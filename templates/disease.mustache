@@ -5,15 +5,47 @@
   <body>
     <h1>{{label}}</h1>
     <div id="description">
+      <p>
+        {{description}}
+      </p>
     </div>
 
     <div class="details">
       <b class="detail-block-header">Phenotypes</b>
       <div class="detail-block-contents">
         <table>
-          {{{tableOfPhenotypes}}}
+          {{{phenotypeTable}}}
         </table>
       </div>
     </div>
+
+    <div class="details">
+      <b class="detail-block-header">Genes</b>
+      <div class="detail-block-contents">
+        <table>
+          {{{geneTable}}}
+        </table>
+      </div>
+    </div>
+
+    <div class="details">
+      <b class="detail-block-header">Alleles</b>
+      <div class="detail-block-contents">
+        <table>
+          {{{alleleTable}}}
+        </table>
+      </div>
+    </div>
+
+    <div class="details">
+      <b class="detail-block-header">Models</b>
+      <div class="detail-block-contents">
+        <table>
+          {{{modelTable}}}
+        </table>
+      </div>
+    </div>
+
+
   </body>
 </html>
