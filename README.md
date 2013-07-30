@@ -41,6 +41,6 @@ Open doc/index.html in a web browser
  * templates/           - we use mustache
  * lib/                 - our javascript API and application doe
      * monarch/         - that's us
-         * api.js       - core API. Wraps OQ/NIF-Fed APIs
+         * api.js       - core API. Wraps OQ/NIF-Fed APIs. See naturaldocs.
          * web/         - web application. See README.md in that dir
 
