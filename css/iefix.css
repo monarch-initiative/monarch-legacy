@@ -1,0 +1,5 @@
+#amigo-logo { /* WIN IE5 hack */ height: 100px; voice-family: "\"}\""; voice-family:inherit; height: 0; }
+
+/* alternative to IE5 hack: height: 0px !important; height /**/ /*<-- this open comment is not reqd  :100px; */
+
+.treeview ul li {display: inline-block !important;}

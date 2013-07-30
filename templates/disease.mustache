@@ -1,6 +1,12 @@
 <html>
   <head>
     <title>Monarch Disease: {{label}}</title>
+    {{#scripts}}
+    <script type="text/javascript" src="{{url}}"></script>
+    {{/scripts}}
+    {{#stylesheets}}
+    <link rel="stylesheet" type="text/css" href="{{url}}"></link>
+    {{/stylesheets}}
   </head>
   <body>
     <h1>{{label}}</h1>
