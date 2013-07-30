@@ -1,0 +1,42 @@
+<html>
+  <head>
+    <title>Monarch Phenotype: {{label}}</title>
+  </head>
+  <body>
+    <h1>{{label}}</h1>
+    <div id="description">
+      <p>
+        {{comments}}
+      </p>
+    </div>
+
+    <div class="details">
+      <p class="todo">TODO: include associations to descendants of {{id}}</p>
+      <b class="detail-block-header">Diseases</b>
+      <div class="detail-block-contents">
+        <table>
+          {{{diseaseTable}}}
+        </table>
+      </div>
+    </div>
+
+    <div class="details">
+      <b class="detail-block-header">Genes</b>
+      <div class="detail-block-contents">
+        <table>
+          {{{geneTable}}}
+        </table>
+      </div>
+    </div>
+
+    <div class="details">
+      <b class="detail-block-header">Alleles</b>
+      <div class="detail-block-contents">
+        <table>
+          {{{alleleTable}}}
+        </table>
+      </div>
+    </div>
+
+  </body>
+</html>
