@@ -10,3 +10,11 @@
 3. Run app
 
     ringo lib/monarch/web/webapp_launcher.js 
+
+4. "browse"
+
+E.g.
+
+    http://127.0.0.1:8080/disease/DOID_14692
+
+More to come...
