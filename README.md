@@ -14,8 +14,7 @@ Then navigate to a disease page. E.g.
 
 http://127.0.0.1:8282/disease/DOID_14692
 
-
-## Step by step
+## Step by step install
 
 1. Install RingoJS - http://ringojs.org
 
@@ -33,4 +32,15 @@ E.g.
 
     http://127.0.0.1:8080/disease/DOID_14692
 
-More to come...
+## Documentation
+
+Open doc/index.html in a web browser
+
+## Organization
+
+ * templates/           - we use mustache
+ * lib/                 - our javascript API and application doe
+     * monarch/         - that's us
+         * api.js       - core API. Wraps OQ/NIF-Fed APIs
+         * web/         - web application. See README.md in that dir
+
