@@ -1,5 +1,21 @@
+## Quickstart
 
-## Setup and Installation
+Just type
+
+    ./install.sh
+
+Then start the server:
+
+    ./start-server.sh
+
+You're done!
+
+Then navigate to a disease page. E.g.
+
+http://127.0.0.1:8282/disease/DOID_14692
+
+
+## Step by step
 
 1. Install RingoJS - http://ringojs.org
 
@@ -9,7 +25,7 @@
 
 3. Run app
 
-    ringo lib/monarch/web/webapp_launcher.js 
+    ringo lib/monarch/web/webapp_launcher.js --port 8282
 
 4. "browse"
 
