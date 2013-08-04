@@ -1,3 +1,14 @@
+## About
+
+This repo contains the JS API and RingoJS application to drive the
+current prototype web interface.
+
+You can run the website locally (see below).
+
+There may be an instance up and running here:
+
+ * http://toaster.lbl.gov:8282/
+
 ## Quickstart
 
 Just type
