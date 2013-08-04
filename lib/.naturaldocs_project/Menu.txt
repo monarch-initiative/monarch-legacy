@@ -46,7 +46,7 @@ Format: 1.5
 # --------------------------------------------------------------------------
 
 
-File: monarch  (api.js)
+File: api.js  (no auto-title, api.js)
 
 Group: Index  {
 

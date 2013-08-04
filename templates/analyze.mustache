@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html>
   <head>
-    <title>Monarch Phenotypes</title>
+    <title>Monarch Analysis: {{datatype}}</title>
     {{#scripts}}
     <script type="text/javascript" src="{{url}}"></script>
     {{/scripts}}
@@ -13,20 +13,21 @@
   <body>
     <div class="container">
       {{{includes.navbar}}}
-      <div class="jumbotron">
-	<h1>Phenotype of the month : large floppy ears</h1>
-	<p>Replace this with something sensible.</p>
-	<a href="/phenotype/HP_0000386" class="btn btn-large btn-success">Find out more</a>
-      </div>
       <div class="row">
         <div class="col-lg-2">
           {{{includes.navlist}}}
         </div>
         <div class="col-lg-9">
-          <h1>Phenotype List</h1>
-          <ul>
-            <li>...</li>
-          </ul>
+
+          <h1>Monarch Analysis: {{datatype}}</h1>
+          <span class="text-warning">DOES NOT WORK YET DON'T GET YOUR
+          HOPES UP!!</span>
+
+          <form  action="/analyze/{{datatype}}/" method="GET">  
+            <textarea rows="10" column="20" name="input_items"></textarea>
+            <button type="submit" class="btn btn-primary">Analyze!</button>  
+          </form> 
+
         </div>
       </div>
     </div>

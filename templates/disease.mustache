@@ -17,14 +17,21 @@
       <div class="row">
         <div class="col-lg-2">
           {{{includes.navlist}}}
+	  <li><a href="#ontology">Ontology</a></li>
+	  <li><a href="#phenotype">Phenotypes</a></li>
+	  <li><a href="#gene">Genes</a></li>
+	  <li><a href="#allele">Alleles</a></li>
+	  <li><a href="#model">Model</a></li>
+	  <li><a href="#sim">Similarity</a></li>
         </div>
         <div class="col-lg-9">
-          <h1>Disease: {{label}}</h1>
-          <p>Download: <a href="{{{download.json}}}">JSON</a></p>
           <div id="description">
+            <h1>Disease: {{label}}</h1>
+            <p>Download: <a href="{{{download.json}}}">JSON</a></p>
             <p>
               {{comments}}
             </p>
+            <a href="https://github.com/cmungall/monarch-app/issues/3">todo - tidy this</a>
             <p>
               <i>AKA: </i> {{has_exact_synonym}}
             </p>
@@ -32,8 +39,8 @@
               <i>IDs: </i> {{database_cross_reference}}
             </p>
           </div>
-          <div id="ont">
-            <h2>Ontology</h2>
+          <div id="ontontology">
+            <h3>Ontology</h3>
             <p>
               <table class="{{css.table}}">
                 {{{ontNavBox}}}
@@ -41,51 +48,42 @@
             </p>
           </div>
 
-          <div class="details">
-            <b class="detail-block-header">Phenotypes</b>
-            <div class="detail-block-contents">
-              <table class="{{css.table}}">
-                {{{phenotypeTable}}}
-              </table>
-            </div>
+          <div id="phenotype">
+            <h3>Phenotypes</h3>
+            <table class="{{css.table}}">
+              {{{phenotypeTable}}}
+            </table>
+          </div>
+          <div id="gene">
+            <h3>Genes</h3>
+            <table class="{{css.table}}">
+              {{{geneTable}}}
+            </table>
           </div>
 
-          <div class="details">
-            <b class="detail-block-header">Genes</b>
-            <div class="detail-block-contents">
-              <table class="{{css.table}}">
-                {{{geneTable}}}
-              </table>
-            </div>
+          <div id="allele">
+            <h3>Alleles</h3>
+            <table class="{{css.table}}">
+              {{{alleleTable}}}
+            </table>
           </div>
 
-          <div class="details">
-            <b class="detail-block-header">Alleles</b>
-            <div class="detail-block-contents">
-              <table class="{{css.table}}">
-                {{{alleleTable}}}
-              </table>
-            </div>
+          <div id="model">
+            <h3>Models</h3>
+            <table class="{{css.table}}">
+              {{{modelTable}}}
+            </table>
           </div>
 
-          <div class="details">
-            <b class="detail-block-header">Models</b>
-            <div class="detail-block-contents">
-              <table class="{{css.table}}">
-                {{{modelTable}}}
-              </table>
-            </div>
+          <div id="sim">
+            <h3>Similar Diseases</h3>
+            <table class="{{css.table}}">
+              {{{simTable}}}
+            </table>
           </div>
 
-          <div class="details">
-            <b class="detail-block-header">Similar Diseases</b>
-            <div class="detail-block-contents">
-              <table class="{{css.table}}">
-                {{{simTable}}}
-              </table>
-            </div>
-          </div>
         </div>
+
         <div class="col-lg-2">
           {{{includes.rightlist}}}
         </div>

@@ -3,11 +3,11 @@
       <div class="container">
         <a class="navbar-brand" href="/">Monarch</a>
        	<p class="navbar-text pull-right">
-          Logged in as <a href="#" class="navbar-link">COMING SOON</a>
+          <a href="https://github.com/cmungall/monarch-app/issues/2" class="navbar-link">Log in</a>
         </p>
         <div class="nav-collapse collapse">
           <ul class="nav navbar-nav">
-            <!-- <li class="active"><a href="/">Home</a></li> -->
+
             <li class="dropdown">
 	      <a href="#" class="dropdown-toggle" data-toggle="dropdown">
 	        <i class="icon-th-large"></i> Browse
@@ -20,16 +20,60 @@
 	        <li><a href="/anatomy/">Cells and organ systems</a></li>
 	      </ul>
 	    </li>
-            <li><a href="/page/about">About</a></li>
-            <li><a href="http://monarchinitiative.org/?q=node/7">Downloads</a></li>
-            <li><a href="http://monarchinitiative.org/?q=node/4">Contact</a></li>
+
+            <li class="dropdown">
+	      <a href="#" class="dropdown-toggle" data-toggle="dropdown">
+	        <i class="icon-th-large"></i> Analyze
+	        <b class="caret"></b>
+	      </a>
+	      <ul class="dropdown-menu" role="menu" aria-labelledby="dropdownMenu">
+	        <li><a href="/analyze/genes">List of genes</a></li>
+	        <li><a href="/analyze/phenotypes">List of phenotypes</a></li>
+	      </ul>
+	    </li>
+
+            <li class="dropdown">
+	      <a href="#" class="dropdown-toggle" data-toggle="dropdown">
+	        <i class="icon-th-large"></i> Documentation
+	        <b class="caret"></b>
+	      </a>
+	      <ul class="dropdown-menu" role="menu" aria-labelledby="dropdownMenu">
+	        <li><a href="/docs/index.html">JS API</a></li>
+	        <li><a href="https://github.com/cmungall/monarch-app/issues">GitHub Project</a></li>
+	        <li><a href="/page/software">How it works</a></li>
+	      </ul>
+	    </li>
+
+
+            <li class="dropdown">
+	      <a href="#" class="dropdown-toggle" data-toggle="dropdown">
+	        <i class="icon-th-large"></i> Download
+	        <b class="caret"></b>
+	      </a>
+	      <ul class="dropdown-menu" role="menu" aria-labelledby="dropdownMenu">
+	        <li><a href="http://monarchinitiative.org/?q=node/7">Data</a></li>
+	        <li><a href="http://monarchinitiative.org/?q=node/7">Analyses</a></li>
+	      </ul>
+	    </li>
+
+            <li class="dropdown">
+	      <a href="#" class="dropdown-toggle" data-toggle="dropdown">
+	        <i class="icon-th-large"></i> Contact
+	        <b class="caret"></b>
+	      </a>
+	      <ul class="dropdown-menu" role="menu" aria-labelledby="dropdownMenu">
+	        <li><a href="http://monarchinitiative.org/?q=node/7">Monarch Team</a></li>
+	        <li><a href="https://github.com/cmungall/monarch-app">Issue tracker</a></li>
+	      </ul>
+	    </li>
+
           </ul>
         </div>
       </div>
     </div>
    <div style="height:48px;" id="spacer"></div>
    <form class="form-search search-bar" action="/search/" method="GET">  
-     <input name="search_term" type="text" class="input-medium search-query">  
-     <button type="submit" class="btn">Search</button>  
-     (currently verryyyyy slow....)
+     Search: <input name="search_term" type="text" class="input-medium search-query">  
+     <button type="submit" class="btn btn-primary">Search</button>  
+     <span class="text-warning"><a href="https://github.com/cmungall/monarch-app/issues/1">todo - autocomplete</a></span>
    </form> 

@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>Monarch Tour</title>
+    {{#scripts}}
+    <script type="text/javascript" src="{{url}}"></script>
+    {{/scripts}}
+    {{#stylesheets}}
+    <link rel="stylesheet" type="text/css" href="{{url}}"></link>
+    {{/stylesheets}}
+    <meta charset=”utf-8”> 
+  </head>
+  <body>
+    <div class="container">
+      {{{includes.navbar}}}
+      <div class="row">
+        <div class="col-lg-2">
+          {{{includes.navlist}}}
+        </div>
+        <div class="col-lg-9">
+
+          <h1>Monarch Tour</h1>
+          <h3>Search</h3>
+          <p>
+            Use the search bar at the top of the page to find things of
+            interest - diseases, phenotypes, genes, etc
+          </p>
+          <p>Example: <a href="/search/?search_term=angelman">Angelman</a></p>
+          <p class="text-warning">TODO - autocomplete</p>
+          <h3>Diseases and Phenotypes</h3>
+          <p>See the <a href="/disease">Disease Page</a></p>
+          <p>See the <a href="/phenotype">Phenotype Page</a></p>
+          <h3>Analysis</h3>
+          <p>Coming soon!
+          </p>
+          <h3>Software</h3>
+          <p>
+            <ul>
+              <li><a href="http://owlsim.org">owlsim</a></li>
+              <li><a href="http://github.com/cmungall/monarch-app">API and Web Server code</a></li>
+            </ul>
+          </p>
+        </div>
+      </div>
+    </div>
+  </body>
+</html>

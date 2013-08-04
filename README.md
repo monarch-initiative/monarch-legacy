@@ -10,11 +10,15 @@ Then start the server:
 
 You're done!
 
-Then navigate to a disease page. E.g.
+Connect on localhost:
 
-http://127.0.0.1:8282/disease/DOID_14692
+ * http://127.0.0.1:8282/
 
-## Step by step install
+Or a particular disease, e.g:
+
+ * http://127.0.0.1:8282/disease/DOID_14692
+
+## Alternate installation instructions
 
 1. Install RingoJS - http://ringojs.org
 
@@ -26,21 +30,13 @@ http://127.0.0.1:8282/disease/DOID_14692
 
     ringo lib/monarch/web/webapp_launcher.js --port 8282
 
-4. "browse"
-
-E.g.
-
-    http://127.0.0.1:8080/disease/DOID_14692
-
 ## Documentation
 
-Open doc/index.html in a web browser
+Open doc/index.html in a web browser.
 
-## Organization
+Alternative, connect to 127.0.0.1:8282 and select "documentation" from menubar.
 
- * templates/           - we use mustache
- * lib/                 - our javascript API and application doe
-     * monarch/         - that's us
-         * api.js       - core API. Wraps OQ/NIF-Fed APIs. See naturaldocs.
-         * web/         - web application. See README.md in that dir
+## Making changes
+
+See README-developers.md
 
