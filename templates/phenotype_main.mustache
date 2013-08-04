@@ -1,0 +1,34 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>Monarch Phenotypes</title>
+    {{#scripts}}
+    <script type="text/javascript" src="{{url}}"></script>
+    {{/scripts}}
+    {{#stylesheets}}
+    <link rel="stylesheet" type="text/css" href="{{url}}"></link>
+    {{/stylesheets}}
+    <meta charset=”utf-8”> 
+  </head>
+  <body>
+    <div class="container">
+      {{{includes.navbar}}}
+      <div class="jumbotron">
+	<h1>Phenotype of the month : big ears</h1>
+	<p>Cras justo odio, dapibus ac facilisis in, egestas eget quam. Fusce dapibus, tellus ac cursus commodo, tortor mauris condimentum nibh, ut fermentum massa justo sit amet risus.</p>
+	<a href="#" class="btn btn-large btn-success">Find out more</a>
+      </div>
+      <div class="row">
+        <div class="col-lg-2">
+          {{{includes.navlist}}}
+        </div>
+        <div class="col-lg-9">
+          <h1>Phenotype List</h1>
+          <ul>
+            <li>...</li>
+          </ul>
+        </div>
+      </div>
+    </div>
+  </body>
+</html>

@@ -1,67 +1,97 @@
+<!DOCTYPE html>
 <html>
   <head>
-    <title>Monarch Disease: {{label}}</title>
+    <title>Monarch Disease: {{label}} ({{id}})</title>
     {{#scripts}}
     <script type="text/javascript" src="{{url}}"></script>
     {{/scripts}}
     {{#stylesheets}}
     <link rel="stylesheet" type="text/css" href="{{url}}"></link>
     {{/stylesheets}}
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta charset=”utf-8”> 
   </head>
   <body>
-    <h1>{{label}}</h1>
-    <p>Download: <a href="{{{download.json}}}">JSON</a></p>
-    <div id="description">
-      <p>
-        {{description}}
-      </p>
-    </div>
+    <div class="container">
+      {{{includes.navbar}}}
+      <div class="row">
+        <div class="col-lg-2">
+          {{{includes.navlist}}}
+        </div>
+        <div class="col-lg-9">
+          <h1>Disease: {{label}}</h1>
+          <p>Download: <a href="{{{download.json}}}">JSON</a></p>
+          <div id="description">
+            <p>
+              {{comments}}
+            </p>
+            <p>
+              <i>AKA: </i> {{has_exact_synonym}}
+            </p>
+            <p>
+              <i>IDs: </i> {{database_cross_reference}}
+            </p>
+          </div>
+          <div id="ont">
+            <h2>Ontology</h2>
+            <p>
+              <table class="{{css.table}}">
+                {{{ontNavBox}}}
+              </table>
+            </p>
+          </div>
 
-    <div class="details">
-      <b class="detail-block-header">Phenotypes</b>
-      <div class="detail-block-contents">
-        <table>
-          {{{phenotypeTable}}}
-        </table>
+          <div class="details">
+            <b class="detail-block-header">Phenotypes</b>
+            <div class="detail-block-contents">
+              <table class="{{css.table}}">
+                {{{phenotypeTable}}}
+              </table>
+            </div>
+          </div>
+
+          <div class="details">
+            <b class="detail-block-header">Genes</b>
+            <div class="detail-block-contents">
+              <table class="{{css.table}}">
+                {{{geneTable}}}
+              </table>
+            </div>
+          </div>
+
+          <div class="details">
+            <b class="detail-block-header">Alleles</b>
+            <div class="detail-block-contents">
+              <table class="{{css.table}}">
+                {{{alleleTable}}}
+              </table>
+            </div>
+          </div>
+
+          <div class="details">
+            <b class="detail-block-header">Models</b>
+            <div class="detail-block-contents">
+              <table class="{{css.table}}">
+                {{{modelTable}}}
+              </table>
+            </div>
+          </div>
+
+          <div class="details">
+            <b class="detail-block-header">Similar Diseases</b>
+            <div class="detail-block-contents">
+              <table class="{{css.table}}">
+                {{{simTable}}}
+              </table>
+            </div>
+          </div>
+        </div>
+        <div class="col-lg-2">
+          {{{includes.rightlist}}}
+        </div>
       </div>
-    </div>
+    </div>      
+</div>      
 
-    <div class="details">
-      <b class="detail-block-header">Genes</b>
-      <div class="detail-block-contents">
-        <table>
-          {{{geneTable}}}
-        </table>
-      </div>
-    </div>
-
-    <div class="details">
-      <b class="detail-block-header">Alleles</b>
-      <div class="detail-block-contents">
-        <table>
-          {{{alleleTable}}}
-        </table>
-      </div>
-    </div>
-
-    <div class="details">
-      <b class="detail-block-header">Models</b>
-      <div class="detail-block-contents">
-        <table>
-          {{{modelTable}}}
-        </table>
-      </div>
-    </div>
-
-    <div class="details">
-      <b class="detail-block-header">Similar Diseases</b>
-      <div class="detail-block-contents">
-        <table>
-          {{{simTable}}}
-        </table>
-      </div>
-    </div>
-
-
-  </body>
+</body>
 </html>

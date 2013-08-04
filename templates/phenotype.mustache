@@ -1,66 +1,78 @@
 <html>
   <head>
-    <title>Monarch Phenotype: {{label}}</title>
+    <title>Monarch Phenotype: {{label}} ({{id}})</title>
     {{#scripts}}
     <script type="text/javascript" src="{{url}}"></script>
     {{/scripts}}
     {{#stylesheets}}
     <link rel="stylesheet" type="text/css" href="{{url}}"></link>
     {{/stylesheets}}
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
   </head>
   <body>
-    <h1>{{label}}</h1>
-    <div id="description">
-      <p>
-        {{comments}}
-      </p>
-    </div>
-    <div id="nav">
-      <h2>Nav</h2>
-      <p>
-        <table>
-          {{{ontNavBox}}}
-        </table>
-      </p>
-    </div>
+    <div class="container">
+      {{{includes.navbar}}}
+      <div class="row">
+        <div class="col-lg-2">
+          {{{includes.navlist}}}
+        </div>
+        <div class="col-lg-9">
+          <h1>Phenotype: {{label}}</h1>
+          <p>Download: <a href="{{{download.json}}}">JSON</a></p>
+          <div id="description">
+            <p>
+              {{comments}}
+            </p>
+          </div>
+          <div id="nav">
+            <h2>Ontology</h2>
+            <p>
+              <table class="{{css.table}}">
+                {{{ontNavBox}}}
+              </table>
+            </p>
+          </div>
 
-    <div class="details">
-      <p class="todo">TODO: include associations to descendants of {{id}}</p>
-      <b class="detail-block-header">Diseases</b>
-      <div class="detail-block-contents">
-        <table>
-          {{{diseaseTable}}}
-        </table>
+          <div class="details">
+            <p class="todo">TODO: include associations to descendants of {{id}}</p>
+            <b class="detail-block-header">Diseases</b>
+            <div class="detail-block-contents">
+              <table class="{{css.table}}">
+                {{{diseaseTable}}}
+              </table>
+            </div>
+          </div>
+
+          <div class="details">
+            <b class="detail-block-header">Genes</b>
+            <div class="detail-block-contents">
+              <table class="{{css.table}}">
+                {{{geneTable}}}
+              </table>
+            </div>
+          </div>
+
+          <div class="details">
+            <b class="detail-block-header">Alleles</b>
+            <div class="detail-block-contents">
+              <table class="{{css.table}}">
+                {{{alleleTable}}}
+              </table>
+            </div>
+          </div>
+
+          <div class="details">
+            <b class="detail-block-header">Diseases Matched using this Phenotype</b>
+            <p>Await OntoQuest functionality...</p>
+            <div class="detail-block-contents">
+              <table class="{{css.table}}">
+                {{{simTable}}}
+              </table>
+            </div>
+          </div>
+        </div>
       </div>
     </div>
-
-    <div class="details">
-      <b class="detail-block-header">Genes</b>
-      <div class="detail-block-contents">
-        <table>
-          {{{geneTable}}}
-        </table>
-      </div>
-    </div>
-
-    <div class="details">
-      <b class="detail-block-header">Alleles</b>
-      <div class="detail-block-contents">
-        <table>
-          {{{alleleTable}}}
-        </table>
-      </div>
-    </div>
-
-    <div class="details">
-      <b class="detail-block-header">Diseases Matched using this Phenotype</b>
-      <p>Await OntoQuest functionality...</p>
-      <div class="detail-block-contents">
-        <table>
-          {{{simTable}}}
-        </table>
-      </div>
-    </div>
-
   </body>
+
 </html>

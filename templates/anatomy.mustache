@@ -1,0 +1,62 @@
+<html>
+  <head>
+    <title>Monarch Anatomical Structure: {{label}}</title>
+    {{#scripts}}
+    <script type="text/javascript" src="{{url}}"></script>
+    {{/scripts}}
+    {{#stylesheets}}
+    <link rel="stylesheet" type="text/css" href="{{url}}"></link>
+    {{/stylesheets}}
+  </head>
+  <body>
+
+    <div class="container">
+      {{{includes.navbar}}}
+      <div class="row">
+        <div class="col-lg-2">
+          {{{includes.navlist}}}
+        </div>
+        <div class="col-lg-9">
+          <h1>Anatomy: {{label}}</h1>
+          <p>Download: <a href="{{{download.json}}}">JSON</a></p>
+          <div id="description">
+            <p>
+              {{comments}}
+            </p>
+          </div>
+          <div id="ont">
+            <h2>Ontology</h2>
+            <p>
+              <table class="{{css.table}}">
+                {{{ontNavBox}}}
+              </table>
+            </p>
+          </div>
+
+
+          <div class="details">
+            <p class="todo">TODO: include associations to descendants of {{id}}</p>
+            <b class="detail-block-header">Expression</b>
+            <div class="detail-block-contents">
+              <table>
+                {{{expressionTable}}}
+              </table>
+            </div>
+          </div>
+
+          <div class="details">
+            <p class="todo">TODO: include associations to descendants of {{id}}</p>
+            <b class="detail-block-header">Phenotype</b>
+            <div class="detail-block-contents">
+              <table>
+                {{{phenotypeTable}}}
+              </table>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+
+  </body>
+</html>
