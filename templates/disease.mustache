@@ -27,7 +27,9 @@
         <div class="col-lg-9">
           <div id="description">
             <h1>Disease: {{label}}</h1>
-            <p>Download: <a href="{{{download.json}}}">JSON</a></p>
+	    <a href="{{{base_url}}}.json" class="btn btn-success">JSON</a>
+	    <a href="{{{base_url}}}.rdf" class="btn btn-success">RDF</a>
+	    <a href="{{{base_url}}}.nt" class="btn btn-success">n-triples</a>
             <p>
               {{comments}}
             </p>
@@ -50,6 +52,9 @@
 
           <div id="phenotype">
             <h3>Phenotypes</h3>
+	    <a href="{{{base_url}}}/phenotype_associations.json" class="btn btn-success">JSON</a>
+	    <a href="{{{base_url}}}/phenotype_associations.rdf" class="btn btn-success">RDF</a>
+	    <a href="{{{base_url}}}/phenotype_associations.nt" class="btn btn-success">n-triples</a>
             <table class="{{css.table}}">
               {{{phenotypeTable}}}
             </table>
@@ -69,6 +74,9 @@
           </div>
 
           <div id="model">
+	    <a href="{{{base_url}}}/models.json" class="btn btn-success">JSON</a>
+	    <a href="{{{base_url}}}/models.rdf" class="btn btn-success">RDF</a>
+	    <a href="{{{base_url}}}/models.nt" class="btn btn-success">n-triples</a>
             <h3>Models</h3>
             <table class="{{css.table}}">
               {{{modelTable}}}
