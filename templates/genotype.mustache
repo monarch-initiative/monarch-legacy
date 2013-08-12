@@ -1,0 +1,71 @@
+<html>
+  <head>
+    <title>Monarch Genotype: {{label}} ({{id}})</title>
+    {{#scripts}}
+    <script type="text/javascript" src="{{url}}"></script>
+    {{/scripts}}
+    {{#stylesheets}}
+    <link rel="stylesheet" type="text/css" href="{{url}}"></link>
+    {{/stylesheets}}
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  </head>
+  <body>
+    <div class="container">
+      {{{includes.navbar}}}
+      <div class="row">
+        <div class="col-lg-2">
+          {{{includes.navlist}}}
+        </div>
+        <div class="col-lg-9">
+          <h1>Genotype: {{label}}</h1>
+          <p>
+            <i>URI:</i> <a href="{{{url}}}">{{{url}}}</a>
+          </p>
+          <p>TODO: provide a link to the MOD here, or IMPC if appropriate</p>
+          <div class="details">
+            <b class="detail-block-header">Phenotypes</b>
+
+	    <a href="{{{base_url}}}/phenotype_associations.json" class="btn btn-success">JSON</a>
+	    <a href="{{{base_url}}}/phenotype_associations.rdf" class="btn btn-success">RDF</a>
+	    <a href="{{{base_url}}}/phenotype_associations.nt" class="btn btn-success">n-triples</a>
+            <div class="detail-block-contents">
+              <table class="{{css.table}}">
+                {{{phenotypeTable}}}
+              </table>
+            </div>
+          </div>
+
+          <div class="details">
+            <b class="detail-block-header">Associated Diseases</b>
+            <div class="detail-block-contents">
+              <table class="{{css.table}}">
+                {{{diseaseTable}}}
+              </table>
+            </div>
+          </div>
+
+          <div class="details">
+            <b class="detail-block-header">Genes</b>
+            <div class="detail-block-contents">
+              <table class="{{css.table}}">
+                {{{geneTable}}}
+              </table>
+            </div>
+          </div>
+
+
+          <div class="details">
+            <b class="detail-block-header">Diseases Matched using this Phenotype</b>
+            <p>Await OntoQuest functionality...</p>
+            <div class="detail-block-contents">
+              <table class="{{css.table}}">
+                {{{simTable}}}
+              </table>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </body>
+
+</html>

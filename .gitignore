@@ -1,3 +1,5 @@
 .pl-history
 cache/*/key*json
 ringojs
+semantic.cache
+*/semantic.cache

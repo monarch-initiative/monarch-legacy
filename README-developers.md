@@ -35,6 +35,18 @@ Then add a call to your new method to fetchDiseaseInfo (assuming the
 new view provides disease related data), or to any of the other
 high-level API calls.
 
+### Map to RDF (optional)
+
+Currently this is not required as the application is not driven by the
+RDF, but it is good practice to ensure that the JSON model you come up
+with in the API is extensible, uses good ID practice and easily mapped
+to RDF.
+
+The mapping is achieved by editing the JSON-LD @context tag. See
+getJsonLdContext() at the end of api.js. Currently there is one
+monolithic context for all of Monarch but in future this may be
+modularized.
+
 ### Create a widget
 
 Open widgets.js and create a new widget for displaying your data. This
@@ -62,6 +74,9 @@ following:
     </table>
    </div>
 
+If you want to add a download json/rdf button, see other examples in
+the template.
+
 ### Restart the server
 
 Kill the server and restart:
@@ -69,5 +84,7 @@ Kill the server and restart:
     ./start-server.sh
 
 That's it!
+
+
 
 

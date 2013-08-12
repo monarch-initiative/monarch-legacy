@@ -18,10 +18,22 @@
         </div>
         <div class="col-lg-9">
           <h1>Phenotype: {{label}}</h1>
+          <p>
+            <i>URI:</i> <a href="{{{url}}}">{{{url}}}</a>
+          </p>
+          <p>TODO: provide a link to the relevant website (HPO, MGI,
+          ZFIN, WormBase, ...) here</p>
           <p>Download: <a href="{{{download.json}}}">JSON</a></p>
           <div id="description">
             <p>
               {{comments}}
+            </p>
+            <a href="https://github.com/cmungall/monarch-app/issues/3">todo - tidy this</a>
+            <p>
+              <i>AKA: </i> {{has_exact_synonym}}
+            </p>
+            <p>
+              <i>IDs: </i> {{database_cross_reference}}
             </p>
           </div>
           <div id="nav">
@@ -35,7 +47,7 @@
 
           <div class="details">
             <p class="todo">TODO: include associations to descendants
-            of {{id}} - see <a href="https://support.crbs.ucsd.edu/browse/LAMHDI-140"></a></p>
+            of {{id}} - see <a href="https://support.crbs.ucsd.edu/browse/LAMHDI-140">JIRA</a></p>
             <b class="detail-block-header">Diseases</b>
             <div class="detail-block-contents">
               <table class="{{css.table}}">
@@ -54,10 +66,17 @@
           </div>
 
           <div class="details">
-            <b class="detail-block-header">Alleles</b>
+            <b class="detail-block-header">Genotypes</b>
+
+            <p class="todo">TODO: include associations to descendants
+            of {{id}} - see <a href="https://support.crbs.ucsd.edu/browse/LAMHDI-140">JIRA</a></p>
+
+	    <a href="{{{base_url}}}/genotype_associations.json" class="btn btn-success">JSON</a>
+	    <a href="{{{base_url}}}/genotype_associations.rdf" class="btn btn-success">RDF</a>
+	    <a href="{{{base_url}}}/genotype_associations.nt" class="btn btn-success">n-triples</a>
             <div class="detail-block-contents">
               <table class="{{css.table}}">
-                {{{alleleTable}}}
+                {{{genotypeTable}}}
               </table>
             </div>
           </div>
