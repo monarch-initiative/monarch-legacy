@@ -47,11 +47,13 @@ Format: 1.5
 
 
 File: api.js  (no auto-title, api.js)
+File: object type/category  (web/widgets.js)
 
 Group: Index  {
 
    Index: Everything
    Class Index: Classes
    Function Index: Functions
+   Type Index: Types
    }  # Group: Index
 
