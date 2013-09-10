@@ -9,6 +9,8 @@ There may be an instance up and running here:
 
  * http://toaster.lbl.gov:8282/
 
+We are also experimenting with Heroku
+
 ## Quickstart
 
 Just type
@@ -51,3 +53,6 @@ Alternative, connect to 127.0.0.1:8282 and select "documentation" from menubar.
 
 See README-developers.md
 
+## Scripts
+
+See bin/README.md

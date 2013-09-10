@@ -1,3 +1,3 @@
 #!/bin/sh
 PATH_TO_ME=`dirname $0`;
-ringo "$PATH_TO_ME/fetch-disease-info.js" "$@"
+ringo "$PATH_TO_ME/fetch-monarch-info.js"  -d disease "$@"

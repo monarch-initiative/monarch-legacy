@@ -7,6 +7,7 @@ function main(args) {
     var script = args.shift();
     var parser = new Parser(system.args);
 
+    parser.addOption("d","datatype","Datatype", "E.g. disease");
     parser.addOption("q","query","QueryTerm", "ID or name for a disease");
     parser.addOption("x", "extract", "DocumentPart", "E.g. phenotype_associations");
     parser.addOption('h', 'help', null, 'Display help');
@@ -22,10 +23,24 @@ function main(args) {
 	system.exit('-1');
     }
 
-    print("Q="+options.query);
-
     var engine = new bbop.monarch.Engine();
-    var info = engine.fetchDiseaseInfo(options.query); 
+
+    var q = options.query;
+    var func = "fetchDiseaseInfo";
+    var dt = options.datatype;
+
+    if (dt == 'disease') {
+        func = "fetchDiseaseInfo";
+    }
+    else if (dt == 'genotype') {
+        func = "fetchGenotypeInfo";
+    }
+    else {
+        print("Unknown datatype: "+dt);
+        system.exit(1);
+    }
+
+    var info = engine[func](q);
 
     if (options.extract != null) {
         info = info[options.extract];
