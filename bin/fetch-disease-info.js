@@ -11,6 +11,7 @@ function main(args) {
     parser.addOption("x", "extract", "DocumentPart", "E.g. phenotype_associations");
     parser.addOption('h', 'help', null, 'Display help');
     parser.addOption('c', 'context', null, 'Add JSON-LD context');
+    parser.addOption('t', 'target', 'Format', 'Target format. E.g. nt, rdf-xml');
     //parser.addOption('', 'no-context', null, 'Hide JSON-LD context');
     //parser.addOption('p', 'prettyprint', null, 'Pretty print JSON');
 
@@ -30,7 +31,7 @@ function main(args) {
         info = info[options.extract];
     }
 
-    if (options.context) {
+    if (options.context || options.target != null) {
         engine.addJsonLdContext(info);
     }
     else {
@@ -39,9 +40,14 @@ function main(args) {
 
     var out = JSON.stringify(info, null, " ");
 
-    //if (options.prettyprint) {
-        //out = httpclient.post("http://jsonprettyprint.com/json-pretty-printer.php", {json_data:out}).content;
-//}
+    if (options.target != null) {
+        var tgt = options.target;
+        if (tgt == 'rdf' || tgt == 'rdf-xml') {
+            tgt = 'xml';
+        }
+        var url = "http://rdf-translator.appspot.com/convert/json-ld/"+tgt+"/content";
+        out = httpclient.post(url, {content:out}).content;
+    }
 
     print(out);
 }
