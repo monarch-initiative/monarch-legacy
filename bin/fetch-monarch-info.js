@@ -53,7 +53,7 @@ function main(args) {
         info['@context'] = null;
     }
 
-    var out = JSON.stringify(info, null, " ");
+    var out = JSON.stringify(info, null, "    ");
 
     if (options.target != null) {
         var tgt = options.target;
