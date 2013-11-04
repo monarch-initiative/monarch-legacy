@@ -4,6 +4,21 @@
     <title>Monarch Disease: {{label}} ({{id}})</title>
     {{#scripts}}
     <script type="text/javascript" src="{{url}}"></script>
+        <script type="text/javascript">
+       $( document ).ready(function() {
+       //I think the RingoJS code is calling the document.ready() each time a section
+       //of code returns.  This causes my svg to get recreated several times.
+       //the loaded_once variable flags this event to ensure it only happens once
+          if (loaded_once != 1) {
+	          createSvg();
+	          loadData();
+			  init();
+			  createModelRegion();
+			  update();
+	          
+          }
+       });
+    </script>
     {{/scripts}}
     {{#stylesheets}}
     <link rel="stylesheet" type="text/css" href="{{url}}"></link>
