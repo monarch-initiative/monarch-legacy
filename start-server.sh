@@ -5,6 +5,6 @@ if [ $PORT ]
   then
    MARGS="--port $PORT"
   else
-   MARGS="--port 8282"
+   MARGS="--port 8080"
 fi
 ./ringojs/bin/ringo lib/monarch/web/webapp_launcher.js $MARGS
