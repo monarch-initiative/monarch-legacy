@@ -1,0 +1,213 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>Monarch Services</title>
+    {{#scripts}}
+    <script type="text/javascript" src="{{url}}"></script>
+    {{/scripts}}
+    {{#stylesheets}}
+    <link rel="stylesheet" type="text/css" href="{{url}}"></link>
+    {{/stylesheets}}
+    <meta charset=”utf-8”> 
+  </head>
+  <body>
+    <div class="container">
+      {{{includes.navbar}}}
+      <div class="row">
+        <div class="col-lg-2">
+          {{{includes.navlist}}}
+        </div>
+        <div class="col-lg-9">
+
+          <h1>Monarch Services</h1>
+          <p>
+            There are currently two types of service calls:
+            <ul>
+              <li>Fetch a data object : fetch all information about a
+              particular entity (disease, phenotype, ...)</li>
+              <li>Search : fetch matches based on specified search
+              criteria. Search may be:
+                <ul>
+                  <li>Lexical - e.g. find all diseases for string "renal"</li>
+                  <li>Logical - e.g. find all entities relevant for
+                  "kidney" or its parts</li>
+                  <li>Similarity-based - e.g. find all models that
+                  have a close match to a set of phenotypes</li>
+                </ul>
+              </li>
+            </ul>
+            Service calls are implemented via one or more calls to
+            other Monarch/NIF services.
+          </p>
+          <h2>Data Objects</h2>
+          <p>
+            A data object is a json object containing all information
+            about a particular entity. A data object may be
+            constructed via one or more calls to other services
+            (including OntoQuest, Federation and OwlSim).
+          </p>
+          <h3>Data Object URLs</h3>
+          <p>
+            The general schema for data objects is:
+            <pre>
+              $BASEURL/:datatype/:id.json
+            </pre>
+            For a sub-part of this object the general schema:
+            <pre>
+              $BASEURL/:datatype/:id/:section.json
+            </pre>
+            Each of these is implemented as a call
+            to the <a href="/docs/files/api-js.html">JS API</a>.
+          </p>
+          <p>
+            Note that each of these URLs corresponds to a page in the
+            UI. On any page in the Monarch system,
+            suffix <strong>.json</strong> onto the end of the URL to
+            retrieve data.
+          </p>
+          <h3>Datatypes</h3>
+          <p>
+            The current list of datatypes:
+            <ul>
+
+              <li><strong><a href="/disease/">/disease/</a>:id</strong> - Executes a call
+                to <a href="/docs/files/api-js.html#bbop.monarch.Engine.fetchDiseaseInfo">fetchDiseaseInfo(:id)</a>.
+                <br/>Examples:
+                <ul>
+                  <li><a href="/disease/OMIM_127750.json">/disease/OMIM_127750.json</a>
+                  - Dementia, Lewy Body
+                  </li>
+                </ul>
+              </li>
+
+              <li><strong><a href="/phenotype/">/phenotype/</a>:id</strong> - Executes a call
+                to <a href="/docs/files/api-js.html#bbop.monarch.Engine.fetchPhenotypeInfo">fetchPhenotypeInfo(:id)</a>
+                <br/>Examples:
+                <ul>
+                  <li><a href="/phenotype/HP_0000003.json">/phenotype/HP_0000003.json</a>
+                  - Multicystic kidney dysplasia
+                  </li>
+                  <li><a href="/phenotype/MP_0000854.json">/phenotype/MP_0000854.json</a>
+                  - abnormal cerebellum development
+                  </li>
+                </ul>
+              </li>
+
+              <li><strong><a href="/gene/">/gene/</a>:id</strong> - Executes a call
+                to <a href="/docs/files/api-js.html#bbop.monarch.Engine.fetchGeneInfo">fetchGeneInfo(:id)</a>
+              </li>
+
+              <li><strong><a href="/genotype/">/genotype/</a>:id</strong> - Executes a call
+                to <a href="/docs/files/api-js.html#bbop.monarch.Engine.fetchGenotypeInfo">fetchGenotypeInfo(:id)</a>
+              </li>
+
+              <li><strong><a href="/phenome/">/phenome/</a>:id.gff3</strong>
+                (UNSTABLE) returns a phenome in GFF3 format
+                <br/>Examples:
+                <ul>
+                  <li><a href="/phenome/Homo_sapiens.gff3">/phenome/Homo_sapiens.gff3</a>
+                  - currently only GFF3 supported
+                  </li>
+                </ul>
+              </li>
+
+
+            </ul>
+          </p>
+          <h3>Data Object JSON specification</h3>
+          <p>
+            The specification for the JSON data objects returned is
+            still unstable. For details, please see the JS API. The
+            following principles are adhered to:
+            <ul>
+
+              <li><a href="http://json-ld.org">JSON-LD</a> is
+              used</li>
+
+              <li>Each object is uniquely identified by
+              an <strong>id:</strong> field. This maps to the IRI in
+              the JSON LD context</li>
+
+              <li>Each object should have a human-readable name
+              identified with a <strong>label:</strong> field. This maps
+              to rdfs:label in the JSON LD context</li>
+
+              <li>Each object should be typed using
+              a <strong>type:</strong> field. This maps
+              to rdf:type in the JSON LD context. Note that the type
+              may be specified as a human-readable string, with this
+              mapped to an IRI in the context object.</li>
+
+              <li>Nesting is preferred over flat structures</li>
+
+            </ul>
+
+          </p>
+          <h3>RDF/OWL services</h3>
+          <p>
+            Each data object can be returned as RDF by
+            switching <strong>.json</strong> for <strong>.rdf</strong>
+            (or <strong>.nt</strong>). The mapping from JSON to RDF is
+            specified entirely by
+            the <a href="http://json-ld.org">JSON-LD</a> context.
+          </p>
+          <h2>Search</h2>
+          <p>
+            
+          </p>
+
+          <h3>Ontology Search</h3>
+          <p>
+            URLs are of the form
+            <pre>
+              /search/:term.json
+            </pre>
+            This wraps a call to OntoQuest - OQ XML is translated to a
+            standard JSON from: <a href="/docs/files/api-js.html#bbop.monarch.Engine.searchOverOntologies">searchOverOntologies(:term,:opts)</a>
+          </p>
+          <p>
+            TODO - improve speed
+          </p>
+
+          <h3>Semantic Matching</h3>
+          <p>
+            <a href="http://owlsim.org">OwlSim</a> is used for
+            semantic matching
+          </p>
+          <h4>Comparing two entities</h4>
+          <p>
+            URLs are of the form
+            <pre>
+              /compare/:x/:y.json
+            </pre>
+            Currently this is only supported for a subset of entities
+            in the system - those with phenotypes.
+          </p>
+          <p>
+            This wraps a call
+            to <a href="http://owltools.googlecode.com/svn/trunk/docs/api/owltools/sim2/OwlSim.html#getGroupwiseSimilarity(org.semanticweb.owlapi.model.OWLNamedIndividual, org.semanticweb.owlapi.model.OWLNamedIndividual)">getGroupwiseSimilarity(x,y)</a> in OwlSim.
+          </p>
+
+          <h4>Searching by profile (TODO)</h4>
+          <p>
+            Find all entities that instantiate a set of attributes
+            matching an input set of attributes. For example, find all
+            animal models matching a disease phenotype profile.
+            <pre>
+              /simsearch/:a1+a2+...+an/:target.json
+            </pre>
+          </p>
+          <p>
+            This wraps a call
+            to <a href="http://owltools.googlecode.com/svn/trunk/docs/api/owltools/sim2/OwlSim.html#findMatches(java.util.Set,
+            java.lang.String)">findMatches(atts, target)</a> in OwlSim.
+          </p>
+          <h2>Implementation</h2>
+          <p>
+            See webapp.js in the source.
+          </p>
+        </div>
+      </div>
+    </div>
+  </body>
+</html>

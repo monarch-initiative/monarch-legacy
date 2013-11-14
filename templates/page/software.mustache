@@ -30,11 +30,12 @@
           <h1>Monarch Software</h1>
           <h3>Background</h3>
           <p>
-            This site is driven by APIs built on top of the NIF
+            This site is driven by APIs built on top of the Monarch
             infrastructure. In particular,
             <ul>
-              <li><b>OntoQuest</b> for ontology queries </li>
-              <li><b>Federation Queries</b> for data resources </li>
+              <li><b>NIF OntoQuest</b> for ontology queries </li>
+              <li><b>NIF Federation Queries</b> for data resources </li>
+              <li><b>OwlSim</b> for semantic similarity</li>
             </ul>
             The monarch API is layered on top of these services. It is
             written in javascript, and can be executed in a browser or
@@ -42,9 +43,9 @@
             docs</a>.
           </p>
           <p>
-            The web browser is written using the lightweight
-            RingoJS/stick framework. See the github project page for
-            details.
+            The web browser is written using the JSGI javascript
+            framework, implemented using RingoJS/stick. See the github
+            project page for details.
           </p>
           
           <p>
@@ -53,6 +54,37 @@
             include Human Phenotype Ontology annotations (many done as
             part of the NIH PATO project) and computational analyses
             run using the OWLSim/PhenoDigm system.
+          </p>
+          <h3>RESTful URLs</h3>
+          <p>
+            See <a href="services">Monarch Services</a> documentation.
+          </p>
+          <h3>System Architecture</h3>
+          <p>
+            <img src="/image/architecture.png"/>
+            A typical URL is resolved as follows:
+            <ul>
+              <li>webapp.js matches the URL pattern against all
+              registered patterns
+              (see <a href="services">services</a>). This typically
+              results in a call to
+              the <a href="/docs/files/api-js.html">JS API</a>.</li>
+
+              <li>
+                The JS API will issue one or more calls to other
+                services and aggregate the results. For federation
+                queries, a transformer is applied on each resource to
+                transform the tabular results into nested json objects
+              </li>
+              <li>
+                If the user requested json, webapp will return the
+                json object directly.
+              </li>
+              <li>
+                If the user requested html, webapp will pass the json
+                through the relevant mustche template to return html.
+              </li>
+            </ul>
           </p>
           <h3>Installing locally</h3>
           <p>
