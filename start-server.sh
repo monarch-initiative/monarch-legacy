@@ -5,6 +5,8 @@ if [ $PORT ]
   then
    MARGS="--port $PORT"
   else
+   echo using default port
    MARGS="--port 8080"
 fi
+echo starting server
 ./ringojs/bin/ringo lib/monarch/web/webapp_launcher.js $MARGS
