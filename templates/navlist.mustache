@@ -1,9 +1,14 @@
-    <!--    <img src="http://monarchinitiative.org/sites/default/files/logo-1_1.png" class="img-rounded"/> -->
-    <a href="/"><img src="/image/logo.png" width="100" class="img-rounded"/></a>
-        <ul class="nav nav-list">
-	    <li class="nav-header">Find a...</li>
-	    <li><a href="/disease">Disease</a></li>
-	    <li><a href="/phenotype">Phenotype</a></li>
-	    <li><a href="/model">Model</a></li>
-	    <li class="nav-header">Navigate to...</li>
-	</ul>
+<!--    <img src="http://monarchinitiative.org/sites/default/files/logo-1_1.png" class="img-rounded"/> -->
+<a href="/"><img src="/image/logo.png" width="100" class="img-rounded"/></a>
+<ul class="nav nav-list">
+    <form class="form-search search-bar" action="/search/" method="GET">  
+         <input name="search_term" type="text" class="input-medium search-query">  
+         <button type="submit" class="btn btn-primary">Search</button>  
+         <div class="text-warning"><a href="https://github.com/cmungall/monarch-app/issues/1">todo - autocomplete</a></div>
+    </form> 
+    <li class="nav-header">Find</li>
+        <li><a href="/disease">Disease</a></li>
+        <li><a href="/phenotype">Phenotype</a></li>
+        <li><a href="/model">Model</a></li>
+    <li class="nav-header">Navigate</li>
+</ul>

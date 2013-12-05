@@ -1,0 +1,43 @@
+.sidebar {
+    display: inline-block;
+    float: left;
+    height: 100%;
+    position: fixed;
+    border-right: 2px solid black;
+    width: 160px;
+    padding-top: 20px;
+}
+.form-search.search-bar {
+    margin-top: 15px;
+}
+.btn.btn-primary {
+    padding: 4px 51px;
+    font-size: 13px;
+    margin-top: 3px;
+}
+.nav-header {
+    font-size: 17px;
+    font-weight: 700;
+    margin-top: 10px;
+}
+.content {
+    display: inline-block;
+    margin-left: 160px;
+    margin-bottom: 20px;
+}
+.jumbotron {
+    margin-top: 0px;
+    border-radius: 2px;
+    padding: 15px 40px 30px;
+}
+.col-lg-9 {
+    padding-left: 40px;
+    margin-top: -20px;
+}
+h1 {
+    margin: 10px 0px;
+}
+.btn.btn-large.btn-success {
+    margin-top: 5px;
+    padding: 10px 15px;
+}

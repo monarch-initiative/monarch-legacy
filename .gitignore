@@ -3,3 +3,5 @@ cache/*/key*json
 ringojs
 semantic.cache
 */semantic.cache
+.DS_Store
+ringojs-0.9
