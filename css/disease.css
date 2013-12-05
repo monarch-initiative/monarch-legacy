@@ -37,19 +37,7 @@
     display: inline-block;
     margin-left: 160px;
     margin-bottom: 20px;
-}
-/* Disease Spotlight */
-.jumbotron {
-    margin-top: 0px;
-    border-radius: 2px;
-    padding: 15px 40px 30px;
-}
-h1 {
-    margin: 10px 0px;
-}
-.btn.btn-large.btn-success {
-    margin-top: 5px;
-    padding: 10px 15px;
+    padding: 20px 20px 20px 40px;
 }
 /* Rest of Content */
 .col-lg-9 {

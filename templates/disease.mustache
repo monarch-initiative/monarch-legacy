@@ -5,7 +5,7 @@
     {{#scripts}}
     <script type="text/javascript" src="{{url}}"></script>
         <script type="text/javascript">
-       $( document ).ready(function() {
+       $(document).ready(function() {
        //I think the RingoJS code is calling the document.ready() each time a section
        //of code returns.  This causes my svg to get recreated several times.
        //the loaded_once variable flags this event to ensure it only happens once
@@ -15,7 +15,6 @@
 			  init();
 			  createModelRegion();
 			  update();
-	          
           }
        });
     </script>
@@ -23,27 +22,21 @@
     {{#stylesheets}}
     <link rel="stylesheet" type="text/css" href="{{url}}"></link>
     {{/stylesheets}}
+    <link rel="stylesheet" type="text/css" href="../css/disease.css"></link>
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta charset=”utf-8”> 
   </head>
   <body>
+    {{{includes.navbar}}}
     <div class="container">
-      {{{includes.navbar}}}
-      <div class="row">
-        <div class="col-lg-2">
-          {{{includes.navlist}}}
-	  <li><a href="#ontology">Ontology</a></li>
-	  <li><a href="#phenotype">Phenotypes</a></li>
-	  <li><a href="#gene">Genes</a></li>
-	  <li><a href="#allele">Alleles</a></li>
-	  <li><a href="#model">Model</a></li>
-	  <li><a href="#sim">Similarity</a></li>
-        </div>
-        <div class="col-lg-9">
+    <div class="sidebar">
+        {{{includes.navlistdisease}}}
+    </div>
+    <div class="content">
           <div id="description">
             <h1>Disease: {{label}}</h1>
 	    <a href="{{{base_url}}}.json" class="btn btn-success">JSON</a>
-	    <a href="{{{base_url}}}.rdf" class="btn btn-success">RDF</a>
+<!-- 	    <a href="{{{base_url}}}.rdf" class="btn btn-success">RDF</a> -->
 	    <a href="{{{base_url}}}.nt" class="btn btn-success">n-triples</a>
             <p>
               {{comments}}
@@ -64,13 +57,12 @@
               </table>
             </p>
           </div>
-
           <div id="phenotype">
             <h3>Phenotypes</h3>
 	    <a href="{{{base_url}}}/phenotype_associations.json" class="btn btn-success">JSON</a>
-	    <a href="{{{base_url}}}/phenotype_associations.rdf" class="btn btn-success">RDF</a>
+<!-- 	    <a href="{{{base_url}}}/phenotype_associations.rdf" class="btn btn-success">RDF</a> -->
 	    <a href="{{{base_url}}}/phenotype_associations.nt" class="btn btn-success">n-triples</a>
-            <span class="text-warning">May be incoomplete/with false
+            <span class="text-warning">May be incomplete/with false
               positives. See: <a href="https://support.crbs.ucsd.edu/browse/LAMHDI-140"></a>
             </span>
             <table class="{{css.table}}">
@@ -93,7 +85,7 @@
 
           <div id="model">
 	    <a href="{{{base_url}}}/models.json" class="btn btn-success">JSON</a>
-	    <a href="{{{base_url}}}/models.rdf" class="btn btn-success">RDF</a>
+<!-- 	    <a href="{{{base_url}}}/models.rdf" class="btn btn-success">RDF</a> -->
 	    <a href="{{{base_url}}}/models.nt" class="btn btn-success">n-triples</a>
             <h3>Models</h3>
             <table class="{{css.table}}">
@@ -108,15 +100,12 @@
               {{{simTable}}}
             </table>
           </div>
-
         </div>
-
         <div class="col-lg-2">
           {{{includes.rightlist}}}
         </div>
       </div>
     </div>      
-</div>      
-
+</div>
 </body>
 </html>
