@@ -1,0 +1,65 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Keggerator Example Page</title>
+</head>
+<body>
+<script type="application/javascript" src="js/d3.min.js"></script>
+<script type="application/javascript" src="js/jquery-1.10.2.min.js"></script>
+<script type="application/javascript" src="js/jquery.xml2json.js"></script>
+<script type="application/javascript" src="js/keggerator.js"></script>
+
+<style>
+
+
+    #twoColumnContainer {
+        width: 100%;
+    }
+
+    #imageDiv {
+        float: left;
+        padding: 0;
+        outline: 1px solid #999;
+    }
+
+    #selectColumn {
+        float: right;
+    }
+
+
+
+</style>
+
+<script>
+
+    $(function () {
+        keggerator.init($("#imageDiv"), $("#selectList"));
+        keggerator.setPathwayId("ko05012");
+    });
+
+</script>
+
+<h1><img src="kegerator.jpg" height="80" width="80"/>Keggerator Demonstration Page</h1>
+
+<div>Kegg or WikiPathway Id<input type="text" size="80" id="pathwayId" value="WP1991"/><input id="pathwayIdButton"
+                                                                                              type="button"
+                                                                                              value="Get It">
+</div>
+
+<div id="twoColumnContainer">
+
+    <div id="imageDiv"></div>
+
+    <div id="selectColumn">
+        <select id="selectList" multiple="multiple" size="20">
+            <option>Enter a Kegg Id First</option>
+        </select><br/>
+        <input id="highlightButton" type="button" value="Highlight"/><br/>
+        <input id="eraseButton" type="button" value="Erase All Highlights"/><br/>
+    </div>
+
+</div>
+
+
+</body>
+</html>
