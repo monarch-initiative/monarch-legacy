@@ -25,6 +25,9 @@
       "rowid":"HP_0000716_HP_0100851"
    },
 
+
+NOTE: I probably need a model_url to access the model info on the screen.  Alternatively I can load the data
+as a separate call in the init function.
  */
 var modeltype = function () {
 
@@ -111,10 +114,13 @@ var modeltype = function () {
 
   //return a label for use in the list.  This label is shortened
   //to fit within the space in the column
-  function getShortLabel(label) {
+  function getShortLabel(label, newlength) {
     var retLabel = label;
-    if (label.length > text_length) {
-  	  retLabel = label.substring(0,text_length-3) + "...";
+    if (!newlength) {
+    	newlength = text_length;
+    }
+    if (label.length > newlength) {
+  	  retLabel = label.substring(0,newlength-3) + "...";
     }	
     return retLabel;
   }
@@ -312,7 +318,7 @@ var modeltype = function () {
 				//this be some voodoo...
 				//to rotate the text, I need to select it as it was added by the axis
 			    .selectAll("text") 
-			       .each(function(d,i) { convertLabelHTML(this, model_list[i].model_label);});
+			       .each(function(d,i) { convertLabelHTML(this, getShortLabel(model_list[i].model_label, 25));});
 
 
 		//create a scale
@@ -371,7 +377,7 @@ var modeltype = function () {
 	      //	  .attr('onclick', function(d) { return 'select_column(this,"' + d + '");';}) 
 
 	      .attr("onclick", function(d) {
-	    	  return 'parallelwidget.changeThreshold(this,' + d + ');';
+	    	  return 'modeltype.changeThreshold(this,' + d + ');';
 	      })
 	      .attr("width", 26)
 	      .attr("height", 5)
