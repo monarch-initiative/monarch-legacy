@@ -10,7 +10,11 @@ var keggerator = function () {
     var pathwayId = {};
     var selectList = {};
     var data = [];
-    var pic_real_width, pic_real_height;
+    var dataShown = [];
+    var pathwayImageWidth, pathwayImageHeight;
+    var acetate = {};
+    var phenotypeGeneIdMap = {};
+    var phenotypeBorderSize = 80;
 
     function initCanvas(imageDiv) {
 
@@ -21,30 +25,29 @@ var keggerator = function () {
     function updateCanvas(pathway_id, pathwayType) {
 
         var imgSrc = "http://rest.kegg.jp/get/" + pathway_id + "/image";
-        var acetate = d3.select("#acetate");
+        acetate = d3.select("#acetate");
 
-        setImageSize(imgSrc);
+        // retrieve image size
+        drawPathway(imgSrc);
+    }
 
-        // add pathway image as background
-        acetate.append("svg:image")
-            .attr("x", 0)
-            .attr("y", 0)
-            .attr("width", 1104)
-            .attr("height", 969)
-            .attr("style", "padding: 0px 0px 0px 0px;")
-            .attr("xlink:href", imgSrc);
+    function drawRects() {
+        var selectorWidth = 46;
+        var selectorHeight = 17;
+        var selectorVerticalPad = 10;
+        var selectorHorizontalPad = 5;
 
-        // set canvas size
-        acetate
-            .attr("width", 1104)
-            .attr("height", 969);
+        acetate = d3.select("#acetate");
 
         // draw rects
-        var rects = acetate.selectAll("g").data(data).enter().append("g")
-            .attr("transform", function (d, i) {
-                return "translate(" + (d.x - Math.floor(d.width / 2)) + "," + (d.y - Math.floor(d.height / 2)) + ")";
-            });
-        rects.append("rect")
+        acetate.selectAll(".gene").data(dataShown).enter().append("rect")
+            .classed("gene", true)
+            .attr("x", function (d, i) {
+                return (d.x - Math.floor(d.width / 2))
+            })
+            .attr("y", function (d, i) {
+                return (d.y - Math.floor(d.height / 2))
+            })
             .attr("width", function (d) {
                 return d.width
             })
@@ -54,17 +57,57 @@ var keggerator = function () {
             .style("fill", "red")
             .style("opacity", 0.5);
 
+        acetate.selectAll(".phenotype").data(phenotypeGeneIdMap).enter().append("rect")
+            .classed("phenotype", true)
+            .attr("x", function (d, i) {
+                return (pathwayImageWidth + selectorHorizontalPad);
+            })
+            .attr("y", function (d, i) {
+                return ((selectorHeight + selectorVerticalPad) * i);
+            })
+            .attr("rx", 3)
+            .attr("ry", 3)
+            .attr("width", function (d) {
+                return selectorWidth;
+            })
+            .attr("height", function (d) {
+                return selectorHeight;
+            })
+            .style("fill", "blue")
+            .style("opacity", 0.5);
 
     }
 
-    function setImageSize(imgSrc) {
+    function drawPathway(imgSrc) {
 
-        $("<img/>") // Make in memory copy of image to avoid css issues
-            .attr("src", imgSrc)
-            .load(function () {
-                pic_real_width = this.width;   // Note: $(this).width() will not
-                pic_real_height = this.height; // work for in memory images.
-            });
+        var myImage = new Image();
+        myImage.name = imgSrc;
+        myImage.onload = function () {
+            pathwayImageHeight = this.height;
+            pathwayImageWidth = this.width;
+            console.log(pathwayImageHeight + "," + pathwayImageWidth);
+
+            // add pathway image as background
+            acetate.append("svg:image")
+                .attr("id", "pathwayImage")
+                .attr("x", 0)
+                .attr("y", 0)
+                .attr("width", pathwayImageWidth)
+                .attr("height", pathwayImageHeight)
+                .attr("style", "padding: 0px 0px 0px 0px;")
+                .attr("xlink:href", imgSrc);
+
+            // set canvas size to image size
+            acetate
+                .attr("width", pathwayImageWidth + phenotypeBorderSize)
+                .attr("height", pathwayImageHeight);
+
+            drawRects();
+
+
+        };
+        myImage.src = imgSrc;
+
     }
 
 
@@ -72,6 +115,34 @@ var keggerator = function () {
         selectList = select_list;
 
         initCanvas(imageDiv);
+    }
+
+
+    function clearHighlights() {
+        acetate.selectAll(".gene").transition()
+            .attr("x", 1)
+            .attr("y", 1)
+            .duration(1000)
+            .remove();
+
+
+
+        //acetate.selectAll("rect").data([]).exit().remove();
+
+    }
+
+    function highlight() {
+
+        var elements = selectList.val();
+
+        dataShown = [];
+        data.forEach(function (d) {
+            if (elements.indexOf(d.graph_id) > -1) {
+                dataShown.push(d);
+            }
+        });
+        clearHighlights();
+        drawRects();
     }
 
     function setPathwayId(pathway_id, pathwayType) {
@@ -89,7 +160,7 @@ var keggerator = function () {
                 if (this.graphics.type == "rectangle") {
                     selectList.append($("<option></option>").attr("value", this.name).text(this.graphics.name));
                     // populate data array
-                    data.push({"label": this.graphics.name, "x": this.graphics.x, "y": this.graphics.y, "width": this.graphics.width, "height": this.graphics.height, "graph_id": this.graphics.name});
+                    data.push({"label": this.graphics.name, "x": this.graphics.x, "y": this.graphics.y, "width": this.graphics.width, "height": this.graphics.height, "graph_id": this.name});
                 }
             });
 
@@ -103,13 +174,38 @@ var keggerator = function () {
 
     }
 
+    function setPhenotypeGeneIdMap(m) {
+        // [ { "phenotype_id" : {
+        //      "label" : "label",
+        //      "geneIds" : [ "gene1", "gene2" ]
+        //      }
+        //    }
+        //  ]
 
-    // public methods and vars
+        phenotypeGeneIdMap = m;
+
+    }
+
+    function highlightPhenotype(phenotypeId) {
+
+        // swap the order of drawn elements
+
+        // redraw
+
+    }
+
+// public methods and vars
     return {
         init: init,
-        setPathwayId: setPathwayId
+        setPathwayId: setPathwayId,
+        setPhenotypeGeneIdMap: setPhenotypeGeneIdMap,
+        highlightPhenotype: highlightPhenotype,
+
+        highlight: highlight,
+        clearHighlights: clearHighlights
     };
 
-}();
+}
+    ();
 
 
