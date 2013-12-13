@@ -1,0 +1,103 @@
+[
+    {
+        "phenotype_id": "HP:0000726",
+        "label": "Dementia",
+        "url": "http://purl.obolibrary.org/obo/HP_0000726",
+        "genes": {
+
+            "gene_id": {
+                "url": ""
+            },
+            "gene_id1": {
+                "url": ""
+            },
+            "gene_id2": {
+                "url": ""
+            },
+            "gene_id3": {
+                "url": ""
+            }
+        }
+    },
+    {
+        "phenotype_id": "HP:0000746",
+        "label": "Delusions",
+        "url": "http://purl.obolibrary.org/obo/HP_0000746",
+        "genes": {
+
+            "gene_id": {
+                "url": ""
+            },
+            "gene_id1": {
+                "url": ""
+            },
+            "gene_id2": {
+                "url": ""
+            },
+            "gene_id3": {
+                "url": ""
+            }
+        }
+    },
+    {
+        "phenotype_id": "HP:0001300",
+        "label": "Parkinsonism",
+        "url": "http://purl.obolibrary.org/obo/HP_0001300",
+        "genes": {
+
+            "gene_id": {
+                "url": ""
+            },
+            "gene_id1": {
+                "url": ""
+            },
+            "gene_id2": {
+                "url": ""
+            },
+            "gene_id3": {
+                "url": ""
+            }
+        }
+    },
+    {
+        "phenotype_id": "HP:0002367",
+        "label": "Visual Hallucinations",
+        "url": "http://purl.obolibrary.org/obo/HP_0002367",
+        "genes": {
+
+            "gene_id": {
+                "url": ""
+            },
+            "gene_id1": {
+                "url": ""
+            },
+            "gene_id2": {
+                "url": ""
+            },
+            "gene_id3": {
+                "url": ""
+            }
+        }
+    },
+    {
+        "phenotype_id": "HP:0007159",
+        "label": "Fluctuations in consciousness",
+        "url": "http://purl.obolibrary.org/obo/HP_0007159",
+        "genes": {
+
+            "gene_id": {
+                "url": ""
+            },
+            "gene_id1": {
+                "url": ""
+            },
+            "gene_id2": {
+                "url": ""
+            },
+            "gene_id3": {
+                "url": ""
+            }
+        }
+    }
+]
+
