@@ -124,8 +124,13 @@ function loadData() {
 		return d.value;
 	});
 	color_scale = d3.scale.linear().domain([d3.min(temp_array), d3.max(temp_array)]).range([d3.rgb("#e5e5e5"), d3.rgb("#44a293")]);
+<<<<<<< HEAD
 	//h = filtered_model_data.length*1.5;
 	h = 600;
+=======
+	h = filtered_model_data.length*1.5;
+	//h = 300;
+>>>>>>> origin/pitt_branch
 
 
 }
@@ -242,8 +247,13 @@ function createModelRegion() {
 }
 
 function updateAxes() {
+<<<<<<< HEAD
 	h= 600;
 	//h = filtered_model_data.length*1.5;
+=======
+	//h= 300;
+	h = filtered_model_data.length*1.5;
+>>>>>>> origin/pitt_branch
 	y_scale = d3.scale.ordinal()
     	.domain(filtered_model_data.map(function (d) {return d.rowid; }))
     	.rangePoints([ 44, h ]);

@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 #!/bin/sh
 PATH_TO_ME=`which $0`
 cd `dirname $PATH_TO_ME`
@@ -10,3 +11,6 @@ if [ $PORT ]
 fi
 echo starting server
 ./ringojs/bin/ringo lib/monarch/web/webapp_launcher.js $MARGS
+=======
+./ringojs/bin/ringo -J-Xmx2G lib/monarch/web/webapp_launcher.js --port 8282
+>>>>>>> origin/pitt_branch
