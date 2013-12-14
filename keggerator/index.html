@@ -1,34 +1,6 @@
 <!DOCTYPE html>
 <html>
 <head>
-<<<<<<< HEAD
-    <title>Keggerator Example Page</title>
-</head>
-<body>
-<script type="application/javascript" src="js/d3.min.js"></script>
-<script type="application/javascript" src="js/jquery-1.10.2.min.js"></script>
-<script type="application/javascript" src="js/jquery.xml2json.js"></script>
-<script type="application/javascript" src="js/keggerator.js"></script>
-
-<style>
-
-
-    #twoColumnContainer {
-        width: 100%;
-    }
-
-    #imageDiv {
-        float: left;
-        padding: 0;
-        outline: 1px solid #999;
-    }
-
-    #selectColumn {
-        float: right;
-    }
-
-
-=======
     <title>Keggerator</title>
 </head>
 <body>
@@ -61,26 +33,10 @@
         z-index:20;
 
     }
->>>>>>> origin/pitt_branch
 
 </style>
 
 <script>
-<<<<<<< HEAD
-
-    $(function () {
-        keggerator.init($("#imageDiv"), $("#selectList"));
-        keggerator.setPathwayId("ko05012");
-    });
-
-</script>
-
-<h1><img src="kegerator.jpg" height="80" width="80"/>Keggerator Demonstration Page</h1>
-
-<div>Kegg or WikiPathway Id<input type="text" size="80" id="pathwayId" value="WP1991"/><input id="pathwayIdButton"
-                                                                                              type="button"
-                                                                                              value="Get It">
-=======
     // the kgml file is loaded when user enters a kegg id
     var kgmlJson = {};
     var canvasXOffset = 22;
@@ -158,17 +114,10 @@
 
 <div>
     Kegg Id<input type="text" size="80" id="keggId" value="ko05012"/><input id="keggIdButton" type="button" value="Get It">
->>>>>>> origin/pitt_branch
 </div>
 
 <div id="twoColumnContainer">
 
-<<<<<<< HEAD
-    <div id="imageDiv"></div>
-
-    <div id="selectColumn">
-        <select id="selectList" multiple="multiple" size="20">
-=======
     <div id="keggImageColumn">
         <img id="keggImage" src=""/>
         <div id="canvas"></div>
@@ -176,7 +125,6 @@
 
     <div id="kgmlSelectColumn">
         <select id="kgmlSelect" multiple="multiple" size="20">
->>>>>>> origin/pitt_branch
             <option>Enter a Kegg Id First</option>
         </select><br/>
         <input id="highlightButton" type="button" value="Highlight"/><br/>
@@ -184,10 +132,5 @@
     </div>
 
 </div>
-
-<<<<<<< HEAD
-
-=======
->>>>>>> origin/pitt_branch
 </body>
 </html>
