@@ -37,6 +37,12 @@ $(document).ready(function(){
         } else if (panel_id == "simi") {
             panel = '#sim';
             tab = '.simtab';
+        } else if (panel_id == "dis") {
+            panel = '#disease';
+            tab = '.distab';
+        } else if (panel_id == "geno") {
+            panel = '#geno';
+            panel = '.genotab';
         } else {
             panel = "#down";
             tab = '.downtab';
