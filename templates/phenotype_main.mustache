@@ -1,6 +1,6 @@
 <!DOCTYPE html>
 <html>
-  <head>
+<head>
     <title>Monarch Phenotypes</title>
     {{#scripts}}
     <script type="text/javascript" src="{{url}}"></script>
@@ -8,33 +8,30 @@
     {{#stylesheets}}
     <link rel="stylesheet" type="text/css" href="{{url}}"></link>
     {{/stylesheets}}
-    <meta charset=”utf-8”> 
-  </head>
-  <body>
+    <link rel="stylesheet" type="text/css" href="../css/phenotype_main.css"></link>
+    <meta charset=”utf-8”>
+</head>
+<body>
+    {{{includes.navbar}}}
     <div class="container">
-      {{{includes.navbar}}}
-      <div class="jumbotron">
-	<h1>Phenotype of the month : large floppy ears</h1>
-	<p>TODO: Replace this with something sensible.</p>
-	<a href="/phenotype/HP_0000386" class="btn btn-large btn-success">Find out more</a>
-      </div>
-      <div class="row">
-        <div class="col-lg-2">
-          {{{includes.navlist}}}
+    <div class="sidebar">
+        {{{includes.navlist}}}
+    </div>
+    <div class="content">
+        <div class="jumbotron">
+            <h1>Phenotype spotlight: Large floppy ears</h1>
+            <p>TODO: Replace this with something sensible.</p>
+            <a href="/phenotype/HP_0000386" class="btn btn-large btn-success">Find out more</a>
         </div>
         <div class="col-lg-9">
-          <h1>Phenotype List</h1>
-          <ul>
-            <li><a href="/phenotype/HP_0000003">Multicystic kidney dysplasia</li> (human)
-            <li><a href="/phenotype/HP_0000104">Renal agenesis</li> (human)
-            <li><a href="/phenotype/MP_0000854">abnormal cerebellum development</li> (mouse)
-            <li><a href="/phenotype/WBPhenotype_0000655">GABA synaptic transmission variant</li> (worm TODO)
-          </ul>
-          <p>
-            Use the search bar above to find more phenotypes...
-          </p>
+            <h1>Phenotype List</h1>
+            <ul>
+                <li><a href="/phenotype/HP_0000003">Multicystic kidney dysplasia (human)</li>
+                <li><a href="/phenotype/HP_0000104">Renal agenesis (human)</li>
+                <li><a href="/phenotype/MP_0000854">abnormal cerebellum development (mouse)</li>
+                <li><a href="/phenotype/WBPhenotype_0000655">GABA synaptic transmission variant (worm TODO)</li>
+            </ul>
         </div>
-      </div>
     </div>
-  </body>
+</body>
 </html>
