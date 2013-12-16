@@ -38,13 +38,10 @@
         <div class="jumbotron">
             <div id="description">
                 <h1>Disease: {{label}}</h1>
-                <a href="{{{base_url}}}.json" class="btn btn-success">JSON</a>
-                <!-- <a href="{{{base_url}}}.rdf" class="btn btn-success">RDF</a> -->
-                <a href="{{{base_url}}}.nt" class="btn btn-success">n-triples</a>
                 <p>
                 {{comments}}
                 </p>
-                <a href="https://github.com/cmungall/monarch-app/issues/3">todo - tidy this</a>
+                <a href="https://github.com/cmungall/monarch-app/issues/3">todo - tidy this & add description of disease</a>
                 <p>
                 <i>AKA: </i> {{has_exact_synonym}}
                 </p>
@@ -62,6 +59,7 @@
                 <a href="#allele"><div class="tab alletab">Alleles</div></a>
                 <a href="#model"><div class="tab modtab">Model</div></a>
                 <a href="#sim"><div class="tab simtab">Similarity</div></a>
+                <a href="#down"><div class="tab downtab">Download</div></a>
             </div>
             <div id="overview" class="category">
                 <h3>To Do</h3>
@@ -78,9 +76,6 @@
             </div>
             <div id="phenotype" class="category">
                 <h3>Phenotypes</h3>
-                <a href="{{{base_url}}}/phenotype_associations.json" class="btn btn-success">JSON</a>
-                <!--    <a href="{{{base_url}}}/phenotype_associations.rdf" class="btn btn-success">RDF</a> -->
-                <a href="{{{base_url}}}/phenotype_associations.nt" class="btn btn-success">n-triples</a>
                 <span class="text-warning">May be incomplete/with false
                 positives. See: <a href="https://support.crbs.ucsd.edu/browse/LAMHDI-140"></a>
                 </span>
@@ -102,20 +97,32 @@
             </div>
             <div id="model" class="category">
                 <h3>Models</h3>
-                <a href="{{{base_url}}}/models.json" class="btn btn-success">JSON</a>
-                <!--    <a href="{{{base_url}}}/models.rdf" class="btn btn-success">RDF</a> -->
-                <a href="{{{base_url}}}/models.nt" class="btn btn-success">n-triples</a>
                 <table class="{{css.table}}">
                 {{{modelTable}}}
                 </table>
             </div>
             <div id="sim" class="category">
                 <h3>Similar Diseases</h3>
-                <a href="{{{base_url}}}/sim.json" class="btn btn-success">JSON</a>
                 <table class="{{css.table}}">
                 {{{simTable}}}
                 </table>
-                </div>
+            </div>
+            <div id="down" class="category">
+                <h3>Download</h3>
+                <div class="buttonsegment">Disease Information</div>
+                <a href="{{{base_url}}}.json" class="btn btn-success">JSON</a>
+                <!-- <a href="{{{base_url}}}.rdf" class="btn btn-success">RDF</a> -->
+                <a href="{{{base_url}}}.nt" class="btn btn-success">n-triples</a>
+                <div class="buttonsegment">Phenotypes</div>
+                <a href="{{{base_url}}}/phenotype_associations.json" class="btn btn-success">JSON</a>
+                <!--    <a href="{{{base_url}}}/phenotype_associations.rdf" class="btn btn-success">RDF</a> -->
+                <a href="{{{base_url}}}/phenotype_associations.nt" class="btn btn-success">n-triples</a>
+                <div class="buttonsegment">Model</div>
+                <a href="{{{base_url}}}/models.json" class="btn btn-success">JSON</a>
+                <!--    <a href="{{{base_url}}}/models.rdf" class="btn btn-success">RDF</a> -->
+                <a href="{{{base_url}}}/models.nt" class="btn btn-success">n-triples</a>
+                <div class="buttonsegment">Similar Diseases</div>
+                <a href="{{{base_url}}}/sim.json" class="btn btn-success">JSON</a>
             </div>
         </div>
     </div>

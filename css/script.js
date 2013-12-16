@@ -1,7 +1,7 @@
 $(document).ready(function(){
 
     $('.tab').click(function() {
-        $('.tab').css({'color': 'grey'});
+        $('.tab').css({'color': '#999'});
         $(this).css({'color': 'white'});
     });
 
@@ -34,9 +34,12 @@ $(document).ready(function(){
         } else if (panel_id == "mod") {
             panel = '#model';
             tab = '.modtab';
-        } else {
+        } else if (panel_id == "simi") {
             panel = '#sim';
             tab = '.simtab';
+        } else {
+            panel = "#down";
+            tab = '.downtab';
         }
         $(panel).show(400);
         $(tab).css({'color': 'white'});
