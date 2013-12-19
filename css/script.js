@@ -8,7 +8,7 @@ $(document).ready(function(){
     $('#categories a').click(function() {
         var panel_id = $(this).attr('href');
         $('.category').hide();
-        $(panel_id).show(400);
+        $(panel_id).slideDown(400);
     });
 
     $('.special').click(function() {
@@ -47,7 +47,7 @@ $(document).ready(function(){
             panel = "#down";
             tab = '.downtab';
         }
-        $(panel).show(400);
+        $(panel).slideDown(400);
         $(tab).css({'color': 'white'});
     });
 

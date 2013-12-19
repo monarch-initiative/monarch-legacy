@@ -48,11 +48,21 @@
     padding: 20px 20px 20px 0px;
 }
 /* Description */
-.jumbotron {
-    border-radius: 2px;
-    padding: 10px 40px 60px;
-    margin-top: -25px;
-    margin-bottom: 0px;
+@media (min-width: 1200px) {
+    .jumbotron {
+        border-radius: 2px;
+        padding: 10px 40px 60px;
+        margin-top: -25px;
+        margin-bottom: 0px;
+    }
+}
+@media (max-width: 1200px) {
+    .jumbotron {
+        border-radius: 2px;
+        padding: 10px 40px 100px;
+        margin-top: -25px;
+        margin-bottom: 0px;
+    }
 }
 .jumbotron h1 {
     font-size: 50px;
@@ -69,25 +79,61 @@ p {
     font-size: 16px;
 }
 /* Rest of Content */
-#categories {
-    margin-top: -30px;
-    border-bottom: black solid 2px;
+@media (min-width: 1200px) {
+    #categories {
+        margin-top: -30px;
+        border-bottom: black solid 2px;
+    }
 }
-.tab {
-    display: inline-block;
-    background: black;
-    color: #999;
-    padding: 5px;
-    width: 100px;
-    text-align: center;
-    border-radius: 5px 5px 0px 0px;
-    margin-right: 5px;
-    font-weight: 400;
-    cursor: pointer;
+@media (max-width: 1200px) {
+    #categories {
+        margin-top: -90px;
+        border-bottom: black solid 2px;
+    }
+}
+@media (min-width: 1200px) {
+    .tab {
+        display: inline-block;
+        background: black;
+        color: #999;
+        padding: 5px;
+        width: 100px;
+        text-align: center;
+        border-radius: 5px 5px 0px 0px;
+        margin-right: 5px;
+        font-weight: 400;
+        cursor: pointer;
+    }
+}
+@media (max-width: 1200px) {
+    .tab {
+        display: inline-block;
+        background: black;
+        color: #999;
+        padding: 5px;
+        width: 110px;
+        text-align: center;
+        border-radius: 4px;
+        margin-right: 20px;
+        font-weight: 400;
+        cursor: pointer;
+    }
 }
 #initialtab {
     color: white;
     margin-left: 40px;
+}
+@media (min-width: 1200px) {
+    .second-row-divider {
+        display: inline-block;
+    }
+}
+@media (max-width: 1200px) {
+    .alletab {
+        margin-left: 40px;
+        margin-top: 10px;
+        margin-bottom: 15px;
+    }
 }
 #overview {
     display: block;

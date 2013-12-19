@@ -1,6 +1,6 @@
 <!DOCTYPE html>
 <html>
-  <head>
+<head>
     <title>Monarch Models</title>
     {{#scripts}}
     <script type="text/javascript" src="{{url}}"></script>
@@ -8,46 +8,49 @@
     {{#stylesheets}}
     <link rel="stylesheet" type="text/css" href="{{url}}"></link>
     {{/stylesheets}}
-    <meta charset=”utf-8”> 
-  </head>
-  <body>
+    <link rel="stylesheet" type="text/css" href="../css/model_main.css"></link>
+    <meta charset=”utf-8”>
+</head>
+<body>
+    {{{includes.navbar}}}
     <div class="container">
-      {{{includes.navbar}}}
-      <div class="jumbotron">
-	<h1>Model of the month : Fat Aussie</h1>
-	<p>The biochemical differences between simple steatosis, a
-	benign liver disease, and non-alcoholic steatohepatitis, which
-	leads to cirrhosis, are unclear. Fat aussie is an obese mouse
-	strain with a truncating mutation (foz) in the Alms1
-	gene. Chow-fed female foz/foz mice develop obesity, diabetes,
-	and simple steatosis. We fed foz/foz and wildtype mice a
-	high-fat diet. Foz/foz mice developed serum ALT elevation and
-	severe steatohepatitis with hepatocyte ballooning,
-	inflammation, and fibrosis; wildtype mice showed simple
-	steatosis. Biochemical pathways favoring hepatocellular lipid
-	accumulation (fatty acid uptake; lipogenesis) and lipid
-	disposal (fatty acid beta-oxidation; triglyceride egress) were
-	both induced by high-fat feeding in wildtype but not foz/foz
-	mice. The resulting extremely high hepatic triglyceride levels
-	were associated with induction of mitochondrial uncoupling
-	protein-2 and adipocyte-specific fatty acid binding protein-2,
-	but not cytochrome P4502e1 or lipid peroxidation. In this
-	model of metabolic syndrome, transition of steatosis to
-	steatohepatitis was associated with hypoadiponectinemia, a
-	mediator of hepatic fatty acid disposal pathways [<a href="http://www.informatics.jax.org/reference/J:107058">PMID:16516152</a>].</p>
-	<a href="/model/MGI_3621984" class="btn btn-large btn-success">Find out more</a>
-      </div>
-      <div class="row">
-        <div class="col-lg-2">
-          {{{includes.navlist}}}
+    <div class="sidebar">
+        {{{includes.navlist}}}
+    </div>
+    <div class="content">
+        <div class="jumbotron">
+            <h1>Model spotlight: Fat Aussie</h1>
+            <p>
+            The biochemical differences between simple steatosis, a
+            benign liver disease, and non-alcoholic steatohepatitis, which
+            leads to cirrhosis, are unclear. Fat aussie is an obese mouse
+            strain with a truncating mutation (foz) in the Alms1
+            gene. Chow-fed female foz/foz mice develop obesity, diabetes,
+            and simple steatosis. We fed foz/foz and wildtype mice a
+            high-fat diet. Foz/foz mice developed serum ALT elevation and
+            severe steatohepatitis with hepatocyte ballooning,
+            inflammation, and fibrosis; wildtype mice showed simple
+            steatosis. Biochemical pathways favoring hepatocellular lipid
+            accumulation (fatty acid uptake; lipogenesis) and lipid
+            disposal (fatty acid beta-oxidation; triglyceride egress) were
+            both induced by high-fat feeding in wildtype but not foz/foz
+            mice. The resulting extremely high hepatic triglyceride levels
+            were associated with induction of mitochondrial uncoupling
+            protein-2 and adipocyte-specific fatty acid binding protein-2,
+            but not cytochrome P4502e1 or lipid peroxidation. In this
+            model of metabolic syndrome, transition of steatosis to
+            steatohepatitis was associated with hypoadiponectinemia, a
+            mediator of hepatic fatty acid disposal pathways
+            [<a href="http://www.informatics.jax.org/reference/J:107058">PMID:16516152</a>].
+            </p>
+            <a href="/model/MGI_3621984" class="btn btn-large btn-success">Find out more</a>
         </div>
         <div class="col-lg-9">
-          <h1>Model List</h1>
-          <ul>
-            <li>...</li>
-          </ul>
+            <h1>Model List</h1>
+            <ul>
+                <li><a href="#">...</li>
+            </ul>
         </div>
-      </div>
     </div>
-  </body>
+</body>
 </html>
