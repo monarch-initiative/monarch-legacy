@@ -1,8 +1,42 @@
-body {
-    background-color: #EEE;
+/* Navbar */
+.nav>li>a {
+    padding: 0px;
 }
+.dropdown-toggle {
+    margin: 15px 15px 10px;
+}
+
+/* Side Bar */
+.sidebar {
+    display: inline-block;
+    float: left;
+    height: 100%;
+    position: fixed;
+    border-right: 2px solid black;
+    width: 160px;
+    padding-top: 20px;
+}
+/* Search Bar */
+.form-search.search-bar {
+    margin-top: 15px;
+}
+/* Search Button */
+.btn.btn-primary {
+    padding: 4px 51px;
+    font-size: 13px;
+    margin-top: 3px;
+}
+.nav-header {
+    font-size: 17px;
+    font-weight: 700;
+    margin-top: 10px;
+}
+
+/* Content */
 .content {
-    padding: 20px 40px 40px;
+    display: inline-block;
+    margin-left: 160px;
+    padding: 20px 0px 40px 40px;
 }
 .title {
     font-size: 50px;
@@ -10,7 +44,7 @@ body {
     line-height: 50px;
 }
 .team {
-    background-color: #FFF;
+    background-color: #EEE;
     padding: 20px;
     margin-top: 20px;
     border: #AAA solid 1px;
