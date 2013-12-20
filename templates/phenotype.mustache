@@ -29,12 +29,20 @@
                 <p>TODO: provide a link to the relevant website (HPO, MGI,
                 ZFIN, WormBase, ...) here<br>
                 <a href="https://github.com/cmungall/monarch-app/issues/3">todo - tidy this</a></p>
-                <i>URI:</i> <a href="{{{url}}}">{{{url}}}</a>
-                <p>
-                <i>AKA: </i> {{has_exact_synonym}}
-                </p>
-                <div id="ids">
-                <i>IDs: </i> {{database_cross_reference}}
+                <div class="ids">
+                    <b>URI:</b> <a href="{{{url}}}">{{{url}}}</a>
+                </div>
+                <div class="ids">
+                    <b>AKA: </b>
+                    {{#has_exact_synonym}}
+                    {{.}},
+                    {{/has_exact_synonym}}
+                </div>
+                <div class="ids">
+                    <b>IDs: </b>
+                    {{#database_cross_reference}}
+                    {{.}},
+                    {{/database_cross_reference}}
                 </div>
             </div>
         </div>

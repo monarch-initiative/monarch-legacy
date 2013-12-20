@@ -65,8 +65,7 @@
     }
 }
 .jumbotron h1 {
-    font-size: 50px;
-    padding-bottom: 10px;
+    font-size: 40px;
 }
 .btn.btn-success {
     margin-bottom: 10px;
@@ -75,8 +74,10 @@ p {
     font-size: 16px;
     margin-bottom: 0px;
 }
-#ids {
+.ids {
+    margin-top: 10px;
     font-size: 16px;
+    line-height: 22px;
 }
 /* Rest of Content */
 @media (min-width: 1200px) {
