@@ -1,0 +1,99 @@
+
+<!DOCTYPE html>
+<head>
+<title>ModelType Demo</title>
+<meta http-equiv="content-type" content="text/html;charset=utf-8">
+<link rel="stylesheet" href="cbw_db.css" type="text/css">
+<!--  <link rel="stylesheet" href="http://code.jquery.com/ui/1.10.3/themes/smoothness/jquery-ui.css" /> -->
+<link rel="stylesheet" href="js/jquery-ui.css" />
+<script type="text/javascript" src="js/jquery-1.9.1.min.js"></script>
+<script type="text/javascript" src="js/jquery-ui-1.8.5.custom.min.js"></script>
+<!-- <script type="text/javascript" src="http://code.jquery.com/ui/1.10.3/jquery-ui.js"></script> -->
+
+<style type="text/css">
+svg {
+	font: 10px sans-serif;
+}
+
+.background path {
+	fill: none;
+	stroke: #ccc;
+	stroke-opacity: .4;
+	shape-rendering: crispEdges;
+}
+
+.foreground path {
+	fill: none;
+	stroke: steelblue;
+	stroke-opacity: .7;
+}
+
+.highlightpath path {
+	fill: none;
+	stroke: red;
+	stroke-opacity: .7;
+}
+
+.brush .extent {
+	fill-opacity: .3;
+	stroke: #fff;
+	shape-rendering: crispEdges;
+}
+
+.axis line,.axis path {
+	fill: none;
+	stroke: #000;
+	shape-rendering: crispEdges;
+}
+
+
+.axis text {
+	text-shadow: 0 1px 0 #fff;
+}
+</style>
+
+<script src="js/d3.min.js" charset="utf-8"></script>
+<script src="js/modeltype.js"></script>
+
+
+<script>
+
+
+    $(function () {
+		var model_data;
+		jQuery.ajax({
+			url : "data/sample_model_data.json",
+			async : false,
+			dataType : 'json',
+			success : function(data) {
+				model_data = data;
+			}
+		});
+		var phenotype_list = [ {id: "HP:0002360", "observed" : "positive"},
+		                       {id: "HP:0002015", "observed" : "positive"},
+		                       {id: "HP:0011960", "observed" : "negative"},
+		                       {id: "HP:0002067", "observed" : "negative"},
+		                       {id: "HP:0002063", "observed" : "positive"},
+		                       {id: "HP:0002322", "observed" : "positive"},
+		                       ];
+		modeltype.initPhenotype($("#page_core"), phenotype_list);
+	});
+</script>
+
+</head>
+<body>
+    <div id="info_div" style="display:none;background: #FFFFFF;border-color: #000000;border-style: solid;border-width: 1px;"></div>
+	<div id="page_top">
+		<h1>ModelType Demo</h1>
+	</div>
+	<div id="page_core" style="width:600px;">
+	   <!--<p><label for="curr_score">LCS Score Threshold:</label><input type="text" id="curr_score" style="border: 0; font-weight: bold;" /></p>
+	    <p><div style="float:left;"><label for="min_score">Min Score:</label><input type="text" id="min_score" style="border: 0; font-weight: bold;" /></div><div id="lcs_slider" style="width:20%;float:left;left:-60px;"></div><div style="float:left"><label for="max_score">Max Score:</label><input type="text" id="max_score" style="border: 0; font-weight: bold;" /></div></p>
+	    <!--<div id="reset_div" onclick="resetInterface(); return false;">Reset</div> -->
+		<div id="separation_data_display">
+		</div>
+	</div>
+	<div id="page_bottom"></div>
+</body>
+
+</html>

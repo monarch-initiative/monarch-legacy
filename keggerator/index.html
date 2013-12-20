@@ -4,6 +4,8 @@
     <title>Keggerator</title>
 </head>
 <body>
+<script type="application/javascript" src="js/d3.min.js"></script>
+<script type="application/javascript" src="js/colorbrewer.v1.min.js"></script>
 <script type="application/javascript" src="js/jquery-1.10.2.min.js"></script>
 <script type="application/javascript" src="js/raphael-min-2.1.0.js"></script>
 <script type="application/javascript" src="js/jquery.xml2json.js"></script>
@@ -23,16 +25,6 @@
         float:right;
     }
 
-
-    #keggImageColumn img {
-        position:absolute;
-        z-index:1;
-    }
-    #canvas {
-        position: relative;
-        z-index:20;
-
-    }
 
 </style>
 
@@ -103,6 +95,23 @@
             })
         });
 
+
+
+    $(function () {
+        // tell keggerator where to draw stuff and handle ui events
+        keggerator.init($("#imageDiv"), $("#selectList"));
+        $("#highlightButton").on("click", keggerator.highlight);
+        $("#eraseButton").on("click", keggerator.clearHighlights);
+
+        // the pathway id
+        keggerator.setPathwayId("ko05012");
+
+        // the phenotype gene map
+        $.getJSON("./js/phenotypeGeneIdMap.json")
+                .done(function (data) {
+                    keggerator.setPhenotypeGeneIdMap(data);
+                }
+        );
 
 
     });
