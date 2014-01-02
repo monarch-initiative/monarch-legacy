@@ -26,14 +26,15 @@
    },
 
 
-NOTE: I probably need a model_url to access the model info on the screen.  Alternatively I can load the data
+NOTE: I probably need a model_url to render additional model info on the screen.  Alternatively I can load the data
 as a separate call in the init function.
  */
 var modeltype = function () {
 
     var col_starting_pos = 50, text_width = 150, clicked_data = undefined, xScale = undefined, text_length = 32;
     var svg;
-    var model_data = [], filtered_model_data = [];
+    var model_data = [];
+    var filtered_model_data = [];
     var dimensions = [ "Human Phenotype", "Lowest Common Subsumer", "Mammalian Phenotype" ];
     var m = [ 30, 10, 10, 10 ], w = 1000 - m[1] - m[3], h = 1300 - m[0] - m[2];
 
@@ -563,12 +564,59 @@ var modeltype = function () {
     	createRects();
     	createModelRects();
    }
+
+    //given an array of phenotype objects 
+    //edit the object array, conduct OWLSim analysis, and return results
+    function loadPhenotypeResults(phenotypelist) {
+    	var retResults = [];
+    	
+    	//filter out all the non-positive observed
+    	var templist = phenotypelist.filter(function(d) { return d.observed == "positive";});
+    	
+    	//remove the "observed" attributes
+    	var newlist = templist.map(function(d) { return d.id; });
+    	
+    	retResults = getSimData(newlist);
+    	return retResults; 
+    }
     
+    //this function will take a list of phenotypes and runs them through the OWLSim analysis
+    //NOTE: This function may need to "repackage" the results.  For example, I am assuming the OWLSim process will not
+    //return unique ids.  These ids are required to arrange the data in the visualiztion
+    //the required fields are id and rowid.
+    function getSimData(plist) {
+    	var retData = [];
+    	//NOTE: just temporary until the calls are ready
+		jQuery.ajax({
+			url : "data/sample_model_data.json",
+			async : false,
+			dataType : 'json',
+			success : function(data) {
+				retData = data;
+			}
+		});
+		return retData;
+
+    }
+    /*
+     * Accept two parameters:
+     * - imageDiv: the <div> tag where the visualization will be embedded
+     * - phenotypelist: an array of objects similar to the following:
+     * [ {"id": "HP:12345", "observed" :"positive"}, {"id: "HP:23451", "observed" : "negative"}, É]
+     * The phenotypelist is passed into the OWLSim function for further processing.
+     */
+    function initPhenotype(imageDiv, phenotypelist) {
+        var data = loadPhenotypeResults(phenotypelist); 
+    	
+        init(imageDiv, data);
+   }
+
 
 
     // public methods and vars
     return {
         init: init,
+        initPhenotype: initPhenotype,
         changeThreshold: changeThreshold,
     };
 
