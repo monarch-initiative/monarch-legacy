@@ -38,6 +38,9 @@ function main(args) {
     else if (dt == 'phenotype') {
         func = "fetchPhenotypeInfo";
     }
+    else if (dt == 'similarity') {
+	func = "fetchThingsSimilarToADisease";
+    }
     else {
         print("Unknown datatype: "+dt);
         system.exit(1);
