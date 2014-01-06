@@ -35,6 +35,9 @@ function main(args) {
     else if (dt == 'genotype') {
         func = "fetchGenotypeInfo";
     }
+    else if (dt == 'phenotype') {
+        func = "fetchPhenotypeInfo";
+    }
     else if (dt == 'similarity') {
 	func = "fetchThingsSimilarToADisease";
     }
