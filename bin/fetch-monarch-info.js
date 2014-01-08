@@ -41,6 +41,12 @@ function main(args) {
     else if (dt == 'similarity') {
 	func = "fetchThingsSimilarToADisease";
     }
+    else if (dt == 'pathway') {
+        func = "fetchPathwayInfo";
+    }
+    else if (dt == 'gene') {
+        func = "fetchGeneInfo";
+    }
     else {
         print("Unknown datatype: "+dt);
         system.exit(1);
