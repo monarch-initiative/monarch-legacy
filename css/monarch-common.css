@@ -5,13 +5,6 @@
 .dropdown-toggle {
     margin: 15px 15px 10px;
 }
-.navbar-link {
-    font-size: 14px;
-}
-.navbar-text {
-    margin-top: 13px;
-    margin-bottom: 14px;
-}
 
 /* Section 2: Sidebar */
 .sidebar {
@@ -19,7 +12,7 @@
     float: left;
     height: 100%;
     position: fixed;
-    border-right: 2px solid black;
+  /*  border-right: 2px solid black;*/
     width: 160px;
     padding-top: 20px;
 }
@@ -41,17 +34,23 @@
 
 /* Section 3: Content */
 .content {
-    width: 88%;
     display: inline-block;
     margin-left: 160px;
     margin-bottom: 20px;
-    padding: 20px 20px 20px 0px;
 }
+
+/* Spotlight */
+.jumbotron {
+    margin-top: 0px;
+    border-radius: 2px;
+    padding: 15px 40px 30px;
+}*/
+
 /* Description */
 @media (min-width: 1200px) {
     .jumbotron {
         border-radius: 2px;
-        padding: 10px 40px 60px;
+        padding: 20px 40px 60px;
         margin-top: -25px;
         margin-bottom: 0px;
     }
@@ -59,21 +58,31 @@
 @media (max-width: 1200px) {
     .jumbotron {
         border-radius: 2px;
-        padding: 10px 40px 100px;
+        padding: 20px 40px 100px;
         margin-top: -25px;
         margin-bottom: 0px;
     }
 }
 .jumbotron h1 {
     font-size: 40px;
+    margin: 10px 0px;
 }
-.btn.btn-success {
-    margin-bottom: 10px;
+.jumbotron p {
+    font-size: 20px;
 }
-p {
-    font-size: 16px;
-    margin-bottom: 0px;
+.btn.btn-large.btn-success {
+    margin-top: 5px;
+    padding: 10px 15px;
 }
+/* Rest of Content */
+.col-lg-9 {
+    padding-left: 40px;
+    margin-top: -20px;
+}
+.col-lg-9 h1 {
+    font-size: 32px;
+}
+
 .ids {
     margin-top: 10px;
     font-size: 16px;
@@ -98,10 +107,10 @@ p {
         background: black;
         color: #999;
         padding: 5px;
-        width: 100px;
-        text-align: center;
+        width: 90px;
+        text-align: left;
         border-radius: 5px 5px 0px 0px;
-        margin-right: 5px;
+        margin-right: 2px;
         font-weight: 400;
         cursor: pointer;
     }
@@ -112,17 +121,17 @@ p {
         background: black;
         color: #999;
         padding: 5px;
-        width: 110px;
-        text-align: center;
+        width: 90px;
+        text-align: left;
         border-radius: 4px;
-        margin-right: 20px;
+        margin-right: 2px;
         font-weight: 400;
         cursor: pointer;
     }
 }
 #initialtab {
     color: white;
-    margin-left: 40px;
+    margin-left: 0px;
 }
 @media (min-width: 1200px) {
     .second-row-divider {
