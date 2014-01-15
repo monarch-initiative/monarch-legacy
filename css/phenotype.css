@@ -9,13 +9,12 @@
 /* Description */
 .jumbotron {
     border-radius: 2px;
-    padding: 10px 40px 60px;
+    padding: 10px 40px 0px;
     margin-top: -25px;
-    margin-bottom: 0px;
+    border-bottom: black solid 2px;
 }
 .jumbotron h1 {
     font-size: 40px;
-    padding-bottom: 10px;
 }
 .btn.btn-success {
     margin-bottom: 10px;
@@ -29,27 +28,56 @@ p {
     font-size: 16px;
     line-height: 22px;
 }
-/* Rest of Content */
+/* Category Tabs */
 #categories {
-    margin-top: -30px;
-    border-bottom: black solid 2px;
+    margin-top: 10px;
+    margin-bottom: -5px;
 }
-.tab {
-    display: inline-block;
-    background: black;
-    color: #999;
-    padding: 5px;
-    width: 100px;
-    text-align: center;
-    border-radius: 5px 5px 0px 0px;
-    margin-right: 5px;
-    font-weight: 400;
-    cursor: pointer;
+@media (min-width: 1000px) {
+    .tab {
+        display: inline-block;
+        background: black;
+        color: #999;
+        padding: 2px;
+        width: 100px;
+        text-align: center;
+        border-radius: 5px 5px 0px 0px;
+        margin-right: 5px;
+        font-weight: 400;
+        cursor: pointer;
+        font-size: 14px;
+    }
+}
+@media (max-width: 1000px) {
+    .tab {
+        display: inline-block;
+        background: black;
+        color: #999;
+        padding: 2px;
+        width: 100px;
+        text-align: center;
+        border-radius: 4px;
+        margin-right: 10px;
+        font-weight: 400;
+        cursor: pointer;
+        font-size: 14px;
+    }
 }
 #initialtab {
     color: white;
-    margin-left: 40px;
 }
+@media (min-width: 1000px) {
+    .second-row-divider {
+        display: none;
+    }
+}
+@media (max-width: 1000px) {
+    .genotab {
+        margin-top: 10px;
+        margin-bottom: 15px;
+    }
+}
+/* Rest of Content */
 #overview {
     display: block;
 }
