@@ -2,6 +2,10 @@ $(document).ready(function(){
    
    // something with #search
    $("#search").autocomplete({
+       position : {
+       		my: "left top",
+                at: "left bottom",
+		collision: "none"},
        source: function(request,response) {
 	   console.log("trying autocomplete on "+request.term);
 	   $.ajax({
@@ -21,10 +25,28 @@ $(document).ready(function(){
 		   }
 	   });
        },
+       messages: {
+               noResults: '',
+	               results: function() {}
+          },
        select: function(event,ui) {
-	   console.log( ui.item ?"Selected: " + ui.item.label :
-			     "Nothing selected, input was " + this.value);
+       	   
+	   if (ui.item !== null) { 
+	      console.log("selected..."+ ui.item.label);
+	      // redirect to "/search/+ui.item.label);
+	      newurl = "http://"+window.location.host+"/search/"
+	      	     +encodeURIComponent(ui.item.label);
+	      console.log("searching for "+newurl);
+	      window.location.replace(newurl);
+	   } else {
+	     console.log("Nothing selected, input was " +
+	     	   this.value);
+   	   }
 	}
  });
+
+ $("#search").change(function() {
+ 	console.log( $(this).text());
+	});
 });
    
