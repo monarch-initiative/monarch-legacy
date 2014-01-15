@@ -8,18 +8,17 @@
 .jumbotron {
     margin-top: 0px;
     border-radius: 2px;
-    padding: 15px 40px 30px;
+    padding: 10px 40px 20px;
 }
 .jumbotron h1 {
-    font-size: 40px;
+    font-size: 30px;
     margin: 10px 0px;
 }
 .jumbotron p {
     font-size: 20px;
 }
 .btn.btn-large.btn-success {
-    margin-top: 5px;
-    padding: 10px 15px;
+    padding: 5px 10px;
 }
 /* Rest of Content */
 .col-lg-9 {

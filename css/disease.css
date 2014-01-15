@@ -14,7 +14,7 @@
     border-bottom: black solid 2px;
 }
 .jumbotron h1 {
-    font-size: 40px;
+    font-size: 30px;
 }
 .btn.btn-success {
     margin-bottom: 10px;
@@ -24,7 +24,7 @@ p {
     margin-bottom: 0px;
 }
 .ids {
-    margin-top: 10px;
+    margin-top: 5px;
     font-size: 16px;
     line-height: 22px;
 }
