@@ -50,6 +50,9 @@ function main(args) {
     else if (dt == 'gene') {
         func = "fetchGeneInfo";
     }
+    else if (dt == 'context') {
+        func = "getJsonLdContext";
+    }
     else {
         print("Unknown datatype: "+dt);
         system.exit(1);
