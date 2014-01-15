@@ -152,6 +152,7 @@ var keggerator = function () {
     function setPathwayId(pathway_id, phenotype_gene_id_map) {
         pathwayId = pathway_id;
         phenotypeGeneIdMap = phenotype_gene_id_map;
+        var pathwayType = "kegg";
 
         // if kegg pathway type
         // fill in select element options

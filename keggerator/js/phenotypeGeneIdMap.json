@@ -20,7 +20,7 @@
         "phenotype_id": "HP:0000746",
         "label": "Delusions",
         "url": "http://purl.obolibrary.org/obo/HP_0000746",
-        "genes": {
+        "genes": {567
 
             "K04556": {
                 "url": ""
