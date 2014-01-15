@@ -38,8 +38,11 @@ function main(args) {
     else if (dt == 'phenotype') {
         func = "fetchPhenotypeInfo";
     }
-    else if (dt == 'similarity') {
+    else if (dt == 'similarDisease') {
 	func = "fetchThingsSimilarToADisease";
+    }
+    else if (dt == 'similarList') {
+        func = "fetchThingsSimilarToAListOfPhenotypes";
     }
     else if (dt == 'pathway') {
         func = "fetchPathwayInfo";
