@@ -26,9 +26,6 @@
                 <p>
                 {{comments}}
                 </p>
-                <p>TODO: provide a link to the relevant website (HPO, MGI,
-                ZFIN, WormBase, ...) here<br>
-                <a href="https://github.com/cmungall/monarch-app/issues/3">todo - tidy this</a></p>
                 <div class="ids">
                     <b>URI:</b> <a href="{{{url}}}">{{{url}}}</a>
                 </div>
@@ -70,8 +67,6 @@
             </div>
             <div id="disease" class="category">
                 <h3>Disease</h3>
-                <span class="text-warning">TODO: include associations to descendants
-                of {{id}} - see <a href="https://support.crbs.ucsd.edu/browse/LAMHDI-140">JIRA</a></p>
                 </span>
                 <table class="{{css.table}}">
                 {{{diseaseTable}}}
@@ -79,15 +74,12 @@
             </div>
             <div id="geno" class="category">
                 <h3>Genotypes</h3>
-                <p class="todo">TODO: include associations to descendants
-                of {{id}} - see <a href="https://support.crbs.ucsd.edu/browse/LAMHDI-140">JIRA</a></p>
                 <table class="{{css.table}}">
                 {{{genotypeTable}}}
                 </table>
             </div>
             <div id="sim" class="category">
                 <h3>Diseases Matched</h3>
-                <p>Await OntoQuest functionality...</p>
                 <table class="{{css.table}}">
                 {{{simTable}}}
                 </table>
