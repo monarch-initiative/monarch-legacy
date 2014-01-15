@@ -37,17 +37,18 @@
     display: inline-block;
     margin-left: 160px;
     margin-bottom: 20px;
+    width:80%;
 }
 
 /* Spotlight */
-.jumbotron {
+/*.jumbotron {
     margin-top: 0px;
     border-radius: 2px;
     padding: 15px 40px 30px;
 }*/
 
 /* Description */
-@media (min-width: 1200px) {
+@media (min-width: 1500px) {
     .jumbotron {
         border-radius: 2px;
         padding: 20px 40px 60px;
@@ -55,7 +56,7 @@
         margin-bottom: 0px;
     }
 }
-@media (max-width: 1200px) {
+@media (max-width: 1500px) {
     .jumbotron {
         border-radius: 2px;
         padding: 20px 40px 100px;
@@ -89,13 +90,13 @@
     line-height: 22px;
 }
 /* Rest of Content */
-@media (min-width: 1200px) {
+@media (min-width: 1500px) {
     #categories {
         margin-top: -30px;
         border-bottom: black solid 2px;
     }
 }
-@media (max-width: 1200px) {
+@media (max-width: 1500px) {
     #categories {
         margin-top: -90px;
         border-bottom: black solid 2px;
