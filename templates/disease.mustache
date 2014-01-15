@@ -23,8 +23,8 @@
     {{#stylesheets}}
     <link rel="stylesheet" type="text/css" href="{{url}}"></link>
     {{/stylesheets}}
-    <link rel="stylesheet" type="text/css" href="../css/disease.css"></link>
-    <script src="../css/script.js"></script>
+    <link rel="stylesheet" type="text/css" href="../css/monarch-common.css"></link>
+    <script src="../js/tabs.js"></script>
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta charset=”utf-8”>
 </head>
@@ -42,11 +42,17 @@
                 {{comments}}
                 </p>
                 <a href="https://github.com/cmungall/monarch-app/issues/3">todo - tidy this & add description of disease</a>
-                <p>
-                <i>AKA: </i> {{has_exact_synonym}}
-                </p>
-                <div id="ids">
-                <i>IDs: </i> {{database_cross_reference}}
+                <div class="ids">
+                    <b>AKA: </b>
+                    {{#has_exact_synonym}}
+                    {{.}},
+                    {{/has_exact_synonym}}
+                </div>
+                <div class="ids">
+                    <b>IDs: </b>
+                    {{#database_cross_reference}}
+                    {{.}},
+                    {{/database_cross_reference}}
                 </div>
             </div>
         </div>
