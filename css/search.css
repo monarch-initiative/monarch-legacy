@@ -1,0 +1,46 @@
+/* Section 1: Navbar */
+.nav>li>a {
+    padding: 0px;
+}
+.dropdown-toggle {
+    margin: 15px 15px 10px;
+}
+
+/* Section 2: Sidebar */
+.sidebar {
+    display: inline-block;
+    float: left;
+    height: 100%;
+    position: fixed;
+    border-right: 2px solid black;
+    width: 160px;
+    padding-top: 20px;
+}
+/* Search Bar */
+.form-search.search-bar {
+    margin-top: 15px;
+}
+/* Search Button */
+.btn.btn-primary {
+    padding: 4px 51px;
+    font-size: 13px;
+    margin-top: 3px;
+}
+.nav-header {
+    font-size: 17px;
+    font-weight: 700;
+    margin-top: 10px;
+}
+
+/* Section 3: Content */
+.content {
+    display: inline-block;
+    margin-left: 160px;
+    padding: 20px 0px 40px 40px;
+    width: 80%;
+}
+.title {
+    font-size: 50px;
+    font-weight: 500;
+    line-height: 50px;
+}

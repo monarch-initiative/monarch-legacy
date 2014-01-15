@@ -1,6 +1,6 @@
 <!DOCTYPE html>
 <html>
-  <head>
+<head>
     <title>Monarch Diseases</title>
     {{#scripts}}
     <script type="text/javascript" src="{{url}}"></script>
@@ -8,62 +8,54 @@
     {{#stylesheets}}
     <link rel="stylesheet" type="text/css" href="{{url}}"></link>
     {{/stylesheets}}
-    <meta charset=”utf-8”> 
-  </head>
-  <body>
+    <link rel="stylesheet" type="text/css" href="../css/monarch-common.css"></link>
+    <link rel="stylesheet" type="text/css" href="../css/monarch-main.css"></link>
+    <meta charset=”utf-8”>
+</head>
+<body>
+    {{{includes.navbar}}}
     <div class="container">
-      {{{includes.navbar}}}
-      <div class="jumbotron">
-	<h1>Disease spotlight : Parkinson's disease</h1>
-	<p>A neurodegenerative disease that has_material_basis_in
-	degeneration of the central nervous system that often impairs
-	the sufferer's motor skills, speech, and other
-	functions. Monarch includes information on a number of
-	different variants of PD.</p>
-	<a href="/disease/DOID_14330" class="btn btn-large btn-success">Find out more</a>
-      </div>
-      <div class="row">
-        <div class="col-lg-2">
-          {{{includes.navlist}}}
+    <div class="sidebar">
+        {{{includes.navlist}}}
+    </div>
+    <div class="content">
+        <div class="jumbotron">
+            <h1>Disease spotlight: Parkinson's disease</h1>
+            <p>A neurodegenerative disease that has material basis in
+            degeneration of the central nervous system that often impairs
+            the sufferer's motor skills, speech, and other
+            functions. Monarch includes information on a number of
+            different variants of PD.</p>
+            <a href="/disease/DOID_14330" class="btn btn-large btn-success">Find out more</a>
         </div>
         <div class="col-lg-9">
-          <h1>Highlighted diseases</h1>
-          <span class="text-warning">NOTE: there will be oddities
-          with the disease hierarchy until we have the latest
-          ontology loaded into OntoQuest</span>
-
-          <ul>
-            <li><a href="/disease/DOID_14692">Smith-Lemli-Opitz syndrome</a></li>
-            <li><a href="/disease/DOID_1932">Angelman syndrome</a></li>
-            <li><a href="/disease/DOID_6683">Aarskog-Scott syndrome</a></li>
-            <li><a href="/disease/DOID_3393">coronary heart
-            disease</a></li>
-            <li><a href="/disease/DOID_12798">mucopolysaccharidosis</a></li>
-            
-          </ul>
-          <p>
-            Use the search bar above to find more diseases...
-          </p>
-          <h1>Disease set highlight: Neurodegenerative diseases</h1>
-
-          <ul>
-            <li><a href="/disease/OMIM_127750">Dementia, lewy body</a>DLB</li>
-            <li><a href="/disease/OMIM_607060">Parkinson disease 8, autosomal dominant</a>PARK8</li>
-            <li><a href="/disease/OMIM_168600">Parkinson disease, late-onset</a>PD</li>
-            <li><a href="/disease/OMIM_260300">Parkinson disease 15, autosomal recessive early-onset</a>PARK15</li>
-            <li><a href="/disease/OMIM_606324">Parkinson disease 7, autosomal recessive early-onset</a>PARK7</li>
-            <li><a href="/disease/OMIM_605909">Parkinson disease 6, autosomal recessive early-onset</a>PARK6</li>
-            <li><a href="/disease/OMIM_146500">Multiple system atrophy 1, susceptibility to</a>MSA1</li>
-            <li><a href="/disease/OMIM_183090">Spinocerebellar ataxia 2</a>SCA2</li>
-            <li><a href="/disease/OMIM_314250">Dystonia 3, torsion, X-linked</a>DYT3</li>
-            <li><a href="/disease/OMIM_606688">Spongiform encephalopathy with neuropsychiatric features</li>
-            <li><a href="/disease/OMIM_162350">Ceroid lipofuscinosis, neuronal, 4b, autosomal dominant</a>CLN4B</li>
-          </ul>
-
+            <h1>Highlighted diseases</h1>
+            <span class="text-warning">NOTE: There will be oddities
+            with the disease hierarchy until we have the latest
+            ontology loaded into OntoQuest</span>
+            <ul>
+                <li><a href="/disease/DOID_14692">Smith-Lemli-Opitz syndrome</a></li>
+                <li><a href="/disease/DOID_1932">Angelman syndrome</a></li>
+                <li><a href="/disease/DOID_6683">Aarskog-Scott syndrome</a></li>
+                <li><a href="/disease/DOID_3393">coronary heart
+                disease</a></li>
+                <li><a href="/disease/DOID_12798">mucopolysaccharidosis</a></li>
+            </ul>
+            <h1>Disease set highlight: Neurodegenerative diseases</h1>
+            <ul>
+                <li><a href="/disease/OMIM_127750">Dementia, lewy body</a> DLB</li>
+                <li><a href="/disease/OMIM_607060">Parkinson disease 8, autosomal dominant</a> PARK8</li>
+                <li><a href="/disease/OMIM_168600">Parkinson disease, late-onset</a> PD</li>
+                <li><a href="/disease/OMIM_260300">Parkinson disease 15, autosomal recessive early-onset</a> PARK15</li>
+                <li><a href="/disease/OMIM_606324">Parkinson disease 7, autosomal recessive early-onset</a> PARK7</li>
+                <li><a href="/disease/OMIM_605909">Parkinson disease 6, autosomal recessive early-onset</a> PARK6</li>
+                <li><a href="/disease/OMIM_146500">Multiple system atrophy 1, susceptibility to</a> MSA1</li>
+                <li><a href="/disease/OMIM_183090">Spinocerebellar ataxia 2</a> SCA2</li>
+                <li><a href="/disease/OMIM_314250">Dystonia 3, torsion, X-linked</a> DYT3</li>
+                <li><a href="/disease/OMIM_606688">Spongiform encephalopathy with neuropsychiatric features</li>
+                <li><a href="/disease/OMIM_162350">Ceroid lipofuscinosis, neuronal, 4b, autosomal dominant</a> CLN4B</li>
+            </ul>
         </div>
-
-
-      </div>
     </div>
-  </body>
+</body>
 </html>

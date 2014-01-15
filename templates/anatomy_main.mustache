@@ -1,6 +1,6 @@
 <!DOCTYPE html>
 <html>
-  <head>
+<head>
     <title>Monarch Organ Systems</title>
     {{#scripts}}
     <script type="text/javascript" src="{{url}}"></script>
@@ -8,28 +8,29 @@
     {{#stylesheets}}
     <link rel="stylesheet" type="text/css" href="{{url}}"></link>
     {{/stylesheets}}
-    <meta charset=”utf-8”> 
-  </head>
-  <body>
+    <link rel="stylesheet" type="text/css" href="../css/monarch-common.css"></link>
+    <link rel="stylesheet" type="text/css" href="../css/monarch-main.css"></link>
+    <meta charset=”utf-8”>
+</head>
+<body>
+    {{{includes.navbar}}}
     <div class="container">
-      {{{includes.navbar}}}
-      <div class="jumbotron">
-	<h1>Organ System of the month : Kidney</h1>
-	<p>A paired organ which has the production of urine as its primary function.</p>
-	<a href="/anatomy/UBERON_0002113" class="btn btn-large btn-success">Find out more</a>
-      </div>
-      <div class="row">
-        <div class="col-lg-2">
-          {{{includes.navlist}}}
+    <div class="sidebar">
+        {{{includes.navlist}}}
+    </div>
+    <div class="content">
+        <div class="jumbotron">
+            <h1>Organ system spotlight: Kidney</h1>
+            <p>A paired organ which has the production of urine as its primary function.</p>
+            <a href="/anatomy/UBERON_0002113" class="btn btn-large btn-success">Find out more</a>
         </div>
         <div class="col-lg-9">
-          <h1>Organ System Highlights</h1>
-          <ul>
-            <li><a href="/anatomy/UBERON_0002038">substantia nigra</li>
-            <li><a href="/anatomy/UBERON_0004446">phalangeal epiphyses</li>
-          </ul>
+            <h1>Organ System List</h1>
+            <ul>
+                <li><a href="/anatomy/UBERON_0002038">substantia nigra</li>
+                <li><a href="/anatomy/UBERON_0004446">phalangeal epiphyses</li>
+            </ul>
         </div>
-      </div>
     </div>
-  </body>
+</body>
 </html>
