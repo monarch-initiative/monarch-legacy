@@ -18,7 +18,6 @@
           {{{includes.navlist}}}
         </div>
         <div class="col-lg-9">
-
           <h1>Monarch Services</h1>
           <p>
             There are currently two types of service calls:
@@ -69,7 +68,6 @@
           <p>
             The current list of datatypes:
             <ul>
-
               <li><strong><a href="/disease/">/disease/</a>:id</strong> - Executes a call
                 to <a href="/docs/files/api-js.html#bbop.monarch.Engine.fetchDiseaseInfo">fetchDiseaseInfo(:id)</a>.
                 <br/>Examples:
@@ -79,7 +77,6 @@
                   </li>
                 </ul>
               </li>
-
               <li><strong><a href="/phenotype/">/phenotype/</a>:id</strong> - Executes a call
                 to <a href="/docs/files/api-js.html#bbop.monarch.Engine.fetchPhenotypeInfo">fetchPhenotypeInfo(:id)</a>
                 <br/>Examples:
@@ -92,15 +89,12 @@
                   </li>
                 </ul>
               </li>
-
               <li><strong><a href="/gene/">/gene/</a>:id</strong> - Executes a call
                 to <a href="/docs/files/api-js.html#bbop.monarch.Engine.fetchGeneInfo">fetchGeneInfo(:id)</a>
               </li>
-
               <li><strong><a href="/genotype/">/genotype/</a>:id</strong> - Executes a call
                 to <a href="/docs/files/api-js.html#bbop.monarch.Engine.fetchGenotypeInfo">fetchGenotypeInfo(:id)</a>
               </li>
-
               <li><strong><a href="/phenome/">/phenome/</a>:id.gff3</strong>
                 (UNSTABLE) returns a phenome in GFF3 format
                 <br/>Examples:
@@ -110,8 +104,6 @@
                   </li>
                 </ul>
               </li>
-
-
             </ul>
           </p>
           <h3>Data Object JSON specification</h3>
@@ -120,28 +112,21 @@
             still unstable. For details, please see the JS API. The
             following principles are adhered to:
             <ul>
-
               <li><a href="http://json-ld.org">JSON-LD</a> is
               used</li>
-
               <li>Each object is uniquely identified by
               an <strong>id:</strong> field. This maps to the IRI in
               the JSON LD context</li>
-
               <li>Each object should have a human-readable name
               identified with a <strong>label:</strong> field. This maps
               to rdfs:label in the JSON LD context</li>
-
               <li>Each object should be typed using
               a <strong>type:</strong> field. This maps
               to rdf:type in the JSON LD context. Note that the type
               may be specified as a human-readable string, with this
               mapped to an IRI in the context object.</li>
-
               <li>Nesting is preferred over flat structures</li>
-
             </ul>
-
           </p>
           <h3>RDF/OWL services</h3>
           <p>
@@ -153,9 +138,7 @@
           </p>
           <h2>Search</h2>
           <p>
-            
           </p>
-
           <h3>Ontology Search</h3>
           <p>
             URLs are of the form
@@ -166,7 +149,6 @@
             standard JSON from: <a href="/docs/files/api-js.html#bbop.monarch.Engine.searchOverOntologies">searchOverOntologies(:term,:opts)</a>
           </p>
           <h3>Keyword Search (TODO)</h3>
-
           <h3>Semantic Matching</h3>
           <p>
             <a href="http://owlsim.org">OwlSim</a> is used for
