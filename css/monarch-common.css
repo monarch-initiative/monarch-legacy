@@ -23,9 +23,12 @@
     width: 160px;
     padding-top: 20px;
 }
+.nav.nav-list {
+    margin-top: 10px;
+}
 /* Search Bar */
-.form-search.search-bar {
-    margin-top: 15px;
+#search {
+    width: 145px;
 }
 /* Search Button */
 .btn.btn-primary {
