@@ -1,3 +1,9 @@
+/* Content */
+.content {
+    display: inline-block;
+    margin-left: 160px;
+    padding: 20px 0px 40px 40px;
+}
 .title {
     font-size: 50px;
     font-weight: 500;

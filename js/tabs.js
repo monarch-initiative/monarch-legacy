@@ -5,7 +5,7 @@ $(document).ready(function(){
         $(this).css({'color': 'white'});
     });
 
-    $('#categories a').click(function() {
+    $('#categories a').click(function(event) {
         var panel_id = $(this).attr('href');
         $('.category').hide();
         $(panel_id).slideDown(400);
