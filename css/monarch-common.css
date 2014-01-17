@@ -19,7 +19,7 @@
     float: left;
     height: 100%;
     position: fixed;
-    border-right: 2px solid black;
+    border-right: 1px solid black;
     width: 160px;
     padding-top: 20px;
 }

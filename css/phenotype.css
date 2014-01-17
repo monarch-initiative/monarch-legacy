@@ -11,7 +11,7 @@
     border-radius: 2px;
     padding: 10px 40px 0px;
     margin-top: -25px;
-    border-bottom: black solid 2px;
+    border-bottom: black solid 1px;
 }
 .jumbotron h1 {
     font-size: 30px;
@@ -31,13 +31,13 @@ p {
 /* Category Tabs */
 #categories {
     margin-top: 10px;
-    margin-bottom: -5px;
+    margin-bottom: -3px;
 }
-@media (min-width: 1000px) {
+@media (min-width: 990px) {
     .tab {
         display: inline-block;
-        background: black;
-        color: #999;
+        background: white;
+        color: #777;
         padding: 2px;
         width: 100px;
         text-align: center;
@@ -46,13 +46,14 @@ p {
         font-weight: 400;
         cursor: pointer;
         font-size: 14px;
+        border: black solid 1px;
     }
 }
-@media (max-width: 1000px) {
+@media (max-width: 990px) {
     .tab {
         display: inline-block;
-        background: black;
-        color: #999;
+        background: white;
+        color: #777;
         padding: 2px;
         width: 100px;
         text-align: center;
@@ -61,18 +62,20 @@ p {
         font-weight: 400;
         cursor: pointer;
         font-size: 14px;
+        border: black solid 1px;
     }
 }
 #initialtab {
     color: white;
+    background-color: #666;
 }
-@media (min-width: 1000px) {
+@media (min-width: 990px) {
     .second-row-divider {
         display: none;
     }
 }
-@media (max-width: 1000px) {
-    .genotab {
+@media (max-width: 990px) {
+    .second {
         margin-top: 10px;
         margin-bottom: 15px;
     }
