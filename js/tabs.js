@@ -1,20 +1,21 @@
 $(document).ready(function(){
 
     $('.tab').click(function() {
-        $('.tab').css({'color': '#999'});
-        $(this).css({'color': 'white'});
+        $('.tab').css({'color': '#777', 'background-color': 'white'});
+        $(this).css({'color': 'white', 'background-color': '#666'});
     });
 
     $('#categories a').click(function(event) {
         var panel_id = $(this).attr('href');
         $('.category').hide();
-        $(panel_id).slideDown(400);
+        event.preventDefault();
+        $(panel_id).show();
     });
 
-    $('.special').click(function() {
+    $('.special').click(function(event) {
         var panel_id = $(this).attr("id");
         $('.category').hide();
-        $('.tab').css({'color': 'grey'});
+        $('.tab').css({'color': '#777', 'background-color': 'white'});
         var panel;
         if (panel_id == "over") {
             panel = '#overview';
@@ -47,8 +48,9 @@ $(document).ready(function(){
             panel = "#down";
             tab = '.downtab';
         }
-        $(panel).slideDown(400);
-        $(tab).css({'color': 'white'});
+        event.preventDefault();
+        $(panel).show();
+        $(tab).css({'color': 'white', 'background-color': '#666'});
     });
 
 });

@@ -15,10 +15,13 @@
     margin: 10px 0px;
 }
 .jumbotron p {
-    font-size: 20px;
+    font-size: 16px;
+    line-height: 26px;
 }
-.btn.btn-large.btn-success {
-    padding: 5px 10px;
+.btn.btn-large.btn-info {
+    padding: 10px 15px;
+    font-weight: 400;
+    font-size: 16px;
 }
 /* Rest of Content */
 .col-lg-9 {
@@ -26,5 +29,5 @@
     margin-top: -20px;
 }
 .col-lg-9 h1 {
-    font-size: 32px;
+    font-size: 22px;
 }

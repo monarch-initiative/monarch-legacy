@@ -32,7 +32,7 @@ p {
     margin-top: 10px;
     margin-bottom: -3px;
 }
-@media (min-width: 990px) {
+@media (min-width: 1200px) {
     .tab {
         display: inline-block;
         background: white;
@@ -48,7 +48,7 @@ p {
         border: black solid 1px;
     }
 }
-@media (max-width: 990px) {
+@media (max-width: 1200px) {
     .tab {
         display: inline-block;
         background: white;
@@ -68,12 +68,12 @@ p {
     color: white;
     background-color: #666;
 }
-@media (min-width: 990px) {
+@media (min-width: 1200px) {
     .second-row-divider {
         display: none;
     }
 }
-@media (max-width: 990px) {
+@media (max-width: 1200px) {
     .second {
         margin-top: 10px;
         margin-bottom: 15px;
