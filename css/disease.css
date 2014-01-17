@@ -87,3 +87,8 @@ p {
     padding-left: 40px;
     display: none;
 }
+.btn.btn-info {
+    padding: 5px 15px;
+    width: 90px;
+}
+
