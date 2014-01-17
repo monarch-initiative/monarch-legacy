@@ -8,10 +8,11 @@ $(document).ready(function(){
     $('#categories a').click(function(event) {
         var panel_id = $(this).attr('href');
         $('.category').hide();
-        $(panel_id).slideDown(400);
+        event.preventDefault();
+        $(panel_id).show();
     });
 
-    $('.special').click(function() {
+    $('.special').click(function(event) {
         var panel_id = $(this).attr("id");
         $('.category').hide();
         $('.tab').css({'color': 'grey'});
@@ -47,7 +48,8 @@ $(document).ready(function(){
             panel = "#down";
             tab = '.downtab';
         }
-        $(panel).slideDown(400);
+        event.preventDefault();
+        $(panel).show();
         $(tab).css({'color': 'white'});
     });
 
