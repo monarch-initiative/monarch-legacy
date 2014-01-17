@@ -69,3 +69,8 @@
 .answer {
     padding-bottom: 5px;
 }
+pre {
+    padding: 15px 0px 0px;
+    line-height: 1;
+    margin-top: 10px;
+}

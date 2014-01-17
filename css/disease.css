@@ -11,21 +11,20 @@
     border-radius: 2px;
     padding: 10px 40px 0px;
     margin-top: -25px;
+    margin-bottom: 20px;
     border-bottom: black solid 1px;
 }
 .jumbotron h1 {
     font-size: 30px;
 }
-.btn.btn-success {
-    margin-bottom: 10px;
-}
 p {
     font-size: 16px;
+    line-height: 26px;
     margin-bottom: 0px;
 }
 .ids {
     margin-top: 5px;
-    font-size: 16px;
+    font-size: 15px;
     line-height: 22px;
 }
 /* Category Tabs */
