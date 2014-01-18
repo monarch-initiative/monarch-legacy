@@ -20,7 +20,10 @@
             </div>
             <div class="content">
                 <div class="title">Search Results: {{term}}</div>
-                <p>Download: <a href="{{{download.json}}}">JSON</a></p>
+                <div class="results">
+                    <h4>Download Results</h4>
+                    <p><a href="{{{download.json}}}" class="btn btn-info">JSON</a></p>
+                </div>
                 <table class="{{css.table}}">
                     {{{resultsTable}}}
                 </table>
