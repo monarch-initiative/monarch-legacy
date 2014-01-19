@@ -8,14 +8,15 @@ $(document).ready(function(){
 		collision: "none"},
        source: function(request,response) {
 	   console.log("trying autocomplete on "+request.term);
+	   var query = "./autocomplete/"+request.term+".json";
 	   $.ajax({
-	       url:"http://nif-services.neuinfo.org/servicesv1/v1/vocabulary.jsonp",
-	       dataType:"jsonp",
-	       data: {
+	       url: query,
+	       dataType:"json",
+	       /*data: {
 		   prefix: request.term,
-	       },
+	       },*/
 	       success:  function(data) {
-		   console.log("got a reponse..");
+		   console.log("AUTOCOMPLTE RESPONSE..");
 		   response($.map(data, function(item) {
 		       return  {
 			   label: item.term,
