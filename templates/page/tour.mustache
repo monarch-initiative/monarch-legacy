@@ -1,49 +1,196 @@
 <!DOCTYPE html>
 <html>
-  <head>
-    <title>Monarch Tour</title>
-    {{#scripts}}
-    <script type="text/javascript" src="{{url}}"></script>
-    {{/scripts}}
-    {{#stylesheets}}
-    <link rel="stylesheet" type="text/css" href="{{url}}"></link>
-    {{/stylesheets}}
-    <meta charset=”utf-8”> 
-  </head>
-  <body>
-    <div class="container">
-      {{{includes.navbar}}}
-      <div class="row">
-        <div class="col-lg-2">
-          {{{includes.navlist}}}
+    <head>
+        <title>Monarch Tour</title>
+        {{#scripts}}
+        <script type="text/javascript" src="{{url}}"></script>
+        {{/scripts}}
+        {{#stylesheets}}
+        <link rel="stylesheet" type="text/css" href="{{url}}"></link>
+        {{/stylesheets}}
+        <link rel="stylesheet" type="text/css" href="/css/tour.css"></link>
+        <meta charset=”utf-8”> 
+    </head>
+    <body>
+        <div class="container">
+            {{{includes.navbar}}}
+            <div class="sidebar">
+                {{{includes.navlist}}}
+            </div>
+            <div class="content">
+                <div class="title">Monarch Tour</div>
+                <div class="section">
+                    <div class="block1 block">
+                        <div id="logo"><img src="/image/logofull.png"/></div>
+                    </div>
+                    <div id="purpose" class="block2 block">
+                        <div class="sectiontitle">Purpose</div>
+                        <div class="text">
+                            Model systems are the cornerstone of biomedical research for
+                            understanding of biological processes, testing gene-based disease
+                            hypotheses, and developing and testing disease treatments.
+                        </div>
+                        <div class="text">
+                            There are a wide-variety of model databases that contain
+                            unparalleled content about genetics, genomics, anatomy,
+                            environmental interactions, and developmental processes.
+                            However, clinical and translational researchers face a daunting
+                            challenge in using these vast stores of biomedical data to
+                            inform their understanding of human disease mechanisms that
+                            drives new therapies. This is particularly difficult in the
+                            context of rare or undiagnosed diseases, where their data is
+                            limited to descriptive phenotypic data and numerous candidate
+                            genomic variations.
+                        </div>
+                    </div>
+                    <div class="block3 block">
+                        <div class="text">
+                            Currently, tools that exploit similarities between phenotypes,
+                            organisms, and human diseases that leverage these rich data are
+                            in their infancy or are non-existent. To address this challenge,
+                            the Monarch Initiative Discovery System contains a wealth of
+                            information about model organisms, in vitro models, genes,
+                            pathways, gene expression, protein and genetic interactions,
+                            orthology, disease, phenotypes, publications, and authors.
+                        </div>
+                        <div class="text">
+                            We provide an ability to navigate multi-scale spatial and
+                            temporal phenotypes across in vivo and in vitro model systems
+                            in the context of genetic and genomic data, using semantics and
+                            statistics. Our system provides basic and clinical science
+                            researchers, informaticists, and medical professionals with
+                            an integrated interface and set of discovery tools to reveal
+                            the genetic basis of disease, facilitate hypothesis generation,
+                            and identify novel candidate drug targets. We aim for this system
+                            to promote true translational research, in that clinicians can
+                            connect with model systems researchers with expertise in
+                            related phenotypes, assays, or models.
+                        </div>
+                    </div>
+                </div>
+                <div class="clear"></div>
+                <div class="section">
+                    <div id="betastats" class="block1 block">
+                        <u>Alpha Stats</u><br>
+                        Diseases: 1000<br>
+                        Phenotypes: 2000<br>
+                        Models: 150<br>
+                        #temporary
+                    </div>
+                    <div id="beta" class="block2 block">
+                        <div class="sectiontitle">Alpha Release</div>
+                        <div class="text">
+                            Include text here about alpha release. This lower chunk of text
+                            is currently just acting as a placeholder.
+                        </div>
+                    </div>
+                    <div class="block3 block">
+                        <div class="text">
+                            Monarch will be in alpha testing in January of 2014. We will
+                            welcome user testers at that time, please contact
+                            <a href="mailto:info@monarchinitiative.org">info@monarchinitiative.org</a>
+                            for more information on becoming a alpha tester.
+                            Data related to Monarch is freely available in the
+                            <a href="http://www.neuinfo.org/">Neuroscience Information Framework</a>.
+                        </div>
+                    </div>
+                </div>
+                <div class="clear"></div>
+                <div class="section">
+                    <div class="block1 block">
+                        <div id="logo"><img src="/image/logofull.png"/></div>
+                    </div>
+                    <div id="future" class="block2 block">
+                        <div class="sectiontitle">Future Release</div>
+                        <div class="text">
+                            Include text here about the future release in July 2014.
+                            This lower chunk of text is currently just acting as a placeholder.
+                            The picture should be an infographic or static model about new
+                            release features.
+                        </div>
+                    </div>
+                    <div class="block3 block">
+                        <div class="text">
+                            We provide an ability to navigate multi-scale spatial and
+                            temporal phenotypes across in vivo and in vitro model systems
+                            in the context of genetic and genomic data, using semantics and
+                            statistics. Our system provides basic and clinical science
+                            researchers, informaticists, and medical professionals with
+                            an integrated interface and set of discovery tools to reveal
+                            the genetic basis of disease, facilitate hypothesis generation,
+                            and identify novel candidate drug targets. We aim for this system
+                            to promote true translational research, in that clinicians can
+                            connect with model systems researchers with expertise in
+                            related phenotypes, assays, or models.
+                        </div>
+                    </div>
+                </div>
+                <div class="clear"></div>
+                <div class="section">
+                    <div id="navigating">
+                        <div class="sectiontitle">Navigating</div>
+                        <div class="category text">1. Search Bar</div>
+                        <div class="text">
+                            You can use the search bar on the left sidebar to find things
+                            of interest - information on disease, phenotypes, genes, and more.<br>
+                            For example, you can search the term <a href="/search/?search_term=angelman">angelman</a>.
+                        </div>
+                        <div class="category text">2. Browse Tab</div>
+                        <div class="text">
+                            The browse tab at the navigation bar at the top of the page allows
+                            you to access the <a href="/disease">disease</a> main page
+                            and the <a href="/phenotype">phenotype</a> main page.
+                            Model, gene, and allele pages are in progress and will be
+                            released for future iterations of this site.
+                        </div>
+                        <div class="category text">3. Tools Tab</div>
+                        <div class="text">
+                            The tools tab at the navigation bar is coming soon with tools
+                            for analysis of genes, phenotypes, and variants.
+                        </div>
+                        <div class="category text">4. Software</div>
+                        <div class="text">
+                            <a href="http://owlsim.org">Owlsim</a><br>
+                            <a href="https://github.com/monarch-initiative/monarch-app">API & Web Server Code</a>
+                        </div>
+                    </div>
+                </div>
+                <div class="clear"></div>
+                <div class="section">
+                    <div id="teamfunding">
+                        <div class="sectiontitle">Team & Funding</div>
+                        <div class="text">
+                            The MONARCH Initiative is funded by an award from the National
+                            Institutes of Health, Office of the Director (NIH# 1R24OD011883-01),
+                            to Oregon Health & Sciences University (OHSU), Lawrence Berkeley
+                            National Laboratory (LBNL), University of California, San Diego
+                            (UCSD), and University of Pittsburgh (UPitt).
+                        </div>
+                        <div class="text">
+                            Read more about the Monarch development team
+                            <a href="/page/team">here</a>.
+                        </div>
+                    </div>
+                </div>
+                <div class="clear"></div>
+                <div class="section">
+                    <div id="faq">
+                        <div class="sectiontitle">Frequently Asked Questions</div>
+                        <div class="text">
+                            <div class="question">Q: When will the Monarch Web Service be available?</div>
+                            <div class="answer">
+                                A: The alpha release of Monarch is expected in January 2014.
+                            </div>
+                            <div class="question">Q: Can I be a alpha tester?</div>
+                            <div class="answer">
+                                A: Yes, we will be seeking alpha testers after our alpha release
+                                in January. Please contact <a href="mailto:info@monarchinitiative.org">info@monarchinitiative.org</a>
+                                for more information on becoming a alpha tester.
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
         </div>
-        <div class="col-lg-9">
-
-          <h1>Monarch Tour</h1>
-          <h3>Search</h3>
-          <p>
-            Use the search bar at the top of the page to find things of
-            interest - diseases, phenotypes, genes, etc
-          </p>
-          <p>Example: <a href="/search/?search_term=angelman">Angelman</a></p>
-          <p class="text-warning">TODO - autocomplete</p>
-          <h3>Diseases and Phenotypes</h3>
-          <p>See the <a href="/disease">Disease Page</a></p>
-          <p>See the <a href="/phenotype">Phenotype Page</a></p>
-          <span class="text-warning">Model, gene, allele pages in progress...</span>
-          
-          <h3>Analysis</h3>
-          <p>Coming soon!
-          </p>
-          <h3>Software</h3>
-          <p>
-            <ul>
-              <li><a href="http://owlsim.org">owlsim</a></li>
-              <li><a href="http://github.com/cmungall/monarch-app">API and Web Server code</a></li>
-            </ul>
-          </p>
-        </div>
-      </div>
-    </div>
-  </body>
+    </body>
 </html>

@@ -1,33 +1,33 @@
 <!DOCTYPE html>
 <html>
-  <head>
-    <title>Search Results: {{term}}</title>
-    {{#scripts}}
-    <script type="text/javascript" src="{{url}}"></script>
-    {{/scripts}}
-    {{#stylesheets}}
-    <link rel="stylesheet" type="text/css" href="{{url}}"></link>
-    {{/stylesheets}}
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <meta charset=”utf-8”> 
-  </head>
-  <body>
-    <div class="container">
-      {{{includes.navbar}}}
-      <p class="text-warning">Sorry search is so slow! We're working
-        on it (TODO: file JIRA ticket)</p>
-      <div class="row">
-        <div class="col-lg-2">
-          {{{includes.navlist}}}
+    <head>
+        <title>Search Results: {{term}}</title>
+        {{#scripts}}
+        <script type="text/javascript" src="{{url}}"></script>
+        {{/scripts}}
+        {{#stylesheets}}
+        <link rel="stylesheet" type="text/css" href="{{url}}"></link>
+        {{/stylesheets}}
+        <link rel="stylesheet" type="text/css" href="/css/search.css"></link>
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <meta charset=”utf-8”> 
+    </head>
+    <body>
+        <div class="container">
+            {{{includes.navbar}}}
+            <div class="sidebar">
+                {{{includes.navlist}}}
+            </div>
+            <div class="content">
+                <div class="title">Search Results: {{term}}</div>
+                <div class="results">
+                    <h4>Download Results</h4>
+                    <p><a href="{{{download.json}}}" class="btn btn-info">JSON</a></p>
+                </div>
+                <table class="{{css.table}}">
+                    {{{resultsTable}}}
+                </table>
+            </div>
         </div>
-        <div class="col-lg-9">
-          <h1>Search Results: {{term}}</h1>
-          <p>Download: <a href="{{{download.json}}}">JSON</a></p>
-          <table class="{{css.table}}">
-            {{{resultsTable}}}
-          </table>
-        </div>
-      </div>
-    </div>
-  </body>
+    </body>
 </html>

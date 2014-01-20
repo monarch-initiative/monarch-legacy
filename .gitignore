@@ -1,5 +1,7 @@
 .pl-history
 cache/*/key*json
-ringojs
+ringojs*
 semantic.cache
 */semantic.cache
+.DS_Store
+ringojs-0.9

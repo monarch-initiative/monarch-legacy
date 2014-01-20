@@ -1,0 +1,18 @@
+/* Section 3: Content */
+.content {
+    display: inline-block;
+    margin-left: 160px;
+    padding: 20px 0px 40px 40px;
+    width: 80%;
+}
+.title {
+    font-size: 50px;
+    font-weight: 500;
+    line-height: 50px;
+}
+.results {
+    margin: 10px 0px;
+}
+.btn.btn-info {
+    padding: 5px 15px;
+}

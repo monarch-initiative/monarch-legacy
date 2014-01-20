@@ -1,0 +1,33 @@
+/* Section 3: Content */
+.content {
+    display: inline-block;
+    margin-left: 160px;
+    margin-bottom: 20px;
+}
+/* Main Spotlight */
+.jumbotron {
+    margin-top: 0px;
+    border-radius: 2px;
+    padding: 10px 40px 20px;
+}
+.jumbotron h1 {
+    font-size: 30px;
+    margin: 10px 0px;
+}
+.jumbotron p {
+    font-size: 16px;
+    line-height: 26px;
+}
+.btn.btn-large.btn-info {
+    padding: 10px 15px;
+    font-weight: 400;
+    font-size: 16px;
+}
+/* Rest of Content */
+.col-lg-9 {
+    padding-left: 40px;
+    margin-top: -20px;
+}
+.col-lg-9 h1 {
+    font-size: 22px;
+}

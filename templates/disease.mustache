@@ -1,6 +1,6 @@
 <!DOCTYPE html>
 <html>
-  <head>
+<head>
     <title>Monarch Disease: {{label}} ({{id}})</title>
     {{#scripts}}
     <script type="text/javascript" src="{{url}}"></script>
@@ -15,7 +15,6 @@
 			  init();
 			  createModelRegion();
 			  update();
-	          
           }
        });
     </script>
@@ -23,104 +22,103 @@
     {{#stylesheets}}
     <link rel="stylesheet" type="text/css" href="{{url}}"></link>
     {{/stylesheets}}
+    <link rel="stylesheet" type="text/css" href="../css/disease.css"></link>
+    <script src="../js/tabs.js"></script>
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <meta charset=”utf-8”> 
-  </head>
-  <body>
+    <meta charset=”utf-8”>
+</head>
+<body>
+    {{{includes.navbar}}}
     <div class="container">
-      {{{includes.navbar}}}
-      <div class="row">
-        <div class="col-lg-2">
-          {{{includes.navlist}}}
-	  <li><a href="#ontology">Ontology</a></li>
-	  <li><a href="#phenotype">Phenotypes</a></li>
-	  <li><a href="#gene">Genes</a></li>
-	  <li><a href="#allele">Alleles</a></li>
-	  <li><a href="#model">Model</a></li>
-	  <li><a href="#sim">Similarity</a></li>
+    <div class="sidebar">
+        {{{includes.navlistdisease}}}
+    </div>
+    <div class="content">
+        <div class="jumbotron">
+            <div id="description">
+                <h1>Disease: {{label}}</h1>
+                <p>
+                {{comments}}
+                </p>
+            </div>
+            <div id="categories">
+                <a href="#overview"><div id="initialtab" class="tab overtab">Overview</div></a>
+                <a href="#phenotype"><div class="tab phentab">Phenotypes</div></a>
+                <a href="#gene"><div class="tab gentab">Genes</div></a>
+                <div class="second-row-divider"></div>
+                <a href="#allele"><div class="tab alletab second">Alleles</div></a>
+                <a href="#model"><div class="tab modtab">Model</div></a>
+                <a href="#sim"><div class="tab simtab">Similarity</div></a>
+            </div>
         </div>
-        <div class="col-lg-9">
-          <div id="description">
-            <h1>Disease: {{label}}</h1>
-	    <a href="{{{base_url}}}.json" class="btn btn-success">JSON</a>
-	    <a href="{{{base_url}}}.rdf" class="btn btn-success">RDF</a>
-	    <a href="{{{base_url}}}.nt" class="btn btn-success">n-triples</a>
-            <p>
-              {{comments}}
-            </p>
-            <a href="https://github.com/cmungall/monarch-app/issues/3">todo - tidy this</a>
-            <p>
-              <i>AKA: </i> {{has_exact_synonym}}
-            </p>
-            <p>
-              <i>IDs: </i> {{database_cross_reference}}
-            </p>
-          </div>
-          <div id="ontontology">
-            <h3>Ontology</h3>
-            <p>
-              <table class="{{css.table}}">
-                {{{ontNavBox}}}
-              </table>
-            </p>
-          </div>
-
-          <div id="phenotype">
-            <h3>Phenotypes</h3>
-	    <a href="{{{base_url}}}/phenotype_associations.json" class="btn btn-success">JSON</a>
-	    <a href="{{{base_url}}}/phenotype_associations.rdf" class="btn btn-success">RDF</a>
-	    <a href="{{{base_url}}}/phenotype_associations.nt" class="btn btn-success">n-triples</a>
-            <span class="text-warning">May be incoomplete/with false
-              positives. See: <a href="https://support.crbs.ucsd.edu/browse/LAMHDI-140"></a>
-            </span>
-            <table class="{{css.table}}">
-              {{{phenotypeTable}}}
-            </table>
-          </div>
-          <div id="gene">
-            <h3>Genes</h3>
-            <table class="{{css.table}}">
-              {{{geneTable}}}
-            </table>
-          </div>
-
-          <div id="allele">
-            <h3>Alleles</h3>
-            <table class="{{css.table}}">
-              {{{alleleTable}}}
-            </table>
-          </div>
-
-          <div id="model">
-	    <a href="{{{base_url}}}/models.json" class="btn btn-success">JSON</a>
-	    <a href="{{{base_url}}}/models.rdf" class="btn btn-success">RDF</a>
-	    <a href="{{{base_url}}}/models.nt" class="btn btn-success">n-triples</a>
-            <h3>Models</h3>
-            <table class="{{css.table}}">
-              {{{modelTable}}}
-            </table>
-	    <h3>Similar Models</h3>
-	    <table class="{{css.table}}">
-	      {{{simModelTable}}}
-	    </table>
-          </div>
-
-          <div id="sim">
-            <h3>Similar Diseases</h3>
-	    <a href="{{{base_url}}}/sim.json" class="btn btn-success">JSON</a>
-            <table class="{{css.table}}">
-              {{{simTable}}}
-            </table>
-          </div>
-
+        <div id="complete-info">
+            <div id="overview" class="category">
+                <h3>IDs</h3>
+                    <div class="ids">
+                        <b>AKA: </b>
+                        {{#has_exact_synonym}}
+                        {{.}},
+                        {{/has_exact_synonym}}
+                    </div>
+                    <div class="ids">
+                        <b>IDs: </b>
+                        {{#database_cross_reference}}
+                        {{.}},
+                        {{/database_cross_reference}}
+                    </div>
+                <h3>Download Disease Information</h3>
+                    <a href="{{{base_url}}}.json" class="btn btn-info">JSON</a>
+                    <!-- <a href="{{{base_url}}}.rdf" class="btn btn-success">RDF</a> -->
+                    <a href="{{{base_url}}}.nt" class="btn btn-info">n-triples</a>
+                <h3>Ontology</h3>
+                    <p>
+                    <table class="{{css.table}}">
+                    {{{ontNavBox}}}
+                    </table>
+                    </p>
+            </div>
+            <div id="phenotype" class="category">
+                <h3>Download Phenotypes</h3>
+                    <a href="{{{base_url}}}/phenotype_associations.json" class="btn btn-info">JSON</a>
+                    <!--    <a href="{{{base_url}}}/phenotype_associations.rdf" class="btn btn-success">RDF</a> -->
+                    <a href="{{{base_url}}}/phenotype_associations.nt" class="btn btn-info">n-triples</a>
+                <h3>Phenotypes</h3>
+                </span>
+                <table class="{{css.table}}">
+                {{{phenotypeTable}}}
+                </table>
+            </div>
+            <div id="gene" class="category">
+                <h3>Genes</h3>
+                <table class="{{css.table}}">
+                {{{geneTable}}}
+                </table>
+            </div>
+            <div id="allele" class="category">
+                <h3>Alleles</h3>
+                <table class="{{css.table}}">
+                {{{alleleTable}}}
+                </table>
+            </div>
+            <div id="model" class="category">
+                <h3>Download Models</h3>
+                    <a href="{{{base_url}}}/models.json" class="btn btn-info">JSON</a>
+                    <!--    <a href="{{{base_url}}}/models.rdf" class="btn btn-success">RDF</a> -->
+                    <a href="{{{base_url}}}/models.nt" class="btn btn-info">n-triples</a>
+                <h3>Models</h3>
+                <table class="{{css.table}}">
+                {{{modelTable}}}
+                </table>
+            </div>
+            <div id="sim" class="category">
+                <h3>Download Info on Similar Diseases</h3>
+                <a href="{{{base_url}}}/sim.json" class="btn btn-info">JSON</a>
+                <h3>Similar Diseases</h3>
+                <table class="{{css.table}}">
+                {{{simTable}}}
+                </table>
+            </div>
         </div>
-
-        <div class="col-lg-2">
-          {{{includes.rightlist}}}
-        </div>
-      </div>
-    </div>      
-</div>      
-
+    </div>
 </body>
 </html>

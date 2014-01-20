@@ -1,0 +1,38 @@
+/* Content */
+.content {
+    display: inline-block;
+    margin-left: 160px;
+    padding: 20px 0px 40px 40px;
+}
+.title {
+    font-size: 50px;
+    font-weight: 500;
+    line-height: 50px;
+}
+.team {
+    background-color: #EEE;
+    padding: 20px;
+    margin-top: 20px;
+    border: #AAA solid 1px;
+}
+.teamname {
+    font-size: 25px;
+    padding-bottom: 10px;
+    font-weight: 700;
+}
+.teammember {
+    border-top: #428bca solid 1px;
+    padding: 10px 0px;
+}
+.membername {
+    font-weight: 500;
+    font-size: 16px;
+}
+.membertitle {
+    font-style: italic;
+    margin-bottom: 5px;
+}
+.memberbio {
+    line-height: 24px;
+    font-weight: 200;
+}
