@@ -8,7 +8,7 @@ $(document).ready(function(){
 		collision: "none"},
        source: function(request,response) {
 	   console.log("trying autocomplete on "+request.term);
-	   var query = "./autocomplete/"+request.term+".json";
+	   var query = "/autocomplete/"+request.term+".json";
 	   $.ajax({
 	       url: query,
 	       dataType:"json",
@@ -46,8 +46,10 @@ $(document).ready(function(){
 	}
  });
 
- $("#search").change(function() {
+ $("#search").change(function() {	
  	console.log( $(this).text());
 	});
+
+  console.log("loaded autocomplete...");
 });
    
