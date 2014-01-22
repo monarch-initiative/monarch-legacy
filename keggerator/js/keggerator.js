@@ -39,6 +39,11 @@ var keggerator = function () {
 
         acetate = d3.select("#acetate");
 
+        acetate.selectAll(".gene").data(dataShown).exit().transition()
+            .attr("y", 1000)
+            .duration(1000)
+            .remove();
+
         // draw rects
         acetate.selectAll(".gene").data(dataShown).enter().append("rect")
             .classed("gene", true)
@@ -122,8 +127,7 @@ var keggerator = function () {
 
     function clearHighlights() {
         acetate.selectAll(".gene").transition()
-            .attr("x", 1)
-            .attr("y", 1)
+            .attr("y", 1000)
             .duration(1000)
             .remove();
 
@@ -142,12 +146,13 @@ var keggerator = function () {
                 dataShown.push(d);
             }
         });
-        clearHighlights();
         drawRects();
     }
 
-    function setPathwayId(pathway_id, pathwayType) {
+    function setPathwayId(pathway_id, phenotype_gene_id_map) {
         pathwayId = pathway_id;
+        phenotypeGeneIdMap = phenotype_gene_id_map;
+        var pathwayType = "kegg";
 
         // if kegg pathway type
         // fill in select element options
@@ -166,8 +171,33 @@ var keggerator = function () {
             });
 
             // update image
-
             updateCanvas(pathway_id, pathwayType);
+
+            // process phenogene map
+            // add colors to each phenotype
+            // add x,y locations for each phenotype
+            // add x,y locations and colors for each gene
+            if (phenotypeGeneIdMap !== undefined) {
+                var palette = colorbrewer.RdYlGn['11'];
+                for (var i = 0; i < phenotypeGeneIdMap.length; i++) {
+                    phenotypeGeneIdMap[i].color = palette[i];
+                    for (var gene in phenotypeGeneIdMap[i].genes) {
+
+                        if (phenotypeGeneIdMap[i].genes.hasOwnProperty(gene)) {
+
+                            phenotypeGeneIdMap[i].genes[gene].x = 0;
+                            phenotypeGeneIdMap[i].genes[gene].y = 0;
+                            phenotypeGeneIdMap[i].genes[gene].width = 0;
+                            phenotypeGeneIdMap[i].genes[gene].height = 0;
+
+
+                            console.log(gene + ":" + phenotypeGeneIdMap[i].genes[gene]);
+                        }
+
+                    }
+
+                }
+            }
 
         });
 
@@ -184,22 +214,6 @@ var keggerator = function () {
         //  ]
 
         phenotypeGeneIdMap = m;
-
-        // add colors to each phenotype
-        // add x,y locations for each phenotype
-        // add x,y locations and colors for each gene
-        var palette = colorbrewer.RdYlGn['11'];
-        for (var i = 0; i < phenotypeGeneIdMap.length; i++) {
-            phenotypeGeneIdMap[i].color = palette[i];
-            for (var gene in phenotypeGeneIdMap[i].genes) {
-
-                if (phenotypeGeneIdMap[i].genes.hasOwnProperty(gene)) {
-                    console.log(gene + ":" + phenotypeGeneIdMap[i].genes[gene]);
-                }
-
-            }
-
-        }
 
     }
 

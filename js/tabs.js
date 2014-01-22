@@ -20,9 +20,6 @@ $(document).ready(function(){
         if (panel_id == "over") {
             panel = '#overview';
             tab = '.overtab';
-        } else if (panel_id == "ont") {
-            panel = '#ontology';
-            tab = '.onttab';
         } else if (panel_id == "phen") {
             panel = '#phenotype';
             tab = '.phentab';
@@ -42,11 +39,8 @@ $(document).ready(function(){
             panel = '#disease';
             tab = '.distab';
         } else if (panel_id == "geno") {
-            panel = '#geno';
-            panel = '.genotab';
-        } else {
-            panel = "#down";
-            tab = '.downtab';
+            panel = '#genot';
+            tab = '.genotab';
         }
         event.preventDefault();
         $(panel).show();

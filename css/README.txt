@@ -14,12 +14,7 @@ monarch-main.css
 
 The remaining CSS files are page type specific.
     disease.css
-        This controls all disease specific pages.
-    phenotype.css
-        This controls all phenotype specific pages.
-        Note: phenotype.css is basically identical to disease.css
-        except that it reacts differently to page width (responsive
-        design).
+        This controls all disease and phenotype specific pages.
     search.css
         This controls all search result pages.
     team.css
@@ -28,4 +23,3 @@ The remaining CSS files are page type specific.
     tour.css
         This file controls all other static pages (such as the tour
         page, the publications page, and the glossary).
-

@@ -29,10 +29,10 @@ p {
 }
 /* Category Tabs */
 #categories {
-    margin-top: 10px;
+    margin-top: 20px;
     margin-bottom: -3px;
 }
-@media (min-width: 1200px) {
+@media (min-width: 992px) {
     .tab {
         display: inline-block;
         background: white;
@@ -48,7 +48,7 @@ p {
         border: black solid 1px;
     }
 }
-@media (max-width: 1200px) {
+@media (max-width: 992px) {
     .tab {
         display: inline-block;
         background: white;
@@ -68,12 +68,12 @@ p {
     color: white;
     background-color: #666;
 }
-@media (min-width: 1200px) {
+@media (min-width: 992px) {
     .second-row-divider {
         display: none;
     }
 }
-@media (max-width: 1200px) {
+@media (max-width: 992px) {
     .second {
         margin-top: 10px;
         margin-bottom: 15px;
@@ -87,3 +87,8 @@ p {
     padding-left: 40px;
     display: none;
 }
+.btn.btn-info {
+    padding: 5px 15px;
+    width: 90px;
+}
+

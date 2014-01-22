@@ -10,3 +10,9 @@
     font-weight: 500;
     line-height: 50px;
 }
+.results {
+    margin: 10px 0px;
+}
+.btn.btn-info {
+    padding: 5px 15px;
+}

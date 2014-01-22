@@ -5,16 +5,13 @@
         "url": "http://purl.obolibrary.org/obo/HP_0000726",
         "genes": {
 
-            "gene_id": {
+            "KO8844": {
                 "url": ""
             },
-            "gene_id1": {
+            "KO4551": {
                 "url": ""
             },
-            "gene_id2": {
-                "url": ""
-            },
-            "gene_id3": {
+            "KO4552": {
                 "url": ""
             }
         }
@@ -23,18 +20,15 @@
         "phenotype_id": "HP:0000746",
         "label": "Delusions",
         "url": "http://purl.obolibrary.org/obo/HP_0000746",
-        "genes": {
+        "genes": {567
 
-            "gene_id": {
+            "K04556": {
                 "url": ""
             },
-            "gene_id1": {
+            "KO4557": {
                 "url": ""
             },
-            "gene_id2": {
-                "url": ""
-            },
-            "gene_id3": {
+            "K04558": {
                 "url": ""
             }
         }
@@ -45,16 +39,16 @@
         "url": "http://purl.obolibrary.org/obo/HP_0001300",
         "genes": {
 
-            "gene_id": {
+            "KO5687": {
                 "url": ""
             },
-            "gene_id1": {
+            "KO5688": {
                 "url": ""
             },
-            "gene_id2": {
+            "KO4528": {
                 "url": ""
             },
-            "gene_id3": {
+            "KO5611": {
                 "url": ""
             }
         }
@@ -65,16 +59,13 @@
         "url": "http://purl.obolibrary.org/obo/HP_0002367",
         "genes": {
 
-            "gene_id": {
+            "KO4553": {
                 "url": ""
             },
-            "gene_id1": {
+            "KO0501": {
                 "url": ""
             },
-            "gene_id2": {
-                "url": ""
-            },
-            "gene_id3": {
+            "KO5036": {
                 "url": ""
             }
         }
@@ -85,16 +76,13 @@
         "url": "http://purl.obolibrary.org/obo/HP_0007159",
         "genes": {
 
-            "gene_id": {
+            "KO2084": {
                 "url": ""
             },
-            "gene_id1": {
+            "KO8155": {
                 "url": ""
             },
-            "gene_id2": {
-                "url": ""
-            },
-            "gene_id3": {
+            "KO05036": {
                 "url": ""
             }
         }
