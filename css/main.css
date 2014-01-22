@@ -1,24 +1,58 @@
 /* Section 3: Content */
 
-.jumbotron {
-    padding: 30px 60px;
+.right-butn {
+    float: right;
 }
-.jumbotron h1 {
-    margin: 0px;
-    font-size: 50px;
+
+
+#columns .column {  
+    float: left;  
+    width: 50%;  
+    /* HACK WARNING  - I couldn't figure out why things were so far to
+    the right. this seemed to work.. */ 
+    margin-left: -20px;
+} 
+
+/* two column layout from http://net.tutsplus.com/tutorials/javascript-ajax/inettuts/ */
+#columns #column1 .entry { margin: 15px 10px 15px 0px; }  
+#columns #column2 .entry { margin: 15px 0px 15px 0px; } 
+
+#columns ul {
+  list-style-type: none;
+  margin-left:0px;
 }
-.jumbotron h2 {
-    font-size: 30px;
+
+#columns li {
+  list-style-type: none;
 }
-.jumbotron p {
-    font-size: 16px;
-    line-height: 26px;
-    margin: 0px 0px 15px;
+
+#columns .entry {
+    background-color: #E5E5E5;
+    height: 200px;
 }
-.btn.btn-large.btn-info {
-    padding: 10px 15px;
-    margin-right: 10px;
-    width: 175px;
-    font-size: 16px;
-    font-weight: 400;
-}
+
+#columns .entry .entry-head {  
+    overflow: hidden;  
+    width: 100%;  
+    color: #000000;
+
+    height: 50px;  
+
+    line-height: 30px;  
+}  
+#columns .entry .entry-head h3 {  
+    padding: 0 5px;  
+    float: left;  
+    font-size: 1.2em;
+    color: #461313;
+}  
+#columns .entry .entry-content {  
+    color: #000000;
+    padding: 5px;  
+    -moz-border-radius-bottomleft: 2px;  
+    -moz-border-radius-bottomright: 2px;  
+    -webkit-border-bottom-left-radius: 2px;  
+    -webkit-border-bottom-rightright-radius: 2px;  
+    line-height: 1.2em;  
+    overflow: hidden;  
+}  

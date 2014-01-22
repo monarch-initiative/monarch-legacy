@@ -8,19 +8,118 @@
     {{#stylesheets}}
     <link rel="stylesheet" type="text/css" href="{{url}}"></link>
     {{/stylesheets}}
+    <link rel="stylesheet" type="text/css" href="/css/monarch-main.css"></link>
     <link rel="stylesheet" type="text/css" href="/css/main.css"></link>
     <meta charset=”utf-8”> 
   </head>
   <body>
+   {{{includes.navbar}}}
     <div class="container">
-      {{{includes.navbar}}}
+      <div  class="sidebar">
+	{{{includes.navlist}}}
+      </div>
+      <div class="content">
       <div class="jumbotron">
     	<h1>Welcome to Monarch!</h1>
-    	<h2>Alpha Release</h2>
-	    <p>Model systems are the cornerstone of biomedical research to investigate biological processes, test gene-based disease hypotheses, and develop and test disease treatments. The vast knowledge that we have about model systems can be better utilized if semantically aggregated and made queryable based on any number of facets, such as phenotypic similarity, network analysis, gene expression and function, and genomics. The Monarch Initiative aims to provide easy-to-use tools to navigate this data landscape, services for other resources, and educational outreach regarding the production of structured data for biomedical discovery.</p>
-    	<a href="/page/tour" class="btn btn-large btn-info">Info About Monarch</a>
-    	<a href="/search" class="btn btn-large btn-info">Search Monarch</a>
+	<a href="/page/tour" class="btn btn-large btn-info right-butn">About Monarch</a>
+    	<h2>Alpha Release</h2>    
+	    <p>Model systems are the cornerstone of biomedical
+	    research to investigate biological processes, test
+	    gene-based disease hypotheses, and develop and test
+	    disease treatments. The vast knowledge that we have about
+	    model systems can be better utilized if semantically
+	    aggregated and made queryable based on any number of
+	    facets, such as phenotypic similarity, network analysis,
+	    gene expression and function, and genomics. The Monarch
+	    Initiative aims to provide easy-to-use tools to navigate
+	    this data landscape, services for other resources, and
+	    educational outreach regarding the production of
+	    structured data for biomedical discovery.</p> 
       </div>
-    </div>
+      
+
+      <!-- two column layout from http://net.tutsplus.com/tutorials/javascript-ajax/inettuts/ -->
+      <div id="columns">
+      <ul id="column1" class="column">
+	<li class="entry">
+	 <div class="entry-head"> 
+	  <h3>Diseases: Parkinson's disease</h3>
+         </div>
+	 <div class="entry-content">
+	   <p>A neurodegenerative disease that has material basis in
+	   degeneration of the central nervous system that often
+	   impairs the sufferer's motor skills, speech, and other
+	   functions.</p>
+	   <P>Highlighted Diseases:
+	     <a href="/disease/DOID_14692">Smith-Lemli-Opitz syndrome</a>,
+	     <a href="/disease/DOID_1932">Angelman syndrome</a>,
+             <a href="/disease/DOID_6683">Aarskog-Scott syndrome</a>,
+             <a href="/disease/DOID_3393">coronary heart disease</a>,
+             <a href="/disease/DOID_12798">mucopolysaccharidosis</a>
+	     <A HREF="/disease/">...more details </a>
+	     </p>
+	 </div>
+       </li>
+
+	<li class="entry">
+	 <div class="entry-head"> 
+	  <h3>Models: Fat Aussie</h3>
+         </div>
+	 <div class="entry-content">
+	   <p>The biochemical differences between simple steatosis, a
+	   benign liver disease, and non-alcoholic steatohepatitis,
+	   which leads to cirrhosis, are unclear. Fat aussie is an
+	   obese mouse strain with a truncating mutation (foz) in the
+	   Alms1 gene... <A HREF="/model">...more details</A>
+	     </p>
+	 </div>
+       </li>
+
+     </ul>
+
+
+      <ul id="column2" class="column">
+
+	<li class="entry">
+	 <div class="entry-head"> 
+	  <h3>Phenotypes: Large floppy ears</h3>
+         </div>
+	 <div class="entry-content">
+	   <p>TODO: Repalce this with something more sensible</p>
+	   <p>Related Phenotypes:
+	     <a href="/phenotype/HP_0000003">Multicystic kidney dysplasia (human),
+                <a href="/phenotype/HP_0000104">Renal agenesis (human),
+                <a href="/phenotype/MP_0000854">abnormal cerebellum development (mouse),
+                <a href="/phenotype/WBPhenotype_0000655">GABA synaptic
+                transmission variant (worm TODO), 
+		  <A HREF="/phenotype/">..more details</a>
+	 </div>
+       </li>
+
+
+	<li class="entry">
+	 <div class="entry-head"> 
+	  <h3>Coming soon</h3>
+         </div>
+	 <div class="entry-content">
+	   <ul>
+	     <li>Cells</li>
+	     <li>Organ Systems</li>
+	     <li>..and much, much more</li>
+           </ul>
+	 </div>
+       </li>
+
+
+     </ul>
+      </div> <!-- end columns -->
+      <div id="footer">Except where otherwise noted, this work is
+	licensed under a Creative Commons Attribution 3.0
+	License.<br/>
+	The Monarch Initiative is a collaboration between OHSU, UCSD,
+	LBNL, and the University of Pittsburgh.<br/>
+        Support: NIH Grant #5R24OD011883</div>
+      </div> <!-- end content --> 
+      </div> <!-- end container -->
   </body>
 </html>

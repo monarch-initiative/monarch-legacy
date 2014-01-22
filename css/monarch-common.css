@@ -1,3 +1,13 @@
+
+/* Override bootstrap for font-family and color */
+body, h1, h2, h3, a {
+    font-family: "Kelson Sans";
+}
+
+a {
+    color: #44A293;
+}
+
 /* Section 1: Navbar */
 .nav>li>a {
     padding: 0px;
@@ -30,7 +40,12 @@
 #search {
     width: 145px;
 }
+
 /* Search Button */
+.btn {
+  background-color: #44A293;
+}
+
 .btn.btn-primary {
     padding: 4px 51px;
     font-size: 13px;
@@ -40,4 +55,13 @@
     font-size: 17px;
     font-weight: 700;
     margin-top: 10px;
+}
+
+/* footer */
+
+#footer {
+    clear:both;
+    display:block;
+    float:center;
+    text-align:center;
 }
