@@ -86,7 +86,7 @@ var keggerator = function () {
     }
 
     function drawPathway(imgSrc) {
-
+        console.log("got image source " + imgSrc);
         var myImage = new Image();
         myImage.name = imgSrc;
         myImage.onload = function () {
@@ -151,7 +151,6 @@ var keggerator = function () {
 
     function setPathwayId(pathway_id, phenotype_gene_id_map) {
         pathwayId = pathway_id;
-        phenotypeGeneIdMap = phenotype_gene_id_map;
         var pathwayType = "kegg";
 
         // if kegg pathway type
