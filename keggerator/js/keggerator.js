@@ -142,7 +142,7 @@ var keggerator = function () {
 
         dataShown = [];
         data.forEach(function (d) {
-            if (elements.indexOf(d.graph_id) > -1) {
+            if (d && d.graph_id && elements.indexOf(d.graph_id) > -1) {
                 dataShown.push(d);
             }
         });

@@ -9,20 +9,23 @@
 <script type="application/javascript" src="js/jquery-1.10.2.min.js"></script>
 <script type="application/javascript" src="js/raphael-min-2.1.0.js"></script>
 <script type="application/javascript" src="js/jquery.xml2json.js"></script>
-<script type="application/javascript" src="js/jquery.xml2json.js"></script>
+<script type="application/javascript" src="js/keggerator.js"></script>
+
 
 <style>
 
     #twoColumnContainer {
-        width:100%;
+        width: 100%;
     }
+
     #keggImageColumn {
-        float:left;
+        float: left;
         padding: 0;
         outline: 1px solid #999;
     }
+
     #kgmlSelectColumn {
-        float:right;
+        float: right;
     }
 
 
@@ -37,24 +40,24 @@
     var raphaelElements = [];
 
 
-    $(function() {
+    $(function () {
 
 
-        $("#keggIdButton").on("click", function() {
+        $("#keggIdButton").on("click", function () {
 
             // update kgml image
             keggId = $("#keggId").val();
-            $("#keggImage").attr("src","http://rest.kegg.jp/get/" + keggId + "/image");
+            $("#keggImage").attr("src", "http://rest.kegg.jp/get/" + keggId + "/image");
             paper = Raphael(document.getElementById("canvas"), 1024, 768);
 
             // retrieve kgml for this id
-            $.get("http://rest.kegg.jp/get/" + keggId + "/kgml", function(xml){
+            $.get("/kegg/get/" + keggId + "/kgml", function (xml) {
                 kgmlJson = $.xml2json(xml);
 
                 // update the kgml select options
                 var $el = $("#kgmlSelect");
                 $el.empty(); // remove old options
-                $.each(kgmlJson.entry, function() {
+                $.each(kgmlJson.entry, function () {
                     $el.append($("<option></option>").attr("value", this.name).text(this.graphics.name));
 
                 });
@@ -62,16 +65,16 @@
         });
 
         // submit kgml entries for highlighting
-        $("#highlightButton").on("click",function() {
-            var kgmlVals = $( "#kgmlSelect" ).val() || [];
-            console.log( kgmlVals.join(",") + " was selected");
-            $.each(kgmlVals, function(k) {
+        $("#highlightButton").on("click", function () {
+            var kgmlVals = $("#kgmlSelect").val() || [];
+            //console.log(kgmlVals.join(",") + " was selected");
+            $.each(kgmlVals, function (k) {
 
                 // extract the value
-                var entry = $.grep(kgmlJson.entry, function(e){
+                var entry = $.grep(kgmlJson.entry, function (e) {
                     return e.name === kgmlVals[k];
                 });
-                console.log("found " + entry[0].name + " " + entry[0].graphics.type);
+                //console.log("found " + entry[0].name + " " + entry[0].graphics.type);
                 if (entry[0].graphics.type === "rectangle") {
 
                     raphaelElements.push(
@@ -89,17 +92,14 @@
             })
         });
 
-        $("#eraseButton").on("click",function() {
-            $.each(raphaelElements, function(r) {
+        $("#eraseButton").on("click", function () {
+            $.each(raphaelElements, function (r) {
                 raphaelElements[r].remove();
             })
         });
 
-
-
-    $(function () {
         // tell keggerator where to draw stuff and handle ui events
-        keggerator.init($("#imageDiv"), $("#selectList"));
+        keggerator.init($("#imageDiv"), $("#kgmlSelect"));
         $("#highlightButton").on("click", keggerator.highlight);
         $("#eraseButton").on("click", keggerator.clearHighlights);
 
@@ -112,23 +112,23 @@
                     keggerator.setPhenotypeGeneIdMap(data);
                 }
         );
-
-
-    });
+    })
 
 
 </script>
 
-<h1><img src="kegerator.jpg" height="80" width="80" />Keggerator - Kegg Pathway JS Annotator</h1>
+<h1><img src="kegerator.jpg" height="80" width="80"/>Keggerator - Kegg Pathway JS Annotator</h1>
 
 <div>
-    Kegg Id<input type="text" size="80" id="keggId" value="ko05012"/><input id="keggIdButton" type="button" value="Get It">
+    Kegg Id<input type="text" size="80" id="keggId" value="ko05012"/><input id="keggIdButton" type="button"
+                                                                            value="Get It">
 </div>
 
 <div id="twoColumnContainer">
 
     <div id="keggImageColumn">
         <img id="keggImage" src=""/>
+
         <div id="canvas"></div>
     </div>
 
