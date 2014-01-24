@@ -33,8 +33,15 @@ var modeltype = function () {
 
     var col_starting_pos = 50, text_width = 150, clicked_data = undefined, xScale = undefined, text_length = 32;
     var svg;
+    var y_scale;
     var model_data = [];
     var filtered_model_data = [];
+    var phenotype_list = [];
+    var detail_rect_width = 200;
+    var detail_rect_height = 400;
+    var data_url = "http://monarch.monarchinitiative.org/";
+    //var data_url = "http://localhost:8080/";
+
     var dimensions = [ "Human Phenotype", "Lowest Common Subsumer", "Mammalian Phenotype" ];
     var m = [ 30, 10, 10, 10 ], w = 1000 - m[1] - m[3], h = 1300 - m[0] - m[2];
 
@@ -44,16 +51,102 @@ var modeltype = function () {
     var model_list = [];
     var model_width;
 
-    function getModelList() {
-    	var unique_model_id = [];
-    	model_list = [];
-    	for (var t_idx = 0;t_idx < model_data.length; t_idx++) {
-    		if (unique_model_id.indexOf(model_data[t_idx].model_id) == -1)
-    		{
-    			model_list.push({model_id: model_data[t_idx].model_id, model_label: model_data[t_idx].model_label});
-    			unique_model_id.push(model_data[t_idx].model_id);
-    		}
-    	} 
+    //given a list of phenotypes, find the top n models
+    //I may need to rename this method "getModelData".  It should extract the models and reformat the data
+    function loadData(phenotype_list) {
+    	var retData = [];
+  
+    	
+    	//NOTE: just temporary until the calls are ready
+		jQuery.ajax({
+			//url : "data/sample_model_data.json",
+			url: "http://tartini.crbs.ucsd.edu/simsearch/phenotype/?input_items=" + phenotype_list.join(",") + "&target_species=10090",
+			async : false,
+			dataType : 'json',
+			success : function(data) {
+				retData = data;
+			}
+
+		});
+		
+		///EXTRACT MOUSE MODEL INFORMATION FIRST
+		model_list = [];
+		for (var idx=0;idx<retData.b.length;idx++) {
+			model_list.push({model_id: retData.b[idx].id, model_label: retData.b[idx].label, model_score: retData.b[idx].score.score, model_rank: retData.b[idx].score.rank});
+			loadDataForModel(retData.b[idx]);
+		}
+		//sort the model list by rank
+		model_list.sort(function(a,b) { return a.model_rank - b.model_rank; } );		
+		
+    }
+    
+    //for a given model, extract the sim search data including IC scores and the triple:
+    //the a column, b column, and lowest common subsumer
+    //for the triple's IC score, use the A score
+    function loadDataForModel(new_model_data) {
+    	/*
+    	 * [
+   {
+      "id":"HP_0002360_MP_0001501_MGI_006446",
+      "label_a":"Sleep disturbance",
+      "id_a":"HP:0002360",
+      "subsumer_label":"Sleep disturbance",
+      "subsumer_id":"HP:0002360",
+      "value":8.218157353968294,
+      "label_b":"MP_0001501",
+      "id_b":"MP:0001501",
+      "model_id":"MGI_006446",
+      "model_label":"B10.Cg-H2<sup>h4</sup>Sh3pxd2b<sup>nee</sup>/GrsrJ",
+      "rowid":"HP_0002360_HP_0002360"
+      
+   },
+   
+   "b":[{"id":"MGI:1095415","label":"Col19a1",
+   "matches":[{"b":{"id":"HP:0002015","IC":7.530669346007908,"label":"Dysphagia"},
+   "a":{"id":"HP:0002015","IC":7.530669346007908,"label":"Dysphagia"},
+   "lcs":{"id":"MP:0003158","IC":7.530669346007908,"label":"dysphagia"}}],
+   "type":null,"score":{"metric":"combinedScore","score":55,"rank":0}},
+   
+   {"id":"MGI:3812220","label":"Rgsc651","matches"
+   :[{"b":{"id":"HP:0001251","IC":5.331176482109164,"label":"Ataxia"},
+   "a":{"id":"HP:0002063","IC":8.621031063637584,"label":"Rigidity"},
+   "lcs":{"id":"HP:0011442","IC":4.030655298413771,"label":"Abnormality of central motor function"}},
+   {"b":{"id":"HP:0001337","IC":5.636678307837094,"label":"Tremor"},
+   "a":{"id":"HP:0002322","IC":11.392565810000562,"label":"Resting tremor"},
+   "lcs":{"id":"HP:0001337","IC":5.636678307837094,"label":"Tremor"}}],
+   "type":null,"score":{"metric":"combinedScore","score":53,"rank":1}}
+   ,{"id":"MGI:3812369","label":"Rgsc718","matches":
+
+"matches": [
+{
+"b": {
+"id": "MP:0009293",
+"IC": 2.8143549220576047,
+"label": "decreased inguinal fat pad weight"
+},
+"a": {
+"id": "MP:0009293",
+"IC": 2.8143549220576047,
+"label": "decreased inguinal fat pad weight"
+},
+"lcs": {
+"id": "MP:0009293",
+"IC": 2.8143549220576047,
+"label": "decreased inguinal fat pad weight"
+}
+},
+
+    	 */
+    	//var model_data = [];
+    	for (var idx=0;idx<new_model_data.matches.length;idx++) {
+    		var curr_row = new_model_data.matches[idx];
+    		var new_row = {"id": getConceptId(curr_row.a.id) + "_" + getConceptId(curr_row.b.id) + "_" + getConceptId(new_model_data.id),
+    				"label_a" : curr_row.a.label, "id_a" : getConceptId(curr_row.a.id), "subsumer_label" : curr_row.lcs.label, 
+    				"subsumer_id" : getConceptId(curr_row.lcs.id), "value" : parseFloat(curr_row.a.IC),
+    				"label_b" : curr_row.b.label, "id_b" : getConceptId(curr_row.b.id), "model_id" : getConceptId(new_model_data.id),
+    				"model_label" : new_model_data.label, "rowid" : getConceptId(curr_row.a.id) + "_" + getConceptId(curr_row.lcs.id)};
+    		model_data.push(new_row);
+    	}
     }
     
     function createColorScale() {
@@ -75,7 +168,7 @@ var modeltype = function () {
     //walk through the data array and extract a list of the
     //models: {model_id, model_label}
     function extractModelList(data_array) {
-    	
+    	//TODO work on this...
     }
     
     function resetLinks() {
@@ -160,7 +253,7 @@ var modeltype = function () {
   }
 
     
-    var convertLabelHTML = function (t, d) {
+    var convertLabelHTML = function (t, label, data) {
     		
     		var width = 100;
     		var el = d3.select(t);
@@ -171,14 +264,19 @@ var modeltype = function () {
     	       // .attr('dx', t.dx)
     	       // .attr('dy', t.dy)
     	        .attr("width", width)
+    	        .attr("model_id", data.model_id)
     	        .attr("height", 200)
+
     	        .attr("transform", function(d) {
     	        	return "rotate(-45)" 
     	         })
     	      .append("xhtml:p")
 
+		        .on("click", function(d) {
+					model_click(data);
+				})
     	        //.attr('style','word-wrap: break-word; text-align:center;')
-    	        .html(d);    
+    	        .html(label);    
 
     	    el.remove();
 
@@ -232,50 +330,21 @@ var modeltype = function () {
 
   }
 
-    function updateAxes() {
-    	//h= 500;
-    	h = (filtered_model_data.length*2.5);
-    	svg.selectAll("yaxis").remove();
-    	y_scale = d3.scale.ordinal()
-        	.domain(filtered_model_data.map(function (d) {return d.rowid; }))
-        	
-    	    .range([0,filtered_model_data.length])
-    	    .rangePoints([ yoffset, yoffset+h ]);
-//    	    .rangeBands([ 0, h ]);
-    	y_axis = d3.svg.axis()
-    	  //.tickSize(5,0,0).ticks(15)
-    	  .orient("left")
-    	  .scale(y_scale);
- //   	svg.attr("height", h);
-    	//svg.selectAll("yaxis")
-    	   svg.append("g")
-    	       .attr("class", "yaxis")
-    	       .attr("transform", "translate(550," + yoffset + ")");
-//    	       .call(y_axis);
-    	   /*
-    	       		    .selectAll("text")  
-    		        .style("text-anchor", "end")
-    		        .style("font-size", "12pt");*/
-    /*
-     * .tickSize(-HEIGHT,0,0).ticks(15)
-     * 
-     * 
-     * 	
-     * 		    .selectAll("text")  
-    		        .style("text-anchor", "end")
-    		        .style("font-size", "8pt")
-
-    	var model_region = svg.append("g").attr("transform",
-    	"translate(210,44)")
-    	.call(model_x_axis)
-    	.attr("class", "axes")
-    */
-    	
-        //update accent boxes
-    	svg.selectAll("#rect.accent").attr("height", h);
+  
+  function updateAxes() {
+  	//h= 500;
+  	h = (filtered_model_data.length*2.5);
+  	//svg.selectAll("yaxis").remove();
+  	y_scale = d3.scale.ordinal()
+      	.domain(filtered_model_data.map(function (d) {return d.rowid; }))
+      	
+  	    .range([0,filtered_model_data.length])
+  	    .rangePoints([ yoffset, yoffset+h ]);
+      //update accent boxes
+  	svg.selectAll("#rect.accent").attr("height", h);
 
 
-    }
+  }
 
 	function createAccentBoxes() {
 		var axis_pos_list = [];
@@ -319,7 +388,7 @@ var modeltype = function () {
 				//this be some voodoo...
 				//to rotate the text, I need to select it as it was added by the axis
 			    .selectAll("text") 
-			       .each(function(d,i) { convertLabelHTML(this, getShortLabel(model_list[i].model_label, 25));});
+			       .each(function(d,i) { convertLabelHTML(this, getShortLabel(model_list[i].model_label, 25),model_list[i]);});
 
 
 		//create a scale
@@ -332,16 +401,16 @@ var modeltype = function () {
 			var t2 = t + (idx * step);
 			color_values.push(t2);
 		}
-		color_values.reverse();
+		//color_values.reverse();
 		var legend_rects = svg.selectAll("#legend_rect")
 		        .data(color_values);
 		    legend_rects.enter()
 		        .append("rect")
-		          .attr("transform","translate(330,30)")
+		          .attr("transform","translate(510,30)")
 			      .attr("class", "legend_rect")
-			      .attr("x", "240")
-			      .attr("y", function(d, i) {
-			    	  return 150 + (i* 25);
+			      .attr("y", "39")
+			      .attr("x", function(d, i) {
+			    	  return (i* 28);
 			      })
 			      .attr("width", 20)
 			      .attr("height", 20)
@@ -352,28 +421,34 @@ var modeltype = function () {
 	        .data(color_values);
 	    legend_text.enter()
 		      .append("text")
-		          .attr("transform","translate(330,30)")
+		          .attr("transform","translate(510,30)")
 			      .attr("class", "legend_text")
-			      .attr("x", "275")
-			      .attr("y", function(d, i) {
-			    	  return (175 + (i* 25));
+			      .attr("y", "35")
+			      .attr("x", function(d, i) {
+			    	  return (i* 28);
 			      })
 			      .text(function(d) {
-			    	  return d.toFixed(5);
+			    	  return d.toFixed(2);
 			      });
+		var div_text = svg.append("svg:text")
+          .attr("transform","translate(510,30)")
+	      .attr("class", "detail_text")
+	      .attr("y", "22")
+	      //.attr("x", "510")
+	      .text("Score Scale");
 
-		var legend_control = svg.selectAll("#legend_control")
+/*		var legend_control = svg.selectAll("#legend_control")
 	    .data(color_values);
 	     legend_rects.enter()
 	    .append("rect")
-	      .attr("transform","translate(330,30)")
+	      .attr("transform","translate(30,30)")
 	      .attr("class", "legend_control")
 	      .attr("value", function(d) {
 	    	  return d.toFixed(6);
 	      })
-	      .attr("x", "237")
-	      .attr("y", function(d, i) {
-	    	  return (175 + (i* 25))-5;
+	      //.attr("x", "237")
+	      .attr("x", function(d, i) {
+	    	  return ((i* 25))-5;
 	      })
 	      //	  .attr('onclick', function(d) { return 'select_column(this,"' + d + '");';}) 
 
@@ -383,10 +458,34 @@ var modeltype = function () {
 	      .attr("width", 26)
 	      .attr("height", 5)
 	      .attr("fill", "lightgrey");
+*/
+		
+		
+		
+	}
+	
+	//create essentially a D3 enalbed "div" tag on the screen
+	function createDetailSection() {
+		var div_text = svg.append("svg:text")
+        //.attr("transform","translate(30,30)")
+	      .attr("class", "detail_text")
+	      .attr("y", "115")
+	      .attr("x", "560")
+	      .text("Item Details:");
 
 		
-		
-		
+		var div_rect = svg.append("svg:rect")
+           //.attr("transform","translate(30,30)")
+	      .attr("class", "detail_rect")
+	      .attr("id", "detail_rect")
+	      .attr("y", "125")
+	      .attr("x", "560")
+	      .attr("width", detail_rect_width)
+	      .attr("height", detail_rect_height)
+	      .style("stroke-width","3")
+	      .style("stroke", "lightgrey")
+	      .attr("fill", "white");
+
 	}
 	
 	function update() {
@@ -458,6 +557,10 @@ var modeltype = function () {
 			    .attr("class", function(d) {
 				    return "a_text data_text " + getConceptId(d.id);
 			    })
+			    //store the id for this item.  This will be used on click events
+			    .attr("ontology_id", function(d) {
+			    	return getConceptId(d.id_a);
+			    })
 				.attr("x", 50)
 				.attr("y", function(d) {
 					  return y_scale(d.rowid)+28;
@@ -473,7 +576,7 @@ var modeltype = function () {
 					}
 				})
 				.on("click", function(d) {
-					rect_click(d);
+					rect_click(this);
 				})
 			    .attr("width", text_width)
 			    .attr("height", 50)
@@ -503,6 +606,10 @@ var modeltype = function () {
 			    	 }
 				    
 			    })
+			    //store the id for this item.  This will be used on click events
+			    .attr("ontology_id", function(d) {
+			    	return getConceptId(d.subsumer_id);
+			    })
 				.attr("x", text_width + 10 + col_starting_pos + model_width)
 				.attr("y", function(d) {
 					  return y_scale(d.rowid)+28;
@@ -518,7 +625,7 @@ var modeltype = function () {
 					}
 				})
 				.on("click", function(d) {
-					rect_click(d);
+					rect_click(this);
 				})
 			    .attr("width", text_width)
 			    .attr("height", 50)
@@ -543,13 +650,97 @@ var modeltype = function () {
 
 	}
 
+	function rect_click(data) {
+		//remove any text from the text area
+		svg.selectAll("#detail_content").remove();
+		var retData;
+		jQuery.ajax({
+			url : data_url + "phenotype/" + data.attributes["ontology_id"].value + ".json",
+			async : false,
+			dataType : 'json',
+			success : function(data) {
+				//retData = data;
+				retData = "<strong>Label:</strong> " + "<a href=\"" + data.url + "\">"  
+				   + data.label + "</a><br/><strong>Type:</strong> " + data.category;
+				//console.log("data: " + retData);
+			}
+		});
+
+		svg.append("foreignObject")
+			.attr("width", detail_rect_width)
+			.attr("height", detail_rect_height)
+			.attr("id", "detail_content")
+		    .attr("y", "125")
+	        .attr("x", "560")
+		.append("xhtml:body")
+			  //.style("font", "14px 'Helvetica Neue'")
+			  .html(retData);
+	}
+
+	function model_click(model_data) {
+		//remove any text from the text area
+		svg.selectAll("#detail_content").remove();
+		var retData;
+		jQuery.ajax({
+			url : data_url + "genotype/" + getConceptId(model_data.model_id) + ".json",
+			async : false,
+			dataType : 'json',
+			success : function(data) {
+				//retData = data;
+				retData = "<strong>Gene Label:</strong> "   
+				   + model_data.model_label + "<br/><strong>Rank:</strong> " + (parseInt(model_data.model_rank) + 1)
+				   + "<br/><strong>Score:</strong> " + model_data.model_score
+				   + "<br/><strong>Genotype(s):</strong> ";
+				//generate a unique list of genotypes
+				var temp_list = [];
+				for (var idx=0;idx<data.phenotype_associations.length;idx++) {
+					var str_temp = data.phenotype_associations[idx].has_genotype.label;
+					//the genotypes frequently contain <> signs.  Escape them before
+					//trying to display them.
+					str_temp = str_temp.replace(/</g, "&lt;");
+					str_temp = str_temp.replace(/>/g, "&gt;");
+					if (temp_list.indexOf(str_temp) == -1) {
+						temp_list.push(str_temp);
+					}
+				}
+				for (var idx=0;idx<temp_list.length;idx++) {
+					retData = retData + temp_list[idx] + "<br/>";
+				}
+				//console.log("data: " + retData);
+			}
+		});
+
+		svg.append("foreignObject")
+			.attr("width", detail_rect_width)
+			.attr("height", detail_rect_height)
+			.attr("id", "detail_content")
+		    .attr("y", "125")
+	        .attr("x", "560")
+		.append("xhtml:body")
+			  //.style("font", "14px 'Helvetica Neue'")
+			  .html(retData);
+	}
 
 
-    function init(imageDiv, data) {
-        model_data = data;
-        filtered_model_data = model_data.slice();
+	//NOTE: I'm not too sure what the default init() method signature should be
+	//given an imageDiv and phenotype_data list
+	/**
+	 * imageDiv- the place you want the widget to appear
+	 * phenotype_data - a list of phenotypes in the following format:
+	 * [ {"id": "HP:12345", "observed" :"positive"}, {"id: "HP:23451", "observed" : "negative"}, É]
+	 */
+    function init(imageDiv, phenotype_data) {
+    	/*phenotype_list = loadPhenotypeResults(phenotype_data);
+        //model_data = data;
+        //filtered_model_data = model_data.slice();
+*/
 
-        getModelList();
+        //model_data = phenotype_data;
+        //filtered_model_data = model_data.slice();
+        
+    	loadData(phenotype_data);
+    	filtered_model_data = model_data.slice();
+    	
         initCanvas(imageDiv);
         
         // set canvas size
@@ -563,11 +754,13 @@ var modeltype = function () {
     	updateAxes();
     	createRects();
     	createModelRects();
+		createDetailSection();
+
    }
 
     //given an array of phenotype objects 
     //edit the object array, conduct OWLSim analysis, and return results
-    function loadPhenotypeResults(phenotypelist) {
+    function filterPhenotypeResults(phenotypelist) {
     	var retResults = [];
     	
     	//filter out all the non-positive observed
@@ -576,28 +769,11 @@ var modeltype = function () {
     	//remove the "observed" attributes
     	var newlist = templist.map(function(d) { return d.id; });
     	
-    	retResults = getSimData(newlist);
-    	return retResults; 
+    	//retResults = getSimData(newlist);
+    	//return retResults;
+    	return newlist;
     }
     
-    //this function will take a list of phenotypes and runs them through the OWLSim analysis
-    //NOTE: This function may need to "repackage" the results.  For example, I am assuming the OWLSim process will not
-    //return unique ids.  These ids are required to arrange the data in the visualiztion
-    //the required fields are id and rowid.
-    function getSimData(plist) {
-    	var retData = [];
-    	//NOTE: just temporary until the calls are ready
-		jQuery.ajax({
-			url : "data/sample_model_data.json",
-			async : false,
-			dataType : 'json',
-			success : function(data) {
-				retData = data;
-			}
-		});
-		return retData;
-
-    }
     /*
      * Accept two parameters:
      * - imageDiv: the <div> tag where the visualization will be embedded
@@ -606,18 +782,22 @@ var modeltype = function () {
      * The phenotypelist is passed into the OWLSim function for further processing.
      */
     function initPhenotype(imageDiv, phenotypelist) {
-        var data = loadPhenotypeResults(phenotypelist); 
+        var data = filterPhenotypeResults(phenotypelist); 
     	
         init(imageDiv, data);
    }
 
-
+    //maybe add this to the init function...
+    function setDataUrl(new_url) {
+        data_url = new_url;
+    }
 
     // public methods and vars
     return {
         init: init,
         initPhenotype: initPhenotype,
         changeThreshold: changeThreshold,
+        setDataUrl: setDataUrl,
     };
 
 }();
