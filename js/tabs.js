@@ -35,6 +35,9 @@ $(document).ready(function(){
         } else if (panel_id == "simi") {
             panel = '#sim';
             tab = '.simtab';
+        } else if (panel_id == "path") {
+            panel = '#pathways';
+            tab = '.pathtab';
         } else if (panel_id == "dis") {
             panel = '#disease';
             tab = '.distab';

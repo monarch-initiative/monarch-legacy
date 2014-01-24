@@ -22,7 +22,8 @@
     <div class="content">
         <div class="jumbotron">
             <div id="description">
-                <h1>Phenotype: {{label}}</h1>
+                <h1 class="downloadline">Phenotype: {{label}}</h1>
+                <a href="{{{download.json}}}" class="btn btn-info downloadline">JSON</a>
                 <p>
                 {{comments}}
                 </p>
@@ -52,8 +53,6 @@
                         {{.}},
                         {{/database_cross_reference}}
                     </div>
-                <h3>Download Phenotype Information</h3>
-                    <a href="{{{download.json}}}" class="btn btn-info">JSON</a>
                 <h3>Ontology</h3>
                     <p>
                     <table class="{{css.table}}">
@@ -69,11 +68,10 @@
                 </table>
             </div>
             <div id="genot" class="category">
-                <h3>Download Genotype Associations</h3>
-                    <a href="{{{base_url}}}/genotype_associations.json" class="btn btn-info">JSON</a>
-<!--                     <a href="{{{base_url}}}/genotype_associations.rdf" class="btn btn-info">RDF</a> -->
-                    <a href="{{{base_url}}}/genotype_associations.nt" class="btn btn-info">n-triples</a>
-                <h3>Genotypes</h3>
+                <h3 class="downloadline">Genotype Associations</h3>
+                <a href="{{{base_url}}}/genotype_associations.json" class="btn btn-info downloadline">JSON</a>
+<!--                 <a href="{{{base_url}}}/genotype_associations.rdf" class="btn btn-info">RDF</a> -->
+<!--                 <a href="{{{base_url}}}/genotype_associations.nt" class="btn btn-info">n-triples</a> -->
                     <table class="{{css.table}}">
                     {{{genotypeTable}}}
                     </table>

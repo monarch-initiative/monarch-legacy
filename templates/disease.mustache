@@ -37,7 +37,10 @@
     <div class="content">
         <div class="jumbotron">
             <div id="description">
-                <h1>Disease: {{label}}</h1>
+                <h1 class="downloadline">Disease: {{label}}</h1>
+                <a href="{{{base_url}}}.json" class="btn btn-info downloadline">JSON</a>
+                <!-- <a href="{{{base_url}}}.rdf" class="btn btn-success">RDF</a> -->
+<!--                 <a href="{{{base_url}}}.nt" class="btn btn-info">n-triples</a> -->
                 <p>
                 {{comments}}
                 </p>
@@ -46,11 +49,11 @@
                 <a href="#overview"><div id="initialtab" class="tab overtab">Overview</div></a>
                 <a href="#phenotype"><div class="tab phentab">Phenotypes</div></a>
                 <a href="#gene"><div class="tab gentab">Genes</div></a>
+                <a href="#allele"><div class="tab alletab">Alleles</div></a>
                 <div class="second-row-divider"></div>
-                <a href="#allele"><div class="tab alletab second">Alleles</div></a>
-                <a href="#model"><div class="tab modtab">Model</div></a>
+                <a href="#model"><div class="tab modtab second">Model</div></a>
                 <a href="#sim"><div class="tab simtab">Similarity</div></a>
-                <a href="#pathways"><div class="tab pathways">Pathways</div></a>
+                <a href="#pathways"><div class="tab pathtab">Pathways</div></a>
             </div>
         </div>
         <div id="complete-info">
@@ -68,10 +71,6 @@
                         {{.}},
                         {{/database_cross_reference}}
                     </div>
-                <h3>Download Disease Information</h3>
-                    <a href="{{{base_url}}}.json" class="btn btn-info">JSON</a>
-                    <!-- <a href="{{{base_url}}}.rdf" class="btn btn-success">RDF</a> -->
-                    <a href="{{{base_url}}}.nt" class="btn btn-info">n-triples</a>
                 <h3>Ontology</h3>
                     <p>
                     <table class="{{css.table}}">
@@ -80,11 +79,10 @@
                     </p>
             </div>
             <div id="phenotype" class="category">
-                <h3>Download Phenotypes</h3>
-                    <a href="{{{base_url}}}/phenotype_associations.json" class="btn btn-info">JSON</a>
-                    <!--    <a href="{{{base_url}}}/phenotype_associations.rdf" class="btn btn-success">RDF</a> -->
-                    <a href="{{{base_url}}}/phenotype_associations.nt" class="btn btn-info">n-triples</a>
-                <h3>Phenotypes</h3>
+                <h3 class="downloadline">Phenotypes</h3>
+                <a href="{{{base_url}}}/phenotype_associations.json" class="btn btn-info downloadline">JSON</a>
+                <!--    <a href="{{{base_url}}}/phenotype_associations.rdf" class="btn btn-success">RDF</a> -->
+<!--                     <a href="{{{base_url}}}/phenotype_associations.nt" class="btn btn-info">n-triples</a> -->
                 </span>
                 <table class="{{css.table}}">
                 {{{phenotypeTable}}}
@@ -103,27 +101,24 @@
                 </table>
             </div>
             <div id="model" class="category">
-                <h3>Download Models</h3>
-                    <a href="{{{base_url}}}/models.json" class="btn btn-info">JSON</a>
-                    <!--    <a href="{{{base_url}}}/models.rdf" class="btn btn-success">RDF</a> -->
-                    <a href="{{{base_url}}}/models.nt" class="btn btn-info">n-triples</a>
-                <h3>Models</h3>
+                <h3 class="downloadline">Models</h3>
+                <a href="{{{base_url}}}/models.json" class="btn btn-info downloadline">JSON</a>
+                <!--    <a href="{{{base_url}}}/models.rdf" class="btn btn-success">RDF</a> -->
+<!--                     <a href="{{{base_url}}}/models.nt" class="btn btn-info">n-triples</a> -->
                 <table class="{{css.table}}">
                 {{{modelTable}}}
                 </table>
             </div>
             <div id="sim" class="category">
-                <h3>Download Info on Similar Diseases</h3>
-                <a href="{{{base_url}}}/sim.json" class="btn btn-info">JSON</a>
-                <h3>Similar Diseases</h3>
+                <h3 class="downloadline">Similar Diseases</h3>
+                <a href="{{{base_url}}}/sim.json" class="btn btn-info downloadline">JSON</a>
                 <table class="{{css.table}}">
                 {{{simTable}}}
                 </table>
             </div>
             <div id="pathways" class="category">
-                <h3>Disease Pathways</h3>
-                <a href="{{{base_url}}}/pathway.json" class="btn btn-info">JSON</a>
-                <h3>Pathways</h3>
+                <h3 class="downloadline">Disease Pathways</h3>
+                <a href="{{{base_url}}}/pathway.json" class="btn btn-info downloadline">JSON</a>
                 <table class="{{css.table}}">
                     {{{pathwayTable}}}
                 </table>
