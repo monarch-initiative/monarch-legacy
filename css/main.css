@@ -1,58 +1,47 @@
 /* Section 3: Content */
-
+/* Jumbotron */
+.jumbotron {
+    margin-bottom: 20px;
+}
 .right-butn {
     float: right;
 }
-
-
-#columns .column {  
-    float: left;  
-    width: 50%;  
-    /* HACK WARNING  - I couldn't figure out why things were so far to
-    the right. this seemed to work.. */ 
-    margin-left: -20px;
-} 
-
-/* two column layout from http://net.tutsplus.com/tutorials/javascript-ajax/inettuts/ */
-#columns #column1 .entry { margin: 15px 10px 15px 0px; }  
-#columns #column2 .entry { margin: 15px 0px 15px 0px; } 
-
-#columns ul {
-  list-style-type: none;
-  margin-left:0px;
+/* Boxes */
+@media (min-width: 1200px) {
+    .column {
+        display: inline-block;
+        width: 48%;
+        margin-left: 20px;
+    }
 }
-
-#columns li {
-  list-style-type: none;
+@media (min-width: 1000px) {
+    .column {
+        display: inline-block;
+        width: 47%;
+        margin-left: 20px;
+    }
 }
-
-#columns .entry {
-    background-color: #E5E5E5;
-    height: 200px;
+@media (max-width: 1000px) {
+    .column {
+        display: inline-block;
+        margin: 0px 10px 0px 20px;
+    }
 }
-
-#columns .entry .entry-head {  
-    overflow: hidden;  
-    width: 100%;  
-    color: #000000;
-
-    height: 50px;  
-
-    line-height: 30px;  
-}  
-#columns .entry .entry-head h3 {  
-    padding: 0 5px;  
-    float: left;  
-    font-size: 1.2em;
-    color: #461313;
-}  
-#columns .entry .entry-content {  
-    color: #000000;
-    padding: 5px;  
-    -moz-border-radius-bottomleft: 2px;  
-    -moz-border-radius-bottomright: 2px;  
-    -webkit-border-bottom-left-radius: 2px;  
-    -webkit-border-bottom-rightright-radius: 2px;  
-    line-height: 1.2em;  
-    overflow: hidden;  
-}  
+#column1 {
+    float: left;
+}
+.entry {
+    background-color: #EEE;
+    border: #AAA solid 1px;
+    margin-bottom: 20px;
+    padding: 15px 20px 5px;
+}
+.entryheader {
+    font-weight: 500;
+    font-size: 18px;
+}
+.entrydescript {
+    margin-top: 10px;
+    font-weight: 200;
+    line-height: 24px;
+}
