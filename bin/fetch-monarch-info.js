@@ -38,6 +38,9 @@ function main(args) {
     else if (dt == 'phenotype') {
         func = "fetchPhenotypeInfo";
     }
+    else if (dt == 'diseasePhenotype') {
+        func = "fetchOmimDiseasePhenotypeAsAssocations";
+    }
     else if (dt == 'similarDisease') {
 	func = "fetchThingsSimilarToADisease";
     }
