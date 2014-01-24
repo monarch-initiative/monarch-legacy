@@ -80,12 +80,12 @@ p {
     }
 }
 /* Rest of Content */
-#overview {
-    display: block;
-}
 .category {
     padding-left: 40px;
     display: none;
+}
+.first {
+    display: block;
 }
 .btn.btn-info {
     padding: 5px 10px;
