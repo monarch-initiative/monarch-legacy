@@ -1,3 +1,20 @@
+/* Section 0: General */
+p {
+    font-family: Helvetica, Arial, sans-serif;
+}
+/* Info Buttons */
+.btn-info {
+    background-color: #53AED7;
+    border-color: #53AED7;
+}
+/* Footer */
+#footer {
+    clear:both;
+    display:block;
+    float:center;
+    text-align:center;
+}
+
 /* Section 1: Navbar */
 .nav>li>a {
     padding: 0px;
@@ -40,17 +57,4 @@
     font-size: 17px;
     font-weight: 700;
     margin-top: 10px;
-}
-/* Info Buttons */
-.btn-info {
-    background-color: #53AED7;
-    border-color: #53AED7;
-}
-
-/* Footer */
-#footer {
-    clear:both;
-    display:block;
-    float:center;
-    text-align:center;
 }
