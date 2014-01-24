@@ -43,60 +43,63 @@
     $(function () {
 
 
-        $("#keggIdButton").on("click", function () {
-
-            // update kgml image
-            keggId = $("#keggId").val();
-            $("#keggImage").attr("src", "http://rest.kegg.jp/get/" + keggId + "/image");
-            paper = Raphael(document.getElementById("canvas"), 1024, 768);
-
-            // retrieve kgml for this id
-            $.get("/kegg/get/" + keggId + "/kgml", function (xml) {
-                kgmlJson = $.xml2json(xml);
-
-                // update the kgml select options
-                var $el = $("#kgmlSelect");
-                $el.empty(); // remove old options
-                $.each(kgmlJson.entry, function () {
-                    $el.append($("<option></option>").attr("value", this.name).text(this.graphics.name));
-
-                });
-            });
-        });
-
-        // submit kgml entries for highlighting
-        $("#highlightButton").on("click", function () {
-            var kgmlVals = $("#kgmlSelect").val() || [];
-            //console.log(kgmlVals.join(",") + " was selected");
-            $.each(kgmlVals, function (k) {
-
-                // extract the value
-                var entry = $.grep(kgmlJson.entry, function (e) {
-                    return e.name === kgmlVals[k];
-                });
-                //console.log("found " + entry[0].name + " " + entry[0].graphics.type);
-                if (entry[0].graphics.type === "rectangle") {
-
-                    raphaelElements.push(
-                            paper.rect(entry[0].graphics.x - canvasXOffset, entry[0].graphics.y - canvasYOffset, entry[0].graphics.width, entry[0].graphics.height)
-                                    .animate({
-                                        "fill": "#f00",
-                                        "fill-opacity": .5,
-                                        "stroke": "#fff"
-                                    }, 2000)
-                                    .click(function () {
-                                        alert("You clicked " + entry[0].graphics.name);
-                                    })
-                    );
-                }
-            })
-        });
-
-        $("#eraseButton").on("click", function () {
-            $.each(raphaelElements, function (r) {
-                raphaelElements[r].remove();
-            })
-        });
+//        $("#keggIdButton").on("click", function () {
+//
+//            // update kgml image
+//            keggId = $("#keggId").val();
+//            $("#keggImage").attr("src", "http://rest.kegg.jp/get/" + keggId + "/image");
+//            paper = Raphael(document.getElementById("canvas"), 1024, 768);
+//
+//            // retrieve kgml for this id
+//            $.get("/kegg/get/" + keggId + "/kgml", function (xml) {
+//                kgmlJson = $.xml2json(xml);
+//
+//                // update the kgml select options
+//                var $el = $("#kgmlSelect");
+//                $el.empty(); // remove old options
+//                $.each(kgmlJson.entry, function () {
+//                    $el.append($("<option></option>").attr("value", this.name).text(this.graphics.name));
+//
+//                });
+//            });
+//        });
+//
+//        // submit kgml entries for highlighting
+//        $("#highlightButton").on("click", function () {
+//            var kgmlVals = $("#kgmlSelect").val() || [];
+//            //console.log(kgmlVals.join(",") + " was selected");
+//            $.each(kgmlVals, function (k) {
+//
+//                // extract the value
+//                var entry = $.grep(kgmlJson.entry, function (e) {
+//                    return e.name === kgmlVals[k];
+//                });
+//                //console.log("found " + entry[0].name + " " + entry[0].graphics.type);
+//                if (entry[0].graphics.type === "rectangle") {
+//
+//                    raphaelElements.push(
+//                            paper.rect(entry[0].graphics.x - canvasXOffset, entry[0].graphics.y - canvasYOffset, entry[0].graphics.width, entry[0].graphics.height)
+//                                    .animate({
+//                                        "fill": "#f00",
+//                                        "fill-opacity": .5,
+//                                        "stroke": "#fff"
+//                                    }, 2000)
+//                                    .click(function () {
+//                                        alert("You clicked " + entry[0].graphics.name);
+//                                    })
+//                    );
+//                }
+//            })
+//        });
+//
+//        $("#eraseButton").on("click", function () {
+//            $.each(raphaelElements, function (r) {
+//                raphaelElements[r].remove();
+//            })
+//        });
+//
+//
+//
 
         // tell keggerator where to draw stuff and handle ui events
         keggerator.init($("#imageDiv"), $("#kgmlSelect"));
@@ -106,12 +109,12 @@
         // the pathway id
         keggerator.setPathwayId("ko05012");
 
-        // the phenotype gene map
-        $.getJSON("./js/phenotypeGeneIdMap.json")
-                .done(function (data) {
-                    keggerator.setPhenotypeGeneIdMap(data);
-                }
-        );
+//        // the phenotype gene map
+//        $.getJSON("./js/phenotypeGeneIdMap.json")
+//                .done(function (data) {
+//                    keggerator.setPhenotypeGeneIdMap(data);
+//                }
+//        );
     })
 
 
