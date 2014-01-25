@@ -82,11 +82,26 @@
                         {{.}},
                         {{/database_cross_reference}}
                     </div>
-                <h3>Ontology</h3>
-                    <p>
-                    <table class="{{css.table}}">
-                    {{{ontNavBox}}}
-                    </table>
+                    <div class="superclasses">
+                      <h4>Is a subtype of</h4>
+                      <table class="{{css.table}}">
+                        {{{superClassTable}}}
+                      </table>
+                    </div>
+                    {{#hasEquivalentClasses}}
+                    <div class="equivs">
+                      <h4>Is equivalent to</h4>
+                      <table class="{{css.table}}">
+                        {{{equivalentClassTable}}}
+                      </table>
+                    </div>
+                    {{/hasEquivalentClasses}}
+                    <div class="subs">
+                      <h4>Has subtype</h4>
+                      <table class="{{css.table}}">
+                        {{{subClassTable}}}
+                      </table>
+                    </div>
                     </p>
             </div>
             <div id="genes" class="category">
