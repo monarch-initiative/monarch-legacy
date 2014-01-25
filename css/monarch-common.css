@@ -9,10 +9,10 @@ p {
 }
 /* Footer */
 #footer {
-    clear:both;
-    display:block;
-    float:center;
-    text-align:center;
+    clear: both;
+    padding: 20px 40px 0px;
+    text-align: center;
+    font-weight: 200;
 }
 
 /* Section 1: Navbar */
