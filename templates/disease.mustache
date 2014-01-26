@@ -42,22 +42,33 @@
                 <!-- <a href="{{{base_url}}}.rdf" class="btn btn-success">RDF</a> -->
 <!--                 <a href="{{{base_url}}}.nt" class="btn btn-info">n-triples</a> -->
                 <p>
+                {{definition}}
+                <br/>
                 {{comments}}
                 </p>
             </div>
             <div id="categories">
-                <a href="#overview"><div id="initialtab" class="tab overtab">Overview</div></a>
-                <a href="#phenotype"><div class="tab phentab">Phenotypes</div></a>
-                <a href="#gene"><div class="tab gentab">Genes</div></a>
-                <a href="#allele"><div class="tab alletab">Alleles</div></a>
+                <a href="#phenotypes"><div id="initialtab" class="tab phentab">Phenotypes</div></a>
+                <a href="#ontology"><div class="tab onttab">Ontology</div></a>
+                <a href="#genes"><div class="tab gentab">Genes</div></a>
+                <a href="#alleles"><div class="tab alletab">Alleles</div></a>
                 <div class="second-row-divider"></div>
                 <a href="#model"><div class="tab modtab second">Model</div></a>
-                <a href="#sim"><div class="tab simtab">Similarity</div></a>
+                <a href="#similarity"><div class="tab simtab">Similarity</div></a>
                 <a href="#pathways"><div class="tab pathtab">Pathways</div></a>
             </div>
         </div>
         <div id="complete-info">
-            <div id="overview" class="category">
+            <div id="phenotypes" class="first category">
+                <h3 class="downloadline">Phenotypes</h3>
+                <a href="{{{base_url}}}/phenotype_associations.json" class="btn btn-info downloadline">JSON</a>
+                <!--    <a href="{{{base_url}}}/phenotype_associations.rdf" class="btn btn-success">RDF</a> -->
+<!--                     <a href="{{{base_url}}}/phenotype_associations.nt" class="btn btn-info">n-triples</a> -->
+                <table class="{{css.table}}">
+                {{{phenotypeTable}}}
+                </table>
+            </div>
+            <div id="ontology" class="category">
                 <h3>IDs</h3>
                     <div class="ids">
                         <b>AKA: </b>
@@ -71,30 +82,48 @@
                         {{.}},
                         {{/database_cross_reference}}
                     </div>
-                <h3>Ontology</h3>
-                    <p>
-                    <table class="{{css.table}}">
-                    {{{ontNavBox}}}
-                    </table>
+                    <div class="superclasses">
+                      <h4>Is a subtype of</h4>
+                      <table class="{{css.table}}">
+                        {{{superClassTable}}}
+                      </table>
+                    </div>
+                    {{#hasEquivalentClasses}}
+                    <div class="equivs">
+                      <h4>Is equivalent to</h4>
+                      <table class="{{css.table}}">
+                        {{{equivalentClassTable}}}
+                      </table>
+                    </div>
+                    {{/hasEquivalentClasses}}
+                    <div class="subs">
+                      <h4>Has subtype</h4>
+                      <table class="{{css.table}}">
+                        {{{subClassTable}}}
+                      </table>
+                    </div>
                     </p>
             </div>
-            <div id="phenotype" class="category">
-                <h3 class="downloadline">Phenotypes</h3>
-                <a href="{{{base_url}}}/phenotype_associations.json" class="btn btn-info downloadline">JSON</a>
-                <!--    <a href="{{{base_url}}}/phenotype_associations.rdf" class="btn btn-success">RDF</a> -->
-<!--                     <a href="{{{base_url}}}/phenotype_associations.nt" class="btn btn-info">n-triples</a> -->
-                </span>
-                <table class="{{css.table}}">
-                {{{phenotypeTable}}}
-                </table>
-            </div>
-            <div id="gene" class="category">
+            <div id="genes" class="category">
                 <h3>Genes</h3>
-                <table class="{{css.table}}">
-                {{{geneTable}}}
-                </table>
+                {{^hasSubClasses}}
+                 <table class="{{css.table}}">
+                  {{{geneTable}}}
+                 </table>
+                {{/hasSubClasses}}
+                {{#hasSubClasses}}
+                 <p>
+                  Genes are associated with specific subtypes of this
+                  disease. Please select a disease subtype from the
+                  list below to see the associated genes.
+                  <!-- This will be fixed with issue 140 -->
+                 </p>
+                 <table class="{{css.table}}">
+                  {{{subClassTable}}}
+                 </table>
+                {{/hasSubClasses}}
             </div>
-            <div id="allele" class="category">
+            <div id="alleles" class="category">
                 <h3>Alleles</h3>
                 <table class="{{css.table}}">
                 {{{alleleTable}}}
@@ -109,7 +138,7 @@
                 {{{modelTable}}}
                 </table>
             </div>
-            <div id="sim" class="category">
+            <div id="similarity" class="category">
                 <h3 class="downloadline">Similar Diseases</h3>
                 <a href="{{{base_url}}}/sim.json" class="btn btn-info downloadline">JSON</a>
                 <table class="{{css.table}}">
@@ -123,8 +152,8 @@
                     {{{pathwayTable}}}
                 </table>
             </div>
-
         </div>
+        {{{includes.footer}}}
     </div>
 </body>
 </html>

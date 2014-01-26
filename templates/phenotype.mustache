@@ -25,18 +25,20 @@
                 <h1 class="downloadline">Phenotype: {{label}}</h1>
                 <a href="{{{download.json}}}" class="btn btn-info downloadline">JSON</a>
                 <p>
+                {{definition}}
+                <br/>
                 {{comments}}
                 </p>
             </div>
             <div id="categories">
                 <a href="#overview"><div id="initialtab" class="tab overtab">Overview</div></a>
                 <a href="#disease"><div class="tab distab">Disease</div></a>
-                <a href="#genot"><div class="tab genotab">Genotypes</div></a>
-                <a href="#sim"><div class="tab simtab second">Similarity</div></a>
+                <a href="#genotypes"><div class="tab genotab">Genotypes</div></a>
+                <a href="#similarity"><div class="tab simtab second">Similarity</div></a>
             </div>
         </div>
         <div id="complete-info">
-            <div id="overview" class="category">
+            <div id="overview" class="first category">
                 <h3>IDs</h3>
                     <div class="ids">
                         <b>URI:</b> <a href="{{{url}}}">{{{url}}}</a>
@@ -67,7 +69,7 @@
                 {{{diseaseTable}}}
                 </table>
             </div>
-            <div id="genot" class="category">
+            <div id="genotypes" class="category">
                 <h3 class="downloadline">Genotype Associations</h3>
                 <a href="{{{base_url}}}/genotype_associations.json" class="btn btn-info downloadline">JSON</a>
 <!--                 <a href="{{{base_url}}}/genotype_associations.rdf" class="btn btn-info">RDF</a> -->
@@ -76,13 +78,14 @@
                     {{{genotypeTable}}}
                     </table>
             </div>
-            <div id="sim" class="category">
+            <div id="similarity" class="category">
                 <h3>Diseases Matched</h3>
                 <table class="{{css.table}}">
                 {{{simTable}}}
                 </table>
             </div>
         </div>
+        {{{includes.footer}}}
     </div>
 </body>
 </html>
