@@ -71,9 +71,6 @@ var modeltype = function () {
 
 function finishLoad(data) {
     retData = data;
-    console.log("got return value from tartini phenotype.");
-    
-    
     
     ///EXTRACT MOUSE MODEL INFORMATION FIRST
     model_list = [];
