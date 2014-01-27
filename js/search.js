@@ -33,11 +33,9 @@ $(document).ready(function(){
        select: function(event,ui) {
        	   
 	   if (ui.item !== null) { 
-	      console.log("selected..."+ ui.item.label);
 	      // redirect to "/search/+ui.item.label);
 	      newurl = "http://"+window.location.host+"/search/"
 	      	     +encodeURIComponent(ui.item.label);
-	      console.log("searching for "+newurl);
 	      window.location.replace(newurl);
 	   } else {
 	     console.log("Nothing selected, input was " +
@@ -50,6 +48,5 @@ $(document).ready(function(){
  	console.log( $(this).text());
 	});
 
-  console.log("loaded autocomplete...");
 });
    

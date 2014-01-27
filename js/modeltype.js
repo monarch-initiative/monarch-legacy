@@ -1,4 +1,4 @@
-/**
+/*
  *
  * modeltype - 
 
@@ -39,8 +39,6 @@ var modeltype = function () {
     var phenotype_list = [];
     var detail_rect_width = 200;
     var detail_rect_height = 400;
-    var data_url = "http://monarch.monarchinitiative.org/";
-    //var data_url = "http://localhost:8080/";
 
     var dimensions = [ "Human Phenotype", "Lowest Common Subsumer", "Mammalian Phenotype" ];
     var m = [ 30, 10, 10, 10 ], w = 1000 - m[1] - m[3], h = 1300 - m[0] - m[2];
@@ -60,25 +58,33 @@ var modeltype = function () {
     	//NOTE: just temporary until the calls are ready
 		jQuery.ajax({
 			//url : "data/sample_model_data.json",
-			url: "http://tartini.crbs.ucsd.edu/simsearch/phenotype/?input_items=" + phenotype_list.join(",") + "&target_species=10090",
+			url: "/simsearch/phenotype/?input_items=" + phenotype_list.join(",") + "&target_species=10090",
 			async : false,
 			dataType : 'json',
 			success : function(data) {
-				retData = data;
+			    finishLoad(data);
 			}
 
 		});
-		
-		///EXTRACT MOUSE MODEL INFORMATION FIRST
-		model_list = [];
-		for (var idx=0;idx<retData.b.length;idx++) {
-			model_list.push({model_id: retData.b[idx].id, model_label: retData.b[idx].label, model_score: retData.b[idx].score.score, model_rank: retData.b[idx].score.rank});
-			loadDataForModel(retData.b[idx]);
-		}
-		//sort the model list by rank
-		model_list.sort(function(a,b) { return a.model_rank - b.model_rank; } );		
-		
+}
+
+
+function finishLoad(data) {
+    retData = data;
+    console.log("got return value from tartini phenotype.");
+    
+    
+    
+    ///EXTRACT MOUSE MODEL INFORMATION FIRST
+    model_list = [];
+    for (var idx=0;idx<retData.b.length;idx++) {
+	model_list.push({model_id: retData.b[idx].id, model_label: retData.b[idx].label, model_score: retData.b[idx].score.score, model_rank: retData.b[idx].score.rank});
+	loadDataForModel(retData.b[idx]);
     }
+    //sort the model list by rank
+    model_list.sort(function(a,b) { return a.model_rank - b.model_rank; } );		
+    
+}
     
     //for a given model, extract the sim search data including IC scores and the triple:
     //the a column, b column, and lowest common subsumer
@@ -655,14 +661,13 @@ var modeltype = function () {
 		svg.selectAll("#detail_content").remove();
 		var retData;
 		jQuery.ajax({
-			url : data_url + "phenotype/" + data.attributes["ontology_id"].value + ".json",
+			url : "/phenotype/" + data.attributes["ontology_id"].value + ".json",
 			async : false,
 			dataType : 'json',
 			success : function(data) {
 				//retData = data;
 				retData = "<strong>Label:</strong> " + "<a href=\"" + data.url + "\">"  
 				   + data.label + "</a><br/><strong>Type:</strong> " + data.category;
-				//console.log("data: " + retData);
 			}
 		});
 
@@ -804,3 +809,23 @@ var modeltype = function () {
 
 
 
+$(function () { 
+    var disease_id = this.location.pathname;
+    var slash_idx = disease_id.indexOf('/');
+    disease_id = disease_id.substring(slash_idx+1);
+    var phenotype_list = []; 
+    jQuery.ajax({ 
+	url : '/' + disease_id + '/phenotype_associations.json', 
+	async : false, 
+	dataType : 'json', 
+	success : function(data) { 
+	    for (var idx=0;idx<data.phenotype_associations.length;idx++) { 
+		phenotype_list.push({ "id" : data.phenotype_associations[idx].phenotype.id, 
+		         "observed" : "positive"}); 
+		 }
+        }
+        });
+
+
+       modeltype.initPhenotype($("#phen_vis"), phenotype_list);
+});        
