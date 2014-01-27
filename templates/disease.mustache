@@ -4,21 +4,8 @@
     <title>Monarch Disease: {{label}} ({{id}})</title>
     {{#scripts}}
     <script type="text/javascript" src="{{url}}"></script>
-        <script type="text/javascript">
-       $( document ).ready(function() {
-       //I think the RingoJS code is calling the document.ready() each time a section
-       //of code returns.  This causes my svg to get recreated several times.
-       //the loaded_once variable flags this event to ensure it only happens once
-          if (loaded_once != 1) {
-	          createSvg();
-	          loadData();
-			  init();
-			  createModelRegion();
-			  update();
-          }
-       });
-    </script>
     {{/scripts}}
+    <script type="text/javascript" src="/js/modeltype.js"></script>
     {{#stylesheets}}
     <link rel="stylesheet" type="text/css" href="{{url}}"></link>
     {{/stylesheets}}
@@ -82,18 +69,46 @@
                         {{.}},
                         {{/database_cross_reference}}
                     </div>
-                <h3>Ontology</h3>
-                    <p>
-                    <table class="{{css.table}}">
-                    {{{ontNavBox}}}
-                    </table>
+                    <div class="superclasses">
+                      <h4>Is a subtype of</h4>
+                      <table class="{{css.table}}">
+                        {{{superClassTable}}}
+                      </table>
+                    </div>
+                    {{#hasEquivalentClasses}}
+                    <div class="equivs">
+                      <h4>Is equivalent to</h4>
+                      <table class="{{css.table}}">
+                        {{{equivalentClassTable}}}
+                      </table>
+                    </div>
+                    {{/hasEquivalentClasses}}
+                    <div class="subs">
+                      <h4>Has subtype</h4>
+                      <table class="{{css.table}}">
+                        {{{subClassTable}}}
+                      </table>
+                    </div>
                     </p>
             </div>
             <div id="genes" class="category">
                 <h3>Genes</h3>
-                <table class="{{css.table}}">
-                {{{geneTable}}}
-                </table>
+                {{^hasSubClasses}}
+                 <table class="{{css.table}}">
+                  {{{geneTable}}}
+                 </table>
+                {{/hasSubClasses}}
+                {{#hasSubClasses}}
+                 <p>
+                  Genes are associated with specific subtypes of this
+                  disease. Please select a disease subtype from the
+                  list below to see the associated genes.
+                  <!-- This will be fixed with issue 140 -->
+                 </p>
+                 <table class="{{css.table}}">
+                  {{{subClassTable}}}
+                 </table>
+                {{/hasSubClasses}}
             </div>
             <div id="alleles" class="category">
                 <h3>Alleles</h3>
@@ -108,6 +123,7 @@
 <!--                     <a href="{{{base_url}}}/models.nt" class="btn btn-info">n-triples</a> -->
                 <table class="{{css.table}}">
                 {{{modelTable}}}
+		<div id ="phen_vis"></div>
                 </table>
             </div>
             <div id="similarity" class="category">
