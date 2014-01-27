@@ -802,7 +802,7 @@ function finishLoad(data) {
         setDataUrl: setDataUrl,
     };
 
-}();
+};
 
 
 
@@ -811,6 +811,7 @@ $(function () {
     var slash_idx = disease_id.indexOf('/');
     disease_id = disease_id.substring(slash_idx+1);
     var phenotype_list = []; 
+    var mt = modeltype();
     jQuery.ajax({ 
 	url : '/' + disease_id + '/phenotype_associations.json', 
 	async : false, 
@@ -824,5 +825,5 @@ $(function () {
         });
 
 
-       modeltype.initPhenotype($("#phen_vis"), phenotype_list);
+       mt.initPhenotype($("#phen_vis"), phenotype_list);
 });        
