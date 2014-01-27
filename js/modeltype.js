@@ -45,8 +45,8 @@ as a separate call in the init function.
 	    yScale: undefined,
 	    modelData: [],
 	    filteredModelData: [],
-	    detailRectWidth: 20,
-            detailRectheight: 40,
+	    detailRectWidth: 200,
+            detailRectHeight: 400,
 	    dimensions: [ "Human Phenotype", "Lowest Common Subsumer", "Mammalian Phenotype" ], 
 	    m :[ 30, 10, 10, 10 ], 
 	    w : 0,
@@ -438,6 +438,7 @@ as a separate call in the init function.
 	
 	//create essentially a D3 enalbed "div" tag on the screen
 	_createDetailSection: function () {
+	    var self=this;
 	    var div_text = this.options.svg.append("svg:text")
             //.attr("transform","translate(30,30)")
 		.attr("class", "detail_text")
@@ -448,15 +449,15 @@ as a separate call in the init function.
 		
 	    var div_rect = this.options.svg.append("svg:rect")
             //.attr("transform","translate(30,30)")
-		.attr("class", "detail_rect")
+		.attr("class", "detail_rect") 
 		.attr("id", "detail_rect")
 		.attr("y", "125")
 	      .attr("x", "560")
-		.attr("width", this.options.detailRectWidth)
-		.attr("height", this.options.detailRectHeight)
+		.attr("width", self.options.detailRectWidth)
+		.attr("height", self.options.detailRectHeight)
 		.style("stroke-width","3")
 		.style("stroke", "lightgrey")
-		.attr("fill", "black");
+		.attr("fill", "white");
 	    
 	},
 	
