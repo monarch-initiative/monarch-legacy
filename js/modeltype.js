@@ -37,16 +37,16 @@ as a separate call in the init function.
 	options:   {
 
 	    colStartingPos: 50,
-	    textWidth: 50,
+	    textWidth: 150,
 	    clickedData: undefined, 
 	    xScale: undefined, 
-	    textLength: 32,
+	    textLength: 28,
 	    svg: undefined,
 	    yScale: undefined,
 	    modelData: [],
 	    filteredModelData: [],
-	    detailRectWidth: 200,
-            detailRectheight: 400,
+	    detailRectWidth: 20,
+            detailRectheight: 40,
 	    dimensions: [ "Human Phenotype", "Lowest Common Subsumer", "Mammalian Phenotype" ], 
 	    m :[ 30, 10, 10, 10 ], 
 	    w : 0,
@@ -337,6 +337,7 @@ as a separate call in the init function.
 	},
 
 	_createAccentBoxes: function() {
+	    var self=this;
 	    var axis_pos_list = [];
 	    this.options.modelWidth = this.options.modelList.length * 18
 	    //add an axis for each ordinal scale found in the data
@@ -358,9 +359,9 @@ as a separate call in the init function.
 	    	.append("rect")
 		.attr("class", "accent")
 		.attr("x", function(d, i) { return axis_pos_list[i];})
-		.attr("y", this.options.yoffset)
-		.attr("width", this.options.textWidth + 5)
-		.attr("height", this.options.h)
+		.attr("y", self.options.yoffset)
+		.attr("width", self.options.textWidth + 5)
+		.attr("height", self.options.h)
 		.style("opacity", '0.4')
 		.attr("fill", function(d, i) {
 		    return i != 1 ? d3.rgb("#e5e5e5") : "white";
@@ -408,7 +409,7 @@ as a separate call in the init function.
 		.attr("class", "legend_rect")
 		.attr("y", "39")
 		.attr("x", function(d, i) {
-		    return (i* 28);
+		    return (i* 32);
 		})
 		.attr("width", 20)
 		.attr("height", 20)
@@ -423,10 +424,10 @@ as a separate call in the init function.
 		.attr("class", "legend_text")
 		.attr("y", "35")
 		.attr("x", function(d, i) {
-		    return (i* 28);
+		    return (i* 32);
 		})
 		.text(function(d) {
-		    return d.toFixed(2);
+		    return d.toFixed(1);
 		});
 	    var div_text = self.options.svg.append("svg:text")
 		.attr("transform","translate(510,30)")
@@ -455,7 +456,7 @@ as a separate call in the init function.
 		.attr("height", this.options.detailRectHeight)
 		.style("stroke-width","3")
 		.style("stroke", "lightgrey")
-		.attr("fill", "white");
+		.attr("fill", "black");
 	    
 	},
 	
