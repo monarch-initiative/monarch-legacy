@@ -18,29 +18,6 @@ function AnalyzeInit(){
     /// here: (stripped) logger and iterator.
     /// 
 
-    var each = function(in_thing, in_function){
-	// Probably an not array then.
-	if( typeof(in_thing) == 'undefined' ){
-	    // this is a nothing, to nothing....
-	}else if( typeof(in_thing) != 'object' ){
-	    throw new Error('Unsupported type in bbop.core.each: ' +
-			    typeof(in_thing) );
-	}else if( bbop.core.is_hash(in_thing) ){
-	    // Probably a hash...
-	    var hkeys = bbop.core.get_keys(in_thing);
-	    for( var ihk = 0; ihk < hkeys.length; ihk++ ){
-		var ikey = hkeys[ihk];
-		var ival = in_thing[ikey];
-		in_function(ikey, ival);
-	    }
-	}else{
-	    // Otherwise likely an array.
-	    for( var iai = 0; iai < in_thing.length; iai++ ){
-		in_function(in_thing[iai], iai);
-	    }
-	}
-    };
-
     var ll = function(str){
 	if( DEBUG && console && console.log ){
 	    console.log(str);
