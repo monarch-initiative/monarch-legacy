@@ -52,6 +52,7 @@ as a separate call in the init function.
 	    w : 0,
 	    h : 0,
 	    yoffset: 100,
+	    yAxis: [],
 	    modelList: [],
 	    modelWidth: undefined,
 	    phenotypeData: [],
@@ -83,6 +84,7 @@ as a separate call in the init function.
 
             this._createAccentBoxes();
             this._createColorScale();
+            this._createYAxis();
             this._createModelRegion();
     	    this._updateAxes();
     	    this._createRects();
@@ -155,6 +157,41 @@ as a separate call in the init function.
 		  }; 
     	    this.options.modelData.push(new_row);
     	}
+    },
+    
+    //create a y-axis from the model data
+    //for each item in the data model, push the rowid
+    //and calculate the y position
+    _createYAxis: function() {
+    	//the height of each row
+    	var size = 10;
+    	//the spacing you want between rows
+    	var gap = 3;
+    	//yoffset
+    	//first, generate an array containing the unique rowids
+    	var tempArray = [];
+    	for (var idx=0;idx<this.options.filteredModelData.length;idx++) {
+    		if (tempArray.indexOf(this.options.filteredModelData[idx].rowid) == -1) {
+    			tempArray.push(this.options.filteredModelData[idx].rowid);
+    		}
+    	}
+    	
+    	for (var idx=0;idx<tempArray.length;idx++) {
+    		var stuff = {"id": tempArray[idx], "ypos" : ((idx * (size+gap)) + this.options.yoffset)};
+    	    this.options.yAxis.push(stuff);
+    	}
+    },
+    
+    //given a rowid, return the y-axis position
+    _getYPosition: function(newRowId) {
+    	var retValue = this.options.yoffset;
+    	var newObj = this.options.yAxis.filter(function(d){
+	    	return d.id == newRowId;
+	    });
+    	if (newObj[0]) {
+    		retValue = newObj[0].ypos;
+    	}
+    	return retValue;
     },
     
     _createColorScale: function() {
@@ -298,7 +335,8 @@ as a separate call in the init function.
   	      return "models " + " " +  self._getConceptId(d.model_id) + " " +  self._getConceptId(d.id);
   	  })
   	  .attr("y", function(d, i) {     	
-  	      return self.options.yScale(d.id);
+  	      //return self.options.yScale(d.id);
+  		  return self._getYPosition(d.rowid);
   	  })
   	  .attr("x", function(d) { return self.options.xScale(d.model_id);})
   	  .attr("width", 10)
@@ -312,7 +350,8 @@ as a separate call in the init function.
       model_rects.transition()
 	  .delay(1000)
   	  .attr("y", function(d) {
-  	      return self.options.yScale(d.id);
+  	      //return self.options.yScale(d.id);
+  		  return self._getYPosition(d.rowid);
   	  })
       model_rects.exit().transition()
           .duration(1000)
@@ -524,7 +563,8 @@ as a separate call in the init function.
 		})
 		.attr("x", 50)
 		.attr("y", function(d) {
-		    return self.options.yScale(d.rowid)+28;
+		    //return self.options.yScale(d.rowid)+28;
+		    return self._getYPosition(d.rowid) +28;
 		})
 		.on("mouseover", function(d) {
 		    if (self.options.clickedData == undefined) {
@@ -547,7 +587,8 @@ as a separate call in the init function.
 	    rect_text.transition()
 		.delay(1000)
 		.attr("y", function(d) {
-		    return self.options.yScale(d.rowid)+28;
+		    //return self.options.yScale(d.rowid)+28;
+			return self._getYPosition(d.rowid)+28;
 		})
 	    rect_text.exit()
 	   	.transition()
@@ -573,7 +614,8 @@ as a separate call in the init function.
 		})
 		.attr("x", self.options.textWidth + 10 + self.options.colStartingPos + self.options.modelWidth)
 		.attr("y", function(d) {
-		    return self.options.yScale(d.rowid)+28;
+		    //return self.options.yScale(d.rowid)+28;
+			return self._getYPosition(d.rowid)+28;
 		})
 		.on("mouseover", function(d) {
 		    if (self.options.clickedData == undefined) {
@@ -601,7 +643,8 @@ as a separate call in the init function.
 	    rect_text2.transition()
 		.delay(1000)
 		.attr("y", function(d) {
-		    return self.options.yScale(d.rowid)+28;
+		    //return self.options.yScale(d.rowid)+28;
+			return self._getYPosition(d.rowid)+28;
 		})
 	    rect_text2.exit()
 		.transition()
