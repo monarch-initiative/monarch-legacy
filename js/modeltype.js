@@ -246,6 +246,7 @@ as a separate call in the init function.
 
     _convertLabelHTML: function (t, label, data) {
     	
+    	    var self = this;
     		var width = 100;
     		var el = d3.select(t);
     	    var p = d3.select(t.parentNode);
@@ -264,7 +265,7 @@ as a separate call in the init function.
     	      .append("xhtml:p")
 
 		        .on("click", function(d) {
-					this._modelClick(data);
+					self._modelClick(data);
 				})
     	        //.attr('style','word-wrap: break-word; text-align:center;')
     	        .html(label);    
@@ -641,7 +642,7 @@ as a separate call in the init function.
 		this.options.svg.selectAll("#detail_content").remove();
 		var retData;
 		jQuery.ajax({
-			url : data_url + "genotype/" + this._getConceptId(modelData.model_id) + ".json",
+			url : "/genotype/" + this._getConceptId(modelData.model_id) + ".json",
 			async : false,
 			dataType : 'json',
 			success : function(data) {
