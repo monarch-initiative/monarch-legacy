@@ -5,6 +5,7 @@
     {{#scripts}}
     <script type="text/javascript" src="{{url}}"></script>
     {{/scripts}}
+    <script type="text/javascript" src="/js/Analyze.js"></script>
     {{#stylesheets}}
     <link rel="stylesheet" type="text/css" href="{{url}}"></link>
     {{/stylesheets}}
@@ -23,12 +24,40 @@
           <span class="text-warning">DOES NOT WORK YET DON'T GET YOUR
           HOPES UP!!</span>
 
-          <form  action="/analyze/{{datatype}}/" method="GET">  
-            <textarea rows="10" column="20" name="input_items">{{input_items}}</textarea>
-            <button type="submit" class="btn btn-primary">Analyze!</button>  
-            <br/>
-            Max number of results: <input name="limit" type="text" value="{{limit}}"></input>
-          </form> 
+          <!-- <form  action="/analyze/{{datatype}}/" method="GET">   -->
+          <!--   <textarea rows="10" column="20" name="input_items">{{input_items}}</textarea> -->
+          <!--   <button type="submit" class="btn btn-primary">Analyze!</button>   -->
+          <!--   <br/> -->
+          <!--   Max number of results: <input name="limit" type="text" value="{{limit}}"></input> -->
+          <!-- </form>  -->
+
+	  <!-- Testing a different way to complete the form. -SJC -->
+	  <hr />
+	  <div>
+            <form role="form"
+	       action="/analyze/{{datatype}}/"
+	       method="GET">
+	      <div class="form-group">
+		<label for="analyze_auto_target">Searchables</label>
+		<textarea id="analyze_auto_target" type="text"
+		       name="input_terms" class="form-control"
+		       placeholder="Your terms will go here..."></textarea>
+	      </div>
+	      <div class="form-group">
+		<label for="analyze_auto_input">Add to searchables</label>
+		<input id="analyze_auto_input" type="text" class="form-control"
+		       placeholder="Search for things...">
+	      </div>
+              <div class="form-group">
+		<label for="analyze_limit_input">Number of results</label>
+		<input id="analyze_limit_input" name="limit" type="text"
+		        class="form-control" value="{{limit}}"></input>
+	      </div>	      
+              <button type="submit" class="btn btn-primary">Analyze!</button>  
+            </form>
+	  </div>
+	  <hr />
+
 	  <a href="{{{base_url}}}.json" class="btn btn-success">JSON</a>
           <h3>Results</h3>
           <table class="{{css.table}}">
