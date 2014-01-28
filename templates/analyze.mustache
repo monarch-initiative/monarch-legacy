@@ -37,16 +37,21 @@
             <form role="form"
 	       action="/analyze/{{datatype}}/"
 	       method="GET">
-	      <div class="form-group">
-		<label for="analyze_auto_target">Searchables</label>
-		<textarea id="analyze_auto_target" type="text"
-		       name="input_terms" class="form-control"
-		       placeholder="Your terms will go here..."></textarea>
-	      </div>
+	      <input id="analyze_auto_target"
+		     name="input_terms"
+		     value=""
+		     type="hidden" />
 	      <div class="form-group">
 		<label for="analyze_auto_input">Add to searchables</label>
 		<input id="analyze_auto_input" type="text" class="form-control"
 		       placeholder="Search for things...">
+	      </div>
+	      <div class="form-group">
+		<label for="analyze_auto_list">Searchables</label>
+		<ul id="analyze_auto_list" class="list-group">
+		  <li class="list-group-item">Empty:
+		    Add items using the input above.</li>
+		</ul>
 	      </div>
               <div class="form-group">
 		<label for="analyze_limit_input">Number of results</label>
