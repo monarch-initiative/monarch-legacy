@@ -58,3 +58,13 @@ p {
     font-weight: 700;
     margin-top: 10px;
 }
+
+/*
+ * Parts originating in the analyze page.
+ */
+
+.analyze-delete-button {
+    cursor: pointer;
+    color: white;
+    background-color: red;
+}
