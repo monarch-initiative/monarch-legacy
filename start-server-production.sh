@@ -9,4 +9,4 @@ if [ $PORT ]
    MARGS="--port 8080"
 fi
 echo starting server
-./ringojs/bin/ringo lib/monarch/web/webapp_launcher.js $MARGS
+./ringojs/bin/ringo lib/monarch/web/webapp_launcher_production.js $MARGS
