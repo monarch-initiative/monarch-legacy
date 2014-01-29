@@ -52,7 +52,18 @@
                 <!--    <a href="{{{base_url}}}/phenotype_associations.rdf" class="btn btn-success">RDF</a> -->
 <!--                     <a href="{{{base_url}}}/phenotype_associations.nt" class="btn btn-info">n-triples</a> -->
                 <table class="{{css.table}}">
-                {{{phenotypeTable}}}
+                {{#hasPhenotypes}}
+                 {{{phenotypeTable}}}
+                {{/hasPhenotypes}}
+                {{^hasPhenotypes}}
+                <p><i>No phenotypes currently associated with disease</i></p>
+                <h4>Why are there no phenotypes?</h4>
+                <p>This pre-release of the Monarch system only
+                includes disease-phenotype associations from a
+                selected set of resources, and are primarily limited
+                to genetic diseases. Future releases will aggregate
+                data from a wider range of sources, including common
+                diseases.</p>  {{/hasPhenotypes}}
                 </table>
             </div>
             <div id="ontology" class="category">
