@@ -16,7 +16,6 @@ $(document).ready(function(){
 		   prefix: request.term,
 	       },*/
 	       success:  function(data) {
-		   console.log("AUTOCOMPLTE RESPONSE..");
 		   response($.map(data, function(item) {
 		       return  {
 			   label: item.term,
@@ -33,14 +32,10 @@ $(document).ready(function(){
        select: function(event,ui) {
        	   
 	   if (ui.item !== null) { 
-	      // redirect to "/search/+ui.item.label);
 	      newurl = "http://"+window.location.host+"/search/"
 	      	     +encodeURIComponent(ui.item.label);
 	      window.location.replace(newurl);
-	   } else {
-	     console.log("Nothing selected, input was " +
-	     	   this.value);
-   	   }
+	   } 
 	}
  });
 
