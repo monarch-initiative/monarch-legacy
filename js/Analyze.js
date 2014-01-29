@@ -123,7 +123,7 @@ function AnalyzeInit(){
 		 delete2val[nid] = skey;
 		 draw_cache.push('<li class="list-group-item">');
 		 draw_cache.push(slabel + ' (' + skey + ')');
-		 draw_cache.push('<span id="'+ nid +'" class="badge">X</span>');
+		 draw_cache.push('<span id="'+ nid +'" class="badge analyze-delete-button">X</span>');
 		 draw_cache.push('</li>');
 	     });
 
