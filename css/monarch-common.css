@@ -16,11 +16,19 @@ p {
 }
 
 /* Section 1: Navbar */
+
+.navbar {
+    min-height: 30px;
+}
 .nav>li>a {
     padding: 0px;
 }
 .dropdown-toggle {
-    margin: 15px 15px 10px;
+   margin: 5px 10px 5px 10px;
+}
+
+.navbar-brand {
+    padding: 5px 30px 5px 10px;
 }
 .navbar-link {
     font-size: 14px;
@@ -29,6 +37,11 @@ p {
     margin-top: 13px;
     margin-bottom: 14px;
 }
+
+#spacer {
+    height: 28px;
+}
+   
 
 /* Section 2: Sidebar */
 .sidebar {
