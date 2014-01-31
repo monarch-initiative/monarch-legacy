@@ -3,8 +3,8 @@ $(document).ready(function(){
    // something with #search
    $("#search").autocomplete({
        position : {
-       		my: "left top",
-                at: "left bottom",
+       		my: "right top",
+                at: "right bottom",
 		collision: "none"},
        source: function(request,response) {
 	   console.log("trying autocomplete on "+request.term);
@@ -38,10 +38,6 @@ $(document).ready(function(){
 	   } 
 	}
  });
-
- $("#search").change(function() {	
- 	console.log( $(this).text());
-	});
 
 });
    
