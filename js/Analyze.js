@@ -139,7 +139,7 @@ function AnalyzeInit(){
 	}
 
 
-	// TODO: Add events to it.
+	// Add events to it.
 	each(delete2val,
 	     function(did, val){
 		 jQuery('#' + did).click(
@@ -177,6 +177,23 @@ function AnalyzeInit(){
 	// Remove the current input.
 	jQuery(analyze_auto_input_elt).val('');
     }
+
+    // Action to perform when an item is selected from the dropdown
+    // list.
+    function bootstrap_from_url(){
+	ll('selected: ' + id + '/' + label);
+
+	// Add the item.
+	search_set[id] = label;
+
+	// Update.
+	update_form_value();
+	redraw_form_list();
+
+	// Remove the current input.
+	jQuery(analyze_auto_input_elt).val('');
+    }
+
 
     var auto_args = {
 	source: function(request, response) {
