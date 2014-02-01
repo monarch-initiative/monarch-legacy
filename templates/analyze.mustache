@@ -9,6 +9,7 @@
     {{#stylesheets}}
     <link rel="stylesheet" type="text/css" href="{{url}}"></link>
     {{/stylesheets}}
+    <link rel="stylesheet" type="text/css" href="../css/disease.css"></link>
     <meta charset=”utf-8”> 
   </head>
   <body>
@@ -21,53 +22,47 @@
         <div class="col-lg-9">
 
           <h1>Monarch Analysis: {{datatype}}</h1>
-          <span class="text-warning">DOES NOT WORK YET DON'T GET YOUR
-          HOPES UP!!</span>
 
-          <!-- <form  action="/analyze/{{datatype}}/" method="GET">   -->
-          <!--   <textarea rows="10" column="20" name="input_items">{{input_items}}</textarea> -->
-          <!--   <button type="submit" class="btn btn-primary">Analyze!</button>   -->
-          <!--   <br/> -->
-          <!--   Max number of results: <input name="limit" type="text" value="{{limit}}"></input> -->
-          <!-- </form>  -->
-
-	  <!-- Testing a different way to complete the form. -SJC -->
 	  <hr />
 	  <div>
             <form role="form"
 	       action="/analyze/{{datatype}}/"
 	       method="GET">
 	      <input id="analyze_auto_target"
-		     name="input_terms"
+		     name="input_items"
 		     value=""
 		     type="hidden" />
 	      <div class="form-group">
-		<label for="analyze_auto_input">Add to searchables</label>
+		<label for="analyze_auto_input">Add to search list</label>
 		<input id="analyze_auto_input" type="text" class="form-control"
-		       placeholder="Search for things...">
+		       placeholder="Enter {{datatype}} here...">
 	      </div>
 	      <div class="form-group">
-		<label for="analyze_auto_list">Searchables</label>
+		<label for="analyze_auto_list">Search list / {{datatype}} profile</label>
 		<ul id="analyze_auto_list" class="list-group">
 		  <li class="list-group-item">Empty:
 		    Add items using the input above.</li>
 		</ul>
 	      </div>
               <div class="form-group">
-		<label for="analyze_limit_input">Number of results</label>
+		<label for="analyze_limit_input">Maximum number of results</label>
 		<input id="analyze_limit_input" name="limit" type="text"
 		        class="form-control" value="{{limit}}"></input>
 	      </div>	      
-              <button type="submit" class="btn btn-primary">Analyze!</button>  
+              <button type="submit" class="btn btn-primary">Search!</button>  
             </form>
 	  </div>
 	  <hr />
 
-	  <a href="{{{base_url}}}.json" class="btn btn-success">JSON</a>
+          {{#hasInputItems}}
           <h3>Results</h3>
+	  <a href="{{{base_url}}}.json" class="btn btn-success">JSON</a>
+          {{#hasResults}}
           <table class="{{css.table}}">
             {{{resultsTable}}}
           </table>
+          {{/hasResults}}
+          {{/hasInputItems}}
         </div>
       </div>
       {{{includes.footer}}}
