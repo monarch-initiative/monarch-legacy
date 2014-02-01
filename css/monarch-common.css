@@ -16,21 +16,20 @@ p {
 }
 
 /* Section 1: Navbar */
-
 .navbar {
     min-height: 30px;
 }
-
 .nav>li>a {
     padding : 0px;
 }
 .dropdown-toggle {
    margin: 5px 10px 5px 10px;
 }
-
-
+.dropdown {
+    padding: 4px 0px 0px;
+}
 .navbar-brand {
-    padding: 5px 30px 2px 10px;
+    padding: 8px 30px 0px 20px;
 }
 .navbar-link {
     font-size: 14px;
@@ -38,12 +37,12 @@ p {
 .navbar-text {
     margin-top: 2px;
     margin-bottom: 2px;
+    font-weight: 400;
+    margin-right: 5px;
 }
-
 #spacer {
-    height: 28px;
+    height: 35px;
 }
-
 
 /* Section 2: Sidebar */
 .sidebar {
@@ -52,8 +51,7 @@ p {
     height: 100%;
     position: fixed;
     border-right: 1px solid black;
-    widht: 160px;
-    max-width: 160px;
+    width: 130px;
     padding-top: 20px;
 }
 .nav.nav-list {
@@ -77,10 +75,14 @@ p {
     margin-top: 10px;
 }
 
-/*
- * Parts originating in the analyze page.
- */
+/* Section 3: Content */
+.content {
+    display: inline-block;
+    margin-left: 130px;
+    margin-bottom: 20px;
+}
 
+/* Analyze Page */
 .analyze-delete-button {
     cursor: pointer;
     color: white;
