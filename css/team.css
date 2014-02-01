@@ -19,6 +19,33 @@
     font-size: 25px;
     padding-bottom: 10px;
     font-weight: 700;
+    display: inline-block;
+    float: left;
+    padding: 5px 0px;
+}
+.teamlogo {
+    display: inline-block;
+    margin-left: 90px;
+    margin-bottom: 10px;
+}
+#ohsu {
+    height: 50px;
+}
+#lbnl {
+    height: 50px;
+}
+#ucsd {
+    height: 45px;
+}
+#pitt {
+    padding: 5px 10px;
+    background-color: white;
+}
+#charite {
+    height: 50px;
+}
+#sanger {
+    height: 50px;
 }
 .teammember {
     border-top: #428bca solid 1px;
