@@ -1,11 +1,8 @@
-<div class="navbar navbar-inverse navbar-fixed-top">
-    <div class="container">
+<div class="navbar navbar-inverse navbar-fixed-top" role="navigation">
+    <div class="monarch-navbar-container">
         <a class="navbar-brand" href="/">Monarch</a>
-        <!-- <p class="navbar-text pull-right">
-        <a href="https://github.com/monarch-initiative/monarch-app/issues/2" class="navbar-link">Log In</a>
-        </p> -->
-        <div class="nav-collapse collapse">
-            <ul class="nav navbar-nav">
+	   <div class="nav-collapse collapse">
+             <ul class="nav navbar-nav">
                 <li class="dropdown">
                     <a href="#" class="dropdown-toggle" data-toggle="dropdown">
                     <i class="icon-th-large"></i>Browse
@@ -15,21 +12,8 @@
                         <li><a href="/disease/">Diseases</a></li>
                         <li><a href="/phenotype/">Phenotypes</a></li>
                         <li><a href="/model/">Models</a></li>
-                        <!-- <li><a href="/anatomy/">Cells & organ systems</a></li> -->
                     </ul>
                 </li>
-
-                <!--    <li class="dropdown">
-                <a href="#" class="dropdown-toggle" data-toggle="dropdown">
-                <i class="icon-th-large"></i>Tools
-                <b class="caret"></b>
-                </a>
-                <ul class="dropdown-menu" role="menu" aria-labelledby="dropdownMenu">
-                <li><a href="/simsearch/genes">Analyze list of genes</a></li>
-                <li><a href="/simsearch/phenotypes">Analyze list of phenotypes</a></li>
-                <li><a href="http://www.sanger.ac.uk/resources/databases/exomiser/">Analyze list of variants</a></li>
-                </ul>
-                </li> -->
 
                 <li class="dropdown">
                     <a href="#" class="dropdown-toggle" data-toggle="dropdown">
@@ -37,7 +21,7 @@
                     <b class="caret"></b>
                     </a>
                     <ul class="dropdown-menu" role="menu" aria-labelledby="dropdownMenu">
-                        <li><a href="/page/tour">Monarch Info</a></li>
+                        <li><a href="/page/tour">About Monarch</a></li>
                         <li><a href="/page/releases">Releases</a></li>
                     </ul>
                 </li>
@@ -59,17 +43,10 @@
                     </ul>
                 </li>
 
-                <!-- 
-                <li class="dropdown">
-                <a href="#" class="dropdown-toggle" data-toggle="dropdown">
-                <i class="icon-th-large"></i>Download
-                <b class="caret"></b>
-                </a>
                 <ul class="dropdown-menu" role="menu" aria-labelledby="dropdownMenu">
                 <li><a href="http://monarchinitiative.org/?q=node/7">Data</a></li>
                 <li><a href="http://monarchinitiative.org/?q=node/7">Analyses</a></li>
                 </ul>
-                </li> -->
 
                 <li class="dropdown">
                     <a href="#" class="dropdown-toggle" data-toggle="dropdown">
@@ -82,8 +59,12 @@
                         <li><a href="mailto: info@monarchinitiative.org">Email Us</a>
                     </ul>
                 </li>
-            </ul>
-        </div>
+            </ul> 
+	   <form class="pull-right navbar-form navbar-right">
+	     <label for="search" class="navbar-text">Search</label>
+           <input id="search" type="text"></input> 
+	   </form>
+        </div> 
     </div>
 </div>
-<div style="height:48px;" id="spacer"></div>
+<div id="spacer"></div>

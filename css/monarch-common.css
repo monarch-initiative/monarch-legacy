@@ -16,37 +16,58 @@ p {
 }
 
 /* Section 1: Navbar */
+.monarch-navbar-container {
+    padding: 0px 20px;
+}
+.navbar {
+    min-height: 30px;
+}
 .nav>li>a {
     padding: 0px;
 }
 .dropdown-toggle {
-    margin: 15px 15px 10px;
+   margin: 5px 10px 5px 10px;
+}
+.dropdown {
+    padding: 4px 0px 0px;
+}
+.navbar-brand {
+    padding: 8px 30px 0px 20px;
 }
 .navbar-link {
     font-size: 14px;
 }
 .navbar-text {
-    margin-top: 13px;
-    margin-bottom: 14px;
+    margin-top: 2px;
+    margin-bottom: 2px;
+    font-weight: 400;
+    margin-right: 5px;
+}
+#spacer {
+    height: 35px;
 }
 
-/* Section 2: Sidebar */
+/* Section 2: Sidebar/Navlist */
 .sidebar {
     display: inline-block;
-    float: left;
     height: 100%;
     position: fixed;
+    left: 0px;
     border-right: 1px solid black;
-    width: 160px;
-    padding-top: 20px;
+    width: 155px;
+    padding: 15px 0px 0px 20px;
+    background-color: white;
+    z-index: 10;
 }
 .nav.nav-list {
     margin-top: 10px;
 }
 /* Search Bar */
+
 #search {
-    width: 145px;
+    width: 200px;
 }
+
 /* Search Button */
 .btn.btn-primary {
     padding: 4px 51px;
@@ -57,4 +78,21 @@ p {
     font-size: 17px;
     font-weight: 700;
     margin-top: 10px;
+}
+
+/* Section 3: Content */
+.monarch-container {
+    padding-left: 155px;
+    padding-right: 20px;
+}
+.content {
+    display: inline-block;
+    margin-bottom: 20px;
+}
+
+/* Analyze Page */
+.analyze-delete-button {
+    cursor: pointer;
+    color: white;
+    background-color: red;
 }

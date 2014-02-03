@@ -12,7 +12,7 @@
         <meta charset=”utf-8”> 
     </head>
     <body>
-        <div class="container">
+        <div class="monarch-container">
             {{{includes.navbar}}}
             <div class="sidebar">
                 {{{includes.navlist}}}
@@ -20,59 +20,55 @@
             <div class="content">
                 <div class="title">Monarch Releases</div>
                 <div class="section">
-                    <div id="betastats" class="block1 block">
-                        <u>Sneak Peek Stats</u><br>
-                        Diseases: 1000<br>
-                        Phenotypes: 2000<br>
-                        Models: 150<br>
-                        #temporary
+                    <div class="sectiontitle">Alpha Release (January 2014)</div>
+                    <div class="text">
+                        Monarch is in alpha testing and we need you! We welcome user testers,
+                        please use the feedback button, email <a href="mailto:info@monarchinitiative.org">info@monarchinitiative.org</a>,
+                        or use the <a href="https://github.com/monarch-initiative/monarch-app/issues">git tracker</a>
+                        to relay your suggestions.
                     </div>
-                    <div id="beta" class="block2 block">
-                        <div class="sectiontitle">Sneak Peek Release</div>
-                        <div class="text">
-                            Include text here about sneak peek release. This lower chunk of text
-                            is currently just acting as a placeholder.
-                        </div>
+                    <div class="text">
+                        This release includes data from human, mouse, and zebrafish. The system
+                        allows comparison of phenotype profiles (either a disease related set
+                        or a user-defined set) across organisms using the
+                        <a href="https://code.google.com/p/owltools/wiki/OwlSim">OWLsim algorithm</a>
+                        and a suite of integrated phenotype, and <a href="https://code.google.com/p/phenotype-ontologies/">disease ontologies</a>,
+                        all of which have been enhanced for this purpose.
                     </div>
-                    <div class="block3 block">
-                        <div class="text">
-                            Monarch will be in &quot;sneak peek&quot; testing in January of 2014. We will
-                            welcome user testers at that time, please contact
-                            <a href="mailto:info@monarchinitiative.org">info@monarchinitiative.org</a>
-                            for more information on becoming a alpha tester.
-                            Data related to Monarch is freely available in the
-                            <a href="http://www.neuinfo.org/">Neuroscience Information Framework</a>.
-                        </div>
+                    <div class="text">
+                        Functionality includes the ability to explore the relationships between
+                        models, diseases and phenotypes, the ability to compare phentoypes across
+                        models to investigate the degree to which they recapitulate a disease,
+                        and a KEGG Pathway view by which one can see how the phenotypes related
+                        to a given disease are distributed in a network.
+                    </div>
+                    <div class="text">
+                        Services include an API to retrieve the models most related to any given
+                        set of phenotypes, as well as an API call for an annotation sufficiency
+                        score for the given set. These services are being used within <a href="http://phenotips.org/">Phenotips</a>
+                        and by the NIH Undiagnosed Disease Program to compare human undiagnosed
+                        disease phenotype profiles against model systems to aid in prioritization
+                        of gene candidates.
                     </div>
                 </div>
                 <div class="clear"></div>
                 <div class="section">
-                    <div class="block1 block">
-                        <div id="logo"><img src="/image/logofull.png"/></div>
+                    <div class="sectiontitle">Beta Release (July 2014)</div>
+                    <div class="text">
+                        In this release we plan to include numerous additional data sources,
+                        such as D. melanogaster, C. elegans, rat, yeast, ClinVar, Undiagnosed
+                        Disease Program phenotypes, Bgee comparative gene expression, and more.
                     </div>
-                    <div id="future" class="block2 block">
-                        <div class="sectiontitle">Future Release</div>
-                        <div class="text">
-                            Include text here about the future release in July 2014.
-                            This lower chunk of text is currently just acting as a placeholder.
-                            The picture should be an infographic or static model about new
-                            release features.
-                        </div>
+                    <div class="text">
+                        New functionality in the user interface will include inclusion of
+                        WikiPathways integrated with genotype and phenotype data and the ability
+                        to query gene expression data via anatomy to prioritize phenotype
+                        similarity results based on co-expression/tissue specificity.
                     </div>
-                    <div class="block3 block">
-                        <div class="text">
-                            We provide an ability to navigate multi-scale spatial and
-                            temporal phenotypes across in vivo and in vitro model systems
-                            in the context of genetic and genomic data, using semantics and
-                            statistics. Our system provides basic and clinical science
-                            researchers, informaticists, and medical professionals with
-                            an integrated interface and set of discovery tools to reveal
-                            the genetic basis of disease, facilitate hypothesis generation,
-                            and identify novel candidate drug targets. We aim for this system
-                            to promote true translational research, in that clinicians can
-                            connect with model systems researchers with expertise in
-                            related phenotypes, assays, or models.
-                        </div>
+                    <div class="text">
+                        New services will include an ID resolution service over all data and
+                        ontology sources and the ability to query on any group of semantic
+                        entities in the system (such as genes, diseases, anatomy, etc).
                     </div>
                 </div>
                 {{{includes.footer}}}

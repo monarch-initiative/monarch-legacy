@@ -39,4 +39,5 @@ app-engine:
 ## Setup portable Ubuntu environment. -SJC
 .PHONY: cli-launch
 cli-launch:
-	RINGO_MODULE_PATH=$(RINGO_MODULE_PATH) $(RINGO_BIN) ./lib/monarch/web/webapp_launcher.js --port=$(RINGO_PORT)
+	RINGO_MODULE_PATH=$(RINGO_MODULE_PATH) $(RINGO_BIN) ./lib/monarch/web/webapp_launcher_dev.js --port=$(RINGO_PORT)
+#	RINGO_MODULE_PATH=$(RINGO_MODULE_PATH) $(RINGO_BIN) ./lib/monarch/web/webapp_launcher.js --port=$(RINGO_PORT)

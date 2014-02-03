@@ -3,9 +3,7 @@
     clear: both;
 }
 .content {
-    display: inline-block;
-    margin-left: 160px;
-    padding: 20px 0px 20px 40px;
+    padding: 20px 0px 20px 30px;
 }
 .title {
     font-size: 50px;
