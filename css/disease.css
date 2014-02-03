@@ -1,13 +1,8 @@
 /* Section 3: Content */
-.content {
-    width: 90%;
-    padding: 20px 20px 20px 0px;
-}
 /* Description */
 .jumbotron {
     border-radius: 2px;
-    padding: 10px 40px 0px;
-    margin-top: -25px;
+    padding: 0px 40px 0px;
     margin-bottom: 20px;
     border-bottom: black solid 1px;
 }
