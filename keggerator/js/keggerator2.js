@@ -14,7 +14,7 @@ var keggerator = function () {
     var diseases = [];
     var pathwayImageWidth, pathwayImageHeight;
     var acetate = {};
-    var canvasSize = .5;
+    var canvasSize = 1;
 
     function init(imageDiv) {
 
