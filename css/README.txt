@@ -12,9 +12,15 @@ monarch-main.css
     Every main page should reference this file.
     Use it to customize the main spotlight and the content layout.
 
+monarch-specific.css
+    This file controls all the specific pages:
+        (1) Disease pages
+        (2) Phenotype pages
+        (3) Genotype/model pages
+
 The remaining CSS files are page type specific.
-    disease.css
-        This controls all disease and phenotype specific pages.
+    main.css
+        This controls the home page (landing page).
     search.css
         This controls all search result pages.
     team.css
