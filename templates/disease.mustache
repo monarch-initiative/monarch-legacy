@@ -106,16 +106,12 @@
             <div id="ontology" class="first category">
                 <h3>IDs</h3>
                     <div class="ids">
-                        <b>AKA: </b>
-                        {{#has_exact_synonym}}
-                        {{.}},
-                        {{/has_exact_synonym}}
+                        <b>AKA:</b>
+                        {{aka}}
                     </div>
                     <div class="ids">
-                        <b>IDs: </b>
-                        {{#database_cross_reference}}
-                        {{.}},
-                        {{/database_cross_reference}}
+                        <b>IDs:</b>
+                        {{ids}}
                     </div>
                     <div class="superclasses">
                       <h4>Is a subtype of</h4>
