@@ -56,6 +56,10 @@ p {
         border: black solid 1px;
     }
 }
+.greyed-out {
+    background-color: #DDD;
+    color: #AAA;
+}
 #initialtab {
     color: white;
     background-color: #666;
