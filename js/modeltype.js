@@ -218,10 +218,18 @@ as a separate call in the init function.
     _selectData: function(curr_data) {
     	this._resetLinks();
     	var alabels = this.options.svg.selectAll("text.a_text." + this._getConceptId(curr_data.id));
-    	alabels.text(curr_data.label_a);
+    	var txt = curr_data.label_a;
+    	if (txt == undefined) {
+    		txt = curr_data.id_a;
+    	}
+    	alabels.text(txt);
 
     	var sublabels = this.options.svg.selectAll("text.lcs_text." + this._getConceptId(curr_data.id) + ", ." + this._getConceptId(curr_data.subsumer_id));
-    	sublabels.text(curr_data.subsumer_label);
+    	var txt = curr_data.subsumer_label;
+    	if (txt == undefined) {
+    		txt = curr_data.subsumer_id;
+    	}
+    	sublabels.text(txt);
     	var all_links = this.options.svg.selectAll("." + this._getConceptId(curr_data.id) + ", ." + this._getConceptId(curr_data.subsumer_id));
     	all_links.style("font-weight", "bold");
     },
@@ -629,7 +637,11 @@ as a separate call in the init function.
 		.attr("width", self.options.textWidth)
 		.attr("height", 50)
 		.text(function(d) {
-		    return self._getShortLabel(d.label_a);
+			var txt = d.label_a;
+			if (txt == undefined) {
+				txt = d.id_a;
+			}
+		    return self._getShortLabel(txt);
 		})
 	    rect_text.transition()
 		.delay(1000)
@@ -681,10 +693,18 @@ as a separate call in the init function.
 		.attr("height", 50)
 		.text(function(d,i) {
 		    if (i==0) {
-			return self._getShortLabel(d.subsumer_label);
+		    	var txt = d.subsumer_label;
+		    	if (txt == undefined) {
+		    		txt = d.subsumer_id;
+		    	}
+			return self._getShortLabel(txt);
 		    }
 		    if (self.options.filteredModelData[i-1].subsumer_label != d.subsumer_label) {
-			return self._getShortLabel(d.subsumer_label);
+		    	var txt = d.subsumer_label;
+		    	if (txt == undefined) {
+		    		txt = d.subsumer_id;
+		    	}
+			    return self._getShortLabel(txt);
 		    }
 		})
 	    rect_text2.transition()
