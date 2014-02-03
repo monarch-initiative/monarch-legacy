@@ -17,7 +17,21 @@
     {{{includes.navbar}}}
     <div class="monarch-container">
     <div class="sidebar">
-        {{{includes.navlistphenotype}}}
+        <a href="/"><img src="/image/logo-sneak.png" width="100" class="img-rounded"/></a>
+        <ul class="nav nav-list">
+            <li class="nav-header">Find</li>
+                <li class="nav-item"><a href="/disease">Disease</a></li>
+                <li class="nav-item"><a href="/phenotype">Phenotype</a></li>
+                <li class="nav-item"><a href="/model">Model</a></li>
+            <li id="navigation" class="nav-header">Navigate</li>
+                <li id="over" class="special nav-item"><a href="#overview">Overview</a></li>
+                {{#hasDiseases}}
+                <li id="dis" class="special nav-item"><a href="#disease">Disease</a></li>
+                {{/hasDiseases}}
+                {{#hasGenotypes}}
+                <li id="geno" class="special nav-item"><a href="#genotypes">Genotypes</a></li>
+                {{/hasGenotypes}}
+        </ul>
     </div>
     <div class="content">
         <div class="jumbotron">
@@ -31,9 +45,19 @@
                 </p>
             </div>
             <div id="categories">
-                <a href="#overview"><div id="initialtab" class="tab overtab">Overview</div></a>
-                <a href="#disease"><div class="tab distab">Disease</div></a>
-                <a href="#genotypes"><div class="tab genotab">Genotypes</div></a>
+                <a href="#overview"><div id="initialtab" class="tab contenttab overtab">Overview</div></a>
+                {{#hasDiseases}}
+                <a href="#disease"><div class="tab contenttab distab">Disease</div></a>
+                {{/hasDiseases}}
+                {{^hasDiseases}}
+                <div class="tab greyed-out">Disease</div>
+                {{/hasDiseases}}
+                {{#hasGenotypes}}
+                <a href="#genotypes"><div class="tab contenttab genotab">Genotypes</div></a>
+                {{/hasGenotypes}}
+                {{^hasGenotypes}}
+                <div class="tab greyed-out">Genotypes</div>
+                {{/hasGenotypes}}
             </div>
         </div>
         <div id="complete-info">
@@ -61,6 +85,7 @@
                     </table>
                     </p>
             </div>
+            {{#hasDiseases}}
             <div id="disease" class="category">
                 <h3>Disease</h3>
                 </span>
@@ -68,6 +93,8 @@
                 {{{diseaseTable}}}
                 </table>
             </div>
+            {{/hasDiseases}}
+            {{#hasGenotypes}}
             <div id="genotypes" class="category">
                 <h3 class="downloadline">Genotype Associations</h3>
                 <a href="{{{base_url}}}/genotype_associations.json" class="btn btn-info downloadline">JSON</a>
@@ -77,6 +104,7 @@
                     {{{genotypeTable}}}
                     </table>
             </div>
+            {{/hasGenotypes}}
         </div>
         {{{includes.footer}}}
     </div>
