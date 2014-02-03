@@ -41,9 +41,8 @@
                 <a href="#genes"><div class="tab gentab">Genes</div></a>
                 <a href="#alleles"><div class="tab alletab">Alleles</div></a>
                 <div class="second-row-divider"></div>
-                <a href="#model"><div class="tab modtab
-                second">Similar Models</div></a>
-                <a href="#similarity"><div class="tab simtab">Related Diseases</div></a>
+                <a href="#model"><div id="longtab" class="tab modtab second">Similar Models</div></a>
+                <a href="#similarity"><div id="longertab" class="tab simtab">Related Diseases</div></a>
                 <a href="#pathways"><div class="tab pathtab">Pathways</div></a>
             </div>
         </div>
@@ -130,12 +129,12 @@
                 </table>
             </div>
             <div id="model" class="category">
-                <h3 class="downloadline">Models</h3>
+                <h3 class="downloadline">Similar Models</h3>
                 <a href="{{{base_url}}}/models.json" class="btn btn-info downloadline">JSON</a>
 		<div id ="phen_vis"></div>
             </div>
             <div id="similarity" class="category">
-                <h3 class="downloadline">Similar Diseases</h3>
+                <h3 class="downloadline">Related Diseases</h3>
                 <a href="{{{base_url}}}/sim.json" class="btn btn-info downloadline">JSON</a>
                 <table class="{{css.table}}">
                 {{{simTable}}}
