@@ -46,7 +46,8 @@ as a separate call in the init function.
 	    modelData: [],
 	    filteredModelData: [],
 	    detailRectWidth: 200,
-            detailRectHeight: 400,
+        detailRectHeight: 400,
+        detailRectStrokeWidth: 3,
 	    dimensions: [ "Human Phenotype", "Lowest Common Subsumer", "Mammalian Phenotype" ], 
 	    m :[ 30, 10, 10, 10 ], 
 	    w : 0,
@@ -310,6 +311,42 @@ as a separate call in the init function.
     	    el.remove();
 
     },
+    
+    _showModelData: function(d) {
+	    //remove any text from the text area
+	    this.options.svg.selectAll("#detail_content").remove();
+	    var retData;
+	    /*	    jQuery.ajax({
+		url : "/phenotype/" + data.attributes["ontology_id"].value + ".json",
+		async : false,
+		dataType : 'json',
+		success : function(data) {
+		    //retData = data;
+		    retData = "<strong>Label:</strong> " + "<a href=\"" + data.url + "\">"  
+			+ data.label + "</a><br/><strong>Type:</strong> " + data.category;
+		}
+	    });*/
+
+	    retData = "<strong>Label: </strong> " + d.label_a   
+		    + "<br/><strong>Subsumer: </strong> " + d.subsumer_label
+	     	+ "<br/><strong>Score: </strong> " + d.value.toFixed(2);
+	    
+	    this.options.svg.append("foreignObject")
+	    //adjust the height and width to avoid overlaying on top of the rectangle border
+		.attr("width", this.options.detailRectWidth-(this.options.detailRectStrokeWidth*2))
+		.attr("height", this.options.detailRectHeight-(this.options.detailRectStrokeWidth*2))
+		.attr("id", "detail_content")
+		.attr("y", (125+this.options.detailRectStrokeWidth))
+	        .attr("x", (560+this.options.detailRectStrokeWidth))
+		.append("xhtml:body")
+			  //.style("font", "14px 'Helvetica Neue'")
+		.html(retData);
+	  
+    },
+	
+    _clearModelData: function() {
+	    this.options.svg.selectAll("#detail_content").remove();
+    },
 
 
   //NOTE: I need to find a way to either add the model class to the phenotypes when they load OR
@@ -343,7 +380,14 @@ as a separate call in the init function.
   	  .attr("height", 10)
   	  .attr("rx", "3")
   	  .attr("ry", "3")
-      
+  	  //I need to pass this into the function
+  	  .on("mouseover", function(d) {
+  		  self._showModelData(d);
+	  })
+	  .on("mouseout", function(d) {
+		  self._clearModelData(d);
+	  })
+
   	  .attr("fill", function(d, i) {
   	      return self.options.colorScale(d.value);
   	  });
@@ -360,7 +404,7 @@ as a separate call in the init function.
   	  .remove();
   },
 
-	
+    
     _updateAxes: function() {
 	var self = this;
   	this.options.h = (this.options.filteredModelData.length*2.5);
@@ -408,6 +452,7 @@ as a separate call in the init function.
 		});
 	},
     
+	//this code creates the colored rectangles below the models
 	_createModelRegion: function () {
 	    //model_x_axis = undefined;
 	    var self=this;
@@ -476,7 +521,7 @@ as a separate call in the init function.
 		.text("Score Scale");
 	},
 	
-	//create essentially a D3 enalbed "div" tag on the screen
+	//create essentially a D3 enabled "div" tag on the screen
 	_createDetailSection: function () {
 	    var self=this;
 	    var div_text = this.options.svg.append("svg:text")
@@ -495,7 +540,7 @@ as a separate call in the init function.
 	      .attr("x", "560")
 		.attr("width", self.options.detailRectWidth)
 		.attr("height", self.options.detailRectHeight)
-		.style("stroke-width","3")
+		.style("stroke-width",self.options.detailRectStrokeWidth)
 		.style("stroke", "lightgrey")
 		.attr("fill", "white");
 	    
@@ -538,6 +583,8 @@ as a separate call in the init function.
 	},
 
 
+	//this code creates the text and rectangles containing the text 
+	//on either side of the model data
 	_createRects: function() {
 	    // this takes some 'splaining
 	    //the raw dataset contains repeats of data within the
@@ -670,11 +717,12 @@ as a separate call in the init function.
 	    });
 	    
 	    this.options.svg.append("foreignObject")
-		.attr("width", this.options.detailRectWidth)
-		.attr("height", this.options.detailRectHeight)
+	    //adjust the height and width to avoid overlaying on top of the rectangle border
+		.attr("width", this.options.detailRectWidth-(this.options.detailRectStrokeWidth*2))
+		.attr("height", this.options.detailRectHeight-(this.options.detailRectStrokeWidth*2))
 		.attr("id", "detail_content")
-		.attr("y", "125")
-	        .attr("x", "560")
+		.attr("y", (125+this.options.detailRectStrokeWidth))
+	        .attr("x", (560+this.options.detailRectStrokeWidth))
 		.append("xhtml:body")
 			  //.style("font", "14px 'Helvetica Neue'")
 		.html(retData);
@@ -714,11 +762,12 @@ as a separate call in the init function.
 		});
 
 	    this.options.svg.append("foreignObject")
-		.attr("width", this.options.detailRectWidth)
-		.attr("height", this.options.detailRectHeight)
+	    //adjust the height and width to avoid overlaying on top of the rectangle border
+		.attr("width", this.options.detailRectWidth-(this.options.detailRectStrokeWidth*2))
+		.attr("height", this.options.detailRectHeight-(this.options.detailRectStrokeWidth*2))
 		.attr("id", "detail_content")
-		.attr("y", "125")
-	        .attr("x", "560")
+		.attr("y", (125+this.options.detailRectStrokeWidth))
+	        .attr("x", (560+this.options.detailRectStrokeWidth))
 		.append("xhtml:body")
 	    //.style("font", "14px 'Helvetica Neue'")
 		.html(retData);
