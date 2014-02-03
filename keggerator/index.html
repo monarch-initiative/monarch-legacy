@@ -102,7 +102,7 @@
 //
 
         // tell keggerator where to draw stuff and handle ui events
-        keggerator.init($("#imageDiv"), $("#kgmlSelect"));
+        keggerator.init($("#canvas"), $("#kgmlSelect"));
         $("#highlightButton").on("click", keggerator.highlight);
         $("#eraseButton").on("click", keggerator.clearHighlights);
 
