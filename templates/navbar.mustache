@@ -60,9 +60,17 @@
                     </ul>
                 </li>
             </ul> 
-	   <form class="pull-right navbar-form navbar-right">
-	     <label for="search" class="navbar-text">Search</label>
-           <input id="search" type="text"></input> 
+	   <form id="search_form" 
+		 class="pull-right navbar-form navbar-right"
+		 action="/search"
+		 role="search">
+	     <!-- <div class="form-group"> -->
+	       <label for="search" class="navbar-text">Search</label>
+               <input id="search"
+		      type="text"
+		      placeholder="Terms" />
+               <!-- <button type="submit">go</button> -->
+	     <!-- </div> -->
 	   </form>
         </div> 
     </div>
