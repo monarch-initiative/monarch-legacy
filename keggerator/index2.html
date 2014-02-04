@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Keggerator</title>
+</head>
+<body>
+<script type="application/javascript" src="js/d3.min.js"></script>
+<script type="application/javascript" src="js/jquery-1.10.2.min.js"></script>
+<script type="application/javascript" src="js/jquery.xml2json.js"></script>
+<script type="application/javascript" src="js/keggerator2.js"></script>
+
+<script>
+
+
+
+
+    $(function () {
+
+
+
+
+        // tell keggerator where to draw stuff and handle ui events
+        keggerator.init($("#canvas"));
+
+        // the pathway id
+        keggerator.annotate(
+                ["hsa05010", "hsa05012"],
+                [
+                    {
+                        "name": "diseasea",
+                        "link": "http://",
+                        "genes": ["hsa:348", "hsa:10975","hsa:842"]
+                    },
+                    {
+                        "name": "diseaseb",
+                        "link": "http://",
+                        "genes": ["hsa:120892", "hsa:10975","hsa:842"]
+                    }
+
+                ]);
+    })
+
+
+</script>
+
+<h3>Keggerator - Kegg Pathway JS Annotator</h3>
+
+<div id="canvas"></div>
+
+</div>
+</body>
+</html>

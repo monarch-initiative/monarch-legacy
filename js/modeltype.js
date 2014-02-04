@@ -46,7 +46,8 @@ as a separate call in the init function.
 	    modelData: [],
 	    filteredModelData: [],
 	    detailRectWidth: 200,
-            detailRectHeight: 400,
+        detailRectHeight: 400,
+        detailRectStrokeWidth: 3,
 	    dimensions: [ "Human Phenotype", "Lowest Common Subsumer", "Mammalian Phenotype" ], 
 	    m :[ 30, 10, 10, 10 ], 
 	    w : 0,
@@ -217,10 +218,18 @@ as a separate call in the init function.
     _selectData: function(curr_data) {
     	this._resetLinks();
     	var alabels = this.options.svg.selectAll("text.a_text." + this._getConceptId(curr_data.id));
-    	alabels.text(curr_data.label_a);
+    	var txt = curr_data.label_a;
+    	if (txt == undefined) {
+    		txt = curr_data.id_a;
+    	}
+    	alabels.text(txt);
 
     	var sublabels = this.options.svg.selectAll("text.lcs_text." + this._getConceptId(curr_data.id) + ", ." + this._getConceptId(curr_data.subsumer_id));
-    	sublabels.text(curr_data.subsumer_label);
+    	var txt = curr_data.subsumer_label;
+    	if (txt == undefined) {
+    		txt = curr_data.subsumer_id;
+    	}
+    	sublabels.text(txt);
     	var all_links = this.options.svg.selectAll("." + this._getConceptId(curr_data.id) + ", ." + this._getConceptId(curr_data.subsumer_id));
     	all_links.style("font-weight", "bold");
     },
@@ -310,6 +319,42 @@ as a separate call in the init function.
     	    el.remove();
 
     },
+    
+    _showModelData: function(d) {
+	    //remove any text from the text area
+	    this.options.svg.selectAll("#detail_content").remove();
+	    var retData;
+	    /*	    jQuery.ajax({
+		url : "/phenotype/" + data.attributes["ontology_id"].value + ".json",
+		async : false,
+		dataType : 'json',
+		success : function(data) {
+		    //retData = data;
+		    retData = "<strong>Label:</strong> " + "<a href=\"" + data.url + "\">"  
+			+ data.label + "</a><br/><strong>Type:</strong> " + data.category;
+		}
+	    });*/
+
+	    retData = "<strong>Label: </strong> " + d.label_a   
+		    + "<br/><strong>Subsumer: </strong> " + d.subsumer_label
+	     	+ "<br/><strong>Score: </strong> " + d.value.toFixed(2);
+	    
+	    this.options.svg.append("foreignObject")
+	    //adjust the height and width to avoid overlaying on top of the rectangle border
+		.attr("width", this.options.detailRectWidth-(this.options.detailRectStrokeWidth*2))
+		.attr("height", this.options.detailRectHeight-(this.options.detailRectStrokeWidth*2))
+		.attr("id", "detail_content")
+		.attr("y", (125+this.options.detailRectStrokeWidth))
+	        .attr("x", (560+this.options.detailRectStrokeWidth))
+		.append("xhtml:body")
+			  //.style("font", "14px 'Helvetica Neue'")
+		.html(retData);
+	  
+    },
+	
+    _clearModelData: function() {
+	    this.options.svg.selectAll("#detail_content").remove();
+    },
 
 
   //NOTE: I need to find a way to either add the model class to the phenotypes when they load OR
@@ -343,7 +388,14 @@ as a separate call in the init function.
   	  .attr("height", 10)
   	  .attr("rx", "3")
   	  .attr("ry", "3")
-      
+  	  //I need to pass this into the function
+  	  .on("mouseover", function(d) {
+  		  self._showModelData(d);
+	  })
+	  .on("mouseout", function(d) {
+		  self._clearModelData(d);
+	  })
+
   	  .attr("fill", function(d, i) {
   	      return self.options.colorScale(d.value);
   	  });
@@ -360,7 +412,7 @@ as a separate call in the init function.
   	  .remove();
   },
 
-	
+    
     _updateAxes: function() {
 	var self = this;
   	this.options.h = (this.options.filteredModelData.length*2.5);
@@ -408,6 +460,7 @@ as a separate call in the init function.
 		});
 	},
     
+	//this code creates the colored rectangles below the models
 	_createModelRegion: function () {
 	    //model_x_axis = undefined;
 	    var self=this;
@@ -476,7 +529,7 @@ as a separate call in the init function.
 		.text("Score Scale");
 	},
 	
-	//create essentially a D3 enalbed "div" tag on the screen
+	//create essentially a D3 enabled "div" tag on the screen
 	_createDetailSection: function () {
 	    var self=this;
 	    var div_text = this.options.svg.append("svg:text")
@@ -495,7 +548,7 @@ as a separate call in the init function.
 	      .attr("x", "560")
 		.attr("width", self.options.detailRectWidth)
 		.attr("height", self.options.detailRectHeight)
-		.style("stroke-width","3")
+		.style("stroke-width",self.options.detailRectStrokeWidth)
 		.style("stroke", "lightgrey")
 		.attr("fill", "white");
 	    
@@ -538,6 +591,8 @@ as a separate call in the init function.
 	},
 
 
+	//this code creates the text and rectangles containing the text 
+	//on either side of the model data
 	_createRects: function() {
 	    // this takes some 'splaining
 	    //the raw dataset contains repeats of data within the
@@ -582,7 +637,11 @@ as a separate call in the init function.
 		.attr("width", self.options.textWidth)
 		.attr("height", 50)
 		.text(function(d) {
-		    return self._getShortLabel(d.label_a);
+			var txt = d.label_a;
+			if (txt == undefined) {
+				txt = d.id_a;
+			}
+		    return self._getShortLabel(txt);
 		})
 	    rect_text.transition()
 		.delay(1000)
@@ -634,10 +693,18 @@ as a separate call in the init function.
 		.attr("height", 50)
 		.text(function(d,i) {
 		    if (i==0) {
-			return self._getShortLabel(d.subsumer_label);
+		    	var txt = d.subsumer_label;
+		    	if (txt == undefined) {
+		    		txt = d.subsumer_id;
+		    	}
+			return self._getShortLabel(txt);
 		    }
 		    if (self.options.filteredModelData[i-1].subsumer_label != d.subsumer_label) {
-			return self._getShortLabel(d.subsumer_label);
+		    	var txt = d.subsumer_label;
+		    	if (txt == undefined) {
+		    		txt = d.subsumer_id;
+		    	}
+			    return self._getShortLabel(txt);
 		    }
 		})
 	    rect_text2.transition()
@@ -670,11 +737,12 @@ as a separate call in the init function.
 	    });
 	    
 	    this.options.svg.append("foreignObject")
-		.attr("width", this.options.detailRectWidth)
-		.attr("height", this.options.detailRectHeight)
+	    //adjust the height and width to avoid overlaying on top of the rectangle border
+		.attr("width", this.options.detailRectWidth-(this.options.detailRectStrokeWidth*2))
+		.attr("height", this.options.detailRectHeight-(this.options.detailRectStrokeWidth*2))
 		.attr("id", "detail_content")
-		.attr("y", "125")
-	        .attr("x", "560")
+		.attr("y", (125+this.options.detailRectStrokeWidth))
+	        .attr("x", (560+this.options.detailRectStrokeWidth))
 		.append("xhtml:body")
 			  //.style("font", "14px 'Helvetica Neue'")
 		.html(retData);
@@ -714,11 +782,12 @@ as a separate call in the init function.
 		});
 
 	    this.options.svg.append("foreignObject")
-		.attr("width", this.options.detailRectWidth)
-		.attr("height", this.options.detailRectHeight)
+	    //adjust the height and width to avoid overlaying on top of the rectangle border
+		.attr("width", this.options.detailRectWidth-(this.options.detailRectStrokeWidth*2))
+		.attr("height", this.options.detailRectHeight-(this.options.detailRectStrokeWidth*2))
 		.attr("id", "detail_content")
-		.attr("y", "125")
-	        .attr("x", "560")
+		.attr("y", (125+this.options.detailRectStrokeWidth))
+	        .attr("x", (560+this.options.detailRectStrokeWidth))
 		.append("xhtml:body")
 	    //.style("font", "14px 'Helvetica Neue'")
 		.html(retData);

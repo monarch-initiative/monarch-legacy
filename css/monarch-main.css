@@ -4,7 +4,7 @@
 .jumbotron {
     margin-top: 0px;
     border-radius: 2px;
-    padding: 10px 40px 20px;
+    padding: 10px 30px 20px;
 }
 .jumbotron h1 {
     font-size: 30px;
@@ -21,7 +21,7 @@
 }
 /* Rest of Content */
 .col-lg-9 {
-    padding-left: 40px;
+    padding-left: 30px;
     margin-top: -20px;
 }
 .col-lg-9 h1 {
