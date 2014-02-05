@@ -65,7 +65,7 @@ var keggerator = function () {
             .style("opacity", 0.7);
 
         acetate.selectAll(".diseaseTxt").data(diseases).enter().append("text")
-            .classed("diseaseTxt",true)
+            .classed("diseaseTxt", true)
             .attr("x", function (d, i) {
                 return 10 + ((dxWidth + 5) * i)
             })
@@ -157,13 +157,28 @@ var keggerator = function () {
 
             // update the data to be shown shown with those genes that should be shown
             dataShown = [];
-            for (var i = 0; i < data.length; i++) {
-                var d = data[i];
-                for (var j = 0; j < diseases.length; j++) {
-                    diseases[j].color = colors[j];
-                    if (d && d.graph_id && diseases[j].genes.indexOf(d.graph_id) > -1) {
-                        d.color = colors[j];
-                        dataShown.push(d);
+            dataShownHash = {};
+            var geneShift = 2;
+            for (var j = 0; j < diseases.length; j++) {
+                diseases[j].color = colors[j];
+                for (var i = 0; i < data.length; i++) {
+                    if (data[i] && data[i].graph_id && (diseases[j].genes.indexOf(data[i].graph_id) > -1)) {
+
+                        if (dataShownHash[data[i].graph_id] == null) {
+                            dataShownHash[data[i].graph_id] = {};
+                            dataShownHash[data[i].graph_id].count = -1;
+                        }
+                        dataShownHash[data[i].graph_id].count = dataShownHash[data[i].graph_id].count + 1; // increment counter of how many times seen this gene
+
+                        var myData = jQuery.extend(true, {}, data[i]) //deep copy since we are in inner loop and will use data[i] again
+                        myData.color = diseases[j].color;
+                        myData.disease = diseases[j];
+                        // shift the annotation of seen before
+                        myData.x = parseInt(myData.x) + (dataShownHash[data[i].graph_id].count * geneShift);
+                        myData.y = parseInt(myData.y) + (dataShownHash[data[i].graph_id].count * geneShift);
+
+                        dataShown.push(myData);
+
                     }
                 }
             }
