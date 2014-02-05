@@ -1,80 +1,65 @@
 <!DOCTYPE html>
 <html>
-  <head>
-    <title>Monarch Analysis: {{datatype}}</title>
+<head>
+    <title>Monarch Analysis</title>
     {{#scripts}}
     <script type="text/javascript" src="{{url}}"></script>
     {{/scripts}}
-    <script type="text/javascript" src="/js/Analyze.js"></script>
+    <script type="text/javascript" src="/js/analyze.js"></script>
     {{#stylesheets}}
     <link rel="stylesheet" type="text/css" href="{{url}}"></link>
     {{/stylesheets}}
-    <link rel="stylesheet" type="text/css" href="../css/disease.css"></link>
-    <meta charset=”utf-8”> 
-  </head>
-  <body>
+    <link rel="stylesheet" type="text/css" href="/css/search.css"></link>
+    <meta charset=”utf-8”>
+</head>
+<body>
+    {{{includes.navbar}}}
     <div class="monarch-container">
-      {{{includes.navbar}}}
-      <div class="row">
-        <div class="col-lg-2">
-          {{{includes.navlist}}}
+        <div class="sidebar">
+            {{{includes.navlist}}}
         </div>
-        <div class="col-lg-9">
-
-          <h1>Monarch Analysis: {{datatype}}</h1>
-
-	  <hr />
-	  <div>
-            <form role="form"
-	       action="/analyze/{{datatype}}/"
-	       method="GET">
-	      <input id="analyze_auto_target"
-		     name="input_items"
-		     value=""
-		     type="hidden" />
-	      <div class="form-group">
-		<label for="analyze_auto_input">Add to search list</label>
-		<input id="analyze_auto_input" type="text" class="form-control"
-		       placeholder="Enter {{datatype}} here...">
-	      </div>
-	      <div class="form-group">
-		<label for="analyze_auto_list">Search list / {{datatype}} profile</label>
-		<ul id="analyze_auto_list" class="list-group">
-		  <li class="list-group-item">Empty:
-		    Add items using the input above.</li>
-		</ul>
-	      </div>
-              <div class="form-group">
-		<label for="analyze_limit_input">Maximum number of results</label>
-		<input id="analyze_limit_input" name="limit" type="text"
-		        class="form-control" value="{{limit}}"></input>
-	      </div>	      
-              <div class="form-group">
-		<label for="target">Target</label>
-                <select id="target" name="target">
-                  <option value="" selected="selected" >All</option>
-                  <option value="MGI" >Mouse genes</option>
-                  <option value="ZFIN" >Zebrafish genes</option>
-                  <option value="OMIM">Human diseases</option>
-                </select>
-              </div>
-              <button type="submit" class="btn btn-primary">Search!</button>  
+        <div class="content">
+            <div class="title">Monarch Analysis: {{datatype}}</div>
+            <form role="form" action="/analyze/{{datatype}}/" method="GET">
+                <input id="analyze_auto_target" name="input_items" value="" type="hidden"/>
+                <div class="form-group">
+                    <label for="analyze_auto_input"><h4>Add to search list</h4></label>
+                    <input id="analyze_auto_input" type="text" class="form-control"
+                    placeholder="Enter {{datatype}} here">
+                </div>
+                <div class="form-group">
+                    <label for="analyze_auto_list"><h4>Search list / {{datatype}} profile</h4></label>
+                    <ul id="analyze_auto_list" class="list-group">
+                    <li class="list-group-item">Empty: Add items using the input above.</li>
+                    </ul>
+                </div>
+                <div class="form-group">
+                    <label for="analyze_limit_input"><h4>Maximum number of results</h4></label>
+                    <input id="analyze_limit_input" name="limit" type="text"
+                    class="form-control" value="{{limit}}"></input>
+                </div>              
+                <div class="form-group">
+                    <label for="target"><h4>Target</h4></label>
+                    <select id="target" name="target">
+                        <option value="" selected="selected" >All</option>
+                        <option value="MGI">Mouse genes</option>
+                        <option value="ZFIN">Zebrafish genes</option>
+                        <option value="OMIM">Human diseases</option>
+                    </select>
+                </div>
+                <button type="submit" class="btn btn-info">Search</button>  
             </form>
-	  </div>
-	  <hr />
-
-          {{#hasInputItems}}
-          <h3>Results</h3>
-	  <a href="{{{base_url}}}.json" class="btn btn-success">JSON</a>
-          {{#hasResults}}
-          <table class="{{css.table}}">
-            {{{resultsTable}}}
-          </table>
-          {{/hasResults}}
-          {{/hasInputItems}}
+            {{#hasInputItems}}
+            <h3>Results</h3>
+            <a href="{{{base_url}}}.json" class="btn btn-info">JSON</a>
+            {{#hasResults}}
+            <table class="{{css.table}}">
+            <p>{{{resultsTable}}}</p>
+            </table>
+            {{/hasResults}}
+            {{/hasInputItems}}
+            {{{includes.footer}}}
         </div>
-      </div>
-      {{{includes.footer}}}
     </div>
-  </body>
+</body>
 </html>

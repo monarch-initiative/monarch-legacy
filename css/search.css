@@ -1,10 +1,9 @@
 /* Section 3: Content */
 .content {
-    padding: 20px 0px 40px 40px;
-    width: 80%;
+    padding: 20px 0px 0px 30px;
 }
 .title {
-    font-size: 50px;
+    font-size: 40px;
     font-weight: 500;
     line-height: 50px;
 }
@@ -13,4 +12,10 @@
 }
 .btn.btn-info {
     padding: 5px 15px;
+}
+#target {
+    margin-left: 15px;
+}
+#footer {
+    margin-left: -30px;
 }
