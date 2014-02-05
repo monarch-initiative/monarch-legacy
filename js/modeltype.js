@@ -156,6 +156,9 @@ as a separate call in the init function.
 			   "rowid" : this._getConceptId(curr_row.a.id) + 
 			              "_" + this._getConceptId(curr_row.lcs.id)
 		  }; 
+    	    if (new_row.subsumer_id.indexOf("0005753") > -1) {
+    	    	console.out("got it");
+    	    }
     	    this.options.modelData.push(new_row);
     	}
     },
@@ -314,6 +317,7 @@ as a separate call in the init function.
 					self._modelClick(data);
 				})
     	        //.attr('style','word-wrap: break-word; text-align:center;')
+				.style("font-size", "12px")
     	        .html(label);    
 
     	    el.remove();
@@ -479,7 +483,7 @@ as a separate call in the init function.
 		.selectAll("text") 
 		.each(function(d,i) { 
 		    self._convertLabelHTML(this,
-			self._getShortLabel(self.options.modelList[i].model_label, 25),self.options.modelList[i]);}); 
+			self._getShortLabel(self.options.modelList[i].model_label, 15),self.options.modelList[i]);}); 
 
 
 	    //create a scale
@@ -636,6 +640,7 @@ as a separate call in the init function.
 		})
 		.attr("width", self.options.textWidth)
 		.attr("height", 50)
+		.style("font-size", "12px")
 		.text(function(d) {
 			var txt = d.label_a;
 			if (txt == undefined) {
@@ -691,6 +696,7 @@ as a separate call in the init function.
 		})
 		.attr("width", self.options.textWidth)
 		.attr("height", 50)
+		.style("font-size", "12px")
 		.text(function(d,i) {
 		    if (i==0) {
 		    	var txt = d.subsumer_label;
