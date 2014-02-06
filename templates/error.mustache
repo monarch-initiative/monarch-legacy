@@ -1,6 +1,6 @@
 <!DOCTYPE html>
 <html>
-  <head>
+<head>
     <title>Monarch Diseases and Phenotypes</title>
     {{#scripts}}
     <script type="text/javascript" src="{{url}}"></script>
@@ -8,18 +8,22 @@
     {{#stylesheets}}
     <link rel="stylesheet" type="text/css" href="{{url}}"></link>
     {{/stylesheets}}
+    <link rel="stylesheet" type="text/css" href="/css/monarch-main.css"></link>
     <meta charset=”utf-8”> 
-  </head>
-  <body>
+</head>
+<body>
+    {{{includes.navbar}}}
     <div class="monarch-container">
-      {{{includes.navbar}}}
-      <div class="jumbotron">
-	<h1>Welcome to Monarch!</h1>
-	<p>Sorry.. something went wrong..</p>
-        <!-- {{{message}}} -->
-	<a href="/page/tour" class="btn btn-large btn-success">Take the tour</a>
-      </div>
-      {{{includes.footer}}}
+        <div class="sidebar">
+        {{{includes.navlist}}}
+        </div>
+        <div class="content">
+        <div class="jumbotron">
+            <h1>Error</h1>
+            <a href="/page/tour" class="btn btn-large btn-info right-butn">About Monarch</a>
+            <p>Sorry. Something went wrong.</p> 
+        </div>
+        {{{includes.footer}}}
     </div>
-  </body>
+</body>
 </html>
