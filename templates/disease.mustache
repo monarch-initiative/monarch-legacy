@@ -113,12 +113,14 @@
                         <b>IDs:</b>
                         {{ids}}
                     </div>
+                    {{#hasSuperClasses}}
                     <div class="superclasses">
                       <h4>Is a subtype of</h4>
                       <table class="{{css.table}}">
                         {{{superClassTable}}}
                       </table>
                     </div>
+                    {{/hasSuperClasses}}
                     {{#hasEquivalentClasses}}
                     <div class="equivs">
                       <h4>Is equivalent to</h4>
@@ -127,13 +129,34 @@
                       </table>
                     </div>
                     {{/hasEquivalentClasses}}
+                    {{#hasSubClasses}}
                     <div class="subs">
                       <h4>Has subtype</h4>
                       <table class="{{css.table}}">
                         {{{subClassTable}}}
                       </table>
                     </div>
+                    {{/hasSubClasses}}
                     </p>
+                <h3>Data Overview</h3>
+                    {{#hasPhenotypes}}
+                    This disease is associated with <b>{{phenotypeNum}}</b> phenotypes.<br>
+                    {{/hasPhenotypes}}
+                    {{#hasGenes}}
+                    This disease is associated with <b>{{geneNum}}</b> genes.<br>
+                    {{/hasGenes}}
+                    {{#hasAlleles}}
+                    This disease is associated with <b>{{alleleNum}}</b> alleles.<br>
+                    {{/hasAlleles}}
+                    {{#hasModels}}
+                    This disease is associated with <b>{{modelNum}}</b> similar models.<br>
+                    {{/hasModels}}
+                    {{#hasSim}}
+                    This disease is associated with <b>{{simNum}}</b> related diseases.<br>
+                    {{/hasSim}}
+                    {{#hasPathways}}
+                    This disease is associated with <b>{{pathwayNum}}</b> disease pathways.
+                    {{/hasPathways}}
             </div>
             {{#hasPhenotypes}}
             <div id="phenotypes" class="category">
