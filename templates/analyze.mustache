@@ -19,6 +19,11 @@
             {{{includes.navlist}}}
         </div>
         <div class="content">
+                {{#alerts}}
+                <div class="alert">
+                  {{{.}}}
+                </div>
+                {{/alerts}}
             <div class="title">Monarch Analysis: {{datatype}}</div>
             <form role="form" action="/analyze/{{datatype}}/" method="GET">
                 <input id="analyze_auto_target" name="input_items" value="" type="hidden"/>
