@@ -85,6 +85,13 @@
                     {{{ontNavBox}}}
                     </table>
                     </p>
+                <h3>Data Overview</h3>
+                    {{#hasDiseases}}
+                    This phenotype is associated with <b>{{diseaseNum}}</b> diseases.<br>
+                    {{/hasDiseases}}
+                    {{#hasGenotypes}}
+                    This phenotype is associated with <b>{{genotypeNum}}</b> genes.<br>
+                    {{/hasGenotypes}}
             </div>
             {{#hasDiseases}}
             <div id="disease" class="category">
