@@ -78,11 +78,21 @@
             <div id="overview" class="first category">
                 <h3>Overview</h3>
                     <div class="ids">
-                        <b>URI:</b> <a href="{{{url}}}">{{{url}}}</a>
-                    </div>
-                    <div class="ids">
                         <b>ID:</b> {{id}}
                     </div>
+                <h3>Data Overview</h3>
+                    {{#hasPhenotypes}}
+                    This genotype is associated with <b>{{phenotypeNum}}</b> phenotypes.<br>
+                    {{/hasPhenotypes}}
+                    {{#hasDiseases}}
+                    This genotype is associated with <b>{{diseaseNum}}</b> diseases.<br>
+                    {{/hasDiseases}}
+                    {{#hasGenes}}
+                    This genotype is associated with <b>{{geneNum}}</b> genes.<br>
+                    {{/hasGenes}}
+                    {{#hasSim}}
+                    This genotype is associated with <b>{{simNum}}</b> related diseases.<br>
+                    {{/hasSim}}
             </div>
             {{#hasPhenotypes}}
             <div id="phenotypes" class="category">
