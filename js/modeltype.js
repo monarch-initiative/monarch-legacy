@@ -801,20 +801,26 @@ as a separate call in the init function.
 
 
     //given an array of phenotype objects 
-    //edit the object array, conduct OWLSim analysis, and return results
+	//edit the object array.
+	// items are either ontology ids as strings, in which case they are handled as is,
+	// or they are objects of the form
+	// { "id": <id>, "observed": <obs>} .
+	// in that case take id  if  "observed" is "positive"
     _filterPhenotypeResults : function(phenotypelist) {
-    	var retResults = [];
+
+    	var newlist = [];
+
+	for (var i = 0; i < phenotypelist.length; i++) {
+	    pheno = phenotypelist[i];
+	    if (typeof pheno ==='string') {
+		newlist.push(pheno);
+	    }
+	    if (pheno.observed==="positive")
+		newlist.push(pheno.id);
+	}
     	
-    	//filter out all the non-positive observed
-    	var templist = phenotypelist.filter(function(d) { return d.observed == "positive";});
-    	
-    	//remove the "observed" attributes
-    	var newlist = templist.map(function(d) { return d.id; });
-    	
-    	//retResults = getSimData(newlist);
-    	//return retResults;
     	return newlist;
-   }
+    }
     
   });
 
