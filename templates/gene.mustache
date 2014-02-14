@@ -23,7 +23,7 @@
         <a href="/"><img src="/image/logo-sneak.png" width="100" class="img-rounded"/></a>
         <ul class="nav nav-list">
             <li class="nav-header">Find</li>
-                <li class="nav-item"><a href="/gene">Gene</a></li>
+                <li class="nav-item"><a href="/gene">Disease</a></li>
                 <li class="nav-item"><a href="/phenotype">Phenotype</a></li>
                 <li class="nav-item"><a href="/model">Model</a></li>
             <li id="navigation" class="nav-header">Navigate</li>
@@ -32,7 +32,7 @@
                 <li id="phen" class="special nav-item"><a href="#phenotypes">Phenotypes</a></li>
                 {{/hasPhenotypes}}
                 {{#hasDiseases}}
-                <li id="gen" class="special nav-item"><a href="#genes">Diseases</a></li>
+                <li id="dis" class="special nav-item"><a href="#diseases">Diseases</a></li>
                 {{/hasDiseases}}
                 {{#hasAlleles}}
                 <li id="alle" class="special nav-item"><a href="#alleles">Alleles</a></li>
@@ -69,12 +69,12 @@
                 {{^hasPhenotypes}}
                 <div class="tab greyed-out">Phenotypes</div>
                 {{/hasPhenotypes}}
-                {{#hasGenes}}
-                <a href="#genes"><div class="tab contenttab gentab">Genes</div></a>
-                {{/hasGenes}}
-                {{^hasGenes}}
-                <div class="tab greyed-out">Genes</div>
-                {{/hasGenes}}
+                {{#hasDiseases}}
+                <a href="#genes"><div class="tab contenttab gentab">Diseases</div></a>
+                {{/hasDiseases}}
+                {{^hasDiseases}}
+                <div class="tab greyed-out">Diseases</div>
+                {{/hasDiseases}}
                 {{#hasAlleles}}
                 <a href="#alleles"><div class="tab contenttab alletab">Alleles</div></a>
                 {{/hasAlleles}}
