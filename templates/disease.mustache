@@ -225,6 +225,12 @@
                 <table class="{{css.table}}">
                     {{{pathwayTable}}}
                 </table>
+                <div id="keggerator_div"></div>
+                <script>
+                        // tell keggerator where to draw stuff and handle ui events
+                        keggerator.setImageDiv($("#keggerator_div"));
+                        keggerator.init();
+                </script>
             </div>
             {{/hasPathways}}
         </div>
