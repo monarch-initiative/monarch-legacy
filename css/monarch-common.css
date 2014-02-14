@@ -68,6 +68,20 @@ p {
     width: 200px;
 }
 
+.autocomplete-main-item {
+    /* white-space: nowrap; */
+}
+.autocomplete-tag-item {
+    white-space: nowrap;
+    font-size: 75%;
+    color: #888888;
+}
+
+/* Get a spinner for jQuery autocomplete wait. */
+.ui-autocomplete-loading {
+    background: white url('/image/waiting_ac.gif') right center no-repeat;
+} 
+
 /* Search Button */
 .btn.btn-primary {
     padding: 4px 51px;
