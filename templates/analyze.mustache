@@ -6,6 +6,7 @@
     <script type="text/javascript" src="{{url}}"></script>
     {{/scripts}}
     <script type="text/javascript" src="/js/Analyze.js"></script>
+    <script type="text/javascript" src="/js/modeltype.js"></script>
     {{#stylesheets}}
     <link rel="stylesheet" type="text/css" href="{{url}}"></link>
     {{/stylesheets}}
@@ -26,7 +27,7 @@
                 {{/alerts}}
             <div class="title">Monarch Analysis: {{datatype}}</div>
             <form role="form" action="/analyze/{{datatype}}/" method="GET">
-                <input id="analyze_auto_target" name="input_items" value="" type="hidden"/>
+                <input id="analyze_auto_target" name="input_items" value="{{input_items}}" type="hidden"/>
                 <div class="form-group">
                     <label for="analyze_auto_input"><h4>Add to search list</h4></label>
                     <input id="analyze_auto_input" type="text" class="form-control"
@@ -61,6 +62,7 @@
             <table class="{{css.table}}">
             <p>{{{resultsTable}}}</p>
             </table>
+	    <div id ="phen_vis"></div>
             {{/hasResults}}
             {{/hasInputItems}}
             {{{includes.footer}}}
