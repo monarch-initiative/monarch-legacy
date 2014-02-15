@@ -1,6 +1,6 @@
 <!DOCTYPE html>
 <html>
-<head>
+  <head>
     <title>Monarch Analysis</title>
     {{#scripts}}
     <script type="text/javascript" src="{{url}}"></script>
@@ -10,63 +10,90 @@
     {{#stylesheets}}
     <link rel="stylesheet" type="text/css" href="{{url}}"></link>
     {{/stylesheets}}
+    <link rel="stylesheet" type="text/css" href="/css/monarch-specific.css"></link>
     <link rel="stylesheet" type="text/css" href="/css/search.css"></link>
-    <meta charset=”utf-8”>
-</head>
-<body>
+    <link rel="stylesheet" type="text/css" href="/css/imagehover.css"></link>
+    <meta charset="utf-8"/>
+  </head>
+  <body>
     {{{includes.navbar}}}
     <div class="monarch-container">
-        <div class="sidebar">
-            {{{includes.navlist}}}
-        </div>
-        <div class="content">
-                {{#alerts}}
-                <div class="alert">
-                  {{{.}}}
-                </div>
-                {{/alerts}}
+      <div class="sidebar">
+        {{{includes.navlist}}}
+      </div>
+      <div class="content">
+        <div class="jumbotron">
+          <div id="description">
+            {{#alerts}}
+            <div class="alert">
+              {{{.}}}
+            </div>
+            {{/alerts}}
             <div class="title">Monarch Analysis: {{datatype}}</div>
-            <form role="form" action="/analyze/{{datatype}}/" method="GET">
-                <input id="analyze_auto_target" name="input_items" value="{{input_items}}" type="hidden"/>
-                <div class="form-group">
-                    <label for="analyze_auto_input"><h4>Add to search list</h4></label>
-                    <input id="analyze_auto_input" type="text" class="form-control"
-                    placeholder="Enter {{datatype}} here">
-                </div>
-                <div class="form-group">
-                    <label for="analyze_auto_list"><h4>Search list / {{datatype}} profile</h4></label>
-                    <ul id="analyze_auto_list" class="list-group">
-                    <li class="list-group-item">Empty: Add items using the input above.</li>
-                    </ul>
-                </div>
-                <div class="form-group">
-                    <label for="analyze_limit_input"><h4>Maximum number of results</h4></label>
-                    <input id="analyze_limit_input" name="limit" type="text"
-                    class="form-control" value="{{limit}}"></input>
-                </div>              
-                <div class="form-group">
-                    <label for="target"><h4>Target</h4></label>
-                    <select id="target" name="target">
-                        <option value="" selected="selected" >All</option>
-                        <option value="MGI">Mouse genes</option>
-                        <option value="ZFIN">Zebrafish genes</option>
-                        <option value="OMIM">Human diseases</option>
-                    </select>
-                </div>
-                <button type="submit" class="btn btn-info">Search</button>  
-            </form>
+          </div>
+          <div id="categories">
             {{#hasInputItems}}
+            <a href="#query">
+              <div id="initialtab" class="tab contenttab onttab">Query</div>
+            </a>
+            <a href="#grid">
+              <div class="tab contenttab onttab">Grid View</div>
+            </a>
+            <a href="#resultlist">
+              <div class="tab contenttab phentab">Table View</div>
+            </a>
+            {{/hasInputItems}}
+          </div>
+        </div>
+        <div id="complete-info">
+          <div id="query" class="first category">
+            <form role="form" action="/analyze/{{datatype}}/" method="GET">
+              <input id="analyze_auto_target" name="input_items" value="{{input_items}}" type="hidden"/>
+              <div class="form-group">
+                <label for="analyze_auto_input"><h4>Add to search list</h4></label>
+                <input id="analyze_auto_input" type="text" class="form-control"
+                       placeholder="Enter {{datatype}} here"/>
+              </div>
+              <div class="form-group">
+                <label for="analyze_auto_list"><h4>Search list / {{datatype}} profile</h4></label>
+                <ul id="analyze_auto_list" class="list-group">
+                  <li class="list-group-item">Empty: Add items using the input above.</li>
+                </ul>
+              </div>
+              <div class="form-group">
+                <label for="analyze_limit_input"><h4>Maximum number of results</h4></label>
+                <input id="analyze_limit_input" name="limit" type="text"
+                       class="form-control" value="{{limit}}"></input>
+              </div>              
+              <div class="form-group">
+                <label for="target"><h4>Target</h4></label>
+                <select id="target" name="target">
+                  <option value="" selected="selected" >All</option>
+                  <option value="MGI">Mouse genes</option>
+                  <option value="ZFIN">Zebrafish genes</option>
+                  <option value="OMIM">Human diseases</option>
+                </select>
+              </div>
+              <button type="submit" class="btn btn-info">Search</button>  
+            </form>
+          </div>
+          {{#hasInputItems}}
+          <div id="resultlist" class="category">
             <h3>Results</h3>
             <a href="{{{base_url}}}.json" class="btn btn-info">JSON</a>
             {{#hasResults}}
             <table class="{{css.table}}">
-            <p>{{{resultsTable}}}</p>
+              <p>{{{resultsTable}}}</p>
             </table>
-	    <div id ="phen_vis"></div>
             {{/hasResults}}
-            {{/hasInputItems}}
-            {{{includes.footer}}}
-        </div>
+          </div>
+          <div id="grid" class="category">
+	    <div id ="phen_vis"></div>
+          </div>
+          {{/hasInputItems}}
+          {{{includes.footer}}}
+        </div>  
+      </div>
     </div>
-</body>
+  </body>
 </html>
