@@ -14,90 +14,91 @@
 <body>
     {{{includes.navbar}}}
     <div class="monarch-container">
-    <div class="sidebar">
-        {{{includes.navlist}}}
-    </div>
-    <div class="content">
-        <div class="jumbotron">
-            <h2>Install Monarch Web Server</h2>
-            <p><i>Developers:</i> Install the monarch web server and
-            make local changes</p>
-            <a href="https://github.com/cmungall/monarch-app"
-            class="btn btn-large btn-info">Clone the GitHub project!</a>
+        <div class="sidebar">
+            {{{includes.navlist}}}
         </div>
-        <div class="col-lg-9">
-            <h2>Monarch Software</h2>
-            <h3>Background</h3>
-                <p>
-                This site is driven by APIs built on top of the Monarch
-                infrastructure. In particular,
-                <ul>
-                    <li><b>NIF OntoQuest</b> for ontology queries </li>
-                    <li><b>NIF Federation Queries</b> for data resources </li>
-                    <li><b>OwlSim</b> for semantic similarity</li>
-                </ul>
-                The monarch API is layered on top of these services. It is
-                written in javascript, and can be executed in a browser or
-                server environment. See <a href="/docs/index.html">the API
-                docs</a>.
-                </p>
-                <p>
-                The web browser is written using the JSGI javascript
-                framework, implemented using RingoJS/stick. See the github
-                project page for details.
-                </p>
-                <p>
-                The Monarch API makes use of resources ingested into the
-                NIF DISCO system as part of the Monarch project. These
-                include Human Phenotype Ontology annotations (many done as
-                part of the NIH PATO project) and computational analyses
-                run using the OWLSim/PhenoDigm system.
-                </p>
-            <h3>RESTful URLs</h3>
-                <p>
-                See <a href="services">Monarch Services</a> documentation.
-                </p>
-            <h3>System Architecture</h3>
-                <p>
-                <img src="/image/architecture.png"/>
-                A typical URL is resolved as follows:
-                <ul>
-                    <li>webapp.js matches the URL pattern against all registered patterns
-                    (see <a href="services">services</a>). This typically results in a call to
-                    the <a href="/docs/files/api-js.html">JS API</a>.
-                    </li>
-                    <li>
-                    The JS API will issue one or more calls to other
-                    services and aggregate the results. For federation
-                    queries, a transformer is applied on each resource to
-                    transform the tabular results into nested json objects
-                    </li>
-                    <li>
-                    If the user requested json, webapp will return the
-                    json object directly.
-                    </li>
-                    <li>
-                    If the user requested html, webapp will pass the json
-                    through the relevant mustche template to return html.
-                    </li>
-                </ul>
-                </p>
-            <h3>Installing Locally</h3>
-                <p>
-                It is very easy to install the web application
-                locally. Assuming you have git installed, clone the
-                project (see link in menubar above), run the install
-                script, and then run the start-server script. That's it!
-                </p>
-                <p>
-                If you wish to make changes, see the README.md and
-                README-developers.md. You can either fork the project and
-                push changes, or simply ask to have your github account
-                added to the list of project members. See the guthub docs
-                for more details.
-                </p>
+        <div class="content">
+            <div class="jumbotron">
+                <h2>Install Monarch Web Server</h2>
+                <p><i>Developers:</i> Install the monarch web server and
+                make local changes</p>
+                <a href="https://github.com/cmungall/monarch-app"
+                class="btn btn-large btn-info">Clone the GitHub project!</a>
+            </div>
+            <div class="col-lg-9">
+                <h2>Monarch Software</h2>
+                <h3>Background</h3>
+                    <p>
+                    This site is driven by APIs built on top of the Monarch
+                    infrastructure. In particular,
+                    <ul>
+                        <li><b>NIF OntoQuest</b> for ontology queries </li>
+                        <li><b>NIF Federation Queries</b> for data resources </li>
+                        <li><b>OwlSim</b> for semantic similarity</li>
+                    </ul>
+                    The monarch API is layered on top of these services. It is
+                    written in javascript, and can be executed in a browser or
+                    server environment. See <a href="/docs/index.html">the API
+                    docs</a>.
+                    </p>
+                    <p>
+                    The web browser is written using the JSGI javascript
+                    framework, implemented using RingoJS/stick. See the github
+                    project page for details.
+                    </p>
+                    <p>
+                    The Monarch API makes use of resources ingested into the
+                    NIF DISCO system as part of the Monarch project. These
+                    include Human Phenotype Ontology annotations (many done as
+                    part of the NIH PATO project) and computational analyses
+                    run using the OWLSim/PhenoDigm system.
+                    </p>
+                <h3>RESTful URLs</h3>
+                    <p>
+                    See <a href="services">Monarch Services</a> documentation.
+                    </p>
+                <h3>System Architecture</h3>
+                    <p>
+                    <img src="/image/architecture.png"/>
+                    A typical URL is resolved as follows:
+                    <ul>
+                        <li>webapp.js matches the URL pattern against all registered patterns
+                        (see <a href="services">services</a>). This typically results in a call to
+                        the <a href="/docs/files/api-js.html">JS API</a>.
+                        </li>
+                        <li>
+                        The JS API will issue one or more calls to other
+                        services and aggregate the results. For federation
+                        queries, a transformer is applied on each resource to
+                        transform the tabular results into nested json objects
+                        </li>
+                        <li>
+                        If the user requested json, webapp will return the
+                        json object directly.
+                        </li>
+                        <li>
+                        If the user requested html, webapp will pass the json
+                        through the relevant mustche template to return html.
+                        </li>
+                    </ul>
+                    </p>
+                <h3>Installing Locally</h3>
+                    <p>
+                    It is very easy to install the web application
+                    locally. Assuming you have git installed, clone the
+                    project (see link in menubar above), run the install
+                    script, and then run the start-server script. That's it!
+                    </p>
+                    <p>
+                    If you wish to make changes, see the README.md and
+                    README-developers.md. You can either fork the project and
+                    push changes, or simply ask to have your github account
+                    added to the list of project members. See the guthub docs
+                    for more details.
+                    </p>
+            </div>
+            {{{includes.footer}}}
         </div>
-        {{{includes.footer}}}
     </div>
 </body>
 </html>
