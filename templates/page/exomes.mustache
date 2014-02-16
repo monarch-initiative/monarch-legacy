@@ -1,68 +1,68 @@
 <!DOCTYPE html>
 <html>
-    <head>
-        <title>Monarch Exomes</title>
-        {{#scripts}}
-        <script type="text/javascript" src="{{url}}"></script>
-        {{/scripts}}
-        {{#stylesheets}}
-        <link rel="stylesheet" type="text/css" href="{{url}}"></link>
-        {{/stylesheets}}
-        <link rel="stylesheet" type="text/css" href="/css/tour.css"></link>
-        <meta charset=”utf-8”> 
-    </head>
-    <body>
-        <div class="monarch-container">
-            {{{includes.navbar}}}
-            <div class="sidebar">
-                {{{includes.navlist}}}
-            </div>
-            <div class="content">
-                <div class="title">Monarch Exomes</div>
-                <div class="section">
-                    <div class="sectiontitle">Exomiser</div>
-                    <div class="block">
-                        <div class="text">
-                            The <a href="https://www.sanger.ac.uk/resources/databases/exomiser/query/">Exomiser</a>
-                            is a Java program that functionally annotates variants
-                            from whole-exome sequencing data starting from a VCF file (version 4).
-                            The functional annotation code is based on Jannovar and uses UCSC
-                            KnownGene transcript definitions and hg19 genomic coordinates.<br>
-                            Variants are prioritized according to user-defined criteria on variant
-                            frequency, pathogenicity, quality, inheritance pattern, and model
-                            organism phenotype data. Predicted pathogenicity data was extracted
-                            from the dbNSFP resource. Cross-species phenotype comparisons are
-                            powered by the <a href="https://code.google.com/p/owltools/wiki/OwlSim">OWLSim algorithm</a>.<br>
-                            Exomiser is currently using mouse phenotypes and will soon be leveraging
-                            the zebrafish phenotype data. Worm and fly phenotype data will be
-                            available later this year.<br>
-                            Exomiser is available from the Sanger Institute. A paper describing Exomiser
-                            is available <a href="http://genome.cshlp.org/content/24/2/340.long">here</a>.
-                        </div>
-                    </div>
-                </div>
-                <div class="section">
-                    <div class="sectiontitle">ExomeWalker</div>
-                    <div class="block">
-                        <div class="text">
-                            ExomeWalker is a computational method to prioritize a set of candidates
-                            in exome sequencing projects that aim to identify novel Mendelian
-                            disease genes. This approach involves filtering a Variant Call Format
-                            (VCF) file according to a number of user-definable criteria.<br>
-                            Genes are prioritized according to a variant score (predicted pathogenicity,
-                            rarity, pattern of variants compatible with the assumed mode of
-                            inheritance) and to their vicinity to other genes that belong to the
-                            same phenotypic disease family within a protein protein interaction
-                            (PPI) network, using the Random-Walk method as described in
-                            <a href="http://www.ncbi.nlm.nih.gov/pmc/articles/PMC2427257/">Köhler</a>
-                            et al. (2008) to determine similarity within the PPI network on the basis
-                            of the global characteristics of the network.<br>
-                            ExomeWalker will be placed online shortly.
-                        </div>
-                    </div>
-                </div>
-                {{{includes.footer}}}
-            </div>
+<head>
+    <title>Monarch Exomes</title>
+    {{#scripts}}
+    <script type="text/javascript" src="{{url}}"></script>
+    {{/scripts}}
+    {{#stylesheets}}
+    <link rel="stylesheet" type="text/css" href="{{url}}"/>
+    {{/stylesheets}}
+    <link rel="stylesheet" type="text/css" href="/css/tour.css"/>
+    <meta charset="utf-8"/> 
+</head>
+<body>
+    <div class="monarch-container">
+        {{{includes.navbar}}}
+        <div class="sidebar">
+            {{{includes.navlist}}}
         </div>
-    </body>
+        <div class="content">
+            <div class="title">Monarch Exomes</div>
+            <div class="section">
+                <div class="sectiontitle">Exomiser</div>
+                <div class="block">
+                    <div class="text">
+                        The <a href="https://www.sanger.ac.uk/resources/databases/exomiser/query/">Exomiser</a>
+                        is a Java program that functionally annotates variants
+                        from whole-exome sequencing data starting from a VCF file (version 4).
+                        The functional annotation code is based on Jannovar and uses UCSC
+                        KnownGene transcript definitions and hg19 genomic coordinates.<br>
+                        Variants are prioritized according to user-defined criteria on variant
+                        frequency, pathogenicity, quality, inheritance pattern, and model
+                        organism phenotype data. Predicted pathogenicity data was extracted
+                        from the dbNSFP resource. Cross-species phenotype comparisons are
+                        powered by the <a href="https://code.google.com/p/owltools/wiki/OwlSim">OWLSim algorithm</a>.<br>
+                        Exomiser is currently using mouse phenotypes and will soon be leveraging
+                        the zebrafish phenotype data. Worm and fly phenotype data will be
+                        available later this year.<br>
+                        Exomiser is available from the Sanger Institute. A paper describing Exomiser
+                        is available <a href="http://genome.cshlp.org/content/24/2/340.long">here</a>.
+                    </div>
+                </div>
+            </div>
+            <div class="section">
+                <div class="sectiontitle">ExomeWalker</div>
+                <div class="block">
+                    <div class="text">
+                        ExomeWalker is a computational method to prioritize a set of candidates
+                        in exome sequencing projects that aim to identify novel Mendelian
+                        disease genes. This approach involves filtering a Variant Call Format
+                        (VCF) file according to a number of user-definable criteria.<br>
+                        Genes are prioritized according to a variant score (predicted pathogenicity,
+                        rarity, pattern of variants compatible with the assumed mode of
+                        inheritance) and to their vicinity to other genes that belong to the
+                        same phenotypic disease family within a protein protein interaction
+                        (PPI) network, using the Random-Walk method as described in
+                        <a href="http://www.ncbi.nlm.nih.gov/pmc/articles/PMC2427257/">Köhler</a>
+                        et al. (2008) to determine similarity within the PPI network on the basis
+                        of the global characteristics of the network.<br>
+                        ExomeWalker will be placed online shortly.
+                    </div>
+                </div>
+            </div>
+            {{{includes.footer}}}
+        </div>
+    </div>
+</body>
 </html>

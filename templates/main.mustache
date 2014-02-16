@@ -1,24 +1,24 @@
 <!DOCTYPE html>
 <html>
-    <head>
-        <title>Monarch Diseases and Phenotypes</title>
-        {{#scripts}}
-        <script type="text/javascript" src="{{url}}"></script>
-        {{/scripts}}
-        {{#stylesheets}}
-        <link rel="stylesheet" type="text/css" href="{{url}}"></link>
-        {{/stylesheets}}
-        <link rel="stylesheet" type="text/css" href="/css/monarch-main.css"></link>
-        <link rel="stylesheet" type="text/css" href="/css/main.css"></link>
-        <meta charset=”utf-8”>
-    </head>
-    <body>
-     {{{includes.navbar}}}
-        <div class="monarch-container">
-            <div    class="sidebar">
-    {{{includes.navlist}}}
-            </div>
-            <div class="content">
+<head>
+    <title>Monarch Diseases and Phenotypes</title>
+    {{#scripts}}
+    <script type="text/javascript" src="{{url}}"></script>
+    {{/scripts}}
+    {{#stylesheets}}
+    <link rel="stylesheet" type="text/css" href="{{url}}"/>
+    {{/stylesheets}}
+    <link rel="stylesheet" type="text/css" href="/css/monarch-main.css"/>
+    <link rel="stylesheet" type="text/css" href="/css/main.css"/>
+    <meta charset="utf-8"/>
+</head>
+<body>
+    {{{includes.navbar}}}
+    <div class="monarch-container">
+        <div class="sidebar">
+            {{{includes.navlist}}}
+        </div>
+        <div class="content">
             <div class="jumbotron">
                 <h1>Welcome to Monarch!</h1>
                 <a href="/page/tour" class="btn btn-large btn-info right-butn">About Monarch</a>
@@ -83,13 +83,14 @@
                     <div class="entry">
                         <div class="entryheader">Phenotype Model Search</div>
                         <div class="entrydescript">
-			    <a href="/analyze/phenotypes">Find models</a>
-			    similar to sets of phenotypes.
+                <a href="/analyze/phenotypes">Find models</a>
+                similar to sets of phenotypes.
                         </div>
                     </div>
                 </div>
-		{{{includes.footer}}}
-            </div> <!-- closes content-->
-        </div> <!-- ends container -->
-    </body>
+            {{{includes.footer}}}
+            </div> <!-- closes columns -->
+        </div> <!-- closes content -->
+    </div> <!-- closes container -->
+</body>
 </html>

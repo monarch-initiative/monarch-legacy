@@ -1,52 +1,52 @@
 <html>
-  <head>
+<head>
     <title>Monarch Model: {{label}}</title>
     {{#scripts}}
     <script type="text/javascript" src="{{url}}"></script>
     {{/scripts}}
     {{#stylesheets}}
-    <link rel="stylesheet" type="text/css" href="{{url}}"></link>
+    <link rel="stylesheet" type="text/css" href="{{url}}"/>
     {{/stylesheets}}
-  </head>
-  <body>
+</head>
+<body>
     <h1>{{label}}</h1>
     <div id="description">
-      <p>
-        {{description}}
-      </p>
+        <p>
+            {{description}}
+        </p>
     </div>
     <div class="details">
-      <b class="detail-block-header">Phenotypes</b>
-      <div class="detail-block-contents">
-        <table>
-          {{{phenotypeTable}}}
-        </table>
-      </div>
+        <b class="detail-block-header">Phenotypes</b>
+        <div class="detail-block-contents">
+            <table>
+                {{{phenotypeTable}}}
+            </table>
+        </div>
     </div>
     <div class="details">
-      <b class="detail-block-header">Genes</b>
-      <div class="detail-block-contents">
-        <table>
-          {{{geneTable}}}
-        </table>
-      </div>
+        <b class="detail-block-header">Genes</b>
+        <div class="detail-block-contents">
+            <table>
+                {{{geneTable}}}
+            </table>
+        </div>
     </div>
     <div class="details">
-      <b class="detail-block-header">Alleles</b>
-      <div class="detail-block-contents">
-        <table>
-          {{{alleleTable}}}
-        </table>
-      </div>
+        <b class="detail-block-header">Alleles</b>
+        <div class="detail-block-contents">
+            <table>
+                {{{alleleTable}}}
+            </table>
+        </div>
     </div>
     <div class="details">
-      <b class="detail-block-header">Models</b>
-      <div class="detail-block-contents">
-        <table>
-          {{{modelTable}}}
-        </table>
-      </div>
-      {{{includes.footer}}}
+        <b class="detail-block-header">Models</b>
+        <div class="detail-block-contents">
+            <table>
+                {{{modelTable}}}
+            </table>
+        </div>
+        {{{includes.footer}}}
     </div>
-  </body>
+</body>
 </html>
