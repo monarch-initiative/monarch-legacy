@@ -1,0 +1,230 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Monarch Gene: {{label}} ({{id}})</title>
+    {{#scripts}}
+    <script type="text/javascript" src="{{url}}"></script>
+    {{/scripts}}
+    <script type="text/javascript" src="/js/modeltype.js"></script>
+    <script type="text/javascript" src="/js/genepage.js"></script>    <!-- TODO -->
+    {{#stylesheets}}
+    <link rel="stylesheet" type="text/css" href="{{url}}"/>
+    {{/stylesheets}}
+    <link rel="stylesheet" type="text/css" href="../css/monarch-specific.css"/>
+    <link rel="stylesheet" type="text/css" href="../css/imagehover.css"/>
+    <script src="../js/tabs.js"></script>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+    <meta charset="utf-8"/>
+</head>
+<body>
+    {{{includes.navbar}}}
+    <div class="monarch-container">
+        <div class="sidebar">
+            <a href="/"><img src="/image/logo-sneak.png" width="100" class="img-rounded"/></a>
+            <ul class="nav nav-list">
+                <li class="nav-header">Find</li>
+                    <li class="nav-item"><a href="/gene">Gene</a></li>
+                    <li class="nav-item"><a href="/phenotype">Phenotype</a></li>
+                    <li class="nav-item"><a href="/model">Model</a></li>
+                <li id="navigation" class="nav-header">Navigate</li>
+                    <li id="ont" class="special nav-item"><a href="#ontology">Overview</a></li>
+                    {{#hasPhenotypes}}
+                    <li id="phen" class="special nav-item"><a href="#phenotypes">Phenotypes</a></li>
+                    {{/hasPhenotypes}}
+                    {{#hasDiseases}}
+                    <li id="gen" class="special nav-item"><a href="#genes">Diseases</a></li>
+                    {{/hasDiseases}}
+                    {{#hasAlleles}}
+                    <li id="alle" class="special nav-item"><a href="#alleles">Alleles</a></li>
+                    {{/hasAlleles}}
+                    {{#hasInteractions}}
+                    <li id="mod" class="special nav-item"><a href="#interaction">Interactions</a></li>
+                    {{/hasInteractions}}
+                    {{#hasSim}}
+                    <li id="simi" class="special nav-item"><a href="#similarity">Related Genes</a></li>
+                    {{/hasSim}}
+                    {{#hasPathways}}
+                    <li id="path" class="special nav-item"><a href="#pathways">Pathways</a></li>
+                    {{/hasPathways}}
+            </ul>
+        </div>
+        <div class="content">
+            <div class="jumbotron">
+                <div id="description">
+                    <h1 class="downloadline">Gene: {{label}}</h1>
+                    <a href="{{{base_url}}}.json" class="btn btn-info downloadline">JSON</a>
+                    <!-- <a href="{{{base_url}}}.rdf" class="btn btn-success">RDF</a> -->
+    <!--                 <a href="{{{base_url}}}.nt" class="btn btn-info">n-triples</a> -->
+                    <p>
+                    {{definition}}
+                    <br/>
+                    {{comments}}
+                    </p>
+                </div>
+                <div id="categories">
+                    <a href="#ontology"><div id="initialtab" class="tab contenttab onttab">Overview</div></a>
+                    {{#hasPhenotypes}}
+                    <a href="#phenotypes"><div class="tab contenttab phentab">Phenotypes</div></a>
+                    {{/hasPhenotypes}}
+                    {{^hasPhenotypes}}
+                    <div class="tab greyed-out">Phenotypes</div>
+                    {{/hasPhenotypes}}
+                    {{#hasGenes}}
+                    <a href="#genes"><div class="tab contenttab gentab">Genes</div></a>
+                    {{/hasGenes}}
+                    {{^hasGenes}}
+                    <div class="tab greyed-out">Genes</div>
+                    {{/hasGenes}}
+                    {{#hasAlleles}}
+                    <a href="#alleles"><div class="tab contenttab alletab">Alleles</div></a>
+                    {{/hasAlleles}}
+                    {{^hasAlleles}}
+                    <div class="tab greyed-out">Alleles</div>
+                    {{/hasAlleles}}
+                    <div class="second-row-divider"></div>
+                    {{#hasInteractions}}
+                    <a href="#interaction"><div id="longtab" class="tab contenttab modtab second">Interactions</div></a>
+                    {{/hasInteractions}}
+                    {{^hasInteractions}}
+                    <div id="longtab" class="tab greyed-out second">Interactions</div>
+                    {{/hasInteractions}}
+                    {{#hasSim}}
+                    <a href="#similarity"><div id="longertab" class="tab contenttab simtab">Related Genes</div></a>
+                    {{/hasSim}}
+                    {{^hasSim}}
+                    <div id="longertab" class="tab greyed-out">Related Genes</div>
+                    {{/hasSim}}
+                    {{#hasPathways}}
+                    <a href="#pathways"><div class="tab contenttab pathtab">Pathways</div></a>
+                    {{/hasPathways}}
+                    {{^hasPathways}}
+                    <div class="tab greyed-out">Pathways</div>
+                    {{/hasPathways}}
+                </div>
+            </div>
+            <div id="complete-info">
+                <div id="ontology" class="first category">
+                    <h3>IDs</h3>
+                        <div class="ids">
+                            <b>AKA:</b>
+                            {{aka}}
+                        </div>
+                        <div class="ids">
+                            <b>IDs:</b>
+                            {{ids}}
+                        </div>
+                        {{#hasSuperClasses}}
+                        <div class="superclasses">
+                          <h4>Is a subtype of</h4>
+                          <table class="{{css.table}}">
+                            {{{superClassTable}}}
+                          </table>
+                        </div>
+                        {{/hasSuperClasses}}
+                        {{#hasEquivalentClasses}}
+                        <div class="equivs">
+                          <h4>Is equivalent to</h4>
+                          <table class="{{css.table}}">
+                            {{{equivalentClassTable}}}
+                          </table>
+                        </div>
+                        {{/hasEquivalentClasses}}
+                        {{#hasSubClasses}}
+                        <div class="subs">
+                          <h4>Has subtype</h4>
+                          <table class="{{css.table}}">
+                            {{{subClassTable}}}
+                          </table>
+                        </div>
+                        {{/hasSubClasses}}
+                    <h3>Data Overview</h3>
+                        {{#hasPhenotypes}}
+                        This gene is associated with <b>{{phenotypeNum}}</b> phenotypes.<br/>
+                        {{/hasPhenotypes}}
+                        {{#hasGenes}}
+                        This gene is associated with <b>{{geneNum}}</b> genes.<br/>
+                        {{/hasGenes}}
+                        {{#hasAlleles}}
+                        This gene is associated with <b>{{alleleNum}}</b> alleles.<br/>
+                        {{/hasAlleles}}
+                        {{#hasInteractions}}
+                        This gene is associated with <b>{{interactionNum}}</b> similar interactions.<br/>
+                        {{/hasInteractions}}
+                        {{#hasSim}}
+                        This gene is associated with <b>{{simNum}}</b> related genes.<br/>
+                        {{/hasSim}}
+                        {{#hasPathways}}
+                        This gene is associated with <b>{{pathwayNum}}</b> gene pathways.
+                        {{/hasPathways}}
+                </div>
+                {{#hasPhenotypes}}
+                <div id="phenotypes" class="category">
+                    <h3 class="downloadline">Phenotypes</h3>
+                    <a href="{{{base_url}}}/phenotype_associations.json" class="btn btn-info downloadline">JSON</a>
+                    <!--    <a href="{{{base_url}}}/phenotype_associations.rdf" class="btn btn-success">RDF</a> -->
+    <!--                     <a href="{{{base_url}}}/phenotype_associations.nt" class="btn btn-info">n-triples</a> -->
+                    <table class="{{css.table}}">
+                     {{{phenotypeTable}}}
+                    </table>
+                </div>
+                {{/hasPhenotypes}}
+                {{#hasGenes}}
+                <div id="genes" class="category">
+                    <h3>Genes</h3>
+                    {{^hasSubClasses}}
+                     <table class="{{css.table}}">
+                      {{{geneTable}}}
+                     </table>
+                    {{/hasSubClasses}}
+                    {{#hasSubClasses}}
+                     <p>
+                      Genes are associated with specific subtypes of this
+                      gene. Please select a gene subtype from the
+                      list below to see the associated genes.
+                      <!-- This will be fixed with issue 140 -->
+                     </p>
+                     <table class="{{css.table}}">
+                      {{{subClassTable}}}
+                     </table>
+                    {{/hasSubClasses}}
+                </div>
+                {{/hasGenes}}
+                {{#hasAlleles}}
+                <div id="alleles" class="category">
+                    <h3>Alleles</h3>
+                    <table class="{{css.table}}">
+                    {{{alleleTable}}}
+                    </table>
+                </div>
+                {{/hasAlleles}}
+                {{#hasInteractions}}
+                <div id="interaction" class="category">
+                    <h3 class="downloadline">Similar Interactions</h3>
+                    <a href="{{{base_url}}}/interactions.json" class="btn btn-info downloadline">JSON</a>
+            <div id ="phen_vis"></div>
+                </div>
+                {{/hasInteractions}}
+                {{#hasSim}}
+                <div id="similarity" class="category">
+                    <h3 class="downloadline">Related Genes</h3>
+                    <a href="{{{base_url}}}/sim.json" class="btn btn-info downloadline">JSON</a>
+                    <table class="{{css.table}}">
+                    {{{simTable}}}
+                    </table>
+                </div>
+                {{/hasSim}}
+                {{#hasPathways}}
+                <div id="pathways" class="category">
+                    <h3 class="downloadline">Gene Pathways</h3>
+                    <a href="{{{base_url}}}/pathway.json" class="btn btn-info downloadline">JSON</a>
+                    <table class="{{css.table}}">
+                        {{{pathwayTable}}}
+                    </table>
+                </div>
+                {{/hasPathways}}
+            </div>
+            {{{includes.footer}}}
+        </div>
+    </div>
+</body>
+</html>
