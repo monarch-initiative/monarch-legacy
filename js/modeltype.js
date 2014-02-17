@@ -58,6 +58,7 @@ as a separate call in the init function.
 	    modelWidth: undefined,
 	    phenotypeData: [],
 	    colorScale: undefined,
+	    target_species: "10090"
 	},
 
 	//NOTE: I'm not too sure what the default init() method signature should be
@@ -103,7 +104,7 @@ as a separate call in the init function.
 		jQuery.ajax({
 			//url : "data/sample_model_data.json",
 			url: "/simsearch/phenotype/?input_items=" + 
-			    phenotypeList.join(",") + "&target_species=10090",
+			    phenotypeList.join(",") + "&target_species="+this.options.target_species, 
 			async : false,
 			dataType : 'json',
 			success : function(data) {
