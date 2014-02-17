@@ -1,151 +1,151 @@
 <!DOCTYPE html>
 <html>
-    <head>
-        <title>About Monarch</title>
-        {{#scripts}}
-        <script type="text/javascript" src="{{url}}"></script>
-        {{/scripts}}
-        {{#stylesheets}}
-        <link rel="stylesheet" type="text/css" href="{{url}}"></link>
-        {{/stylesheets}}
-        <link rel="stylesheet" type="text/css" href="/css/tour.css"></link>
-        <meta charset=”utf-8”> 
-    </head>
-    <body>
-        <div class="monarch-container">
-            {{{includes.navbar}}}
-            <div class="sidebar">
-                {{{includes.navlist}}}
-            </div>
-            <div class="content">
-                <div class="title">About Monarch Initiative</div>
-                <div class="section">
-                    <div class="sectiontitle">Goals</div>
-                    <div class="text">
-                        Model systems are the cornerstone of biomedical research for
-                        understanding of biological processes, testing gene-based disease
-                        hypotheses, and developing and testing disease treatments.
-                    </div>
-                    <div class="text">
-                        A wide-variety of model databases contain unparalleled content about
-                        genetics, genomics, anatomy, environmental interactions, and
-                        developmental processes. However, clinical and translational
-                        researchers face a daunting challenge in using these vast stores of
-                        biomedical data to inform their understanding of human disease mechanisms
-                        that drives new therapies. This is particularly difficult in the
-                        context of rare or undiagnosed diseases, where data is limited to
-                        descriptive phenotypic data and numerous candidate genomic variations.
-                    </div>
-                    <div class="text">
-                        Currently, tools that exploit similarities between phenotypes,
-                        organisms, and human diseases to leverage these rich data are in
-                        their infancy or are non-existent. To address this challenge, the
-                        Monarch Initiative Discovery System contains a wealth of information
-                        about model organisms, in vitro models, genes, pathways, gene
-                        expression, protein and genetic interactions, orthology, disease,
-                        phenotypes, publications, and authors with semantic similarity
-                        calculations that suggest novel relationships based on the information
-                        content of data descriptions.
-                    </div>
-                    <div class="text">
-                        We will provide tools that will use semantics and statistical models
-                        to support navigating through multi-scale spatial and temporal phenotypes
-                        across in vivo and in vitro model systems in the context of genetic and
-                        genomic data. These tools will provide basic and clinical science
-                        researchers, informaticists, and medical professionals with an integrated
-                        interface and set of discovery tools to reveal the genetic basis of
-                        disease, facilitate hypothesis generation, and identify novel candidate
-                        drug targets. We aim for this system to promote true translational
-                        research, connecting clinicians with model systems researchers who might
-                        shed light onrelated phenotypes, assays, or models.
-                    </div>
-                </div>
-                <div class="clear"></div>
-                <div class="section">
-                    <div class="sectiontitle">About the System</div>
-                    <div class="text">
-                        The Monarch system is built based upon the foundation of the
-                        <a href="http://neuinfo.org/">Neuroscience Information Framework (NIF)</a>. NIF's large scale
-                        data ingest system, DISCO, enables the aggregation, provenance, and
-                        currency of hundreds of external resources. The Monarch Initiative is
-                        performing sophisticated curation and mapping of many of these resources
-                        to an integrated suite of ontologies for
-                        <a href="https://code.google.com/p/phenotype-ontologies/">phenotypes and diseases</a>,
-                        genotypes, and <a href="http://www.obofoundry.org/wiki/index.php/UBERON:Main_Page">anatomy</a>.
-                        The ontology services are provided by NIF Ontoquest. The OWLsim algorithmic
-                        tools enable the comparison of sets of entities across the corpus.
-                        Visualization tools to explore this semantic landscape are being developed
-                        by the University of Pittsburgh Human computer interactions team.
-                        See documentation for more information.
-                    </div>
-                </div>
-                <div class="clear"></div>
-                <div class="section">
-                    <div id="navigating">
-                        <div class="sectiontitle">Navigating</div>
-                        <div class="category text">1. Search Bar</div>
-                        <div class="text">
-                            You can use the search bar on the left sidebar to find things
-                            of interest - information on disease, phenotypes, genes, and more.<br>
-                            For example, you can search the term <a href="/search/?search_term=angelman">angelman</a>.
-                        </div>
-                        <div class="category text">2. Browse Tab</div>
-                        <div class="text">
-                            The browse tab at the navigation bar at the top of the page allows
-                            you to access the <a href="/disease">disease</a> main page
-                            and the <a href="/phenotype">phenotype</a> main page.
-                            Model, gene, and allele pages are in progress and will be
-                            released for future iterations of this site.
-                        </div>
-                        <div class="category text">3. Tools Tab</div>
-                        <div class="text">
-                            The tools tab at the navigation bar is coming soon with tools
-                            for analysis of genes, phenotypes, and variants.
-                        </div>
-                        <div class="category text">4. Software</div>
-                        <div class="text">
-                            <a href="http://owlsim.org">Owlsim</a><br>
-                            <a href="https://github.com/monarch-initiative/monarch-app">API & Web Server Code</a>
-                        </div>
-                    </div>
-                </div>
-                <div class="clear"></div>
-                <div class="section">
-                    <div id="teamfunding">
-                        <div class="sectiontitle">Team & Funding</div>
-                        <div class="text">
-                            The Monarch Initiative is a collaboration between Oregon Health &
-                            Sciences University (OHSU), University of California, San Diego (UCSD),
-                            Lawrence Berkeley National Laboratory (LBNL), the University of
-                            Pittsburgh (UPitt), Sanger, and Charité and is supported generously by a
-                            NIH Office of the Director Grant #5R24OD011883.
-                        </div>
-                        <div class="text">
-                            Read more about the Monarch development team
-                            <a href="/page/team">here</a>.
-                        </div>
-                    </div>
-                </div>
-                <div class="clear"></div>
-                <div class="section">
-                    <div id="faq">
-                        <div class="sectiontitle">Frequently Asked Questions</div>
-                        <div class="text">
-                            <div class="question">Q: When will the Monarch Web Service be available?</div>
-                            <div class="answer">
-                                A: The alpha release of Monarch is expected in January 2014.
-                            </div>
-                            <div class="question">Q: Can I be a alpha tester?</div>
-                            <div class="answer">
-                                A: Yes, we will be seeking alpha testers after our alpha release
-                                in January. Please contact <a href="mailto:info@monarchinitiative.org">info@monarchinitiative.org</a>
-                                for more information on becoming a alpha tester.
-                            </div>
-                        </div>
-                    </div>
-                </div>
-                {{{includes.footer}}}
-            </div>
+<head>
+    <title>About Monarch</title>
+    {{#scripts}}
+    <script type="text/javascript" src="{{url}}"></script>
+    {{/scripts}}
+    {{#stylesheets}}
+    <link rel="stylesheet" type="text/css" href="{{url}}"/>
+    {{/stylesheets}}
+    <link rel="stylesheet" type="text/css" href="/css/tour.css"/>
+    <meta charset="utf-8"/> 
+</head>
+<body>
+    <div class="monarch-container">
+        {{{includes.navbar}}}
+        <div class="sidebar">
+            {{{includes.navlist}}}
         </div>
-    </body>
+        <div class="content">
+            <div class="title">About Monarch Initiative</div>
+            <div class="section">
+                <div class="sectiontitle">Goals</div>
+                <div class="text">
+                    Model systems are the cornerstone of biomedical research for
+                    understanding of biological processes, testing gene-based disease
+                    hypotheses, and developing and testing disease treatments.
+                </div>
+                <div class="text">
+                    A wide-variety of model databases contain unparalleled content about
+                    genetics, genomics, anatomy, environmental interactions, and
+                    developmental processes. However, clinical and translational
+                    researchers face a daunting challenge in using these vast stores of
+                    biomedical data to inform their understanding of human disease mechanisms
+                    that drives new therapies. This is particularly difficult in the
+                    context of rare or undiagnosed diseases, where data is limited to
+                    descriptive phenotypic data and numerous candidate genomic variations.
+                </div>
+                <div class="text">
+                    Currently, tools that exploit similarities between phenotypes,
+                    organisms, and human diseases to leverage these rich data are in
+                    their infancy or are non-existent. To address this challenge, the
+                    Monarch Initiative Discovery System contains a wealth of information
+                    about model organisms, in vitro models, genes, pathways, gene
+                    expression, protein and genetic interactions, orthology, disease,
+                    phenotypes, publications, and authors with semantic similarity
+                    calculations that suggest novel relationships based on the information
+                    content of data descriptions.
+                </div>
+                <div class="text">
+                    We will provide tools that will use semantics and statistical models
+                    to support navigating through multi-scale spatial and temporal phenotypes
+                    across in vivo and in vitro model systems in the context of genetic and
+                    genomic data. These tools will provide basic and clinical science
+                    researchers, informaticists, and medical professionals with an integrated
+                    interface and set of discovery tools to reveal the genetic basis of
+                    disease, facilitate hypothesis generation, and identify novel candidate
+                    drug targets. We aim for this system to promote true translational
+                    research, connecting clinicians with model systems researchers who might
+                    shed light onrelated phenotypes, assays, or models.
+                </div>
+            </div>
+            <div class="clear"></div>
+            <div class="section">
+                <div class="sectiontitle">About the System</div>
+                <div class="text">
+                    The Monarch system is built based upon the foundation of the
+                    <a href="http://neuinfo.org/">Neuroscience Information Framework (NIF)</a>. NIF's large scale
+                    data ingest system, DISCO, enables the aggregation, provenance, and
+                    currency of hundreds of external resources. The Monarch Initiative is
+                    performing sophisticated curation and mapping of many of these resources
+                    to an integrated suite of ontologies for
+                    <a href="https://code.google.com/p/phenotype-ontologies/">phenotypes and diseases</a>,
+                    genotypes, and <a href="http://www.obofoundry.org/wiki/index.php/UBERON:Main_Page">anatomy</a>.
+                    The ontology services are provided by NIF Ontoquest. The OWLsim algorithmic
+                    tools enable the comparison of sets of entities across the corpus.
+                    Visualization tools to explore this semantic landscape are being developed
+                    by the University of Pittsburgh Human computer interactions team.
+                    See documentation for more information.
+                </div>
+            </div>
+            <div class="clear"></div>
+            <div class="section">
+                <div id="navigating">
+                    <div class="sectiontitle">Navigating</div>
+                    <div class="category text">1. Search Bar</div>
+                    <div class="text">
+                        You can use the search bar on the left sidebar to find things
+                        of interest - information on disease, phenotypes, genes, and more.<br/>
+                        For example, you can search the term <a href="/search/?search_term=angelman">angelman</a>.
+                    </div>
+                    <div class="category text">2. Browse Tab</div>
+                    <div class="text">
+                        The browse tab at the navigation bar at the top of the page allows
+                        you to access the <a href="/disease">disease</a> main page
+                        and the <a href="/phenotype">phenotype</a> main page.
+                        Model, gene, and allele pages are in progress and will be
+                        released for future iterations of this site.
+                    </div>
+                    <div class="category text">3. Tools Tab</div>
+                    <div class="text">
+                        The tools tab at the navigation bar is coming soon with tools
+                        for analysis of genes, phenotypes, and variants.
+                    </div>
+                    <div class="category text">4. Software</div>
+                    <div class="text">
+                        <a href="http://owlsim.org">Owlsim</a><br/>
+                        <a href="https://github.com/monarch-initiative/monarch-app">API &amp; Web Server Code</a>
+                    </div>
+                </div>
+            </div>
+            <div class="clear"></div>
+            <div class="section">
+                <div id="teamfunding">
+                    <div class="sectiontitle">Team &amp; Funding</div>
+                    <div class="text">
+                        The Monarch Initiative is a collaboration between Oregon Health &amp;
+                        Sciences University (OHSU), University of California, San Diego (UCSD),
+                        Lawrence Berkeley National Laboratory (LBNL), the University of
+                        Pittsburgh (UPitt), Sanger, and Charité and is supported generously by a
+                        NIH Office of the Director Grant #5R24OD011883.
+                    </div>
+                    <div class="text">
+                        Read more about the Monarch development team
+                        <a href="/page/team">here</a>.
+                    </div>
+                </div>
+            </div>
+            <div class="clear"></div>
+            <div class="section">
+                <div id="faq">
+                    <div class="sectiontitle">Frequently Asked Questions</div>
+                    <div class="text">
+                        <div class="question">Q: When will the Monarch Web Service be available?</div>
+                        <div class="answer">
+                            A: The alpha release of Monarch is expected in January 2014.
+                        </div>
+                        <div class="question">Q: Can I be a alpha tester?</div>
+                        <div class="answer">
+                            A: Yes, we will be seeking alpha testers after our alpha release
+                            in January. Please contact <a href="mailto:info@monarchinitiative.org">info@monarchinitiative.org</a>
+                            for more information on becoming a alpha tester.
+                        </div>
+                    </div>
+                </div>
+            </div>
+            {{{includes.footer}}}
+        </div>
+    </div>
+</body>
 </html>

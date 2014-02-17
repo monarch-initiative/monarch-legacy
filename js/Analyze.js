@@ -243,4 +243,12 @@ function AnalyzeInit(){
 jQuery(document).ready(
     function(){
 	AnalyzeInit();
+
+	if ($("#analyze_auto_target").val() !== null) {
+	    var text = $("#analyze_auto_target").val()
+	    var species = $("#analyze_auto_species").val();
+	    var phenotypes  = text.split(/[\s,]+/);
+	    $("#phen_vis").modeltype({phenotypeData: phenotypes,
+				      target_species: species });
+	}
     });

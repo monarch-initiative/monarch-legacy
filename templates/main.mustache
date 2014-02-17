@@ -1,24 +1,24 @@
 <!DOCTYPE html>
 <html>
-    <head>
-        <title>Monarch Diseases and Phenotypes</title>
-        {{#scripts}}
-        <script type="text/javascript" src="{{url}}"></script>
-        {{/scripts}}
-        {{#stylesheets}}
-        <link rel="stylesheet" type="text/css" href="{{url}}"></link>
-        {{/stylesheets}}
-        <link rel="stylesheet" type="text/css" href="/css/monarch-main.css"></link>
-        <link rel="stylesheet" type="text/css" href="/css/main.css"></link>
-        <meta charset=”utf-8”>
-    </head>
-    <body>
-     {{{includes.navbar}}}
-        <div class="monarch-container">
-            <div    class="sidebar">
-    {{{includes.navlist}}}
-            </div>
-            <div class="content">
+<head>
+    <title>Monarch Diseases and Phenotypes</title>
+    {{#scripts}}
+    <script type="text/javascript" src="{{url}}"></script>
+    {{/scripts}}
+    {{#stylesheets}}
+    <link rel="stylesheet" type="text/css" href="{{url}}"/>
+    {{/stylesheets}}
+    <link rel="stylesheet" type="text/css" href="/css/monarch-main.css"/>
+    <link rel="stylesheet" type="text/css" href="/css/main.css"/>
+    <meta charset="utf-8"/>
+</head>
+<body>
+    {{{includes.navbar}}}
+    <div class="monarch-container">
+        <div class="sidebar">
+            {{{includes.navlist}}}
+        </div>
+        <div class="content">
             <div class="jumbotron">
                 <h1>Welcome to Monarch!</h1>
                 <a href="/page/tour" class="btn btn-large btn-info right-butn">About Monarch</a>
@@ -45,7 +45,7 @@
                             A neurodegenerative disease that has material basis in
                             degeneration of the central nervous system that often
                             impairs the sufferer's motor skills, speech, and other
-                            functions.<br>
+                            functions.<br/>
                             <p>Other Diseases:
                             <a href="/disease/DOID_14692">Smith-Lemli-Opitz syndrome</a>,
                             <a href="/disease/DOID_1932">Angelman syndrome</a>,
@@ -71,7 +71,7 @@
                     <div class="entry">
                         <a href="/phenotype" class="entryheader">Phenotypes</a>
                         <div class="entrydescript">
-                            Large floppy ears: Replace this with something more sensible.<br>
+                            Large floppy ears: Replace this with something more sensible.<br/>
                             <p>Related Phenotypes:
                             <a href="/phenotype/HP_0000003">Multicystic kidney dysplasia (human)</a>,
                             <a href="/phenotype/HP_0000104">Renal agenesis (human)</a>,
@@ -83,13 +83,14 @@
                     <div class="entry">
                         <div class="entryheader">Phenotype Model Search</div>
                         <div class="entrydescript">
-			    <a href="/analyze/phenotypes">Find models</a>
-			    similar to sets of phenotypes.
+                <a href="/analyze/phenotypes">Find models</a>
+                similar to sets of phenotypes.
                         </div>
                     </div>
                 </div>
-		{{{includes.footer}}}
-            </div> <!-- closes content-->
-        </div> <!-- ends container -->
-    </body>
+            {{{includes.footer}}}
+            </div> <!-- closes columns -->
+        </div> <!-- closes content -->
+    </div> <!-- closes container -->
+</body>
 </html>

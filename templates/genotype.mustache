@@ -5,132 +5,133 @@
     <script type="text/javascript" src="{{url}}"></script>
     {{/scripts}}
     {{#stylesheets}}
-    <link rel="stylesheet" type="text/css" href="{{url}}"></link>
+    <link rel="stylesheet" type="text/css" href="{{url}}"/>
     {{/stylesheets}}
-    <link rel="stylesheet" type="text/css" href="../css/monarch-specific.css"></link>
-    <link rel="stylesheet" type="text/css" href="../css/imagehover.css"></link>
+    <link rel="stylesheet" type="text/css" href="../css/monarch-specific.css"/>
+    <link rel="stylesheet" type="text/css" href="../css/imagehover.css"/>
     <script src="../js/tabs.js"></script>
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
 </head>
 <body>
     {{{includes.navbar}}}
     <div class="monarch-container">
-    <div class="sidebar">
-        <a href="/"><img src="/image/logo-sneak.png" width="100" class="img-rounded"/></a>
-        <ul class="nav nav-list">
-            <li class="nav-header">Find</li>
-                <li class="nav-item"><a href="/disease">Disease</a></li>
-                <li class="nav-item"><a href="/phenotype">Phenotype</a></li>
-                <li class="nav-item"><a href="/model">Model</a></li>
-            <li id="navigation" class="nav-header">Navigate</li>
-                <li id="over" class="special nav-item"><a href="#overview">Overview</a></li>
-                {{#hasPhenotypes}}
-                <li id="phen" class="special nav-item"><a href="#phenotypes">Phenotypes</a></li>
-                {{/hasPhenotypes}}
-                {{#hasDiseases}}
-                <li id="dis" class="special nav-item"><a href="#disease">Disease</a></li>
-                {{/hasDiseases}}
-                {{#hasGenes}}
-                <li id="gen" class="special nav-item"><a href="#genes">Genes</a></li>
-                {{/hasGenes}}
-                {{#hasSim}}
-                <li id="simi" class="special nav-item"><a href="#similarity">Similarity</a></li>
-                {{/hasSim}}
-        </ul>
-    </div>
-    <div class="content">
-        <div class="jumbotron">
-            <div id="description">
-                <h1 class="downloadline">Genotype: {{label}}</h1>
-                <a href="{{{base_url}}}.json" class="btn btn-info downloadline">JSON</a>
-                <!-- <a href="{{{base_url}}}.rdf" class="btn btn-success">RDF</a> -->
-<!--                 <a href="{{{base_url}}}.nt" class="btn btn-info">n-triples</a> -->
-            </div>
-            <div id="categories">
-                <a href="#overview"><div id="initialtab" class="tab contenttab overtab">Overview</div></a>
-                {{#hasPhenotypes}}                
-                <a href="#phenotypes"><div class="tab contenttab phentab">Phenotypes</div></a>
-                {{/hasPhenotypes}}
-                {{^hasPhenotypes}}
-                <div class="tab greyed-out">Phenotypes</div>
-                {{/hasPhenotypes}}
-                {{#hasDiseases}}
-                <a href="#disease"><div class="tab contenttab distab">Disease</div></a>
-                {{/hasDiseases}}
-                {{^hasDiseases}}
-                <div class="tab greyed-out">Disease</div>
-                {{/hasDiseases}}
-                {{#hasGenes}}
-                <a href="#genes"><div class="tab contenttab gentab">Genes</div></a>
-                {{/hasGenes}}
-                {{^hasGenes}}
-                <div class="tab greyed-out">Genes</div>
-                {{/hasGenes}}
-                {{#hasSim}}
-                <a href="#similarity"><div class="tab contenttab simtab">Similarity</div></a>
-                {{/hasSim}}
-                {{^hasSim}}
-                <div class="tab greyed-out">Similarity</div>
-                {{/hasSim}}
-            </div>
-        </div>
-        <div id="complete-info">
-            <div id="overview" class="first category">
-                <h3>Overview</h3>
-                    <div class="ids">
-                        <b>ID:</b> {{id}}
-                    </div>
-                <h3>Data Overview</h3>
+        <div class="sidebar">
+            <a href="/"><img src="/image/logo-sneak.png" width="100" class="img-rounded"/></a>
+            <ul class="nav nav-list">
+                <li class="nav-header">Find</li>
+                    <li class="nav-item"><a href="/disease">Disease</a></li>
+                    <li class="nav-item"><a href="/phenotype">Phenotype</a></li>
+                    <li class="nav-item"><a href="/model">Model</a></li>
+                <li id="navigation" class="nav-header">Navigate</li>
+                    <li id="over" class="special nav-item"><a href="#overview">Overview</a></li>
                     {{#hasPhenotypes}}
-                    This genotype is associated with <b>{{phenotypeNum}}</b> phenotypes.<br>
+                    <li id="phen" class="special nav-item"><a href="#phenotypes">Phenotypes</a></li>
                     {{/hasPhenotypes}}
                     {{#hasDiseases}}
-                    This genotype is associated with <b>{{diseaseNum}}</b> diseases.<br>
+                    <li id="dis" class="special nav-item"><a href="#disease">Disease</a></li>
                     {{/hasDiseases}}
                     {{#hasGenes}}
-                    This genotype is associated with <b>{{geneNum}}</b> genes.<br>
+                    <li id="gen" class="special nav-item"><a href="#genes">Genes</a></li>
                     {{/hasGenes}}
                     {{#hasSim}}
-                    This genotype is associated with <b>{{simNum}}</b> related diseases.<br>
+                    <li id="simi" class="special nav-item"><a href="#similarity">Similarity</a></li>
                     {{/hasSim}}
-            </div>
-            {{#hasPhenotypes}}
-            <div id="phenotypes" class="category">
-                <h3 class="downloadline">Phenotypes</h3>
-                <a href="{{{base_url}}}/phenotype_associations.json" class="btn btn-info downloadline">JSON</a>
-<!--                 <a href="{{{base_url}}}/phenotype_associations.rdf" class="btn btn-success">RDF</a> -->
-<!--                 <a href="{{{base_url}}}/phenotype_associations.nt" class="btn btn-success">n-triples</a> -->
-                <table class="{{css.table}}">
-                {{{phenotypeTable}}}
-                </table>
-            </div>
-            {{/hasPhenotypes}}
-            {{#hasDiseases}}
-            <div id="disease" class="category">
-                <h3>Associated Diseases</h3>
-                <table class="{{css.table}}">
-                {{{diseaseTable}}}
-                </table>
-            </div>
-            {{/hasDiseases}}
-            {{#hasGenes}}
-            <div id="genes" class="category">
-                <h3>Genes</h3>
-                <table class="{{css.table}}">
-                {{{geneTable}}}
-                </table>
-            </div>
-            {{/hasGenes}}
-            {{#hasSim}}
-            <div id="similarity" class="category">
-                <h3>Similar Diseases</h3>
-                <table class="{{css.table}}">
-                {{{simTable}}}
-                </table>
-            </div>
-            {{/hasSim}}
+            </ul>
         </div>
-        {{{includes.footer}}}
+        <div class="content">
+            <div class="jumbotron">
+                <div id="description">
+                    <h1 class="downloadline">Genotype: {{label}}</h1>
+                    <a href="{{{base_url}}}.json" class="btn btn-info downloadline">JSON</a>
+                    <!-- <a href="{{{base_url}}}.rdf" class="btn btn-success">RDF</a> -->
+    <!--                 <a href="{{{base_url}}}.nt" class="btn btn-info">n-triples</a> -->
+                </div>
+                <div id="categories">
+                    <a href="#overview"><div id="initialtab" class="tab contenttab overtab">Overview</div></a>
+                    {{#hasPhenotypes}}                
+                    <a href="#phenotypes"><div class="tab contenttab phentab">Phenotypes</div></a>
+                    {{/hasPhenotypes}}
+                    {{^hasPhenotypes}}
+                    <div class="tab greyed-out">Phenotypes</div>
+                    {{/hasPhenotypes}}
+                    {{#hasDiseases}}
+                    <a href="#disease"><div class="tab contenttab distab">Disease</div></a>
+                    {{/hasDiseases}}
+                    {{^hasDiseases}}
+                    <div class="tab greyed-out">Disease</div>
+                    {{/hasDiseases}}
+                    {{#hasGenes}}
+                    <a href="#genes"><div class="tab contenttab gentab">Genes</div></a>
+                    {{/hasGenes}}
+                    {{^hasGenes}}
+                    <div class="tab greyed-out">Genes</div>
+                    {{/hasGenes}}
+                    {{#hasSim}}
+                    <a href="#similarity"><div class="tab contenttab simtab">Similarity</div></a>
+                    {{/hasSim}}
+                    {{^hasSim}}
+                    <div class="tab greyed-out">Similarity</div>
+                    {{/hasSim}}
+                </div>
+            </div>
+            <div id="complete-info">
+                <div id="overview" class="first category">
+                    <h3>Overview</h3>
+                        <div class="ids">
+                            <b>ID:</b> {{id}}
+                        </div>
+                    <h3>Data Overview</h3>
+                        {{#hasPhenotypes}}
+                        This genotype is associated with <b>{{phenotypeNum}}</b> phenotypes.<br/>
+                        {{/hasPhenotypes}}
+                        {{#hasDiseases}}
+                        This genotype is associated with <b>{{diseaseNum}}</b> diseases.<br/>
+                        {{/hasDiseases}}
+                        {{#hasGenes}}
+                        This genotype is associated with <b>{{geneNum}}</b> genes.<br/>
+                        {{/hasGenes}}
+                        {{#hasSim}}
+                        This genotype is associated with <b>{{simNum}}</b> related diseases.<br/>
+                        {{/hasSim}}
+                </div>
+                {{#hasPhenotypes}}
+                <div id="phenotypes" class="category">
+                    <h3 class="downloadline">Phenotypes</h3>
+                    <a href="{{{base_url}}}/phenotype_associations.json" class="btn btn-info downloadline">JSON</a>
+    <!--                 <a href="{{{base_url}}}/phenotype_associations.rdf" class="btn btn-success">RDF</a> -->
+    <!--                 <a href="{{{base_url}}}/phenotype_associations.nt" class="btn btn-success">n-triples</a> -->
+                    <table class="{{css.table}}">
+                    {{{phenotypeTable}}}
+                    </table>
+                </div>
+                {{/hasPhenotypes}}
+                {{#hasDiseases}}
+                <div id="disease" class="category">
+                    <h3>Associated Diseases</h3>
+                    <table class="{{css.table}}">
+                    {{{diseaseTable}}}
+                    </table>
+                </div>
+                {{/hasDiseases}}
+                {{#hasGenes}}
+                <div id="genes" class="category">
+                    <h3>Genes</h3>
+                    <table class="{{css.table}}">
+                    {{{geneTable}}}
+                    </table>
+                </div>
+                {{/hasGenes}}
+                {{#hasSim}}
+                <div id="similarity" class="category">
+                    <h3>Similar Diseases</h3>
+                    <table class="{{css.table}}">
+                    {{{simTable}}}
+                    </table>
+                </div>
+                {{/hasSim}}
+            </div>
+            {{{includes.footer}}}
+        </div>
     </div>
 </body>
 </html>

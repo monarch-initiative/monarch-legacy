@@ -6,31 +6,32 @@
     <script type="text/javascript" src="{{url}}"></script>
     {{/scripts}}
     {{#stylesheets}}
-    <link rel="stylesheet" type="text/css" href="{{url}}"></link>
+    <link rel="stylesheet" type="text/css" href="{{url}}"/>
     {{/stylesheets}}
-    <link rel="stylesheet" type="text/css" href="../css/monarch-main.css"></link>
-    <meta charset=”utf-8”>
+    <link rel="stylesheet" type="text/css" href="../css/monarch-main.css"/>
+    <meta charset="utf-8"/>
 </head>
 <body>
     {{{includes.navbar}}}
     <div class="monarch-container">
-    <div class="sidebar">
-        {{{includes.navlist}}}
-    </div>
-    <div class="content">
-        <div class="jumbotron">
-            <h1>Organ system spotlight: Kidney</h1>
-            <p>A paired organ which has the production of urine as its primary function.</p>
-            <a href="/anatomy/UBERON_0002113" class="btn btn-large btn-info">Find out more</a>
+        <div class="sidebar">
+            {{{includes.navlist}}}
         </div>
-        <div class="col-lg-9">
-            <h1>Organ System List</h1>
-            <ul>
-                <li><a href="/anatomy/UBERON_0002038">substantia nigra</li>
-                <li><a href="/anatomy/UBERON_0004446">phalangeal epiphyses</li>
-            </ul>
+        <div class="content">
+            <div class="jumbotron">
+                <h1>Organ system spotlight: Kidney</h1>
+                <p>A paired organ which has the production of urine as its primary function.</p>
+                <a href="/anatomy/UBERON_0002113" class="btn btn-large btn-info">Find out more</a>
+            </div>
+            <div class="col-lg-9">
+                <h1>Organ System List</h1>
+                <ul>
+                    <li><a href="/anatomy/UBERON_0002038">substantia nigra</a></li>
+                    <li><a href="/anatomy/UBERON_0004446">phalangeal epiphyses</a></li>
+                </ul>
+            </div>
+            {{{includes.footer}}}
         </div>
-        {{{includes.footer}}}
     </div>
 </body>
 </html>

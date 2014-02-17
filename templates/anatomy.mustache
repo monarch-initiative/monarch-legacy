@@ -1,57 +1,65 @@
 <html>
-  <head>
+<head>
     <title>Monarch Anatomical Structure: {{label}}</title>
     {{#scripts}}
     <script type="text/javascript" src="{{url}}"></script>
     {{/scripts}}
     {{#stylesheets}}
-    <link rel="stylesheet" type="text/css" href="{{url}}"></link>
+    <link rel="stylesheet" type="text/css" href="{{url}}"/>
+    <link rel="stylesheet" type="text/css" href="../css/monarch-specific.css"/>
     {{/stylesheets}}
-  </head>
-  <body>
+</head>
+<body>
+    {{{includes.navbar}}}
     <div class="monarch-container">
-      {{{includes.navbar}}}
-      <div class="row">
-        <div class="col-lg-2">
-          {{{includes.navlist}}}
+        <div class="sidebar">
+            <a href="/"><img src="/image/logo-sneak.png" width="100" class="img-rounded"/></a>
+            <ul class="nav nav-list">
+                <li class="nav-header">Find</li>
+                    <li class="nav-item"><a href="/disease">Disease</a></li>
+                    <li class="nav-item"><a href="/phenotype">Phenotype</a></li>
+                    <li class="nav-item"><a href="/model">Model</a></li>
+                <li id="navigation" class="nav-header">Navigate</li>
+                    <li id="over" class="special nav-item"><a href="#overview">Overview</a></li>
+                    <li id="phen" class="special nav-item"><a href="#phenotypes">Phenotypes</a></li>
+            </ul>
         </div>
-        <div class="col-lg-9">
-          <h1>Anatomy: {{label}}</h1>
-          <p>Download: <a href="{{{download.json}}}">JSON</a></p>
-          <div id="description">
-            <p>
-              {{comments}}
-            </p>
-          </div>
-          <div id="ont">
-            <h2>Ontology</h2>
-            <p>
-              <table class="{{css.table}}">
-                {{{ontNavBox}}}
-              </table>
-            </p>
-          </div>
-          <div class="details">
-            <p class="todo">TODO: include associations to descendants of {{id}}</p>
-            <b class="detail-block-header">Expression</b>
-            <div class="detail-block-contents">
-              <table>
-                {{{expressionTable}}}
-              </table>
+        <div class="content">
+            <div class="jumbotron">
+                <div id="description">
+                    <h1 class="downloadline">Anatomy: {{label}}</h1>
+                    <a href="{{{download.json}}}.json" class="btn btn-info downloadline">JSON</a>
+                    <p>
+                    {{comments}}
+                    </p>
+                </div>
+                <div id="categories">
+                    <a href="#overview"><div id="initialtab" class="tab contenttab overtab">Overview</div></a>
+                    <a href="#phenotypes"><div class="tab contenttab phentab">Phenotypes</div></a>
+                    <!-- <div class="tab greyed-out">Phenotypes</div> -->
+                </div>
             </div>
-          </div>
-          <div class="details">
-            <p class="todo">TODO: include associations to descendants of {{id}}</p>
-            <b class="detail-block-header">Phenotype</b>
-            <div class="detail-block-contents">
-              <table>
-                {{{phenotypeTable}}}
-              </table>
+            <div id="complete-info">
+                <div id="overview" class="first category">
+                    <h3>Overview</h3>
+                        <div class="ids">
+                            <b>ID:</b> {{id}}
+                        </div>
+                    <h3 class="downloadline">Ontology</h3>
+                        <table class="{{css.table}}">
+                        {{{ontNavBox}}}
+                        </table>
+                </div>
+                <div id="phenotypes" class="category">
+                    <h3 class="downloadline">Phenotypes</h3>
+                    <a href="{{{base_url}}}/phenotype_associations.json" class="btn btn-info downloadline">JSON</a>
+                    <table class="{{css.table}}">
+                    {{{phenotypeTable}}}
+                    </table>
+                </div>
             </div>
-          </div>
+            {{{includes.footer}}}
         </div>
-      </div>
-      {{{includes.footer}}}
     </div>
-  </body>
+</body>
 </html>
