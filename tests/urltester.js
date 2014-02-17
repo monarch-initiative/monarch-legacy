@@ -66,9 +66,9 @@ var testUrl = function(urlinfo) {
     console.log("Testing URL: "+url);
     print(JSON.stringify(urlinfo, ' ', null));
     var x = httpclient.get(url);
-    
+    console.log("Status: " + x.status);
     if (expects.status != null) {
-        assert.equal(expects.status, e.status);
+        assert.equal(expects.status, x.status);
     }
 
     var resultObj = null;
