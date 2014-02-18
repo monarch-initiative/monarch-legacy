@@ -1,16 +1,53 @@
     [
+
+        // ====================
+        // FEDERATION SERVICES
+        // ====================
         {
             component : "federation",
             priority : 1,
-            url : "http://beta.neuinfo.org/services/v1/federation/data/nlx_151835-1.json?includePrimaryData=true&q=HP_0003797",
-            desc : "Query OmimDiseasePhenotype using an HPO ID; we expect diseases directly annotated and annotated to subclasses",
-            notes : "This test needs fully configured",
+            url : "http://beta.neuinfo.org/services/v1/federation/data/nlx_151835-1.json?includePrimaryData=true&q=HP_0001337",
+            desc : "Query OmimDiseasePhenotype using an HPO ID (Tremor) - direct only",
             expects : {
                 format : "json",
-                min_results : 2
+                min_results : 20,
+                must_contain : {
+                    disorder_id : "OMIM:300619" // Cataract, Ataxia, Short Stature, And Mental Retardation
+                }
             }
         },
 
+        {
+            component : "federation",
+            priority : 1,
+            url : "http://beta.neuinfo.org/services/v1/federation/data/nlx_151835-1.json?includePrimaryData=true&q=HP_0001337&includeSubclasses=true",
+            desc : "Query OmimDiseasePhenotype using an HPO ID (Tremor) - include subclasses - we expect diseases directly annotated and annotated to subclasses",
+            expects : {
+                format : "json",
+                min_results : 20,
+                must_contain : {
+                    disorder_id : "OMIM:300619" // Cataract, Ataxia, Short Stature, And Mental Retardation
+                }
+            }
+        },
+
+        {
+            component : "federation",
+            priority : 1,
+            url : "http://beta.neuinfo.org/services/v1/federation/data/nif-0000-03216-9.json?count=1000&q=Huntington",
+            desc : "Query OmimDiseaseVariants using string matching",
+            expects : {
+                format : "json",
+                min_results : 3,
+                must_contain : {
+                    disorder_id : "OMIM:143100" // ID for Huntington's disease
+                }
+            }
+        },
+
+        // ====================
+        // VOCABULARY SERVICES
+        // ====================
         {
             component : "vocabulary",
             priority : 1,
@@ -25,8 +62,12 @@
             }
         },
 
+        // ====================
+        // ONTOQUEST QUERIES
+        // ====================
         {
             component : "ontoquest",
+            subcomponent : "concepts",
             priority : 1,
             url : "http://nif-services-stage.neuinfo.org//ontoquest-lamhdi/concepts/term/HP_0003325",
             desc : "Concept details for 'limb girdle muscle weakness''",
@@ -37,6 +78,25 @@
             }
         },
 
+        {
+            component : "ontoquest",
+            subcomponent : "rel",
+            priority : 1,
+            url : "http://nif-services-stage.neuinfo.org/ontoquest-lamhdi/rel/all/MP_0002789",
+            desc : "Relationships for male pseudohermaphroditism",
+            notes : "Currently just checks for string matches in returned XML",
+            expects : {
+                format : "xml",
+                raw_contains : [
+                    "HP_0000037", // equivalent HP class
+                    "MP_0002787", // parent class pseudohermaphroditism
+                ],
+            }
+        },
+
+        // ====================
+        // MONARCH QUERIES
+        // ====================
         {
             component : "monarch",
             priority : 1,
@@ -53,13 +113,31 @@
             component : "monarch",
             priority : 1,
             url : "http://tartini.crbs.ucsd.edu/disease/DOID_14330",
-            desc : "A DO disease page",
+            desc : "A DO disease page, Parkinsons",
             expects : {
                 format : "html",
                 raw_contains : 
                 [
                     "DOID_14330",
-                    "Parkinsonism" // HP term associated
+                    "Parkinsonism", // HP term associated
+                    "PINK1", // 
+                    "Parkinson Disease 14", // OMIM subtype
+                ]
+            }
+        },
+
+        {
+            component : "monarch",
+            priority : 1,
+            url : "http://tartini.crbs.ucsd.edu/phenotype/HP:0001337",
+            desc : "A HPO phenotype disease page, Tremor",
+            expects : {
+                format : "html",
+                raw_contains : 
+                [
+                    "Phenotype: Tremor",
+                    "Cataract, Ataxia, Short Stature, And Mental Retardation", // associated with a subtype of tremor
+                    "Grid2", // MGI genotype, for titubation
                 ]
             }
         },
@@ -77,6 +155,41 @@
                     "MGI",
                     "HP:0002360",
                 ]
+            }
+        },
+
+        {
+            component : "monarch",
+            priority : 1,
+            url : "http://tartini.crbs.ucsd.edu/analyze/phenotypes",
+            desc : "Top level monarch portal page page for phenotype profile search",
+            notes : "Currently just checks for string matches in returned HTML",
+            expects : {
+                format : "html",
+                raw_contains : "Monarch Analysis: phenotypes",
+            }
+        },
+
+
+        {
+            component : "monarch",
+            priority : 1,
+            url : "http://tartini.crbs.ucsd.edu/analyze/phenotypes/?target_species=10090&input_items=MP%3A0000788%0D%0AMP%3A0000822%0D%0AMP%3A0000914%0D%0AMP%3A0000929%0D%0AMP%3A0000930%0D%0AMP%3A0001286%0D%0AMP%3A0001393%0D%0AMP%3A0001688%0D%0AMP%3A0001698%0D%0AMP%3A0001732%0D%0AMP%3A0001787%0D%0AMP%3A0002064%0D%0AMP%3A0002083%0D%0AMP%3A0002151%0D%0AMP%3A0002950%0D%0AMP%3A0003012%0D%0AMP%3A0003424%0D%0AMP%3A0003651%0D%0AMP%3A0004948%0D%0AMP%3A0005657&limit=100",
+            desc : "Results for phenotype profile search",
+            notes : "Currently just checks for string matches in returned HTML",
+            expects : {
+                format : "html",
+                raw_contains : "Cfl1",
+            }
+        },
+
+        {
+            component : "monarch",
+            priority : 1,
+            url : "http://tartini.crbs.ucsd.edu/reference/PMID:16516152",
+            desc : "Pubmed query, which should redirect",
+            expects : {
+                redirect: true
             }
         },
 

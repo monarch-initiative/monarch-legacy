@@ -17,6 +17,7 @@ var system = require('system');
 var assert = require("assert");
 var fs = require("fs");
 var httpclient = require('ringo/httpclient');
+var version = null; // alpha, beta or productions
 
 // list of cfgs to load
 var cfgs =
@@ -63,12 +64,20 @@ var testUrl = function(urlinfo) {
         }
     }
 
+    url = modifyUrlForComponent(url, component);
+
     console.log("Testing URL: "+url);
     print(JSON.stringify(urlinfo, ' ', null));
     var x = httpclient.get(url);
     console.log("Status: " + x.status);
     if (expects.status != null) {
         assert.equal(expects.status, x.status);
+    }
+    if (expects.status == null && x.status == 500) {
+        console.warn("Received a 500");
+        assert.notEqual(x.status, 500);
+        // no point testing further
+        return;
     }
 
     var resultObj = null;
@@ -155,6 +164,23 @@ var matchesQuery = function(obj, q) {
     return isMatch;
 }
 
+// this is a fairly hacky (and incomplete) way of translating the hardcoded beta URLs to production or
+// alpha.
+// see: https://docs.google.com/document/d/1ZxGuuvyvMmHVWQ7rIleIRkmbiDTNNP27eAHhxyFWHok/edit#
+//
+// Consider using webapp_launcher to select the correct configuration
+var modifyUrlForComponent = function(url, component) {
+    if (version == null) {
+        return url;
+    }
+    if (component == 'federation' || component == 'vocabulary') {
+        if (version == 'alpha') {
+            return url.replace("beta.", "alpha.");
+        }
+    }
+    return url;
+}
+
 if (require.main == module) {
     var script = system.args.shift();
     var parser = new Parser(system.args);
@@ -174,6 +200,10 @@ Example:\n\
 ringo tests/urltester.js -c vocabulary\n\
 \n\
 Example:\n\
+# Tests federation component on alpha\n\
+ringo tests/urltester.js -c vocabulary -s alpha\n\
+\n\
+Example:\n\
 # all tests\
 ringo tests/urltester.js -c vocabulary\n\
 ");
@@ -183,6 +213,8 @@ ringo tests/urltester.js -c vocabulary\n\
     if (options.components) {
         components = options.components.split(",");
     }
+
+    version = options.setup;
 
     //system.args.forEach(function(fn) { print(fn) });
     var rtn = require("test").run(exports);
