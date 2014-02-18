@@ -153,6 +153,10 @@ var testResults = function(urlinfo, results) {
         console.log("Expects: min_results = "+expects.min_results);
         assert.isTrue(results.length >= expects.min_results);
     }
+    if (expects.max_results != null) {
+        console.log("Expects: max_results = "+expects.max_results);
+        assert.isTrue(results.length <= expects.max_results);
+    }
     if (expects.must_contain != null) {
         console.log("Expects: match = "+JSON.stringify(expects.must_contain, null, ' '));
         listify(expects.must_contain).forEach(
