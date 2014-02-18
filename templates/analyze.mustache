@@ -10,37 +10,51 @@
     {{#stylesheets}}
     <link rel="stylesheet" type="text/css" href="{{url}}"/>
     {{/stylesheets}}
-    <link rel="stylesheet" type="text/css" href="/css/search.css"/>
+<!--     <link rel="stylesheet" type="text/css" href="/css/search.css"/> -->
     <link rel="stylesheet" type="text/css" href="/css/imagehover.css"/>
+    <link rel="stylesheet" type="text/css" href="/css/monarch-specific.css"/>
+    <script src="../js/tabs.js"></script>
     <meta charset="utf-8"/>
 </head>
 <body>
     {{{includes.navbar}}}
     <div class="monarch-container">
         <div class="sidebar">
-            {{{includes.navlist}}}
+            <a href="/"><img src="/image/logo-sneak.png" width="100" class="img-rounded"/></a>
+            <ul class="nav nav-list">
+                <li class="nav-header">Find</li>
+                <li class="nav-item"><a href="/disease">Disease</a></li>
+                <li class="nav-item"><a href="/phenotype">Phenotype</a></li>
+                <li class="nav-item"><a href="/model">Model</a></li>
+                <li id="navigation" class="nav-header">Navigate</li>
+                <li id="que" class="special nav-item"><a href="#query">Query</a></li>
+                {{#hasInputItems}}
+                <li id="res" class="special nav-item"><a href="#result">Table View</a></li>
+                <li id="gri" class="special nav-item"><a href="#grid">Grid View</a></li>
+                {{/hasInputItems}}
+            </ul>
         </div>
         <div class="content">
-            <div id="description">
-                {{#alerts}}
-                <div class="alert">
-                {{{.}}}
+            <div class="jumbotron">
+                <div id="description">
+                    {{#alerts}}
+                    <div class="alert">
+                        {{{.}}}
+                    </div>
+                    {{/alerts}}
+                    <h1>Monarch Analysis: {{datatype}}</h1>
                 </div>
-                {{/alerts}}
-                <div class="title">Monarch Analysis: {{datatype}}</div>
-            </div>
-            <div id="categories">
-                {{#hasInputItems}}
-                <a href="#query">
-                <div id="initialtab" class="tab contenttab onttab">Query</div>
-                </a>
-                <a href="#grid">
-                <div class="tab contenttab onttab">Grid View</div>
-                </a>
-                <a href="#resultlist">
-                <div class="tab contenttab phentab">Table View</div>
-                </a>
-                {{/hasInputItems}}
+                <div id="categories">
+                    <a href="#query"><div id="initialtab" class="tab contenttab quetab">Query</div></a>
+                    {{#hasInputItems}}
+                    <a href="#result"><div class="tab contenttab restab">Table View</div></a>
+                    <a href="#grid"><div class="tab contenttab gritab">Grid View</div></a>
+                    {{/hasInputItems}}
+                    {{^hasInputItems}}
+                        <div class="tab greyed-out">Table View</div>
+                        <div class="tab greyed-out">Grid View</div>
+                    {{/hasInputItems}}
+                </div>
             </div>
             <div id="complete-info">
                 <div id="query" class="first category">
@@ -75,22 +89,24 @@
                     </form>
                 </div>
                 {{#hasInputItems}}
-                <div id="resultlist" class="category">
-                    <h3>Results</h3>
-                    <a href="{{{base_url}}}.json" class="btn btn-info">JSON</a>
+                <div id="result" class="category">
+                    <h3 class="downloadline">Results</h3>
+                    <a href="{{{base_url}}}.json" class="btn btn-info downloadline">JSON</a>
                     {{#hasResults}}
                     <table class="{{css.table}}">
                     <p>{{{resultsTable}}}</p>
                     </table>
                     {{/hasResults}}
+                    {{^hasResults}}
+                    <div class="text">Unfortunately, your search produced no results.</div>
+                    {{/hasResults}}
                 </div>
                 <div id="grid" class="category">
-		  <input id="analyze_auto_species"
-			 name="current_target_species" value="{{target_filter.species}}" type="hidden"/>
-                  <div id ="phen_vis"></div>
+                    <input id="analyze_auto_species" name="current_target_species" value="{{target_filter.species}}" type="hidden"/>
+                    <div id ="phen_vis"></div>
                 </div>
                 {{/hasInputItems}}
-            </div>  
+            </div>
             {{{includes.footer}}}
         </div>
     </div>
