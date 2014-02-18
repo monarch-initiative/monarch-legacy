@@ -19,35 +19,32 @@ $(document).ready(function(){
         var panel;
         if (panel_id == "phen") {
             panel = '#phenotypes';
-            contenttab = '.phentab';
         } else if (panel_id == "ont") {
             panel = '#ontology';
-            contenttab = '.onttab';
         } else if (panel_id == "gen") {
             panel = '#genes';
-            contenttab = '.gentab';
         } else if (panel_id == "alle") {
             panel = '#alleles';
-            contenttab = '.alletab';
         } else if (panel_id == "mod") {
             panel = '#model';
-            contenttab = '.modtab';
         } else if (panel_id == "simi") {
             panel = '#similarity';
-            contenttab = '.simtab';
         } else if (panel_id == "path") {
             panel = '#pathways';
-            contenttab = '.pathtab';
         } else if (panel_id == "over") {
             panel = '#overview';
-            contenttab = '.overtab';
         } else if (panel_id == "dis") {
             panel = '#disease';
-            contenttab = '.distab';
         } else if (panel_id == "geno") {
             panel = '#genotypes';
-            contenttab = '.genotab';
+        } else if (panel_id == "que") {
+            panel = '#query';
+        } else if (panel_id == "res") {
+            panel = '#result';
+        } else if (panel_id == "gri") {
+            panel = '#grid';
         }
+        contenttab = '.' + panel_id + 'tab';
         event.preventDefault();
         $(panel).show();
         $(contenttab).css({'color': 'white', 'background-color': '#666'});
