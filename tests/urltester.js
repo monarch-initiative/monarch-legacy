@@ -17,6 +17,7 @@ var system = require('system');
 var assert = require("assert");
 var fs = require("fs");
 var httpclient = require('ringo/httpclient');
+var version = null; // alpha, beta or productions
 
 // list of cfgs to load
 var cfgs =
@@ -63,6 +64,8 @@ var testUrl = function(urlinfo) {
         }
     }
 
+    url = modifyUrlForComponent(url, component);
+
     console.log("Testing URL: "+url);
     print(JSON.stringify(urlinfo, ' ', null));
     var x = httpclient.get(url);
@@ -70,13 +73,28 @@ var testUrl = function(urlinfo) {
     if (expects.status != null) {
         assert.equal(expects.status, x.status);
     }
+    if (expects.status == null && x.status == 500) {
+        console.warn("Received a 500");
+        assert.notEqual(x.status, 500);
+        // no point testing further
+        return;
+    }
 
     var resultObj = null;
     if (expects.format != null) {
         var rawContent = x.content;
 
         if (expects.raw_contains != null) {
-            var strings = expects.raw_contains.push == null ? [expects.raw_contains] : expects.raw_contains; // listify
+            var strings = listify(expects.raw_contains);
+            strings.forEach(function(s) {
+                console.log("Checking for presence of string: "+s);
+                //assert.isTrue(rawContent.indexOf(s) > -1);
+                assert.stringContains(rawContent, s);
+            });
+        }
+
+        if (expects.raw_not_contains != null) {
+            var strings = expects.raw_not_contains.push == null ? [expects.raw_not_contains] : expects.raw_not_contains; // listify
             strings.forEach(function(s) {
                 console.log("Checking for presence of string: "+s);
                 //assert.isTrue(rawContent.indexOf(s) > -1);
@@ -137,22 +155,50 @@ var testResults = function(urlinfo, results) {
     }
     if (expects.must_contain != null) {
         console.log("Expects: match = "+JSON.stringify(expects.must_contain, null, ' '));
-        var matches = results.filter(function(r) { return matchesQuery(r, expects.must_contain) });
-        assert.isTrue(matches.length > 1);
+        listify(expects.must_contain).forEach(
+            function(matchObj) { 
+                var matches = results.filter(function(r) { return matchesQuery(r, matchObj) });
+                assert.notEqual(matches.length, 0);
+            });
     }
-    
+    if (expects.must_not_contain != null) {
+        console.log("Expects: NO match = "+JSON.stringify(expects.must_not_contain, null, ' '));
+        listify(expects.must_not_contain).forEach(
+            function(matchObj) { 
+                var matches = results.filter(function(r) { return matchesQuery(r, matchObj) });
+                assert.isEqual(matches.length, 0);
+            });
+    }
 }
 
-var matchesQuery = function(obj, q) {
-    var isMatch = true;
-    for (var k in q) {
-        if (obj[k] != null && obj[k] == q[k]) {
-        }
-        else {
-            isMatch = false;
+var matchesQuery = function(obj, pattern) {
+    for (var k in pattern) {
+        if ( ! (obj[k] != null && obj[k] == pattern[k]) ) {
+            return false;
         }
     }
-    return isMatch;
+    return true;
+}
+
+// this is a fairly hacky (and incomplete) way of translating the hardcoded beta URLs to production or
+// alpha.
+// see: https://docs.google.com/document/d/1ZxGuuvyvMmHVWQ7rIleIRkmbiDTNNP27eAHhxyFWHok/edit#
+//
+// Consider using webapp_launcher to select the correct configuration
+var modifyUrlForComponent = function(url, component) {
+    if (version == null) {
+        return url;
+    }
+    if (component == 'federation' || component == 'vocabulary') {
+        if (version == 'alpha') {
+            return url.replace("beta.", "alpha.");
+        }
+    }
+    return url;
+}
+
+function listify(x) {
+    return x.push == null ? [x] : x;
 }
 
 if (require.main == module) {
@@ -174,6 +220,10 @@ Example:\n\
 ringo tests/urltester.js -c vocabulary\n\
 \n\
 Example:\n\
+# Tests federation component on alpha\n\
+ringo tests/urltester.js -c vocabulary -s alpha\n\
+\n\
+Example:\n\
 # all tests\
 ringo tests/urltester.js -c vocabulary\n\
 ");
@@ -183,6 +233,8 @@ ringo tests/urltester.js -c vocabulary\n\
     if (options.components) {
         components = options.components.split(",");
     }
+
+    version = options.setup;
 
     //system.args.forEach(function(fn) { print(fn) });
     var rtn = require("test").run(exports);
