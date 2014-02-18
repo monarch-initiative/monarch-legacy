@@ -6,13 +6,13 @@
         {
             component : "federation",
             priority : 1,
-            url : "http://beta.neuinfo.org/services/v1/federation/data/nlx_151835-1.json?includePrimaryData=true&q=HP_0001337",
-            desc : "Query OmimDiseasePhenotype using an HPO ID (Tremor) - direct only",
+            url : "http://beta.neuinfo.org/services/v1/federation/data/nlx_151835-1.json?includePrimaryData=true&q=HP:0001337",
+            desc : "DIRECT Query on OmimDiseasePhenotype using an HPO ID (Tremor)",
             expects : {
                 format : "json",
-                min_results : 20,
+                min_results : 0,
                 must_contain : {
-                    disorder_id : "OMIM:300619" // Cataract, Ataxia, Short Stature, And Mental Retardation
+                    disorder_id : "OMIM:270500" // Ataxia, Spastic, Childhood-Onset, Autosomal Recessive, With Optic Atrophy And Mental Retardation
                 }
             }
         },
@@ -20,27 +20,60 @@
         {
             component : "federation",
             priority : 1,
-            url : "http://beta.neuinfo.org/services/v1/federation/data/nlx_151835-1.json?includePrimaryData=true&q=HP_0001337&includeSubclasses=true",
-            desc : "Query OmimDiseasePhenotype using an HPO ID (Tremor) - include subclasses - we expect diseases directly annotated and annotated to subclasses",
+            url : "http://beta.neuinfo.org/services/v1/federation/data/nlx_151835-1.json?includePrimaryData=true&q=HP:0001337&includeSubclasses=true",
+            desc : "INFERRED Query OmimDiseasePhenotype using an HPO ID (Tremor) - include subclasses - we expect diseases directly annotated and annotated to subclasses",
             expects : {
                 format : "json",
                 min_results : 20,
-                must_contain : {
-                    disorder_id : "OMIM:300619" // Cataract, Ataxia, Short Stature, And Mental Retardation
-                }
+                must_contain : 
+                [
+                    {
+                        aspect_text : "organ abnormality",
+                        disorder_id : "OMIM:300619" // Cataract, Ataxia, Short Stature, And Mental Retardation
+                    },
+                    {  
+                        aspect_text : "organ abnormality",
+                        phenotype_id : "HP:0001337" // always include annotations to direct
+                    },
+                    {  
+                        aspect_text : "organ abnormality",
+                        phenotype_id : "HP:0002378" // annotation to hand tremor - indirect
+                    },
+                    {  
+                        aspect_text : "organ abnormality",
+                        phenotype_id : "HP:0002599", // Head titubation
+                        "disorder_id": "OMIM:275550", // Trichorrhexis Nodosa Syndrome
+                    },
+                    
+                ]
             }
         },
 
         {
             component : "federation",
             priority : 1,
-            url : "http://beta.neuinfo.org/services/v1/federation/data/nif-0000-03216-9.json?count=1000&q=Huntington",
-            desc : "Query OmimDiseaseVariants using string matching",
+            url : "http://beta.neuinfo.org/services/v1/federation/data/nif-0000-00096-6.json?includePrimaryData=true&count=1000&q=MP:0000428&includeSubclasses=true&",
+            desc : "INFERRED MGI Geno Pheno using an MP ID (craniofacial) - include subclasses - we expect genotypes directly annotated and annotated to subclasses",
+            expects : {
+                format : "json",
+                min_results : 20,
+                must_contain : 
+                [
+                    // TODO
+                ]
+            }
+        },
+
+        {
+            component : "federation",
+            priority : 1,
+            url : "http://beta.neuinfo.org/services/v1/federation/data/nif-0000-03216-9.json?includePrimaryData=true&count=1000&q=Huntington",
+            desc : "Query OmimDiseaseVariants using string matching (expect Hungtindon's disease)",
             expects : {
                 format : "json",
                 min_results : 3,
                 must_contain : {
-                    disorder_id : "OMIM:143100" // ID for Huntington's disease
+                    phenotype_id : "OMIM:143100" // ID for Huntington's disease (note in this view, phenotype subsumes phenotype and disease)
                 }
             }
         },
