@@ -66,9 +66,9 @@ var testUrl = function(urlinfo) {
     console.log("Testing URL: "+url);
     print(JSON.stringify(urlinfo, ' ', null));
     var x = httpclient.get(url);
-    
+    console.log("Status: " + x.status);
     if (expects.status != null) {
-        assert.equal(expects.status, e.status);
+        assert.equal(expects.status, x.status);
     }
 
     var resultObj = null;
@@ -79,7 +79,8 @@ var testUrl = function(urlinfo) {
             var strings = expects.raw_contains.push == null ? [expects.raw_contains] : expects.raw_contains; // listify
             strings.forEach(function(s) {
                 console.log("Checking for presence of string: "+s);
-                assert.isTrue(rawContent.indexOf(s) > -1);
+                //assert.isTrue(rawContent.indexOf(s) > -1);
+                assert.stringContains(rawContent, s);
             });
         }
         
@@ -184,5 +185,7 @@ ringo tests/urltester.js -c vocabulary\n\
     }
 
     //system.args.forEach(function(fn) { print(fn) });
-    require("test").run(exports);
+    var rtn = require("test").run(exports);
+    print("Return code="+rtn);
+    system.exit(rtn);
 }
