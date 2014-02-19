@@ -31,6 +31,24 @@ $(document).ready(function(){
         },
         "rank": function(a, b) {
             return float(a, b);
+        },
+        "genotype": function(a, b) {
+            return string(a, b);
+        },
+        "phenotype description": function(a, b) {
+            return string(a, b);
+        },
+        "Hit": function(a, b) {
+            return string(a, b);
+        },
+        "Combined score": function(a, b) {
+            return float(a, b);
+        },
+        "Most Informative Shared Phenotype": function(a, b) {
+            return string(a, b);
+        },
+        "Other Matching Phenotypes": function(a, b) {
+            return string(a, b);
         }
     });
     
@@ -66,8 +84,10 @@ $(document).ready(function(){
         var arrow = data.direction === "asc" ? "  ↑" : "  ↓";
         var type = th.eq(data.column).attr("data-sort");
         if (type == "disease" | type == "phenotype" | type == "frequency" | type == "gene" |
-            type == "mutation" | type == "allele" | type == "disease B" |
-            type == "score" | type == "rank") {
+            type == "mutation" | type == "allele" | type == "disease B" | type == "score" |
+            type == "rank" | type == "genotype" | type == "phenotype description" | type == "Hit" |
+            type == "Combined score" | type == "Most Informative Shared Phenotype" |
+            type == "Other Matching Phenotypes") {
             th.eq(data.column).append('<span class="arrow">' + arrow +'</span>');
         }
     });
