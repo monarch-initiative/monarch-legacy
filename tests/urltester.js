@@ -150,8 +150,12 @@ var testResults = function(urlinfo, results) {
     var expects = urlinfo.expects;
 
     if (expects.min_results != null) {
-        console.log("Expects: min_results = "+expects.min_results);
+        console.log("Expects: min_results = "+expects.min_results+" Actual #results="+results.length);
         assert.isTrue(results.length >= expects.min_results);
+    }
+    if (expects.max_results != null) {
+        console.log("Expects: max_results = "+expects.max_results+" Actual #results="+results.length);
+        assert.isTrue(results.length <= expects.max_results);
     }
     if (expects.must_contain != null) {
         console.log("Expects: match = "+JSON.stringify(expects.must_contain, null, ' '));

@@ -78,6 +78,23 @@
             }
         },
 
+        {
+            component : "federation",
+            priority : 1,
+            url : "http://beta.neuinfo.org/services/v1/federation/data/nif-0000-03216-9.json?includePrimaryData=true&count=1000&q=OMIM:214290",
+            desc : "Query OmimDiseaseVariants using OMIM ID (Cervical Vertebrae, Agenesis Of)",
+            expects : {
+                format : "json",
+                max_results : 1,
+                must_contain : {
+                    phenotype_id : "OMIM:214290" // Cervical Vertebrae, Agenesis Of
+                },
+                must_not_contain : {
+                    phenotype_id : "OMIM:103400" // non-queried for ID
+                }
+            }
+        },
+
         // ====================
         // VOCABULARY SERVICES
         // ====================
