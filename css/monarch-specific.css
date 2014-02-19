@@ -22,7 +22,7 @@ p {
 /* Category Tabs */
 #categories {
     margin-top: 20px;
-    margin-bottom: -2px;
+    margin-bottom: -3px;
 }
 @media (min-width: 1100px) {
     .tab {
