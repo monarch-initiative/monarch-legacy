@@ -46,7 +46,7 @@ as a separate call in the init function.
 	    modelData: [],
 	    filteredModelData: [],
 	    detailRectWidth: 200,
-        detailRectHeight: 400,
+        detailRectHeight: 100,
         detailRectStrokeWidth: 3,
 	    dimensions: [ "Human Phenotype", "Lowest Common Subsumer", "Mammalian Phenotype" ], 
 	    m :[ 30, 10, 10, 10 ], 
@@ -58,7 +58,8 @@ as a separate call in the init function.
 	    modelWidth: undefined,
 	    phenotypeData: [],
 	    colorScale: undefined,
-	    target_species: "10090"
+	    targetSpecies: "10090",
+	    yAxisMax : 0
 	},
 
 	//NOTE: I'm not too sure what the default init() method signature should be
@@ -77,16 +78,18 @@ as a separate call in the init function.
 	    this._loadData(this.options.phenotypeData);
             this.options.filteredModelData = this.options.modelData.slice();
 
+            this._createYAxis();
+    	    //just pad the overall height by a skosh...
+    	    this.options.h = this.options.yAxisMax + 40;
             this._initCanvas(); 
         
             // set canvas size
             this.options.svg
 		.attr("width", 1100)
-		.attr("height", 1300);
+		.attr("height", this.options.h);
 
             this._createAccentBoxes();
             this._createColorScale();
-            this._createYAxis();
             this._createModelRegion();
     	    this._updateAxes();
     	    this._createRects();
@@ -104,7 +107,7 @@ as a separate call in the init function.
 		jQuery.ajax({
 			//url : "data/sample_model_data.json",
 			url: "/simsearch/phenotype/?input_items=" + 
-			    phenotypeList.join(",") + "&target_species="+this.options.target_species, 
+			    phenotypeList.join(",") + "&target_species="+this.options.targetSpecies, 
 			async : false,
 			dataType : 'json',
 			success : function(data) {
@@ -164,6 +167,7 @@ as a separate call in the init function.
     	}
     },
     
+    
     //create a y-axis from the model data
     //for each item in the data model, push the rowid
     //and calculate the y position
@@ -184,6 +188,9 @@ as a separate call in the init function.
     	for (var idx=0;idx<tempArray.length;idx++) {
     		var stuff = {"id": tempArray[idx], "ypos" : ((idx * (size+gap)) + this.options.yoffset)};
     	    this.options.yAxis.push(stuff);
+    	    if (((idx * (size+gap)) + this.options.yoffset) > this.options.yAxisMax) {
+    	    	this.options.yAxisMax = (idx * (size+gap)) + this.options.yoffset;
+    	    }
     	}
     },
     
@@ -503,7 +510,7 @@ as a separate call in the init function.
 		.data(color_values);
 	    legend_rects.enter()
 		.append("rect")
-		.attr("transform","translate(510,30)")
+		.attr("transform","translate(15,10)")
 		.attr("class", "legend_rect")
 		.attr("y", "39")
 		.attr("x", function(d, i) {
@@ -518,7 +525,7 @@ as a separate call in the init function.
 	        .data(color_values);
 	    legend_text.enter()
 		.append("text")
-		.attr("transform","translate(510,30)")
+		.attr("transform","translate(15,10)")
 		.attr("class", "legend_text")
 		.attr("y", "35")
 		.attr("x", function(d, i) {
@@ -528,7 +535,7 @@ as a separate call in the init function.
 		    return d.toFixed(1);
 		});
 	    var div_text = self.options.svg.append("svg:text")
-		.attr("transform","translate(510,30)")
+		.attr("transform","translate(15,10)")
 		.attr("class", "detail_text")
 		.attr("y", "22")
 		.text("Score Scale");
@@ -540,7 +547,7 @@ as a separate call in the init function.
 	    var div_text = this.options.svg.append("svg:text")
             //.attr("transform","translate(30,30)")
 		.attr("class", "detail_text")
-		.attr("y", "115")
+		.attr("y", "15")
 		.attr("x", "560")
 		.text("Item Details:");
 	    
@@ -549,7 +556,7 @@ as a separate call in the init function.
             //.attr("transform","translate(30,30)")
 		.attr("class", "detail_rect") 
 		.attr("id", "detail_rect")
-		.attr("y", "125")
+		.attr("y", "25")
 	      .attr("x", "560")
 		.attr("width", self.options.detailRectWidth)
 		.attr("height", self.options.detailRectHeight)
@@ -748,7 +755,7 @@ as a separate call in the init function.
 		.attr("width", this.options.detailRectWidth-(this.options.detailRectStrokeWidth*2))
 		.attr("height", this.options.detailRectHeight-(this.options.detailRectStrokeWidth*2))
 		.attr("id", "detail_content")
-		.attr("y", (125+this.options.detailRectStrokeWidth))
+		.attr("y", (25+this.options.detailRectStrokeWidth))
 	        .attr("x", (560+this.options.detailRectStrokeWidth))
 		.append("xhtml:body")
 			  //.style("font", "14px 'Helvetica Neue'")
@@ -767,7 +774,9 @@ as a separate call in the init function.
 				//retData = data;
 				retData = "<strong>Gene Label:</strong> "   
 				+ modelData.model_label + "<br/><strong>Rank:</strong> " + (parseInt(modelData.model_rank) + 1)
-				+ "<br/><strong>Score:</strong> " + modelData.model_score
+				+ "<br/><strong>Score:</strong> " + modelData.model_score;
+				
+				/*
 				+ "<br/><strong>Genotype(s):</strong> ";
 			    //generate a unique list of genotypes
 			    var temp_list = [];
@@ -784,7 +793,7 @@ as a separate call in the init function.
 			    for (var idx=0;idx<temp_list.length;idx++) {
 				retData = retData + temp_list[idx] + "<br/>";
 			    }
-			    //console.log("data: " + retData);
+			    //console.log("data: " + retData);*/
 			}
 		});
 
@@ -793,7 +802,7 @@ as a separate call in the init function.
 		.attr("width", this.options.detailRectWidth-(this.options.detailRectStrokeWidth*2))
 		.attr("height", this.options.detailRectHeight-(this.options.detailRectStrokeWidth*2))
 		.attr("id", "detail_content")
-		.attr("y", (125+this.options.detailRectStrokeWidth))
+		.attr("y", (25+this.options.detailRectStrokeWidth))
 	        .attr("x", (560+this.options.detailRectStrokeWidth))
 		.append("xhtml:body")
 	    //.style("font", "14px 'Helvetica Neue'")
