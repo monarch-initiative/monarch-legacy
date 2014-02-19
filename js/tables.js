@@ -1,17 +1,6 @@
 $(document).ready(function(){
 
     var table = $('.simpletable').stupidtable({
-        "int": function(a, b) {
-            return parseInt(a, 10) - parseInt(b, 10);
-        },
-        "float": function(a, b) {
-            return parseFloat(a) - parseFloat(b);
-        },
-        "string": function(a, b) {
-            if (a < b) return -1;
-            if (a > b) return +1;
-            return 0;
-        },
         "disease": function(a, b) {
             return string(a, b);
         },
@@ -25,13 +14,29 @@ $(document).ready(function(){
             if (a > b) return +1;
             return 0;
         },
-        "inheritance": function(a, b) {
-            return string(a, b);
-        },
         "gene": function(a, b) {
             return string(a, b);
+        },
+        "mutation": function(a, b) {
+            return string(a, b);
+        },
+        "allele": function(a, b) {
+            return string(a, b);
+        },
+        "disease B": function(a, b) {
+            return string(a, b);
+        },
+        "score": function(a, b) {
+            return float(a, b);
+        },
+        "rank": function(a, b) {
+            return float(a, b);
         }
     });
+    
+    function float(a, b) {
+        return parseFloat(a, 10) - parseFloat(b, 10);
+    };
     
     function string(a, b) {
         a = a.toLowerCase();
@@ -59,7 +64,12 @@ $(document).ready(function(){
         var th = $(this).find("th");
         th.find(".arrow").remove();
         var arrow = data.direction === "asc" ? "  ↑" : "  ↓";
-        th.eq(data.column).append('<span class="arrow">' + arrow +'</span>');
+        var type = th.eq(data.column).attr("data-sort");
+        if (type == "disease" | type == "phenotype" | type == "frequency" | type == "gene" |
+            type == "mutation" | type == "allele" | type == "disease B" |
+            type == "score" | type == "rank") {
+            th.eq(data.column).append('<span class="arrow">' + arrow +'</span>');
+        }
     });
 
 });
