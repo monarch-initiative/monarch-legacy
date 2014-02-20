@@ -1,3 +1,4 @@
+.project
 .pl-history
 cache/*/key*json
 ringojs*

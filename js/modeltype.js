@@ -321,9 +321,16 @@ as a separate call in the init function.
     	         })
     	      .append("xhtml:p")
 
-		        .on("click", function(d) {
+/*		        .on("click", function(d) {
 					self._modelClick(data);
-				})
+				})*/
+    	       .on("mouseover", function(d) {
+    	    	   self._modelClick(data);
+    	       })
+    	       .on("mouseout", function(d) {
+    	    	   self._clearModelData(d);
+    	       })
+		
     	        //.attr('style','word-wrap: break-word; text-align:center;')
 				.style("font-size", "12px")
     	        .html(label);    
@@ -349,8 +356,8 @@ as a separate call in the init function.
     
     _showModelData: function(d) {
 	    var retData;
-	    retData = "<strong>Label: </strong> " + d.label_a   
-		    + "<br/><strong>Subsumer: </strong> " + d.subsumer_label
+	    retData = "<strong>Input: </strong> " + d.label_a   
+		    + "<br/><strong>Match: </strong> " + d.subsumer_label
 	     	+ "<br/><strong>Score: </strong> " + d.value.toFixed(2);
 	    this._updateDetailSection(retData);
 	  
@@ -761,7 +768,12 @@ as a separate call in the init function.
 
 	_modelClick: function(modelData) {
 		var retData;
-		jQuery.ajax({
+		//initialize the model data based on the scores
+		retData = "<strong>Gene Label:</strong> "   
+			+ modelData.model_label + "<br/><strong>Rank:</strong> " + (parseInt(modelData.model_rank) + 1)
+			+ "<br/><strong>Score:</strong> " + modelData.model_score;
+
+/*		jQuery.ajax({
 			url : "/genotype/" + this._getConceptId(modelData.model_id) + ".json",
 			async : false,
 			dataType : 'json',
@@ -789,8 +801,9 @@ as a separate call in the init function.
 				retData = retData + temp_list[idx] + "<br/>";
 			    }
 			    //console.log("data: " + retData);*/
-			}
+/*			}
 		});
+*/
 	    this._updateDetailSection(retData);
 	},
 
