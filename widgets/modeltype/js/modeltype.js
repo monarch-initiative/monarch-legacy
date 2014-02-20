@@ -46,7 +46,7 @@ as a separate call in the init function.
 	    modelData: [],
 	    filteredModelData: [],
 	    detailRectWidth: 240,
-        detailRectHeight: 80,
+        detailRectHeight: 60,
         detailRectStrokeWidth: 3,
 	    dimensions: [ "Input Phenotypes", "Lowest Common Subsumer", "Matching Phenotypes" ], 
 	    m :[ 30, 10, 10, 10 ], 
@@ -346,12 +346,31 @@ as a separate call in the init function.
 			.attr("width", this.options.detailRectWidth-(this.options.detailRectStrokeWidth*2))
 			.attr("height", this.options.detailRectHeight-(this.options.detailRectStrokeWidth*2))
 			.attr("id", "detail_content")
-			.attr("y", (25+this.options.detailRectStrokeWidth))
-		    .attr("x", (560+this.options.detailRectStrokeWidth))
+			.attr("y", (16+this.options.detailRectStrokeWidth))
+		    .attr("x", (440+this.options.detailRectStrokeWidth))
 			.append("xhtml:body")
 			.style("font-size", "12px")
 			.html(htmltext);
     	
+    },
+    
+    _showThrobber: function() {
+	    this.options.svg.selectAll("#detail_content").remove();
+	    this.options.svg.append("svg:text")
+			.attr("id", "detail_content")
+			.attr("y", (26+this.options.detailRectStrokeWidth))
+		    .attr("x", (440+this.options.detailRectStrokeWidth))
+			.style("font-size", "12px")
+			.text("Searching for data")
+	    this.options.svg.append("svg:image")
+			.attr("width", 16)
+			.attr("height", 16)
+			.attr("id", "detail_content")
+			.attr("y", (16+this.options.detailRectStrokeWidth))
+		    .attr("x", (545+this.options.detailRectStrokeWidth))
+		    .attr("xlink:href","/widgets/modeltype/image/throbber.gif");
+
+	       
     },
     
     _showModelData: function(d) {
@@ -562,8 +581,8 @@ as a separate call in the init function.
 	    var div_text = this.options.svg.append("svg:text")
             //.attr("transform","translate(30,30)")
 		.attr("class", "detail_text")
-		.attr("y", "15")
-		.attr("x", "560")
+		.attr("y", "10")
+		.attr("x", "440")
 		.text("Item Details:");
 	    
 		
@@ -571,8 +590,8 @@ as a separate call in the init function.
             //.attr("transform","translate(30,30)")
 		.attr("class", "detail_rect") 
 		.attr("id", "detail_rect")
-		.attr("y", "25")
-	      .attr("x", "560")
+		.attr("y", "15")
+	      .attr("x", "440")
 		.attr("width", self.options.detailRectWidth)
 		.attr("height", self.options.detailRectHeight)
 		.style("stroke-width",self.options.detailRectStrokeWidth)
@@ -752,6 +771,7 @@ as a separate call in the init function.
 
 	_rectClick: function(data) {
 	    var retData;
+	    this._showThrobber();
 	    jQuery.ajax({
 		url : "/phenotype/" + data.attributes["ontology_id"].value + ".json",
 		async : false,
@@ -767,6 +787,7 @@ as a separate call in the init function.
 	},
 
 	_modelClick: function(modelData) {
+	    //this._showThrobber();
 		var retData;
 		//initialize the model data based on the scores
 		retData = "<strong>Gene Label:</strong> "   
