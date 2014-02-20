@@ -108,3 +108,13 @@ p {
     margin-right: 5px;
     margin-bottom: 5px;
 }
+/* Tables */
+table {
+    font-size: 14px;
+    line-height: 1.428;
+    color: #333;
+    width: 100%;
+}
+td {
+    word-wrap: break-word;
+}
