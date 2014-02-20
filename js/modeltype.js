@@ -45,10 +45,10 @@ as a separate call in the init function.
 	    yScale: undefined,
 	    modelData: [],
 	    filteredModelData: [],
-	    detailRectWidth: 200,
-        detailRectHeight: 100,
+	    detailRectWidth: 240,
+        detailRectHeight: 80,
         detailRectStrokeWidth: 3,
-	    dimensions: [ "Human Phenotype", "Lowest Common Subsumer", "Mammalian Phenotype" ], 
+	    dimensions: [ "Input Phenotypes", "Lowest Common Subsumer", "Matching Phenotypes" ], 
 	    m :[ 30, 10, 10, 10 ], 
 	    w : 0,
 	    h : 0,
@@ -321,9 +321,16 @@ as a separate call in the init function.
     	         })
     	      .append("xhtml:p")
 
-		        .on("click", function(d) {
+/*		        .on("click", function(d) {
 					self._modelClick(data);
-				})
+				})*/
+    	       .on("mouseover", function(d) {
+    	    	   self._modelClick(data);
+    	       })
+    	       .on("mouseout", function(d) {
+    	    	   self._clearModelData(d);
+    	       })
+		
     	        //.attr('style','word-wrap: break-word; text-align:center;')
 				.style("font-size", "12px")
     	        .html(label);    
@@ -331,39 +338,31 @@ as a separate call in the init function.
     	    el.remove();
 
     },
+
+    _updateDetailSection: function(htmltext) {
+	    this.options.svg.selectAll("#detail_content").remove();
+	    this.options.svg.append("foreignObject")
+		    //adjust the height and width to avoid overlaying on top of the rectangle border
+			.attr("width", this.options.detailRectWidth-(this.options.detailRectStrokeWidth*2))
+			.attr("height", this.options.detailRectHeight-(this.options.detailRectStrokeWidth*2))
+			.attr("id", "detail_content")
+			.attr("y", (25+this.options.detailRectStrokeWidth))
+		    .attr("x", (560+this.options.detailRectStrokeWidth))
+			.append("xhtml:body")
+			.style("font-size", "12px")
+			.html(htmltext);
+    	
+    },
     
     _showModelData: function(d) {
-	    //remove any text from the text area
-	    this.options.svg.selectAll("#detail_content").remove();
 	    var retData;
-	    /*	    jQuery.ajax({
-		url : "/phenotype/" + data.attributes["ontology_id"].value + ".json",
-		async : false,
-		dataType : 'json',
-		success : function(data) {
-		    //retData = data;
-		    retData = "<strong>Label:</strong> " + "<a href=\"" + data.url + "\">"  
-			+ data.label + "</a><br/><strong>Type:</strong> " + data.category;
-		}
-	    });*/
-
-	    retData = "<strong>Label: </strong> " + d.label_a   
-		    + "<br/><strong>Subsumer: </strong> " + d.subsumer_label
+	    retData = "<strong>Input: </strong> " + d.label_a   
+		    + "<br/><strong>Match: </strong> " + d.subsumer_label
 	     	+ "<br/><strong>Score: </strong> " + d.value.toFixed(2);
-	    
-	    this.options.svg.append("foreignObject")
-	    //adjust the height and width to avoid overlaying on top of the rectangle border
-		.attr("width", this.options.detailRectWidth-(this.options.detailRectStrokeWidth*2))
-		.attr("height", this.options.detailRectHeight-(this.options.detailRectStrokeWidth*2))
-		.attr("id", "detail_content")
-		.attr("y", (125+this.options.detailRectStrokeWidth))
-	        .attr("x", (560+this.options.detailRectStrokeWidth))
-		.append("xhtml:body")
-			  //.style("font", "14px 'Helvetica Neue'")
-		.html(retData);
+	    this._updateDetailSection(retData);
 	  
     },
-	
+    	
     _clearModelData: function() {
 	    this.options.svg.selectAll("#detail_content").remove();
     },
@@ -470,7 +469,23 @@ as a separate call in the init function.
 		.attr("fill", function(d, i) {
 		    return i != 1 ? d3.rgb("#e5e5e5") : "white";
 		});
-	},
+
+	    //add text headers
+	    var rect_headers = this.options.svg.selectAll("#text.accent")
+		.data(this.options.dimensions, function(d) { return d;});
+	    rect_headers.enter()
+	    	.append("text")
+		.attr("class", "accent")
+		.attr("x", function(d, i) { return (axis_pos_list[i]+10);})
+		.attr("y", self.options.yoffset-10)
+		//.attr("width", self.options.textWidth + 5)
+		//.attr("height", self.options.h)
+		//.style("opacity", '0.4')
+		.style("display", function(d, i) {
+		    return i != 1 ? "" : "none";
+		})
+		.text(String);
+},
     
 	//this code creates the colored rectangles below the models
 	_createModelRegion: function () {
@@ -736,8 +751,6 @@ as a separate call in the init function.
 	},
 
 	_rectClick: function(data) {
-	    //remove any text from the text area
-	    this.options.svg.selectAll("#detail_content").remove();
 	    var retData;
 	    jQuery.ajax({
 		url : "/phenotype/" + data.attributes["ontology_id"].value + ".json",
@@ -749,24 +762,18 @@ as a separate call in the init function.
 			+ data.label + "</a><br/><strong>Type:</strong> " + data.category;
 		}
 	    });
-	    
-	    this.options.svg.append("foreignObject")
-	    //adjust the height and width to avoid overlaying on top of the rectangle border
-		.attr("width", this.options.detailRectWidth-(this.options.detailRectStrokeWidth*2))
-		.attr("height", this.options.detailRectHeight-(this.options.detailRectStrokeWidth*2))
-		.attr("id", "detail_content")
-		.attr("y", (25+this.options.detailRectStrokeWidth))
-	        .attr("x", (560+this.options.detailRectStrokeWidth))
-		.append("xhtml:body")
-			  //.style("font", "14px 'Helvetica Neue'")
-		.html(retData);
+	    this._updateDetailSection(retData);
+
 	},
 
 	_modelClick: function(modelData) {
-		//remove any text from the text area
-		this.options.svg.selectAll("#detail_content").remove();
 		var retData;
-		jQuery.ajax({
+		//initialize the model data based on the scores
+		retData = "<strong>Gene Label:</strong> "   
+			+ modelData.model_label + "<br/><strong>Rank:</strong> " + (parseInt(modelData.model_rank) + 1)
+			+ "<br/><strong>Score:</strong> " + modelData.model_score;
+
+/*		jQuery.ajax({
 			url : "/genotype/" + this._getConceptId(modelData.model_id) + ".json",
 			async : false,
 			dataType : 'json',
@@ -776,7 +783,7 @@ as a separate call in the init function.
 				+ modelData.model_label + "<br/><strong>Rank:</strong> " + (parseInt(modelData.model_rank) + 1)
 				+ "<br/><strong>Score:</strong> " + modelData.model_score;
 				
-				/*
+				/* REMOVED the gentoype info for now...
 				+ "<br/><strong>Genotype(s):</strong> ";
 			    //generate a unique list of genotypes
 			    var temp_list = [];
@@ -794,19 +801,10 @@ as a separate call in the init function.
 				retData = retData + temp_list[idx] + "<br/>";
 			    }
 			    //console.log("data: " + retData);*/
-			}
+/*			}
 		});
-
-	    this.options.svg.append("foreignObject")
-	    //adjust the height and width to avoid overlaying on top of the rectangle border
-		.attr("width", this.options.detailRectWidth-(this.options.detailRectStrokeWidth*2))
-		.attr("height", this.options.detailRectHeight-(this.options.detailRectStrokeWidth*2))
-		.attr("id", "detail_content")
-		.attr("y", (25+this.options.detailRectStrokeWidth))
-	        .attr("x", (560+this.options.detailRectStrokeWidth))
-		.append("xhtml:body")
-	    //.style("font", "14px 'Helvetica Neue'")
-		.html(retData);
+*/
+	    this._updateDetailSection(retData);
 	},
 
 
