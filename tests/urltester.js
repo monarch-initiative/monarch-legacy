@@ -170,7 +170,7 @@ var testResults = function(urlinfo, results) {
         listify(expects.must_not_contain).forEach(
             function(matchObj) { 
                 var matches = results.filter(function(r) { return matchesQuery(r, matchObj) });
-                assert.isEqual(matches.length, 0);
+                assert.equal(matches.length, 0);
             });
     }
 }
