@@ -6,7 +6,7 @@
         {
             component : "federation",
             priority : 1,
-            url : "http://beta.neuinfo.org/services/v1/federation/data/nlx_151835-1.json?includePrimaryData=true&q=HP:0001337",
+            url : "http://beta.neuinfo.org/services/v1/federation/data/nlx_151835-1.json?exportType=data&q=HP:0001337",
             desc : "DIRECT Query on OmimDiseasePhenotype using an HPO ID (Tremor)",
             expects : {
                 format : "json",
@@ -20,7 +20,7 @@
         {
             component : "federation",
             priority : 1,
-            url : "http://beta.neuinfo.org/services/v1/federation/data/nlx_151835-1.json?includePrimaryData=true&q=HP:0001337&includeSubclasses=true",
+            url : "http://beta.neuinfo.org/services/v1/federation/data/nlx_151835-1.json?exportType=data&q=HP:0001337&includeSubclasses=true&count=1000",
             desc : "INFERRED Query OmimDiseasePhenotype using an HPO ID (Tremor) - include subclasses - we expect diseases directly annotated and annotated to subclasses",
             expects : {
                 format : "json",
@@ -52,7 +52,7 @@
         {
             component : "federation",
             priority : 1,
-            url : "http://beta.neuinfo.org/services/v1/federation/data/nif-0000-00096-6.json?includePrimaryData=true&count=1000&q=MP:0000428&includeSubclasses=true&",
+            url : "http://beta.neuinfo.org/services/v1/federation/data/nif-0000-00096-6.json?exportType=data&count=1000&q=MP:0000428&includeSubclasses=true&",
             desc : "INFERRED MGI Geno Pheno using an MP ID (craniofacial) - include subclasses - we expect genotypes directly annotated and annotated to subclasses",
             expects : {
                 format : "json",
@@ -67,7 +67,7 @@
         {
             component : "federation",
             priority : 1,
-            url : "http://beta.neuinfo.org/services/v1/federation/data/nif-0000-03216-9.json?includePrimaryData=true&count=1000&q=Huntington",
+            url : "http://beta.neuinfo.org/services/v1/federation/data/nif-0000-03216-9.json?exportType=data&count=1000&q=Huntington",
             desc : "Query OmimDiseaseVariants using string matching (expect Hungtindon's disease)",
             expects : {
                 format : "json",
@@ -81,7 +81,7 @@
         {
             component : "federation",
             priority : 1,
-            url : "http://beta.neuinfo.org/services/v1/federation/data/nif-0000-03216-9.json?includePrimaryData=true&count=1000&q=OMIM:214290",
+            url : "http://beta.neuinfo.org/services/v1/federation/data/nif-0000-03216-9.json?exportType=data&count=1000&q=OMIM:214290",
             desc : "Query OmimDiseaseVariants using OMIM ID (Cervical Vertebrae, Agenesis Of)",
             expects : {
                 format : "json",
