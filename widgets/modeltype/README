@@ -1,0 +1,26 @@
+This file describes how to include the modeltype.js file in a webpage.  The following .js code is required:
+
+- jQuery (tested with 1.11.0)
+- jQuery UI (tested with 1.10.3)
+- d3 (tested with 3.2.4)
+
+To add the ModelType to the page:
+
+- create a list of phenotypes as an array of Javascript objects with the following attributes:
+    [{ id:"HP:0000006", observed:"positive"},{ id:"HP:0000726", observed:"positive"},...];
+- create a <div> tag to contain the widget
+- add the widget to the div tag as follows.  The following example assumes you are adding the widget to a div
+    with an id="phen_vis": 
+            $("#phen_vis").modeltype({serverURL : "http://tartini.crbs.ucsd.edu", phenotypeData: phenotypes,
+	   				      target_species: "10090" });
+	   				      
+Widget Parameters
+To add the widget, you must set some parameters.  The following are the most common parameters 
+
+- phenotypeData [required]- this is the only required parameter.  It is a Javascript array of objects listing the 
+   phenotypes to be rendered in the widget.
+- serverURL [optional*]- *this parameter is only optional if the widget is being deployed within the Monarch
+   Initiative website.  Otherwise, you must set it to a URL accessible to your website that contains the Monarch web services.
+   You will also need to handle the cross-site scripting (XSS) issues you will encounter when you specify this URL.
+- targetSpecies [optional]- this parameter defaults to 10090 (mus musculus).  Change this parameter if you want to compare the
+   phenotypes in the pheotypeData parameter against a different species.  
