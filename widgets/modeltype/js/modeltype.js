@@ -59,7 +59,8 @@ as a separate call in the init function.
 	    phenotypeData: [],
 	    colorScale: undefined,
 	    targetSpecies: "10090",
-	    yAxisMax : 0
+	    yAxisMax : 0,
+	    serverURL : "",
 	},
 
 	//NOTE: I'm not too sure what the default init() method signature should be
@@ -106,7 +107,7 @@ as a separate call in the init function.
     	//NOTE: just temporary until the calls are ready
 		jQuery.ajax({
 			//url : "data/sample_model_data.json",
-			url: "/simsearch/phenotype/?input_items=" + 
+			url: this.options.serverURL + "/simsearch/phenotype/?input_items=" + 
 			    phenotypeList.join(",") + "&target_species="+this.options.targetSpecies, 
 			async : false,
 			dataType : 'json',
@@ -349,7 +350,7 @@ as a separate call in the init function.
 			.attr("y", (16+this.options.detailRectStrokeWidth))
 		    .attr("x", (440+this.options.detailRectStrokeWidth))
 			.append("xhtml:body")
-			.style("font-size", "12px")
+			.style("font-size", "10px")
 			.html(htmltext);
     	
     },
@@ -582,7 +583,8 @@ as a separate call in the init function.
             //.attr("transform","translate(30,30)")
 		.attr("class", "detail_text")
 		.attr("y", "10")
-		.attr("x", "440")
+		.attr("x", "440")		
+		.style("font-size", "12px")
 		.text("Item Details:");
 	    
 		
@@ -773,7 +775,7 @@ as a separate call in the init function.
 	    var retData;
 	    this._showThrobber();
 	    jQuery.ajax({
-		url : "/phenotype/" + data.attributes["ontology_id"].value + ".json",
+		url : this.options.serverURL + "/phenotype/" + data.attributes["ontology_id"].value + ".json",
 		async : false,
 		dataType : 'json',
 		success : function(data) {
@@ -795,7 +797,7 @@ as a separate call in the init function.
 			+ "<br/><strong>Score:</strong> " + modelData.model_score;
 
 /*		jQuery.ajax({
-			url : "/genotype/" + this._getConceptId(modelData.model_id) + ".json",
+			url : this.options.serverURL +"/genotype/" + this._getConceptId(modelData.model_id) + ".json",
 			async : false,
 			dataType : 'json',
 			success : function(data) {
