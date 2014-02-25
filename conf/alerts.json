@@ -1,1 +1,5 @@
-["We are currently experiencing difficulties. <b>Results may be unreliable</b>. Please check back later."]
+// UNCOMMENT THIS IF PROBLEMS ARE ANTICIPATED:
+//["We are currently experiencing difficulties. <b>Results may be unreliable</b>. Please check back later."]
+
+// REMOVE THIS IF THE ABOVE IS UNCOMMENTED:
+[]

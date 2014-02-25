@@ -19,8 +19,11 @@ load('lib/monarch/api.js');
 var Parser = require('ringo/args').Parser;
 var system = require('system');
 var assert = require("assert");
+var fs = require('fs');
 var engine;
 var setup;
+if (typeof bbop == 'undefined') { var bbop = {};}
+if (typeof bbop.monarch == 'undefined') { bbop.monarch = {};}
 
 // feel free to add more here...
 var diseaseIds =
@@ -71,12 +74,16 @@ if (require.main == module) {
     }
 
     setup = options.setup;
+    var conf = "conf/server_config_dev.json";
 
     if (setup != null) {
         if (setup == 'production') {
-            load("lib/monarch/web/webapp_launcher_production.js");
+            conf = "conf/server_config_production.json";
         }
     }
+
+    // see: https://docs.google.com/document/d/1ZxGuuvyvMmHVWQ7rIleIRkmbiDTNNP27eAHhxyFWHok/edit#
+    bbop.monarch.defaultConfig = JSON.parse(fs.read(conf));
 
     engine = new bbop.monarch.Engine();
 

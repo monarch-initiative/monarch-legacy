@@ -14,10 +14,16 @@ RINGO_PORT ?= 8080
 ### Tests
 ###
 
-test: test-apitest test-urltester
+TESTS = apitest urltester
+
+test: $(patsubst %, test-%, $(TESTS))
+production-test: $(patsubst %, production-test-%, $(TESTS))
 
 test-%:
 	$(RINGO_BIN) tests/$*.js
+
+production-test-%:
+	$(RINGO_BIN) tests/$*.js -s production
 
 ###
 ### Documentation.
