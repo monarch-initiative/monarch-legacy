@@ -7,8 +7,17 @@
 ###
 
 RINGO_MODULE_PATH ?= ../stick/lib
-RINGO_BIN ?= /usr/bin/ringo
+RINGO_BIN ?= ./ringojs/bin/ringo
 RINGO_PORT ?= 8080
+
+###
+### Tests
+###
+
+test: test-apitest test-urltester
+
+test-%:
+	$(RINGO_BIN) tests/$*.js
 
 ###
 ### Documentation.
