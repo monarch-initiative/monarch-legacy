@@ -134,7 +134,8 @@ var testUrl = function(urlinfo) {
                 results = [resultObj];
             }
             else {
-                console.warn("Not implemented: "+ subcomponent);
+                results = [resultObj];
+                //console.warn("Not implemented: "+ subcomponent);
             }
         }
         else {
@@ -176,10 +177,30 @@ var testResults = function(urlinfo, results) {
 }
 
 var matchesQuery = function(obj, pattern) {
+    //console.log("    MQ(OBJ) = "+JSON.stringify(obj, null, ' '));
+    //console.log("    MQ(PATTERN) = "+JSON.stringify(pattern, null, ' '));
+    // if the object is a list, only one element has to match
+    if (obj.push != null) {
+        var matches = obj.filter(function(r) { return matchesQuery(r, pattern) } );
+        return matches.length > 0;
+    }
     for (var k in pattern) {
-        if ( ! (obj[k] != null && obj[k] == pattern[k]) ) {
+        //console.log("    T ? "+obj[k]+" == "+pattern[k]);
+        if (obj[k] == null) {
             return false;
         }
+        if (typeof pattern[k] == 'object') {
+            // recurse
+            if (! matchesQuery(obj[k], pattern[k])) {
+                return false;
+            }
+        }
+        else {
+            if ( obj[k] != pattern[k] ) {
+                return false;
+            }
+        }
+        //console.log("    OK "+k);
     }
     return true;
 }
@@ -209,7 +230,7 @@ if (require.main == module) {
     var script = system.args.shift();
     var parser = new Parser(system.args);
     parser.addOption('h', 'help', null, 'Display help');
-    parser.addOption('c', 'components', 'String', 'comma separated list of components');
+    parser.addOption('c', 'components', 'String', 'comma separated list of components. "ALL" for all');
     parser.addOption('s', 'setup', 'String', 'one of: alpha, beta, production (NOT IMPLEMENTED)');
     
     var options = parser.parse(system.args);
@@ -236,6 +257,9 @@ ringo tests/urltester.js -c vocabulary\n\
 
     if (options.components != null) {
         components = options.components.split(",");
+        if (components = 'ALL') {
+            components = null;
+        }
     }
     else {
         components = [
