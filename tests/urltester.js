@@ -234,8 +234,15 @@ ringo tests/urltester.js -c vocabulary\n\
 	system.exit('-1');
     }
 
-    if (options.components) {
+    if (options.components != null) {
         components = options.components.split(",");
+    }
+    else {
+        components = [
+            'vocabulary',
+            'federation',
+            'ontoquest'
+        ];
     }
 
     version = options.setup;

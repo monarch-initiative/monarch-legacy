@@ -22,5 +22,8 @@ To add the widget, you must set some parameters.  The following are the most com
 - serverURL [optional*]- *this parameter is only optional if the widget is being deployed within the Monarch
    Initiative website.  Otherwise, you must set it to a URL accessible to your website that contains the Monarch web services.
    You will also need to handle the cross-site scripting (XSS) issues you will encounter when you specify this URL.
+   Option 1: Use http://tartini.crbs.ucsd.edu to connect to the development/test web services.  This server is less stable 
+      than the production server.
+   Option 2: Use http://monarch.monarchinitiative.org to connect to the stable, production version of the web services (better uptime)
 - targetSpecies [optional]- this parameter defaults to 10090 (mus musculus).  Change this parameter if you want to compare the
    phenotypes in the pheotypeData parameter against a different species.  
