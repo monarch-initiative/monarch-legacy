@@ -3,6 +3,7 @@
         // ====================
         // FEDERATION SERVICES
         // ====================
+        // --OMIM--
         {
             component : "federation",
             priority : 1,
@@ -17,6 +18,7 @@
             }
         },
 
+        // --OMIM closure--
         {
             component : "federation",
             priority : 1,
@@ -49,6 +51,7 @@
             }
         },
 
+        // --MGI closure--
         {
             component : "federation",
             priority : 1,
@@ -59,11 +62,19 @@
                 min_results : 20,
                 must_contain : 
                 [
-                    // TODO
+                    {
+                        effective_genotype_id: "MGI:3686776",
+                        genomic_background_label: "involves: 129S7/SvEvBrd * C57BL/6 * CBA",
+                        phenotype_id: "MP:0003679",
+                        phenotype_label: "ear lobe hypoplasia",
+                        publication_id: "PMID:16914493",
+                        
+                    }
                 ]
             }
         },
 
+        // --OMIM variant search--
         {
             component : "federation",
             priority : 1,
@@ -78,6 +89,7 @@
             }
         },
 
+        // --OMIM variant--
         {
             component : "federation",
             priority : 1,
@@ -147,6 +159,7 @@
         // ====================
         // MONARCH QUERIES
         // ====================
+        // --html--
         {
             component : "monarch",
             priority : 1,
@@ -159,6 +172,7 @@
             }
         },
 
+        // --html--
         {
             component : "monarch",
             priority : 1,
@@ -176,6 +190,7 @@
             }
         },
 
+        // --html--
         {
             component : "monarch",
             priority : 1,
@@ -192,6 +207,80 @@
             }
         },
 
+        // --json--
+        // monarch API calls can return deeply nested/structured objects, these are
+        // checked recursively
+        {
+            component : "monarch",
+            priority : 1,
+            url : "http://tartini.crbs.ucsd.edu/phenotype/HP:0001337.json",
+            desc : "JSON for A HPO phenotype disease page, Tremor (and subtypes)",
+            expects : {
+                format : "json",
+                must_contain : [
+                    {
+                        disease_associations : {
+                            disease: {
+                                label: "Nipah Virus Disease"
+                            }
+                        }
+                    },
+                    {
+                        disease_associations : {
+                            type: "Association",
+                            disease: {
+                                id: "OMIM:253550",
+                                label: "Spinal Muscular Atrophy, Type Ii"
+                            },
+                            phenotype: {
+                                id: "HP:0002378",
+                                label: "Hand tremor"
+                            },
+                            source: {
+                                id: "nlx_151835-1",
+                                label: "HPO"
+                            }
+                        }
+                    },
+                    {
+                        genotype_associations : {
+                            has_genotype : {
+                                id: "MGI:3844321",
+                                label: "Grid2<Lc-J>/Grid2<+> [BALB/cByJ]",
+                                type: "effective_genotype",
+                                has_part: {
+                                    id: "MGI:3844321",
+                                    label: "Grid2<Lc-J>/Grid2<+> [BALB/cByJ]",
+                                    type: "intrinsic_genotype",
+                                    has_part: {
+                                        type: "genomic_variation_complement",
+                                        has_part : {
+                                            type: "variant_single_locus_complement",
+                                            has_variant_part : {
+                                                has_part : {
+                                                    type: "variant_locus",
+                                                    has_part : {
+                                                        type: "sequence_alteration"
+                                                    }
+                                                }
+                                            }
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                    }
+                ],
+                raw_contains : 
+                [
+                    "Tremor",
+                    "Cataract, Ataxia, Short Stature, And Mental Retardation", // associated with a subtype of tremor
+                    "Grid2", // MGI genotype, for titubation
+                ]
+            }
+        },
+
+        // --simsearch json--
         {
             component : "monarch",
             subcomponent : "simsearch",
@@ -208,6 +297,7 @@
             }
         },
 
+        // --simsearch html--
         {
             component : "monarch",
             priority : 1,
@@ -221,6 +311,7 @@
         },
 
 
+        // --analyze html--
         {
             component : "monarch",
             priority : 1,
@@ -233,6 +324,7 @@
             }
         },
 
+        // --redirects--
         {
             component : "monarch",
             priority : 1,

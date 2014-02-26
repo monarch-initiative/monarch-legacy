@@ -3,7 +3,7 @@
     
     "ontology_services_url" : "http://services.monarchinitiative.org/ontoquest/",
     
-    "federation_services_url" : "http://beta.neuinfo.org/services/v1/federation/",
+    "federation_services_url" : "http://neuinfo.org/services/v1/federation/",
     
     "owlsim_services_url" : "http://owlsim.monarchinitiative.org/",
     
