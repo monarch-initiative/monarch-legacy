@@ -218,6 +218,17 @@ var modifyUrlForComponent = function(url, component) {
         if (version == 'alpha') {
             return url.replace("beta.", "alpha.");
         }
+        else if (version == 'production') {
+            return url.replace("http://beta.neuinfo.org/services/v1/", "http://neuinfo.org/servicesv1/v1/");
+        }
+        else if (version == 'beta') {
+            // default
+        }
+        else {
+            console.warn("UNKNOWN: "+version);
+	    system.exit('-1');
+            
+        }
     }
     return url;
 }
@@ -228,6 +239,7 @@ function listify(x) {
 
 if (require.main == module) {
     var script = system.args.shift();
+    console.log("ARGS="+system.args);
     var parser = new Parser(system.args);
     parser.addOption('h', 'help', null, 'Display help');
     parser.addOption('c', 'components', 'String', 'comma separated list of components. "ALL" for all');
@@ -242,22 +254,24 @@ if (require.main == module) {
         print("\n\n\
 Example:\n\
 # Tests vocabulary component\n\
-ringo tests/urltester.js -c vocabulary\n\
+ringo -c vocabulary tests/urltester.js\n\
 \n\
 Example:\n\
 # Tests federation component on alpha\n\
-ringo tests/urltester.js -c vocabulary -s alpha\n\
+ringo -c vocabulary -s alpha  tests/urltester.js\n\
 \n\
 Example:\n\
 # all tests\
-ringo tests/urltester.js -c vocabulary\n\
+ringo  -c vocabulary tests/urltester.js\n\
 ");
 	system.exit('-1');
     }
 
+    console.log("options.components = " + options.components);
     if (options.components != null) {
+        console.log("SETTING = " + options.components);
         components = options.components.split(",");
-        if (components = 'ALL') {
+        if (components == 'ALL') {
             components = null;
         }
     }
@@ -268,6 +282,7 @@ ringo tests/urltester.js -c vocabulary\n\
             'ontoquest'
         ];
     }
+    console.log("Components = " + components);
 
     version = options.setup;
 
