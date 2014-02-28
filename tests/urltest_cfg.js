@@ -51,7 +51,7 @@
             }
         },
 
-        // --MGI closure--
+        // --MGI closure: high level term--
         {
             component : "federation",
             priority : 1,
@@ -59,7 +59,19 @@
             desc : "INFERRED MGI Geno Pheno using an MP ID (craniofacial) - include subclasses - we expect genotypes directly annotated and annotated to subclasses",
             expects : {
                 format : "json",
-                min_results : 20,
+                min_results : 800,
+            }
+        },
+
+        // --MGI closure: high level term--
+        {
+            component : "federation",
+            priority : 1,
+            url : "http://beta.neuinfo.org/services/v1/federation/data/nif-0000-00096-6.json?exportType=data&count=1000&q=MP:0003677&includeSubclasses=true&",
+            desc : "INFERRED MGI Geno Pheno using an MP ID (craniofacial) - include subclasses - we expect genotypes directly annotated and annotated to subclasses",
+            expects : {
+                format : "json",
+                min_results : 2,
                 must_contain : 
                 [
                     {
