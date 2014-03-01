@@ -81,10 +81,8 @@
                             <b>IDs:</b>
                             {{ids}}
                         </div>
-                    <h3>Ontology</h3>
-                        <table class="{{css.table}}">
-                        {{{ontNavBox}}}
-                        </table>
+                    <h3>Classification</h3>
+                    {{{includes.classificationComponent}}}
                     <h3>Data Overview</h3>
                         {{#hasDiseases}}
                         This phenotype is associated with <b>{{diseaseNum}}</b> diseases.<br/>

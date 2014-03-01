@@ -1,0 +1,25 @@
+                        <table class="{{css.table}}">
+                          {{#superClasses}}
+                          <tr>
+                            <td>
+                              {{{.}}}
+                            </td>
+                          </tr>
+                          {{/superClasses}}
+                          <tr>
+                            <td>
+                              &nbsp;&nbsp;<b>{{label}}</b>
+                              {{#equivalentClasses}}
+                              = {{{.}}}
+                              {{/equivalentClasses}}
+                            </td>
+                          </tr>
+                          {{#subClasses}}
+                          <tr>
+                            <td>
+                              &nbsp;&nbsp;&nbsp;&nbsp;{{{.}}}
+                            </td>
+                          </tr>
+                          {{/subClasses}}
+                          
+                        </table>

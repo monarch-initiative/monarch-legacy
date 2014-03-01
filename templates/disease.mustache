@@ -120,30 +120,7 @@
                         <b>IDs:</b>
                         {{ids}}
                     </div>
-                    {{#hasSuperClasses}}
-                    <div class="superclasses">
-                        <h4>Is a subtype of</h4>
-                        <table class="{{css.table}}">
-                            {{{superClassTable}}}
-                        </table>
-                    </div>
-                    {{/hasSuperClasses}}
-                    {{#hasEquivalentClasses}}
-                    <div class="equivs">
-                        <h4>Is equivalent to</h4>
-                        <table class="{{css.table}}">
-                            {{{equivalentClassTable}}}
-                        </table>
-                    </div>
-                    {{/hasEquivalentClasses}}
-                    {{#hasSubClasses}}
-                    <div class="subs">
-                        <h4>Has subtype</h4>
-                        <table class="{{css.table}}">
-                            {{{subClassTable}}}
-                        </table>
-                    </div>
-                    {{/hasSubClasses}}
+                    {{{includes.classificationComponent}}}
                     <h3>Data Overview</h3>
                     {{#hasPhenotypes}}
                     This disease is associated with <b>{{phenotypeNum}}</b> phenotypes.<br/>
