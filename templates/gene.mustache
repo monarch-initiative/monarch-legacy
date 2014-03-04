@@ -72,7 +72,7 @@
                     <div class="tab greyed-out">Phenotypes</div>
                     {{/hasPhenotypes}}
                     {{#hasDiseases}}
-                    <a href="#disease"><div class="tab contenttab distab">Disease</div></a>
+                    <a href="#disease"><div class="tab contenttab distab">Diseases</div></a>
                     {{/hasDiseases}}
                     {{^hasDiseases}}
                     <div class="tab greyed-out">Disease</div>
@@ -124,8 +124,16 @@
                             {{species}}
                         </div>
                         <div class="ids">
+                            <b>Gene Location:</b>
+                            {{location}}
+                        </div>
+                        <div class="ids">
                             <b>IDs:</b>
                             <a href="http://www.ncbi.nlm.nih.gov/gene?term={{ncbi_id}}">{{id}}</a>
+                        </div>
+                        <div class="ids">
+                            <b>Test field:</b>
+                            {{refList}}
                         </div>
                         {{#hasSuperClasses}}
                         <div class="superclasses">
@@ -216,7 +224,8 @@
                 {{/hasAlleles}}
                 {{#hasDiseases}}
                 <div id="disease" class="category">
-                    <h3>Disease</h3>
+                    <h3 class="downloadline">Diseases</h3>
+                    <a href="{{{base_url}}}/disease_associations.json" class="btn btn-info downloadline">JSON</a>
                     <table class="{{css.table}}">
                     {{{diseaseTable}}}
                     </table>
