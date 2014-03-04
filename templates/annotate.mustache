@@ -1,0 +1,92 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Annotation</title>
+    {{#scripts}}
+    <script type="text/javascript" src="{{url}}"></script>
+    {{/scripts}}
+    <script src="/js/tabs.js"></script>
+    <script src="/js/stupidtable.min.js"></script>
+    <script src="/js/tables.js"></script>
+    {{#stylesheets}}
+    <link rel="stylesheet" type="text/css" href="{{url}}"/>
+    {{/stylesheets}}
+    <link rel="stylesheet" type="text/css" href="/css/monarch-specific.css"/>
+    <link rel="stylesheet" type="text/css" href="/css/imagehover.css"/>
+    <meta charset="utf-8"/>
+</head>
+<body>
+    {{{includes.navbar}}}
+    <div class="monarch-container">
+        <div class="sidebar">
+            <a href="/"><img src="/image/logo-sneak.png" width="100" class="img-rounded"/></a>
+            <ul class="nav nav-list">
+            </ul>
+        </div>
+        <div class="content">
+            <div class="jumbotron">
+                <div id="description">
+                    {{#alerts}}
+                    <div class="alert">
+                        {{{.}}}
+                    </div>
+                    {{/alerts}}
+                    <h1>Text Annotator</h1>
+                    <p>
+                      Provided by the
+                      <a href="http://nif-services.neuinfo.org/servicesv1/resource_AnnotateService.html">
+                        NIF Annotation Service
+                      </a>
+                    </p>
+                </div>
+            </div>
+            <div id="complete-info">
+                <div id="query" class="first category">
+                    <form role="form" action="/annotate/text/" method="GET">
+                      <p>Enter a phrase, piece of text or abstract:</p>
+                      <textarea cols="80" rows="10" 
+                                id="annotate_auto_target" name="q">
+{{#query}}
+{{query}} 
+{{/query}}
+{{^query}}
+SAMPLE TEXT, ENTER YOUR OWN HERE:
+Lewis (1978) found 7 affected males and 5 affected females in 3 consecutive generations of a Caucasian kindred. As in the X-linked Nettleship-Falls form of ocular albinism (300500), the patients showed reduced visual acuity, photophobia, nystagmus, translucent irides, strabismus, hypermetropic refractive errors, and albinotic fundus with foveal hypoplasia. The skin lesions showed macromelanosomes as in X-linked ocular albinism. Deafness, which was accompanied by vestibular hypofunction, lentigines even in unexposed areas, optic nerve dysplasia, and dominant inheritance distinguished this form of ocular albinism. (In the LEOPARD syndrome (151100) vestibular function is normal.)
+
+Bard (1978) described a kindred that was atypical of Waardenburg syndrome (see 193510) in several ways. Although the nasal root was prominent, one affected person had dystopia of the inner canthi or lower puncta. The face in some showed striking freckling of pale skin. Symptomatic vestibular disturbance was another unusual feature. Lewis (1989) expressed the opinion that the family reported by Bard (1978) as an instance of Waardenburg syndrome in fact had this disorder. Lewis (1989) had also been told of 2 other small families with the syndrome. Goldberg (1966) described a Waardenburg syndrome family with apparent ocular albinism.
+
+Morell et al. (1997) presented an update of the clinical findings in the family of Bard (1978). The deafness was sensorineural and congenital. Heterochromia iridis was a prominent feature in 1 sibship in which both segmental iris bicolor and complete heterochromia occurred. Most of the affected individuals showed transillumination defects of the iris. Hypopigmentation of the fundus was mild in some, moderate in others, and severe in yet others. Almost all affected individuals had strabismus and visual acuity defects. One individual with a prominent white forelock, characteristic of Waardenburg syndrome, was pictured. 
+{{/query}}
+</textarea>
+
+                      </br>
+                      <input type="checkbox" name="longestOnly"
+                             {{#longestOnly}}
+                             checked="true"
+                             {{/longestOnly}}
+                             value="true">Always use longest match</input>
+
+                      </br>
+                      <button type="submit" class="btn btn-info">Search</button>  
+                    {{#hasResults}}
+                    <h3 class="downloadline">Results</h3>
+                    <table>
+                    {{{resultsTable}}}
+                    </table>
+                    {{/hasResults}}
+                    </form>
+                    {{#hasResults}}
+                    <form role="form" action="/analyze/phenotype/" method="GET">
+                      <span>Phenotype Profile Size: {{numPhenotypes}}</span>
+                      <input type="hidden" name="input_items" value="{{inputItems}}"/>
+                      <input type="hidden" name="target_species" value="10090"/>
+                      <button type="submit" class="btn btn-info">Search!</button>  
+                    </form>
+                    {{/hasResults}}
+                </div>
+            </div>
+            {{{includes.footer}}}
+        </div>
+    </div>
+</body>
+</html>
