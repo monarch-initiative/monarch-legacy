@@ -63,22 +63,23 @@
                     <div class="tab greyed-out">Phenotypes</div>
                     {{/hasPhenotypes}}
                     {{#hasDiseases}}
-                    <a href="#disease"><div class="tab contenttab distab">Disease</div></a>
+                    <a href="#disease"><div id="longertab" class="tab contenttab distab">Related Diseases</div></a>
                     {{/hasDiseases}}
                     {{^hasDiseases}}
-                    <div class="tab greyed-out">Disease</div>
+                    <div id="longertab" class="tab greyed-out">Related Diseases</div>
                     {{/hasDiseases}}
+                    <div class="second-row-divider"></div>
                     {{#hasGenes}}
-                    <a href="#genes"><div class="tab contenttab gentab">Genes</div></a>
+                    <a href="#genes"><div class="tab contenttab gentab second">Genes</div></a>
                     {{/hasGenes}}
                     {{^hasGenes}}
-                    <div class="tab greyed-out">Genes</div>
+                    <div class="tab greyed-out second">Genes</div>
                     {{/hasGenes}}
                     {{#hasSim}}
-                    <a href="#similarity"><div class="tab contenttab simitab">Similarity</div></a>
+                    <a href="#similarity"><div id="longtab" class="tab contenttab simitab">Similar Models</div></a>
                     {{/hasSim}}
                     {{^hasSim}}
-                    <div class="tab greyed-out">Similarity</div>
+                    <div id="longtab" class="tab greyed-out">Similar Models</div>
                     {{/hasSim}}
                 </div>
             </div>
@@ -93,13 +94,13 @@
                         This genotype is associated with <b>{{phenotypeNum}}</b> phenotypes.<br/>
                         {{/hasPhenotypes}}
                         {{#hasDiseases}}
-                        This genotype is associated with <b>{{diseaseNum}}</b> diseases.<br/>
+                        This genotype is associated with <b>{{diseaseNum}}</b> related diseases.<br/>
                         {{/hasDiseases}}
                         {{#hasGenes}}
                         This genotype is associated with <b>{{geneNum}}</b> genes.<br/>
                         {{/hasGenes}}
                         {{#hasSim}}
-                        This genotype is associated with <b>{{simNum}}</b> related diseases.<br/>
+                        This genotype is associated with <b>{{simNum}}</b> similar models.<br/>
                         {{/hasSim}}
                 </div>
                 {{#hasPhenotypes}}
@@ -115,7 +116,7 @@
                 {{/hasPhenotypes}}
                 {{#hasDiseases}}
                 <div id="disease" class="category">
-                    <h3>Associated Diseases</h3>
+                    <h3>Related Diseases</h3>
                     <table class="{{css.table}}">
                     {{{diseaseTable}}}
                     </table>
@@ -131,7 +132,7 @@
                 {{/hasGenes}}
                 {{#hasSim}}
                 <div id="similarity" class="category">
-                    <h3>Similar Diseases</h3>
+                    <h3>Similar Models</h3>
                     <table class="{{css.table}}">
                     {{{simTable}}}
                     </table>
