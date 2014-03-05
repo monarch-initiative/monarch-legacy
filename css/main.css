@@ -3,9 +3,28 @@
 .jumbotron {
     margin-bottom: 20px;
 }
+.buttonline {
+    display: inline-block;
+}
 .right-butn {
     float: right;
+    margin: 15px 20px;
 }
+.clear {
+    clear: both;
+}
+.tagline {
+    font-size: 16px;
+    font-style: italic;
+    font-weight: 500;
+    line-height: 18px;
+    padding-bottom: 10px;
+}
+.description {
+    font-size: 14px;
+    line-height: 26px;
+}
+
 /* Boxes */
 @media (min-width: 1200px) {
     .column {
