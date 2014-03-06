@@ -1,0 +1,29 @@
+                    <form role="form" action="/annotate_minimal/text/" method="GET">
+                      <p>Enter a phrase, piece of text or abstract:</p>
+                      <textarea cols="80" rows="10" 
+                                id="annotate_auto_target" name="q">
+{{#query}}
+{{query}} 
+{{/query}}
+{{^query}}
+ENTER YOUR TEXT HERE
+{{/query}}
+</textarea>
+
+                      </br>
+                      <input type="checkbox" name="longestOnly"
+                             {{#longestOnly}}
+                             checked="true"
+                             {{/longestOnly}}
+                             value="true">Always use longest match</input>
+
+                      </br>
+
+                      <button type="submit" class="btn btn-info">Search</button>  
+                    {{#hasResults}}
+                    <h3 class="downloadline">Results</h3>
+                    <table>
+                    {{{resultsTable}}}
+                    </table>
+                    {{/hasResults}}
+                    </form>
