@@ -4,8 +4,11 @@
     "ontology_services_url" : "http://nif-services-stage.neuinfo.org/ontoquest-lamhdi/",
     
     "federation_services_url" : "http://beta.neuinfo.org/services/v1/federation/",
+
+    "annotate_services_url" : "http://beta.neuinfo.org/services/v1/annotate/",
     
-    "owlsim_services_url" : "http://owlsim.crbs.ucsd.edu/",
+    "autocomplete_url" : "http://beta.neuinfo.org/services/v1/vocabulary.json",
+
+    "owlsim_services_url" : "http://owlsim.crbs.ucsd.edu/"
     
-    "autocomplete_url" : "http://beta.neuinfo.org/services/v1/vocabulary.json"
 }
