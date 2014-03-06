@@ -20,33 +20,28 @@
         </div>
         <div class="content">
             <div class="jumbotron">
-                <h1>Welcome to Monarch!</h1>
-                <a href="/page/tour" class="btn btn-large btn-info right-butn">About Monarch</a>
-                <h2>Sneak Peek</h2>      
-                <p>Model systems are the cornerstone of biomedical
-                research to investigate biological processes, test
-                gene-based disease hypotheses, and develop and test
-                disease treatments. The vast knowledge that we have about
-                model systems can be better utilized if semantically
-                aggregated and made queryable based on any number of
-                facets, such as phenotypic similarity, network analysis,
-                gene expression and function, and genomics. The Monarch
-                Initiative aims to provide easy-to-use tools to navigate
-                this data landscape, services for other resources, and
-                educational outreach regarding the production of
-                structured data for biomedical discovery.</p> 
+                <h2 class="buttonline">The Monarch Initiative</h2>
+                <a href="/page/tour" class="btn btn-large btn-info right-butn buttonline">About Monarch</a>
+                <div class="clear"></div>
+                <div class="tagline">
+                    Enabling navigation across a rich landscape of phenotypes, diseases,
+                    models, and genes for translational research.
+                </div>
+                <div class="description">
+                    Semantically describing this data enables novel computational methods to
+                    identify previously unknown relationships and suggest novel biological
+                    insights. Our goal is to provide usable tools that will help biomedical
+                    researchers harness the power of these computational approaches.
+                </div> 
             </div>
             <div id="columns">
                 <div id="column1" class="column">
                     <div class="entry">
                         <a href="/disease" class="entryheader">Diseases</a>
                         <div class="entrydescript">
-                            <a href="/disease/DOID_14330">Parkinson's disease</a>:
-                            A neurodegenerative disease that has material basis in
-                            degeneration of the central nervous system that often
-                            impairs the sufferer's motor skills, speech, and other
-                            functions.<br/>
-                            <p>Other Diseases:
+                            Explore genetic diseases, find similar models, examine phenotypes,
+                            and identify related genes.<br/>
+                            <p>Sample Diseases:
                             <a href="/disease/DOID_14692">Smith-Lemli-Opitz syndrome</a>,
                             <a href="/disease/DOID_1932">Angelman syndrome</a>,
                             <a href="/disease/DOID_6683">Aarskog-Scott syndrome</a>,
@@ -58,12 +53,11 @@
                     <div class="entry">
                         <a href="/model" class="entryheader">Models</a>
                         <div class="entrydescript">
-                            <p><a href="/model/MGI_3621984">Fat Aussie</a>:
-                            The biochemical differences between simple steatosis, a
-                            benign liver disease, and non-alcoholic steatohepatitis,
-                            which leads to cirrhosis, are unclear. Fat aussie is an
-                            obese mouse strain with a truncating mutation (foz) in the
-                            Alms1 gene.</p>
+                            Find model systems that recapitulate various aspects of human
+                            disease or phenotypes.<br/>
+                            <p>Sample Models:
+                            <a href="/model/MGI_3621984">Fat aussie</a> is an obese mouse
+                            strain with a truncating mutation (foz) in the Alms1 gene.</p>
                         </div>
                     </div>
                 </div>
@@ -71,8 +65,8 @@
                     <div class="entry">
                         <a href="/phenotype" class="entryheader">Phenotypes</a>
                         <div class="entrydescript">
-                            Large floppy ears: Replace this with something more sensible.<br/>
-                            <p>Related Phenotypes:
+                            See which diseases, models, and genes are linked to an observed phenotype.<br/>
+                            <p>Sample Phenotypes:
                             <a href="/phenotype/HP_0000003">Multicystic kidney dysplasia (human)</a>,
                             <a href="/phenotype/HP_0000104">Renal agenesis (human)</a>,
                             <a href="/phenotype/MP_0000854">abnormal cerebellum development (mouse)</a>,
@@ -81,13 +75,22 @@
                         </div>
                     </div>
                     <div class="entry">
-                        <a href="/analyze/phenotypes" class="entryheader">Phenotype Model Search</a>
+                        <a href="/analyze/phenotypes" class="entryheader">Analyze Phenotypes</a>
                         <div class="entrydescript">
-                            <p>Find models similar to sets of phenotypes.</p>
+                            <p>Learn which diseases and models are most similar to a set of
+                            phenotypic observations in humans, mice, or zebrafish.<br/>
+                            <a href="/analyze/phenotypes/?target=ZFIN&input_items=MP%3A0000788%0D%0AMP%3A0000822%0D%0AMP%3A0000914%0D%0AMP%3A0000929%0D%0AMP%3A0000930%0D%0AMP%3A0001286%0D%0AMP%3A0001393%0D%0AMP%3A0001688%0D%0AMP%3A0001698%0D%0AMP%3A0001732%0D%0AMP%3A0001787%0D%0AMP%3A0002064%0D%0AMP%3A0002083%0D%0AMP%3A0002151%0D%0AMP%3A0002950%0D%0AMP%3A0003012%0D%0AMP%3A0003424%0D%0AMP%3A0003651%0D%0AMP%3A0004948%0D%0AMP%3A0005657&limit=100">Sample patient phenotype profile</a></p>
                         </div>
                     </div>
                 </div>
-            {{{includes.footer}}}
+                <div id="footer">
+                    Except where otherwise noted, this work is licensed under a Creative Commons Attribution
+                    3.0 License.<br/>
+                    The Monarch Initiative is a collaboration between Oregon Health & Science University,
+                    University of California, San Diego, Lawrence Berkeley National Laboratory, the University of
+                    Pittsburgh, Sanger Institute, and Charité - Universitätsmedizin Berlin
+                    and is supported generously by a NIH Office of the Director Grant #5R24OD011883.
+                </div>
             </div> <!-- closes columns -->
         </div> <!-- closes content -->
     </div> <!-- closes container -->

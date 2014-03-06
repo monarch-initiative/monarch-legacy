@@ -36,11 +36,11 @@ as a separate call in the init function.
 
 	options:   {
 
-	    colStartingPos: 50,
-	    textWidth: 150,
+	    colStartingPos: 10,
+	    textWidth: 200,
 	    clickedData: undefined, 
 	    xScale: undefined, 
-	    textLength: 28,
+	    textLength: 34,
 	    svg: undefined,
 	    yScale: undefined,
 	    modelData: [],
@@ -93,8 +93,8 @@ as a separate call in the init function.
             this._createColorScale();
             this._createModelRegion();
     	    this._updateAxes();
-    	    this._createRects();
     	    this._createModelRects();
+    	    this._createRects();
             this._createDetailSection();
 	},
 
@@ -400,7 +400,7 @@ as a separate call in the init function.
       model_rects.enter()
   	  .append("rect")
   	  .attr("transform",
-  		"translate(210,20)")
+  		"translate(" + (this.options.textWidth + 20) + ",20)")
       //"translate(210," + this.options.yoffset + ")")
   	  .attr("class", function(d) { 
   	      //append the model id to all related items
@@ -518,7 +518,7 @@ as a separate call in the init function.
 	    model_x_axis = d3.svg.axis().
 		scale(this.options.xScale).orient("top");
 	    var model_region = this.options.svg.append("g").
-		attr("transform","translate(210," + this.options.yoffset + ")")
+		attr("transform","translate(" + (this.options.textWidth + 20) +"," + this.options.yoffset + ")")
 		.call(model_x_axis)
 		.attr("class", "axes")
 	    //this be some voodoo...
@@ -664,7 +664,7 @@ as a separate call in the init function.
 		.attr("ontology_id", function(d) {
 		    return self._getConceptId(d.id_a);
 		})
-		.attr("x", 50)
+		.attr("x", 15)
 		.attr("y", function(d) {
 		    //return self.options.yScale(d.rowid)+28;
 		    return self._getYPosition(d.rowid) +28;
@@ -720,7 +720,7 @@ as a separate call in the init function.
 		.attr("ontology_id", function(d) {
 		    return self._getConceptId(d.subsumer_id);
 		})
-		.attr("x", self.options.textWidth + 10 + self.options.colStartingPos + self.options.modelWidth)
+		.attr("x", self.options.textWidth + 15 + self.options.colStartingPos + self.options.modelWidth)
 		.attr("y", function(d) {
 		    //return self.options.yScale(d.rowid)+28;
 			return self._getYPosition(d.rowid)+28;

@@ -1,14 +1,20 @@
 <div class="navbar navbar-inverse navbar-fixed-top" role="navigation">
     <div class="monarch-navbar-container">
-        <a class="navbar-brand" href="/">Monarch</a>
-	    <div class="nav-collapse collapse">
+        <div class="navbar-header">
+            <button type="button" class="navbar-toggle" data-toggle="collapse"
+                data-target="#collapsed-navbar">
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+            </button>
+            <a class="navbar-brand" href="/">Monarch</a>
+        </div>
+	    <div id="collapsed-navbar" class="nav-collapse collapse">
             <ul class="nav navbar-nav">
                 <li class="dropdown">
                     <a href="#" class="dropdown-toggle" data-toggle="dropdown">
-                    <i class="icon-th-large"></i>Browse
-                    <b class="caret"></b>
-                    </a>
-                    <ul class="dropdown-menu" role="menu" aria-labelledby="dropdownMenu">
+                        <i class="icon-th-large"></i>Browse <b class="caret"></b></a>
+                    <ul class="dropdown-menu">
                         <li><a href="/disease/">Diseases</a></li>
                         <li><a href="/phenotype/">Phenotypes</a></li>
                         <li><a href="/model/">Models</a></li>
@@ -16,30 +22,24 @@
                 </li>
                 <li class="dropdown">
                     <a href="#" class="dropdown-toggle" data-toggle="dropdown">
-                    <i class="icon-th-large"></i>Analyze
-                    <b class="caret"></b>
-                    </a>
-                    <ul class="dropdown-menu" role="menu" aria-labelledby="dropdownMenu">
+                        <i class="icon-th-large"></i>Analyze <b class="caret"></b></a>
+                    <ul class="dropdown-menu">
                         <li><a href="/analyze/phenotypes/">Phenotypes</a></li>
                         <li><a href="/page/exomes/">Exomes</a></li>
                     </ul>
                 </li>
                 <li class="dropdown">
                     <a href="#" class="dropdown-toggle" data-toggle="dropdown">
-                    <i class="icon-th-large"></i>About
-                    <b class="caret"></b>
-                    </a>
-                    <ul class="dropdown-menu" role="menu" aria-labelledby="dropdownMenu">
+                        <i class="icon-th-large"></i>About <b class="caret"></b></a>
+                    <ul class="dropdown-menu">
                         <li><a href="/page/tour">About Monarch</a></li>
                         <li><a href="/page/releases">Releases</a></li>
                     </ul>
                 </li>
                 <li class="dropdown">
                     <a href="#" class="dropdown-toggle" data-toggle="dropdown">
-                    <i class="icon-th-large"></i>Documentation
-                    <b class="caret"></b>
-                    </a>
-                    <ul class="dropdown-menu" role="menu" aria-labelledby="dropdownMenu">
+                        <i class="icon-th-large"></i>Documentation <b class="caret"></b></a>
+                    <ul class="dropdown-menu">
                         <li><a href="/page/software">Monarch Software</a></li>
                         <li><a href="/page/services">Monarch RESTful API</a></li>
                         <li><a href="/docs/index.html">Javascript API</a></li>
@@ -52,24 +52,20 @@
                 </li>
                 <li class="dropdown">
                     <a href="#" class="dropdown-toggle" data-toggle="dropdown">
-                    <i class="icon-th-large"></i>Contact
-                    <b class="caret"></b>
-                    </a>
-                    <ul class="dropdown-menu" role="menu" aria-labelledby="dropdownMenu">
+                        <i class="icon-th-large"></i>Contact <b class="caret"></b></a>
+                    <ul class="dropdown-menu">
                         <li><a href="/page/team">Monarch Team</a></li>
                         <li><a href="https://github.com/monarch-initiative/monarch-app/issues">Issue Tracker</a></li>
                         <li><a href="mailto:info@monarchinitiative.org">Email Us</a></li>
                     </ul>
                 </li>
-            </ul> 
-            <form id="search_form" class="pull-right navbar-form navbar-right" action="/search" role="search">
-                <!-- <div class="form-group"> -->
-                <label for="search" class="navbar-text">Search</label>
-                <input id="search" type="text" placeholder=""/>
-                <!-- <button type="submit">go</button> -->
-                <!-- </div> -->
+            </ul>
+            <form id="search_form" class="navbar-form searchspace" action="/search" role="search">
+                <div class="form-group">
+                <input id="search" type="text" class="form-control" placeholder="Search">
+                </div>
             </form>
-        </div> 
+        </div>
     </div>
 </div>
 <div id="spacer"></div>

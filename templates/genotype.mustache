@@ -57,28 +57,29 @@
                 <div id="categories">
                     <a href="#overview"><div id="initialtab" class="tab contenttab overtab">Overview</div></a>
                     {{#hasPhenotypes}}                
-                    <a href="#phenotypes"><div class="tab contenttab phentab">Phenotypes</div></a>
+                    <a href="#phenotypes"><div class="tab contenttab phentab">Phenotypes ({{phenotypeNum}})</div></a>
                     {{/hasPhenotypes}}
                     {{^hasPhenotypes}}
-                    <div class="tab greyed-out">Phenotypes</div>
+                    <div class="tab greyed-out">Phenotypes (0)</div>
                     {{/hasPhenotypes}}
                     {{#hasDiseases}}
-                    <a href="#disease"><div class="tab contenttab distab">Disease</div></a>
+                    <a href="#disease"><div id="longertab" class="tab contenttab distab">Related Diseases ({{diseaseNum}})</div></a>
                     {{/hasDiseases}}
                     {{^hasDiseases}}
-                    <div class="tab greyed-out">Disease</div>
+                    <div class="tab greyed-out">Related Diseases (0)</div>
                     {{/hasDiseases}}
+                    <div class="second-row-divider"></div>
                     {{#hasGenes}}
-                    <a href="#genes"><div class="tab contenttab gentab">Genes</div></a>
+                    <a href="#genes"><div class="tab contenttab gentab second">Genes ({{geneNum}})</div></a>
                     {{/hasGenes}}
                     {{^hasGenes}}
-                    <div class="tab greyed-out">Genes</div>
+                    <div class="tab greyed-out second">Genes (0)</div>
                     {{/hasGenes}}
                     {{#hasSim}}
-                    <a href="#similarity"><div class="tab contenttab simitab">Similarity</div></a>
+                    <a href="#similarity"><div class="tab contenttab simitab">Similar Models ({{simNum}})</div></a>
                     {{/hasSim}}
                     {{^hasSim}}
-                    <div class="tab greyed-out">Similarity</div>
+                    <div class="tab greyed-out">Similar Models (0)</div>
                     {{/hasSim}}
                 </div>
             </div>
@@ -88,19 +89,6 @@
                         <div class="ids">
                             <b>ID:</b> {{id}}
                         </div>
-                    <h3>Data Overview</h3>
-                        {{#hasPhenotypes}}
-                        This genotype is associated with <b>{{phenotypeNum}}</b> phenotypes.<br/>
-                        {{/hasPhenotypes}}
-                        {{#hasDiseases}}
-                        This genotype is associated with <b>{{diseaseNum}}</b> diseases.<br/>
-                        {{/hasDiseases}}
-                        {{#hasGenes}}
-                        This genotype is associated with <b>{{geneNum}}</b> genes.<br/>
-                        {{/hasGenes}}
-                        {{#hasSim}}
-                        This genotype is associated with <b>{{simNum}}</b> related diseases.<br/>
-                        {{/hasSim}}
                 </div>
                 {{#hasPhenotypes}}
                 <div id="phenotypes" class="category">
@@ -115,7 +103,7 @@
                 {{/hasPhenotypes}}
                 {{#hasDiseases}}
                 <div id="disease" class="category">
-                    <h3>Associated Diseases</h3>
+                    <h3>Related Diseases</h3>
                     <table class="{{css.table}}">
                     {{{diseaseTable}}}
                     </table>
@@ -131,7 +119,7 @@
                 {{/hasGenes}}
                 {{#hasSim}}
                 <div id="similarity" class="category">
-                    <h3>Similar Diseases</h3>
+                    <h3>Similar Models</h3>
                     <table class="{{css.table}}">
                     {{{simTable}}}
                     </table>

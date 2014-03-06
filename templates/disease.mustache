@@ -71,41 +71,41 @@
                 <div id="categories">
                     <a href="#ontology"><div id="initialtab" class="tab contenttab onttab">Overview</div></a>
                     {{#hasPhenotypes}}
-                    <a href="#phenotypes"><div class="tab contenttab phentab">Phenotypes</div></a>
+                    <a href="#phenotypes"><div class="tab contenttab phentab">Phenotypes ({{phenotypeNum}})</div></a>
                     {{/hasPhenotypes}}
                     {{^hasPhenotypes}}
-                    <div class="tab greyed-out">Phenotypes</div>
+                    <div class="tab greyed-out">Phenotypes (0)</div>
                     {{/hasPhenotypes}}
                     {{#hasGenes}}
-                    <a href="#genes"><div class="tab contenttab gentab">Genes</div></a>
+                    <a href="#genes"><div class="tab contenttab gentab">Genes ({{geneNum}})</div></a>
                     {{/hasGenes}}
                     {{^hasGenes}}
-                    <div class="tab greyed-out">Genes</div>
+                    <div class="tab greyed-out">Genes (0)</div>
                     {{/hasGenes}}
                     {{#hasAlleles}}
-                    <a href="#alleles"><div class="tab contenttab alletab">Alleles</div></a>
+                    <a href="#alleles"><div class="tab contenttab alletab">Alleles ({{alleleNum}})</div></a>
                     {{/hasAlleles}}
                     {{^hasAlleles}}
-                    <div class="tab greyed-out">Alleles</div>
+                    <div class="tab greyed-out">Alleles (0)</div>
                     {{/hasAlleles}}
                     <div class="second-row-divider"></div>
                     {{#hasModels}}
-                    <a href="#model"><div id="longtab" class="tab contenttab modtab second">Similar Models</div></a>
+                    <a href="#model"><div class="tab contenttab modtab second">Similar Models ({{modelNum}})</div></a>
                     {{/hasModels}}
                     {{^hasModels}}
-                    <div id="longtab" class="tab greyed-out second">Similar Models</div>
+                    <div class="tab greyed-out second">Similar Models (0)</div>
                     {{/hasModels}}
                     {{#hasSim}}
-                    <a href="#similarity"><div id="longertab" class="tab contenttab simitab">Related Diseases</div></a>
+                    <a href="#similarity"><div class="tab contenttab simitab">Related Diseases ({{simNum}})</div></a>
                     {{/hasSim}}
                     {{^hasSim}}
-                    <div id="longertab" class="tab greyed-out">Related Diseases</div>
+                    <div class="tab greyed-out">Related Diseases (0)</div>
                     {{/hasSim}}
                     {{#hasPathways}}
-                    <a href="#pathways"><div class="tab contenttab pathtab">Pathways</div></a>
+                    <a href="#pathways"><div class="tab contenttab pathtab">Pathways ({{pathwayNum}})</div></a>
                     {{/hasPathways}}
                     {{^hasPathways}}
-                    <div class="tab greyed-out">Pathways</div>
+                    <div class="tab greyed-out">Pathways (0)</div>
                     {{/hasPathways}}
                 </div>
             </div>
@@ -120,26 +120,8 @@
                         <b>IDs:</b>
                         {{ids}}
                     </div>
+                    <h3>Ontology Tree</h3>
                     {{{includes.classificationComponent}}}
-                    <h3>Data Overview</h3>
-                    {{#hasPhenotypes}}
-                    This disease is associated with <b>{{phenotypeNum}}</b> phenotypes.<br/>
-                    {{/hasPhenotypes}}
-                    {{#hasGenes}}
-                    This disease is associated with <b>{{geneNum}}</b> genes.<br/>
-                    {{/hasGenes}}
-                    {{#hasAlleles}}
-                    This disease is associated with <b>{{alleleNum}}</b> alleles.<br/>
-                    {{/hasAlleles}}
-                    {{#hasModels}}
-                    This disease is associated with <b>{{modelNum}}</b> similar models.<br/>
-                    {{/hasModels}}
-                    {{#hasSim}}
-                    This disease is associated with <b>{{simNum}}</b> related diseases.<br/>
-                    {{/hasSim}}
-                    {{#hasPathways}}
-                    This disease is associated with <b>{{pathwayNum}}</b> disease pathways.
-                    {{/hasPathways}}
                 </div>
                 {{#hasPhenotypes}}
                 <div id="phenotypes" class="category">
