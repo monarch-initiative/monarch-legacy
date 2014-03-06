@@ -3,12 +3,14 @@
 .jumbotron {
     margin-bottom: 20px;
 }
-.buttonline {
-    display: inline-block;
-}
-.right-butn {
-    float: right;
-    margin: 15px 20px;
+@media (min-width: 800px) {
+    .buttonline {
+        display: inline-block;
+    }
+    .right-butn {
+        float: right;
+        margin: 15px 20px;
+    }
 }
 .clear {
     clear: both;
@@ -18,7 +20,7 @@
     font-style: italic;
     font-weight: 500;
     line-height: 18px;
-    padding-bottom: 10px;
+    padding: 10px 0px;
 }
 .description {
     font-size: 14px;

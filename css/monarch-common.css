@@ -16,37 +16,56 @@ p {
 }
 
 /* Section 1: Navbar */
-.monarch-navbar-container {
-    padding: 0px 20px;
+@media (min-width: 815px) {
+    .monarch-navbar-container {
+        padding: 0px 10px;
+    }
 }
-.navbar {
-    min-height: 30px;
+@media (min-width: 768px) {
+    .navbar {
+        min-height: 30px;
+    }
+    .nav>li>a {
+        padding: 0px;
+    }
+    .dropdown-toggle {
+        margin: 5px 10px 5px 10px;
+    }
+    .dropdown {
+        padding: 4px 0px 0px;
+    }
+    .navbar-brand {
+        padding: 8px 20px 0px 20px;
+    }
+    .navbar-link {
+        font-size: 14px;
+    }
+    .navbar-text {
+        margin-top: 2px;
+        margin-bottom: 2px;
+        font-weight: 400;
+        margin-right: 5px;
+    }
+    .searchspace {
+        float: right;
+    }
+    .form-group {
+        margin-bottom: 0px;
+    }
+    .form-control {
+        padding: 0px 10px;
+        height: 28px;
+        border-radius: 2px;
+    }
+    #spacer {
+        height: 35px;
+    }
 }
-.nav>li>a {
-    padding: 0px;
+@media (max-width: 767px) {
+    #spacer {
+        height: 50px;
+    }
 }
-.dropdown-toggle {
-   margin: 5px 10px 5px 10px;
-}
-.dropdown {
-    padding: 4px 0px 0px;
-}
-.navbar-brand {
-    padding: 8px 30px 0px 20px;
-}
-.navbar-link {
-    font-size: 14px;
-}
-.navbar-text {
-    margin-top: 2px;
-    margin-bottom: 2px;
-    font-weight: 400;
-    margin-right: 5px;
-}
-#spacer {
-    height: 35px;
-}
-
 /* Section 2: Sidebar/Navlist */
 .sidebar {
     display: inline-block;
@@ -61,32 +80,6 @@ p {
 }
 .nav.nav-list {
     margin-top: 10px;
-}
-/* Search Bar */
-
-#search {
-    width: 200px;
-}
-
-.autocomplete-main-item {
-    /* white-space: nowrap; */
-}
-.autocomplete-tag-item {
-    white-space: nowrap;
-    font-size: 75%;
-    color: #888888;
-}
-
-/* Get a spinner for jQuery autocomplete wait. */
-.ui-autocomplete-loading {
-    background: white url('/image/waiting_ac.gif') right center no-repeat;
-} 
-
-/* Search Button */
-.btn.btn-primary {
-    padding: 4px 51px;
-    font-size: 13px;
-    margin-top: 3px;
 }
 .nav-header {
     font-size: 17px;
@@ -103,6 +96,20 @@ p {
     display: inline-block;
     margin-bottom: 20px;
 }
+
+/* Search Bar */
+#search {
+    width: 180px;
+}
+.autocomplete-tag-item {
+    white-space: nowrap;
+    font-size: 75%;
+    color: #888888;
+}
+/* Get a spinner for jQuery autocomplete wait. */
+.ui-autocomplete-loading {
+    background: white url('/image/waiting_ac.gif') right center no-repeat;
+} 
 
 /* Analyze Page */
 .analyze-delete-button {
