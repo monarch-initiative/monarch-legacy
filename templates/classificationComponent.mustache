@@ -8,7 +8,7 @@
                           {{/superClasses}}
                           <tr>
                             <td>
-                              &nbsp;&nbsp;<b>{{label}}</b>
+                              &nbsp;&nbsp;&nbsp;&nbsp;<b>{{label}}</b>
                               {{#equivalentClasses}}
                               = {{{.}}}
                               {{/equivalentClasses}}
@@ -17,9 +17,8 @@
                           {{#subClasses}}
                           <tr>
                             <td>
-                              &nbsp;&nbsp;&nbsp;&nbsp;{{{.}}}
+                              &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;{{{.}}}
                             </td>
                           </tr>
                           {{/subClasses}}
-                          
                         </table>
