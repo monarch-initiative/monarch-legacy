@@ -24,13 +24,12 @@ p {
     margin-top: 20px;
     margin-bottom: -3px;
 }
-@media (min-width: 1100px) {
+@media (min-width: 1175px) {
     .tab {
         display: inline-block;
         background: white;
         color: #777;
-        padding: 2px;
-        width: 100px;
+        padding: 2px 15px;
         text-align: center;
         border-radius: 5px 5px 0px 0px;
         margin-right: 5px;
@@ -40,13 +39,12 @@ p {
         border: black solid 1px;
     }
 }
-@media (max-width: 1100px) {
+@media (max-width: 1175px) {
     .tab {
         display: inline-block;
         background: white;
         color: #777;
-        padding: 2px;
-        width: 100px;
+        padding: 2px 15px;
         text-align: center;
         border-radius: 4px;
         margin-right: 10px;
@@ -70,12 +68,12 @@ p {
 #longertab {
     width: 140px;
 }
-@media (min-width: 1100px) {
+@media (min-width: 1175px) {
     .second-row-divider {
         display: none;
     }
 }
-@media (max-width: 1100px) {
+@media (max-width: 1175px) {
     .second {
         margin-top: 10px;
         margin-bottom: 15px;
