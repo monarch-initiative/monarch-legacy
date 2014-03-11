@@ -70,7 +70,7 @@ var keggerator = function () {
 
         // if kegg pathway type
         // fill in select element options
-        $.get("http://rest.kegg.jp/get/" + pathwayId + "/kgml", function (xml) {
+        $.get("/kegg/get/" + pathwayId + "/kgml", function (xml) {
             var kgmlJson = $.xml2json(xml);
 
             // update the data var with the rectangle info

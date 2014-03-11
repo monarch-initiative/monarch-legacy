@@ -13,6 +13,7 @@ p {
     padding: 20px 40px 0px;
     text-align: center;
     font-weight: 200;
+    font-size: 12px;
 }
 
 /* Section 1: Navbar */
@@ -89,7 +90,7 @@ p {
 
 /* Section 3: Content */
 .monarch-container {
-    padding-left: 155px;
+    padding: 0px 20px 0px 155px;
     padding-right: 20px;
 }
 .content {
