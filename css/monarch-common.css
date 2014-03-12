@@ -1,4 +1,7 @@
 /* Section 0: General */
+html, body {
+    height: 100%;
+}
 p {
     font-family: Helvetica, Arial, sans-serif;
 }
@@ -6,14 +9,6 @@ p {
 .btn-info {
     background-color: #53AED7;
     border-color: #53AED7;
-}
-/* Footer */
-#footer {
-    clear: both;
-    padding: 20px 40px 0px;
-    text-align: center;
-    font-weight: 200;
-    font-size: 12px;
 }
 
 /* Section 1: Navbar */
@@ -58,13 +53,18 @@ p {
         height: 28px;
         border-radius: 2px;
     }
-    #spacer {
-        height: 35px;
+}
+@media (max-width: 800px) {
+    .monarch-navbar-container {
+        margin: 0px -3px;
+    }
+    .navbar-brand {
+        padding: 8px 10px 0px 20px;
     }
 }
 @media (max-width: 767px) {
-    #spacer {
-        height: 50px;
+    .navbar-brand {
+        padding: 15px;
     }
 }
 /* Section 2: Sidebar/Navlist */
@@ -79,6 +79,11 @@ p {
     background-color: white;
     z-index: 10;
 }
+@media (max-width: 768px) {
+    .sidebar {
+        padding: 20px 0px 0px 20px;
+    }
+}
 .nav.nav-list {
     margin-top: 10px;
 }
@@ -90,12 +95,49 @@ p {
 
 /* Section 3: Content */
 .monarch-container {
-    padding: 0px 20px 0px 155px;
+    padding: 40px 20px 0px 155px;
     padding-right: 20px;
+    height: 100%;
 }
 .content {
     display: inline-block;
-    margin-bottom: 20px;
+    height: 100%;
+}
+
+/* Footer */
+#footer {
+    clear: both;
+    padding: 10px 40px 10px;
+    text-align: center;
+    font-weight: 200;
+    font-size: 12px;
+}
+@media (min-width: 1110px) {
+    .wrapperforfooter {
+        min-height: 100%;
+        padding-bottom: 80px;
+    }
+    #footer {
+        margin-top: -80px;
+    }
+}
+@media (max-width: 1110px) {
+    .wrapperforfooter {
+        min-height: 100%;
+        padding-bottom: 90px;
+    }
+    #footer {
+        margin-top: -90px;
+    }
+}
+@media (max-width: 840px) {
+    .wrapperforfooter {
+        min-height: 100%;
+        padding-bottom: 110px;
+    }
+    #footer {
+        margin-top: -110px;
+    }
 }
 
 /* Search Bar */
