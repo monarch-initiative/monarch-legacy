@@ -64,44 +64,64 @@
                     </p>
                 </div>
                 <div id="categories">
-                    <a href="#ontology"><div id="initialtab" class="tab contenttab onttab">Overview</div></a>
-                    {{#hasPhenotypes}}
-                    <a href="#phenotypes"><div class="tab contenttab phentab">Phenotypes ({{phenotypeNum}})</div></a>
-                    {{/hasPhenotypes}}
-                    {{^hasPhenotypes}}
-                    <div class="tab greyed-out">Phenotypes (0)</div>
-                    {{/hasPhenotypes}}
-                    {{#hasDiseases}}
-                    <a href="#disease"><div class="tab contenttab distab">Diseases ({{diseaseNum}})</div></a>
-                    {{/hasDiseases}}
-                    {{^hasDiseases}}
-                    <div class="tab greyed-out">Diseases (0)</div>
-                    {{/hasDiseases}}
-                    {{#hasAlleles}}
-                    <a href="#alleles"><div class="tab contenttab alletab">Alleles ({{alleleNum}})</div></a>
-                    {{/hasAlleles}}
-                    {{^hasAlleles}}
-                    <div class="tab greyed-out">Alleles (0)</div>
-                    {{/hasAlleles}}
+                    <div class="tabcontainer">
+                        <a href="#ontology"><div id="initialtab" class="tab contenttab onttab">Overview</div></a>
+                    </div>
+                    <div class="tabcontainer">
+                        <div class="tabhover">View phenotypes related to this gene</div>
+                        {{#hasPhenotypes}}
+                            <a href="#phenotypes"><div class="tab contenttab phentab">Phenotypes ({{phenotypeNum}})</div></a>
+                        {{/hasPhenotypes}}
+                        {{^hasPhenotypes}}
+                            <div class="tab greyed-out">Phenotypes (0)</div>
+                        {{/hasPhenotypes}}
+                        </div>
+                    <div class="tabcontainer">
+                        <div class="tabhover">View diseases related to this gene</div>
+                        {{#hasDiseases}}
+                            <a href="#diseases"><div class="tab contenttab gentab">Diseases ({{diseaseNum}})</div></a>
+                        {{/hasDiseases}}
+                        {{^hasDiseases}}
+                            <div class="tab greyed-out">Diseases (0)</div>
+                        {{/hasDiseases}}
+                    </div>
+                    <div class="tabcontainer">
+                        <div class="tabhover">View alleles of this gene</div>
+                        {{#hasAlleles}}
+                            <a href="#alleles"><div class="tab contenttab alletab">Alleles ({{alleleNum}})</div></a>
+                        {{/hasAlleles}}
+                        {{^hasAlleles}}
+                            <div class="tab greyed-out">Alleles (0)</div>
+                        {{/hasAlleles}}
+                    </div>
                     <div class="second-row-divider"></div>
-                    {{#hasInteractions}}
-                    <a href="#interaction"><div id="longtab" class="tab contenttab modtab">Interactions ({{interactionNum}})</div></a>
-                    {{/hasInteractions}}
-                    {{^hasInteractions}}
-                    <div id="longtab" class="tab greyed-out">Interactions</div>
-                    {{/hasInteractions}}
-                    {{#hasSim}}
-                    <a href="#similarity"><div class="tab contenttab simitab">Related Genes ({{simNum}})</div></a>
-                    {{/hasSim}}
-                    {{^hasSim}}
-                    <div class="tab greyed-out">Related Genes (0)</div>
-                    {{/hasSim}}
-                    {{#hasPathways}}
-                    <a href="#pathways"><div class="tab contenttab pathtab">Pathways ({{pathwayNum}})</div></a>
-                    {{/hasPathways}}
-                    {{^hasPathways}}
-                    <div class="tab greyed-out">Pathways (0)</div>
-                    {{/hasPathways}}
+                    <div class="tabcontainer">
+                        <div class="tabhover">View gene interactions</div>
+                        {{#hasInteractions}}
+                            <a href="#model"><div class="tab contenttab modtab">Interactions ({{interactionNum}})</div></a>
+                        {{/hasInteractions}}
+                        {{^hasInteractions}}
+                            <div class="tab greyed-out">Interactions (0)</div>
+                        {{/hasInteractions}}
+                    </div>
+                    <div class="tabcontainer">
+                        <div class="tabhover">View related genes</div>
+                        {{#hasSim}}
+                            <a href="#similarity"><div class="tab contenttab simitab">Related Genes ({{simNum}})</div></a>
+                        {{/hasSim}}
+                        {{^hasSim}}
+                            <div class="tab greyed-out">Related Genes (0)</div>
+                        {{/hasSim}}
+                    </div>
+                    <div class="tabcontainer">
+                        <div class="tabhover">View pathways that involve this gene</div>
+                        {{#hasPathways}}
+                            <a href="#pathways"><div class="tab contenttab pathtab">Pathways ({{pathwayNum}})</div></a>
+                        {{/hasPathways}}
+                        {{^hasPathways}}
+                            <div class="tab greyed-out">Pathways (0)</div>
+                        {{/hasPathways}}
+                    </div>
                 </div>
             </div>
             <div id="complete-info">
