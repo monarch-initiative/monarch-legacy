@@ -69,44 +69,64 @@
                     </p>
                 </div>
                 <div id="categories">
-                    <a href="#ontology"><div id="initialtab" class="tab contenttab onttab">Overview</div></a>
-                    {{#hasPhenotypes}}
-                    <a href="#phenotypes"><div class="tab contenttab phentab">Phenotypes ({{phenotypeNum}})</div></a>
-                    {{/hasPhenotypes}}
-                    {{^hasPhenotypes}}
-                    <div class="tab greyed-out">Phenotypes (0)</div>
-                    {{/hasPhenotypes}}
-                    {{#hasGenes}}
-                    <a href="#genes"><div class="tab contenttab gentab">Genes ({{geneNum}})</div></a>
-                    {{/hasGenes}}
-                    {{^hasGenes}}
-                    <div class="tab greyed-out">Genes (0)</div>
-                    {{/hasGenes}}
-                    {{#hasAlleles}}
-                    <a href="#alleles"><div class="tab contenttab alletab">Alleles ({{alleleNum}})</div></a>
-                    {{/hasAlleles}}
-                    {{^hasAlleles}}
-                    <div class="tab greyed-out">Alleles (0)</div>
-                    {{/hasAlleles}}
+                    <div class="tabcontainer">
+                        <a href="#ontology"><div id="initialtab" class="tab contenttab onttab">Overview</div></a>
+                    </div>
+                    <div class="tabcontainer">
+                        <div class="tabhover">View phenotypes related to this disease</div>
+                        {{#hasPhenotypes}}
+                            <a href="#phenotypes"><div class="tab contenttab phentab">Phenotypes ({{phenotypeNum}})</div></a>
+                        {{/hasPhenotypes}}
+                        {{^hasPhenotypes}}
+                            <div class="tab greyed-out">Phenotypes (0)</div>
+                        {{/hasPhenotypes}}
+                        </div>
+                    <div class="tabcontainer">
+                        <div class="tabhover">View genes known to be variant in this disease</div>
+                        {{#hasGenes}}
+                            <a href="#genes"><div class="tab contenttab gentab">Genes ({{geneNum}})</div></a>
+                        {{/hasGenes}}
+                        {{^hasGenes}}
+                            <div class="tab greyed-out">Genes (0)</div>
+                        {{/hasGenes}}
+                    </div>
+                    <div class="tabcontainer">
+                        <div class="tabhover">View known variants associated with this disease</div>
+                        {{#hasAlleles}}
+                            <a href="#alleles"><div class="tab contenttab alletab">Alleles ({{alleleNum}})</div></a>
+                        {{/hasAlleles}}
+                        {{^hasAlleles}}
+                            <div class="tab greyed-out">Alleles (0)</div>
+                        {{/hasAlleles}}
+                    </div>
                     <div class="second-row-divider"></div>
-                    {{#hasModels}}
-                    <a href="#model"><div class="tab contenttab modtab second">Similar Models ({{modelNum}})</div></a>
-                    {{/hasModels}}
-                    {{^hasModels}}
-                    <div class="tab greyed-out second">Similar Models (0)</div>
-                    {{/hasModels}}
-                    {{#hasSim}}
-                    <a href="#similarity"><div class="tab contenttab simitab">Related Diseases ({{simNum}})</div></a>
-                    {{/hasSim}}
-                    {{^hasSim}}
-                    <div class="tab greyed-out">Related Diseases (0)</div>
-                    {{/hasSim}}
-                    {{#hasPathways}}
-                    <a href="#pathways"><div class="tab contenttab pathtab">Pathways ({{pathwayNum}})</div></a>
-                    {{/hasPathways}}
-                    {{^hasPathways}}
-                    <div class="tab greyed-out">Pathways (0)</div>
-                    {{/hasPathways}}
+                    <div class="tabcontainer">
+                        <div class="tabhover">View models that have phenotypes in common</div>
+                        {{#hasModels}}
+                            <a href="#model"><div class="tab contenttab modtab">Similar Models ({{modelNum}})</div></a>
+                        {{/hasModels}}
+                        {{^hasModels}}
+                            <div class="tab greyed-out">Similar Models (0)</div>
+                        {{/hasModels}}
+                    </div>
+                    <div class="tabcontainer">
+                        <div class="tabhover">View diseases that have the most phenotypes in common</div>
+                        {{#hasSim}}
+                            <a href="#similarity"><div class="tab contenttab simitab">Related Diseases ({{simNum}})</div></a>
+                        {{/hasSim}}
+                        {{^hasSim}}
+                            <div class="tab greyed-out">Related Diseases (0)</div>
+                        {{/hasSim}}
+                    </div>
+                    <div class="tabcontainer">
+                        <div class="tabhover">View phenotypes on pathway view containing variant genes</div>
+                        {{#hasPathways}}
+                            <a href="#pathways"><div class="tab contenttab pathtab">Pathways ({{pathwayNum}})</div></a>
+                        {{/hasPathways}}
+                        {{^hasPathways}}
+                            <div class="tab greyed-out">Pathways (0)</div>
+                        {{/hasPathways}}
+                    </div>
                 </div>
             </div>
             <div id="complete-info">
