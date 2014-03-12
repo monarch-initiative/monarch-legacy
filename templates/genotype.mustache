@@ -56,31 +56,43 @@
                 </div>
                 <div id="categories">
                     <a href="#overview"><div id="initialtab" class="tab contenttab overtab">Overview</div></a>
-                    {{#hasPhenotypes}}                
-                    <a href="#phenotypes"><div class="tab contenttab phentab">Phenotypes ({{phenotypeNum}})</div></a>
-                    {{/hasPhenotypes}}
-                    {{^hasPhenotypes}}
-                    <div class="tab greyed-out">Phenotypes (0)</div>
-                    {{/hasPhenotypes}}
-                    {{#hasDiseases}}
-                    <a href="#disease"><div id="longertab" class="tab contenttab distab">Related Diseases ({{diseaseNum}})</div></a>
-                    {{/hasDiseases}}
-                    {{^hasDiseases}}
-                    <div class="tab greyed-out">Related Diseases (0)</div>
-                    {{/hasDiseases}}
+                    <div class="tabcontainer">
+                        <div class="tabhover">View phenotypes related to this model</div>
+                        {{#hasPhenotypes}}                
+                            <a href="#phenotypes"><div class="tab contenttab phentab">Phenotypes ({{phenotypeNum}})</div></a>
+                        {{/hasPhenotypes}}
+                        {{^hasPhenotypes}}
+                            <div class="tab greyed-out">Phenotypes (0)</div>
+                        {{/hasPhenotypes}}
+                    </div>
+                    <div class="tabcontainer">
+                        <div class="tabhover">Placeholder text</div>
+                        {{#hasDiseases}}
+                            <a href="#disease"><div id="longertab" class="tab contenttab distab">Related Diseases ({{diseaseNum}})</div></a>
+                        {{/hasDiseases}}
+                        {{^hasDiseases}}
+                            <div class="tab greyed-out">Related Diseases (0)</div>
+                        {{/hasDiseases}}
+                    </div>
                     <div class="second-row-divider"></div>
-                    {{#hasGenes}}
-                    <a href="#genes"><div class="tab contenttab gentab">Genes ({{geneNum}})</div></a>
-                    {{/hasGenes}}
-                    {{^hasGenes}}
-                    <div class="tab greyed-out">Genes (0)</div>
-                    {{/hasGenes}}
-                    {{#hasSim}}
-                    <a href="#similarity"><div class="tab contenttab simitab">Similar Models ({{simNum}})</div></a>
-                    {{/hasSim}}
-                    {{^hasSim}}
-                    <div class="tab greyed-out">Similar Models (0)</div>
-                    {{/hasSim}}
+                    <div class="tabcontainer">
+                        <div class="tabhover">View genes known to be variant in this model</div>
+                        {{#hasGenes}}
+                            <a href="#genes"><div class="tab contenttab gentab">Genes ({{geneNum}})</div></a>
+                        {{/hasGenes}}
+                        {{^hasGenes}}
+                            <div class="tab greyed-out">Genes (0)</div>
+                        {{/hasGenes}}
+                    </div>
+                    <div class="tabcontainer">
+                        <div class="tabhover">View models that have phenotypes in common</div>
+                        {{#hasSim}}
+                            <a href="#similarity"><div class="tab contenttab simitab">Similar Models ({{simNum}})</div></a>
+                        {{/hasSim}}
+                        {{^hasSim}}
+                            <div class="tab greyed-out">Similar Models (0)</div>
+                        {{/hasSim}}
+                    </div>
                 </div>
             </div>
             <div id="complete-info">

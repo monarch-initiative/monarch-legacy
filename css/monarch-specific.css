@@ -21,12 +21,11 @@ p {
 }
 /* Category Tabs */
 #categories {
-    margin-top: 20px;
+    margin-top: 35px;
     margin-bottom: -3px;
 }
 @media (max-width: 1170px) {
     #categories {
-        margin-top: 10px;
         margin-bottom: 10px;
     }
 }

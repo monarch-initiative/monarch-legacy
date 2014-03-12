@@ -53,18 +53,24 @@
                 </div>
                 <div id="categories">
                     <a href="#overview"><div id="initialtab" class="tab contenttab overtab">Overview</div></a>
-                    {{#hasDiseases}}
-                    <a href="#disease"><div class="tab contenttab distab">Disease ({{diseaseNum}})</div></a>
-                    {{/hasDiseases}}
-                    {{^hasDiseases}}
-                    <div class="tab greyed-out">Disease (0)</div>
-                    {{/hasDiseases}}
-                    {{#hasGenotypes}}
-                    <a href="#genotypes"><div class="tab contenttab genotab">Genotypes ({{genotypeNum}})</div></a>
-                    {{/hasGenotypes}}
-                    {{^hasGenotypes}}
-                    <div class="tab greyed-out">Genotypes (0)</div>
-                    {{/hasGenotypes}}
+                    <div class="tabcontainer">
+                        <div class="tabhover">Placeholder text</div>
+                        {{#hasDiseases}}
+                            <a href="#disease"><div class="tab contenttab distab">Disease ({{diseaseNum}})</div></a>
+                        {{/hasDiseases}}
+                        {{^hasDiseases}}
+                            <div class="tab greyed-out">Disease (0)</div>
+                        {{/hasDiseases}}
+                    </div>
+                    <div class="tabcontainer">
+                        <div class="tabhover">Placeholder text</div>
+                        {{#hasGenotypes}}
+                            <a href="#genotypes"><div class="tab contenttab genotab">Genotypes ({{genotypeNum}})</div></a>
+                        {{/hasGenotypes}}
+                        {{^hasGenotypes}}
+                            <div class="tab greyed-out">Genotypes (0)</div>
+                        {{/hasGenotypes}}
+                    </div>
                 </div>
             </div>
             <div id="complete-info">
