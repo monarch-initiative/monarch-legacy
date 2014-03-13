@@ -80,7 +80,7 @@
                     <div class="tabcontainer">
                         <div class="tabhover">View diseases related to this gene</div>
                         {{#hasDiseases}}
-                            <a href="#diseases"><div class="tab contenttab gentab">Diseases ({{diseaseNum}})</div></a>
+                            <a href="#diseases"><div class="tab contenttab distab">Diseases ({{diseaseNum}})</div></a>
                         {{/hasDiseases}}
                         {{^hasDiseases}}
                             <div class="tab greyed-out">Diseases (0)</div>
@@ -188,27 +188,15 @@
                     </table>
                 </div>
                 {{/hasPhenotypes}}
-                {{#hasGenes}}
-                <div id="genes" class="category">
-                    <h3>Genes</h3>
-                    {{^hasSubClasses}}
-                     <table class="{{css.table}}">
-                      {{{geneTable}}}
-                     </table>
-                    {{/hasSubClasses}}
-                    {{#hasSubClasses}}
-                     <p>
-                      Genes are associated with specific subtypes of this
-                      gene. Please select a gene subtype from the
-                      list below to see the associated genes.
-                      <!-- This will be fixed with issue 140 -->
-                     </p>
-                     <table class="{{css.table}}">
-                      {{{subClassTable}}}
-                     </table>
-                    {{/hasSubClasses}}
+                {{#hasDiseases}}
+                <div id="diseases" class="category">
+                    <h3 class="downloadline">Diseases</h3>
+                    <a href="{{{base_url}}}/disease_associations.json" class="btn btn-info downloadline">JSON</a>
+                    <table class="{{css.table}}">
+                    {{{diseaseTable}}}
+                    </table>
                 </div>
-                {{/hasGenes}}
+                {{/hasDiseases}}
                 {{#hasAlleles}}
                 <div id="alleles" class="category">
                     <h3>Alleles</h3>
@@ -217,15 +205,6 @@
                     </table>
                 </div>
                 {{/hasAlleles}}
-                {{#hasDiseases}}
-                <div id="disease" class="category">
-                    <h3 class="downloadline">Diseases</h3>
-                    <a href="{{{base_url}}}/disease_associations.json" class="btn btn-info downloadline">JSON</a>
-                    <table class="{{css.table}}">
-                    {{{diseaseTable}}}
-                    </table>
-                </div>
-                {{/hasDiseases}}
                 {{#hasInteractions}}
                 <div id="interaction" class="category">
                     <h3 class="downloadline">Similar Interactions</h3>
