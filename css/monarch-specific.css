@@ -14,6 +14,7 @@ p {
     line-height: 26px;
     margin-bottom: 0px;
 }
+
 .ids {
     margin-top: 5px;
     font-size: 15px;
@@ -42,6 +43,12 @@ p {
     left: 5px;
     display: none;
 }
+
+.example {
+    font-size: 80%;
+    font-weight: normal;
+}
+
 @media (min-width: 1170px) {
     .tab {
         display: inline-block;
