@@ -19,19 +19,16 @@ p {
 }
 @media (min-width: 768px) {
     .navbar {
-        min-height: 30px;
+        min-height: 50px;
     }
     .nav>li>a {
-        padding: 0px;
+        padding: 5px 10px 5px;
     }
     .dropdown-toggle {
         margin: 5px 10px 5px 10px;
     }
     .dropdown {
         padding: 4px 0px 0px;
-    }
-    .navbar-brand {
-        padding: 8px 20px 0px 20px;
     }
     .navbar-link {
         font-size: 14px;
@@ -58,14 +55,10 @@ p {
     .monarch-navbar-container {
         margin: 0px -3px;
     }
-    .navbar-brand {
-        padding: 8px 10px 0px 20px;
-    }
+
 }
 @media (max-width: 767px) {
-    .navbar-brand {
-        padding: 15px;
-    }
+
 }
 /* Section 2: Sidebar/Navlist */
 .sidebar {
@@ -95,7 +88,7 @@ p {
 
 /* Section 3: Content */
 .monarch-container {
-    padding: 40px 20px 0px 155px;
+    padding: 50px 20px 0px 155px;
     padding-right: 20px;
     height: 100%;
 }
@@ -142,7 +135,7 @@ p {
 
 /* Search Bar */
 #search {
-    width: 180px;
+    width: 375px;
 }
 .autocomplete-tag-item {
     white-space: nowrap;
@@ -159,4 +152,11 @@ p {
     cursor: pointer;
     color: white;
     background-color: red;
+}
+
+.example {
+    font-size: 80%;
+    font-weight: normal;
+    padding-bottom: 0px;
+    margin-bottom: 0px;
 }

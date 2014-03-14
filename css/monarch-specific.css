@@ -44,10 +44,6 @@ p {
     display: none;
 }
 
-.example {
-    font-size: 80%;
-    font-weight: normal;
-}
 
 @media (min-width: 1170px) {
     .tab {
