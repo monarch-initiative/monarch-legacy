@@ -3274,15 +3274,15 @@
    "kegg" : {
       "object" : "identifier",
       "uri_prefix" : null,
-      "name" : null,
-      "url_example" : null,
+      "name" : "KEGG",
+      "url_example" : "http://www.kegg.jp/dbget-bin/www_bget?hsa:6469",
       "database" : "Kyoto Encyclopedia of Genes and Genomes",
-      "example_id" : null,
+      "example_id" : "KEGG:hsa_6469",
       "generic_url" : "http://www.genome.ad.jp/kegg/",
       "fullname" : null,
       "id" : null,
       "abbreviation" : "KEGG",
-      "url_syntax" : null,
+      "url_syntax" : "http://www.kegg.jp/dbget-bin/www_bget?[example_id]",
       "datatype" : null
    },
    "smart" : {
