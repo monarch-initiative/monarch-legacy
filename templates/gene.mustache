@@ -63,6 +63,7 @@
                     {{description}}
                     <br/>
 					Organism: {{species}} [{{taxon.id}}] <br />
+					Source: {{{primary_xref}}} <br />
                     {{comments}}
                     </p>
                 </div>
@@ -129,7 +130,6 @@
             </div>
             <div id="complete-info">
                 <div id="ontology" class="first category">
-                    <h3>IDs</h3>
                         <div class="ids">
                             <b>Gene:</b>
                             {{label}}
@@ -144,7 +144,8 @@
                         </div>
                         <div class="ids">
                             <b>IDs:</b>
-                            {{{refList}}}
+							{{{xrefs}}}
+							<b>{{reflist}}</b>
                         </div>
                         {{#hasSuperClasses}}
                         <div class="superclasses">
