@@ -67,6 +67,8 @@
                         {{definition}}
                         <br/>
                         {{comments}}
+						<br />
+						Source: {{{primary_xref}}}
                     </p>
                 </div>
                 <div id="categories">
@@ -132,14 +134,12 @@
             </div>
             <div id="complete-info">
                 <div id="ontology" class="first category">
-                    <h3>IDs</h3>
                     <div class="ids">
                         <b>AKA:</b>
                         {{aka}}
                     </div>
                     <div class="ids">
-                        <b>IDs:</b>
-                        {{ids}}
+						<b>xref IDs:</b> {{{xrefs}}}
                     </div>
                     <h3>Ontology Tree</h3>
                     {{{includes.classificationComponent}}}
