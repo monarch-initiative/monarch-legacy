@@ -19,7 +19,7 @@ p {
 }
 @media (min-width: 768px) {
     .navbar {
-        min-height: 50px;
+        min-height: 70px;
     }
     .nav>li>a {
         padding: 5px 10px 5px;
@@ -88,7 +88,7 @@ p {
 
 /* Section 3: Content */
 .monarch-container {
-    padding: 50px 20px 0px 155px;
+    padding: 70px 20px 0px 155px;
     padding-right: 20px;
     height: 100%;
 }
@@ -135,7 +135,7 @@ p {
 
 /* Search Bar */
 #search {
-    width: 375px;
+    width: 150px;
 }
 .autocomplete-tag-item {
     white-space: nowrap;
