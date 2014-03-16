@@ -103,12 +103,9 @@
                 {{/hasDiseases}}
                 {{#hasGenotypes}}
                 <div id="genotypes" class="category">
-                    <a href="{{{base_url}}}/genotype_associations.json" class="btn btn-info">JSON</a>
-                        <!-- <a href="{{{base_url}}}/genotype_associations.rdf" class="btn btn-info">RDF</a> -->
-                        <!-- <a href="{{{base_url}}}/genotype_associations.nt" class="btn btn-info">n-triples</a> -->
-                        <table class="{{css.table}}">
-                        {{{genotypeTable}}}
-                        </table>
+                    <table class="{{css.table}}">
+                    {{{genotypeTable}}}
+                    </table>
                 </div>
                 {{/hasGenotypes}}
             </div>

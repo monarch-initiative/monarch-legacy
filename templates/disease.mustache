@@ -150,9 +150,6 @@
                 </div>
                 {{#hasPhenotypes}}
                 <div id="phenotypes" class="category">
-                    <a href="{{{base_url}}}/phenotype_associations.json" class="btn btn-info">JSON</a>
-                    <!--        <a href="{{{base_url}}}/phenotype_associations.rdf" class="btn btn-success">RDF</a> -->
-                    <!--                                         <a href="{{{base_url}}}/phenotype_associations.nt" class="btn btn-info">n-triples</a> -->
                     <table class="{{css.table}}">
                         {{{phenotypeTable}}}
                     </table>
@@ -187,13 +184,11 @@
                 {{/hasAlleles}}
                 {{#hasModels}}
                 <div id="model" class="category">
-                    <a href="{{{base_url}}}/models.json" class="btn btn-info">JSON</a>
                     <div id ="phen_vis"></div>
                 </div>
                 {{/hasModels}}
                 {{#hasSim}}
                 <div id="similarity" class="category">
-                    <a href="{{{base_url}}}/sim.json" class="btn btn-info">JSON</a>
                     <table class="{{css.table}}">
                         {{{simTable}}}
                     </table>
