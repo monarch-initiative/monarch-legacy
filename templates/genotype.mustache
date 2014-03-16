@@ -98,17 +98,12 @@
             </div>
             <div id="complete-info">
                 <div id="overview" class="first category">
-                    <h3>Overview</h3>
-                        <div class="ids">
-                            <b>ID:</b> {{id}} <br />
-                        </div>
+                    <div class="ids">
+                        <b>ID:</b> {{id}} <br />
+                    </div>
                 </div>
                 {{#hasPhenotypes}}
                 <div id="phenotypes" class="category">
-                    <h3 class="downloadline">Phenotypes</h3>
-                    <a href="{{{base_url}}}/phenotype_associations.json" class="btn btn-info downloadline">JSON</a>
-    <!--                 <a href="{{{base_url}}}/phenotype_associations.rdf" class="btn btn-success">RDF</a> -->
-    <!--                 <a href="{{{base_url}}}/phenotype_associations.nt" class="btn btn-success">n-triples</a> -->
                     <table class="{{css.table}}">
                     {{{phenotypeTable}}}
                     </table>
@@ -116,7 +111,6 @@
                 {{/hasPhenotypes}}
                 {{#hasDiseases}}
                 <div id="disease" class="category">
-                    <h3>Related Diseases</h3>
                     <table class="{{css.table}}">
                     {{{diseaseTable}}}
                     </table>
@@ -124,7 +118,6 @@
                 {{/hasDiseases}}
                 {{#hasGenes}}
                 <div id="genes" class="category">
-                    <h3>Genes</h3>
                     <table class="{{css.table}}">
                     {{{geneTable}}}
                     </table>
@@ -132,7 +125,6 @@
                 {{/hasGenes}}
                 {{#hasSim}}
                 <div id="similarity" class="category">
-                    <h3>Similar Models</h3>
                     <table class="{{css.table}}">
                     {{{simTable}}}
                     </table>
