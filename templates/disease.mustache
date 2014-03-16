@@ -134,13 +134,17 @@
             </div>
             <div id="complete-info">
                 <div id="ontology" class="first category">
+                    {{#hasAka}}
                     <div class="ids">
                         <b>AKA:</b>
                         {{aka}}
                     </div>
+                    {{/hasAka}}
+                    {{#hasXrefs}}
                     <div class="ids">
 						<b>xref IDs:</b> {{{xrefs}}}
                     </div>
+                    {{/hasXrefs}}
                     <h3>Classification</h3>
                     {{{includes.classificationComponent}}}
                 </div>

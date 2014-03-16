@@ -80,14 +80,17 @@
                         <div class="ids">
                             <b>URI:</b> <a href="{{{url}}}">{{{url}}}</a>
                         </div>
-                        <div class="ids">
-                            <b>AKA:</b>
-                            {{aka}}
-                        </div>
-                        <div class="ids">
-                            <b>IDs:</b>
-                            {{ids}}
-                        </div>
+                        {{#hasAka}}
+                            <div class="ids">
+                                <b>AKA:</b>
+                                {{aka}}
+                            </div>
+                        {{/hasAka}}
+                        {{#hasXrefs}}
+                            <div class="ids">
+                                <b>xref IDs:</b> {{{xrefs}}}
+                            </div>
+                        {{/hasXrefs}}
                     <h3>Classification</h3>
                     {{{includes.classificationComponent}}}
                 </div>
