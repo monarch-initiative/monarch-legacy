@@ -48,7 +48,7 @@ as a separate call in the init function.
 	    detailRectWidth: 240,
         detailRectHeight: 60,
         detailRectStrokeWidth: 3,
-	    dimensions: [ "Input Phenotypes", "Lowest Common Subsumer", "Matching Phenotypes" ], 
+	    dimensions: [ "Human Phenotypes", "Lowest Common Subsumer", "Matching Phenotypes" ], 
 	    m :[ 30, 10, 10, 10 ], 
 	    w : 0,
 	    h : 0,
@@ -61,6 +61,7 @@ as a separate call in the init function.
 	    targetSpecies: "10090",
 	    yAxisMax : 0,
 	    serverURL : "",
+	    axis_pos_list: [],
 	},
 
 	//NOTE: I'm not too sure what the default init() method signature should be
@@ -228,6 +229,25 @@ as a separate call in the init function.
     },
 
     _selectData: function(curr_data) {
+    	
+    	//  		  return self._getYPosition(d.rowid);
+
+    	//create a highlight row
+		var self=this;
+		//create the related row rectangle
+		//var ypos = self._getYPosition(curr_data.rowid);
+		var highlight_rect = self.options.svg.append("svg:rect")
+		  	.attr("transform","translate(" + self.options.axis_pos_list[1] + ",18)")
+			.attr("x", 0)
+			.attr("y", function(d) {return self._getYPosition(curr_data.rowid);})
+//		.attr("y", self.options.yoffset)
+			.attr("class", "row_accent")
+			.attr("width", self.options.textWidth-20)
+			.attr("fill", 'darkgrey')
+			.attr("opacity", '0.5')
+			.attr("height", 14);
+
+    	
     	this._resetLinks();
     	var alabels = this.options.svg.selectAll("text.a_text." + this._getConceptId(curr_data.id));
     	var txt = curr_data.label_a;
@@ -247,6 +267,7 @@ as a separate call in the init function.
     },
 
     _deselectData: function (curr_data) {
+    	this.options.svg.selectAll(".row_accent").remove();
     	this._resetLinks();
     	var alabels = this.options.svg.selectAll("text.a_text." + this._getConceptId(curr_data.id));
     	alabels.text(this._getShortLabel(curr_data.label_a));
@@ -314,6 +335,7 @@ as a separate call in the init function.
     	       // .attr('dx', t.dx)
     	       // .attr('dy', t.dy)
     	        .attr("width", width)
+    	        .attr("id", self._getConceptId(data.model_id))
     	        .attr("model_id", data.model_id)
     	        .attr("height", 200)
 
@@ -332,6 +354,7 @@ as a separate call in the init function.
     	    	   self._clearModelData(d);
     	       })
 		
+    	       .attr("class", this._getConceptId(data.model_id) + " model_label")
     	        //.attr('style','word-wrap: break-word; text-align:center;')
 				.style("font-size", "12px")
     	        .html(label);    
@@ -374,17 +397,34 @@ as a separate call in the init function.
 	       
     },
     
+    
+    //TODO: add a URL url: this.options.serverURL + self._getConceptId(d.model_id)
     _showModelData: function(d) {
 	    var retData;
-	    retData = "<strong>Input: </strong> " + d.label_a   
-		    + "<br/><strong>Match: </strong> " + d.subsumer_label
-	     	+ "<br/><strong>Score: </strong> " + d.value.toFixed(2);
+	    var aSpecies = "Human";
+	    if (d.id_a.indexOf("MP") > -1) {
+	    	aSpecies = "Mouse";
+	    }
+	    var subSpecies = "Human";
+	    if (d.subsumer_id.indexOf("MP") > -1) {
+	    	subSpecies = "Mouse";
+	    }
+	    
+	    retData = "<strong>Input: </strong> " + d.label_a + " (" + aSpecies + ")"   
+		    + "<br/><strong>Match: </strong> " + d.subsumer_label + " (" + subSpecies + ")"
+	     	+ "<br/><strong>Similarity Score: </strong> " + d.value.toFixed(2);
 	    this._updateDetailSection(retData);
 	  
     },
     	
-    _clearModelData: function() {
+    //I need to check to see if the modelData is an object.  If so, get the model_id
+    _clearModelData: function(modelData) {
 	    this.options.svg.selectAll("#detail_content").remove();
+	    this.options.svg.selectAll(".model_accent").remove();
+	    if (modelData != null && typeof modelData != 'object') {
+		    var model_text = this.options.svg.selectAll("#" + this._getConceptId(modelData));
+		    model_text.style("font-weight","normal");
+	    }
     },
 
 
@@ -461,16 +501,16 @@ as a separate call in the init function.
 
 	_createAccentBoxes: function() {
 	    var self=this;
-	    var axis_pos_list = [];
+	    
 	    this.options.modelWidth = this.options.modelList.length * 18
 	    //add an axis for each ordinal scale found in the data
 	    for (var i=0;i<this.options.dimensions.length;i++) { 
 		if (i == 2) {
-		    axis_pos_list.push((this.options.textWidth + 10) 
+			self.options.axis_pos_list.push((this.options.textWidth + 10) 
 				       + this.options.colStartingPos 
 				       + this.options.modelWidth);
 		} else {
-		    axis_pos_list.push((i*(this.options.textWidth + 10)) + 
+			self.options.axis_pos_list.push((i*(this.options.textWidth + 10)) + 
 				       this.options.colStartingPos);
 		}
 	    }
@@ -481,7 +521,7 @@ as a separate call in the init function.
 	    rect_accents.enter()
 	    	.append("rect")
 		.attr("class", "accent")
-		.attr("x", function(d, i) { return axis_pos_list[i];})
+		.attr("x", function(d, i) { return self.options.axis_pos_list[i];})
 		.attr("y", self.options.yoffset)
 		.attr("width", self.options.textWidth + 5)
 		.attr("height", self.options.h)
@@ -489,6 +529,16 @@ as a separate call in the init function.
 		.attr("fill", function(d, i) {
 		    return i != 1 ? d3.rgb("#e5e5e5") : "white";
 		});
+	    
+	    //add text about models
+	    var div_text = self.options.svg.append("svg:text")
+			.attr("transform","translate(" + self.options.axis_pos_list[1] + "," + self.options.yoffset +")")
+			.attr("class", "model_data_text")
+			.attr("x", "22")
+			.attr("y", "10")
+			.style("font-size", "12px")
+			.text("(Models ordered by score)");
+	    
 
 	    //add text headers
 	    var rect_headers = this.options.svg.selectAll("#text.accent")
@@ -496,7 +546,7 @@ as a separate call in the init function.
 	    rect_headers.enter()
 	    	.append("text")
 		.attr("class", "accent")
-		.attr("x", function(d, i) { return (axis_pos_list[i]+10);})
+		.attr("x", function(d, i) { return (self.options.axis_pos_list[i]+10);})
 		.attr("y", self.options.yoffset-10)
 		//.attr("width", self.options.textWidth + 5)
 		//.attr("height", self.options.h)
@@ -529,51 +579,71 @@ as a separate call in the init function.
 			self._getShortLabel(self.options.modelList[i].model_label, 15),self.options.modelList[i]);}); 
 
 
-	    //create a scale
-	    var color_values = [];
 	    var temp_data = this.options.modelData.map(function(d) { 
-		return d.value;});
+			return d.value;});
 	    var diff = d3.max(temp_data) - d3.min(temp_data);
-	    var step = (diff/5);
-	    for (var idx=0;idx<6;idx++) {
-		var t = d3.min(temp_data);
-		var t2 = t + (idx * step);
-		color_values.push(t2);
+	    //only show the scale if there is more than one value represented
+	    //in the scale
+	    if (diff > 0) {
+		    //create a scale
+		    var color_values = [];
+		    var temp_data = this.options.modelData.map(function(d) { 
+			return d.value;});
+		    var diff = d3.max(temp_data) - d3.min(temp_data);
+		    var step = (diff/5);
+		    for (var idx=0;idx<6;idx++) {
+			var t = d3.min(temp_data);
+			var t2 = t + (idx * step);
+			color_values.push(t2);
+		    }
+		    //color_values.reverse();
+		    var legend_rects = this.options.svg.selectAll("#legend_rect")
+			.data(color_values);
+		    legend_rects.enter()
+			.append("rect")
+			.attr("transform","translate(15,10)")
+			.attr("class", "legend_rect")
+			.attr("y", "39")
+			.attr("x", function(d, i) {
+			    return (i* 32);
+			})
+			.attr("width", 20)
+			.attr("height", 20)
+			.attr("fill", function(d) {
+			    return self.options.colorScale(d);
+			});
+		    var legend_text = self.options.svg.selectAll("#legend_text")
+		        .data(color_values);
+		    legend_text.enter()
+			.append("text")
+			.attr("transform","translate(15,10)")
+			.attr("class", "legend_text")
+			.attr("y", "35")
+			.attr("x", function(d, i) {
+			    return (i* 32);
+			})
+			.text(function(d) {
+			    return d.toFixed(1);
+			});
+		    var div_text1 = self.options.svg.append("svg:text")
+			.attr("transform","translate(0,10)")
+			.attr("class", "detail_text")
+			.attr("y", "22")
+			.style("font-size", "10px")
+			.text("Less Similar");
+		    var div_text = self.options.svg.append("svg:text")
+			.attr("transform","translate(65,10)")
+			.attr("class", "detail_text")
+			.attr("y", "22")
+			.style("font-size", "12px")
+			.text("Similarity Scale");
+		    var div_text2 = self.options.svg.append("svg:text")
+			.attr("transform","translate(160,10)")
+			.attr("class", "detail_text")
+			.attr("y", "22")
+			.style("font-size", "10px")
+			.text("More Similar");
 	    }
-	    //color_values.reverse();
-	    var legend_rects = this.options.svg.selectAll("#legend_rect")
-		.data(color_values);
-	    legend_rects.enter()
-		.append("rect")
-		.attr("transform","translate(15,10)")
-		.attr("class", "legend_rect")
-		.attr("y", "39")
-		.attr("x", function(d, i) {
-		    return (i* 32);
-		})
-		.attr("width", 20)
-		.attr("height", 20)
-		.attr("fill", function(d) {
-		    return self.options.colorScale(d);
-		});
-	    var legend_text = self.options.svg.selectAll("#legend_text")
-	        .data(color_values);
-	    legend_text.enter()
-		.append("text")
-		.attr("transform","translate(15,10)")
-		.attr("class", "legend_text")
-		.attr("y", "35")
-		.attr("x", function(d, i) {
-		    return (i* 32);
-		})
-		.text(function(d) {
-		    return d.toFixed(1);
-		});
-	    var div_text = self.options.svg.append("svg:text")
-		.attr("transform","translate(15,10)")
-		.attr("class", "detail_text")
-		.attr("y", "22")
-		.text("Score Scale");
 	},
 	
 	//create essentially a D3 enabled "div" tag on the screen
@@ -675,6 +745,7 @@ as a separate call in the init function.
 		    }
 		})
 		.on("mouseout", function(d) {
+//	    	self.options.svg.selectAll(".row_accent").remove();
 		    if (self.options.clickedData == undefined) {
 			self._deselectData(d);
 		    }
@@ -731,6 +802,8 @@ as a separate call in the init function.
 		    }
 		})
 		.on("mouseout", function(d) {
+//	    	self.options.svg.selectAll(".row_accent").remove();
+			
 		    if (self.options.clickedData == undefined) {
 			self._deselectData(d);
 		    }
@@ -789,7 +862,24 @@ as a separate call in the init function.
 	},
 
 	_modelClick: function(modelData) {
+		var self=this;
 	    //this._showThrobber();
+		//select the model label
+		var model_label = self.options.svg.selectAll("#" + this._getConceptId(modelData.model_id));
+		//var model_label = self.options.svg.selectAll(".foreignObject.p");
+		model_label.style("font-weight", "bold");
+		//create the related model rectangles
+		var highlight_rect = self.options.svg.append("svg:rect")
+		  	  .attr("transform",
+		  			  "translate(" + (self.options.textWidth + 20) + ",20)")
+			.attr("x", function(d) { return (self.options.xScale(modelData.model_id)-2);})
+			.attr("y", self.options.yoffset)
+			.attr("class", "model_accent")
+			.attr("width", 14)
+			.attr("fill", 'darkgrey')
+			.attr("opacity", '0.5')
+			.attr("height", self.options.yAxisMax);
+
 		var retData;
 		//initialize the model data based on the scores
 		retData = "<strong>Gene Label:</strong> "   

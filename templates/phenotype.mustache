@@ -36,6 +36,7 @@
             </ul>
         </div>
         <div class="content">
+            <div class="wrapperforfooter">
             <div class="jumbotron">
                 <div id="description">
                     {{#alerts}}
@@ -52,19 +53,25 @@
                     </p>
                 </div>
                 <div id="categories">
-                    <a href="#overview"><div id="initialtab" class="tab contenttab overtab second">Overview</div></a>
-                    {{#hasDiseases}}
-                    <a href="#disease"><div class="tab contenttab distab">Disease ({{diseaseNum}})</div></a>
-                    {{/hasDiseases}}
-                    {{^hasDiseases}}
-                    <div class="tab greyed-out">Disease (0)</div>
-                    {{/hasDiseases}}
-                    {{#hasGenotypes}}
-                    <a href="#genotypes"><div class="tab contenttab genotab">Genotypes ({{genotypeNum}})</div></a>
-                    {{/hasGenotypes}}
-                    {{^hasGenotypes}}
-                    <div class="tab greyed-out">Genotypes (0)</div>
-                    {{/hasGenotypes}}
+                    <a href="#overview"><div id="initialtab" class="tab contenttab overtab">Overview</div></a>
+                    <div class="tabcontainer">
+                        <div class="tabhover">Placeholder text</div>
+                        {{#hasDiseases}}
+                            <a href="#disease"><div class="tab contenttab distab">Disease ({{diseaseNum}})</div></a>
+                        {{/hasDiseases}}
+                        {{^hasDiseases}}
+                            <div class="tab greyed-out">Disease (0)</div>
+                        {{/hasDiseases}}
+                    </div>
+                    <div class="tabcontainer">
+                        <div class="tabhover">Placeholder text</div>
+                        {{#hasGenotypes}}
+                            <a href="#genotypes"><div class="tab contenttab genotab">Genotypes ({{genotypeNum}})</div></a>
+                        {{/hasGenotypes}}
+                        {{^hasGenotypes}}
+                            <div class="tab greyed-out">Genotypes (0)</div>
+                        {{/hasGenotypes}}
+                    </div>
                 </div>
             </div>
             <div id="complete-info">
@@ -73,20 +80,22 @@
                         <div class="ids">
                             <b>URI:</b> <a href="{{{url}}}">{{{url}}}</a>
                         </div>
-                        <div class="ids">
-                            <b>AKA:</b>
-                            {{aka}}
-                        </div>
-                        <div class="ids">
-                            <b>IDs:</b>
-                            {{ids}}
-                        </div>
+                        {{#hasAka}}
+                            <div class="ids">
+                                <b>AKA:</b>
+                                {{aka}}
+                            </div>
+                        {{/hasAka}}
+                        {{#hasXrefs}}
+                            <div class="ids">
+                                <b>xref IDs:</b> {{{xrefs}}}
+                            </div>
+                        {{/hasXrefs}}
                     <h3>Classification</h3>
                     {{{includes.classificationComponent}}}
                 </div>
                 {{#hasDiseases}}
                 <div id="disease" class="category">
-                    <h3>Disease</h3>
                     <table class="{{css.table}}">
                     {{{diseaseTable}}}
                     </table>
@@ -94,16 +103,13 @@
                 {{/hasDiseases}}
                 {{#hasGenotypes}}
                 <div id="genotypes" class="category">
-                    <h3 class="downloadline">Genotype Associations</h3>
-                    <a href="{{{base_url}}}/genotype_associations.json" class="btn btn-info downloadline">JSON</a>
-                        <!-- <a href="{{{base_url}}}/genotype_associations.rdf" class="btn btn-info">RDF</a> -->
-                        <!-- <a href="{{{base_url}}}/genotype_associations.nt" class="btn btn-info">n-triples</a> -->
-                        <table class="{{css.table}}">
-                        {{{genotypeTable}}}
-                        </table>
+                    <table class="{{css.table}}">
+                    {{{genotypeTable}}}
+                    </table>
                 </div>
                 {{/hasGenotypes}}
             </div>
+            </div> <!-- closes wrapperforfooter -->
             {{{includes.footer}}}
         </div>
     </div>

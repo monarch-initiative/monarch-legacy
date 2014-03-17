@@ -14,6 +14,7 @@ p {
     line-height: 26px;
     margin-bottom: 0px;
 }
+
 .ids {
     margin-top: 5px;
     font-size: 15px;
@@ -21,10 +22,30 @@ p {
 }
 /* Category Tabs */
 #categories {
-    margin-top: 20px;
+    margin-top: 35px;
     margin-bottom: -3px;
 }
-@media (min-width: 1175px) {
+@media (max-width: 1170px) {
+    #categories {
+        margin-bottom: 10px;
+    }
+}
+.tabcontainer {
+    position: relative;
+    display: inline-block;
+}
+.tabhover {
+    position: absolute;
+    bottom: 45px;
+    font-size: 12px;
+    line-height: 14px;
+    width: 170px;
+    left: 5px;
+    display: none;
+}
+
+
+@media (min-width: 1170px) {
     .tab {
         display: inline-block;
         background: white;
@@ -32,14 +53,14 @@ p {
         padding: 2px 15px;
         text-align: center;
         border-radius: 5px 5px 0px 0px;
-        margin-right: 5px;
+        margin-right: 3px;
         font-weight: 400;
         cursor: pointer;
         font-size: 14px;
         border: black solid 1px;
     }
 }
-@media (max-width: 1175px) {
+@media (max-width: 1170px) {
     .tab {
         display: inline-block;
         background: white;
@@ -47,7 +68,7 @@ p {
         padding: 2px 15px;
         text-align: center;
         border-radius: 4px;
-        margin-right: 10px;
+        margin-right: 5px;
         font-weight: 400;
         cursor: pointer;
         font-size: 14px;
@@ -68,15 +89,14 @@ p {
 #longertab {
     width: 140px;
 }
-@media (min-width: 1175px) {
+@media (min-width: 1170px) {
     .second-row-divider {
         display: none;
     }
 }
-@media (max-width: 1175px) {
-    .second {
-        margin-top: 10px;
-        margin-bottom: 15px;
+@media (max-width: 1170px) {
+    .second-row-divider {
+        margin-bottom: 35px;
     }
 }
 /* Rest of Content */

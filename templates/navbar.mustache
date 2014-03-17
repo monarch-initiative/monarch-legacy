@@ -1,5 +1,5 @@
 <div class="navbar navbar-inverse navbar-fixed-top" role="navigation">
-    <div class="monarch-navbar-container">
+    <div class="containter-fluid"> <!-- monarch-navbar-container">-->
         <div class="navbar-header">
             <button type="button" class="navbar-toggle" data-toggle="collapse"
                 data-target="#collapsed-navbar">
@@ -60,12 +60,12 @@
                     </ul>
                 </li>
             </ul>
-            <form id="search_form" class="navbar-form searchspace" action="/search" role="search">
+            <form id="search_form" class="navbar-form navbar-left searchspace search-box-position" action="/search" role="search">
                 <div class="form-group">
-                <input id="search" type="text" class="form-control" placeholder="Search">
+                <input id="search" type="text" class="form-control search-box" placeholder="Search"/>
+	            <div class="search-text-example">Search for diseases (e.g. Parkinsons) or phenotypes (e.g. Renal agenesis)</div>
                 </div>
             </form>
         </div>
     </div>
 </div>
-<div id="spacer"></div>

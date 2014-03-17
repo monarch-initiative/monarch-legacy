@@ -1,5 +1,11 @@
 $(document).ready(function(){
 
+    $('.tabcontainer').hover(function() {
+        $(this).find('.tabhover').css({'display': 'block'});
+    }, function(){
+        $(this).find('.tabhover').css({'display': 'none'});
+    });
+
     $('.contenttab').click(function() {
         $('.contenttab').css({'color': '#777', 'background-color': 'white'});
         $(this).css({'color': 'white', 'background-color': '#666'});

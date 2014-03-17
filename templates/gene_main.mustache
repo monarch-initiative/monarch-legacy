@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Monarch Genes</title>
+    {{#scripts}}
+    <script type="text/javascript" src="{{url}}"></script>
+    {{/scripts}}
+    {{#stylesheets}}
+    <link rel="stylesheet" type="text/css" href="{{url}}"></link>
+    {{/stylesheets}}
+    <link rel="stylesheet" type="text/css" href="../css/monarch-main.css"></link>
+    <meta charset=”utf-8”></meta>
+</head>
+<body>
+    {{{includes.navbar}}}
+    <div class="monarch-container">
+        <div class="sidebar">
+            {{{includes.navlist}}}
+        </div>
+        <div class="content">
+            <div class="jumbotron">
+                <h1>Gene spotlight: Dystrophin, DMD</h1>
+                <p>DMD encodes dystrophin, which plays a vital role in striated
+                   muscle fiber and is part of the dystrophin-associated protein
+                   complex, also known as the costamere.</p>
+                <a href="/gene/1756" class="btn btn-large btn-info">Find out more</a>
+            </div>
+            <div class="col-lg-9">
+                <h1>Highlighted genes</h1>
+                <ul>
+                    <li><a href="/gene/NCBIGene:2048">EPHB2</a></li>
+                    <li><a href="/gene/NCBIGene:388552">BLOC1S3</a></li>
+                    <li><a href="/gene/NCBIGene:7291">TWIST1</a></li>
+                </ul>
+                <h1>Gene set highlight: Genes Involed in Carcinogenesis</h1>
+                <ul>
+                    <li><a href="/gene/NCBIGene:672">BRCA1</a></li>
+                    <li><a href="/gene/NCBIGene:7157">TP53</a></li>
+                </ul>
+            </div>
+            </div> <!-- closes wrapperforfooter -->
+            {{{includes.footer}}}
+        </div>
+     </div>
+</body>
+</html>

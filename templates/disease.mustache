@@ -51,6 +51,7 @@
             </ul>
         </div>
         <div class="content">
+            <div class="wrapperforfooter">
             <div class="jumbotron">
                 <div id="description">
                     {{#alerts}}
@@ -66,69 +67,89 @@
                         {{definition}}
                         <br/>
                         {{comments}}
+						<br />
+						Source: {{{primary_xref}}}
                     </p>
                 </div>
                 <div id="categories">
-                    <a href="#ontology"><div id="initialtab" class="tab contenttab onttab">Overview</div></a>
-                    {{#hasPhenotypes}}
-                    <a href="#phenotypes"><div class="tab contenttab phentab">Phenotypes ({{phenotypeNum}})</div></a>
-                    {{/hasPhenotypes}}
-                    {{^hasPhenotypes}}
-                    <div class="tab greyed-out">Phenotypes (0)</div>
-                    {{/hasPhenotypes}}
-                    {{#hasGenes}}
-                    <a href="#genes"><div class="tab contenttab gentab">Genes ({{geneNum}})</div></a>
-                    {{/hasGenes}}
-                    {{^hasGenes}}
-                    <div class="tab greyed-out">Genes (0)</div>
-                    {{/hasGenes}}
-                    {{#hasAlleles}}
-                    <a href="#alleles"><div class="tab contenttab alletab">Alleles ({{alleleNum}})</div></a>
-                    {{/hasAlleles}}
-                    {{^hasAlleles}}
-                    <div class="tab greyed-out">Alleles (0)</div>
-                    {{/hasAlleles}}
+                    <div class="tabcontainer">
+                        <a href="#ontology"><div id="initialtab" class="tab contenttab onttab">Overview</div></a>
+                    </div>
+                    <div class="tabcontainer">
+                        <div class="tabhover">View phenotypes related to this disease</div>
+                        {{#hasPhenotypes}}
+                            <a href="#phenotypes"><div class="tab contenttab phentab">Phenotypes ({{phenotypeNum}})</div></a>
+                        {{/hasPhenotypes}}
+                        {{^hasPhenotypes}}
+                            <div class="tab greyed-out">Phenotypes (0)</div>
+                        {{/hasPhenotypes}}
+                        </div>
+                    <div class="tabcontainer">
+                        <div class="tabhover">View genes known to be variant in this disease</div>
+                        {{#hasGenes}}
+                            <a href="#genes"><div class="tab contenttab gentab">Genes ({{geneNum}})</div></a>
+                        {{/hasGenes}}
+                        {{^hasGenes}}
+                            <div class="tab greyed-out">Genes (0)</div>
+                        {{/hasGenes}}
+                    </div>
+                    <div class="tabcontainer">
+                        <div class="tabhover">View known variants associated with this disease</div>
+                        {{#hasAlleles}}
+                            <a href="#alleles"><div class="tab contenttab alletab">Alleles ({{alleleNum}})</div></a>
+                        {{/hasAlleles}}
+                        {{^hasAlleles}}
+                            <div class="tab greyed-out">Alleles (0)</div>
+                        {{/hasAlleles}}
+                    </div>
                     <div class="second-row-divider"></div>
-                    {{#hasModels}}
-                    <a href="#model"><div class="tab contenttab modtab second">Similar Models ({{modelNum}})</div></a>
-                    {{/hasModels}}
-                    {{^hasModels}}
-                    <div class="tab greyed-out second">Similar Models (0)</div>
-                    {{/hasModels}}
-                    {{#hasSim}}
-                    <a href="#similarity"><div class="tab contenttab simitab">Related Diseases ({{simNum}})</div></a>
-                    {{/hasSim}}
-                    {{^hasSim}}
-                    <div class="tab greyed-out">Related Diseases (0)</div>
-                    {{/hasSim}}
-                    {{#hasPathways}}
-                    <a href="#pathways"><div class="tab contenttab pathtab">Pathways ({{pathwayNum}})</div></a>
-                    {{/hasPathways}}
-                    {{^hasPathways}}
-                    <div class="tab greyed-out">Pathways (0)</div>
-                    {{/hasPathways}}
+                    <div class="tabcontainer">
+                        <div class="tabhover">View models that have phenotypes in common</div>
+                        {{#hasModels}}
+                            <a href="#model"><div class="tab contenttab modtab">Similar Models ({{modelNum}})</div></a>
+                        {{/hasModels}}
+                        {{^hasModels}}
+                            <div class="tab greyed-out">Similar Models (0)</div>
+                        {{/hasModels}}
+                    </div>
+                    <div class="tabcontainer">
+                        <div class="tabhover">View diseases that have the most phenotypes in common</div>
+                        {{#hasSim}}
+                            <a href="#similarity"><div class="tab contenttab simitab">Related Diseases ({{simNum}})</div></a>
+                        {{/hasSim}}
+                        {{^hasSim}}
+                            <div class="tab greyed-out">Related Diseases (0)</div>
+                        {{/hasSim}}
+                    </div>
+                    <div class="tabcontainer">
+                        <div class="tabhover">View phenotypes on pathway view containing variant genes</div>
+                        {{#hasPathways}}
+                            <a href="#pathways"><div class="tab contenttab pathtab">Pathways ({{pathwayNum}})</div></a>
+                        {{/hasPathways}}
+                        {{^hasPathways}}
+                            <div class="tab greyed-out">Pathways (0)</div>
+                        {{/hasPathways}}
+                    </div>
                 </div>
             </div>
             <div id="complete-info">
                 <div id="ontology" class="first category">
-                    <h3>IDs</h3>
+                    {{#hasAka}}
                     <div class="ids">
                         <b>AKA:</b>
                         {{aka}}
                     </div>
+                    {{/hasAka}}
+                    {{#hasXrefs}}
                     <div class="ids">
-                        <b>IDs:</b>
-                        {{ids}}
+						<b>xref IDs:</b> {{{xrefs}}}
                     </div>
-                    <h3>Ontology Tree</h3>
+                    {{/hasXrefs}}
+                    <h3>Classification</h3>
                     {{{includes.classificationComponent}}}
                 </div>
                 {{#hasPhenotypes}}
                 <div id="phenotypes" class="category">
-                    <h3 class="downloadline">Phenotypes</h3>
-                    <a href="{{{base_url}}}/phenotype_associations.json" class="btn btn-info downloadline">JSON</a>
-                    <!--        <a href="{{{base_url}}}/phenotype_associations.rdf" class="btn btn-success">RDF</a> -->
-                    <!--                                         <a href="{{{base_url}}}/phenotype_associations.nt" class="btn btn-info">n-triples</a> -->
                     <table class="{{css.table}}">
                         {{{phenotypeTable}}}
                     </table>
@@ -136,7 +157,6 @@
                 {{/hasPhenotypes}}
                 {{#hasGenes}}
                 <div id="genes" class="category">
-                    <h3>Genes</h3>
                     {{^hasSubClasses}}
                     <table class="{{css.table}}">
                         {{{geneTable}}}
@@ -157,7 +177,6 @@
                 {{/hasGenes}}
                 {{#hasAlleles}}
                 <div id="alleles" class="category">
-                    <h3>Alleles</h3>
                     <table class="{{css.table}}">
                         {{{alleleTable}}}
                     </table>
@@ -165,15 +184,11 @@
                 {{/hasAlleles}}
                 {{#hasModels}}
                 <div id="model" class="category">
-                    <h3 class="downloadline">Similar Models</h3>
-                    <a href="{{{base_url}}}/models.json" class="btn btn-info downloadline">JSON</a>
                     <div id ="phen_vis"></div>
                 </div>
                 {{/hasModels}}
                 {{#hasSim}}
                 <div id="similarity" class="category">
-                    <h3 class="downloadline">Related Diseases</h3>
-                    <a href="{{{base_url}}}/sim.json" class="btn btn-info downloadline">JSON</a>
                     <table class="{{css.table}}">
                         {{{simTable}}}
                     </table>
@@ -181,8 +196,6 @@
                 {{/hasSim}}
                 {{#hasPathways}}
                 <div id="pathways" class="category">
-                    <h3 class="downloadline">Disease Pathways</h3>
-                    <a href="{{{base_url}}}/pathway.json" class="btn btn-info downloadline">JSON</a>
                     <table class="{{css.table}}">
                         {{{pathwayTable}}}
                     </table>
@@ -195,6 +208,7 @@
                 </div>
                 {{/hasPathways}}
             </div>
+            </div> <!-- closes wrapperforfooter -->
             {{{includes.footer}}}
         </div>
     </div>
