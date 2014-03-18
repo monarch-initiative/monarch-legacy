@@ -529,6 +529,16 @@ as a separate call in the init function.
 		.attr("fill", function(d, i) {
 		    return i != 1 ? d3.rgb("#e5e5e5") : "white";
 		});
+	    
+	    //add text about models
+	    var div_text = self.options.svg.append("svg:text")
+			.attr("transform","translate(" + self.options.axis_pos_list[1] + "," + self.options.yoffset +")")
+			.attr("class", "model_data_text")
+			.attr("x", "22")
+			.attr("y", "10")
+			.style("font-size", "12px")
+			.text("(Models ordered by score)");
+	    
 
 	    //add text headers
 	    var rect_headers = this.options.svg.selectAll("#text.accent")

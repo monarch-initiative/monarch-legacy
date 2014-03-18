@@ -1,7 +1,6 @@
 /* Section 3: Content */
 /* Jumbotron */
 .jumbotron {
-    padding: 0px 30px 20px;
     margin-bottom: 20px;
 }
 @media (min-width: 800px) {

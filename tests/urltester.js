@@ -68,8 +68,20 @@ var testUrl = function(urlinfo) {
 
     console.log("Testing URL: "+url);
     print(JSON.stringify(urlinfo, ' ', null));
+    var date = new Date();
+    var t1 = date.getTime();
     var x = httpclient.get(url);
+    date = new Date();
+    var t2 = date.getTime();
+    var td = t2-t1;
+    console.log("TIME\t"+url+"\t"+td);
     console.log("Status: " + x.status);
+    if (urlinfo.maxTimeMilliseconds != null) {
+        if (td > urlinfo.maxTimeMilliseconds) {
+            console.warn("Too long!");
+            assert.fail("Call to "+url+" takes too long: "+td+" ms");
+        }
+    }
     if (expects.status != null) {
         assert.equal(expects.status, x.status);
     }
