@@ -14,6 +14,9 @@ $(document).ready(function(){
             if (a > b) return +1;
             return 0;
         },
+        "references": function(a, b) {
+            return string(a, b);
+        },
         "gene": function(a, b) {
             return string(a, b);
         },
@@ -32,10 +35,19 @@ $(document).ready(function(){
         "rank": function(a, b) {
             return float(a, b);
         },
+        "pathway": function(a, b) {
+            return string(a, b);
+        },
+        "evidence": function(a, b) {
+            return string(a, b);
+        },
         "genotype": function(a, b) {
             return string(a, b);
         },
         "phenotype description": function(a, b) {
+            return string(a, b);
+        },
+        "reference": function(a, b) {
             return string(a, b);
         },
         "Hit": function(a, b) {
@@ -75,6 +87,11 @@ $(document).ready(function(){
         return 4;
     };
 
+    var sort = ["disease", "phenotype", "frequency", "references", "gene", "mutation",
+                "allele", "disease B", "score", "rank", "pathway", "evidence", "genotype",
+                "phenotype description", "reference", "Hit", "Combined score",
+                "Most Informative Shared Phenotype", "Other Matching Phenotypes"];
+
     table.bind('beforetablesort', function(event, data) {
         // data.column - the index of the column sorted after a click
         // data.direction - the sorting direction (either asc or desc)
@@ -83,11 +100,7 @@ $(document).ready(function(){
         th.find(".arrow").remove();
         var arrow = data.direction === "asc" ? "  ↑" : "  ↓";
         var type = th.eq(data.column).attr("data-sort");
-        if (type == "disease" | type == "phenotype" | type == "frequency" | type == "gene" |
-            type == "mutation" | type == "allele" | type == "disease B" | type == "score" |
-            type == "rank" | type == "genotype" | type == "phenotype description" | type == "Hit" |
-            type == "Combined score" | type == "Most Informative Shared Phenotype" |
-            type == "Other Matching Phenotypes") {
+        if (sort.indexOf(type) != -1) {
             th.eq(data.column).append('<span class="arrow">' + arrow +'</span>');
         }
     });
