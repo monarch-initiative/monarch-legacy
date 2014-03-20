@@ -7,8 +7,8 @@ $(document).ready(function(){
     });
 
     $('.contenttab').click(function() {
-        $('.contenttab').css({'color': '#777', 'background-color': 'white'});
-        $(this).css({'color': 'white', 'background-color': '#666'});
+        $('.contenttab').css({'color': 'white', 'background-color': '#999', 'border-bottom': '1px solid black'});
+        $(this).css({'color': 'black', 'background-color': 'white', 'border-bottom': '1px solid white'});
     });
 
     $('#categories a').click(function(event) {
@@ -21,7 +21,7 @@ $(document).ready(function(){
     $('.special').click(function(event) {
         var panel_id = $(this).attr("id");
         $('.category').hide();
-        $('.contenttab').css({'color': '#777', 'background-color': 'white'});
+        $('.contenttab').css({'color': 'white', 'background-color': '#999', 'border-bottom': '1px solid black'});
         var panel;
         if (panel_id == "phen") {
             panel = '#phenotypes';
@@ -53,7 +53,7 @@ $(document).ready(function(){
         contenttab = '.' + panel_id + 'tab';
         event.preventDefault();
         $(panel).show();
-        $(contenttab).css({'color': 'white', 'background-color': '#666'});
+        $(contenttab).css({'color': 'black', 'background-color': 'white', 'border-bottom': '1px solid white'});
     });
 
 });
