@@ -90,13 +90,13 @@
                         {{/hasDiseases}}
                     </div>
                     <div class="tabcontainer">
-                        <div class="tabhover">View alleles of this gene</div>
-                        {{#hasAlleles}}
-                            <a href="#alleles"><div class="tab contenttab alletab">Alleles ({{alleleNum}})</div></a>
-                        {{/hasAlleles}}
-                        {{^hasAlleles}}
-                            <div class="tab greyed-out">Alleles (0)</div>
-                        {{/hasAlleles}}
+                        <div class="tabhover">View genotypes of this gene</div>
+                        {{#hasGenotypes}}
+                            <a href="#alleles"><div class="tab contenttab alletab">Genotypes ({{genotypeNum}})</div></a>
+                        {{/hasGenotypes}}
+                        {{^hasGenotypes}}
+                            <div class="tab greyed-out">Genotypes (0)</div>
+                        {{/hasGenotypes}}
                     </div>
                     <div class="second-row-divider"></div>
                     <div class="tabcontainer">
@@ -194,14 +194,14 @@
                     </table>
                 </div>
                 {{/hasDiseases}}
-                {{#hasAlleles}}
+                {{#hasGenotypes}}
                 <div id="alleles" class="category">
-                    <h3>Alleles</h3>
+                    <h3>Genotypes</h3>
                     <table class="{{css.table}}">
-                    {{{alleleTable}}}
+                    {{{genotypeTable}}}
                     </table>
                 </div>
-                {{/hasAlleles}}
+                {{/hasGenotypes}}
                 {{#hasInteractions}}
                 <div id="interaction" class="category">
                     <h3 class="downloadline">Similar Interactions</h3>
