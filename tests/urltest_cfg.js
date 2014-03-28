@@ -171,7 +171,11 @@
             notes : "Currently just checks for string matches in returned XML",
             expects : {
                 format : "xml",
-                raw_contains : "Limb-girdle muscle weakness",
+                raw_contains : 
+                ["Limb-girdle muscle weakness",
+                 "HP:0008971", // alt ID
+                 "Weakness of the limb-girdle muscles"     // definition field
+                ]
             }
         },
 

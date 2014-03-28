@@ -242,6 +242,9 @@ var modifyUrlForComponent = function(url, component) {
             
         }
     }
+    else if (component == 'ontoquest') {
+        return url.replace("http://nif-services-stage.neuinfo.org//ontoquest-lamhdi", "http://services.monarchinitiative.org/ontoquest");
+    }
     return url;
 }
 
@@ -297,6 +300,7 @@ ringo  -c vocabulary tests/urltester.js\n\
     console.log("Components = " + components);
 
     version = options.setup;
+    console.log("Version = " + version);
 
     //system.args.forEach(function(fn) { print(fn) });
     var rtn = require("test").run(exports);
