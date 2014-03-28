@@ -21,42 +21,6 @@
 <body>
     {{{includes.navbar}}}
     <div class="monarch-container">
-        <div class="sidebar">
-            <a href="/"><img src="/image/logo-sneak.png" width="100" class="img-rounded"/></a>
-            <ul class="nav nav-list">
-                <li class="nav-header">Find</li>
-                    <li class="nav-item"><a href="/disease">Disease</a></li>
-                    <li class="nav-item"><a href="/phenotype">Phenotype</a></li>
-                    <li class="nav-item"><a href="/gene">Gene</a></li>
-                    <li class="nav-item"><a href="/model">Model</a></li>
-                <li id="navigation" class="nav-header">Navigate</li>
-                    <li id="ont" class="special nav-item"><a href="#ontology">Overview</a></li>
-                    {{#hasPhenotypes}}
-                    <li id="phen" class="special nav-item"><a href="#phenotypes">Phenotypes</a></li>
-                    {{/hasPhenotypes}}
-                    {{#hasDiseases}}
-                    <li id="dis" class="special nav-item"><a href="#diseases">Diseases</a></li>
-                    {{/hasDiseases}}
-                    {{#hasAlleles}}
-                    <li id="geno" class="special nav-item"><a href="#genotypes">Genotypes</a></li>
-                    {{/hasAlleles}}
-                    {{#hasAlleles}}
-                    <li id="alle" class="special nav-item"><a href="#alleles">Alleles</a></li>
-                    {{/hasAlleles}}
-                    {{#hasInteractions}}
-                    <li id="mod" class="special nav-item"><a href="#interaction">Interactions</a></li>
-                    {{/hasInteractions}}
-                    {{#hasSim}}
-                    <li id="simi" class="special nav-item"><a href="#similarity">Related Genes</a></li>
-                    {{/hasSim}}
-                    {{#hasOrthologs}}
-                    <li id="simi" class="special nav-item"><a href="#orthologs">Orthologs</a></li>
-                    {{/hasOrthologs}}
-                    {{#hasPathways}}
-                    <li id="path" class="special nav-item"><a href="#pathways">Pathways</a></li>
-                    {{/hasPathways}}
-            </ul>
-        </div>
         <div class="content">
             <div class="wrapperforfooter">
             <div class="jumbotron monarch-gene-light">
@@ -74,6 +38,7 @@
                 <div id="categories">
                     <div class="tabcontainer">
                         <a href="#ontology"><div id="initialtab" class="tab contenttab onttab">Overview</div></a>
+                        <div class="tabline"></div>
                     </div>
                     <div class="tabcontainer">
                         <div class="tabhover">View phenotypes related to this gene</div>
