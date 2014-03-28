@@ -74,12 +74,12 @@ var testUrl = function(urlinfo) {
     date = new Date();
     var t2 = date.getTime();
     var td = t2-t1;
-    console.log("TIME\t"+url+"\t"+td);
+    console.log("TIME\t"+component+"\t"+url+"\t"+td);
     console.log("Status: " + x.status);
     if (urlinfo.maxTimeMilliseconds != null) {
         if (td > urlinfo.maxTimeMilliseconds) {
-            console.warn("Too long!");
-            assert.fail("Call to "+url+" takes too long: "+td+" ms");
+            console.warn("TIME_EXCEEDS_EXPECTED: Call to "+url+" takes too long: "+td+" ms");
+            //assert.fail("Call to "+url+" takes too long: "+td+" ms");
         }
     }
     if (expects.status != null) {

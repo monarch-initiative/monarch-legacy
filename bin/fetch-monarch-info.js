@@ -56,6 +56,9 @@ function main(args) {
     else if (dt == 'class') {
         func = "fetchClassInfo";
     }
+    else if (dt == 'search') {
+        func = "searchOverOntologies";
+    }
     else if (dt == 'anatomy') {
         func = "fetchAnatomyInfo";
     }
