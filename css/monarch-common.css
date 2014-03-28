@@ -5,10 +5,19 @@ html, body {
 p {
     font-family: Helvetica, Arial, sans-serif;
 }
-/* Info Buttons */
+/* Buttons */
 .btn-info {
     background-color: #53AED7;
     border-color: #53AED7;
+}
+.downloadline {
+    display: inline-block;
+}
+.btn.downloadline {
+    padding: 5px 15px;
+    margin-bottom: 10px;
+    margin-left: 20px;
+    border-radius: 3px;
 }
 
 /* Section 1: Navbar */

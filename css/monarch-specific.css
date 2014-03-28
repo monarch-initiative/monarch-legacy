@@ -106,15 +106,6 @@ p {
 .first {
     display: block;
 }
-.downloadline {
-    display: inline-block;
-}
-.btn.downloadline {
-    padding: 5px 10px;
-    width: 80px;
-    margin-bottom: 10px;
-    margin-left: 20px;
-}
 .source {
     height: 18px;
 }
