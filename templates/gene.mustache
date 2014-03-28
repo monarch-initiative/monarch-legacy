@@ -49,6 +49,9 @@
                     {{#hasSim}}
                     <li id="simi" class="special nav-item"><a href="#similarity">Related Genes</a></li>
                     {{/hasSim}}
+                    {{#hasOrthologs}}
+                    <li id="simi" class="special nav-item"><a href="#orthologs">Orthologs</a></li>
+                    {{/hasOrthologs}}
                     {{#hasPathways}}
                     <li id="path" class="special nav-item"><a href="#pathways">Pathways</a></li>
                     {{/hasPathways}}
@@ -128,6 +131,15 @@
                         {{^hasSim}}
                             <div class="tab greyed-out">Related Genes (0)</div>
                         {{/hasSim}}
+                    </div>
+                    <div class="tabcontainer">
+                        <div class="tabhover">View orthologs</div>
+                        {{#hasOrthologs}}
+                            <a href="#orthologs"><div class="tab contenttab simitab">Orthologs ({{orthologNum}})</div></a>
+                        {{/hasOrthologs}}
+                        {{^hasOrthologs}}
+                            <div class="tab greyed-out">Orthologs (0)</div>
+                        {{/hasOrthologs}}
                     </div>
                     <div class="tabcontainer">
                         <div class="tabhover">View pathways that involve this gene</div>
@@ -240,6 +252,15 @@
                     </table>
                 </div>
                 {{/hasSim}}
+                {{#hasOrthologs}}
+                <div id="orthologs" class="category">
+                    <h3 class="downloadline">Orthologs</h3>
+                    <a href="{{{base_url}}}/sim.json" class="btn btn-info downloadline">JSON</a>
+                    <table class="{{css.table}}">
+                    {{{orthologTable}}}
+                    </table>
+                </div>
+                {{/hasOrthologs}}
                 {{#hasPathways}}
                 <div id="pathways" class="category">
                     <table class="{{css.table}}">
