@@ -106,14 +106,12 @@ p {
 .first {
     display: block;
 }
-.btn.btn-info {
-    padding: 5px 10px;
-    width: 80px;
-}
 .downloadline {
     display: inline-block;
 }
-.btn.btn-info.downloadline {
+.btn.downloadline {
+    padding: 5px 10px;
+    width: 80px;
     margin-bottom: 10px;
     margin-left: 20px;
 }

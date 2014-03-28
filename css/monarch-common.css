@@ -67,6 +67,7 @@ p {
         padding: 15px;
     }
 }
+
 /* Section 2: Sidebar/Navlist */
 .sidebar {
     display: inline-block;
@@ -115,6 +116,32 @@ p {
 .content {
     display: inline-block;
     height: 100%;
+}
+
+/* Colors */
+.monarch-disease-light {
+    background-color: #ECE8E3;
+}
+.monarch-disease-dark {
+    background-color: #d0bda1;
+}
+.monarch-phenotype-light {
+    background-color: #eaf5f3;
+}
+.monarch-phenotype-dark {
+    background-color: #a5d5d3;
+}
+.monarch-gene-light {
+    background-color: #dbebe8;
+}
+.monarch-gene-dark {
+    background-color: #4ca092;
+}
+.monarch-model-light {
+    background-color: #F4EEEB;
+}
+.monarch-model-dark {
+    background-color: #ed9f7f;
 }
 
 /* Footer */
