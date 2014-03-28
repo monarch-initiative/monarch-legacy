@@ -38,6 +38,9 @@
                     <li id="gen" class="special nav-item"><a href="#diseases">Diseases</a></li>
                     {{/hasDiseases}}
                     {{#hasAlleles}}
+                    <li id="alle" class="special nav-item"><a href="#genotypes">Genotypes</a></li>
+                    {{/hasAlleles}}
+                    {{#hasAlleles}}
                     <li id="alle" class="special nav-item"><a href="#alleles">Alleles</a></li>
                     {{/hasAlleles}}
                     {{#hasInteractions}}
@@ -92,11 +95,20 @@
                     <div class="tabcontainer">
                         <div class="tabhover">View genotypes of this gene</div>
                         {{#hasGenotypes}}
-                            <a href="#alleles"><div class="tab contenttab alletab">Genotypes ({{genotypeNum}})</div></a>
+                            <a href="#genotypes"><div class="tab contenttab alletab">Genotypes ({{genotypeNum}})</div></a>
                         {{/hasGenotypes}}
                         {{^hasGenotypes}}
                             <div class="tab greyed-out">Genotypes (0)</div>
                         {{/hasGenotypes}}
+                    </div>
+                    <div class="tabcontainer">
+                        <div class="tabhover">View alleles of this gene</div>
+                        {{#hasAlleles}}
+                            <a href="#alleles"><div class="tab contenttab alletab">Alleles ({{alleleNum}})</div></a>
+                        {{/hasAlleles}}
+                        {{^hasAlleles}}
+                            <div class="tab greyed-out">Alleles (0)</div>
+                        {{/hasAlleles}}
                     </div>
                     <div class="second-row-divider"></div>
                     <div class="tabcontainer">
@@ -207,6 +219,13 @@
                     </table>
                 </div>
                 {{/hasGenotypes}}
+                {{#hasAlleles}}
+                <div id="alleles" class="category">
+                    <table class="{{css.table}}">
+                    {{{alleleTable}}}
+                    </table>
+                </div>
+                {{/hasAlleles}}
                 {{#hasInteractions}}
                 <div id="interaction" class="category">
                     <div id ="phen_vis"></div>
