@@ -149,7 +149,7 @@
             priority : 1,
             url : "http://beta.neuinfo.org/services/v1/vocabulary.json?prefix=small+adrenal+gland&vocabulary=monarch",
             desc : "Autocomplete query form 'small adrenal...'",
-            maxTimeMilliseconds : 500,
+            maxTimeMilliseconds : 100,
             expects : {
                 format : "json",
                 min_results : 2,
