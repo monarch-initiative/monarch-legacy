@@ -57,12 +57,12 @@
         {
             component : "federation",
             priority : 1,
-            url : "http://beta.neuinfo.org/services/v1/federation/data/nif-0000-00096-6.json?exportType=data&count=1000&q=MP:0000428&includeSubclasses=true&",
+            url : "http://beta.neuinfo.org/services/v1/federation/data/nif-0000-00096-6.json?exportType=data&count=100&q=MP:0000428&includeSubclasses=true&",
             desc : "INFERRED MGI Geno Pheno using an MP ID (craniofacial) - include subclasses - we expect genotypes directly annotated and annotated to subclasses",
             maxTimeMilliseconds : 5000,
             expects : {
                 format : "json",
-                min_results : 800,
+                min_results : 80,
             }
         },
 
@@ -112,6 +112,7 @@
             priority : 1,
             url : "http://beta.neuinfo.org/services/v1/federation/data/nif-0000-03216-9.json?exportType=data&count=1000&q=OMIM:214290",
             desc : "Query OmimDiseaseVariants using OMIM ID (Cervical Vertebrae, Agenesis Of)",
+            maxTimeMilliseconds : 3000,
             expects : {
                 format : "json",
                 max_results : 1,
@@ -124,6 +125,23 @@
             }
         },
 
+        // ORPHANET
+        {
+            component : "federation",
+            priority : 1,
+            url : "http://beta.neuinfo.org/services/v1/federation/data/nif-0000-21306-2.json?exportType=data&count=50&q=Huntington",
+            desc : "Query ORPHANET using string matching (expect Hungtindon's disease)",
+            maxTimeMilliseconds : 5000,
+            expects : {
+                format : "json",
+                min_results : 3,
+                must_contain : {
+                    disease_id: "ORPHANET:399", // ID for Huntington's disease
+                }
+            }
+        },
+
+
         // ====================
         // VOCABULARY SERVICES
         // ====================
@@ -132,7 +150,7 @@
             priority : 1,
             url : "http://beta.neuinfo.org/services/v1/vocabulary.json?prefix=small+adrenal+gland&vocabulary=monarch",
             desc : "Autocomplete query form 'small adrenal...'",
-            maxTimeMilliseconds : 500,
+            maxTimeMilliseconds : 400,
             expects : {
                 format : "json",
                 min_results : 2,
@@ -152,9 +170,14 @@
             url : "http://nif-services-stage.neuinfo.org//ontoquest-lamhdi/concepts/term/HP_0003325",
             desc : "Concept details for 'limb girdle muscle weakness''",
             notes : "Currently just checks for string matches in returned XML",
+            maxTimeMilliseconds : 2000,
             expects : {
                 format : "xml",
-                raw_contains : "Limb-girdle muscle weakness",
+                raw_contains : 
+                ["Limb-girdle muscle weakness",
+                 "HP:0008971", // alt ID
+                 "Weakness of the limb-girdle muscles"     // definition field
+                ]
             }
         },
 
@@ -165,6 +188,7 @@
             url : "http://nif-services-stage.neuinfo.org/ontoquest-lamhdi/rel/all/MP_0002789",
             desc : "Relationships for male pseudohermaphroditism",
             notes : "Currently just checks for string matches in returned XML",
+            maxTimeMilliseconds : 2000,
             expects : {
                 format : "xml",
                 raw_contains : [
