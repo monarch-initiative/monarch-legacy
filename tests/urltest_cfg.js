@@ -112,6 +112,7 @@
             priority : 1,
             url : "http://beta.neuinfo.org/services/v1/federation/data/nif-0000-03216-9.json?exportType=data&count=1000&q=OMIM:214290",
             desc : "Query OmimDiseaseVariants using OMIM ID (Cervical Vertebrae, Agenesis Of)",
+            maxTimeMilliseconds : 3000,
             expects : {
                 format : "json",
                 max_results : 1,
@@ -149,7 +150,7 @@
             priority : 1,
             url : "http://beta.neuinfo.org/services/v1/vocabulary.json?prefix=small+adrenal+gland&vocabulary=monarch",
             desc : "Autocomplete query form 'small adrenal...'",
-            maxTimeMilliseconds : 500,
+            maxTimeMilliseconds : 400,
             expects : {
                 format : "json",
                 min_results : 2,
@@ -169,9 +170,14 @@
             url : "http://nif-services-stage.neuinfo.org//ontoquest-lamhdi/concepts/term/HP_0003325",
             desc : "Concept details for 'limb girdle muscle weakness''",
             notes : "Currently just checks for string matches in returned XML",
+            maxTimeMilliseconds : 2000,
             expects : {
                 format : "xml",
-                raw_contains : "Limb-girdle muscle weakness",
+                raw_contains : 
+                ["Limb-girdle muscle weakness",
+                 "HP:0008971", // alt ID
+                 "Weakness of the limb-girdle muscles"     // definition field
+                ]
             }
         },
 
@@ -182,6 +188,7 @@
             url : "http://nif-services-stage.neuinfo.org/ontoquest-lamhdi/rel/all/MP_0002789",
             desc : "Relationships for male pseudohermaphroditism",
             notes : "Currently just checks for string matches in returned XML",
+            maxTimeMilliseconds : 2000,
             expects : {
                 format : "xml",
                 raw_contains : [
