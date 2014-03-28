@@ -35,8 +35,11 @@
                     <li id="phen" class="special nav-item"><a href="#phenotypes">Phenotypes</a></li>
                     {{/hasPhenotypes}}
                     {{#hasDiseases}}
-                    <li id="gen" class="special nav-item"><a href="#diseases">Diseases</a></li>
+                    <li id="dis" class="special nav-item"><a href="#diseases">Diseases</a></li>
                     {{/hasDiseases}}
+                    {{#hasAlleles}}
+                    <li id="geno" class="special nav-item"><a href="#genotypes">Genotypes</a></li>
+                    {{/hasAlleles}}
                     {{#hasAlleles}}
                     <li id="alle" class="special nav-item"><a href="#alleles">Alleles</a></li>
                     {{/hasAlleles}}
@@ -46,6 +49,9 @@
                     {{#hasSim}}
                     <li id="simi" class="special nav-item"><a href="#similarity">Related Genes</a></li>
                     {{/hasSim}}
+                    {{#hasOrthologs}}
+                    <li id="simi" class="special nav-item"><a href="#orthologs">Orthologs</a></li>
+                    {{/hasOrthologs}}
                     {{#hasPathways}}
                     <li id="path" class="special nav-item"><a href="#pathways">Pathways</a></li>
                     {{/hasPathways}}
@@ -90,11 +96,20 @@
                     <div class="tabcontainer">
                         <div class="tabhover">View genotypes of this gene</div>
                         {{#hasGenotypes}}
-                            <a href="#alleles"><div class="tab contenttab alletab">Genotypes ({{genotypeNum}})</div></a>
+                            <a href="#genotypes"><div class="tab contenttab genotab">Genotypes ({{genotypeNum}})</div></a>
                         {{/hasGenotypes}}
                         {{^hasGenotypes}}
                             <div class="tab greyed-out">Genotypes (0)</div>
                         {{/hasGenotypes}}
+                    </div>
+                    <div class="tabcontainer">
+                        <div class="tabhover">View alleles of this gene</div>
+                        {{#hasAlleles}}
+                            <a href="#alleles"><div class="tab contenttab alletab">Alleles ({{alleleNum}})</div></a>
+                        {{/hasAlleles}}
+                        {{^hasAlleles}}
+                            <div class="tab greyed-out">Alleles (0)</div>
+                        {{/hasAlleles}}
                     </div>
                     <div class="second-row-divider"></div>
                     <div class="tabcontainer">
@@ -114,6 +129,15 @@
                         {{^hasSim}}
                             <div class="tab greyed-out">Related Genes (0)</div>
                         {{/hasSim}}
+                    </div>
+                    <div class="tabcontainer">
+                        <div class="tabhover">View orthologs</div>
+                        {{#hasOrthologs}}
+                            <a href="#orthologs"><div class="tab contenttab simitab">Orthologs ({{orthologNum}})</div></a>
+                        {{/hasOrthologs}}
+                        {{^hasOrthologs}}
+                            <div class="tab greyed-out">Orthologs (0)</div>
+                        {{/hasOrthologs}}
                     </div>
                     <div class="tabcontainer">
                         <div class="tabhover">View pathways that involve this gene</div>
@@ -199,12 +223,19 @@
                 </div>
                 {{/hasDiseases}}
                 {{#hasGenotypes}}
-                <div id="alleles" class="category">
+                <div id="genotypes" class="category">
                     <table class="{{css.table}}">
                     {{{genotypeTable}}}
                     </table>
                 </div>
                 {{/hasGenotypes}}
+                {{#hasAlleles}}
+                <div id="alleles" class="category">
+                    <table class="{{css.table}}">
+                    {{{alleleTable}}}
+                    </table>
+                </div>
+                {{/hasAlleles}}
                 {{#hasInteractions}}
                 <div id="interaction" class="category">
                     <div id ="phen_vis"></div>
@@ -219,6 +250,15 @@
                     </table>
                 </div>
                 {{/hasSim}}
+                {{#hasOrthologs}}
+                <div id="orthologs" class="category">
+                    <h3 class="downloadline">Orthologs</h3>
+                    <a href="{{{base_url}}}/sim.json" class="btn btn-info downloadline">JSON</a>
+                    <table class="{{css.table}}">
+                    {{{orthologTable}}}
+                    </table>
+                </div>
+                {{/hasOrthologs}}
                 {{#hasPathways}}
                 <div id="pathways" class="category">
                     <table class="{{css.table}}">
