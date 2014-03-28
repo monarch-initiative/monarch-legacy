@@ -163,11 +163,11 @@ p {
 .search-text-example {
     position: absolute;
     top: 35px;
-    background: white;
-    padding: 5px 10px;
-    font-size: 11px;
+    background-color: white;
+    padding: 5px 7px;
+    font-size: 12px;
     border: 1px solid #AAA;
-    border-radius: 5px;
+    border-radius: 3px;
     line-height: 12px;
     display: none;
 }
