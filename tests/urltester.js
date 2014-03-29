@@ -87,6 +87,7 @@ var testUrl = function(urlinfo) {
     }
     if (expects.status == null && x.status == 500) {
         console.warn("Received a 500");
+        console.warn("DEBUG:"+x.content);
         assert.notEqual(x.status, 500);
         // no point testing further
         return;
