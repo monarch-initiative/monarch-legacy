@@ -98,10 +98,10 @@
                     <div class="tabcontainer">
                         <div class="tabhover">View orthologs</div>
                         {{#hasOrthologs}}
-                            <a href="#orthologs"><div class="tab contenttab simitab">Orthologs ({{orthologNum}})</div></a>
+                            <a href="#orthologs"><div class="tab contenttab simitab">Homologs ({{orthologNum}})</div></a>
                         {{/hasOrthologs}}
                         {{^hasOrthologs}}
-                            <div class="tab greyed-out">Orthologs (0)</div>
+                            <div class="tab greyed-out">Homologs (0)</div>
                         {{/hasOrthologs}}
                     </div>
                     <div class="tabcontainer">
@@ -217,7 +217,7 @@
                 {{/hasSim}}
                 {{#hasOrthologs}}
                 <div id="orthologs" class="category">
-                    <h3 class="downloadline">Orthologs</h3>
+                    <h3 class="downloadline">Homologs</h3>
                     <a href="{{{base_url}}}/sim.json" class="btn btn-info downloadline">JSON</a>
                     <table class="{{css.table}}">
                     {{{orthologTable}}}
