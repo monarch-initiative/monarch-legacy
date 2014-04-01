@@ -185,7 +185,7 @@
             component : "ontoquest",
             subcomponent : "rel",
             priority : 1,
-            url : "http://nif-services-stage.neuinfo.org/ontoquest-lamhdi/rel/all/MP_0002789",
+            url : "http://nif-services-stage.neuinfo.org/ontoquest-lamhdi/rel/all/MP_0002789?level=1",
             desc : "Relationships for male pseudohermaphroditism",
             notes : "Currently just checks for string matches in returned XML",
             maxTimeMilliseconds : 2000,
