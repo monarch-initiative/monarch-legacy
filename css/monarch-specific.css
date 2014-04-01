@@ -106,17 +106,6 @@ p {
 .first {
     display: block;
 }
-.btn.btn-info {
-    padding: 5px 10px;
-    width: 80px;
-}
-.downloadline {
-    display: inline-block;
-}
-.btn.btn-info.downloadline {
-    margin-bottom: 10px;
-    margin-left: 20px;
-}
 .source {
     height: 18px;
 }
@@ -134,4 +123,42 @@ p {
 }
 td {
     word-wrap: break-word;
+}
+/* Annotation Score Stars */
+#annotationscore {
+    margin-bottom: 10px;
+    position: relative;
+}
+#annotationscore > span.annotatetext {
+    margin-right: 10px;
+    float: left;
+}
+span.stars, span.stars > * {
+    display: inline-block;
+    background: url(../image/stars.png) 0 -16px repeat-x;
+    width: 80px;
+    height: 16px;
+}
+span.stars > *{
+    max-width:80px;
+    background-position: 0 0;
+}
+#annotationscore > span.annotatequestion {
+    margin-left: 10px;
+    padding: 1px 6px;
+    background-color: #53AED7;
+    color: white;
+    border-radius: 2px;
+}
+#annotationscore > span.annotatehelp {
+    position: absolute;
+    left: 285px;
+    top: -5px;
+    font-size: 12px;
+    line-height: 12px;
+    background-color: white;
+    border: 1px solid #AAA;
+    border-radius: 3px;
+    padding: 5px 7px;
+    display: none;
 }

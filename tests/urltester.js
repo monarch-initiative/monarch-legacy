@@ -74,12 +74,12 @@ var testUrl = function(urlinfo) {
     date = new Date();
     var t2 = date.getTime();
     var td = t2-t1;
-    console.log("TIME\t"+url+"\t"+td);
+    console.log("TIME\t"+component+"\t"+url+"\t"+td);
     console.log("Status: " + x.status);
     if (urlinfo.maxTimeMilliseconds != null) {
         if (td > urlinfo.maxTimeMilliseconds) {
-            console.warn("Too long!");
-            assert.fail("Call to "+url+" takes too long: "+td+" ms");
+            console.warn("TIME_EXCEEDS_EXPECTED: Call to "+url+" takes too long: "+td+" ms");
+            //assert.fail("Call to "+url+" takes too long: "+td+" ms");
         }
     }
     if (expects.status != null) {
@@ -87,6 +87,7 @@ var testUrl = function(urlinfo) {
     }
     if (expects.status == null && x.status == 500) {
         console.warn("Received a 500");
+        console.warn("DEBUG:"+x.content);
         assert.notEqual(x.status, 500);
         // no point testing further
         return;
@@ -242,6 +243,9 @@ var modifyUrlForComponent = function(url, component) {
             
         }
     }
+    else if (component == 'ontoquest') {
+        return url.replace("http://nif-services-stage.neuinfo.org//ontoquest-lamhdi", "http://services.monarchinitiative.org/ontoquest");
+    }
     return url;
 }
 
@@ -297,6 +301,7 @@ ringo  -c vocabulary tests/urltester.js\n\
     console.log("Components = " + components);
 
     version = options.setup;
+    console.log("Version = " + version);
 
     //system.args.forEach(function(fn) { print(fn) });
     var rtn = require("test").run(exports);

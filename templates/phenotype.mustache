@@ -18,26 +18,9 @@
 <body>
     {{{includes.navbar}}}
     <div class="monarch-container">
-        <div class="sidebar">
-            <a href="/"><img src="/image/logo-sneak.png" width="100" class="img-rounded"/></a>
-            <ul class="nav nav-list">
-                <li class="nav-header">Find</li>
-                    <li class="nav-item"><a href="/disease">Disease</a></li>
-                    <li class="nav-item"><a href="/phenotype">Phenotype</a></li>
-                    <li class="nav-item"><a href="/model">Model</a></li>
-                <li id="navigation" class="nav-header">Navigate</li>
-                    <li id="over" class="special nav-item"><a href="#overview">Overview</a></li>
-                    {{#hasDiseases}}
-                    <li id="dis" class="special nav-item"><a href="#disease">Disease</a></li>
-                    {{/hasDiseases}}
-                    {{#hasGenotypes}}
-                    <li id="geno" class="special nav-item"><a href="#genotypes">Genotypes</a></li>
-                    {{/hasGenotypes}}
-            </ul>
-        </div>
         <div class="content">
             <div class="wrapperforfooter">
-            <div class="jumbotron">
+            <div class="jumbotron monarch-phenotype-light">
                 <div id="description">
                     {{#alerts}}
                     <div class="alert">
@@ -45,7 +28,7 @@
                     </div>
                     {{/alerts}}
                     <h1 class="downloadline">Phenotype: {{label}}</h1>
-                    <a href="{{{download.json}}}" class="btn btn-info downloadline">JSON</a>
+                    <a href="{{{download.json}}}" class="btn btn-default downloadline monarch-phenotype-dark">JSON</a>
                     <p>
                     {{definition}}
                     <br/>
@@ -55,7 +38,7 @@
                 <div id="categories">
                     <a href="#overview"><div id="initialtab" class="tab contenttab overtab">Overview</div></a>
                     <div class="tabcontainer">
-                        <div class="tabhover">Placeholder text</div>
+                        <div class="tabhover">View diseases with this phenotype</div>
                         {{#hasDiseases}}
                             <a href="#disease"><div class="tab contenttab distab">Disease ({{diseaseNum}})</div></a>
                         {{/hasDiseases}}
@@ -64,7 +47,7 @@
                         {{/hasDiseases}}
                     </div>
                     <div class="tabcontainer">
-                        <div class="tabhover">Placeholder text</div>
+                        <div class="tabhover">View genotypes with this phenotype</div>
                         {{#hasGenotypes}}
                             <a href="#genotypes"><div class="tab contenttab genotab">Genotypes ({{genotypeNum}})</div></a>
                         {{/hasGenotypes}}
