@@ -45,10 +45,13 @@ as a separate call in the init function.
 	    yScale: undefined,
 	    modelData: [],
 	    filteredModelData: [],
+	    filteredPhenotypeData: [],
+	    phenotypeData: [],
+	    filteredModelList: [],
 	    detailRectWidth: 240,
-        detailRectHeight: 60,
+        detailRectHeight: 70,
         detailRectStrokeWidth: 3,
-	    dimensions: [ "Human Phenotypes", "Lowest Common Subsumer", "Matching Phenotypes" ], 
+	    dimensions: [ "Phenotype Profile", "Lowest Common Subsumer", "Phenotypes in common" ], 
 	    m :[ 30, 10, 10, 10 ], 
 	    w : 0,
 	    h : 0,
@@ -61,7 +64,18 @@ as a separate call in the init function.
 	    targetSpecies: "10090",
 	    yAxisMax : 0,
 	    serverURL : "",
+	    phenotypeDisplayCount : 16,
+	    currPhenotypeIdx : 15,
+	    currModelIdx : 9,
+	    modelDisplayCount : 10,
 	    axis_pos_list: [],
+	    defaultComparisonSpecies : "Mus musculus",
+	    defaultComparisonType : "genes",
+	    minColorScale : "#a4d6d4",
+	    maxColorScale : "#44a293",
+	    orangeHighlight: "#ea763b",
+	    maxICScore : 0,
+	    		
 	},
 
 	//NOTE: I'm not too sure what the default init() method signature should be
@@ -78,8 +92,9 @@ as a separate call in the init function.
 	    this.options.phenotypeData = 
 		this._filterPhenotypeResults(this.options.phenotypeData);
 	    this._loadData(this.options.phenotypeData);
-            this.options.filteredModelData = this.options.modelData.slice();
+            //this.options.filteredModelData = this.options.modelData.slice();
 
+            this._filterData(this.options.modelData.slice());
             this._createYAxis();
     	    //just pad the overall height by a skosh...
     	    this.options.h = this.options.yAxisMax + 40;
@@ -90,15 +105,55 @@ as a separate call in the init function.
 		.attr("width", 1100)
 		.attr("height", this.options.h);
 
+            this._createTitle();
             this._createAccentBoxes();
+            this._createScrollBars();
             this._createColorScale();
             this._createModelRegion();
     	    this._updateAxes();
     	    this._createModelRects();
     	    this._createRects();
-            this._createDetailSection();
+    		this._updateScrollCounts();
+
 	},
 
+	_createTitle: function() {
+		var self = this;
+	    var div_text1 = self.options.svg.append("svg:text")
+		.attr("transform","translate(0,0)")
+		.attr("class", "title_text")
+		.attr("y", "16")
+		.style("font-size", "16px")
+		.text("Phenotype comparison (grouped by " + this.options.defaultComparisonSpecies + " " + this.options.defaultComparisonType + ")");
+
+	},
+	
+	//given the full dataset, return a filtered dataset containing the
+	//subset of data bounded by the phenotype display count and the model display count
+	_filterData: function(fulldataset) {
+    	var phenotypeArray = [];
+    	for (var idx=0;idx<fulldataset.length;idx++) {
+    		if (phenotypeArray.indexOf(fulldataset[idx].rowid) == -1) {
+    			phenotypeArray.push(fulldataset[idx].rowid);
+    		}
+    	}
+    	//copy the phenotype data
+    	this.options.phenotypeData = phenotypeArray.slice();
+    	
+    	//create filtered phenotype data and the filtered data
+    	for (var idx=0;idx<this.options.phenotypeDisplayCount;idx++) {
+    		var currphenotype = this.options.phenotypeData[idx];
+    		var tempdata = fulldataset.filter(function(d) {
+    	    	return d.rowid == currphenotype;
+    	    });
+    		this.options.filteredModelData = this.options.filteredModelData.concat(tempdata);
+    		this.options.filteredPhenotypeData.push(this.options.phenotypeData[idx]);
+    	}
+    	
+    	
+
+	},
+	
     //given a list of phenotypes, find the top n models
     //I may need to rename this method "getModelData".  It should extract the models and reformat the data 
     _loadData: function() {
@@ -135,7 +190,14 @@ as a separate call in the init function.
 	}
 	//sort the model list by rank
 	this.options.modelList.sort(function(a,b) { 
-	    return a.model_rank - b.model_rank; } );		
+	    return a.model_rank - b.model_rank; } );
+	
+	//initialize the filtered model list
+	for (var idx=0;idx<this.options.modelDisplayCount;idx++) {
+		this.options.filteredModelList.push(this.options.modelList[idx]);
+	}
+	//extract the maxIC score
+	this.options.maxICScore = retData.metadata.maxMaxIC;
     
     },
     
@@ -187,7 +249,9 @@ as a separate call in the init function.
     		}
     	}
     	
-    	for (var idx=0;idx<tempArray.length;idx++) {
+    	//use the max phenotype size to limit the number of phenotypes shown 
+    	var yLength = tempArray.length > this.options.phenotypeDisplayCount ? this.options.phenotypeDisplayCount : tempArray.length;
+    	for (var idx=0;idx<yLength;idx++) {
     		var stuff = {"id": tempArray[idx], "ypos" : ((idx * (size+gap)) + this.options.yoffset)};
     	    this.options.yAxis.push(stuff);
     	    if (((idx * (size+gap)) + this.options.yoffset) > this.options.yAxisMax) {
@@ -209,10 +273,12 @@ as a separate call in the init function.
     },
     
     _createColorScale: function() {
-    	var temp_array = this.options.filteredModelData.map(function(d) {
+    	/*var temp_array = this.options.filteredModelData.map(function(d) {
     	    return d.value;
     	});
-    	this.options.colorScale = d3.scale.linear().domain([d3.min(temp_array), d3.max(temp_array)]).range([d3.rgb("#e5e5e5"), d3.rgb("#44a293")]);
+    	this.options.colorScale = d3.scale.linear().domain([d3.min(temp_array), d3.max(temp_array)]).range([d3.rgb(this.options.minColorScale), d3.rgb(this.options.maxColorScale)]);
+    	*/
+    	this.options.colorScale = d3.scale.linear().domain([0,this.options.maxICScore]).range([d3.rgb(this.options.minColorScale), d3.rgb(this.options.maxColorScale)]);
     },
 
 
@@ -224,11 +290,13 @@ as a separate call in the init function.
     },
     
     _resetLinks: function() {
+	    this.options.svg.selectAll("#detail_content").remove();
+
     	var link_lines = d3.selectAll(".data_text");
     	link_lines.style("font-weight", "normal");
     },
 
-    _selectData: function(curr_data) {
+    _selectData: function(curr_data, obj) {
     	
     	//  		  return self._getYPosition(d.rowid);
 
@@ -243,7 +311,7 @@ as a separate call in the init function.
 //		.attr("y", self.options.yoffset)
 			.attr("class", "row_accent")
 			.attr("width", self.options.textWidth-20)
-			.attr("fill", 'darkgrey')
+			.attr("fill", d3.rgb(self.options.orangeHighlight))
 			.attr("opacity", '0.5')
 			.attr("height", 14);
 
@@ -264,6 +332,12 @@ as a separate call in the init function.
     	sublabels.text(txt);
     	var all_links = this.options.svg.selectAll("." + this._getConceptId(curr_data.id) + ", ." + this._getConceptId(curr_data.subsumer_id));
     	all_links.style("font-weight", "bold");
+
+    	/* TEMPORARY!!! REMOVE FOR HARRY's POSTER!!!
+    	var retData = "What data do we want to show for phentoypes?";
+	    this._updateDetailSection(retData, this._getXYPos(obj));
+	    */    	
+
     },
 
     _deselectData: function (curr_data) {
@@ -337,7 +411,7 @@ as a separate call in the init function.
     	        .attr("width", width)
     	        .attr("id", self._getConceptId(data.model_id))
     	        .attr("model_id", data.model_id)
-    	        .attr("height", 200)
+    	        .attr("height", 20)
 
     	        .attr("transform", function(d) {
     	        	return "rotate(-45)" 
@@ -345,13 +419,13 @@ as a separate call in the init function.
     	      .append("xhtml:p")
 
 /*		        .on("click", function(d) {
-					self._modelClick(data);
+					self._selectModel(data);
 				})*/
     	       .on("mouseover", function(d) {
-    	    	   self._modelClick(data);
+    	    	   self._selectModel(data, this);
     	       })
     	       .on("mouseout", function(d) {
-    	    	   self._clearModelData(d);
+    	    	   self._clearModelData(d, d3.mouse(this));
     	       })
 		
     	       .attr("class", this._getConceptId(data.model_id) + " model_label")
@@ -363,17 +437,22 @@ as a separate call in the init function.
 
     },
 
-    _updateDetailSection: function(htmltext) {
+    _updateDetailSection: function(htmltext, coords) {
+
 	    this.options.svg.selectAll("#detail_content").remove();
+
 	    this.options.svg.append("foreignObject")
-		    //adjust the height and width to avoid overlaying on top of the rectangle border
-			.attr("width", this.options.detailRectWidth-(this.options.detailRectStrokeWidth*2))
+		    .attr("width", this.options.detailRectWidth-(this.options.detailRectStrokeWidth*2))
 			.attr("height", this.options.detailRectHeight-(this.options.detailRectStrokeWidth*2))
 			.attr("id", "detail_content")
-			.attr("y", (16+this.options.detailRectStrokeWidth))
-		    .attr("x", (440+this.options.detailRectStrokeWidth))
+
+			//add an offset.  Otherwise, the tooltip turns off the mouse event
+			.attr("y", coords.y+10)
+		    .attr("x", coords.x+10)
+  		    
 			.append("xhtml:body")
 			.style("font-size", "10px")
+			.style("background-color", d3.rgb("#F09F76"))
 			.html(htmltext);
     	
     },
@@ -397,9 +476,31 @@ as a separate call in the init function.
 	       
     },
     
+    //extract the x,y values from a SVG transform string (ex: transform(200,20))
+    _extractTransform: function(dataString) {
+    	var startIdx = dataString.indexOf("(");
+    	var commaIdx = dataString.indexOf(",");
+    	var x_data = Number(dataString.substring(startIdx+1,commaIdx));
+    	var y_data = Number(dataString.substring(commaIdx+1, dataString.length-1));
+    	return { x: x_data, y: y_data};
+    },
+    
+    //the the "SVG" XY position of an element
+    //The mouse position returned by d3.mouse returns the poistion within the page, not the SVG
+    //area.  Therefore, this is a two step process: retreive any transform data and the (x,y) pair.
+    //Return the (x,y) coordinates with the transform applied
+    _getXYPos: function(obj) {
+    	var tform = { x: 0, y: 0};
+    	//if a transform exisits, apply it
+    	if (typeof obj.attributes["transform"] != 'undefined') {
+	      var transform_str = obj.attributes["transform"].value;
+	      tform = this._extractTransform(transform_str);
+    	}
+	    return {x: Number(obj.getAttribute("x")) + tform.x, y: Number(obj.getAttribute("y")) + tform.y};
+    },
     
     //TODO: add a URL url: this.options.serverURL + self._getConceptId(d.model_id)
-    _showModelData: function(d) {
+    _showModelData: function(d, obj) {
 	    var retData;
 	    var aSpecies = "Human";
 	    if (d.id_a.indexOf("MP") > -1) {
@@ -413,7 +514,7 @@ as a separate call in the init function.
 	    retData = "<strong>Input: </strong> " + d.label_a + " (" + aSpecies + ")"   
 		    + "<br/><strong>Match: </strong> " + d.subsumer_label + " (" + subSpecies + ")"
 	     	+ "<br/><strong>Similarity Score: </strong> " + d.value.toFixed(2);
-	    this._updateDetailSection(retData);
+	    this._updateDetailSection(retData, this._getXYPos(obj));
 	  
     },
     	
@@ -461,24 +562,24 @@ as a separate call in the init function.
   	  .attr("ry", "3")
   	  //I need to pass this into the function
   	  .on("mouseover", function(d) {
-  		  self._showModelData(d);
+  		  self._showModelData(d, this);
 	  })
 	  .on("mouseout", function(d) {
-		  self._clearModelData(d);
+		  self._clearModelData(d, d3.mouse(this));
 	  })
 
   	  .attr("fill", function(d, i) {
   	      return self.options.colorScale(d.value);
   	  });
       model_rects.transition()
-	  .delay(1000)
+	  .delay(20)
   	  .attr("y", function(d) {
   	      //return self.options.yScale(d.id);
   		  return self._getYPosition(d.rowid);
   	  })
       model_rects.exit().transition()
-          .duration(1000)
-          .attr("x", 600)
+          .duration(20)
+          //.attr("x", 600)
           .style('opacity', '0.0')
   	  .remove();
   },
@@ -499,20 +600,228 @@ as a separate call in the init function.
 
 	},
 
+	_createScrollBars: function() {
+		var self = this;
+		var xpos = self.options.axis_pos_list[2] - 20;
+		var ypos = self.options.yAxisMax -16;
+		var vert_slider_background = this.options.svg.append("svg:rect")
+			//.attr("transform","translate(" + self.options.axis_pos_list[1] + "," + self.options.yoffset +")")
+			.attr("class", "vert_slider")
+			.attr("x", xpos)
+			.attr("width", 16)
+			.attr("y", this.options.yoffset+ 18)
+			.attr("height", (this.options.yAxisMax) - this.options.yoffset)
+			.attr("fill", "lightgrey");
+		
+		var rect_slider_up = this.options.svg.append("svg:image")
+			.attr("class", "vert_slider")
+			.attr("x", xpos)
+			.attr("width", 16)
+			.attr("y", this.options.yoffset+ 18)
+			.attr("height", 16)
+			.on("click", function(d) {
+				self._clickPhenotypeSlider(-1);
+			})
+		    .attr("xlink:href","/widgets/modeltype/image/up_arrow.png");
+
+		
+		var rect_slider_down = this.options.svg.append("svg:image")
+			.attr("class", "vert_slider")
+			.attr("x", xpos)
+			.attr("width", 16)
+			.attr("y", this.options.yAxisMax +2)
+			.attr("height", 16)
+			.on("click", function(d) {
+				self._clickPhenotypeSlider(1);
+			})
+		    .attr("xlink:href","/widgets/modeltype/image/down_arrow.png");
+
+		var xpos = self.options.axis_pos_list[1] -5;
+		var xpos2 = self.options.axis_pos_list[2] - 37;
+		var horz_slider_background = this.options.svg.append("svg:rect")
+			//.attr("transform","translate(" + self.options.axis_pos_list[1] + "," + self.options.yoffset +")")
+			.attr("class", "horz_slider")
+			.attr("x", xpos)
+			.attr("width", xpos2-xpos)
+			.attr("y", this.options.yAxisMax+ 23)
+			.attr("height", 16)
+			.attr("fill", "lightgrey");
+	
+		var rect_slider_left = this.options.svg.append("svg:image")
+			.attr("class", "horz_slider")
+			.attr("x", xpos)
+			.attr("width", 16)
+			.attr("y", this.options.yAxisMax+ 23)
+			.attr("height", 16)
+			.on("click", function(d) {
+				self._clickModelSlider(-1);
+			})
+		    .attr("xlink:href","/widgets/modeltype/image/left_arrow.png");
+	
+		
+		var rect_slider_right = this.options.svg.append("svg:image")
+			.attr("class", "horz_slider")
+			.attr("x", xpos2)
+			.attr("width", 16)
+			.attr("y", this.options.yAxisMax+ 23)
+			.attr("height", 16)
+			.on("click", function(d) {
+				self._clickModelSlider(1);
+			})
+		    .attr("xlink:href","/widgets/modeltype/image/right_arrow.png");
+		
+	},
+	
+	//change the text shown on the screen as the scrollbars are used
+	_updateScrollCounts: function() {
+		this.options.svg.selectAll(".scroll_text").remove();
+
+		var startModelIdx = (this.options.currModelIdx - this.options.modelDisplayCount) + 2;
+		var display_text = "Models [" + startModelIdx + "-"+ (this.options.modelDisplayCount + startModelIdx) + "] out of " + (this.options.modelList.length+1);
+		var div_text = this.options.svg.append("svg:text")
+			.attr("class", "scroll_text")
+			.attr("x", "430")
+			.attr("y", "55")
+			.style("font-size", "12px")
+			.text(display_text);
+		
+		var startPhenIdx = (this.options.currPhenotypeIdx - this.options.phenotypeDisplayCount) + 2;
+		var display_text = "Phenotypes [" + startPhenIdx + "-"+ (this.options.phenotypeDisplayCount + startPhenIdx) + "] out of " + (this.options.phenotypeData.length+1);
+		var div_text = this.options.svg.append("svg:text")
+			.attr("class", "scroll_text")
+			.attr("x", "430")
+			.attr("y", "70")
+			.style("font-size", "12px")
+			.text(display_text);
+	},
+	
+	//change the list of phenotypes and filter the models accordling.  The 
+	//movecount is an integer and can be either positive or negative
+	_clickPhenotypeSlider: function(movecount) {
+		var self = this;
+		
+		//increment/decrement the count
+		var tempIdx = this.options.currPhenotypeIdx + movecount;
+		//check to see if the max of the slider is greater than the number of items in the list
+		if (tempIdx > this.options.phenotypeData.length) {
+			this.options.currPhenotypeIdx = this.options.phenotypeData.length;
+		} else if (tempIdx - (this.options.phenotypeDisplayCount -1) < 0) {
+			//check to see if the min of the slider is less than the 0
+			  this.options.currPhenotypeIdx = (this.options.phenotypeDisplayCount -1);
+		} else {
+			this.options.currPhenotypeIdx = tempIdx;
+		}
+		var startIdx = this.options.currPhenotypeIdx - (this.options.phenotypeDisplayCount -1);
+		
+		this.options.filterPhenotypeData = [];
+		this.options.yAxis = [];
+		this.options.filteredModelData = [];
+		
+		
+		//extract the new array of filtered Phentoypes
+		//also update the axis
+		//also update the modeldata
+
+		var axis_idx = 0;
+    	for (var idx=startIdx;idx<self.options.currPhenotypeIdx;idx++) {
+    		self.options.filterPhenotypeData.push(self.options.phenotypeData[idx]);
+    		//update the YAxis   	
+    		
+    		//the height of each row
+        	var size = 10;
+        	//the spacing you want between rows
+        	var gap = 3;
+
+    		var stuff = {"id": self.options.phenotypeData[idx], "ypos" : ((axis_idx * (size+gap)) + self.options.yoffset)};
+    		self.options.yAxis.push(stuff); 
+    	    axis_idx = axis_idx + 1;
+    	    //update the ModelData
+    		var tempdata = self.options.modelData.filter(function(d) {
+    	    	return d.rowid == self.options.phenotypeData[idx];
+    	    });
+    		self.options.filteredModelData = self.options.filteredModelData.concat(tempdata);
+
+    	}
+	    this._createModelRects();
+	    this._createRects();
+	    this._updateScrollCounts();
+
+	},
+
+	//change the list of phenotypes and filter the models accordling.  The 
+	//movecount is an integer and can be either positive or negative
+	_clickModelSlider: function(movecount) {
+		var self = this;
+/*		
+		//increment/decrement the count
+		var tempIdx = this.options.currModelIdx + movecount;
+		//check to see if the max of the slider is greater than the number of items in the list
+		if (tempIdx > this.options.modelList.length) {
+			this.options.currModelIdx = this.options.modelList.length;
+		} else if (tempIdx - (this.options.modelDisplayCount -1) < 0) {
+			//check to see if the min of the slider is less than the 0
+			  this.options.currModelIdx = (this.options.modelDisplayCount -1);
+		} else {
+			this.options.currModelIdx = tempIdx;
+		}
+		var startIdx = this.options.currModelIdx - (this.options.modelDisplayCount -1);
+
+WORKING HERE!!!		
+		
+		this.options.filterModelData = [];
+		this.options.yAxis = [];
+		this.options.filteredModelData = [];
+		
+		
+		//extract the new array of filtered Phentoypes
+		//also update the axis
+		//also update the modeldata
+
+		var axis_idx = 0;
+    	for (var idx=startIdx;idx<self.options.currPhenotypeIdx;idx++) {
+    		self.options.filterPhenotypeData.push(self.options.phenotypeData[idx]);
+    		//update the YAxis   	
+    		
+    		//call x axis here...
+    		
+    		
+    		//the height of each row
+        	var size = 10;
+        	//the spacing you want between rows
+        	var gap = 3;
+
+    		var stuff = {"id": self.options.phenotypeData[idx], "ypos" : ((axis_idx * (size+gap)) + self.options.yoffset)};
+    		self.options.yAxis.push(stuff); 
+    	    axis_idx = axis_idx + 1;
+    	    //update the ModelData
+    		var tempdata = self.options.modelData.filter(function(d) {
+    	    	return d.rowid == self.options.phenotypeData[idx];
+    	    });
+    		self.options.filteredModelData = self.options.filteredModelData.concat(tempdata);
+
+    	}
+    	
+ 	    this._createModelRects();
+	    this._createRects();
+	    this._updateScrollCounts();
+*/
+	},
+
 	_createAccentBoxes: function() {
 	    var self=this;
 	    
-	    this.options.modelWidth = this.options.modelList.length * 18
+	    this.options.modelWidth = this.options.filteredModelList.length * 18
 	    //add an axis for each ordinal scale found in the data
-	    for (var i=0;i<this.options.dimensions.length;i++) { 
-		if (i == 2) {
-			self.options.axis_pos_list.push((this.options.textWidth + 10) 
-				       + this.options.colStartingPos 
-				       + this.options.modelWidth);
-		} else {
-			self.options.axis_pos_list.push((i*(this.options.textWidth + 10)) + 
-				       this.options.colStartingPos);
-		}
+	    for (var i=0;i<this.options.dimensions.length;i++) {
+	    	//move the last accent over a bit for the scrollbar
+			if (i == 2) {
+				self.options.axis_pos_list.push((this.options.textWidth + 30) 
+					       + this.options.colStartingPos 
+					       + this.options.modelWidth);
+			} else {
+				self.options.axis_pos_list.push((i*(this.options.textWidth + 10)) + 
+					       this.options.colStartingPos);
+			}
 	    }
 	
 	    //create accent boxes
@@ -562,7 +871,7 @@ as a separate call in the init function.
 	    //model_x_axis = undefined;
 	    var self=this;
 	    this.options.xScale = d3.scale.ordinal()
-		.domain(this.options.modelList.map(function (d) {
+		.domain(this.options.filteredModelList.map(function (d) {
 		    return d.model_id; }))
 	        .rangeRoundBands([0,this.options.modelWidth]);
 	    model_x_axis = d3.svg.axis().
@@ -576,7 +885,7 @@ as a separate call in the init function.
 		.selectAll("text") 
 		.each(function(d,i) { 
 		    self._convertLabelHTML(this,
-			self._getShortLabel(self.options.modelList[i].model_label, 15),self.options.modelList[i]);}); 
+			self._getShortLabel(self.options.filteredModelList[i].model_label, 15),self.options.filteredModelList[i]);}); 
 
 
 	    var temp_data = this.options.modelData.map(function(d) { 
@@ -596,7 +905,7 @@ as a separate call in the init function.
 			var t2 = t + (idx * step);
 			color_values.push(t2);
 		    }
-		    //color_values.reverse();
+/*		    //color_values.reverse();
 		    var legend_rects = this.options.svg.selectAll("#legend_rect")
 			.data(color_values);
 		    legend_rects.enter()
@@ -625,52 +934,61 @@ as a separate call in the init function.
 			.text(function(d) {
 			    return d.toFixed(1);
 			});
-		    var div_text1 = self.options.svg.append("svg:text")
+			*/
+		    
+		    //start # a4 d6 d4
+		    //stop # 44 a2 93
+		    var gradient = this.options.svg.append("svg:linearGradient")
+				.attr("id", "gradient")
+				.attr("x1", "0")
+				.attr("x2", "100%")
+				.attr("y1", "0%")
+				.attr("y2", "0%");
+				//.attr("gradientUnits", "userSpaceOnUse")
+				//.attr("spreadMethod", "pad");
+
+			gradient.append("svg:stop")
+				.attr("offset", "0%")
+				.style("stop-color", this.options.minColorScale)
+				.style("stop-opacity", 1);
+			
+			gradient.append("svg:stop")
+				.attr("offset", "100%")
+				.style("stop-color", this.options.maxColorScale)
+				.style("stop-opacity", 1);
+
+		    var legend_rects = this.options.svg.append("rect")
 			.attr("transform","translate(0,10)")
-			.attr("class", "detail_text")
-			.attr("y", "22")
-			.style("font-size", "10px")
-			.text("Less Similar");
+			.attr("class", "legend_rect")
+			.attr("y", "29")
+			.attr("x", 15)
+			.attr("width", 180)
+			.attr("height", 20)
+			.attr("fill", "url(#gradient)");
+
+	
+		    var div_text1 = self.options.svg.append("svg:text")
+				.attr("transform","translate(0,10)")
+				.attr("class", "detail_text")
+				.attr("y", "22")
+				.style("font-size", "10px")
+				.text("Less Similar");
 		    var div_text = self.options.svg.append("svg:text")
-			.attr("transform","translate(65,10)")
-			.attr("class", "detail_text")
-			.attr("y", "22")
-			.style("font-size", "12px")
-			.text("Similarity Scale");
+				.attr("transform","translate(65,10)")
+				.attr("class", "detail_text")
+				.attr("y", "22")
+				.style("font-size", "12px")
+				.text("Similarity Scale");
 		    var div_text2 = self.options.svg.append("svg:text")
-			.attr("transform","translate(160,10)")
-			.attr("class", "detail_text")
-			.attr("y", "22")
-			.style("font-size", "10px")
-			.text("More Similar");
+				.attr("transform","translate(160,10)")
+				.attr("class", "detail_text")
+				.attr("y", "22")
+				.style("font-size", "10px")
+				.text("More Similar");
+			
 	    }
 	},
 	
-	//create essentially a D3 enabled "div" tag on the screen
-	_createDetailSection: function () {
-	    var self=this;
-	    var div_text = this.options.svg.append("svg:text")
-            //.attr("transform","translate(30,30)")
-		.attr("class", "detail_text")
-		.attr("y", "10")
-		.attr("x", "440")		
-		.style("font-size", "12px")
-		.text("Item Details:");
-	    
-		
-	    var div_rect = this.options.svg.append("svg:rect")
-            //.attr("transform","translate(30,30)")
-		.attr("class", "detail_rect") 
-		.attr("id", "detail_rect")
-		.attr("y", "15")
-	      .attr("x", "440")
-		.attr("width", self.options.detailRectWidth)
-		.attr("height", self.options.detailRectHeight)
-		.style("stroke-width",self.options.detailRectStrokeWidth)
-		.style("stroke", "lightgrey")
-		.attr("fill", "white");
-	    
-	},
 	
 	update: function() {
 		this._updateAxes();
@@ -741,13 +1059,13 @@ as a separate call in the init function.
 		})
 		.on("mouseover", function(d) {
 		    if (self.options.clickedData == undefined) {
-			self._selectData(d);
+			self._selectData(d, this);
 		    }
 		})
 		.on("mouseout", function(d) {
 //	    	self.options.svg.selectAll(".row_accent").remove();
 		    if (self.options.clickedData == undefined) {
-			self._deselectData(d);
+			self._deselectData(d, d3.mouse(this));
 		    }
 		})
 		.on("click", function(d) {
@@ -764,15 +1082,17 @@ as a separate call in the init function.
 		    return self._getShortLabel(txt);
 		})
 	    rect_text.transition()
-		.delay(1000)
+		.delay(20)
 		.attr("y", function(d) {
 		    //return self.options.yScale(d.rowid)+28;
 			return self._getYPosition(d.rowid)+28;
 		})
 	    rect_text.exit()
 	   	.transition()
-	   	.delay(500)
-	   	.attr("y", 1600)
+	   	.delay(20)
+	   	.style('opacity', '0.0')
+
+	   	//.attr("y", 1600)
 		.remove();
 	    
 	    
@@ -791,21 +1111,22 @@ as a separate call in the init function.
 		.attr("ontology_id", function(d) {
 		    return self._getConceptId(d.subsumer_id);
 		})
-		.attr("x", self.options.textWidth + 15 + self.options.colStartingPos + self.options.modelWidth)
+//		.attr("x", self.options.textWidth + 15 + self.options.colStartingPos + self.options.modelWidth)
+	     .attr("x", self.options.axis_pos_list[2]+3)
 		.attr("y", function(d) {
 		    //return self.options.yScale(d.rowid)+28;
 			return self._getYPosition(d.rowid)+28;
 		})
 		.on("mouseover", function(d) {
 		    if (self.options.clickedData == undefined) {
-			self._selectData(d);
+			self._selectData(d, this);
 		    }
 		})
 		.on("mouseout", function(d) {
 //	    	self.options.svg.selectAll(".row_accent").remove();
 			
 		    if (self.options.clickedData == undefined) {
-			self._deselectData(d);
+			self._deselectData(d, d3.mouse(this));
 		    }
 		})
 		.on("click", function(d) {
@@ -831,15 +1152,17 @@ as a separate call in the init function.
 		    }
 		})
 	    rect_text2.transition()
-		.delay(1000)
+		.delay(20)
 		.attr("y", function(d) {
 		    //return self.options.yScale(d.rowid)+28;
 			return self._getYPosition(d.rowid)+28;
 		})
 	    rect_text2.exit()
 		.transition()
-		.delay(500)
-		.attr("y", 1600)
+		.delay(20)
+		//.attr("y", 1600)
+		.style('opacity', '0.0')
+
 		.remove();
 	    
 	},
@@ -857,11 +1180,12 @@ as a separate call in the init function.
 			+ data.label + "</a><br/><strong>Type:</strong> " + data.category;
 		}
 	    });
-	    this._updateDetailSection(retData);
+	    //this._updateDetailSection(retData, d3.mouse(data));
+	    this._updateDetailSection(retData, this._getXYPos(data));
 
 	},
 
-	_modelClick: function(modelData) {
+	_selectModel: function(modelData, obj) {
 		var self=this;
 	    //this._showThrobber();
 		//select the model label
@@ -876,7 +1200,7 @@ as a separate call in the init function.
 			.attr("y", self.options.yoffset)
 			.attr("class", "model_accent")
 			.attr("width", 14)
-			.attr("fill", 'darkgrey')
+			.attr("fill", d3.rgb(self.options.orangeHighlight))
 			.attr("opacity", '0.5')
 			.attr("height", self.options.yAxisMax);
 
@@ -917,7 +1241,34 @@ as a separate call in the init function.
 /*			}
 		});
 */
-	    this._updateDetailSection(retData);
+		//obj = try creating an ojbect with an attributes array including "attributes", but I may need to define
+		//getAttrbitues
+		//just create a temporary object to pass to the next method...
+		var obj = {
+				attributes: [],
+				getAttribute: function(keystring) {
+					var ret = self.options.xScale(modelData.model_id)-2;
+					if (keystring == "y") {
+						ret = Number(self.options.yoffset)-120;
+					}
+					return ret;
+				},
+        };
+		
+		obj.attributes['transform'] = {value: highlight_rect.attr("transform")};
+		
+		this._updateDetailSection(retData, this._getXYPos(obj));
+	    //this._updateDetailSection(retData);
+
+	    /*
+    	// Get the d3js SVG element
+    	var tmp = document.getElementById("phen_vis");
+    	var svg = tmp.getElementsByTagName("svg")[0];
+    	// Extract the data as SVG text string
+    	var svg_xml = (new XMLSerializer).serializeToString(svg);
+
+    	console.log(svg_xml);
+*/
 	},
 
 

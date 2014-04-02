@@ -18,24 +18,6 @@
 <body>
     {{{includes.navbar}}}
     <div class="monarch-container">
-        <div class="sidebar">
-            <a href="/"><img src="/image/logo-sneak.png" width="100" class="img-rounded"/></a>
-            <ul class="nav nav-list">
-                <li class="nav-header">Find</li>
-                    <li class="nav-item"><a href="/disease">Disease</a></li>
-                    <li class="nav-item"><a href="/phenotype">Phenotype</a></li>
-                    <li class="nav-item"><a href="/gene">Gene</a></li>
-                    <li class="nav-item"><a href="/model">Model</a></li>
-                <li id="navigation" class="nav-header">Navigate</li>
-                    <li id="over" class="special nav-item"><a href="#overview">Overview</a></li>
-                    {{#hasDiseases}}
-                    <li id="dis" class="special nav-item"><a href="#disease">Disease</a></li>
-                    {{/hasDiseases}}
-                    {{#hasGenotypes}}
-                    <li id="geno" class="special nav-item"><a href="#genotypes">Genotypes</a></li>
-                    {{/hasGenotypes}}
-            </ul>
-        </div>
         <div class="content">
             <div class="wrapperforfooter">
             <div class="jumbotron monarch-phenotype-light">
