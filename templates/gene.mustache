@@ -132,9 +132,10 @@
                         </div>
                         {{/hasLocation}}
                         <div class="ids">
-                            <b>xref IDs:</b>
-							{{{xrefs}}}
-							<b>{{reflist}}</b>
+							<h3>Cross References</h3>
+							 <table class="{{css.table}}">
+                                 {{{xrefTable}}}
+                             </table>
                         </div>
                         {{#hasSuperClasses}}
                         <div class="superclasses">
