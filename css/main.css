@@ -1,7 +1,7 @@
 /* Section 3: Content */
 /* Jumbotron */
 .jumbotron {
-    margin-bottom: 20px;
+    margin-bottom: 0px;
 }
 .btn-info {
     font-weight: 200;
@@ -19,6 +19,10 @@
 .description {
     font-size: 14px;
     line-height: 26px;
+}
+
+#graphic > img {
+    width: 100%;
 }
 
 /* Boxes */
