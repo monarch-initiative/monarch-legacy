@@ -5,6 +5,7 @@
     {{#scripts}}
     <script type="text/javascript" src="{{url}}"></script>
     {{/scripts}}
+    <script type="text/javascript" src="/js/main.js"></script>
     {{#stylesheets}}
     <link rel="stylesheet" type="text/css" href="{{url}}"/>
     {{/stylesheets}}
@@ -39,72 +40,24 @@
                     <a href="/phenotype"><div id="phenotypebutton" class="graphicbutton"></div></a>
                     <a href="/gene"><div id="genebutton" class="graphicbutton"></div></a>
                     <a href="/model"><div id="modelbutton" class="graphicbutton"></div></a>
-                    <div id="toparrow" class="horizontalarrow">
-                        <div id="toptext" class="hovertext">
+                    <div id="toparrow" class="arrow horizontalarrow">
+                        <div class="hovertext horizontalhovertext">
                             Diseases are described with phenotypes
                         </div>
                     </div>
-                    <div id="rightarrow" class="verticalarrow">
-                        <div id="righttext" class="hovertext">
+                    <div id="rightarrow" class="arrow verticalarrow">
+                        <div class="hovertext verticalhovertext">
                             Phenotype profiles are shared across species
                         </div>
                     </div>
-                    <div id="bottomarrow" class="horizontalarrow">
-                        <div id="bottomtext" class="hovertext">
+                    <div id="bottomarrow" class="arrow horizontalarrow">
+                        <div class="hovertext horizontalhovertext">
                             Models suggest candidate genes
                         </div>
                     </div>
-                    <div id="leftarrow" class="verticalarrow">
-                        <div id="lefttext" class="hovertext">
+                    <div id="leftarrow" class="arrow verticalarrow">
+                        <div class="hovertext verticalhovertext">
                             Diseases relate to genetic variation
-                        </div>
-                    </div>
-                </div>
-                <div id="column1" class="column">
-                    <div class="entry">
-                        <a href="/disease" class="entryheader">Diseases</a>
-                        <div class="entrydescript">
-                            Explore genetic diseases, find similar models, examine phenotypes,
-                            and identify related genes.<br/>
-                            <p>Sample Diseases:
-                            <a href="/disease/DOID_14692">Smith-Lemli-Opitz syndrome</a>,
-                            <a href="/disease/DOID_1932">Angelman syndrome</a>,
-                            <a href="/disease/DOID_6683">Aarskog-Scott syndrome</a>,
-                            <a href="/disease/DOID_3393">coronary heart disease</a>,
-                            <a href="/disease/DOID_12798">mucopolysaccharidosis</a>
-                            </p>
-                        </div>
-                    </div>
-                    <div class="entry">
-                        <a href="/model" class="entryheader">Models</a>
-                        <div class="entrydescript">
-                            Find model systems that recapitulate various aspects of human
-                            disease or phenotypes.<br/>
-                            <p>Sample Models:
-                            <a href="/model/MGI:3622093">Fat aussie</a> is an obese mouse
-                            strain with a truncating mutation (foz) in the Alms1 gene.</p>
-                        </div>
-                    </div>
-                </div>
-                <div class="column">
-                    <div class="entry">
-                        <a href="/phenotype" class="entryheader">Phenotypes</a>
-                        <div class="entrydescript">
-                            See which diseases, models, and genes are linked to an observed phenotype.<br/>
-                            <p>Sample Phenotypes:
-                            <a href="/phenotype/HP_0000003">Multicystic kidney dysplasia (human)</a>,
-                            <a href="/phenotype/HP_0000104">Renal agenesis (human)</a>,
-                            <a href="/phenotype/MP_0000854">abnormal cerebellum development (mouse)</a>,
-                            <a href="/phenotype/WBPhenotype_0000655">GABA synaptic transmission variant (worm)</a>
-                            </p>
-                        </div>
-                    </div>
-                    <div class="entry">
-                        <a href="/analyze/phenotypes" class="entryheader">Analyze Phenotypes</a>
-                        <div class="entrydescript">
-                            <p>Learn which diseases and models are most similar to a set of
-                            phenotypic observations in humans, mice, or zebrafish.<br/>
-                            <a href="/analyze/phenotypes/?target=ZFIN&input_items=MP%3A0000788%0D%0AMP%3A0000822%0D%0AMP%3A0000914%0D%0AMP%3A0000929%0D%0AMP%3A0000930%0D%0AMP%3A0001286%0D%0AMP%3A0001393%0D%0AMP%3A0001688%0D%0AMP%3A0001698%0D%0AMP%3A0001732%0D%0AMP%3A0001787%0D%0AMP%3A0002064%0D%0AMP%3A0002083%0D%0AMP%3A0002151%0D%0AMP%3A0002950%0D%0AMP%3A0003012%0D%0AMP%3A0003424%0D%0AMP%3A0003651%0D%0AMP%3A0004948%0D%0AMP%3A0005657&limit=100">Sample patient phenotype profile</a></p>
                         </div>
                     </div>
                 </div>
