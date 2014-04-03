@@ -137,8 +137,12 @@ as a separate call in the init function.
 		
     	var phenotypeArray = [];
     	for (var idx=0;idx<fulldataset.length;idx++) {
-    		if (phenotypeArray.indexOf(fulldataset[idx].rowid) == -1) {
-    			phenotypeArray.push(fulldataset[idx].rowid);
+//    		if (phenotypeArray.indexOf(fulldataset[idx].rowid) == -1) {
+//    			phenotypeArray.push(fulldataset[idx].rowid);
+//    		}
+    		var result = $.grep(phenotypeArray, function(e){ return e.rowid == fulldataset[idx].rowid; });
+    		if (result.length == 0) {
+    			phenotypeArray.push(fulldataset[idx]);
     		}
     	}
 
@@ -180,12 +184,12 @@ as a separate call in the init function.
         	//the spacing you want between rows
         	var gap = 3;
 
-    		var stuff = {"id": self.options.phenotypeData[idx], "ypos" : ((axis_idx * (size+gap)) + self.options.yoffset)};
+    		var stuff = {"id": self.options.phenotypeData[idx].rowid, "ypos" : ((axis_idx * (size+gap)) + self.options.yoffset)};
     		self.options.yAxis.push(stuff); 
     	    axis_idx = axis_idx + 1;
     	    //update the ModelData
     		var tempdata = self.options.modelData.filter(function(d) {
-    	    	return d.rowid == self.options.phenotypeData[idx];
+    	    	return d.rowid == self.options.phenotypeData[idx].rowid;
     	    });
     		tempFilteredModelData = tempFilteredModelData.concat(tempdata);
 
@@ -802,12 +806,12 @@ as a separate call in the init function.
         	//the spacing you want between rows
         	var gap = 3;
 
-    		var stuff = {"id": self.options.phenotypeData[idx], "ypos" : ((axis_idx * (size+gap)) + self.options.yoffset)};
+    		var stuff = {"id": self.options.phenotypeData[idx].rowid, "ypos" : ((axis_idx * (size+gap)) + self.options.yoffset)};
     		self.options.yAxis.push(stuff); 
     	    axis_idx = axis_idx + 1;
     	    //update the ModelData
     		var tempdata = self.options.modelData.filter(function(d) {
-    	    	return d.rowid == self.options.phenotypeData[idx];
+    	    	return d.rowid == self.options.phenotypeData[idx].rowid;
     	    });
     		tempFilteredModelData = tempFilteredModelData.concat(tempdata);
 
@@ -824,7 +828,7 @@ as a separate call in the init function.
 
     	
 	    this._createModelRects();
-	    //this._createRects();
+	    this._createRects();
 	    this._updateScrollCounts();
 
 	},
@@ -871,7 +875,7 @@ as a separate call in the init function.
     	//now, limit the data returned by phenotypes as well
     	for (var idx=0;idx<self.options.filteredPhenotypeData.length;idx++) {
     		var tempdata = tempFilteredModelData.filter(function(d) {
-    	    	return d.rowid == self.options.filteredPhenotypeData[idx];
+    	    	return d.rowid == self.options.filteredPhenotypeData[idx].rowid;
     	    });
     		self.options.filteredModelData = self.options.filteredModelData.concat(tempdata);
     		
@@ -1132,7 +1136,7 @@ as a separate call in the init function.
 	    var self=this;
 	    var rect_text = this.options.svg
 		.selectAll(".a_text")
-		.data(this.options.filteredModelData, function(d) { return d.rowid; });
+		.data(this.options.filteredPhenotypeData, function(d) { return d.rowid; });
 	    rect_text.enter()
 		.append("text")
 		.attr("class", function(d) {
@@ -1188,11 +1192,11 @@ as a separate call in the init function.
 	    
 	    var rect_text2 = this.options.svg
 		.selectAll(".lcs_text")
-		.data(self.options.filteredModelData, function(d) { return d.rowid; });
+		.data(self.options.filteredPhenotypeData, function(d) { return d.rowid; });
 	    rect_text2.enter()
 		.append("text")
 		.attr("class", function(d,i) {
-		    if (i==0 || (self.options.filteredModelData[i-1].subsumer_label != d.subsumer_label)) {
+		    if (i==0 || (self.options.filteredPhenotypeData[i-1].subsumer_label != d.subsumer_label)) {
 			return "lcs_text data_text " + self._getConceptId(d.id) + " " + self._getConceptId(d.subsumer_id);
 		    }
 		    
@@ -1233,7 +1237,7 @@ as a separate call in the init function.
 		    	}
 			return self._getShortLabel(txt);
 		    }
-		    if (self.options.filteredModelData[i-1].subsumer_label != d.subsumer_label) {
+		    if (self.options.filteredPhenotypeData[i-1].subsumer_label != d.subsumer_label) {
 		    	var txt = d.subsumer_label;
 		    	if (txt == undefined) {
 		    		txt = d.subsumer_id;
