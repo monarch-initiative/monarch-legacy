@@ -3,22 +3,14 @@
 .jumbotron {
     margin-bottom: 0px;
 }
-.btn-info {
-    font-weight: 200;
-}
 .clear {
     clear: both;
 }
 .tagline {
-    font-size: 16px;
+    font-size: 15px;
     font-style: italic;
-    font-weight: 500;
     line-height: 18px;
-    padding: 10px 0px;
-}
-.description {
-    font-size: 14px;
-    line-height: 26px;
+    padding: 5px 0px;
 }
 
 /* Graphic */
