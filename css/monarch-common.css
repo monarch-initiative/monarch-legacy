@@ -88,6 +88,9 @@ p {
 }
 
 /* Colors */
+.monarch-blue {
+    background-color: #53AED7;
+}
 .monarch-disease-light {
     background-color: #ECE8E3;
 }

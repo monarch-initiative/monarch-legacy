@@ -161,11 +161,14 @@
                     </table>
                 </div>
                 {{/hasAlleles}}
-                {{#hasModels}}
                 <div id="model" class="category">
                     <div id ="phen_vis"></div>
+                    {{#hasModels}}
+                    <table class="{{css.table}}">
+                        {{{modelTable}}}
+                    </table>                
+                    {{/hasModels}}
                 </div>
-                {{/hasModels}}
                 {{#hasSim}}
                 <div id="similarity" class="category">
                     <table class="{{css.table}}">

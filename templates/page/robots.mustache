@@ -1,0 +1,20 @@
+{{#isProduction}}
+# robots.txt for Monarch production
+# welcome, robots, make yourselves at home.
+# just don't use our services, thanks
+
+User-agent: *
+Disallow: /analyze/
+Disallow: /annotate/
+Disallow: /admin/
+
+User-Agent: W3C-checklink
+Disallow:
+{{/isProduction}}
+{{^isProduction}}
+# robots.txt for Monarch dev or non-production
+# robots begone! use our production URL
+
+User-agent: *
+Disallow: /
+{{/isProduction}}

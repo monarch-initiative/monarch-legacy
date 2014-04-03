@@ -1,62 +1,93 @@
 /* Section 3: Content */
 /* Jumbotron */
 .jumbotron {
-    margin-bottom: 20px;
-}
-.btn-info {
-    font-weight: 200;
+    margin-bottom: 0px;
 }
 .clear {
     clear: both;
 }
 .tagline {
-    font-size: 16px;
+    font-size: 15px;
     font-style: italic;
-    font-weight: 500;
     line-height: 18px;
-    padding: 10px 0px;
-}
-.description {
-    font-size: 14px;
-    line-height: 26px;
+    padding: 5px 0px;
 }
 
-/* Boxes */
-@media (min-width: 1200px) {
-    .column {
-        display: inline-block;
-        width: 48%;
-        margin-left: 20px;
-    }
+/* Graphic */
+#graphic {
+    position: relative;
+    max-width: 1000px;
+    margin: 0px auto;
 }
-@media (min-width: 1000px) {
-    .column {
-        display: inline-block;
-        width: 47%;
-        margin-left: 20px;
-    }
+#graphic > img {
+    width: 100%;
 }
-@media (max-width: 1000px) {
-    .column {
-        display: inline-block;
-        margin: 0px 10px 0px 20px;
-    }
+.graphicbutton {
+    position: absolute;
+    width: 24.5%;
+    height: 38%;
+    z-index: 10;
 }
-#column1 {
-    float: left;
+#diseasebutton {
+    top: 7.5%;
+    left: 13.5%;
 }
-.entry {
-    background-color: #EEE;
-    border: #AAA solid 1px;
-    margin-bottom: 20px;
-    padding: 15px 20px 5px;
+#phenotypebutton {
+    top: 7.5%;
+    right: 13.5%;
 }
-.entryheader {
-    font-weight: 500;
-    font-size: 18px;
+#genebutton {
+    left: 13.5%;
+    bottom: 7.5%;
 }
-.entrydescript {
-    margin-top: 10px;
-    font-weight: 200;
-    line-height: 24px;
+#modelbutton {
+    right: 13.5%;
+    bottom: 7.5%;
+}
+.horizontalarrow {
+    position: absolute;
+    z-index: 10;
+    width: 20%;
+    height: 11%;
+}
+.verticalarrow {
+    position: absolute;
+    z-index: 10;
+    width: 6%;
+    height: 34%;
+}
+#toparrow {
+    top: 8%;
+    left: 40%;
+}
+#rightarrow {
+    top: 33%;
+    right: 8%;
+}
+#bottomarrow {
+    left: 40%;
+    bottom: 8%;
+}
+#leftarrow {
+    top: 33%;
+    left: 8%;
+}
+.hovertext {
+    text-align: center;
+    background-color: rgba(0, 0, 0, 0.65);
+    color: white;
+    padding: 5px;
+    border-radius: 5px;
+    display: none;
+}
+.horizontalhovertext {
+    width: 100%;
+    min-height: 100%;
+    padding-top: 5%;
+}
+.verticalhovertext {
+    width: 90px;
+    min-height: 100%;
+    padding-top: 30%;
+    margin-left: -18%;
 }
