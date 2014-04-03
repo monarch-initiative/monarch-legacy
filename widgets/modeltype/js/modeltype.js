@@ -64,14 +64,14 @@ as a separate call in the init function.
 	    targetSpecies: "10090",
 	    yAxisMax : 0,
 	    serverURL : "",
-	    phenotypeDisplayCount : 16,
-	    currPhenotypeIdx : 15,
-	    currModelIdx : 9,
-	    modelDisplayCount : 10,
+	    phenotypeDisplayCount : 26,
+	    currPhenotypeIdx : 0,
+	    modelDisplayCount : 20,
+	    currModelIdx : 0,
 	    axis_pos_list: [],
 	    defaultComparisonSpecies : "Mus musculus",
 	    defaultComparisonType : "genes",
-	    minColorScale : "#a4d6d4",
+	    minColorScale : "#D6D6D6",
 	    maxColorScale : "#44a293",
 	    orangeHighlight: "#ea763b",
 	    maxICScore : 0,
@@ -89,6 +89,8 @@ as a separate call in the init function.
 	    
 	    this.options.w = this.options.m[1]-this.options.m[3];
 	    this.options.h = 1300 -this.options.m[0]-this.options.m[2];
+	    this.options.currModelIdx = this.options.modelDisplayCount-1;
+	    this.options.currPhenotypeIdx = this.options.phenotypeDisplayCount-1;
 	    this.options.phenotypeData = 
 		this._filterPhenotypeResults(this.options.phenotypeData);
 	    this._loadData(this.options.phenotypeData);
@@ -131,14 +133,20 @@ as a separate call in the init function.
 	//given the full dataset, return a filtered dataset containing the
 	//subset of data bounded by the phenotype display count and the model display count
 	_filterData: function(fulldataset) {
+		var self = this;
+		
     	var phenotypeArray = [];
     	for (var idx=0;idx<fulldataset.length;idx++) {
     		if (phenotypeArray.indexOf(fulldataset[idx].rowid) == -1) {
     			phenotypeArray.push(fulldataset[idx].rowid);
     		}
     	}
+
     	//copy the phenotype data
     	this.options.phenotypeData = phenotypeArray.slice();
+
+    	/*
+    	 
     	
     	//create filtered phenotype data and the filtered data
     	for (var idx=0;idx<this.options.phenotypeDisplayCount;idx++) {
@@ -149,7 +157,49 @@ as a separate call in the init function.
     		this.options.filteredModelData = this.options.filteredModelData.concat(tempdata);
     		this.options.filteredPhenotypeData.push(this.options.phenotypeData[idx]);
     	}
+    	*/
     	
+		this.options.filteredPhenotypeData = [];
+		this.options.yAxis = [];
+		this.options.filteredModelData = [];
+		var startIdx = this.options.currPhenotypeIdx - (this.options.phenotypeDisplayCount -1);
+
+		
+		//extract the new array of filtered Phentoypes
+		//also update the axis
+		//also update the modeldata
+
+		var tempFilteredModelData = [];
+		var axis_idx = 0;
+    	for (var idx=startIdx;idx<self.options.currPhenotypeIdx;idx++) {
+    		self.options.filteredPhenotypeData.push(self.options.phenotypeData[idx]);
+    		//update the YAxis   	
+    		
+    		//the height of each row
+        	var size = 10;
+        	//the spacing you want between rows
+        	var gap = 3;
+
+    		var stuff = {"id": self.options.phenotypeData[idx], "ypos" : ((axis_idx * (size+gap)) + self.options.yoffset)};
+    		self.options.yAxis.push(stuff); 
+    	    axis_idx = axis_idx + 1;
+    	    //update the ModelData
+    		var tempdata = self.options.modelData.filter(function(d) {
+    	    	return d.rowid == self.options.phenotypeData[idx];
+    	    });
+    		tempFilteredModelData = tempFilteredModelData.concat(tempdata);
+
+    	}
+    	
+    	//now, limit the data returned by models as well
+    	for (var idx=0;idx<self.options.filteredModelList.length;idx++) {
+    		var tempdata = tempFilteredModelData.filter(function(d) {
+    	    	return d.model_id == self._getConceptId(self.options.filteredModelList[idx].model_id);
+    	    });
+    		self.options.filteredModelData = self.options.filteredModelData.concat(tempdata);
+    		
+    	}
+
     	
 
 	},
@@ -177,12 +227,13 @@ as a separate call in the init function.
     _finishLoad: function(data) {
 
 	var retData = data;
+	var self= this;
 
 	///EXTRACT MOUSE MODEL INFORMATION FIRST
 	this.options.modelList = [];
 	for (var idx=0;idx<retData.b.length;idx++) {
 	    this.options.modelList.push(
-		{model_id: retData.b[idx].id, 
+		{model_id: self._getConceptId(retData.b[idx].id), 
 		 model_label: retData.b[idx].label, 
 		 model_score: retData.b[idx].score.score, 
 		 model_rank: retData.b[idx].score.rank});
@@ -418,9 +469,9 @@ as a separate call in the init function.
     	         })
     	      .append("xhtml:p")
 
-/*		        .on("click", function(d) {
-					self._selectModel(data);
-				})*/
+		        .on("click", function(d) {
+					self._clickModel(data, self.document[0].location.origin);
+				})
     	       .on("mouseover", function(d) {
     	    	   self._selectModel(data, this);
     	       })
@@ -435,6 +486,11 @@ as a separate call in the init function.
 
     	    el.remove();
 
+    },
+    
+    _clickModel: function(data, url_origin) {
+    	var url = url_origin + "/gene/" + data.model_id;
+    	var win = window.open(url, '_blank');
     },
 
     _updateDetailSection: function(htmltext, coords) {
@@ -513,7 +569,9 @@ as a separate call in the init function.
 	    
 	    retData = "<strong>Input: </strong> " + d.label_a + " (" + aSpecies + ")"   
 		    + "<br/><strong>Match: </strong> " + d.subsumer_label + " (" + subSpecies + ")"
-	     	+ "<br/><strong>Similarity Score: </strong> " + d.value.toFixed(2);
+	     	+ "<br/><strong>Similarity Score: </strong> " + d.value.toFixed(2)
+     	    + "<br/><strong>Model Label: </strong> " + d.model_label
+     	    + "<br/><strong>Model Id: </strong> " + d.model_id;
 	    this._updateDetailSection(retData, this._getXYPos(obj));
 	  
     },
@@ -577,6 +635,8 @@ as a separate call in the init function.
   	      //return self.options.yScale(d.id);
   		  return self._getYPosition(d.rowid);
   	  })
+  	  .attr("x", function(d) { return self.options.xScale(d.model_id);})
+
       model_rects.exit().transition()
           .duration(20)
           //.attr("x", 600)
@@ -602,74 +662,78 @@ as a separate call in the init function.
 
 	_createScrollBars: function() {
 		var self = this;
-		var xpos = self.options.axis_pos_list[2] - 20;
-		var ypos = self.options.yAxisMax -16;
-		var vert_slider_background = this.options.svg.append("svg:rect")
-			//.attr("transform","translate(" + self.options.axis_pos_list[1] + "," + self.options.yoffset +")")
-			.attr("class", "vert_slider")
-			.attr("x", xpos)
-			.attr("width", 16)
-			.attr("y", this.options.yoffset+ 18)
-			.attr("height", (this.options.yAxisMax) - this.options.yoffset)
-			.attr("fill", "lightgrey");
-		
-		var rect_slider_up = this.options.svg.append("svg:image")
-			.attr("class", "vert_slider")
-			.attr("x", xpos)
-			.attr("width", 16)
-			.attr("y", this.options.yoffset+ 18)
-			.attr("height", 16)
-			.on("click", function(d) {
-				self._clickPhenotypeSlider(-1);
-			})
-		    .attr("xlink:href","/widgets/modeltype/image/up_arrow.png");
-
-		
-		var rect_slider_down = this.options.svg.append("svg:image")
-			.attr("class", "vert_slider")
-			.attr("x", xpos)
-			.attr("width", 16)
-			.attr("y", this.options.yAxisMax +2)
-			.attr("height", 16)
-			.on("click", function(d) {
-				self._clickPhenotypeSlider(1);
-			})
-		    .attr("xlink:href","/widgets/modeltype/image/down_arrow.png");
-
-		var xpos = self.options.axis_pos_list[1] -5;
-		var xpos2 = self.options.axis_pos_list[2] - 37;
-		var horz_slider_background = this.options.svg.append("svg:rect")
-			//.attr("transform","translate(" + self.options.axis_pos_list[1] + "," + self.options.yoffset +")")
-			.attr("class", "horz_slider")
-			.attr("x", xpos)
-			.attr("width", xpos2-xpos)
-			.attr("y", this.options.yAxisMax+ 23)
-			.attr("height", 16)
-			.attr("fill", "lightgrey");
+		//show the vertical scrollbar if necessary
+		if (this.options.phenotypeData.length > this.options.phenotypeDisplayCount) {
+			var xpos = self.options.axis_pos_list[2] - 20;
+			var ypos = self.options.yAxisMax -16;
+			var vert_slider_background = this.options.svg.append("svg:rect")
+				//.attr("transform","translate(" + self.options.axis_pos_list[1] + "," + self.options.yoffset +")")
+				.attr("class", "vert_slider")
+				.attr("x", xpos)
+				.attr("width", 16)
+				.attr("y", this.options.yoffset+ 18)
+				.attr("height", (this.options.yAxisMax) - this.options.yoffset)
+				.attr("fill", "lightgrey");
+			
+			var rect_slider_up = this.options.svg.append("svg:image")
+				.attr("class", "vert_slider")
+				.attr("x", xpos)
+				.attr("width", 16)
+				.attr("y", this.options.yoffset+ 18)
+				.attr("height", 16)
+				.on("click", function(d) {
+					self._clickPhenotypeSlider(-1);
+				})
+			    .attr("xlink:href","/widgets/modeltype/image/up_arrow.png");
 	
-		var rect_slider_left = this.options.svg.append("svg:image")
-			.attr("class", "horz_slider")
-			.attr("x", xpos)
-			.attr("width", 16)
-			.attr("y", this.options.yAxisMax+ 23)
-			.attr("height", 16)
-			.on("click", function(d) {
-				self._clickModelSlider(-1);
-			})
-		    .attr("xlink:href","/widgets/modeltype/image/left_arrow.png");
-	
+			
+			var rect_slider_down = this.options.svg.append("svg:image")
+				.attr("class", "vert_slider")
+				.attr("x", xpos)
+				.attr("width", 16)
+				.attr("y", this.options.yAxisMax +2)
+				.attr("height", 16)
+				.on("click", function(d) {
+					self._clickPhenotypeSlider(1);
+				})
+			    .attr("xlink:href","/widgets/modeltype/image/down_arrow.png");
+		}
+		//show the model scrollbar if necessary
+		if (this.options.modelList.length > this.options.modelDisplayCount) {
+			var xpos = self.options.axis_pos_list[1] -5;
+			var xpos2 = self.options.axis_pos_list[2] - 37;
+			var horz_slider_background = this.options.svg.append("svg:rect")
+				//.attr("transform","translate(" + self.options.axis_pos_list[1] + "," + self.options.yoffset +")")
+				.attr("class", "horz_slider")
+				.attr("x", xpos)
+				.attr("width", xpos2-xpos)
+				.attr("y", this.options.yAxisMax+ 23)
+				.attr("height", 16)
+				.attr("fill", "lightgrey");
 		
-		var rect_slider_right = this.options.svg.append("svg:image")
-			.attr("class", "horz_slider")
-			.attr("x", xpos2)
-			.attr("width", 16)
-			.attr("y", this.options.yAxisMax+ 23)
-			.attr("height", 16)
-			.on("click", function(d) {
-				self._clickModelSlider(1);
-			})
-		    .attr("xlink:href","/widgets/modeltype/image/right_arrow.png");
+			var rect_slider_left = this.options.svg.append("svg:image")
+				.attr("class", "horz_slider")
+				.attr("x", xpos)
+				.attr("width", 16)
+				.attr("y", this.options.yAxisMax+ 23)
+				.attr("height", 16)
+				.on("click", function(d) {
+					self._clickModelSlider(-1);
+				})
+			    .attr("xlink:href","/widgets/modeltype/image/left_arrow.png");
 		
+			
+			var rect_slider_right = this.options.svg.append("svg:image")
+				.attr("class", "horz_slider")
+				.attr("x", xpos2)
+				.attr("width", 16)
+				.attr("y", this.options.yAxisMax+ 23)
+				.attr("height", 16)
+				.on("click", function(d) {
+					self._clickModelSlider(1);
+				})
+			    .attr("xlink:href","/widgets/modeltype/image/right_arrow.png");
+		}
 	},
 	
 	//change the text shown on the screen as the scrollbars are used
@@ -677,23 +741,28 @@ as a separate call in the init function.
 		this.options.svg.selectAll(".scroll_text").remove();
 
 		var startModelIdx = (this.options.currModelIdx - this.options.modelDisplayCount) + 2;
-		var display_text = "Models [" + startModelIdx + "-"+ (this.options.modelDisplayCount + startModelIdx) + "] out of " + (this.options.modelList.length+1);
+		var max_count = ((this.options.modelDisplayCount + startModelIdx) >= this.options.modelList.length) ? this.options.modelList.length : this.options.modelDisplayCount + startModelIdx; 
+		var display_text = "Genotypes [" + startModelIdx + "-"+ max_count + "] out of " + (this.options.modelList.length);
 		var div_text = this.options.svg.append("svg:text")
 			.attr("class", "scroll_text")
-			.attr("x", "430")
+			.attr("x", this.options.axis_pos_list[2] +10)
 			.attr("y", "55")
-			.style("font-size", "12px")
+			.style("font-size", "9px")
 			.text(display_text);
 		
 		var startPhenIdx = (this.options.currPhenotypeIdx - this.options.phenotypeDisplayCount) + 2;
-		var display_text = "Phenotypes [" + startPhenIdx + "-"+ (this.options.phenotypeDisplayCount + startPhenIdx) + "] out of " + (this.options.phenotypeData.length+1);
+		var max_count = ((this.options.phenotypeDisplayCount + startPhenIdx) >= this.options.phenotypeData.length) ? this.options.phenotypeData.length : this.options.phenotypeDisplayCount + startPhenIdx ; 
+		var display_text = "Phenotypes [" + startPhenIdx + "-"+ max_count + "] out of " + (this.options.phenotypeData.length);
 		var div_text = this.options.svg.append("svg:text")
 			.attr("class", "scroll_text")
-			.attr("x", "430")
+			.attr("x", this.options.axis_pos_list[2] +10)
 			.attr("y", "70")
-			.style("font-size", "12px")
+			.style("font-size", "9px")
 			.text(display_text);
 	},
+	
+	//NOTE: FOR FILTERING IT MAY BE FASTER TO CONCATENATE THE PHENOTYPE and MODEL into an attribute
+	
 	
 	//change the list of phenotypes and filter the models accordling.  The 
 	//movecount is an integer and can be either positive or negative
@@ -713,7 +782,7 @@ as a separate call in the init function.
 		}
 		var startIdx = this.options.currPhenotypeIdx - (this.options.phenotypeDisplayCount -1);
 		
-		this.options.filterPhenotypeData = [];
+		this.options.filteredPhenotypeData = [];
 		this.options.yAxis = [];
 		this.options.filteredModelData = [];
 		
@@ -722,9 +791,10 @@ as a separate call in the init function.
 		//also update the axis
 		//also update the modeldata
 
+		var tempFilteredModelData = [];
 		var axis_idx = 0;
     	for (var idx=startIdx;idx<self.options.currPhenotypeIdx;idx++) {
-    		self.options.filterPhenotypeData.push(self.options.phenotypeData[idx]);
+    		self.options.filteredPhenotypeData.push(self.options.phenotypeData[idx]);
     		//update the YAxis   	
     		
     		//the height of each row
@@ -739,11 +809,22 @@ as a separate call in the init function.
     		var tempdata = self.options.modelData.filter(function(d) {
     	    	return d.rowid == self.options.phenotypeData[idx];
     	    });
-    		self.options.filteredModelData = self.options.filteredModelData.concat(tempdata);
+    		tempFilteredModelData = tempFilteredModelData.concat(tempdata);
 
     	}
+    	
+    	//now, limit the data returned by models as well
+    	for (var idx=0;idx<self.options.filteredModelList.length;idx++) {
+    		var tempdata = tempFilteredModelData.filter(function(d) {
+    	    	return d.model_id == self.options.filteredModelList[idx].model_id;
+    	    });
+    		self.options.filteredModelData = self.options.filteredModelData.concat(tempdata);
+    		
+    	}
+
+    	
 	    this._createModelRects();
-	    this._createRects();
+	    //this._createRects();
 	    this._updateScrollCounts();
 
 	},
@@ -752,7 +833,7 @@ as a separate call in the init function.
 	//movecount is an integer and can be either positive or negative
 	_clickModelSlider: function(movecount) {
 		var self = this;
-/*		
+		
 		//increment/decrement the count
 		var tempIdx = this.options.currModelIdx + movecount;
 		//check to see if the max of the slider is greater than the number of items in the list
@@ -766,10 +847,7 @@ as a separate call in the init function.
 		}
 		var startIdx = this.options.currModelIdx - (this.options.modelDisplayCount -1);
 
-WORKING HERE!!!		
-		
-		this.options.filterModelData = [];
-		this.options.yAxis = [];
+		this.options.filteredModelList = [];
 		this.options.filteredModelData = [];
 		
 		
@@ -777,34 +855,55 @@ WORKING HERE!!!
 		//also update the axis
 		//also update the modeldata
 
+		var tempFilteredModelData = [];
 		var axis_idx = 0;
-    	for (var idx=startIdx;idx<self.options.currPhenotypeIdx;idx++) {
-    		self.options.filterPhenotypeData.push(self.options.phenotypeData[idx]);
+    	for (var idx=startIdx;idx<self.options.currModelIdx;idx++) {
+    		self.options.filteredModelList.push(self.options.modelList[idx]);
     		//update the YAxis   	
     		
-    		//call x axis here...
-    		
-    		
-    		//the height of each row
-        	var size = 10;
-        	//the spacing you want between rows
-        	var gap = 3;
-
-    		var stuff = {"id": self.options.phenotypeData[idx], "ypos" : ((axis_idx * (size+gap)) + self.options.yoffset)};
-    		self.options.yAxis.push(stuff); 
-    	    axis_idx = axis_idx + 1;
-    	    //update the ModelData
     		var tempdata = self.options.modelData.filter(function(d) {
-    	    	return d.rowid == self.options.phenotypeData[idx];
+    	    	return d.model_id == self.options.modelList[idx].model_id;
     	    });
-    		self.options.filteredModelData = self.options.filteredModelData.concat(tempdata);
+    		tempFilteredModelData = tempFilteredModelData.concat(tempdata);
 
     	}
+
+    	//now, limit the data returned by phenotypes as well
+    	for (var idx=0;idx<self.options.filteredPhenotypeData.length;idx++) {
+    		var tempdata = tempFilteredModelData.filter(function(d) {
+    	    	return d.rowid == self.options.filteredPhenotypeData[idx];
+    	    });
+    		self.options.filteredModelData = self.options.filteredModelData.concat(tempdata);
+    		
+    	}
+
     	
+    	self.options.svg.selectAll("g .x.axis")
+          .remove();
+    	self.options.svg.selectAll("g .tick.major")
+        	.remove();
+    	//update the x axis
+    	self.options.xScale = d3.scale.ordinal()
+  			.domain(self.options.filteredModelList.map(function (d) {
+  				return d.model_id; }))
+  	        .rangeRoundBands([0,self.options.modelWidth]);
+  	    model_x_axis = d3.svg.axis()
+  			.scale(self.options.xScale).orient("top");
+  	    var model_region = self.options.svg.append("g")
+	  		.attr("transform","translate(" + (self.options.textWidth + 20) +"," + self.options.yoffset + ")")
+	  		.attr("class", "x axis")
+	  		.call(model_x_axis)
+	  	    //this be some voodoo...
+	  	    //to rotate the text, I need to select it as it was added by the axis
+	  		.selectAll("text") 
+	  		.each(function(d,i) { 
+	  		    self._convertLabelHTML(this,
+	  			self._getShortLabel(self.options.filteredModelList[i].model_label, 15),self.options.filteredModelList[i]);}); 
+
  	    this._createModelRects();
 	    this._createRects();
 	    this._updateScrollCounts();
-*/
+
 	},
 
 	_createAccentBoxes: function() {
@@ -839,16 +938,6 @@ WORKING HERE!!!
 		    return i != 1 ? d3.rgb("#e5e5e5") : "white";
 		});
 	    
-	    //add text about models
-	    var div_text = self.options.svg.append("svg:text")
-			.attr("transform","translate(" + self.options.axis_pos_list[1] + "," + self.options.yoffset +")")
-			.attr("class", "model_data_text")
-			.attr("x", "22")
-			.attr("y", "10")
-			.style("font-size", "12px")
-			.text("(Models ordered by score)");
-	    
-
 	    //add text headers
 	    var rect_headers = this.options.svg.selectAll("#text.accent")
 		.data(this.options.dimensions, function(d) { return d;});
@@ -866,6 +955,7 @@ WORKING HERE!!!
 		.text(String);
 },
     
+//IMPORTANT!! THIS 
 	//this code creates the colored rectangles below the models
 	_createModelRegion: function () {
 	    //model_x_axis = undefined;
@@ -874,18 +964,18 @@ WORKING HERE!!!
 		.domain(this.options.filteredModelList.map(function (d) {
 		    return d.model_id; }))
 	        .rangeRoundBands([0,this.options.modelWidth]);
-	    model_x_axis = d3.svg.axis().
-		scale(this.options.xScale).orient("top");
-	    var model_region = this.options.svg.append("g").
-		attr("transform","translate(" + (this.options.textWidth + 20) +"," + this.options.yoffset + ")")
-		.call(model_x_axis)
-		.attr("class", "axes")
-	    //this be some voodoo...
-	    //to rotate the text, I need to select it as it was added by the axis
-		.selectAll("text") 
-		.each(function(d,i) { 
-		    self._convertLabelHTML(this,
-			self._getShortLabel(self.options.filteredModelList[i].model_label, 15),self.options.filteredModelList[i]);}); 
+	    model_x_axis = d3.svg.axis()
+			.scale(this.options.xScale).orient("top");
+	    var model_region = this.options.svg.append("g")
+			.attr("transform","translate(" + (this.options.textWidth + 20) +"," + this.options.yoffset + ")")
+			.call(model_x_axis)
+			.attr("class", "x axis")
+		    //this be some voodoo...
+		    //to rotate the text, I need to select it as it was added by the axis
+			.selectAll("text") 
+			.each(function(d,i) { 
+			    self._convertLabelHTML(this,
+				self._getShortLabel(self.options.filteredModelList[i].model_label, 15),self.options.filteredModelList[i]);}); 
 
 
 	    var temp_data = this.options.modelData.map(function(d) { 
