@@ -71,12 +71,13 @@
                     </div>
                     <div class="second-row-divider"></div>
                     <div class="tabcontainer">
-                        <div class="tabhover">View models that have phenotypes in common</div>
+                        <div class="tabhover">View matching models and
+                        genes based on shared phenotypes and orthology</div>
                         {{#hasModels}}
-                            <a href="#model"><div class="tab contenttab modtab">Similar Models ({{modelNum}})</div></a>
+                            <a href="#model"><div class="tab contenttab modtab">Matches ({{modelNum}})</div></a>
                         {{/hasModels}}
                         {{^hasModels}}
-                            <div class="tab greyed-out">Similar Models (0)</div>
+                            <div class="tab greyed-out">Matches (0)</div>
                         {{/hasModels}}
                     </div>
                     <div class="tabcontainer">
