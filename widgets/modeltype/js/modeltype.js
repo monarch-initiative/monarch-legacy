@@ -287,23 +287,18 @@ as a separate call in the init function.
     //for each item in the data model, push the rowid
     //and calculate the y position
     _createYAxis: function() {
+    	var self=this;
     	//the height of each row
     	var size = 10;
     	//the spacing you want between rows
     	var gap = 3;
     	//yoffset
-    	//first, generate an array containing the unique rowids
-    	var tempArray = [];
-    	for (var idx=0;idx<this.options.filteredModelData.length;idx++) {
-    		if (tempArray.indexOf(this.options.filteredModelData[idx].rowid) == -1) {
-    			tempArray.push(this.options.filteredModelData[idx].rowid);
-    		}
-    	}
+ 
     	
     	//use the max phenotype size to limit the number of phenotypes shown 
-    	var yLength = tempArray.length > this.options.phenotypeDisplayCount ? this.options.phenotypeDisplayCount : tempArray.length;
+    	var yLength = self.options.phenotypeData.length > this.options.phenotypeDisplayCount ? this.options.phenotypeDisplayCount : self.options.phenotypeData.length;
     	for (var idx=0;idx<yLength;idx++) {
-    		var stuff = {"id": tempArray[idx], "ypos" : ((idx * (size+gap)) + this.options.yoffset)};
+    		var stuff = {"id": self.options.phenotypeData[idx], "ypos" : ((idx * (size+gap)) + this.options.yoffset)};
     	    this.options.yAxis.push(stuff);
     	    if (((idx * (size+gap)) + this.options.yoffset) > this.options.yAxisMax) {
     	    	this.options.yAxisMax = (idx * (size+gap)) + this.options.yoffset;
@@ -1299,7 +1294,7 @@ as a separate call in the init function.
 			.attr("width", 14)
 			.attr("fill", d3.rgb(self.options.orangeHighlight))
 			.attr("opacity", '0.5')
-			.attr("height", self.options.yAxisMax);
+			.attr("height", (self.options.yAxisMax-87));
 
 		var retData;
 		//initialize the model data based on the scores
