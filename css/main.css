@@ -16,7 +16,7 @@
 /* Graphic */
 #graphic {
     position: relative;
-    max-width: 1000px;
+    max-width: 760px;
     margin: 0px auto;
 }
 #graphic > img {
@@ -24,70 +24,23 @@
 }
 .graphicbutton {
     position: absolute;
-    width: 24.5%;
-    height: 38%;
+    width: 28%;
+    height: 29.5%;
     z-index: 10;
 }
 #diseasebutton {
-    top: 7.5%;
-    left: 13.5%;
+    top: 7%;
+    left: 7.5%;
 }
 #phenotypebutton {
-    top: 7.5%;
-    right: 13.5%;
+    top: 7%;
+    right: 7.5%;
 }
 #genebutton {
-    left: 13.5%;
+    left: 8.5%;
     bottom: 7.5%;
 }
 #modelbutton {
-    right: 13.5%;
-    bottom: 7.5%;
-}
-.horizontalarrow {
-    position: absolute;
-    z-index: 10;
-    width: 20%;
-    height: 11%;
-}
-.verticalarrow {
-    position: absolute;
-    z-index: 10;
-    width: 6%;
-    height: 34%;
-}
-#toparrow {
-    top: 8%;
-    left: 40%;
-}
-#rightarrow {
-    top: 33%;
     right: 8%;
-}
-#bottomarrow {
-    left: 40%;
-    bottom: 8%;
-}
-#leftarrow {
-    top: 33%;
-    left: 8%;
-}
-.hovertext {
-    text-align: center;
-    background-color: rgba(0, 0, 0, 0.65);
-    color: white;
-    padding: 5px;
-    border-radius: 5px;
-    display: none;
-}
-.horizontalhovertext {
-    width: 100%;
-    min-height: 100%;
-    padding-top: 5%;
-}
-.verticalhovertext {
-    width: 90px;
-    min-height: 100%;
-    padding-top: 30%;
-    margin-left: -18%;
+    bottom: 7.5%;
 }
