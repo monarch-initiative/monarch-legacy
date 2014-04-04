@@ -197,7 +197,7 @@ function AnalyzeInit(){
 
     var auto_args = {
 	source: function(request, response) {
-	    var query = "/autocomplete/" + request.term + ".json";
+	    var query = "/autocomplete/Phenotype/" + request.term + ".json";
 	    jQuery.ajax({
 			    url: query,
 			    dataType: 'json',

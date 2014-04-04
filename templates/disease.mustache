@@ -30,6 +30,7 @@
                         {{{.}}}
                     </div>
                     {{/alerts}}
+                    <img id="monarch-logo" class="downloadline" src="/image/logo.png"/>
                     <h1 class="downloadline">Disease: {{label}}</h1>
                     <a href="{{{base_url}}}.json" class="btn btn-default downloadline monarch-disease-dark">JSON</a>
                     <p>
@@ -71,12 +72,13 @@
                     </div>
                     <div class="second-row-divider"></div>
                     <div class="tabcontainer">
-                        <div class="tabhover">View models that have phenotypes in common</div>
+                        <div class="tabhover">View matching models and
+                        genes based on shared phenotypes and orthology</div>
                         {{#hasModels}}
-                            <a href="#model"><div class="tab contenttab modtab">Similar Models ({{modelNum}})</div></a>
+                            <a href="#model"><div class="tab contenttab modtab">Matches ({{modelNum}})</div></a>
                         {{/hasModels}}
                         {{^hasModels}}
-                            <div class="tab greyed-out">Similar Models (0)</div>
+                            <div class="tab greyed-out">Matches (0)</div>
                         {{/hasModels}}
                     </div>
                     <div class="tabcontainer">
@@ -161,11 +163,14 @@
                     </table>
                 </div>
                 {{/hasAlleles}}
-                {{#hasModels}}
                 <div id="model" class="category">
                     <div id ="phen_vis"></div>
+                    {{#hasModels}}
+                    <table class="{{css.table}}">
+                        {{{modelTable}}}
+                    </table>                
+                    {{/hasModels}}
                 </div>
-                {{/hasModels}}
                 {{#hasSim}}
                 <div id="similarity" class="category">
                     <table class="{{css.table}}">

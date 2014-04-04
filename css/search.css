@@ -2,6 +2,9 @@
 .content {
     padding: 20px 0px 0px 30px;
 }
+#monarch-logo {
+    margin-right: 20px;
+}
 .title {
     font-size: 40px;
     font-weight: 500;

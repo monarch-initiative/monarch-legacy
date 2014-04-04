@@ -1,62 +1,53 @@
 /* Section 3: Content */
 /* Jumbotron */
 .jumbotron {
-    margin-bottom: 20px;
+    margin-bottom: 0px;
 }
-.btn-info {
-    font-weight: 200;
+#monarch-logo-horizontal {
+    float: left;
+    margin-right: 20px;
+}
+#about-button {
+    margin-top: 10px;
 }
 .clear {
     clear: both;
 }
 .tagline {
-    font-size: 16px;
+    font-size: 15px;
     font-style: italic;
-    font-weight: 500;
     line-height: 18px;
-    padding: 10px 0px;
-}
-.description {
-    font-size: 14px;
-    line-height: 26px;
+    padding: 5px 0px;
 }
 
-/* Boxes */
-@media (min-width: 1200px) {
-    .column {
-        display: inline-block;
-        width: 48%;
-        margin-left: 20px;
-    }
+/* Graphic */
+#graphic {
+    position: relative;
+    max-width: 760px;
+    margin: 0px auto;
 }
-@media (min-width: 1000px) {
-    .column {
-        display: inline-block;
-        width: 47%;
-        margin-left: 20px;
-    }
+#graphic > img {
+    width: 100%;
 }
-@media (max-width: 1000px) {
-    .column {
-        display: inline-block;
-        margin: 0px 10px 0px 20px;
-    }
+.graphicbutton {
+    position: absolute;
+    width: 28%;
+    height: 29.5%;
+    z-index: 10;
 }
-#column1 {
-    float: left;
+#diseasebutton {
+    top: 7%;
+    left: 7.5%;
 }
-.entry {
-    background-color: #EEE;
-    border: #AAA solid 1px;
-    margin-bottom: 20px;
-    padding: 15px 20px 5px;
+#phenotypebutton {
+    top: 7%;
+    right: 7.5%;
 }
-.entryheader {
-    font-weight: 500;
-    font-size: 18px;
+#genebutton {
+    left: 8.5%;
+    bottom: 7.5%;
 }
-.entrydescript {
-    margin-top: 10px;
-    font-weight: 200;
-    line-height: 24px;
+#modelbutton {
+    right: 8%;
+    bottom: 7.5%;
 }
