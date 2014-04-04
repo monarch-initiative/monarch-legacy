@@ -88,6 +88,10 @@ p {
 }
 
 /* Logo */
+#monarch-logo {
+    height: 45px;
+    float: left;
+}
 #monarch-logo-horizontal {
     height: 50px;
 }

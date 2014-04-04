@@ -9,6 +9,10 @@
 .jumbotron h1 {
     font-size: 30px;
 }
+#monarch-logo {
+    margin-top: 10px;
+    margin-right: 20px;
+}
 p {
     font-size: 16px;
     line-height: 26px;
