@@ -99,7 +99,7 @@ as a separate call in the init function.
             this._filterData(this.options.modelData.slice());
             this._createYAxis();
     	    //just pad the overall height by a skosh...
-    	    this.options.h = this.options.yAxisMax + 40;
+    	    this.options.h = this.options.yAxisMax + 60;
             this._initCanvas(); 
         
             // set canvas size
@@ -137,9 +137,6 @@ as a separate call in the init function.
 		
     	var phenotypeArray = [];
     	for (var idx=0;idx<fulldataset.length;idx++) {
-//    		if (phenotypeArray.indexOf(fulldataset[idx].rowid) == -1) {
-//    			phenotypeArray.push(fulldataset[idx].rowid);
-//    		}
     		var result = $.grep(phenotypeArray, function(e){ return e.rowid == fulldataset[idx].rowid; });
     		if (result.length == 0) {
     			phenotypeArray.push(fulldataset[idx]);
@@ -149,19 +146,12 @@ as a separate call in the init function.
     	//copy the phenotype data
     	this.options.phenotypeData = phenotypeArray.slice();
 
-    	/*
-    	 
-    	
-    	//create filtered phenotype data and the filtered data
-    	for (var idx=0;idx<this.options.phenotypeDisplayCount;idx++) {
-    		var currphenotype = this.options.phenotypeData[idx];
-    		var tempdata = fulldataset.filter(function(d) {
-    	    	return d.rowid == currphenotype;
-    	    });
-    		this.options.filteredModelData = this.options.filteredModelData.concat(tempdata);
-    		this.options.filteredPhenotypeData.push(this.options.phenotypeData[idx]);
+    	//we need to adjust the display counts and indexing if there are fewer phenotypes
+    	if (this.options.phenotypeData.length < this.options.phenotypeDisplayCount) {
+    		this.options.currPhenotypeIdx = this.options.phenotypeData.length-1;
+    		this.options.phenotypeDisplayCount = this.options.phenotypeData.length;
     	}
-    	*/
+
     	
 		this.options.filteredPhenotypeData = [];
 		this.options.yAxis = [];
@@ -247,6 +237,12 @@ as a separate call in the init function.
 	this.options.modelList.sort(function(a,b) { 
 	    return a.model_rank - b.model_rank; } );
 	
+	//we need to adjust the display counts and indexing if there are fewer models
+	if (this.options.modelList.length < this.options.modelDisplayCount) {
+		this.options.currModelIdx = this.options.modelList.length-1;
+		this.options.modelDisplayCount = this.options.modelList.length;
+	}
+
 	//initialize the filtered model list
 	for (var idx=0;idx<this.options.modelDisplayCount;idx++) {
 		this.options.filteredModelList.push(this.options.modelList[idx]);
@@ -365,7 +361,7 @@ as a separate call in the init function.
 			.attr("y", function(d) {return self._getYPosition(curr_data.rowid);})
 //		.attr("y", self.options.yoffset)
 			.attr("class", "row_accent")
-			.attr("width", self.options.textWidth-20)
+			.attr("width", this.options.modelWidth)
 			.attr("fill", d3.rgb(self.options.orangeHighlight))
 			.attr("opacity", '0.5')
 			.attr("height", 14);
@@ -497,13 +493,22 @@ as a separate call in the init function.
     	var win = window.open(url, '_blank');
     },
 
-    _updateDetailSection: function(htmltext, coords) {
+    _updateDetailSection: function(htmltext, coords, width, height) {
 
 	    this.options.svg.selectAll("#detail_content").remove();
+	    
+	    var w = this.options.detailRectWidth-(this.options.detailRectStrokeWidth*2);
+	    var h = this.options.detailRectHeight-(this.options.detailRectStrokeWidth*2);
+	    if (width != undefined) {
+	    	w = width;
+	    }
+	    if (height != undefined) {
+	    	h = height;
+	    }
 
 	    this.options.svg.append("foreignObject")
-		    .attr("width", this.options.detailRectWidth-(this.options.detailRectStrokeWidth*2))
-			.attr("height", this.options.detailRectHeight-(this.options.detailRectStrokeWidth*2))
+		    .attr("width", w)
+			.attr("height", h)
 			.attr("id", "detail_content")
 
 			//add an offset.  Otherwise, the tooltip turns off the mouse event
@@ -559,7 +564,6 @@ as a separate call in the init function.
 	    return {x: Number(obj.getAttribute("x")) + tform.x, y: Number(obj.getAttribute("y")) + tform.y};
     },
     
-    //TODO: add a URL url: this.options.serverURL + self._getConceptId(d.model_id)
     _showModelData: function(d, obj) {
 	    var retData;
 	    var aSpecies = "Human";
@@ -573,9 +577,8 @@ as a separate call in the init function.
 	    
 	    retData = "<strong>Input: </strong> " + d.label_a + " (" + aSpecies + ")"   
 		    + "<br/><strong>Match: </strong> " + d.subsumer_label + " (" + subSpecies + ")"
-	     	+ "<br/><strong>Similarity Score: </strong> " + d.value.toFixed(2)
      	    + "<br/><strong>Model Label: </strong> " + d.model_label
-     	    + "<br/><strong>Model Id: </strong> " + d.model_id;
+     	+ "<br/><strong>Similarity Score: </strong> " + d.value.toFixed(2);
 	    this._updateDetailSection(retData, this._getXYPos(obj));
 	  
     },
@@ -676,7 +679,7 @@ as a separate call in the init function.
 				.attr("x", xpos)
 				.attr("width", 16)
 				.attr("y", this.options.yoffset+ 18)
-				.attr("height", (this.options.yAxisMax) - this.options.yoffset)
+				.attr("height", this.options.h - (this.options.yoffset+ 50))
 				.attr("fill", "lightgrey");
 			
 			var rect_slider_up = this.options.svg.append("svg:image")
@@ -695,7 +698,7 @@ as a separate call in the init function.
 				.attr("class", "vert_slider")
 				.attr("x", xpos)
 				.attr("width", 16)
-				.attr("y", this.options.yAxisMax +2)
+				.attr("y", this.options.yAxisMax +18)
 				.attr("height", 16)
 				.on("click", function(d) {
 					self._clickPhenotypeSlider(1);
@@ -711,7 +714,7 @@ as a separate call in the init function.
 				.attr("class", "horz_slider")
 				.attr("x", xpos)
 				.attr("width", xpos2-xpos)
-				.attr("y", this.options.yAxisMax+ 23)
+				.attr("y", this.options.yAxisMax+ 33)
 				.attr("height", 16)
 				.attr("fill", "lightgrey");
 		
@@ -719,7 +722,7 @@ as a separate call in the init function.
 				.attr("class", "horz_slider")
 				.attr("x", xpos)
 				.attr("width", 16)
-				.attr("y", this.options.yAxisMax+ 23)
+				.attr("y", this.options.yAxisMax+ 33)
 				.attr("height", 16)
 				.on("click", function(d) {
 					self._clickModelSlider(-1);
@@ -731,7 +734,7 @@ as a separate call in the init function.
 				.attr("class", "horz_slider")
 				.attr("x", xpos2)
 				.attr("width", 16)
-				.attr("y", this.options.yAxisMax+ 23)
+				.attr("y", this.options.yAxisMax+ 33)
 				.attr("height", 16)
 				.on("click", function(d) {
 					self._clickModelSlider(1);
@@ -1351,7 +1354,7 @@ as a separate call in the init function.
 		
 		obj.attributes['transform'] = {value: highlight_rect.attr("transform")};
 		
-		this._updateDetailSection(retData, this._getXYPos(obj));
+		this._updateDetailSection(retData, this._getXYPos(obj), undefined, 45);
 	    //this._updateDetailSection(retData);
 
 	    /*
