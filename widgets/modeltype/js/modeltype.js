@@ -340,6 +340,8 @@ as a separate call in the init function.
 
     	var link_lines = d3.selectAll(".data_text");
     	link_lines.style("font-weight", "normal");
+    	link_lines.style("text-decoration", "none");
+    	link_lines.style("color", "black");
     },
 
     _selectData: function(curr_data, obj) {
@@ -474,6 +476,7 @@ as a separate call in the init function.
     	    	   self._clearModelData(d, d3.mouse(this));
     	       })
 		
+    	       .attr("id", this._getConceptId(data.model_id))
     	       .attr("class", this._getConceptId(data.model_id) + " model_label")
     	        //.attr('style','word-wrap: break-word; text-align:center;')
 				.style("font-size", "12px")
@@ -583,8 +586,11 @@ as a separate call in the init function.
 	    this.options.svg.selectAll("#detail_content").remove();
 	    this.options.svg.selectAll(".model_accent").remove();
 	    if (modelData != null && typeof modelData != 'object') {
-		    var model_text = this.options.svg.selectAll("#" + this._getConceptId(modelData));
+		    var model_text = this.options.svg.selectAll("p#" + this._getConceptId(modelData));
 		    model_text.style("font-weight","normal");
+		    model_text.style("text-decoration", "none");
+		    model_text.style("color", "black");
+
 	    }
     },
 
@@ -1160,9 +1166,9 @@ as a separate call in the init function.
 			self._deselectData(d, d3.mouse(this));
 		    }
 		})
-		.on("click", function(d) {
+/*		.on("click", function(d) {
 		    self._rectClick(this);
-		})
+		})*/
 		.attr("width", self.options.textWidth)
 		.attr("height", 50)
 		.style("font-size", "12px")
@@ -1221,9 +1227,9 @@ as a separate call in the init function.
 			self._deselectData(d, d3.mouse(this));
 		    }
 		})
-		.on("click", function(d) {
+/*		.on("click", function(d) {
 		    self._rectClick(this);
-		})
+		})*/
 		.attr("width", self.options.textWidth)
 		.attr("height", 50)
 		.style("font-size", "12px")
@@ -1281,9 +1287,12 @@ as a separate call in the init function.
 		var self=this;
 	    //this._showThrobber();
 		//select the model label
-		var model_label = self.options.svg.selectAll("#" + this._getConceptId(modelData.model_id));
-		//var model_label = self.options.svg.selectAll(".foreignObject.p");
-		model_label.style("font-weight", "bold");
+		
+		
+		var model_label = self.options.svg.selectAll("p#" + this._getConceptId(modelData.model_id));
+    	model_label.style("color", "blue");
+		model_label.style("text-decoration", "underline");
+
 		//create the related model rectangles
 		var highlight_rect = self.options.svg.append("svg:rect")
 		  	  .attr("transform",
