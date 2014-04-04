@@ -3,6 +3,13 @@
 .jumbotron {
     margin-bottom: 0px;
 }
+#monarch-logo-horizontal {
+    float: left;
+    margin-right: 20px;
+}
+#about-button {
+    margin-top: 10px;
+}
 .clear {
     clear: both;
 }
