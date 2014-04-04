@@ -87,6 +87,11 @@ p {
     height: 100%;
 }
 
+/* Logo */
+#monarch-logo-horizontal {
+    height: 50px;
+}
+
 /* Colors */
 .monarch-blue {
     background-color: #53AED7;
@@ -107,7 +112,7 @@ p {
     background-color: #dbebe8;
 }
 .monarch-gene-dark {
-    background-color: #4ca092;
+    background-color: #44A293;
 }
 .monarch-model-light {
     background-color: #F4EEEB;
