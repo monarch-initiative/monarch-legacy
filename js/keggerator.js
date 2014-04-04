@@ -7,7 +7,8 @@
  */
 var keggerator = function () {
 
-    var colors = ["#e41a1c", "#377eb8", "#4daf4a", "#984ea3", "#ff7f00", "#ffff33", "#a65628", "#f781bf", "#999999"];
+    var colors = ["#44a293", "#dd3835", "#461313", "#a4d6d4", "#ea763b" ];
+//    var colors = ["#e41a1c", "#377eb8", "#4daf4a", "#984ea3", "#ff7f00", "#ffff33", "#a65628", "#f781bf", "#999999"];
     var pathwayId = {};
     var data = [];
     var dataShown = [];
@@ -64,7 +65,7 @@ var keggerator = function () {
         var pathway_ids = annotations.pathways;
         var phenotypeList = annotations.phenotypes;
 
-        pathwayId = pathway_ids[0];
+        pathwayId = pathway_ids[0]; // only render a single pathway at this time
         diseases = phenotypeList;
         var pathwayType = "kegg";
 
@@ -86,24 +87,26 @@ var keggerator = function () {
             // update the data to be shown shown with those genes that should be shown
             dataShown = [];
             dataShownHash = {};
-            var geneShift = 2;
+            var geneShift = 2; // the pixel offset for overlapping highlighted boxes
             for (var j = 0; j < diseases.length; j++) {
                 diseases[j].color = colors[j];
                 for (var i = 0; i < data.length; i++) {
-                    if (data[i] && data[i].graph_id && (diseases[j].genes.indexOf(data[i].graph_id) > -1)) {
+                    if (data[i] && data[i].graph_id && data[i].x && data[i].y &&(diseases[j].genes.indexOf(data[i].graph_id) > -1)) {
 
-                        if (dataShownHash[data[i].graph_id] == null) {
-                            dataShownHash[data[i].graph_id] = {};
-                            dataShownHash[data[i].graph_id].count = -1;
+                        // create a new hash entry for the count
+                        var graphHashID = data[i].graph_id + data[i].x + data[i].y;  //uniquely identifies a pathway box
+                        if (dataShownHash[graphHashID] == null) {
+                            dataShownHash[graphHashID] = {};
+                            dataShownHash[graphHashID].count = -1;
                         }
-                        dataShownHash[data[i].graph_id].count = dataShownHash[data[i].graph_id].count + 1; // increment counter of how many times seen this gene
+                        dataShownHash[graphHashID].count = dataShownHash[graphHashID].count + 1;
 
                         var myData = jQuery.extend(true, {}, data[i]) //deep copy since we are in inner loop and will use data[i] again
                         myData.color = diseases[j].color;
                         myData.disease = diseases[j];
                         // shift the annotation of seen before
-                        myData.x = parseInt(myData.x) + (dataShownHash[data[i].graph_id].count * geneShift);
-                        myData.y = parseInt(myData.y) + (dataShownHash[data[i].graph_id].count * geneShift);
+                        myData.x = parseInt(myData.x) + (dataShownHash[graphHashID].count * geneShift);
+                        myData.y = parseInt(myData.y) + (dataShownHash[graphHashID].count * geneShift);
 
                         dataShown.push(myData);
 
@@ -129,14 +132,22 @@ var keggerator = function () {
             pathwayImageWidth = this.width;
             //console.log(pathwayImageHeight + "," + pathwayImageWidth);
 
-            // add pathway image as background
-            acetate.append("svg:image")
+            var filter = acetate.append("defs")
+                .append("filter")
+                .attr("id", "greyscale")
+                .append("feColorMatrix")
+                .attr("type", "matrix")
+                .attr("values","0.3333 0.3333 0.3333 0 0 0.3333 0.3333 0.3333 0 0 0.3333 0.3333 0.3333 0 0 0 0 0 1 0");
+
+
+       acetate.append("svg:image")
                 .attr("id", "pathwayImage")
                 .attr("x", 0)
                 .attr("y", 0)
                 .attr("width", Math.floor(pathwayImageWidth * canvasSize))
                 .attr("height", Math.floor(pathwayImageHeight * canvasSize))
                 .attr("style", "padding: 0px 0px 0px 0px;")
+                .attr("filter", "url(#greyscale)")
                 .attr("xlink:href", imgSrc);
 
             // set canvas size to image size
@@ -159,7 +170,7 @@ var keggerator = function () {
 
         acetate = d3.select("#acetate");
 
-        // draw disease/phenotype lables at top
+        // draw disease/phenotype labels at top
         var dxWidth = 200;
         var dxHeight = 20;
         var disease = acetate.selectAll(".disease").data(diseases).enter().append("rect")
@@ -179,7 +190,25 @@ var keggerator = function () {
             .style("fill", function (d) {
                 return d.color
             })
-            .style("opacity", 0.7);
+            .style("opacity", 1)
+
+            .on('mouseover', function(d) {
+                d3.selectAll("[disease=" + d.name.replace(/\s+/g, '_')).transition()
+                    .ease('cubic-out')
+                    .duration('200')
+                    .style("stroke-width", function (d) {
+                        return 7
+                    });
+            })
+            .on('mouseout', function(d) {
+                d3.selectAll("[disease=" + d.name.replace(/\s+/g, '_')).transition()
+                    .ease('cubic-out')
+                    .duration('200')
+                    .style("stroke-width", function (d) {
+                        return 3
+                    });
+            });
+
 
         acetate.selectAll(".diseaseTxt").data(diseases).enter().append("text")
             .classed("diseaseTxt", true)
@@ -200,9 +229,10 @@ var keggerator = function () {
 
         // draw rects
         acetate.selectAll(".gene").data(dataShown).enter().append("rect")
+            .attr("disease", function (d) { return d.disease.name.replace(/\s+/g, '_') } )
             .classed("gene", true)
             .attr("x", function (d, i) {
-                return (Math.floor(d.x * canvasSize) - Math.floor(d.width / 2 * canvasSize)) - 2
+                return (Math.floor(d.x * canvasSize) - Math.floor(d.width / 2 * canvasSize)) - 1
             })
             .attr("y", function (d, i) {
                 return (Math.floor(d.y * canvasSize) - Math.floor(d.height / 2 * canvasSize)) - 2
@@ -213,10 +243,16 @@ var keggerator = function () {
             .attr("height", function (d) {
                 return Math.floor(d.height * canvasSize) + 4
             })
-            .style("fill", function (d) {
+            .style("fill", function(d) {
+                return "none"
+            })
+            .style("stroke", function(d) {
                 return d.color
             })
-            .style("opacity", 0.7);
+            .style("stroke-width", function (d) {
+                return 3
+            })
+            .style("opacity", 1);
     }
 
 
