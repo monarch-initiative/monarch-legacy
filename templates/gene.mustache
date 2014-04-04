@@ -68,12 +68,12 @@
                         {{/hasGenotypes}}
                     </div>
                     <div class="tabcontainer">
-                        <div class="tabhover">View alleles of this gene</div>
+                        <div class="tabhover">View variants of this gene</div>
                         {{#hasAlleles}}
-                            <a href="#alleles"><div class="tab contenttab alletab">Alleles ({{alleleNum}})</div></a>
+                            <a href="#alleles"><div class="tab contenttab alletab">Variants ({{alleleNum}})</div></a>
                         {{/hasAlleles}}
                         {{^hasAlleles}}
-                            <div class="tab greyed-out">Alleles (0)</div>
+                            <div class="tab greyed-out">Variants (0)</div>
                         {{/hasAlleles}}
                     </div>
                     <div class="second-row-divider"></div>
@@ -85,15 +85,6 @@
                         {{^hasInteractions}}
                             <div class="tab greyed-out">Interactions (0)</div>
                         {{/hasInteractions}}
-                    </div>
-                    <div class="tabcontainer">
-                        <div class="tabhover">View related genes</div>
-                        {{#hasSim}}
-                            <a href="#similarity"><div class="tab contenttab simitab">Related Genes ({{simNum}})</div></a>
-                        {{/hasSim}}
-                        {{^hasSim}}
-                            <div class="tab greyed-out">Related Genes (0)</div>
-                        {{/hasSim}}
                     </div>
                     <div class="tabcontainer">
                         <div class="tabhover">View orthologs</div>
@@ -176,6 +167,7 @@
                             as well as in the number and specificity of each of the phenotypes.
                         </span>
                     </div>
+                    <a href="{{analyze_phenotypes}}" class="btn btn-default downloadline monarch-gene-dark">Analyze Phenotypes</a>
                     <table class="{{css.table}}">
                      {{{phenotypeTable}}}
                     </table>
@@ -209,15 +201,6 @@
                     </table>
                 </div>
                 {{/hasInteractions}}
-                {{#hasSim}}
-                <div id="similarity" class="category">
-                    <h3 class="downloadline">Related Genes</h3>
-                    <a href="{{{base_url}}}/sim.json" class="btn btn-info downloadline">JSON</a>
-                    <table class="{{css.table}}">
-                    {{{simTable}}}
-                    </table>
-                </div>
-                {{/hasSim}}
                 {{#hasOrthologs}}
                 <div id="orthologs" class="category">
                     <table class="{{css.table}}">
