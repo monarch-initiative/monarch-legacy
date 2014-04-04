@@ -4727,7 +4727,7 @@
       "description" : "BioGRID is an online interaction repository with data compiled through comprehensive curation efforts.",
       "example_id" : "BioGRID:203220",
       "generic_url" : "http://www.thebiogrid.org",
-      "fullname" : "Biological General Repository for Interaction Datasets,
+      "fullname" : "Biological General Repository for Interaction Datasets",
       "id" : null,
       "abbreviation" : "BioGRID",
       "url_syntax" : "http://thebiogrid.org/[example_id]",
