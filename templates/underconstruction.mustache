@@ -1,0 +1,29 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>{{message}}</title>
+    {{#scripts}}
+    <script type="text/javascript" src="{{url}}"></script>
+    {{/scripts}}
+    {{#stylesheets}}
+    <link rel="stylesheet" type="text/css" href="{{url}}"/>
+    {{/stylesheets}}
+    <link rel="stylesheet" type="text/css" href="/css/monarch-main.css"/>
+    <meta charset="utf-8"/> 
+</head>
+<body>
+    {{{includes.navbar}}}
+    <div class="monarch-container">
+        <div class="content">
+            <div class="wrapperforfooter">
+            <div class="jumbotron">
+                <img id="monarch-logo" class="downloadline" src="/image/logo.png"/>
+                <h1 class="downloadline">{{message}}</h1>
+                <p>Please check back later</p>
+            </div>
+            </div> <!-- closes wrapperforfooter -->
+            {{{includes.footer}}}
+        </div>
+    </div>
+</body>
+</html>
