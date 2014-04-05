@@ -21,7 +21,7 @@
                 <div class="sectiontitle">Overview</div>
                 <div class="block">
                     <div class="text">
-                        There are currently two types of service calls:
+                        There are currently three types of service calls:
                         <ul>
                             <li>Fetch a data object: fetch all information about a
                             particular entity (disease, phenotype, etc.)</li>
@@ -35,6 +35,9 @@
                                 have a close match to a set of phenotypes</li>
                                 </ul>
                             </li>
+							<li>Compute: perform a computation on a set of phenotypes
+								against data loaded into the owlsim server.
+							</li>
                         </ul>
                         Service calls are implemented via one or more calls to
                         other Monarch/NIF services.
@@ -149,18 +152,10 @@
                         </pre>
                         This wraps a call to OntoQuest - OQ XML is translated to a
                         standard JSON from: <a href="/docs/files/api-js.html#bbop.monarch.Engine.searchOverOntologies">searchOverOntologies(:term,:opts)</a>
-                        <h3>Semantic Matching</h3>
+                        <h3>Profile Search</h3>
                         <a href="http://owlsim.org">OwlSim</a> is used for
-                        semantic matching
-                        <h4>Comparing two entities</h4>
-                        URLs are of the form
-                        <pre>
-                        /compare/:x/:y.json
-                        </pre>
-                        Currently this is only supported for a subset of entities
-                        in the system - those with phenotypes.
-                        This wraps a call
-                        to <a href="http://owltools.googlecode.com/svn/trunk/docs/api/owltools/sim2/OwlSim.html#getGroupwiseSimilarity(org.semanticweb.owlapi.model.OWLNamedIndividual, org.semanticweb.owlapi.model.OWLNamedIndividual)">getGroupwiseSimilarity(x,y)</a> in OwlSim.
+                        semantic matching.  Currently services are only supported for a subset of entities in the system - those with phenotypes.
+						<h4>Search for Entities</h4>
                         Find all entities that instantiate a set of attributes
                         matching an input set of attributes. For example, find all
                         animal models matching a disease phenotype profile.
@@ -173,6 +168,72 @@
                     </div>
                 </div>
             </div>
+			<div class="section">
+                <div class="sectiontitle">Compute</div>
+                <div class="block">
+                    <div class="text">
+					<h3>Compare</h3>
+						We use <a href="http://owlsim.org">OwlSim</a> for semantic matching when comparing two entities with sets of attributes.
+                        Currently services are only supported for a subset of entities in the system - those with phenotypes.
+                    <h4>Comparing two entities</h4>URLs are of the form                        
+						<pre>
+                        /compare/:x/:y.json
+                        </pre>
+                        This wraps a call to <a href="http://owltools.googlecode.com/svn/trunk/docs/api/owltools/sim2/OwlSim.html#getGroupwiseSimilarity(org.semanticweb.owlapi.model.OWLNamedIndividual, org.semanticweb.owlapi.model.OWLNamedIndividual)">getGroupwiseSimilarity(x,y)</a> in OwlSim.
+					<h4>Comparing two sets of attributes</h4>
+					Coming soon.
+					<h3>Profile Information</h3>
+					<p>We use Information Content (IC)-based algorithms to compute similarity scores in the Monarch system.  
+					You can retrieve the computed <a href="http://owltools.googlecode.com/svn/trunk/docs/api/owltools/sim2/OwlSim.html#getInformationContentForAttribute(org.semanticweb.owlapi.model.OWLClass)">IC scores</a> 
+					for each ontology class, plus summary statistics
+					for a phenotype profile and the overall system.  This will also compute an <strong>Annotation Sufficiency</strong> 
+					score using a set of 20 pre-defined high-level phenotype classes.</p>
+					URLs are of the form:
+					<pre>
+					/score?annotation_profile=<strong>:profile</strong>
+					</pre>
+					The profile needs to be supplied as a JSON object with the following minimal structure:
+					<pre>
+					{ features : [ {id : <strong>:id</strong>}, ...] }
+					</pre>
+					Where the ids are of phenotypes or other classes contained in our <a href="https://code.google.com/p/phenotype-ontologies/">Monarch ontology</a> import chain. Non-existent
+					classes will be tossed from the calculation, and reported as unresolvable_classes.
+					<p>You may supply "not" or "normal" annotations as part of the profile by adding an <strong>isPresent : false</strong> attribute to each object.  
+					These are presently weighted equally to "abnormal" annotations when calculating the sufficiency score.</p>
+					Here are a few examples of the annotation_profile JSON objects:
+					<ul>
+						<li><a href='/score/?annotation_profile={"id" : "MONARCH:Example1","features" : [{"id":"HP:0000505"},{"id":"HP:0000479"},{"id":"HP:0001010"},{"id":"HP:0000044"}]}'>
+							Example 1:</a> A simple profile with four phenotypes.
+<pre>     {"features" : [{"id":"HP:0000505"},{"id":"HP:0000479"},{"id":"HP:0001010"},{"id":"HP:0000044"}]}</pre></li>
+						<li> <a href='/score/?annotation_profile={"id" : "MONARCH:Example2","features" : [{"id":"HP:0000505"},{"id":"HP:0000479"},{"id":"HP:0001010"},{"id":"HP:0000044"}]}'>
+							Example 2:</a> You can supply an optional identifier for your own purposes, but it is ignored by our system<br /> 
+<pre>
+     {<strong>"id"       : "MONARCH:Example2"</strong>,
+     "features"  : [{"id":"HP:0000505"},{"id":"HP:0000479"},{"id":"HP:0001010"},{"id":"HP:0000044"}]}</pre></li>
+                       <li><a href='/score/?annotation_profile={"id" : "MONARCH:Example3","features" : [{"id":"HP:0000505","isPresent" : "true"},{"id":"HP:0000479", "isPresent" : "false"},{"id":"HP:0001010","isPresent" : "true"},{"id":"HP:0000044", "isPresent" : "false"}]}'>Example 3:</a> You can provide both normal and abnormal qualifiers<br/>
+<pre>
+     {"features" : [{"id":"HP:0000505",<strong>isPresent : true</strong>},{"id":"HP:0000479", <strong>isPresent : false</strong>},
+                    {"id":"HP:0001010",<strong>isPresent : true</strong>},{"id":"HP:0000044", <strong>isPresent : false</strong>}]}
+</pre></li>	
+					   <li><a href='/score/?annotation_profile={"id":"MONARCH:Example4", "features" : [{"id":"HP:0001332"},{"id":"HP:0007319"},{"id":"HP:0002135"},{"id":"HP:0007238"},{"id":"HP:0004963"},{"id":"HP:0002077"},{"id":"HP:0004934"},{"id":"HP:0001681"},{"id":"HP:0000505","isPresent":"false"},{"id":"HP:0000481","isPresent":"false"},{"id":"HP:0000589","isPresent":"false"},{"id":"HP:0000593","isPresent":"false"},{"id":"HP:0000518","isPresent":"false"},{"id":"HP:0000479","isPresent":"false"},{"id":"HP:0000587","isPresent":"false"},{"id":"HP:0000568","isPresent":"false"},{"id":"HP:0000639","isPresent":"false"},{"id":"HP:0000486","isPresent":"false"},{"id":"HP:0008538","isPresent":"false"},{"id":"HP:0000367","isPresent":"false"},{"id":"HP:0004467","isPresent":"false"},{"id":"HP:0000384","isPresent":"false"},{"id":"HP:0000356","isPresent":"false"},{"id":"HP:0000359","isPresent":"false"},{"id":"HP:0000953","isPresent":"false"},{"id":"HP:0001010","isPresent":"false"},{"id":"HP:0005306","isPresent":"false"},{"id":"HP:0011276","isPresent":"false"},{"id":"HP:0002652","isPresent":"false"},{"id":"HP:0002659","isPresent":"false"},{"id":"HP:0009816","isPresent":"false"},{"id":"HP:0009824","isPresent":"false"},{"id":"HP:0100490","isPresent":"false"},{"id":"HP:0001836","isPresent":"false"},{"id":"HP:0006101","isPresent":"false"},{"id":"HP:0001770","isPresent":"false"},{"id":"HP:0100258","isPresent":"false"},{"id":"HP:0100259","isPresent":"false"},{"id":"HP:0001180","isPresent":"false"},{"id":"HP:0001849","isPresent":"false"},{"id":"HP:0002650","isPresent":"false"},{"id":"HP:0000925","isPresent":"false"},{"id":"HP:0001371","isPresent":"false"},{"id":"HP:0001762","isPresent":"false"},{"id":"HP:0001263","isPresent":"false"},{"id":"HP:0010862","isPresent":"false"},{"id":"HP:0002194","isPresent":"false"},{"id":"HP:0000750","isPresent":"false"},{"id":"HP:0001328","isPresent":"false"},{"id":"HP:0007018","isPresent":"false"},{"id":"HP:0000717","isPresent":"false"},{"id":"HP:0000708","isPresent":"false"},{"id":"HP:0001290","isPresent":"false"},{"id":"HP:0001250","isPresent":"false"},{"id":"HP:0001251","isPresent":"false"},{"id":"HP:0002072","isPresent":"false"},{"id":"HP:0001257","isPresent":"false"},{"id":"HP:0010301","isPresent":"false"},{"id":"HP:0005310","isPresent":"false"},{"id":"HP:0001677","isPresent":"false"},{"id":"HP:0012455","isPresent":"false"}]}'>Example 4:</a> An annotation profile with few "abnormal" annotations, but many "normal/not"<br />
+
+						</li>
+					</ul>
+					There are three scores provided, each with a range of (0..1):  
+					<ul>
+						<li><strong>simple</strong>: A simple measure of amount of information 
+							in the profile, with an emphasis on number and depth of annotations.</li>
+						<li><strong>categorical</strong>: A score computed similar to the 
+							simple score, Annotations are first split into high-level 
+							phenotypic categories, a sub-score is computed for each subset/category 
+							(similar to the simple score above), which are finally averaged together.</li>
+						<li><strong>scaled</strong>: A combined score with weights applied to the 
+							simple and categorical scores. <i>This is the score displayed in the Monarch web interface.</i></li>
+					</ul>
+					<p>Summary statistics for the profile, the system, and for each category are provided for you if you choose to compute your own profile scores.</p>
+					</div>
+				</div>	
+			</div>
             <div class="section">
                 <div class="sectiontitle">Implementation</div>
                 <div class="block">
