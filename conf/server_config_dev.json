@@ -3,7 +3,7 @@
     
     "ontology_services_url" : "http://nif-services-stage.neuinfo.org/ontoquest-lamhdi/",
     
-    "federation_services_url" : "http://beta.neuinfo.org/services/v1/federation/",
+    "federation_services_url" : "http://neuinfo.org/servicesv1/v1/federation/",
 
     "annotate_services_url" : "http://beta.neuinfo.org/services/v1/annotate/",
     
