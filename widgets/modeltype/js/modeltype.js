@@ -743,10 +743,10 @@ as a separate call in the init function.
 	    this.options.svg.selectAll("#detail_content").remove();
 	    this.options.svg.selectAll(".model_accent").remove();
 	    if (modelData != null && typeof modelData != 'object') {
-		    var model_text = this.options.svg.selectAll("p#" + this._getConceptId(modelData));
+		    var model_text = this.options.svg.selectAll("text#" + this._getConceptId(modelData));
 		    model_text.style("font-weight","normal");
 		    model_text.style("text-decoration", "none");
-		    model_text.style("color", "black");
+		    model_text.style("fill", "black");
 
 	    }
     },
@@ -1446,8 +1446,8 @@ as a separate call in the init function.
 		//select the model label
 		
 		
-		var model_label = self.options.svg.selectAll("p#" + this._getConceptId(modelData.model_id));
-    	model_label.style("color", "blue");
+		var model_label = self.options.svg.selectAll("text#" + this._getConceptId(modelData.model_id));
+    	model_label.style("fill", "blue");
 		model_label.style("text-decoration", "underline");
 
 		//create the related model rectangles
