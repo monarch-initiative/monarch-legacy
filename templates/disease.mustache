@@ -15,6 +15,7 @@
     {{/stylesheets}}
     <link rel="stylesheet" type="text/css" href="/css/monarch-specific.css"/>
     <link rel="stylesheet" type="text/css" href="/css/imagehover.css"/>
+    <link rel="icon" href="/image/favicon.ico" type="image/x-icon">
     <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
     <meta charset="utf-8"/>
 </head>
@@ -30,6 +31,7 @@
                         {{{.}}}
                     </div>
                     {{/alerts}}
+                    <img id="monarch-logo" class="downloadline" src="/image/logo.png"/>
                     <h1 class="downloadline">Disease: {{label}}</h1>
                     <a href="{{{base_url}}}.json" class="btn btn-default downloadline monarch-disease-dark">JSON</a>
                     <p>
@@ -71,12 +73,13 @@
                     </div>
                     <div class="second-row-divider"></div>
                     <div class="tabcontainer">
-                        <div class="tabhover">View models that have phenotypes in common</div>
+                        <div class="tabhover">View matching models and
+                        genes based on shared phenotypes and orthology</div>
                         {{#hasModels}}
-                            <a href="#model"><div class="tab contenttab modtab">Similar Models ({{modelNum}})</div></a>
+                            <a href="#model"><div class="tab contenttab modtab">Matches ({{modelNum}})</div></a>
                         {{/hasModels}}
                         {{^hasModels}}
-                            <div class="tab greyed-out">Similar Models (0)</div>
+                            <div class="tab greyed-out">Matches (0)</div>
                         {{/hasModels}}
                     </div>
                     <div class="tabcontainer">

@@ -907,7 +907,7 @@ as a separate call in the init function.
 
 		var startModelIdx = (this.options.currModelIdx - this.options.modelDisplayCount) + 2;
 		var max_count = ((this.options.modelDisplayCount + startModelIdx) >= this.options.modelList.length) ? this.options.modelList.length : this.options.modelDisplayCount + startModelIdx; 
-		var display_text = "Genotypes [" + startModelIdx + "-"+ max_count + "] out of " + (this.options.modelList.length);
+		var display_text = "Matches [" + startModelIdx + "-"+ max_count + "] out of " + (this.options.modelList.length);
 		var div_text = this.options.svg.append("svg:text")
 			.attr("class", "scroll_text")
 			.attr("x", this.options.axis_pos_list[2] +10)
