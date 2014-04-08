@@ -75,6 +75,10 @@ as a separate call in the init function.
 	    maxColorScale : "#44a293",
 	    orangeHighlight: "#ea763b",
 	    maxICScore : 0,
+	    smallXScale: undefined,
+	    smallYScale: undefined,
+	    drag: undefined,
+	    highlightRect: undefined,
 	    		
 	},
 
@@ -116,7 +120,136 @@ as a separate call in the init function.
     	    this._createModelRects();
     	    this._createRects();
     		this._updateScrollCounts();
+   // 		this._createOverviewSection();
 
+	},
+	
+	//for the selection area, see if you can convert the selection to the idx of the x and y
+	//then redraw the bigger grid 
+	_createOverviewSection: function() {
+		var self=this;
+		var globalViewWidth = 110;
+		var globalViewHeight = 110;
+		
+		var globalview = self.options.svg.append("rect")
+			//note: I had to make the rectangle slightly bigger to compensate for the strike-width
+			.attr("x", self.options.axis_pos_list[2] + self.options.textWidth + 28)
+			.attr("y", 188)
+			.attr("id", "globalview")
+			.style("stroke", "black")
+			.style("fill", "white")
+			.style("stroke-width", 2)
+			.attr("height", globalViewHeight+6)
+			.attr("width", globalViewWidth+6);
+
+		var rect_instructions = self.options.svg.append("text")
+			.attr("x", self.options.axis_pos_list[2] + self.options.textWidth + 28)
+			.attr("y", 168)
+			.style("font-size", "12px")
+			.text("Use the view below to navigate");
+		
+		var rect_instructions = self.options.svg.append("text")
+			.attr("x", self.options.axis_pos_list[2] + self.options.textWidth + 28)
+			.attr("y", 180)
+			.style("font-size", "12px")
+			.text("the model view on the left");
+
+		this.options.smallYScale = d3.scale.ordinal()
+		    .domain(self.options.phenotypeData.map(function (d) {return d.rowid; }))		    
+		    .rangePoints([0,globalViewHeight]);
+
+		this.options.smallXScale = d3.scale.ordinal()
+		    .domain(self.options.modelList.map(function (d) {return d.model_id; }))		    
+		    .rangePoints([0,globalViewWidth]);
+
+  		//next assign the x and y axis using the full list
+		//add the items using smaller rects
+
+	      var model_rects = this.options.svg.selectAll(".mini_models")
+	      	.data(this.options.modelData, function(d) {
+	      	    return d.id;
+	      	});
+	      model_rects.enter()
+		  	  .append("rect")
+		  	  .attr("transform",
+		  		"translate(" + (self.options.axis_pos_list[2] + self.options.textWidth + 30) + ",190)")
+		      //"translate(210," + this.options.yoffset + ")")
+		  	  .attr("class",  "mini_model")
+		  	  .attr("y", function(d, i) { return self.options.smallYScale(d.rowid);})
+		  	  .attr("x", function(d) { return self.options.smallXScale(d.model_id);})
+		  	  .attr("width", 2)
+		  	  .attr("height", 2)
+		  	  .attr("fill", function(d, i) {
+		  	      return self.options.colorScale(d.value);
+		  	  });
+	
+	      //create the drag events
+	      var drag = d3.behavior.drag()
+	      	  .origin(Object)
+
+/*		      .on("dragstart", function(d,i){
+		          //do some drag start stuff...
+		    	  console.log("Hey let me carry that for you");
+		      })*/
+		      .on("drag", function(d,i){
+		          //hey we're dragging, let's update some stuff
+		    	  console.log("I'm dragging ass here");
+		    	  self.options.highlightRect
+		              .attr("x", d.x +2);
+		    	  
+		      });
+/*		      .on("dragend", function(d,i){
+		          //we're done, end some stuff
+		    	  console.log("I'm done dragging your ass around...you do it");
+		      })*/;
+
+		  //create the "highlight" rectangle
+		self.options.highlightRect = self.options.svg.append("rect")
+		  	.attr("transform",
+		  		"translate(" + (self.options.axis_pos_list[2] + self.options.textWidth + 30) + ",190)")
+			.attr("x", 0)
+			.attr("y", 0)		
+			.attr("class", "draggable")
+//			.on("click", function() {
+//  if (d3.event.defaultPrevented) return; // click suppressed
+//  console.log("clicked!");
+//})
+			.call(drag)
+			.call(d3.behavior.drag()
+                .on("drag", function(d) {
+                	
+                	console.log("d3.event.x=" + d3.event.x);
+                	console.log("d3.event.y=" + d3.event.y);
+                    //d[0] = Math.max(0, Math.min(this.__origin__[0] += d3.event.dx, w));
+                    //d[1] = Math.max(0, Math.min(this.__origin__[1] += d3.event.dy, h));
+                	var rect = self.options.svg.select("#selectionrect");
+        		  	rect.attr("transform",
+        			  		"translate(0,0)")
+        			//retrieve the id of the items using the d3.event.dx and dy
+        			//
+        			  		
+        			var xPos = d3.event.dx;
+        			  		
+        			var leftEdges = self.options.smallXScale.range();
+        var width = self.options.smallXScale.rangeBand();
+        var j;
+        for(j=0; xPos > (leftEdges[j] + width); j++) {}
+            //do nothing, just increment j until case fails
+        console.log("Clicked on " + self.options.smallXScale.domain()[j]);
+               	    rect.attr("x", d3.event.x)
+                	rect.attr("y", d3.event.y);
+
+                
+                }))
+
+
+			.attr("id", "selectionrect")
+			.style("fill", "grey")
+			.style("opacity", 0.5)
+			.attr("height", self.options.smallYScale(self.options.phenotypeData[self.options.phenotypeDisplayCount-1].rowid))
+			.attr("width", self.options.smallXScale(self.options.modelList[self.options.modelDisplayCount-1].model_id));
+	      
+		//self.options.svg.selectAll(".draggable").call(this.options.drag);
 	},
 
 	_createTitle: function() {
@@ -451,7 +584,31 @@ as a separate call in the init function.
     		var width = 100;
     		var el = d3.select(t);
     	    var p = d3.select(t.parentNode);
-    	    p.append("foreignObject")
+    	    p.append("text")
+    	       	.attr('x', t.getAttribute("x")+15)
+    	        .attr('y', t.getAttribute("y")-13)
+    	        .attr("width", width)
+    	        .attr("id", self._getConceptId(data.model_id))
+    	        .attr("model_id", data.model_id)
+    	        .attr("height", 20)
+
+    	        .attr("transform", function(d) {
+    	        	return "rotate(-45)" 
+    	         })
+		        .on("click", function(d) {
+					self._clickModel(data, self.document[0].location.origin);
+				})
+    	       .on("mouseover", function(d) {
+    	    	   self._selectModel(data, this);
+    	       })
+    	       .on("mouseout", function(d) {
+    	    	   self._clearModelData(d, d3.mouse(this));
+    	       })
+    	       .attr("class", this._getConceptId(data.model_id) + " model_label")
+    	       .style("font-size", "12px")
+    	       .text(label);
+ 
+/*    	    p.append("foreignObject")
     	        .attr('x', t.getAttribute("x")+15)
     	        .attr('y', t.getAttribute("y")-13)
     	       // .attr('dx', t.dx)
@@ -481,7 +638,7 @@ as a separate call in the init function.
     	        //.attr('style','word-wrap: break-word; text-align:center;')
 				.style("font-size", "12px")
     	        .html(label);    
-
+*/
     	    el.remove();
 
     },
