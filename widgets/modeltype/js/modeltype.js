@@ -79,6 +79,9 @@ as a separate call in the init function.
 	    smallYScale: undefined,
 	    drag: undefined,
 	    highlightRect: undefined,
+		globalViewWidth : 110,
+	    globalViewHeight : 110,
+
 	    		
 	},
 
@@ -113,14 +116,14 @@ as a separate call in the init function.
 
             this._createTitle();
             this._createAccentBoxes();
-            this._createScrollBars();
+            //this._createScrollBars();
             this._createColorScale();
             this._createModelRegion();
     	    this._updateAxes();
     	    this._createModelRects();
     	    this._createRects();
     		this._updateScrollCounts();
-   // 		this._createOverviewSection();
+    		this._createOverviewSection();
 
 	},
 	
@@ -128,39 +131,40 @@ as a separate call in the init function.
 	//then redraw the bigger grid 
 	_createOverviewSection: function() {
 		var self=this;
-		var globalViewWidth = 110;
-		var globalViewHeight = 110;
 		
+		if (this.options.phenotypeData.length < 26) {
+			self.options.globalViewHeight = 30;
+		}
 		var globalview = self.options.svg.append("rect")
 			//note: I had to make the rectangle slightly bigger to compensate for the strike-width
 			.attr("x", self.options.axis_pos_list[2] + self.options.textWidth + 28)
-			.attr("y", 188)
+			.attr("y", 75)
 			.attr("id", "globalview")
 			.style("stroke", "black")
 			.style("fill", "white")
 			.style("stroke-width", 2)
-			.attr("height", globalViewHeight+6)
-			.attr("width", globalViewWidth+6);
+			.attr("height", self.options.globalViewHeight+6)
+			.attr("width", self.options.globalViewWidth+6);
 
 		var rect_instructions = self.options.svg.append("text")
-			.attr("x", self.options.axis_pos_list[2] + self.options.textWidth + 28)
-			.attr("y", 168)
+			.attr("x", self.options.axis_pos_list[2] + self.options.textWidth + 10)
+			.attr("y", 55)
 			.style("font-size", "12px")
-			.text("Use the view below to navigate");
+			.text("Use the phenotype map below to");
 		
 		var rect_instructions = self.options.svg.append("text")
-			.attr("x", self.options.axis_pos_list[2] + self.options.textWidth + 28)
-			.attr("y", 180)
+			.attr("x", self.options.axis_pos_list[2] + self.options.textWidth + 10)
+			.attr("y", 67)
 			.style("font-size", "12px")
-			.text("the model view on the left");
+			.text("navigate the model view on the left");
 
 		this.options.smallYScale = d3.scale.ordinal()
 		    .domain(self.options.phenotypeData.map(function (d) {return d.rowid; }))		    
-		    .rangePoints([0,globalViewHeight]);
+		    .rangePoints([0,self.options.globalViewHeight]);
 
 		this.options.smallXScale = d3.scale.ordinal()
 		    .domain(self.options.modelList.map(function (d) {return d.model_id; }))		    
-		    .rangePoints([0,globalViewWidth]);
+		    .rangePoints([0,self.options.globalViewWidth]);
 
   		//next assign the x and y axis using the full list
 		//add the items using smaller rects
@@ -172,7 +176,7 @@ as a separate call in the init function.
 	      model_rects.enter()
 		  	  .append("rect")
 		  	  .attr("transform",
-		  		"translate(" + (self.options.axis_pos_list[2] + self.options.textWidth + 30) + ",190)")
+		  		"translate(" + (self.options.axis_pos_list[2] + self.options.textWidth + 30) + ",77)")
 		      //"translate(210," + this.options.yoffset + ")")
 		  	  .attr("class",  "mini_model")
 		  	  .attr("y", function(d, i) { return self.options.smallYScale(d.rowid);})
@@ -183,61 +187,56 @@ as a separate call in the init function.
 		  	      return self.options.colorScale(d.value);
 		  	  });
 	
-	      //create the drag events
-	      var drag = d3.behavior.drag()
-	      	  .origin(Object)
-
-/*		      .on("dragstart", function(d,i){
-		          //do some drag start stuff...
-		    	  console.log("Hey let me carry that for you");
-		      })*/
-		      .on("drag", function(d,i){
-		          //hey we're dragging, let's update some stuff
-		    	  console.log("I'm dragging ass here");
-		    	  self.options.highlightRect
-		              .attr("x", d.x +2);
-		    	  
-		      });
-/*		      .on("dragend", function(d,i){
-		          //we're done, end some stuff
-		    	  console.log("I'm done dragging your ass around...you do it");
-		      })*/;
-
 		  //create the "highlight" rectangle
 		self.options.highlightRect = self.options.svg.append("rect")
 		  	.attr("transform",
-		  		"translate(" + (self.options.axis_pos_list[2] + self.options.textWidth + 30) + ",190)")
+		  		"translate(" + (self.options.axis_pos_list[2] + self.options.textWidth + 30) + ",77)")
 			.attr("x", 0)
 			.attr("y", 0)		
 			.attr("class", "draggable")
-//			.on("click", function() {
-//  if (d3.event.defaultPrevented) return; // click suppressed
-//  console.log("clicked!");
-//})
-			.call(drag)
+			//.call(drag)
 			.call(d3.behavior.drag()
                 .on("drag", function(d) {
                 	
-                	console.log("d3.event.x=" + d3.event.x);
-                	console.log("d3.event.y=" + d3.event.y);
-                    //d[0] = Math.max(0, Math.min(this.__origin__[0] += d3.event.dx, w));
-                    //d[1] = Math.max(0, Math.min(this.__origin__[1] += d3.event.dy, h));
+                	//notes: account for the width of the rectangle in my x and y calculations
+                	//do not use the event x and y, they will be out of range at times.  use the converted values instead.
                 	var rect = self.options.svg.select("#selectionrect");
         		  	rect.attr("transform",
         			  		"translate(0,0)")
+        			//limit the range of the x value
+        			var newX = d3.event.x - (self.options.axis_pos_list[2] + self.options.textWidth + 30);
+        		  	newX = Math.max(newX,0);
+        		  	newX = Math.min(newX,(110-self.options.smallXScale(self.options.modelList[self.options.modelDisplayCount-1].model_id)));
+               	    rect.attr("x", newX + (self.options.axis_pos_list[2] + self.options.textWidth + 30))
+               	    //limit the range of the y value
+        			var newY = d3.event.y - 77;
+        		  	newY = Math.max(newY,0);
+        		  	newY = Math.min(newY,(self.options.globalViewHeight-self.options.smallYScale(self.options.phenotypeData[self.options.phenotypeDisplayCount-1].rowid)));
+               	    rect.attr("y", newY + 77);
         			//retrieve the id of the items using the d3.event.dx and dy
         			//
         			  		
-        			var xPos = d3.event.dx;
-        			  		
+        			//var xPos = d3.event.x - (self.options.axis_pos_list[2] + self.options.textWidth + 30);
+        			var xPos = newX;
+        			
         			var leftEdges = self.options.smallXScale.range();
-        var width = self.options.smallXScale.rangeBand();
-        var j;
-        for(j=0; xPos > (leftEdges[j] + width); j++) {}
-            //do nothing, just increment j until case fails
-        console.log("Clicked on " + self.options.smallXScale.domain()[j]);
-               	    rect.attr("x", d3.event.x)
-                	rect.attr("y", d3.event.y);
+			        var width = self.options.smallXScale.rangeBand();
+			        var j;
+			        for(j=0; xPos > (leftEdges[j] + width); j++) {}
+			            //do nothing, just increment j until case fails
+               	    var newModelPos = j+self.options.modelDisplayCount;
+
+        			//var yPos = d3.event.y - 190;
+			  		var yPos = newY;
+			  		
+        			var leftEdges = self.options.smallYScale.range();
+			        var height = self.options.smallYScale.rangeBand();
+			        var j;
+			        for(j=0; yPos > (leftEdges[j] + height); j++) {}
+			            //do nothing, just increment j until case fails
+               	    var newPhenotypePos = j+self.options.phenotypeDisplayCount;
+
+                    self._updateModel(newModelPos, newPhenotypePos);
 
                 
                 }))
@@ -246,10 +245,10 @@ as a separate call in the init function.
 			.attr("id", "selectionrect")
 			.style("fill", "grey")
 			.style("opacity", 0.5)
+			//set the height and width to match the number of items shown on the axes
 			.attr("height", self.options.smallYScale(self.options.phenotypeData[self.options.phenotypeDisplayCount-1].rowid))
 			.attr("width", self.options.smallXScale(self.options.modelList[self.options.modelDisplayCount-1].model_id));
 	      
-		//self.options.svg.selectAll(".draggable").call(this.options.drag);
 	},
 
 	_createTitle: function() {
@@ -928,27 +927,39 @@ as a separate call in the init function.
 	
 	//NOTE: FOR FILTERING IT MAY BE FASTER TO CONCATENATE THE PHENOTYPE and MODEL into an attribute
 	
-	
 	//change the list of phenotypes and filter the models accordling.  The 
 	//movecount is an integer and can be either positive or negative
-	_clickPhenotypeSlider: function(movecount) {
+	_updateModel: function(modelIdx, phenotypeIdx) {
 		var self = this;
 		
-		//increment/decrement the count
-		var tempIdx = this.options.currPhenotypeIdx + movecount;
-		//check to see if the max of the slider is greater than the number of items in the list
-		if (tempIdx > this.options.phenotypeData.length) {
+		//check to see if the phenotypeIdx is greater than the number of items in the list
+		if (phenotypeIdx > this.options.phenotypeData.length) {
 			this.options.currPhenotypeIdx = this.options.phenotypeData.length;
-		} else if (tempIdx - (this.options.phenotypeDisplayCount -1) < 0) {
+		} else if (phenotypeIdx - (this.options.phenotypeDisplayCount -1) < 0) {
 			//check to see if the min of the slider is less than the 0
 			  this.options.currPhenotypeIdx = (this.options.phenotypeDisplayCount -1);
 		} else {
-			this.options.currPhenotypeIdx = tempIdx;
+			this.options.currPhenotypeIdx = phenotypeIdx;
 		}
-		var startIdx = this.options.currPhenotypeIdx - (this.options.phenotypeDisplayCount -1);
+		var startPhenotypeIdx = this.options.currPhenotypeIdx - (this.options.phenotypeDisplayCount -1);
 		
 		this.options.filteredPhenotypeData = [];
 		this.options.yAxis = [];
+		this.options.filteredModelData = [];
+		
+		//fix model list
+		//check to see if the max of the slider is greater than the number of items in the list
+		if (modelIdx > this.options.modelList.length) {
+			this.options.currModelIdx = this.options.modelList.length;
+		} else if (modelIdx - (this.options.modelDisplayCount -1) < 0) {
+			//check to see if the min of the slider is less than the 0
+			  this.options.currModelIdx = (this.options.modelDisplayCount -1);
+		} else {
+			this.options.currModelIdx = modelIdx;
+		}
+		var startModelIdx = this.options.currModelIdx - (this.options.modelDisplayCount -1);
+
+		this.options.filteredModelList = [];
 		this.options.filteredModelData = [];
 		
 		
@@ -958,10 +969,19 @@ as a separate call in the init function.
 
 		var tempFilteredModelData = [];
 		var axis_idx = 0;
-    	for (var idx=startIdx;idx<self.options.currPhenotypeIdx;idx++) {
+    	for (var idx=startModelIdx;idx<self.options.currModelIdx;idx++) {
+    		self.options.filteredModelList.push(self.options.modelList[idx]);
+    	}
+		
+		//extract the new array of filtered Phentoypes
+		//also update the axis
+		//also update the modeldata
+
+		var tempFilteredModelData = [];
+		var axis_idx = 0;
+    	for (var idx=startPhenotypeIdx;idx<self.options.currPhenotypeIdx;idx++) {
     		self.options.filteredPhenotypeData.push(self.options.phenotypeData[idx]);
-    		//update the YAxis   	
-    		
+    		//update the YAxis   	    		
     		//the height of each row
         	var size = 10;
         	//the spacing you want between rows
@@ -977,7 +997,29 @@ as a separate call in the init function.
     		tempFilteredModelData = tempFilteredModelData.concat(tempdata);
 
     	}
-    	
+
+    	self.options.svg.selectAll("g .x.axis")
+        .remove();
+  	self.options.svg.selectAll("g .tick.major")
+      	.remove();
+  	//update the x axis
+  	self.options.xScale = d3.scale.ordinal()
+			.domain(self.options.filteredModelList.map(function (d) {
+				return d.model_id; }))
+	        .rangeRoundBands([0,self.options.modelWidth]);
+	    model_x_axis = d3.svg.axis()
+			.scale(self.options.xScale).orient("top");
+	    var model_region = self.options.svg.append("g")
+	  		.attr("transform","translate(" + (self.options.textWidth + 20) +"," + self.options.yoffset + ")")
+	  		.attr("class", "x axis")
+	  		.call(model_x_axis)
+	  	    //this be some voodoo...
+	  	    //to rotate the text, I need to select it as it was added by the axis
+	  		.selectAll("text") 
+	  		.each(function(d,i) { 
+	  		    self._convertLabelHTML(this,
+	  			self._getShortLabel(self.options.filteredModelList[i].model_label, 15),self.options.filteredModelList[i]);}); 
+
     	//now, limit the data returned by models as well
     	for (var idx=0;idx<self.options.filteredModelList.length;idx++) {
     		var tempdata = tempFilteredModelData.filter(function(d) {
@@ -994,82 +1036,7 @@ as a separate call in the init function.
 
 	},
 
-	//change the list of phenotypes and filter the models accordling.  The 
-	//movecount is an integer and can be either positive or negative
-	_clickModelSlider: function(movecount) {
-		var self = this;
-		
-		//increment/decrement the count
-		var tempIdx = this.options.currModelIdx + movecount;
-		//check to see if the max of the slider is greater than the number of items in the list
-		if (tempIdx > this.options.modelList.length) {
-			this.options.currModelIdx = this.options.modelList.length;
-		} else if (tempIdx - (this.options.modelDisplayCount -1) < 0) {
-			//check to see if the min of the slider is less than the 0
-			  this.options.currModelIdx = (this.options.modelDisplayCount -1);
-		} else {
-			this.options.currModelIdx = tempIdx;
-		}
-		var startIdx = this.options.currModelIdx - (this.options.modelDisplayCount -1);
-
-		this.options.filteredModelList = [];
-		this.options.filteredModelData = [];
-		
-		
-		//extract the new array of filtered Phentoypes
-		//also update the axis
-		//also update the modeldata
-
-		var tempFilteredModelData = [];
-		var axis_idx = 0;
-    	for (var idx=startIdx;idx<self.options.currModelIdx;idx++) {
-    		self.options.filteredModelList.push(self.options.modelList[idx]);
-    		//update the YAxis   	
-    		
-    		var tempdata = self.options.modelData.filter(function(d) {
-    	    	return d.model_id == self.options.modelList[idx].model_id;
-    	    });
-    		tempFilteredModelData = tempFilteredModelData.concat(tempdata);
-
-    	}
-
-    	//now, limit the data returned by phenotypes as well
-    	for (var idx=0;idx<self.options.filteredPhenotypeData.length;idx++) {
-    		var tempdata = tempFilteredModelData.filter(function(d) {
-    	    	return d.rowid == self.options.filteredPhenotypeData[idx].rowid;
-    	    });
-    		self.options.filteredModelData = self.options.filteredModelData.concat(tempdata);
-    		
-    	}
-
-    	
-    	self.options.svg.selectAll("g .x.axis")
-          .remove();
-    	self.options.svg.selectAll("g .tick.major")
-        	.remove();
-    	//update the x axis
-    	self.options.xScale = d3.scale.ordinal()
-  			.domain(self.options.filteredModelList.map(function (d) {
-  				return d.model_id; }))
-  	        .rangeRoundBands([0,self.options.modelWidth]);
-  	    model_x_axis = d3.svg.axis()
-  			.scale(self.options.xScale).orient("top");
-  	    var model_region = self.options.svg.append("g")
-	  		.attr("transform","translate(" + (self.options.textWidth + 20) +"," + self.options.yoffset + ")")
-	  		.attr("class", "x axis")
-	  		.call(model_x_axis)
-	  	    //this be some voodoo...
-	  	    //to rotate the text, I need to select it as it was added by the axis
-	  		.selectAll("text") 
-	  		.each(function(d,i) { 
-	  		    self._convertLabelHTML(this,
-	  			self._getShortLabel(self.options.filteredModelList[i].model_label, 15),self.options.filteredModelList[i]);}); 
-
- 	    this._createModelRects();
-	    this._createRects();
-	    this._updateScrollCounts();
-
-	},
+	
 
 	_createAccentBoxes: function() {
 	    var self=this;
@@ -1120,7 +1087,6 @@ as a separate call in the init function.
 		.text(String);
 },
     
-//IMPORTANT!! THIS 
 	//this code creates the colored rectangles below the models
 	_createModelRegion: function () {
 	    //model_x_axis = undefined;
