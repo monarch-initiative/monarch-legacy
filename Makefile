@@ -28,6 +28,9 @@ production-test-%:
 nif-production-url-test:
 	$(RINGO_BIN) tests/urltester.js -s production -c vocabulary,ontoquest,federation
 
+triples:
+	./bin/generate-triples-from-nif -c conf/server_config_production.json -m conf/rdf-mapping/ncbi-gene-map.json
+
 ###
 ### Documentation.
 ###
