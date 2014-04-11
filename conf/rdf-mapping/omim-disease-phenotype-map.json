@@ -1,0 +1,48 @@
+{
+    "status" : "alpha",
+    "graphs": [
+        {
+            "graph" : "omim-disease-phenotype",
+            "view" : "nlx_151835-1",
+            "columns" : [
+                {
+                    "name" : "v_uuid"
+                },
+                {
+                    "name" : "disorder_id"
+                },
+                {
+                    "name" : "disorder_qualifier",
+                    "@context" : {
+                    }
+                },
+                {
+                    "name" : "phenotype_id"
+                },
+                {
+                    "name" : "publication_id",
+                    "list_delimiter" : ";"
+                }
+            ],
+            "mappings" : [
+
+                {"subject" : "v_uuid",
+                 "predicate" : "rdf:type",
+                 "object" : "SIO:association"
+                },
+                {"subject" : "v_uuid",
+                 "predicate" : "hasSubject",
+                 "object" : "disorder_id"
+                },
+                {"subject" : "v_uuid",
+                 "predicate" : "hasObject",
+                 "object" : "phenotype_id"
+                },
+                {"subject" : "v_uuid",
+                 "predicate" : "dc:source",
+                 "object" : "publication_id"
+                }
+            ]
+        }
+   ]
+}

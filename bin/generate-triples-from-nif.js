@@ -37,7 +37,6 @@ function main(args) {
 
     targetDir = options.targetDir != null ? options.targetDir : "target";
 
-    var gset = JSON.parse(fs.read(options.mappings));
 
     if (options.context || options.target != null) {
         //engine.addJsonLdContext(JSON.parse(fs.read(options.context)));
@@ -48,17 +47,28 @@ function main(args) {
     
     ldcontext = engine.getJsonLdContext();
 
-    var graphs = gset.graphs;
+    var gsets = [];
+    if (options.mappings != null) {
+        gsets = [JSON.parse(fs.read(options.mappings))];
+    }
+    else {
+        gsets = args.map(function(fn) {
+            return JSON.parse(fs.read(fn));
+        });
+    }
+    
+    for (var j in gsets) {
+        var gset = gsets[j];
+        var graphs = gset.graphs;
 
     
-    for (var k in graphs) {
-        var graphconf = graphs[k];
-        if (options.graph == null || graphconf.graph == options.graph) {
-            generateNamedGraph(graphconf);
+        for (var k in graphs) {
+            var graphconf = graphs[k];
+            if (options.graph == null || graphconf.graph == options.graph) {
+                generateNamedGraph(graphconf);
+            }
         }
     }
-
-    // TODO - footer
 
 }
 
@@ -68,6 +78,10 @@ if (require.main == module.id) {
 }
 
 function mapRdfResource(iri) {
+    if (iri.match(/\s/) != null) {
+        iri = iri.replace(/\s/g, "");
+    }
+
     if (iri.indexOf("http") == 0) {
         return "<"+iri+">";
     }
@@ -79,42 +93,58 @@ function mapRdfResource(iri) {
 
 function mapColumn(ix, row, cmap, gconf) {
     if (cmap[ix] != null) {
-        var cobj = cmap[ix];
-        var type = cobj.type;
-
         var v = row[ix];
-
-        if (cobj.lookup != null) {
-            if (cobj.lookup[v] != null) {
-                v = cobj.lookup[v];
-            }
-            else {
-                console.warn("NO MAPPING: "+v);
-            }
-        }
-
-        // column
-        if (cobj.prefix != null) {
-            return mapRdfResource(cobj.prefix + v);
-        }
-        if (cobj.list_delimiter != null) {
-            var vl = v.split(cobj.list_delimiter);
-            if (v == '-') {
-                // ARRGGH AD-HOCCERY
-                vl = [];
-            }
-            if (vl.length == 0) {
-                return null;
-            }
-            // WARNING: assumes literals
-            return vl.map(function(e) { return engine.quote(e) }).join(", ");
-        }
-        if (type == 'Literal') {
-            return engine.quote(v);
-        }
-        return mapRdfResource(v);
+        return mapColumnValue(ix, v, cmap, gconf);
     }
-    return mapRdfResource(ix);   
+    else {
+        return mapRdfResource(ix);
+    }
+}
+
+function mapColumnValue(ix, v, cmap, gconf) {
+    var cobj = cmap[ix];
+    var type = cobj.type;
+
+    // JSON-LD context
+    var ctx = cobj['@context'];
+    if (ctx != null) {
+        if (ctx[v] != null) {
+            v = ctx[v];
+        }
+        else {
+            console.warn("NO MAPPING: "+v);
+        }
+    }
+
+    // column
+    if (cobj.prefix != null) {
+        return mapRdfResource(cobj.prefix + v);
+    }
+    
+    // Remobe this code when this is fixed: https://support.crbs.ucsd.edu/browse/NIF-10646
+    if (cobj.list_delimiter != null) {
+        var vl = v.split(cobj.list_delimiter);
+        if (v == '-') {
+            // ARRGGH AD-HOCCERY
+            vl = [];
+        }
+        if (vl.length == 0) {
+            return null;
+        }
+        if (vl.length > 1) {
+            // WARNING: assumes literals
+            //return vl.map(function(e) { return engine.quote(e) }).join(", ");
+            return vl.map(function(e) { return mapColumnValue(ix, e, cmap, gconf) });
+        }
+        // carry on, just use v, as it is a singleton list
+    }
+    if (type == 'rdfs:Literal') {
+        return engine.quote(v);
+    }
+    if (v == null) {
+        console.warn("No value for "+ix+" in "+JSON.stringify(row));
+    }
+    return mapRdfResource(v);
 }
 
 function generateNamedGraph(gconf) {
@@ -126,12 +156,15 @@ function generateNamedGraph(gconf) {
     var cmap = {};
     gconf.columns.forEach(function(c) { cmap[c.name] = c });
 
+
     var offset = 0;
     var done = false;
     while (!done) {
 
         var resultObj = engine.fetchDataFromResource(null, gconf.view, null, colNames, gconf.filter, maxLimit, null, {offset : offset});
         console.info(offset + " / "+resultObj.resultCount + " rows");
+
+
 
         offset += maxLimit;
         if (offset >= resultObj.resultCount) {
@@ -143,10 +176,15 @@ function generateNamedGraph(gconf) {
         var results = resultObj.results;
         for (var k in results) {
             var r = results[k];
+
+            if (colNames.indexOf('v_uuid') > -1 && r.v_uuid == null) {
+                // HACK - see https://support.crbs.ucsd.edu/browse/NIF-10231
+                r.v_uuid = colNames.map(function(cn) { return safeify(r[cn]) }).join("-");
+            }
             
             for (var j in gconf.mappings) {
                 var mapping = gconf.mappings[j];
-                
+                //console.log(JSON.stringify(mapping));
                 var sv = mapColumn(mapping.subject, r, cmap);
                 var pv = mapColumn(mapping.predicate, r, cmap);
                 var ov = mapColumn(mapping.object, r, cmap);
@@ -164,7 +202,13 @@ function emit(io, sv, pv, ov) {
     if (sv == null || pv == null || ov == null) {
         return;
     }
-    io.print(sv + " " + pv + " " + ov + " .");
+    if (ov.forEach != null) {
+        console.log("Emitting multiple triples: "+ov.length);
+        ov.forEach(function(x) { emit(io, sv, pv, x) });
+    }
+    else {
+        io.print(sv + " " + pv + " " + ov + " .");
+    }
 }
 
 function emitPrefixes(io) {
@@ -181,4 +225,11 @@ function emitPrefixes(io) {
         }
     }
     io.print("");
+}
+
+function safeify(s) {
+    if (s == null) {
+        return "NULL";
+    }
+    return s.replace(/[^a-zA-Z0-9]/g, '_');
 }

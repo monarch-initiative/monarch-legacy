@@ -1,0 +1,29 @@
+{
+    "notes" : "currently just stores interaction as a graph. In future we will need to store the interaction as an entity",
+    "graphs": [
+        {
+            "graph" : "gene-interactions",
+            "view" : "nif-0000-00432-1",
+            "filter" : {
+                "interactor_a_taxon_id" : "9606"
+            },
+            "columns" : [
+                {
+                    "name" : "interactor_a_gene_id",
+                    "prefix" : "http://purl.obolibrary.org/obo/NCBIGene_"
+                },
+                {
+                    "name" : "interactor_b_gene_id",
+                    "prefix" : "http://purl.obolibrary.org/obo/NCBIGene_"
+                }
+            ],
+            "mappings" : [
+
+                {"subject" : "interactor_a_gene_id",
+                 "predicate" : "RO:0002434",
+                 "object" : "interactor_a_gene_id"}
+                
+            ]
+        }
+   ]
+}

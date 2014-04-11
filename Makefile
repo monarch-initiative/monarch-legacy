@@ -29,7 +29,8 @@ nif-production-url-test:
 	$(RINGO_BIN) tests/urltester.js -s production -c vocabulary,ontoquest,federation
 
 triples:
-	$(RINGO_BIN) bin/generate-triples-from-nif.js -c conf/server_config_production.json -m conf/rdf-mapping/ncbi-gene-map.json && ./bin/target-ttl-to-owl.sh
+	$(RINGO_BIN) bin/generate-triples-from-nif.js -c conf/server_config_production.json conf/rdf-mapping/*-map.json && ./bin/target-ttl-to-owl.sh
+##	$(RINGO_BIN) bin/generate-triples-from-nif.js -c conf/server_config_production.json -m conf/rdf-mapping/ncbi-gene-map.json && ./bin/target-ttl-to-owl.sh
 
 ###
 ### Documentation.

@@ -23,7 +23,7 @@
                 {
                     "name" : "type_of_gene",
                     "type" : "owl:Class",
-                    "lookup" : {
+                    "@context" : {
                         "protein-coding" : "SO:0001217",
                         "ncRNA" : "SO:0001263",
                         "tRNA" : "SO:0001272",
@@ -37,11 +37,11 @@
                 },
                 {
                     "name" : "symbol",
-                    "type" : "Literal"
+                    "type" : "rdfs:Literal"
                },
                 {
                     "name" : "synonyms",
-                    "type" : "Literal",
+                    "type" : "rdfs:Literal",
                     "list_delimiter" : ","
                 }
             ],
