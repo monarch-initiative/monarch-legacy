@@ -1,0 +1,69 @@
+{
+    "@" : {
+
+    },
+    "graphs": [
+        {
+            "graph" : "human-genes",
+            "view" : "nif-0000-02801-1",
+            "filter" : {
+                "tax_id" : "9606"
+            },
+            "columns" : [
+                {
+                    "name" : "geneid",
+                    "prefix" : "http://purl.obolibrary.org/obo/NCBIGene_",
+                    "type" : "owl:Class"
+                },
+                {
+                    "name" : "tax_id",
+                    "prefix" : "http://purl.obolibrary.org/obo/NCBITaxon_",
+                    "type" : "owl:Class"
+                },
+                {
+                    "name" : "type_of_gene",
+                    "type" : "owl:Class",
+                    "lookup" : {
+                        "protein-coding" : "SO:0001217",
+                        "ncRNA" : "SO:0001263",
+                        "tRNA" : "SO:0001272",
+                        "rRNA" : "SO:0001637",
+                        "snRNA" : "SO:0001268",
+                        "snoRNA" : "SO:0001267",
+                        "pseudo" : "SO:0000336",
+                        "other" : "SO:0000704",
+                        "unknown" : "SO:0000704"
+                    }
+                },
+                {
+                    "name" : "symbol",
+                    "type" : "Literal"
+               },
+                {
+                    "name" : "synonyms",
+                    "type" : "Literal",
+                    "list_delimiter" : ","
+                }
+            ],
+            "mappings" : [
+
+                {"subject" : "geneid",
+                 "predicate" : "rdfs:label",
+                 "object" : "symbol"},
+
+                {"subject" : "geneid",
+                 "predicate" : "oboInOwl:hasRelatedSynonym",
+                 "object" : "synonyms"},
+
+                {"subject" : "geneid",
+                 "predicate" : "RO:0002162",
+                 "object" : "tax_id"},
+
+                {"subject" : "geneid",
+                 "predicate" : "rdfs:subClassOf",
+                 "object" : "type_of_gene"}
+                
+            ]
+        }
+   ]
+}
