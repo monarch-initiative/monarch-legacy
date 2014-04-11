@@ -9,6 +9,7 @@ var engine;
 var maxLimit = 1000;
 //var maxLimit = 10;
 var ldcontext;
+var targetDir;
 
 function main(args) {
     var script = args.shift();
@@ -18,6 +19,7 @@ function main(args) {
     parser.addOption("m","mappings","JSONFile", "E.g. conf/rdf-mapping/ncbi-gene-map.json");
     parser.addOption("C","context","JSONFile", "E.g. conf/context.json");
     parser.addOption("c","config","JSONFile", "E.g. conf/production.json");
+    parser.addOption("d","targetDir","Directory", "E.g. target");
     parser.addOption('h', 'help', null, 'Display help');
 
     options = parser.parse(args);
@@ -33,6 +35,8 @@ function main(args) {
         engine.setConfiguration( JSON.parse(fs.read(options.config)) );
     }
 
+    targetDir = options.targetDir != null ? options.targetDir : "target";
+
     var gset = JSON.parse(fs.read(options.mappings));
 
     if (options.context || options.target != null) {
@@ -46,7 +50,6 @@ function main(args) {
 
     var graphs = gset.graphs;
 
-    emitPrefixes();
     
     for (var k in graphs) {
         var graphconf = graphs[k];
@@ -115,6 +118,10 @@ function mapColumn(ix, row, cmap, gconf) {
 }
 
 function generateNamedGraph(gconf) {
+
+    var io = fs.open(targetDir + "/" + gconf.graph + ".ttl", {write: true});
+    emitPrefixes(io);
+
     var colNames = gconf.columns.map(function(c) { return c.name });
     var cmap = {};
     gconf.columns.forEach(function(c) { cmap[c.name] = c });
@@ -144,22 +151,23 @@ function generateNamedGraph(gconf) {
                 var pv = mapColumn(mapping.predicate, r, cmap);
                 var ov = mapColumn(mapping.object, r, cmap);
                 
-                emit(sv, pv, ov);
+                emit(io, sv, pv, ov);
                 
             }
         }
     }
+    io.close();
 }
 
 // does not uniquify
-function emit(sv, pv, ov) {
+function emit(io, sv, pv, ov) {
     if (sv == null || pv == null || ov == null) {
         return;
     }
-    print(sv + " " + pv + " " + ov + " .");
+    io.print(sv + " " + pv + " " + ov + " .");
 }
 
-function emitPrefixes() {
+function emitPrefixes(io) {
     for (var k in ldcontext) {
         var pfx = ldcontext[k];
         if (k.indexOf('@') == 0) {
@@ -169,8 +177,8 @@ function emitPrefixes() {
             if (pfx.indexOf('@') == 0) {
                 continue;
             }
-            print("@prefix "+k+": <"+pfx+"> .");
+            io.print("@prefix "+k+": <"+pfx+"> .");
         }
     }
-    print("");
+    io.print("");
 }
