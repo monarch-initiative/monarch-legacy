@@ -128,6 +128,9 @@ function mapColumnValue(ix, v, cmap, gconf) {
             // ARRGGH AD-HOCCERY
             vl = [];
         }
+        if (v == "") {
+            vl = [];
+        }
         if (vl.length == 0) {
             return null;
         }
@@ -159,6 +162,8 @@ function generateNamedGraph(gconf) {
 
     var offset = 0;
     var done = false;
+    var seenMap = {};
+    var nDupes = 0;
     while (!done) {
 
         var resultObj = engine.fetchDataFromResource(null, gconf.view, null, colNames, gconf.filter, maxLimit, null, {offset : offset});
@@ -177,10 +182,18 @@ function generateNamedGraph(gconf) {
         for (var k in results) {
             var r = results[k];
 
+            var key = colNames.map(function(cn) { return r[cn] }).join("-");
+            if (seenMap[key]) {
+                nDupes ++;
+                continue;
+            }
+            seenMap[key] = true;
+            
             if (colNames.indexOf('v_uuid') > -1 && r.v_uuid == null) {
                 // HACK - see https://support.crbs.ucsd.edu/browse/NIF-10231
                 r.v_uuid = colNames.map(function(cn) { return safeify(r[cn]) }).join("-");
             }
+            
             
             for (var j in gconf.mappings) {
                 var mapping = gconf.mappings[j];
@@ -193,6 +206,7 @@ function generateNamedGraph(gconf) {
                 
             }
         }
+        console.log("nDupes = "+nDupes);
     }
     io.close();
 }
@@ -203,7 +217,7 @@ function emit(io, sv, pv, ov) {
         return;
     }
     if (ov.forEach != null) {
-        console.log("Emitting multiple triples: "+ov.length);
+        //console.log("Emitting multiple triples: "+ov.length);
         ov.forEach(function(x) { emit(io, sv, pv, x) });
     }
     else {
