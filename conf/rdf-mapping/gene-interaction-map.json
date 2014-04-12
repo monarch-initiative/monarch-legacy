@@ -21,7 +21,7 @@
 
                 {"subject" : "interactor_a_gene_id",
                  "predicate" : "RO:0002434",
-                 "object" : "interactor_a_gene_id"}
+                 "object" : "interactor_b_gene_id"}
                 
             ]
         }
