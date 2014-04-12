@@ -1,0 +1,36 @@
+{
+    "@" : {
+
+    },
+    "graphs": [
+        {
+            "graph" : "disorders",
+            "view" : "nlx_151835-1",
+            "columns" : [
+                {
+                    "name" : "disorder_id",
+                    "type" : "owl:Class"
+                },
+                {
+                    "name" : "disorder_name",
+                    "type" : "rdfs:Literal"
+               },
+                {
+                    "name" : "synonyms",
+                    "type" : "rdfs:Literal",
+                    "list_delimiter" : ","
+                }
+            ],
+            "mappings" : [
+
+                {"subject" : "disorder_id",
+                 "predicate" : "rdfs:label",
+                 "object" : "disorder_name"},
+
+                {"subject" : "disorder_id",
+                 "predicate" : "oboInOwl:hasRelatedSynonym",
+                 "object" : "synonyms"}
+            ]
+        }
+   ]
+}
