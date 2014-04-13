@@ -178,6 +178,7 @@ function generateNamedGraph(gconf) {
         else {
         }
 
+        var iter = 0;
         var results = resultObj.results;
         for (var k in results) {
             var r = results[k];
@@ -186,6 +187,12 @@ function generateNamedGraph(gconf) {
             if (seenMap[key]) {
                 nDupes ++;
                 continue;
+            }
+
+            // crude way to keep cache small; cost of occasional dupes is low
+            if (iter > 10) {
+                seenMap = {};
+                iter = 0;
             }
             seenMap[key] = true;
             

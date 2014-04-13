@@ -28,6 +28,10 @@
                  "object" : "disorder_name"},
 
                 {"subject" : "disorder_id",
+                 "predicate" : "rdfs:subClassOf",
+                 "object" : "DOID:630"},
+
+                {"subject" : "disorder_id",
                  "predicate" : "oboInOwl:hasRelatedSynonym",
                  "object" : "synonyms"}
             ]
