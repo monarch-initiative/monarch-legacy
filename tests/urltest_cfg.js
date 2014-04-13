@@ -167,7 +167,7 @@
             component : "ontoquest",
             subcomponent : "concepts",
             priority : 1,
-            url : "http://nif-services-stage.neuinfo.org//ontoquest-lamhdi/concepts/term/HP_0003325",
+            url : "http://nif-services-stage.neuinfo.org/ontoquest-lamhdi/concepts/term/HP_0003325",
             desc : "Concept details for 'limb girdle muscle weakness''",
             notes : "Currently just checks for string matches in returned XML",
             maxTimeMilliseconds : 2000,

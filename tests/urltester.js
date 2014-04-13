@@ -244,7 +244,7 @@ var modifyUrlForComponent = function(url, component) {
         }
     }
     else if (component == 'ontoquest') {
-        return url.replace("http://nif-services-stage.neuinfo.org//ontoquest-lamhdi", "http://services.monarchinitiative.org/ontoquest");
+        return url.replace("http://nif-services-stage.neuinfo.org/ontoquest-lamhdi", "http://services.monarchinitiative.org/ontoquest");
     }
     return url;
 }
