@@ -189,6 +189,31 @@
                         // tell keggerator where to draw stuff and handle ui events
                         keggerator.setImageDiv($("#keggerator_div"));
                         keggerator.init();
+                        keggerator.annotate({
+                            pathways: ["hsa05012", "hsa05012"],
+                            phenotypes: [
+                                {
+                                    "name": "Bradykinesia",
+                                    "link": "http://",
+                                    "genes": ["hsa:6531", "hsa:7345", "hsa:125965"]
+                                },
+                                {
+                                    "name": "Lewy Bodies",
+                                    "link": "http://",
+                                    "genes": ["hsa:6531","hsa:7314"]
+                                },
+                                {
+                                    "name": "Dysphagia",
+                                    "link": "http://",
+                                    "genes": []
+                                },
+                                {
+                                    "name": "Depression",
+                                    "link": "http://",
+                                    "genes": []
+                                }
+                            ]
+                        })
                     </script>
                 </div>
                 {{/hasPathways}}
