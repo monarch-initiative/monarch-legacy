@@ -26,6 +26,10 @@
             ],
             "mappings" : [
 
+                {"subject" : "disorder_id",
+                 "predicate" : "RO:0002200",
+                 "object" : "phenotype_id"
+                },
                 {"subject" : "v_uuid",
                  "predicate" : "rdf:type",
                  "object" : "SIO:association"
