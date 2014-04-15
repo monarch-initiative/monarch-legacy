@@ -77,99 +77,34 @@ if (require.main == module.id) {
     main(system.args);
 }
 
-function mapRdfResource(iri) {
-    if (iri.match(/\s/) != null) {
-        iri = iri.replace(/\s/g, "");
-    }
-
-    if (iri.indexOf("http") == 0) {
-        return "<"+iri+">";
-    }
-    iri = engine.expandIdToURL(iri);
-    if (iri.indexOf("http") == 0) {
-        return "<"+iri+">";
-    }
-}
-
-function mapColumn(ix, row, cmap, gconf) {
-    if (cmap[ix] != null) {
-        var v = row[ix];
-        return mapColumnValue(ix, v, cmap, gconf);
-    }
-    else {
-        return mapRdfResource(ix);
-    }
-}
-
-function mapColumnValue(ix, v, cmap, gconf) {
-    var cobj = cmap[ix];
-    var type = cobj.type;
-
-    // JSON-LD context
-    var ctx = cobj['@context'];
-    if (ctx != null) {
-        if (ctx[v] != null) {
-            v = ctx[v];
-        }
-        else {
-            console.warn("NO MAPPING: "+v);
-        }
-    }
-
-    // column
-    if (cobj.prefix != null) {
-        return mapRdfResource(cobj.prefix + v);
-    }
-    
-    // Remobe this code when this is fixed: https://support.crbs.ucsd.edu/browse/NIF-10646
-    if (cobj.list_delimiter != null) {
-        var vl = v.split(cobj.list_delimiter);
-        if (v == '-') {
-            // ARRGGH AD-HOCCERY
-            vl = [];
-        }
-        if (v == "") {
-            vl = [];
-        }
-        if (vl.length == 0) {
-            return null;
-        }
-        if (vl.length > 1) {
-            // WARNING: assumes literals
-            //return vl.map(function(e) { return engine.quote(e) }).join(", ");
-            return vl.map(function(e) { return mapColumnValue(ix, e, cmap, gconf) });
-        }
-        // carry on, just use v, as it is a singleton list
-    }
-    if (type == 'rdfs:Literal') {
-        return engine.quote(v);
-    }
-    if (v == null) {
-        console.warn("No value for "+ix+" in "+JSON.stringify(row));
-    }
-    return mapRdfResource(v);
-}
-
+// generate a named graph from a set of mappings
 function generateNamedGraph(gconf) {
 
+    // write each NG to its own turtle file
     var io = fs.open(targetDir + "/" + gconf.graph + ".ttl", {write: true});
+
+    // HEADER
     emitPrefixes(io);
 
     var colNames = gconf.columns.map(function(c) { return c.name });
     var cmap = {};
+
+    // create index mapping column names to column metadata
     gconf.columns.forEach(function(c) { cmap[c.name] = c });
 
-
+    // Federation REST API does not allow extraction of
+    // all data in one query, so we iterate through rows
+    // in chunks, starting with offset = 0
     var offset = 0;
     var done = false;
     var seenMap = {};
     var nDupes = 0;
+
     while (!done) {
 
+        // Federation query
         var resultObj = engine.fetchDataFromResource(null, gconf.view, null, colNames, gconf.filter, maxLimit, null, {offset : offset});
         console.info(offset + " / "+resultObj.resultCount + " rows");
-
-
 
         offset += maxLimit;
         if (offset >= resultObj.resultCount) {
@@ -183,6 +118,10 @@ function generateNamedGraph(gconf) {
         for (var k in results) {
             var r = results[k];
 
+            // generate a primary key for entire row.
+            // we have no way to SELECT DISTINCT so to avoid
+            // writing duplicate triples we check if the set of requested
+            // column values is unique
             var key = colNames.map(function(cn) { return r[cn] }).join("-");
             if (seenMap[key]) {
                 nDupes ++;
@@ -201,10 +140,11 @@ function generateNamedGraph(gconf) {
                 r.v_uuid = colNames.map(function(cn) { return safeify(r[cn]) }).join("-");
             }
             
-            
+            // Each n-ary Row in the Solr view can be mapped to multiple 3-ary triples
             for (var j in gconf.mappings) {
                 var mapping = gconf.mappings[j];
-                //console.log(JSON.stringify(mapping));
+
+                // map each element of triple
                 var sv = mapColumn(mapping.subject, r, cmap);
                 var pv = mapColumn(mapping.predicate, r, cmap);
                 var ov = mapColumn(mapping.object, r, cmap);
@@ -217,6 +157,94 @@ function generateNamedGraph(gconf) {
     }
     io.close();
 }
+
+// Arguments:
+//  - ix : either a column name or a literal or IRI
+//  - row : key-value object obtained from Fed query
+//  - cmap : column description object
+//  - gconf : graph conf
+function mapColumn(ix, row, cmap, gconf) {
+    // is ix a column? if so return column value
+    if (cmap[ix] != null) {
+        var v = row[ix];
+        return mapColumnValue(ix, v, cmap, gconf);
+    }
+    else {
+        // ix is a fixed RDF resource
+        return mapRdfResource(ix);
+    }
+}
+
+// Expand CURIE or shortform ID to IRI.
+// E.g. GO:1234 --> http://purl.obolibrary.org/obo/GO_1234
+//
+function mapRdfResource(iri) {
+    if (iri.match(/\s/) != null) {
+        iri = iri.replace(/\s/g, "");
+    }
+
+    if (iri.indexOf("http") == 0) {
+        return "<"+iri+">";
+    }
+    iri = engine.expandIdToURL(iri);
+    if (iri.indexOf("http") == 0) {
+        return "<"+iri+">";
+    }
+}
+
+
+// Arguments:
+//  - ix : column mapping spec
+//  - v : column value obtained from row
+function mapColumnValue(ix, v, cmap, gconf) {
+    var cobj = cmap[ix];
+    var type = cobj.type;
+
+    // JSON-LD context;
+    // can be used to map string values to IRIs
+    var ctx = cobj['@context'];
+    if (ctx != null) {
+        if (ctx[v] != null) {
+            v = ctx[v];
+        }
+        else {
+            console.warn("NO MAPPING: "+v);
+        }
+    }
+
+    // column
+    if (cobj.prefix != null) {
+        return mapRdfResource(cobj.prefix + v);
+    }
+    
+    // Remove this code when this is fixed: https://support.crbs.ucsd.edu/browse/NIF-10646
+    if (cobj.list_delimiter != null) {
+        var vl = v.split(cobj.list_delimiter);
+        if (v == '-') {
+            // ARRGGH AD-HOCCERY. Sometimes empty lists are denoted '-'...
+            vl = [];
+        }
+        if (v == "") {
+            // sometimes an empty string
+            vl = [];
+        }
+        if (vl.length == 0) {
+            return null;
+        }
+        if (vl.length > 1) {
+            return vl.map(function(e) { return mapColumnValue(ix, e, cmap, gconf) });
+        }
+        // carry on, just use v, as it is a singleton list
+    }
+    if (type == 'rdfs:Literal') {
+        return engine.quote(v);
+    }
+    if (v == null) {
+        console.warn("No value for "+ix+" in "+JSON.stringify(row));
+    }
+    return mapRdfResource(v);
+}
+
 
 // does not uniquify
 function emit(io, sv, pv, ov) {
@@ -232,6 +260,7 @@ function emit(io, sv, pv, ov) {
     }
 }
 
+// TODO: we can reduce the size of the triple dump by making use of these
 function emitPrefixes(io) {
     for (var k in ldcontext) {
         var pfx = ldcontext[k];
@@ -248,6 +277,7 @@ function emitPrefixes(io) {
     io.print("");
 }
 
+// remove offensive characters for IRI construction
 function safeify(s) {
     if (s == null) {
         return "NULL";
