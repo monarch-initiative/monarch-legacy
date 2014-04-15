@@ -2,22 +2,13 @@
 /* Jumbotron */
 .jumbotron {
     margin-bottom: 0px;
-}
-#monarch-logo-horizontal {
-    float: left;
-    margin-right: 20px;
-}
-#about-button {
-    margin-top: 10px;
-}
-.clear {
-    clear: both;
+    padding-bottom: 10px;
+    min-height: 50px;
 }
 .tagline {
     font-size: 15px;
     font-style: italic;
-    line-height: 18px;
-    padding: 5px 0px;
+    line-height: 22px;
 }
 
 /* Graphic */
