@@ -5,6 +5,9 @@ html, body {
 p {
     font-family: Helvetica, Arial, sans-serif;
 }
+.clear {
+    clear: both;
+}
 /* Buttons */
 .btn-info {
     background-color: #53AED7;
