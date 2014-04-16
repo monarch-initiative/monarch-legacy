@@ -20,6 +20,7 @@ function main(args) {
     parser.addOption("C","context","JSONFile", "E.g. conf/context.json");
     parser.addOption("c","config","JSONFile", "E.g. conf/production.json");
     parser.addOption("d","targetDir","Directory", "E.g. target");
+    parser.addOption("k","apikey","ID", "NIF/SciCrunch API Key");
     parser.addOption('h', 'help', null, 'Display help');
 
     options = parser.parse(args);
@@ -102,8 +103,12 @@ function generateNamedGraph(gconf) {
 
     while (!done) {
 
+        var qopts = {offset : offset};
+        if (options.apikey != null) {
+            qopts[apikey] = options.apikey;
+        }
         // Federation query
-        var resultObj = engine.fetchDataFromResource(null, gconf.view, null, colNames, gconf.filter, maxLimit, null, {offset : offset});
+        var resultObj = engine.fetchDataFromResource(null, gconf.view, null, colNames, gconf.filter, maxLimit, null, qopts);
         console.info(offset + " / "+resultObj.resultCount + " rows");
 
         offset += maxLimit;
