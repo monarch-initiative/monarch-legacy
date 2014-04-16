@@ -9,6 +9,9 @@ p {
     clear: both;
 }
 /* Buttons */
+.btn {
+    padding: 5px 15px;
+}
 .btn-info {
     background-color: #53AED7;
     border-color: #53AED7;
