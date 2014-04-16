@@ -32,9 +32,9 @@
                     <h1 class="downloadline">Phenotype: {{label}}</h1>
                     <a href="{{{download.json}}}" class="btn btn-default downloadline monarch-phenotype-dark">JSON</a>
                     <p>
-                    {{definition}}
-                    <br/>
-                    {{comments}}
+                    {{#hasDef}}
+                    {{definition}}<br/>
+                    {{/hasDef}}
                     </p>
                 </div>
                 <div id="categories">
