@@ -9,6 +9,9 @@ p {
     clear: both;
 }
 /* Buttons */
+.btn {
+    padding: 5px 15px;
+}
 .btn-info {
     background-color: #53AED7;
     border-color: #53AED7;
@@ -102,6 +105,9 @@ p {
 /* Colors */
 .monarch-blue {
     background-color: #53AED7;
+}
+.monarch-blue-light {
+    background-color: #acd8ec;
 }
 .monarch-disease-light {
     background-color: #ECE8E3;
