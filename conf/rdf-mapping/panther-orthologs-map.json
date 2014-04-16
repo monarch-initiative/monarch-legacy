@@ -1,0 +1,57 @@
+{
+    "status" : "alpha",
+    "graphs": [
+        {
+            "graph" : "panther-orthologs",
+            "view" : "nlx_84521-1",
+            "filter" : {
+                "tax_id_a" : "9606"
+            },
+            "columns" : [
+                {
+                    "name" : "tax_id_a",
+                    "prefix" : "http://purl.obolibrary.org/obo/NCBITaxon_",
+                    "type" : "owl:Class"
+                },
+               {
+                    "name" : "tax_id_b",
+                    "prefix" : "http://purl.obolibrary.org/obo/NCBITaxon_",
+                    "type" : "owl:Class"
+                },
+                {
+                    "name" : "genea",
+                    "type" : "owl:Class"
+                },
+                {
+                    "name" : "geneb",
+                    "type" : "owl:Class"
+                },
+                {
+                    "name" : "orthology_class",
+                    "prefix" : "http://purl.obolibrary.org/obo/PORTHO_"
+                },
+                {
+                    "name" : "orthology_class_label",
+                    "type" : "rdfs:Literal"
+                }
+            ],
+            "mappings" : [
+                {"subject" : "genea",
+                 "predicate" : "orthology_class",
+                 "object" : "geneb"
+				},
+                {"subject" : "genea",
+                 "predicate" : "RO:0002162",
+                 "object" : "tax_id_a"
+                },
+                {"subject" : "geneb",
+                 "predicate" : "RO:0002162",
+                 "object" : "tax_id_b"
+                },
+                {"subject" : "orthology_class",
+                 "predicate" : "rdfs:label",
+                 "object" : "orthology_class_label"}
+            ]
+        }
+   ]
+}
