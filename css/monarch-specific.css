@@ -102,8 +102,10 @@ p {
     }
 }
 /* Rest of Content */
+#complete-info {
+    padding: 0px 30px;
+}
 .category {
-    padding-left: 30px;
     display: none;
 }
 .first {
