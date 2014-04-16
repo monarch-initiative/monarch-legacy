@@ -167,3 +167,10 @@ span.stars > *{
     padding: 5px 7px;
     display: none;
 }
+/* Analyze */
+#analyze-profile > ul#analyze_auto_list > li.list-group-item {
+    background-color: #acd8ec;
+}
+#analyze-profile > ul#analyze_auto_list > li#analyze-empty-item {
+    background-color: white;
+}
