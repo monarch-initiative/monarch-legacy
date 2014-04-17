@@ -6,6 +6,12 @@
             "filter" : {
                 "tax_id" : "9606"
             },
+            "objects" : [
+                {
+                    "id" : "RO:0002162",
+                    "rdf:type" : "owl:ObjectProperty"
+                }
+            ],
             "columns" : [
                 {
                     "name" : "geneid",
@@ -54,7 +60,8 @@
 
                 {"subject" : "geneid",
                  "predicate" : "RO:0002162",
-                 "object" : "tax_id"},
+                 "object" : "tax_id",
+                 "isExistential" : true},
 
                 {"subject" : "geneid",
                  "predicate" : "rdfs:subClassOf",

@@ -61,7 +61,6 @@ function main(args) {
     for (var j in gsets) {
         var gset = gsets[j];
         var graphs = gset.graphs;
-
     
         for (var k in graphs) {
             var graphconf = graphs[k];
@@ -86,6 +85,20 @@ function generateNamedGraph(gconf) {
 
     // HEADER
     emitPrefixes(io);
+
+    // OBJECTS
+    if (gconf.objects != null) {
+        gconf.objects.forEach(function(obj) {
+            var id = mapRdfResource(obj.id);
+            for (var k in obj) {
+                if (k == 'id') {
+                }
+                else {
+                    emit(io, id, mapRdfResource(k), mapRdfResource(obj[k]));
+                }
+            }
+        });
+    }
 
     var colNames = gconf.columns.map(function(c) { return c.name });
     var cmap = {};
@@ -154,7 +167,7 @@ function generateNamedGraph(gconf) {
                 var pv = mapColumn(mapping.predicate, r, cmap);
                 var ov = mapColumn(mapping.object, r, cmap);
                 
-                emit(io, sv, pv, ov);
+                emit(io, sv, pv, ov, mapping);
                 
             }
         }
@@ -252,16 +265,21 @@ function mapColumnValue(ix, v, cmap, gconf) {
 
 
 // does not uniquify
-function emit(io, sv, pv, ov) {
+function emit(io, sv, pv, ov, mapping) {
     if (sv == null || pv == null || ov == null) {
         return;
     }
     if (ov.forEach != null) {
         //console.log("Emitting multiple triples: "+ov.length);
-        ov.forEach(function(x) { emit(io, sv, pv, x) });
+        ov.forEach(function(x) { emit(io, sv, pv, x, mapping) });
     }
     else {
-        io.print(sv + " " + pv + " " + ov + " .");
+        if (mapping != null && mapping.isExistential) {
+            io.print(sv + " rdfs:subClassOf [a owl:Restriction ; owl:onProperty " + pv + " ; owl:someValuesFrom " + ov + " ] .");
+        }
+        else {
+            io.print(sv + " " + pv + " " + ov + " .");
+        }
     }
 }
 
