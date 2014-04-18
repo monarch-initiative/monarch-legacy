@@ -174,20 +174,6 @@ p {
 #search {
     width: 180px;
 }
-.search-box-position {
-    position: relative;
-}
-.search-text-example {
-    position: absolute;
-    top: 35px;
-    background-color: white;
-    padding: 5px 7px;
-    font-size: 12px;
-    border: 1px solid #AAA;
-    border-radius: 3px;
-    line-height: 12px;
-    display: none;
-}
 .autocomplete-tag-item {
     white-space: nowrap;
     font-size: 75%;

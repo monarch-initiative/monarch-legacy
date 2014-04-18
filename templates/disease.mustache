@@ -35,8 +35,12 @@
                     <h1 class="downloadline">Disease: {{label}}</h1>
                     <a href="{{{base_url}}}.json" class="btn btn-default downloadline monarch-disease-dark">JSON</a>
                     <p>
-                        {{definition}}</br>
-                        {{comments}}</br>
+                        {{#hasDef}}
+                        {{definition}}<br/>
+                        {{/hasDef}}
+                        {{#hasComment}}
+                        {{comment}}<br/>
+                        {{/hasComment}}
 						Source: {{{primary_xref}}}
                     </p>
                 </div>

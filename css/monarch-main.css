@@ -13,6 +13,7 @@
 .jumbotron p {
     font-size: 16px;
     line-height: 26px;
+    margin: 0px;
 }
 #monarch-logo {
     margin-right: 20px;
