@@ -2,6 +2,7 @@
 
 /* Main Spotlight */
 .jumbotron {
+    position: relative;
     margin-top: 0px;
     border-radius: 2px;
     padding: 10px 30px 20px;
@@ -35,4 +36,18 @@
     position:absolute;
     cursor:default;
     z-index:4000 !important
+}
+
+.feedback {
+    font-size: .6em;
+    position: absolute;
+    background-color: #EA763B;
+    margin: 0px 10px 0px 10px;
+
+    /*   padding: 0px 20px 0px 20px;
+    border-radius: 20px;
+    -webkit-border-radius: 20px;
+    -moz-border-radius: 20px;*/
+    right: 0;
+    bottom: 0;
 }
