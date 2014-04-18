@@ -17,6 +17,8 @@ function CyPathDemoInit(){
     var auto_1_input_elt = '#' + auto_1_input_id;
     var auto_2_input_id = 'auto_2_input';
     var auto_2_input_elt = '#' + auto_2_input_id;
+    var sel_1_input_id = 'sel_1_input';
+    var sel_1_input_elt = '#' + sel_1_input_id;
 
     // Aliases.
     var each = bbop.core.each;
@@ -345,8 +347,13 @@ function CyPathDemoInit(){
 	function(event){
 	    event.preventDefault();
 	    
+	    var v1 = jQuery(auto_1_input_elt).val();
+	    var v2 = jQuery(auto_2_input_elt).val();
+	    var s1 = jQuery(sel_1_input_elt).val();
+
 	    // TODO:
-	    alert('TODO: only using demo input');
+	    alert('TODO: only using demo input; ignoring: ' +
+		 [v1, v2, s1].join(', '));
 
 	    // TODO: need real managed data source; see above
 	    var dg = new bbop.model.graph();
