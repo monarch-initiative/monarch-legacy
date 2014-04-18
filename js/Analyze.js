@@ -1,8 +1,8 @@
 
 function AnalyzeInit(){
     
-    //var DEBUG = false;
-    var DEBUG = true;
+    var DEBUG = false;
+    //var DEBUG = true;
 
     ///
     /// HTML connctions.
@@ -245,7 +245,7 @@ jQuery(document).ready(
 	AnalyzeInit();
 
 	if ($("#analyze_auto_target").val() !== null) {
-	    var text = $("#analyze_auto_target").val()
+	    var text = $("#analyze_auto_target").val();
 	    var species = $("#analyze_auto_species").val();
 	    var phenotypes  = text.split(/[\s,]+/);
 	    $("#phen_vis").modeltype({phenotypeData: phenotypes,
