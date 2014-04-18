@@ -10,6 +10,8 @@ var maxLimit = 1000;
 //var maxLimit = 10;
 var ldcontext;
 var targetDir;
+var numTriplesDumped;
+var numAxiomsDumped;
 
 function main(args) {
     var script = args.shift();
@@ -80,8 +82,36 @@ if (require.main == module.id) {
 // generate a named graph from a set of mappings
 function generateNamedGraph(gconf) {
 
+    var targetFileBaseName = targetDir + "/" + gconf.graph;
+
+    var mdFilePath = targetFileBaseName + "-meta.json";
+
+    var lastDumpMetadata;
+    if (fs.exists(mdFilePath)) {
+        lastDumpMetadata = JSON.parse(fs.read(mdFilePath));
+        if (lastDumpMetadata.mapVersion != null) {
+            console.info("Comparing last dump version: "+lastDumpMetadata.mapVersion+ " with current: " + gconf.mapVersion);
+            if (lastDumpMetadata.mapVersion == gconf.mapVersion) {
+                console.info("Identical - will not redump");
+                return;
+            }
+            else {
+                if (lastDumpMetadata.mapVersion > gconf.mapVersion) {
+                    console.warn("Kind of weird; lastDumpMetadata.mapVersion > gconf.mapVersion");
+                }
+            }
+        }
+    }
+    else {
+        console.log("Cannot find "+mdFilePath+ " -- assuming this is initial dump");
+    }
+
+    // globals ahoy
+    numTriplesDumped = 0;
+    numAxiomsDumped = 0;
+
     // write each NG to its own turtle file
-    var io = fs.open(targetDir + "/" + gconf.graph + ".ttl", {write: true});
+    var io = fs.open(targetFileBaseName + ".ttl", {write: true});
 
     // HEADER
     emitPrefixes(io);
@@ -113,6 +143,7 @@ function generateNamedGraph(gconf) {
     var done = false;
     var seenMap = {};
     var nDupes = 0;
+    var numSourceRows;
 
     while (!done) {
 
@@ -122,10 +153,12 @@ function generateNamedGraph(gconf) {
         }
         // Federation query
         var resultObj = engine.fetchDataFromResource(null, gconf.view, null, colNames, gconf.filter, maxLimit, null, qopts);
-        console.info(offset + " / "+resultObj.resultCount + " rows");
+        numSourceRows = resultObj.resultCount;
+        console.info(offset + " / "+ numSourceRows + " rows");
+
 
         offset += maxLimit;
-        if (offset >= resultObj.resultCount) {
+        if (offset >= numSourceRows) {
             done = true;
         }
         else {
@@ -151,6 +184,7 @@ function generateNamedGraph(gconf) {
                 seenMap = {};
                 iter = 0;
             }
+            iter++;
             seenMap[key] = true;
             
             if (colNames.indexOf('v_uuid') > -1 && r.v_uuid == null) {
@@ -174,6 +208,17 @@ function generateNamedGraph(gconf) {
         console.log("nDupes = "+nDupes);
     }
     io.close();
+
+    var mdObj =
+        {
+            sourceView : gconf.view,
+            mapVersion : gconf.mapVersion,
+            numSourceRows : numSourceRows,
+            numTriplesDumped : numTriplesDumped,
+            numAxiomsDumped : numAxiomsDumped,
+        };
+
+    fs.write(mdFilePath, JSON.stringify(mdObj));
 }
 
 // Arguments:
@@ -276,9 +321,13 @@ function emit(io, sv, pv, ov, mapping) {
     else {
         if (mapping != null && mapping.isExistential) {
             io.print(sv + " rdfs:subClassOf [a owl:Restriction ; owl:onProperty " + pv + " ; owl:someValuesFrom " + ov + " ] .");
+            numTriplesDumped += 4;
+            numAxiomsDumped ++;
         }
         else {
             io.print(sv + " " + pv + " " + ov + " .");
+            numTriplesDumped ++;
+            numAxiomsDumped ++;
         }
     }
 }
