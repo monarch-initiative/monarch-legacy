@@ -4,7 +4,44 @@
  * Jeremy Espino MD MS
  * Copyright 2013 University of Pittsburgh
  *
+ *
+
+
+ USAGE:  the keggSource option is used to specify the base of the url to retrieve KGML data.  If omitted it defaults to
+ a kegg proxy that starts with /kegg/get which is what is in monarch-ui
+
+
+          var annotations = {
+            pathways: ["hsa05010"],
+            phenotypes: [
+                {
+                    "name": "diseasea",
+                    "link": "http://",
+                    "genes": ["hsa:348", "hsa:10975", "hsa:842"]
+                },
+                {
+                    "name": "diseaseb",
+                    "link": "http://",
+                    "genes": ["hsa:348", "hsa:120892", "hsa:10975"]
+                },
+                {
+                    "name": "diseasec",
+                    "link": "http://",
+                    "genes": ["hsa:348", "hsa:120892", "hsa:10975"]
+                }
+            ]
+        }
+
+ jQuery(document).ready(
+ function () {
+
+                    $("#keggerator").keggerator({keggSource: "./demodata", annotations: annotations});
+
+                });
+ *
  */
+
+
 
 (function ($) {
 
@@ -22,12 +59,17 @@
             imageDiv: {},
 
             options: {
-                colors: ["#44a293", "#dd3835", "#461313", "#a4d6d4", "#ea763b" ]
+                colors: ["#44a293", "#dd3835", "#461313", "#a4d6d4", "#ea763b" ],
+                keggSource: "/kegg/get",
+                annotations: {}
 
             },
 
             _create: function () {
+                this.imageDiv = this.element;
+
                 this._init();
+                this._annotate();
 
             },
 
@@ -42,69 +84,77 @@
                 this.acetate = d3.select("#acetate");
             },
 
-            annotate: function (annotations) {
-                var self = this;
-                var pathway_ids = annotations.pathways;
-                var phenotypeList = annotations.phenotypes;
+            _annotate: function () {
 
-                self.pathwayId = pathway_ids[0]; // only render a single pathway at this time
-                self.diseases = phenotypeList;
+
 
                 // fill in select element options
-                $.get("/kegg/get/" + pathwayId + "/kgml", function (xml) {
-                    var kgmlJson = $.xml2json(xml);
 
-                    // update the data var with the rectangle info
-                    $.each(kgmlJson.entry, function () {
-                        // only use rectangles
-                        if (this.graphics.type == "rectangle") {
-                            // populate data array
-                            self.data.push({"label": this.graphics.name, "x": this.graphics.x, "y": this.graphics.y, "width": this.graphics.width, "height": this.graphics.height, "graph_id": this.name, "color": ""});
-                        }
-                    });
+                (function (self) {
+                    $.get(self.options.keggSource + "/" + self.options.annotations.pathways[0]+ "/kgml", function (xml) {
 
+                        self.diseases = self.options.annotations.phenotypes;
+                        self.pathwayId = self.options.annotations.pathways[0];
 
-                    // update the data to be shown shown with those genes that should be shown
-                    self.dataShown = [];
-                    self.dataShownHash = {};
-                    var geneShift = 2; // the pixel offset for overlapping highlighted boxes
-                    for (var j = 0; j < self.diseases.length; j++) {
-                        self.diseases[j].color = self.colors[j];
-                        for (var i = 0; i < self.data.length; i++) {
-                            if (self.data[i] && self.data[i].graph_id && self.data[i].x && self.data[i].y && (self.diseases[j].genes.indexOf(self.data[i].graph_id) > -1)) {
+                        var kgmlJson = $.xml2json(xml);
 
-                                // create a new hash entry for the count
-                                var graphHashID = self.data[i].graph_id + self.data[i].x + self.data[i].y;  //uniquely identifies a pathway box
-                                if (self.dataShownHash[graphHashID] == null) {
-                                    self.dataShownHash[graphHashID] = {};
-                                    self.dataShownHash[graphHashID].count = -1;
+                        // update the data var with the rectangle info
+                        (function (self) {
+                            $.each(kgmlJson.entry, function () {
+                                // only use rectangles
+                                if (this.graphics.type == "rectangle") {
+                                    // populate data array
+                                    self.data.push({"label": this.graphics.name, "x": this.graphics.x, "y": this.graphics.y, "width": this.graphics.width, "height": this.graphics.height, "graph_id": this.name, "color": ""});
                                 }
-                                self.dataShownHash[graphHashID].count = self.dataShownHash[graphHashID].count + 1;
+                            });
+                        })(self)
 
-                                var myData = jQuery.extend(true, {}, self.data[i]) //deep copy since we are in inner loop and will use data[i] again
-                                myData.color = self.diseases[j].color;
-                                myData.disease = self.diseases[j];
-                                // shift the annotation of seen before
-                                myData.x = parseInt(myData.x) + (self.dataShownHash[graphHashID].count * geneShift);
-                                myData.y = parseInt(myData.y) + (self.dataShownHash[graphHashID].count * geneShift);
 
-                                dataShown.push(myData);
+                        // update the data to be shown shown with those genes that should be shown
+                        self.dataShown = [];
+                        self.dataShownHash = {};
+                        var geneShift = 2; // the pixel offset for overlapping highlighted boxes
+                        for (var j = 0; j < self.options.annotations.phenotypes.length; j++) {
+                            self.diseases[j].color = self.options.colors[j];
+                            for (var i = 0; i < self.data.length; i++) {
+                                if (self.data[i] && self.data[i].graph_id && self.data[i].x && self.data[i].y && (self.diseases[j].genes.indexOf(self.data[i].graph_id) > -1)) {
 
+                                    // create a new hash entry for the count
+                                    var graphHashID = self.data[i].graph_id + self.data[i].x + self.data[i].y;  //uniquely identifies a pathway box
+                                    if (self.dataShownHash[graphHashID] == null) {
+                                        self.dataShownHash[graphHashID] = {};
+                                        self.dataShownHash[graphHashID].count = -1;
+                                    }
+                                    self.dataShownHash[graphHashID].count = self.dataShownHash[graphHashID].count + 1;
+
+                                    var myData = jQuery.extend(true, {}, self.data[i]) //deep copy since we are in inner loop and will use data[i] again
+                                    myData.color = self.diseases[j].color;
+                                    myData.disease = self.diseases[j];
+                                    // shift the annotation of seen before
+                                    myData.x = parseInt(myData.x) + (self.dataShownHash[graphHashID].count * geneShift);
+                                    myData.y = parseInt(myData.y) + (self.dataShownHash[graphHashID].count * geneShift);
+
+                                    self.dataShown.push(myData);
+
+                                }
                             }
                         }
-                    }
 
-                    // formulate image url
-                    var imgSrc = "http://rest.kegg.jp/get/" + pathwayId + "/image";
-                    self._drawPathway(imgSrc);
 
-                });
+                        // formulate image url
+                        var imgSrc = "http://rest.kegg.jp/get/" + self.pathwayId + "/image";
+                        self._drawPathway(imgSrc);
+
+                    });
+                })(this);
+
             },
 
 
             // draw the pathway image
             _drawPathway: function (imgSrc) {
                 var self = this;
+
                 // preload the image to get its width and height which
                 // we need to set the canvas size
                 var myImage = new Image();
@@ -191,7 +241,7 @@
                     });
 
 
-                acetate.selectAll(".diseaseTxt").data(self.diseases).enter().append("text")
+                self.acetate.selectAll(".diseaseTxt").data(self.diseases).enter().append("text")
                     .classed("diseaseTxt", true)
                     .attr("x", function (d, i) {
                         return 10 + (((dxWidth) + 5) * i)
@@ -209,7 +259,7 @@
 
 
                 // draw rects
-                acetate.selectAll(".gene").data(self.dataShown).enter().append("rect")
+                self.acetate.selectAll(".gene").data(self.dataShown).enter().append("rect")
                     .attr("disease", function (d) {
                         return d.disease.name.replace(/\s+/g, '_')
                     })
