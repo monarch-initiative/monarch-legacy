@@ -4,6 +4,7 @@
         {
             "graph" : "gene-interactions",
             "view" : "nif-0000-00432-1",
+            "mapVersion" : "2014-04-18",
             "filter" : {
                 "interactor_a_taxon_id" : "9606"
             },
