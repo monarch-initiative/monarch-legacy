@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>cy-path-demo</title>
+    {{#scripts}}
+    <script type="text/javascript" src="{{url}}"></script>
+    {{/scripts}}
+    {{#stylesheets}}
+    <link rel="stylesheet" type="text/css" href="{{url}}"/>
+    {{/stylesheets}}
+    <link rel="stylesheet" type="text/css" href="/css/tour.css"/>
+    <link rel="icon" href="/image/favicon.ico" type="image/x-icon">
+    <meta charset="utf-8"/> 
+  </head>
+  <body>
+    <div class="monarch-container">
+      {{{includes.navbar}}}
+      <div class="content">
+        <div class="wrapperforfooter">
+          <div class="title">cy-path-demo</div>
+
+	  <!-- Input. -->
+	  <div style="margin-top: 1em;">
+	    <form id="demo_input" role="form" class="form-inline">
+	      <div class="form-group">
+		<input id="auto_1_input" placeholder="UBERON_0000004" />
+		<input id="auto_2_input" placeholder="UBERON_0001062" />
+		<button id="demo_button"
+			class="btn btn-default"
+			type="submit">Go!</button>
+              </div>
+	    </form>
+          </div>
+
+	  <!-- Output. -->
+	  <div id="cydemo" style="margin-top: 1em; height:600px; border-style:solid; border-color: black; border-width:1px;"></div>
+	  <div class="clearfix"></div>
+
+        </div> <!-- closes wrapperforfooter -->
+        {{{includes.footer}}}
+      </div>
+    </div>
+  </body>
+</html>
