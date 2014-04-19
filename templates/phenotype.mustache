@@ -11,6 +11,7 @@
     {{#stylesheets}}
     <link rel="stylesheet" type="text/css" href="{{url}}"/>
     {{/stylesheets}}
+    <link rel="stylesheet" type="text/css" href="/css/monarch-main.css"/>
     <link rel="stylesheet" type="text/css" href="/css/monarch-specific.css"/>
     <link rel="icon" href="/image/favicon.ico" type="image/x-icon">
     <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
@@ -58,6 +59,9 @@
                         {{/hasGenotypes}}
                     </div>
                 </div>
+		<A class="feedback downloadline btn btn-large btn-default
+                btn-monarch-main" HREF="mailto:info@monarchinitiative.org">Your feedback welcome!</a>
+
             </div>
             <div id="complete-info">
                 <div id="overview" class="first category">
@@ -94,6 +98,7 @@
                 </div>
                 {{/hasGenotypes}}
             </div>
+	    
             </div> <!-- closes wrapperforfooter -->
             {{{includes.footer}}}
         </div>
