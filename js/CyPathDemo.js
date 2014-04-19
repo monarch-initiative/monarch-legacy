@@ -244,6 +244,8 @@ function CyPathDemoInit(){
 	var rsrc = base + '/' + arg1 + '/' + arg2 + '.jsonp?length=' + arg3;
 	manager.resource(rsrc);
 	manager.method('get');
+	manager.use_jsonp(true);
+	manager.jsonp_callback('callback');
 	manager.action();
     }
 

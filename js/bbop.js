@@ -8291,6 +8291,7 @@ bbop.rest.manager.jquery = function(response_handler){
     this._is_a = 'bbop.rest.manager.jquery';
 
     this._use_jsonp = false;
+    this._jsonp_callback = 'json.wrf';
     this._headers = null;
 
     // Before anything else, if we cannot find a viable jQuery library
@@ -8336,6 +8337,26 @@ bbop.rest.manager.jquery.prototype.use_jsonp = function(use_p){
 	}
     }
     return anchor._use_jsonp;
+};
+
+/*
+ * Function: jsonp_callback
+ *
+ * Get/set the jQuery jsonp callback string to something other than
+ * "json.wrf".
+ * 
+ * Parameters: 
+ *  cstring - *[optional]* setter string
+ *
+ * Returns:
+ *  string
+ */
+bbop.rest.manager.jquery.prototype.jsonp_callback = function(cstring){
+    var anchor = this;
+    if( bbop.core.is_defined(cstring) ){
+	anchor._jsonp_callback = cstring;
+    }
+    return anchor._jsonp_callback;
 };
 
 /*
@@ -8395,7 +8416,7 @@ bbop.rest.manager.jquery.prototype.update = function(callback_type){
     // If we're going to use JSONP instead of the defaults, set that now.
     if( anchor.use_jsonp() ){
 	jq_vars['dataType'] = 'jsonp';
-	jq_vars['jsonp'] = 'json.wrf';
+	jq_vars['jsonp'] = anchor._jsonp_callback;
     }
     if( anchor.headers() ){
     	jq_vars['headers'] = anchor.headers();
