@@ -223,9 +223,29 @@ function CyPathDemoInit(){
     /// Demo runner.
     ///
 
-    // TODO: need good data source
-    // This demo lifted from: http://beta.neuinfo.org:9000/graphdemo/graph/path/short/UBERON_0000004/UBERON_0001062.json?length=5
-    var dgraph = {"nodes":[{"id":"http://purl.obolibrary.org/obo/UBERON_0000004","lbl":"olfactory apparatus"},{"id":"http://purl.obolibrary.org/obo/UBERON_0004121","lbl":"ectoderm-derived structure"},{"id":"http://purl.obolibrary.org/obo/UBERON_0000061","lbl":"anatomical structure"},{"id":"http://purl.obolibrary.org/obo/UBERON_0000465","lbl":"material anatomical entity"},{"id":"http://purl.obolibrary.org/obo/UBERON_0001062","lbl":"anatomical entity"}],"edges":[{"sub":"http://purl.obolibrary.org/obo/UBERON_0000004","obj":"http://purl.obolibrary.org/obo/UBERON_0004121","pred":"SUBCLASS_OF"},{"sub":"http://purl.obolibrary.org/obo/UBERON_0004121","obj":"http://purl.obolibrary.org/obo/UBERON_0000061","pred":"SUBCLASS_OF"},{"sub":"http://purl.obolibrary.org/obo/UBERON_0000061","obj":"http://purl.obolibrary.org/obo/UBERON_0000465","pred":"SUBCLASS_OF"},{"sub":"http://purl.obolibrary.org/obo/UBERON_0000465","obj":"http://purl.obolibrary.org/obo/UBERON_0001062","pred":"SUBCLASS_OF"}]};
+    // For now, use a generic manager with a generic response.
+    var manager = new bbop.rest.manager.jquery(bbop.rest.response.json);
+    // Generic responder.
+    function _success_callback(resp, man){
+	// The response is a generic bbop.rest.response.json.
+	// Peel out the graph and render it.
+	if( resp.okay() ){
+	    var gj = JSON.parse(resp.raw());
+	    var g = new bbop.model.graph();
+	    g.load_json(gj);
+	    draw_graph(g);
+	}else{
+	    ll('the response was not okay');	    
+	}
+    }
+    manager.register('success', 'draw', _success_callback);
+    function data_call(arg1, arg2, arg3){
+	var base = 'http://beta.neuinfo.org:9000/graphdemo/graph/path/short';
+	var rsrc = base + '/' + arg1 + '/' + arg2 + '.jsonp?length=' + arg3;
+	manager.resource(rsrc);
+	manager.method('get');
+	manager.action();
+    }
 
     ///
     /// Activate autocomplete and actions on inputs for demo.
@@ -349,18 +369,27 @@ function CyPathDemoInit(){
 	function(event){
 	    event.preventDefault();
 	    
-	    var v1 = jQuery(auto_1_input_elt).val();
-	    var v2 = jQuery(auto_2_input_elt).val();
-	    var s1 = jQuery(sel_1_input_elt).val();
+	    var v1 = jQuery(auto_1_input_elt).val() || '';
+	    var v2 = jQuery(auto_2_input_elt).val() || '';
+	    var s1 = jQuery(sel_1_input_elt).val() || '';
 
 	    // TODO:
-	    alert('TODO: only using demo input; ignoring: ' +
-		 [v1, v2, s1].join(', '));
+	    if( v1 != '' && v2 != '' && s1 != '' ){
+		// alert('TODO: only using demo input; ignoring: ' +
+		// 	 [v1, v2, s1].join(', '));
+		data_call(v1, v2, s1);
+	    }else{
+		alert('insufficient args: ' + [v1, v2, s1].join(', ') +
+		      '; fall back on demo');
+		// TODO: need good data source
+		// This demo lifted from: http://beta.neuinfo.org:9000/graphdemo/graph/path/short/UBERON_0000004/UBERON_0001062.json?length=5
+		var dgraph = {"nodes":[{"id":"http://purl.obolibrary.org/obo/UBERON_0000004","lbl":"olfactory apparatus"},{"id":"http://purl.obolibrary.org/obo/UBERON_0004121","lbl":"ectoderm-derived structure"},{"id":"http://purl.obolibrary.org/obo/UBERON_0000061","lbl":"anatomical structure"},{"id":"http://purl.obolibrary.org/obo/UBERON_0000465","lbl":"material anatomical entity"},{"id":"http://purl.obolibrary.org/obo/UBERON_0001062","lbl":"anatomical entity"}],"edges":[{"sub":"http://purl.obolibrary.org/obo/UBERON_0000004","obj":"http://purl.obolibrary.org/obo/UBERON_0004121","pred":"SUBCLASS_OF"},{"sub":"http://purl.obolibrary.org/obo/UBERON_0004121","obj":"http://purl.obolibrary.org/obo/UBERON_0000061","pred":"SUBCLASS_OF"},{"sub":"http://purl.obolibrary.org/obo/UBERON_0000061","obj":"http://purl.obolibrary.org/obo/UBERON_0000465","pred":"SUBCLASS_OF"},{"sub":"http://purl.obolibrary.org/obo/UBERON_0000465","obj":"http://purl.obolibrary.org/obo/UBERON_0001062","pred":"SUBCLASS_OF"}]};
+		// TODO: need real managed data source; see above
+		var dg = new bbop.model.graph();
+		dg.load_json(dgraph);
+		draw_graph(dg);
+	    }
 
-	    // TODO: need real managed data source; see above
-	    var dg = new bbop.model.graph();
-	    dg.load_json(dgraph);
-	    draw_graph(dg);
 	});
 
     ll('Done ready!');
