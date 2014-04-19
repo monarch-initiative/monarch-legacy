@@ -324,6 +324,7 @@ function CyPathDemoInit(){
 
     // Activate first autocomplete.
     ac_args['select'] = function(event, ui) {
+	event.preventDefault();
 	if (ui.item !== null) { 
 	    ll('got: ' + ui.item.name);
 	    jQuery(auto_1_input_elt).val(ui.item.name);
@@ -334,6 +335,7 @@ function CyPathDemoInit(){
 
     // Activate second autocomplete.
     ac_args['select'] = function(event, ui) {
+	event.preventDefault();
 	if (ui.item !== null) {
 	    ll('got: ' + ui.item.name);
 	    jQuery(auto_2_input_elt).val(ui.item.name);
