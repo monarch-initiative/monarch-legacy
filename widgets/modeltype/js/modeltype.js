@@ -790,11 +790,13 @@ as a separate call in the init function.
 		  self._clearModelData(d, d3.mouse(this));
 	  })
 
+	  .style('opacity', '1.0')
   	  .attr("fill", function(d, i) {
   	      return self.options.colorScale(d.value);
   	  });
       model_rects.transition()
 	  .delay(20)
+	  .style('opacity', '1.0')
   	  .attr("y", function(d) {
   	      //return self.options.yScale(d.id);
   		  return self._getYPosition(d.rowid);
@@ -802,7 +804,7 @@ as a separate call in the init function.
   	  .attr("x", function(d) { return self.options.xScale(d.model_id);})
 
       model_rects.exit().transition()
-          .duration(20)
+          //.duration(20)
           //.attr("x", 600)
           .style('opacity', '0.0')
   	  .remove();
@@ -931,7 +933,7 @@ as a separate call in the init function.
 	//movecount is an integer and can be either positive or negative
 	_updateModel: function(modelIdx, phenotypeIdx) {
 		var self = this;
-		
+				
 		//check to see if the phenotypeIdx is greater than the number of items in the list
 		if (phenotypeIdx > this.options.phenotypeData.length) {
 			this.options.currPhenotypeIdx = this.options.phenotypeData.length;
@@ -941,7 +943,7 @@ as a separate call in the init function.
 		} else {
 			this.options.currPhenotypeIdx = phenotypeIdx;
 		}
-		var startPhenotypeIdx = this.options.currPhenotypeIdx - (this.options.phenotypeDisplayCount -1);
+		var startPhenotypeIdx = this.options.currPhenotypeIdx - this.options.phenotypeDisplayCount;
 		
 		this.options.filteredPhenotypeData = [];
 		this.options.yAxis = [];
@@ -957,12 +959,11 @@ as a separate call in the init function.
 		} else {
 			this.options.currModelIdx = modelIdx;
 		}
-		var startModelIdx = this.options.currModelIdx - (this.options.modelDisplayCount -1);
+		var startModelIdx = this.options.currModelIdx - this.options.modelDisplayCount;
 
 		this.options.filteredModelList = [];
 		this.options.filteredModelData = [];
-		
-		
+				
 		//extract the new array of filtered Phentoypes
 		//also update the axis
 		//also update the modeldata
@@ -1292,6 +1293,8 @@ as a separate call in the init function.
 /*		.on("click", function(d) {
 		    self._rectClick(this);
 		})*/
+		.style('opacity', '1.0')
+
 		.attr("width", self.options.textWidth)
 		.attr("height", 50)
 		.style("font-size", "12px")
@@ -1303,6 +1306,8 @@ as a separate call in the init function.
 		    return self._getShortLabel(txt);
 		})
 	    rect_text.transition()
+   		.style('opacity', '1.0')
+
 		.delay(20)
 		.attr("y", function(d) {
 		    //return self.options.yScale(d.rowid)+28;
@@ -1310,7 +1315,7 @@ as a separate call in the init function.
 		})
 	    rect_text.exit()
 	   	.transition()
-	   	.delay(20)
+	   	//.delay(20)
 	   	.style('opacity', '0.0')
 
 	   	//.attr("y", 1600)
@@ -1353,6 +1358,8 @@ as a separate call in the init function.
 /*		.on("click", function(d) {
 		    self._rectClick(this);
 		})*/
+		.style('opacity', '1.0')
+
 		.attr("width", self.options.textWidth)
 		.attr("height", 50)
 		.style("font-size", "12px")
@@ -1378,9 +1385,11 @@ as a separate call in the init function.
 		    //return self.options.yScale(d.rowid)+28;
 			return self._getYPosition(d.rowid)+28;
 		})
+		.style('opacity', '1.0')
+
 	    rect_text2.exit()
 		.transition()
-		.delay(20)
+		//.delay(20)
 		//.attr("y", 1600)
 		.style('opacity', '0.0')
 

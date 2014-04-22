@@ -4,6 +4,7 @@
         {
             "graph" : "omim-disease-phenotype",
             "view" : "nlx_151835-1",
+            "mapVersion" : "2014-04-18",
             "columns" : [
                 {
                     "name" : "v_uuid"

@@ -3,9 +3,16 @@
         {
             "graph" : "human-genes",
             "view" : "nif-0000-02801-1",
+            "mapVersion" : "2014-04-18",
             "filter" : {
                 "tax_id" : "9606"
             },
+            "objects" : [
+                {
+                    "id" : "RO:0002162",
+                    "rdf:type" : "owl:ObjectProperty"
+                }
+            ],
             "columns" : [
                 {
                     "name" : "geneid",
@@ -54,7 +61,8 @@
 
                 {"subject" : "geneid",
                  "predicate" : "RO:0002162",
-                 "object" : "tax_id"},
+                 "object" : "tax_id",
+                 "isExistential" : true},
 
                 {"subject" : "geneid",
                  "predicate" : "rdfs:subClassOf",
