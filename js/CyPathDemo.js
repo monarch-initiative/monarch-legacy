@@ -240,7 +240,7 @@ function CyPathDemoInit(){
     }
     manager.register('success', 'draw', _success_callback);
     function data_call(arg1, arg2, arg3){
-	var base = 'http://beta.neuinfo.org:9000/graphdemo/graph/path/short';
+	var base = 'http://kato.crbs.ucsd.edu:9000/scigraph/graph/paths/short';
 	var rsrc = base + '/' + arg1 + '/' + arg2 + '.jsonp?length=' + arg3;
 	manager.resource(rsrc);
 	manager.method('get');
