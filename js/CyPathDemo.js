@@ -272,11 +272,11 @@ function CyPathDemoInit(){
 		// namespace; otherwise, nothing.
 		var appendee = '';
 		if( item ){
-		    if( item['categories'] && ! bbop.core.is_empty(item['categories']) ){
-			appendee = item['categories'].join(' ');
-		    }else if( item['fragment'] ){
+		    if( item['concept']['categories'] && ! bbop.core.is_empty(item['concept']['categories']) ){
+			appendee = item['concept']['categories'].join(' ');
+		    }else if( item['concept']['fragment'] ){
 			// Get first split on '_'.
-			var fspl = bbop.core.first_split('_', item['fragment']);
+			var fspl = bbop.core.first_split('_', item['concept']['fragment']);
 			if( fspl[0] ){
 			    appendee = fspl[0];
 			}
@@ -284,9 +284,9 @@ function CyPathDemoInit(){
 		}
 
 		return {
-		    label: item.label,
+		    label: item['completion'],
 		    tag: appendee,
-		    name: item.fragment
+		    name: item['concept']['fragment']
 		};
 	    };
 	    var _on_success = function(data) {
@@ -296,14 +296,12 @@ function CyPathDemoInit(){
 
 		    var ldata = data['list'];
 
-		    // Pare out duplicates. Assume existance of 'id'
-		    // field. Would really be nice to have bbop.core in
-		    // here...
+		    // Pare out duplicates. Assume existance of structure.
 		    var pared_data = [];
 		    var seen_ids = {};
 		    for( var di = 0; di < ldata.length; di++ ){
 			var datum = ldata[di];
-			var datum_id = datum['uri'];
+			var datum_id = datum['concept']['uri'];
 			if( ! seen_ids[datum_id] ){
 			    // Only add new ids to pared data list.
 			    pared_data.push(datum);
@@ -320,7 +318,7 @@ function CyPathDemoInit(){
 	    };
 
 	    //var query = "/autocomplete/"+request.term+".json";
-	    var query = 'http://kato.crbs.ucsd.edu:9000/scigraph/vocabulary/search/' + request.term + '*.jsonp?limit=20&searchSynonyms=true';
+	    var query = 'http://kato.crbs.ucsd.edu:9000/scigraph/vocabulary/prefix/' + request.term + '.jsonp?limit=20&searchSynonyms=true';
 	    //var query = "/autocomplete/"+request.term+".json";
 	    jQuery.ajax({
 			    url: query,
