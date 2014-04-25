@@ -1,1 +1,0 @@
-Cache directory. This is populated when running the server.

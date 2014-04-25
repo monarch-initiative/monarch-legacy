@@ -249,6 +249,6 @@ jQuery(document).ready(
 	    var species = $("#analyze_auto_species").val();
 	    var phenotypes  = text.split(/[\s,]+/);
 	    $("#phen_vis").modeltype({phenotypeData: phenotypes,
-				      target_species: species });
+				      targetSpecies: species });
 	}
     });
