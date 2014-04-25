@@ -4,6 +4,7 @@
         {
             "graph" : "panther-orthologs",
             "view" : "nlx_84521-1",
+            "mapVersion" : "2014-04-18",
             "filter" : {
                 "tax_id_a" : "9606"
             },

@@ -1,0 +1,66 @@
+{
+    "notes" : "currently just stores interaction as a graph. In future we will need to store the interaction as an entity",
+    "graphs": [
+        {
+            "graph" : "brain-connectivity",
+            "view" : "nlx_154697-8",
+            "columns" : [
+                {
+                    "name" : "v_uuid"
+                },
+                {
+                    "name" : "con_from",
+                    "type" : "rdfs:Literal"
+                },
+                {
+                    "name" : "con_to",
+                    "type" : "rdfs:Literal"
+                },
+                {
+                    "name" : "ref_link"
+                },
+                {
+                    "name" : "projection_strength",
+                    "type" : "rdfs:Literal"
+                },
+                {
+                    "name" : "notes",
+                    "type" : "rdfs:Literal"
+                },
+                {
+                    "name" : "species",
+                    "type" : "rdfs:Literal"
+                },
+                { 
+                   "name" : "database",
+                   "type" : "rdfs:Literal"
+                }
+
+            ],
+            "mappings" : [
+
+                {"subject" : "v_uuid",
+                 "predicate" : "http://uri.neuinfo.org/connectivity#original_afferent_term",
+                 "object" : "con_from"},
+                {"subject" : "v_uuid",
+                 "predicate" : "http://uri.neuinfo.org/connectivity#original_efferent_term",
+                 "object" : "con_to"},
+                {"subject" : "v_uuid",
+                 "predicate" : "dc:source",
+                 "object" : "database"},
+                {"subject" : "v_uuid",
+                 "predicate" : "http://uri.neuinfo.org/connectivity#projectionStrength",
+                 "object" : "projection_strength"},
+                {"subject" : "v_uuid",
+                 "predicate" : "http://uri.neuinfo.org/connectivity#notes",
+                 "object" : "notes"},
+                {"subject" : "v_uuid",
+                 "predicate" : "http://uri.neuinfo.org/connectivity#species",
+                 "object" : "species"},
+                {"subject" : "v_uuid",
+                 "predicate" : "http://uri.neuinfo.org/connectivity#reference",
+                 "object" : "ref_link"}
+            ]
+        }
+   ]
+}
