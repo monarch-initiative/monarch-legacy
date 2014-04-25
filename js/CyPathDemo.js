@@ -19,6 +19,8 @@ function CyPathDemoInit(){
     var auto_2_input_elt = '#' + auto_2_input_id;
     var sel_1_input_id = 'sel_1_input';
     var sel_1_input_elt = '#' + sel_1_input_id;
+    var sel_2_input_id = 'sel_2_input';
+    var sel_2_input_elt = '#' + sel_2_input_id;
 
     // Aliases.
     var each = bbop.core.each;
@@ -239,8 +241,8 @@ function CyPathDemoInit(){
 	}
     }
     manager.register('success', 'draw', _success_callback);
-    function data_call(arg1, arg2, arg3){
-	var base = 'http://kato.crbs.ucsd.edu:9000/scigraph/graph/paths/short';
+    function data_call(arg1, arg2, arg3, arg4){
+	var base = 'http://kato.crbs.ucsd.edu:9000/scigraph/graph/paths/' + arg4;
 	var rsrc = base + '/' + arg1 + '/' + arg2 + '.jsonp?length=' + arg3;
 	manager.resource(rsrc);
 	manager.method('get');
@@ -384,14 +386,15 @@ function CyPathDemoInit(){
 	    var v1 = jQuery(auto_1_input_elt).val() || '';
 	    var v2 = jQuery(auto_2_input_elt).val() || '';
 	    var s1 = jQuery(sel_1_input_elt).val() || '';
+	    var s2 = jQuery(sel_2_input_elt).val() || '';
 
 	    // TODO:
-	    if( v1 != '' && v2 != '' && s1 != '' ){
+	    if( v1 != '' && v2 != '' && s1 != '' && s2 != '' ){
 		// alert('TODO: only using demo input; ignoring: ' +
 		// 	 [v1, v2, s1].join(', '));
-		data_call(v1, v2, s1);
+		data_call(v1, v2, s1, s2);
 	    }else{
-		alert('insufficient args: ' + [v1, v2, s1].join(', ') +
+		alert('insufficient args: ' + [v1, v2, s1, s2].join(', ') +
 		      '; fall back on demo');
 		// TODO: need good data source
 		// This demo lifted from: http://beta.neuinfo.org:9000/graphdemo/graph/path/short/UBERON_0000004/UBERON_0001062.jsonp?length=5
