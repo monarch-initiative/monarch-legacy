@@ -141,6 +141,7 @@ p {
     text-align: center;
     font-weight: 200;
     font-size: 12px;
+    color: white;
 }
 @media (min-width: 1110px) {
     .wrapperforfooter {
@@ -173,6 +174,7 @@ p {
 /* Search Bar */
 #search {
     width: 180px;
+    font-size: 13px;
 }
 .autocomplete-tag-item {
     white-space: nowrap;
