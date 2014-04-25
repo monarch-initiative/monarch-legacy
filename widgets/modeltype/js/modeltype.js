@@ -70,7 +70,7 @@ as a separate call in the init function.
 	    modelDisplayCount : 20,
 	    currModelIdx : 0,
 	    axis_pos_list: [],
-	    targetSpeciesList : [{name: "Mus musculus", taxon: "10090"}, { name: "Homo sapiens", taxon: "9096"}, {name: "Danio rerio", taxon: "7955"}],
+	    targetSpeciesList : [{name: "Mus musculus", taxon: "10090"}, { name: "Homo sapiens", taxon: "9606"}, {name: "Danio rerio", taxon: "7955"}],
 	    targetSpeciesName : "Mus musculus",
 	    comparisonType : "genes",
 	    minColorScale : "#D6D6D6",
