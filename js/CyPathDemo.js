@@ -230,9 +230,9 @@ function CyPathDemoInit(){
 	// The response is a generic bbop.rest.response.json.
 	// Peel out the graph and render it.
 	if( resp.okay() ){
-	    var gj = JSON.parse(resp.raw());
+	    // var gj = JSON.parse(resp.raw());
 	    var g = new bbop.model.graph();
-	    g.load_json(gj);
+	    g.load_json(resp.raw());
 	    draw_graph(g);
 	}else{
 	    ll('the response was not okay');	    
@@ -261,7 +261,7 @@ function CyPathDemoInit(){
 	    collision: "none"
 	},
 	source: function(request, response) {
-	    console.log("trying autocomplete on "+request.term);
+	    console.log("trying autocomplete on " + request.term);
 
 	    // Argument response from source gets map as argument.
 	    var _parse_data_item = function(item){
@@ -270,11 +270,11 @@ function CyPathDemoInit(){
 		// namespace; otherwise, nothing.
 		var appendee = '';
 		if( item ){
-		    if( item['category'] ){
-			appendee = item['category'];
-		    }else if( item['id'] ){
+		    if( item['categories'] && ! bbop.core.is_empty(item['categories']) ){
+			appendee = item['categories'].join(' ');
+		    }else if( item['fragment'] ){
 			// Get first split on '_'.
-			var fspl = first_split('_', item['id']);
+			var fspl = bbop.core.first_split('_', item['fragment']);
 			if( fspl[0] ){
 			    appendee = fspl[0];
 			}
@@ -282,38 +282,48 @@ function CyPathDemoInit(){
 		}
 
 		return {
-		    label: item.term,
+		    label: item.label,
 		    tag: appendee,
-		    name: item.id
+		    name: item.fragment
 		};
 	    };
 	    var _on_success = function(data) {
 
-		// Pare out duplicates. Assume existance of 'id'
-		// field. Would really be nice to have bbop.core in
-		// here...
-		var pared_data = [];
-		var seen_ids = {};
-		for( var di = 0; di < data.length; di++ ){
-		    var datum = data[di];
-		    var datum_id = datum['id'];
-		    if( ! seen_ids[datum_id] ){
-			// Only add new ids to pared data list.
-			pared_data.push(datum);
-			
-			// Block them in the future.
-			seen_ids[datum_id] = true;
-		    }
-		}
+		// Get the list out of the return.
+		if( data && data['list'] ){
 
-		var map = jQuery.map(pared_data, _parse_data_item);
-		response(map);
+		    var ldata = data['list'];
+
+		    // Pare out duplicates. Assume existance of 'id'
+		    // field. Would really be nice to have bbop.core in
+		    // here...
+		    var pared_data = [];
+		    var seen_ids = {};
+		    for( var di = 0; di < ldata.length; di++ ){
+			var datum = ldata[di];
+			var datum_id = datum['uri'];
+			if( ! seen_ids[datum_id] ){
+			    // Only add new ids to pared data list.
+			    pared_data.push(datum);
+			    
+			    // Block them in the future.
+			    seen_ids[datum_id] = true;
+			}
+		    }
+
+		    // Map out into the display format.
+		    var map = jQuery.map(pared_data, _parse_data_item);
+		    response(map);
+		}
 	    };
 
-	    var query = "/autocomplete/"+request.term+".json";
+	    //var query = "/autocomplete/"+request.term+".json";
+	    var query = 'http://kato.crbs.ucsd.edu:9000/scigraph/vocabulary/search/' + request.term + '*.jsonp?limit=20&searchSynonyms=true';
+	    //var query = "/autocomplete/"+request.term+".json";
 	    jQuery.ajax({
 			    url: query,
-			    dataType:"json",
+			    dataType: 'jsonp',
+			    'jsonp': 'callback',
 			    /*data: {
 			     prefix: request.term,
 			     },*/
@@ -384,7 +394,7 @@ function CyPathDemoInit(){
 		alert('insufficient args: ' + [v1, v2, s1].join(', ') +
 		      '; fall back on demo');
 		// TODO: need good data source
-		// This demo lifted from: http://beta.neuinfo.org:9000/graphdemo/graph/path/short/UBERON_0000004/UBERON_0001062.json?length=5
+		// This demo lifted from: http://beta.neuinfo.org:9000/graphdemo/graph/path/short/UBERON_0000004/UBERON_0001062.jsonp?length=5
 		var dgraph = {"nodes":[{"id":"http://purl.obolibrary.org/obo/UBERON_0000004","lbl":"olfactory apparatus"},{"id":"http://purl.obolibrary.org/obo/UBERON_0004121","lbl":"ectoderm-derived structure"},{"id":"http://purl.obolibrary.org/obo/UBERON_0000061","lbl":"anatomical structure"},{"id":"http://purl.obolibrary.org/obo/UBERON_0000465","lbl":"material anatomical entity"},{"id":"http://purl.obolibrary.org/obo/UBERON_0001062","lbl":"anatomical entity"}],"edges":[{"sub":"http://purl.obolibrary.org/obo/UBERON_0000004","obj":"http://purl.obolibrary.org/obo/UBERON_0004121","pred":"SUBCLASS_OF"},{"sub":"http://purl.obolibrary.org/obo/UBERON_0004121","obj":"http://purl.obolibrary.org/obo/UBERON_0000061","pred":"SUBCLASS_OF"},{"sub":"http://purl.obolibrary.org/obo/UBERON_0000061","obj":"http://purl.obolibrary.org/obo/UBERON_0000465","pred":"SUBCLASS_OF"},{"sub":"http://purl.obolibrary.org/obo/UBERON_0000465","obj":"http://purl.obolibrary.org/obo/UBERON_0001062","pred":"SUBCLASS_OF"}]};
 		// TODO: need real managed data source; see above
 		var dg = new bbop.model.graph();
