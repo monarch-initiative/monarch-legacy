@@ -514,6 +514,9 @@ function CyPathDemoInit(){
 	}
     };
 
+    // Ready spinner for use.
+    var spin = new bbop.widget.spinner('spinloc', '/image/waiting_ac.gif',
+				       {'visible_p': false});
     ll('Start ready!');
 
     ///
@@ -603,6 +606,25 @@ function CyPathDemoInit(){
 	
 	// Select which layout we want to use.
 	var layout_opts = {
+	    'random': {
+		name: 'random'//,
+		// fit: true
+	    },
+	    'grid': {
+		name: 'grid',
+		// fit: true,
+		padding: 30,
+		rows: undefined,
+		columns: undefined
+	    },
+	    'circle': {
+		name: 'circle'//,
+		//fit: true
+	    },
+	    'concentric': {
+		name: 'concentric'//,
+		//fit: true
+	    },
 	    'breadthfirst': {
                 'name': 'breadthfirst',
                 'directed': true,
@@ -611,6 +633,8 @@ function CyPathDemoInit(){
 		'circle': false,
 		'roots': cyroots
 	    },
+	    // 'arbor': {
+	    // },
 	    'cose': {
                 'name': 'cose'//,
                 // 'directed': true,
@@ -720,8 +744,7 @@ function CyPathDemoInit(){
 			      cy.resize(); 
 			  });
 
-	//spin.hide();
-	//ll('done');
+	//ll('done draw');
     }
 
     ///
@@ -735,20 +758,14 @@ function CyPathDemoInit(){
 	// The response is a generic bbop.rest.response.json.
 	// Peel out the graph and render it.
 	if( resp.okay() ){
-	    // var gj = JSON.parse(resp.raw());
-	    
-	    // Check to see if we're dealing with a single graph
-	    // (short) or a list of graphs (simple).
-	    // if( bbop.core.is_array(resp.raw()) ){
-	    // 	alert('multi');
-	    // }else{
-		draw_graph(resp.raw());
-	    // }
+	    draw_graph(resp.raw());
 	}else{
 	    ll('the response was not okay');	    
 	}
+	spin.hide();
     }
     function _error_callback(resp, man){
+	spin.hide();
 	alert('some kind of error?');
     }
     manager.register('success', 'draw', _success_callback);
@@ -760,6 +777,7 @@ function CyPathDemoInit(){
 	manager.method('get');
 	manager.use_jsonp(true);
 	manager.jsonp_callback('callback');
+	spin.show();
 	manager.action();
     }
 
