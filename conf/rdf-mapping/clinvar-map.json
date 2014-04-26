@@ -1,0 +1,57 @@
+{
+    "status" : "alpha",
+    "forceConfiguration" : 
+    {
+        "federation_services_url" : "http://beta.neuinfo.org/services/v1/federation/"
+    },
+    "graphs": [
+        {
+            "graph" : "clinvar",
+            "view" : "nlx_151671-1",
+            "mapVersion" : "test1",
+            "columns" : [
+                {
+                    "name" : "v_uuid"
+                },
+                {
+                    "name" : "clinvar_allele_id",
+                    "prefix" : "http://monarchinitiative.org/variant/"
+                },
+                {
+                    "name" : "phenotype_id"
+                },
+                {
+                    "name" : "clinical_significance",
+                    "type" : "rdfs:Literal"
+                },
+                {
+                    "name" : "sequence_alteration_xrefs",
+                    "list_delimiter" : ", "
+                }
+            ],
+            "mappings" : [
+
+                {"subject" : "clinvar_allele_id",
+                 "predicate" : "RO:0002200",
+                 "object" : "phenotype_id"
+                },
+                {"subject" : "v_uuid",
+                 "predicate" : "rdf:type",
+                 "object" : "SIO:association"
+                },
+                {"subject" : "v_uuid",
+                 "predicate" : "hasSubject",
+                 "object" : "clinvar_allele_id"
+                },
+                {"subject" : "v_uuid",
+                 "predicate" : "hasObject",
+                 "object" : "phenotype_id"
+                },
+                {"subject" : "v_uuid",
+                 "predicate" : "http://monarchinitiative.org/vocab/clinicalSignificance",
+                 "object" : "clinical_significance"
+                }
+            ]
+        }
+   ]
+}
