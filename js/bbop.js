@@ -1884,7 +1884,7 @@ bbop.version.revision = "2.0.3";
  *
  * Partial version for this library: release (date-like) information.
  */
-bbop.version.release = "20140418";
+bbop.version.release = "20140425";
 /*
  * Package: logger.js
  * 
@@ -7278,7 +7278,8 @@ bbop.rest.response.json = function(json_data){
 		this._okay = false;
 	    }
 
-	}else if( bbop.core.what_is(json_data) == 'object' ){
+	}else if( bbop.core.what_is(json_data) == 'object' ||
+		  bbop.core.what_is(json_data) == 'array' ){
 
 	    // Looks like somebody else got here first.
 	    this._raw = json_data;
@@ -16763,6 +16764,7 @@ if ( typeof bbop.widget == "undefined" ){ bbop.widget = {}; }
  * there are probably some fields that you'll want to fill out to make
  * things work decently. The options for the argument hash are:
  * 
+ *  fill_p - whether or not to fill the input with the val on select(default true)
  *  label_template - string template for dropdown, can use any document field
  *  value_template - string template for selected, can use any document field
  *  minimum_length - wait for this many characters to start (default 3)
@@ -16800,6 +16802,7 @@ bbop.widget.search_box = function(golr_loc,
     // Our argument default hash.
     var default_hash =
 	{
+	    'fill_p': true,
 	    'label_template': '{{id}}',
 	    'value_template': '{{id}}',
 	    'minimum_length': 3, // wait for three characters or more
@@ -16810,6 +16813,7 @@ bbop.widget.search_box = function(golr_loc,
 
     // There should be a string interface_id argument.
     this._interface_id = interface_id;
+    this._fill_p = arg_hash['fill_p'];
     this._list_select_callback = arg_hash['list_select_callback'];
     var label_tt = new bbop.template(arg_hash['label_template']);
     var value_tt = new bbop.template(arg_hash['value_template']);
@@ -16857,6 +16861,13 @@ bbop.widget.search_box = function(golr_loc,
 	},
 	// What to do when an element is selected.
 	select: function(event, ui){
+
+	    // Prevent default selection input filling action (from
+	    // jQuery UI) when non-default marked.
+	    if( ! anchor._fill_p ){
+		event.preventDefault();		
+	    }
+
 	    var doc_to_apply = null;
 	    if( ui.item ){
 		doc_to_apply = ui.item.document;
