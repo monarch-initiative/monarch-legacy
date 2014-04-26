@@ -698,29 +698,37 @@ function CyPathDemoInit(){
 	cy.nodes().bind('mouseover',
 			function(e){
 			    e.stopPropagation();
-			    var nid = e.cyTarget.id();
-			    var nlbl = info_lookup[nid]['label'];
- 			    var popt = {
-				title: nid,
-				content: nlbl,
-				animation: false,
-				placement: 'top',
-				trigger: 'manual'
-			    };
-			    //jQuery(this).popover(popt);
-			    //jQuery(this).popover('show');
+
 			    // TODO/BUG: this popover positioning got out of
 			    // hand; just rewrite doing it manually with a
 			    // div from bootstrap like normal people.
 			    // (couldn't do it the obvious way because the
 			    // canvas elements are just layers with nothing
 			    // to adere to).
+			    var nid = e.cyTarget.id();
+			    var nlbl = info_lookup[nid]['label'];
+ 			    var popt = {
+				title: nid,
+				content: nlbl,
+				// container: 'body',
+				animation: false,
+				placement: 'top',
+				trigger: 'manual'
+			    };
 			    var epos = e.cyRenderedPosition;
 			    jQuery(e.originalEvent.target).popover(popt);
 			    jQuery(e.originalEvent.target).popover('show');
 			    jQuery('.arrow').hide();
 			    jQuery('.popover').css('top', epos.y -100);
 			    jQuery('.popover').css('left', epos.x -100);
+			    // TODO/BUG: Also, unfortunately, I cannot
+			    // figure out why I am stuck with the
+			    // single frozen pop-up (cannot change
+			    // from the intial, probably a quirk of
+			    // bs3). Manually change it.
+			    var new_html = '<div style="display: none;" class="arrow"></div><h3 class="popover-title">' + nid + '</h3><div class="popover-content">' + nlbl + '</div>';
+			    jQuery('.popover').html(new_html);
+
 			    //ll('node: ' + nid);
 			});
 	cy.nodes().bind('mouseout',
@@ -728,11 +736,8 @@ function CyPathDemoInit(){
 			    e.stopPropagation();
 			    jQuery(e.originalEvent.target).popover('destroy');
 			});
-	// each(cy.nodes(),
-	//      function(nkey, node){
-	// 	 jQuery(node.element()).popover(popt);
-	//      });
 
+	// 
 	cy.edges().unselectify(); // opt
 	cy.boxSelectionEnabled(false);
 	cy.resize();
