@@ -8,7 +8,7 @@
         {
             "graph" : "clinvar",
             "view" : "nlx_151671-3",
-            "mapVersion" : "test1",
+            "mapVersion" : "2014-04-27",
             "columns" : [
                 {
                     "name" : "v_uuid"
