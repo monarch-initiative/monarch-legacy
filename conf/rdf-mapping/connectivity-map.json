@@ -1,5 +1,6 @@
 {
     "notes" : "currently just stores interaction as a graph. In future we will need to store the interaction as an entity",
+    "isDisabled" : true,
     "graphs": [
         {
             "graph" : "brain-connectivity",

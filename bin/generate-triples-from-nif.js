@@ -67,6 +67,10 @@ function main(args) {
         if (gset.forceConfiguration != null) {
             engine.setConfiguration( gset.forceConfiguration );
         }
+        if (gset.isDisabled) {
+            console.log("Skipping disabled conf");
+            continue;
+        }
 
         for (var k in graphs) {
             var graphconf = graphs[k];
