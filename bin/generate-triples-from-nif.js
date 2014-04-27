@@ -318,7 +318,7 @@ function mapColumnValue(ix, v, cmap, gconf) {
         return engine.quote(v);
     }
     if (v == null) {
-        console.warn("No value for "+ix+" in "+JSON.stringify(row));
+        console.warn("No value for "+ix);
     }
     return mapRdfResource(v);
 }

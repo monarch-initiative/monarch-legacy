@@ -7,7 +7,7 @@
     "graphs": [
         {
             "graph" : "clinvar",
-            "view" : "nlx_151671-1",
+            "view" : "nlx_151671-3",
             "mapVersion" : "test1",
             "columns" : [
                 {
@@ -19,6 +19,20 @@
                 },
                 {
                     "name" : "phenotype_id"
+                },
+                {
+                    "name" : "assembly",
+                    "type" : "rdfs:Literal"
+                },
+                {
+                    "name" : "chromosome",
+                    "type" : "rdfs:Literal"
+                },
+                {
+                    "name" : "starting_location"
+                },
+                {
+                    "name" : "ending_location"
                 },
                 {
                     "name" : "location",
@@ -43,6 +57,22 @@
                 {"subject" : "clinvar_allele_id",
                  "predicate" : "faldo:location",
                  "object" : "location"
+                },
+                {"subject" : "location",
+                 "predicate" : "http://monarchinitiative.org/vocab/begin",
+                 "object" : "starting_location"
+                },
+                {"subject" : "location",
+                 "predicate" : "http://monarchinitiative.org/vocab/end",
+                 "object" : "ending_location"
+                },
+                {"subject" : "location",
+                 "predicate" : "http://monarchinitiative.org/vocab/chromosome",
+                 "object" : "chromosome"
+                },
+                {"subject" : "location",
+                 "predicate" : "http://monarchinitiative.org/vocab/assembly",
+                 "object" : "assembly"
                 },
                 {"subject" : "v_uuid",
                  "predicate" : "rdf:type",
