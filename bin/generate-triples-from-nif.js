@@ -63,7 +63,11 @@ function main(args) {
     for (var j in gsets) {
         var gset = gsets[j];
         var graphs = gset.graphs;
-    
+
+        if (gset.forceConfiguration != null) {
+            engine.setConfiguration( gset.forceConfiguration );
+        }
+
         for (var k in graphs) {
             var graphconf = graphs[k];
             if (options.graph == null || graphconf.graph == options.graph) {
@@ -136,6 +140,10 @@ function generateNamedGraph(gconf) {
     // create index mapping column names to column metadata
     gconf.columns.forEach(function(c) { cmap[c.name] = c });
 
+    // don't use derived columns in queries
+    var queryColNames = colNames.filter( function(c) { return cmap[c].derivedFrom == null } );
+    var derivedColNames = colNames.filter( function(c) { return cmap[c].derivedFrom != null } );
+
     // Federation REST API does not allow extraction of
     // all data in one query, so we iterate through rows
     // in chunks, starting with offset = 0
@@ -152,7 +160,7 @@ function generateNamedGraph(gconf) {
             qopts[apikey] = options.apikey;
         }
         // Federation query
-        var resultObj = engine.fetchDataFromResource(null, gconf.view, null, colNames, gconf.filter, maxLimit, null, qopts);
+        var resultObj = engine.fetchDataFromResource(null, gconf.view, null, queryColNames, gconf.filter, maxLimit, null, qopts);
         numSourceRows = resultObj.resultCount;
         console.info(offset + " / "+ numSourceRows + " rows");
 
@@ -168,6 +176,11 @@ function generateNamedGraph(gconf) {
         var results = resultObj.results;
         for (var k in results) {
             var r = results[k];
+
+            derivedColNames.forEach( function(c) {
+                var dc = cmap[c].derivedFrom;
+                r[c] = r[dc];
+            });
 
             // generate a primary key for entire row.
             // we have no way to SELECT DISTINCT so to avoid
@@ -242,7 +255,9 @@ function mapColumn(ix, row, cmap, gconf) {
 // E.g. GO:1234 --> http://purl.obolibrary.org/obo/GO_1234
 //
 function mapRdfResource(iri) {
+    // remove whitespace
     if (iri.match(/\s/) != null) {
+        console.warn("Whitespace in "+iri);
         iri = iri.replace(/\s/g, "");
     }
 
