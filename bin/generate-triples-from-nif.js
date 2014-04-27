@@ -64,6 +64,9 @@ function main(args) {
         var gset = gsets[j];
         var graphs = gset.graphs;
 
+        if (options.config != null) {
+            engine.setConfiguration( JSON.parse(fs.read(options.config)) );
+        }
         if (gset.forceConfiguration != null) {
             engine.setConfiguration( gset.forceConfiguration );
         }
