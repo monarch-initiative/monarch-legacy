@@ -5,6 +5,8 @@
     {{#scripts}}
     <script type="text/javascript" src="{{url}}"></script>
     {{/scripts}}
+    <script type="text/javascript" src="/js/jquery.xml2json.js"></script>
+    <script type="text/javascript" src="/widgets/keggerator/js/keggerator.js"></script>
     <script type="text/javascript" src="/widgets/modeltype/js/modeltype.js"></script>
     <script type="text/javascript" src="/js/diseasepage.js"></script>
     <script src="/js/tabs.js"></script>
@@ -181,40 +183,14 @@
                 {{/hasSim}}
                 {{#hasPathways}}
                 <div id="pathways" class="category">
+                    <script>
+                        var keggerator = $("#keggerator_div").keggerator();
+                    </script>
                     <table class="{{css.table}}">
                         {{{pathwayTable}}}
                     </table>
                     <div id="keggerator_div"></div>
-                    <script>
-                        // tell keggerator where to draw stuff and handle ui events
-                        keggerator.setImageDiv($("#keggerator_div"));
-                        keggerator.init();
-                        keggerator.annotate({
-                            pathways: ["hsa05012", "hsa05012"],
-                            phenotypes: [
-                                {
-                                    "name": "Bradykinesia",
-                                    "link": "http://",
-                                    "genes": ["hsa:6531", "hsa:7345", "hsa:125965"]
-                                },
-                                {
-                                    "name": "Lewy Bodies",
-                                    "link": "http://",
-                                    "genes": ["hsa:6531","hsa:7314"]
-                                },
-                                {
-                                    "name": "Dysphagia",
-                                    "link": "http://",
-                                    "genes": []
-                                },
-                                {
-                                    "name": "Depression",
-                                    "link": "http://",
-                                    "genes": []
-                                }
-                            ]
-                        })
-                    </script>
+
                 </div>
                 {{/hasPathways}}
             </div>

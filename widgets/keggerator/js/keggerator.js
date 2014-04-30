@@ -71,6 +71,8 @@
                 this._init();
                 this._annotate();
 
+                return this;
+
             },
 
             _init: function () {
@@ -82,6 +84,8 @@
                 this.imageDiv.empty();
                 this.imageDiv.append("<svg id='acetate'></svg>");
                 this.acetate = d3.select("#acetate");
+
+                return this;
             },
 
             _annotate: function () {
