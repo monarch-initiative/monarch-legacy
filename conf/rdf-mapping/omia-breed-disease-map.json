@@ -1,0 +1,100 @@
+{
+    "status" : "alpha",
+    "graphs": [
+        {
+            "graph" : "animal-breed-disease",
+            "view" : "nif-0000-03215-2",
+            "mapVersion" : "2014-04-30",
+            "columns" : [
+                {
+                    "name" : "v_uuid"
+                },
+                {
+                    "name" : "breed_id",
+					"type" : "owl:Class"
+                },
+                {
+                    "name" : "breed_label",
+					"type" : "rdfs:Literal"
+                },
+                {
+                    "name" : "taxon_id",
+                    "type" : "owl:Class"
+                },
+                {
+                    "name" : "taxon_label",
+                    "type" : "rdfs:Literal"
+                },
+                {
+                    "name" : "taxon_alt_label",
+                    "type" : "rdfs:Literal"
+                },
+                {
+                    "name" : "phenotype_id",
+					"type" : "owl:Class"
+                },
+                {
+                    "name" : "phenotype_label",
+					"type" : "rdfs:Literal"
+                },
+				{
+                    "name" : "publication_id",
+                },
+                {
+                    "name" : "omim_id",
+                    "type" : "owl:Class"
+                },
+                {
+                    "name" : "species_specific_phenotype_name",
+                    "type" : "rdfs:Literal"
+                },
+            ],
+            "mappings" : [
+                {"subject" : "breed_id",
+                 "predicate" : "RO:0002200",
+                 "object" : "phenotype_id"
+                },
+                {"subject" : "phenotype_id",
+                 "predicate" : "rdfs:label",
+                 "object" : "phenotype_label"
+                },
+                {"subject" : "phenotype_id",
+                 "predicate" : "oboInOwl:hasRelatedSynonym",
+                 "object" : "species_specific_phenotype_name"
+				},
+                {"subject" : "v_uuid",
+                 "predicate" : "rdf:type",
+                 "object" : "SIO:association"
+                },
+                {"subject" : "v_uuid",
+                 "predicate" : "hasSubject",
+                 "object" : "breed_id"
+                },
+                {"subject" : "v_uuid",
+                 "predicate" : "hasObject",
+                 "object" : "phenotype_id"
+                },
+                {"subject" : "v_uuid",
+                 "predicate" : "dc:source",
+                 "object" : "publication_id"
+                },
+                {"subject" : "breed_id",
+                 "predicate" : "RO:0002162",
+                 "object" : "taxon_id"
+                },
+                {"subject" : "taxon_id",
+                 "predicate" : "rdfs:label",
+                 "object" : "taxon_label"
+                },
+                {"subject" : "taxon_id",
+                 "predicate" : "oboInOwl:hasRelatedSynonym",
+                 "object" : "taxon_alt_label"
+                },
+                {"subject" : "phenotype_id",
+                 "predicate" : "putatively_homologous_to",
+                 "object" : "omim_id"
+                },
+            ]
+        }
+   ]
+}
