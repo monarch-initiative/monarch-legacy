@@ -5,11 +5,14 @@
     padding-bottom: 10px;
     min-height: 50px;
 }
+#feedback-main {
+    margin-top: 8px;
+}
 .tagline {
     font-size: 15px;
     font-style: italic;
     line-height: 18px;
-    margin: 15px 0 5px;
+    margin: 10px 0 5px;
 }
 
 /* Graphic */

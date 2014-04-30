@@ -22,7 +22,7 @@
 .btn-monarch-main {
     padding: 10px 15px;
     font-weight: 400;
-    font-size: 16px;
+    font-size: 14px;
 }
 /* Rest of Content */
 .col-lg-9 {
@@ -36,18 +36,4 @@
     position:absolute;
     cursor:default;
     z-index:4000 !important
-}
-
-.feedback {
-    font-size: .6em;
-    position: absolute;
-    background-color: #EA763B;
-    margin: 0px 10px 0px 10px;
-
-    /*   padding: 0px 20px 0px 20px;
-    border-radius: 20px;
-    -webkit-border-radius: 20px;
-    -moz-border-radius: 20px;*/
-    right: 0;
-    bottom: 0;
 }
