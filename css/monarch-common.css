@@ -22,8 +22,11 @@ p {
 .btn.downloadline {
     padding: 5px 15px;
     margin-bottom: 10px;
-    margin-left: 20px;
     border-radius: 3px;
+    margin-left: 5px;
+}
+.btn.downloadline-left {
+    margin-left: 20px;
 }
 
 /* Section 1: Navbar */
@@ -131,6 +134,9 @@ p {
     background-color: #F4EEEB;
 }
 .monarch-model-dark {
+    background-color: #EA763B;
+}
+.monarch-feedback-dark {
     background-color: #ed9f7f;
 }
 

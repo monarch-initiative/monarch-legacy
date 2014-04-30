@@ -49,12 +49,12 @@ $(document).ready(function(){
         // data.column - the index of the column sorted after a click
         // data.direction - the sorting direction (either asc or desc)
     
+        $('.arrow').html(' &#x2195;');
         var th = $(this).find("th");
-        th.find(".arrow").remove();
         var arrow = data.direction === "asc" ? "  ↑" : "  ↓";
         var type = th.eq(data.column).attr("data-sort");
         if (sort.indexOf(type) != -1) {
-            th.eq(data.column).append('<span class="arrow">' + arrow +'</span>');
+            th.eq(data.column).find('.arrow').text(arrow);
         }
     });
 
