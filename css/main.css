@@ -8,7 +8,8 @@
 .tagline {
     font-size: 15px;
     font-style: italic;
-    line-height: 22px;
+    line-height: 18px;
+    margin: 15px 0 5px;
 }
 
 /* Graphic */
