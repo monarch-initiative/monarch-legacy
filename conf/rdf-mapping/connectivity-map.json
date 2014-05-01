@@ -18,7 +18,8 @@
                     "type" : "rdfs:Literal"
                 },
                 {
-                    "name" : "ref_link"
+                    "name" : "ref_link",
+                    "type" : "rdfs:Literal"
                 },
                 {
                     "name" : "projection_strength",
