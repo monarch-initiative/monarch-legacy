@@ -465,6 +465,8 @@ as a separate call in the init function.
 	//extract the maxIC score
 	this.options.maxICScore = retData.metadata.maxMaxIC;
     
+	//extract the comparison type being used
+	this.options.comparisonType = retData.source.b_type + "s";
     },
     
     //for a given model, extract the sim search data including IC scores and the triple:
@@ -552,9 +554,9 @@ as a separate call in the init function.
     		var selecteditem = "";
     		if (self.options.targetSpeciesList[idx].name === self.options.targetSpeciesName) {
     			selecteditem = "selected";
-    			if (self.options.targetSpeciesName == "Homo sapiens") {
+/*    			if (self.options.targetSpeciesName == "Homo sapiens") {
     				this.options.comparisonType = "diseases";
-    			}
+    			}*/
     		}
     		optionhtml = optionhtml + "<option value='" + self.options.targetSpeciesList[idx].taxon +"' "+ selecteditem +">" + self.options.targetSpeciesList[idx].name +"</option>"
     	}
@@ -845,7 +847,7 @@ as a separate call in the init function.
 	    
 	    retData = "<strong>Input: </strong> " + d.label_a + " (" + aSpecies + ")"   
 		    + "<br/><strong>Match: </strong> " + d.subsumer_label + " (" + subSpecies + ")"
-     	    + "<br/><strong>Model Label: </strong> " + d.model_label
+     	    + "<br/><strong>" + this._toProperCase(this.options.comparisonType).substring(0, this.options.comparisonType.length-1)  +" Label: </strong> " + d.model_label
      	+ "<br/><strong>Similarity Score: </strong> " + d.value.toFixed(2);
 	    this._updateDetailSection(retData, this._getXYPos(obj));
 	  
@@ -1499,6 +1501,10 @@ as a separate call in the init function.
 
 	},
 
+	_toProperCase : function (oldstring) {
+	    return oldstring.replace(/\w\S*/g, function(txt){return txt.charAt(0).toUpperCase() + txt.substr(1).toLowerCase();});
+	},
+	
 	_selectModel: function(modelData, obj) {
 		var self=this;
 	    //this._showThrobber();
@@ -1523,7 +1529,7 @@ as a separate call in the init function.
 
 		var retData;
 		//initialize the model data based on the scores
-		retData = "<strong>Gene Label:</strong> "   
+		retData = "<strong>" +  self._toProperCase(self.options.comparisonType).substring(0, self.options.comparisonType.length-1) +" Label:</strong> "   
 			+ modelData.model_label + "<br/><strong>Rank:</strong> " + (parseInt(modelData.model_rank) + 1)
 			+ "<br/><strong>Score:</strong> " + modelData.model_score;
 
