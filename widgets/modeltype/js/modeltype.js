@@ -844,9 +844,16 @@ as a separate call in the init function.
 	    } else if (d.subsumer_id.indexOf("ZFIN") > -1) {
 	    	subSpecies = "Zebrafish";
 	    }
-	    
+
+	    var bSpecies = "Human";
+	    if (d.id_b.indexOf("MP") > -1) {
+	    	bSpecies = "Mouse";
+	    } else if (d.id_b.indexOf("ZFIN") > -1) {
+	    	bSpecies = "Zebrafish";
+	    }
+
 	    retData = "<strong>Input: </strong> " + d.label_a + " (" + aSpecies + ")"   
-		    + "<br/><strong>Match: </strong> " + d.subsumer_label + " (" + subSpecies + ")"
+		    + "<br/><strong>Target: </strong> " + d.label_b + " (" + bSpecies + ")"
      	    + "<br/><strong>" + this._toProperCase(this.options.comparisonType).substring(0, this.options.comparisonType.length-1)  +" Label: </strong> " + d.model_label
      	+ "<br/><strong>Similarity Score: </strong> " + d.value.toFixed(2);
 	    this._updateDetailSection(retData, this._getXYPos(obj));
