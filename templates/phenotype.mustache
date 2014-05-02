@@ -31,7 +31,9 @@
                     {{/alerts}}
                     <img id="monarch-logo" class="downloadline" src="/image/logo-sneak.png"/>
                     <h1 class="downloadline">Phenotype: {{label}}</h1>
-                    <a href="{{{download.json}}}" class="btn btn-default downloadline monarch-phenotype-dark">JSON</a>
+                    <a href="{{{download.json}}}" class="btn btn-default downloadline downloadline-left monarch-phenotype-dark">JSON</a>
+                    <a class="downloadline btn btn-large btn-default btn-monarch-main monarch-feedback-dark"
+                            href="mailto:info@monarchinitiative.org">Your feedback welcome!</a>
                     <p>
                     {{#hasDef}}
                     {{definition}}<br/>
@@ -52,16 +54,13 @@
                     <div class="tabcontainer">
                         <div class="tabhover">View genotypes with this phenotype</div>
                         {{#hasGenotypes}}
-                            <a href="#genotypes"><div class="tab contenttab genotab">Genotypes ({{genotypeNum}})</div></a>
+                            <a href="#genotypes"><div class="tab contenttab genotab">Models ({{genotypeNum}})</div></a>
                         {{/hasGenotypes}}
                         {{^hasGenotypes}}
-                            <div class="tab greyed-out">Genotypes (0)</div>
+                            <div class="tab greyed-out">Models (0)</div>
                         {{/hasGenotypes}}
                     </div>
                 </div>
-		<A class="feedback downloadline btn btn-large btn-default
-                btn-monarch-main" HREF="mailto:info@monarchinitiative.org">Your feedback welcome!</a>
-
             </div>
             <div id="complete-info">
                 <div id="overview" class="first category">

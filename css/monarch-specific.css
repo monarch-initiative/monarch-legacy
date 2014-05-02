@@ -28,7 +28,7 @@ p {
     margin-top: 35px;
     margin-bottom: -3px;
 }
-@media (max-width: 1170px) {
+@media (max-width: 950px) {
     #categories {
         margin-bottom: 10px;
     }
@@ -46,7 +46,7 @@ p {
     left: 5px;
     display: none;
 }
-@media (min-width: 1170px) {
+@media (min-width: 950px) {
     .tab {
         display: inline-block;
         padding: 2px 15px;
@@ -59,7 +59,7 @@ p {
         border: black solid 1px;
     }
 }
-@media (max-width: 1170px) {
+@media (max-width: 950px) {
     .tab {
         display: inline-block;
         padding: 2px 15px;
@@ -91,12 +91,12 @@ p {
 #longertab {
     width: 140px;
 }
-@media (min-width: 1170px) {
+@media (min-width: 950px) {
     .second-row-divider {
         display: none;
     }
 }
-@media (max-width: 1170px) {
+@media (max-width: 950px) {
     .second-row-divider {
         margin-bottom: 35px;
     }
