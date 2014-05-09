@@ -1,0 +1,75 @@
+{
+    "status" : "alpha",
+    "graphs": [
+        {
+            "graph" : "ctd-chemical-disease-map",
+            "view" : "nif-0000-02683-2",
+            "mapVersion" : "2014-05-09b",
+            "filter" : {
+                "direct_or_inferred" : "direct"
+            },
+            "columns" : [
+                {
+                    "name" : "v_uuid"
+                },
+                {
+                    "name" : "disease_id"
+                },
+                {
+                    "name" : "disease_label",
+					"type" : "rdfs:Literal"
+                },
+                {
+                    "name" : "chemical_id"
+                },
+                {
+                    "name" : "chemical_label",
+					"type" : "rdfs:Literal"
+                },
+                {
+                    "name" : "publication_ids",
+                    "list_delimiter" : ", "
+                },
+                {
+                    "name" : "association_type_label",
+					"type" : "rdfs:Literal"
+                }
+            ],
+            "mappings" : [
+                {"subject" : "chemcial_id",
+                 "predicate" : "RO:0002431",
+                 "object" : "disease_id"
+                },
+                {"subject" : "disease_id",
+                 "predicate" : "rdfs:Label",
+                 "object" : "disease_label"
+                },
+                {"subject" : "chemical_id",
+                 "predicate" : "rdfs:Label",
+                 "object" : "chemical_label"
+                },
+                {"subject" : "v_uuid",
+                 "predicate" : "rdf:type",
+                 "object" : "SIO:association"
+                },
+                {"subject" : "v_uuid",
+                 "predicate" : "hasSubject",
+                 "object" : "chemical_id"
+                },
+                {"subject" : "v_uuid",
+                 "predicate" : "hasObject",
+                 "object" : "disease_id"
+                },
+                {"subject" : "v_uuid",
+                 "predicate" : "dc:source",
+                 "object" : "publication_ids"
+                },
+                {"subject" : "v_uuid",
+                 "predicate" : "dc:description",
+                 "object" : "association_description"
+                }
+
+            ]
+        }
+   ]
+}
