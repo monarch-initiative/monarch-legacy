@@ -624,7 +624,7 @@ function CyExploreDemoInit(){
 	var position_object = {};
 	if( desired_layout == 'sugiyama' ){
 	    var renderer = new bbop.layout.sugiyama.render();
-	    var layout = renderer.layout(graph);
+	    var layout = renderer.layout(global_graph);
 	    var layout_nodes = layout.nodes;
 	    each(layout_nodes,
 		 function(ln){
