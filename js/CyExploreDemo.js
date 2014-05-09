@@ -525,6 +525,14 @@ function CyExploreDemoInit(){
 
     // 
     var global_graph = null;
+    // Destroy cytoscape graph as well as the resetting the global
+    // graph object.
+    function empty_graph(){
+	global_graph = new bbop.model.graph();
+	//focus_nodes = {};
+	jQuery(demo_output_elt).empty();
+    }
+    // Add to it.
     function add_to_graph(graph_json, focus_id){
 
 	// graphs may be either a single object (short) or multiple
@@ -536,7 +544,7 @@ function CyExploreDemoInit(){
 	}
 	each(graph_json,
 	     function(grg){
-		 graph.load_json(grg);
+		 new_graph.load_json(grg);
 	     });
 
 	// Merge in the new_graph to the global one.
@@ -611,8 +619,30 @@ function CyExploreDemoInit(){
 	// Render.
 	var elements = {nodes: cynodes, edges: cyedges};
 	
+	// Get the layout information into the position object
+	// required by cytoscape.js for sugiyama in grid, if required.
+	var position_object = {};
+	if( desired_layout == 'sugiyama' ){
+	    var renderer = new bbop.layout.sugiyama.render();
+	    var layout = renderer.layout(graph);
+	    var layout_nodes = layout.nodes;
+	    each(layout_nodes,
+		 function(ln){
+		     position_object[ln['id']] = {x: ln['x'], y: ln['y']};
+		 });
+	}
+	function get_pos(cn){
+	    var po = position_object[cn.id()];
+	    return {row: po['y'], col: po['x']};
+	}
+
 	// Select which layout we want to use.
 	var layout_opts = {
+	    'sugiyama': {
+                'name': 'grid',
+		'padding': 30,
+		'position': get_pos
+	    },
 	    'random': {
 		name: 'random'//,
 		// fit: true
@@ -780,8 +810,8 @@ function CyExploreDemoInit(){
     manager.register('success', 'draw', _success_callback);
     manager.register('error', 'oops', _error_callback);
     function data_call(arg1){
-	var base = 'http://kato.crbs.ucsd.edu:9000/scigraph/graph/paths/' + arg4;
-	var rsrc = base + '/' + arg1 + '/' + arg2 + '.jsonp?length=' + desired_spread;
+	var base = 'http://kato.crbs.ucsd.edu:9000/scigraph/graph/neighbors/' + arg1 + '.jsonp';
+	var rsrc = base + '?' + 'depth=' + desired_spread;
 	manager.resource(rsrc);
 	manager.method('get');
 	manager.use_jsonp(true);
@@ -918,6 +948,10 @@ function CyExploreDemoInit(){
 
 	    // TODO:
 	    if( v1 != '' && s1 != '' && s2 != '' ){
+
+		// Clear out the graph on call.
+		empty_graph();
+
 		// alert('TODO: only using demo input; ignoring: ' +
 		// 	 [v1, v2, s1].join(', '));
 		desired_spread = s1;
