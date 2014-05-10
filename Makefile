@@ -27,10 +27,10 @@ test-%:
 	$(RINGO_BIN) tests/$*.js
 
 production-test-%:
-	$(RINGO_BIN) tests/$*.js -s production
+	$(RINGO_BIN) tests/$*.js -s production-c vocabulary,ontoquest,federation,monarch
 
 nif-production-url-test:
-	$(RINGO_BIN) tests/urltester.js -s production -c vocabulary,ontoquest,federation
+	$(RINGO_BIN) tests/urltester.js -s production -c vocabulary,ontoquest,federation,monarch
 
 triples:
 	$(RINGO_BIN) bin/generate-triples-from-nif.js -c conf/server_config_production.json conf/rdf-mapping/*-map.json && ./bin/target-ttl-to-owl.sh
