@@ -525,33 +525,39 @@ function CyExploreDemoInit(){
 
     // 
     var global_graph = null;
+    var focus_nodes = {};
     // Destroy cytoscape graph as well as the resetting the global
     // graph object.
     function empty_graph(){
 	global_graph = new bbop.model.graph();
-	//focus_nodes = {};
+	focus_nodes = {};
 	jQuery(demo_output_elt).empty();
     }
     // Add to it.
-    function add_to_graph(graph_json, focus_id){
+    function add_to_graph(graph_json){
+
+	// Ensure 
+	if( ! global_graph ){
+	    global_graph = new bbop.model.graph();
+	}
+
+	// // Add another focus.
+	// if( focus_id ){
+	//     focus_nodes[focus_id] = true;	    
+	// }
 
 	// graphs may be either a single object (short) or multiple
 	// graph objects (simple). For now, fold them all in to a
 	// single graph entity.
-	var new_graph = new bbop.model.graph();
 	if( ! bbop.core.is_array(graph_json) ){
 	    graph_json = [graph_json];
 	}
 	each(graph_json,
 	     function(grg){
-		 new_graph.load_json(grg);
+		 var tmp_graph = new bbop.model.graph();
+		 tmp_graph.load_json(grg);
+		 global_graph.merge_in(tmp_graph);
 	     });
-
-	// Merge in the new_graph to the global one.
-	if( ! global_graph ){
-	    global_graph = new bbop.model.graph();
-	}
-	global_graph.merge_in(new_graph);
 
 	// Clear current contents of graph elt.
 	jQuery(demo_output_elt).empty();
@@ -570,10 +576,6 @@ function CyExploreDemoInit(){
 		 if( global_graph.is_root_node(node.id()) ){
 		     cyroots.push(node.id());
 		 }
-		 var clr;
-		 if( focus && node.id() == focus_id ){
-		     
-		 }
 		 var node_opts = {
 		     //'group': 'nodes',
 		     'data': {
@@ -583,7 +585,7 @@ function CyExploreDemoInit(){
 		     'grabbable': true
 		 };
 		 // Highlight the focus if there.
-		 if( focus_id && node.id() == focus_id ){
+		 if( focus_nodes[node.id()] ){
 		     node_opts['css'] = { 'background-color': '#111111' };
 		 }
 		 cynodes.push(node_opts);
@@ -640,8 +642,8 @@ function CyExploreDemoInit(){
 	var layout_opts = {
 	    'sugiyama': {
                 'name': 'grid',
-		'padding': 30,
-		'position': get_pos
+	    	'padding': 30,
+	    	'position': get_pos
 	    },
 	    'random': {
 		name: 'random'//,
@@ -729,6 +731,7 @@ function CyExploreDemoInit(){
 			function(e){
 			    e.stopPropagation();
 			    var nid = e.cyTarget.id();
+			    focus_nodes[nid] = true;
 			    data_call(nid);
 			});
 	cy.nodes().bind('mouseover',
@@ -946,29 +949,21 @@ function CyExploreDemoInit(){
 	    var s1 = jQuery(sel_1_input_elt).val() || '';
 	    var s2 = jQuery(sel_2_input_elt).val() || '';
 
-	    // TODO:
+	    // ...
 	    if( v1 != '' && s1 != '' && s2 != '' ){
 
 		// Clear out the graph on call.
 		empty_graph();
 
 		// alert('TODO: only using demo input; ignoring: ' +
-		// 	 [v1, v2, s1].join(', '));
+		// 	 [v1, s1, s2].join(', '));
 		desired_spread = s1;
 		desired_layout = s2;
+		focus_nodes[v1] = true;
 		data_call(v1);
 	    }else{
 		alert('insufficient args: ' + [v1, s1, s2].join(', ') ); //+
-		//       '; fall back on demo');
-		// // TODO: need good data source
-		// // This demo lifted from: http://beta.neuinfo.org:9000/graphdemo/graph/path/short/UBERON_0000004/UBERON_0001062.jsonp?length=5
-		// var dgraph = {"nodes":[{"id":"http://purl.obolibrary.org/obo/UBERON_0000004","lbl":"olfactory apparatus"},{"id":"http://purl.obolibrary.org/obo/UBERON_0004121","lbl":"ectoderm-derived structure"},{"id":"http://purl.obolibrary.org/obo/UBERON_0000061","lbl":"anatomical structure"},{"id":"http://purl.obolibrary.org/obo/UBERON_0000465","lbl":"material anatomical entity"},{"id":"http://purl.obolibrary.org/obo/UBERON_0001062","lbl":"anatomical entity"}],"edges":[{"sub":"http://purl.obolibrary.org/obo/UBERON_0000004","obj":"http://purl.obolibrary.org/obo/UBERON_0004121","pred":"SUBCLASS_OF"},{"sub":"http://purl.obolibrary.org/obo/UBERON_0004121","obj":"http://purl.obolibrary.org/obo/UBERON_0000061","pred":"SUBCLASS_OF"},{"sub":"http://purl.obolibrary.org/obo/UBERON_0000061","obj":"http://purl.obolibrary.org/obo/UBERON_0000465","pred":"SUBCLASS_OF"},{"sub":"http://purl.obolibrary.org/obo/UBERON_0000465","obj":"http://purl.obolibrary.org/obo/UBERON_0001062","pred":"SUBCLASS_OF"}]};
-		// // TODO: need real managed data source; see above
-		// var dg = new bbop.model.graph();
-		// dg.load_json(dgraph);
-		// add_to_graph(dg);
 	    }
-
 	});
 
     ll('Done ready!');
