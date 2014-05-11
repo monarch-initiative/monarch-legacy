@@ -27,7 +27,7 @@ test-%:
 	$(RINGO_BIN) tests/$*.js
 
 production-test-%:
-	$(RINGO_BIN) tests/$*.js -s production -c vocabulary,ontoquest,federation,monarch
+	$(RINGO_BIN) tests/$*.js -s production
 
 nif-production-url-test:
 	$(RINGO_BIN) tests/urltester.js -s production -c vocabulary,ontoquest,federation,monarch
