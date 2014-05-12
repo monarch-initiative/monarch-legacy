@@ -1,0 +1,49 @@
+<html>
+<head>
+    <title>Keggerator Widget Example</title>
+    <script src="../../js/jquery-1.11.0.min.js"></script>
+    <script src="../../js/jquery-ui-1.10.3.custom.min.js"></script>
+    <script src="../../js/d3.min.js"></script>
+    <script src="../../js/jquery.xml2json.js"></script>
+    <script src="js/keggerator.js"></script>
+    <script>
+
+        var annotations = {
+            pathways: ["hsa05010"],
+            phenotypes: [
+                {
+                    "name": "diseasea",
+                    "link": "http://",
+                    "genes": ["hsa:348", "hsa:10975", "hsa:842"]
+                },
+                {
+                    "name": "diseaseb",
+                    "link": "http://",
+                    "genes": ["hsa:348", "hsa:120892", "hsa:10975"]
+                },
+                {
+                    "name": "diseasec",
+                    "link": "http://",
+                    "genes": ["hsa:348", "hsa:120892", "hsa:10975"]
+                }
+            ]
+        }
+
+        jQuery(document).ready(
+                function () {
+
+                    $("#keggerator").keggerator({keggSource: "./demodata", annotations: annotations});
+
+                });
+
+    </script>
+</head>
+<body>
+
+<h1>ModelType Widget Example</h1>
+
+<div id="keggerator"></div>
+
+
+</body>
+</html>
