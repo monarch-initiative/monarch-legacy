@@ -1,6 +1,6 @@
 {
     "notes" : "currently just stores interaction as a graph. In future we will need to store the interaction as an entity",
-    "isDisabled" : true,
+    "isDisabled" : false,
     "graphs": [
         {
             "graph" : "brain-connectivity",
@@ -30,8 +30,16 @@
                     "type" : "rdfs:Literal"
                 },
                 {
-                    "name" : "species",
-                    "type" : "rdfs:Literal"
+                    "name" : "species_id",
+                    "prefix" : "http://uri.neuinfo.org/nif/nifstd/"
+                },
+                {
+                    "name" : "pmid",
+                    "list_delimiter" : ","
+                },
+                {
+                    "name" : "nifid",
+                    "prefix" : "http://uri.neuinfo.org/source/"
                 },
                 { 
                    "name" : "database",
@@ -49,7 +57,7 @@
                  "object" : "con_to"},
                 {"subject" : "v_uuid",
                  "predicate" : "dc:source",
-                 "object" : "database"},
+                 "object" : "nifid"},
                 {"subject" : "v_uuid",
                  "predicate" : "http://uri.neuinfo.org/connectivity#projectionStrength",
                  "object" : "projection_strength"},
@@ -58,9 +66,12 @@
                  "object" : "notes"},
                 {"subject" : "v_uuid",
                  "predicate" : "http://uri.neuinfo.org/connectivity#species",
-                 "object" : "species"},
+                 "object" : "species_id"},
                 {"subject" : "v_uuid",
                  "predicate" : "http://uri.neuinfo.org/connectivity#reference",
+                 "object" : "pmid"},
+                {"subject" : "v_uuid",
+                 "predicate" : "http://uri.neuinfo.org/connectivity#referenceLink",
                  "object" : "ref_link"}
             ]
         }

@@ -1,0 +1,29 @@
+{
+    "notes" : "currently just stores interaction as a graph. In future we will need to store the interaction as an entity",
+    "isDisabled" : false,
+    "graphs": [
+        {
+            "graph" : "brain-connectivity-eff-overlaps",
+            "view" : "nlx_154697-8",
+            "filter" : {
+                "con_to_expr" : "overlaps"
+            },
+
+            "columns" : [
+                {
+                    "name" : "v_uuid"
+                },
+                {
+                    "name" : "con_to_id",
+                    "prefix" : "http://uri.neuinfo.org/nif/nifstd/"
+                },
+            ],
+            "mappings" : [
+
+                {"subject" : "v_uuid",
+                 "predicate" : "http://uri.neuinfo.org/connectivity#efferent_overlaps",
+                 "object" : "con_to_id"}
+            ]
+        }
+   ]
+}
