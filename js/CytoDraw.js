@@ -214,6 +214,15 @@ function CytoDraw(graph, focus_node_list,
 			jQuery('.arrow').hide();
 			jQuery('.popover').css('top', epos.y -100);
 			jQuery('.popover').css('left', epos.x -100);
+			// TODO/BUG: Also, unfortunately, I cannot
+			// figure out why I am stuck with the
+			// single frozen pop-up on the versions of
+			// jQuery/UI that monarch is using. I cannot
+			// change from the intial, probably a quirk of
+			// bs3). Manually change it.
+			var new_html = '<div style="display: none;" class="arrow"></div><h3 class="popover-title">' + nid + '</h3><div class="popover-content">' + nlbl + '</div>';
+			jQuery('.popover').html(new_html);
+
 			//ll('node: ' + nid);
 		    });
     cy.nodes().bind('mouseout',
@@ -221,11 +230,8 @@ function CytoDraw(graph, focus_node_list,
 			e.stopPropagation();
 			jQuery(e.originalEvent.target).popover('destroy');
 		    });
-    // each(cy.nodes(),
-    //      function(nkey, node){
-    // 	 jQuery(node.element()).popover(popt);
-    //      });
 
+    // 
     cy.edges().unselectify(); // opt
     cy.boxSelectionEnabled(false);
     cy.resize();
