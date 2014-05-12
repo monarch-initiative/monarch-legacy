@@ -76,7 +76,7 @@ if (require.main == module) {
     var script = system.args.shift();
     var parser = new Parser(system.args);
     parser.addOption('h', 'help', null, 'Display help');
-    parser.addOption('s', 'setup', 'String', 'one of: alpha, beta, production (NOT IMPLEMENTED)');
+    parser.addOption('s', 'setup', 'String', 'one of: beta, production');
     
     var options = parser.parse(system.args);
     if (options.help) {
