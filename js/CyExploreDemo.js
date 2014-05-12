@@ -91,6 +91,33 @@ function CyExploreDemoInit(){
 	CytoDraw(global_graph, bbop.core.get_keys(focus_nodes),
 		 desired_layout, context, demo_output_id,
 		 _spin_show, _spin_hide, data_call);
+	
+	// Update color explanations to the newest.
+	var color_clust = [];
+	var erels = global_graph.all_predicates();
+	each(erels,
+	     function(erel){
+		 color_clust.push({
+				      'label': context.readable(erel),
+				      'color': context.color(erel),
+				      'priority': context.priority(erel)
+				  });
+	     });
+	color_clust.sort(function(a, b){ return b.priority - a.priority; });
+	// Assemble HTML for label display.
+	var fc = [];
+	fc.push('<ul class="list-unstyled">');
+	each(color_clust,
+	     function(c){
+		 fc.push('<li>');
+		 fc.push('<span class="label" style="background-color:' +
+			 c.color + ';">' + c.label + '</span>');
+		 fc.push('</li>');
+	     });
+	fc.push('</ul>');
+	// Add to DOM.
+	jQuery('#color_exp').empty();
+	jQuery('#color_exp').append(fc.join(''));
     }
 
     ///
