@@ -13,7 +13,11 @@ function CyPathDemoInit(){
 
     // Color/name context.
     var context = new bbop.context(amigo.data.context);
+    var desired_spread = 1;
     var desired_layout = null;
+
+    var global_graph = null;
+    var focus_nodes = {};
 
     // HTML connctions.
     var demo_output_id = 'cydemo';
@@ -42,6 +46,12 @@ function CyPathDemoInit(){
     // Ready spinner for use.
     var spin = new bbop.widget.spinner('spinloc', '/image/waiting_ac.gif',
 				       {'visible_p': false});
+    function _spin_show(){
+	spin.show();
+    }
+    function _spin_hide(){
+	spin.hide();
+    }
     ll('Start ready!');
 
     ///
@@ -49,233 +59,76 @@ function CyPathDemoInit(){
     ///
 
     // 
-    function draw_graph(graph_json, focus_id){
+    function draw_graph(graph_json){
+	
+	// Ensure 
+	if( ! global_graph ){
+	    global_graph = new bbop.model.graph();
+	}
 
 	// graphs may be either a single object (short) or multiple
 	// graph objects (simple). For now, fold them all in to a
 	// single graph entity.
-	var graph = new bbop.model.graph();
 	if( ! bbop.core.is_array(graph_json) ){
 	    graph_json = [graph_json];
 	}
 	each(graph_json,
 	     function(grg){
+		 var graph = new bbop.model.graph();
 		 graph.load_json(grg);
+		 global_graph.merge_in(graph);
 	     });
-
+	
 	// Clear current contents of graph elt.
 	jQuery(demo_output_elt).empty();
-
-	// Nodes.
-	var cyroots = [];
-	var cynodes = [];
-	var info_lookup = {};
-	each(graph.all_nodes(),
-	     function(node){
-		 ll('node: ' + node.id());
-		 info_lookup[node.id()] = {
-		     'id': node.id(), 
-		     'label': node.label() || node.id()
-		 };
-		 if( graph.is_root_node(node.id()) ){
-		     cyroots.push(node.id());
-		 }
-		 var clr;
-		 if( focus && node.id() == focus_id ){
-		     
-		 }
-		 var node_opts = {
-		     //'group': 'nodes',
-		     'data': {
-			 'id': node.id(), 
-			 'label': node.label() || node.id()
-		     },
-		     'grabbable': true
-		 };
-		 // Highlight the focus if there.
-		 if( focus_id && node.id() == focus_id ){
-		     node_opts['css'] = { 'background-color': '#111111' };
-		 }
-		 cynodes.push(node_opts);
-	     });
-
-	// Edges.
-	var cyedges = [];
-	each(graph.all_edges(),
-	     function(edge){
-		 var sub = edge.subject_id();
-		 var obj = edge.object_id();
-		 var prd = edge.predicate_id();
-		 var clr = context.color(prd);
-                 var eid = '' + prd + '_' + sub + '_' + obj;
-		 ll('edge: ' + eid);
-		 cyedges.push(
-                     {
-			 //'group': 'edges',
-			 'data': {
-                             'id': eid,
-                             'pred': prd,
-                             // 'source': sub,
-                             // 'target': obj
-                             'source': obj,
-                             'target': sub
-			 },
-			 css: {
-			     'line-color': clr
-			 }
-                     });
-	     });
-
-	// Render.
-	var elements = {nodes: cynodes, edges: cyedges};
 	
-	// Select which layout we want to use.
-	var layout_opts = {
-	    'random': {
-		name: 'random'//,
-		// fit: true
-	    },
-	    'grid': {
-		name: 'grid',
-		// fit: true,
-		padding: 30,
-		rows: undefined,
-		columns: undefined
-	    },
-	    'circle': {
-		name: 'circle'//,
-		//fit: true
-	    },
-	    'concentric': {
-		name: 'concentric'//,
-		//fit: true
-	    },
-	    'breadthfirst': {
-                'name': 'breadthfirst',
-                'directed': true,
-                //'fit': true,
-		//'maximalAdjustments': 0,
-		'circle': false,
-		'roots': cyroots
-	    },
-	    // 'arbor': {
-	    // },
-	    'cose': {
-                'name': 'cose'//,
-                // 'directed': true,
-                // //'fit': true,
-		// //'maximalAdjustments': 0,
-		// 'circle': false,
-		// 'roots': cyroots
-	    }
-	};
-	var lo = layout_opts[desired_layout];
-	if( ! lo ){
-	    alert('your selected layout does not exist: ' + desired_layout);   
-	}
-
-	jQuery(demo_output_elt).cytoscape(
-            {
-		userPanningEnabled: true, // pan over box select
-		'elements': elements,
-		'layout': lo,
-		hideLabelsOnViewport: true, // opt
-		hideEdgesOnViewport: true, // opt
-		textureOnViewport: true, // opt
-		'style': [
-                    {
-			selector: 'node',
-			css: {
-                            'content': 'data(label)',
-			    'font-size': 8,
-			    'min-zoomed-font-size': 6, //10,
-                            'text-valign': 'center',
-                            'color': 'white',
-			    'shape': 'roundrectangle',
-                            'text-outline-width': 2,
-                            'text-outline-color': '#222222'
-			}
-                    },
-                    {
-			selector: 'edge',
-			css: {
-                            //'content': 'data(pred)', // opt
-                            'width': 2,
-			    //'curve-style': 'haystack', // opt
-                            'line-color': '#6fb1fc'
-                            //'source-arrow-shape': 'triangle' // opt
-			}
-                    }
-		]
-            });
-
-	var cy = jQuery(demo_output_elt).cytoscape('get');
-
-	// Bind events.
-	// cy.nodes().bind('click',
+	CytoDraw(global_graph, focus_nodes,
+		 desired_layout, context, demo_output_id,
+		 _spin_show, _spin_hide, data_call_explore);
+    }
+    
+	// cy.nodes().bind('mouseover',
 	// 		function(e){
 	// 		    e.stopPropagation();
+
+	// 		    // TODO/BUG: this popover positioning got out of
+	// 		    // hand; just rewrite doing it manually with a
+	// 		    // div from bootstrap like normal people.
+	// 		    // (couldn't do it the obvious way because the
+	// 		    // canvas elements are just layers with nothing
+	// 		    // to adere to).
 	// 		    var nid = e.cyTarget.id();
-	// 		    man.set_id(nid);
-	// 		    //spin.show();
-	// 		    man.search();
+	// 		    var nlbl = info_lookup[nid]['label'];
+ 	// 		    var popt = {
+	// 			title: nid,
+	// 			content: nlbl,
+	// 			// container: 'body',
+	// 			animation: false,
+	// 			placement: 'top',
+	// 			trigger: 'manual'
+	// 		    };
+	// 		    var epos = e.cyRenderedPosition;
+	// 		    jQuery(e.originalEvent.target).popover(popt);
+	// 		    jQuery(e.originalEvent.target).popover('show');
+	// 		    jQuery('.arrow').hide();
+	// 		    jQuery('.popover').css('top', epos.y -100);
+	// 		    jQuery('.popover').css('left', epos.x -100);
+	// 		    // TODO/BUG: Also, unfortunately, I cannot
+	// 		    // figure out why I am stuck with the
+	// 		    // single frozen pop-up (cannot change
+	// 		    // from the intial, probably a quirk of
+	// 		    // bs3). Manually change it.
+	// 		    var new_html = '<div style="display: none;" class="arrow"></div><h3 class="popover-title">' + nid + '</h3><div class="popover-content">' + nlbl + '</div>';
+	// 		    jQuery('.popover').html(new_html);
+
+	// 		    //ll('node: ' + nid);
 	// 		});
-	cy.nodes().bind('mouseover',
-			function(e){
-			    e.stopPropagation();
-
-			    // TODO/BUG: this popover positioning got out of
-			    // hand; just rewrite doing it manually with a
-			    // div from bootstrap like normal people.
-			    // (couldn't do it the obvious way because the
-			    // canvas elements are just layers with nothing
-			    // to adere to).
-			    var nid = e.cyTarget.id();
-			    var nlbl = info_lookup[nid]['label'];
- 			    var popt = {
-				title: nid,
-				content: nlbl,
-				// container: 'body',
-				animation: false,
-				placement: 'top',
-				trigger: 'manual'
-			    };
-			    var epos = e.cyRenderedPosition;
-			    jQuery(e.originalEvent.target).popover(popt);
-			    jQuery(e.originalEvent.target).popover('show');
-			    jQuery('.arrow').hide();
-			    jQuery('.popover').css('top', epos.y -100);
-			    jQuery('.popover').css('left', epos.x -100);
-			    // TODO/BUG: Also, unfortunately, I cannot
-			    // figure out why I am stuck with the
-			    // single frozen pop-up (cannot change
-			    // from the intial, probably a quirk of
-			    // bs3). Manually change it.
-			    var new_html = '<div style="display: none;" class="arrow"></div><h3 class="popover-title">' + nid + '</h3><div class="popover-content">' + nlbl + '</div>';
-			    jQuery('.popover').html(new_html);
-
-			    //ll('node: ' + nid);
-			});
-	cy.nodes().bind('mouseout',
-			function(e){
-			    e.stopPropagation();
-			    jQuery(e.originalEvent.target).popover('destroy');
-			});
-
-	// 
-	cy.edges().unselectify(); // opt
-	cy.boxSelectionEnabled(false);
-	cy.resize();
-
-	// Make sure re respect resizing.
-	jQuery(window).off('resize');
-	jQuery(window).on('resize',
-			  function(){
-			      cy.resize(); 
-			  });
-
+	// cy.nodes().bind('mouseout',
+	// 		function(e){
+	// 		    e.stopPropagation();
+	// 		    jQuery(e.originalEvent.target).popover('destroy');
+	// 		});
 	//ll('done draw');
-    }
 
     ///
     /// Demo runner.
@@ -292,22 +145,48 @@ function CyPathDemoInit(){
 	}else{
 	    ll('the response was not okay');	    
 	}
-	spin.hide();
+	_spin_hide();
     }
     function _error_callback(resp, man){
-	spin.hide();
+	_spin_hide();
 	alert('some kind of error?');
     }
     manager.register('success', 'draw', _success_callback);
     manager.register('error', 'oops', _error_callback);
-    function data_call(arg1, arg2, arg3, arg4){
+
+    function data_call_path(arg1, arg2, arg3, arg4){
+
+	// 'Tis focus nodes.
+	focus_nodes[arg1] = true;
+	focus_nodes[arg2] = true;
+
 	var base = 'http://kato.crbs.ucsd.edu:9000/scigraph/graph/paths/' + arg4;
 	var rsrc = base + '/' + arg1 + '/' + arg2 + '.jsonp?length=' + arg3;
 	manager.resource(rsrc);
 	manager.method('get');
 	manager.use_jsonp(true);
 	manager.jsonp_callback('callback');
-	spin.show();
+	_spin_show();
+	manager.action();
+    }
+
+    // Wrap up a data call with a single argument.
+    function data_call_explore(arg1){
+
+	// 'Tis a focus node.
+	focus_nodes[arg1] = true;
+
+	// Data call setup.
+	var base = 'http://kato.crbs.ucsd.edu:9000/scigraph/graph/neighbors/' +
+	    arg1 + '.jsonp';
+	var rsrc = base + '?' + 'depth=' + desired_spread;
+	manager.resource(rsrc);
+	manager.method('get');
+	manager.use_jsonp(true);
+	manager.jsonp_callback('callback');
+
+	// Action.
+	_spin_show();
 	manager.action();
     }
 
@@ -455,7 +334,7 @@ function CyPathDemoInit(){
 		// alert('TODO: only using demo input; ignoring: ' +
 		// 	 [v1, v2, s1].join(', '));
 		desired_layout = s3;
-		data_call(v1, v2, s1, s2);
+		data_call_path(v1, v2, s1, s2);
 	    }else{
 		alert('insufficient args: ' + [v1, v2, s1, s2].join(', ') ); //+
 	    }
