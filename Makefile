@@ -7,7 +7,11 @@
 ###
 
 RINGO_MODULE_PATH ?= ../stick/lib
+## TODO/BUG: highly non-canonical location--should be passed as
+## variable, not hard-coded.
 RINGO_BIN ?= ./ringojs/bin/ringo
+## Workaround for the above.
+RINGO_CLI_BIN ?= /usr/bin/ringo
 RINGO_PORT ?= 8080
 
 ###
@@ -26,11 +30,12 @@ production-test-%:
 	$(RINGO_BIN) tests/$*.js -s production
 
 nif-production-url-test:
-	$(RINGO_BIN) tests/urltester.js -s production -c vocabulary,ontoquest,federation
+	$(RINGO_BIN) tests/urltester.js -s production -c vocabulary,ontoquest,federation,monarch
 
 triples:
 	$(RINGO_BIN) bin/generate-triples-from-nif.js -c conf/server_config_production.json conf/rdf-mapping/*-map.json && ./bin/target-ttl-to-owl.sh
-##	$(RINGO_BIN) bin/generate-triples-from-nif.js -c conf/server_config_production.json -m conf/rdf-mapping/ncbi-gene-map.json && ./bin/target-ttl-to-owl.sh
+target/%.ttl:
+	$(RINGO_BIN) bin/generate-triples-from-nif.js -c conf/server_config_production.json conf/rdf-mapping/$*-map.json && ./bin/target-ttl-to-owl.sh
 
 ###
 ### Documentation.
@@ -59,7 +64,9 @@ app-engine:
 	ringo-admin create --google-appengine gae
 
 ## Setup portable Ubuntu environment. -SJC
+.PHONY: cli-launch-dev
+cli-launch-dev:
+	RINGO_MODULE_PATH=$(RINGO_MODULE_PATH) $(RINGO_CLI_BIN) ./lib/monarch/web/webapp_launcher_dev.js --port=$(RINGO_PORT)
 .PHONY: cli-launch
 cli-launch:
-	RINGO_MODULE_PATH=$(RINGO_MODULE_PATH) $(RINGO_BIN) ./lib/monarch/web/webapp_launcher_dev.js --port=$(RINGO_PORT)
-#	RINGO_MODULE_PATH=$(RINGO_MODULE_PATH) $(RINGO_BIN) ./lib/monarch/web/webapp_launcher.js --port=$(RINGO_PORT)
+	RINGO_MODULE_PATH=$(RINGO_MODULE_PATH) $(RINGO_CLI_BIN) ./lib/monarch/web/webapp_launcher.js --port=$(RINGO_PORT)

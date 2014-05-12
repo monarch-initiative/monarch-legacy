@@ -255,6 +255,27 @@
         {
             component : "monarch",
             priority : 1,
+            url : "http://tartini.crbs.ucsd.edu/phenotype/NCBIGene:388552.json",
+            desc : "JSON for a gene",
+            expects : {
+                format : "json",
+                must_contain : [
+                    {
+                        tax_xref: {
+                            "id": "NCBITaxon:9606"
+                        }
+                    }
+                ]
+            }
+        },
+            
+
+        // --json--
+        // monarch API calls can return deeply nested/structured objects, these are
+        // checked recursively
+        {
+            component : "monarch",
+            priority : 1,
             url : "http://tartini.crbs.ucsd.edu/phenotype/HP:0001337.json",
             desc : "JSON for A HPO phenotype disease page, Tremor (and subtypes)",
             expects : {

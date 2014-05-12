@@ -1,0 +1,11 @@
+/**
+ * CSS for items still in labs.
+ */
+
+.bbop-js-spinner {
+    height: 18px;
+}
+.bbop-js-spinner-hidden {
+    visibility: hidden;
+    display: none;
+}

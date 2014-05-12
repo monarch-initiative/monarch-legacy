@@ -2,6 +2,7 @@
 
 /* Main Spotlight */
 .jumbotron {
+    position: relative;
     margin-top: 0px;
     border-radius: 2px;
     padding: 10px 30px 20px;
@@ -13,6 +14,7 @@
 .jumbotron p {
     font-size: 16px;
     line-height: 26px;
+    margin: 0px;
 }
 #monarch-logo {
     margin-right: 20px;
@@ -20,7 +22,7 @@
 .btn-monarch-main {
     padding: 10px 15px;
     font-weight: 400;
-    font-size: 16px;
+    font-size: 14px;
 }
 /* Rest of Content */
 .col-lg-9 {
@@ -29,4 +31,9 @@
 }
 .col-lg-9 h1 {
     font-size: 22px;
+}
+.ui-autocomplete {
+    position:absolute;
+    cursor:default;
+    z-index:4000 !important
 }

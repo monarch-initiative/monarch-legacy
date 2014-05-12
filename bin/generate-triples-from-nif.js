@@ -10,6 +10,8 @@ var maxLimit = 1000;
 //var maxLimit = 10;
 var ldcontext;
 var targetDir;
+var numTriplesDumped;
+var numAxiomsDumped;
 
 function main(args) {
     var script = args.shift();
@@ -20,6 +22,7 @@ function main(args) {
     parser.addOption("C","context","JSONFile", "E.g. conf/context.json");
     parser.addOption("c","config","JSONFile", "E.g. conf/production.json");
     parser.addOption("d","targetDir","Directory", "E.g. target");
+    parser.addOption("k","apikey","ID", "NIF/SciCrunch API Key");
     parser.addOption('h', 'help', null, 'Display help');
 
     options = parser.parse(args);
@@ -61,7 +64,17 @@ function main(args) {
         var gset = gsets[j];
         var graphs = gset.graphs;
 
-    
+        if (options.config != null) {
+            engine.setConfiguration( JSON.parse(fs.read(options.config)) );
+        }
+        if (gset.forceConfiguration != null) {
+            engine.setConfiguration( gset.forceConfiguration );
+        }
+        if (gset.isDisabled) {
+            console.log("Skipping disabled conf");
+            continue;
+        }
+
         for (var k in graphs) {
             var graphconf = graphs[k];
             if (options.graph == null || graphconf.graph == options.graph) {
@@ -77,8 +90,181 @@ if (require.main == module.id) {
     main(system.args);
 }
 
+// generate a named graph from a set of mappings
+function generateNamedGraph(gconf) {
+
+    var targetFileBaseName = targetDir + "/" + gconf.graph;
+
+    var mdFilePath = targetFileBaseName + "-meta.json";
+
+    var lastDumpMetadata;
+    if (fs.exists(mdFilePath)) {
+        lastDumpMetadata = JSON.parse(fs.read(mdFilePath));
+        if (lastDumpMetadata.mapVersion != null) {
+            console.info("Comparing last dump version: "+lastDumpMetadata.mapVersion+ " with current: " + gconf.mapVersion);
+            if (lastDumpMetadata.mapVersion == gconf.mapVersion) {
+                console.info("Identical - will not redump");
+                return;
+            }
+            else {
+                if (lastDumpMetadata.mapVersion > gconf.mapVersion) {
+                    console.warn("Kind of weird; lastDumpMetadata.mapVersion > gconf.mapVersion");
+                }
+            }
+        }
+    }
+    else {
+        console.log("Cannot find "+mdFilePath+ " -- assuming this is initial dump");
+    }
+
+    // globals ahoy
+    numTriplesDumped = 0;
+    numAxiomsDumped = 0;
+
+    // write each NG to its own turtle file
+    var io = fs.open(targetFileBaseName + ".ttl", {write: true});
+
+    // HEADER
+    emitPrefixes(io);
+
+    // OBJECTS
+    if (gconf.objects != null) {
+        gconf.objects.forEach(function(obj) {
+            var id = mapRdfResource(obj.id);
+            for (var k in obj) {
+                if (k == 'id') {
+                }
+                else {
+                    emit(io, id, mapRdfResource(k), mapRdfResource(obj[k]));
+                }
+            }
+        });
+    }
+
+    var colNames = gconf.columns.map(function(c) { return c.name });
+    var cmap = {};
+
+    // create index mapping column names to column metadata
+    gconf.columns.forEach(function(c) { cmap[c.name] = c });
+
+    // don't use derived columns in queries
+    var queryColNames = colNames.filter( function(c) { return cmap[c].derivedFrom == null } );
+    var derivedColNames = colNames.filter( function(c) { return cmap[c].derivedFrom != null } );
+
+    // Federation REST API does not allow extraction of
+    // all data in one query, so we iterate through rows
+    // in chunks, starting with offset = 0
+    var offset = 0;
+    var done = false;
+    var seenMap = {};
+    var nDupes = 0;
+    var numSourceRows;
+
+    while (!done) {
+
+        var qopts = {offset : offset};
+        if (options.apikey != null) {
+            qopts[apikey] = options.apikey;
+        }
+        // Federation query
+        var resultObj = engine.fetchDataFromResource(null, gconf.view, null, queryColNames, gconf.filter, maxLimit, null, qopts);
+        numSourceRows = resultObj.resultCount;
+        console.info(offset + " / "+ numSourceRows + " rows");
+
+
+        offset += maxLimit;
+        if (offset >= numSourceRows) {
+            done = true;
+        }
+        else {
+        }
+
+        var iter = 0;
+        var results = resultObj.results;
+        for (var k in results) {
+            var r = results[k];
+
+            derivedColNames.forEach( function(c) {
+                var dc = cmap[c].derivedFrom;
+                r[c] = r[dc];
+            });
+
+            // generate a primary key for entire row.
+            // we have no way to SELECT DISTINCT so to avoid
+            // writing duplicate triples we check if the set of requested
+            // column values is unique
+            var key = colNames.map(function(cn) { return r[cn] }).join("-");
+            if (seenMap[key]) {
+                nDupes ++;
+                continue;
+            }
+
+            // crude way to keep cache small; cost of occasional dupes is low
+            if (iter > 10) {
+                seenMap = {};
+                iter = 0;
+            }
+            iter++;
+            seenMap[key] = true;
+            
+            if (colNames.indexOf('v_uuid') > -1 && r.v_uuid == null) {
+                // HACK - see https://support.crbs.ucsd.edu/browse/NIF-10231
+                r.v_uuid = colNames.map(function(cn) { return safeify(r[cn]) }).join("-");
+            }
+            
+            // Each n-ary Row in the Solr view can be mapped to multiple 3-ary triples
+            for (var j in gconf.mappings) {
+                var mapping = gconf.mappings[j];
+
+                // map each element of triple
+                var sv = mapColumn(mapping.subject, r, cmap);
+                var pv = mapColumn(mapping.predicate, r, cmap);
+                var ov = mapColumn(mapping.object, r, cmap);
+                
+                emit(io, sv, pv, ov, mapping);
+                
+            }
+        }
+        console.log("nDupes = "+nDupes);
+    }
+    io.close();
+
+    var mdObj =
+        {
+            sourceView : gconf.view,
+            mapVersion : gconf.mapVersion,
+            numSourceRows : numSourceRows,
+            numTriplesDumped : numTriplesDumped,
+            numAxiomsDumped : numAxiomsDumped,
+        };
+
+    fs.write(mdFilePath, JSON.stringify(mdObj));
+}
+
+// Arguments:
+//  - ix : either a column name or a literal or IRI
+//  - row : key-value object obtained from Fed query
+//  - cmap : column description object
+//  - gconf : graph conf
+function mapColumn(ix, row, cmap, gconf) {
+    // is ix a column? if so return column value
+    if (cmap[ix] != null) {
+        var v = row[ix];
+        return mapColumnValue(ix, v, cmap, gconf);
+    }
+    else {
+        // ix is a fixed RDF resource
+        return mapRdfResource(ix);
+    }
+}
+
+// Expand CURIE or shortform ID to IRI.
+// E.g. GO:1234 --> http://purl.obolibrary.org/obo/GO_1234
+//
 function mapRdfResource(iri) {
+    // remove whitespace
     if (iri.match(/\s/) != null) {
+        console.warn("Whitespace in "+iri);
         iri = iri.replace(/\s/g, "");
     }
 
@@ -91,21 +277,16 @@ function mapRdfResource(iri) {
     }
 }
 
-function mapColumn(ix, row, cmap, gconf) {
-    if (cmap[ix] != null) {
-        var v = row[ix];
-        return mapColumnValue(ix, v, cmap, gconf);
-    }
-    else {
-        return mapRdfResource(ix);
-    }
-}
 
+// Arguments:
+//  - ix : column mapping spec
+//  - v : column value obtained from row
 function mapColumnValue(ix, v, cmap, gconf) {
     var cobj = cmap[ix];
     var type = cobj.type;
 
-    // JSON-LD context
+    // JSON-LD context;
+    // can be used to map string values to IRIs
     var ctx = cobj['@context'];
     if (ctx != null) {
         if (ctx[v] != null) {
@@ -121,22 +302,21 @@ function mapColumnValue(ix, v, cmap, gconf) {
         return mapRdfResource(cobj.prefix + v);
     }
     
-    // Remobe this code when this is fixed: https://support.crbs.ucsd.edu/browse/NIF-10646
+    // Remove this code when this is fixed: https://support.crbs.ucsd.edu/browse/NIF-10646
     if (cobj.list_delimiter != null) {
         var vl = v.split(cobj.list_delimiter);
         if (v == '-') {
-            // ARRGGH AD-HOCCERY
+            // ARRGGH AD-HOCCERY. Sometimes empty lists are denoted '-'...
             vl = [];
         }
         if (v == "") {
+            // sometimes an empty string
             vl = [];
         }
         if (vl.length == 0) {
             return null;
         }
         if (vl.length > 1) {
-            // WARNING: assumes literals
-            //return vl.map(function(e) { return engine.quote(e) }).join(", ");
             return vl.map(function(e) { return mapColumnValue(ix, e, cmap, gconf) });
         }
         // carry on, just use v, as it is a singleton list
@@ -145,93 +325,36 @@ function mapColumnValue(ix, v, cmap, gconf) {
         return engine.quote(v);
     }
     if (v == null) {
-        console.warn("No value for "+ix+" in "+JSON.stringify(row));
+        console.warn("No value for "+ix);
     }
     return mapRdfResource(v);
 }
 
-function generateNamedGraph(gconf) {
-
-    var io = fs.open(targetDir + "/" + gconf.graph + ".ttl", {write: true});
-    emitPrefixes(io);
-
-    var colNames = gconf.columns.map(function(c) { return c.name });
-    var cmap = {};
-    gconf.columns.forEach(function(c) { cmap[c.name] = c });
-
-
-    var offset = 0;
-    var done = false;
-    var seenMap = {};
-    var nDupes = 0;
-    while (!done) {
-
-        var resultObj = engine.fetchDataFromResource(null, gconf.view, null, colNames, gconf.filter, maxLimit, null, {offset : offset});
-        console.info(offset + " / "+resultObj.resultCount + " rows");
-
-
-
-        offset += maxLimit;
-        if (offset >= resultObj.resultCount) {
-            done = true;
-        }
-        else {
-        }
-
-        var iter = 0;
-        var results = resultObj.results;
-        for (var k in results) {
-            var r = results[k];
-
-            var key = colNames.map(function(cn) { return r[cn] }).join("-");
-            if (seenMap[key]) {
-                nDupes ++;
-                continue;
-            }
-
-            // crude way to keep cache small; cost of occasional dupes is low
-            if (iter > 10) {
-                seenMap = {};
-                iter = 0;
-            }
-            seenMap[key] = true;
-            
-            if (colNames.indexOf('v_uuid') > -1 && r.v_uuid == null) {
-                // HACK - see https://support.crbs.ucsd.edu/browse/NIF-10231
-                r.v_uuid = colNames.map(function(cn) { return safeify(r[cn]) }).join("-");
-            }
-            
-            
-            for (var j in gconf.mappings) {
-                var mapping = gconf.mappings[j];
-                //console.log(JSON.stringify(mapping));
-                var sv = mapColumn(mapping.subject, r, cmap);
-                var pv = mapColumn(mapping.predicate, r, cmap);
-                var ov = mapColumn(mapping.object, r, cmap);
-                
-                emit(io, sv, pv, ov);
-                
-            }
-        }
-        console.log("nDupes = "+nDupes);
-    }
-    io.close();
-}
 
 // does not uniquify
-function emit(io, sv, pv, ov) {
+function emit(io, sv, pv, ov, mapping) {
     if (sv == null || pv == null || ov == null) {
         return;
     }
     if (ov.forEach != null) {
         //console.log("Emitting multiple triples: "+ov.length);
-        ov.forEach(function(x) { emit(io, sv, pv, x) });
+        ov.forEach(function(x) { emit(io, sv, pv, x, mapping) });
     }
     else {
-        io.print(sv + " " + pv + " " + ov + " .");
+        if (mapping != null && mapping.isExistential) {
+            io.print(sv + " rdfs:subClassOf [a owl:Restriction ; owl:onProperty " + pv + " ; owl:someValuesFrom " + ov + " ] .");
+            numTriplesDumped += 4;
+            numAxiomsDumped ++;
+        }
+        else {
+            io.print(sv + " " + pv + " " + ov + " .");
+            numTriplesDumped ++;
+            numAxiomsDumped ++;
+        }
     }
 }
 
+// TODO: we can reduce the size of the triple dump by making use of these
 function emitPrefixes(io) {
     for (var k in ldcontext) {
         var pfx = ldcontext[k];
@@ -248,6 +371,7 @@ function emitPrefixes(io) {
     io.print("");
 }
 
+// remove offensive characters for IRI construction
 function safeify(s) {
     if (s == null) {
         return "NULL";

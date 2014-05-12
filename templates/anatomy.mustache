@@ -1,6 +1,6 @@
 <html>
 <head>
-    <title>Monarch Anatomical Structure: {{label}}</title>
+    <title>Monarch Anatomy: {{label}}</title>
     {{#scripts}}
     <script type="text/javascript" src="{{url}}"></script>
     {{/scripts}}
@@ -10,6 +10,7 @@
     {{#stylesheets}}
     <link rel="stylesheet" type="text/css" href="{{url}}"/>
     {{/stylesheets}}
+    <link rel="stylesheet" type="text/css" href="/css/monarch-main.css"/>
     <link rel="stylesheet" type="text/css" href="/css/monarch-specific.css"/>
     <link rel="icon" href="/image/favicon.ico" type="image/x-icon">
     <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
@@ -22,8 +23,16 @@
             <div class="wrapperforfooter">
             <div class="jumbotron">
                 <div id="description">
+                    {{#alerts}}
+                    <div class="alert">
+                        {{{.}}}
+                    </div>
+                    {{/alerts}}
+                    <img id="monarch-logo" class="downloadline" src="/image/logo-sneak.png"/>
                     <h1 class="downloadline">Anatomy: {{label}}</h1>
-                    <a href="{{{download.json}}}.json" class="btn btn-info downloadline">JSON</a>
+                    <a href="{{{base_url}}}.json" class="btn btn-default downloadline downloadline-left">JSON</a>
+                    <a class="downloadline btn btn-large btn-default btn-monarch-main monarch-feedback-dark"
+                            href="mailto:info@monarchinitiative.org">Your feedback welcome!</a>
                     <p>
                     {{comments}}
                     </p>
@@ -50,13 +59,6 @@
                         </div>
                     <h3>Classification</h3>
                     {{{includes.classificationComponent}}}
-                    <h3>Data Overview</h3>
-                        {{#hasDiseases}}
-                        This structure is associated with <b>{{diseaseNum}}</b> diseases.<br/>
-                        {{/hasDiseases}}
-                        {{#hasGenotypes}}
-                        This structure is associated with <b>{{genotypeNum}}</b> genotypes.<br/>
-                        {{/hasGenotypes}}
                 </div>
                 <div id="phenotypes" class="category">
                     <h3 class="downloadline">Phenotypes</h3>

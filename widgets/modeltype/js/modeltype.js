@@ -46,6 +46,7 @@ as a separate call in the init function.
 	    modelData: [],
 	    filteredModelData: [],
 	    filteredPhenotypeData: [],
+	    inputPhenotypeData : [],
 	    phenotypeData: [],
 	    filteredModelList: [],
 	    detailRectWidth: 240,
@@ -69,8 +70,9 @@ as a separate call in the init function.
 	    modelDisplayCount : 20,
 	    currModelIdx : 0,
 	    axis_pos_list: [],
-	    defaultComparisonSpecies : "Mus musculus",
-	    defaultComparisonType : "genes",
+	    targetSpeciesList : [{name: "Mus musculus", taxon: "10090"}, { name: "Homo sapiens", taxon: "9606"}, {name: "Danio rerio", taxon: "7955"}],
+	    targetSpeciesName : "Mus musculus",
+	    comparisonType : "genes",
 	    minColorScale : "#D6D6D6",
 	    maxColorScale : "#44a293",
 	    orangeHighlight: "#ea763b",
@@ -84,6 +86,42 @@ as a separate call in the init function.
 
 	    		
 	},
+	
+	//reset all the arrays before reloading data
+	_reset: function() {
+		
+		//TODO Reset the display model and display phenotype sizes 
+		var self = this;
+	    self.options.xScale = undefined; 
+	    self.options.svg = undefined;
+		self.options.yScale = undefined;
+		self.options.modelData = [];
+		self.options.filteredModelData = [];
+		self.options.filteredPhenotypeData = [];
+	    self.options.modelList = [];
+	    self.options.filteredModelList = [];
+	    self.options.yAxis = [];
+	    self.options.modelList = [];
+	    self.options.colorScale = undefined;
+	    self.options.yAxisMax = 0;
+	    self.options.currPhenotypeIdx = 0;
+	    self.options.currModelIdx = 0;
+	    self.options.axis_pos_list = [];
+	    self.options.maxICScore = 0;
+	    self.options.smallXScale = undefined;
+	    self.options.smallYScale = undefined;
+	    self.options.axis_pos_list = [];
+	    self.options.globalViewWidth = 110;
+	    self.options.globalViewHeight = 110;
+	    self.options.phenotypeDisplayCount = 26;
+	    self.options.modelDisplayCount = 20;
+	    self.options.yoffset = 100;
+	    self.options.comparisonType = "genes";
+
+
+
+		
+	},
 
 	//NOTE: I'm not too sure what the default init() method signature should be
 	//given an imageDiv and phenotype_data list
@@ -94,37 +132,71 @@ as a separate call in the init function.
 	 */
 	_create: function() {
 	    
+		this._setTargetSpeciesName(this.options.targetSpecies);
 	    this.options.w = this.options.m[1]-this.options.m[3];
 	    this.options.h = 1300 -this.options.m[0]-this.options.m[2];
 	    this.options.currModelIdx = this.options.modelDisplayCount-1;
 	    this.options.currPhenotypeIdx = this.options.phenotypeDisplayCount-1;
 	    this.options.phenotypeData = 
 		this._filterPhenotypeResults(this.options.phenotypeData);
+	    this.options.inputPhenotypeData = this.options.phenotypeData.slice();
 	    this._loadData(this.options.phenotypeData);
-            //this.options.filteredModelData = this.options.modelData.slice();
+	    
+	    //TODO: If after loading the phenotype list or model list is zero, then create a default screen
+	    //3 phenotypes high (approx 200 px) and 10 models wide (approx 387 px)
+	    if (this.options.modelData.length != 0 && this.options.phenotypeData.length != 0) {
+	    
+	    
+	            //this.options.filteredModelData = this.options.modelData.slice();
+	
+	            this._filterData(this.options.modelData.slice());
+	            this._createYAxis();
+	    	    //just pad the overall height by a skosh...
+	    	    this.options.h = this.options.yAxisMax + 60;
+	            this._initCanvas(); 
+	        
+	            // set canvas size
+	            this.options.svg
+					.attr("width", 1100)
+					.attr("height", this.options.h);
+	
+	            this._createTitle();
+	            this._createAccentBoxes();
+	            //this._createScrollBars();
+	            this._createColorScale();
+	            this._createModelRegion();
+	    	    this._updateAxes();
+	    	    this._createModelRects();
+	    	    this._createRects();
+	    		this._updateScrollCounts();
+	    		this._createOverviewSection();
+	    } else {
+	    	this._createEmptyVisualization();
 
-            this._filterData(this.options.modelData.slice());
-            this._createYAxis();
-    	    //just pad the overall height by a skosh...
-    	    this.options.h = this.options.yAxisMax + 60;
-            this._initCanvas(); 
-        
-            // set canvas size
-            this.options.svg
-		.attr("width", 1100)
-		.attr("height", this.options.h);
+	    }
 
-            this._createTitle();
-            this._createAccentBoxes();
-            //this._createScrollBars();
-            this._createColorScale();
-            this._createModelRegion();
-    	    this._updateAxes();
-    	    this._createModelRects();
-    	    this._createRects();
-    		this._updateScrollCounts();
-    		this._createOverviewSection();
-
+	},
+	
+	//create this visualization if no phenotypes or models are returned
+	_createEmptyVisualization: function() {
+		var self = this;
+		self._initCanvas(); 
+        // set canvas size
+        self.options.svg
+			.attr("width", 1100)
+			.attr("height", 180);
+        self.options.h = 150;
+        //create an empty array of models to preserve the proper spacing on the accent boxes
+        self.options.filteredModelList = ['','','','','','','','','','',''];
+        self.options.yoffset = 50;
+        self._createAccentBoxes();
+        self.options.svg.append("text")
+            .attr("x", 280)
+            .attr("y", 125)
+            .attr("height", 50)
+            .attr("width", 200)
+            .text("No data found");
+		
 	},
 	
 	//for the selection area, see if you can convert the selection to the idx of the x and y
@@ -250,6 +322,17 @@ as a separate call in the init function.
 			.attr("width", self.options.smallXScale(self.options.modelList[self.options.modelDisplayCount-1].model_id));
 	      
 	},
+	
+	_setTargetSpeciesName: function(taxonid) {
+		var self = this;
+		
+		var tempdata = self.options.targetSpeciesList.filter(function(d) {
+	    	return d.taxon === taxonid;
+	    });
+
+		self.options.targetSpeciesName = tempdata[0].name;
+		self.options.targetSpecies = tempdata[0].taxon;
+	},
 
 	_createTitle: function() {
 		var self = this;
@@ -258,7 +341,7 @@ as a separate call in the init function.
 		.attr("class", "title_text")
 		.attr("y", "16")
 		.style("font-size", "16px")
-		.text("Phenotype comparison (grouped by " + this.options.defaultComparisonSpecies + " " + this.options.defaultComparisonType + ")");
+		.text("Phenotype comparison (grouped by " + this.options.targetSpeciesName + " " + this.options.comparisonType + ")");
 
 	},
 	
@@ -382,6 +465,8 @@ as a separate call in the init function.
 	//extract the maxIC score
 	this.options.maxICScore = retData.metadata.maxMaxIC;
     
+	//extract the comparison type being used
+	this.options.comparisonType = retData.source.b_type + "s";
     },
     
     //for a given model, extract the sim search data including IC scores and the triple:
@@ -462,8 +547,35 @@ as a separate call in the init function.
 
     _initCanvas : function() {
 
+    	var self= this;
+    	//create the option list from the species list
+    	var optionhtml = "<div id='organism_div'>Comparison Organism&nbsp;&nbsp;&nbsp;<select id=\"organism\">";
+    	for (var idx=0;idx<self.options.targetSpeciesList.length;idx++) {
+    		var selecteditem = "";
+    		if (self.options.targetSpeciesList[idx].name === self.options.targetSpeciesName) {
+    			selecteditem = "selected";
+/*    			if (self.options.targetSpeciesName == "Homo sapiens") {
+    				this.options.comparisonType = "diseases";
+    			}*/
+    		}
+    		optionhtml = optionhtml + "<option value='" + self.options.targetSpeciesList[idx].taxon +"' "+ selecteditem +">" + self.options.targetSpeciesList[idx].name +"</option>"
+    	}
+    	optionhtml = optionhtml + "</select></div>";
+    	this.element.append(optionhtml);
+    	//add the handler for the select control
+        $( "#organism" ).change(function(d) {
+        	//alert( "Handler for .change() called." );
+        	self.options.targetSpecies = self.options.targetSpeciesList[d.target.selectedIndex].taxon;
+        	self.options.targetSpeciesName = self.options.targetSpeciesList[d.target.selectedIndex].name;
+        	$("#organism_div").remove();
+        	$("#svg_area").remove();
+        	self.options.phenotypeData = self.options.inputPhenotypeData.slice();
+        	self._reset();
+        	self._create();
+        	});
         this.element.append("<svg id='svg_area'></svg>");
         this.options.svg = d3.select("#svg_area");
+        
 
     },
     
@@ -723,15 +835,26 @@ as a separate call in the init function.
 	    var aSpecies = "Human";
 	    if (d.id_a.indexOf("MP") > -1) {
 	    	aSpecies = "Mouse";
+	    } else if (d.id_a.indexOf("ZFIN") > -1) {
+	    	aSpecies = "Zebrafish";
 	    }
 	    var subSpecies = "Human";
 	    if (d.subsumer_id.indexOf("MP") > -1) {
 	    	subSpecies = "Mouse";
+	    } else if (d.subsumer_id.indexOf("ZFIN") > -1) {
+	    	subSpecies = "Zebrafish";
 	    }
-	    
+
+	    var bSpecies = "Human";
+	    if (d.id_b.indexOf("MP") > -1) {
+	    	bSpecies = "Mouse";
+	    } else if (d.id_b.indexOf("ZFIN") > -1) {
+	    	bSpecies = "Zebrafish";
+	    }
+
 	    retData = "<strong>Input: </strong> " + d.label_a + " (" + aSpecies + ")"   
-		    + "<br/><strong>Match: </strong> " + d.subsumer_label + " (" + subSpecies + ")"
-     	    + "<br/><strong>Model Label: </strong> " + d.model_label
+		    + "<br/><strong>Target: </strong> " + d.label_b + " (" + bSpecies + ")"
+     	    + "<br/><strong>" + this._toProperCase(this.options.comparisonType).substring(0, this.options.comparisonType.length-1)  +" Label: </strong> " + d.model_label
      	+ "<br/><strong>Similarity Score: </strong> " + d.value.toFixed(2);
 	    this._updateDetailSection(retData, this._getXYPos(obj));
 	  
@@ -790,11 +913,13 @@ as a separate call in the init function.
 		  self._clearModelData(d, d3.mouse(this));
 	  })
 
+	  .style('opacity', '1.0')
   	  .attr("fill", function(d, i) {
   	      return self.options.colorScale(d.value);
   	  });
       model_rects.transition()
 	  .delay(20)
+	  .style('opacity', '1.0')
   	  .attr("y", function(d) {
   	      //return self.options.yScale(d.id);
   		  return self._getYPosition(d.rowid);
@@ -802,7 +927,7 @@ as a separate call in the init function.
   	  .attr("x", function(d) { return self.options.xScale(d.model_id);})
 
       model_rects.exit().transition()
-          .duration(20)
+          //.duration(20)
           //.attr("x", 600)
           .style('opacity', '0.0')
   	  .remove();
@@ -931,7 +1056,7 @@ as a separate call in the init function.
 	//movecount is an integer and can be either positive or negative
 	_updateModel: function(modelIdx, phenotypeIdx) {
 		var self = this;
-		
+				
 		//check to see if the phenotypeIdx is greater than the number of items in the list
 		if (phenotypeIdx > this.options.phenotypeData.length) {
 			this.options.currPhenotypeIdx = this.options.phenotypeData.length;
@@ -941,7 +1066,7 @@ as a separate call in the init function.
 		} else {
 			this.options.currPhenotypeIdx = phenotypeIdx;
 		}
-		var startPhenotypeIdx = this.options.currPhenotypeIdx - (this.options.phenotypeDisplayCount -1);
+		var startPhenotypeIdx = this.options.currPhenotypeIdx - this.options.phenotypeDisplayCount;
 		
 		this.options.filteredPhenotypeData = [];
 		this.options.yAxis = [];
@@ -957,12 +1082,11 @@ as a separate call in the init function.
 		} else {
 			this.options.currModelIdx = modelIdx;
 		}
-		var startModelIdx = this.options.currModelIdx - (this.options.modelDisplayCount -1);
+		var startModelIdx = this.options.currModelIdx - this.options.modelDisplayCount;
 
 		this.options.filteredModelList = [];
 		this.options.filteredModelData = [];
-		
-		
+				
 		//extract the new array of filtered Phentoypes
 		//also update the axis
 		//also update the modeldata
@@ -1041,7 +1165,7 @@ as a separate call in the init function.
 	_createAccentBoxes: function() {
 	    var self=this;
 	    
-	    this.options.modelWidth = this.options.filteredModelList.length * 18
+	    this.options.modelWidth = this.options.filteredModelList.length * 18;
 	    //add an axis for each ordinal scale found in the data
 	    for (var i=0;i<this.options.dimensions.length;i++) {
 	    	//move the last accent over a bit for the scrollbar
@@ -1217,36 +1341,6 @@ as a separate call in the init function.
 		this._createModelRects() ;
 	},
 
-	changeThreshold: function(obj, value) {
-		//reset the color on all the other controls
-	    var controls = this.options.svg.selectAll(".legend_control");
-	    controls[0].forEach(function(ctl) {
-		ctl.setAttribute('fill', 'lightgrey');
-	    });
-	    //set the selected control to black
-	    obj.setAttribute('fill', 'black');
-	    
-	    var new_data = this.options.modelData.filter(function(d){
-	    	return d.value.toFixed(6) >= value.toFixed(6);
-	    });
-	    this.options.filteredModelData = new_data.slice();
-	    
-	    // var new_data2 = comparison_data.filter(function(d){
-	    //	 return d.score.toFixed(6) >= value.toFixed(6);
-	    // });
-	    this.options.filteredModelData = new_data.slice();
-	    //filtered_data = new_data2.slice();
-	    
-	    var data_size = this.options.filteredModelData.length/2;
-	    //this.options.svg.setAttribute('height', data_size *20);
-	    //this.options.svg.attr('height') = data_size *20;
-	    //this.options.svg.height = data_size*20;
-	    //h = data_size*5;
-	    //this.options.svg.style('height', data_size*20);
-	    //init();
-	    update();
-	},
-
 
 	//this code creates the text and rectangles containing the text 
 	//on either side of the model data
@@ -1292,6 +1386,8 @@ as a separate call in the init function.
 /*		.on("click", function(d) {
 		    self._rectClick(this);
 		})*/
+		.style('opacity', '1.0')
+
 		.attr("width", self.options.textWidth)
 		.attr("height", 50)
 		.style("font-size", "12px")
@@ -1303,6 +1399,8 @@ as a separate call in the init function.
 		    return self._getShortLabel(txt);
 		})
 	    rect_text.transition()
+   		.style('opacity', '1.0')
+
 		.delay(20)
 		.attr("y", function(d) {
 		    //return self.options.yScale(d.rowid)+28;
@@ -1310,7 +1408,7 @@ as a separate call in the init function.
 		})
 	    rect_text.exit()
 	   	.transition()
-	   	.delay(20)
+	   	//.delay(20)
 	   	.style('opacity', '0.0')
 
 	   	//.attr("y", 1600)
@@ -1353,6 +1451,8 @@ as a separate call in the init function.
 /*		.on("click", function(d) {
 		    self._rectClick(this);
 		})*/
+		.style('opacity', '1.0')
+
 		.attr("width", self.options.textWidth)
 		.attr("height", 50)
 		.style("font-size", "12px")
@@ -1378,9 +1478,11 @@ as a separate call in the init function.
 		    //return self.options.yScale(d.rowid)+28;
 			return self._getYPosition(d.rowid)+28;
 		})
+		.style('opacity', '1.0')
+
 	    rect_text2.exit()
 		.transition()
-		.delay(20)
+		//.delay(20)
 		//.attr("y", 1600)
 		.style('opacity', '0.0')
 
@@ -1406,6 +1508,10 @@ as a separate call in the init function.
 
 	},
 
+	_toProperCase : function (oldstring) {
+	    return oldstring.replace(/\w\S*/g, function(txt){return txt.charAt(0).toUpperCase() + txt.substr(1).toLowerCase();});
+	},
+	
 	_selectModel: function(modelData, obj) {
 		var self=this;
 	    //this._showThrobber();
@@ -1430,7 +1536,7 @@ as a separate call in the init function.
 
 		var retData;
 		//initialize the model data based on the scores
-		retData = "<strong>Gene Label:</strong> "   
+		retData = "<strong>" +  self._toProperCase(self.options.comparisonType).substring(0, self.options.comparisonType.length-1) +" Label:</strong> "   
 			+ modelData.model_label + "<br/><strong>Rank:</strong> " + (parseInt(modelData.model_rank) + 1)
 			+ "<br/><strong>Score:</strong> " + modelData.model_score;
 

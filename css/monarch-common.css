@@ -5,7 +5,13 @@ html, body {
 p {
     font-family: Helvetica, Arial, sans-serif;
 }
+.clear {
+    clear: both;
+}
 /* Buttons */
+.btn {
+    padding: 5px 15px;
+}
 .btn-info {
     background-color: #53AED7;
     border-color: #53AED7;
@@ -16,8 +22,11 @@ p {
 .btn.downloadline {
     padding: 5px 15px;
     margin-bottom: 10px;
-    margin-left: 20px;
     border-radius: 3px;
+    margin-left: 5px;
+}
+.btn.downloadline-left {
+    margin-left: 20px;
 }
 
 /* Section 1: Navbar */
@@ -100,6 +109,9 @@ p {
 .monarch-blue {
     background-color: #53AED7;
 }
+.monarch-blue-light {
+    background-color: #acd8ec;
+}
 .monarch-disease-light {
     background-color: #ECE8E3;
 }
@@ -122,6 +134,9 @@ p {
     background-color: #F4EEEB;
 }
 .monarch-model-dark {
+    background-color: #EA763B;
+}
+.monarch-feedback-dark {
     background-color: #ed9f7f;
 }
 
@@ -132,6 +147,7 @@ p {
     text-align: center;
     font-weight: 200;
     font-size: 12px;
+    color: white;
 }
 @media (min-width: 1110px) {
     .wrapperforfooter {
@@ -164,20 +180,7 @@ p {
 /* Search Bar */
 #search {
     width: 180px;
-}
-.search-box-position {
-    position: relative;
-}
-.search-text-example {
-    position: absolute;
-    top: 35px;
-    background-color: white;
-    padding: 5px 7px;
-    font-size: 12px;
-    border: 1px solid #AAA;
-    border-radius: 3px;
-    line-height: 12px;
-    display: none;
+    font-size: 13px;
 }
 .autocomplete-tag-item {
     white-space: nowrap;

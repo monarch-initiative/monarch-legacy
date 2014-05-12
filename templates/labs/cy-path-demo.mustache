@@ -1,0 +1,90 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>cy-path-demo</title>
+    {{#scripts}}
+    <script type="text/javascript" src="{{url}}"></script>
+    {{/scripts}}
+    {{#stylesheets}}
+    <link rel="stylesheet" type="text/css" href="{{url}}"/>
+    {{/stylesheets}}
+    <link rel="stylesheet" type="text/css" href="/css/tour.css"/>
+    <link rel="icon" href="/image/favicon.ico" type="image/x-icon">
+    <meta charset="utf-8"/> 
+  </head>
+  <body>
+    <div class="monarch-container">
+      {{{includes.navbar}}}
+      <div class="content">
+        <div class="wrapperforfooter">
+          <div class="title">cy-path-demo</div>
+
+	  <!-- Input. -->
+	  <!-- Try: UBERON_0000004 UBERON_0001062 5 -->
+	  <div style="margin-top: 1em;">
+	    <form id="demo_input" role="form" class="form-inline">
+	      <div class="form-group">
+		<input id="auto_1_input"
+		       placeholder="e.g. olfactory apparatus" />
+		<input id="auto_2_input"
+		       placeholder="e.g. anatomical entity" />
+		<select id="sel_1_input" class="form-control" style="width:4em;">
+		  <option>0</option>
+		  <option>1</option>
+		  <option selected="selected">2</option>
+		  <option>3</option>
+		  <option>4</option>
+		  <option>5</option>
+		  <option>6</option>
+		  <option>7</option>
+		  <option>8</option>
+		  <option>9</option>
+		  <option>9</option>
+		</select>
+		<select id="sel_2_input" class="form-control"
+			style="width:6em;">
+		  <option selected="selected">short</option>
+		  <option>simple</option>
+		</select>
+		<select id="sel_3_input" class="form-control"
+			style="width:8em;">
+		  <option>random</option>
+		  <option>grid</option>
+		  <option>circle</option>
+		  <option>concentric</option>
+		  <option selected="selected">breadthfirst</option>
+		  <!-- <option>arbor</option> -->
+		  <option>cose</option>
+		</select>
+		<button id="demo_button"
+			class="btn btn-default"
+			type="submit">Go!</button>
+		<span id="spinloc"></span>
+              </div>
+	    </form>
+          </div>
+
+	  <div class="row">
+	    
+	    <div class="col-xs-12 col-sm-10">
+
+	      <!-- Output. -->
+	      <div id="cydemo" style="margin-top: 1em; height:600px; border-style:solid; border-color: black; border-width:1px;"></div>
+	      <div class="clearfix"></div>
+
+	    </div>
+	    
+	    <!-- color display -->
+	    <div class="col-xs-6 col-sm-2">
+	      <div id="color_exp" style="margin-top: 1em;">
+	      </div>
+	    </div>      
+	    
+	  </div>
+
+        </div> <!-- closes wrapperforfooter -->
+        {{{includes.footer}}}
+      </div>
+    </div>
+  </body>
+</html>

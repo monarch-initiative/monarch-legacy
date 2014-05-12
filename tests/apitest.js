@@ -58,11 +58,25 @@ exports.testPhenotypeBasic = function() {
     );
 }
 
+
+var geneIds =
+    [
+        "NCBIGene:388552", 
+    ];
+exports.testGeneBasic = function() {
+    geneIds.forEach(
+        function(id) {
+            var json = engine.fetchGeneInfo(id);
+            // todo - check json
+        }
+    );
+}
+
 if (require.main == module) {
     var script = system.args.shift();
     var parser = new Parser(system.args);
     parser.addOption('h', 'help', null, 'Display help');
-    parser.addOption('s', 'setup', 'String', 'one of: alpha, beta, production (NOT IMPLEMENTED)');
+    parser.addOption('s', 'setup', 'String', 'one of: beta, production');
     
     var options = parser.parse(system.args);
     if (options.help) {

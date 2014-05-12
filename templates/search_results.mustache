@@ -8,25 +8,29 @@
     {{#stylesheets}}
     <link rel="stylesheet" type="text/css" href="{{url}}"/>
     {{/stylesheets}}
+    <link rel="stylesheet" type="text/css" href="/css/monarch-specific.css"/>
     <link rel="stylesheet" type="text/css" href="/css/search.css"/>
     <link rel="icon" href="/image/favicon.ico" type="image/x-icon">
     <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
     <meta charset="utf-8"/> 
 </head>
 <body>
+    {{{includes.navbar}}}
     <div class="monarch-container">
-        {{{includes.navbar}}}
         <div class="content">
             <div class="wrapperforfooter">
-            <img id="monarch-logo" class="downloadline" src="/image/logo-sneak.png"/>
-            <div class="title downloadline">Search Results: {{term}}</div>
-            <div class="results">
-                <h4>Download Results</h4>
-                <p><a href="{{{download.json}}}" class="btn btn-info">JSON</a></p>
+            <div class="jumbotron">
+                <div id="description">
+                    <img id="monarch-logo" class="downloadline" src="/image/logo-sneak.png"/>
+                    <h1 class="downloadline">Search Results: {{term}}</h1>
+                    <a href="{{{download.json}}}" class="downloadline btn btn-info">JSON</a>
+                </div>
             </div>
-            <table class="{{css.table}}">
-                {{{resultsTable}}}
-            </table>
+            <div id="complete-info">
+                <table class="{{css.table}}">
+                    {{{resultsTable}}}
+                </table>
+            </div>
             </div> <!-- closes wrapperforfooter -->
             {{{includes.footer}}}
         </div>

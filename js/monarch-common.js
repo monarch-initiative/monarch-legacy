@@ -1,11 +1,13 @@
 $(document).ready(function(){
 
-    $('.search-box-position').hover(function() {
-        $(this).find('.search-text-example').css({'display': 'block'});
+    /* Show Footer on Hover */
+    $('#footer').hover(function() {
+        $(this).css({'color': 'black'});
     }, function() {
-        $(this).find('.search-text-example').css({'display': 'none'});
+        $(this).css({'color': 'white'});
     });
 
+    /* Annotation Score Stars */
     $.fn.stars = function() {
         return this.each(function(i,e){$(e).html($('<span/>').width($(e).text()*16));});
     };

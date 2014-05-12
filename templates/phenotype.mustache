@@ -11,6 +11,7 @@
     {{#stylesheets}}
     <link rel="stylesheet" type="text/css" href="{{url}}"/>
     {{/stylesheets}}
+    <link rel="stylesheet" type="text/css" href="/css/monarch-main.css"/>
     <link rel="stylesheet" type="text/css" href="/css/monarch-specific.css"/>
     <link rel="icon" href="/image/favicon.ico" type="image/x-icon">
     <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
@@ -30,11 +31,13 @@
                     {{/alerts}}
                     <img id="monarch-logo" class="downloadline" src="/image/logo-sneak.png"/>
                     <h1 class="downloadline">Phenotype: {{label}}</h1>
-                    <a href="{{{download.json}}}" class="btn btn-default downloadline monarch-phenotype-dark">JSON</a>
+                    <a href="{{{download.json}}}" class="btn btn-default downloadline downloadline-left monarch-phenotype-dark">JSON</a>
+                    <a class="downloadline btn btn-large btn-default btn-monarch-main monarch-feedback-dark"
+                            href="mailto:info@monarchinitiative.org">Your feedback welcome!</a>
                     <p>
-                    {{definition}}
-                    <br/>
-                    {{comments}}
+                    {{#hasDef}}
+                    {{definition}}<br/>
+                    {{/hasDef}}
                     </p>
                 </div>
                 <div id="categories">
@@ -51,10 +54,10 @@
                     <div class="tabcontainer">
                         <div class="tabhover">View genotypes with this phenotype</div>
                         {{#hasGenotypes}}
-                            <a href="#genotypes"><div class="tab contenttab genotab">Genotypes ({{genotypeNum}})</div></a>
+                            <a href="#genotypes"><div class="tab contenttab genotab">Models ({{genotypeNum}})</div></a>
                         {{/hasGenotypes}}
                         {{^hasGenotypes}}
-                            <div class="tab greyed-out">Genotypes (0)</div>
+                            <div class="tab greyed-out">Models (0)</div>
                         {{/hasGenotypes}}
                     </div>
                 </div>
@@ -94,6 +97,7 @@
                 </div>
                 {{/hasGenotypes}}
             </div>
+	    
             </div> <!-- closes wrapperforfooter -->
             {{{includes.footer}}}
         </div>
