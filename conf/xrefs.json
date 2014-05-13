@@ -4733,6 +4733,21 @@
       "url_syntax" : "http://thebiogrid.org/[example_id]",
       "datatype" : null
    },
+   "CTD" : {
+      "object" : "Identifier",
+      "uri_prefix" : null,
+      "name" : "CTD",
+      "url_example" : "http://ctdbase.org/detail.go?type=chem&acc=D002104",
+      "database" : "CTD",
+      "description" : "BioGRID is an online interaction repository with data compiled through comprehensive curation efforts.",
+      "example_id" : "D002104",
+      "generic_url" : "http://www.ctdbase.org",
+      "fullname" : "Comparative Toxicogenomics Database",
+      "id" : null,
+      "abbreviation" : "CTD",
+      "url_syntax" : "http://ctdbase.org/basicQuery.go?bqCat=all&bq=[example_id]",
+      "datatype" : null
+   },
 
 
 }
