@@ -1,0 +1,59 @@
+{
+    "status" : "alpha",
+    "graphs": [
+        {
+            "graph" : "ctd-gene-disease-map",
+            "view" : "nif-0000-02683-4",
+            "mapVersion" : "2014-05-13",
+            "filter" : {
+                "direct_or_inferred" : "direct"
+            },
+            "columns" : [
+                {
+                    "name" : "v_uuid"
+                },
+                {
+                    "name" : "gene_id"
+                },
+                {
+                    "name" : "disease_id"
+                },
+                {
+                    "name" : "disease_label",
+                    "type" : "rdfs:Literal"
+                },
+                {
+                    "name" : "publication_ids",
+                    "list_delimiter" : ", "
+                }
+            ],
+            "mappings" : [
+
+                {"subject" : "gene_id",
+                 "predicate" : "RO:0002200",
+                 "object" : "disease_id"
+                },
+                {"subject" : "disease_id",
+                 "predicate" : "rdfs:Label",
+                 "object" : "disease_label"
+                },
+                {"subject" : "v_uuid",
+                 "predicate" : "rdf:type",
+                 "object" : "SIO:association"
+                },
+                {"subject" : "v_uuid",
+                 "predicate" : "hasSubject",
+                 "object" : "gene_id"
+                },
+                {"subject" : "v_uuid",
+                 "predicate" : "hasObject",
+                 "object" : "disease_id"
+                },
+                {"subject" : "v_uuid",
+                 "predicate" : "dc:source",
+                 "object" : "publication_ids"
+                }
+            ]
+        }
+   ]
+}
