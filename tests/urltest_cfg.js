@@ -7,14 +7,14 @@
         {
             component : "federation",
             priority : 1,
-            url : "http://beta.neuinfo.org/services/v1/federation/data/nlx_151835-1.json?exportType=data&q=HP:0001337",
-            desc : "DIRECT Query on OmimDiseasePhenotype using an HPO ID (Tremor)",
+            url : "http://beta.neuinfo.org/services/v1/federation/data/nlx_151835-1.json?exportType=data&q=HP:0200085",
+            desc : "DIRECT Query on OmimDiseasePhenotype using an HPO ID (Limb Tremor)",
             maxTimeMilliseconds : 5000,
             expects : {
                 format : "json",
-                min_results : 0,
+                min_results : 2,
                 must_contain : {
-                    disorder_id : "OMIM:270500" // Ataxia, Spastic, Childhood-Onset, Autosomal Recessive, With Optic Atrophy And Mental Retardation
+                    disorder_id : "OMIM:105830" // Angelman
                 }
             }
         },
