@@ -167,7 +167,7 @@ as a separate call in the init function.
 	    		this._createOverviewSection();
 	    } else {
 			//If there is no data, display a message.
-	    	//Modified this function to only show text: "Model not found."
+	    	//Modified this function to only show text: "No Models found."
 			this._createEmptyVisualization();
 	    }
 
