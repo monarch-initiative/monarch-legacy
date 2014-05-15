@@ -1,29 +1,85 @@
-This file describes how to include the modeltype.js file in a webpage.  The following .js code is required:
+Steps for Adding the ModelType Viewer Widget to Your Webpage
 
-- jQuery (tested with 1.11.0)
-- jQuery UI (tested with 1.10.3)
-- d3 (tested with 3.2.4)
+   This page describes how to include the Viewer Widget on any webpage. Steps are provided for adding required javascript files*, adding parameters to the widget call, and adding the widget to the html file.
 
-To add the ModelType to the page:
+	*Required files are available at: https://github.com/monarch-initiative/monarch-app/tree/master/widgets/modeltype
+	
+1. Add the Required Javascript Libraries and Image
 
-- create a list of phenotypes as an array of Javascript objects with the following attributes:
-    [{ id:"HP:0000006", observed:"positive"},{ id:"HP:0000726", observed:"positive"},...];
-- create a <div> tag to contain the widget
-- add the widget to the div tag as follows.  The following example assumes you are adding the widget to a div
-    with an id="phen_vis": 
-            $("#phen_vis").modeltype({serverURL : "http://tartini.crbs.ucsd.edu", phenotypeData: phenotypes,
-	   				      target_species: "10090" });
-	   				      
-Widget Parameters
-To add the widget, you must set some parameters.  The following are the most common parameters 
+    The following .js code libraries are required:
+        jQuery (tested with 1.11.0)
+        jQuery UI (tested with 1.10.3)
+        d3 (tested with 3.2.4)
+    The custom javascript file for the ModelViewer widget is required.
+        modeltype.js
+    Create a new html file and add all required javascript files within the html <head> tags
+        Example:
 
-- phenotypeData [required]- this is the only required parameter.  It is a Javascript array of objects listing the 
-   phenotypes to be rendered in the widget.
-- serverURL [optional*]- *this parameter is only optional if the widget is being deployed within the Monarch
-   Initiative website.  Otherwise, you must set it to a URL accessible to your website that contains the Monarch web services.
-   You will also need to handle the cross-site scripting (XSS) issues you will encounter when you specify this URL.
-   Option 1: Use http://tartini.crbs.ucsd.edu to connect to the development/test web services.  This server is less stable 
-      than the production server.
-   Option 2: Use http://monarch.monarchinitiative.org to connect to the stable, production version of the web services (better uptime)
-- targetSpecies [optional]- this parameter defaults to 10090 (mus musculus).  Change this parameter if you want to compare the
-   phenotypes in the pheotypeData parameter against a different species.  
+        <head>
+             <script src="js/jquery-1.11.0.min.js"></script>
+             <script src="js/jquery-ui-1.10.3.custom.min.js"></script>
+             <script src="js/d3.min.js"></script>
+             <script src="js/modeltype.js"></script>
+        </head>
+
+    The logo.png file is required:
+        Make sure that there is an "image" directory directly below the html file directory.
+        Place "logo.png" in the image directory
+
+
+2. Add a List of Phenotyopes and a jQuery Function Call
+
+    Create a list of phenotypes as an array of Javascript objects with the following attributes:
+
+        [{ id:"HP:0000006", observed:"positive"}, id:"HP:0000726", observed:"positive"},...];
+
+        Note that the phenotypes may also be passed in as a JSON list and that the "observed" tag may be omitted.
+
+        Example: { "HP:0000006" , "HP0000726",...}
+
+    Add a jQuery .ready function that will add the widget to an empty div tag (see Step 3) as follows (The following example assumes you are adding the widget to a div with an id="phen_vis"):
+
+        jQuery(document).ready(function(){$("#phen_vis").modeltype(
+        	{serverURL: "http://tartini.crbs.ucsd.edu", phenotypeData: phenotypes, target_species: "10090" });
+        });
+
+        Widget Parameters
+        To add the widget, you must set some parameters. The following are the most common parameters:
+            a.phenotypeData [required] - It is a Javascript array of objects listing the phenotypes to be rendered in the widget.
+            b.serverURL [required] - This URL should be pointed to the OWLSim URL server associated with your installation containing the Monarch web services.
+                Option 1: Use http://tartini.crbs.ucsd.edu to connect to the development/test web services. This server is less stable than the production server.
+                Option 2: Use http://monarch.monarchinitiative.org to connect to the stable, production version of the web services (better uptime)
+            c.targetSpecies [optional]- this parameter defaults to 10090 (mus musculus). Change this parameter if you want to compare the phenotypes in the phenotypeData parameter against a different species. Available Species:
+                Name: Homo sapiens Taxon: 9606
+                Name: Dani rerio Taxon: 7955
+                Name: Drosophila melanogaster Taxon: 7227
+    Add the phenotype array and the jQuery function between <script> tags in the html <head>
+        Example:
+
+        <script>
+        	var phenotypes = [
+        		{ id:"HP:0000006", observed:"positive"},
+        		{ id:"HP:0000726", observed:"positive"},
+        		{ id:"HP:0000746", observed:"positive"}];
+        		
+        	jQuery(document).ready(function(){
+        		$("#phen_vis").modeltype({serverURL : "http://tartini.crbs.ucsd.edu", 
+        			phenotypeData: phenotypes, targetSpecies: "10090" });	
+        	});
+        </script>
+
+
+3. Add the Widget <div>:
+
+    Add an empty <div> tag in the body of the html file.
+    Example:
+
+    <body>	
+    	<div id="phen_vis"></div>
+    <body>
+
+
+4. Add tbe HTML File on the Server
+Just add your html file and the required .js libraries where they are visible on your server. You're done!
+
+Please contact us at info@monarchinitiative.org if you have any problems or questions.

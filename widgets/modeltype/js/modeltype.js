@@ -50,7 +50,7 @@ as a separate call in the init function.
 	    phenotypeData: [],
 	    filteredModelList: [],
 	    detailRectWidth: 240,
-        detailRectHeight: 70,
+        detailRectHeight: 100,
         detailRectStrokeWidth: 3,
 	    dimensions: [ "Phenotype Profile", "Lowest Common Subsumer", "Phenotypes in common" ], 
 	    m :[ 30, 10, 10, 10 ], 
@@ -70,11 +70,13 @@ as a separate call in the init function.
 	    modelDisplayCount : 20,
 	    currModelIdx : 0,
 	    axis_pos_list: [],
-	    targetSpeciesList : [{name: "Mus musculus", taxon: "10090"}, { name: "Homo sapiens", taxon: "9606"}, {name: "Danio rerio", taxon: "7955"}],
+	    targetSpeciesList : [{name: "Mus musculus", taxon: "10090"}, { name: "Homo sapiens", taxon: "9606"}, {name: "Danio rerio", taxon: "7955"},  {name: "Drosophila melanogaster", taxon: "7227"}],
 	    targetSpeciesName : "Mus musculus",
 	    comparisonType : "genes",
-	    minColorScale : "#D6D6D6",
-	    maxColorScale : "#44a293",
+	    //minColorScale : "#D6D6D6",
+		minColorScale : "#F2F2F2",
+	    //maxColorScale : "#44a293",
+		maxColorScale : "#0F473E",
 	    orangeHighlight: "#ea763b",
 	    maxICScore : 0,
 	    smallXScale: undefined,
@@ -82,9 +84,7 @@ as a separate call in the init function.
 	    drag: undefined,
 	    highlightRect: undefined,
 		globalViewWidth : 110,
-	    globalViewHeight : 110,
-
-	    		
+	    globalViewHeight : 110,	    		
 	},
 	
 	//reset all the arrays before reloading data
@@ -116,11 +116,7 @@ as a separate call in the init function.
 	    self.options.phenotypeDisplayCount = 26;
 	    self.options.modelDisplayCount = 20;
 	    self.options.yoffset = 100;
-	    self.options.comparisonType = "genes";
-
-
-
-		
+	    self.options.comparisonType = "genes";		
 	},
 
 	//NOTE: I'm not too sure what the default init() method signature should be
@@ -142,11 +138,7 @@ as a separate call in the init function.
 	    this.options.inputPhenotypeData = this.options.phenotypeData.slice();
 	    this._loadData(this.options.phenotypeData);
 	    
-	    //TODO: If after loading the phenotype list or model list is zero, then create a default screen
-	    //3 phenotypes high (approx 200 px) and 10 models wide (approx 387 px)
-	    if (this.options.modelData.length != 0 && this.options.phenotypeData.length != 0) {
-	    
-	    
+	    if (this.options.modelData.length != 0 && this.options.phenotypeData.length != 0) {	    
 	            //this.options.filteredModelData = this.options.modelData.slice();
 	
 	            this._filterData(this.options.modelData.slice());
@@ -154,25 +146,29 @@ as a separate call in the init function.
 	    	    //just pad the overall height by a skosh...
 	    	    this.options.h = this.options.yAxisMax + 60;
 	            this._initCanvas(); 
+				this._addLogoImage();
 	        
 	            // set canvas size
 	            this.options.svg
 					.attr("width", 1100)
-					.attr("height", this.options.h);
+					// added +60 so tooltips were not hidden.
+					.attr("height", this.options.h + 60);
 	
-	            this._createTitle();
-	            this._createAccentBoxes();
+	            //this._createTitle();
+	            this._createAccentBoxes();				
 	            //this._createScrollBars();
 	            this._createColorScale();
 	            this._createModelRegion();
 	    	    this._updateAxes();
 	    	    this._createModelRects();
 	    	    this._createRects();
+				//this._createGridlines();
 	    		this._updateScrollCounts();
 	    		this._createOverviewSection();
 	    } else {
-	    	this._createEmptyVisualization();
-
+			//If there is no data, display a message.
+	    	//Modified this function to only show text: "Model not found."
+			this._createEmptyVisualization();
 	    }
 
 	},
@@ -180,23 +176,57 @@ as a separate call in the init function.
 	//create this visualization if no phenotypes or models are returned
 	_createEmptyVisualization: function() {
 		var self = this;
-		self._initCanvas(); 
-        // set canvas size
+		this.element.append("<svg id='svg_area'></svg>");
+        this.options.svg = d3.select("#svg_area");
+		//self._initCanvas(); 
+        //set canvas size
         self.options.svg
 			.attr("width", 1100)
-			.attr("height", 180);
-        self.options.h = 150;
+			.attr("height", 60);
+        self.options.h = 60;
         //create an empty array of models to preserve the proper spacing on the accent boxes
-        self.options.filteredModelList = ['','','','','','','','','','',''];
+        //self.options.filteredModelList = ['','','','','','','','','','',''];
         self.options.yoffset = 50;
-        self._createAccentBoxes();
+        //self._createAccentBoxes();
         self.options.svg.append("text")
-            .attr("x", 280)
-            .attr("y", 125)
-            .attr("height", 50)
+            .attr("x", 100)
+            .attr("y", 25)
+            .attr("height", 60)
             .attr("width", 200)
-            .text("No data found");
+            .text("No Models found")
+			.attr("style","font-size:1.2em;")
+			.attr("style","font-weight:bold;");
+			
 		
+	},
+	
+	//work in progress - commented out in create function.
+	_createGridlines: function() { 
+			var self=this;
+			
+			//create a blank grid to match the size of the modelviewer grid				
+			var data = new Array();
+			for (var k = 0; k < self.options.modelDisplayCount; k++){
+				for (var l = 0; l < self.options.phenotypeDisplayCount; l++) {
+				   var x = "'x':'" + k + "'";
+				   var y = "'y':'" + l + "'";
+				   data.push( [x,y] );
+				}
+			}
+	        console.log("Data: " + data);
+ 
+			self.options.svg.selectAll("rect.bordered")
+					   .data(data)
+					   .enter()
+					   .append("rect")
+					   .attr("transform","translate(219, 118)")
+					   .attr("x", function(d, i) { return d[i].x * 13 })
+					   .attr("y", function(d, i) { return d[i].y * 13 })  
+					   .attr("class", "hour bordered deselected")
+					   .attr("width", 13)
+					   .attr("height", 13)
+					   .attr("stroke", "#e5e5e5")
+					   .attr("stroke-width", 2); 						      
 	},
 	
 	//for the selection area, see if you can convert the selection to the idx of the x and y
@@ -209,8 +239,9 @@ as a separate call in the init function.
 		}
 		var globalview = self.options.svg.append("rect")
 			//note: I had to make the rectangle slightly bigger to compensate for the strike-width
-			.attr("x", self.options.axis_pos_list[2] + self.options.textWidth + 28)
-			.attr("y", 75)
+			//.attr("x", self.options.axis_pos_list[2] + self.options.textWidth + 28)
+			.attr("x", self.options.axis_pos_list[2] + 45)
+			.attr("y", 130)
 			.attr("id", "globalview")
 			.style("stroke", "black")
 			.style("fill", "white")
@@ -219,14 +250,16 @@ as a separate call in the init function.
 			.attr("width", self.options.globalViewWidth+6);
 
 		var rect_instructions = self.options.svg.append("text")
-			.attr("x", self.options.axis_pos_list[2] + self.options.textWidth + 10)
-			.attr("y", 55)
+			//.attr("x", self.options.axis_pos_list[2] + self.options.textWidth + 10)
+			.attr("x", self.options.axis_pos_list[2] + 10)
+			.attr("y", 78)
 			.style("font-size", "12px")
 			.text("Use the phenotype map below to");
 		
 		var rect_instructions = self.options.svg.append("text")
-			.attr("x", self.options.axis_pos_list[2] + self.options.textWidth + 10)
-			.attr("y", 67)
+			//.attr("x", self.options.axis_pos_list[2] + self.options.textWidth + 10)
+			.attr("x", self.options.axis_pos_list[2] + 10)
+			.attr("y", 90)
 			.style("font-size", "12px")
 			.text("navigate the model view on the left");
 
@@ -248,7 +281,8 @@ as a separate call in the init function.
 	      model_rects.enter()
 		  	  .append("rect")
 		  	  .attr("transform",
-		  		"translate(" + (self.options.axis_pos_list[2] + self.options.textWidth + 30) + ",77)")
+		  		"translate(" + (self.options.axis_pos_list[2] + 45) + ",130)")
+			  //(self.options.axis_pos_list[2] + self.options.textWidth + 30) + ",77)")
 		      //"translate(210," + this.options.yoffset + ")")
 		  	  .attr("class",  "mini_model")
 		  	  .attr("y", function(d, i) { return self.options.smallYScale(d.rowid);})
@@ -262,7 +296,8 @@ as a separate call in the init function.
 		  //create the "highlight" rectangle
 		self.options.highlightRect = self.options.svg.append("rect")
 		  	.attr("transform",
-		  		"translate(" + (self.options.axis_pos_list[2] + self.options.textWidth + 30) + ",77)")
+		  		"translate(" + (self.options.axis_pos_list[2] + 45) + ",130)")
+			 //(self.options.axis_pos_list[2] + self.options.textWidth + 30) + ",77)")
 			.attr("x", 0)
 			.attr("y", 0)		
 			.attr("class", "draggable")
@@ -273,21 +308,21 @@ as a separate call in the init function.
                 	//notes: account for the width of the rectangle in my x and y calculations
                 	//do not use the event x and y, they will be out of range at times.  use the converted values instead.
                 	var rect = self.options.svg.select("#selectionrect");
-        		  	rect.attr("transform",
-        			  		"translate(0,0)")
+        		  	rect.attr("transform","translate(0,0)")
         			//limit the range of the x value
-        			var newX = d3.event.x - (self.options.axis_pos_list[2] + self.options.textWidth + 30);
+        			//var newX = d3.event.x - (self.options.axis_pos_list[2] + self.options.textWidth + 30);					
+					var newX = d3.event.x - (self.options.axis_pos_list[2] + 45);
         		  	newX = Math.max(newX,0);
         		  	newX = Math.min(newX,(110-self.options.smallXScale(self.options.modelList[self.options.modelDisplayCount-1].model_id)));
-               	    rect.attr("x", newX + (self.options.axis_pos_list[2] + self.options.textWidth + 30))
+               	    //rect.attr("x", newX + (self.options.axis_pos_list[2] + self.options.textWidth + 30))
+					rect.attr("x", newX + (self.options.axis_pos_list[2] + 45))
                	    //limit the range of the y value
-        			var newY = d3.event.y - 77;
+        			var newY = d3.event.y - 130;
         		  	newY = Math.max(newY,0);
         		  	newY = Math.min(newY,(self.options.globalViewHeight-self.options.smallYScale(self.options.phenotypeData[self.options.phenotypeDisplayCount-1].rowid)));
-               	    rect.attr("y", newY + 77);
+               	    rect.attr("y", newY + 130);
         			//retrieve the id of the items using the d3.event.dx and dy
-        			//
-        			  		
+        			//       			  		
         			//var xPos = d3.event.x - (self.options.axis_pos_list[2] + self.options.textWidth + 30);
         			var xPos = newX;
         			
@@ -309,7 +344,6 @@ as a separate call in the init function.
                	    var newPhenotypePos = j+self.options.phenotypeDisplayCount;
 
                     self._updateModel(newModelPos, newPhenotypePos);
-
                 
                 }))
 
@@ -339,7 +373,7 @@ as a separate call in the init function.
 	    var div_text1 = self.options.svg.append("svg:text")
 		.attr("transform","translate(0,0)")
 		.attr("class", "title_text")
-		.attr("y", "16")
+		.attr("y", "5")
 		.style("font-size", "16px")
 		.text("Phenotype comparison (grouped by " + this.options.targetSpeciesName + " " + this.options.comparisonType + ")");
 
@@ -350,14 +384,42 @@ as a separate call in the init function.
 	_filterData: function(fulldataset) {
 		var self = this;
 		
-    	var phenotypeArray = [];
+    	//removed so we can select a set of rows with unique phenotypes - not unique rowids
+	    /**	
+		var phenotypeArray = [];
     	for (var idx=0;idx<fulldataset.length;idx++) {
     		var result = $.grep(phenotypeArray, function(e){ return e.rowid == fulldataset[idx].rowid; });
     		if (result.length == 0) {
     			phenotypeArray.push(fulldataset[idx]);
     		}
+    	}*/
+		
+		//we should end up with an array with unique phenotypes
+		var phenotypeArray = [];
+		var dupArray = [];
+		var ic = [];
+		
+    	for (var idx=0;idx<fulldataset.length;idx++) {
+    		var result = $.grep(phenotypeArray, function(e){ return e.label_a == fulldataset[idx].label_a; });
+    		if (result.length == 0) {
+    			phenotypeArray.push(fulldataset[idx]);
+    		}
+			else {
+			    var resultdup = $.grep(fulldataset, function(e){ return ( (e.label_a == fulldataset[idx].label_a)  &&  (e.model_id == fulldataset[idx].model_id) )});
+				if (resultdup.length > 1) {
+					var max = 0;
+					for (var i = 0; i<resultdup.length; i++){
+					     if(resultdup[i].value > max) {
+						    max = resultdup[i].value;
+						 }
+					}
+					//put this value back into the unique phenotype/model pair
+					//should only be one of this phenotype in the phenotype array
+					var resultmatch = $.grep(phenotypeArray, function(e){ return e.label_a == fulldataset[idx].label_a; });
+					if(resultmatch.length > 0) resultmatch.value = max;
+				}
+			}
     	}
-
     	//copy the phenotype data
     	this.options.phenotypeData = phenotypeArray.slice();
 
@@ -366,14 +428,11 @@ as a separate call in the init function.
     		this.options.currPhenotypeIdx = this.options.phenotypeData.length-1;
     		this.options.phenotypeDisplayCount = this.options.phenotypeData.length;
     	}
-
-    	
+   	
 		this.options.filteredPhenotypeData = [];
 		this.options.yAxis = [];
 		this.options.filteredModelData = [];
-		var startIdx = this.options.currPhenotypeIdx - (this.options.phenotypeDisplayCount -1);
-
-		
+		var startIdx = this.options.currPhenotypeIdx - (this.options.phenotypeDisplayCount -1);		
 		//extract the new array of filtered Phentoypes
 		//also update the axis
 		//also update the modeldata
@@ -397,7 +456,6 @@ as a separate call in the init function.
     	    	return d.rowid == self.options.phenotypeData[idx].rowid;
     	    });
     		tempFilteredModelData = tempFilteredModelData.concat(tempdata);
-
     	}
     	
     	//now, limit the data returned by models as well
@@ -405,12 +463,8 @@ as a separate call in the init function.
     		var tempdata = tempFilteredModelData.filter(function(d) {
     	    	return d.model_id == self._getConceptId(self.options.filteredModelList[idx].model_id);
     	    });
-    		self.options.filteredModelData = self.options.filteredModelData.concat(tempdata);
-    		
+    		self.options.filteredModelData = self.options.filteredModelData.concat(tempdata);    		
     	}
-
-    	
-
 	},
 	
     //given a list of phenotypes, find the top n models
@@ -471,9 +525,10 @@ as a separate call in the init function.
     
     //for a given model, extract the sim search data including IC scores and the triple:
     //the a column, b column, and lowest common subsumer
-    //for the triple's IC score, use the A score
+    //for the triple's IC score, use the LCS score
     _loadDataForModel: function(newModelData) {
 	
+	//BB: 05/14/2014:  added a.IC and b.IC to the row to display on label and determine
 	data = newModelData.matches;
     	for (var idx=0;idx<data.length;idx++) {
     	    var curr_row = data[idx];
@@ -482,13 +537,15 @@ as a separate call in the init function.
 			          "_" + this._getConceptId(newModelData.id), 
    			   "label_a" : curr_row.a.label, 
 			   "id_a" : this._getConceptId(curr_row.a.id), 
+			   "IC_a" : parseFloat(curr_row.a.IC),
 			   "subsumer_label" : curr_row.lcs.label, 
-    	     	           "subsumer_id" : this._getConceptId(curr_row.lcs.id), 
-			   "value" : parseFloat(curr_row.a.IC),
-    			   "label_b" : curr_row.b.label, 
+    	       "subsumer_id" : this._getConceptId(curr_row.lcs.id), 
+			   "value" : parseFloat(curr_row.lcs.IC),
+    		   "label_b" : curr_row.b.label, 
 			   "id_b" : this._getConceptId(curr_row.b.id), 
+			   "IC_b" : parseFloat(curr_row.b.IC),
 			   "model_id" : this._getConceptId(newModelData.id),
-    			   "model_label" : newModelData.label, 
+    		   "model_label" : newModelData.label, 
 			   "rowid" : this._getConceptId(curr_row.a.id) + 
 			              "_" + this._getConceptId(curr_row.lcs.id)
 		  }; 
@@ -509,8 +566,7 @@ as a separate call in the init function.
     	var size = 10;
     	//the spacing you want between rows
     	var gap = 3;
-    	//yoffset
- 
+    	//yoffset 
     	
     	//use the max phenotype size to limit the number of phenotypes shown 
     	var yLength = self.options.phenotypeData.length > this.options.phenotypeDisplayCount ? this.options.phenotypeDisplayCount : self.options.phenotypeData.length;
@@ -549,7 +605,7 @@ as a separate call in the init function.
 
     	var self= this;
     	//create the option list from the species list
-    	var optionhtml = "<div id='organism_div'>Comparison Organism&nbsp;&nbsp;&nbsp;<select id=\"organism\">";
+    	var optionhtml = "<span id='title'><b>Phenotype comparison (grouped by " + this.options.targetSpeciesName + " " + this.options.comparisonType + ")</b></span><span id='organism_div'  style='margin-left:70px;'>Comparison Organism&nbsp;&nbsp;&nbsp;<select id=\"organism\">";
     	for (var idx=0;idx<self.options.targetSpeciesList.length;idx++) {
     		var selecteditem = "";
     		if (self.options.targetSpeciesList[idx].name === self.options.targetSpeciesName) {
@@ -560,7 +616,7 @@ as a separate call in the init function.
     		}
     		optionhtml = optionhtml + "<option value='" + self.options.targetSpeciesList[idx].taxon +"' "+ selecteditem +">" + self.options.targetSpeciesList[idx].name +"</option>"
     	}
-    	optionhtml = optionhtml + "</select></div>";
+    	optionhtml = optionhtml + "</select></span>";
     	this.element.append(optionhtml);
     	//add the handler for the select control
         $( "#organism" ).change(function(d) {
@@ -568,6 +624,7 @@ as a separate call in the init function.
         	self.options.targetSpecies = self.options.targetSpeciesList[d.target.selectedIndex].taxon;
         	self.options.targetSpeciesName = self.options.targetSpeciesList[d.target.selectedIndex].name;
         	$("#organism_div").remove();
+			$("#title").remove();
         	$("#svg_area").remove();
         	self.options.phenotypeData = self.options.inputPhenotypeData.slice();
         	self._reset();
@@ -575,10 +632,21 @@ as a separate call in the init function.
         	});
         this.element.append("<svg id='svg_area'></svg>");
         this.options.svg = d3.select("#svg_area");
-        
-
     },
-    
+	
+	_addLogoImage : function() {     
+	  var scriptpath = $("script[src]").last().attr("src").split('?')[0].split('/').slice(0, -1).join('/')+'/';
+	  var imgs = this.options.svg.selectAll("image").data([0]);
+      imgs.enter()
+                .append("svg:image")
+                .attr("xlink:href", scriptpath + "../image/logo.png")
+                .attr("x", "75")
+                .attr("y", "25")
+                .attr("width", "60")
+                .attr("height", "50");       
+    },
+
+	
     _resetLinks: function() {
 	    this.options.svg.selectAll("#detail_content").remove();
 
@@ -586,11 +654,11 @@ as a separate call in the init function.
     	link_lines.style("font-weight", "normal");
     	link_lines.style("text-decoration", "none");
     	link_lines.style("color", "black");
+		link_lines.style("text-anchor", "end");
     },
 
-    _selectData: function(curr_data, obj) {
-    	
-    	//  		  return self._getYPosition(d.rowid);
+    _selectData: function(curr_data, obj) {    	
+    	//return self._getYPosition(d.rowid);
 
     	//create a highlight row
 		var self=this;
@@ -615,7 +683,7 @@ as a separate call in the init function.
     		txt = curr_data.id_a;
     	}
     	alabels.text(txt);
-
+/**
     	var sublabels = this.options.svg.selectAll("text.lcs_text." + this._getConceptId(curr_data.id) + ", ." + this._getConceptId(curr_data.subsumer_id));
     	var txt = curr_data.subsumer_label;
     	if (txt == undefined) {
@@ -624,7 +692,7 @@ as a separate call in the init function.
     	sublabels.text(txt);
     	var all_links = this.options.svg.selectAll("." + this._getConceptId(curr_data.id) + ", ." + this._getConceptId(curr_data.subsumer_id));
     	all_links.style("font-weight", "bold");
-
+*/
     	/* TEMPORARY!!! REMOVE FOR HARRY's POSTER!!!
     	var retData = "What data do we want to show for phentoypes?";
 	    this._updateDetailSection(retData, this._getXYPos(obj));
@@ -670,7 +738,7 @@ as a separate call in the init function.
   //Why?  Two reasons.  First it's useful to note that d3.js doesn't like to use URI's as ids.
   //Second, I like to use unique ids for CSS classes.  This allows me to selectively manipulate related groups of items on the
   //screen based their relationship to a common concept (ex: HP000123).  However, I can't use a URI as a class.
-  _getConceptId: function (uri) {
+	_getConceptId: function (uri) {
       if (!uri) {
 		  return "";
       }
@@ -696,25 +764,24 @@ as a separate call in the init function.
     		var el = d3.select(t);
     	    var p = d3.select(t.parentNode);
     	    p.append("text")
-    	       	.attr('x', t.getAttribute("x")+15)
-    	        .attr('y', t.getAttribute("y")-13)
+    	       	.attr('x', t.getAttribute("x")+ 12)
+    	        .attr('y', t.getAttribute("y") - 0)
     	        .attr("width", width)
     	        .attr("id", self._getConceptId(data.model_id))
     	        .attr("model_id", data.model_id)
-    	        .attr("height", 20)
-
+    	        .attr("height", 30)
     	        .attr("transform", function(d) {
     	        	return "rotate(-45)" 
-    	         })
+    	        })
 		        .on("click", function(d) {
 					self._clickModel(data, self.document[0].location.origin);
 				})
-    	       .on("mouseover", function(d) {
+    	        .on("mouseover", function(d) {
     	    	   self._selectModel(data, this);
-    	       })
-    	       .on("mouseout", function(d) {
+    	        })
+    	        .on("mouseout", function(d) {
     	    	   self._clearModelData(d, d3.mouse(this));
-    	       })
+    	        })
     	       .attr("class", this._getConceptId(data.model_id) + " model_label")
     	       .style("font-size", "12px")
     	       .text(label);
@@ -773,7 +840,7 @@ as a separate call in the init function.
 	    }
 
 	    this.options.svg.append("foreignObject")
-		    .attr("width", w)
+		    .attr("width", w+60)
 			.attr("height", h)
 			.attr("id", "detail_content")
 
@@ -783,7 +850,9 @@ as a separate call in the init function.
   		    
 			.append("xhtml:body")
 			.style("font-size", "10px")
-			.style("background-color", d3.rgb("#F09F76"))
+			.style("padding", "6px")
+			.style("background-color", d3.rgb("#F9D0BB"))
+			.style("border","1px solid #c5c5c5")
 			.html(htmltext);
     	
     },
@@ -852,10 +921,11 @@ as a separate call in the init function.
 	    	bSpecies = "Zebrafish";
 	    }
 
-	    retData = "<strong>Input: </strong> " + d.label_a + " (" + aSpecies + ")"   
-		    + "<br/><strong>Target: </strong> " + d.label_b + " (" + bSpecies + ")"
+	    retData = "<strong>Input: </strong> " + d.label_a + " (" + aSpecies + ", IC: " + d.IC_a.toFixed(2) + ")"   
+		    + "<br/><strong>Target: </strong> " + d.label_b + " (" + bSpecies + ", IC: " + d.IC_b.toFixed(2) +")"
+			+ "<br/><strong>Subsumer: </strong> " + d.subsumer_label 
      	    + "<br/><strong>" + this._toProperCase(this.options.comparisonType).substring(0, this.options.comparisonType.length-1)  +" Label: </strong> " + d.model_label
-     	+ "<br/><strong>Similarity Score: </strong> " + d.value.toFixed(2);
+			+ "<br/><strong>Similarity Score: </strong> " + d.value.toFixed(2);
 	    this._updateDetailSection(retData, this._getXYPos(obj));
 	  
     },
@@ -905,6 +975,8 @@ as a separate call in the init function.
   	  .attr("height", 10)
   	  .attr("rx", "3")
   	  .attr("ry", "3")
+	  //.attr("stroke", "#E6E6E6")
+	  //.attr("stroke-width", "2")
   	  //I need to pass this into the function
   	  .on("mouseover", function(d) {
   		  self._showModelData(d, this);
@@ -929,24 +1001,20 @@ as a separate call in the init function.
       model_rects.exit().transition()
           //.duration(20)
           //.attr("x", 600)
-          .style('opacity', '0.0')
+      .style('opacity', '0.0')
   	  .remove();
-  },
-
-    
+    },
+   
     _updateAxes: function() {
-	var self = this;
-  	this.options.h = (this.options.filteredModelData.length*2.5);
-  	//this.options.svg.selectAll("yaxis").remove();
-  	self.options.yScale = d3.scale.ordinal()
+		var self = this;
+		this.options.h = (this.options.filteredModelData.length*2.5);
+		//this.options.svg.selectAll("yaxis").remove();
+		self.options.yScale = d3.scale.ordinal()
       	    .domain(self.options.filteredModelData.map(function (d) {return d.rowid; }))
-      	    
   		.range([0,self.options.filteredModelData.length])
   		.rangePoints([ self.options.yoffset, self.options.yoffset+this.options.h ]);
 	    //update accent boxes
   	    self.options.svg.selectAll("#rect.accent").attr("height", self.options.h);
-
-
 	},
 
 	_createScrollBars: function() {
@@ -1034,8 +1102,8 @@ as a separate call in the init function.
 		var display_text = "Matches [" + startModelIdx + "-"+ max_count + "] out of " + (this.options.modelList.length);
 		var div_text = this.options.svg.append("svg:text")
 			.attr("class", "scroll_text")
-			.attr("x", this.options.axis_pos_list[2] +10)
-			.attr("y", "55")
+			.attr("x", this.options.axis_pos_list[2] +45)
+			.attr("y", "270")
 			.style("font-size", "9px")
 			.text(display_text);
 		
@@ -1044,8 +1112,8 @@ as a separate call in the init function.
 		var display_text = "Phenotypes [" + startPhenIdx + "-"+ max_count + "] out of " + (this.options.phenotypeData.length);
 		var div_text = this.options.svg.append("svg:text")
 			.attr("class", "scroll_text")
-			.attr("x", this.options.axis_pos_list[2] +10)
-			.attr("y", "70")
+			.attr("x", this.options.axis_pos_list[2] +45)
+			.attr("y", "285")
 			.style("font-size", "9px")
 			.text(display_text);
 	},
@@ -1200,13 +1268,13 @@ as a separate call in the init function.
 	    rect_headers.enter()
 	    	.append("text")
 		.attr("class", "accent")
-		.attr("x", function(d, i) { return (self.options.axis_pos_list[i]+10);})
+		.attr("x", function(d, i) { return i == 0 ?(self.options.axis_pos_list[i]+10)+25 : (self.options.axis_pos_list[i]+10);})
 		.attr("y", self.options.yoffset-10)
 		//.attr("width", self.options.textWidth + 5)
 		//.attr("height", self.options.h)
 		//.style("opacity", '0.4')
 		.style("display", function(d, i) {
-		    return i != 1 ? "" : "none";
+		    return i == 0 ? "" : "none";
 		})
 		.text(String);
 },
@@ -1231,7 +1299,6 @@ as a separate call in the init function.
 			.each(function(d,i) { 
 			    self._convertLabelHTML(this,
 				self._getShortLabel(self.options.filteredModelList[i].model_label, 15),self.options.filteredModelList[i]);}); 
-
 
 	    var temp_data = this.options.modelData.map(function(d) { 
 			return d.value;});
@@ -1305,42 +1372,40 @@ as a separate call in the init function.
 		    var legend_rects = this.options.svg.append("rect")
 			.attr("transform","translate(0,10)")
 			.attr("class", "legend_rect")
-			.attr("y", "29")
-			.attr("x", 15)
+			.attr("y", "340")
+			.attr("x", 612)
 			.attr("width", 180)
 			.attr("height", 20)
 			.attr("fill", "url(#gradient)");
 
 	
 		    var div_text1 = self.options.svg.append("svg:text")
-				.attr("transform","translate(0,10)")
+				.attr("transform","translate(612,10)")
 				.attr("class", "detail_text")
-				.attr("y", "22")
+				.attr("y", "335")
 				.style("font-size", "10px")
 				.text("Less Similar");
 		    var div_text = self.options.svg.append("svg:text")
-				.attr("transform","translate(65,10)")
+				.attr("transform","translate(660,10)")
 				.attr("class", "detail_text")
-				.attr("y", "22")
+				.attr("y", "322")
 				.style("font-size", "12px")
 				.text("Similarity Scale");
 		    var div_text2 = self.options.svg.append("svg:text")
-				.attr("transform","translate(160,10)")
+				.attr("transform","translate(730,10)")
 				.attr("class", "detail_text")
-				.attr("y", "22")
+				.attr("y", "335")
 				.style("font-size", "10px")
 				.text("More Similar");
 			
 	    }
 	},
-	
-	
+		
 	update: function() {
 		this._updateAxes();
 		this._createRects();
 		this._createModelRects() ;
 	},
-
 
 	//this code creates the text and rectangles containing the text 
 	//on either side of the model data
@@ -1350,9 +1415,9 @@ as a separate call in the init function.
 	    //A,subsumer, and B columns.   
 	    //If d3 sees the same label 4 times (ex: Abnormality of the
 	    //pharynx) then it will 
-	//create a rectangle and text for it 4 times.  Therefore, I
+		//create a rectangle and text for it 4 times.  Therefore, I
 	    //need to create a unique set of  
-	//labels per axis (because the labels can repeat across axes)
+		//labels per axis (because the labels can repeat across axes)
 
 	    var self=this;
 	    var rect_text = this.options.svg
@@ -1360,17 +1425,18 @@ as a separate call in the init function.
 		.data(this.options.filteredPhenotypeData, function(d) { return d.rowid; });
 	    rect_text.enter()
 		.append("text")
+		.style("text-anchor","end")
 		.attr("class", function(d) {
 		    return "a_text data_text " + self._getConceptId(d.id);
 		})
 	    //store the id for this item.  This will be used on click events
 		.attr("ontology_id", function(d) {
 		    return self._getConceptId(d.id_a);
+		    //return self.options.yScale(d.rowid)+28;		   
 		})
-		.attr("x", 15)
+		.attr("x", 208)
 		.attr("y", function(d) {
-		    //return self.options.yScale(d.rowid)+28;
-		    return self._getYPosition(d.rowid) +28;
+			 return self._getYPosition(d.rowid) +28;
 		})
 		.on("mouseover", function(d) {
 		    if (self.options.clickedData == undefined) {
@@ -1381,8 +1447,9 @@ as a separate call in the init function.
 //	    	self.options.svg.selectAll(".row_accent").remove();
 		    if (self.options.clickedData == undefined) {
 			self._deselectData(d, d3.mouse(this));
-		    }
-		})
+			}
+			})
+		
 /*		.on("click", function(d) {
 		    self._rectClick(this);
 		})*/
@@ -1413,9 +1480,8 @@ as a separate call in the init function.
 
 	   	//.attr("y", 1600)
 		.remove();
-	    
-	    
-	    var rect_text2 = this.options.svg
+	    	    
+	  /**  var rect_text2 = this.options.svg
 		.selectAll(".lcs_text")
 		.data(self.options.filteredPhenotypeData, function(d) { return d.rowid; });
 	    rect_text2.enter()
@@ -1451,7 +1517,7 @@ as a separate call in the init function.
 /*		.on("click", function(d) {
 		    self._rectClick(this);
 		})*/
-		.style('opacity', '1.0')
+/*		.style('opacity', '1.0')
 
 		.attr("width", self.options.textWidth)
 		.attr("height", 50)
@@ -1487,7 +1553,7 @@ as a separate call in the init function.
 		.style('opacity', '0.0')
 
 		.remove();
-	    
+	   */ 
 	},
 
 	_rectClick: function(data) {
@@ -1517,14 +1583,13 @@ as a separate call in the init function.
 	    //this._showThrobber();
 		//select the model label
 		
-		
 		var model_label = self.options.svg.selectAll("text#" + this._getConceptId(modelData.model_id));
     	model_label.style("fill", "blue");
 		model_label.style("text-decoration", "underline");
 
 		//create the related model rectangles
 		var highlight_rect = self.options.svg.append("svg:rect")
-		  	  .attr("transform",
+		  	.attr("transform",
 		  			  "translate(" + (self.options.textWidth + 20) + ",20)")
 			.attr("x", function(d) { return (self.options.xScale(modelData.model_id)-2);})
 			.attr("y", self.options.yoffset)
@@ -1609,21 +1674,18 @@ as a separate call in the init function.
 	// { "id": <id>, "observed": <obs>} .
 	// in that case take id  if  "observed" is "positive"
     _filterPhenotypeResults : function(phenotypelist) {
-
     	var newlist = [];
 
-	for (var i = 0; i < phenotypelist.length; i++) {
-	    pheno = phenotypelist[i];
-	    if (typeof pheno ==='string') {
-		newlist.push(pheno);
-	    }
-	    if (pheno.observed==="positive")
-		newlist.push(pheno.id);
-	}
-    	
+		for (var i = 0; i < phenotypelist.length; i++) {
+			pheno = phenotypelist[i];
+			if (typeof pheno ==='string') {
+			newlist.push(pheno);
+			}
+			if (pheno.observed==="positive")
+			newlist.push(pheno.id);
+		}   	
     	return newlist;
-    }
-    
+    }   
   });
 
 

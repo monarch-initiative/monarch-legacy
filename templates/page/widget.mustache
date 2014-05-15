@@ -1,81 +1,91 @@
-<!--
-  File: /widget/modeltype/index.html 
-  
-  Authors: Harry Hochheiser, Chuck Boromeo, Becky Boes (University of Pittsburgh)
-  
-  Version: Model Viewer v5.9.2014
-  
-  Purpose: This file provides step-by-step instructions on how to create an instance of the ModelType Viewer (modeltype.js) widget on any webpage.
-  
-  General Steps include:  
-  1. Add appropriate Javascript libraries and files
-  2. Add list of phenotypes and the function call for widget creation
-  3. Add a div for the widget to the html file body 
-  4. Display page in webbrowser
- -->
- 
+<!DOCTYPE html>
 <html>
-  <head>
-    <title>ModelType Widget Example</title>
-    <script src="js/jquery-1.11.0.min.js"></script>
-    <script src="js/jquery-ui-1.10.3.custom.min.js"></script>
-    <script src="js/d3.min.js"></script>
-    <script src="js/modeltype.js"></script>
-    <script>
-	var phenotypes = [
-	   	{ id:"HP:0000006", observed:"positive"},
-	   	{ id:"HP:0000726", observed:"positive"},
-	   	{ id:"HP:0000746", observed:"positive"},
-		{ id:"HP:0001300", observed:"positive"},
-		{ id:"HP:0002367", observed:"positive"},
-	   	{ id:"HP:0000007", observed:"positive"},
-	   	{ id:"HP:0000012", observed:"positive"},
-	   	{ id:"HP:0000716", observed:"positive"},
-		{ id:"HP:0000726", observed:"positive"},
-		{ id:"HP:0000739", observed:"positive"},
-	   	{ id:"HP:0001332", observed:"positive"},
-	   	{ id:"HP:0001347", observed:"positive"},
-	   	{ id:"HP:0002063", observed:"positive"},
-		{ id:"HP:0002067", observed:"positive"},
-		{ id:"HP:0002172", observed:"positive"},
-	   	{ id:"HP:0002322", observed:"positive"},
-	   	{ id:"HP:0003539", observed:"positive"},
-	   	{ id:"HP:0003677", observed:"positive"},
-		{ id:"HP:0007159", observed:"positive"}];	
-   
-   
-	// jQuery gets to bootstrap everything.
-	   jQuery(document).ready(
-	       function(){
+<head>
+    <title>Phenotype Comparison Widget</title>
+    {{#scripts}}
+    <script type="text/javascript" src="{{url}}"></script>
+    {{/scripts}}	
+    
+    <script src="/js/tabs.js"></script>
+    <script src="/js/stupidtable.min.js"></script>
+    <script src="/js/tables.js"></script>
+	<script src="/widgets/modeltype/js/jquery-1.11.0.min.js"></script>
+    <script src="/widgets/modeltype/js/jquery-ui-1.10.3.custom.min.js"></script>
+    <script src="/widgets/modeltype/js/d3.min.js"></script>
+	<script type="text/javascript" src="/widgets/modeltype/js/modeltype.js"></script>
+    {{#stylesheets}}
+    <link rel="stylesheet" type="text/css" href="{{url}}"/>
+    {{/stylesheets}}
+    <link rel="stylesheet" type="text/css" href="/css/tour.css"/>
+	<link rel="stylesheet" type="text/css" href="/css/monarch-main.css"/>
+    <link rel="stylesheet" type="text/css" href="/css/monarch-specific.css"/>
+    <link rel="stylesheet" type="text/css" href="/css/imagehover.css"/>	
+    <meta name="viewport" content="width=device-width, initial-scale=1.0"/> 
+    <link rel="icon" href="/image/favicon.ico" type="image/x-icon">
+    <meta charset="utf-8"/> 
+	<script>
+	   var phenotypes = [
+			{ id:"HP:0000006", observed:"positive"},
+			{ id:"HP:0000726", observed:"positive"},
+			{ id:"HP:0000746", observed:"positive"},
+			{ id:"HP:0001300", observed:"positive"},
+			{ id:"HP:0002367", observed:"positive"},
+			{ id:"HP:0000007", observed:"positive"},
+			{ id:"HP:0000012", observed:"positive"},
+			{ id:"HP:0000716", observed:"positive"},
+			{ id:"HP:0000726", observed:"positive"},
+			{ id:"HP:0000739", observed:"positive"},
+			{ id:"HP:0001332", observed:"positive"},
+					{ id:"HP:0001347", observed:"positive"},
+			{ id:"HP:0002063", observed:"positive"},
+			{ id:"HP:0002067", observed:"positive"},
+			{ id:"HP:0002172", observed:"positive"},
+			{ id:"HP:0002322", observed:"positive"},
+			{ id:"HP:0003539", observed:"positive"},
+			{ id:"HP:0003677", observed:"positive"},
+			{ id:"HP:0007159", observed:"positive"}];	
+	   
+	   
+		// jQuery gets to bootstrap everything.
+		   jQuery(document).ready(
+			   function(){
 
-	   	$("#phen_vis").modeltype({serverURL : "http://tartini.crbs.ucsd.edu", phenotypeData: 		phenotypes, targetSpecies: "10090" });
-	   	});
-	
-	</script>
-	<style media="screen" type="text/css">
+			$("#phen_vis").modeltype({serverURL: "http://tartini.crbs.ucsd.edu", phenotypeData: phenotypes,
+							  targetSpecies: "10090" });
+			
+			});	
+   </script>
+   <style media="screen" type="text/css">
 		body{
 			margin-left:25px;
 			width:60%;
 			font-family: Arial, Helvetica, sans-serif;
-			font-size: 0.9em;
+			font-size: 14px;
 		}
-		.title, .sectiontitle, h1, .subsectiontitle, .header{
+		.title, .sectiontitle, h1, .subsectiontitle{
 			font-weight:bold;
 			color:#44A293;
+			line-height: 25px;
 		} 
+		pre {
+		  margin-bottom:10px;
+		  padding: 15px 0;
+		}
 		.header{
-			font-size:2.0em;
+			font-size:40px;
 			margin-left:15ps;
 			margin-bottom:15px;
+			font-style:normal;
+			border-top: 0px solid #428BCA
 		}			
 		.subsectiontitle{
-			font-size:1.0em;
+			font-size:14px;
 		}		
 		.sectiontitle{
-			font-size:1.2em;
+			font-size:16px;
 		}
 		.title{
-			font-size:1.4em;
+			font-size: 20px;
 		}
 		.headtitle img{
 			vertical-align:bottom;
@@ -83,22 +93,21 @@
 		#phen_vis{
 		  margin-top:20px;
 		}
-
 	</style>
-  </head>
-  <body>
-    <div class="monarch-container">       
+</head>
+<body>
+    <div class="monarch-container">
+        {{{includes.navbar}}}
         <div class="content">
             <div class="wrapperforfooter">
-			<span class="headtitle"><img id="monarch-logo"  width="90px" class="downloadline" src="image/logo.png"/>
 			<span class="header">ModelType Viewer Widget</span></span>
 			<div id="phen_vis"></div><br /><br />
             <div class="title">Steps for Adding the ModelType Viewer Widget to Your Webpage</div>
 				<div class="text">
-                    This file describes how to include the Viewer Widget on any webpage.  Steps are provided for adding required javascript files<b>*</b>, adding parameters to the widget call, and adding the widget to the html file. <br /><br />
+                    This page describes how to include the Viewer Widget on any webpage.  Steps are provided for adding required javascript files<b>*</b>, adding parameters to the widget call, and adding the widget to the html file. <br /><br />
 					
 					<span style="font-weight:bold; font-size:1.1em;">*Required files are available at: <a href="https://github.com/monarch-initiative/monarch-app/tree/master/widgets/modeltype">https://github.com/monarch-initiative/monarch-app/tree/master/widgets/modeltype</a></span>
-                </div><br />
+                </div>
             <div class="section">
                 <div class="sectiontitle">1. Add the Required Javascript Libraries and Image</div>
                 <div class="text">
@@ -201,7 +210,8 @@
             </div>  
 			<div class="sectiontitle">Please contact us at <a href="mailto:info@monarchinitiative.org">info@monarchinitiative.org</a> if you have any problems or questions.</div>			
             </div> <!-- closes wrapperforfooter -->
+            {{{includes.footer}}}
         </div>
     </div>
-  </body>
+</body>
 </html>
