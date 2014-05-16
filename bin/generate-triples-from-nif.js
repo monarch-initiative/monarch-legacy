@@ -331,7 +331,18 @@ function mapColumnValue(ix, v, cmap, gconf) {
 }
 
 
-// does not uniquify
+/* Function: emit
+ *
+ * Writes a triple to a stream
+ *
+ * Arguments:
+ *  - io: stream to write to
+ *  - sv: subject of triple
+ *  - pv: predicate of triple
+ *  - ov: object of triple. If a list, emits multiple triples, for each element
+ *  - mapping: (optional) source mapping used to derive the triple
+ *
+ */
 function emit(io, sv, pv, ov, mapping) {
     if (sv == null || pv == null || ov == null) {
         return;

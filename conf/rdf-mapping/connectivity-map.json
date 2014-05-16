@@ -1,6 +1,7 @@
 {
     "notes" : "currently just stores interaction as a graph. In future we will need to store the interaction as an entity",
     "isDisabled" : false,
+    "mapVersion" : "2014-05-16",
     "graphs": [
         {
             "graph" : "brain-connectivity",

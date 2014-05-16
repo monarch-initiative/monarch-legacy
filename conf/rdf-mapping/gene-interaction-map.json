@@ -4,10 +4,16 @@
         {
             "graph" : "gene-interactions",
             "view" : "nif-0000-00432-1",
-            "mapVersion" : "2014-04-18",
+            "mapVersion" : "2014-05-16",
             "filter" : {
                 "interactor_a_taxon_id" : "9606"
             },
+            "objects" : [
+                {
+                    "id" : "RO:0002434",
+                    "rdf:type" : "owl:ObjectProperty"
+                }
+            ],
             "columns" : [
                 {
                     "name" : "interactor_a_gene_id",

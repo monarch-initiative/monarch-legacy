@@ -5,6 +5,13 @@
         {
             "graph" : "brain-connectivity_eff",
             "view" : "nlx_154697-8",
+            "mapVersion" : "2014-05-16",
+            "objects" : [
+                {
+                    "id" : "http://uri.neuinfo.org/connectivity#efferent",
+                    "rdf:type" : "owl:ObjectProperty"
+                }
+            ],
             "filter" : {
                 "con_to_expr" : "is_a"
             },

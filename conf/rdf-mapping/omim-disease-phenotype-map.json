@@ -4,7 +4,13 @@
         {
             "graph" : "omim-disease-phenotype",
             "view" : "nlx_151835-1",
-            "mapVersion" : "2014-04-18",
+            "mapVersion" : "2014-05-16",
+            "objects" : [
+                {
+                    "id" : "RO:0002200",
+                    "rdf:type" : "owl:ObjectProperty"
+                }
+            ],
             "columns" : [
                 {
                     "name" : "v_uuid"
