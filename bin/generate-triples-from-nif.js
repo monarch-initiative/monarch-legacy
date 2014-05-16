@@ -321,12 +321,12 @@ function mapColumnValue(ix, v, cmap, gconf) {
         }
         // carry on, just use v, as it is a singleton list
     }
-    if (type == 'rdfs:Literal') {
-        return engine.quote(v);
-    }
     if (v == null) {
         console.warn("No value for "+ix);
         return null;
+    }
+    if (type == 'rdfs:Literal') {
+        return engine.quote(v);
     }
     return mapRdfResource(v);
 }
