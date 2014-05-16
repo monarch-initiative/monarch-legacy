@@ -326,6 +326,7 @@ function mapColumnValue(ix, v, cmap, gconf) {
     }
     if (v == null) {
         console.warn("No value for "+ix);
+        return null;
     }
     return mapRdfResource(v);
 }
