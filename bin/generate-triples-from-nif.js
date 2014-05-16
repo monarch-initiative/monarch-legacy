@@ -297,6 +297,12 @@ function mapColumnValue(ix, v, cmap, gconf) {
         }
     }
 
+    if (v == null) {
+        console.warn("No value for "+ix);
+        return null;
+    }
+
+
     // column
     if (cobj.prefix != null) {
         return mapRdfResource(cobj.prefix + v);
@@ -320,10 +326,6 @@ function mapColumnValue(ix, v, cmap, gconf) {
             return vl.map(function(e) { return mapColumnValue(ix, e, cmap, gconf) });
         }
         // carry on, just use v, as it is a singleton list
-    }
-    if (v == null) {
-        console.warn("No value for "+ix);
-        return null;
     }
     if (type == 'rdfs:Literal') {
         return engine.quote(v);
