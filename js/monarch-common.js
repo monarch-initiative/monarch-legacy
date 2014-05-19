@@ -1,12 +1,5 @@
 $(document).ready(function(){
 
-    /* Show Footer on Hover */
-    $('#footer').hover(function() {
-        $(this).css({'color': 'black'});
-    }, function() {
-        $(this).css({'color': 'white'});
-    });
-
     /* Annotation Score Stars */
     $.fn.stars = function() {
         return this.each(function(i,e){$(e).html($('<span/>').width($(e).text()*16));});
