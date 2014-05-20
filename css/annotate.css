@@ -1,3 +1,16 @@
+.linkedspan {
+    color: #428bca;
+    position: relative;
+}
 .linkedterms {
+    position: absolute;
+    background-color: #DDD;
+    bottom: 15px;
+    border: 1px solid black;
+    padding: 5px 10px;
+    border-radius: 3px;
+    min-width: 180px;
+    max-width: 250px;
+    color: black;
     display: none;
 }
