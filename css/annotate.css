@@ -1,3 +1,6 @@
+#markeduptext {
+    line-height: 30px;
+}
 .linkedspan {
     color: #428bca;
     position: relative;
@@ -13,4 +16,15 @@
     max-width: 250px;
     color: black;
     display: none;
+    line-height: 16px;
+    font-size: 13.5px;
+}
+#longestcheck {
+    margin-top: 10px;
+    margin-right: 10px;
+}
+.btn.btn-annotate {
+    padding: 5px 15px;
+    margin-top: 10px;
+    border-radius: 3px;
 }
