@@ -41,11 +41,11 @@
                     </p>
                 </div>
                 <div id="categories">
-                    <a href="#overview"><div id="initialtab" class="tab contenttab overtab">Overview</div></a>
+                    <a href="#overview"><div id="initialtab" class="tab contenttab">Overview</div></a>
                     <div class="tabcontainer">
                         <div class="tabhover">View diseases with this phenotype</div>
                         {{#hasDiseases}}
-                            <a href="#disease"><div class="tab contenttab distab">Disease ({{diseaseNum}})</div></a>
+                            <a href="#disease"><div class="tab contenttab">Disease ({{diseaseNum}})</div></a>
                         {{/hasDiseases}}
                         {{^hasDiseases}}
                             <div class="tab greyed-out">Disease (0)</div>
@@ -54,7 +54,7 @@
                     <div class="tabcontainer">
                         <div class="tabhover">View genotypes with this phenotype</div>
                         {{#hasGenotypes}}
-                            <a href="#genotypes"><div class="tab contenttab genotab">Models ({{genotypeNum}})</div></a>
+                            <a href="#genotypes"><div class="tab contenttab">Models ({{genotypeNum}})</div></a>
                         {{/hasGenotypes}}
                         {{^hasGenotypes}}
                             <div class="tab greyed-out">Models (0)</div>

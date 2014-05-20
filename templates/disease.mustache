@@ -51,12 +51,12 @@
                 </div>
                 <div id="categories">
                     <div class="tabcontainer">
-                        <a href="#ontology"><div id="initialtab" class="tab contenttab onttab">Overview</div></a>
+                        <a href="#ontology"><div id="initialtab" class="tab contenttab">Overview</div></a>
                     </div>
                     <div class="tabcontainer">
                         <div class="tabhover">View phenotypes related to this disease</div>
                         {{#hasPhenotypes}}
-                            <a href="#phenotypes"><div class="tab contenttab phentab">Phenotypes ({{phenotypeNum}})</div></a>
+                            <a href="#phenotypes"><div class="tab contenttab">Phenotypes ({{phenotypeNum}})</div></a>
                         {{/hasPhenotypes}}
                         {{^hasPhenotypes}}
                             <div class="tab greyed-out">Phenotypes (0)</div>
@@ -65,7 +65,7 @@
                     <div class="tabcontainer">
                         <div class="tabhover">View genes known to be variant in this disease</div>
                         {{#hasGenes}}
-                            <a href="#genes"><div class="tab contenttab gentab">Genes ({{geneNum}})</div></a>
+                            <a href="#genes"><div class="tab contenttab">Genes ({{geneNum}})</div></a>
                         {{/hasGenes}}
                         {{^hasGenes}}
                             <div class="tab greyed-out">Genes (0)</div>
@@ -74,7 +74,7 @@
                     <div class="tabcontainer">
                         <div class="tabhover">View known variants associated with this disease</div>
                         {{#hasAlleles}}
-                            <a href="#alleles"><div class="tab contenttab alletab">Alleles ({{alleleNum}})</div></a>
+                            <a href="#alleles"><div class="tab contenttab">Alleles ({{alleleNum}})</div></a>
                         {{/hasAlleles}}
                         {{^hasAlleles}}
                             <div class="tab greyed-out">Alleles (0)</div>
@@ -85,7 +85,7 @@
                         <div class="tabhover">View matching models and
                         genes based on shared phenotypes and orthology</div>
                         {{#hasModels}}
-                            <a href="#model"><div class="tab contenttab modtab">Matches ({{modelNum}})</div></a>
+                            <a href="#model"><div class="tab contenttab">Matches ({{modelNum}})</div></a>
                         {{/hasModels}}
                         {{^hasModels}}
                             <div class="tab greyed-out">Matches (0)</div>
@@ -94,7 +94,7 @@
                     <div class="tabcontainer">
                         <div class="tabhover">View diseases that have the most phenotypes in common</div>
                         {{#hasSim}}
-                            <a href="#similarity"><div class="tab contenttab simitab">Related Diseases ({{simNum}})</div></a>
+                            <a href="#similarity"><div class="tab contenttab">Related Diseases ({{simNum}})</div></a>
                         {{/hasSim}}
                         {{^hasSim}}
                             <div class="tab greyed-out">Related Diseases (0)</div>
@@ -103,11 +103,20 @@
                     <div class="tabcontainer">
                         <div class="tabhover">View phenotypes on pathway view containing variant genes</div>
                         {{#hasPathways}}
-                            <a href="#pathways"><div class="tab contenttab pathtab">Pathways ({{pathwayNum}})</div></a>
+                            <a href="#pathways"><div class="tab contenttab">Pathways ({{pathwayNum}})</div></a>
                         {{/hasPathways}}
                         {{^hasPathways}}
                             <div class="tab greyed-out">Pathways (0)</div>
                         {{/hasPathways}}
+                    </div>
+                    <div class="tabcontainer">
+                        <div class="tabhover">View citations for the data on this page</div>
+                        {{#hasLiterature}}
+                            <a href="#literature"><div class="tab contenttab">Literature ({{literatureNum}})</div></a>
+                        {{/hasLiterature}}
+                        {{^hasLiterature}}
+                            <div class="tab greyed-out">Literature (0)</div>
+                        {{/hasLiterature}}
                     </div>
                 </div>
             </div>
@@ -197,9 +206,13 @@
                         {{{pathwayTable}}}
                     </table>
                     <div id="keggerator_div"></div>
-
                 </div>
                 {{/hasPathways}}
+                {{#hasLiterature}}
+                <div id="literature" class="category">
+                    
+                </div>
+                {{/hasLiterature}}
             </div>
             </div> <!-- closes wrapperforfooter -->
             {{{includes.footer}}}

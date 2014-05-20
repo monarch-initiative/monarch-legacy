@@ -41,13 +41,13 @@
                 </div>
                 <div id="categories">
                     <div class="tabcontainer">
-                        <a href="#ontology"><div id="initialtab" class="tab contenttab onttab">Overview</div></a>
+                        <a href="#ontology"><div id="initialtab" class="tab contenttab">Overview</div></a>
                         <div class="tabline"></div>
                     </div>
                     <div class="tabcontainer">
                         <div class="tabhover">View phenotypes related to this gene</div>
                         {{#hasPhenotypes}}
-                            <a href="#phenotypes"><div class="tab contenttab phentab">Phenotypes ({{phenotypeNum}})</div></a>
+                            <a href="#phenotypes"><div class="tab contenttab">Phenotypes ({{phenotypeNum}})</div></a>
                         {{/hasPhenotypes}}
                         {{^hasPhenotypes}}
                             <div class="tab greyed-out">Phenotypes (0)</div>
@@ -56,7 +56,7 @@
                     <div class="tabcontainer">
                         <div class="tabhover">View diseases related to this gene</div>
                         {{#hasDiseases}}
-                            <a href="#diseases"><div class="tab contenttab distab">Diseases ({{diseaseNum}})</div></a>
+                            <a href="#diseases"><div class="tab contenttab">Diseases ({{diseaseNum}})</div></a>
                         {{/hasDiseases}}
                         {{^hasDiseases}}
                             <div class="tab greyed-out">Diseases (0)</div>
@@ -65,7 +65,7 @@
                     <div class="tabcontainer">
                         <div class="tabhover">View genotypes of this gene</div>
                         {{#hasGenotypes}}
-                            <a href="#genotypes"><div class="tab contenttab genotab">Genotypes ({{genotypeNum}})</div></a>
+                            <a href="#genotypes"><div class="tab contenttab">Genotypes ({{genotypeNum}})</div></a>
                         {{/hasGenotypes}}
                         {{^hasGenotypes}}
                             <div class="tab greyed-out">Genotypes (0)</div>
@@ -74,7 +74,7 @@
                     <div class="tabcontainer">
                         <div class="tabhover">View variants of this gene</div>
                         {{#hasAlleles}}
-                            <a href="#alleles"><div class="tab contenttab alletab">Variants ({{alleleNum}})</div></a>
+                            <a href="#alleles"><div class="tab contenttab">Variants ({{alleleNum}})</div></a>
                         {{/hasAlleles}}
                         {{^hasAlleles}}
                             <div class="tab greyed-out">Variants (0)</div>
@@ -84,7 +84,7 @@
                     <div class="tabcontainer">
                         <div class="tabhover">View gene interactions</div>
                         {{#hasInteractions}}
-                            <a href="#interactions"><div class="tab contenttab modtab">Interactions ({{interactionNum}})</div></a>
+                            <a href="#interactions"><div class="tab contenttab">Interactions ({{interactionNum}})</div></a>
                         {{/hasInteractions}}
                         {{^hasInteractions}}
                             <div class="tab greyed-out">Interactions (0)</div>
@@ -93,7 +93,7 @@
                     <div class="tabcontainer">
                         <div class="tabhover">View orthologs</div>
                         {{#hasOrthologs}}
-                            <a href="#orthologs"><div class="tab contenttab simitab">Homologs ({{orthologNum}})</div></a>
+                            <a href="#orthologs"><div class="tab contenttab">Homologs ({{orthologNum}})</div></a>
                         {{/hasOrthologs}}
                         {{^hasOrthologs}}
                             <div class="tab greyed-out">Homologs (0)</div>
@@ -102,7 +102,7 @@
                     <div class="tabcontainer">
                         <div class="tabhover">View pathways that involve this gene</div>
                         {{#hasPathways}}
-                            <a href="#pathways"><div class="tab contenttab pathtab">Pathways ({{pathwayNum}})</div></a>
+                            <a href="#pathways"><div class="tab contenttab">Pathways ({{pathwayNum}})</div></a>
                         {{/hasPathways}}
                         {{^hasPathways}}
                             <div class="tab greyed-out">Pathways (0)</div>
