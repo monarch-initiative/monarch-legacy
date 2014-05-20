@@ -1,5 +1,6 @@
 #markeduptext {
     line-height: 30px;
+    margin: 40px;
 }
 .linkedspan {
     color: #428bca;
@@ -8,16 +9,18 @@
 .linkedterms {
     position: absolute;
     background-color: #DDD;
-    bottom: 15px;
+    top: 15px;
+    left: -50px;
     border: 1px solid black;
-    padding: 5px 10px;
+    padding: 5px 7px;
     border-radius: 3px;
     min-width: 180px;
-    max-width: 250px;
+    max-width: 300px;
     color: black;
     display: none;
     line-height: 16px;
     font-size: 13.5px;
+    z-index: 10;
 }
 #longestcheck {
     margin-top: 10px;
