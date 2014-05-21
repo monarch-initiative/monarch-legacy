@@ -60,6 +60,15 @@
                             <div class="tab greyed-out">Models (0)</div>
                         {{/hasGenotypes}}
                     </div>
+                    <div class="tabcontainer">
+                        <div class="tabhover">View citations for the data on this page</div>
+                        {{#hasLiterature}}
+                            <a href="#literature"><div class="tab contenttab">Literature ({{literatureNum}})</div></a>
+                        {{/hasLiterature}}
+                        {{^hasLiterature}}
+                            <div class="tab greyed-out">Literature (0)</div>
+                        {{/hasLiterature}}
+                    </div>
                 </div>
             </div>
             <div id="complete-info">
@@ -96,6 +105,13 @@
                     </table>
                 </div>
                 {{/hasGenotypes}}
+                {{#hasLiterature}}
+                <div id="literature" class="category">
+                    <table class="{{css.table}}">
+                        {{{literatureTable}}}
+                    </table>
+                </div>
+                {{/hasLiterature}}
             </div>
 	    
             </div> <!-- closes wrapperforfooter -->
