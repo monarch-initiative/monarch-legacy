@@ -35,7 +35,6 @@ as a separate call in the init function.
     $.widget("ui.modeltype", {
 
 	options:   {
-
 	    axis_pos_list: [],
 		clickedData: undefined, 
 		colorScale: undefined,
@@ -68,6 +67,9 @@ as a separate call in the init function.
 		phenotypeData: [],
 	    phenotypeDisplayCount : 26,
 		phenotypeSumData: [],
+		selectedCalculation: 0,
+		selectedLabel: "Default",
+		selectList: [{label: "Default", calc: 0}, { label: "Information Content Ratio", calc: 1}, { label: "Distance Calculation", calc: 2}],
 		selectRectHeight : 0,
 		selectRectWidth : 0,
 		serverURL : "",
@@ -85,8 +87,7 @@ as a separate call in the init function.
 		yAxisMax : 0,
 		yoffset: 100,	    
 	    yScale: undefined,	
-		yTranslation: undefined,
-		
+		yTranslation: undefined,	
 	},
 	
 		//reset all the arrays before reloading data
@@ -116,7 +117,7 @@ as a separate call in the init function.
 			self.options.globalViewWidth = 110;
 			self.options.globalViewHeight = 110;
 			self.options.phenotypeDisplayCount = 26;
-			self.options.modelDisplayCount = 20;
+			self.options.modelDisplayCount = 30;
 			self.options.yoffset = 100;
 			self.options.comparisonType = "genes";
 			self.options.yTranslation = undefined;
@@ -124,8 +125,6 @@ as a separate call in the init function.
 			self.options.selectRectWidth = 0;
 			self.options.phenotypeSumData  = [];
 	},
-
-
 
 	//NOTE: I'm not too sure what the default init() method signature should be
 	//given an imageDiv and phenotype_data list
@@ -137,6 +136,7 @@ as a separate call in the init function.
 	_create: function() {
 	    
 		this._setTargetSpeciesName(this.options.targetSpecies);
+		this._setSelectedCalculation(this.options.selectedCalculation);
 		this.options.yTranslation =(this.options.targetSpecies == '9606') ? 0 : 0;
 		this.options.w = this.options.m[1]-this.options.m[3];
 	    this.options.h = 1300 -this.options.m[0]-this.options.m[2];
@@ -148,8 +148,7 @@ as a separate call in the init function.
 	    this._loadData(this.options.phenotypeData);
 	    
 	    if (this.options.modelData.length != 0 && this.options.phenotypeData.length != 0) {	    
-	            //this.options.filteredModelData = this.options.modelData.slice();
-	
+	         
 	            this._filterData(this.options.modelData.slice());
 	            this._createYAxis();
 	    	    //just pad the overall height by a skosh...
@@ -239,7 +238,6 @@ as a separate call in the init function.
 		}
 		var globalview = self.options.svg.append("rect")
 			//note: I had to make the rectangle slightly bigger to compensate for the strike-width
-			//.attr("x", self.options.axis_pos_list[2] + self.options.textWidth + 28)
 			.attr("x", self.options.axis_pos_list[2] + 39)
 			.attr("y", 128  + this.options.yTranslation)
 			.attr("id", "globalview")
@@ -250,14 +248,12 @@ as a separate call in the init function.
 			.attr("width", self.options.globalViewWidth+4);
 
 		var rect_instructions = self.options.svg.append("text")
-			//.attr("x", self.options.axis_pos_list[2] + self.options.textWidth + 10)
 			.attr("x", self.options.axis_pos_list[2] + 10)
 			.attr("y", 78 + this.options.yTranslation)
 			.style("font-size", "12px")
 			.text("Use the phenotype map below to");
 		
 		var rect_instructions = self.options.svg.append("text")
-			//.attr("x", self.options.axis_pos_list[2] + self.options.textWidth + 10)
 			.attr("x", self.options.axis_pos_list[2] + 10)
 			.attr("y", 90 + this.options.yTranslation) 
 			.style("font-size", "12px")
@@ -282,8 +278,6 @@ as a separate call in the init function.
 		  	  .append("rect")
 		  	  .attr("transform",
 		  		"translate(" + (self.options.axis_pos_list[2] + 41) + "," + (133 + self.options.yTranslation) + ")")
-			  //(self.options.axis_pos_list[2] + self.options.textWidth + 30) + ",77)")
-		      //"translate(210," + this.options.yoffset + ")")
 		  	  .attr("class",  "mini_model")
 		  	  .attr("y", function(d, i) { return self.options.smallYScale(d.rowid);})
 		  	  .attr("x", function(d) { return self.options.smallXScale(d.model_id);})
@@ -296,16 +290,11 @@ as a separate call in the init function.
 		selectRectWidth = self.options.smallXScale(self.options.modelList[self.options.modelDisplayCount-1].model_id);
 		  //create the "highlight" rectangle
 		self.options.highlightRect = self.options.svg.append("rect")
-		  	//.attr("transform",
-		  	//	"translate(" + (self.options.axis_pos_list[2] + 41) + "," + (130 + //self.options.yTranslation) + ")")
 			.attr("transform",
 		  		"translate(" + (self.options.axis_pos_list[2] + 41) + "," + (130 + self.options.yTranslation) + ")")
-			 //(self.options.axis_pos_list[2] + self.options.textWidth + 30) + ",77)")
 			.attr("x", 0)
 			.attr("y", 0)		
-			.attr("class", "draggable")
-			
-			//.call(drag)
+			.attr("class", "draggable")					
 			.call(d3.behavior.drag()
 				.origin(function() {
 					var current = d3.select(this);
@@ -318,22 +307,16 @@ as a separate call in the init function.
                 	var rect = self.options.svg.select("#selectionrect");
         		  	rect.attr("transform","translate(0,0)")
         			//limit the range of the x value
-        			//var newX = d3.event.x - (self.options.axis_pos_list[2] + self.options.textWidth + 30);					
-					var newX = d3.event.x - (self.options.axis_pos_list[2] + 41);
+        			var newX = d3.event.x - (self.options.axis_pos_list[2] + 41);
         		  	newX = Math.max(newX,0);
         		  	newX = Math.min(newX,(110-self.options.smallXScale(self.options.modelList[self.options.modelDisplayCount-1].model_id)));
-               	    //rect.attr("x", newX + (self.options.axis_pos_list[2] + self.options.textWidth + 30))
-					rect.attr("x", newX + (self.options.axis_pos_list[2] + 41))
+               	   rect.attr("x", newX + (self.options.axis_pos_list[2] + 41))
                	    //limit the range of the y value
-        			var newY = d3.event.y - 130;//+ self.options.yTranslation;
-					//var newY = d3.event.y + self.options.yTranslation;
+        			var newY = d3.event.y - 130;					
         		  	newY = Math.max(newY,0);
         		  	newY = Math.min(newY,(self.options.globalViewHeight-self.options.smallYScale(self.options.phenotypeData[self.options.phenotypeDisplayCount-1].rowid)));
                	    rect.attr("y", newY + 130 + self.options.yTranslation);
-					//rect.attr("y", newY + self.options.yTranslation);
-        			//retrieve the id of the items using the d3.event.dx and dy
-        			//       			  		
-        			//var xPos = d3.event.x - (self.options.axis_pos_list[2] + self.options.textWidth + 30);
+					
         			var xPos = newX;
         			
         			var leftEdges = self.options.smallXScale.range();
@@ -343,7 +326,6 @@ as a separate call in the init function.
 			            //do nothing, just increment j until case fails
                	    var newModelPos = j+self.options.modelDisplayCount;
 
-        			//var yPos = d3.event.y - 190;
 			  		var yPos = newY;
 			  		
         			var leftEdges = self.options.smallYScale.range();
@@ -364,36 +346,7 @@ as a separate call in the init function.
 			//set the height and width to match the number of items shown on the axes
 			.attr("height", self.options.smallYScale(self.options.phenotypeData[self.options.phenotypeDisplayCount-1].rowid))
 			.attr("width", self.options.smallXScale(self.options.modelList[self.options.modelDisplayCount-1].model_id));
-			//.call(drag);
-	         
-			/** var drag = d3.behavior.drag()
-				.origin(function(d) { return d; })
-				.on("drag", this._dragmove);*/
 	},
-	
-	/**_dragmove: function(d) {
-		d3.select(this)			
-			.attr("x", d.x = Math.max(self.options.selectRectWidth/2, Math.min(self.options.selectRectWidth - (self.options.selectRectWidth/2), d3.event.x)))
-	        .attr("y", d.y = Math.max(self.options.selectRectHeight/2, Math.min(self.options.selectRectHeight - (self.options.selectRectHeight/2), d3.event.y)));
-			var leftEdges = self.options.smallXScale.range();
-			        var width = self.options.smallXScale.rangeBand();
-			        var j;
-			        for(j=0; xPos > (leftEdges[j] + width); j++) {}
-			            //do nothing, just increment j until case fails
-               	    var newModelPos = j+self.options.modelDisplayCount;
-
-        			var leftEdges = self.options.smallYScale.range();
-			        var height = self.options.smallYScale.rangeBand();
-			        var j;
-			        for(j=0; yPos > (leftEdges[j] + height); j++) {}
-			            //do nothing, just increment j until case fails
-               	    var newPhenotypePos = j+self.options.phenotypeDisplayCount;
-			self._updateModel(self.options.modelDisplayCount, self.options.phenotypeDisplayCount);
-	},*/
-	
-	
-
-	
 	
 	_setTargetSpeciesName: function(taxonid) {
 		var self = this;
@@ -404,6 +357,17 @@ as a separate call in the init function.
 
 		self.options.targetSpeciesName = tempdata[0].name;
 		self.options.targetSpecies = tempdata[0].taxon;
+	},
+
+	_setSelectedCalculation: function(calc) {
+		var self = this;
+		
+		var tempdata = self.options.selectList.filter(function(d) {
+	    	return d.calc === calc;
+	    });
+
+		self.options.selectedLabel = tempdata[0].label;
+		self.options.selectedCalculation = tempdata[0].calc;
 	},
 
 	_createTitle: function() {
@@ -488,7 +452,6 @@ as a separate call in the init function.
         	var size = 10;
         	//the spacing you want between rows
         	var gap = 3;
-
     		var stuff = {"id": rankedArray[idx][0].rowid, "ypos" : ((axis_idx * (size+gap)) + self.options.yoffset)};
     		self.options.yAxis.push(stuff); 
     	    axis_idx = axis_idx + 1;
@@ -518,13 +481,11 @@ as a separate call in the init function.
 		var self = this;
 		var modelDataForSorting = [];
 		
-		for (var idx=0;idx<self.options.phenotypeData.length;idx++) {
-			
+		for (var idx=0;idx<self.options.phenotypeData.length;idx++) {			
 			var tempdata = self.options.modelData.filter(function(d) {
     	    	return d.id_a == self.options.phenotypeData[idx].id_a;
     	    });	
 			modelDataForSorting.push(tempdata);
-    		//modelDataForSorting = modelDataForSorting.concat(tempdata);
 		}
 		//sort the model list by rank
 		modelDataForSorting.sort(function(a,b) { 
@@ -536,7 +497,7 @@ as a separate call in the init function.
 			var newdata = modelDataForSorting.filter(function(d,i) {			
 				var sum = 0;			
 				if (d[0].id_a == self.options.phenotypeData[idx++].id_a){
-					for (el of d)
+					for (el in d)
 					{
 						sum+= +el.value;
 					}
@@ -633,15 +594,16 @@ as a separate call in the init function.
 		
 		norm = max - min;
 		//console.log("Min: " + min + "  Max " + max + "Norm: " + norm);
-		
-		for (var idx=0;idx<calculatedArray.length;idx++) {
-			normalizedArray.push((calculatedArray[idx] - min)/norm);
-		}
+		//save until we have agreed on how to noralize the data
+		//for (var idx=0;idx<calculatedArray.length;idx++) {
+		//	normalizedArray.push((calculatedArray[idx] - min)/norm);
+		//}
 		//console.log(normalizedArray);		
 		
 		for (var idx=0;idx<data.length;idx++) {
     	   
 			var curr_row = data[idx];
+			var lcs = calculatedArray[idx];
     	    var new_row = {"id": this._getConceptId(curr_row.a.id) + 
 			          "_" + this._getConceptId(curr_row.b.id) + 
 			          "_" + this._getConceptId(newModelData.id), 
@@ -650,7 +612,7 @@ as a separate call in the init function.
 			   "IC_a" : parseFloat(curr_row.a.IC),
 			   "subsumer_label" : curr_row.lcs.label, 
     	       "subsumer_id" : this._getConceptId(curr_row.lcs.id), 
-			   "value" : parseFloat(curr_row.lcs.IC),
+			   "value" : parseFloat(lcs),
     		   "label_b" : curr_row.b.label, 
 			   "id_b" : this._getConceptId(curr_row.b.id), 
 			   "IC_b" : parseFloat(curr_row.b.IC),
@@ -661,45 +623,56 @@ as a separate call in the init function.
 		  }; 
     	    if (new_row.subsumer_id.indexOf("0005753") > -1) {
     	    	console.out("got it");
-    	    }
+    	    }			
     	    this.options.modelData.push(new_row);
     	}
+		//we may use this when normalization and ranking have been determined
 		this._rankLCSScores();
 		},
 	
+	//we may use this when normalization and ranking have been determined
 	_rankLCSScores : function () {
-	
-	
-	
 	},
 
-
-
-    //sqrt((ic(a)-ic(lcs))^2 + (ic(b)-ic(lcs))^2)
+    //Different methods of calculation based on the selectedCalculationMethod
 	_normalizeIC: function(datarow){
 		var ics = [],
 			aIC = datarow.a.IC,
 			bIC = datarow.b.IC,
 			lIC = datarow.lcs.IC,
 			nic;
+		//var ics = [],
+			//aIC = datarow.IC_a,
+			//bIC = datarow.IC_b,
+			//lIC = datarow.value,
+			//nic = 0;
+			
+		var calcMethod = this.options.selectedCalculation;
 		
-		nic = Math.sqrt((Math.pow(aIC-lIC,2)) + (Math.pow(bIC-lIC,2)));
+		switch(calcMethod){
+			case 0: nic = lIC;
+					break;
+			case 1: nic = ((lIC/aIC) * 100);
+					break;
+			case 2: nic = Math.sqrt((Math.pow(aIC-lIC,2)) + (Math.pow(bIC-lIC,2)));
+					break;
+			default: nic = lIC;
+		}				
 		//console.log("AIC,BIC,LIC: " + aIC + ","+bIC+","+lIC+"  NIC: " + nic);
 		return nic;
-	},		
-		
+	},				
     
     //create a y-axis from the model data
     //for each item in the data model, push the rowid
     //and calculate the y position
     _createYAxis: function() {
-    	var self=this;
+    	
+		var self=this;
     	//the height of each row
     	var size = 10;
     	//the spacing you want between rows
     	var gap = 3;
-    	//yoffset 
-    	
+    
     	//use the max phenotype size to limit the number of phenotypes shown 
     	var yLength = self.options.phenotypeSumData.length > this.options.phenotypeDisplayCount ? this.options.phenotypeDisplayCount : self.options.phenotypeSumData.length;
     	for (var idx=0;idx<yLength;idx++) {
@@ -724,14 +697,8 @@ as a separate call in the init function.
     },
     
     _createColorScale: function() {
-    	/*var temp_array = this.options.filteredModelData.map(function(d) {
-    	    return d.value;
-    	});
-    	this.options.colorScale = d3.scale.linear().domain([d3.min(temp_array), d3.max(temp_array)]).range([d3.rgb(this.options.minColorScale), d3.rgb(this.options.maxColorScale)]);
-    	*/
     	this.options.colorScale = d3.scale.linear().domain([0,this.options.maxICScore]).range([d3.rgb(this.options.minColorScale), d3.rgb(this.options.maxColorScale)]);
     },
-
 
     _initCanvas : function() {
 
@@ -742,13 +709,10 @@ as a separate call in the init function.
     		var selecteditem = "";
     		if (self.options.targetSpeciesList[idx].name === self.options.targetSpeciesName) {
     			selecteditem = "selected";
-/*    			if (self.options.targetSpeciesName == "Homo sapiens") {
-    				this.options.comparisonType = "diseases";
-    			}*/
     		}
-    		optionhtml = optionhtml + "<option value='" + self.options.targetSpeciesList[idx].taxon +"' "+ selecteditem +">" + self.options.targetSpeciesList[idx].name +"</option>"
+    		optionhtml = optionhtml + "<option value='" + self.options.targetSpeciesList[idx].label +"' "+ selecteditem +">" + self.options.targetSpeciesList[idx].name +"</option>"
     	}
-    	optionhtml = optionhtml + "</select></span>";
+    	optionhtml = optionhtml + "</select><br /><br /></span>";
     	this.element.append(optionhtml);
     	//add the handler for the select control
         $( "#organism" ).change(function(d) {
@@ -756,16 +720,72 @@ as a separate call in the init function.
         	self.options.targetSpecies = self.options.targetSpeciesList[d.target.selectedIndex].taxon;
         	self.options.targetSpeciesName = self.options.targetSpeciesList[d.target.selectedIndex].name;
         	$("#organism_div").remove();
+			$("#calculation_div").remove();
 			$("#title").remove();
+			$("#title2").remove();
         	$("#svg_area").remove();
         	self.options.phenotypeData = self.options.inputPhenotypeData.slice();
         	self._reset();
         	self._create();
         	});
-        this.element.append("<svg id='svg_area' style='float:left; clear:both; margin-top:50px;'></svg>");
-        this.options.svg = d3.select("#svg_area");
+			
+		var optionhtml2 = "<span id='title2' style='float:left;'><b>Similarity Values based on " + this.options.selectedLabel + " Calculation</b></span><span id='calculation_div'  style='margin-left:168px;'>Similarity Calculation&nbsp;&nbsp;&nbsp;<select id=\"calculation\">";
+    	for (var idx=0;idx<self.options.selectList.length;idx++) {
+    		var selecteditem = "";
+    		if (self.options.selectList[idx].label === self.options.selectedLabel) {
+    			selecteditem = "selected";
+    		}
+			if (self.options.selectList[idx].calc === self.options.selectedCalculation) {
+    			selecteditem = "selected";
+    		}
+    		optionhtml2 = optionhtml2 + "<option value='" + self.options.selectList[idx].calc +"' "+ selecteditem +">" + self.options.selectList[idx].label +"</option>"
+    	}
+    	optionhtml2 = optionhtml2 + "</select></span>";
+    	this.element.append(optionhtml2);
+        
+		//Add the select box for choosing the similarity calculation method
+		/**var selectText = d3.select("#phen_vis")
+			.append("span")
+			.attr("class", "calcspan")
+			.append("text")
+			.attr("class", "sel_text")
+			.style("font-size", "14px")
+			.style("margin-left", "35px")
+			.style("margin-right", "10px")
+			.text("Similarity Calculation");
+				
+		var calcSelect = d3.select(".calcspan")				
+			.append("select")
+			.attr("id","calcsel")
+			.attr("class", "calcselect")
+			.style("font-size", "12px");
+			
+		var options = calcSelect.selectAll("option")
+			.data(self.options.selectList).enter()
+			.append('option')
+			.attr("class", "calcopt")
+			.text(function (d) { return d.label; })
+			.attr("value", function(d){return d.calc;}); */
+			
+		 $( "#calculation" ).change(function(d) {
+			//alert( "Handler for .change() called." );
+			self.options.selectedCalculation = self.options.selectList[d.target.selectedIndex].calc;
+			self.options.selectedLabel = self.options.selectList[d.target.selectedIndex].label;
+			$("#calculation_div").remove();
+			$("#organism_div").remove();
+			$("#title").remove();
+			$("#title2").remove();
+			$("#svg_area").remove();
+			self.options.phenotypeData = self.options.inputPhenotypeData.slice();
+			self._reset();
+			self._create();
+		});
+				
+			this.element.append("<svg id='svg_area' style='float:left; clear:both; margin-top:50px;'></svg>");
+			this.options.svg = d3.select("#svg_area");
+			
     },
-	
+
 	_addLogoImage : function() {     
 	  var scriptpath = $("script[src]").last().attr("src").split('?')[0].split('/').slice(0, -1).join('/')+'/';
 	  var imgs = this.options.svg.selectAll("image").data([0]);
@@ -777,11 +797,10 @@ as a separate call in the init function.
                 .attr("width", "60")
                 .attr("height", "50");       
     },
-
 	
     _resetLinks: function() {
-	    this.options.svg.selectAll("#detail_content").remove();
-
+	    
+		this.options.svg.selectAll("#detail_content").remove();
     	var link_lines = d3.selectAll(".data_text");
     	link_lines.style("font-weight", "normal");
     	link_lines.style("text-decoration", "none");
@@ -790,25 +809,20 @@ as a separate call in the init function.
     },
 
     _selectData: function(curr_data, obj) {    	
-    	//return self._getYPosition(d.rowid);
-
+    	
     	//create a highlight row
 		var self=this;
 		//create the related row rectangle
-		//var ypos = self._getYPosition(curr_data.rowid);
 		var highlight_rect = self.options.svg.append("svg:rect")
 		  	.attr("transform","translate(" + self.options.axis_pos_list[1] + ","+ (7 + self.options.yTranslation) + ")")
 			.attr("x", 0)
-			//.attr("y", function(d) {return self._getYPosition(curr_data.rowid) + (4 + self.options.yTranslation);})
 			.attr("y", function(d) {return self._getYPosition(curr_data[0].rowid) ;})
-			//		.attr("y", self.options.yoffset)
 			.attr("class", "row_accent")
 			.attr("width", this.options.modelWidth)
 			.attr("fill", d3.rgb(self.options.orangeHighlight))
 			.attr("opacity", '0.5')
 			.attr("height", 14);
-
-    	
+	
     	this._resetLinks();
     	var alabels = this.options.svg.selectAll("text.a_text." + this._getConceptId(curr_data[0].id));
     	var txt = curr_data[0].label_a;
@@ -831,11 +845,11 @@ as a separate call in the init function.
     	var retData = "What data do we want to show for phentoypes?";
 	    this._updateDetailSection(retData, this._getXYPos(obj));
 	    */    	
-
     },
 
     _deselectData: function (curr_data) {
-    	this.options.svg.selectAll(".row_accent").remove();
+    	
+		this.options.svg.selectAll(".row_accent").remove();
     	this._resetLinks();
     	var alabels = this.options.svg.selectAll("text.a_text." + this._getConceptId(curr_data[0].id));
     	alabels.text(this._getShortLabel(curr_data[0].label_a));
@@ -845,8 +859,8 @@ as a separate call in the init function.
     },
 
 
-  //return a label for use in the list.  This label is shortened
-  //to fit within the space in the column
+	//return a label for use in the list.  This label is shortened
+	//to fit within the space in the column
     _getShortLabel: function(label, newlength) {
 	var retLabel = label;
 	if (!newlength) {
@@ -858,20 +872,20 @@ as a separate call in the init function.
     return retLabel;
     },
 
-  //return a useful label to use for visualizing the rectangles
-   _getCleanLabel: function (uri, label) {
-  	if (label && label != "" && label != "null") {
-  		return label;
-  	} 
-      var temp = this._getConceptId(uri);
-      return temp;
-   },
+    //return a useful label to use for visualizing the rectangles
+    _getCleanLabel: function (uri, label) {
+		if (label && label != "" && label != "null") {
+			return label;
+		} 
+		var temp = this._getConceptId(uri);
+		return temp;
+    },
 
-  //This method extracts the unique id from a given URI
-  //for example, http://www.berkeleybop.org/obo/HP:0003791 would return HP:0003791
-  //Why?  Two reasons.  First it's useful to note that d3.js doesn't like to use URI's as ids.
-  //Second, I like to use unique ids for CSS classes.  This allows me to selectively manipulate related groups of items on the
-  //screen based their relationship to a common concept (ex: HP000123).  However, I can't use a URI as a class.
+	//This method extracts the unique id from a given URI
+	//for example, http://www.berkeleybop.org/obo/HP:0003791 would return HP:0003791
+	//Why?  Two reasons.  First it's useful to note that d3.js doesn't like to use URI's as ids.
+	//Second, I like to use unique ids for CSS classes.  This allows me to selectively manipulate related groups of items on the
+	//screen based their relationship to a common concept (ex: HP000123).  However, I can't use a URI as a class.
 	_getConceptId: function (uri) {
       if (!uri) {
 		  return "";
@@ -923,40 +937,7 @@ as a separate call in the init function.
     	       .style("font-size", "12px")
     	       .text(label);
  
-/*    	    p.append("foreignObject")
-    	        .attr('x', t.getAttribute("x")+15)
-    	        .attr('y', t.getAttribute("y")-13)
-    	       // .attr('dx', t.dx)
-    	       // .attr('dy', t.dy)
-    	        .attr("width", width)
-    	        .attr("id", self._getConceptId(data.model_id))
-    	        .attr("model_id", data.model_id)
-    	        .attr("height", 20)
-
-    	        .attr("transform", function(d) {
-    	        	return "rotate(-45)" 
-    	         })
-    	      .append("xhtml:p")
-
-		        .on("click", function(d) {
-					self._clickModel(data, self.document[0].location.origin);
-				})
-    	       .on("mouseover", function(d) {
-    	    	   self._selectModel(data, this);
-    	       })
-    	       .on("mouseout", function(d) {
-    	    	   self._clearModelData(d, d3.mouse(this));
-    	       })
-		
-    	       .attr("id", this._getConceptId(data.model_id))
-    	       .attr("class", this._getConceptId(data.model_id) + " \
-			   
-		   //.attr('style','word-wrap: break-word; text-align:center;')
-				.style("font-size", "12px")
-    	        .html(label);    
-*/
     	    el.remove();
-
     },
     
     _clickModel: function(data, url_origin) {
@@ -988,19 +969,15 @@ as a separate call in the init function.
 		    .attr("width", w+60)
 			.attr("height", h)
 			.attr("id", "detail_content")
-
 			//add an offset.  Otherwise, the tooltip turns off the mouse event
-			//.attr("y", yv + this.options.yTranslation)
 			.attr("y", yv)
-		    .attr("x", coords.x+10)
-  		    
+		    .attr("x", coords.x+10) 		    
 			.append("xhtml:body")
 			.style("font-size", "10px")
 			.style("padding", "8px")
 			.style("background-color", d3.rgb("#F9D0BB"))
 			.style("border","1px solid #c5c5c5")
-			.html(htmltext);
-    	
+			.html(htmltext);  	
     },
     
     _showThrobber: function() {
@@ -1017,9 +994,7 @@ as a separate call in the init function.
 			.attr("id", "detail_content")
 			.attr("y", (16+this.options.detailRectStrokeWidth))
 		    .attr("x", (545+this.options.detailRectStrokeWidth))
-		    .attr("xlink:href","/widgets/modeltype/image/throbber.gif");
-
-	       
+		    .attr("xlink:href","/widgets/modeltype/image/throbber.gif");	       
     },
     
     //extract the x,y values from a SVG transform string (ex: transform(200,20))
@@ -1090,71 +1065,63 @@ as a separate call in the init function.
     },
 
 
-  //NOTE: I need to find a way to either add the model class to the phenotypes when they load OR
-  //select the rect objects related to the model and append the class to them.
-  //something like this: $( "p" ).addClass( "myClass yourClass" );
-  _createModelRects: function() {
-      var self = this;
-      var model_rects = this.options.svg.selectAll(".models")
-      	.data(this.options.filteredModelData, function(d) {
-      	    return d.id;
-      	});
-      model_rects.enter()
-  	  .append("rect")
-  	  .attr("transform",
-  		"translate(" + (this.options.textWidth + 20) + "," + (20 + self.options.yTranslation)+ ")")
-      //"translate(210," + this.options.yoffset + ")")
-  	  .attr("class", function(d) { 
-  	      //append the model id to all related items
-  	      if (d.value > 0) {
-  		  var bla = self.options.svg.selectAll(".data_text." + self._getConceptId(d.id));	    	
-  		    	bla.classed(self._getConceptId(d.model_id), true);
-  	      }
-  	      return "models " + " " +  self._getConceptId(d.model_id) + " " +  self._getConceptId(d.id);
-  	  })
-  	  .attr("y", function(d, i) {     	
-  	      //return self.options.yScale(d.id);
-  		  return self._getYPosition(d.rowid) + (self.options.yTranslation - 10) ;
-  	  })
-  	  .attr("x", function(d) { return self.options.xScale(d.model_id);})
-  	  .attr("width", 10)
-  	  .attr("height", 10)
-  	  .attr("rx", "3")
-  	  .attr("ry", "3")
-	  //.attr("stroke", "#E6E6E6")
-	  //.attr("stroke-width", "2")
-  	  //I need to pass this into the function
-  	  .on("mouseover", function(d) {
-  		  self._showModelData(d, this);
-	  })
-	  .on("mouseout", function(d) {
-		  self._clearModelData(d, d3.mouse(this));
-	  })
+	//NOTE: I need to find a way to either add the model class to the phenotypes when they load OR
+	//select the rect objects related to the model and append the class to them.
+	//something like this: $( "p" ).addClass( "myClass yourClass" );
+	 _createModelRects: function() {
+		  var self = this;
+		  var model_rects = this.options.svg.selectAll(".models")
+			.data(this.options.filteredModelData, function(d) {
+				return d.id;
+			});
+		  model_rects.enter()
+		  .append("rect")
+		  .attr("transform",
+			"translate(" + (this.options.textWidth + 20) + "," + (20 + self.options.yTranslation)+ ")")
+		  .attr("class", function(d) { 
+			  //append the model id to all related items
+			  if (d.value > 0) {
+			  var bla = self.options.svg.selectAll(".data_text." + self._getConceptId(d.id));	    	
+					bla.classed(self._getConceptId(d.model_id), true);
+			  }
+			  return "models " + " " +  self._getConceptId(d.model_id) + " " +  self._getConceptId(d.id);
+		  })
+		  .attr("y", function(d, i) {     
+			  return self._getYPosition(d.rowid) + (self.options.yTranslation - 10) ;
+		  })
+		  .attr("x", function(d) { return self.options.xScale(d.model_id);})
+		  .attr("width", 10)
+		  .attr("height", 10)
+		  .attr("rx", "3")
+		  .attr("ry", "3")		 
+		  //I need to pass this into the function
+		  .on("mouseover", function(d) {
+			  self._showModelData(d, this);
+		  })
+		  .on("mouseout", function(d) {
+			  self._clearModelData(d, d3.mouse(this));
+		  })
+		  .style('opacity', '1.0')
+		  .attr("fill", function(d, i) {
+			  return self.options.colorScale(d.value);
+		  });
+		  model_rects.transition()
+			  .delay(20)
+			  .style('opacity', '1.0')
+			  .attr("y", function(d) {
+			  return self._getYPosition(d.rowid) -10;
+		  })
+		  .attr("x", function(d) { return self.options.xScale(d.model_id);})
 
-	  .style('opacity', '1.0')
-  	  .attr("fill", function(d, i) {
-  	      return self.options.colorScale(d.value);
-  	  });
-      model_rects.transition()
-	  .delay(20)
-	  .style('opacity', '1.0')
-  	  .attr("y", function(d) {
-  	      //return self.options.yScale(d.id);
-  		  return self._getYPosition(d.rowid) -10;
-  	  })
-  	  .attr("x", function(d) { return self.options.xScale(d.model_id);})
-
-      model_rects.exit().transition()
-          //.duration(20)
-          //.attr("x", 600)
-      .style('opacity', '0.0')
-  	  .remove();
+		  model_rects.exit().transition()
+			  //.duration(20)
+		  .style('opacity', '0.0')
+		  .remove();
     },
    
     _updateAxes: function() {
 		var self = this;
 		this.options.h = (this.options.filteredModelData.length*2.5);
-		//this.options.svg.selectAll("yaxis").remove();
 		self.options.yScale = d3.scale.ordinal()
       	    .domain(self.options.filteredModelData.map(function (d) {return d.rowid; }))
   		.range([0,self.options.filteredModelData.length])
@@ -1170,7 +1137,6 @@ as a separate call in the init function.
 			var xpos = self.options.axis_pos_list[2] - 20;
 			var ypos = self.options.yAxisMax -16;
 			var vert_slider_background = this.options.svg.append("svg:rect")
-				//.attr("transform","translate(" + self.options.axis_pos_list[1] + "," + self.options.yoffset +")")
 				.attr("class", "vert_slider")
 				.attr("x", xpos)
 				.attr("width", 16)
@@ -1188,8 +1154,7 @@ as a separate call in the init function.
 					self._clickPhenotypeSlider(-1);
 				})
 			    .attr("xlink:href","/widgets/modeltype/image/up_arrow.png");
-	
-			
+				
 			var rect_slider_down = this.options.svg.append("svg:image")
 				.attr("class", "vert_slider")
 				.attr("x", xpos)
@@ -1206,7 +1171,6 @@ as a separate call in the init function.
 			var xpos = self.options.axis_pos_list[1] -5;
 			var xpos2 = self.options.axis_pos_list[2] - 37;
 			var horz_slider_background = this.options.svg.append("svg:rect")
-				//.attr("transform","translate(" + self.options.axis_pos_list[1] + "," + self.options.yoffset +")")
 				.attr("class", "horz_slider")
 				.attr("x", xpos)
 				.attr("width", xpos2-xpos)
@@ -1224,8 +1188,7 @@ as a separate call in the init function.
 					self._clickModelSlider(-1);
 				})
 			    .attr("xlink:href","/widgets/modeltype/image/left_arrow.png");
-		
-			
+					
 			var rect_slider_right = this.options.svg.append("svg:image")
 				.attr("class", "horz_slider")
 				.attr("x", xpos2)
@@ -1409,20 +1372,8 @@ as a separate call in the init function.
 		.attr("fill", function(d, i) {
 		    return i != 1 ? d3.rgb("#e5e5e5") : "white";
 		});
-		
-		//create bottom box
-	   /** var rect_bottom = this.options.svg.selectAll("#rect.bottom")		  
-	    	.append("rect")
-			.attr("class", "bottom")
-			.attr("x", self.options.colStartingPos)
-			.attr("y", self.options.h + 100 )
-			.attr("width", 1130)
-			.attr("height", self.options.yoffset)
-			.style("opacity", '0.4')
-			.attr("fill", "white"); */
-		
-		
-	//create accent boxes
+				
+		//create accent boxes
 	    var rect_accents = this.options.svg.selectAll("#rect.accent")
 		.data(this.options.dimensions, function(d) { return d;});
 	    rect_accents.enter()
@@ -1436,8 +1387,7 @@ as a separate call in the init function.
 		.attr("fill", function(d, i) {
 		    return i != 1 ? d3.rgb("#e5e5e5") : "white";
 		});
-		
-	    
+			    
 	    //add text headers
 	    var rect_headers = this.options.svg.selectAll("#text.accent")
 		.data(this.options.dimensions, function(d) { return d;});
@@ -1446,9 +1396,6 @@ as a separate call in the init function.
 		.attr("class", "accent")
 		.attr("x", function(d, i) { return i == 0 ?(self.options.axis_pos_list[i]+10)+25 : (self.options.axis_pos_list[i]+10);})
 		.attr("y", self.options.yoffset +(this.options.yTranslation-10))
-		//.attr("width", self.options.textWidth + 5)
-		//.attr("height", self.options.h)
-		//.style("opacity", '0.4')
 		.style("display", function(d, i) {
 		    return i == 0 ? "" : "none";
 		})
@@ -1457,14 +1404,13 @@ as a separate call in the init function.
     
 	//this code creates the colored rectangles below the models
 	_createModelRegion: function () {
-	    //model_x_axis = undefined;
 	    var self=this;
 	    this.options.xScale = d3.scale.ordinal()
 		.domain(this.options.filteredModelList.map(function (d) {
 		    return d.model_id; }))
 	        .rangeRoundBands([0,this.options.modelWidth]);
 	   
-		model_x_axis = d3.svg.axis()//.outerTickSize(0)
+		model_x_axis = d3.svg.axis()
 			.scale(this.options.xScale).orient("top");
 
 	    var model_region = this.options.svg.append("g")
@@ -1477,15 +1423,12 @@ as a separate call in the init function.
 			.each(function(d,i) { 
 			    	self._convertLabelHTML(this, self._getShortLabel(self.options.filteredModelList[i].model_label, 15),self.options.filteredModelList[i]);});
 			
-				//self._convertLabelHTML(this, //self.options.filteredModelList[i].model_label,self.options.filteredModelList[i]);}); 
-				//self._getShortLabel(self.options.filteredModelList[i].model_label, //15),self.options.filteredModelList[i]);}); 
 		var w = this.options.modelWidth + 18;
 		var pathline = this.options.svg.selectAll("path.domain")
 				.attr("class","domain")
 				.attr("d", "M0,-1V0H" + w + "V-1")
 				.attr("fill", "black");
-				
-		
+					
 	    var temp_data = this.options.modelData.map(function(d) { 
 			return d.value;});
 	    var diff = d3.max(temp_data) - d3.min(temp_data);
@@ -1502,38 +1445,7 @@ as a separate call in the init function.
 			var t = d3.min(temp_data);
 			var t2 = t + (idx * step);
 			color_values.push(t2);
-		    }
-/*		    //color_values.reverse();
-		    var legend_rects = this.options.svg.selectAll("#legend_rect")
-			.data(color_values);
-		    legend_rects.enter()
-			.append("rect")
-			.attr("transform","translate(15,10)")
-			.attr("class", "legend_rect")
-			.attr("y", "39")
-			.attr("x", function(d, i) {
-			    return (i* 32);
-			})
-			.attr("width", 20)
-			.attr("height", 20)
-			.attr("fill", function(d) {
-			    return self.options.colorScale(d);
-			});
-		    var legend_text = self.options.svg.selectAll("#legend_text")
-		        .data(color_values);
-		    legend_text.enter()
-			.append("text")
-			.attr("transform","translate(15,10)")
-			.attr("class", "legend_text")
-			.attr("y", "35")
-			.attr("x", function(d, i) {
-			    return (i* 32);
-			})
-			.text(function(d) {
-			    return d.toFixed(1);
-			});
-			*/
-		    
+		    }		    
 		    //start # a4 d6 d4
 		    //stop # 44 a2 93
 		    var gradient = this.options.svg.append("svg:linearGradient")
@@ -1542,8 +1454,6 @@ as a separate call in the init function.
 				.attr("x2", "100%")
 				.attr("y1", "0%")
 				.attr("y2", "0%");
-				//.attr("gradientUnits", "userSpaceOnUse")
-				//.attr("spreadMethod", "pad");
 
 			gradient.append("svg:stop")
 				.attr("offset", "0%")
@@ -1556,14 +1466,13 @@ as a separate call in the init function.
 				.style("stop-opacity", 1);
 
 		    var legend_rects = this.options.svg.append("rect")
-			.attr("transform","translate(0,10)")
-			.attr("class", "legend_rect")
-			.attr("y", 335 + this.options.yTranslation)
-			.attr("x", self.options.axis_pos_list[2] + 12)
-			.attr("width", 180)
-			.attr("height", 20)
-			.attr("fill", "url(#gradient)");
-
+				.attr("transform","translate(0,10)")
+				.attr("class", "legend_rect")
+				.attr("y", 335 + this.options.yTranslation)
+				.attr("x", self.options.axis_pos_list[2] + 12)
+				.attr("width", 180)
+				.attr("height", 20)
+				.attr("fill", "url(#gradient)");
 	
 		    var div_text1 = self.options.svg.append("svg:text")
 				.attr("class", "detail_text")
@@ -1577,12 +1486,13 @@ as a separate call in the init function.
 				.attr("x", self.options.axis_pos_list[2] + 60)
 				.style("font-size", "12px")
 				.text("Similarity Scale");
+				
 		    var div_text2 = self.options.svg.append("svg:text")
 				.attr("class", "detail_text")
 				.attr("y", 340  + this.options.yTranslation)
 				.attr("x", self.options.axis_pos_list[2] + 130)
 				.style("font-size", "10px")
-				.text("More Similar");			
+				.text("More Similar");	
 	    }
 	},
 		
@@ -1616,8 +1526,7 @@ as a separate call in the init function.
 		})
 	    //store the id for this item.  This will be used on click events
 		.attr("ontology_id", function(d) {
-		    return self._getConceptId(d[0].id_a);
-		    //return self.options.yScale(d.rowid)+28;		   
+		    return self._getConceptId(d[0].id_a);   
 		})
 		.attr("x", 208)
 		.attr("y", function(d) {
@@ -1629,17 +1538,11 @@ as a separate call in the init function.
 		    }
 		})
 		.on("mouseout", function(d) {
-//	    	self.options.svg.selectAll(".row_accent").remove();
-		    if (self.options.clickedData == undefined) {
-			self._deselectData(d, d3.mouse(this));
+	    	if (self.options.clickedData == undefined) {
+				self._deselectData(d, d3.mouse(this));
 			}
-		})
-		
-/*		.on("click", function(d) {
-		    self._rectClick(this);
-		})*/
+		})	
 		.style('opacity', '1.0')
-
 		.attr("width", self.options.textWidth)
 		.attr("height", 50)
 		.style("font-size", "12px")
@@ -1655,90 +1558,14 @@ as a separate call in the init function.
 
 		.delay(5)
 		.attr("y", function(d) {
-		    //return self.options.yScale(d.rowid)+28;
 			return self._getYPosition(d[0].rowid) + (self.options.yTranslation + 18);
 		})
 	    rect_text.exit()
 	   	.transition()
-	   	//.delay(20)
+	   	.delay(20)
 	   	.style('opacity', '0.0')
 
-	   	//.attr("y", 1600)
 		.remove();
-	    	    
-	  /**  var rect_text2 = this.options.svg
-		.selectAll(".lcs_text")
-		.data(self.options.filteredPhenotypeData, function(d) { return d.rowid; });
-	    rect_text2.enter()
-		.append("text")
-		.attr("class", function(d,i) {
-		    if (i==0 || (self.options.filteredPhenotypeData[i-1].subsumer_label != d.subsumer_label)) {
-			return "lcs_text data_text " + self._getConceptId(d.id) + " " + self._getConceptId(d.subsumer_id);
-		    }
-		    
-		})
-	    //store the id for this item.  This will be used on click events
-		.attr("ontology_id", function(d) {
-		    return self._getConceptId(d.subsumer_id);
-		})
-//		.attr("x", self.options.textWidth + 15 + self.options.colStartingPos + self.options.modelWidth)
-	     .attr("x", self.options.axis_pos_list[2]+3)
-		.attr("y", function(d) {
-		    //return self.options.yScale(d.rowid)+28;
-			return self._getYPosition(d.rowid)+28;
-		})
-		.on("mouseover", function(d) {
-		    if (self.options.clickedData == undefined) {
-			self._selectData(d, this);
-		    }
-		})
-		.on("mouseout", function(d) {
-//	    	self.options.svg.selectAll(".row_accent").remove();
-			
-		    if (self.options.clickedData == undefined) {
-			self._deselectData(d, d3.mouse(this));
-		    }
-		})
-/*		.on("click", function(d) {
-		    self._rectClick(this);
-		})*/
-/*		.style('opacity', '1.0')
-
-		.attr("width", self.options.textWidth)
-		.attr("height", 50)
-		.style("font-size", "12px")
-		.text(function(d,i) {
-		    if (i==0) {
-		    	var txt = d.subsumer_label;
-		    	if (txt == undefined) {
-		    		txt = d.subsumer_id;
-		    	}
-			return self._getShortLabel(txt);
-		    }
-		    if (self.options.filteredPhenotypeData[i-1].subsumer_label != d.subsumer_label) {
-		    	var txt = d.subsumer_label;
-		    	if (txt == undefined) {
-		    		txt = d.subsumer_id;
-		    	}
-			    return self._getShortLabel(txt);
-		    }
-		})
-	    rect_text2.transition()
-		.delay(20)
-		.attr("y", function(d) {
-		    //return self.options.yScale(d.rowid)+28;
-			return self._getYPosition(d.rowid)+28;
-		})
-		.style('opacity', '1.0')
-
-	    rect_text2.exit()
-		.transition()
-		//.delay(20)
-		//.attr("y", 1600)
-		.style('opacity', '0.0')
-
-		.remove();
-	   */ 
 	},
 
 	_rectClick: function(data) {
@@ -1754,7 +1581,6 @@ as a separate call in the init function.
 				+ data.label + "</a><br/><strong>Type:</strong> " + data.category;
 			}
 	    });
-	    //this._updateDetailSection(retData, d3.mouse(data));
 	    this._updateDetailSection(retData, this._getXYPos(data));
 
 	},
@@ -1765,9 +1591,7 @@ as a separate call in the init function.
 	
 	_selectModel: function(modelData, obj) {
 		var self=this;
-	    //this._showThrobber();
-		//select the model label
-		
+		//select the model label		
 		var model_label = self.options.svg.selectAll("text#" + this._getConceptId(modelData.model_id));
     	model_label.style("fill", "blue");
 		model_label.style("text-decoration", "underline");
@@ -1790,37 +1614,6 @@ as a separate call in the init function.
 			+ modelData.model_label + "<br/><strong>Rank:</strong> " + (parseInt(modelData.model_rank) + 1)
 			+ "<br/><strong>Score:</strong> " + modelData.model_score;
 
-/*		jQuery.ajax({
-			url : this.options.serverURL +"/genotype/" + this._getConceptId(modelData.model_id) + ".json",
-			async : false,
-			dataType : 'json',
-			success : function(data) {
-				//retData = data;
-				retData = "<strong>Gene Label:</strong> "   
-				+ modelData.model_label + "<br/><strong>Rank:</strong> " + (parseInt(modelData.model_rank) + 1)
-				+ "<br/><strong>Score:</strong> " + modelData.model_score;
-				
-				/* REMOVED the gentoype info for now...
-				+ "<br/><strong>Genotype(s):</strong> ";
-			    //generate a unique list of genotypes
-			    var temp_list = [];
-			    for (var idx=0;idx<data.phenotype_associations.length;idx++) {
-				var str_temp = data.phenotype_associations[idx].has_genotype.label;
-				//the genotypes frequently contain <> signs.  Escape them before
-				//trying to display them.
-				str_temp = str_temp.replace(/</g, "&lt;");
-				str_temp = str_temp.replace(/>/g, "&gt;");
-				if (temp_list.indexOf(str_temp) == -1) {
-				    temp_list.push(str_temp);
-				}
-			    }
-			    for (var idx=0;idx<temp_list.length;idx++) {
-				retData = retData + temp_list[idx] + "<br/>";
-			    }
-			    //console.log("data: " + retData);*/
-/*			}
-		});
-*/
 		//obj = try creating an ojbect with an attributes array including "attributes", but I may need to define
 		//getAttrbitues
 		//just create a temporary object to pass to the next method...
@@ -1838,19 +1631,7 @@ as a separate call in the init function.
 		obj.attributes['transform'] = {value: highlight_rect.attr("transform")};
 		
 		this._updateDetailSection(retData, this._getXYPos(obj), undefined, 60);
-	    //this._updateDetailSection(retData);
-
-	    /*
-    	// Get the d3js SVG element
-    	var tmp = document.getElementById("phen_vis");
-    	var svg = tmp.getElementsByTagName("svg")[0];
-    	// Extract the data as SVG text string
-    	var svg_xml = (new XMLSerializer).serializeToString(svg);
-
-    	console.log(svg_xml);
-*/
 	},
-
 
     //given an array of phenotype objects 
 	//edit the object array.
