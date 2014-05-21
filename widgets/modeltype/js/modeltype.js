@@ -1484,9 +1484,9 @@ as a separate call in the init function.
 				text2 = "",
 				text3 = "";
 				
-			if (calc == 0) {text1 = "Less Similar"; text2 = "Subsumer IC Scale"; text3 = "More Similar";}
+			if (calc == 0) {text1 = "Lowest"; text2 = "Subsumer IC Scale"; text3 = "Highest";}
 			else if (calc == 1) {text1 = "Less Similar"; text2 = "Similarity Scale"; text3 = "More Similar";}
-			else if (calc == 2) {text1 = "Farther"; text2 = "Euclidean Distance"; text3 = "Closer";}
+			else if (calc == 2) {text1 = "Min"; text2 = "Euclidean Distance"; text3 = "Max";}
 	
 		    var div_text1 = self.options.svg.append("svg:text")
 				.attr("class", "detail_text")
@@ -1509,9 +1509,12 @@ as a separate call in the init function.
 				.style("font-size", "10px")
 				.text(text3);	
 				
-			if (text3 == "Closer") {
-				div_text2.attr("x",self.options.axis_pos_list[2] + 160);
-			
+			//Position the max more carefully	
+			if (text3 == "Max") {
+				div_text2.attr("x",self.options.axis_pos_list[2] + 170);			
+			}
+			if (text3 == "Highest") {
+				div_text2.attr("x",self.options.axis_pos_list[2] + 150);			
 			}
 	    }
 	},
