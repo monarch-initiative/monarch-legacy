@@ -69,7 +69,7 @@ as a separate call in the init function.
 		phenotypeSumData: [],
 		selectedCalculation: 0,
 		selectedLabel: "Default",
-		selectList: [{label: "Default", calc: 0}, { label: "Information Content Ratio", calc: 1}, { label: "Distance Calculation", calc: 2}],
+		selectList: [{label: "Information Content of Subsumer", calc: 0}, { label: "Information Content Ratio", calc: 1}, { label: "Distance", calc: 2}],
 		selectRectHeight : 0,
 		selectRectWidth : 0,
 		serverURL : "",
@@ -607,6 +607,7 @@ as a separate call in the init function.
 		for (var idx=0;idx<data.length;idx++) {
     	   
 			var curr_row = data[idx];
+			
 			var lcs = calculatedArray[idx];
     	    var new_row = {"id": this._getConceptId(curr_row.a.id) + 
 			          "_" + this._getConceptId(curr_row.b.id) + 
@@ -616,6 +617,7 @@ as a separate call in the init function.
 			   "IC_a" : parseFloat(curr_row.a.IC),
 			   "subsumer_label" : curr_row.lcs.label, 
     	       "subsumer_id" : this._getConceptId(curr_row.lcs.id), 
+			   "subsumer_IC" : parseFloat(curr_row.lcs.IC), 
 			   "value" : parseFloat(lcs),
     		   "label_b" : curr_row.b.label, 
 			   "id_b" : this._getConceptId(curr_row.b.id), 
@@ -748,7 +750,7 @@ as a separate call in the init function.
         	self._create();
         	});
 			
-		var optionhtml2 = "<span id='title2' style='float:left;'><b>Similarity Values based on " + this.options.selectedLabel + " Calculation</b></span><span id='calculation_div'  style='margin-left:168px;'>Similarity Calculation&nbsp;&nbsp;&nbsp;<select id=\"calculation\">";
+		var optionhtml2 = "<span id='title2' style='float:left;'><b>Similarity Values based on " + this.options.selectedLabel + " Calculation</b></span><span id='calculation_div'  style='margin-left:110px;'>Similarity Calculation&nbsp;&nbsp;&nbsp;<select id=\"calculation\">";
     	for (var idx=0;idx<self.options.selectList.length;idx++) {
     		var selecteditem = "";
     		if (self.options.selectList[idx].label === self.options.selectedLabel) {
@@ -1039,13 +1041,17 @@ as a separate call in the init function.
 		
 		var calc = this.options.selectedCalculation;
 		var suffix = "";
+		var prefix = "";
 		if (calc == 1 || calc == 2) {suffix = '%';}
-		
+		if (calc == 0) {prefix = "Subsumer IC";}
+		else if (calc == 1) {prefix = "Similarity";}
+		else if (calc == 2) {prefix = "Euclidean Distance";}
+				
 	    retData = "<strong>Query: </strong> " + d.label_a + " (IC: " + d.IC_a.toFixed(2) + ")"   
 		    + "<br/><strong>Match: </strong> " + d.label_b + " (IC: " + d.IC_b.toFixed(2) +")"
-			+ "<br/><strong>Common: </strong> " + d.subsumer_label 
+			+ "<br/><strong>Common: </strong> " + d.subsumer_label + " (IC: " + d.subsumer_IC.toFixed(2) +")"
      	    + "<br/><strong>" + this._toProperCase(this.options.comparisonType).substring(0, this.options.comparisonType.length-1)  +": </strong> " + d.model_label
-			+ "<br/><strong>Similarity: </strong> " + d.value.toFixed(2) + suffix;
+			+ "<br/><strong>" + prefix + ":</strong> " + d.value.toFixed(2) + suffix;
 	    this._updateDetailSection(retData, this._getXYPos(obj));
 	  
     },
@@ -1472,26 +1478,41 @@ as a separate call in the init function.
 				.attr("width", 180)
 				.attr("height", 20)
 				.attr("fill", "url(#gradient)");
+				
+			var calc = this.options.selectedCalculation,
+				text1 = "",
+				text2 = "",
+				text3 = "";
+				
+			if (calc == 0) {text1 = "Less Similar"; text2 = "Subsumer IC Scale"; text3 = "More Similar";}
+			else if (calc == 1) {text1 = "Less Similar"; text2 = "Similarity Scale"; text3 = "More Similar";}
+			else if (calc == 2) {text1 = "Farther"; text2 = "Euclidean Distance"; text3 = "Closer";}
 	
 		    var div_text1 = self.options.svg.append("svg:text")
 				.attr("class", "detail_text")
 				.attr("y", 340  + this.options.yTranslation)
 				.attr("x", self.options.axis_pos_list[2] + 12)
 				.style("font-size", "10px")
-				.text("Less Similar");
-		    var div_text = self.options.svg.append("svg:text")
+				.text(text1);
+		    
+			var div_text = self.options.svg.append("svg:text")
 				.attr("class", "detail_text")
 				.attr("y", 327  + this.options.yTranslation)
-				.attr("x", self.options.axis_pos_list[2] + 60)
+				.attr("x", self.options.axis_pos_list[2] + 45)
 				.style("font-size", "12px")
-				.text("Similarity Scale");
+				.text(text2);
 				
 		    var div_text2 = self.options.svg.append("svg:text")
 				.attr("class", "detail_text")
 				.attr("y", 340  + this.options.yTranslation)
 				.attr("x", self.options.axis_pos_list[2] + 130)
 				.style("font-size", "10px")
-				.text("More Similar");	
+				.text(text3);	
+				
+			if (text3 == "Closer") {
+				div_text2.attr("x",self.options.axis_pos_list[2] + 160);
+			
+			}
 	    }
 	},
 		
