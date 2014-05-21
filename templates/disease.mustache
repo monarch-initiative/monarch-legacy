@@ -210,7 +210,9 @@
                 {{/hasPathways}}
                 {{#hasLiterature}}
                 <div id="literature" class="category">
-                    <div id="liter">{{{literature}}}</div>
+                    <table class="{{css.table}}">
+                        {{{literatureTable}}}
+                    </table>
                 </div>
                 {{/hasLiterature}}
             </div>
