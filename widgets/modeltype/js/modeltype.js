@@ -200,16 +200,18 @@ as a separate call in the init function.
 	},
 	
 	//work in progress - commented out in create function.
-	_createGridlines: function() { 
+/**	_createGridlines: function() { 
 			var self=this;
 			
 			//create a blank grid to match the size of the modelviewer grid				
 			var data = new Array();
 			for (var k = 0; k < self.options.modelDisplayCount; k++){
 				for (var l = 0; l < self.options.phenotypeDisplayCount; l++) {
-				   var x = "'x':'" + k + "'";
-				   var y = "'y':'" + l + "'";
-				   data.push( [x,y] );
+				   var r = new Object();
+				   r.x = k;
+				   r.y = l;
+				   
+				   data.push( r );
 				}
 			}
 	        console.log("Data: " + data);
@@ -226,7 +228,7 @@ as a separate call in the init function.
 					   .attr("height", 13)
 					   .attr("stroke", "#e5e5e5")
 					   .attr("stroke-width", 2); 						      
-	},
+	}, */
 	
 	//for the selection area, see if you can convert the selection to the idx of the x and y
 	//then redraw the bigger grid 
@@ -537,6 +539,8 @@ as a separate call in the init function.
     _finishLoad: function(data) {
 
 	var retData = data;
+	//extract the maxIC score
+	this.options.maxICScore = retData.metadata.maxMaxIC;
 	var self= this;
 
 	///EXTRACT MOUSE MODEL INFORMATION FIRST
@@ -564,7 +568,7 @@ as a separate call in the init function.
 		this.options.filteredModelList.push(this.options.modelList[idx]);
 	}
 	//extract the maxIC score
-	this.options.maxICScore = retData.metadata.maxMaxIC;
+	//this.options.maxICScore = retData.metadata.maxMaxIC;
     
 	//extract the comparison type being used
 	this.options.comparisonType = retData.source.b_type + "s";
@@ -655,6 +659,7 @@ as a separate call in the init function.
 			case 1: nic = ((lIC/aIC) * 100);
 					break;
 			case 2: nic = Math.sqrt((Math.pow(aIC-lIC,2)) + (Math.pow(bIC-lIC,2)));
+					nic = (1 - (nic/this.options.maxICScore)) * 100;					
 					break;
 			default: nic = lIC;
 		}				
@@ -697,7 +702,21 @@ as a separate call in the init function.
     },
     
     _createColorScale: function() {
-    	this.options.colorScale = d3.scale.linear().domain([0,this.options.maxICScore]).range([d3.rgb(this.options.minColorScale), d3.rgb(this.options.maxColorScale)]);
+		
+		var maxScore = 0,
+			method = this.options.selectedCalculation;
+		
+		switch(method){
+			case 0: maxScore = this.options.maxICScore;
+					break;
+			case 1: maxScore = 100;
+					break;
+			case 2: maxScore = 100;
+					break;
+			default: maxScore = this.options.maxICScore;
+					break;
+		}				
+    	this.options.colorScale = d3.scale.linear().domain([0,maxScore]).range([d3.rgb(this.options.minColorScale), d3.rgb(this.options.maxColorScale)]);
     },
 
     _initCanvas : function() {
@@ -743,30 +762,6 @@ as a separate call in the init function.
     	optionhtml2 = optionhtml2 + "</select></span>";
     	this.element.append(optionhtml2);
         
-		//Add the select box for choosing the similarity calculation method
-		/**var selectText = d3.select("#phen_vis")
-			.append("span")
-			.attr("class", "calcspan")
-			.append("text")
-			.attr("class", "sel_text")
-			.style("font-size", "14px")
-			.style("margin-left", "35px")
-			.style("margin-right", "10px")
-			.text("Similarity Calculation");
-				
-		var calcSelect = d3.select(".calcspan")				
-			.append("select")
-			.attr("id","calcsel")
-			.attr("class", "calcselect")
-			.style("font-size", "12px");
-			
-		var options = calcSelect.selectAll("option")
-			.data(self.options.selectList).enter()
-			.append('option')
-			.attr("class", "calcopt")
-			.text(function (d) { return d.label; })
-			.attr("value", function(d){return d.calc;}); */
-			
 		 $( "#calculation" ).change(function(d) {
 			//alert( "Handler for .change() called." );
 			self.options.selectedCalculation = self.options.selectList[d.target.selectedIndex].calc;
@@ -781,8 +776,8 @@ as a separate call in the init function.
 			self._create();
 		});
 				
-			this.element.append("<svg id='svg_area' style='float:left; clear:both; margin-top:50px;'></svg>");
-			this.options.svg = d3.select("#svg_area");
+		this.element.append("<svg id='svg_area' style='float:left; clear:both; margin-top:50px;'></svg>");
+		this.options.svg = d3.select("#svg_area");
 			
     },
 
@@ -1041,12 +1036,16 @@ as a separate call in the init function.
 	    } else if (d.id_b.indexOf("ZFIN") > -1) {
 	    	bSpecies = "Zebrafish";
 	    }
-
+		
+		var calc = this.options.selectedCalculation;
+		var suffix = "";
+		if (calc == 1 || calc == 2) {suffix = '%';}
+		
 	    retData = "<strong>Query: </strong> " + d.label_a + " (IC: " + d.IC_a.toFixed(2) + ")"   
 		    + "<br/><strong>Match: </strong> " + d.label_b + " (IC: " + d.IC_b.toFixed(2) +")"
 			+ "<br/><strong>Common: </strong> " + d.subsumer_label 
      	    + "<br/><strong>" + this._toProperCase(this.options.comparisonType).substring(0, this.options.comparisonType.length-1)  +": </strong> " + d.model_label
-			+ "<br/><strong>Similarity: </strong> " + d.value.toFixed(2);
+			+ "<br/><strong>Similarity: </strong> " + d.value.toFixed(2) + suffix;
 	    this._updateDetailSection(retData, this._getXYPos(obj));
 	  
     },
