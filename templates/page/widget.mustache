@@ -36,7 +36,7 @@
 			{ id:"HP:0000726", observed:"positive"},
 			{ id:"HP:0000739", observed:"positive"},
 			{ id:"HP:0001332", observed:"positive"},
-					{ id:"HP:0001347", observed:"positive"},
+			{ id:"HP:0001347", observed:"positive"},
 			{ id:"HP:0002063", observed:"positive"},
 			{ id:"HP:0002067", observed:"positive"},
 			{ id:"HP:0002172", observed:"positive"},
@@ -58,40 +58,35 @@
    <style media="screen" type="text/css">
 		body{
 			margin-left:25px;
-			width:60%;
+			width:70%;
 			font-family: Arial, Helvetica, sans-serif;
 			font-size: 14px;
 		}
-		.title, .sectiontitle, h1, .subsectiontitle{
+		.title, .sectiontitle, h1, .subsectiontitle, .header{
 			font-weight:bold;
 			color:#44A293;
-			line-height: 25px;
 		} 
-		pre {
-		  margin-bottom:10px;
-		  padding: 15px 0;
-		}
 		.header{
-			font-size:40px;
+			font-size:2.0em;
 			margin-left:15ps;
 			margin-bottom:15px;
-			font-style:normal;
-			border-top: 0px solid #428BCA
 		}			
 		.subsectiontitle{
-			font-size:14px;
+			font-size:1.0em;
 		}		
 		.sectiontitle{
-			font-size:16px;
+			font-size:1.2em;
 		}
 		.title{
-			font-size: 20px;
+			font-size:1.4em;
+			margin-top: 25px;
 		}
 		.headtitle img{
 			vertical-align:bottom;
 		}
-		#phen_vis{
+		#phen_vis svg{
 		  margin-top:20px;
+		  padding-bottom: 30px;
 		}
 	</style>
 </head>
@@ -149,6 +144,7 @@
 							<ul><li><pre>[{ id:"HP:0000006", observed:"positive"}, id:"HP:0000726", observed:"positive"},...];</pre>
 							</li>
 							<li>Note that the phenotypes may also be passed in as a JSON list and that the "observed" tag may be omitted.  <pre>Example: { "HP:0000006" , "HP0000726",...}</pre>
+							<li>Note that if there are no phenotype matches in the models, you may see a "No Models found" message.</li>
 						</ul>
 						</li>
 						<li>Add a jQuery .ready function that will add the widget to an empty div tag (see Step 3) as follows  (The following example assumes you are adding the widget to a div with an id="phen_vis"): 

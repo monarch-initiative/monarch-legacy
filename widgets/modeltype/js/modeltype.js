@@ -146,10 +146,11 @@ as a separate call in the init function.
 		this._filterPhenotypeResults(this.options.phenotypeData);
 	    this.options.inputPhenotypeData = this.options.phenotypeData.slice();
 	    this._loadData(this.options.phenotypeData);
-	    
-	    if (this.options.modelData.length != 0 && this.options.phenotypeData.length != 0) {	    
+	    this._filterData(this.options.modelData.slice());
+		
+	    if (this.options.modelData.length != 0 && this.options.phenotypeData.length != 0 && this.options.filteredPhenotypeData.length != 0) {	    
 	         
-	            this._filterData(this.options.modelData.slice());
+	            //this._filterData(this.options.modelData.slice());
 	            this._createYAxis();
 	    	    //just pad the overall height by a skosh...
 	    	    this.options.h = this.options.yAxisMax + 60;
@@ -159,7 +160,7 @@ as a separate call in the init function.
 	            // set canvas size
 	            this.options.svg
 					.attr("width", 1100)
-					.attr("height", this.options.h - 20 + this.options.yTranslation);
+					.attr("height", 450);//this.options.h - 20 + this.options.yTranslation);
 	
 	            //this._createTitle();
 	            this._createAccentBoxes();				
@@ -779,7 +780,7 @@ as a separate call in the init function.
 			self._create();
 		});
 				
-		this.element.append("<svg id='svg_area' style='float:left; clear:both; margin-top:50px;'></svg>");
+		this.element.append("<svg id='svg_area' style='float:left; clear:both; margin-top:40px;'></svg>");
 		this.options.svg = d3.select("#svg_area");
 			
     },
@@ -1214,14 +1215,20 @@ as a separate call in the init function.
 	//change the text shown on the screen as the scrollbars are used
 	_updateScrollCounts: function() {
 		this.options.svg.selectAll(".scroll_text").remove();
-
+	
+	//account for a grid with less than 5 phenotypes
+		var y1 = 270,
+			y2 = 285;
+		if (this.options.filteredPhenotypeData.length < 6) {y1 =185; y2 = 200;}
+		
+		
 		var startModelIdx = (this.options.currModelIdx - this.options.modelDisplayCount) + 2;
 		var max_count = ((this.options.modelDisplayCount + startModelIdx) >= this.options.modelList.length) ? this.options.modelList.length : this.options.modelDisplayCount + startModelIdx; 
 		var display_text = "Matches [" + startModelIdx + "-"+ max_count + "] out of " + (this.options.modelList.length);
 		var div_text = this.options.svg.append("svg:text")
 			.attr("class", "scroll_text")
 			.attr("x", this.options.axis_pos_list[2] +45)
-			.attr("y", 270 + this.options.yTranslation)
+			.attr("y", y1 + this.options.yTranslation)
 			.style("font-size", "9px")
 			.text(display_text);
 		
@@ -1231,7 +1238,7 @@ as a separate call in the init function.
 		var div_text = this.options.svg.append("svg:text")
 			.attr("class", "scroll_text")
 			.attr("x", this.options.axis_pos_list[2] +45)
-			.attr("y", 285  + this.options.yTranslation)
+			.attr("y", y2  + this.options.yTranslation)
 			.style("font-size", "9px")
 			.text(display_text);
 	},
@@ -1442,6 +1449,10 @@ as a separate call in the init function.
 	    var temp_data = this.options.modelData.map(function(d) { 
 			return d.value;});
 	    var diff = d3.max(temp_data) - d3.min(temp_data);
+		//account for a grid with less than 5 phenotypes
+		var y1 = 340,
+			y2 = 327;
+		if (this.options.filteredPhenotypeData.length < 6) {y1 =250; y2 = 227;}
 	    //only show the scale if there is more than one value represented
 	    //in the scale
 	    if (diff > 0) {
@@ -1478,7 +1489,7 @@ as a separate call in the init function.
 		    var legend_rects = this.options.svg.append("rect")
 				.attr("transform","translate(0,10)")
 				.attr("class", "legend_rect")
-				.attr("y", 335 + this.options.yTranslation)
+				.attr("y", (y1 - 5) + this.options.yTranslation)
 				.attr("x", self.options.axis_pos_list[2] + 12)
 				.attr("width", 180)
 				.attr("height", 20)
@@ -1488,28 +1499,33 @@ as a separate call in the init function.
 				text1 = "",
 				text2 = "",
 				text3 = "";
-				
+			
+			//account for a grid with less than 5 phenotypes
+			var y1 = 340,
+				y2 = 327;
+			if (this.options.filteredPhenotypeData.length < 6) {y1 = 245; y2 = 227;}
+			
 			if (calc == 0) {text1 = "Lowest"; text2 = "Subsumer IC Scale"; text3 = "Highest";}
 			else if (calc == 1) {text1 = "Less Similar"; text2 = "Similarity Scale"; text3 = "More Similar";}
 			else if (calc == 2) {text1 = "Min"; text2 = "Euclidean Distance"; text3 = "Max";}
 	
 		    var div_text1 = self.options.svg.append("svg:text")
 				.attr("class", "detail_text")
-				.attr("y", 340  + this.options.yTranslation)
+				.attr("y", y1  + this.options.yTranslation)
 				.attr("x", self.options.axis_pos_list[2] + 12)
 				.style("font-size", "10px")
 				.text(text1);
 		    
 			var div_text = self.options.svg.append("svg:text")
 				.attr("class", "detail_text")
-				.attr("y", 327  + this.options.yTranslation)
+				.attr("y", y2  + this.options.yTranslation)
 				.attr("x", self.options.axis_pos_list[2] + 45)
 				.style("font-size", "12px")
 				.text(text2);
 				
 		    var div_text2 = self.options.svg.append("svg:text")
 				.attr("class", "detail_text")
-				.attr("y", 340  + this.options.yTranslation)
+				.attr("y", y1  + this.options.yTranslation)
 				.attr("x", self.options.axis_pos_list[2] + 130)
 				.style("font-size", "10px")
 				.text(text3);	
