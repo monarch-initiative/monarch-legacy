@@ -77,7 +77,7 @@ as a separate call in the init function.
 	    smallYScale: undefined,		
 	    svg: undefined,
 		targetSpecies: "10090",
-		targetSpeciesList : [{name: "Mus musculus", taxon: "10090"}, { name: "Homo sapiens", taxon: "9606"}, {name: "Danio rerio", taxon: "7955"},  {name: "Drosophila melanogaster", taxon: "7227"}],
+		targetSpeciesList : [{name: "Mus musculus", taxon: "10090"}, { name: "Homo sapiens", taxon: "9606"}, {name: "Danio rerio", taxon: "7955"} /**,  {name: "Drosophila melanogaster", taxon: "7227"} */],
 	    targetSpeciesName : "Mus musculus",
 		textLength: 34,
 		textWidth: 200,
