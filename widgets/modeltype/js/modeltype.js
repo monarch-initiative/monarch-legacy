@@ -501,9 +501,9 @@ as a separate call in the init function.
 			var newdata = modelDataForSorting.filter(function(d,i) {			
 				var sum = 0;			
 				if (d[0].id_a == self.options.phenotypeData[idx++].id_a){
-					for (el in d)
+					for (var i=0; i< d.length; i++)
 					{
-						sum+= +el.value;
+						sum+= +d[i].subsumer_IC;
 					}
 					d["sum"] = sum;
 					self.options.phenotypeSumData.push(d);
