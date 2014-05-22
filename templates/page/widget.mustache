@@ -108,11 +108,13 @@
 					
 					<span style="font-weight:bold; font-size:1.1em;">*Required files are available at: <a href="https://github.com/monarch-initiative/monarch-app/tree/master/widgets/modeltype">https://github.com/monarch-initiative/monarch-app/tree/master/widgets/modeltype</a></span>
                 </div>
-            <div class="section">
-                <div class="sectiontitle">1. Add the Required Javascript Libraries and Image</div>
+				<div class="section">
+				  <div class="sectiontitle">1. Create a directory</div>
+				  <div class="text"> As this directory will be used to hold all of the files, it should be visible to your HTML server.</div>		  
+                <div class="sectiontitle">2. Add the Required Files</div>
                 <div class="text">
                     <ul>
-						<li>The following .js code libraries are required:
+						<li>Go to your main directory and create a subdirectory named. &quot;js&quot; and add these files to it. The following .js code libraries are required:
 							<ul>
 								<li>jQuery (tested with 1.11.0)</li>
 								<li>jQuery UI (tested with 1.10.3)</li>
@@ -124,7 +126,7 @@
 								<li>modeltype.js</li>
 							</ul>
 						</li>
-						<li>Create a new html file and add all required javascript files within the html &lt;head&gt; tags
+						<li>Create a new html file in your main directory and add all required javascript files within the html &lt;head&gt; tags
 							<ul>
 								<li>Example:<br />
 <pre>&lt;head&gt;
@@ -135,15 +137,12 @@
 &lt;/head&gt;</pre>				</li>
 							</ul>
 						</li>
-						<li>The logo-sneak.png file and all other image files in the image directory are required:
-							<ul>
-								<li>Make sure that there is an "image" directory directly below the html file directory.</li>
-								<li>Place all image files including "logo-sneak.png" in the image directory</li>
-							</ul>
+						<li>Create an image subdirectory  and place all of the files in the image subdirectory of the installation into that directory.
+						
 						</li>
 					</ul>
                 </div><br />
-				<div class="sectiontitle">2. Add a List of Phenotyopes and a jQuery Function Call</div>
+				<div class="sectiontitle">3. Add a List of Phenotyopes and a jQuery Function Call</div>
                 <div class="text">
                     <ul>
 						<li>Create a list of phenotypes as an array of Javascript objects with the following attributes:
@@ -163,9 +162,10 @@
 								<ul>
 									<li><b><em>phenotypeData</em></b> [required] - It is a Javascript array of objects listing the phenotypes to be rendered in the widget.
 									</li>
-									<li><b><em>serverURL</em></b> [required] - This URL should be pointed to the OWLSim URL server associated with your installation containing the Monarch web services. 
-										<ul><li>Option 1: Use http://tartini.crbs.ucsd.edu to connect to the development/test web services.  This server is less stable than the production server.</li> 
-										<li>Option 2: Use http://monarch.monarchinitiative.org to connect to the stable, production version of the web services (better uptime)</li></ul>
+									<li><b><em>serverURL</em></b> [required] - This URL should be pointed to the OWLSim URL server associated with your installation containing the Monarch web services. You have three options:<br/>
+										<ol><li>Use http://tartini.crbs.ucsd.edu to connect to the development/test web services.  This server is less stable than the production server.</li> 
+										  <li>Use http://monarch.monarchinitiative.org to connect to the stable, production version of the web services (better uptime)</li>
+										  <li>If you are running the complete monarch-app, you can point it to http://localhost:8080, or whichever server/port you are using in your local installation.</li></ol>
 									</li>
 									<li><b><em>targetSpecies</em></b> [optional]- this parameter defaults to 10090 (mus musculus).  Change this parameter if you want to compare the phenotypes in the phenotypeData parameter against a different species. Available Species: 
 									<ul><li>Name: Homo sapiens  Taxon: 9606</li>
@@ -177,7 +177,7 @@
 							</li>
 						</ul>
 						</li>
-						<li>Add the phenotype array and the jQuery function between &lt;script&gt; tags in the html &lt;head&gt;</li>
+						<li>Add the phenotype array and the jQuery function between &lt;script&gt; tags in the html &lt;head&gt; of the index file that you created above.</li>
 							<ul>Example:<br />					
 <pre>&lt;script&gt;
 	var phenotypes = [
@@ -193,10 +193,10 @@
 							</ul></li>	
 					</ul></li>
                 </div><br />
-				<div class="sectiontitle">3. Add the Widget &lt;div&gt;:</div>
+				<div class="sectiontitle">4. Add the Widget &lt;div&gt;:</div>
                 <div class="text">
                     <ul>
-						<li>Add an empty &lt;div&gt; tag in the body of the html file.</li>
+						<li>Add an empty &lt;div&gt; tag in the body of the html file. The id of this &lt;div&gt; must match the id that you used in the Javascript fragment given above.</li>
 						<li>Example:<br />
 <pre>&lt;body&gt;	
 	&lt;div id="phen_vis"&gt;&lt;/div&gt;
@@ -204,10 +204,9 @@
 						</li>
 					</ul>										
 				</div><br />
-				<div class="sectiontitle">4. Add tbe HTML File on the Server</div>
-                <div class="text">Just add your html file and the required .js libraries where they are visible on your server.  You're done!
-                </div><br />				
-            </div>  
+				
+</div>
+			<div class="sectiontitle">4. Load your HTML file into a browser.</div><br/>
 			<div class="sectiontitle">Please contact us at <a href="mailto:info@monarchinitiative.org">info@monarchinitiative.org</a> if you have any problems or questions.</div>			
             </div> <!-- closes wrapperforfooter -->
             {{{includes.footer}}}
