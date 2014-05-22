@@ -167,9 +167,9 @@ as a separate call in the init function.
 	            this._createColorScale();
 	            this._createModelRegion();
 	    	    this._updateAxes();
+				this._createGridlines();
 	    	    this._createModelRects();
-	    	    this._createRects();
-				//this._createGridlines();
+	    	    this._createRects();			
 	    		this._updateScrollCounts();
 	    		this._createOverviewSection();
 	    } else {
@@ -200,35 +200,36 @@ as a separate call in the init function.
 	},
 	
 	//work in progress - commented out in create function.
-/**	_createGridlines: function() { 
+	_createGridlines: function() { 
 			var self=this;
 			
 			//create a blank grid to match the size of the modelviewer grid				
 			var data = new Array();
-			for (var k = 0; k < self.options.modelDisplayCount; k++){
-				for (var l = 0; l < self.options.phenotypeDisplayCount; l++) {
-				   var r = new Object();
-				   r.x = k;
-				   r.y = l;
-				   
+			for (var k = 0; k < self.options.phenotypeDisplayCount; k++){
+				for (var l = 0; l < self.options.modelDisplayCount; l++) {
+				   var r = [];
+				   r.push(k);
+				   r.push(l);				   
 				   data.push( r );
 				}
 			}
-	        console.log("Data: " + data);
+	        //console.log("Data: " + data);
  
 			self.options.svg.selectAll("rect.bordered")
 					   .data(data)
 					   .enter()
 					   .append("rect")
-					   .attr("transform","translate(219, 118)")
-					   .attr("x", function(d, i) { return d[i].x * 13 })
-					   .attr("y", function(d, i) { return d[i].y * 13 })  
+					   .attr("transform","translate(232, 109)")
+					   .attr("x", function(d,i) { return d[1] * 18 })
+					   .attr("y", function(d,i) { return d[0] * 13 })  
 					   .attr("class", "hour bordered deselected")
-					   .attr("width", 13)
-					   .attr("height", 13)
+					   .attr("width", 14)
+					   .attr("height", 11.5)
 					   .attr("stroke", "#e5e5e5")
-					   .attr("stroke-width", 2); 						      
-	}, */
+					   .attr("fill", "#ffffff")
+					   .attr("fill-opacity",  0)
+					   .attr("stroke-width", 1); 						      
+	}, 
 	
 	//for the selection area, see if you can convert the selection to the idx of the x and y
 	//then redraw the bigger grid 
@@ -859,14 +860,17 @@ as a separate call in the init function.
 	//return a label for use in the list.  This label is shortened
 	//to fit within the space in the column
     _getShortLabel: function(label, newlength) {
-	var retLabel = label;
-	if (!newlength) {
-    	    newlength = this.options.textLength;
-	}
-	if (label.length > newlength) {
-  	    retLabel = label.substring(0,newlength-3) + "...";
-	}	
-    return retLabel;
+		if (label != undefined){
+			var retLabel = label;
+			if (!newlength) {
+					newlength = this.options.textLength;
+			}
+			if (label.length > newlength) {
+				retLabel = label.substring(0,newlength-3) + "...";
+			}	
+			return retLabel;
+		}
+		else return "Unknown";
     },
 
     //return a useful label to use for visualizing the rectangles
@@ -1082,7 +1086,7 @@ as a separate call in the init function.
 		  model_rects.enter()
 		  .append("rect")
 		  .attr("transform",
-			"translate(" + (this.options.textWidth + 20) + "," + (20 + self.options.yTranslation)+ ")")
+			"translate(" + (this.options.textWidth + 34) + "," + (20 + self.options.yTranslation)+ ")")
 		  .attr("class", function(d) { 
 			  //append the model id to all related items
 			  if (d.value > 0) {
@@ -1317,7 +1321,7 @@ as a separate call in the init function.
 			.scale(self.options.xScale).orient("top");//.outerTickSize(2);
 	    model_x_axis.tickEndSize = 1;
 		var model_region = self.options.svg.append("g")
-	  		.attr("transform","translate(" + (self.options.textWidth + 20) +"," + (self.options.yTranslation + self.options.yoffset) + ")")
+	  		.attr("transform","translate(" + (self.options.textWidth + 38) +"," + (self.options.yTranslation + self.options.yoffset) + ")")
 	  		.attr("class", "x axis")
 	  		.call(model_x_axis)			
 	  	    //this be some voodoo...
@@ -1378,13 +1382,13 @@ as a separate call in the init function.
 		    return i != 1 ? d3.rgb("#e5e5e5") : "white";
 		});
 				
-		//create accent boxes
-	    var rect_accents = this.options.svg.selectAll("#rect.accent")
+/**		//create accent boxes
+	    var rect_accents = this.options.svg.selectAll("#rect.accent.two")
 		.data(this.options.dimensions, function(d) { return d;});
 	    rect_accents.enter()
 	    	.append("rect")
-		.attr("class", "accent")
-		.attr("x", function(d, i) { return self.options.axis_pos_list[i];})
+		.attr("class", "accent two")
+		.attr("x", function(d, i) { return self.options.axis_pos_list[i] + 14;})
 		.attr("y", self.options.yoffset  + this.options.yTranslation)
 		.attr("width", self.options.textWidth + 5)
 		.attr("height", self.options.h)
@@ -1392,6 +1396,7 @@ as a separate call in the init function.
 		.attr("fill", function(d, i) {
 		    return i != 1 ? d3.rgb("#e5e5e5") : "white";
 		});
+		*/
 			    
 	    //add text headers
 	    var rect_headers = this.options.svg.selectAll("#text.accent")
@@ -1399,7 +1404,7 @@ as a separate call in the init function.
 	    rect_headers.enter()
 	    	.append("text")
 		.attr("class", "accent")
-		.attr("x", function(d, i) { return i == 0 ?(self.options.axis_pos_list[i]+10)+25 : (self.options.axis_pos_list[i]+10);})
+		.attr("x", function(d, i) { return i == 0 ?(self.options.axis_pos_list[i]+10)+25 : (self.options.axis_pos_list[i]);})
 		.attr("y", self.options.yoffset +(this.options.yTranslation-10))
 		.style("display", function(d, i) {
 		    return i == 0 ? "" : "none";
@@ -1419,7 +1424,7 @@ as a separate call in the init function.
 			.scale(this.options.xScale).orient("top");
 
 	    var model_region = this.options.svg.append("g")
-			.attr("transform","translate(" + (this.options.textWidth + 20) + "," + (this.options.yoffset  + this.options.yTranslation) + ")")
+			.attr("transform","translate(" + (this.options.textWidth + 30) + "," + (this.options.yoffset  + this.options.yTranslation) + ")")
 			.call(model_x_axis)
 			.attr("class", "x axis")
 		    //this be some voodoo...
@@ -1622,7 +1627,7 @@ as a separate call in the init function.
 		//create the related model rectangles
 		var highlight_rect = self.options.svg.append("svg:rect")
 		  	.attr("transform",
-		  			  "translate(" + (self.options.textWidth + 20) + "," + ( self.options.yTranslation)+ ")")
+		  			  "translate(" + (self.options.textWidth + 34) + "," + ( self.options.yTranslation)+ ")")
 			.attr("x", function(d) { return (self.options.xScale(modelData.model_id)-2);})
 			.attr("y", self.options.yoffset)
 			.attr("class", "model_accent")
