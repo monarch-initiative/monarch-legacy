@@ -449,19 +449,19 @@ as a separate call in the init function.
 		var axis_idx = 0;
 		var tempFilteredModelData = [];
 		
-    	for (var idx=startIdx;idx<self.options.currPhenotypeIdx;idx++) {
-    		self.options.filteredPhenotypeData.push(self.options.phenotypeSumData[idx]);
+    	for (var i = startIdx;i <self.options.currPhenotypeIdx;i++) {
+    		self.options.filteredPhenotypeData.push(self.options.phenotypeSumData[i]);
     		//update the YAxis   	
 			//the height of each row
         	var size = 10;
         	//the spacing you want between rows
         	var gap = 3;
-    		var stuff = {"id": rankedArray[idx][0].rowid, "ypos" : ((axis_idx * (size+gap)) + self.options.yoffset)};
+    		var stuff = {"id": self.options.phenotypeSumData[i][0].rowid, "ypos" : ((axis_idx * (size+gap)) + self.options.yoffset)};
     		self.options.yAxis.push(stuff); 
     	    axis_idx = axis_idx + 1;
     	    //update the ModelData
     		var tempdata = self.options.modelData.filter(function(d) {
-    	    	return d.rowid == rankedArray[idx][0].rowid;
+    	    	return d.rowid == self.options.phenotypeSumData[i][0].rowid;
     	    });
     		tempFilteredModelData = tempFilteredModelData.concat(tempdata);
     	}
@@ -727,7 +727,7 @@ as a separate call in the init function.
 
     	var self= this;
     	//create the option list from the species list
-    	var optionhtml = "<span id='title' style='float:left;'><b>Phenotype comparison (grouped by " + this.options.targetSpeciesName + " " + this.options.comparisonType + ")</b></span><span id='organism_div'  style='margin-left:70px;'>Comparison Organism&nbsp;&nbsp;&nbsp;<select id=\"organism\">";
+    	var optionhtml = "<span id='title' style='float:left;'><b>Phenotype comparison (grouped by " + this.options.targetSpeciesName + " " + this.options.comparisonType + ")</b></span><span id='organism_div'  style='position:absolute; top:215px;left:590px;'>Comparison Organism&nbsp;&nbsp;&nbsp;<select id=\"organism\">";
     	for (var idx=0;idx<self.options.targetSpeciesList.length;idx++) {
     		var selecteditem = "";
     		if (self.options.targetSpeciesList[idx].name === self.options.targetSpeciesName) {
@@ -752,7 +752,7 @@ as a separate call in the init function.
         	self._create();
         	});
 			
-		var optionhtml2 = "<span id='title2' style='float:left;'><b>Similarity Values based on " + this.options.selectedLabel + " Calculation</b></span><span id='calculation_div'  style='margin-left:110px;'>Similarity Calculation&nbsp;&nbsp;&nbsp;<select id=\"calculation\">";
+		var optionhtml2 = "<span id='title2' style='float:left; position:absolute; top:240px; left:27px;'><b>Similarity Values based on " + this.options.selectedLabel + " Calculation</b></span><span id='calculation_div'  style='position:absolute; top:240px;left:600px;'>Similarity Calculation&nbsp;&nbsp;&nbsp;<select id=\"calculation\">";
     	for (var idx=0;idx<self.options.selectList.length;idx++) {
     		var selecteditem = "";
     		if (self.options.selectList[idx].label === self.options.selectedLabel) {
