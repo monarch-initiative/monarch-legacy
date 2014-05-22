@@ -108,60 +108,69 @@
                             <div class="tab greyed-out">Pathways (0)</div>
                         {{/hasPathways}}
                     </div>
+                    <div class="tabcontainer">
+                        <div class="tabhover">View citations for the data on this page</div>
+                        {{#hasLiterature}}
+                            <a href="#literature"><div class="tab contenttab">Literature ({{literatureNum}})</div></a>
+                        {{/hasLiterature}}
+                        {{^hasLiterature}}
+                            <div class="tab greyed-out">Literature (0)</div>
+                        {{/hasLiterature}}
+                    </div>
                 </div>
             </div>
             <div id="complete-info">
                 <div id="ontology" class="first category">
-                        <div class="ids">
-                            <b>Gene:</b>
-                            {{label}}
-                        </div>
-                        <div class="ids">
-                            <b>Description:</b>
-                            {{description}}
-                        </div>
-                        {{#hasLocation}}
-                        <div class="ids">
-                            <b>Gene Location:</b>
-                            {{location}}
-                        </div>
-                        {{/hasLocation}}
-                        {{#hasSummary}}
-                        <div class="ids">
-                            <b>Summary:</b>
-                            {{summary}}
-                        </div>
-                        {{/hasSummary}}
-                        <div class="ids">
-							<h3>Cross References</h3>
-							 <table class="{{css.table}}">
-                                 {{{xrefTable}}}
-                             </table>
-                        </div>
-                        {{#hasSuperClasses}}
-                        <div class="superclasses">
-                          <h4>Is a subtype of</h4>
-                          <table class="{{css.table}}">
-                            {{{superClassTable}}}
-                          </table>
-                        </div>
-                        {{/hasSuperClasses}}
-                        {{#hasEquivalentClasses}}
-                        <div class="equivs">
-                          <h4>Is equivalent to</h4>
-                          <table class="{{css.table}}">
-                            {{{equivalentClassTable}}}
-                          </table>
-                        </div>
-                        {{/hasEquivalentClasses}}
-                        {{#hasSubClasses}}
-                        <div class="subs">
-                          <h4>Has subtype</h4>
-                          <table class="{{css.table}}">
-                            {{{subClassTable}}}
-                          </table>
-                        </div>
-                        {{/hasSubClasses}}
+                    <div class="ids">
+                        <b>Gene:</b>
+                        {{label}}
+                    </div>
+                    <div class="ids">
+                        <b>Description:</b>
+                        {{description}}
+                    </div>
+                    {{#hasLocation}}
+                    <div class="ids">
+                        <b>Gene Location:</b>
+                        {{location}}
+                    </div>
+                    {{/hasLocation}}
+                    {{#hasSummary}}
+                    <div class="ids">
+                        <b>Summary:</b>
+                        {{summary}}
+                    </div>
+                    {{/hasSummary}}
+                    <div class="ids">
+                        <h3>Cross References</h3>
+                         <table class="{{css.table}}">
+                             {{{xrefTable}}}
+                         </table>
+                    </div>
+                    {{#hasSuperClasses}}
+                    <div class="superclasses">
+                      <h4>Is a subtype of</h4>
+                      <table class="{{css.table}}">
+                        {{{superClassTable}}}
+                      </table>
+                    </div>
+                    {{/hasSuperClasses}}
+                    {{#hasEquivalentClasses}}
+                    <div class="equivs">
+                      <h4>Is equivalent to</h4>
+                      <table class="{{css.table}}">
+                        {{{equivalentClassTable}}}
+                      </table>
+                    </div>
+                    {{/hasEquivalentClasses}}
+                    {{#hasSubClasses}}
+                    <div class="subs">
+                      <h4>Has subtype</h4>
+                      <table class="{{css.table}}">
+                        {{{subClassTable}}}
+                      </table>
+                    </div>
+                    {{/hasSubClasses}}
                 </div>
                 {{#hasPhenotypes}}
                 <div id="phenotypes" class="category">
@@ -225,6 +234,13 @@
                     </table>
                 </div>
                 {{/hasPathways}}
+                {{#hasLiterature}}
+                <div id="literature" class="category">
+                    <table class="{{css.table}}">
+                        {{{literatureTable}}}
+                    </table>
+                </div>
+                {{/hasLiterature}}
             </div>
             </div> <!-- closes wrapperforfooter -->
             {{{includes.footer}}}

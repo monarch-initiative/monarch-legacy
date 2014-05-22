@@ -1,6 +1,9 @@
 $(document).ready(function(){
 
     var table = $('.simpletable').stupidtable({
+        "PMID": function(a, b) {
+            return float(a.substring(5), b.substring(5));
+        },
         "string": function(a, b) {
             return string(a, b);
         },
@@ -43,7 +46,7 @@ $(document).ready(function(){
         return 6;
     };
 
-    var sort = ["string", "float", "frequency"];
+    var sort = ["PMID", "string", "float", "frequency"];
 
     table.bind('beforetablesort', function(event, data) {
         // data.column - the index of the column sorted after a click
