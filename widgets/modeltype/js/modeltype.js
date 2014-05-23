@@ -77,7 +77,7 @@ as a separate call in the init function.
 		phenotypeSumData: [],
 		selectedCalculation: 0,
 		selectedLabel: "Default",
-		selectList: [{label: "Information Content of Subsumer", calc: 0}, { label: "Information Content Ratio", calc: 1}, { label: "Distance", calc: 2}],
+		selectList: [{label: "Information Content of Subsumer", calc: 0}, { label: "Information Content Similarity", calc: 1}, { label: "Euclidean Similarity", calc: 2}],
 		selectRectHeight : 0,
 		selectRectWidth : 0,
 		serverURL : "",
@@ -1092,7 +1092,7 @@ as a separate call in the init function.
 		if (calc == 1 || calc == 2) {suffix = '%';}
 		if (calc == 0) {prefix = "Subsumer IC";}
 		else if (calc == 1) {prefix = "Similarity";}
-		else if (calc == 2) {prefix = "Euclidean Distance";}
+		else if (calc == 2) {prefix = "Euclidean Similiarity";}
 				
 	    retData = "<strong>Query: </strong> " + d.label_a + " (IC: " + d.IC_a.toFixed(2) + ")"   
 		    + "<br/><strong>Match: </strong> " + d.label_b + " (IC: " + d.IC_b.toFixed(2) +")"
@@ -1549,7 +1549,7 @@ as a separate call in the init function.
 			
 			if (calc == 0) {text1 = "Lowest"; text2 = "Subsumer IC Scale"; text3 = "Highest";}
 			else if (calc == 1) {text1 = "Less Similar"; text2 = "Similarity Scale"; text3 = "More Similar";}
-			else if (calc == 2) {text1 = "Min"; text2 = "Euclidean Distance"; text3 = "Max";}
+			else if (calc == 2) {text1 = "Min"; text2 = "Euclidean Similarity"; text3 = "Max";}
 	
 		    var div_text1 = self.options.svg.append("svg:text")
 				.attr("class", "detail_text")
