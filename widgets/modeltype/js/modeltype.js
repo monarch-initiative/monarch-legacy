@@ -758,12 +758,12 @@ as a separate call in the init function.
     	var self= this;
     	//create the option list from the species list
     	
-		if (url != "http://localhost:8080/page/widget"  &&  url.indexOf("index.html") < 0) { 
-			var optionhtml = "<span id='title' style='float:left;'><b>Phenotype comparison (grouped by " + this.options.targetSpeciesName + " " + this.options.comparisonType + ")</b></span><span id='organism_div'  style='position:absolute; top:215px;left:590px;'>Comparison Organism&nbsp;&nbsp;&nbsp;<select id=\"organism\">";
-		}
-		else {  //Same code as above with no styles 
-		  var optionhtml = "<span id='title'><b>Phenotype comparison (grouped by " + this.options.targetSpeciesName + " " + this.options.comparisonType + ")</b></span><span id='organism_div'>Comparison Organism&nbsp;&nbsp;&nbsp;<select id=\"organism\">";
-    	}
+		//if (url != "http://localhost:8080/page/widget"  &&  url.indexOf("index.html") < 0) { 
+			var optionhtml = "<div  ><span id='title' style='width:560px; float:left;'><b>Phenotype comparison (grouped by " + this.options.targetSpeciesName + " " + this.options.comparisonType + ")</b></span><span id='organism_div'><span style='width:175px;float:left; text-align:right;'>Comparison Organism&nbsp;&nbsp;&nbsp;</span><span style='width:150px;float:left;'><select id=\"organism\">";
+		//}
+		//else {  //Same code as above with no styles 
+		//  var optionhtml = "<span id='title'><b>Phenotype comparison (grouped by " + this.options.targetSpeciesName + " " + this.options.comparisonType + ")</b></span><span //id='organism_div'>Comparison Organism&nbsp;&nbsp;&nbsp;<select id=\"organism\">";
+    	//}
 		
 		for (var idx=0;idx<self.options.targetSpeciesList.length;idx++) {
     		var selecteditem = "";
@@ -772,7 +772,7 @@ as a separate call in the init function.
     		}
     		optionhtml = optionhtml + "<option value='" + self.options.targetSpeciesList[idx].label +"' "+ selecteditem +">" + self.options.targetSpeciesList[idx].name +"</option>"
     	}
-    	optionhtml = optionhtml + "</select><br /><br /></span>";
+    	optionhtml = optionhtml + "</select></span></span></div>";
     	this.element.append(optionhtml);
     	//add the handler for the select control
         $( "#organism" ).change(function(d) {
@@ -789,12 +789,13 @@ as a separate call in the init function.
         	self._create();
         	});
 		
-		if (url != "http://localhost:8080/page/widget" &&  url.indexOf("index.html") < 0){ 
-			var optionhtml2 = "<span id='title2' style='float:left; position:absolute; top:240px; left:27px;'><b>Similarity Values based on " + this.options.selectedLabel + " Calculation</b></span><span id='calculation_div'  style='position:absolute; top:240px;left:600px;'>Similarity Calculation&nbsp;&nbsp;&nbsp;<select id=\"calculation\">";
-        }
-		else {  //Same code as above with no styles		
-			var optionhtml2 = "<span id='title2'><b>Similarity Values based on " + this.options.selectedLabel + " Calculation</b></span><span id='calculation_div'>Similarity Calculation&nbsp;&nbsp;&nbsp;<select id=\"calculation\">";
-    	}
+		//if (url != "http://localhost:8080/page/widget" &&  url.indexOf("index.html") < 0){ 
+			var optionhtml2 = "<div style='float:left;margin-top:5px;'><span id='title2' style='width:560px; float:left;'><b>Similarity Values based on " + this.options.selectedLabel + " Calculation</b></span><span id='calculation_div' style=''><span style='width:175px;float:left;text-align:right;' >Similarity Calculation&nbsp;&nbsp;&nbsp;</span><span style='width:150px;float:left;' ><select id=\"calculation\">";
+       
+	   
+	   //else {  //Same code as above with no styles		
+		//	var optionhtml2 = "<span id='title2'><b>Similarity Values based on " + this.options.selectedLabel + " Calculation</b></span><span id='calculation_div'>Similarity //Calculation&nbsp;&nbsp;&nbsp;<select id=\"calculation\">";
+    	//}
 		for (var idx=0;idx<self.options.selectList.length;idx++) {
     		var selecteditem = "";
     		if (self.options.selectList[idx].label === self.options.selectedLabel) {
@@ -805,7 +806,7 @@ as a separate call in the init function.
     		}
     		optionhtml2 = optionhtml2 + "<option value='" + self.options.selectList[idx].calc +"' "+ selecteditem +">" + self.options.selectList[idx].label +"</option>"
     	}
-    	optionhtml2 = optionhtml2 + "</select></span>";
+    	optionhtml2 = optionhtml2 + "</select></span></span></div>";
     	this.element.append(optionhtml2);
         
 		 $( "#calculation" ).change(function(d) {
