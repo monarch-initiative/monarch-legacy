@@ -18,4 +18,17 @@ $(document).ready(function(){
         $(panel_id).show();
     });
 
+    /* Literature Tab */
+    $('.etal').click(function(event) {
+        $(this).hide();
+        $(this).parent().find('.moreauthors').show();
+        $(this).parent().find('.hideauthors').show();
+    });
+
+    $('.hideauthors').click(function(event) {
+        $(this).parent().find('.moreauthors').hide();
+        $(this).hide();
+        $(this).parent().find('.etal').show();
+    });
+
 });
