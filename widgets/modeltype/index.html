@@ -21,6 +21,7 @@
     <script src="js/jquery-ui-1.10.3.custom.min.js"></script>
     <script src="js/d3.min.js"></script>
     <script src="js/modeltype.js"></script>
+	<link rel="stylesheet" type="text/css" href="css/instructions.css"/>
     <script>
 	var phenotypes = [
 	   	{ id:"HP:0000006", observed:"positive"},
@@ -52,46 +53,7 @@
 	   	});
 	
 	</script>
-	<style media="screen" type="text/css">
-		body{
-			margin-left:25px;
-			width:70%;
-			font-family: Arial, Helvetica, sans-serif;
-			font-size: 14px;
-		}
-		.title, .sectiontitle, h1, .subsectiontitle, .header{
-			font-weight:bold;
-			color:#44A293;
-		} 
-		.header{
-			font-size:2.0em;
-			margin-left:15ps;
-			margin-bottom:15px;
-		}			
-		.subsectiontitle{
-			font-size:1.0em;
-		}		
-		.sectiontitle{
-			font-size:1.2em;
-		}
-		div .title{
-			margin-top:-30px;
-		}
-		.title{
-			font-size:1.4em;
-			margin-top: 25px;
-		}
-		.headtitle img{
-			vertical-align:bottom;
-		}
-		#phen_vis{
-		  margin-top:20px;
-		  padding-bottom: 30px;
-		}
-		li{ padding-bottom: 7px;}
 	
-
-	</style>
   </head>
   <body>
     <div class="monarch-container">  
@@ -99,7 +61,8 @@
         <div class="content">
             <div class="wrapperforfooter">
 			<span class="headtitle"><img id="monarch-logo"  width="90px" class="downloadline" src="image/logo.png"/>
-			<span class="header">ModelType Viewer Widget</span></span><br />           <div id="phen_vis"></div><br /><br />	
+			<span class="header">ModelType Viewer Widget</span></span><br />           
+			<div id="phen_vis"></div><br /><br />	
 				<div class="text">
 				<div class="title">Steps for Adding the ModelType Viewer Widget to Your Webpage</div>
                     This page describes how to include the Viewer Widget on any webpage.  Steps are provided for adding required javascript files<b>*</b>, adding parameters to the widget call, and adding the widget to the html file. <br /><br />
@@ -138,7 +101,10 @@
 						<li>Create an image subdirectory  and place all of the files in the image subdirectory of the installation into that directory.
 						
 						</li>
-					</ul>
+						</li>
+						<li>Create a css subdirectory and copy instructions.css and modelviewer.css from the css subdirectory of the installation into your directory.
+						
+					    </ul>
                 </div><br />			   
 				<div class="sectiontitle">3. Add a List of Phenotyopes and a jQuery Function Call</div>
                 <div class="text">
@@ -206,7 +172,8 @@
 				<div class="sectiontitle">5.Load your HTML File into a browser.
                 </div><br />				
  </div>  
-			<div class="sectiontitle">Please contact us at <a href="mailto:info@monarchinitiative.org">info@monarchinitiative.org</a> if you have any problems or questions.</div>			
+			<div class="sectiontitle">Please contact us at <a href="mailto:info@monarchinitiative.org">info@monarchinitiative.org</a> if you have any problems or questions.</div>
+			
             </div> <!-- closes wrapperforfooter -->
         </div>
     </div>

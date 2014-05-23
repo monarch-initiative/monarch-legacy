@@ -29,6 +29,14 @@
 NOTE: I probably need a model_url to render additional model info on the screen.  Alternatively I can load the data
 as a separate call in the init function.
  */
+ var url = document.URL;
+ console.log(url);
+//Save this for future use - this appends a link for a css file - for now the styles are embedded in the code 
+/**$(document).ready(function(){    
+	 //console.log(url);
+	 if (url != "http://localhost:8080/page/widget"){
+     $('head').append('<link href="/css/modelviewer.css" type="text/css" rel="stylesheet" />');} 
+});*/
 
 (function($) {
     
@@ -496,7 +504,13 @@ as a separate call in the init function.
 			return a.id - b.id; 
 		});
 		
-		this.options.phenotypeSumData = [];		
+		self.options.phenotypeData.sort(function(a,b) {
+		return a.id_a-b.id_a;
+	    });
+	    console.log("model data for sorting has "+modelDataForSorting.length);
+		
+		
+		/**this.options.phenotypeSumData = [];		
 			var idx = 0;		
 			var newdata = modelDataForSorting.filter(function(d,i) {			
 				var sum = 0;			
@@ -511,7 +525,23 @@ as a separate call in the init function.
 				}
 				else {return false;}	
 
-    	    });				
+    	    });		*/
+		for (var k =0; k < modelDataForSorting.length;k++) {
+			var sum  = 0;
+			var d = modelDataForSorting[k];
+			console.log("Phenotype " + k + ": d[0].id_a is "+d[0].id_a+", "+self.options.phenotypeData[k].id_a);
+			if (d[0].id_a === self.options.phenotypeData[k].id_a){
+				console.log("matched...");
+				for (var i=0; i< d.length; i++)
+				{
+				sum+= +d[i].subsumer_IC;
+				}
+				d["sum"] = sum;
+				self.options.phenotypeSumData.push(d);
+			}
+	    }
+
+			
 		//sort the phenotype list by sum of LCS
 		self.options.phenotypeSumData.sort(function(a,b) { 
 			return b.sum - a.sum; 
@@ -727,8 +757,15 @@ as a separate call in the init function.
 
     	var self= this;
     	//create the option list from the species list
-    	var optionhtml = "<span id='title' style='float:left;'><b>Phenotype comparison (grouped by " + this.options.targetSpeciesName + " " + this.options.comparisonType + ")</b></span><span id='organism_div'  style='position:absolute; top:215px;left:590px;'>Comparison Organism&nbsp;&nbsp;&nbsp;<select id=\"organism\">";
-    	for (var idx=0;idx<self.options.targetSpeciesList.length;idx++) {
+    	
+		if (url != "http://localhost:8080/page/widget"  &&  url.indexOf("index.html") < 0) { 
+			var optionhtml = "<span id='title' style='float:left;'><b>Phenotype comparison (grouped by " + this.options.targetSpeciesName + " " + this.options.comparisonType + ")</b></span><span id='organism_div'  style='position:absolute; top:215px;left:590px;'>Comparison Organism&nbsp;&nbsp;&nbsp;<select id=\"organism\">";
+		}
+		else {  //Same code as above with no styles 
+		  var optionhtml = "<span id='title'><b>Phenotype comparison (grouped by " + this.options.targetSpeciesName + " " + this.options.comparisonType + ")</b></span><span id='organism_div'>Comparison Organism&nbsp;&nbsp;&nbsp;<select id=\"organism\">";
+    	}
+		
+		for (var idx=0;idx<self.options.targetSpeciesList.length;idx++) {
     		var selecteditem = "";
     		if (self.options.targetSpeciesList[idx].name === self.options.targetSpeciesName) {
     			selecteditem = "selected";
@@ -751,9 +788,14 @@ as a separate call in the init function.
         	self._reset();
         	self._create();
         	});
-			
-		var optionhtml2 = "<span id='title2' style='float:left; position:absolute; top:240px; left:27px;'><b>Similarity Values based on " + this.options.selectedLabel + " Calculation</b></span><span id='calculation_div'  style='position:absolute; top:240px;left:600px;'>Similarity Calculation&nbsp;&nbsp;&nbsp;<select id=\"calculation\">";
-    	for (var idx=0;idx<self.options.selectList.length;idx++) {
+		
+		if (url != "http://localhost:8080/page/widget" &&  url.indexOf("index.html") < 0){ 
+			var optionhtml2 = "<span id='title2' style='float:left; position:absolute; top:240px; left:27px;'><b>Similarity Values based on " + this.options.selectedLabel + " Calculation</b></span><span id='calculation_div'  style='position:absolute; top:240px;left:600px;'>Similarity Calculation&nbsp;&nbsp;&nbsp;<select id=\"calculation\">";
+        }
+		else {  //Same code as above with no styles		
+			var optionhtml2 = "<span id='title2'><b>Similarity Values based on " + this.options.selectedLabel + " Calculation</b></span><span id='calculation_div'>Similarity Calculation&nbsp;&nbsp;&nbsp;<select id=\"calculation\">";
+    	}
+		for (var idx=0;idx<self.options.selectList.length;idx++) {
     		var selecteditem = "";
     		if (self.options.selectList[idx].label === self.options.selectedLabel) {
     			selecteditem = "selected";
@@ -1697,5 +1739,6 @@ as a separate call in the init function.
     	return newlist;
     }   
   });
-
 })(jQuery);
+
+
