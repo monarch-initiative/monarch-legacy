@@ -1,0 +1,22 @@
+.title{
+	float:left;
+}
+
+.title2{
+	font-size:1.4em;
+	float:left;
+	position: absolute;
+	top:120;
+	left:27px;
+}
+#organism_div {
+	position:absolute;
+	top:215px;
+	left: 590px;
+}
+
+#calculation_div (
+	position:absolute:
+	top:240px;
+	left:600px; 
+)
