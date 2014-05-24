@@ -72,6 +72,15 @@ exports.testGeneBasic = function() {
     );
 }
 
+
+var pmids = [14581620, 20080219, 11912187];
+exports.testLiteratureBasic = function() {
+    var json = engine.fetchPubFromPMID(pmids);
+    console.log(JSON.stringify(json));
+    // todo - check json
+
+}
+
 if (require.main == module) {
     var script = system.args.shift();
     var parser = new Parser(system.args);
