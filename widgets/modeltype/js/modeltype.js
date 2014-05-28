@@ -362,16 +362,24 @@ as a separate call in the init function.
 			.attr("height", self.options.smallYScale(self.options.phenotypeData[self.options.phenotypeDisplayCount-1].rowid))
 			.attr("width", self.options.smallXScale(self.options.modelList[self.options.modelDisplayCount-1].model_id));
 	},
-	
+
 	_setTargetSpeciesName: function(taxonid) {
 		var self = this;
-		
-		var tempdata = self.options.targetSpeciesList.filter(function(d) {
-	    	return d.taxon === taxonid;
-	    });
 
-		self.options.targetSpeciesName = tempdata[0].name;
-		self.options.targetSpecies = tempdata[0].taxon;
+
+	    if (typeof taxonid === 'undefined' || taxonid === "" || taxonid === null) {
+		taxonid="10090";
+	    }
+	    var tempdata;
+	    for (var i  = 0; i  <self.options.targetSpeciesList.length; i++) {
+		if (self.options.targetSpeciesList[i].taxon === taxonid) {
+		    tempdata  = self.options.targetSpeciesList[i];
+		    break;
+		}
+	    }
+	    
+	    self.options.targetSpeciesName = tempdata.name;
+	    self.options.targetSpecies = tempdata.taxon;
 	},
 
 	_setSelectedCalculation: function(calc) {
