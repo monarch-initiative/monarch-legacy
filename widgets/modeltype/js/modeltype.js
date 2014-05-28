@@ -363,16 +363,12 @@ as a separate call in the init function.
 	_setTargetSpeciesName: function(taxonid) {
 		var self = this;
 
-	    console.log("target taxon id is"+taxonid);
 
 	    if (typeof taxonid === 'undefined' || taxonid === "" || taxonid === null) {
-		console.log("setting taxonid");
 		taxonid="10090";
 	    }
-	    console.log("taxonid = "+taxonid);
 	    var tempdata;
 	    for (var i  = 0; i  <self.options.targetSpeciesList.length; i++) {
-		console.log("target is ..."+self.options.targetSpeciesList[i].taxon);
 		if (self.options.targetSpeciesList[i].taxon === taxonid) {
 		    tempdata  = self.options.targetSpeciesList[i];
 		    break;
