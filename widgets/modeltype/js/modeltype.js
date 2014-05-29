@@ -65,9 +65,11 @@ as a separate call in the init function.
 		highlightRect: undefined,
 		inputPhenotypeData : [],	  	    
 	    m :[ 30, 10, 10, 10 ], 
-		maxColorScale : "#0F473E",
+		maxColorScale : 'rgb(37,52,148)',
+		//maxColorScale : "#0F473E",
 		maxICScore : 0,
-		minColorScale : "#F2F2F2",	     
+		minColorScale: 'rgb(255,255,204)',
+		//minColorScale : "#F2F2F2",	     
 	    modelData: [],
 		modelDisplayCount : 30,
 	    modelList: [],
@@ -761,8 +763,14 @@ as a separate call in the init function.
 			default: maxScore = this.options.maxICScore;
 					break;
 		}				
-    	this.options.colorScale = d3.scale.linear().domain([0,maxScore]).range([d3.rgb(this.options.minColorScale), d3.rgb(this.options.maxColorScale)]);
-    },
+    	/**this.options.colorScale = d3.scale.linear().domain([0,maxScore]).range([d3.rgb(this.options.minColorScale), d3.rgb(this.options.maxColorScale)]); */
+      
+	    this.options.colorScale = d3.scale.linear().domain([3, maxScore]);
+        this.options.colorScale.domain([0, 0.2, 0.4, 0.6, 0.8, 1].map(this.options.colorScale.invert));
+        this.options.colorScale.range(['rgb(255,255,204)','rgb(199,233,180)','rgb(127,205,187)','rgb(65,182,196)','rgb(44,127,184)','rgb(37,52,148)']); 
+	
+	
+	},
 
     _initCanvas : function() {
 
@@ -1170,31 +1178,30 @@ as a separate call in the init function.
 		  })
 		  .on("click", function(d) {
 			  //put the clicked rect on the top layer of the svg so other events work
-			  this.parentNode.appendChild(this);
+				this.parentNode.appendChild(this);
+				
 			  //if this column and row are selected, clear the column/row and unset the column/row flag
 			  if (self.options.selectedColumn != undefined && self.options.selectedRow != undefined) 
 			  {
-				//if this is a second click on the original rectangle clear row and column
-				if (this == self.options.currSelectedRect){				
 					self._clearModelData(self.options.selectedColumn);
 					self.options.selectedColumn = undefined;
 					self._deselectData(self.options.selectedRow);
-					self.options.selectedRow = undefined;
-				}
-				else {
-				
-				    var text = "Please deselect your first selection before clicking a new rectangle. Click on the rectangle at the intersection to deselect."
-					self._showDialog(text);
-				}
-			  }			  
-			  else {
-				self._highlightIntersection(d, d3.mouse(this));
-				//put the clicked rect on the top layer of the svg so other events work
-				this.parentNode.appendChild(this);
-				self._enableRowColumnRects(this);
-				//set the current selected rectangle
-				self.options.currSelectedRect = this;  
-			  }
+					self.options.selectedRow = undefined;	
+					if (this != self.options.currSelectedRect){
+						self._highlightIntersection(d, d3.mouse(this));
+						//put the clicked rect on the top layer of the svg so other events work
+						this.parentNode.appendChild(this);
+						self._enableRowColumnRects(this);
+						//set the current selected rectangle
+						self.options.currSelectedRect = this;  
+					}
+			   }
+			   else {
+					self._highlightIntersection(d, d3.mouse(this));
+					this.parentNode.appendChild(this);
+					self._enableRowColumnRects(this);
+					self.options.currSelectedRect = this;  
+			   }
 		  })
 		  .on("mouseout", function(d) {
 			  if (self.options.selectedColumn == undefined  && self.options.selectedRow == undefined) {
@@ -1203,7 +1210,8 @@ as a separate call in the init function.
 		  })
 		  .style('opacity', '1.0')
 		  .attr("fill", function(d, i) {
-			  return self.options.colorScale(d.value);
+			  //added +5 to d.value to get darker color
+			  return self.options.colorScale(d.value + 5);
 		  });
 		  model_rects.transition()
 			  .delay(20)
@@ -1219,27 +1227,6 @@ as a separate call in the init function.
 		  .remove();
     },
 	
-	_showDialog : function(text) {
-												
-				var dialog = this.options.svg.select("body")
-					.append("div")
-					.attr("id","dialog")
-					.attr("font-weight", "bold")
-					.style("font-size", "14px")
-					.text(text);
-					
-				$("#dialog").dialog(
-				{
-					width: 450,
-					height: 150,
-					show: {effect: "blind", duration: 400 },
-					title: "Modelviewer Tips",
-					dialogClass: "ui-dialog-osx",
-					draggable: true,
-					position: ['top', 'center'],
-				});
-	},
-	
 	_enableRowColumnRects :  function(curr_rect){
 		var self = this;
 		
@@ -1252,8 +1239,9 @@ as a separate call in the init function.
 		}
 		var data_rects = self.options.svg.selectAll("rect.models")
 			.filter(function (d) { return d.model_id == curr_rect.__data__.model_id;});
-		for (var j = 0; i < data_rects[0].length; j++){
+		for (var j = 0; j < data_rects[0].length; j++){
                model_rects[0][j].parentNode.appendChild(model_rects[0][j]);
+			   model_rects[0][j].parentNode.appendChild(model_rects[0][j]);
 		}
 	},
 	
@@ -1713,16 +1701,17 @@ as a separate call in the init function.
 	    //in the scale
 	    if (diff > 0) {
 		    //create a scale
-		    var color_values = [];
-		    var temp_data = this.options.modelData.map(function(d) { 
-			return d.value;});
-		    var diff = d3.max(temp_data) - d3.min(temp_data);
-		    var step = (diff/5);
-		    for (var idx=0;idx<6;idx++) {
-			var t = d3.min(temp_data);
-			var t2 = t + (idx * step);
-			color_values.push(t2);
-		    }		    
+			var color_values = ['rgb(247,252,240)','rgb(204,235,197)','rgb(168,221,181)','rgb(78,179,211)','rgb(43,140,190)','rgb(8,88,158)'];
+		    //var color_values = [];
+		    //var temp_data = this.options.modelData.map(function(d) { 
+			//return d.value;});
+		    //var diff = d3.max(temp_data) - d3.min(temp_data);
+		    //var step = (diff/5);
+		    //for (var idx=0;idx<6;idx++) {
+			//var t = d3.min(temp_data);
+			//var t2 = t + (idx * step);
+			//color_values.push(t2);
+		    //}		    
 		    //start # a4 d6 d4
 		    //stop # 44 a2 93
 		    var gradient = this.options.svg.append("svg:linearGradient")
@@ -1732,7 +1721,7 @@ as a separate call in the init function.
 				.attr("y1", "0%")
 				.attr("y2", "0%");
 
-			gradient.append("svg:stop")
+			/**gradient.append("svg:stop")
 				.attr("offset", "0%")
 				.style("stop-color", this.options.minColorScale)
 				.style("stop-opacity", 1);
@@ -1740,6 +1729,26 @@ as a separate call in the init function.
 			gradient.append("svg:stop")
 				.attr("offset", "100%")
 				.style("stop-color", this.options.maxColorScale)
+				.style("stop-opacity", 1);*/
+				
+			gradient.append("svg:stop")
+				.attr("offset", "20%")
+				.style("stop-color", 'rgb(168,221,181)')
+				.style("stop-opacity", 1);
+			
+			gradient.append("svg:stop")
+				.attr("offset", "40%")
+				.style("stop-color", 'rgb(78,179,211)')
+				.style("stop-opacity", 1);
+			
+			gradient.append("svg:stop")
+				.attr("offset", "60%")
+				.style("stop-color", 'rgb(43,140,190)')
+				.style("stop-opacity", 1);
+				
+			gradient.append("svg:stop")
+				.attr("offset", "80%")
+				.style("stop-color", 'rgb(8,88,158)')
 				.style("stop-opacity", 1);
 
 		    var legend_rects = this.options.svg.append("rect")
