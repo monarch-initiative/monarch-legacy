@@ -1213,9 +1213,10 @@ as a separate call in the init function.
 			self._deselectData(self.options.selectedRow);
 		  })
 		  .on("mouseout", function(d) {
-			  if (self.options.selectedColumn == undefined  && self.options.selectedRow == undefined) {
+			  //if (self.options.selectedColumn == undefined  && self.options.selectedRow == undefined) {
 				self._clearModelData(d, d3.mouse(this));
-			  }
+				self._deselectData(self.options.selectedRow);
+			 // }
 		  })
 		  .style('opacity', '1.0')
 		  .attr("fill", function(d, i) {
