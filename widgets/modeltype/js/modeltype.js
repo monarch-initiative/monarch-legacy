@@ -552,9 +552,7 @@ as a separate call in the init function.
 				d["sum"] = sum;
 				self.options.phenotypeSumData.push(d);
 			}
-	    }
-
-			
+	    }		
 		//sort the phenotype list by sum of LCS
 		self.options.phenotypeSumData.sort(function(a,b) { 
 			return b.sum - a.sum; 
@@ -867,6 +865,12 @@ as a separate call in the init function.
     	link_lines.style("text-decoration", "none");
     	link_lines.style("color", "black");
 		link_lines.style("text-anchor", "end");
+		var link_labels = d3.selectAll(".model_label");
+    	link_labels.style("font-weight", "normal");
+    	link_labels.style("text-decoration", "none");
+    	link_labels.style("color", "black");
+		link_labels.attr("fill", "black");
+		
     },
 	
 	
@@ -1029,20 +1033,20 @@ as a separate call in the init function.
 	    	h = height;
 	    }
 		
-		var hgt = this.options.phenotypeDisplayCount*10 + this.options.yoffset;
+		var hgt = this.options.phenotypeDisplayCount*10 + this.options.yoffset,
 		    yv = 0;
 		
-		if (coords.y > hgt) { yv = coords.y - this.options.detailRectHeight;}
-		else {yv = coords.y + 10;}
+		if (coords.y > hgt) { yv = coords.y - this.options.detailRectHeight - 10;}
+		else {yv = coords.y + 20;}
 		
 
 	    this.options.svg.append("foreignObject")
-		    .attr("width", w+60)
+		    .attr("width", w + 60)
 			.attr("height", h)
 			.attr("id", "detail_content")
 			//add an offset.  Otherwise, the tooltip turns off the mouse event
 			.attr("y", yv)
-		    .attr("x", coords.x+10) 		    
+		    .attr("x", coords.x + 20) 		    
 			.append("xhtml:body")
 			.style("font-size", "10px")
 			.style("padding", "8px")
@@ -1174,9 +1178,9 @@ as a separate call in the init function.
 		  .attr("ry", "3")		 
 		  //I need to pass this into the function
 		  .on("mouseover", function(d) {
-			  self._showModelData(d, this);
-		  })
-		  .on("click", function(d) {
+			  //self._showModelData(d, this);
+		 // })
+		//  .on("click", function(d) {
 			  //put the clicked rect on the top layer of the svg so other events work
 				this.parentNode.appendChild(this);
 				
@@ -1202,6 +1206,11 @@ as a separate call in the init function.
 					self._enableRowColumnRects(this);
 					self.options.currSelectedRect = this;  
 			   }
+			   self._showModelData(d, this);
+		  })
+		  .on("click", function(d) {
+			self._clearModelData(d, d3.mouse(this));
+			self._deselectData(self.options.selectedRow);
 		  })
 		  .on("mouseout", function(d) {
 			  if (self.options.selectedColumn == undefined  && self.options.selectedRow == undefined) {
@@ -1230,8 +1239,6 @@ as a separate call in the init function.
 	_enableRowColumnRects :  function(curr_rect){
 		var self = this;
 		
-		var rowid = curr_rect.__data__.rowid,
-			colid = curr_rect.__data__.model_id;
 		var model_rects = self.options.svg.selectAll("rect.models")
 			.filter(function (d) { return d.rowid == curr_rect.__data__.rowid;});
 		for (var i = 0; i < model_rects[0].length; i++){
@@ -1240,8 +1247,7 @@ as a separate call in the init function.
 		var data_rects = self.options.svg.selectAll("rect.models")
 			.filter(function (d) { return d.model_id == curr_rect.__data__.model_id;});
 		for (var j = 0; j < data_rects[0].length; j++){
-               model_rects[0][j].parentNode.appendChild(model_rects[0][j]);
-			   model_rects[0][j].parentNode.appendChild(model_rects[0][j]);
+               data_rects[0][j].parentNode.appendChild(data_rects[0][j]);
 		}
 	},
 	
