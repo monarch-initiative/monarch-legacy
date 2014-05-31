@@ -93,7 +93,7 @@
                         {{/hasModels}}
                     </div>
                     <div class="tabcontainer">
-                        <div class="tabhover">View diseases that have the most phenotypes in common</div>
+                        <div class="tabhover">View diseases that have the most abnormal phenotypes in common</div>
                         {{#hasSim}}
                             <a href="#similarity"><div class="tab contenttab">Related Diseases ({{simNum}})</div></a>
                         {{/hasSim}}
@@ -193,6 +193,9 @@
                 </div>
                 {{#hasSim}}
                 <div id="similarity" class="category">
+                    <div class="text">
+                        Note: Comparisons are based on abnormal phenotypes.
+                    </div>
                     <table class="{{css.table}}">
                         {{{simTable}}}
                     </table>
