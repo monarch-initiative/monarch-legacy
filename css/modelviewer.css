@@ -1,22 +1,101 @@
 .ui-dialog-titlebar {
-  background-color: #F9D0BB;
-
+  background-color:#253494;
+  color:#FFFFFF;
 }
 .ui-dialog-content{
-	font-weight:bold;
-	font-size:14px;
+	/**font-weight:bold;*/
+	font-size:11px;
 	font-family: arial;
+	color:#000000;	
 }
 
+.ui-dialog-content a{
+	color: #253494;
+}
 .ui-dialog-buttonpane{
-	background-color: #F9D0BB;
+	background-color: #253494;
 }
 
 .ui-dialog-buttonset{
-	background-color: #F9D0BB;
+	background-color: #25349A;
 }
 .ui-dialog-osx {
     -moz-border-radius: 0 0 8px 8px;
     -webkit-border-radius: 0 0 8px 8px;
-    border-radius: 0 0 8px 8px; border-width: 0 8px 8px 8px;
+    border-radius: 0 0 8px 8px; 
+	border-width: 3px;
+}
+
+.tip{
+	width: 80px;
+	height:10px;
+	font-size:12px;
+	font-weight:bold;
+}
+
+#tip{  
+   font-size: 13px;
+   margin-left:-20px;
+   stroke-width: 1px;
+   stroke:#25349A;
+}
+
+.selects{
+  float:right;
+ /** margin-top:615px; 
+  margin-right:105px;*/
+  position:absolute;
+  top:640px;
+  left:820px;
+  background-color:#f5f5f5; 
+  padding: 0 7px 8px 6px;
+  margin-left:-10px;
+   z-index:-1000;
+}
+
+.shortselects{
+  float:right;
+ /** margin-top:615px; 
+  margin-right:105px;*/
+  position:absolute;
+  top:560px;
+  left:820px;
+  background-color:#f5f5f5; 
+  padding: 0 7px 8px 6px;
+  margin-left:-10px;
+  z-index:-1000;
+}
+
+#org_div div, #calc_div div{
+	font-weight:bold;
+}
+
+#org_div span, #calc_div span{
+   font-size:14px;
+}
+
+#calcs {
+  margin-left:10px;
+  font-size: 22px;
+  color: #25349A;
+  font-weight:bold;
+}
+
+#clabel{
+  font-weight:bold;
+}
+
+#organism , #calculation{
+   margin-top: 5px;  
+}
+
+#org_div div, #calc_div div {
+	font-weight:bold;
+}
+
+#faq{
+	margin-left:200px;
+	font-weight:bold;
+	font-size:16px;
+	color:#FF9966;
 }
