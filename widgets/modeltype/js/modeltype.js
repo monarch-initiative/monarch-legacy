@@ -968,13 +968,15 @@ as a separate call in the init function.
 	    if (height != undefined) {
 	    	h = height;
 	    }
-		
+		var wdt = this.options.axis_pos_list[1] + ((this.options.axis_pos_list[2] - this.options.axis_pos_list[1])/2);
 		var hgt = this.options.phenotypeDisplayCount*10 + this.options.yoffset,
 		    yv = 0;
 		
 		if (coords.y > hgt) { yv = coords.y - this.options.detailRectHeight - 10;}
 		else {yv = coords.y + 20;}
 		
+		if (coords.x > wdt) { wv = coords.x - this.options.detailRectWidth - 70;}
+		else {wv = coords.x + 20;}
 
 	    this.options.svg.append("foreignObject")
 		    .attr("width", w + 60)
@@ -982,7 +984,7 @@ as a separate call in the init function.
 			.attr("id", "detail_content")
 			//add an offset.  Otherwise, the tooltip turns off the mouse event
 			.attr("y", yv)
-		    .attr("x", coords.x + 20) 		    
+		    .attr("x", wv) 
 			.append("xhtml:body")
 			.style("font-size", "10px")
 			.style("padding", "8px")
@@ -1726,9 +1728,9 @@ as a separate call in the init function.
 				y2 = 290;
 			if (this.options.filteredPhenotypeData.length < 6) {y1 = 220; y2 = 205;}
 			
-			if (calc == 0) {text1 = "Lowest"; text2 = "Subsumer IC Scale"; text3 = "Highest";}
-			else if (calc == 1) {text1 = "Less Similar"; text2 = "Similarity Scale"; text3 = "More Similar";}
-			else if (calc == 2) {text1 = "Min"; text2 = "Euclidean Similarity"; text3 = "Max";}
+			if (calc == 0) {text1 = "Lowest"; text2 = "Phenotype Uniqueness"; text3 = "Highest";}
+			else if (calc == 1) {text1 = "Less Similar"; text2 = "Ratio of Unique over Common"; text3 = "More Similar";}
+			else if (calc == 2) {text1 = "Min"; text2 = "Distance Between Phenotypes"; text3 = "Max";}
 	
 		    var div_text1 = self.options.svg.append("svg:text")
 				.attr("class", "detail_text")
