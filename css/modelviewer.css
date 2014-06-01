@@ -50,7 +50,7 @@
   background-color:#f5f5f5; 
   padding: 0 7px 8px 6px;
   margin-left:-10px;
-   z-index:-1000;
+ /**  z-index:-1000;*/
 }
 
 .shortselects{
@@ -63,7 +63,7 @@
   background-color:#f5f5f5; 
   padding: 0 7px 8px 6px;
   margin-left:-10px;
-  z-index:-1000;
+  /**z-index:-1000;*/
 }
 
 #org_div div, #calc_div div{
@@ -98,4 +98,8 @@
 	font-weight:bold;
 	font-size:16px;
 	color:#FF9966;
+}
+
+#detail_content{
+  z-index:500;
 }
