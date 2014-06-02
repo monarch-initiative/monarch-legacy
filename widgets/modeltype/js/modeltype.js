@@ -768,7 +768,7 @@ as a separate call in the init function.
 
     	var self= this;
     	//create the option list from the species list
-    	var optionhtml = "<span id='title' style='width:560px;margin-left:280px;font-size:16px;'><b>Phenotype comparison (grouped by " + this.options.targetSpeciesName + " " + this.options.comparisonType + ")</b></span><span id='faq'>FAQ</span>";			
+    	var optionhtml = "<div id='header'><span id='title' style='width:560px;margin-left:280px;font-size:16px;'><b>Phenotype comparison (grouped by " + this.options.targetSpeciesName + " " + this.options.comparisonType + ")</b></span><span id='faq'>FAQ</span></div>";			
 		this.element.append(optionhtml);
 		
 		d3.select("#faq")
@@ -1802,7 +1802,7 @@ as a separate call in the init function.
         	self.options.targetSpeciesName = self.options.targetSpeciesList[d.target.selectedIndex].name;
         	$("#org_div").remove();
 			$("#calc_div").remove();
-			$("#title").remove();
+			$("#header").remove();
         	$("#svg_area").remove();
         	self.options.phenotypeData = self.options.inputPhenotypeData.slice();
         	self._reset();
@@ -1816,7 +1816,7 @@ as a separate call in the init function.
 			self.options.selectedLabel = self.options.selectList[d.target.selectedIndex].label;
 			$("#calc_div").remove();
 			$("#org_div").remove();
-			$("#title").remove();
+			$("#header").remove();
 			$("#svg_area").remove();
 			self.options.phenotypeData = self.options.inputPhenotypeData.slice();
 			self._reset();
