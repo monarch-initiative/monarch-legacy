@@ -9,7 +9,7 @@ ontologyConfiguration:
     graphLocation: /var/home/bamboo/SciGraph/monarchGraph
 
 ontologyUrls:
- - http://purl.obolibrary.org/obo/upheno/monarch-inferred.owl
+ - http://purl.obolibrary.org/obo/upheno/monarch.owl
 
 curies:
     http://purl.obolibrary.org/obo/DOID_ : DOID
