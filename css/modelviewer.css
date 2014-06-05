@@ -45,7 +45,7 @@
  /** margin-top:615px; 
   margin-right:105px;*/
   position:absolute;
-  top:640px;
+  top:580px;
   left:820px;
   background-color:#f5f5f5; 
   padding: 0 7px 8px 6px;
@@ -58,7 +58,7 @@
  /** margin-top:615px; 
   margin-right:105px;*/
   position:absolute;
-  top:560px;
+  top:500px;
   left:820px;
   background-color:#f5f5f5; 
   padding: 0 7px 8px 6px;
@@ -94,7 +94,7 @@
 }
 
 #faq{
-	margin-left:200px;
+	margin-left:114px;
 	font-weight:bold;
 	font-size:16px;
 	color:#FF9966;
@@ -102,4 +102,18 @@
 
 #detail_content{
   z-index:500;
+}
+
+#slabel{
+	font-size:14px;
+	font-weight:bold;
+}
+
+#logo {
+	height:90px;
+}
+
+#sort_div {
+margin-top: 0px;
+margin-left: 5px;
 }
