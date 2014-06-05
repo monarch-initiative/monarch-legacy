@@ -18,9 +18,11 @@ RINGO_PORT ?= 8080
 ### Tests
 ###
 
-TESTS = apitest urltester
+APITESTS = apitest literature-test class-info-test disease-phenotype-test
+TESTS = $(APITESTS) urltester
 
 test: $(patsubst %, test-%, $(TESTS))
+apitest: $(patsubst %, test-%, $(APITESTS))
 production-test: $(patsubst %, production-test-%, $(TESTS))
 
 test-%:
