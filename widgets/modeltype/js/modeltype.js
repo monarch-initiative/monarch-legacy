@@ -68,10 +68,8 @@ as a separate call in the init function.
 		inputPhenotypeData : [],	  	    
 	    m :[ 30, 10, 10, 10 ], 
 		maxColorScale : 'rgb(37,52,148)',
-		//maxColorScale : "#0F473E",
 		maxICScore : 0,
 		minColorScale: 'rgb(255,255,204)',
-		//minColorScale : "#F2F2F2",	     
 	    modelData: [],
 		modelDisplayCount : 30,
 	    modelList: [],
@@ -85,19 +83,17 @@ as a separate call in the init function.
 		selectedLabel: "Default",
 		selectedOrder: 0,
 		selectedRow: undefined,
-		//selectedSort: "LCS Sums",
 		selectedSort: "Alphabetic",
-		selectList: [{label: "Phenotype Uniqueness", calc: 0}, { label: "Ratio of Uniqueness over Commonality", calc: 1}, { label: "Distance between phenotypes", calc: 2}],
+		selectList: [{label: "Distance", calc: 0}, { label: "Ratio (q)", calc: 1}, { label: "Uniqueness", calc: 2}],
 		selectRectHeight : 0,
 		selectRectWidth : 0,
 		serverURL : "",
-		//sortList: [{type: "LCS Sums", order:1},{type: "Alphabetic", order: 0}],
 		sortList: [{type: "Alphabetic", order: 0},{type: "LCS Sums", order:1}],
 	    smallXScale: undefined,
 	    smallYScale: undefined,		
 	    svg: undefined,
 		targetSpecies: "10090",
-		targetSpeciesList : [{name: "Mus musculus", taxon: "10090"}, { name: "Homo sapiens", taxon: "9606"}, {name: "Danio rerio", taxon: "7955"} /**,  {name: "Drosophila melanogaster", taxon: "7227"} */],
+		targetSpeciesList : [{name: "Mus musculus", taxon: "10090"}, { name: "Homo sapiens", taxon: "9606"}, {name: "Danio rerio", taxon: "7955"} , {name: "All", taxon: ""}/**,  {name: "Drosophila melanogaster", taxon: "7227"} */],
 	    targetSpeciesName : "Mus musculus",
 		textLength: 34,
 		textWidth: 200,
@@ -145,9 +141,7 @@ as a separate call in the init function.
 			self.options.comparisonType = "genes";
 			self.options.yTranslation = undefined;
 			self.options.selectRectHeight = 0;
-			self.options.phenotypeSortData = [];
-			//self.options.phenotypeData = [];
-			
+			self.options.phenotypeSortData = [];			
 	},
 
 	//NOTE: I'm not too sure what the default init() method signature should be
@@ -175,20 +169,16 @@ as a separate call in the init function.
 		
 	    if (this.options.modelData.length != 0 && this.options.phenotypeData.length != 0 && this.options.filteredPhenotypeData.length != 0) {	    
 	         
-	            //this._filterData(this.options.modelData.slice());
 	            this._createYAxis();
 	    	    //just pad the overall height by a skosh...
 	    	    this.options.h = this.options.yAxisMax + 60;
 	            this._initCanvas(); 
-				this._addLogoImage();
-	        
+				this._addLogoImage();	        
 	            // set canvas size
 	            this.options.svg
 					.attr("width", 1100)
 					.attr("height", 450);//this.options.h - 20 + this.options.yTranslation);
-	
-	            //this._createTitle();
-	            this._createAccentBoxes();				
+				this._createAccentBoxes();				
 	            //this._createScrollBars();
 	            this._createColorScale();
 	            this._createModelRegion();
@@ -209,7 +199,6 @@ as a separate call in the init function.
 		var self = this;
 		this.element.append("<svg id='svg_area'></svg>");
         this.options.svg = d3.select("#svg_area");
-		
         self.options.svg
 			.attr("width", 1100)
 			.attr("height", 60);
@@ -220,9 +209,9 @@ as a separate call in the init function.
             .attr("y", 25)
             .attr("height", 60)
             .attr("width", 200)
-            .text("No Models found")
-			.attr("style","font-size:1.2em;")
-			.attr("style","font-weight:bold;");		
+			.attr("id", "svgempty")
+            .text("No Models found");
+			
 	},
 	
 	//work in progress - commented out in create function.
@@ -239,22 +228,17 @@ as a separate call in the init function.
 				   data.push( r );
 				}
 			}
-	        //console.log("Data: " + data);
- 
 			self.options.svg.selectAll("rect.bordered")
 					   .data(data)
 					   .enter()
 					   .append("rect")
+					   .attr("id","gridline")
 					   .attr("transform","translate(232, 95)")
 					   .attr("x", function(d,i) { return d[1] * 18 })
 					   .attr("y", function(d,i) { return d[0] * 13 })  
 					   .attr("class", "hour bordered deselected")
 					   .attr("width", 14)
-					   .attr("height", 11.5)
-					   .attr("stroke", "#e5e5e5")
-					   .attr("fill", "#ffffff")
-					   .attr("fill-opacity",  0)
-					   .attr("stroke-width", 1); 						      
+					   .attr("height", 11.5);				      
 	}, 
 	
 	//for the selection area, see if you can convert the selection to the idx of the x and y
@@ -270,9 +254,6 @@ as a separate call in the init function.
 			.attr("x", self.options.axis_pos_list[2] + 40)
 			.attr("y", 126 + this.options.yTranslation)
 			.attr("id", "globalview")
-			.style("stroke", "black")
-			.style("fill", "white")
-			.style("stroke-width", 2)
 			.attr("height", self.options.globalViewHeight + 6)
 			.attr("width", self.options.globalViewWidth + 6);
 			
@@ -294,21 +275,20 @@ as a separate call in the init function.
 				.attr("x", 0)
 				.attr("y", 0)
 				.attr("width", 20)
-    	        .attr("height", 20)
-				
+    	        .attr("height", 20)				
 				.attr("id","tip")
 				.text("?");
 
 		var rect_instructions = self.options.svg.append("text")
 			.attr("x", self.options.axis_pos_list[2] + 10)
 			.attr("y", 100 + this.options.yTranslation)
-			.style("font-size", "12px")
+			.attr("class", "instruct")
 			.text("Use the phenotype map below to");
 		
 		var rect_instructions = self.options.svg.append("text")
 			.attr("x", self.options.axis_pos_list[2] + 10)
 			.attr("y", 112 + this.options.yTranslation) 
-			.style("font-size", "12px")
+			.attr("class", "instruct")
 			.text("navigate the model view on the left");
 			
 	    var  sortDataList = [];
@@ -318,23 +298,21 @@ as a separate call in the init function.
 		}
 	
 		this.options.smallYScale = d3.scale.ordinal()
-		    //.domain(sortDataList.map(function (d) {return d.rowid; }))
-			.domain(sortDataList.map(function (d) {return d; }))				    
+		    .domain(sortDataList.map(function (d) {return d; }))				    
 		    .rangePoints([0,self.options.globalViewHeight]);
 
 		this.options.smallXScale = d3.scale.ordinal()
-		   // .domain(modelDataList.map(function (d) {return d.model_id; }))
-			 .domain(self.options.modelList.map(function (d) {return d.model_id; }))
+		    .domain(self.options.modelList.map(function (d) {return d.model_id; }))
 		    .rangePoints([0,self.options.globalViewWidth]);
 
   		//next assign the x and y axis using the full list
 		//add the items using smaller rects
 
-	      var model_rects = this.options.svg.selectAll(".mini_models")
+	     var model_rects = this.options.svg.selectAll(".mini_models")
 	      	.data(this.options.modelData, function(d) {
 	      	    return d.id;
 	      	});
-	      model_rects.enter()
+	     model_rects.enter()
 		  	  .append("rect")
 		  	  .attr("transform",
 		  		"translate(" + (self.options.axis_pos_list[2] + 42) + "," + (128 + self.options.yTranslation) + ")")
@@ -346,9 +324,10 @@ as a separate call in the init function.
 		  	  .attr("fill", function(d, i) {
 		  	      return self.options.colorScale(d.value + 5);
 		  	  });
+			  
 		selectRectHeight = self.options.smallYScale(self.options.phenotypeSortData[self.options.phenotypeDisplayCount-1][0].rowid);
 		selectRectWidth = self.options.smallXScale(self.options.modelList[self.options.modelDisplayCount-1].model_id);
-		  //create the "highlight" rectangle
+		//create the "highlight" rectangle
 		self.options.highlightRect = self.options.svg.append("rect")
 			.attr("transform",												//133
 		  		"translate(" + (self.options.axis_pos_list[2] + 41) + "," + (126+ self.options.yTranslation) + ")")
@@ -401,8 +380,6 @@ as a separate call in the init function.
 
 
 			.attr("id", "selectionrect")
-			.style("fill", "grey")
-			.style("opacity", 0.5)
 			//set the height and width to match the number of items shown on the axes
 			.attr("height", self.options.smallYScale(self.options.phenotypeSortData[self.options.phenotypeDisplayCount-1][0].rowid))
 			.attr("width", self.options.smallXScale(self.options.modelList[self.options.modelDisplayCount-1].model_id));
@@ -411,16 +388,15 @@ as a separate call in the init function.
 	_setTargetSpeciesName: function(taxonid) {
 		var self = this;
 
-
-	    if (typeof taxonid === 'undefined' || taxonid === "" || taxonid === null) {
+	    if (typeof taxonid === 'undefined' || taxonid === null) {
 		taxonid="10090";
 	    }
 	    var tempdata;
 	    for (var i  = 0; i  <self.options.targetSpeciesList.length; i++) {
-		if (self.options.targetSpeciesList[i].taxon === taxonid) {
-		    tempdata  = self.options.targetSpeciesList[i];
-		    break;
-		}
+			if (self.options.targetSpeciesList[i].taxon === taxonid) {
+				tempdata  = self.options.targetSpeciesList[i];
+				break;
+			}
 	    }
 	    
 	    self.options.targetSpeciesName = tempdata.name;
@@ -449,31 +425,10 @@ as a separate call in the init function.
 		self.options.selectedOrder = tempdata[0].order;
 	},
 
-	_createTitle: function() {
-		var self = this;
-	    var div_text1 = self.options.svg.append("svg:text")
-		.attr("transform","translate(0,0)")
-		.attr("class", "title_text")
-		.attr("y", "5")
-		.style("font-size", "16px")
-		.text("Phenotype comparison (grouped by " + this.options.targetSpeciesName + " " + this.options.comparisonType + ")");
-
-	},
-	
 	//given the full dataset, return a filtered dataset containing the
 	//subset of data bounded by the phenotype display count and the model display count
 	_filterData: function(fulldataset) {
 		var self = this;
-		
-    	//removed so we can select a set of rows with unique phenotypes - not unique rowids
-	    /**	
-		var phenotypeArray = [];
-    	for (var idx=0;idx<fulldataset.length;idx++) {
-    		var result = $.grep(phenotypeArray, function(e){ return e.rowid == fulldataset[idx].rowid; });
-    		if (result.length == 0) {
-    			phenotypeArray.push(fulldataset[idx]);
-    		}
-    	}*/
 		
 		//phenotypeArray: we should end up with an array with unique matched phenotypes
 		var phenotypeArray = [];
@@ -530,7 +485,6 @@ as a separate call in the init function.
 		//extract the new array of filtered Phentoypes
 		//also update the axis
 		//also update the modeldata
-		//this._filterFullModelData();
 		var axis_idx = 0;
 		var tempFilteredModelData = [];
 		
@@ -566,38 +520,7 @@ as a separate call in the init function.
     	}
 	},
 	
-	_filterFullModelData : function(){
-		var self = this;
-		
-		this.options.filteredFullPhenotypeData = [];
-		this.options.yAxis = [];
-		this.options.filteredFullModelData = [];
-		
-		var axis_idx = 0,
-			tempFullFilteredModelData = [];
-		
-    	for (var i = 0;i < self.options.phenotypeSortData.length;i++) {
-    		//move the ranked phenotypes onto the filteredPhenotypeData array
-			self.options.filteredFullPhenotypeData.push(self.options.phenotypeSortData[i]);
-    	    //update the ModelData
-			//find the rowid in the original ModelData (list of models and their matching phenotypes) and write it to tempdata if it matches this phenotypeSortData rowid.
-    		var tempdata = self.options.modelData.filter(function(d) {
-    	    	return d.id_a == self.options.phenotypeSortData[i].id_a;
-    	    });
-    		tempFullFilteredModelData = tempFullFilteredModelData.concat(tempdata);
-    	}
-    	
-    	//now, limit the data returned by models as well
-    	//find the modelid in the filteredModellist and write it to tempdata if it matches filteredModelList modelid
-		for (var idx=0; idx < self.options.modelList.length; idx++) {
-    		var tempdata = tempFullFilteredModelData.filter(function(d) {
-    	    	return d.model_id == self._getConceptId(self.options.modelList[idx].model_id);
-    	    });
-    		self.options.filteredFullModelData = self.options.filteredFullModelData.concat(tempdata);    		
-    	}
-		
-		
-	},
+	
 	//`. Get all unique phenotypes in an array
 	//2. Sort the array by source phenotype name
 	//3. Get the sum of all of this phenotype's LCS scores and add to array
@@ -621,14 +544,11 @@ as a separate call in the init function.
 		self.options.phenotypeData.sort(function(a,b) {
 		return a.id_a-b.id_a;
 	    });
-	    //console.log("model data for sorting has "+modelDataForSorting.length);
-		
+	    
 		for (var k =0; k < modelDataForSorting.length;k++) {
 			var sum  = 0;
 			var d = modelDataForSorting[k];
-			//console.log("Phenotype " + k + ": d[0].id_a is "+d[0].id_a+", "+self.options.phenotypeData[k].id_a);
 			if (d[0].id_a === self.options.phenotypeData[k].id_a){
-				//console.log("matched...");
 				for (var i=0; i< d.length; i++)
 				{
 				sum+= +d[i].subsumer_IC;
@@ -666,9 +586,7 @@ as a separate call in the init function.
 		for (var k =0; k < modelDataForSorting.length;k++) {
 			var sum  = 0;
 			var d = modelDataForSorting[k];
-			//console.log("Phenotype " + k + ": d[0].id_a is "+d[0].id_a+", "+self.options.phenotypeData[k].id_a);
 			if (d[0].id_a === self.options.phenotypeData[k].id_a){
-				//console.log("matched...");
 				d["label"] = d[0].label_a;
 				self.options.phenotypeSortData.push(d);
 			}
@@ -681,12 +599,8 @@ as a separate call in the init function.
 			if (labelA > labelB) {return 1;}
 			return 0;
 		});		
-
-		//for (i=0; i<self.options.phenotypeData.length; i++){
-		//	self.options.phenotypeSortData.push(self.options.phenotypeData[i]);
-		//}
-		//this.options.phenotypeSortData = d3.nest().key(function(d, i){return //d.label_a}).sortKeys(d3.ascending).entries(self.options.phenotypeData);
-	    
+	    //Save this - it works
+		//this.options.phenotypeSortData = d3.nest().key(function(d, i){return //d.label_a}).sortKeys(d3.ascending).entries(self.options.phenotypeData);	    
 	},
 	
     //given a list of phenotypes, find the top n models
@@ -697,7 +611,6 @@ as a separate call in the init function.
     	var phenotypeList = this.options.phenotypeData;
     	//NOTE: just temporary until the calls are ready
 		jQuery.ajax({
-			//url : "data/sample_model_data.json",
 			url: this.options.serverURL + "/simsearch/phenotype/?input_items=" + 
 			    phenotypeList.join(",") + "&target_species="+this.options.targetSpecies, 
 			async : false,
@@ -741,13 +654,6 @@ as a separate call in the init function.
 		this.options.filteredModelList.push(this.options.modelList[idx]);
 	}
 	
-	////initialize the filtered model list
-	//for (var idx=0;idx<this.options.modelDisplayCount;idx++) {
-	//	this.options.filteredModelList.push(this.options.modelList[idx]);
-	//}
-	//extract the maxIC score
-	//this.options.maxICScore = retData.metadata.maxMaxIC;
-    
 	//extract the comparison type being used
 	this.options.comparisonType = retData.source.b_type + "s";
     },
@@ -759,7 +665,6 @@ as a separate call in the init function.
 	
 	    //BB: 05/14/2014:  added a.IC and b.IC to the row to display on label and determine
 		data = newModelData.matches;
-		//console.log(data);
 		var calculatedArray = [],
 			normalizedArray = [],
 							min,
@@ -770,7 +675,6 @@ as a separate call in the init function.
 			calculatedArray.push(this._normalizeIC(data[idx]));
 		}
 		
-		//min = Math.min(calculatedArray);
 		min =  Math.min.apply(Math, calculatedArray);
 		max = Math.max.apply(Math, calculatedArray);
 		
@@ -823,11 +727,11 @@ as a separate call in the init function.
 		var calcMethod = this.options.selectedCalculation;
 		
 		switch(calcMethod){
-			case 0: nic = lIC;
+			case 2: nic = lIC;
 					break;
 			case 1: nic = ((lIC/aIC) * 100);
 					break;
-			case 2: nic = Math.sqrt((Math.pow(aIC-lIC,2)) + (Math.pow(bIC-lIC,2)));
+			case 0: nic = Math.sqrt((Math.pow(aIC-lIC,2)) + (Math.pow(bIC-lIC,2)));
 					nic = (1 - (nic/this.options.maxICScore)) * 100;					
 					break;
 			default: nic = lIC;
@@ -876,17 +780,16 @@ as a separate call in the init function.
 			method = this.options.selectedCalculation;
 		
 		switch(method){
-			case 0: maxScore = this.options.maxICScore;
+			case 2: maxScore = this.options.maxICScore;
 					break;
 			case 1: maxScore = 100;
 					break;
-			case 2: maxScore = 100;
+			case 0: maxScore = 100;
 					break;
 			default: maxScore = this.options.maxICScore;
 					break;
 		}				
-    	/**this.options.colorScale = d3.scale.linear().domain([0,maxScore]).range([d3.rgb(this.options.minColorScale), d3.rgb(this.options.maxColorScale)]); */
-      
+    	
 	    this.options.colorScale = d3.scale.linear().domain([3, maxScore]);
         this.options.colorScale.domain([0, 0.2, 0.4, 0.6, 0.8, 1].map(this.options.colorScale.invert));
         this.options.colorScale.range(['rgb(255,255,204)','rgb(199,233,180)','rgb(127,205,187)','rgb(65,182,196)','rgb(44,127,184)','rgb(37,52,148)']); 	
@@ -896,7 +799,7 @@ as a separate call in the init function.
 
     	var self= this;
 		
- 		var optionhtml = "<div id='header'><span id='sort_div'><span id='slabel' style='width:175px;' >Sort Phenotypes:<span id='sorts'></span></span><span style='width:150px;font-size:12px;'><select id=\"sortphenotypes\">";
+ 		var optionhtml = "<div id='header'><span id='sort_div'><span id='slabel' >Sort Phenotypes<span id='sorts'></span></span><span><select id=\"sortphenotypes\">";
        	   
 		for (var idx=0;idx<self.options.sortList.length;idx++) {
     		var selecteditem = "";
@@ -910,12 +813,10 @@ as a separate call in the init function.
     	}
 		optionhtml = optionhtml + "</select></span>";
 		
-		optionhtml = optionhtml + "<span id='title' style='width:560px;margin-left:35px;font-size:18px;'><b>Phenotype comparison (grouped by " + this.options.targetSpeciesName + " " + this.options.comparisonType + ")</b></span><span id='faq'>FAQ</span></div>";			
+		optionhtml = optionhtml + "<span id='stitle'><b>Phenotype comparison (grouped by " + this.options.targetSpeciesName + " " + this.options.comparisonType + ")</b></span><span id='faq'>FAQ</span></div>";			
 		
-		this.element.append(optionhtml);
+		this.element.append(optionhtml);		
 		
-		
-		//this.element.append(optionhtml2);			
 		d3.select("#faq")
 			.on("click", function(d) {self._showDialog("faq");
 		});
@@ -927,7 +828,6 @@ as a separate call in the init function.
 		
 		//add the handler for the select control
         $( "#sortphenotypes" ).change(function(d) {
-        	//alert( "Handler for .change() called." );
         	self.options.selectedSort = self.options.sortList[d.target.selectedIndex].type;
         	self.options.selectedOrder = self.options.sortList[d.target.selectedIndex].order;
         	$("#org_div").remove();
@@ -940,7 +840,7 @@ as a separate call in the init function.
         	self._create();
         	});
 		
-		this.element.append("<svg id='svg_area' style='float:left;  margin-top:0px;'></svg>");		
+		this.element.append("<svg id='svg_area'></svg>");		
 		this.options.svg = d3.select("#svg_area");
 			
     },
@@ -959,7 +859,7 @@ as a separate call in the init function.
     },
 	
     _resetLinks: function() {
-	    
+	    //don't put these styles in css file - these stuyles change depending on state
 		this.options.svg.selectAll("#detail_content").remove();
     	var link_lines = d3.selectAll(".data_text");
     	link_lines.style("font-weight", "normal");
@@ -971,8 +871,7 @@ as a separate call in the init function.
     	link_labels.style("text-decoration", "none");
     	link_labels.style("color", "black");
 		link_labels.attr("fill", "black");
-		
-    },
+	},
 	
 	
     _selectData: function(curr_data, obj) {    	
@@ -986,10 +885,6 @@ as a separate call in the init function.
 			.attr("y", function(d) {return self._getYPosition(curr_data[0].rowid) ;})
 			.attr("class", "row_accent")
 			.attr("width", this.options.modelWidth)
-			.attr("stroke", d3.rgb(self.options.orangeHighlight))
-			.attr("stroke-width", 2)
-			.attr("fill", "#FFFFFF")
-			.attr("fill-opacity", '0.05')
 			.attr("height", 14);
 	
     	this._resetLinks();
@@ -1022,9 +917,7 @@ as a separate call in the init function.
 	 _clickPhenotype: function(data, url_origin) {
     	var url = url_origin + "/phenotype/" + data;
     	var win = window.open(url, '_blank');
-    },
-
-	
+    },	
 
     _deselectData: function (curr_data) {
     	
@@ -1037,10 +930,8 @@ as a separate call in the init function.
 		alabels.text(this._getShortLabel(row.label_a));
 
 		var sublabels = this.options.svg.selectAll("text.lcs_text." + this._getConceptId(row.id));
-		sublabels.text(this._getShortLabel(row.subsumer_label));
-		
+		sublabels.text(this._getShortLabel(row.subsumer_label));		
     },
-
 
 	//return a label for use in the list.  This label is shortened
 	//to fit within the space in the column
@@ -1161,10 +1052,7 @@ as a separate call in the init function.
 			.attr("y", yv)
 		    .attr("x", wv) 
 			.append("xhtml:body")
-			.style("font-size", "10px")
-			.style("padding", "8px")
-			.style("background-color", d3.rgb("#F9D0BB"))
-			.style("border","1px solid #c5c5c5")
+			.attr("id", "detail_text")
 			.html(htmltext);  	
     },
     
@@ -1233,10 +1121,10 @@ as a separate call in the init function.
 		var calc = this.options.selectedCalculation;
 		var suffix = "";
 		var prefix = "";
-		if (calc == 1 || calc == 2) {suffix = '%';}
-		if (calc == 0) {prefix = "Phenotype Uniqueness";}
-		else if (calc == 1) {prefix = "Ratio of Uniqueness over Commonality";}
-		else if (calc == 2) {prefix = "Distance between Phenotypes";}
+		if (calc == 0 || calc == 1) {suffix = '%';}
+		if (calc == 0) {prefix = "Distance";}
+		else if (calc == 1) {prefix = "Ratio (q)";}
+		else if (calc == 2) {prefix = "Uniquesness";}
 				
 	    retData = "<strong>Query: </strong> " + d.label_a + " (IC: " + d.IC_a.toFixed(2) + ")"   
 		    + "<br/><strong>Match: </strong> " + d.label_b + " (IC: " + d.IC_b.toFixed(2) +")"
@@ -1292,11 +1180,7 @@ as a separate call in the init function.
 		  .attr("ry", "3")		 
 		  //I need to pass this into the function
 		  .on("mouseover", function(d) {
-			  //self._showModelData(d, this);
-		 // })
-		//  .on("click", function(d) {
-			  //put the clicked rect on the top layer of the svg so other events work
-				this.parentNode.appendChild(this);
+			  this.parentNode.appendChild(this);
 				
 			  //if this column and row are selected, clear the column/row and unset the column/row flag
 			  if (self.options.selectedColumn != undefined && self.options.selectedRow != undefined) 
@@ -1322,17 +1206,9 @@ as a separate call in the init function.
 			   }
 			   self._showModelData(d, this);
 		  })
-		 /** .on("click", function(d) {
-			self._clearModelData(d, d3.mouse(this));
-			self._deselectData(self.options.selectedRow);
-			 var text = "Please deselect your first selection before clicking a new rectangle. Click on the rectangle at the intersection to deselect."
-					self._showDialog(text);
-		  })*/
 		  .on("mouseout", function(d) {
-			  //if (self.options.selectedColumn == undefined  && self.options.selectedRow == undefined) {
-				self._clearModelData(d, d3.mouse(this));
+			  self._clearModelData(d, d3.mouse(this));
 				self._deselectData(self.options.selectedRow);
-			  //}
 		  })
 		  .style('opacity', '1.0')
 		  .attr("fill", function(d, i) {
@@ -1348,9 +1224,8 @@ as a separate call in the init function.
 		  .attr("x", function(d) { return self.options.xScale(d.model_id);})
 
 		  model_rects.exit().transition()
-			  //.duration(20)
-		  .style('opacity', '0.0')
-		  .remove();
+			.style('opacity', '0.0')
+			.remove();
     },
 	
 	_enableRowColumnRects :  function(curr_rect){
@@ -1378,10 +1253,6 @@ as a separate call in the init function.
 			.attr("y", function(d) {return self._getYPosition(curr_data.rowid) ;})
 			.attr("class", "row_accent")
 			.attr("width", this.options.modelWidth)
-			.attr("stroke", d3.rgb(self.options.orangeHighlight))
-			.attr("stroke-width", 2)
-			.attr("fill", "#FFFFFF")
-			.attr("fill-opacity", '0.05')
 			.attr("height", 14);
 	
     	this.options.selectedRow = curr_data;
@@ -1389,12 +1260,6 @@ as a separate call in the init function.
 		this._resetLinks();
 		
 		var alabels = this.options.svg.selectAll("text.a_text." + this._getConceptId(curr_data.id));
-		var txt = curr_data.label_a;
-    	//var alabels = this.options.svg.selectAll("text.a_text")
-		//	.filter(function (d) { return d.ontology_id == curr_rect.__data__.id_a;});
-		//alabels.attr("font-weight","bold");
-    	//alabels.attr("text-decoration","italic");
-	
 		var txt = curr_data.label_a;
     	if (txt == undefined) {
     		txt = curr_data.id_a;
@@ -1424,10 +1289,6 @@ as a separate call in the init function.
 			.attr("y", self.options.yoffset)
 			.attr("class", "model_accent")
 			.attr("width", 14)
-			.attr("stroke", d3.rgb(self.options.orangeHighlight))
-			.attr("stroke-width", 2)
-			.attr("fill", "#FFFFFF")
-			.attr("fill-opacity", "0.05")
 			.attr("height", (self.options.yAxisMax-75));
 	},
   
@@ -1531,7 +1392,6 @@ as a separate call in the init function.
 			.attr("class", "scroll_text")
 			.attr("x", this.options.axis_pos_list[2] +45)
 			.attr("y", y1 + this.options.yTranslation)
-			.style("font-size", "9px")
 			.text(display_text);
 		
 		var startPhenIdx = (this.options.currPhenotypeIdx - this.options.phenotypeDisplayCount) + 2
@@ -1542,7 +1402,6 @@ as a separate call in the init function.
 			.attr("class", "scroll_text")
 			.attr("x", this.options.axis_pos_list[2] +45)
 			.attr("y", y2  + this.options.yTranslation)
-			.style("font-size", "9px")
 			.text(display_text);
 	},
 	
@@ -1628,10 +1487,9 @@ as a separate call in the init function.
 				return d.model_id; }))
 	        .rangeRoundBands([0,self.options.modelWidth]);
 	    model_x_axis = d3.svg.axis()
-			.scale(self.options.xScale).orient("top");//.outerTickSize(2);
+			.scale(self.options.xScale).orient("top");
 	    model_x_axis.tickEndSize = 1;
-		
-		
+				
 		var model_region = self.options.svg.append("g")
 	  		.attr("transform","translate(" + (self.options.textWidth +28) +"," + (self.options.yTranslation + self.options.yoffset) + ")")
 	  		.attr("class", "x axis")
@@ -1640,26 +1498,20 @@ as a separate call in the init function.
 	  	    //to rotate the text, I need to select it as it was added by the axis
 	  		.selectAll("text") 
 	  		.each(function(d,i) { 
-	  		    //self._convertLabelHTML(this, self.options.filteredModelList[i].model_label, self.options.filteredModelList[i]);}); 
-	  			self._convertLabelHTML(this, self._getShortLabel(self.options.filteredModelList[i].model_label, 15),self.options.filteredModelList[i]);}); 
+	  		    self._convertLabelHTML(this, self._getShortLabel(self.options.filteredModelList[i].model_label, 15),self.options.filteredModelList[i]);}); 
 		
 		//The pathline creates a line  below the labels. We don't want two lines to show up so fill=white hides the line.
-		var w = self.options.modelWidth;
-		
-		this.options.svg.selectAll("path.domain").remove();
-	
+		var w = self.options.modelWidth;		
+		this.options.svg.selectAll("path.domain").remove();	
 		self.options.svg.selectAll("text.scores").remove();
-		
-		
-		
+				
 		self.options.svg.append("line")
 				.attr("transform","translate(" + (self.options.textWidth + 30) +"," + (self.options.yTranslation + self.options.yoffset - 16) + ")")
 				.attr("x1", 0)
 				.attr("y1", 0)
 				.attr("x2", self.options.modelWidth)
-				.attr("y2", 0)
-				.attr("stroke", "#0F473E")
-				.attr("stroke-width", 1);	
+				.attr("y2", 0);
+				
 		
 		var scores = self.options.svg.selectAll("text.scores")
 				.data(self.options.filteredModelList)
@@ -1671,8 +1523,6 @@ as a separate call in the init function.
 				.attr("y", 0)
 				.attr("width", 18)
     	        .attr("height", 10)
-				.attr("font-size", "11px")
-				.attr("fill", "#0F473E")
 				.attr("class", "scores")
 				.text(function (d,i){return self.options.filteredModelList[i].model_score;});
 		
@@ -1681,19 +1531,17 @@ as a separate call in the init function.
 				.attr("x1", 0)
 				.attr("y1", 0)
 				.attr("x2", self.options.modelWidth)
-				.attr("y2", 0)
-				.attr("stroke", "#0F473E")
-				.attr("stroke-width", 1);
+				.attr("y2", 0);
+			
 		
 		//now, limit the data returned by models as well
     	for (var idx=0;idx<self.options.filteredModelList.length;idx++) {
     		var tempdata = tempFilteredModelData.filter(function(d) {
     	    	return d.model_id == self.options.filteredModelList[idx].model_id;
     	    });
-    		self.options.filteredModelData = self.options.filteredModelData.concat(tempdata);
-    		
-    	}
-   	
+    		self.options.filteredModelData = self.options.filteredModelData.concat(tempdata);   		
+    	}	
+		
 	    this._createModelRects();
 	    this._createRects();
 	    this._updateScrollCounts();
@@ -1725,7 +1573,7 @@ as a separate call in the init function.
 		switch(name){
 			case("modelscores"): text = "<h5>What is the score shown at the top of the grid?</h5><div>The score indicated at the top of each column, below the target label, is the overall similarity score between the query and target. Briefly, for each of the targets (columns) listed, the set of Q(1..n) phenotypes of the query are pairwise compared against all of the T(1..m) phenotypes in the target.<br /><br />Then, for each pairwise comparison of phenotypes (q x P1...n), the best comparison is retained for each q and summed for all p1..n. </div><br /><div>The raw score is then normalized against the maximal possible score, which is the query matching to itself. Therefore, range of scores displayed is 0..100. For more details, please see (Smedley et al, 2012 <a href='http://www.ncbi.nlm.nih.gov/pubmed/23660285' target='_blank'>http://www.ncbi.nlm.nih.gov/pubmed/23660285</a> and <a href='http://www.owlsim.org' target='_blank'>http://www.owlsim.org</a>).";
 			break;
-			case("calcs"): text = "<h5>What do the different calculation methods mean?</h5><div>For each pairwise comparison of phenotypes from the query (q) and target (t), we can assess their individual similarities in a number of ways.  First, we find the phenotype-in-common between each pair (called the lowest common subsumer or LCS). Then, we can leverage the Information Content (IC) of the phenotypes (q,t,lcs) in a variety of combinations to interpret the strength of the similarity.</div><br /><div>**Uniqueness reflects how often the phenotype-in-common is annotated to all diseases and genes in the Monarch Initiative knowledgebase.  This is simply a reflection of the IC normalized based on the maxIC. IC(PhenotypeInCommon)maxIC(AllPhenotypes)</div><br /><div>**Distance is the euclidian distance between the query, target, and phenotype-in-common, computed using IC scores.<br/><center>d=(IC(q)-IC(lcs))2+(IC(t)-IC(lcs))2</center>  </div><br /><div>This is normalized based on the maximal distance possible, which would be between two rarely annotated leaf nodes that only have the root node (phenotypic abnormality) in common.  So what is depicted in the grid is 1-dmax(d)</div><br /><div>**Ratio(q) is the proportion of shared information between a query phenotype and the phenotype-in-common with the target.<br /><center>ratio(q)=IC(lcs)IC(q)*100</center></div><br /><div>**Ratio(t) is the proportion of shared information between the target phenotype and the phenotype-in-common with the query.<br /><center>ratio(t)=IC(lcs)IC(t)*100</center></div>";
+			case("calcs"): text = "<h5>What do the different calculation methods mean?</h5><div>For each pairwise comparison of phenotypes from the query (q) and target (t), we can assess their individual similarities in a number of ways.  First, we find the phenotype-in-common between each pair (called the lowest common subsumer or LCS). Then, we can leverage the Information Content (IC) of the phenotypes (q,t,lcs) in a variety of combinations to interpret the strength of the similarity.</div><br /><div><b>**Uniqueness </b>reflects how often the phenotype-in-common is annotated to all diseases and genes in the Monarch Initiative knowledgebase.  This is simply a reflection of the IC normalized based on the maxIC. IC(PhenotypeInCommon)maxIC(AllPhenotypes)</div><br /><div><b>**Distance</b> is the euclidian distance between the query, target, and phenotype-in-common, computed using IC scores.<br/><center>d=(IC(q)-IC(lcs))2+(IC(t)-IC(lcs))2</center>  </div><br /><div>This is normalized based on the maximal distance possible, which would be between two rarely annotated leaf nodes that only have the root node (phenotypic abnormality) in common.  So what is depicted in the grid is 1-dmax(d)</div><br /><div><b>**Ratio(q)</b> is the proportion of shared information between a query phenotype and the phenotype-in-common with the target.<br /><center>ratio(q)=IC(lcs)IC(q)*100</center></div><br /><div><b>**Ratio(t)</b> is the proportion of shared information between the target phenotype and the phenotype-in-common with the query.<br /><center>ratio(t)=IC(lcs)IC(t)*100</center></div>";
 			break;
 			case("faq"): text = "<h4>Phenogrid Faq</h4><h5>How are the similar targets obtained?</h5><div>We query our owlsim server to obtain the top 100 most-phenotypically similar targets for the selected organism.  The grid defaults to showing mouse.</div><h5>What are the possible targets for comparison?</h5><div>Currently, the phenogrid is configured to permit comparisons between your query (typically a set of disease-phenotype associations) and one of:<ul><li>human diseases</li><li>mouse genes</li><li>zebrafish genes</li></ul>You can change the target organism by selecting a new organism.  The grid will temporarily disappear, and reappear with the new target rendered.</div><h5>Can I compare the phenotypes to human genes?</h5><div>No, not yet.  But that will be added soon.</div><h5>Where does the data come from?</h5><div>The phenotype annotations utilized to compute the phenotypic similarity are drawn from a number of sources:<ul><li>Human disease-phenotype annotations were obtained from  <a href='http://human-phenotype-ontology.org' target='_blank'>http://human-phenotype-ontology.org</a>, which contains annotations for approx. 7,500 diseases.<li><li>Mouse gene-phenotype annotations were obtained from MGI <a href='www.informatics.jax.org'>(www.informatics.jax.org).</a> The original annotations were made between genotypes and phenotypes.  We then inferred the relationship between gene and phenotype based on the genes that were variant in each genotype.  We only perform this inference for those genotypes that contain a single variant gene.</li><li>Zebrafish genotype-phenotype annotations were obtained from ZFIN  <a href='www.zfin.org' target='_blank'>(www.zfin.org).</a> The original annotations were made between genotypes and phenotypes, with some of those genotypes created experimentally with the application of morpholino reagents.  Like for mouse, we inferred the relationship between gene and phenotype based on the genes that were varied in each genotype.  We only perform this inference for those genotypes that contain a single variant gene.</li><li>All annotation data, preformatted for use in OWLSim, is available for download from  <a href='http://code.google.com/p/phenotype-ontologies/' target='_blank'>http://code.google.com/p/phenotype-ontologies/ </a> </li></ul><h5>What does the phenogrid show?</h5><div>The grid depicts the comparison of a set of phenotypes in a query (such as those annotated to a disease or a gene) with one or more phenotypically similar targets.  Each row is a phenotype that is annotated to the query (either directly or it is a less-specific phenotype that is inferred), and each column is an annotated target (such as a gene or disease).  When a phenotype is shared between the query and target, the intersection is colored based on the selected calculation method (see What do the different calculation methods mean).   You can hover over the intersection to get more information about what the original phenotype is of the target, and what is in-common between the two.</div><h5>Where can I make suggestions for improvements or additions?</h5><div>Please email your feedback to <a href='mailto:info@monarchinitiative.org'>info@monarchinitiative.org.</a><h5>What happens to the phenotypes that are not shared?</h5><div>Presently, phenotypes that were part of your query but are not shared by any of the targets are not rendered.</div><h5>Why do I sometimes see two targets that share the same phenotypes have very different overall scores?</h5><div>This is usually because of some of the phenotypes that are not shared with the query.  For example, if the top hit to a query matches each phenotype exactly, and the next hit matches all of them exactly plus it has 10 additional phenotypes that don’t match it at all, it is penalized for those phenotypes are aren’t in common, and thus ranks lower on the similarity scale. <div>"; 
 			default:
@@ -1733,7 +1581,6 @@ as a separate call in the init function.
 		}
 	    return text;
 	},
-	
 	
 	_createAccentBoxes: function() {
 	    var self=this;
@@ -1750,8 +1597,7 @@ as a separate call in the init function.
 				self.options.axis_pos_list.push((i*(this.options.textWidth + 10)) + 
 					       this.options.colStartingPos);
 			}
-	    }
-	
+	    }	
 	    //create accent boxes
 	    var rect_accents = this.options.svg.selectAll("#rect.accent")
 		.data(this.options.dimensions, function(d) { return d;});
@@ -1761,7 +1607,7 @@ as a separate call in the init function.
 		.attr("x", function(d, i) { return self.options.axis_pos_list[i];})
 		.attr("y", self.options.yoffset  + this.options.yTranslation)
 		.attr("width", function(d, i) {
-		    return i == 2 ? self.options.textWidth + 53 : self.options.textWidth + 5;
+		    return i == 2 ? self.options.textWidth + 5 : self.options.textWidth + 5;
 		})		
 		.attr("height",  function(d, i) {
 		    return i == 2 ? self.options.h - 216 : self.options.h;
@@ -1805,8 +1651,7 @@ as a separate call in the init function.
 			.selectAll("text") 
 			.each(function(d,i) { 
 			    	self._convertLabelHTML(this, self._getShortLabel(self.options.filteredModelList[i].model_label, 15),self.options.filteredModelList[i]);});
-		
-		
+				
 		var w = self.options.modelWidth;
 		
 		this.options.svg.selectAll("path.domain").remove();	
@@ -1815,10 +1660,8 @@ as a separate call in the init function.
 				.attr("x1", 0)
 				.attr("y1", 0)
 				.attr("x2", self.options.modelWidth)
-				.attr("y2", 0)
-				.attr("stroke", "#0F473E")
-				.attr("stroke-width", 1);		
-		
+				.attr("y2", 0);
+				
 		var scores = self.options.svg.selectAll("test.scores")
 				.data(self.options.filteredModelList)
 				.enter()	
@@ -1829,8 +1672,6 @@ as a separate call in the init function.
 				.attr("y", 0)
 				.attr("width", 18)
     	        .attr("height", 10)
-				.attr("font-size", "11px")
-				.attr("fill", "#0F473E")
 				.attr("class", "scores")
 				.text(function (d,i){return self.options.filteredModelList[i].model_score;});
 		
@@ -1839,9 +1680,7 @@ as a separate call in the init function.
 				.attr("x1", 0)
 				.attr("y1", 0)
 				.attr("x2", self.options.modelWidth)
-				.attr("y2", 0)
-				.attr("stroke", "#0F473E")
-				.attr("stroke-width", 1);
+				.attr("y2", 0);
 			
 
 	    var temp_data = this.options.modelData.map(function(d) { 
@@ -1904,43 +1743,46 @@ as a separate call in the init function.
 				y2 = 290;
 			if (this.options.filteredPhenotypeData.length < 6) {y1 = 220; y2 = 205;}
 			
-			if (calc == 0) {text1 = "Lowest"; text2 = "Phenotype Uniqueness"; text3 = "Highest";}
-			else if (calc == 1) {text1 = "Less Similar"; text2 = "Ratio of Unique over Common"; text3 = "More Similar";}
-			else if (calc == 2) {text1 = "Min"; text2 = "Distance Between Phenotypes"; text3 = "Max";}
+			if (calc == 2) {text1 = "Lowest"; text2 = "Uniqueness"; text3 = "Highest";}
+			else if (calc == 1) {text1 = "Less Similar"; text2 = "Ratio (q)"; text3 = "More Similar";}
+			else if (calc == 0) {text1 = "Min"; text2 = "Distance"; text3 = "Max";}
 	
 		    var div_text1 = self.options.svg.append("svg:text")
 				.attr("class", "detail_text")
 				.attr("y", y1  + this.options.yTranslation)
-				.attr("x", self.options.axis_pos_list[2] + 12)
+				.attr("x", self.options.axis_pos_list[2] + 10)
 				.style("font-size", "10px")
 				.text(text1);
 		    
 			var div_text2 = self.options.svg.append("svg:text")
 				.attr("class", "detail_text")
 				.attr("y", y2  + this.options.yTranslation)
-				.attr("x", self.options.axis_pos_list[2] + 45)
+				.attr("x", self.options.axis_pos_list[2] + 70)
 				.style("font-size", "12px")
 				.text(text2);
 				
-		    var div_text2 = self.options.svg.append("svg:text")
+		    var div_text3 = self.options.svg.append("svg:text")
 				.attr("class", "detail_text")
 				.attr("y", y1 + this.options.yTranslation )
-				.attr("x", self.options.axis_pos_list[2] + 130)
+				.attr("x", self.options.axis_pos_list[2] + 135)
 				.style("font-size", "10px")
 				.text(text3);	
 				
 			//Position the max more carefully	
+			if (text2 == "Uniqueness" || text2 == "Distance") {
+				div_text2.attr("x", "850px");			
+			}
 			if (text3 == "Max") {
-				div_text2.attr("x",self.options.axis_pos_list[2] + 170);			
+				div_text2.attr("x","945px");			
 			}
 			if (text3 == "Highest") {
-				div_text2.attr("x",self.options.axis_pos_list[2] + 150);			
+				div_text2.attr("x",self.options.axis_pos_list[2] + 165);			
 			}
 			
 			var selClass = "";
 			if (self.options.filteredPhenotypeData.length < 6) { selClass = "shortselects"; } else { selClass = "selects";}
 			
-			var optionhtml = "<div id='selects' class='" + selClass + "'><div id='org_div' s><div style='width:175px;'>Target</div><span style='width:150px;margin-top:-15px;font-size:12px;'><select id=\'organism\'>";
+			var optionhtml = "<div id='selects' class='" + selClass + "'><div id='org_div'><div>Target</div><span><select id=\'organism\'>";
 	
 			for (var idx=0;idx<self.options.targetSpeciesList.length;idx++) {
 				var selecteditem = "";
@@ -1950,7 +1792,7 @@ as a separate call in the init function.
 				optionhtml = optionhtml + "<option value='" + self.options.targetSpeciesList[idx].label +"' "+ selecteditem +">" + self.options.targetSpeciesList[idx].name +"</option>"
 			}
 	
-			optionhtml = optionhtml + "</select></span></div><div id='calc_div'><span id='clabel' style='width:175px;' >Display<span id='calcs'>?</span></span><br /><span style='width:150px;margin-top:-15px;font-size:12px;'><select id=\"calculation\">";
+			optionhtml = optionhtml + "</select></span></div><div id='calc_div'><span id='clabel'>Display<span id='calcs'>?</span></span><br /><span id='calc_sel'><select id=\"calculation\">";
        	   
 
 		for (var idx=0;idx<self.options.selectList.length;idx++) {
@@ -2000,12 +1842,6 @@ as a separate call in the init function.
 			self._reset();
 			self._create();
 		});
-		
-		//this.element.append("<svg id='svg_area' style='float:left; margin-top:20px;'></svg>");
-		//this.options.svg = d3.select("#svg_area");		
-		
-			
-			
 	    }
 	},
 		
@@ -2033,7 +1869,6 @@ as a separate call in the init function.
 		.data(self.options.filteredPhenotypeData, function(d, i) {  return d[0].rowid; });
 	    rect_text.enter()
 		.append("text")
-		.style("text-anchor","end")
 		.attr("class", function(d) {
 		    return "a_text data_text " + self._getConceptId(d[0].id);
 		})
@@ -2055,11 +1890,8 @@ as a separate call in the init function.
 				self._deselectData(d, d3.mouse(this));
 			}
 		})
-		
-		.style('opacity', '1.0')
 		.attr("width", self.options.textWidth)
 		.attr("height", 50)
-		.style("font-size", "12px")
 		.text(function(d) {
 			var txt = d[0].label_a;
 			if (txt == undefined) {
@@ -2069,7 +1901,6 @@ as a separate call in the init function.
 		})
 		rect_text.transition()
    		.style('opacity', '1.0')
-
 		.delay(5)
 		.attr("y", function(d) {
 			return self._getYPosition(d[0].rowid) + (self.options.yTranslation + 18);
@@ -2078,7 +1909,6 @@ as a separate call in the init function.
 	   	.transition()
 	   	.delay(20)
 	   	.style('opacity', '0.0')
-
 		.remove();
 	},
 
@@ -2090,13 +1920,11 @@ as a separate call in the init function.
 			async : false,
 			dataType : 'json',
 			success : function(data) {
-				//retData = data;
 				retData = "<strong>Label:</strong> " + "<a href=\"" + data.url + "\">"  
 				+ data.label + "</a><br/><strong>Type:</strong> " + data.category;
 			}
 	    });
 	    this._updateDetailSection(retData, this._getXYPos(data));
-
 	},
 
 	_toProperCase : function (oldstring) {
@@ -2118,18 +1946,12 @@ as a separate call in the init function.
 			.attr("y", self.options.yoffset)
 			.attr("class", "model_accent")
 			.attr("width", 14)
-			.attr("stroke", d3.rgb(self.options.orangeHighlight))
-			.attr("stroke-width", 2)
-			.attr("fill", "#FFFFFF")
-			.attr("fill-opacity", "0.05")
 			.attr("height", (self.options.yAxisMax-75));
 
 		var retData;
 		//initialize the model data based on the scores
 		retData = "<strong>" +  self._toProperCase(self.options.comparisonType).substring(0, self.options.comparisonType.length-1) +" Label:</strong> "   
 			+ modelData.model_label + "<br/><strong>Rank:</strong> " + (parseInt(modelData.model_rank) + 1);
-			//Remove score from model tooltip 
-			//+ "<br/><strong>Score:</strong> " + modelData.model_score;
 
 		//obj = try creating an ojbect with an attributes array including "attributes", but I may need to define
 		//getAttrbitues
@@ -2143,10 +1965,8 @@ as a separate call in the init function.
 					}
 					return ret;
 				},
-        };
-		
-		obj.attributes['transform'] = {value: highlight_rect.attr("transform")};
-		
+        };		
+		obj.attributes['transform'] = {value: highlight_rect.attr("transform")};		
 		this._updateDetailSection(retData, this._getXYPos(obj), undefined, 60);
 	},
 

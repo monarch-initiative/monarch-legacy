@@ -1,29 +1,96 @@
-.ui-dialog-titlebar {
-  background-color:#253494;
-  color:#FFFFFF;
-}
-.ui-dialog-content{
-	/**font-weight:bold;*/
-	font-size:11px;
-	font-family: arial;
-	color:#000000;	
+#svgempty{
+	font-size:1.2em;
+	font-weight:bold;
+	height: 60;
+	width: 200;
 }
 
-.ui-dialog-content a{
-	color: #253494;
-}
-.ui-dialog-buttonpane{
-	background-color: #253494;
+#gridline{
+	fill: #ffffff;
+	fill-opacity: 0;
+	stroke: #e5e5e5;
+	stroke-width: 1;
 }
 
-.ui-dialog-buttonset{
-	background-color: #25349A;
+#globalview{
+	fill: #ffffff;
+	stroke: #000000;
+	stroke-width: 2;
 }
-.ui-dialog-osx {
-    -moz-border-radius: 0 0 8px 8px;
-    -webkit-border-radius: 0 0 8px 8px;
-    border-radius: 0 0 8px 8px; 
-	border-width: 3px;
+
+#slabel,
+#org_div div,
+#clabel{
+	width:175px;
+}
+
+#sorts span,
+#org_div span,
+#calc_sel{
+	width:150px;
+	font-size:9px;
+}
+
+#org_div span,
+#calc_sel{
+	margin-top:-15px;
+}
+
+.row_accent,
+.model_accent{
+	stroke:#ea763b;
+	stroke-width: 2;
+	fill: #ffffff;
+	fill-opacity: 0.05;
+}
+
+.scroll_text{
+	font-size: 9px;
+}
+
+line {
+	stroke: #0F473E;
+	stroke-width: 1;
+}
+
+.a_text{
+	text-anchor:end;
+	opacity: 1.0;
+	font-size: 12px;
+
+}
+
+#scorelist{
+	font-size:10px;
+	fill: #0F473E;
+}
+
+#detail_text{
+	font-size: 10px;
+	padding: 8px;
+	background-color: #f9d0bb;
+	border: 1px solid #c5c5c5;
+
+}
+
+#stitle{
+	width:560px;
+	margin-left: 35px;
+	font-size:18px;
+}
+
+#svg_area{
+	float:left;
+	margin-top: 0px;
+}
+
+#selectionrect{
+	fill: grey;
+	opacity: 0.5
+}
+
+.instruct{
+	font-size:12px;
 }
 
 .tip{
@@ -42,28 +109,24 @@
 
 .selects{
   float:right;
- /** margin-top:615px; 
-  margin-right:105px;*/
   position:absolute;
   top:580px;
   left:820px;
   background-color:#f5f5f5; 
   padding: 0 7px 8px 6px;
   margin-left:-10px;
- /**  z-index:-1000;*/
+  width: 205px;
 }
 
 .shortselects{
   float:right;
- /** margin-top:615px; 
-  margin-right:105px;*/
   position:absolute;
   top:500px;
   left:820px;
   background-color:#f5f5f5; 
   padding: 0 7px 8px 6px;
   margin-left:-10px;
-  /**z-index:-1000;*/
+  width: 205px;
 }
 
 #org_div div, #calc_div div{
@@ -116,4 +179,32 @@
 #sort_div {
 margin-top: 0px;
 margin-left: 5px;
+}
+
+
+
+/** jQDialog styles */
+.ui-dialog-titlebar {
+  background-color:#253494;
+  color:#FFFFFF;
+}
+.ui-dialog-content{
+	font-size:11px;
+	font-family: arial;
+	color:#000000;	
+}
+.ui-dialog-content a{
+	color: #253494;
+}
+.ui-dialog-buttonpane{
+	background-color: #253494;
+}
+.ui-dialog-buttonset{
+	background-color: #25349A;
+}
+.ui-dialog-osx {
+    -moz-border-radius: 0 0 8px 8px;
+    -webkit-border-radius: 0 0 8px 8px;
+    border-radius: 0 0 8px 8px; 
+	border-width: 3px;
 }
