@@ -9,3 +9,26 @@
     visibility: hidden;
     display: none;
 }
+
+/**
+ * Data Graph
+**/
+
+.graph-container{
+    position: relative;
+    background-color: #EBEBEB;
+}
+
+#graph {
+    margin: 0px 0px 0px 300px;
+    padding: 50px 0px 0px 0px;
+}
+.axis path,
+.axis line {
+  fill: none;
+  stroke: #000;
+  shape-rendering: crispEdges;
+}
+.bar {
+  fill: steelblue;
+}
