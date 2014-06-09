@@ -52,7 +52,7 @@ as a separate call in the init function.
 	    currPhenotypeIdx : 0,
 		currSelectedRect: undefined,
 	    detailRectWidth: 240,   
-        detailRectHeight: 100,
+        detailRectHeight: 140,
         detailRectStrokeWidth: 3,
 	    dimensions: [ "Phenotype Profile", "Lowest Common Subsumer", "Phenotypes in common" ], 
 		drag: undefined,
@@ -78,22 +78,23 @@ as a separate call in the init function.
 		phenotypeData: [],
 	    phenotypeDisplayCount : 26,
 		phenotypeSortData: [],
+		scriptpath : $('script[src]').last().attr('src').split('?')[0].split('/').slice(0, -1).join('/')+'/',
 		selectedCalculation: 0,
 		selectedColumn: undefined,
 		selectedLabel: "Default",
 		selectedOrder: 0,
 		selectedRow: undefined,
 		selectedSort: "Alphabetic",
-		selectList: [{label: "Distance", calc: 0}, { label: "Ratio (q)", calc: 1}, { label: "Uniqueness", calc: 2}],
+		selectList: [{label: "Distance", calc: 0}, {label: "Ratio (q)", calc: 1}, {label: "Ratio (t)", calc: 3} , {label: "Uniqueness", calc: 2}],
 		selectRectHeight : 0,
 		selectRectWidth : 0,
 		serverURL : "",
-		sortList: [{type: "Alphabetic", order: 0},{type: "LCS Sums", order:1}],
+		sortList: [{type: "Alphabetic", order: 0},{type: "LCS Sums", order:1} ,{type: "Model Matches", order:2} ],
 	    smallXScale: undefined,
 	    smallYScale: undefined,		
 	    svg: undefined,
 		targetSpecies: "10090",
-		targetSpeciesList : [{name: "Mus musculus", taxon: "10090"}, { name: "Homo sapiens", taxon: "9606"}, {name: "Danio rerio", taxon: "7955"} , {name: "All", taxon: ""}/**,  {name: "Drosophila melanogaster", taxon: "7227"} */],
+		targetSpeciesList : [{name: "Mus musculus", taxon: "10090"}, { name: "Homo sapiens", taxon: "9606"}, {name: "Danio rerio", taxon: "7955"} , {name: "Drosophila melanogaster", taxon: "7227"} , {name: "All", taxon: ""}],
 	    targetSpeciesName : "Mus musculus",
 		textLength: 34,
 		textWidth: 200,
@@ -169,7 +170,7 @@ as a separate call in the init function.
 		
 	    if (this.options.modelData.length != 0 && this.options.phenotypeData.length != 0 && this.options.filteredPhenotypeData.length != 0) {	    
 	         
-	            this._createYAxis();
+	            //this._createYAxis();
 	    	    //just pad the overall height by a skosh...
 	    	    this.options.h = this.options.yAxisMax + 60;
 	            this._initCanvas(); 
@@ -262,22 +263,33 @@ as a separate call in the init function.
     	        .attr("x", 0)
 				.attr("y", 0)
 				.attr("class", "tip")
-				.text("<-- Model Scores");			
-				
-		var tip	= self.options.svg.append("g")
+				.text("< Model Scores");			
+		
+
+/** var imgs = this.options.svg.selectAll("image").data([0]);
+  imgs.enter()
+			.append("svg:image")
+			.attr("xlink:href", this.options.scriptpath + "../image/logo-sneak.png")
+			.attr("x", 850)
+			.attr("y", this.options.yTranslation - 10)
+			.attr("id", "logo")
+			.attr("width", "60")
+			.attr("height", "90");       */
+		
+		var tip	= self.options.svg
+				.append("svg:image")				
+				.attr("xlink:href", this.options.scriptpath + "../image/greeninfo30.png")
+				.attr("transform","translate(" + (self.options.axis_pos_list[2] +102) + "," + (self.options.yTranslation + self.options.yoffset - 20) + ")")
 				.attr("id","modelscores")
+				.attr("x", 0)
+				.attr("y", 0)
+				.attr("width", 15)
+    	        .attr("height", 15)		
 				.on("click", function(d) {
 					var name = "modelscores";					
 					self._showDialog(name);
-				})
-				.append("text")
-				.attr("transform","translate(" + (self.options.axis_pos_list[2] +135) + "," + (self.options.yTranslation + self.options.yoffset - 5) + ")")
-				.attr("x", 0)
-				.attr("y", 0)
-				.attr("width", 20)
-    	        .attr("height", 20)				
-				.attr("id","tip")
-				.text("?");
+				});
+			
 
 		var rect_instructions = self.options.svg.append("text")
 			.attr("x", self.options.axis_pos_list[2] + 10)
@@ -294,7 +306,7 @@ as a separate call in the init function.
 	    var  sortDataList = [];
 		
 		for (i=0; i<self.options.phenotypeSortData.length; i++) {
-			sortDataList.push(self.options.phenotypeSortData[i][0].rowid);
+			sortDataList.push(self.options.phenotypeSortData[i][0].id_a);  //rowid
 		}
 	
 		this.options.smallYScale = d3.scale.ordinal()
@@ -317,7 +329,7 @@ as a separate call in the init function.
 		  	  .attr("transform",
 		  		"translate(" + (self.options.axis_pos_list[2] + 42) + "," + (128 + self.options.yTranslation) + ")")
 		  	  .attr("class",  "mini_model")
-		  	  .attr("y", function(d, i) { return self.options.smallYScale(d.rowid);})
+		  	  .attr("y", function(d, i) { return self.options.smallYScale(d.id_a);})//rowid
 		  	  .attr("x", function(d) { return self.options.smallXScale(d.model_id);})
 		  	  .attr("width", 2)
 		  	  .attr("height", 2)
@@ -325,7 +337,7 @@ as a separate call in the init function.
 		  	      return self.options.colorScale(d.value + 5);
 		  	  });
 			  
-		selectRectHeight = self.options.smallYScale(self.options.phenotypeSortData[self.options.phenotypeDisplayCount-1][0].rowid);
+		selectRectHeight = self.options.smallYScale(self.options.phenotypeSortData[self.options.phenotypeDisplayCount-1][0].id_a); //rowid
 		selectRectWidth = self.options.smallXScale(self.options.modelList[self.options.modelDisplayCount-1].model_id);
 		//create the "highlight" rectangle
 		self.options.highlightRect = self.options.svg.append("rect")
@@ -353,7 +365,7 @@ as a separate call in the init function.
                	    //limit the range of the y value
         			var newY = d3.event.y - 126;					
         		  	newY = Math.max(newY,0);
-        		  	newY = Math.min(newY,(self.options.globalViewHeight-self.options.smallYScale(self.options.phenotypeSortData[self.options.phenotypeDisplayCount-1][0].rowid)));
+        		  	newY = Math.min(newY,(self.options.globalViewHeight-self.options.smallYScale(self.options.phenotypeSortData[self.options.phenotypeDisplayCount-1][0].id_a)));  //rowid
                	    rect.attr("y", newY + 126 + self.options.yTranslation);
 					
         			var xPos = newX;
@@ -381,10 +393,27 @@ as a separate call in the init function.
 
 			.attr("id", "selectionrect")
 			//set the height and width to match the number of items shown on the axes
-			.attr("height", self.options.smallYScale(self.options.phenotypeSortData[self.options.phenotypeDisplayCount-1][0].rowid))
+			.attr("height", self.options.smallYScale(self.options.phenotypeSortData[self.options.phenotypeDisplayCount-1][0].id_a))  //rowid
 			.attr("width", self.options.smallXScale(self.options.modelList[self.options.modelDisplayCount-1].model_id));
 	},
 
+	
+	_setComparisonType : function(comp){
+		var self = this;
+		
+		if (comp != undefined || comp != null)
+			{ this.options.comparisonType = comp + "s";}
+		else {
+			if (this.options.targetSpecies === "9606") {
+				this.options.comparisonType = "models";
+			}
+			else {
+				this.options.comparisonType = "genes";
+			}
+		}
+	},
+	
+	
 	_setTargetSpeciesName: function(taxonid) {
 		var self = this;
 
@@ -471,6 +500,8 @@ as a separate call in the init function.
 								break;
 			case "LCS Sums":    this._rankPhenotypes();
 								break;
+			case "Model Matches": this._sortByModelMatches();
+								break;
 			default:			this._alphabetizePhenotypes();
 		}
 		
@@ -498,7 +529,7 @@ as a separate call in the init function.
         	var gap = 3;
 			//push the rowid and ypos onto the yaxis array
 			//so now the yaxis will be in the order of the ranked phenotypes
-    		var stuff = {"id": self.options.phenotypeSortData[i][0].rowid, "ypos" : ((axis_idx * (size+gap)) + self.options.yoffset)};
+    		var stuff = {"id": self.options.phenotypeSortData[i][0].id_a, "ypos" : ((axis_idx * (size+gap)) + self.options.yoffset)};
     		self.options.yAxis.push(stuff); 
     	    axis_idx = axis_idx + 1;
     	    //update the ModelData
@@ -520,6 +551,48 @@ as a separate call in the init function.
     	}
 	},
 	
+
+	//1. Sort the array by source phenotype name
+	//3. Get the number of model matches for this phenotype and add to array
+	//4. Sort the array by matches. descending
+	_sortByModelMatches: function() {
+		
+		var self = this;
+		var modelDataForSorting = [];
+		
+		for (var idx=0;idx<self.options.phenotypeData.length;idx++) {			
+			var tempdata = self.options.modelData.filter(function(d) {
+    	    	return d.id_a == self.options.phenotypeData[idx].id_a;
+    	    });	
+			modelDataForSorting.push(tempdata);
+		}
+		//sort the model list by rank
+		modelDataForSorting.sort(function(a,b) { 
+			return a.id_a - b.id_a; 
+		});
+		
+		self.options.phenotypeData.sort(function(a,b) {
+		return a.id_a-b.id_a;
+	    });
+	    
+		for (var k =0; k < modelDataForSorting.length;k++) {
+			var ct  = 0;
+			var d = modelDataForSorting[k];
+			if (d[0].id_a === self.options.phenotypeData[k].id_a){
+				for (var i=0; i< d.length; i++)
+				{
+					ct+= 1;
+				}
+				d["count"] = ct;
+				self.options.phenotypeSortData.push(d);
+			}
+	    }		
+		//sort the phenotype list by sum of LCS
+		self.options.phenotypeSortData.sort(function(a,b) { 
+			return b.count - a.count; 
+		});
+		 	
+	   },
 	
 	//`. Get all unique phenotypes in an array
 	//2. Sort the array by source phenotype name
@@ -624,38 +697,39 @@ as a separate call in the init function.
 	
     _finishLoad: function(data) {
 
-	var retData = data;
-	//extract the maxIC score
-	this.options.maxICScore = retData.metadata.maxMaxIC;
-	var self= this;
+		var retData = data;
+		//extract the maxIC score
+		this.options.maxICScore = retData.metadata.maxMaxIC;
+		var self= this;
 
-	///EXTRACT MOUSE MODEL INFORMATION FIRST
-	this.options.modelList = [];
-	for (var idx=0;idx<retData.b.length;idx++) {
-	    this.options.modelList.push(
-		{model_id: self._getConceptId(retData.b[idx].id), 
-		 model_label: retData.b[idx].label, 
-		 model_score: retData.b[idx].score.score, 
-		 model_rank: retData.b[idx].score.rank});
-	    this._loadDataForModel(retData.b[idx]);
-	}
-	//sort the model list by rank
-	this.options.modelList.sort(function(a,b) { 
-	    return a.model_rank - b.model_rank; } );
-	
-	//we need to adjust the display counts and indexing if there are fewer models
-	if (this.options.modelList.length < this.options.modelDisplayCount) {
-		this.options.currModelIdx = this.options.modelList.length-1;
-		this.options.modelDisplayCount = this.options.modelList.length;
-	}
+		///EXTRACT MOUSE MODEL INFORMATION FIRST
+		this.options.modelList = [];
+		for (var idx=0;idx<retData.b.length;idx++) {
+			this.options.modelList.push(
+			{model_id: self._getConceptId(retData.b[idx].id), 
+			 model_label: retData.b[idx].label, 
+			 model_score: retData.b[idx].score.score, 
+			 model_rank: retData.b[idx].score.rank});
+			this._loadDataForModel(retData.b[idx]);
+		}
+		//sort the model list by rank
+		this.options.modelList.sort(function(a,b) { 
+			return a.model_rank - b.model_rank; } );
+		
+		//we need to adjust the display counts and indexing if there are fewer models
+		if (this.options.modelList.length < this.options.modelDisplayCount) {
+			this.options.currModelIdx = this.options.modelList.length-1;
+			this.options.modelDisplayCount = this.options.modelList.length;
+		}
 
-	//initialize the filtered model list
-	for (var idx=0;idx<this.options.modelDisplayCount;idx++) {
-		this.options.filteredModelList.push(this.options.modelList[idx]);
-	}
-	
+		//initialize the filtered model list
+		for (var idx=0;idx<this.options.modelDisplayCount;idx++) {
+			this.options.filteredModelList.push(this.options.modelList[idx]);
+		}
+		
+		this._setComparisonType(retData.source.b_type);
 	//extract the comparison type being used
-	this.options.comparisonType = retData.source.b_type + "s";
+	//this.options.comparisonType = retData.source.b_type + "s";
     },
     
     //for a given model, extract the sim search data including IC scores and the triple:
@@ -665,6 +739,7 @@ as a separate call in the init function.
 	
 	    //BB: 05/14/2014:  added a.IC and b.IC to the row to display on label and determine
 		data = newModelData.matches;
+		var species = newModelData.taxon;
 		var calculatedArray = [],
 			normalizedArray = [],
 							min,
@@ -700,6 +775,8 @@ as a separate call in the init function.
 			   "IC_b" : parseFloat(curr_row.b.IC),
 			   "model_id" : this._getConceptId(newModelData.id),
     		   "model_label" : newModelData.label, 
+			   "species": species.label,
+			   "taxon" : species.id,
 			   "rowid" : this._getConceptId(curr_row.a.id) + 
 			              "_" + this._getConceptId(curr_row.lcs.id)
 		  }; 
@@ -734,6 +811,8 @@ as a separate call in the init function.
 			case 0: nic = Math.sqrt((Math.pow(aIC-lIC,2)) + (Math.pow(bIC-lIC,2)));
 					nic = (1 - (nic/this.options.maxICScore)) * 100;					
 					break;
+			case 3: nic = ((lIC/bIC) * 100);
+					break;
 			default: nic = lIC;
 		}				
 		//console.log("AIC,BIC,LIC: " + aIC + ","+bIC+","+lIC+"  NIC: " + nic);
@@ -754,7 +833,7 @@ as a separate call in the init function.
     	//use the max phenotype size to limit the number of phenotypes shown 
     	var yLength = self.options.phenotypeSortData.length > this.options.phenotypeDisplayCount ? this.options.phenotypeDisplayCount : self.options.phenotypeSortData.length;
     	for (var idx=0;idx<yLength;idx++) {
-    		var stuff = {"id": self.options.phenotypeSortData[idx], "ypos" : ((idx * (size+gap)) + this.options.yoffset)};
+    		var stuff = {"id": self.options.phenotypeSortData[idx][0].id_a, "ypos" : ((idx * (size+gap)) + this.options.yoffset)};
     	    this.options.yAxis.push(stuff);
     	    if (((idx * (size+gap)) + this.options.yoffset) > this.options.yAxisMax) {
     	    	this.options.yAxisMax = (idx * (size+gap)) + this.options.yoffset;
@@ -786,6 +865,8 @@ as a separate call in the init function.
 					break;
 			case 0: maxScore = 100;
 					break;
+			case 3: maxScore = 100;
+					break;
 			default: maxScore = this.options.maxICScore;
 					break;
 		}				
@@ -798,9 +879,8 @@ as a separate call in the init function.
     _initCanvas : function() {
 
     	var self= this;
+		var optionhtml = "<div id='header'><span id='sort_div'><span id='slabel' >Sort Phenotypes<span id='sorts'></span></span><span><select id=\"sortphenotypes\">";
 		
- 		var optionhtml = "<div id='header'><span id='sort_div'><span id='slabel' >Sort Phenotypes<span id='sorts'></span></span><span><select id=\"sortphenotypes\">";
-       	   
 		for (var idx=0;idx<self.options.sortList.length;idx++) {
     		var selecteditem = "";
     		if (self.options.sortList[idx].type === self.options.selectedSort) {
@@ -809,13 +889,12 @@ as a separate call in the init function.
 			if (self.options.sortList[idx].order  === self.options.selectedOrder) {
     			selecteditem = "selected";
     		}
-    		optionhtml = optionhtml + "<option value='" + self.options.sortList[idx].order +"' "+ selecteditem +">" + self.options.sortList[idx].type +"</option>"
-    	}
-		optionhtml = optionhtml + "</select></span>";
-		
-		optionhtml = optionhtml + "<span id='stitle'><b>Phenotype comparison (grouped by " + this.options.targetSpeciesName + " " + this.options.comparisonType + ")</b></span><span id='faq'>FAQ</span></div>";			
-		
-		this.element.append(optionhtml);		
+			optionhtml = optionhtml + "<option value='" + self.options.sortList[idx].order +"' "+ selecteditem +">" + self.options.sortList[idx].type +"</option>"
+		}
+		optionhtml = optionhtml + "</select></span>";			
+		optionhtml = optionhtml + "<span id='stitle'><b>Phenotype comparison (grouped by " + this.options.targetSpeciesName + " " + this.options.comparisonType + ")</b></span>";	
+		optionhtml = optionhtml + "<span id='faq'><img class='faq' src='" + this.options.scriptpath + "../image/greeninfo30.png' height='15px'></span>";		
+		this.element.append(optionhtml);
 		
 		d3.select("#faq")
 			.on("click", function(d) {self._showDialog("faq");
@@ -846,11 +925,11 @@ as a separate call in the init function.
     },
 
 	_addLogoImage : function() {     
-	  var scriptpath = $("script[src]").last().attr("src").split('?')[0].split('/').slice(0, -1).join('/')+'/';
+	  
 	  var imgs = this.options.svg.selectAll("image").data([0]);
       imgs.enter()
                 .append("svg:image")
-                .attr("xlink:href", scriptpath + "../image/logo-sneak.png")
+                .attr("xlink:href", this.options.scriptpath + "../image/logo-sneak.png")
                 .attr("x", 850)
                 .attr("y", this.options.yTranslation - 10)
 				.attr("id", "logo")
@@ -882,7 +961,7 @@ as a separate call in the init function.
 		var highlight_rect = self.options.svg.append("svg:rect")
 		  	.attr("transform","translate(" + self.options.axis_pos_list[1] + ","+ (7 + self.options.yTranslation) + ")")
 			.attr("x", 8)
-			.attr("y", function(d) {return self._getYPosition(curr_data[0].rowid) ;})
+			.attr("y", function(d) {return self._getYPosition(curr_data[0].id_a) ;}) //rowid
 			.attr("class", "row_accent")
 			.attr("width", this.options.modelWidth)
 			.attr("height", 14);
@@ -1118,19 +1197,29 @@ as a separate call in the init function.
 	    	bSpecies = "Zebrafish";
 	    }
 		
+		var species = d.species,
+		    taxon = "";
+		
+		if (d.taxon != undefined || d.taxon!= null){
+			if (d.taxon.indexOf("NCBITaxon:") != -1) {taxon = d.taxon.slice(10);}
+			else {taxon = d.taxon;}
+		}
+		
 		var calc = this.options.selectedCalculation;
 		var suffix = "";
 		var prefix = "";
-		if (calc == 0 || calc == 1) {suffix = '%';}
+		if (calc == 0 || calc == 1 || calc == 3) {suffix = '%';}
 		if (calc == 0) {prefix = "Distance";}
 		else if (calc == 1) {prefix = "Ratio (q)";}
 		else if (calc == 2) {prefix = "Uniquesness";}
+		else if (calc == 3) {prefix = "Ratio (t)";}
 				
 	    retData = "<strong>Query: </strong> " + d.label_a + " (IC: " + d.IC_a.toFixed(2) + ")"   
 		    + "<br/><strong>Match: </strong> " + d.label_b + " (IC: " + d.IC_b.toFixed(2) +")"
 			+ "<br/><strong>Common: </strong> " + d.subsumer_label + " (IC: " + d.subsumer_IC.toFixed(2) +")"
      	    + "<br/><strong>" + this._toProperCase(this.options.comparisonType).substring(0, this.options.comparisonType.length-1)  +": </strong> " + d.model_label
-			+ "<br/><strong>" + prefix + ":</strong> " + d.value.toFixed(2) + suffix;
+			+ "<br/><strong>" + prefix + ":</strong> " + d.value.toFixed(2) + suffix
+			+ "<br/><strong>Species: </strong> " + d.species + " (" + taxon + ")";
 	    this._updateDetailSection(retData, this._getXYPos(obj));
 	  
     },
@@ -1170,8 +1259,12 @@ as a separate call in the init function.
 			  }
 			  return "models " + " " +  self._getConceptId(d.model_id) + " " +  self._getConceptId(d.id);
 		  })
-		  .attr("y", function(d, i) {     
-			  return self._getYPosition(d.rowid) + (self.options.yTranslation - 10) ;
+		  .attr("y", function(d, i) { 
+				console.log("Y Pos: " + (self._getYPosition(d.id_a) - 10) + 
+				"  X Pos: " + self.options.xScale(d.model_id) + "  Model Name: " + d.model_label +  "  Model Id: " + d.model_id +
+				"  Phen: " + d.label_a  + 
+				"  IA_a: " + d.id_a );
+			  return self._getYPosition(d.id_a) + (self.options.yTranslation - 10) ;
 		  })
 		  .attr("x", function(d) { return self.options.xScale(d.model_id);})
 		  .attr("width", 10)
@@ -1219,7 +1312,7 @@ as a separate call in the init function.
 			  .delay(20)
 			  .style('opacity', '1.0')
 			  .attr("y", function(d) {
-			  return self._getYPosition(d.rowid) -10;
+			  return self._getYPosition(d.id_a) -10; //rowid
 		  })
 		  .attr("x", function(d) { return self.options.xScale(d.model_id);})
 
@@ -1250,7 +1343,7 @@ as a separate call in the init function.
 		var highlight_rect = self.options.svg.append("svg:rect")
 		  	.attr("transform","translate(" + self.options.axis_pos_list[1] + ","+ (7 + self.options.yTranslation) + ")")
 			.attr("x", 8)
-			.attr("y", function(d) {return self._getYPosition(curr_data.rowid) ;})
+			.attr("y", function(d) {return self._getYPosition(curr_data.id_a) ;}) //rowid
 			.attr("class", "row_accent")
 			.attr("width", this.options.modelWidth)
 			.attr("height", 14);
@@ -1289,14 +1382,14 @@ as a separate call in the init function.
 			.attr("y", self.options.yoffset)
 			.attr("class", "model_accent")
 			.attr("width", 14)
-			.attr("height", (self.options.yAxisMax-75));
+			.attr("height", (self.options.phenotypeDisplayCount * 13));
 	},
   
     _updateAxes: function() {
 		var self = this;
 		this.options.h = (this.options.filteredModelData.length*2.5);
 		self.options.yScale = d3.scale.ordinal()
-      	    .domain(self.options.filteredModelData.map(function (d) {return d.rowid; }))
+      	    .domain(self.options.filteredModelData.map(function (d) {return d.id_a; }))
   		.range([0,self.options.filteredModelData.length])
   		.rangePoints([ self.options.yoffset, self.options.yoffset+this.options.h ]);
 	    //update accent boxes
@@ -1466,7 +1559,7 @@ as a separate call in the init function.
         	//the spacing you want between rows
         	var gap = 3;
 
-    		var stuff = {"id": self.options.phenotypeSortData[idx][0].rowid, "ypos" : ((axis_idx * (size+gap)) + self.options.yoffset)};
+    		var stuff = {"id": self.options.phenotypeSortData[idx][0].id_a, "ypos" : ((axis_idx * (size+gap)) + self.options.yoffset)};
     		self.options.yAxis.push(stuff); 
     	    axis_idx = axis_idx + 1;
     	    //update the ModelData
@@ -1488,7 +1581,7 @@ as a separate call in the init function.
 	        .rangeRoundBands([0,self.options.modelWidth]);
 	    model_x_axis = d3.svg.axis()
 			.scale(self.options.xScale).orient("top");
-	    model_x_axis.tickEndSize = 1;
+	    //model_x_axis.tickEndSize = 1;
 				
 		var model_region = self.options.svg.append("g")
 	  		.attr("transform","translate(" + (self.options.textWidth +28) +"," + (self.options.yTranslation + self.options.yoffset) + ")")
@@ -1740,8 +1833,8 @@ as a separate call in the init function.
 			
 			//account for a grid with less than 5 phenotypes
 			var y1 = 305,
-				y2 = 290;
-			if (this.options.filteredPhenotypeData.length < 6) {y1 = 220; y2 = 205;}
+				y2 = 295;
+			if (this.options.filteredPhenotypeData.length < 6) {y1 = 220; y2 = 210;}
 			
 			if (calc == 2) {text1 = "Lowest"; text2 = "Uniqueness"; text3 = "Highest";}
 			else if (calc == 1) {text1 = "Less Similar"; text2 = "Ratio (q)"; text3 = "More Similar";}
@@ -1757,26 +1850,29 @@ as a separate call in the init function.
 			var div_text2 = self.options.svg.append("svg:text")
 				.attr("class", "detail_text")
 				.attr("y", y2  + this.options.yTranslation)
-				.attr("x", self.options.axis_pos_list[2] + 70)
+				.attr("x", self.options.axis_pos_list[2] + 75)
 				.style("font-size", "12px")
 				.text(text2);
 				
 		    var div_text3 = self.options.svg.append("svg:text")
 				.attr("class", "detail_text")
 				.attr("y", y1 + this.options.yTranslation )
-				.attr("x", self.options.axis_pos_list[2] + 135)
+				.attr("x", self.options.axis_pos_list[2] + 125)
 				.style("font-size", "10px")
 				.text(text3);	
 				
 			//Position the max more carefully	
-			if (text2 == "Uniqueness" || text2 == "Distance") {
-				div_text2.attr("x", "850px");			
+			if (text2 == "Distance") {
+				div_text2.attr("x", "860px");			
+			}
+			if (text2 == "Uniqueness") {
+				div_text2.attr("x", "845px");			
 			}
 			if (text3 == "Max") {
-				div_text2.attr("x","945px");			
+				div_text3.attr("x","945px");			
 			}
 			if (text3 == "Highest") {
-				div_text2.attr("x",self.options.axis_pos_list[2] + 165);			
+				div_text3.attr("x",self.options.axis_pos_list[2] + 150);			
 			}
 			
 			var selClass = "";
@@ -1792,7 +1888,7 @@ as a separate call in the init function.
 				optionhtml = optionhtml + "<option value='" + self.options.targetSpeciesList[idx].label +"' "+ selecteditem +">" + self.options.targetSpeciesList[idx].name +"</option>"
 			}
 	
-			optionhtml = optionhtml + "</select></span></div><div id='calc_div'><span id='clabel'>Display<span id='calcs'>?</span></span><br /><span id='calc_sel'><select id=\"calculation\">";
+			optionhtml = optionhtml + "</select></span></div><div id='calc_div'><span id='clabel'>Display<span id='calcs'><img class='calcs' src='" + this.options.scriptpath + "../image/greeninfo30.png' height='15px'></span></span><br /><span id='calc_sel'><select id=\"calculation\">";
        	   
 
 		for (var idx=0;idx<self.options.selectList.length;idx++) {
@@ -1866,7 +1962,7 @@ as a separate call in the init function.
 	    var self=this;
 	    var rect_text = this.options.svg
 		.selectAll(".a_text")
-		.data(self.options.filteredPhenotypeData, function(d, i) {  return d[0].rowid; });
+		.data(self.options.filteredPhenotypeData, function(d, i) {  return d[0].id_a; });//rowid
 	    rect_text.enter()
 		.append("text")
 		.attr("class", function(d) {
@@ -1878,7 +1974,7 @@ as a separate call in the init function.
 		})
 		.attr("x", 208)
 		.attr("y", function(d) {
-			 return self._getYPosition(d[0].rowid) + (self.options.yTranslation + 18);
+			 return self._getYPosition(d[0].id_a) + (self.options.yTranslation + 18);   //rowid
 		})
 		.on("mouseover", function(d) {
 		    if (self.options.clickedData == undefined) {
@@ -1903,7 +1999,7 @@ as a separate call in the init function.
    		.style('opacity', '1.0')
 		.delay(5)
 		.attr("y", function(d) {
-			return self._getYPosition(d[0].rowid) + (self.options.yTranslation + 18);
+			return self._getYPosition(d[0].id_a) + (self.options.yTranslation + 18);//rowid
 		})
 	    rect_text.exit()
 	   	.transition()
