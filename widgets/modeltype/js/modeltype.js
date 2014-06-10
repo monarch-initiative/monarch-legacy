@@ -146,7 +146,8 @@ as a separate call in the init function.
 			self.options.phenotypeSortData = [];	
 			self.options.unmatchedPhenotypes = [];
 	},
-
+	
+	
 	//NOTE: I'm not too sure what the default init() method signature should be
 	//given an imageDiv and phenotype_data list
 	/**
@@ -744,10 +745,50 @@ as a separate call in the init function.
 			dataType : 'json',
 			success : function(data) {
 			   self._finishLoad(data);
-			}
-
+			},
+			error: function ( xhr, errorType, exception ) { //Triggered if an error communicating with server  
+				  html = '<h1>Ajax Error</h1>' +
+                  '<p>The Ajax call returned the following error: ' + 
+                  xhr.statusText + '.</p>';
+        
+				this._displayResult(xhr, errorType, exception);
+				
+				
+			},  
 		});
     },
+	
+	
+	_displayResult : function(xhr, errorType, exception){
+	
+
+      
+            if (xhr.status === 0) {
+                alert('Not connected.\n Verify Network.');
+            } else if (xhr.status == 404) {
+                alert('Requested page not found. [404]');
+            } else if (xhr.status == 500) {
+                alert('Internal Server Error [500].');
+            } else if (exception === 'parsererror') {
+                alert('Requested JSON parse failed.');
+            } else if (exception === 'timeout') {
+                alert('Time out error.');
+            } else if (exception === 'abort') {
+                alert('Ajax request aborted.');
+            } else {
+                alert('Uncaught Error.\n' + xhr.responseText);
+            }
+        
+   
+
+	
+	
+	
+		var errorMessage = exception || xhr.statusText; //If exception null, then default to xhr.statusText   
+		alert( "There was an error retrieving the phenotype data: " + errorMessage );  
+	
+	
+	},
 	
     _finishLoad: function(data) {
 
@@ -970,7 +1011,8 @@ as a separate call in the init function.
         $( "#sortphenotypes" ).change(function(d) {
         	self.options.selectedSort = self.options.sortList[d.target.selectedIndex].type;
         	self.options.selectedOrder = self.options.sortList[d.target.selectedIndex].order;
-        	$("#org_div").remove();
+        	$("#unmatched").remove();
+			$("#org_div").remove();
 			$("#calc_div").remove();
 			$("#sort_div").remove();
 			$("#header").remove();
@@ -1977,7 +2019,8 @@ as a separate call in the init function.
         	//alert( "Handler for .change() called." );
         	self.options.targetSpecies = self.options.targetSpeciesList[d.target.selectedIndex].taxon;
         	self.options.targetSpeciesName = self.options.targetSpeciesList[d.target.selectedIndex].name;
-        	$("#org_div").remove();
+			$("#unmatched").remove();
+			$("#org_div").remove();
 			$("#calc_div").remove();
 			$("#sort_div").remove();
 			$("#header").remove();
@@ -1992,6 +2035,7 @@ as a separate call in the init function.
 			//alert( "Handler for .change() called." );
 			self.options.selectedCalculation = self.options.selectList[d.target.selectedIndex].calc;
 			self.options.selectedLabel = self.options.selectList[d.target.selectedIndex].label;
+			$("#unmatched").remove();
 			$("#calc_div").remove();
 			$("#org_div").remove();
 			$("#sort_div").remove();
