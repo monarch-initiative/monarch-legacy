@@ -60,12 +60,12 @@ d3.json("/labs/datagraph.json", function(error, json) {
         .attr("y", 6)
         .attr("dy", ".71em")
         .style("text-anchor", "end")
-        .text("Counts");
+        .text("Diseases");
 
     var phenotype = svg.selectAll(".phenotype")
         .data(data)
-        .enter().append("g")
-        .attr("class", "g")
+        .enter().append("svg:a")
+        .attr("xlink:href", function(d) { return "/Phenotype/"+ d.id; })
         .attr("transform", function(d) { return "translate(" + x0(d.phenotype) + ",0)"; });
 
     phenotype.selectAll("rect")

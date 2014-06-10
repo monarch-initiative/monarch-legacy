@@ -23,6 +23,11 @@
     margin: 0px 0px 0px 300px;
     padding: 50px 0px 0px 0px;
 }
+.title{
+	margin-left: 480px;
+	font-size : 25px;
+	font-weight: bold;
+}
 .axis path,
 .axis line {
   fill: none;
