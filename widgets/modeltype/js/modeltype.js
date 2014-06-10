@@ -98,6 +98,7 @@ as a separate call in the init function.
 	    targetSpeciesName : "Mus musculus",
 		textLength: 34,
 		textWidth: 200,
+		unmatchedPhenotypes: [],
 		w : 0,
 	    xScale: undefined, 
 		yAxis: [],
@@ -142,7 +143,8 @@ as a separate call in the init function.
 			self.options.comparisonType = "genes";
 			self.options.yTranslation = undefined;
 			self.options.selectRectHeight = 0;
-			self.options.phenotypeSortData = [];			
+			self.options.phenotypeSortData = [];	
+			self.options.unmatchedPhenotypes = [];
 	},
 
 	//NOTE: I'm not too sure what the default init() method signature should be
@@ -167,6 +169,7 @@ as a separate call in the init function.
 	    this.options.inputPhenotypeData = this.options.phenotypeData.slice();
 	    this._loadData(this.options.phenotypeData);
 	    this._filterData(this.options.modelData.slice());
+		this._getUnmatchedPhenotypes();
 		
 	    if (this.options.modelData.length != 0 && this.options.phenotypeData.length != 0 && this.options.filteredPhenotypeData.length != 0) {	    
 	         
@@ -397,6 +400,57 @@ as a separate call in the init function.
 			.attr("width", self.options.smallXScale(self.options.modelList[self.options.modelDisplayCount-1].model_id));
 	},
 
+	_getUnmatchedPhenotypes : function(){
+	
+		var fullset = this.options.inputPhenotypeData,
+			partialset = this.options.phenotypeSortData,
+			full = [],
+			partial = [],
+			matchedset = [],
+			unmatchedset = [];
+			
+			for (i=0; i < fullset.length; i++) {
+				full.push(fullset[i]);
+			}
+			for (j=0; j < partialset.length; j++) {
+				partial.push((partialset[j][0].id_a).replace("_", ":"));
+			}
+			for (k=0; k <full.length; k++) {
+				if (partial.indexOf(full[k]) < 0) {				
+					unmatchedset.push(full[k]);
+				}
+			}
+			this.options.unmatchedPhenotypes = unmatchedset;
+			return this.options.unmatchedPhenotypes;
+	},
+	
+	_showUnmatchedPhenotypes : function(){
+		var self=this;
+		var unmatched = this.options.unmatchedPhenotypes,
+			text = "<b><h5>Unmatched Phenotypes</h5></b>",
+			label = "";
+		
+		for (i = 0; i < unmatched.length; i++)
+		{
+			//label = this._getPhenotypeLabel(unmatched[i]);
+			var url_origin = self.document[0].location.origin;
+			text = text + "<a href='" + url_origin + "/phenotype/" + unmatched[i] + "' target='_blank'>" + unmatched[i] + "</a><br />";
+	    }
+		return text;
+	},
+	
+	_getPhenotypeLabel : function(id){
+		var label = "";
+		
+		for (i=0; i < this.options.phenotypeSortData.length; i++){
+			if(id == this.options.phenotypeSortData[i][0].id_a.replace("_",":"))
+			{ 
+				label = this.options.phenotypeSortData[i][0].label_a;
+				break;
+			}
+		}
+		return label;
+	},
 	
 	_setComparisonType : function(comp){
 		var self = this;
@@ -905,6 +959,13 @@ as a separate call in the init function.
 				self._showDialog( "sorts");
 		});
 		
+		var optionhtml2 = "<br /><div id='unmatched'><img class='matched' src='" + this.options.scriptpath + "../image/unmatched120.png' height='40px'></div>";
+		this.element.append(optionhtml2);
+		d3.select("#unmatched")
+			.on("click", function(d) {self._showDialog("unmatched");
+		});
+		
+		
 		//add the handler for the select control
         $( "#sortphenotypes" ).change(function(d) {
         	self.options.selectedSort = self.options.sortList[d.target.selectedIndex].type;
@@ -1260,10 +1321,10 @@ as a separate call in the init function.
 			  return "models " + " " +  self._getConceptId(d.model_id) + " " +  self._getConceptId(d.id);
 		  })
 		  .attr("y", function(d, i) { 
-				console.log("Y Pos: " + (self._getYPosition(d.id_a) - 10) + 
+			/**	console.log("Y Pos: " + (self._getYPosition(d.id_a) - 10) + 
 				"  X Pos: " + self.options.xScale(d.model_id) + "  Model Name: " + d.model_label +  "  Model Id: " + d.model_id +
 				"  Phen: " + d.label_a  + 
-				"  IA_a: " + d.id_a );
+				"  IA_a: " + d.id_a );*/
 			  return self._getYPosition(d.id_a) + (self.options.yTranslation - 10) ;
 		  })
 		  .attr("x", function(d) { return self.options.xScale(d.model_id);})
@@ -1664,11 +1725,13 @@ as a separate call in the init function.
 	
 		var text = "";
 		switch(name){
-			case("modelscores"): text = "<h5>What is the score shown at the top of the grid?</h5><div>The score indicated at the top of each column, below the target label, is the overall similarity score between the query and target. Briefly, for each of the targets (columns) listed, the set of Q(1..n) phenotypes of the query are pairwise compared against all of the T(1..m) phenotypes in the target.<br /><br />Then, for each pairwise comparison of phenotypes (q x P1...n), the best comparison is retained for each q and summed for all p1..n. </div><br /><div>The raw score is then normalized against the maximal possible score, which is the query matching to itself. Therefore, range of scores displayed is 0..100. For more details, please see (Smedley et al, 2012 <a href='http://www.ncbi.nlm.nih.gov/pubmed/23660285' target='_blank'>http://www.ncbi.nlm.nih.gov/pubmed/23660285</a> and <a href='http://www.owlsim.org' target='_blank'>http://www.owlsim.org</a>).";
+			case "modelscores": text = "<h5>What is the score shown at the top of the grid?</h5><div>The score indicated at the top of each column, below the target label, is the overall similarity score between the query and target. Briefly, for each of the targets (columns) listed, the set of Q(1..n) phenotypes of the query are pairwise compared against all of the T(1..m) phenotypes in the target.<br /><br />Then, for each pairwise comparison of phenotypes (q x P1...n), the best comparison is retained for each q and summed for all p1..n. </div><br /><div>The raw score is then normalized against the maximal possible score, which is the query matching to itself. Therefore, range of scores displayed is 0..100. For more details, please see (Smedley et al, 2012 <a href='http://www.ncbi.nlm.nih.gov/pubmed/23660285' target='_blank'>http://www.ncbi.nlm.nih.gov/pubmed/23660285</a> and <a href='http://www.owlsim.org' target='_blank'>http://www.owlsim.org</a>).";
 			break;
-			case("calcs"): text = "<h5>What do the different calculation methods mean?</h5><div>For each pairwise comparison of phenotypes from the query (q) and target (t), we can assess their individual similarities in a number of ways.  First, we find the phenotype-in-common between each pair (called the lowest common subsumer or LCS). Then, we can leverage the Information Content (IC) of the phenotypes (q,t,lcs) in a variety of combinations to interpret the strength of the similarity.</div><br /><div><b>**Uniqueness </b>reflects how often the phenotype-in-common is annotated to all diseases and genes in the Monarch Initiative knowledgebase.  This is simply a reflection of the IC normalized based on the maxIC. IC(PhenotypeInCommon)maxIC(AllPhenotypes)</div><br /><div><b>**Distance</b> is the euclidian distance between the query, target, and phenotype-in-common, computed using IC scores.<br/><center>d=(IC(q)-IC(lcs))2+(IC(t)-IC(lcs))2</center>  </div><br /><div>This is normalized based on the maximal distance possible, which would be between two rarely annotated leaf nodes that only have the root node (phenotypic abnormality) in common.  So what is depicted in the grid is 1-dmax(d)</div><br /><div><b>**Ratio(q)</b> is the proportion of shared information between a query phenotype and the phenotype-in-common with the target.<br /><center>ratio(q)=IC(lcs)IC(q)*100</center></div><br /><div><b>**Ratio(t)</b> is the proportion of shared information between the target phenotype and the phenotype-in-common with the query.<br /><center>ratio(t)=IC(lcs)IC(t)*100</center></div>";
+			case "calcs": text = "<h5>What do the different calculation methods mean?</h5><div>For each pairwise comparison of phenotypes from the query (q) and target (t), we can assess their individual similarities in a number of ways.  First, we find the phenotype-in-common between each pair (called the lowest common subsumer or LCS). Then, we can leverage the Information Content (IC) of the phenotypes (q,t,lcs) in a variety of combinations to interpret the strength of the similarity.</div><br /><div><b>**Uniqueness </b>reflects how often the phenotype-in-common is annotated to all diseases and genes in the Monarch Initiative knowledgebase.  This is simply a reflection of the IC normalized based on the maxIC. IC(PhenotypeInCommon)maxIC(AllPhenotypes)</div><br /><div><b>**Distance</b> is the euclidian distance between the query, target, and phenotype-in-common, computed using IC scores.<br/><center>d=(IC(q)-IC(lcs))2+(IC(t)-IC(lcs))2</center>  </div><br /><div>This is normalized based on the maximal distance possible, which would be between two rarely annotated leaf nodes that only have the root node (phenotypic abnormality) in common.  So what is depicted in the grid is 1-dmax(d)</div><br /><div><b>**Ratio(q)</b> is the proportion of shared information between a query phenotype and the phenotype-in-common with the target.<br /><center>ratio(q)=IC(lcs)IC(q)*100</center></div><br /><div><b>**Ratio(t)</b> is the proportion of shared information between the target phenotype and the phenotype-in-common with the query.<br /><center>ratio(t)=IC(lcs)IC(t)*100</center></div>";
 			break;
-			case("faq"): text = "<h4>Phenogrid Faq</h4><h5>How are the similar targets obtained?</h5><div>We query our owlsim server to obtain the top 100 most-phenotypically similar targets for the selected organism.  The grid defaults to showing mouse.</div><h5>What are the possible targets for comparison?</h5><div>Currently, the phenogrid is configured to permit comparisons between your query (typically a set of disease-phenotype associations) and one of:<ul><li>human diseases</li><li>mouse genes</li><li>zebrafish genes</li></ul>You can change the target organism by selecting a new organism.  The grid will temporarily disappear, and reappear with the new target rendered.</div><h5>Can I compare the phenotypes to human genes?</h5><div>No, not yet.  But that will be added soon.</div><h5>Where does the data come from?</h5><div>The phenotype annotations utilized to compute the phenotypic similarity are drawn from a number of sources:<ul><li>Human disease-phenotype annotations were obtained from  <a href='http://human-phenotype-ontology.org' target='_blank'>http://human-phenotype-ontology.org</a>, which contains annotations for approx. 7,500 diseases.<li><li>Mouse gene-phenotype annotations were obtained from MGI <a href='www.informatics.jax.org'>(www.informatics.jax.org).</a> The original annotations were made between genotypes and phenotypes.  We then inferred the relationship between gene and phenotype based on the genes that were variant in each genotype.  We only perform this inference for those genotypes that contain a single variant gene.</li><li>Zebrafish genotype-phenotype annotations were obtained from ZFIN  <a href='www.zfin.org' target='_blank'>(www.zfin.org).</a> The original annotations were made between genotypes and phenotypes, with some of those genotypes created experimentally with the application of morpholino reagents.  Like for mouse, we inferred the relationship between gene and phenotype based on the genes that were varied in each genotype.  We only perform this inference for those genotypes that contain a single variant gene.</li><li>All annotation data, preformatted for use in OWLSim, is available for download from  <a href='http://code.google.com/p/phenotype-ontologies/' target='_blank'>http://code.google.com/p/phenotype-ontologies/ </a> </li></ul><h5>What does the phenogrid show?</h5><div>The grid depicts the comparison of a set of phenotypes in a query (such as those annotated to a disease or a gene) with one or more phenotypically similar targets.  Each row is a phenotype that is annotated to the query (either directly or it is a less-specific phenotype that is inferred), and each column is an annotated target (such as a gene or disease).  When a phenotype is shared between the query and target, the intersection is colored based on the selected calculation method (see What do the different calculation methods mean).   You can hover over the intersection to get more information about what the original phenotype is of the target, and what is in-common between the two.</div><h5>Where can I make suggestions for improvements or additions?</h5><div>Please email your feedback to <a href='mailto:info@monarchinitiative.org'>info@monarchinitiative.org.</a><h5>What happens to the phenotypes that are not shared?</h5><div>Presently, phenotypes that were part of your query but are not shared by any of the targets are not rendered.</div><h5>Why do I sometimes see two targets that share the same phenotypes have very different overall scores?</h5><div>This is usually because of some of the phenotypes that are not shared with the query.  For example, if the top hit to a query matches each phenotype exactly, and the next hit matches all of them exactly plus it has 10 additional phenotypes that don’t match it at all, it is penalized for those phenotypes are aren’t in common, and thus ranks lower on the similarity scale. <div>"; 
+			case "faq": text = "<h4>Phenogrid Faq</h4><h5>How are the similar targets obtained?</h5><div>We query our owlsim server to obtain the top 100 most-phenotypically similar targets for the selected organism.  The grid defaults to showing mouse.</div><h5>What are the possible targets for comparison?</h5><div>Currently, the phenogrid is configured to permit comparisons between your query (typically a set of disease-phenotype associations) and one of:<ul><li>human diseases</li><li>mouse genes</li><li>zebrafish genes</li></ul>You can change the target organism by selecting a new organism.  The grid will temporarily disappear, and reappear with the new target rendered.</div><h5>Can I compare the phenotypes to human genes?</h5><div>No, not yet.  But that will be added soon.</div><h5>Where does the data come from?</h5><div>The phenotype annotations utilized to compute the phenotypic similarity are drawn from a number of sources:<ul><li>Human disease-phenotype annotations were obtained from  <a href='http://human-phenotype-ontology.org' target='_blank'>http://human-phenotype-ontology.org</a>, which contains annotations for approx. 7,500 diseases.<li><li>Mouse gene-phenotype annotations were obtained from MGI <a href='www.informatics.jax.org'>(www.informatics.jax.org).</a> The original annotations were made between genotypes and phenotypes.  We then inferred the relationship between gene and phenotype based on the genes that were variant in each genotype.  We only perform this inference for those genotypes that contain a single variant gene.</li><li>Zebrafish genotype-phenotype annotations were obtained from ZFIN  <a href='www.zfin.org' target='_blank'>(www.zfin.org).</a> The original annotations were made between genotypes and phenotypes, with some of those genotypes created experimentally with the application of morpholino reagents.  Like for mouse, we inferred the relationship between gene and phenotype based on the genes that were varied in each genotype.  We only perform this inference for those genotypes that contain a single variant gene.</li><li>All annotation data, preformatted for use in OWLSim, is available for download from  <a href='http://code.google.com/p/phenotype-ontologies/' target='_blank'>http://code.google.com/p/phenotype-ontologies/ </a> </li></ul><h5>What does the phenogrid show?</h5><div>The grid depicts the comparison of a set of phenotypes in a query (such as those annotated to a disease or a gene) with one or more phenotypically similar targets.  Each row is a phenotype that is annotated to the query (either directly or it is a less-specific phenotype that is inferred), and each column is an annotated target (such as a gene or disease).  When a phenotype is shared between the query and target, the intersection is colored based on the selected calculation method (see What do the different calculation methods mean).   You can hover over the intersection to get more information about what the original phenotype is of the target, and what is in-common between the two.</div><h5>Where can I make suggestions for improvements or additions?</h5><div>Please email your feedback to <a href='mailto:info@monarchinitiative.org'>info@monarchinitiative.org.</a><h5>What happens to the phenotypes that are not shared?</h5><div>Presently, phenotypes that were part of your query but are not shared by any of the targets are not rendered.</div><h5>Why do I sometimes see two targets that share the same phenotypes have very different overall scores?</h5><div>This is usually because of some of the phenotypes that are not shared with the query.  For example, if the top hit to a query matches each phenotype exactly, and the next hit matches all of them exactly plus it has 10 additional phenotypes that don’t match it at all, it is penalized for those phenotypes are aren’t in common, and thus ranks lower on the similarity scale. <div>"; 
+			case "unmatched":  text = this._showUnmatchedPhenotypes();
+			break;
 			default:
 		
 		}

@@ -84,7 +84,7 @@ line {
 
 #svg_area{
 	float:left;
-	margin-top: 0px;
+	margin-top: -35px;
 }
 
 #selectionrect{
@@ -178,6 +178,12 @@ line {
 
 .faq{
 	margin-top:-5px;
+}
+
+#unmatched {
+	margin-left:55px;
+	margin-top: -10px;
+
 }
 
 #logo {
