@@ -65,6 +65,7 @@ d3.json("/labs/datagraph.json", function(error, json) {
     var phenotype = svg.selectAll(".phenotype")
         .data(data)
         .enter().append("svg:a")
+        .attr("class", "bar")
         .attr("xlink:href", function(d) { return "/Phenotype/"+ d.id; })
         .attr("transform", function(d) { return "translate(" + x0(d.phenotype) + ",0)"; });
 
@@ -75,8 +76,16 @@ d3.json("/labs/datagraph.json", function(error, json) {
        .attr("x", function(d) { return x1(d.name); })
        .attr("y", function(d) { return y(d.value); })
        .attr("height", function(d) { return height - y(d.value); })
+       .on("mouseover", function(){
+           d3.select(this)
+           .style("fill", "#71B291");
+        })
+       .on("mouseout", function(){
+           d3.select(this)
+           .style("fill", function(d) { return color(d.name); });
+        })
        .style("fill", function(d) { return color(d.name); });
-
+    
     var legend = svg.selectAll(".legend")
        .data(groups.slice())
        .enter().append("g")
@@ -94,7 +103,6 @@ d3.json("/labs/datagraph.json", function(error, json) {
        .attr("y", 9)
        .attr("dy", ".35em")
        .style("text-anchor", "end")
-       .text(function(d) { return d; });
-    
+       .text(function(d) { return d; });   
     });
 });
