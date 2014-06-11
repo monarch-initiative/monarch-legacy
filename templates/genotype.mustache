@@ -60,12 +60,12 @@
                     <div class="second-row-divider"></div>
                     <div class="tabcontainer">
                         <div class="tabhover">View genes known to be variant in this model</div>
-                        {{#hasGenes}}
-                            <a href="#genes"><div class="tab contenttab">Genes ({{geneNum}})</div></a>
-                        {{/hasGenes}}
-                        {{^hasGenes}}
-                            <div class="tab greyed-out">Genes (0)</div>
-                        {{/hasGenes}}
+                        {{#hasVariants}}
+                            <a href="#genes"><div class="tab contenttab">Variants ({{variantNum}})</div></a>
+                        {{/hasVariants}}
+                        {{^hasVariants}}
+                            <div class="tab greyed-out">Variants (0)</div>
+                        {{/hasVariants}}
                     </div>
                     <div class="tabcontainer">
                         <div class="tabhover">View models that have phenotypes in common</div>
@@ -92,6 +92,16 @@
                     <div class="ids">
                         <b>ID:</b> {{id}} <br />
                     </div>
+					Genetic Background: {{background}} <br />
+					Genomic Variation Complements: <br />
+					Variant Genes: {{genes}} <br />
+					Variants : {{variants}} <br />
+					{{^hasDescription}}
+					Description : (none provided)
+					{{/hasDescription}}
+					{{#hasDescription}}
+					Description : {{description}} <br />
+					{{/hasDescription}}
                 </div>
                 {{#hasPhenotypes}}
                 <div id="phenotypes" class="category">
