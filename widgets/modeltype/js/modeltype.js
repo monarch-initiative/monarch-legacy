@@ -1588,10 +1588,10 @@ as a separate call in the init function.
 	_updateScrollCounts: function() {
 		this.options.svg.selectAll(".scroll_text").remove();
 	
-	//account for a grid with less than 5 phenotypes
+	//account for a grid with less than 14 phenotypes
 		var y1 = 257,
 			y2 = 273;
-		if (this.options.filteredPhenotypeData.length < 6) {y1 =172; y2 = 188;}
+		if (this.options.filteredPhenotypeData.length < 14) {y1 = 172; y2 = 188;}
 		
 		
 		var startModelIdx = (this.options.currModelIdx - this.options.modelDisplayCount) + 2;
@@ -1901,7 +1901,7 @@ as a separate call in the init function.
 		//account for a grid with less than 5 phenotypes
 		var y1 = 307,
 			y2 = 294;
-		if (this.options.filteredPhenotypeData.length < 6) {y1 =217; y2 = 164;}
+		if (this.options.filteredPhenotypeData.length < 14) {y1 =217; y2 = 164;}
 	    //only show the scale if there is more than one value represented
 	    //in the scale
 	    if (diff > 0) {
@@ -1953,7 +1953,7 @@ as a separate call in the init function.
 			//account for a grid with less than 5 phenotypes
 			var y1 = 305,
 				y2 = 295;
-			if (this.options.filteredPhenotypeData.length < 6) {y1 = 220; y2 = 210;}
+			if (this.options.filteredPhenotypeData.length < 14) {y1 = 220; y2 = 210;}
 			
 			if (calc == 2) {text1 = "Lowest"; text2 = "Uniqueness"; text3 = "Highest";}
 			else if (calc == 1) {text1 = "Less Similar"; text2 = "Ratio (q)"; text3 = "More Similar";}
@@ -1995,7 +1995,7 @@ as a separate call in the init function.
 			}
 			
 			var selClass = "";
-			if (self.options.filteredPhenotypeData.length < 6) { selClass = "shortselects"; } else { selClass = "selects";}
+			if (self.options.filteredPhenotypeData.length < 14) { selClass = "shortselects"; } else { selClass = "selects";}
 			
 			var optionhtml = "<div id='selects' class='" + selClass + "'><div id='org_div'><div>Target</div><span><select id=\'organism\'>";
 	
