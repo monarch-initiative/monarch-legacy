@@ -5,6 +5,12 @@
 	width: 200;
 }
 
+#errmsg{
+	font-size:1.2em;
+	font-weight:bold;
+	stroke:#ea763b;
+}
+
 #gridline{
 	fill: #ffffff;
 	fill-opacity: 0;
@@ -38,6 +44,12 @@
 #calc_sel{
 	margin-top:-15px;
 }
+
+text.accent{
+	
+
+}
+
 
 .row_accent,
 .model_accent{
@@ -113,7 +125,7 @@ line {
 .selects{
   float:right;
   position:absolute;
-  top:645px;
+  top:660px;
   left:820px;
   background-color:#f5f5f5; 
   padding: 0 7px 8px 6px;
