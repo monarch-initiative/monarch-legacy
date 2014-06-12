@@ -22,14 +22,20 @@
 
 	  <div style="margin-top: 1em;">
 	    <h4>Server-side implementation</h4>
-	    <ul>
 	    {{#blog_results}}
-	    <li>
-	      <strong><a href="{{link}}">{{title}}</a></strong>
-	      {{description}}
-	    </li>
+	    <dl>
+	      <dt>
+		<a href="{{link}}">{{title}}</a>
+		{{#category}}
+		<a href="{{link}}" class="label label-default">{{label}}</a>
+		{{/category}}
+	      </dt>
+	      <dd>
+		<strong>{{date}}</strong>
+		{{description}}
+	      </dd>
+	    </dl>
 	    {{/blog_results}}
-	    </ul>
 	  </div>
 
 	</div> <!-- closes wrapperforfooter -->
