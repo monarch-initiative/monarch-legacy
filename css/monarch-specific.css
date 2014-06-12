@@ -28,49 +28,37 @@ p {
     margin-top: 35px;
     margin-bottom: -3px;
 }
-@media (max-width: 950px) {
-    #categories {
-        margin-bottom: 10px;
-    }
-}
 .tabcontainer {
     position: relative;
     display: inline-block;
 }
 .tabhover {
     position: absolute;
-    bottom: 45px;
+    bottom: 41px;
     font-size: 12px;
     line-height: 14px;
-    width: 170px;
-    left: 5px;
     display: none;
+    background-color: white;
+    padding: 2px 5px;
+    border: 1px solid black;
+    max-height: 48px;
+    min-width: 120px;
 }
-@media (min-width: 950px) {
-    .tab {
-        display: inline-block;
-        padding: 2px 15px;
-        text-align: center;
-        border-radius: 5px 5px 0px 0px;
-        margin-right: 3px;
-        font-weight: 400;
-        cursor: pointer;
-        font-size: 14px;
-        border: black solid 1px;
-    }
+.tab {
+    display: inline-block;
+    padding: 2px 12px;
+    text-align: center;
+    font-weight: 400;
+    cursor: pointer;
+    font-size: 14px;
+    border: 1px solid black;
+    border-radius: 5px 5px 0px 0px;
+    margin-right: 2px;
 }
-@media (max-width: 950px) {
-    .tab {
-        display: inline-block;
-        padding: 2px 15px;
-        text-align: center;
-        border-radius: 4px;
-        margin-right: 5px;
-        font-weight: 400;
-        cursor: pointer;
-        font-size: 14px;
-        border: black solid 1px;
-    }
+#initialtab {
+    color: black;
+    background-color: white;
+    border-bottom: 1px solid white;
 }
 .contenttab {
     background-color: #999;
@@ -79,27 +67,6 @@ p {
 .greyed-out {
     background-color: #DDD;
     color: #AAA;
-}
-#initialtab {
-    color: black;
-    background-color: white;
-    border-bottom: 1px solid white;
-}
-#longtab {
-    width: 120px;
-}
-#longertab {
-    width: 140px;
-}
-@media (min-width: 950px) {
-    .second-row-divider {
-        display: none;
-    }
-}
-@media (max-width: 950px) {
-    .second-row-divider {
-        margin-bottom: 35px;
-    }
 }
 /* Rest of Content */
 #complete-info {
