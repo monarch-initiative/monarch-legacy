@@ -45,7 +45,8 @@ as a separate call in the init function.
 	options:   {
 	    axis_pos_list: [],
 		clickedData: undefined, 
-		colorScale: undefined,
+		colorScaleB: undefined,
+		colorScaleR: undefined,
 		colStartingPos: 10,
 		comparisonType : "genes",
 		currModelIdx : 0,
@@ -67,9 +68,9 @@ as a separate call in the init function.
 		highlightRect: undefined,
 		inputPhenotypeData : [],	  	    
 	    m :[ 30, 10, 10, 10 ], 
-		maxColorScale : 'rgb(37,52,148)',
+		//maxColorScale : 'rgb(37,52,148)',
 		maxICScore : 0,
-		minColorScale: 'rgb(255,255,204)',
+		//minColorScale: 'rgb(255,255,204)',
 	    modelData: [],
 		modelDisplayCount : 30,
 	    modelList: [],
@@ -126,7 +127,8 @@ as a separate call in the init function.
 			self.options.filteredModelList = [];
 			self.options.yAxis = [];
 			self.options.modelList = [];
-			self.options.colorScale = undefined;
+			self.options.colorScaleB = undefined;
+			self.options.colorScaleR = undefined;
 			self.options.yAxisMax = 0;
 			self.options.currPhenotypeIdx = 0;
 			self.options.currModelIdx = 0;
@@ -191,7 +193,7 @@ as a separate call in the init function.
 				this._createGridlines();
 	    	    this._createModelRects();
 	    	    this._createRects();			
-	    		this._updateScrollCounts();
+	    		//this._updateScrollCounts();
 	    		this._createOverviewSection();
 	    } else {
 			//If there is no data, display a message- "No Models found."
@@ -200,22 +202,22 @@ as a separate call in the init function.
 	},
 	
 	//create this visualization if no phenotypes or models are returned
-	_createEmptyVisualization: function() {
+	_createEmptyVisualization: function(msg) {
 		var self = this;
 		this.element.append("<svg id='svg_area'></svg>");
         this.options.svg = d3.select("#svg_area");
         self.options.svg
 			.attr("width", 1100)
-			.attr("height", 60);
+			.attr("height", 70);
         self.options.h = 60;
         self.options.yoffset = 50;
         self.options.svg.append("text")
-            .attr("x", 100)
-            .attr("y", 25)
-            .attr("height", 60)
+            .attr("x", 80)
+            .attr("y", 60)
+            .attr("height", 70)
             .attr("width", 200)
-			.attr("id", "svgempty")
-            .text("No Models found");
+			.attr("id", "errmsg")
+            .text(msg);
 			
 	},
 	
@@ -338,7 +340,13 @@ as a separate call in the init function.
 		  	  .attr("width", 2)
 		  	  .attr("height", 2)
 		  	  .attr("fill", function(d, i) {
-		  	      return self.options.colorScale(d.value + 5);
+					if (self.options.targetSpeciesName == "All"){
+						if (d.species == "Homo sapiens") {return self.options.colorScaleB(d.value + 5);}
+						else {return self.options.colorScaleR(d.value + 5);}
+					}	
+					else {	
+						return self.options.colorScaleB(d.value + 5);
+				  }
 		  	  });
 			  
 		selectRectHeight = self.options.smallYScale(self.options.phenotypeSortData[self.options.phenotypeDisplayCount-1][0].id_a); //rowid
@@ -430,15 +438,32 @@ as a separate call in the init function.
 		var unmatched = this.options.unmatchedPhenotypes,
 			text = "<b><h5>Unmatched Phenotypes</h5></b>",
 			label = "";
-		
+		var labels = this._getUnmatchedLabels();
 		for (i = 0; i < unmatched.length; i++)
 		{
-			//label = this._getPhenotypeLabel(unmatched[i]);
+			label = labels[i];
 			var url_origin = self.document[0].location.origin;
-			text = text + "<a href='" + url_origin + "/phenotype/" + unmatched[i] + "' target='_blank'>" + unmatched[i] + "</a><br />";
+			text = text + "<a href='" + url_origin + "/phenotype/" + unmatched[i] + "' target='_blank'>" + unmatched[i] + ",&nbsp;&nbsp;" + label + "</a><br />";
 	    }
 		return text;
 	},
+	
+	_getUnmatchedLabels: function() {
+	  	var unmatchedLabels = [];
+		for (i=0;i<this.options.unmatchedPhenotypes.length; i++){
+		
+			jQuery.ajax({
+				url : this.options.serverURL + "/phenotype/" + this.options.unmatchedPhenotypes[i] + ".json",
+				async : false,
+				dataType : 'json',
+				success : function(data) {
+					unmatchedLabels.push(data.label);
+				}
+			});
+	   }
+	   return unmatchedLabels;
+	},
+
 	
 	_getPhenotypeLabel : function(id){
 		var label = "";
@@ -467,8 +492,7 @@ as a separate call in the init function.
 			}
 		}
 	},
-	
-	
+		
 	_setTargetSpeciesName: function(taxonid) {
 		var self = this;
 
@@ -645,9 +669,8 @@ as a separate call in the init function.
 		//sort the phenotype list by sum of LCS
 		self.options.phenotypeSortData.sort(function(a,b) { 
 			return b.count - a.count; 
-		});
-		 	
-	   },
+		});	 	
+	},
 	
 	//`. Get all unique phenotypes in an array
 	//2. Sort the array by source phenotype name
@@ -747,6 +770,12 @@ as a separate call in the init function.
 			url = this.options.serverURL + "/simsearch/phenotype/?input_items=" + 
 			    phenotypeList.join(",") + "&target_species=" + this.options.targetSpecies;
 		}
+		/*Testing AJAX call error handling*/
+		//url = this.options.serverURL + "/simsearch/phenotype/?input_items=" + 
+			   //phenotypeList.join(",") + "&target_species=2468";
+	    //url = this.options.serverURL + "/simsearch/phenotype/"
+		//?input_items=" + 
+			   //phenotypeList.join(",") + "&target_species=2468";	
     	//NOTE: just temporary until the calls are ready
 		jQuery.ajax({
 			url: url, 
@@ -756,22 +785,31 @@ as a separate call in the init function.
 			   self._finishLoad(data);
 			},
 			error: function ( xhr, errorType, exception ) { //Triggered if an error communicating with server  
-				this._displayResult(xhr, errorType, exception);
+				self._displayResult(xhr, errorType, exception);
 			},  
 		});
     },
 	
 	
 	_displayResult : function(xhr, errorType, exception){
-			
 		var self = this;
 		var msg = '';
 		if (xhr.status === 0) {
 			msg = 'Not connected.\n Verify Network.';
 		} else if (xhr.status == 404) {
-			msg = 'Requested page not found. [404]';
+			msg = 'The requested page was not found.';
 		} else if (xhr.status == 500) {
-			msg = 'Internal Server Error [500].';
+			msg = 'Due to an Internal Server Error, no phenotype data was retrieved.';
+		} else if (xhr.status == 501) {
+			msg = 'The server either does not recognize the request method, or it lacks the ability to fulfill the request';
+		} else if (xhr.status == 502) {
+			msg = 'The server was acting as a gateway or proxy and received an invalid response from the upstream server.';
+		} else if (xhr.status == 503) {
+			msg = 'The server is currently unavailable (because it is overloaded or down for maintenance).';
+		} else if (xhr.status == 504) {
+			msg = 'The server was acting as a gateway or proxy and did not receive a timely response from the upstream server.';
+		} else if (xhr.status == 505) {
+			msg = 'The server does not support the HTTP protocol version used in the request.';
 		} else if (exception === 'parsererror') {
 			msg = 'Requested JSON parse failed.';
 		} else if (exception === 'timeout') {
@@ -782,24 +820,7 @@ as a separate call in the init function.
 			msg = 'Uncaught Error.\n' + xhr.responseText;
 		}
 
-		msg = "There was an error retrieving the phenotype data: " + msg ;  
-			
-		this.element.append("<svg id='svg_area'></svg>");
-        this.options.svg = d3.select("#svg_area");
-        self.options.svg
-			.attr("width", 1100)
-			.attr("height", 60);
-        self.options.h = 60;
-        self.options.yoffset = 50;
-        self.options.svg.append("text")
-            .attr("x", 100)
-            .attr("y", 25)
-            .attr("height", 60)
-            .attr("width", 200)
-			.attr("id", "errmsg")
-            .text(msg);
-
-			
+		this._createEmptyVisualization(msg);
 	},
 	
     _finishLoad: function(data) {
@@ -978,9 +999,16 @@ as a separate call in the init function.
 					break;
 		}				
     	
-	    this.options.colorScale = d3.scale.linear().domain([3, maxScore]);
-        this.options.colorScale.domain([0, 0.2, 0.4, 0.6, 0.8, 1].map(this.options.colorScale.invert));
-        this.options.colorScale.range(['rgb(255,255,204)','rgb(199,233,180)','rgb(127,205,187)','rgb(65,182,196)','rgb(44,127,184)','rgb(37,52,148)']); 	
+	    this.options.colorScaleB = d3.scale.linear().domain([3, maxScore]);
+        this.options.colorScaleB.domain([0, 0.2, 0.4, 0.6, 0.8, 1].map(this.options.colorScaleB.invert));
+        this.options.colorScaleB.range(['rgb(255,255,204)','rgb(199,233,180)','rgb(127,205,187)','rgb(65,182,196)','rgb(44,127,184)','rgb(37,52,148)']); 
+
+ 
+		this.options.colorScaleR = d3.scale.linear().domain([3, maxScore]);
+        this.options.colorScaleR.domain([0, 0.2, 0.4, 0.6, 0.8, 1].map(this.options.colorScaleR.invert));
+        this.options.colorScaleR.range(['rgb(255,255,178)','rgb(254,217,118)','rgb(254,178,76)','rgb(253,141,60)','rgb(240,59,32)','rgb(189,0,38)']); 
+
+		
 	},
 
     _initCanvas : function() {
@@ -1422,7 +1450,13 @@ as a separate call in the init function.
 		  .style('opacity', '1.0')
 		  .attr("fill", function(d, i) {
 			  //added +5 to d.value to get darker color
-			  return self.options.colorScale(d.value + 5);
+			  if (self.options.targetSpeciesName == "All"){
+						if (d.species == "Homo sapiens") {return self.options.colorScaleB(d.value + 5);}
+						else {return self.options.colorScaleR(d.value + 5);}
+					}	
+					else {	
+						return self.options.colorScaleB(d.value + 5);
+			  }
 		  });
 		  model_rects.transition()
 			  .delay(20)
@@ -1753,7 +1787,7 @@ as a separate call in the init function.
 		
 	    this._createModelRects();
 	    this._createRects();
-	    this._updateScrollCounts();
+	    //this._updateScrollCounts();
 	},
 	
 	_showDialog : function( dname ) {				
@@ -1784,7 +1818,7 @@ as a separate call in the init function.
 			break;
 			case "calcs": text = "<h5>What do the different calculation methods mean?</h5><div>For each pairwise comparison of phenotypes from the query (q) and target (t), we can assess their individual similarities in a number of ways.  First, we find the phenotype-in-common between each pair (called the lowest common subsumer or LCS). Then, we can leverage the Information Content (IC) of the phenotypes (q,t,lcs) in a variety of combinations to interpret the strength of the similarity.</div><br /><div><b>**Uniqueness </b>reflects how often the phenotype-in-common is annotated to all diseases and genes in the Monarch Initiative knowledgebase.  This is simply a reflection of the IC normalized based on the maxIC. IC(PhenotypeInCommon)maxIC(AllPhenotypes)</div><br /><div><b>**Distance</b> is the euclidian distance between the query, target, and phenotype-in-common, computed using IC scores.<br/><center>d=(IC(q)-IC(lcs))2+(IC(t)-IC(lcs))2</center>  </div><br /><div>This is normalized based on the maximal distance possible, which would be between two rarely annotated leaf nodes that only have the root node (phenotypic abnormality) in common.  So what is depicted in the grid is 1-dmax(d)</div><br /><div><b>**Ratio(q)</b> is the proportion of shared information between a query phenotype and the phenotype-in-common with the target.<br /><center>ratio(q)=IC(lcs)IC(q)*100</center></div><br /><div><b>**Ratio(t)</b> is the proportion of shared information between the target phenotype and the phenotype-in-common with the query.<br /><center>ratio(t)=IC(lcs)IC(t)*100</center></div>";
 			break;
-			case "faq": text = "<h4>Phenogrid Faq</h4><h5>How are the similar targets obtained?</h5><div>We query our owlsim server to obtain the top 100 most-phenotypically similar targets for the selected organism.  The grid defaults to showing mouse.</div><h5>What are the possible targets for comparison?</h5><div>Currently, the phenogrid is configured to permit comparisons between your query (typically a set of disease-phenotype associations) and one of:<ul><li>human diseases</li><li>mouse genes</li><li>zebrafish genes</li></ul>You can change the target organism by selecting a new organism.  The grid will temporarily disappear, and reappear with the new target rendered.</div><h5>Can I compare the phenotypes to human genes?</h5><div>No, not yet.  But that will be added soon.</div><h5>Where does the data come from?</h5><div>The phenotype annotations utilized to compute the phenotypic similarity are drawn from a number of sources:<ul><li>Human disease-phenotype annotations were obtained from  <a href='http://human-phenotype-ontology.org' target='_blank'>http://human-phenotype-ontology.org</a>, which contains annotations for approx. 7,500 diseases.<li><li>Mouse gene-phenotype annotations were obtained from MGI <a href='www.informatics.jax.org'>(www.informatics.jax.org).</a> The original annotations were made between genotypes and phenotypes.  We then inferred the relationship between gene and phenotype based on the genes that were variant in each genotype.  We only perform this inference for those genotypes that contain a single variant gene.</li><li>Zebrafish genotype-phenotype annotations were obtained from ZFIN  <a href='www.zfin.org' target='_blank'>(www.zfin.org).</a> The original annotations were made between genotypes and phenotypes, with some of those genotypes created experimentally with the application of morpholino reagents.  Like for mouse, we inferred the relationship between gene and phenotype based on the genes that were varied in each genotype.  We only perform this inference for those genotypes that contain a single variant gene.</li><li>All annotation data, preformatted for use in OWLSim, is available for download from  <a href='http://code.google.com/p/phenotype-ontologies/' target='_blank'>http://code.google.com/p/phenotype-ontologies/ </a> </li></ul><h5>What does the phenogrid show?</h5><div>The grid depicts the comparison of a set of phenotypes in a query (such as those annotated to a disease or a gene) with one or more phenotypically similar targets.  Each row is a phenotype that is annotated to the query (either directly or it is a less-specific phenotype that is inferred), and each column is an annotated target (such as a gene or disease).  When a phenotype is shared between the query and target, the intersection is colored based on the selected calculation method (see What do the different calculation methods mean).   You can hover over the intersection to get more information about what the original phenotype is of the target, and what is in-common between the two.</div><h5>Where can I make suggestions for improvements or additions?</h5><div>Please email your feedback to <a href='mailto:info@monarchinitiative.org'>info@monarchinitiative.org.</a><h5>What happens to the phenotypes that are not shared?</h5><div>Presently, phenotypes that were part of your query but are not shared by any of the targets are not rendered.</div><h5>Why do I sometimes see two targets that share the same phenotypes have very different overall scores?</h5><div>This is usually because of some of the phenotypes that are not shared with the query.  For example, if the top hit to a query matches each phenotype exactly, and the next hit matches all of them exactly plus it has 10 additional phenotypes that don’t match it at all, it is penalized for those phenotypes are aren’t in common, and thus ranks lower on the similarity scale. <div>";
+			case "faq": text = "<h4>Phenogrid Faq</h4><h5>How are the similar targets obtained?</h5><div>We query our owlsim server to obtain the top 100 most-phenotypically similar targets for the selected organism.  The grid defaults to showing mouse.</div><h5>What are the possible targets for comparison?</h5><div>Currently, the phenogrid is configured to permit comparisons between your query (typically a set of disease-phenotype associations) and one of:<ul><li>human diseases</li><li>mouse genes</li><li>zebrafish genes</li></ul>You can change the target organism by selecting a new organism.  The grid will temporarily disappear, and reappear with the new target rendered.</div><h5>Can I compare the phenotypes to human genes?</h5><div>No, not yet.  But that will be added soon.</div><h5>Where does the data come from?</h5><div>The phenotype annotations utilized to compute the phenotypic similarity are drawn from a number of sources:<ul><li>Human disease-phenotype annotations were obtained from  <a href='http://human-phenotype-ontology.org' target='_blank'>http://human-phenotype-ontology.org</a>, which contains annotations for approx. 7,500 diseases.<li><li>Mouse gene-phenotype annotations were obtained from MGI <a href='www.informatics.jax.org'>(www.informatics.jax.org).</a> The original annotations were made between genotypes and phenotypes.  We then inferred the relationship between gene and phenotype based on the genes that were variant in each genotype.  We only perform this inference for those genotypes that contain a single variant gene.</li><li>Zebrafish genotype-phenotype annotations were obtained from ZFIN  <a href='www.zfin.org' target='_blank'>(www.zfin.org).</a> The original annotations were made between genotypes and phenotypes, with some of those genotypes created experimentally with the application of morpholino reagents.  Like for mouse, we inferred the relationship between gene and phenotype based on the genes that were varied in each genotype.  We only perform this inference for those genotypes that contain a single variant gene.</li><li>All annotation data, preformatted for use in OWLSim, is available for download from  <a href='http://code.google.com/p/phenotype-ontologies/' target='_blank'>http://code.google.com/p/phenotype-ontologies/ </a> </li></ul><h5>What does the phenogrid show?</h5><div>The grid depicts the comparison of a set of phenotypes in a query (such as those annotated to a disease or a gene) with one or more phenotypically similar targets.  Each row is a phenotype that is annotated to the query (either directly or it is a less-specific phenotype that is inferred), and each column is an annotated target (such as a gene or disease).  When a phenotype is shared between the query and target, the intersection is colored based on the selected calculation method (see What do the different calculation methods mean).   You can hover over the intersection to get more information about what the original phenotype is of the target, and what is in-common between the two.</div><h5>Where can I make suggestions for improvements or additions?</h5><div>Please email your feedback to <a href='mailto:info@monarchinitiative.org'>info@monarchinitiative.org.</a><h5>What happens to the phenotypes that are not shared?</h5><div>Presently, phenotypes that were part of your query but are not shared by any of the targets are not rendered.</div><h5>Why do I sometimes see two targets that share the same phenotypes have very different overall scores?</h5><div>This is usually because of some of the phenotypes that are not shared with the query.  For example, if the top hit to a query matches each phenotype exactly, and the next hit matches all of them exactly plus it has 10 additional phenotypes that don&#39;t match it at all, it is penalized for those phenotypes are aren&#39;t in common, and thus ranks lower on the similarity scale. <div>";
 			break;			
 			case "unmatched":  text = this._showUnmatchedPhenotypes();
 			break;
@@ -1899,51 +1933,122 @@ as a separate call in the init function.
 			return d.value;});
 	    var diff = d3.max(temp_data) - d3.min(temp_data);
 		//account for a grid with less than 5 phenotypes
-		var y1 = 307,
-			y2 = 294;
-		if (this.options.filteredPhenotypeData.length < 14) {y1 =217; y2 = 164;}
+		//No matches
+		//var y1 = 307,
+		//	y2 = 294;
+		var y1 = 267,
+			y2 = 254;
+			
+		if (this.options.filteredPhenotypeData.length < 14) {y1 =177; y2 = 164;} //{y1 =217; y2 = 204;}
 	    //only show the scale if there is more than one value represented
 	    //in the scale
 	    if (diff > 0) {
-		    //create a scale
-			var color_values = ['rgb(247,252,240)','rgb(204,235,197)','rgb(168,221,181)','rgb(78,179,211)','rgb(43,140,190)','rgb(8,88,158)'];
+		    
+			//colorbrewer: 8-class //GnBu['rgb(247,252,240)','rgb(224,243,219)','rgb(204,235,197)','rgb(168,221,181)','rgb(123,204,196)','rgb(78,179,211)','rgb(43,140,190)','rgb(8,88,158)']
+			//['rgb(247,252,240)','rgb(204,235,197)','rgb(168,221,181)','rgb(78,179,211)','rgb(43,140,190)','rgb(8,88,158)'],
+				//colorbrewer: 6-class YlGnBu
+			var color_values_blue = ['rgb(255,255,204)','rgb(199,233,180)','rgb(127,205,187)','rgb(65,182,196)','rgb(44,127,184)','rgb(37,52,148)'],
+				//colorbrewer: 6-class YlOrRd
+				color_values_red = ['rgb(255,255,178)','rgb(254,217,118)','rgb(254,178,76)','rgb(253,141,60)','rgb(240,59,32)','rgb(189,0,38)'];
 		   
-		    var gradient = this.options.svg.append("svg:linearGradient")
-				.attr("id", "gradient")
+		    var gradient_blue = this.options.svg.append("svg:linearGradient")
+				.attr("id", "gradient_blue")
 				.attr("x1", "0")
 				.attr("x2", "100%")
 				.attr("y1", "0%")
 				.attr("y2", "0%");
 				
-			gradient.append("svg:stop")
+			gradient_blue.append("svg:stop")
 				.attr("offset", "20%")
-				.style("stop-color", 'rgb(168,221,181)')
+				.style("stop-color", 'rgb(199,233,180)')
 				.style("stop-opacity", 1);
 			
-			gradient.append("svg:stop")
+			gradient_blue.append("svg:stop")
 				.attr("offset", "40%")
-				.style("stop-color", 'rgb(78,179,211)')
+				.style("stop-color", 'rgb(127,205,187)')
 				.style("stop-opacity", 1);
 			
-			gradient.append("svg:stop")
+			gradient_blue.append("svg:stop")
 				.attr("offset", "60%")
-				.style("stop-color", 'rgb(43,140,190)')
+				.style("stop-color", 'rgb(44,127,184)')
 				.style("stop-opacity", 1);
 				
-			gradient.append("svg:stop")
+			gradient_blue.append("svg:stop")
 				.attr("offset", "80%")
-				.style("stop-color", 'rgb(8,88,158)')
+				.style("stop-color", 'rgb(37,52,148)')
 				.style("stop-opacity", 1);
 
-		    var legend_rects = this.options.svg.append("rect")
+		    var legend_rects_blue = this.options.svg.append("rect")
 				.attr("transform","translate(0,10)")
 				.attr("class", "legend_rect")
-				.attr("id","legendscale")
+				.attr("id","legendscale_blue")
 				.attr("y", (y1 - 5) + this.options.yTranslation)
 				.attr("x", self.options.axis_pos_list[2] + 12)
+				.attr("rx",15)
+				.attr("ry",15)
 				.attr("width", 180)
 				.attr("height", 20)
-				.attr("fill", "url(#gradient)");
+				.attr("fill", "url(#gradient_blue)");
+			
+			if (this.options.targetSpeciesName == "All"){			
+				
+				legend_rects_blue.append("text")
+					.attr("y", (y1 - 5) + this.options.yTranslation)
+					.attr("x", self.options.axis_pos_list[2] + 200)
+					.attr("id","bluetext")
+					.attr("width", 40)
+					.attr("height", 20)
+					.text("Human");
+				
+				var gradient_red = this.options.svg.append("svg:linearGradient")
+					.attr("id", "gradient_red")
+					.attr("x1", "0")
+					.attr("x2", "100%")
+					.attr("y1", "0%")
+					.attr("y2", "0%");
+						
+				//Red values: ['rgb(255,255,178)','rgb(254,217,118)','rgb(254,178,76)','rgb(253,141,60)','rgb(240,59,32)','rgb(189,0,38)'];	
+				gradient_red.append("svg:stop")
+					.attr("offset", "20%")
+					.style("stop-color", 'rgb(255,255,178)')
+					.style("stop-opacity", 1);
+				
+				gradient_red.append("svg:stop")
+					.attr("offset", "40%")
+					.style("stop-color", 'rgb(254,178,76)')
+					.style("stop-opacity", 1);
+				
+				gradient_red.append("svg:stop")
+					.attr("offset", "60%")
+					.style("stop-color", 'rgb(240,59,32)')
+					.style("stop-opacity", 1);
+					
+				gradient_red.append("svg:stop")
+					.attr("offset", "80%")
+					.style("stop-color", 'rgb(189,0,38)')
+					.style("stop-opacity", 1);
+
+				var legend_rects_red = this.options.svg.append("rect")
+					.attr("transform","translate(0,10)")
+					.attr("class", "legend_rect")
+					.attr("id","legendscale_red")
+					.attr("y", (y1 + 15) + this.options.yTranslation)
+					.attr("x", self.options.axis_pos_list[2] + 12)
+					.attr("rx",15)
+					.attr("ry",15)
+					.attr("width", 180)
+					.attr("height", 20)
+					.attr("fill", "url(#gradient_red)");
+					
+				legend_rects_red.append("text")
+					.attr("y", (y1 + 15) + this.options.yTranslation)
+					.attr("x", self.options.axis_pos_list[2] + 200)
+					.attr("id","redtext")
+					.attr("width", 40)
+					.attr("height", 20)
+					.text("Other");
+				
+			}
 				
 			var calc = this.options.selectedCalculation,
 				text1 = "",
@@ -1951,12 +2056,13 @@ as a separate call in the init function.
 				text3 = "";
 			
 			//account for a grid with less than 5 phenotypes
-			var y1 = 305,
-				y2 = 295;
-			if (this.options.filteredPhenotypeData.length < 14) {y1 = 220; y2 = 210;}
+			var y1 = 267,
+				y2 = 257;
+			if (this.options.filteredPhenotypeData.length < 14) {y1 = 172; y2 = 162;}
 			
 			if (calc == 2) {text1 = "Lowest"; text2 = "Uniqueness"; text3 = "Highest";}
 			else if (calc == 1) {text1 = "Less Similar"; text2 = "Ratio (q)"; text3 = "More Similar";}
+			else if (calc == 3) {text1 = "Less Similar"; text2 = "Ratio (t)"; text3 = "More Similar";}
 			else if (calc == 0) {text1 = "Min"; text2 = "Distance"; text3 = "Max";}
 	
 		    var div_text1 = self.options.svg.append("svg:text")
