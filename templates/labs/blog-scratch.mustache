@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>blog-scratch</title>
+    {{#scripts}}
+    <script type="text/javascript" src="{{url}}"></script>
+    {{/scripts}}
+    {{{includes.analytics}}}
+    {{#stylesheets}}
+    <link rel="stylesheet" type="text/css" href="{{url}}"/>
+    {{/stylesheets}}
+    <link rel="stylesheet" type="text/css" href="/css/tour.css"/>
+    <link rel="icon" href="/image/favicon.ico" type="image/x-icon">
+    <meta charset="utf-8"/> 
+  </head>
+  <body>
+    <div class="monarch-container">
+      {{{includes.navbar}}}
+      <div class="content">
+        <div class="wrapperforfooter">
+          <div class="title">blog scratch</div>
+
+	  <div style="margin-top: 1em;">
+	    <h4>Server-side implementation</h4>
+	    <ul>
+	    {{#blog_results}}
+	    <li>
+	      <strong><a href="{{link}}">{{title}}</a></strong>
+	      {{description}}
+	    </li>
+	    {{/blog_results}}
+	    </ul>
+	  </div>
+
+	</div> <!-- closes wrapperforfooter -->
+	{{{includes.footer}}}
+      </div>
+    </div>
+  </body>
+</html>
