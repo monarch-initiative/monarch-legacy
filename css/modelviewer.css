@@ -6,8 +6,9 @@
 }
 
 #errmsg{
+	padding-top: 30px;
 	font-size:1.2em;
-	font-weight:bold;
+	/**font-weight:bold;*/
 	stroke:#ea763b;
 }
 
@@ -49,7 +50,6 @@ text.accent{
 	
 
 }
-
 
 .row_accent,
 .model_accent{
@@ -125,8 +125,8 @@ line {
 .selects{
   float:right;
   position:absolute;
-  top:730px;
-  left:900px;
+  top:690px;
+  left:830px;
   background-color:#f5f5f5; 
   padding: 0 7px 8px 6px;
   margin-left:-10px;
@@ -137,18 +137,13 @@ line {
   float:right;
   position:absolute;
   top:500px;
-  left:900px;
+  left:830px;
   background-color:#f5f5f5; 
   padding: 0 7px 8px 6px;
   margin-left:-10px;
   width: 205px;
 }
 
-
-#phen_vis{
-	margin-left:40px;
-	padding:40px;
-}
 
 #org_div div, #calc_div div{
 	font-weight:bold;
@@ -201,7 +196,6 @@ line {
 #unmatched {
 	margin-left:55px;
 	margin-top: -10px;
-
 }
 
 #logo {
@@ -237,4 +231,8 @@ margin-left: 5px;
     -webkit-border-radius: 0 0 8px 8px;
     border-radius: 0 0 8px 8px; 
 	border-width: 3px;
+}
+
+#redtext, #bluetext{
+	fill: black;
 }
