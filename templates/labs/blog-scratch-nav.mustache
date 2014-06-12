@@ -1,0 +1,74 @@
+<div class="navbar navbar-inverse navbar-fixed-top" role="navigation">
+  <div class="containter-fluid"> <!-- monarch-navbar-container">-->
+    <div class="navbar-header">
+      <button type="button" class="navbar-toggle" data-toggle="collapse"
+              data-target="#collapsed-navbar">
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+      </button>
+      <a class="navbar-brand" href="/">Monarch</a>
+    </div>
+    <div id="collapsed-navbar" class="nav-collapse collapse">
+      <ul class="nav navbar-nav">
+        <li class="dropdown">
+          <a href="#" class="dropdown-toggle" data-toggle="dropdown">
+            <i class="icon-th-large"></i>Browse <b class="caret"></b></a>
+          <ul class="dropdown-menu">
+            <li><a href="/disease/">Diseases</a></li>
+            <li><a href="/phenotype/">Phenotypes</a></li>
+            <li><a href="/gene/">Genes</a></li>
+            <li><a href="/model/">Models</a></li>
+          </ul>
+        </li>
+        <li class="dropdown">
+          <a href="#" class="dropdown-toggle" data-toggle="dropdown">
+            <i class="icon-th-large"></i>Analyze <b class="caret"></b></a>
+          <ul class="dropdown-menu">
+            <li><a href="/analyze/phenotypes/">Phenotypes</a></li>
+            <li><a href="/annotate/text">Annotate Text</a></li>
+            <li><a href="/page/exomes/">Exomes</a></li>
+          </ul>
+        </li>
+        <li class="dropdown">
+          <a href="#" class="dropdown-toggle" data-toggle="dropdown">
+            <i class="icon-th-large"></i>About <b class="caret"></b></a>
+          <ul class="dropdown-menu">
+            <li><a href="/page/about">About Monarch</a></li>
+            <li><a href="/page/releases">Releases</a></li>
+          </ul>
+        </li>
+        <li class="dropdown">
+          <a href="#" class="dropdown-toggle" data-toggle="dropdown">
+            <i class="icon-th-large"></i>Documentation <b class="caret"></b></a>
+          <ul class="dropdown-menu">
+            <li><a href="/page/software">Monarch Software</a></li>
+            <li><a href="/page/services">Monarch RESTful API</a></li>
+            <li><a href="/docs/index.html">Javascript API</a></li>
+	    <li><a href="/page/widget">ModelType VIewer Widget</a></li>
+	    <li><a href="https://github.com/monarch-initiative/monarch-app">GitHub
+                Project</a></li>
+            <li><a href="https://code.google.com/p/phenotype-ontologies/">Ontologies</a></li>
+            <li><a href="/page/pubs">Publications</a></li>
+            <li><a href="/page/glossary">Glossary</a></li>
+          </ul>
+        </li>
+        <li class="dropdown">
+          <a href="#" class="dropdown-toggle" data-toggle="dropdown">
+            <i class="icon-th-large"></i>Contact <b class="caret"></b></a>
+          <ul class="dropdown-menu">
+            <li><a href="/page/team">Monarch Team</a></li>
+            <li><a href="https://github.com/monarch-initiative/monarch-app/issues">Issue Tracker</a></li>
+            <li><a href="mailto:info@monarchinitiative.org">Email Us</a></li>
+            <li><a href="http://mail.monarchinitiative.org/mailman/listinfo/users">Join Listserve</a></li>
+          </ul>
+        </li>
+      </ul>
+      <form id="search_form" class="navbar-form navbar-left searchspace" action="/search" role="search">
+        <div class="form-group">
+          <input id="search" type="text" class="form-control search-box" placeholder="Search (e.g. Parkinson's)"/>
+        </div>
+      </form>
+    </div>
+  </div>
+</div>
