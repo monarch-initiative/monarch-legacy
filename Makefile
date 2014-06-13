@@ -18,9 +18,11 @@ RINGO_PORT ?= 8080
 ### Tests
 ###
 
-TESTS = apitest urltester
+APITESTS = apitest literature-test class-info-test disease-phenotype-test
+TESTS = $(APITESTS) urltester
 
 test: $(patsubst %, test-%, $(TESTS))
+apitest: $(patsubst %, test-%, $(APITESTS))
 production-test: $(patsubst %, production-test-%, $(TESTS))
 
 test-%:
@@ -64,6 +66,9 @@ app-engine:
 	ringo-admin create --google-appengine gae
 
 ## Setup portable Ubuntu environment. -SJC
+.PHONY: cli-launch-prod
+cli-launch-prod:
+	RINGO_MODULE_PATH=$(RINGO_MODULE_PATH) $(RINGO_CLI_BIN) ./lib/monarch/web/webapp_launcher_production.js --port=$(RINGO_PORT)
 .PHONY: cli-launch-dev
 cli-launch-dev:
 	RINGO_MODULE_PATH=$(RINGO_MODULE_PATH) $(RINGO_CLI_BIN) ./lib/monarch/web/webapp_launcher_dev.js --port=$(RINGO_PORT)

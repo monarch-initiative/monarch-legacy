@@ -1,22 +1,238 @@
-.ui-dialog-titlebar {
-  background-color: #F9D0BB;
+#svgempty{
+	font-size:1.2em;
+	font-weight:bold;
+	height: 60;
+	width: 200;
+}
 
+#errmsg{
+	padding-top: 30px;
+	font-size:1.2em;
+	/**font-weight:bold;*/
+	stroke:#ea763b;
+}
+
+#gridline{
+	fill: #ffffff;
+	fill-opacity: 0;
+	stroke: #e5e5e5;
+	stroke-width: 1;
+}
+
+#globalview{
+	fill: #ffffff;
+	stroke: #000000;
+	stroke-width: 2;
+}
+#header{
+	margin-top:0px;
+}
+
+#slabel,
+#org_div div,
+#clabel{
+	width:175px;
+}
+
+#sorts span,
+#org_div span,
+#calc_sel{
+	width:150px;
+	font-size:9px;
+}
+
+#org_div span,
+#calc_sel{
+	margin-top:-15px;
+}
+
+text.accent{
+	
+
+}
+
+.row_accent,
+.model_accent{
+	stroke:#ea763b;
+	stroke-width: 2;
+	fill: #ffffff;
+	fill-opacity: 0.05;
+}
+
+.scroll_text{
+	font-size: 9px;
+}
+
+line {
+	stroke: #0F473E;
+	stroke-width: 1;
+}
+
+.a_text{
+	text-anchor:end;
+	opacity: 1.0;
+	font-size: 12px;
+
+}
+
+#scorelist{
+	font-size:10px;
+	fill: #0F473E;
+}
+
+#detail_text{
+	font-size: 10px;
+	padding: 8px;
+	background-color: #f9d0bb;
+	border: 1px solid #c5c5c5;
+
+}
+
+#stitle{
+	width:560px;
+	margin-left: 25px;
+	font-size:18px;
+}
+
+#svg_area{
+	float:left;
+	margin-top: -35px;
+}
+
+#selectionrect{
+	fill: grey;
+	opacity: 0.5
+}
+
+.instruct{
+	font-size:12px;
+}
+
+.tip{
+	width: 80px;
+	height:10px;
+	font-size:12px;
+	font-weight:bold;
+}
+
+#tip{  
+   font-size: 13px;
+   margin-left:-20px;
+   stroke-width: 1px;
+   stroke:#25349A;
+}
+
+.selects{
+  float:right;
+  position:absolute;
+  top:690px;
+  left:830px;
+  background-color:#f5f5f5; 
+  padding: 0 7px 8px 6px;
+  margin-left:-10px;
+  width: 205px;
+}
+
+.shortselects{
+  float:right;
+  position:absolute;
+  top:500px;
+  left:830px;
+  background-color:#f5f5f5; 
+  padding: 0 7px 8px 6px;
+  margin-left:-10px;
+  width: 205px;
+}
+
+
+#org_div div, #calc_div div{
+	font-weight:bold;
+}
+
+#org_div span, #calc_div span{
+   font-size:14px;
+}
+
+#calcs {
+  margin-left:10px;
+  font-size: 22px;
+  color: #25349A;
+  font-weight:bold;
+}
+
+#clabel{
+  font-weight:bold;
+}
+
+#organism , #calculation{
+   margin-top: 5px;  
+}
+
+#org_div div, #calc_div div {
+	font-weight:bold;
+}
+
+#faq{
+	margin-left:14px;
+	font-weight:bold;
+	font-size:16px;
+	color:#FF9966;
+}
+
+#detail_content{
+  z-index:500;
+}
+
+#slabel{
+	font-size:14px;
+	font-weight:bold;
+	margin-left: -20px;
+}
+
+.faq{
+	margin-top:-5px;
+}
+
+#unmatched {
+	margin-left:55px;
+	margin-top: -10px;
+}
+
+#logo {
+	height:90px;
+}
+
+#sort_div {
+margin-top: 0px;
+margin-left: 5px;
+}
+
+/** jQDialog styles */
+.ui-dialog-titlebar {
+  background-color:#253494;
+  color:#FFFFFF;
 }
 .ui-dialog-content{
-	font-weight:bold;
-	font-size:14px;
+	font-size:11px;
 	font-family: arial;
+	color:#000000;	
 }
-
+.ui-dialog-content a{
+	color: #253494;
+}
 .ui-dialog-buttonpane{
-	background-color: #F9D0BB;
+	background-color: #253494;
 }
-
 .ui-dialog-buttonset{
-	background-color: #F9D0BB;
+	background-color: #25349A;
 }
 .ui-dialog-osx {
     -moz-border-radius: 0 0 8px 8px;
     -webkit-border-radius: 0 0 8px 8px;
-    border-radius: 0 0 8px 8px; border-width: 0 8px 8px 8px;
+    border-radius: 0 0 8px 8px; 
+	border-width: 3px;
+}
+
+#redtext, #bluetext{
+	fill: black;
 }

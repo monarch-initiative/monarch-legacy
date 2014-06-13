@@ -8,6 +8,7 @@
     <script src="/js/tabs.js"></script>
     <script src="/js/stupidtable.min.js"></script>
     <script src="/js/tables.js"></script>
+    {{{includes.analytics}}}
     {{#stylesheets}}
     <link rel="stylesheet" type="text/css" href="{{url}}"/>
     {{/stylesheets}}
@@ -56,7 +57,6 @@
                             <div class="tab greyed-out">Related Diseases (0)</div>
                         {{/hasDiseases}}
                     </div>
-                    <div class="second-row-divider"></div>
                     <div class="tabcontainer">
                         <div class="tabhover">View genes known to be variant in this model</div>
                         {{#hasGenes}}

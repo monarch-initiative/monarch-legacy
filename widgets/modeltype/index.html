@@ -22,6 +22,7 @@
     <script src="js/d3.min.js"></script>
     <script src="js/modeltype.js"></script>
 	<link rel="stylesheet" type="text/css" href="css/instructions.css"/>
+	<link rel="stylesheet" type="text/css" href="css/modelviewer.css"/>
     <script>
 	var phenotypes = [
 	   	{ id:"HP:0000006", observed:"positive"},
@@ -61,8 +62,9 @@
         <div class="content">
             <div class="wrapperforfooter">
 			<span class="headtitle"><img id="monarch-logo"  width="90px" class="downloadline" src="image/logo.png"/>
-			<span class="header">ModelType Viewer Widget</span></span><br />           
-			<div id="phen_vis"></div><br /><br />	
+			<span class="header">ModelType Viewer Widget</span></span><br />  <br /> <br />          
+			<div id="viscontent">
+			<div id="phen_vis"></div></div>
 				<div class="text">
 				<div class="title">Steps for Adding the ModelType Viewer Widget to Your Webpage</div>
                     This page describes how to include the Viewer Widget on any webpage.  Steps are provided for adding required javascript files<b>*</b>, adding parameters to the widget call, and adding the widget to the html file. <br /><br />
