@@ -161,7 +161,11 @@
                         matching an input set of attributes. For example, find all
                         animal models matching a disease phenotype profile.
                         <pre>
-                        /analyze/phenotypes/:a1+a2+...+an/:target.json
+                        /analyze/phenotypes.json?input=items=a1+a2+...+an
+                        </pre>
+                        For example: 
+                        <pre>
+                        /analyze/phenotypes.json?input=items=/analyze/phenotypes.json/?input_items=MP:0000788+MP:0000914
                         </pre>
                         This wraps a call
                         to <a href="http://owltools.googlecode.com/svn/trunk/docs/api/owltools/sim2/OwlSim.html#findMatches(java.util.Set,
