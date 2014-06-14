@@ -13,6 +13,7 @@
     <script src="/widgets/modeltype/js/jquery-ui-1.10.3.custom.min.js"></script>
     <script src="/widgets/modeltype/js/d3.min.js"></script>
 	<script type="text/javascript" src="/widgets/modeltype/js/modeltype.js"></script>
+    {{{includes.analytics}}}
     {{#stylesheets}}
     <link rel="stylesheet" type="text/css" href="{{url}}"/>
     {{/stylesheets}}
@@ -21,6 +22,7 @@
     <link rel="stylesheet" type="text/css" href="/css/monarch-specific.css"/>
     <link rel="stylesheet" type="text/css" href="/css/imagehover.css"/>	
 	<link rel="stylesheet" type="text/css" href="/css/instructions.css"/>
+	<link rel="stylesheet" type="text/css" href="/css/modelviewer.css"/>
     <meta name="viewport" content="width=device-width, initial-scale=1.0"/> 
     <link rel="icon" href="/image/favicon.ico" type="image/x-icon">
     <meta charset="utf-8"/> 
@@ -65,7 +67,7 @@
         <div class="content">
             <div class="wrapperforfooter">
 			<span class="header">ModelType Viewer Widget</span></span>
-			<div id="phen_vis"></div><br /><br />
+			<div id="viscontent"><div id="phen_vis"></div></div><br />
             <div class="title">Steps for Adding the ModelType Viewer Widget to Your Webpage</div>
 				<div class="text">
                     This page describes how to include the Viewer Widget on any webpage.  Steps are provided for adding required javascript files<b>*</b>, adding parameters to the widget call, and adding the widget to the html file. <br /><br />
@@ -177,10 +179,10 @@
 			<div class="sectiontitle">5. Load your HTML file into a browser.</div><br/>
 			<div class="sectiontitle">Please contact us at <a href="mailto:info@monarchinitiative.org">info@monarchinitiative.org</a> if you have any problems or questions.</div>			
             </div> <!-- closes wrapperforfooter -->
-            
-			</div>
-        </div>
-    </div>
+        </div>	
+	</div>
 	{{{includes.footer}}}
+	
+	
 </body>
 </html>

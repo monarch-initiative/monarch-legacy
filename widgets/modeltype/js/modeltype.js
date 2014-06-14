@@ -45,31 +45,32 @@ as a separate call in the init function.
 	options:   {
 	    axis_pos_list: [],
 		clickedData: undefined, 
-		colorScale: undefined,
+		colorScaleB: undefined,
+		colorScaleR: undefined,
 		colStartingPos: 10,
 		comparisonType : "genes",
 		currModelIdx : 0,
 	    currPhenotypeIdx : 0,
 		currSelectedRect: undefined,
 	    detailRectWidth: 240,   
-        detailRectHeight: 100,
+        detailRectHeight: 140,
         detailRectStrokeWidth: 3,
 	    dimensions: [ "Phenotype Profile", "Lowest Common Subsumer", "Phenotypes in common" ], 
 		drag: undefined,
 	    filteredModelData: [],
 		filteredModelList: [],
 	    filteredPhenotypeData: [],
+		filteredFullModelData: [],
+		filteredFullPhenotypeData: [],
 	    globalViewWidth : 110,
 	    globalViewHeight : 110,	
 	    h : 0,
 		highlightRect: undefined,
 		inputPhenotypeData : [],	  	    
 	    m :[ 30, 10, 10, 10 ], 
-		maxColorScale : 'rgb(37,52,148)',
-		//maxColorScale : "#0F473E",
+		//maxColorScale : 'rgb(37,52,148)',
 		maxICScore : 0,
-		minColorScale: 'rgb(255,255,204)',
-		//minColorScale : "#F2F2F2",	     
+		//minColorScale: 'rgb(255,255,204)',
 	    modelData: [],
 		modelDisplayCount : 30,
 	    modelList: [],
@@ -77,32 +78,38 @@ as a separate call in the init function.
 		orangeHighlight: "#ea763b",
 		phenotypeData: [],
 	    phenotypeDisplayCount : 26,
-		phenotypeSumData: [],
+		phenotypeSortData: [],
+		scriptpath : $('script[src]').last().attr('src').split('?')[0].split('/').slice(0, -1).join('/')+'/',
 		selectedCalculation: 0,
 		selectedColumn: undefined,
 		selectedLabel: "Default",
+		selectedOrder: 0,
 		selectedRow: undefined,
-		selectList: [{label: "Information Content of Subsumer", calc: 0}, { label: "Information Content Similarity", calc: 1}, { label: "Euclidean Similarity", calc: 2}],
+		selectedSort: "Alphabetic",
+		selectList: [{label: "Distance", calc: 0}, {label: "Ratio (q)", calc: 1}, {label: "Ratio (t)", calc: 3} , {label: "Uniqueness", calc: 2}],
 		selectRectHeight : 0,
 		selectRectWidth : 0,
 		serverURL : "",
+		sortList: [{type: "Alphabetic", order: 0},{type: "LCS Sums", order:1} ,{type: "Model Matches", order:2} ],
 	    smallXScale: undefined,
 	    smallYScale: undefined,		
 	    svg: undefined,
 		targetSpecies: "10090",
-		targetSpeciesList : [{name: "Mus musculus", taxon: "10090"}, { name: "Homo sapiens", taxon: "9606"}, {name: "Danio rerio", taxon: "7955"} /**,  {name: "Drosophila melanogaster", taxon: "7227"} */],
+		targetSpeciesList : [{name: "Mus musculus", taxon: "10090"}, { name: "Homo sapiens", taxon: "9606"}, {name: "Danio rerio", taxon: "7955"} , {name: "Drosophila melanogaster", taxon: "7227"} , {name: "All", taxon: ""}],
 	    targetSpeciesName : "Mus musculus",
 		textLength: 34,
 		textWidth: 200,
+		unmatchedPhenotypes: [],
 		w : 0,
 	    xScale: undefined, 
 		yAxis: [],
 		yAxisMax : 0,
-		yoffset: 100,	    
+		yoffset: 85,	    
 	    yScale: undefined,	
 		yTranslation: undefined,	
 	},
-	
+	   
+		
 		//reset all the arrays before reloading data
 		_reset: function() {
 
@@ -113,12 +120,15 @@ as a separate call in the init function.
 			self.options.yScale = undefined;
 			self.options.modelData = [];
 			self.options.filteredModelData = [];
+			self.options.filteredFullModelData = [];
 			self.options.filteredPhenotypeData = [];
+			self.options.filteredFullPhenotypeData = [];
 			self.options.modelList = [];
 			self.options.filteredModelList = [];
 			self.options.yAxis = [];
 			self.options.modelList = [];
-			self.options.colorScale = undefined;
+			self.options.colorScaleB = undefined;
+			self.options.colorScaleR = undefined;
 			self.options.yAxisMax = 0;
 			self.options.currPhenotypeIdx = 0;
 			self.options.currModelIdx = 0;
@@ -131,14 +141,15 @@ as a separate call in the init function.
 			self.options.globalViewHeight = 110;
 			self.options.phenotypeDisplayCount = 26;
 			self.options.modelDisplayCount = 30;
-			self.options.yoffset = 100;
+			self.options.yoffset = 85;
 			self.options.comparisonType = "genes";
 			self.options.yTranslation = undefined;
 			self.options.selectRectHeight = 0;
-			self.options.selectRectWidth = 0;
-			self.options.phenotypeSumData  = [];
+			self.options.phenotypeSortData = [];	
+			self.options.unmatchedPhenotypes = [];
 	},
-
+	
+	
 	//NOTE: I'm not too sure what the default init() method signature should be
 	//given an imageDiv and phenotype_data list
 	/**
@@ -150,6 +161,7 @@ as a separate call in the init function.
 	    
 		this._setTargetSpeciesName(this.options.targetSpecies);
 		this._setSelectedCalculation(this.options.selectedCalculation);
+		this._setSelectedSort(this.options.selectedSort);
 		this.options.yTranslation =(this.options.targetSpecies == '9606') ? 0 : 0;
 		this.options.w = this.options.m[1]-this.options.m[3];
 	    this.options.h = 1300 -this.options.m[0]-this.options.m[2];
@@ -160,23 +172,20 @@ as a separate call in the init function.
 	    this.options.inputPhenotypeData = this.options.phenotypeData.slice();
 	    this._loadData(this.options.phenotypeData);
 	    this._filterData(this.options.modelData.slice());
+		this._getUnmatchedPhenotypes();
 		
 	    if (this.options.modelData.length != 0 && this.options.phenotypeData.length != 0 && this.options.filteredPhenotypeData.length != 0) {	    
 	         
-	            //this._filterData(this.options.modelData.slice());
-	            this._createYAxis();
+	            //this._createYAxis();
 	    	    //just pad the overall height by a skosh...
 	    	    this.options.h = this.options.yAxisMax + 60;
 	            this._initCanvas(); 
-				this._addLogoImage();
-	        
+				this._addLogoImage();	        
 	            // set canvas size
 	            this.options.svg
 					.attr("width", 1100)
 					.attr("height", 450);//this.options.h - 20 + this.options.yTranslation);
-	
-	            //this._createTitle();
-	            this._createAccentBoxes();				
+				this._createAccentBoxes();				
 	            //this._createScrollBars();
 	            this._createColorScale();
 	            this._createModelRegion();
@@ -184,7 +193,7 @@ as a separate call in the init function.
 				this._createGridlines();
 	    	    this._createModelRects();
 	    	    this._createRects();			
-	    		this._updateScrollCounts();
+	    		//this._updateScrollCounts();
 	    		this._createOverviewSection();
 	    } else {
 			//If there is no data, display a message- "No Models found."
@@ -193,24 +202,23 @@ as a separate call in the init function.
 	},
 	
 	//create this visualization if no phenotypes or models are returned
-	_createEmptyVisualization: function() {
+	_createEmptyVisualization: function(msg) {
 		var self = this;
 		this.element.append("<svg id='svg_area'></svg>");
         this.options.svg = d3.select("#svg_area");
-		
         self.options.svg
 			.attr("width", 1100)
-			.attr("height", 60);
+			.attr("height", 70);
         self.options.h = 60;
         self.options.yoffset = 50;
         self.options.svg.append("text")
-            .attr("x", 100)
-            .attr("y", 25)
-            .attr("height", 60)
+            .attr("x", 80)
+            .attr("y", 60)
+            .attr("height", 70)
             .attr("width", 200)
-            .text("No Models found")
-			.attr("style","font-size:1.2em;")
-			.attr("style","font-weight:bold;");		
+			.attr("id", "errmsg")
+            .text(msg);
+			
 	},
 	
 	//work in progress - commented out in create function.
@@ -227,22 +235,17 @@ as a separate call in the init function.
 				   data.push( r );
 				}
 			}
-	        //console.log("Data: " + data);
- 
 			self.options.svg.selectAll("rect.bordered")
 					   .data(data)
 					   .enter()
 					   .append("rect")
-					   .attr("transform","translate(232, 109)")
+					   .attr("id","gridline")
+					   .attr("transform","translate(232, 95)")
 					   .attr("x", function(d,i) { return d[1] * 18 })
 					   .attr("y", function(d,i) { return d[0] * 13 })  
 					   .attr("class", "hour bordered deselected")
 					   .attr("width", 14)
-					   .attr("height", 11.5)
-					   .attr("stroke", "#e5e5e5")
-					   .attr("fill", "#ffffff")
-					   .attr("fill-opacity",  0)
-					   .attr("stroke-width", 1); 						      
+					   .attr("height", 11.5);				      
 	}, 
 	
 	//for the selection area, see if you can convert the selection to the idx of the x and y
@@ -256,59 +259,102 @@ as a separate call in the init function.
 		var globalview = self.options.svg.append("rect")
 			//note: I had to make the rectangle slightly bigger to compensate for the strike-width
 			.attr("x", self.options.axis_pos_list[2] + 40)
-			.attr("y", 130 + this.options.yTranslation)
+			.attr("y", 126 + this.options.yTranslation)
 			.attr("id", "globalview")
-			.style("stroke", "black")
-			.style("fill", "white")
-			.style("stroke-width", 2)
 			.attr("height", self.options.globalViewHeight + 6)
 			.attr("width", self.options.globalViewWidth + 6);
+			
+		var scoretip = self.options.svg.append("text")
+				.attr("transform","translate(" + (self.options.axis_pos_list[2] ) + "," + (self.options.yTranslation + self.options.yoffset - 6) + ")")
+    	        .attr("x", 0)
+				.attr("y", 0)
+				.attr("class", "tip")
+				.text("< Model Scores");			
+		
+
+/** var imgs = this.options.svg.selectAll("image").data([0]);
+  imgs.enter()
+			.append("svg:image")
+			.attr("xlink:href", this.options.scriptpath + "../image/logo-sneak.png")
+			.attr("x", 850)
+			.attr("y", this.options.yTranslation - 10)
+			.attr("id", "logo")
+			.attr("width", "60")
+			.attr("height", "90");       */
+		
+		var tip	= self.options.svg
+				.append("svg:image")				
+				.attr("xlink:href", this.options.scriptpath + "../image/greeninfo30.png")
+				.attr("transform","translate(" + (self.options.axis_pos_list[2] +102) + "," + (self.options.yTranslation + self.options.yoffset - 20) + ")")
+				.attr("id","modelscores")
+				.attr("x", 0)
+				.attr("y", 0)
+				.attr("width", 15)
+    	        .attr("height", 15)		
+				.on("click", function(d) {
+					var name = "modelscores";					
+					self._showDialog(name);
+				});
+			
 
 		var rect_instructions = self.options.svg.append("text")
 			.attr("x", self.options.axis_pos_list[2] + 10)
-			.attr("y", 78 + this.options.yTranslation)
-			.style("font-size", "12px")
+			.attr("y", 100 + this.options.yTranslation)
+			.attr("class", "instruct")
 			.text("Use the phenotype map below to");
 		
 		var rect_instructions = self.options.svg.append("text")
 			.attr("x", self.options.axis_pos_list[2] + 10)
-			.attr("y", 90 + this.options.yTranslation) 
-			.style("font-size", "12px")
+			.attr("y", 112 + this.options.yTranslation) 
+			.attr("class", "instruct")
 			.text("navigate the model view on the left");
-
+			
+	    var  sortDataList = [];
+		
+		for (i=0; i<self.options.phenotypeSortData.length; i++) {
+			sortDataList.push(self.options.phenotypeSortData[i][0].id_a);  //rowid
+		}
+	
 		this.options.smallYScale = d3.scale.ordinal()
-		    .domain(self.options.phenotypeData.map(function (d) {return d.rowid; }))		    
+		    .domain(sortDataList.map(function (d) {return d; }))				    
 		    .rangePoints([0,self.options.globalViewHeight]);
 
 		this.options.smallXScale = d3.scale.ordinal()
-		    .domain(self.options.modelList.map(function (d) {return d.model_id; }))		    
+		    .domain(self.options.modelList.map(function (d) {return d.model_id; }))
 		    .rangePoints([0,self.options.globalViewWidth]);
 
   		//next assign the x and y axis using the full list
 		//add the items using smaller rects
 
-	      var model_rects = this.options.svg.selectAll(".mini_models")
+	     var model_rects = this.options.svg.selectAll(".mini_models")
 	      	.data(this.options.modelData, function(d) {
 	      	    return d.id;
 	      	});
-	      model_rects.enter()
+	     model_rects.enter()
 		  	  .append("rect")
 		  	  .attr("transform",
-		  		"translate(" + (self.options.axis_pos_list[2] + 42) + "," + (132 + self.options.yTranslation) + ")")
+		  		"translate(" + (self.options.axis_pos_list[2] + 42) + "," + (128 + self.options.yTranslation) + ")")
 		  	  .attr("class",  "mini_model")
-		  	  .attr("y", function(d, i) { return self.options.smallYScale(d.rowid);})
+		  	  .attr("y", function(d, i) { return self.options.smallYScale(d.id_a);})//rowid
 		  	  .attr("x", function(d) { return self.options.smallXScale(d.model_id);})
 		  	  .attr("width", 2)
 		  	  .attr("height", 2)
 		  	  .attr("fill", function(d, i) {
-		  	      return self.options.colorScale(d.value);
+					if (self.options.targetSpeciesName == "All"){
+						if (d.species == "Homo sapiens") {return self.options.colorScaleB(d.value + 5);}
+						else {return self.options.colorScaleR(d.value + 5);}
+					}	
+					else {	
+						return self.options.colorScaleB(d.value + 5);
+				  }
 		  	  });
-		selectRectHeight = self.options.smallYScale(self.options.phenotypeData[self.options.phenotypeDisplayCount-1].rowid);
+			  
+		selectRectHeight = self.options.smallYScale(self.options.phenotypeSortData[self.options.phenotypeDisplayCount-1][0].id_a); //rowid
 		selectRectWidth = self.options.smallXScale(self.options.modelList[self.options.modelDisplayCount-1].model_id);
-		  //create the "highlight" rectangle
+		//create the "highlight" rectangle
 		self.options.highlightRect = self.options.svg.append("rect")
 			.attr("transform",												//133
-		  		"translate(" + (self.options.axis_pos_list[2] + 44) + "," + (134 + self.options.yTranslation) + ")")
+		  		"translate(" + (self.options.axis_pos_list[2] + 41) + "," + (126+ self.options.yTranslation) + ")")
 			.attr("x", 0)
 			.attr("y", 0)		
 			.attr("class", "draggable")					
@@ -327,12 +373,12 @@ as a separate call in the init function.
         			var newX = d3.event.x - (self.options.axis_pos_list[2] + 43);
         		  	newX = Math.max(newX,0);
         		  	newX = Math.min(newX,(110-self.options.smallXScale(self.options.modelList[self.options.modelDisplayCount-1].model_id)));
-               	   rect.attr("x", newX + (self.options.axis_pos_list[2] + 43))
+               	    rect.attr("x", newX + (self.options.axis_pos_list[2] + 43))
                	    //limit the range of the y value
-        			var newY = d3.event.y - 133;					
+        			var newY = d3.event.y - 126;					
         		  	newY = Math.max(newY,0);
-        		  	newY = Math.min(newY,(self.options.globalViewHeight-self.options.smallYScale(self.options.phenotypeData[self.options.phenotypeDisplayCount-1].rowid)));
-               	    rect.attr("y", newY + 133 + self.options.yTranslation);
+        		  	newY = Math.min(newY,(self.options.globalViewHeight-self.options.smallYScale(self.options.phenotypeSortData[self.options.phenotypeDisplayCount-1][0].id_a)));  //rowid
+               	    rect.attr("y", newY + 126 + self.options.yTranslation);
 					
         			var xPos = newX;
         			
@@ -358,26 +404,107 @@ as a separate call in the init function.
 
 
 			.attr("id", "selectionrect")
-			.style("fill", "grey")
-			.style("opacity", 0.5)
 			//set the height and width to match the number of items shown on the axes
-			.attr("height", self.options.smallYScale(self.options.phenotypeData[self.options.phenotypeDisplayCount-1].rowid))
+			.attr("height", self.options.smallYScale(self.options.phenotypeSortData[self.options.phenotypeDisplayCount-1][0].id_a))  //rowid
 			.attr("width", self.options.smallXScale(self.options.modelList[self.options.modelDisplayCount-1].model_id));
 	},
 
+	_getUnmatchedPhenotypes : function(){
+	
+		var fullset = this.options.inputPhenotypeData,
+			partialset = this.options.phenotypeSortData,
+			full = [],
+			partial = [],
+			matchedset = [],
+			unmatchedset = [];
+			
+			for (i=0; i < fullset.length; i++) {
+				full.push(fullset[i]);
+			}
+			for (j=0; j < partialset.length; j++) {
+				partial.push((partialset[j][0].id_a).replace("_", ":"));
+			}
+			for (k=0; k <full.length; k++) {
+				if (partial.indexOf(full[k]) < 0) {				
+					unmatchedset.push(full[k]);
+				}
+			}
+			this.options.unmatchedPhenotypes = unmatchedset;
+			return this.options.unmatchedPhenotypes;
+	},
+	
+	_showUnmatchedPhenotypes : function(){
+		var self=this;
+		var unmatched = this.options.unmatchedPhenotypes,
+			text = "<b><h5>Unmatched Phenotypes</h5></b>",
+			label = "";
+		var labels = this._getUnmatchedLabels();
+		for (i = 0; i < unmatched.length; i++)
+		{
+			label = labels[i];
+			var url_origin = self.document[0].location.origin;
+			text = text + "<a href='" + url_origin + "/phenotype/" + unmatched[i] + "' target='_blank'>" + unmatched[i] + ",&nbsp;&nbsp;" + label + "</a><br />";
+	    }
+		return text;
+	},
+	
+	_getUnmatchedLabels: function() {
+	  	var unmatchedLabels = [];
+		for (i=0;i<this.options.unmatchedPhenotypes.length; i++){
+		
+			jQuery.ajax({
+				url : this.options.serverURL + "/phenotype/" + this.options.unmatchedPhenotypes[i] + ".json",
+				async : false,
+				dataType : 'json',
+				success : function(data) {
+					unmatchedLabels.push(data.label);
+				}
+			});
+	   }
+	   return unmatchedLabels;
+	},
+
+	
+	_getPhenotypeLabel : function(id){
+		var label = "";
+		
+		for (i=0; i < this.options.phenotypeSortData.length; i++){
+			if(id == this.options.phenotypeSortData[i][0].id_a.replace("_",":"))
+			{ 
+				label = this.options.phenotypeSortData[i][0].label_a;
+				break;
+			}
+		}
+		return label;
+	},
+	
+	_setComparisonType : function(comp){
+		var self = this;
+		
+		if (comp != undefined || comp != null)
+			{ this.options.comparisonType = comp + "s";}
+		else {
+			if (this.options.targetSpecies === "9606") {
+				this.options.comparisonType = "models";
+			}
+			else {
+				this.options.comparisonType = "genes";
+			}
+		}
+	},
+		
 	_setTargetSpeciesName: function(taxonid) {
 		var self = this;
 
-
-	    if (typeof taxonid === 'undefined' || taxonid === "" || taxonid === null) {
+	    if (typeof taxonid === 'undefined' || taxonid === null) {
 		taxonid="10090";
 	    }
 	    var tempdata;
 	    for (var i  = 0; i  <self.options.targetSpeciesList.length; i++) {
-		if (self.options.targetSpeciesList[i].taxon === taxonid) {
-		    tempdata  = self.options.targetSpeciesList[i];
-		    break;
-		}
+			if (self.options.targetSpeciesList[i].taxon === taxonid) {
+				tempdata  = self.options.targetSpeciesList[i];
+				break;
+			}
 	    }
 	    
 	    self.options.targetSpeciesName = tempdata.name;
@@ -395,33 +522,23 @@ as a separate call in the init function.
 		self.options.selectedCalculation = tempdata[0].calc;
 	},
 
-	_createTitle: function() {
+	_setSelectedSort: function(type) {
 		var self = this;
-	    var div_text1 = self.options.svg.append("svg:text")
-		.attr("transform","translate(0,0)")
-		.attr("class", "title_text")
-		.attr("y", "5")
-		.style("font-size", "16px")
-		.text("Phenotype comparison (grouped by " + this.options.targetSpeciesName + " " + this.options.comparisonType + ")");
+		
+		var tempdata = self.options.sortList.filter(function(d) {
+	    	return d.type === type;
+	    });
 
+		self.options.selectedSort = tempdata[0].type;
+		self.options.selectedOrder = tempdata[0].order;
 	},
-	
+
 	//given the full dataset, return a filtered dataset containing the
 	//subset of data bounded by the phenotype display count and the model display count
 	_filterData: function(fulldataset) {
 		var self = this;
 		
-    	//removed so we can select a set of rows with unique phenotypes - not unique rowids
-	    /**	
-		var phenotypeArray = [];
-    	for (var idx=0;idx<fulldataset.length;idx++) {
-    		var result = $.grep(phenotypeArray, function(e){ return e.rowid == fulldataset[idx].rowid; });
-    		if (result.length == 0) {
-    			phenotypeArray.push(fulldataset[idx]);
-    		}
-    	}*/
-		
-		//we should end up with an array with unique phenotypes
+		//phenotypeArray: we should end up with an array with unique matched phenotypes
 		var phenotypeArray = [];
 		var dupArray = [];
 		var ic = [];
@@ -447,7 +564,7 @@ as a separate call in the init function.
 				}
 			}
     	}
-    	//copy the phenotype data
+    	//copy the phenotypeArray to phenotypeData array
     	this.options.phenotypeData = phenotypeArray.slice();
 
     	//we need to adjust the display counts and indexing if there are fewer phenotypes
@@ -455,40 +572,57 @@ as a separate call in the init function.
     		this.options.currPhenotypeIdx = this.options.phenotypeData.length-1;
     		this.options.phenotypeDisplayCount = this.options.phenotypeData.length;
     	}
+		//Order the array of phenotypes based on the sum of each phenotype across all models
 		
-		this._rankPhenotypes();
-		var rankedArray = this.options.phenotypeSumData.slice();
+		switch(this.options.selectedSort) {
+			case "Alphabetic":  this._alphabetizePhenotypes();
+								break;
+			case "LCS Sums":    this._rankPhenotypes();
+								break;
+			case "Model Matches": this._sortByModelMatches();
+								break;
+			default:			this._alphabetizePhenotypes();
+		}
+		
+		//phenotypeSortData is returned from each sorting function; 
+		this.options.phenotypeSortData = this.options.phenotypeSortData.slice();
    	
 		this.options.filteredPhenotypeData = [];
 		this.options.yAxis = [];
 		this.options.filteredModelData = [];
+		//begin to sort batches of phenotypes based on the phenotypeDisplayCount
 		var startIdx = this.options.currPhenotypeIdx - (this.options.phenotypeDisplayCount -1);		
 		//extract the new array of filtered Phentoypes
 		//also update the axis
 		//also update the modeldata
-		
 		var axis_idx = 0;
 		var tempFilteredModelData = [];
 		
     	for (var i = startIdx;i <self.options.currPhenotypeIdx + 1;i++) {
-    		self.options.filteredPhenotypeData.push(self.options.phenotypeSumData[i]);
+    		//move the ranked phenotypes onto the filteredPhenotypeData array
+			self.options.filteredPhenotypeData.push(self.options.phenotypeSortData[i]);
     		//update the YAxis   	
 			//the height of each row
         	var size = 10;
         	//the spacing you want between rows
         	var gap = 3;
-    		var stuff = {"id": self.options.phenotypeSumData[i][0].rowid, "ypos" : ((axis_idx * (size+gap)) + self.options.yoffset)};
+			//push the rowid and ypos onto the yaxis array
+			//so now the yaxis will be in the order of the ranked phenotypes
+    		var stuff = {"id": self.options.phenotypeSortData[i][0].id_a, "ypos" : ((axis_idx * (size+gap)) + self.options.yoffset)};
     		self.options.yAxis.push(stuff); 
     	    axis_idx = axis_idx + 1;
     	    //update the ModelData
+			
+			//find the rowid in the original ModelData (list of models and their matching phenotypes) and write it to tempdata if it matches this phenotypeSortData rowid.
     		var tempdata = self.options.modelData.filter(function(d) {
-    	    	return d.rowid == self.options.phenotypeSumData[i][0].rowid;
+    	    	return d.id_a == self.options.phenotypeSortData[i][0].id_a;
     	    });
     		tempFilteredModelData = tempFilteredModelData.concat(tempdata);
     	}
     	
     	//now, limit the data returned by models as well
-    	for (var idx=0;idx<self.options.filteredModelList.length;idx++) {
+    	//find the modelid in the filteredModellist and write it to tempdata if it matches filteredModelList modelid
+		for (var idx=0;idx<self.options.filteredModelList.length;idx++) {
     		var tempdata = tempFilteredModelData.filter(function(d) {
     	    	return d.model_id == self._getConceptId(self.options.filteredModelList[idx].model_id);
     	    });
@@ -496,6 +630,47 @@ as a separate call in the init function.
     	}
 	},
 	
+
+	//1. Sort the array by source phenotype name
+	//3. Get the number of model matches for this phenotype and add to array
+	//4. Sort the array by matches. descending
+	_sortByModelMatches: function() {
+		
+		var self = this;
+		var modelDataForSorting = [];
+		
+		for (var idx=0;idx<self.options.phenotypeData.length;idx++) {			
+			var tempdata = self.options.modelData.filter(function(d) {
+    	    	return d.id_a == self.options.phenotypeData[idx].id_a;
+    	    });	
+			modelDataForSorting.push(tempdata);
+		}
+		//sort the model list by rank
+		modelDataForSorting.sort(function(a,b) { 
+			return a.id_a - b.id_a; 
+		});
+		
+		self.options.phenotypeData.sort(function(a,b) {
+		return a.id_a-b.id_a;
+	    });
+	    
+		for (var k =0; k < modelDataForSorting.length;k++) {
+			var ct  = 0;
+			var d = modelDataForSorting[k];
+			if (d[0].id_a === self.options.phenotypeData[k].id_a){
+				for (var i=0; i< d.length; i++)
+				{
+					ct+= 1;
+				}
+				d["count"] = ct;
+				self.options.phenotypeSortData.push(d);
+			}
+	    }		
+		//sort the phenotype list by sum of LCS
+		self.options.phenotypeSortData.sort(function(a,b) { 
+			return b.count - a.count; 
+		});	 	
+	},
 	
 	//`. Get all unique phenotypes in an array
 	//2. Sort the array by source phenotype name
@@ -520,101 +695,169 @@ as a separate call in the init function.
 		self.options.phenotypeData.sort(function(a,b) {
 		return a.id_a-b.id_a;
 	    });
-	    //console.log("model data for sorting has "+modelDataForSorting.length);
-		
-		
-		/**this.options.phenotypeSumData = [];		
-			var idx = 0;		
-			var newdata = modelDataForSorting.filter(function(d,i) {			
-				var sum = 0;			
-				if (d[0].id_a == self.options.phenotypeData[idx++].id_a){
-					for (var i=0; i< d.length; i++)
-					{
-						sum+= +d[i].subsumer_IC;
-					}
-					d["sum"] = sum;
-					self.options.phenotypeSumData.push(d);
-					return true;	
-				}
-				else {return false;}	
-
-    	    });		*/
+	    
 		for (var k =0; k < modelDataForSorting.length;k++) {
 			var sum  = 0;
 			var d = modelDataForSorting[k];
-			//console.log("Phenotype " + k + ": d[0].id_a is "+d[0].id_a+", "+self.options.phenotypeData[k].id_a);
 			if (d[0].id_a === self.options.phenotypeData[k].id_a){
-				//console.log("matched...");
 				for (var i=0; i< d.length; i++)
 				{
 				sum+= +d[i].subsumer_IC;
 				}
 				d["sum"] = sum;
-				self.options.phenotypeSumData.push(d);
+				self.options.phenotypeSortData.push(d);
 			}
 	    }		
 		//sort the phenotype list by sum of LCS
-		self.options.phenotypeSumData.sort(function(a,b) { 
+		self.options.phenotypeSortData.sort(function(a,b) { 
 			return b.sum - a.sum; 
 		});
+	},
+	
+	//`. Get all unique phenotypes in an array
+	//2. Sort the array by source phenotype name
+	//3. Get the sum of all of this phenotype's LCS scores and add to array
+	//4. Sort the array by sums. descending
+	_alphabetizePhenotypes: function() {
+		
+		var self = this;
+		var modelDataForSorting = [];
+		
+		for (var idx=0;idx<self.options.phenotypeData.length;idx++) {			
+			var tempdata = self.options.modelData.filter(function(d) {
+    	    	return d.id_a == self.options.phenotypeData[idx].id_a;
+    	    });	
+			modelDataForSorting.push(tempdata);
+		}
+		//sort the model list by rank
+		modelDataForSorting.sort(function(a,b) { 
+			return a.id_a - b.id_a; 
+		});
+		 	
+		for (var k =0; k < modelDataForSorting.length;k++) {
+			var sum  = 0;
+			var d = modelDataForSorting[k];
+			if (d[0].id_a === self.options.phenotypeData[k].id_a){
+				d["label"] = d[0].label_a;
+				self.options.phenotypeSortData.push(d);
+			}
+	    }		
+			
+		self.options.phenotypeSortData.sort(function(a,b) {
+		    var labelA = a.label.toLowerCase(), 
+				labelB = b.label.toLowerCase();
+			if (labelA < labelB) {return -1;}
+			if (labelA > labelB) {return 1;}
+			return 0;
+		});		
+	    //Save this - it works
+		//this.options.phenotypeSortData = d3.nest().key(function(d, i){return //d.label_a}).sortKeys(d3.ascending).entries(self.options.phenotypeData);	    
 	},
 	
     //given a list of phenotypes, find the top n models
     //I may need to rename this method "getModelData".  It should extract the models and reformat the data 
     _loadData: function() {
-  
-	var self=this;
+		var url = '';
+		var self=this;
     	var phenotypeList = this.options.phenotypeData;
+		if (this.options.targetSpecies === "")
+		{
+			url = this.options.serverURL + "/simsearch/phenotype/?input_items=" + 
+			    phenotypeList.join(",");
+		}
+		else 
+		{
+			url = this.options.serverURL + "/simsearch/phenotype/?input_items=" + 
+			    phenotypeList.join(",") + "&target_species=" + this.options.targetSpecies;
+		}
+		/*Testing AJAX call error handling*/
+		//url = this.options.serverURL + "/simsearch/phenotype/?input_items=" + 
+			   //phenotypeList.join(",") + "&target_species=2468";
+	    //url = this.options.serverURL + "/simsearch/phenotype/"
+		//?input_items=" + 
+			   //phenotypeList.join(",") + "&target_species=2468";	
     	//NOTE: just temporary until the calls are ready
 		jQuery.ajax({
-			//url : "data/sample_model_data.json",
-			url: this.options.serverURL + "/simsearch/phenotype/?input_items=" + 
-			    phenotypeList.join(",") + "&target_species="+this.options.targetSpecies, 
+			url: url, 
 			async : false,
 			dataType : 'json',
 			success : function(data) {
 			   self._finishLoad(data);
-			}
-
+			},
+			error: function ( xhr, errorType, exception ) { //Triggered if an error communicating with server  
+				self._displayResult(xhr, errorType, exception);
+			},  
 		});
     },
 	
+	
+	_displayResult : function(xhr, errorType, exception){
+		var self = this;
+		var msg = '';
+		if (xhr.status === 0) {
+			msg = 'Not connected.\n Verify Network.';
+		} else if (xhr.status == 404) {
+			msg = 'The requested page was not found.';
+		} else if (xhr.status == 500) {
+			msg = 'Due to an Internal Server Error, no phenotype data was retrieved.';
+		} else if (xhr.status == 501) {
+			msg = 'The server either does not recognize the request method, or it lacks the ability to fulfill the request';
+		} else if (xhr.status == 502) {
+			msg = 'The server was acting as a gateway or proxy and received an invalid response from the upstream server.';
+		} else if (xhr.status == 503) {
+			msg = 'The server is currently unavailable (because it is overloaded or down for maintenance).';
+		} else if (xhr.status == 504) {
+			msg = 'The server was acting as a gateway or proxy and did not receive a timely response from the upstream server.';
+		} else if (xhr.status == 505) {
+			msg = 'The server does not support the HTTP protocol version used in the request.';
+		} else if (exception === 'parsererror') {
+			msg = 'Requested JSON parse failed.';
+		} else if (exception === 'timeout') {
+			msg = 'Time out error.';
+		} else if (exception === 'abort') {
+			msg = 'Ajax request aborted.';
+		} else {
+			msg = 'Uncaught Error.\n' + xhr.responseText;
+		}
+
+		this._createEmptyVisualization(msg);
+	},
+	
     _finishLoad: function(data) {
 
-	var retData = data;
-	//extract the maxIC score
-	this.options.maxICScore = retData.metadata.maxMaxIC;
-	var self= this;
+		var retData = data;
+		//extract the maxIC score
+		this.options.maxICScore = retData.metadata.maxMaxIC;
+		var self= this;
 
-	///EXTRACT MOUSE MODEL INFORMATION FIRST
-	this.options.modelList = [];
-	for (var idx=0;idx<retData.b.length;idx++) {
-	    this.options.modelList.push(
-		{model_id: self._getConceptId(retData.b[idx].id), 
-		 model_label: retData.b[idx].label, 
-		 model_score: retData.b[idx].score.score, 
-		 model_rank: retData.b[idx].score.rank});
-	    this._loadDataForModel(retData.b[idx]);
-	}
-	//sort the model list by rank
-	this.options.modelList.sort(function(a,b) { 
-	    return a.model_rank - b.model_rank; } );
-	
-	//we need to adjust the display counts and indexing if there are fewer models
-	if (this.options.modelList.length < this.options.modelDisplayCount) {
-		this.options.currModelIdx = this.options.modelList.length-1;
-		this.options.modelDisplayCount = this.options.modelList.length;
-	}
+		///EXTRACT MOUSE MODEL INFORMATION FIRST
+		this.options.modelList = [];
+		for (var idx=0;idx<retData.b.length;idx++) {
+			this.options.modelList.push(
+			{model_id: self._getConceptId(retData.b[idx].id), 
+			 model_label: retData.b[idx].label, 
+			 model_score: retData.b[idx].score.score, 
+			 model_rank: retData.b[idx].score.rank});
+			this._loadDataForModel(retData.b[idx]);
+		}
+		//sort the model list by rank
+		this.options.modelList.sort(function(a,b) { 
+			return a.model_rank - b.model_rank; } );
+		
+		//we need to adjust the display counts and indexing if there are fewer models
+		if (this.options.modelList.length < this.options.modelDisplayCount) {
+			this.options.currModelIdx = this.options.modelList.length-1;
+			this.options.modelDisplayCount = this.options.modelList.length;
+		}
 
-	//initialize the filtered model list
-	for (var idx=0;idx<this.options.modelDisplayCount;idx++) {
-		this.options.filteredModelList.push(this.options.modelList[idx]);
-	}
-	//extract the maxIC score
-	//this.options.maxICScore = retData.metadata.maxMaxIC;
-    
+		//initialize the filtered model list
+		for (var idx=0;idx<this.options.modelDisplayCount;idx++) {
+			this.options.filteredModelList.push(this.options.modelList[idx]);
+		}
+		
+		this._setComparisonType(retData.source.b_type);
 	//extract the comparison type being used
-	this.options.comparisonType = retData.source.b_type + "s";
+	//this.options.comparisonType = retData.source.b_type + "s";
     },
     
     //for a given model, extract the sim search data including IC scores and the triple:
@@ -624,7 +867,7 @@ as a separate call in the init function.
 	
 	    //BB: 05/14/2014:  added a.IC and b.IC to the row to display on label and determine
 		data = newModelData.matches;
-		//console.log(data);
+		var species = newModelData.taxon;
 		var calculatedArray = [],
 			normalizedArray = [],
 							min,
@@ -635,17 +878,10 @@ as a separate call in the init function.
 			calculatedArray.push(this._normalizeIC(data[idx]));
 		}
 		
-		//min = Math.min(calculatedArray);
 		min =  Math.min.apply(Math, calculatedArray);
 		max = Math.max.apply(Math, calculatedArray);
 		
 		norm = max - min;
-		//console.log("Min: " + min + "  Max " + max + "Norm: " + norm);
-		//save until we have agreed on how to noralize the data
-		//for (var idx=0;idx<calculatedArray.length;idx++) {
-		//	normalizedArray.push((calculatedArray[idx] - min)/norm);
-		//}
-		//console.log(normalizedArray);		
 		
 		for (var idx=0;idx<data.length;idx++) {
     	   
@@ -667,6 +903,8 @@ as a separate call in the init function.
 			   "IC_b" : parseFloat(curr_row.b.IC),
 			   "model_id" : this._getConceptId(newModelData.id),
     		   "model_label" : newModelData.label, 
+			   "species": species.label,
+			   "taxon" : species.id,
 			   "rowid" : this._getConceptId(curr_row.a.id) + 
 			              "_" + this._getConceptId(curr_row.lcs.id)
 		  }; 
@@ -690,21 +928,18 @@ as a separate call in the init function.
 			bIC = datarow.b.IC,
 			lIC = datarow.lcs.IC,
 			nic;
-		//var ics = [],
-			//aIC = datarow.IC_a,
-			//bIC = datarow.IC_b,
-			//lIC = datarow.value,
-			//nic = 0;
-			
+		
 		var calcMethod = this.options.selectedCalculation;
 		
 		switch(calcMethod){
-			case 0: nic = lIC;
+			case 2: nic = lIC;
 					break;
 			case 1: nic = ((lIC/aIC) * 100);
 					break;
-			case 2: nic = Math.sqrt((Math.pow(aIC-lIC,2)) + (Math.pow(bIC-lIC,2)));
+			case 0: nic = Math.sqrt((Math.pow(aIC-lIC,2)) + (Math.pow(bIC-lIC,2)));
 					nic = (1 - (nic/this.options.maxICScore)) * 100;					
+					break;
+			case 3: nic = ((lIC/bIC) * 100);
 					break;
 			default: nic = lIC;
 		}				
@@ -724,9 +959,9 @@ as a separate call in the init function.
     	var gap = 3;
     
     	//use the max phenotype size to limit the number of phenotypes shown 
-    	var yLength = self.options.phenotypeSumData.length > this.options.phenotypeDisplayCount ? this.options.phenotypeDisplayCount : self.options.phenotypeSumData.length;
+    	var yLength = self.options.phenotypeSortData.length > this.options.phenotypeDisplayCount ? this.options.phenotypeDisplayCount : self.options.phenotypeSortData.length;
     	for (var idx=0;idx<yLength;idx++) {
-    		var stuff = {"id": self.options.phenotypeSumData[idx], "ypos" : ((idx * (size+gap)) + this.options.yoffset)};
+    		var stuff = {"id": self.options.phenotypeSortData[idx][0].id_a, "ypos" : ((idx * (size+gap)) + this.options.yoffset)};
     	    this.options.yAxis.push(stuff);
     	    if (((idx * (size+gap)) + this.options.yoffset) > this.options.yAxisMax) {
     	    	this.options.yAxisMax = (idx * (size+gap)) + this.options.yoffset;
@@ -752,113 +987,102 @@ as a separate call in the init function.
 			method = this.options.selectedCalculation;
 		
 		switch(method){
-			case 0: maxScore = this.options.maxICScore;
+			case 2: maxScore = this.options.maxICScore;
 					break;
 			case 1: maxScore = 100;
 					break;
-			case 2: maxScore = 100;
+			case 0: maxScore = 100;
+					break;
+			case 3: maxScore = 100;
 					break;
 			default: maxScore = this.options.maxICScore;
 					break;
 		}				
-    	/**this.options.colorScale = d3.scale.linear().domain([0,maxScore]).range([d3.rgb(this.options.minColorScale), d3.rgb(this.options.maxColorScale)]); */
-      
-	    this.options.colorScale = d3.scale.linear().domain([3, maxScore]);
-        this.options.colorScale.domain([0, 0.2, 0.4, 0.6, 0.8, 1].map(this.options.colorScale.invert));
-        this.options.colorScale.range(['rgb(255,255,204)','rgb(199,233,180)','rgb(127,205,187)','rgb(65,182,196)','rgb(44,127,184)','rgb(37,52,148)']); 
-	
-	
+    	
+	    this.options.colorScaleB = d3.scale.linear().domain([3, maxScore]);
+        this.options.colorScaleB.domain([0, 0.2, 0.4, 0.6, 0.8, 1].map(this.options.colorScaleB.invert));
+        this.options.colorScaleB.range(['rgb(255,255,204)','rgb(199,233,180)','rgb(127,205,187)','rgb(65,182,196)','rgb(44,127,184)','rgb(37,52,148)']); 
+
+ 
+		this.options.colorScaleR = d3.scale.linear().domain([3, maxScore]);
+        this.options.colorScaleR.domain([0, 0.2, 0.4, 0.6, 0.8, 1].map(this.options.colorScaleR.invert));
+        this.options.colorScaleR.range(['rgb(255,255,178)','rgb(254,217,118)','rgb(254,178,76)','rgb(253,141,60)','rgb(240,59,32)','rgb(189,0,38)']); 
+
+		
 	},
 
     _initCanvas : function() {
 
     	var self= this;
-    	//create the option list from the species list
-    	
-		//if (url != "http://localhost:8080/page/widget"  &&  url.indexOf("index.html") < 0) { 
-			var optionhtml = "<div  ><span id='title' style='width:560px; float:left;'><b>Phenotype comparison (grouped by " + this.options.targetSpeciesName + " " + this.options.comparisonType + ")</b></span><span id='organism_div'><span style='width:175px;float:left; text-align:right;'>Comparison Organism&nbsp;&nbsp;&nbsp;</span><span style='width:150px;float:left;'><select id=\"organism\">";
-		//}
-		//else {  //Same code as above with no styles 
-		//  var optionhtml = "<span id='title'><b>Phenotype comparison (grouped by " + this.options.targetSpeciesName + " " + this.options.comparisonType + ")</b></span><span //id='organism_div'>Comparison Organism&nbsp;&nbsp;&nbsp;<select id=\"organism\">";
-    	//}
+		var optionhtml = "<div id='header'><span id='sort_div'><span id='slabel' >Sort Phenotypes<span id='sorts'></span></span><span><select id=\"sortphenotypes\">";
 		
-		for (var idx=0;idx<self.options.targetSpeciesList.length;idx++) {
+		for (var idx=0;idx<self.options.sortList.length;idx++) {
     		var selecteditem = "";
-    		if (self.options.targetSpeciesList[idx].name === self.options.targetSpeciesName) {
+    		if (self.options.sortList[idx].type === self.options.selectedSort) {
     			selecteditem = "selected";
     		}
-    		optionhtml = optionhtml + "<option value='" + self.options.targetSpeciesList[idx].label +"' "+ selecteditem +">" + self.options.targetSpeciesList[idx].name +"</option>"
-    	}
-    	optionhtml = optionhtml + "</select></span></span></div><br /><br />";
-    	this.element.append(optionhtml);
-    	//add the handler for the select control
-        $( "#organism" ).change(function(d) {
-        	//alert( "Handler for .change() called." );
-        	self.options.targetSpecies = self.options.targetSpeciesList[d.target.selectedIndex].taxon;
-        	self.options.targetSpeciesName = self.options.targetSpeciesList[d.target.selectedIndex].name;
-        	$("#organism_div").remove();
-			$("#calculation_div").remove();
-			$("#title").remove();
-			$("#title2").remove();
+			if (self.options.sortList[idx].order  === self.options.selectedOrder) {
+    			selecteditem = "selected";
+    		}
+			optionhtml = optionhtml + "<option value='" + self.options.sortList[idx].order +"' "+ selecteditem +">" + self.options.sortList[idx].type +"</option>"
+		}
+		optionhtml = optionhtml + "</select></span>";			
+		optionhtml = optionhtml + "<span id='stitle'><b>Phenotype comparison (grouped by " + this.options.targetSpeciesName + " " + this.options.comparisonType + ")</b></span>";	
+		optionhtml = optionhtml + "<span id='faq'><img class='faq' src='" + this.options.scriptpath + "../image/greeninfo30.png' height='15px'></span>";		
+		this.element.append(optionhtml);
+		
+		d3.select("#faq")
+			.on("click", function(d) {self._showDialog("faq");
+		});
+			
+		var sorts = d3.selectAll("#sorts")
+			.on("click", function(d,i){
+				self._showDialog( "sorts");
+		});
+		
+		var optionhtml2 = "<div id='unmatched'><br /><img class='unmatched' src='" + this.options.scriptpath + "../image/unmatched120.png' height='40px'></div>";
+		this.element.append(optionhtml2);
+		d3.select("#unmatched")
+			.on("click", function(d) {self._showDialog("unmatched");
+		});
+		
+		
+		//add the handler for the select control
+        $( "#sortphenotypes" ).change(function(d) {
+        	self.options.selectedSort = self.options.sortList[d.target.selectedIndex].type;
+        	self.options.selectedOrder = self.options.sortList[d.target.selectedIndex].order;
+        	$("#unmatched").remove();
+			$("#selects").remove();
+			$("#org_div").remove();
+			$("#calc_div").remove();
+			$("#sort_div").remove();
+			$("#header").remove();
         	$("#svg_area").remove();
         	self.options.phenotypeData = self.options.inputPhenotypeData.slice();
         	self._reset();
         	self._create();
         	});
 		
-		//if (url != "http://localhost:8080/page/widget" &&  url.indexOf("index.html") < 0){ 
-			var optionhtml2 = "<div style='float:left;margin-top:5px;'><span id='title2' style='width:560px; float:left;'><b>Similarity Values based on " + this.options.selectedLabel + " Calculation</b></span><span id='calculation_div' style=''><span style='width:175px;float:left;text-align:right;' >Similarity Calculation&nbsp;&nbsp;&nbsp;</span><span style='width:150px;float:left;' ><select id=\"calculation\">";
-       
-	   
-	   //else {  //Same code as above with no styles		
-		//	var optionhtml2 = "<span id='title2'><b>Similarity Values based on " + this.options.selectedLabel + " Calculation</b></span><span id='calculation_div'>Similarity //Calculation&nbsp;&nbsp;&nbsp;<select id=\"calculation\">";
-    	//}
-		for (var idx=0;idx<self.options.selectList.length;idx++) {
-    		var selecteditem = "";
-    		if (self.options.selectList[idx].label === self.options.selectedLabel) {
-    			selecteditem = "selected";
-    		}
-			if (self.options.selectList[idx].calc === self.options.selectedCalculation) {
-    			selecteditem = "selected";
-    		}
-    		optionhtml2 = optionhtml2 + "<option value='" + self.options.selectList[idx].calc +"' "+ selecteditem +">" + self.options.selectList[idx].label +"</option>"
-    	}
-    	optionhtml2 = optionhtml2 + "</select></span></span></div>";
-    	this.element.append(optionhtml2);
-        
-		 $( "#calculation" ).change(function(d) {
-			//alert( "Handler for .change() called." );
-			self.options.selectedCalculation = self.options.selectList[d.target.selectedIndex].calc;
-			self.options.selectedLabel = self.options.selectList[d.target.selectedIndex].label;
-			$("#calculation_div").remove();
-			$("#organism_div").remove();
-			$("#title").remove();
-			$("#title2").remove();
-			$("#svg_area").remove();
-			self.options.phenotypeData = self.options.inputPhenotypeData.slice();
-			self._reset();
-			self._create();
-		});
-				
-		this.element.append("<svg id='svg_area' style='float:left; clear:both; margin-top:40px;'></svg>");
+		this.element.append("<svg id='svg_area'></svg>");		
 		this.options.svg = d3.select("#svg_area");
 			
     },
 
 	_addLogoImage : function() {     
-	  var scriptpath = $("script[src]").last().attr("src").split('?')[0].split('/').slice(0, -1).join('/')+'/';
+	  
 	  var imgs = this.options.svg.selectAll("image").data([0]);
       imgs.enter()
                 .append("svg:image")
-                .attr("xlink:href", scriptpath + "../image/logo-sneak.png")
-                .attr("x", "75")
-                .attr("y", 25  + this.options.yTranslation)
+                .attr("xlink:href", this.options.scriptpath + "../image/logo-sneak.png")
+                .attr("x", 850)
+                .attr("y", this.options.yTranslation - 10)
+				.attr("id", "logo")
                 .attr("width", "60")
-                .attr("height", "50");       
+                .attr("height", "90");       
     },
 	
     _resetLinks: function() {
-	    
+	    //don't put these styles in css file - these stuyles change depending on state
 		this.options.svg.selectAll("#detail_content").remove();
     	var link_lines = d3.selectAll(".data_text");
     	link_lines.style("font-weight", "normal");
@@ -870,8 +1094,7 @@ as a separate call in the init function.
     	link_labels.style("text-decoration", "none");
     	link_labels.style("color", "black");
 		link_labels.attr("fill", "black");
-		
-    },
+	},
 	
 	
     _selectData: function(curr_data, obj) {    	
@@ -882,13 +1105,9 @@ as a separate call in the init function.
 		var highlight_rect = self.options.svg.append("svg:rect")
 		  	.attr("transform","translate(" + self.options.axis_pos_list[1] + ","+ (7 + self.options.yTranslation) + ")")
 			.attr("x", 8)
-			.attr("y", function(d) {return self._getYPosition(curr_data[0].rowid) ;})
+			.attr("y", function(d) {return self._getYPosition(curr_data[0].id_a) ;}) //rowid
 			.attr("class", "row_accent")
 			.attr("width", this.options.modelWidth)
-			.attr("stroke", d3.rgb(self.options.orangeHighlight))
-			.attr("stroke-width", 2)
-			.attr("fill", "#FFFFFF")
-			.attr("fill-opacity", '0.05')
 			.attr("height", 14);
 	
     	this._resetLinks();
@@ -897,10 +1116,13 @@ as a separate call in the init function.
     	if (txt == undefined) {
     		txt = curr_data[0].id_a;
     	}
-    	alabels.text(txt);
+    	alabels.text(txt)
+			   .on("click",function(d){
+					self._clickPhenotype(self._getConceptId(curr_data[0].id_a), self.document[0].location.origin);
+				});
 
     	var sublabels = this.options.svg.selectAll("text.lcs_text." + this._getConceptId(curr_data[0].id) + ", ." + this._getConceptId(curr_data[0].subsumer_id));
-    	var txt = curr_data[0].subsumer_label;
+    	var txt = curr_data.subsumer_label;
     	
     	if (txt == undefined) {
     		txt = curr_data[0].subsumer_id;
@@ -914,6 +1136,11 @@ as a separate call in the init function.
 	    this._updateDetailSection(retData, this._getXYPos(obj));
 	    */    	
     },
+	
+	 _clickPhenotype: function(data, url_origin) {
+    	var url = url_origin + "/phenotype/" + data;
+    	var win = window.open(url, '_blank');
+    },	
 
     _deselectData: function (curr_data) {
     	
@@ -926,10 +1153,8 @@ as a separate call in the init function.
 		alabels.text(this._getShortLabel(row.label_a));
 
 		var sublabels = this.options.svg.selectAll("text.lcs_text." + this._getConceptId(row.id));
-		sublabels.text(this._getShortLabel(row.subsumer_label));
-		
+		sublabels.text(this._getShortLabel(row.subsumer_label));		
     },
-
 
 	//return a label for use in the list.  This label is shortened
 	//to fit within the space in the column
@@ -995,7 +1220,7 @@ as a separate call in the init function.
     	        .attr("width", width)
     	        .attr("id", self._getConceptId(data.model_id))
     	        .attr("model_id", data.model_id)
-    	        .attr("height", 30)
+    	        .attr("height", 60)
     	        .attr("transform", function(d) {
     	        	return "rotate(-45)" 
     	        })
@@ -1007,6 +1232,7 @@ as a separate call in the init function.
     	        })
     	        .on("mouseout", function(d) {
     	    	   self._clearModelData(d, d3.mouse(this));
+				   self._deselectData(self.options.selectedRow);
     	        })
     	       .attr("class", this._getConceptId(data.model_id) + " model_label")
     	       .style("font-size", "12px")
@@ -1032,13 +1258,15 @@ as a separate call in the init function.
 	    if (height != undefined) {
 	    	h = height;
 	    }
-		
+		var wdt = this.options.axis_pos_list[1] + ((this.options.axis_pos_list[2] - this.options.axis_pos_list[1])/2);
 		var hgt = this.options.phenotypeDisplayCount*10 + this.options.yoffset,
 		    yv = 0;
 		
 		if (coords.y > hgt) { yv = coords.y - this.options.detailRectHeight - 10;}
 		else {yv = coords.y + 20;}
 		
+		if (coords.x > wdt) { wv = coords.x - this.options.detailRectWidth - 70;}
+		else {wv = coords.x + 20;}
 
 	    this.options.svg.append("foreignObject")
 		    .attr("width", w + 60)
@@ -1046,12 +1274,9 @@ as a separate call in the init function.
 			.attr("id", "detail_content")
 			//add an offset.  Otherwise, the tooltip turns off the mouse event
 			.attr("y", yv)
-		    .attr("x", coords.x + 20) 		    
+		    .attr("x", wv) 
 			.append("xhtml:body")
-			.style("font-size", "10px")
-			.style("padding", "8px")
-			.style("background-color", d3.rgb("#F9D0BB"))
-			.style("border","1px solid #c5c5c5")
+			.attr("id", "detail_text")
 			.html(htmltext);  	
     },
     
@@ -1117,19 +1342,28 @@ as a separate call in the init function.
 	    	bSpecies = "Zebrafish";
 	    }
 		
+		var species = d.species,
+		    taxon = d.taxon;
+		
+		if (taxon != undefined || taxon!= null || taxon != '');{
+			if (taxon.indexOf("NCBITaxon:") != -1) {taxon = taxon.slice(10);}
+		}
+		
 		var calc = this.options.selectedCalculation;
 		var suffix = "";
 		var prefix = "";
-		if (calc == 1 || calc == 2) {suffix = '%';}
-		if (calc == 0) {prefix = "Subsumer IC";}
-		else if (calc == 1) {prefix = "Similarity";}
-		else if (calc == 2) {prefix = "Euclidean Similiarity";}
+		if (calc == 0 || calc == 1 || calc == 3) {suffix = '%';}
+		if (calc == 0) {prefix = "Distance";}
+		else if (calc == 1) {prefix = "Ratio (q)";}
+		else if (calc == 2) {prefix = "Uniquesness";}
+		else if (calc == 3) {prefix = "Ratio (t)";}
 				
 	    retData = "<strong>Query: </strong> " + d.label_a + " (IC: " + d.IC_a.toFixed(2) + ")"   
 		    + "<br/><strong>Match: </strong> " + d.label_b + " (IC: " + d.IC_b.toFixed(2) +")"
 			+ "<br/><strong>Common: </strong> " + d.subsumer_label + " (IC: " + d.subsumer_IC.toFixed(2) +")"
      	    + "<br/><strong>" + this._toProperCase(this.options.comparisonType).substring(0, this.options.comparisonType.length-1)  +": </strong> " + d.model_label
-			+ "<br/><strong>" + prefix + ":</strong> " + d.value.toFixed(2) + suffix;
+			+ "<br/><strong>" + prefix + ":</strong> " + d.value.toFixed(2) + suffix
+			+ "<br/><strong>Species: </strong> " + d.species + " (" + taxon + ")";
 	    this._updateDetailSection(retData, this._getXYPos(obj));
 	  
     },
@@ -1138,12 +1372,13 @@ as a separate call in the init function.
     _clearModelData: function(modelData) {
 	    this.options.svg.selectAll("#detail_content").remove();
 	    this.options.svg.selectAll(".model_accent").remove();
+		var model_text = "";
 	    if (modelData != null && typeof modelData != 'object') {
-		    var model_text = this.options.svg.selectAll("text#" + this._getConceptId(modelData));
-		    model_text.style("font-weight","normal");
-		    model_text.style("text-decoration", "none");
-		    model_text.style("fill", "black");
-	    }
+		    model_text = this.options.svg.selectAll("text#" + this._getConceptId(modelData));
+		} else {model_text = this.options.svg.selectAll("text#" + this._getConceptId(modelData.model_id));}
+		model_text.style("font-weight","normal");
+		model_text.style("text-decoration", "none");
+		model_text.style("fill", "black");    
     },
 
 
@@ -1168,8 +1403,12 @@ as a separate call in the init function.
 			  }
 			  return "models " + " " +  self._getConceptId(d.model_id) + " " +  self._getConceptId(d.id);
 		  })
-		  .attr("y", function(d, i) {     
-			  return self._getYPosition(d.rowid) + (self.options.yTranslation - 10) ;
+		  .attr("y", function(d, i) { 
+			/**	console.log("Y Pos: " + (self._getYPosition(d.id_a) - 10) + 
+				"  X Pos: " + self.options.xScale(d.model_id) + "  Model Name: " + d.model_label +  "  Model Id: " + d.model_id +
+				"  Phen: " + d.label_a  + 
+				"  IA_a: " + d.id_a );*/
+			  return self._getYPosition(d.id_a) + (self.options.yTranslation - 10) ;
 		  })
 		  .attr("x", function(d) { return self.options.xScale(d.model_id);})
 		  .attr("width", 10)
@@ -1178,11 +1417,7 @@ as a separate call in the init function.
 		  .attr("ry", "3")		 
 		  //I need to pass this into the function
 		  .on("mouseover", function(d) {
-			  //self._showModelData(d, this);
-		 // })
-		//  .on("click", function(d) {
-			  //put the clicked rect on the top layer of the svg so other events work
-				this.parentNode.appendChild(this);
+			  this.parentNode.appendChild(this);
 				
 			  //if this column and row are selected, clear the column/row and unset the column/row flag
 			  if (self.options.selectedColumn != undefined && self.options.selectedRow != undefined) 
@@ -1208,33 +1443,32 @@ as a separate call in the init function.
 			   }
 			   self._showModelData(d, this);
 		  })
-		  .on("click", function(d) {
-			self._clearModelData(d, d3.mouse(this));
-			self._deselectData(self.options.selectedRow);
-		  })
 		  .on("mouseout", function(d) {
-			  //if (self.options.selectedColumn == undefined  && self.options.selectedRow == undefined) {
-				self._clearModelData(d, d3.mouse(this));
-				self._deselectData(self.options.selectedRow);
-			 // }
+			  self._clearModelData(d, d3.mouse(this));
+			  self._deselectData(self.options.selectedRow);
 		  })
 		  .style('opacity', '1.0')
 		  .attr("fill", function(d, i) {
 			  //added +5 to d.value to get darker color
-			  return self.options.colorScale(d.value + 5);
+			  if (self.options.targetSpeciesName == "All"){
+						if (d.species == "Homo sapiens") {return self.options.colorScaleB(d.value + 5);}
+						else {return self.options.colorScaleR(d.value + 5);}
+					}	
+					else {	
+						return self.options.colorScaleB(d.value + 5);
+			  }
 		  });
 		  model_rects.transition()
 			  .delay(20)
 			  .style('opacity', '1.0')
 			  .attr("y", function(d) {
-			  return self._getYPosition(d.rowid) -10;
+			  return self._getYPosition(d.id_a) -10; //rowid
 		  })
 		  .attr("x", function(d) { return self.options.xScale(d.model_id);})
 
 		  model_rects.exit().transition()
-			  //.duration(20)
-		  .style('opacity', '0.0')
-		  .remove();
+			.style('opacity', '0.0')
+			.remove();
     },
 	
 	_enableRowColumnRects :  function(curr_rect){
@@ -1259,20 +1493,17 @@ as a separate call in the init function.
 		var highlight_rect = self.options.svg.append("svg:rect")
 		  	.attr("transform","translate(" + self.options.axis_pos_list[1] + ","+ (7 + self.options.yTranslation) + ")")
 			.attr("x", 8)
-			.attr("y", function(d) {return self._getYPosition(curr_data.rowid) ;})
+			.attr("y", function(d) {return self._getYPosition(curr_data.id_a) ;}) //rowid
 			.attr("class", "row_accent")
 			.attr("width", this.options.modelWidth)
-			.attr("stroke", d3.rgb(self.options.orangeHighlight))
-			.attr("stroke-width", 2)
-			.attr("fill", "#FFFFFF")
-			.attr("fill-opacity", '0.05')
 			.attr("height", 14);
 	
     	this.options.selectedRow = curr_data;
 		this.options.selectedColumn = curr_data;
 		this._resetLinks();
-    	var alabels = this.options.svg.selectAll("text.a_text." + this._getConceptId(curr_data.id));
-    	var txt = curr_data.label_a;
+		
+		var alabels = this.options.svg.selectAll("text.a_text." + this._getConceptId(curr_data.id));
+		var txt = curr_data.label_a;
     	if (txt == undefined) {
     		txt = curr_data.id_a;
     	}
@@ -1301,18 +1532,14 @@ as a separate call in the init function.
 			.attr("y", self.options.yoffset)
 			.attr("class", "model_accent")
 			.attr("width", 14)
-			.attr("stroke", d3.rgb(self.options.orangeHighlight))
-			.attr("stroke-width", 2)
-			.attr("fill", "#FFFFFF")
-			.attr("fill-opacity", "0.05")
-			.attr("height", (self.options.yAxisMax-87));
+			.attr("height", (self.options.phenotypeDisplayCount * 13));
 	},
   
     _updateAxes: function() {
 		var self = this;
 		this.options.h = (this.options.filteredModelData.length*2.5);
 		self.options.yScale = d3.scale.ordinal()
-      	    .domain(self.options.filteredModelData.map(function (d) {return d.rowid; }))
+      	    .domain(self.options.filteredModelData.map(function (d) {return d.id_a; }))
   		.range([0,self.options.filteredModelData.length])
   		.rangePoints([ self.options.yoffset, self.options.yoffset+this.options.h ]);
 	    //update accent boxes
@@ -1395,10 +1622,10 @@ as a separate call in the init function.
 	_updateScrollCounts: function() {
 		this.options.svg.selectAll(".scroll_text").remove();
 	
-	//account for a grid with less than 5 phenotypes
-		var y1 = 270,
-			y2 = 285;
-		if (this.options.filteredPhenotypeData.length < 6) {y1 =185; y2 = 200;}
+	//account for a grid with less than 14 phenotypes
+		var y1 = 257,
+			y2 = 273;
+		if (this.options.filteredPhenotypeData.length < 14) {y1 = 172; y2 = 188;}
 		
 		
 		var startModelIdx = (this.options.currModelIdx - this.options.modelDisplayCount) + 2;
@@ -1408,17 +1635,16 @@ as a separate call in the init function.
 			.attr("class", "scroll_text")
 			.attr("x", this.options.axis_pos_list[2] +45)
 			.attr("y", y1 + this.options.yTranslation)
-			.style("font-size", "9px")
 			.text(display_text);
 		
-		var startPhenIdx = (this.options.currPhenotypeIdx - this.options.phenotypeDisplayCount) + 2;
+		var startPhenIdx = (this.options.currPhenotypeIdx - this.options.phenotypeDisplayCount) + 2
+		;
 		var max_count = ((this.options.phenotypeDisplayCount + startPhenIdx) >= this.options.phenotypeData.length) ? this.options.phenotypeData.length : this.options.phenotypeDisplayCount + startPhenIdx ; 
 		var display_text = "Phenotypes [" + startPhenIdx + "-"+ max_count + "] out of " + (this.options.phenotypeData.length);
 		var div_text = this.options.svg.append("svg:text")
 			.attr("class", "scroll_text")
 			.attr("x", this.options.axis_pos_list[2] +45)
 			.attr("y", y2  + this.options.yTranslation)
-			.style("font-size", "9px")
 			.text(display_text);
 	},
 	
@@ -1431,7 +1657,7 @@ as a separate call in the init function.
 				
 		//check to see if the phenotypeIdx is greater than the number of items in the list
 		if (phenotypeIdx > this.options.phenotypeData.length) {
-			this.options.currPhenotypeIdx = this.options.phenotypeSumData.length;
+			this.options.currPhenotypeIdx = this.options.phenotypeSortData.length;
 		} else if (phenotypeIdx - (this.options.phenotypeDisplayCount -1) < 0) {
 			//check to see if the min of the slider is less than the 0
 			  this.options.currPhenotypeIdx = (this.options.phenotypeDisplayCount -1);
@@ -1476,19 +1702,19 @@ as a separate call in the init function.
 		var tempFilteredModelData = [];
 		var axis_idx = 0;
     	for (var idx=startPhenotypeIdx;idx<self.options.currPhenotypeIdx;idx++) {
-    		self.options.filteredPhenotypeData.push(self.options.phenotypeSumData[idx]);
+    		self.options.filteredPhenotypeData.push(self.options.phenotypeSortData[idx]);
     		//update the YAxis   	    		
     		//the height of each row
         	var size = 10;
         	//the spacing you want between rows
         	var gap = 3;
 
-    		var stuff = {"id": self.options.phenotypeSumData[idx][0].rowid, "ypos" : ((axis_idx * (size+gap)) + self.options.yoffset)};
+    		var stuff = {"id": self.options.phenotypeSortData[idx][0].id_a, "ypos" : ((axis_idx * (size+gap)) + self.options.yoffset)};
     		self.options.yAxis.push(stuff); 
     	    axis_idx = axis_idx + 1;
     	    //update the ModelData
     		var tempdata = self.options.modelData.filter(function(d) {
-    	    	return d.rowid == self.options.phenotypeSumData[idx][0].rowid;
+    	    	return d.id_a == self.options.phenotypeSortData[idx][0].id_a;
     	    });
     		tempFilteredModelData = tempFilteredModelData.concat(tempdata);
 
@@ -1504,10 +1730,9 @@ as a separate call in the init function.
 				return d.model_id; }))
 	        .rangeRoundBands([0,self.options.modelWidth]);
 	    model_x_axis = d3.svg.axis()
-			.scale(self.options.xScale).orient("top");//.outerTickSize(2);
-	    model_x_axis.tickEndSize = 1;
-		
-		
+			.scale(self.options.xScale).orient("top");
+	    //model_x_axis.tickEndSize = 1;
+				
 		var model_region = self.options.svg.append("g")
 	  		.attr("transform","translate(" + (self.options.textWidth +28) +"," + (self.options.yTranslation + self.options.yoffset) + ")")
 	  		.attr("class", "x axis")
@@ -1516,26 +1741,22 @@ as a separate call in the init function.
 	  	    //to rotate the text, I need to select it as it was added by the axis
 	  		.selectAll("text") 
 	  		.each(function(d,i) { 
-	  		    //self._convertLabelHTML(this, self.options.filteredModelList[i].model_label, self.options.filteredModelList[i]);}); 
-	  			self._convertLabelHTML(this, self._getShortLabel(self.options.filteredModelList[i].model_label, 15),self.options.filteredModelList[i]);}); 
+	  		    self._convertLabelHTML(this, self._getShortLabel(self.options.filteredModelList[i].model_label, 15),self.options.filteredModelList[i]);}); 
 		
 		//The pathline creates a line  below the labels. We don't want two lines to show up so fill=white hides the line.
-		var w = self.options.modelWidth;
-		
-		this.options.svg.selectAll("path.domain").remove();
-	
+		var w = self.options.modelWidth;		
+		this.options.svg.selectAll("path.domain").remove();	
 		self.options.svg.selectAll("text.scores").remove();
-		
+				
 		self.options.svg.append("line")
 				.attr("transform","translate(" + (self.options.textWidth + 30) +"," + (self.options.yTranslation + self.options.yoffset - 16) + ")")
 				.attr("x1", 0)
 				.attr("y1", 0)
 				.attr("x2", self.options.modelWidth)
-				.attr("y2", 0)
-				.attr("stroke", "#0F473E")
-				.attr("stroke-width", 1);		
+				.attr("y2", 0);
+				
 		
-		var scores = self.options.svg.selectAll("test.scores")
+		var scores = self.options.svg.selectAll("text.scores")
 				.data(self.options.filteredModelList)
 				.enter()	
 				.append("text")
@@ -1545,8 +1766,6 @@ as a separate call in the init function.
 				.attr("y", 0)
 				.attr("width", 18)
     	        .attr("height", 10)
-				.attr("font-size", "11px")
-				.attr("fill", "#0F473E")
 				.attr("class", "scores")
 				.text(function (d,i){return self.options.filteredModelList[i].model_score;});
 		
@@ -1555,24 +1774,60 @@ as a separate call in the init function.
 				.attr("x1", 0)
 				.attr("y1", 0)
 				.attr("x2", self.options.modelWidth)
-				.attr("y2", 0)
-				.attr("stroke", "#0F473E")
-				.attr("stroke-width", 1);
+				.attr("y2", 0);
+			
 		
 		//now, limit the data returned by models as well
     	for (var idx=0;idx<self.options.filteredModelList.length;idx++) {
     		var tempdata = tempFilteredModelData.filter(function(d) {
     	    	return d.model_id == self.options.filteredModelList[idx].model_id;
     	    });
-    		self.options.filteredModelData = self.options.filteredModelData.concat(tempdata);
-    		
-    	}
-   	
+    		self.options.filteredModelData = self.options.filteredModelData.concat(tempdata);   		
+    	}	
+		
 	    this._createModelRects();
 	    this._createRects();
-	    this._updateScrollCounts();
+	    //this._updateScrollCounts();
 	},
+	
+	_showDialog : function( dname ) {				
+		
+		var text = this._getDialogText(dname);
+		var SplitText = "Title"
+		var $dialog = $('<div></div>')
+			.html(SplitText )
+			.dialog({
+				modal: true,
+				minHeight: 200,
+				maxHeight: 400,
+				minWidth: 400,
+				resizable: true,
+				draggable:true,
+				position: ['center', 'center'],
+				title: 'Phenogrid Notes'});
 
+		$dialog.dialog('open');
+		$dialog.html(text);
+	},
+	
+	_getDialogText : function(name){
+	
+		var text = "";
+		switch(name){
+			case "modelscores": text = "<h5>What is the score shown at the top of the grid?</h5><div>The score indicated at the top of each column, below the target label, is the overall similarity score between the query and target. Briefly, for each of the targets (columns) listed, the set of Q(1..n) phenotypes of the query are pairwise compared against all of the T(1..m) phenotypes in the target.<br /><br />Then, for each pairwise comparison of phenotypes (q x P1...n), the best comparison is retained for each q and summed for all p1..n. </div><br /><div>The raw score is then normalized against the maximal possible score, which is the query matching to itself. Therefore, range of scores displayed is 0..100. For more details, please see (Smedley et al, 2012 <a href='http://www.ncbi.nlm.nih.gov/pubmed/23660285' target='_blank'>http://www.ncbi.nlm.nih.gov/pubmed/23660285</a> and <a href='http://www.owlsim.org' target='_blank'>http://www.owlsim.org</a>).";
+			break;
+			case "calcs": text = "<h5>What do the different calculation methods mean?</h5><div>For each pairwise comparison of phenotypes from the query (q) and target (t), we can assess their individual similarities in a number of ways.  First, we find the phenotype-in-common between each pair (called the lowest common subsumer or LCS). Then, we can leverage the Information Content (IC) of the phenotypes (q,t,lcs) in a variety of combinations to interpret the strength of the similarity.</div><br /><div><b>**Uniqueness </b>reflects how often the phenotype-in-common is annotated to all diseases and genes in the Monarch Initiative knowledgebase.  This is simply a reflection of the IC normalized based on the maxIC. IC(PhenotypeInCommon)maxIC(AllPhenotypes)</div><br /><div><b>**Distance</b> is the euclidian distance between the query, target, and phenotype-in-common, computed using IC scores.<br/><center>d=(IC(q)-IC(lcs))2+(IC(t)-IC(lcs))2</center>  </div><br /><div>This is normalized based on the maximal distance possible, which would be between two rarely annotated leaf nodes that only have the root node (phenotypic abnormality) in common.  So what is depicted in the grid is 1-dmax(d)</div><br /><div><b>**Ratio(q)</b> is the proportion of shared information between a query phenotype and the phenotype-in-common with the target.<br /><center>ratio(q)=IC(lcs)IC(q)*100</center></div><br /><div><b>**Ratio(t)</b> is the proportion of shared information between the target phenotype and the phenotype-in-common with the query.<br /><center>ratio(t)=IC(lcs)IC(t)*100</center></div>";
+			break;
+			case "faq": text = "<h4>Phenogrid Faq</h4><h5>How are the similar targets obtained?</h5><div>We query our owlsim server to obtain the top 100 most-phenotypically similar targets for the selected organism.  The grid defaults to showing mouse.</div><h5>What are the possible targets for comparison?</h5><div>Currently, the phenogrid is configured to permit comparisons between your query (typically a set of disease-phenotype associations) and one of:<ul><li>human diseases</li><li>mouse genes</li><li>zebrafish genes</li></ul>You can change the target organism by selecting a new organism.  The grid will temporarily disappear, and reappear with the new target rendered.</div><h5>Can I compare the phenotypes to human genes?</h5><div>No, not yet.  But that will be added soon.</div><h5>Where does the data come from?</h5><div>The phenotype annotations utilized to compute the phenotypic similarity are drawn from a number of sources:<ul><li>Human disease-phenotype annotations were obtained from  <a href='http://human-phenotype-ontology.org' target='_blank'>http://human-phenotype-ontology.org</a>, which contains annotations for approx. 7,500 diseases.<li><li>Mouse gene-phenotype annotations were obtained from MGI <a href='www.informatics.jax.org'>(www.informatics.jax.org).</a> The original annotations were made between genotypes and phenotypes.  We then inferred the relationship between gene and phenotype based on the genes that were variant in each genotype.  We only perform this inference for those genotypes that contain a single variant gene.</li><li>Zebrafish genotype-phenotype annotations were obtained from ZFIN  <a href='www.zfin.org' target='_blank'>(www.zfin.org).</a> The original annotations were made between genotypes and phenotypes, with some of those genotypes created experimentally with the application of morpholino reagents.  Like for mouse, we inferred the relationship between gene and phenotype based on the genes that were varied in each genotype.  We only perform this inference for those genotypes that contain a single variant gene.</li><li>All annotation data, preformatted for use in OWLSim, is available for download from  <a href='http://code.google.com/p/phenotype-ontologies/' target='_blank'>http://code.google.com/p/phenotype-ontologies/ </a> </li></ul><h5>What does the phenogrid show?</h5><div>The grid depicts the comparison of a set of phenotypes in a query (such as those annotated to a disease or a gene) with one or more phenotypically similar targets.  Each row is a phenotype that is annotated to the query (either directly or it is a less-specific phenotype that is inferred), and each column is an annotated target (such as a gene or disease).  When a phenotype is shared between the query and target, the intersection is colored based on the selected calculation method (see What do the different calculation methods mean).   You can hover over the intersection to get more information about what the original phenotype is of the target, and what is in-common between the two.</div><h5>Where can I make suggestions for improvements or additions?</h5><div>Please email your feedback to <a href='mailto:info@monarchinitiative.org'>info@monarchinitiative.org.</a><h5>What happens to the phenotypes that are not shared?</h5><div>Presently, phenotypes that were part of your query but are not shared by any of the targets are not rendered.</div><h5>Why do I sometimes see two targets that share the same phenotypes have very different overall scores?</h5><div>This is usually because of some of the phenotypes that are not shared with the query.  For example, if the top hit to a query matches each phenotype exactly, and the next hit matches all of them exactly plus it has 10 additional phenotypes that don&#39;t match it at all, it is penalized for those phenotypes are aren&#39;t in common, and thus ranks lower on the similarity scale. <div>";
+			break;			
+			case "unmatched":  text = this._showUnmatchedPhenotypes();
+			break;
+			default:
+		
+		}
+	    return text;
+	},
+	
 	_createAccentBoxes: function() {
 	    var self=this;
 	    
@@ -1588,8 +1843,7 @@ as a separate call in the init function.
 				self.options.axis_pos_list.push((i*(this.options.textWidth + 10)) + 
 					       this.options.colStartingPos);
 			}
-	    }
-	
+	    }	
 	    //create accent boxes
 	    var rect_accents = this.options.svg.selectAll("#rect.accent")
 		.data(this.options.dimensions, function(d) { return d;});
@@ -1598,29 +1852,17 @@ as a separate call in the init function.
 		.attr("class", "accent")
 		.attr("x", function(d, i) { return self.options.axis_pos_list[i];})
 		.attr("y", self.options.yoffset  + this.options.yTranslation)
-		.attr("width", self.options.textWidth + 5)
-		.attr("height", self.options.h)
+		.attr("width", function(d, i) {
+		    return i == 2 ? self.options.textWidth + 5 : self.options.textWidth + 5;
+		})		
+		.attr("height",  function(d, i) {
+		    return i == 2 ? self.options.h - 216 : self.options.h;
+		})
 		.style("opacity", '0.4')
 		.attr("fill", function(d, i) {
 		    return i != 1 ? d3.rgb("#e5e5e5") : "white";
 		});
 				
-/**		//create accent boxes
-	    var rect_accents = this.options.svg.selectAll("#rect.accent.two")
-		.data(this.options.dimensions, function(d) { return d;});
-	    rect_accents.enter()
-	    	.append("rect")
-		.attr("class", "accent two")
-		.attr("x", function(d, i) { return self.options.axis_pos_list[i] + 14;})
-		.attr("y", self.options.yoffset  + this.options.yTranslation)
-		.attr("width", self.options.textWidth + 5)
-		.attr("height", self.options.h)
-		.style("opacity", '0.4')
-		.attr("fill", function(d, i) {
-		    return i != 1 ? d3.rgb("#e5e5e5") : "white";
-		});
-		*/
-			    
 	    //add text headers
 	    var rect_headers = this.options.svg.selectAll("#text.accent")
 		.data(this.options.dimensions, function(d) { return d;});
@@ -1628,7 +1870,7 @@ as a separate call in the init function.
 	    	.append("text")
 		.attr("class", "accent")
 		.attr("x", function(d, i) { return i == 0 ?(self.options.axis_pos_list[i]+10)+25 : (self.options.axis_pos_list[i]);})
-		.attr("y", self.options.yoffset +(this.options.yTranslation-10))
+		.attr("y", self.options.yoffset +(this.options.yTranslation-20))
 		.style("display", function(d, i) {
 		    return i == 0 ? "" : "none";
 		})
@@ -1655,23 +1897,17 @@ as a separate call in the init function.
 			.selectAll("text") 
 			.each(function(d,i) { 
 			    	self._convertLabelHTML(this, self._getShortLabel(self.options.filteredModelList[i].model_label, 15),self.options.filteredModelList[i]);});
-		
-		
+				
 		var w = self.options.modelWidth;
-		/**var pathline = this.options.svg.selectAll("path.domain")
-				.attr("class","domain")
-				.attr("d", "M0,-1V0H" + w + "V-1")
-				.attr("fill", "black");**/
+		
 		this.options.svg.selectAll("path.domain").remove();	
 		self.options.svg.append("line")
 				.attr("transform","translate(" + (self.options.textWidth + 30) +"," + (self.options.yTranslation + self.options.yoffset - 16) + ")")
 				.attr("x1", 0)
 				.attr("y1", 0)
 				.attr("x2", self.options.modelWidth)
-				.attr("y2", 0)
-				.attr("stroke", "#0F473E")
-				.attr("stroke-width", 1);		
-		
+				.attr("y2", 0);
+				
 		var scores = self.options.svg.selectAll("test.scores")
 				.data(self.options.filteredModelList)
 				.enter()	
@@ -1682,8 +1918,6 @@ as a separate call in the init function.
 				.attr("y", 0)
 				.attr("width", 18)
     	        .attr("height", 10)
-				.attr("font-size", "11px")
-				.attr("fill", "#0F473E")
 				.attr("class", "scores")
 				.text(function (d,i){return self.options.filteredModelList[i].model_score;});
 		
@@ -1692,80 +1926,129 @@ as a separate call in the init function.
 				.attr("x1", 0)
 				.attr("y1", 0)
 				.attr("x2", self.options.modelWidth)
-				.attr("y2", 0)
-				.attr("stroke", "#0F473E")
-				.attr("stroke-width", 1);
+				.attr("y2", 0);
 			
 
 	    var temp_data = this.options.modelData.map(function(d) { 
 			return d.value;});
 	    var diff = d3.max(temp_data) - d3.min(temp_data);
 		//account for a grid with less than 5 phenotypes
-		var y1 = 340,
-			y2 = 327;
-		if (this.options.filteredPhenotypeData.length < 6) {y1 =250; y2 = 227;}
+		//No matches
+		//var y1 = 307,
+		//	y2 = 294;
+		var y1 = 267,
+			y2 = 254;
+			
+		if (this.options.filteredPhenotypeData.length < 14) {y1 =177; y2 = 164;} //{y1 =217; y2 = 204;}
 	    //only show the scale if there is more than one value represented
 	    //in the scale
 	    if (diff > 0) {
-		    //create a scale
-			var color_values = ['rgb(247,252,240)','rgb(204,235,197)','rgb(168,221,181)','rgb(78,179,211)','rgb(43,140,190)','rgb(8,88,158)'];
-		    //var color_values = [];
-		    //var temp_data = this.options.modelData.map(function(d) { 
-			//return d.value;});
-		    //var diff = d3.max(temp_data) - d3.min(temp_data);
-		    //var step = (diff/5);
-		    //for (var idx=0;idx<6;idx++) {
-			//var t = d3.min(temp_data);
-			//var t2 = t + (idx * step);
-			//color_values.push(t2);
-		    //}		    
-		    //start # a4 d6 d4
-		    //stop # 44 a2 93
-		    var gradient = this.options.svg.append("svg:linearGradient")
-				.attr("id", "gradient")
+		    
+			//colorbrewer: 8-class //GnBu['rgb(247,252,240)','rgb(224,243,219)','rgb(204,235,197)','rgb(168,221,181)','rgb(123,204,196)','rgb(78,179,211)','rgb(43,140,190)','rgb(8,88,158)']
+			//['rgb(247,252,240)','rgb(204,235,197)','rgb(168,221,181)','rgb(78,179,211)','rgb(43,140,190)','rgb(8,88,158)'],
+				//colorbrewer: 6-class YlGnBu
+			var color_values_blue = ['rgb(255,255,204)','rgb(199,233,180)','rgb(127,205,187)','rgb(65,182,196)','rgb(44,127,184)','rgb(37,52,148)'],
+				//colorbrewer: 6-class YlOrRd
+				color_values_red = ['rgb(255,255,178)','rgb(254,217,118)','rgb(254,178,76)','rgb(253,141,60)','rgb(240,59,32)','rgb(189,0,38)'];
+		   
+		    var gradient_blue = this.options.svg.append("svg:linearGradient")
+				.attr("id", "gradient_blue")
 				.attr("x1", "0")
 				.attr("x2", "100%")
 				.attr("y1", "0%")
 				.attr("y2", "0%");
-
-			/**gradient.append("svg:stop")
-				.attr("offset", "0%")
-				.style("stop-color", this.options.minColorScale)
-				.style("stop-opacity", 1);
-			
-			gradient.append("svg:stop")
-				.attr("offset", "100%")
-				.style("stop-color", this.options.maxColorScale)
-				.style("stop-opacity", 1);*/
 				
-			gradient.append("svg:stop")
+			gradient_blue.append("svg:stop")
 				.attr("offset", "20%")
-				.style("stop-color", 'rgb(168,221,181)')
+				.style("stop-color", 'rgb(199,233,180)')
 				.style("stop-opacity", 1);
 			
-			gradient.append("svg:stop")
+			gradient_blue.append("svg:stop")
 				.attr("offset", "40%")
-				.style("stop-color", 'rgb(78,179,211)')
+				.style("stop-color", 'rgb(127,205,187)')
 				.style("stop-opacity", 1);
 			
-			gradient.append("svg:stop")
+			gradient_blue.append("svg:stop")
 				.attr("offset", "60%")
-				.style("stop-color", 'rgb(43,140,190)')
+				.style("stop-color", 'rgb(44,127,184)')
 				.style("stop-opacity", 1);
 				
-			gradient.append("svg:stop")
+			gradient_blue.append("svg:stop")
 				.attr("offset", "80%")
-				.style("stop-color", 'rgb(8,88,158)')
+				.style("stop-color", 'rgb(37,52,148)')
 				.style("stop-opacity", 1);
 
-		    var legend_rects = this.options.svg.append("rect")
+		    var legend_rects_blue = this.options.svg.append("rect")
 				.attr("transform","translate(0,10)")
 				.attr("class", "legend_rect")
+				.attr("id","legendscale_blue")
 				.attr("y", (y1 - 5) + this.options.yTranslation)
 				.attr("x", self.options.axis_pos_list[2] + 12)
+				.attr("rx",15)
+				.attr("ry",15)
 				.attr("width", 180)
 				.attr("height", 20)
-				.attr("fill", "url(#gradient)");
+				.attr("fill", "url(#gradient_blue)");
+			
+			if (this.options.targetSpeciesName == "All"){			
+				
+				legend_rects_blue.append("text")
+					.attr("y", (y1 - 5) + this.options.yTranslation)
+					.attr("x", self.options.axis_pos_list[2] + 200)
+					.attr("id","bluetext")
+					.attr("width", 40)
+					.attr("height", 20)
+					.text("Human");
+				
+				var gradient_red = this.options.svg.append("svg:linearGradient")
+					.attr("id", "gradient_red")
+					.attr("x1", "0")
+					.attr("x2", "100%")
+					.attr("y1", "0%")
+					.attr("y2", "0%");
+						
+				//Red values: ['rgb(255,255,178)','rgb(254,217,118)','rgb(254,178,76)','rgb(253,141,60)','rgb(240,59,32)','rgb(189,0,38)'];	
+				gradient_red.append("svg:stop")
+					.attr("offset", "20%")
+					.style("stop-color", 'rgb(255,255,178)')
+					.style("stop-opacity", 1);
+				
+				gradient_red.append("svg:stop")
+					.attr("offset", "40%")
+					.style("stop-color", 'rgb(254,178,76)')
+					.style("stop-opacity", 1);
+				
+				gradient_red.append("svg:stop")
+					.attr("offset", "60%")
+					.style("stop-color", 'rgb(240,59,32)')
+					.style("stop-opacity", 1);
+					
+				gradient_red.append("svg:stop")
+					.attr("offset", "80%")
+					.style("stop-color", 'rgb(189,0,38)')
+					.style("stop-opacity", 1);
+
+				var legend_rects_red = this.options.svg.append("rect")
+					.attr("transform","translate(0,10)")
+					.attr("class", "legend_rect")
+					.attr("id","legendscale_red")
+					.attr("y", (y1 + 15) + this.options.yTranslation)
+					.attr("x", self.options.axis_pos_list[2] + 12)
+					.attr("rx",15)
+					.attr("ry",15)
+					.attr("width", 180)
+					.attr("height", 20)
+					.attr("fill", "url(#gradient_red)");
+					
+				legend_rects_red.append("text")
+					.attr("y", (y1 + 15) + this.options.yTranslation)
+					.attr("x", self.options.axis_pos_list[2] + 200)
+					.attr("id","redtext")
+					.attr("width", 40)
+					.attr("height", 20)
+					.text("Other");
+				
+			}
 				
 			var calc = this.options.selectedCalculation,
 				text1 = "",
@@ -1773,42 +2056,117 @@ as a separate call in the init function.
 				text3 = "";
 			
 			//account for a grid with less than 5 phenotypes
-			var y1 = 340,
-				y2 = 327;
-			if (this.options.filteredPhenotypeData.length < 6) {y1 = 245; y2 = 227;}
+			var y1 = 267,
+				y2 = 257;
+			if (this.options.filteredPhenotypeData.length < 14) {y1 = 172; y2 = 162;}
 			
-			if (calc == 0) {text1 = "Lowest"; text2 = "Subsumer IC Scale"; text3 = "Highest";}
-			else if (calc == 1) {text1 = "Less Similar"; text2 = "Similarity Scale"; text3 = "More Similar";}
-			else if (calc == 2) {text1 = "Min"; text2 = "Euclidean Similarity"; text3 = "Max";}
+			if (calc == 2) {text1 = "Lowest"; text2 = "Uniqueness"; text3 = "Highest";}
+			else if (calc == 1) {text1 = "Less Similar"; text2 = "Ratio (q)"; text3 = "More Similar";}
+			else if (calc == 3) {text1 = "Less Similar"; text2 = "Ratio (t)"; text3 = "More Similar";}
+			else if (calc == 0) {text1 = "Min"; text2 = "Distance"; text3 = "Max";}
 	
 		    var div_text1 = self.options.svg.append("svg:text")
 				.attr("class", "detail_text")
 				.attr("y", y1  + this.options.yTranslation)
-				.attr("x", self.options.axis_pos_list[2] + 12)
+				.attr("x", self.options.axis_pos_list[2] + 10)
 				.style("font-size", "10px")
 				.text(text1);
 		    
-			var div_text = self.options.svg.append("svg:text")
+			var div_text2 = self.options.svg.append("svg:text")
 				.attr("class", "detail_text")
 				.attr("y", y2  + this.options.yTranslation)
-				.attr("x", self.options.axis_pos_list[2] + 45)
+				.attr("x", self.options.axis_pos_list[2] + 75)
 				.style("font-size", "12px")
 				.text(text2);
 				
-		    var div_text2 = self.options.svg.append("svg:text")
+		    var div_text3 = self.options.svg.append("svg:text")
 				.attr("class", "detail_text")
-				.attr("y", y1  + this.options.yTranslation)
-				.attr("x", self.options.axis_pos_list[2] + 130)
+				.attr("y", y1 + this.options.yTranslation )
+				.attr("x", self.options.axis_pos_list[2] + 125)
 				.style("font-size", "10px")
 				.text(text3);	
 				
 			//Position the max more carefully	
+			if (text2 == "Distance") {
+				div_text2.attr("x", "860px");			
+			}
+			if (text2 == "Uniqueness") {
+				div_text2.attr("x", "845px");			
+			}
 			if (text3 == "Max") {
-				div_text2.attr("x",self.options.axis_pos_list[2] + 170);			
+				div_text3.attr("x","945px");			
 			}
 			if (text3 == "Highest") {
-				div_text2.attr("x",self.options.axis_pos_list[2] + 150);			
+				div_text3.attr("x",self.options.axis_pos_list[2] + 150);			
 			}
+			
+			var selClass = "";
+			if (self.options.filteredPhenotypeData.length < 14) { selClass = "shortselects"; } else { selClass = "selects";}
+			
+			var optionhtml = "<div id='selects' class='" + selClass + "'><div id='org_div'><div>Target</div><span><select id=\'organism\'>";
+	
+			for (var idx=0;idx<self.options.targetSpeciesList.length;idx++) {
+				var selecteditem = "";
+				if (self.options.targetSpeciesList[idx].name === self.options.targetSpeciesName) {
+					selecteditem = "selected";
+				}
+				optionhtml = optionhtml + "<option value='" + self.options.targetSpeciesList[idx].label +"' "+ selecteditem +">" + self.options.targetSpeciesList[idx].name +"</option>"
+			}
+	
+			optionhtml = optionhtml + "</select></span></div><div id='calc_div'><span id='clabel'>Display<span id='calcs'><img class='calcs' src='" + this.options.scriptpath + "../image/greeninfo30.png' height='15px'></span></span><br /><span id='calc_sel'><select id=\"calculation\">";
+       	   
+
+		for (var idx=0;idx<self.options.selectList.length;idx++) {
+    		var selecteditem = "";
+    		if (self.options.selectList[idx].label === self.options.selectedLabel) {
+    			selecteditem = "selected";
+    		}
+			if (self.options.selectList[idx].calc === self.options.selectedCalculation) {
+    			selecteditem = "selected";
+    		}
+    		optionhtml = optionhtml + "<option value='" + self.options.selectList[idx].calc +"' "+ selecteditem +">" + self.options.selectList[idx].label +"</option>"
+    	}
+		optionhtml = optionhtml + "</select></span></div></div>";
+		this.element.append(optionhtml);			
+
+		var calcs = d3.selectAll("#calcs")
+			.on("click", function(d,i){
+				self._showDialog( "calcs");
+		});
+		
+		//add the handler for the select control
+        $( "#organism" ).change(function(d) {
+        	//msg =  "Handler for .change() called." );
+        	self.options.targetSpecies = self.options.targetSpeciesList[d.target.selectedIndex].taxon;
+        	self.options.targetSpeciesName = self.options.targetSpeciesList[d.target.selectedIndex].name;
+			$("#unmatched").remove();
+			$("#selects").remove();
+			$("#org_div").remove();
+			$("#calc_div").remove();
+			$("#sort_div").remove();
+			$("#header").remove();
+        	$("#svg_area").remove();
+        	self.options.phenotypeData = self.options.inputPhenotypeData.slice();
+        	self._reset();
+        	self._create();
+        	});
+		
+        
+		 $( "#calculation" ).change(function(d) {
+			//msg =  "Handler for .change() called." );
+			self.options.selectedCalculation = self.options.selectList[d.target.selectedIndex].calc;
+			self.options.selectedLabel = self.options.selectList[d.target.selectedIndex].label;
+			$("#unmatched").remove();
+			$("#selects").remove();
+			$("#calc_div").remove();
+			$("#org_div").remove();
+			$("#sort_div").remove();
+			$("#header").remove();
+			$("#svg_area").remove();
+			self.options.phenotypeData = self.options.inputPhenotypeData.slice();
+			self._reset();
+			self._create();
+		});
 	    }
 	},
 		
@@ -1833,10 +2191,9 @@ as a separate call in the init function.
 	    var self=this;
 	    var rect_text = this.options.svg
 		.selectAll(".a_text")
-		.data(self.options.filteredPhenotypeData, function(d, i) { return d[0].rowid; });
+		.data(self.options.filteredPhenotypeData, function(d, i) {  return d[0].id_a; });//rowid
 	    rect_text.enter()
 		.append("text")
-		.style("text-anchor","end")
 		.attr("class", function(d) {
 		    return "a_text data_text " + self._getConceptId(d[0].id);
 		})
@@ -1846,7 +2203,7 @@ as a separate call in the init function.
 		})
 		.attr("x", 208)
 		.attr("y", function(d) {
-			 return self._getYPosition(d[0].rowid) + (self.options.yTranslation + 18);
+			 return self._getYPosition(d[0].id_a) + (self.options.yTranslation + 18);   //rowid
 		})
 		.on("mouseover", function(d) {
 		    if (self.options.clickedData == undefined) {
@@ -1857,30 +2214,26 @@ as a separate call in the init function.
 	    	if (self.options.clickedData == undefined) {
 				self._deselectData(d, d3.mouse(this));
 			}
-		})	
-		.style('opacity', '1.0')
+		})
 		.attr("width", self.options.textWidth)
 		.attr("height", 50)
-		.style("font-size", "12px")
 		.text(function(d) {
 			var txt = d[0].label_a;
 			if (txt == undefined) {
 				txt = d[0].id_a;
 			}
-		    return self._getShortLabel(txt);
+			return self._getShortLabel(txt);
 		})
-	    rect_text.transition()
+		rect_text.transition()
    		.style('opacity', '1.0')
-
 		.delay(5)
 		.attr("y", function(d) {
-			return self._getYPosition(d[0].rowid) + (self.options.yTranslation + 18);
+			return self._getYPosition(d[0].id_a) + (self.options.yTranslation + 18);//rowid
 		})
 	    rect_text.exit()
 	   	.transition()
 	   	.delay(20)
 	   	.style('opacity', '0.0')
-
 		.remove();
 	},
 
@@ -1892,13 +2245,11 @@ as a separate call in the init function.
 			async : false,
 			dataType : 'json',
 			success : function(data) {
-				//retData = data;
 				retData = "<strong>Label:</strong> " + "<a href=\"" + data.url + "\">"  
 				+ data.label + "</a><br/><strong>Type:</strong> " + data.category;
 			}
 	    });
 	    this._updateDetailSection(retData, this._getXYPos(data));
-
 	},
 
 	_toProperCase : function (oldstring) {
@@ -1920,17 +2271,12 @@ as a separate call in the init function.
 			.attr("y", self.options.yoffset)
 			.attr("class", "model_accent")
 			.attr("width", 14)
-			.attr("stroke", d3.rgb(self.options.orangeHighlight))
-			.attr("stroke-width", 2)
-			.attr("fill", "#FFFFFF")
-			.attr("fill-opacity", "0.05")
-			.attr("height", (self.options.yAxisMax-87));
+			.attr("height", (self.options.yAxisMax-75));
 
 		var retData;
 		//initialize the model data based on the scores
 		retData = "<strong>" +  self._toProperCase(self.options.comparisonType).substring(0, self.options.comparisonType.length-1) +" Label:</strong> "   
-			+ modelData.model_label + "<br/><strong>Rank:</strong> " + (parseInt(modelData.model_rank) + 1)
-			+ "<br/><strong>Score:</strong> " + modelData.model_score;
+			+ modelData.model_label + "<br/><strong>Rank:</strong> " + (parseInt(modelData.model_rank) + 1);
 
 		//obj = try creating an ojbect with an attributes array including "attributes", but I may need to define
 		//getAttrbitues
@@ -1944,10 +2290,8 @@ as a separate call in the init function.
 					}
 					return ret;
 				},
-        };
-		
-		obj.attributes['transform'] = {value: highlight_rect.attr("transform")};
-		
+        };		
+		obj.attributes['transform'] = {value: highlight_rect.attr("transform")};		
 		this._updateDetailSection(retData, this._getXYPos(obj), undefined, 60);
 	},
 
