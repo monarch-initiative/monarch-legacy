@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html>
   <head>
-    <title>blog-scratch</title>
+    <title>Monarch Diseases and Phenotypes</title>
     {{#scripts}}
     <script type="text/javascript" src="{{url}}"></script>
     {{/scripts}}
@@ -9,32 +9,78 @@
     {{#stylesheets}}
     <link rel="stylesheet" type="text/css" href="{{url}}"/>
     {{/stylesheets}}
-    <link rel="stylesheet" type="text/css" href="/css/tour.css"/>
+    <link rel="stylesheet" type="text/css" href="/css/monarch-main.css"/>
+    <link rel="stylesheet" type="text/css" href="/css/main.css"/>
     <link rel="icon" href="/image/favicon.ico" type="image/x-icon">
-    <meta charset="utf-8"/> 
+    <meta charset="utf-8"/>
   </head>
-  <body>
-    <div class="monarch-container">
-      {{{includes.navbar}}}
-      <div class="content">
-        <div class="wrapperforfooter">
-          <div class="title">blog scratch</div>
+  <body style="padding-top: 40px;">
 
-	  <div style="margin-top: 1em;">
-	    <h4>Server-side implementation</h4>
-	    <ul>
-	    {{#blog_results}}
-	    <li>
-	      <strong><a href="{{link}}">{{title}}</a></strong>
-	      {{description}}
-	    </li>
-	    {{/blog_results}}
-	    </ul>
-	  </div>
+    <!-- Nav. -->
+    {{{includes.blog_nav}}}
 
-	</div> <!-- closes wrapperforfooter -->
-	{{{includes.footer}}}
+    <!-- Banner. -->
+    <div class="jumbotron">
+      <img id="monarch-logo-horizontal"
+	   class="downloadline"
+	   src="/image/logo-horizontal-sneak.png"/>
+      <a id="feedback-main"
+	 class="downloadline downloadline-left btn btn-large btn-default btn-monarch-main monarch-feedback-dark"
+         href="mailto:info@monarchinitiative.org">Your feedback welcome!</a>
+      <div class="tagline">
+        Enabling navigation across a rich landscape of
+        phenotypes, diseases, models, and genes for
+        translational research.
+	<a href="/page/about">Find out more</a>.<br/>
+        <a href="http://mail.monarchinitiative.org/mailman/listinfo/users">Sign up for our listserve to receive announcements</a>.
       </div>
     </div>
+
+    <!-- Open row section. -->
+    <div class="container-fluid" style="margin: 1em;">
+      <!-- <div class="row"> -->
+      <div class="row" style="margin-left: -15px; margin-right: -14px;">
+	
+	<!-- Graphic. -->
+	<div id="graphic" class="col-xs-12 col-sm-8 col-md-8 col-lg-8">
+	  <img src="/image/homepage.png"/>
+	  <a href="/disease"><div id="diseasebutton" class="graphicbutton"></div></a>
+	  <a href="/phenotype"><div id="phenotypebutton" class="graphicbutton"></div></a>
+	  <a href="/gene"><div id="genebutton" class="graphicbutton"></div></a>
+	  <a href="/model"><div id="modelbutton" class="graphicbutton"></div></a>
+        </div>
+	
+	<!-- Blog. -->
+	<div id="graphic" class="col-xs-12 col-sm-4 col-md-4 col-lg-4">
+
+	  <div class="panel panel-default">
+	    <div class="panel-heading">
+	      <h3 class="panel-title">News and Events</h3>
+	    </div>
+	    <div class="panel-body">
+	      {{#blog_results}}
+	      <dl>
+		<dt>
+		  <a href="{{link}}">{{title}}</a>
+		  {{#category}}
+		  <a href="{{link}}" class="label label-default">{{label}}</a>
+		  {{/category}}
+		</dt>
+		<dd>
+		  <strong>{{date}}</strong>
+		  {{description}}
+		</dd>
+	      </dl>
+	      {{/blog_results}}
+	    </div>
+	  </div>
+	</div>
+	
+      </div>
+    </div>
+    <!-- Close row section. -->
+
+    {{{includes.blog_foot}}}
+
   </body>
 </html>

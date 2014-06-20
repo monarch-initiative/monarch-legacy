@@ -1,3 +1,4 @@
+/**These styles are specific to the widgets instruction page (templates/page/widgets.mustache)*/
 body{
 	margin-left:25px;
 	width:70%;
@@ -63,11 +64,12 @@ li{ padding-bottom: 7px;}
 
 div .title{
 	margin-top:-30px;
+	clear:both;
 }
 
 #viscontent .shortselects{
-	top:430px;
-	left:930px;
+	top:390px;
+	left:855px;
 }
 
 #viscontent {
