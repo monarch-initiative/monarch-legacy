@@ -70,9 +70,13 @@
 					</div>
                   <div class="tabcontainer">
                         <div class="tabhover">View a list of asserted and inferred animal models for this disease</div>
-                            <a href="#model"><div class="tab contenttab">Models {{{modelNum}}}</div></a>
+                        {{#hasModels}}
+                            <a href="#model"><div class="tab contenttab">Models ({{{modelNum}}})</div></a>
+                        {{/hasModels}}
+                        {{^hasModels}}
+                            <div class="tab greyed-out">Models (0)</div>
+                        {{/hasModels}}
                     </div>
-
                     <div class="tabcontainer">
                         <div class="tabhover">View genes known to be variant in this disease</div>
                         {{#hasGenes}}
