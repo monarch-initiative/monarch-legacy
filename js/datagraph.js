@@ -119,7 +119,7 @@ d3.json("/labs/datagraph.json", function(error, json) {
 	    .range([0, width]);
 
 	var color = d3.scale.ordinal()
-	    .range(["#8a89a6","#98abc5", "#7b6888", "#6b486b", "#a05d56", "#d0743c", "#ff8c00"]);
+	    .range(["#44A293","#A4D6D4"]);
 
 	var xAxis = d3.svg.axis()
 	    .scale(x)
@@ -154,10 +154,10 @@ d3.json("/labs/datagraph.json", function(error, json) {
 	    .append("text")
 	    .attr("transform", "rotate(0)")
 	    .attr("y", 6)
-	    .attr("dx", "25em")
+	    .attr("dx", "27em")
 	    .attr("dy", "3em")
 	    .style("text-anchor", "end")
-	    .text("Phenotype Counts");
+	    .text("Number Of Annotations");
 
 	    svg.append("g")
 	    .attr("class", "y axis")
@@ -186,7 +186,7 @@ d3.json("/labs/datagraph.json", function(error, json) {
 	       .attr("width", function(d) { return x(d.value); })
 	       .on("mouseover", function(){
 	           d3.select(this)
-	           .style("fill", "#71B291");
+	           .style("fill", "#EA763B");
 	        })
 	       .on("mouseout", function(){
 	           d3.select(this)
