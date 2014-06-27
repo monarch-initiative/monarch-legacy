@@ -25,24 +25,21 @@ p {
 }
 /* Category Tabs */
 #categories {
-    margin-top: 35px;
+    margin-top: 10px;
     margin-bottom: -3px;
 }
 .tabcontainer {
-    position: relative;
     display: inline-block;
 }
 .tabhover {
     position: absolute;
-    bottom: 41px;
     font-size: 12px;
     line-height: 14px;
     display: none;
     background-color: white;
     padding: 2px 5px;
     border: 1px solid black;
-    max-height: 48px;
-    min-width: 120px;
+    max-width: 150px;
 }
 .tab {
     display: inline-block;

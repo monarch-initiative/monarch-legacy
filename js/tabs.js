@@ -1,9 +1,13 @@
 $(document).ready(function(){
 
     $('.tabcontainer').hover(function() {
-        $(this).find('.tabhover').css({'display': 'block'});
+        $(this).on('mousemove', function(e) {
+            $(this).find('.tabhover').css({'top': e.pageY - 20, 'left': e.pageX});
+            $(this).find('.tabhover').show();
+        });
     }, function(){
-        $(this).find('.tabhover').css({'display': 'none'});
+        $(document).off('mousemove');
+        $(this).find('.tabhover').hide();
     });
 
     $('.contenttab').click(function() {
