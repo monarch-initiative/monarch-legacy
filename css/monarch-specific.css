@@ -1,5 +1,9 @@
-/* Section 3: Content */
+/* This file controls all styling on disease, phenotype, gene, or genotype/model specific
+ * pages. Every specific data page should link to this stylesheet. */
+
 /* Description */
+/* This styles the jumbotron (information spotlight) at the top of all specific pages. */
+
 .jumbotron {
     border-radius: 2px;
     padding: 0px 30px 0px;
@@ -23,7 +27,10 @@ p {
     font-size: 15px;
     line-height: 22px;
 }
+
 /* Category Tabs */
+/* This styles the tab bar, individual tabs, and tooltip hovers. */
+
 #categories {
     margin-top: 10px;
     margin-bottom: -3px;
@@ -66,7 +73,10 @@ p {
     background-color: #DDD;
     color: #AAA;
 }
+
 /* Rest of Content */
+/* This styles the content within tab categories. */
+
 #complete-info {
     padding: 0px 30px;
 }
@@ -84,7 +94,9 @@ p {
     margin-right: 5px;
     margin-bottom: 5px;
 }
+
 /* Tables */
+
 .table-condensed thead>tr>th {
     padding: 5px 15px 5px 3px;
 }
@@ -94,7 +106,12 @@ p {
 td {
     word-wrap: break-word;
 }
+
 /* Annotation Score Stars */
+/* This styles the stars that appear on some tabs to demonstrate the annotation
+ * sufficiency score of some data. For example, there are stars on the phenotype
+ * tab of the disease specific pages. */
+
 #annotationscore {
     margin-bottom: 10px;
     position: relative;
@@ -132,7 +149,9 @@ span.stars > *{
     padding: 5px 7px;
     display: none;
 }
+
 /* Literature Tab */
+
 .littabmoreauthors > .etal {
     color: #53AED7;
 }
@@ -143,7 +162,9 @@ span.stars > *{
     color: #53AED7;
     display: none;
 }
+
 /* Analyze */
+
 #analyze-profile > ul#analyze_auto_list > li.list-group-item {
     background-color: #acd8ec;
 }
