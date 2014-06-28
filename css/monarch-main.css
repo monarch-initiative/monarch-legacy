@@ -1,6 +1,10 @@
-/* Section 3: Content */
+/* This file controls all main pages (disease, phenotypes, genes, genotype/model).
+ * Every main page should reference this file. Use it to customize the main spotlight
+ * and the content layout. */
 
 /* Main Spotlight */
+/* This overrides many Bootstrap jumbotron styles to make things take less height. */
+
 .jumbotron {
     position: relative;
     margin-top: 0px;
@@ -24,7 +28,10 @@
     font-weight: 400;
     font-size: 14px;
 }
+
 /* Rest of Content */
+/* This overrides Bootstrap content styles. */
+
 .col-lg-9 {
     padding-left: 30px;
     margin-top: -20px;

@@ -12,6 +12,7 @@
     <script src="/js/tabs.js"></script>
     <script src="/js/stupidtable.min.js"></script>
     <script src="/js/tables.js"></script>
+    {{{includes.analytics}}}
     {{#stylesheets}}
     <link rel="stylesheet" type="text/css" href="{{url}}"/>
     {{/stylesheets}}
@@ -63,6 +64,19 @@
                             <div class="tab greyed-out">Phenotypes (0)</div>
                         {{/hasPhenotypes}}
                         </div>
+                   <div class="tabcontainer">
+                        <div class="tabhover">View phenotypically similar diseases and genes in a grid</div>
+                            <a href="#compare"><div class="tab contenttab">Compare</div></a>
+					</div>
+                  <div class="tabcontainer">
+                        <div class="tabhover">View a list of asserted and inferred animal models for this disease</div>
+                        {{#hasModels}}
+                            <a href="#model"><div class="tab contenttab">Models ({{{modelNum}}})</div></a>
+                        {{/hasModels}}
+                        {{^hasModels}}
+                            <div class="tab greyed-out">Models (0)</div>
+                        {{/hasModels}}
+                    </div>
                     <div class="tabcontainer">
                         <div class="tabhover">View genes known to be variant in this disease</div>
                         {{#hasGenes}}
@@ -81,26 +95,7 @@
                             <div class="tab greyed-out">Alleles (0)</div>
                         {{/hasAlleles}}
                     </div>
-                    <div class="second-row-divider"></div>
-                    <div class="tabcontainer">
-                        <div class="tabhover">View matching models and
-                        genes based on shared phenotypes and orthology</div>
-                        {{#hasModels}}
-                            <a href="#model"><div class="tab contenttab">Matches ({{modelNum}})</div></a>
-                        {{/hasModels}}
-                        {{^hasModels}}
-                            <div class="tab greyed-out">Matches (0)</div>
-                        {{/hasModels}}
-                    </div>
-                    <div class="tabcontainer">
-                        <div class="tabhover">View diseases that have the most abnormal phenotypes in common</div>
-                        {{#hasSim}}
-                            <a href="#similarity"><div class="tab contenttab">Related Diseases ({{simNum}})</div></a>
-                        {{/hasSim}}
-                        {{^hasSim}}
-                            <div class="tab greyed-out">Related Diseases (0)</div>
-                        {{/hasSim}}
-                    </div>
+
                     <div class="tabcontainer">
                         <div class="tabhover">View phenotypes on pathway view containing variant genes</div>
                         {{#hasPathways}}
@@ -183,8 +178,10 @@
                     </table>
                 </div>
                 {{/hasAlleles}}
+				<div id="compare" class="category">
+					<div id="phen_vis"></div>
+				</div>
                 <div id="model" class="category">
-                    <div id ="phen_vis"></div>
                     {{#hasModels}}
                     <table class="{{css.table}}">
                         {{{modelTable}}}

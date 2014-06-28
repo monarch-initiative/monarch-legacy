@@ -41,7 +41,7 @@ function ensureAllEquivalent(ids) {
     var lastResultObj;
     ids.forEach(
         function(id) {
-            var resObj = engine.fetchOmimDiseasePhenotypeAsAssocations(id);
+            var resObj = engine.fetchOmimDiseasePhenotypeAsAssocations(id, {type: "disease"});
             console.log("|results("+id+")|="+resObj.resultCount);
             //console.log(JSON.stringify(resObj,' ',1));
             assert.isTrue(resObj.resultCount > 1);
