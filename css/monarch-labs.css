@@ -24,7 +24,8 @@
     padding: 50px 0px 0px 0px;
 }
 .title{
-	margin-left: 480px;
+	margin-left: 440px;
+	padding-bottom: 10px;
 	font-size : 25px;
 	font-weight: bold;
 }
@@ -33,4 +34,8 @@
   fill: none;
   stroke: #000;
   shape-rendering: crispEdges;
+}
+form {
+  position: relative;
+  margin-left: 840px;
 }
