@@ -53,6 +53,15 @@
                         {{/hasDiseases}}
                     </div>
                     <div class="tabcontainer">
+                        <div class="tabhover">View genes associated with this phenotype</div>
+                        {{#hasGenes}}
+                            <a href="#genes"><div class="tab contenttab">Genes ({{geneNum}})</div></a>
+                        {{/hasGenes}}
+                        {{^hasGenes}}
+                            <div class="tab greyed-out">Genes (0)</div>
+                        {{/hasGenes}}
+                    </div>
+                    <div class="tabcontainer">
                         <div class="tabhover">View genotypes with this phenotype</div>
                         {{#hasGenotypes}}
                             <a href="#genotypes"><div class="tab contenttab">Models ({{genotypeNum}})</div></a>
@@ -99,6 +108,13 @@
                     </table>
                 </div>
                 {{/hasDiseases}}
+                {{#hasGenes}}
+                <div id="genes" class="category">
+                    <table class="{{css.table}}">
+                    {{{geneTable}}}
+                    </table>
+                </div>
+                {{/hasGenes}}
                 {{#hasGenotypes}}
                 <div id="genotypes" class="category">
                     <table class="{{css.table}}">
