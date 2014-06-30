@@ -6,8 +6,9 @@
 }
 
 #errmsg{
+	padding-top: 30px;
 	font-size:1.2em;
-	font-weight:bold;
+	/**font-weight:bold;*/
 	stroke:#ea763b;
 }
 
@@ -25,6 +26,7 @@
 }
 #header{
 	margin-top:0px;
+	padding-bottom:45px;
 }
 
 #slabel,
@@ -50,7 +52,6 @@ text.accent{
 
 }
 
-
 .row_accent,
 .model_accent{
 	stroke:#ea763b;
@@ -63,10 +64,7 @@ text.accent{
 	font-size: 9px;
 }
 
-line {
-	stroke: #0F473E;
-	stroke-width: 1;
-}
+
 
 .a_text{
 	text-anchor:end;
@@ -125,8 +123,8 @@ line {
 .selects{
   float:right;
   position:absolute;
-  top:660px;
-  left:820px;
+  top:640px;
+  left:830px;
   background-color:#f5f5f5; 
   padding: 0 7px 8px 6px;
   margin-left:-10px;
@@ -136,13 +134,36 @@ line {
 .shortselects{
   float:right;
   position:absolute;
-  top:500px;
-  left:820px;
+  top:440px;
+  left:830px;
   background-color:#f5f5f5; 
   padding: 0 7px 8px 6px;
   margin-left:-10px;
   width: 205px;
 }
+
+.overviewselects{
+  float:right;
+  position:absolute;
+  top:660px;
+  left:880px;
+  background-color:#f5f5f5; 
+  padding: 0 7px 8px 6px;
+  margin-left:-10px;
+  width: 205px; 
+}
+
+.overviewShortselects{
+  float:right;
+  position:absolute;
+  top:660px;
+  left:880px;
+  background-color:#f5f5f5; 
+  padding: 0 7px 8px 6px;
+  margin-left:-10px;
+  width: 205px; 
+}
+
 
 #org_div div, #calc_div div{
 	font-weight:bold;
@@ -192,12 +213,6 @@ line {
 	margin-top:-5px;
 }
 
-#unmatched {
-	margin-left:55px;
-	margin-top: -10px;
-
-}
-
 #logo {
 	height:90px;
 }
@@ -231,4 +246,30 @@ margin-left: 5px;
     -webkit-border-radius: 0 0 8px 8px;
     border-radius: 0 0 8px 8px; 
 	border-width: 3px;
+}
+
+#redtext, #bluetext{
+	fill: black;
+}
+
+#unmatchedlabel,
+#unmatchedlabelhide{
+	float:left;
+	clear:both;
+	font-weight: bold;
+	color: rgb(68,162,147);
+	margin-top:-20px;
+	margin-left: 5px;
+}
+#unmatched a{
+	margin-left:19px;
+}
+
+#unmatched {
+	float:left;
+	clear:both;
+	font-size: 0.8em;
+    margin-left: 10px;
+    text-align: right;
+	padding-bottom:30px;
 }

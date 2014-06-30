@@ -1,28 +1,35 @@
+/**These styles are specific to the widgets instruction page (templates/page/widgets.mustache)*/
 body{
 	margin-left:25px;
 	width:70%;
 	font-family: Arial, Helvetica, sans-serif;
 	font-size: 14px;
 }
+
 .title, .sectiontitle, h1, .subsectiontitle, .header{
 	font-weight:bold;
 	color:#44A293;
 } 
+
 .header{
 	font-size:2.0em;
 	margin-left:15px;
 	margin-bottom:15px;
-}			
+}
+			
 .subsectiontitle{
 	font-size:1.0em;
-}		
+}
+		
 .sectiontitle{
 	font-size:1.2em;
 }
+
 #title{
 	float:left;
 
 }
+
 #title b{
   position:absolute;
   top:100px;
@@ -55,7 +62,7 @@ body{
 	vertical-align:bottom;
 }
 #phen_vis svg{
-  margin-top:20px;
+  margin-top:-35px;
   padding-bottom: 30px;
 }
 
@@ -63,4 +70,20 @@ li{ padding-bottom: 7px;}
 
 div .title{
 	margin-top:-30px;
+	clear:both;
 }
+
+#viscontent .shortselects{
+	top:390px;
+	left:855px;
+}
+
+#viscontent {
+    height: 100%;
+    width: 100%;
+}
+
+#footer {
+	margin-top: 20px;
+}
+
