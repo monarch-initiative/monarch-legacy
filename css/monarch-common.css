@@ -62,6 +62,10 @@ p {
         height: 28px;
         border-radius: 2px;
     }
+    #search {
+        width: 180px;
+        font-size: 13px;
+    }
 }
 @media (max-width: 800px) {
     .monarch-navbar-container {
@@ -71,17 +75,45 @@ p {
         padding: 8px 5px 0px 20px;
     }
 }
-@media (max-width: 767px) {
+@media (max-width: 768px) {
     .navbar-brand {
         padding: 15px;
+    }
+    .nav.navbar-nav {
+        margin: 0px 0 10px;
+    }
+    .nav>li>a {
+        padding: 5px 10px;
+        margin: 0 10px;
+        border-radius: 0px;
+    }
+    .navbar-nav>li>.dropdown-menu {
+        margin-top: 0px;
+        margin-left: 10px;
+    }
+    .navbar-form {
+        margin-top: 0px;
+    }
+    #search {
+        width: 90%;
+        margin: 0 20px;
+        font-size: 13px;
     }
 }
 
 /* Content Containers */
 
-.monarch-container {
-    padding: 40px 0px 0px;
-    height: 100%;
+@media (min-width: 768px) {
+    .monarch-container {
+        padding: 40px 0px 0px;
+        height: 100%;
+    }
+}
+@media (max-width: 768px) {
+    .monarch-container {
+        padding: 50px 0px 0px;
+        height: 100%;
+    }
 }
 .content {
     display: inline-block;
@@ -233,10 +265,6 @@ p {
 
 /* Search Bar */
 
-#search {
-    width: 180px;
-    font-size: 13px;
-}
 .autocomplete-tag-item {
     white-space: nowrap;
     font-size: 75%;
@@ -245,6 +273,11 @@ p {
 /* Get a spinner for jQuery autocomplete wait. */
 .ui-autocomplete-loading {
     background: white url('/image/waiting_ac.gif') right center no-repeat;
+}
+.form-control {
+    padding: 5px 10px;
+    line-height: 13px;
+    border-radius: 2px;
 }
 
 /* Analyze Page */
