@@ -156,15 +156,15 @@ p {
     background-color: #d0bda1;
 }
 
-/* This light mint-blue color is used for jumbotron content related to phenotype pages.
+/* This light blue color is used for jumbotron content related to phenotype pages.
  * For example, it is use for the phenotype spotlight on the phenotype main page and
  * for phenotype information on phenotype specific pages. */
 .monarch-phenotype-light {
-    background-color: #eaf5f3;
+    background-color: #dcf7f9;
 }
 /* This darker blue color is used for the buttons related to phenotype pages. */
 .monarch-phenotype-dark {
-    background-color: #a5d5d3;
+    background-color: #72d5f5;
 }
 
 /* This light green color is used for jumbotron content related to gene pages.
@@ -187,6 +187,15 @@ p {
 /* This darker orange color is used for the buttons related to model pages. */
 .monarch-model-dark {
     background-color: #EA763B;
+}
+
+/* This light color is used for jumbotron content related to literature pages. */
+.monarch-literature-light {
+    background-color: ;
+}
+/* This darker color is used for the buttons related to literature pages. */
+.monarch-literature-dark {
+    background-color: ;
 }
 
 /* This color is lighter than monarch-model-dark and is used for the feedback button

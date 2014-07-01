@@ -1,0 +1,95 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Monarch Literature: {{label}} ({{id}})</title>
+    {{#scripts}}
+    <script type="text/javascript" src="{{url}}"></script>
+    {{/scripts}}
+    <script src="/js/tabs.js"></script>
+    <script src="/js/stupidtable.min.js"></script>
+    <script src="/js/tables.js"></script>
+    {{{includes.analytics}}}
+    {{#stylesheets}}
+    <link rel="stylesheet" type="text/css" href="{{url}}"/>
+    {{/stylesheets}}
+    <link rel="stylesheet" type="text/css" href="/css/monarch-main.css"/>
+    <link rel="stylesheet" type="text/css" href="/css/monarch-specific.css"/>
+    <meta charset="utf-8"/>
+</head>
+<body>
+    {{{includes.navbar}}}
+    <div class="monarch-container">
+        <div class="content">
+            <div class="wrapperforfooter">
+            <div class="jumbotron monarch-literature-light">
+                <div id="description">
+                    {{#alerts}}
+                    <div class="alert">
+                        {{{.}}}
+                    </div>
+                    {{/alerts}}
+                    <img id="monarch-logo" class="downloadline" src="/image/logo-sneak.png"/>
+                    <h1 class="downloadline">Literature: {{label}}</h1>
+                    <a href="{{{base_url}}}.json" class="btn btn-default downloadline downloadline-left monarch-literature-dark">JSON</a>
+                    <a class="downloadline btn btn-large btn-default btn-monarch-main monarch-feedback-dark"
+                            href="mailto:info@monarchinitiative.org">Your feedback welcome!</a>
+                    <p>
+                        {{#hasDef}}
+                        {{definition}}<br/>
+                        {{/hasDef}}
+                        {{#hasComment}}
+                        {{comment}}<br/>
+                        {{/hasComment}}
+						Source: {{{primary_xref}}}
+                    </p>
+                </div>
+                <div id="categories">
+                    <div class="tabcontainer">
+                        <a href="#ontology"><div id="initialtab" class="tab contenttab">Overview</div></a>
+                    </div>
+                    <div class="tabcontainer">
+                        <div class="tabhover">View phenotypes related to this disease</div>
+                        {{#hasPhenotypes}}
+                            <a href="#phenotypes"><div class="tab contenttab">Phenotypes ({{phenotypeNum}})</div></a>
+                        {{/hasPhenotypes}}
+                        {{^hasPhenotypes}}
+                            <div class="tab greyed-out">Phenotypes (0)</div>
+                        {{/hasPhenotypes}}
+                        </div>
+                    </div>
+            </div>
+            <div id="complete-info">
+                <div id="ontology" class="first category">
+                    {{#hasAka}}
+                    <div class="ids">
+                        <b>AKA:</b>
+                        {{aka}}
+                    </div>
+                    {{/hasAka}}
+                </div>
+                {{#hasPhenotypes}}
+                <div id="phenotypes" class="category">
+                        <div id="annotationscore">
+                            <span class="annotatetext">Annotation Sufficiency:</span>
+                            <span class="stars">{{annotationScore}}</span>
+                            <span class="annotatequestion">?</span>
+                            <span class="annotatehelp">
+                                The annotation score reflects how the breadth and depth of
+                                annotations for this disease compares to all of the other phenotypic
+                                profiles in our corpus. A high score means that the disease is richly
+                                annotated, both across a diverse set of phenotypic categories,
+                                as well as in the number and specificity of each of the phenotypes.
+                            </span>
+                        </div>
+                    <table class="{{css.table}}">
+                        {{{phenotypeTable}}}
+                    </table>
+                </div>
+                {{/hasPhenotypes}}
+            </div>
+            </div> <!-- closes wrapperforfooter -->
+            {{{includes.footer}}}
+        </div>
+    </div>
+</body>
+</html>
