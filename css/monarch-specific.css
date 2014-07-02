@@ -150,10 +150,11 @@ span.stars > *{
     display: none;
 }
 
-/* Literature Tab */
+/* Literature Pages & Tabs */
 
 .littabmoreauthors > .etal {
     color: #53AED7;
+    cursor: pointer;
 }
 .moreauthors {
     display: none;
@@ -161,6 +162,7 @@ span.stars > *{
 .littabmoreauthors > .hideauthors {
     color: #53AED7;
     display: none;
+    cursor: pointer;
 }
 
 /* Analyze */

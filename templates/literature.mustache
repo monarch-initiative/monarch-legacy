@@ -1,0 +1,78 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Monarch Literature: {{label}} ({{id}})</title>
+    {{#scripts}}
+    <script type="text/javascript" src="{{url}}"></script>
+    {{/scripts}}
+    <script src="/js/tabs.js"></script>
+    <script src="/js/stupidtable.min.js"></script>
+    <script src="/js/tables.js"></script>
+    {{{includes.analytics}}}
+    {{#stylesheets}}
+    <link rel="stylesheet" type="text/css" href="{{url}}"/>
+    {{/stylesheets}}
+    <link rel="stylesheet" type="text/css" href="/css/monarch-main.css"/>
+    <link rel="stylesheet" type="text/css" href="/css/monarch-specific.css"/>
+    <meta charset="utf-8"/>
+</head>
+<body>
+    {{{includes.navbar}}}
+    <div class="monarch-container">
+        <div class="content">
+            <div class="wrapperforfooter">
+            <div class="jumbotron monarch-literature-light">
+                <div id="description">
+                    {{#alerts}}
+                    <div class="alert">
+                        {{{.}}}
+                    </div>
+                    {{/alerts}}
+                    <img id="monarch-logo" class="downloadline" src="/image/logo-sneak.png"/>
+                    <h1 class="downloadline">Literature: {{label}}</h1>
+                    <a href="{{{base_url}}}.json" class="btn btn-default downloadline downloadline-left monarch-literature-dark">JSON</a>
+                    <a class="downloadline btn btn-large btn-default btn-monarch-main monarch-feedback-dark"
+                            href="mailto:info@monarchinitiative.org">Your feedback welcome!</a>
+                    <p>
+                        <b>Authors</b>: {{{authorList}}}</br>
+                        <b>Journal</b>: {{journal}} ({{year}})
+                    </p>
+                </div>
+                <div id="categories">
+                    <div class="tabcontainer">
+                        <a href="#overview"><div id="initialtab" class="tab contenttab">Overview</div></a>
+                    </div>
+                    <div class="tabcontainer">
+                        <div class="tabhover">View phenotypes related to this disease</div>
+                        {{#hasSimilar}}
+                            <a href="#similarpapers"><div class="tab contenttab">Similar Papers ({{similarNum}})</div></a>
+                        {{/hasSimilar}}
+                        {{^hasSimilar}}
+                            <div class="tab greyed-out">Similar Papers (0)</div>
+                        {{/hasSimilar}}
+                        </div>
+                    </div>
+            </div>
+            <div id="complete-info">
+                <div id="overview" class="first category">
+                    <p>
+                        <b>Mesh Terms</b>: {{{meshTerms}}}</br>
+                        {{#hasAbstract}}
+                        <b>Abstract</b>: {{abstract}}
+                        {{/hasAbstract}}
+                    </p>
+                </div>
+                {{#hasSimilar}}
+                <div id="similarpapers" class="category">
+                    <table class="{{css.table}}">
+                        {{{similarPapersTable}}}
+                    </table>
+                </div>
+                {{/hasSimilar}}
+            </div>
+            </div> <!-- closes wrapperforfooter -->
+            {{{includes.footer}}}
+        </div>
+    </div>
+</body>
+</html>
