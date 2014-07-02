@@ -34,18 +34,13 @@
                     <a class="downloadline btn btn-large btn-default btn-monarch-main monarch-feedback-dark"
                             href="mailto:info@monarchinitiative.org">Your feedback welcome!</a>
                     <p>
-                        {{#hasDef}}
-                        {{definition}}<br/>
-                        {{/hasDef}}
-                        {{#hasComment}}
-                        {{comment}}<br/>
-                        {{/hasComment}}
-						Source: {{{primary_xref}}}
+                        <b>Authors</b>: {{{authorList}}}</br>
+                        <b>Journal</b>: {{journal}} ({{year}})
                     </p>
                 </div>
                 <div id="categories">
                     <div class="tabcontainer">
-                        <a href="#ontology"><div id="initialtab" class="tab contenttab">Overview</div></a>
+                        <a href="#overview"><div id="initialtab" class="tab contenttab">Overview</div></a>
                     </div>
                     <div class="tabcontainer">
                         <div class="tabhover">View phenotypes related to this disease</div>
@@ -59,13 +54,12 @@
                     </div>
             </div>
             <div id="complete-info">
-                <div id="ontology" class="first category">
-                    {{#hasAka}}
-                    <div class="ids">
-                        <b>AKA:</b>
-                        {{aka}}
-                    </div>
-                    {{/hasAka}}
+                <div id="overview" class="first category">
+                    <p>
+                        {{#hasAbstract}}
+                        <b>Abstract</b>: {{abstract}}
+                        {{/hasAbstract}}
+                    </p>
                 </div>
                 {{#hasPhenotypes}}
                 <div id="phenotypes" class="category">
