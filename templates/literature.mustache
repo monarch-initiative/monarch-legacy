@@ -44,42 +44,31 @@
                     </div>
                     <div class="tabcontainer">
                         <div class="tabhover">View phenotypes related to this disease</div>
-                        {{#hasPhenotypes}}
-                            <a href="#phenotypes"><div class="tab contenttab">Phenotypes ({{phenotypeNum}})</div></a>
-                        {{/hasPhenotypes}}
-                        {{^hasPhenotypes}}
-                            <div class="tab greyed-out">Phenotypes (0)</div>
-                        {{/hasPhenotypes}}
+                        {{#hasSimilar}}
+                            <a href="#similarpapers"><div class="tab contenttab">Similar Papers ({{simNum}})</div></a>
+                        {{/hasSimilar}}
+                        {{^hasSimilar}}
+                            <div class="tab greyed-out">Similar Papers (0)</div>
+                        {{/hasSimilar}}
                         </div>
                     </div>
             </div>
             <div id="complete-info">
                 <div id="overview" class="first category">
                     <p>
+                        <b>Mesh Terms</b>: {{{meshTerms}}}</br>
                         {{#hasAbstract}}
                         <b>Abstract</b>: {{abstract}}
                         {{/hasAbstract}}
                     </p>
                 </div>
-                {{#hasPhenotypes}}
+                {{#hasSimilar}}
                 <div id="phenotypes" class="category">
-                        <div id="annotationscore">
-                            <span class="annotatetext">Annotation Sufficiency:</span>
-                            <span class="stars">{{annotationScore}}</span>
-                            <span class="annotatequestion">?</span>
-                            <span class="annotatehelp">
-                                The annotation score reflects how the breadth and depth of
-                                annotations for this disease compares to all of the other phenotypic
-                                profiles in our corpus. A high score means that the disease is richly
-                                annotated, both across a diverse set of phenotypic categories,
-                                as well as in the number and specificity of each of the phenotypes.
-                            </span>
-                        </div>
                     <table class="{{css.table}}">
-                        {{{phenotypeTable}}}
+                        {{{similarPapersTable}}}
                     </table>
                 </div>
-                {{/hasPhenotypes}}
+                {{/hasSimilar}}
             </div>
             </div> <!-- closes wrapperforfooter -->
             {{{includes.footer}}}

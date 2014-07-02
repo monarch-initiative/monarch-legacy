@@ -191,17 +191,17 @@ p {
 
 /* This light color is used for jumbotron content related to literature pages. */
 .monarch-literature-light {
-    background-color: ;
+    background-color: #fff6c4;
 }
 /* This darker color is used for the buttons related to literature pages. */
 .monarch-literature-dark {
-    background-color: ;
+    background-color: #ffd700;
 }
 
 /* This color is lighter than monarch-model-dark and is used for the feedback button
  * located throughout the site. */
 .monarch-feedback-dark {
-    background-color: #ed9f7f;
+    background-color: #AAA;
 }
 
 /* Buttons */
