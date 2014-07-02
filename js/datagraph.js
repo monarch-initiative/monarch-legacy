@@ -46,7 +46,7 @@ $(document).ready(function() {
         
         x.domain([0, xGroupMax]);
 	    
-	    svg.append("g")
+	    var xTicks = svg.append("g")
 	        .attr("class", "x axis")
 	        .attr("transform", "translate(0," + height + ")")
 	        .call(xAxis)
@@ -58,22 +58,53 @@ $(document).ready(function() {
 	        .style("text-anchor", "end")
 	        .text("Number Of Annotations");
 
-	    svg.append("g")
+	    var yTicks = svg.append("g")
 	    .attr("class", "y axis")
 	    .call(yAxis)
-	    .selectAll("text")  
+	    .selectAll("text")
+	    .filter(function(d){ return typeof(d) == "string"; })
+        .style("cursor", "pointer")
+        .on("mouseover", function(){
+	           d3.select(this).style("fill", "#EA763B");
+	           d3.select(this).style("text-decoration", "underline");
+	     })
+	    .on("mouseout", function(){
+	           d3.select(this).style("fill", "#000000" );
+	           d3.select(this).style("text-decoration", "none");
+	     })
+        .on("click", function(d){
+        	var monarchID;
+        	for (var i=0, len=data.length; i < len; i++){
+        		if (data[i].phenotype === d){
+        			monarchID = data[i].id;
+        			break;
+        		}
+        	}
+            document.location.href = "/phenotype/" + monarchID;
+         })
 	    .style("text-anchor", "end")
 	    .attr("dx", "-.5em")
 	    .attr("dy", ".15em")
-	    .attr("transform", function(d) {
-	        return "rotate(0)" 
-	        });
-
+	    .attr("transform", function(d) {return "rotate(0)"});
+	    
 	    var phenotype = svg.selectAll(".phenotype")
 	        .data(data)
-	        .enter().append("svg:a")
+	        .enter().append("svg:g")
 	        .attr("class", "bar")
-	        .attr("xlink:href", function(d) { return "/Phenotype/"+ d.id; })
+	        //.attr("xlink:href", function(d) { return "/Phenotype/"+ d.id; })
+	        .on("click", function(d){
+	        	   if (d.subGraph){
+	        		   
+	    		       transitionSubGraph(d,groups);
+	    		       //remove old bars
+	    		       rect.transition()
+		   		        .duration(750)
+		   		        .attr("y", 60)
+		   		        .style("fill-opacity", 1e-6)
+		   		        .remove();
+	        	   }
+	    	   
+	       })
 	        .attr("transform", function(d) { return "translate(0," + y0(d.phenotype) + ")"; });
 
 	    var rect = phenotype.selectAll("rect")
@@ -119,16 +150,20 @@ $(document).ready(function() {
 	    d3.selectAll("input").on("change", change);
 
 	    function change() {
-	      if (this.value === "grouped") transitionGrouped();
-	      else transitionStacked();
+	      if (this.value === "grouped"){
+	    	  transitionGrouped();	  
+	      } else {
+	    	  transitionStacked();
+	      }
 	    }
+	    
 	    
 	    function transitionGrouped() {
 		    x.domain([0, xGroupMax]);
 		    y1.domain(groups).rangeRoundBands([0, y0.rangeBand()]);
 		       
-		    var t = svg.transition().duration(750);
-		    t.select(".x.axis").call(xAxis);   
+		    var xTransition = svg.transition().duration(750);
+		    xTransition.select(".x.axis").call(xAxis);   
 
 		    rect.transition()
 		        .duration(500)
@@ -156,5 +191,144 @@ $(document).ready(function() {
 			    .attr("height", y0.rangeBand())
 			    .attr("y", function(d) { return y1(d.value); })
 		}
+		
+	    function transitionSubGraph(d,groups) {
+	    	
+	    	var subGraph = d.subGraph;
+		    var groups = groups;
+		    
+		    if (subGraph.length < 4){
+		        height = 200;
+		    } else if ((subGraph.length > 4)&&(subGraph.length < 8)){
+		    	height = 300;
+		    } else if ((subGraph.length > 8)&&(subGraph.length < 12)){
+		    	height = 400;
+		    } else {
+		    	height = 500;
+		    }
+		    
+			y0 = d3.scale.ordinal()
+		        .rangeRoundBands([0,height], .1);
+			
+			yAxis = d3.svg.axis()
+		        .scale(y0)
+		        .orient("left");
+			
+		    console.log($('input[name=mode]:checked').val());
+
+		    y0.domain(subGraph.map(function(d) { return d.phenotype; }));
+		    y1.domain(groups).rangeRoundBands([0, y0.rangeBand()]);
+		    
+		    var xGroupMax = d3.max(subGraph, function(d) { 
+	            return d3.max(d.counts, function(d) { return d.value; }); });
+		    
+		    var xStackMax = d3.max(data, function(d) { 
+		    	return d3.max(d.counts, function(d) { return d.x1; }); });
+		    
+		    var yTransition = svg.transition().duration(750);
+		    yTransition.select(".y.axis").call(yAxis)
+		    
+		    svg.select(".y.axis")
+		        .selectAll("text")
+		        .filter(function(d){ return typeof(d) == "string"; })
+	            .style("cursor", "pointer")
+	            .on("mouseover", function(){
+		           d3.select(this).style("fill", "#EA763B");
+		           d3.select(this).style("text-decoration", "underline");
+		         })
+		        .on("mouseout", function(){
+		           d3.select(this).style("fill", "#000000" );
+		           d3.select(this).style("text-decoration", "none");
+		        })
+	            .on("click", function(d){
+	        	    var monarchID;
+	        	    for (var i=0, len=subGraph.length; i < len; i++){
+	        		    if (subGraph[i].phenotype === d){
+	        			    monarchID = subGraph[i].id;
+	        			    break;
+	        		    }
+	        	    }
+	                document.location.href = "/phenotype/" + monarchID;
+	            });
+		  
+
+		    var newPhenotype = svg.selectAll(".newPhenotype")
+	            .data(subGraph)
+	            .enter().append("svg:g")
+	            .attr("class", "bar")
+	            .on("click", function(d){
+	        	    if (d.subGraph){
+
+	    		       transitionSubGraph(d,groups);
+	    		       rect.transition()
+		   		        .duration(750)
+		   		        .attr("y", 60)
+		   		        .style("fill-opacity", 1e-6)
+		   		        .remove();
+	        	    }
+	    	   
+	             })
+	             .attr("transform", function(d) {
+	            	 return "translate(0," + y0(d.phenotype) + ")"; });
+		    
+		    
+		    if ($('input[name=mode]:checked').val()=== 'grouped') {
+			    	  
+		          x.domain([0, xGroupMax]);
+		    
+		    var xTransition = svg.transition().duration(500);
+		    xTransition.select(".x.axis")
+		    .attr("transform", "translate(0," + height + ")")
+		    .call(xAxis);
+		    
+	        var rect = newPhenotype.selectAll("rect")
+	            .data(function(d) { return d.counts; })
+	            .enter().append("rect")
+	            .attr("height", y1.rangeBand())
+	            .attr("y", function(d) { return y1(d.value); })
+	            .attr("x", 0)
+	            .attr("width", function(d) { return x(d.value); })
+	            .on("mouseover", function(){
+	 	           d3.select(this)
+		           .style("fill", "#EA763B");
+		        })
+	            .on("mouseout", function(){
+	                d3.select(this)
+	                  .style("fill", function(d) { return color(d.name); });
+	            })
+	            .style("fill", function(d) { return color(d.name); });
+	        } else {
+	        	
+		          x.domain([0, xStackMax]);
+		          y1.domain(groups).rangeRoundBands([0,0]);
+				    
+				    var xTransition = svg.transition().duration(500);
+				    xTransition.select(".x.axis")
+				    .attr("transform", "translate(0," + height + ")")
+				    .call(xAxis);
+				    
+			        var rect = newPhenotype.selectAll("rect")
+			            .data(function(d) { return d.counts; })
+			            .enter().append("rect")
+			            .attr("x", function(d) { return x(d.x0); })
+			            .attr("width", function(d) { return x(d.x1) - x(d.x0); })
+			            .attr("height", y0.rangeBand())
+			            .attr("y", function(d) { return y1(d.value); })
+			            .on("mouseover", function(){
+			 	           d3.select(this)
+				           .style("fill", "#EA763B");
+				        })
+			            .on("mouseout", function(){
+			                d3.select(this)
+			                  .style("fill", function(d) { return color(d.name); });
+			            })
+			            .style("fill", function(d) { return color(d.name); });
+	        }
+	        	 	
+	        //Remove old bars
+			
+	
+		}
+
 	});
 });
