@@ -45,7 +45,7 @@
                     <div class="tabcontainer">
                         <div class="tabhover">View phenotypes related to this disease</div>
                         {{#hasSimilar}}
-                            <a href="#similarpapers"><div class="tab contenttab">Similar Papers ({{simNum}})</div></a>
+                            <a href="#similarpapers"><div class="tab contenttab">Similar Papers ({{similarNum}})</div></a>
                         {{/hasSimilar}}
                         {{^hasSimilar}}
                             <div class="tab greyed-out">Similar Papers (0)</div>
@@ -63,7 +63,7 @@
                     </p>
                 </div>
                 {{#hasSimilar}}
-                <div id="phenotypes" class="category">
+                <div id="similarpapers" class="category">
                     <table class="{{css.table}}">
                         {{{similarPapersTable}}}
                     </table>
