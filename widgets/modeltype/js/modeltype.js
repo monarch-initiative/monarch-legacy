@@ -2802,7 +2802,7 @@ var url = document.URL;
 		
 			var phenotypes = self._showUnmatchedPhenotypes();		
 		
-			var optionhtml3 = "<div id='unmatchedlabel' style='display:block;'>View Unmatched Phenotypes</div>";
+			var optionhtml3 = "<div id='prebl'><div id='unmatchedlabel' style='display:block;'>View Unmatched Phenotypes</div></div>";
 			var el = this.element;
 			el.append(optionhtml3);	
 
