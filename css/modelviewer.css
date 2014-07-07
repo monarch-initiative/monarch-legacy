@@ -26,6 +26,7 @@
 }
 #header{
 	margin-top:0px;
+	padding-bottom:45px;
 }
 
 #slabel,
@@ -63,10 +64,7 @@ text.accent{
 	font-size: 9px;
 }
 
-line {
-	stroke: #0F473E;
-	stroke-width: 1;
-}
+
 
 .a_text{
 	text-anchor:end;
@@ -85,7 +83,6 @@ line {
 	padding: 8px;
 	background-color: #f9d0bb;
 	border: 1px solid #c5c5c5;
-
 }
 
 #stitle{
@@ -125,11 +122,12 @@ line {
 .selects{
   float:right;
   position:absolute;
+
   top:690px;
   left:830px;
+
   background-color:#f5f5f5; 
   padding: 0 7px 8px 6px;
-  margin-left:-10px;
   width: 205px;
 }
 
@@ -144,6 +142,27 @@ line {
   width: 205px;
 }
 
+.overviewselects{
+  float:right; 
+  position:absolute;
+  top:710px;
+  left:830px;
+  background-color:#f5f5f5; 
+  padding: 0 7px 8px 6px;
+  margin-left:-10px;
+  width: 205px; 
+}
+
+.overviewShortselects{
+  float:right;
+  position:absolute;
+  top:510px;
+  left:830px;
+  background-color:#f5f5f5; 
+  padding: 0 7px 8px 6px;
+  margin-left:-10px;
+  width: 205px; 
+}
 
 #org_div div, #calc_div div{
 	font-weight:bold;
@@ -193,6 +212,7 @@ line {
 	margin-top:-5px;
 }
 
+
 #unmatched {
 	margin-left:55px;
 	margin-top: -10px;
@@ -227,12 +247,35 @@ margin-left: 5px;
 	background-color: #25349A;
 }
 .ui-dialog-osx {
-    -moz-border-radius: 0 0 8px 8px;
     -webkit-border-radius: 0 0 8px 8px;
     border-radius: 0 0 8px 8px; 
 	border-width: 3px;
+	-moz-border-radius: 0 0 8px 8px;
 }
 
-#redtext, #bluetext{
+#redtext, #bluetext, #greentext{
 	fill: black;
+}
+
+#unmatchedlabel,
+#unmatchedlabelhide{
+	float:left;
+	clear:both;
+	font-weight: bold;
+	color: rgb(68,162,147);
+	margin-top:20px;
+	margin-left: 5px;
+	margin-bottom:20px;
+}
+#unmatched a{
+	margin-left:19px;
+}
+
+#unmatched {
+	float:left;
+	clear:both;
+	font-size: 0.8em;
+    margin-left: 10px;
+    text-align: right;
+	padding-bottom:30px;
 }
