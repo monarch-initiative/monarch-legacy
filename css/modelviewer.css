@@ -83,7 +83,6 @@ text.accent{
 	padding: 8px;
 	background-color: #f9d0bb;
 	border: 1px solid #c5c5c5;
-
 }
 
 #stitle{
@@ -123,19 +122,21 @@ text.accent{
 .selects{
   float:right;
   position:absolute;
-  top:640px;
-  left:830px;
+  left:815px;
+  top:645px;
+  clear:left;
+  
   background-color:#f5f5f5; 
   padding: 0 7px 8px 6px;
-  margin-left:-10px;
   width: 205px;
 }
 
 .shortselects{
   float:right;
   position:absolute;
-  top:440px;
-  left:830px;
+  left:815px;
+  top:510px;
+  
   background-color:#f5f5f5; 
   padding: 0 7px 8px 6px;
   margin-left:-10px;
@@ -143,10 +144,10 @@ text.accent{
 }
 
 .overviewselects{
-  float:right;
+  float:right; 
   position:absolute;
-  top:660px;
-  left:880px;
+  top:710px;
+  left:830px;
   background-color:#f5f5f5; 
   padding: 0 7px 8px 6px;
   margin-left:-10px;
@@ -156,8 +157,8 @@ text.accent{
 .overviewShortselects{
   float:right;
   position:absolute;
-  top:660px;
-  left:880px;
+  top:510px;
+  left:830px;
   background-color:#f5f5f5; 
   padding: 0 7px 8px 6px;
   margin-left:-10px;
@@ -242,13 +243,13 @@ margin-left: 5px;
 	background-color: #25349A;
 }
 .ui-dialog-osx {
-    -moz-border-radius: 0 0 8px 8px;
-    -webkit-border-radius: 0 0 8px 8px;
+        -webkit-border-radius: 0 0 8px 8px;
     border-radius: 0 0 8px 8px; 
 	border-width: 3px;
+-moz-border-radius: 0 0 8px 8px;
 }
 
-#redtext, #bluetext{
+#redtext, #bluetext, #greentext{
 	fill: black;
 }
 
@@ -258,8 +259,9 @@ margin-left: 5px;
 	clear:both;
 	font-weight: bold;
 	color: rgb(68,162,147);
-	margin-top:-20px;
+	margin-top:20px;
 	margin-left: 5px;
+	margin-bottom:20px;
 }
 #unmatched a{
 	margin-left:19px;
