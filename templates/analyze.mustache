@@ -10,6 +10,7 @@
     <script src="/js/tabs.js"></script>
     <script src="/js/stupidtable.min.js"></script>
     <script src="/js/tables.js"></script>
+    {{{includes.analytics}}}
     {{#stylesheets}}
     <link rel="stylesheet" type="text/css" href="{{url}}"/>
     {{/stylesheets}}
@@ -93,7 +94,7 @@
                             <option value="" selected="selected" >All</option>
                             <option value="10090">Mouse (genes)</option>
                             <option value="7955">Zebrafish (genes)</option>
-                            <option value="9096">Human (diseases)</option>
+                            <option value="9606">Human (diseases)</option>
                             </select>
                         </div>
                         <button type="submit" class="btn btn-info">Search</button>  
@@ -102,8 +103,11 @@
                 {{#hasInputItems}}
                 <div id="result" class="first category">
                     <h3 class="downloadline">Results</h3>
-                    <a href="{{{base_url}}}.json" class="btn btn-info downloadline">JSON</a>
+                    <a href="{{{downloadURL}}}" class="btn btn-default downloadline downloadline-left monarch-blue">JSON</a>
                     {{#hasResults}}
+                    {{#singleSpecies}}
+                        <p>Species: {{{speciesHref}}}</p>
+                    {{/singleSpecies}}
                     {{{resultsTable}}}
                     </table>
                     {{/hasResults}}

@@ -9,6 +9,8 @@
     
     "autocomplete_url" : "http://beta.neuinfo.org/services/v1/vocabulary.json",
 
-    "owlsim_services_url" : "http://owlsim.crbs.ucsd.edu/"
+    "owlsim_services_url" : "http://owlsim.crbs.ucsd.edu/",
+    
+    "analytics_id" : ""
     
 }

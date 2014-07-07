@@ -122,10 +122,10 @@ text.accent{
 .selects{
   float:right;
   position:absolute;
-  left:815px;
-  top:645px;
-  clear:left;
-  
+
+  top:690px;
+  left:830px;
+
   background-color:#f5f5f5; 
   padding: 0 7px 8px 6px;
   width: 205px;
@@ -134,9 +134,8 @@ text.accent{
 .shortselects{
   float:right;
   position:absolute;
-  left:815px;
-  top:510px;
-  
+  top:500px;
+  left:830px;
   background-color:#f5f5f5; 
   padding: 0 7px 8px 6px;
   margin-left:-10px;
@@ -164,7 +163,6 @@ text.accent{
   margin-left:-10px;
   width: 205px; 
 }
-
 
 #org_div div, #calc_div div{
 	font-weight:bold;
@@ -214,6 +212,12 @@ text.accent{
 	margin-top:-5px;
 }
 
+
+#unmatched {
+	margin-left:55px;
+	margin-top: -10px;
+}
+
 #logo {
 	height:90px;
 }
@@ -243,10 +247,10 @@ margin-left: 5px;
 	background-color: #25349A;
 }
 .ui-dialog-osx {
-        -webkit-border-radius: 0 0 8px 8px;
+    -webkit-border-radius: 0 0 8px 8px;
     border-radius: 0 0 8px 8px; 
 	border-width: 3px;
--moz-border-radius: 0 0 8px 8px;
+	-moz-border-radius: 0 0 8px 8px;
 }
 
 #redtext, #bluetext, #greentext{

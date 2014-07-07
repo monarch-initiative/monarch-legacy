@@ -1,4 +1,8 @@
-/* Section 0: General */
+/* This file controls the elements common to all monarch pages. Every webpage
+ * references this file. Use it to style the navbar, buttons, colors. */
+
+/* General Styles */
+
 html, body {
     height: 100%;
 }
@@ -8,28 +12,15 @@ p {
 .clear {
     clear: both;
 }
-/* Buttons */
-.btn {
-    padding: 5px 15px;
-}
-.btn-info {
-    background-color: #53AED7;
-    border-color: #53AED7;
-}
-.downloadline {
-    display: inline-block;
-}
-.btn.downloadline {
-    padding: 5px 15px;
-    margin-bottom: 10px;
-    border-radius: 3px;
-    margin-left: 5px;
-}
-.btn.downloadline-left {
-    margin-left: 20px;
-}
 
-/* Section 1: Navbar */
+/* Navbar */
+/* These are navbar styles that depend heavily on media queries to determine the
+ * width of the user's browser window. Make sure that you are adding styles to the
+ * correct media query section.
+ *
+ * The default Bootstrap behavior makes the navbar quite different from regular
+ * browser width to smaller (e.g. smartphone browsers). */
+
 @media (min-width: 815px) {
     .monarch-navbar-container {
         padding: 0px 10px;
@@ -71,6 +62,10 @@ p {
         height: 28px;
         border-radius: 2px;
     }
+    #search {
+        width: 180px;
+        font-size: 13px;
+    }
 }
 @media (max-width: 800px) {
     .monarch-navbar-container {
@@ -80,23 +75,54 @@ p {
         padding: 8px 5px 0px 20px;
     }
 }
-@media (max-width: 767px) {
+@media (max-width: 768px) {
     .navbar-brand {
         padding: 15px;
     }
+    .nav.navbar-nav {
+        margin: 0px 0 10px;
+    }
+    .nav>li>a {
+        padding: 5px 10px;
+        margin: 0 10px;
+        border-radius: 0px;
+    }
+    .navbar-nav>li>.dropdown-menu {
+        margin-top: 0px;
+        margin-left: 10px;
+    }
+    .navbar-form {
+        margin-top: 0px;
+    }
+    #search {
+        width: 90%;
+        margin: 0 20px;
+        font-size: 13px;
+    }
 }
 
-/* Section 3: Content */
-.monarch-container {
-    padding: 40px 0px 0px;
-    height: 100%;
+/* Content Containers */
+
+@media (min-width: 768px) {
+    .monarch-container {
+        padding: 40px 0px 0px;
+        height: 100%;
+    }
+}
+@media (max-width: 768px) {
+    .monarch-container {
+        padding: 50px 0px 0px;
+        height: 100%;
+    }
 }
 .content {
     display: inline-block;
     height: 100%;
 }
 
-/* Logo */
+/* Logos */
+/* These styles standardize the size of logos over all Monarch pages. */
+
 #monarch-logo {
     height: 45px;
     float: left;
@@ -106,41 +132,104 @@ p {
 }
 
 /* Colors */
+
+/* This blue color is used on Monarch pages and buttons that are _not_ related to the
+ * four core types of pages: diseases, phenotypes, genes, and genotypes.
+ * For example, the analyze phenotypes page's search button uses monarch-blue. */
 .monarch-blue {
     background-color: #53AED7;
 }
+/* This monarch-blue-light is an alternative blue color that is lighter and used for
+ * non-category specific pages/buttons. */
 .monarch-blue-light {
     background-color: #acd8ec;
 }
+
+/* This light brown color is used for jumbotron content related to disease pages.
+ * For example, it is use for the disease spotlight on the disease main page and
+ * for disease information on disease specific pages. */
 .monarch-disease-light {
     background-color: #ECE8E3;
 }
+/* This darker brown color is used for the buttons related to disease pages. */
 .monarch-disease-dark {
     background-color: #d0bda1;
 }
+
+/* This light blue color is used for jumbotron content related to phenotype pages.
+ * For example, it is use for the phenotype spotlight on the phenotype main page and
+ * for phenotype information on phenotype specific pages. */
 .monarch-phenotype-light {
-    background-color: #eaf5f3;
+    background-color: #dcf7f9;
 }
+/* This darker blue color is used for the buttons related to phenotype pages. */
 .monarch-phenotype-dark {
-    background-color: #a5d5d3;
+    background-color: #72d5f5;
 }
+
+/* This light green color is used for jumbotron content related to gene pages.
+ * For example, it is use for the gene spotlight on the gene main page and for gene
+ * information on gene specific pages. */
 .monarch-gene-light {
     background-color: #dbebe8;
 }
+/* This darker green color is used for the buttons related to gene pages. */
 .monarch-gene-dark {
     background-color: #44A293;
 }
+
+/* This light orange color is used for jumbotron content related to genotype/model pages.
+ * For example, it is use for the model spotlight on the model main page and for model
+ * information on model specific pages. */
 .monarch-model-light {
     background-color: #F4EEEB;
 }
+/* This darker orange color is used for the buttons related to model pages. */
 .monarch-model-dark {
     background-color: #EA763B;
 }
+
+/* This light color is used for jumbotron content related to literature pages. */
+.monarch-literature-light {
+    background-color: #fff6c4;
+}
+/* This darker color is used for the buttons related to literature pages. */
+.monarch-literature-dark {
+    background-color: #ffd700;
+}
+
+/* This color is lighter than monarch-model-dark and is used for the feedback button
+ * located throughout the site. */
 .monarch-feedback-dark {
-    background-color: #ed9f7f;
+    background-color: #AAA;
+}
+
+/* Buttons */
+/* These styles override some bootstrap button styles to make the buttons slimmer
+ * and less skeuomorphic. */
+
+.btn {
+    padding: 5px 15px;
+}
+.btn-info {
+    background-color: #53AED7;
+    border-color: #53AED7;
+}
+.downloadline {
+    display: inline-block;
+}
+.btn.downloadline {
+    padding: 5px 15px;
+    margin-bottom: 10px;
+    border-radius: 3px;
+    margin-left: 5px;
+}
+.btn.downloadline-left {
+    margin-left: 20px;
 }
 
 /* Footer */
+
 #footer {
     clear: both;
     padding: 10px 40px 10px;
@@ -184,10 +273,7 @@ p {
 }
 
 /* Search Bar */
-#search {
-    width: 180px;
-    font-size: 13px;
-}
+
 .autocomplete-tag-item {
     white-space: nowrap;
     font-size: 75%;
@@ -197,8 +283,14 @@ p {
 .ui-autocomplete-loading {
     background: white url('/image/waiting_ac.gif') right center no-repeat;
 }
+.form-control {
+    padding: 5px 10px;
+    line-height: 13px;
+    border-radius: 2px;
+}
 
 /* Analyze Page */
+
 .analyze-delete-button {
     cursor: pointer;
     color: white;
@@ -212,6 +304,9 @@ p {
 }
 
 /* Alerts */
+/* This is the styling for alerts about development that appear at the tops of dev
+ * pages throughout the Monarch site. */
+ 
 .alert {
     margin: 0px;
     padding: 0px 20px;

@@ -129,11 +129,7 @@ var url = document.URL;
 		//reset option values if needed before reloading data
 		_reset: function() {
 			var self = this;
-			
-			self.options.axis_pos_list = [];		
-			self.options.comparisonType = "genes";
-			self.options.colorScaleB = undefined;
-			self.options.colorScaleR = undefined;
+
 			self.options.currModelIdx = 0;
 			self.options.currPhenotypeIdx = 0;						
 			self.options.globalViewWidth = 110;
@@ -246,6 +242,7 @@ var url = document.URL;
 	
 	//create this visualization if no phenotypes or models are returned
 	_createEmptyVisualization: function(url, organism) {
+
 		var self = this;
 		var fullmsg = "There are no " + organism + " models for this disease. "
 		d3.select("#svg_area").remove();
@@ -263,6 +260,7 @@ var url = document.URL;
             .attr("width", 200)
 			.attr("id", "errmsg")
             .text(fullmsg);			
+
 	},
 	
 	//adds light gray gridlines to make it easier to see which row/column selected matches occur
@@ -533,10 +531,27 @@ var url = document.URL;
 						dupLabels.push(label);
 					}
 				}
-			}
+
 	    }
 		return text;
 	},
+	
+	_getUnmatchedLabels: function() {
+	  	var unmatchedLabels = [];
+		for (i=0;i<this.options.unmatchedPhenotypes.length; i++){
+		
+			jQuery.ajax({
+				url : this.options.serverURL + "/phenotype/" + this.options.unmatchedPhenotypes[i] + ".json",
+				async : false,
+				dataType : 'json',
+				success : function(data) {
+					unmatchedLabels.push(data.label);
+				}
+			});
+	   }
+	   return unmatchedLabels;
+	},
+
 	
 	_getPhenotypeLabel : function(id){
 		var label = "";
@@ -1032,6 +1047,7 @@ var url = document.URL;
 	_ajaxLoadData : function (target, url) {
 			var self = this;
 			jQuery.ajax({
+
 			url: url, 
 			async : false,
 			dataType : 'json',
@@ -1288,6 +1304,7 @@ var url = document.URL;
     	
 	    this.options.colorScaleB = d3.scale.linear().domain([3, maxScore]);
         this.options.colorScaleB.domain([0, 0.2, 0.4, 0.6, 0.8, 1].map(this.options.colorScaleB.invert));
+
         //this.options.colorScaleB.range(['rgb(255,255,204)','rgb(199,233,180)','rgb(127,205,187)','rgb(65,182,196)','rgb(44,12//7,184)','rgb(37,52,148)']); 
 		this.options.colorScaleB.range(['rgb(229,229,229)','rgb(164,214,212)','rgb(68,162,147)','rgb(97,142,153)','rgb(66,139,202)','rgb(25,59,143)']);
 		  
@@ -1302,6 +1319,7 @@ var url = document.URL;
 		this.options.colorScaleG.domain([0, 0.2, 0.4, 0.6, 0.8, 1].map(this.options.colorScaleG.invert));
 		//this.options.colorScaleG.range(['rgb(140,81,10)','rgb(216,179,101)','rgb(246,232,195)','rgb//(199,234,229)','rgb(90,180,172)','rgb(1,102,94)']);
 		this.options.colorScaleG.range(['rgb(1,102,94)','rgb(90,180,172)','rgb(199,234,229)','rgb(246,232,195)','rgb(216,179,101)','rgb(140,81,10)']);
+
 		
 	},
 
@@ -1758,6 +1776,7 @@ var url = document.URL;
 		  })
 		  .style('opacity', '1.0')
 		  .attr("fill", function(d, i) {
+
 			  //This is for the new "Overview" target option 
 			  if (self.options.targetSpeciesName == "Overview"){
 						if (d.species == "Homo sapiens") {return self.options.colorScaleB(d.value);} 
@@ -1772,7 +1791,6 @@ var url = document.URL;
 		if (self.options.targetSpeciesName == "Overview") {
 			this._highlightSpecies();
 		}		
-			
 		  model_rects.transition()
 			  .delay(20)
 			  .style('opacity', '1.0')
@@ -2425,7 +2443,6 @@ var url = document.URL;
 	    //in the scale
 	    if (diff > 0) {
 
-		
 			var color_values_blue = ['rgb(229,229,229)','rgb(164,214,212)','rgb(68,162,147)','rgb(97,142,153)','rgb(66,139,202)','rgb(25,59,143)'];
 			
 			var color_values_red =  ['rgb(252,248,227)','rgb(230,209,178)','rgb(234,118,59)','rgb(221,56,53)','rgb(181,92,85)','rgb(70,19,19)'];
@@ -2497,6 +2514,7 @@ var url = document.URL;
 				gradient_red.append("svg:stop")
 					.attr("offset", "20%")
 					.style("stop-color", 'rgb(230,209,178)')
+
 					.style("stop-opacity", 1);
 				
 				gradient_red.append("svg:stop")
@@ -2508,16 +2526,15 @@ var url = document.URL;
 					.attr("offset", "60%")
 					.style("stop-color", 'rgb(181,92,85)')
 					.style("stop-opacity", 1);
-					
 				gradient_red.append("svg:stop")
 					.attr("offset", "80%")
-					.style("stop-color", 'rgb(70,19,19)')
 					.style("stop-opacity", 1);
 
 				var legend_rects_red = this.options.svg.append("rect")
 					.attr("transform","translate(0,10)")
 					.attr("class", "legend_rect")
 					.attr("id","legendscale_red")
+
 					.attr("y", (y1 + 0) + this.options.yTranslation + self.options.yoffsetOver)
 					.attr("x", self.options.axis_pos_list[2] + 12)
 					.attr("rx",8)
@@ -2532,6 +2549,7 @@ var url = document.URL;
 					.attr("x", self.options.axis_pos_list[2] + 205)
 					.style("font-size", "11px")
 					.text("Mus musculus");
+
 				
 				var gradient_green = this.options.svg.append("svg:linearGradient")
 					.attr("id", "gradient_green")
@@ -2635,6 +2653,7 @@ var url = document.URL;
 			}
 						
 			var selClass = "";
+
 			//This is for the new "Overview" target option 
 			if (self.options.targetSpeciesName == "Overview") {
 				if (self.options.filteredPhenotypeData.length < 14) 
@@ -2648,7 +2667,7 @@ var url = document.URL;
 			}
 		
 			var optionhtml = "<div id='selects' class='" + selClass + "'><div id='org_div'><div>Species</div><span><select id=\'organism\'>";
-	
+
 			for (var idx=0;idx<self.options.targetSpeciesList.length;idx++) {
 				var selecteditem = "";
 				if (self.options.targetSpeciesList[idx].name === self.options.targetSpeciesName) {
