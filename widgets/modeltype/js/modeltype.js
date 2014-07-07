@@ -532,7 +532,8 @@ var url = document.URL;
 					}
 				}
 
-	    }
+			}
+		}
 		return text;
 	},
 	
