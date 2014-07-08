@@ -3,7 +3,7 @@
         // ====================
         // FEDERATION SERVICES
         // ====================
-        // --OMIM--
+        // --OMIM, general q--
         {
             component : "federation",
             priority : 1,
@@ -23,7 +23,7 @@
         {
             component : "federation",
             priority : 1,
-            url : "http://beta.neuinfo.org/services/v1/federation/data/nlx_151835-1.json?exportType=data&q=HP:0001337&includeSubclasses=true&count=1000",
+            url : "http://beta.neuinfo.org/services/v1/federation/data/nlx_151835-1.json?exportType=data&subclassFilter=phenotype_id:HP:0001337&count=1000",
             desc : "INFERRED Query OmimDiseasePhenotype using an HPO ID (Tremor) - include subclasses - we expect diseases directly annotated and annotated to subclasses",
             maxTimeMilliseconds : 5000,
             expects : {
@@ -57,7 +57,7 @@
         {
             component : "federation",
             priority : 1,
-            url : "http://beta.neuinfo.org/services/v1/federation/data/nif-0000-00096-6.json?exportType=data&count=100&q=MP:0000428&includeSubclasses=true&",
+            url : "http://beta.neuinfo.org/services/v1/federation/data/nif-0000-00096-6.json?exportType=data&count=100&subclassFilter=phenotype_id:MP:0000428&",
             desc : "INFERRED MGI Geno Pheno using an MP ID (craniofacial) - include subclasses - we expect genotypes directly annotated and annotated to subclasses",
             maxTimeMilliseconds : 5000,
             expects : {
@@ -70,7 +70,7 @@
         {
             component : "federation",
             priority : 1,
-            url : "http://beta.neuinfo.org/services/v1/federation/data/nif-0000-00096-6.json?exportType=data&count=1000&q=MP:0003677&includeSubclasses=true&",
+            url : "http://beta.neuinfo.org/services/v1/federation/data/nif-0000-00096-6.json?exportType=data&count=1000&subclassFilter=phenotype_id:MP:0003677&",
             desc : "INFERRED MGI Geno Pheno using an MP ID (craniofacial) - include subclasses - we expect genotypes directly annotated and annotated to subclasses",
             maxTimeMilliseconds : 5000,
             expects : {
@@ -90,7 +90,7 @@
             }
         },
 
-        // --OMIM variant search--
+        // --OMIM variant search (textual)--
         {
             component : "federation",
             priority : 1,
@@ -177,6 +177,22 @@
                 ["Limb-girdle muscle weakness",
                  "HP:0008971", // alt ID
                  "Weakness of the limb-girdle muscles"     // definition field
+                ]
+            }
+        },
+
+        {
+            component : "ontoquest",
+            subcomponent : "concepts",
+            priority : 1,
+            url : "http://nif-services-stage.neuinfo.org/ontoquest-lamhdi/concepts/term/ZP_0000001",
+            desc : "Concept details for 'abnormal(ly) quality zebrafish anatomical entity''",
+            notes : "Currently just checks for string matches in returned XML",
+            maxTimeMilliseconds : 2000,
+            expects : {
+                format : "xml",
+                raw_contains : 
+                ["abnormal(ly) quality zebrafish anatomical entity"
                 ]
             }
         },
