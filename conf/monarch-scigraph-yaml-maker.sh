@@ -39,6 +39,7 @@ curies:
     http://purl.obolibrary.org/obo/MPATH_ : MPATH
     http://purl.obolibrary.org/obo/CHEBI_ : CHEBI
     http://purl.obolibrary.org/obo/FB_ : FB
+    http://purl.obolibrary.org/obo/FBbt_ : FBbt
     http://purl.obolibrary.org/obo/FBcv_ : FBcv
     http://purl.obolibrary.org/obo/RGD_ : RGD
     http://purl.obolibrary.org/obo/MONARCH_ : MONARCH
