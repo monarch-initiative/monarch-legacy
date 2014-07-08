@@ -1327,7 +1327,15 @@ var url = document.URL;
     _initCanvas : function() {
 
     	var self= this;
-		var optionhtml = "<div id='header'><span id='sort_div'><span id='slabel' >Sort Phenotypes<span id='sorts'></span></span><span><select id=\"sortphenotypes\">";
+		//var optionhtml = "<div id='header'><span id='sort_div'><span id='slabel' >Sort //Phenotypes<span id='sorts'></span></span>";
+			
+		var optionhtml = "<span id='stitle'><b>Phenotype comparison (grouped by " + species + " " + this.options.comparisonType + ")</b></span>";	
+		optionhtml = optionhtml + "<span id='faq'><img class='faq' src='" + this.options.scriptpath + "../image/greeninfo30.png' height='15px'></span><br /><div id='header'><span id='sort_div'><span id='slabel' >Sort Phenotypes<span id='sorts'></span></span><br /><span><select id=\'sortphenotypes\'>";	
+		
+		d3.select("#faq")
+			.on("click", function(d) {self._showDialog("faq");
+		});		
+		
 		
 		for (var idx=0;idx<self.options.sortList.length;idx++) {
     		var selecteditem = "";
@@ -1343,13 +1351,9 @@ var url = document.URL;
 		//This is for the new "Overview" target option 
 		if (this.options.targetSpeciesName == "Overview") {species = "All";} else {species= this.options.targetSpeciesName;}
 		optionhtml = optionhtml + "</select></span>";			
-		optionhtml = optionhtml + "<span id='stitle'><b>Phenotype comparison (grouped by " + species + " " + this.options.comparisonType + ")</b></span>";	
-		optionhtml = optionhtml + "<span id='faq'><img class='faq' src='" + this.options.scriptpath + "../image/greeninfo30.png' height='15px'></span>";		
-		this.element.append(optionhtml);
+	    this.element.append(optionhtml);
 		
-		d3.select("#faq")
-			.on("click", function(d) {self._showDialog("faq");
-		});
+		
 			
 		var sorts = d3.selectAll("#sorts")
 			.on("click", function(d,i){
