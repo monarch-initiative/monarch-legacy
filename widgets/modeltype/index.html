@@ -16,7 +16,7 @@
  
 <html>
   <head>
-    <title>ModelType Widget Example</title>
+    <title>Monarch Phonotype Grid Widget</title>
     <script src="js/jquery-1.11.0.min.js"></script>
     <script src="js/jquery-ui-1.10.3.custom.min.js"></script>
     <script src="js/d3.min.js"></script>
@@ -56,18 +56,18 @@
 	</script>
 	
   </head>
-  <body>
+  <body id="phenogrid">
     <div class="monarch-container">  
 		
         <div class="content">
             <div class="wrapperforfooter">
 			<span class="headtitle"><img id="monarch-logo"  width="90px" class="downloadline" src="image/logo.png"/>
-			<span class="header">ModelType Viewer Widget</span></span><br />  <br /> <br />          
+			<span class="header">Monarch Phenotype Grid Widget</span></span><br />  <br /> <br />          
 			<div id="viscontent">
 			<div id="phen_vis"></div></div>
 				<div class="text">
-				<div class="title">Steps for Adding the ModelType Viewer Widget to Your Webpage</div>
-                    This page describes how to include the Viewer Widget on any webpage.  Steps are provided for adding required javascript files<b>*</b>, adding parameters to the widget call, and adding the widget to the html file. <br /><br />
+				<div class="title">Steps for Adding the Monarch Phenotype Grid to Your Webpage</div>
+                    This page describes how to include the phenogrid widget on any webpage.  Steps are provided for adding required javascript files<b>*</b>, adding parameters to the widget call, and adding the widget to the html file. <br /><br />
 					
 					<span style="font-weight:bold; font-size:1.1em;">*Required files are available at: <a href="https://github.com/monarch-initiative/monarch-app/tree/master/widgets/modeltype">https://github.com/monarch-initiative/monarch-app/tree/master/widgets/modeltype</a></span>
                 </div><br />
@@ -84,7 +84,7 @@
 								<li>d3 (tested with 3.2.4)</li>
 							</ul>
 						</li>
-						<li>The custom javascript file for the ModelViewer widget is required.
+						<li>The custom javascript file for the phenogrid widget is required.
 							<ul>
 								<li>modeltype.js</li>
 							</ul>
@@ -137,7 +137,7 @@
 									<li><b><em>targetSpecies</em></b> [optional]- this parameter defaults to 10090 (mus musculus).  Change this parameter if you want to compare the phenotypes in the phenotypeData parameter against a different species. Available Species: 
 									<ul><li>Name: Homo sapiens  Taxon: 9606</li>
 										<li>Name: Dani rerio    Taxon: 7955</li>
-										<!--<li>Name: Drosophila melanogaster  Taxon: 7227</li>-->
+										<li>Name: Drosophila melanogaster  Taxon: 7227</li>
 									</ul>
 									</li>
 								</ul>
