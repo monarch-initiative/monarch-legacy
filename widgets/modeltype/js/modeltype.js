@@ -259,8 +259,20 @@ var url = document.URL;
             .attr("height", 70)
             .attr("width", 200)
 			.attr("id", "errmsg")
-            .text(fullmsg);			
-
+            .text(fullmsg);	
+	
+		var html = "<br /><div id='return'><button id='button' type='button'>Return</button></div>";	this.element.append(html);
+					
+		var btn = d3.selectAll("#button")
+			.on("click", function(d,i){
+				$("#return").remove();
+				$("#errmsg").remove();
+				d3.select("#svg_area").remove();
+				self.options.phenotypeData = self.options.origPhenotypeData.slice();
+				self.options.targetSpecies =  '2';
+				self._reset();
+				self._create();
+		});
 	},
 	
 	//adds light gray gridlines to make it easier to see which row/column selected matches occur
@@ -1354,9 +1366,7 @@ var url = document.URL;
 		
 		optionhtml = optionhtml + "</select></span>";			
 	    this.element.append(optionhtml);
-		
-		
-			
+					
 		var sorts = d3.selectAll("#sorts")
 			.on("click", function(d,i){
 				self._showDialog( "sorts");

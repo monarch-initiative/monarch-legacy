@@ -93,10 +93,8 @@ text.accent{
 }
 
 #stitle{
-	text-align:center;
-	margin-left:17%;
-	font-size:18px;
-	
+	margin-left:240px;
+	font-size:18px;	
 }
 
 #svg_area{
@@ -131,8 +129,8 @@ text.accent{
   float:right;
   position:absolute;
 
-  top:640px;
-  left:830px;
+  top:590px;
+  left:820px;
 
   background-color:#f5f5f5; 
   padding: 0 7px 8px 6px;
@@ -142,8 +140,8 @@ text.accent{
 .shortselects{
   float:right;
   position:absolute;
-  top:500px;
-  left:830px;
+  top:480px;
+  left:820px;
   background-color:#f5f5f5; 
   padding: 0 7px 8px 6px;
   margin-left:-10px;
@@ -153,8 +151,8 @@ text.accent{
 .overviewselects{
   float:right; 
   position:absolute;
-  top:675px;
-  left:830px;
+  top:625px;
+  left:820px;
   background-color:#f5f5f5; 
   padding: 0 7px 8px 6px;
   margin-left:-10px;
@@ -164,8 +162,8 @@ text.accent{
 .overviewShortselects{
   float:right;
   position:absolute;
-  top:510px;
-  left:830px;
+  top:540px;
+  left:820px;
   background-color:#f5f5f5; 
   padding: 0 7px 8px 6px;
   margin-left:-10px;
@@ -221,10 +219,7 @@ text.accent{
 }
 
 
-#unmatched {
-	margin-left:55px;
-	margin-top: -10px;
-}
+
 
 #logo {
 	height:90px;
@@ -276,7 +271,7 @@ margin-left: 55px;
 	clear:both;
 	font-weight: bold;
 	color: rgb(68,162,147);
-	margin-top:0px;
+	margin-top:-15px;
 	margin-left: 5px;
 	margin-bottom:20px;
 }
@@ -288,7 +283,16 @@ margin-left: 55px;
 	float:left;
 	clear:both;
 	font-size: 0.8em;
-    margin-left: 10px;
+    margin-left: -10px;
     text-align: right;
 	padding-bottom:30px;
+	margin-top:10px;
 }
+
+#return,
+#button {
+	float:left;
+	margin-top:15px;
+	margin-left: -510px;
+}
+
