@@ -928,7 +928,7 @@ var url = document.URL;
 		var self=this;
 		
     	var phenotypeList = this.options.phenotypeData;
-		var limit = 10;
+		var limit = this.options.multiOrganismCt;
 		//For the Overview, we need to create grid for human data first - top 10  models
 		//Taxon is hard-coded since the targetSpecies is "Overview"
 		hurl = this.options.serverURL + "/simsearch/phenotype/?input_items=" + 
@@ -952,7 +952,7 @@ var url = document.URL;
 						phenotypeList.join(",") + "&limit=" + limit + "&target_species=7227";
 		this._ajaxLoadData("Drosophila melanogaster", furl);
 		
-		//Now we have top 15 model matches for Human data in humandata, 
+		//Now we have top 10 model matches for Human data in humandata, 
 		//Top n model matches for Mouse data in mousedata
 		//Top n model matches for zebrashish data in zfishdata
 		//Top n model matches for flies in flydata
@@ -1331,21 +1331,27 @@ var url = document.URL;
 		this.options.colorScaleG = d3.scale.linear().domain([3, maxScore]);
 		this.options.colorScaleG.domain([0, 0.2, 0.4, 0.6, 0.8, 1].map(this.options.colorScaleG.invert));
 		//this.options.colorScaleG.range(['rgb(140,81,10)','rgb(216,179,101)','rgb(246,232,195)','rgb//(199,234,229)','rgb(90,180,172)','rgb(1,102,94)']);
-		this.options.colorScaleG.range(['rgb(1,102,94)','rgb(90,180,172)','rgb(199,234,229)','rgb(246,232,195)','rgb(216,179,101)','rgb(140,81,10)']);
+		//this.options.colorScaleG.range(['rgb(1,102,94)','rgb(90,180,172)','rgb(199,234,229)','rgb(246,232,19//5)','rgb(216,179,101)','rgb(140,81,10)']);
 
-		
+		this.options.colorScaleG.range(['rgb(230,209,178)','rgb(210,173,116)','rgb(148,114,60)','rgb(68,162,147)','rgb(31,128,113)','rgb(3,82,70)']);
 	},
 
     _initCanvas : function() {
 
     	var self= this;
 		//var optionhtml = "<div id='header'><span id='sort_div'><span id='slabel' >Sort //Phenotypes<span id='sorts'></span></span>";
-		var species = '';
+		var species = '',
+			optionhtml = '';
 		
 		//This is for the new "Overview" target option 
-		if (this.options.targetSpeciesName == "Overview") {species = "All";} else {species= this.options.targetSpeciesName;}
+		if (this.options.targetSpeciesName == "Overview") {
+			species = "All";
+			optionhtml = "<span id='mtitle'><span id='s2title'><b>Cross-species Overview</b></span>";	
+		} else {
+			species= this.options.targetSpeciesName;
+			optionhtml = "<span id='mtitle'><span id='stitle'><b>Phenotype comparison (grouped by " + species + " " + this.options.comparisonType + ")</b></span>";	
+		}
 		
-		var optionhtml = "<span id='mtitle'><span id='stitle'><b>Phenotype comparison (grouped by " + species + " " + this.options.comparisonType + ")</b></span>";	
 		optionhtml = optionhtml + "<span id='faq'><img class='faq' src='" + this.options.scriptpath + "../image/greeninfo30.png' height='15px'></span><br /></span><div id='header'><span id='sort_div'><span id='slabel' >Sort Phenotypes<span id='sorts'></span></span><br /><span><select id=\'sortphenotypes\'>";	
 		
 		d3.select("#faq")
@@ -2467,7 +2473,9 @@ var url = document.URL;
 			
 			//var color_values_green =  //['rgb(140,81,10)','rgb(216,179,101)','rgb(246,232,195)','rgb(199,234,229)','rgb(90,180,172)','rgb(1,102,94)'];
 			
-			var color_values_green = ['rgb(1,102,94)','rgb(90,180,172)','rgb(199,234,229)','rgb(246,232,195)','rgb(216,179,101)','rgb(140,81,10)'];
+			//var color_values_green = //['rgb(1,102,94)','rgb(90,180,172)','rgb(199,234,229)','rgb(246,232,195)','rgb(216,179,101)','rgb//(140,81,10)'];
+			
+			var color_values_green = ['rgb(230,209,178)','rgb(210,173,116)','rgb(148,114,60)','rgb(68,162,147)','rgb(31,128,113)','rgb(3,82,70)'];
 			
 			   
 				var gradient_blue = this.options.svg.append("svg:linearGradient")
@@ -2579,25 +2587,27 @@ var url = document.URL;
 				//Green values: 				
 				//new: var color_values_green = ['rgb(1,102,94)','rgb(90.180,172)','rgb(199,234,229)','rgb(246,232,195)','rgb(216,179,101)','rgb(140,81,10)'];
 				//OLD: 'rgb(140,81,10)','rgb(216,179,101)','rgb(246,232,195)','rgb(199,234,229)','rgb(90,180,172)','rgb(1,102,94)']
+				//NEWEST:	//'rgb(230,209,178)','rgb(210,173,116)','rgb(148,114,60)','rgb(68,162,147)','rgb(31,128,113)',//'rgb(3,82,70)'
+				
 				
 				gradient_green.append("svg:stop")
 					.attr("offset", "20%")
-					.style("stop-color", 'rgb(1,102,94)')
+					.style("stop-color", 'rgb(210,173,116)')
 					.style("stop-opacity", 1);
 				
 				gradient_green.append("svg:stop")
 					.attr("offset", "40%")
-					.style("stop-color", 'rgb(199,234,195)')
+					.style("stop-color", 'rgb(148,114,60)')
 					.style("stop-opacity", 1);
 				
 				gradient_green.append("svg:stop")
 					.attr("offset", "60%")
-					.style("stop-color", 'rgb(216,159,101)')
+					.style("stop-color", 'rgb(31,128,113)')
 					.style("stop-opacity", 1);
 					
 				gradient_green.append("svg:stop")
 					.attr("offset", "80%")
-					.style("stop-color", 'rgb(140,81,10)')
+					.style("stop-color", 'rgb(3,82,70)')
 					.style("stop-opacity", 1);
 
 				var legend_rects_green = this.options.svg.append("rect")
@@ -2909,13 +2919,13 @@ var url = document.URL;
 				getAttribute: function(keystring) {
 					var ret = self.options.xScale(modelData.model_id)-2;
 					if (keystring == "y") {
-						ret = Number(self.options.yoffset + self.options.yoffsetOver)-120;
+						ret = Number(self.options.yoffset + /**self.options.yoffsetOver)*/-190);
 					}
 					return ret;
 				},
         };		
 		obj.attributes['transform'] = {value: highlight_rect.attr("transform")};		
-		this._updateDetailSection(retData, this._getXYPos(obj), undefined, 60);
+		this._updateDetailSection(retData, this._getXYPos(obj), undefined, 50);
 	},
 
 	//given an array of phenotype objects 
