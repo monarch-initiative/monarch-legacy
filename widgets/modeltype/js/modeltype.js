@@ -1325,7 +1325,8 @@ var url = document.URL;
 		this.options.colorScaleR = d3.scale.linear().domain([3, maxScore]);
         this.options.colorScaleR.domain([0, 0.2, 0.4, 0.6, 0.8, 1].map(this.options.colorScaleR.invert));
         //this.options.colorScaleR.range(['rgb(255,255,178)','rgb(254,217,118)','rgb(254,178,76)','rgb(253,141,60)','rgb(240,59//,32)','rgb(189,0,38)']); 
-		this.options.colorScaleR.range(['rgb(252,248,227)','rgb(230,209,178)','rgb(234,118,59)','rgb(221,56,53)','rgb(181,92,85)','rgb(70,19,19)']);
+		this.options.colorScaleR.range(['rgb(252,248,227)','rgb(249,205,184)','rgb(234,118,59)','rgb(221,56,53)','rgb(181,92,85)','rgb(70,19,19)']);
+		//this.options.colorScaleR.range(['rgb(252,248,227)','rgb(230,209,178)','rgb(234,118,59)','rgb(221,56,53)','rgb(181,92,85)','rgb(70,19,19)']);
 		
 		
 		this.options.colorScaleG = d3.scale.linear().domain([3, maxScore]);
@@ -2537,9 +2538,11 @@ var url = document.URL;
 							
 					//Red values: 
 					/**var color_values_red =  ['rgb(252,248,227)','rgb(230,209,178)','rgb(234,118,59)','rgb(221,56,53)','rgb(181,92,85)','rgb(70,19,19)'];*/
+					var color_values_red =  ['rgb(252,248,227)','rgb(249,205,184)','rgb(234,118,59)','rgb(221,56,53)','rgb(181,92,85)','rgb(70,19,19)'];
+					
 				gradient_red.append("svg:stop")
 					.attr("offset", "20%")
-					.style("stop-color", 'rgb(230,209,178)')
+					.style("stop-color", 'rgb(249,205,184)')
 
 					.style("stop-opacity", 1);
 				
@@ -2554,6 +2557,7 @@ var url = document.URL;
 					.style("stop-opacity", 1);
 				gradient_red.append("svg:stop")
 					.attr("offset", "80%")
+					.style("stop-color", 'rgb(70,19,19)')
 					.style("stop-opacity", 1);
 
 				var legend_rects_red = this.options.svg.append("rect")
