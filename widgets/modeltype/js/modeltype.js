@@ -1328,9 +1328,13 @@ var url = document.URL;
 
     	var self= this;
 		//var optionhtml = "<div id='header'><span id='sort_div'><span id='slabel' >Sort //Phenotypes<span id='sorts'></span></span>";
-			
-		var optionhtml = "<span id='stitle'><b>Phenotype comparison (grouped by " + species + " " + this.options.comparisonType + ")</b></span>";	
-		optionhtml = optionhtml + "<span id='faq'><img class='faq' src='" + this.options.scriptpath + "../image/greeninfo30.png' height='15px'></span><br /><div id='header'><span id='sort_div'><span id='slabel' >Sort Phenotypes<span id='sorts'></span></span><br /><span><select id=\'sortphenotypes\'>";	
+		var species = '';
+		
+		//This is for the new "Overview" target option 
+		if (this.options.targetSpeciesName == "Overview") {species = "All";} else {species= this.options.targetSpeciesName;}
+		
+		var optionhtml = "<span id='mtitle'><span id='stitle'><b>Phenotype comparison (grouped by " + species + " " + this.options.comparisonType + ")</b></span>";	
+		optionhtml = optionhtml + "<span id='faq'><img class='faq' src='" + this.options.scriptpath + "../image/greeninfo30.png' height='15px'></span><br /></span><div id='header'><span id='sort_div'><span id='slabel' >Sort Phenotypes<span id='sorts'></span></span><br /><span><select id=\'sortphenotypes\'>";	
 		
 		d3.select("#faq")
 			.on("click", function(d) {self._showDialog("faq");
@@ -1347,9 +1351,7 @@ var url = document.URL;
     		}
 			optionhtml = optionhtml + "<option value='" + self.options.sortList[idx].order +"' "+ selecteditem +">" + self.options.sortList[idx].type +"</option>"
 		}
-		var species = '';
-		//This is for the new "Overview" target option 
-		if (this.options.targetSpeciesName == "Overview") {species = "All";} else {species= this.options.targetSpeciesName;}
+		
 		optionhtml = optionhtml + "</select></span>";			
 	    this.element.append(optionhtml);
 		
@@ -1371,6 +1373,7 @@ var url = document.URL;
 			$("#org_div").remove();
 			$("#calc_div").remove();
 			$("#sort_div").remove();
+			$("#mtitle").remove();
 			$("#header").remove();
         	$("#svg_area").remove();
         	self.options.phenotypeData = self.options.origPhenotypeData.slice();
@@ -2714,6 +2717,7 @@ var url = document.URL;
 				$("#org_div").remove();
 				$("#calc_div").remove();
 				$("#sort_div").remove();
+				$("#mtitle").remove();
 				$("#header").remove();
 				$("#svg_area").remove();
 				self.options.phenotypeData = self.options.origPhenotypeData.slice();
@@ -2733,6 +2737,7 @@ var url = document.URL;
 				$("#calc_div").remove();
 				$("#org_div").remove();
 				$("#sort_div").remove();
+				$("#mtitle").remove();
 				$("#header").remove();
 				$("#svg_area").remove();
 				self.options.phenotypeData = self.options.origPhenotypeData.slice();
