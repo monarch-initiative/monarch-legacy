@@ -226,7 +226,7 @@
             notes : "Currently just checks for string matches in returned HTML",
             expects : {
                 format : "html",
-                raw_contains : "translational research",
+                raw_contains : "Enabling navigation",
             }
         },
 

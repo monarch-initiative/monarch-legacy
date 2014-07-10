@@ -259,8 +259,20 @@ var url = document.URL;
             .attr("height", 70)
             .attr("width", 200)
 			.attr("id", "errmsg")
-            .text(fullmsg);			
-
+            .text(fullmsg);	
+	
+		var html = "<br /><div id='return'><button id='button' type='button'>Return</button></div>";	this.element.append(html);
+					
+		var btn = d3.selectAll("#button")
+			.on("click", function(d,i){
+				$("#return").remove();
+				$("#errmsg").remove();
+				d3.select("#svg_area").remove();
+				self.options.phenotypeData = self.options.origPhenotypeData.slice();
+				self.options.targetSpecies =  '2';
+				self._reset();
+				self._create();
+		});
 	},
 	
 	//adds light gray gridlines to make it easier to see which row/column selected matches occur
@@ -916,7 +928,7 @@ var url = document.URL;
 		var self=this;
 		
     	var phenotypeList = this.options.phenotypeData;
-		var limit = 10;
+		var limit = this.options.multiOrganismCt;
 		//For the Overview, we need to create grid for human data first - top 10  models
 		//Taxon is hard-coded since the targetSpecies is "Overview"
 		hurl = this.options.serverURL + "/simsearch/phenotype/?input_items=" + 
@@ -940,7 +952,7 @@ var url = document.URL;
 						phenotypeList.join(",") + "&limit=" + limit + "&target_species=7227";
 		this._ajaxLoadData("Drosophila melanogaster", furl);
 		
-		//Now we have top 15 model matches for Human data in humandata, 
+		//Now we have top 10 model matches for Human data in humandata, 
 		//Top n model matches for Mouse data in mousedata
 		//Top n model matches for zebrashish data in zfishdata
 		//Top n model matches for flies in flydata
@@ -1313,30 +1325,36 @@ var url = document.URL;
 		this.options.colorScaleR = d3.scale.linear().domain([3, maxScore]);
         this.options.colorScaleR.domain([0, 0.2, 0.4, 0.6, 0.8, 1].map(this.options.colorScaleR.invert));
         //this.options.colorScaleR.range(['rgb(255,255,178)','rgb(254,217,118)','rgb(254,178,76)','rgb(253,141,60)','rgb(240,59//,32)','rgb(189,0,38)']); 
-		this.options.colorScaleR.range(['rgb(252,248,227)','rgb(230,209,178)','rgb(234,118,59)','rgb(221,56,53)','rgb(181,92,85)','rgb(70,19,19)']);
+		this.options.colorScaleR.range(['rgb(252,248,227)','rgb(249,205,184)','rgb(234,118,59)','rgb(221,56,53)','rgb(181,92,85)','rgb(70,19,19)']);
+		//this.options.colorScaleR.range(['rgb(252,248,227)','rgb(230,209,178)','rgb(234,118,59)','rgb(221,56,53)','rgb(181,92,85)','rgb(70,19,19)']);
 		
 		
 		this.options.colorScaleG = d3.scale.linear().domain([3, maxScore]);
 		this.options.colorScaleG.domain([0, 0.2, 0.4, 0.6, 0.8, 1].map(this.options.colorScaleG.invert));
 		//this.options.colorScaleG.range(['rgb(140,81,10)','rgb(216,179,101)','rgb(246,232,195)','rgb//(199,234,229)','rgb(90,180,172)','rgb(1,102,94)']);
-		this.options.colorScaleG.range(['rgb(1,102,94)','rgb(90,180,172)','rgb(199,234,229)','rgb(246,232,195)','rgb(216,179,101)','rgb(140,81,10)']);
+		//this.options.colorScaleG.range(['rgb(1,102,94)','rgb(90,180,172)','rgb(199,234,229)','rgb(246,232,19//5)','rgb(216,179,101)','rgb(140,81,10)']);
 
-		
+		this.options.colorScaleG.range(['rgb(230,209,178)','rgb(210,173,116)','rgb(148,114,60)','rgb(68,162,147)','rgb(31,128,113)','rgb(3,82,70)']);
 	},
 
     _initCanvas : function() {
 
     	var self= this;
-		//var optionhtml = "<div id='header'><span id='sort_div'><span id='slabel' >Sort //Phenotypes<span id='sorts'></span></span>";
+		
+		var species = '',
+			optionhtml = '';
+		
+		//This is for the new "Overview" target option 
+		if (this.options.targetSpeciesName == "Overview") {
+			species = "All";
+			optionhtml = "<span id='mtitle'><span id='s2title'><b>Cross-species Overview</b></span>";	
+		} else {
+			species= this.options.targetSpeciesName;
+			optionhtml = "<span id='mtitle'><span id='stitle'><b>Phenotype comparison (grouped by " + species + " " + this.options.comparisonType + ")</b></span>";	
+		}
+		
+		optionhtml = optionhtml + "<span id='faq'><img class='faq' src='" + this.options.scriptpath + "../image/greeninfo30.png' height='15px'></span><br /></span><div id='header'><span id='sort_div'><span id='slabel' >Sort Phenotypes<span id='sorts'></span></span><br /><span><select id=\'sortphenotypes\'>";	
 			
-		var optionhtml = "<span id='stitle'><b>Phenotype comparison (grouped by " + species + " " + this.options.comparisonType + ")</b></span>";	
-		optionhtml = optionhtml + "<span id='faq'><img class='faq' src='" + this.options.scriptpath + "../image/greeninfo30.png' height='15px'></span><br /><div id='header'><span id='sort_div'><span id='slabel' >Sort Phenotypes<span id='sorts'></span></span><br /><span><select id=\'sortphenotypes\'>";	
-		
-		d3.select("#faq")
-			.on("click", function(d) {self._showDialog("faq");
-		});		
-		
-		
 		for (var idx=0;idx<self.options.sortList.length;idx++) {
     		var selecteditem = "";
     		if (self.options.sortList[idx].type === self.options.selectedSort) {
@@ -1347,14 +1365,14 @@ var url = document.URL;
     		}
 			optionhtml = optionhtml + "<option value='" + self.options.sortList[idx].order +"' "+ selecteditem +">" + self.options.sortList[idx].type +"</option>"
 		}
-		var species = '';
-		//This is for the new "Overview" target option 
-		if (this.options.targetSpeciesName == "Overview") {species = "All";} else {species= this.options.targetSpeciesName;}
+		
 		optionhtml = optionhtml + "</select></span>";			
 	    this.element.append(optionhtml);
 		
-		
-			
+		var faqs = d3.selectAll("#faq")
+			.on("click", function(d) {self._showDialog("faq");
+		});	
+					
 		var sorts = d3.selectAll("#sorts")
 			.on("click", function(d,i){
 				self._showDialog( "sorts");
@@ -1371,6 +1389,7 @@ var url = document.URL;
 			$("#org_div").remove();
 			$("#calc_div").remove();
 			$("#sort_div").remove();
+			$("#mtitle").remove();
 			$("#header").remove();
         	$("#svg_area").remove();
         	self.options.phenotypeData = self.options.origPhenotypeData.slice();
@@ -2228,7 +2247,7 @@ var url = document.URL;
 			break;
 			case "calcs": text = "<h5>What do the different calculation methods mean?</h5><div>For each pairwise comparison of phenotypes from the query (q) and target (t), we can assess their individual similarities in a number of ways.  First, we find the phenotype-in-common between each pair (called the lowest common subsumer or LCS). Then, we can leverage the Information Content (IC) of the phenotypes (q,t,lcs) in a variety of combinations to interpret the strength of the similarity.</div><br /><div><b>**Uniqueness </b>reflects how often the phenotype-in-common is annotated to all diseases and genes in the Monarch Initiative knowledgebase.  This is simply a reflection of the IC normalized based on the maxIC. IC(PhenotypeInCommon)maxIC(AllPhenotypes)</div><br /><div><b>**Distance</b> is the euclidian distance between the query, target, and phenotype-in-common, computed using IC scores.<br/><center>d=(IC(q)-IC(lcs))2+(IC(t)-IC(lcs))2</center>  </div><br /><div>This is normalized based on the maximal distance possible, which would be between two rarely annotated leaf nodes that only have the root node (phenotypic abnormality) in common.  So what is depicted in the grid is 1-dmax(d)</div><br /><div><b>**Ratio(q)</b> is the proportion of shared information between a query phenotype and the phenotype-in-common with the target.<br /><center>ratio(q)=IC(lcs)IC(q)*100</center></div><br /><div><b>**Ratio(t)</b> is the proportion of shared information between the target phenotype and the phenotype-in-common with the query.<br /><center>ratio(t)=IC(lcs)IC(t)*100</center></div>";
 			break;
-			case "faq": text = "<h4>Phenogrid Faq</h4><h5>How are the similar targets obtained?</h5><div>We query our owlsim server to obtain the top 100 most-phenotypically similar targets for the selected organism.  The grid defaults to showing mouse.</div><h5>What are the possible targets for comparison?</h5><div>Currently, the phenogrid is configured to permit comparisons between your query (typically a set of disease-phenotype associations) and one of:<ul><li>human diseases</li><li>mouse genes</li><li>zebrafish genes</li></ul>You can change the target organism by selecting a new organism.  The grid will temporarily disappear, and reappear with the new target rendered.</div><h5>Can I compare the phenotypes to human genes?</h5><div>No, not yet.  But that will be added soon.</div><h5>Where does the data come from?</h5><div>The phenotype annotations utilized to compute the phenotypic similarity are drawn from a number of sources:<ul><li>Human disease-phenotype annotations were obtained from  <a href='http://human-phenotype-ontology.org' target='_blank'>http://human-phenotype-ontology.org</a>, which contains annotations for approx. 7,500 diseases.<li><li>Mouse gene-phenotype annotations were obtained from MGI <a href='www.informatics.jax.org'>(www.informatics.jax.org).</a> The original annotations were made between genotypes and phenotypes.  We then inferred the relationship between gene and phenotype based on the genes that were variant in each genotype.  We only perform this inference for those genotypes that contain a single variant gene.</li><li>Zebrafish genotype-phenotype annotations were obtained from ZFIN  <a href='www.zfin.org' target='_blank'>(www.zfin.org).</a> The original annotations were made between genotypes and phenotypes, with some of those genotypes created experimentally with the application of morpholino reagents.  Like for mouse, we inferred the relationship between gene and phenotype based on the genes that were varied in each genotype.  We only perform this inference for those genotypes that contain a single variant gene.</li><li>All annotation data, preformatted for use in OWLSim, is available for download from  <a href='http://code.google.com/p/phenotype-ontologies/' target='_blank'>http://code.google.com/p/phenotype-ontologies/ </a> </li></ul><h5>What does the phenogrid show?</h5><div>The grid depicts the comparison of a set of phenotypes in a query (such as those annotated to a disease or a gene) with one or more phenotypically similar targets.  Each row is a phenotype that is annotated to the query (either directly or it is a less-specific phenotype that is inferred), and each column is an annotated target (such as a gene or disease).  When a phenotype is shared between the query and target, the intersection is colored based on the selected calculation method (see What do the different calculation methods mean).   You can hover over the intersection to get more information about what the original phenotype is of the target, and what is in-common between the two.</div><h5>Where can I make suggestions for improvements or additions?</h5><div>Please email your feedback to <a href='mailto:info@monarchinitiative.org'>info@monarchinitiative.org.</a><h5>What happens to the phenotypes that are not shared?</h5><div>Presently, phenotypes that were part of your query but are not shared by any of the targets are not rendered.</div><h5>Why do I sometimes see two targets that share the same phenotypes have very different overall scores?</h5><div>This is usually because of some of the phenotypes that are not shared with the query.  For example, if the top hit to a query matches each phenotype exactly, and the next hit matches all of them exactly plus it has 10 additional phenotypes that don&#39;t match it at all, it is penalized for those phenotypes are aren&#39;t in common, and thus ranks lower on the similarity scale. <div>";
+			case "faq": text = "<h4>Phenogrid Faq</h4><h5>How are the similar targets obtained?</h5><div>We query our owlsim server to obtain the top 100 most-phenotypically similar targets for the selected organism.  The grid defaults to showing mouse.</div><h5>What are the possible targets for comparison?</h5><div>Currently, the phenogrid is configured to permit comparisons between your query (typically a set of disease-phenotype associations) and one of:<ul><li>human diseases</li><li>mouse genes</li><li>zebrafish genes</li></ul>You can change the target organism by selecting a new organism.  The grid will temporarily disappear, and reappear with the new target rendered.</div><h5>Can I compare the phenotypes to human genes?</h5><div>No, not yet.  But that will be added soon.</div><h5>Where does the data come from?</h5><div>The phenotype annotations utilized to compute the phenotypic similarity are drawn from a number of sources:<ul><li>Human disease-phenotype annotations were obtained from  <a href='http://human-phenotype-ontology.org' target='_blank'>http://human-phenotype-ontology.org</a>, which contains annotations for approx. 7,500 diseases.</li><li>Mouse gene-phenotype annotations were obtained from MGI <a href='www.informatics.jax.org'>(www.informatics.jax.org).</a> The original annotations were made between genotypes and phenotypes.  We then inferred the relationship between gene and phenotype based on the genes that were variant in each genotype.  We only perform this inference for those genotypes that contain a single variant gene.</li><li>Zebrafish genotype-phenotype annotations were obtained from ZFIN  <a href='www.zfin.org' target='_blank'>(www.zfin.org).</a> The original annotations were made between genotypes and phenotypes, with some of those genotypes created experimentally with the application of morpholino reagents.  Like for mouse, we inferred the relationship between gene and phenotype based on the genes that were varied in each genotype.  We only perform this inference for those genotypes that contain a single variant gene.</li><li>All annotation data, preformatted for use in OWLSim, is available for download from  <a href='http://code.google.com/p/phenotype-ontologies/' target='_blank'>http://code.google.com/p/phenotype-ontologies/ </a> </li></ul><h5>What does the phenogrid show?</h5><div>The grid depicts the comparison of a set of phenotypes in a query (such as those annotated to a disease or a gene) with one or more phenotypically similar targets.  Each row is a phenotype that is annotated to the query (either directly or it is a less-specific phenotype that is inferred), and each column is an annotated target (such as a gene or disease).  When a phenotype is shared between the query and target, the intersection is colored based on the selected calculation method (see What do the different calculation methods mean).   You can hover over the intersection to get more information about what the original phenotype is of the target, and what is in-common between the two.</div><h5>Where can I make suggestions for improvements or additions?</h5><div>Please email your feedback to <a href='mailto:info@monarchinitiative.org'>info@monarchinitiative.org.</a><h5>What happens to the phenotypes that are not shared?</h5><div>Phenotypes that were part of your query but are not shared by any of the targets can be seen by clicking the View Unmatched Phenotype link.</div><h5>Why do I sometimes see two targets that share the same phenotypes have very different overall scores?</h5><div>This is usually because of some of the phenotypes that are not shared with the query.  For example, if the top hit to a query matches each phenotype exactly, and the next hit matches all of them exactly plus it has 10 additional phenotypes that don&#39;t match it at all, it is penalized for those phenotypes are aren&#39;t in common, and thus ranks lower on the similarity scale. <div>";
 			break;			
 			//case "unmatched":  text = this._showUnmatchedPhenotypes();
 			//break;
@@ -2454,7 +2473,9 @@ var url = document.URL;
 			
 			//var color_values_green =  //['rgb(140,81,10)','rgb(216,179,101)','rgb(246,232,195)','rgb(199,234,229)','rgb(90,180,172)','rgb(1,102,94)'];
 			
-			var color_values_green = ['rgb(1,102,94)','rgb(90,180,172)','rgb(199,234,229)','rgb(246,232,195)','rgb(216,179,101)','rgb(140,81,10)'];
+			//var color_values_green = //['rgb(1,102,94)','rgb(90,180,172)','rgb(199,234,229)','rgb(246,232,195)','rgb(216,179,101)','rgb//(140,81,10)'];
+			
+			var color_values_green = ['rgb(230,209,178)','rgb(210,173,116)','rgb(148,114,60)','rgb(68,162,147)','rgb(31,128,113)','rgb(3,82,70)'];
 			
 			   
 				var gradient_blue = this.options.svg.append("svg:linearGradient")
@@ -2516,9 +2537,11 @@ var url = document.URL;
 							
 					//Red values: 
 					/**var color_values_red =  ['rgb(252,248,227)','rgb(230,209,178)','rgb(234,118,59)','rgb(221,56,53)','rgb(181,92,85)','rgb(70,19,19)'];*/
+					var color_values_red =  ['rgb(252,248,227)','rgb(249,205,184)','rgb(234,118,59)','rgb(221,56,53)','rgb(181,92,85)','rgb(70,19,19)'];
+					
 				gradient_red.append("svg:stop")
 					.attr("offset", "20%")
-					.style("stop-color", 'rgb(230,209,178)')
+					.style("stop-color", 'rgb(249,205,184)')
 
 					.style("stop-opacity", 1);
 				
@@ -2533,6 +2556,7 @@ var url = document.URL;
 					.style("stop-opacity", 1);
 				gradient_red.append("svg:stop")
 					.attr("offset", "80%")
+					.style("stop-color", 'rgb(70,19,19)')
 					.style("stop-opacity", 1);
 
 				var legend_rects_red = this.options.svg.append("rect")
@@ -2566,25 +2590,27 @@ var url = document.URL;
 				//Green values: 				
 				//new: var color_values_green = ['rgb(1,102,94)','rgb(90.180,172)','rgb(199,234,229)','rgb(246,232,195)','rgb(216,179,101)','rgb(140,81,10)'];
 				//OLD: 'rgb(140,81,10)','rgb(216,179,101)','rgb(246,232,195)','rgb(199,234,229)','rgb(90,180,172)','rgb(1,102,94)']
+				//NEWEST:	//'rgb(230,209,178)','rgb(210,173,116)','rgb(148,114,60)','rgb(68,162,147)','rgb(31,128,113)',//'rgb(3,82,70)'
+				
 				
 				gradient_green.append("svg:stop")
 					.attr("offset", "20%")
-					.style("stop-color", 'rgb(1,102,94)')
+					.style("stop-color", 'rgb(210,173,116)')
 					.style("stop-opacity", 1);
 				
 				gradient_green.append("svg:stop")
 					.attr("offset", "40%")
-					.style("stop-color", 'rgb(199,234,195)')
+					.style("stop-color", 'rgb(148,114,60)')
 					.style("stop-opacity", 1);
 				
 				gradient_green.append("svg:stop")
 					.attr("offset", "60%")
-					.style("stop-color", 'rgb(216,159,101)')
+					.style("stop-color", 'rgb(31,128,113)')
 					.style("stop-opacity", 1);
 					
 				gradient_green.append("svg:stop")
 					.attr("offset", "80%")
-					.style("stop-color", 'rgb(140,81,10)')
+					.style("stop-color", 'rgb(3,82,70)')
 					.style("stop-opacity", 1);
 
 				var legend_rects_green = this.options.svg.append("rect")
@@ -2714,6 +2740,7 @@ var url = document.URL;
 				$("#org_div").remove();
 				$("#calc_div").remove();
 				$("#sort_div").remove();
+				$("#mtitle").remove();
 				$("#header").remove();
 				$("#svg_area").remove();
 				self.options.phenotypeData = self.options.origPhenotypeData.slice();
@@ -2733,6 +2760,7 @@ var url = document.URL;
 				$("#calc_div").remove();
 				$("#org_div").remove();
 				$("#sort_div").remove();
+				$("#mtitle").remove();
 				$("#header").remove();
 				$("#svg_area").remove();
 				self.options.phenotypeData = self.options.origPhenotypeData.slice();
@@ -2803,6 +2831,7 @@ var url = document.URL;
 		if (this.options.unmatchedPhenotypes != undefined && this.options.unmatchedPhenotypes.length > 0){
 			d3.select("#unmatchedlabel").remove();
 			d3.select("#unmatchedlabelhide").remove();
+			d3.select("#prebl").remove();
 		
 			var phenotypes = self._showUnmatchedPhenotypes();		
 		
@@ -2894,13 +2923,13 @@ var url = document.URL;
 				getAttribute: function(keystring) {
 					var ret = self.options.xScale(modelData.model_id)-2;
 					if (keystring == "y") {
-						ret = Number(self.options.yoffset + self.options.yoffsetOver)-120;
+						ret = Number(self.options.yoffset + /**self.options.yoffsetOver)*/-190);
 					}
 					return ret;
 				},
         };		
 		obj.attributes['transform'] = {value: highlight_rect.attr("transform")};		
-		this._updateDetailSection(retData, this._getXYPos(obj), undefined, 60);
+		this._updateDetailSection(retData, this._getXYPos(obj), undefined, 50);
 	},
 
 	//given an array of phenotype objects 
