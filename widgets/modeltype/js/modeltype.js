@@ -1407,7 +1407,7 @@ var url = document.URL;
 	  var imgs = this.options.svg.selectAll("image").data([0]);
       imgs.enter()
                 .append("svg:image")
-                .attr("xlink:href", this.options.scriptpath + "../image/logo-sneak.png")
+                .attr("xlink:href", this.options.scriptpath + "../image/logo.png")
                 .attr("x", 850)
                 .attr("y", this.options.yTranslation - 10)
 				.attr("id", "logo")
