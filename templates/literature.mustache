@@ -28,7 +28,7 @@
                         {{{.}}}
                     </div>
                     {{/alerts}}
-                    <img id="monarch-logo" class="downloadline" src="/image/logo-sneak.png"/>
+                    <img id="monarch-logo" class="downloadline" src="/image/logo.png"/>
                     <h1 class="downloadline">Literature: {{label}}</h1>
                     <a href="{{{base_url}}}.json" class="btn btn-default downloadline downloadline-left monarch-literature-dark">JSON</a>
                     <a class="downloadline btn btn-large btn-default btn-monarch-main monarch-feedback-dark"
@@ -43,15 +43,24 @@
                         <a href="#overview"><div id="initialtab" class="tab contenttab">Overview</div></a>
                     </div>
                     <div class="tabcontainer">
-                        <div class="tabhover">View phenotypes related to this disease</div>
+                        <div class="tabhover">View genes mentioned in this publication</div>
+                        {{#hasGenes}}
+                            <a href="#genes"><div class="tab contenttab">Genes ({{genesNum}})</div></a>
+                        {{/hasGenes}}
+                        {{^hasGenes}}
+                            <div class="tab greyed-out">Genes (0)</div>
+                        {{/hasGenes}}
+                    </div>
+                    <div class="tabcontainer">
+                        <div class="tabhover">View similar papers related to this publication</div>
                         {{#hasSimilar}}
                             <a href="#similarpapers"><div class="tab contenttab">Similar Papers ({{similarNum}})</div></a>
                         {{/hasSimilar}}
                         {{^hasSimilar}}
                             <div class="tab greyed-out">Similar Papers (0)</div>
                         {{/hasSimilar}}
-                        </div>
                     </div>
+                </div>
             </div>
             <div id="complete-info">
                 <div id="overview" class="first category">
@@ -62,6 +71,13 @@
                         {{/hasAbstract}}
                     </p>
                 </div>
+                {{#hasGenes}}
+                <div id="genes" class="category">
+                    <table class="{{css.table}}">
+                        {{{genesTable}}}
+                    </table>
+                </div>
+                {{/hasGenes}}
                 {{#hasSimilar}}
                 <div id="similarpapers" class="category">
                     <table class="{{css.table}}">

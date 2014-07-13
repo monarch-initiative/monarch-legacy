@@ -10,7 +10,7 @@ $(function () {
 	dataType : 'json', 
 	success : function(data) { 
 	    for (var idx=0;idx<data.phenotype_associations.length;idx++) { 
-		phenotype_list.push({ "id" : data.phenotype_associations[idx].phenotype.id, 
+		phenotype_list.push({ "id" : data.phenotype_associations[idx].phenotype.id, "label" : data.phenotype_associations[idx].phenotype.label,
 		         "observed" : "positive"}); 
 		 }
         }
