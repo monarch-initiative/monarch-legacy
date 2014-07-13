@@ -39,3 +39,16 @@ form {
   position: relative;
   margin-left: 840px;
 }
+.bartip {
+    position: absolute;
+    font-size: 12px;
+    color:white;
+    line-height: 14px;
+    display: none;
+    background: #1D1E1F;
+    background:rgba(0,0,0,0.7);
+    padding: 2px 5px;
+    border: 1px solid black;
+    max-width: 150px;
+    z-index: 10;
+}
