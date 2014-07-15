@@ -72,7 +72,7 @@ $(document).ready(function() {
 	           d3.select(this).style("fill", "#EA763B");
 	           d3.select(this).style("text-decoration", "underline");
 	           
-	           var monarchID = getPhenotype(d);
+	           var monarchID = getPhenotype(d,data);
 	           var w = this.getBBox().width;
 	           var coords = d3.transform(d3.select(this.parentNode).attr("transform")).translate;
 	           var h = coords[1];
@@ -89,7 +89,7 @@ $(document).ready(function() {
 	           tooltip.style("display", "none");
 	     })
         .on("click", function(d){
-        	var monarchID = getPhenotype(d);
+        	var monarchID = getPhenotype(d,data);
             document.location.href = "/phenotype/" + monarchID;
          })
 	    .style("text-anchor", "end")
@@ -222,7 +222,7 @@ $(document).ready(function() {
 			    .attr("y", function(d) { return y1(d.value); })
 		}
 		
-		function getPhenotype(d){
+		function getPhenotype(d,data){
             for (var i=0, len=data.length; i < len; i++){
      	       if (data[i].phenotype === d){
      			   monarchID = data[i].id;
@@ -270,22 +270,30 @@ $(document).ready(function() {
 		        .selectAll("text")
 		        .filter(function(d){ return typeof(d) == "string"; })
 	            .style("cursor", "pointer")
-	            .on("mouseover", function(){
+	            //.style("font-size","12px")
+	            .on("mouseover", function(d){
 		           d3.select(this).style("fill", "#EA763B");
 		           d3.select(this).style("text-decoration", "underline");
+		           
+		           var monarchID = getPhenotype(d,subGraph);
+		           var w = this.getBBox().width;
+		           var coords = d3.transform(d3.select(this.parentNode).attr("transform")).translate;
+		           var h = coords[1];
+		           var offset = 100*(1/w);
+		           
+		           tooltip.style("display", "block")
+		           .html(window.location.hostname+"/phenotype/" + monarchID)
+		           .style("top",h+margin.bottom-62+"px")
+		           .style("left",width-offset-w-margin.right-73+"px");
+		           
 		         })
 		        .on("mouseout", function(){
 		           d3.select(this).style("fill", "#000000" );
 		           d3.select(this).style("text-decoration", "none");
+		           tooltip.style("display", "none");
 		        })
 	            .on("click", function(d){
-	        	    var monarchID;
-	        	    for (var i=0, len=subGraph.length; i < len; i++){
-	        		    if (subGraph[i].phenotype === d){
-	        			    monarchID = subGraph[i].id;
-	        			    break;
-	        		    }
-	        	    }
+	            	var monarchID = getPhenotype(d,subGraph);
 	                document.location.href = "/phenotype/" + monarchID;
 	            })
 	            .style("text-anchor", "end")
@@ -333,13 +341,24 @@ $(document).ready(function() {
 	                .attr("y", function(d) { return y1(d.value); })
 	                .attr("x", 0)
 	                .attr("width", function(d) { return x(d.value); })
-	                .on("mouseover", function(){
+	                .on("mouseover", function(d){
 	 	                d3.select(this)
 		                  .style("fill", "#EA763B");
+	 	                
+	 		           var w = this.getBBox().width;
+	 		           var coords = d3.transform(d3.select(this.parentNode).attr("transform")).translate;
+	 		           var h = coords[1];
+	 		           var heightOffset = this.getBBox().y;
+	 		           
+	 		           tooltip.style("display", "block")
+	 		           .html("Counts: "+"<span style='font-weight:bold'>"+d.value+"</span>"+"<br/>"+"Click to see subclasses")
+	 		           .style("top",h+margin.bottom-margin.top+heightOffset-27+"px")
+	 		           .style("left",width+w+25+"px");
 		            })
 	                .on("mouseout", function(){
 	                    d3.select(this)
 	                      .style("fill", function(d) { return color(d.name); });
+	                    tooltip.style("display", "none")
 	                })
 	                .style("fill", function(d) { return color(d.name); });
 	        } else {
@@ -359,13 +378,24 @@ $(document).ready(function() {
 			        .attr("width", function(d) { return x(d.x1) - x(d.x0); })
 			        .attr("height", y0.rangeBand())
 			        .attr("y", function(d) { return y1(d.value); })
-			        .on("mouseover", function(){
+			        .on("mouseover", function(d){
 			 	        d3.select(this)
 				          .style("fill", "#EA763B");
+			 	        
+				           var w = this.getBBox().width;
+				           var coords = d3.transform(d3.select(this.parentNode).attr("transform")).translate;
+				           var h = coords[1];
+				           var heightOffset = this.getBBox().y;
+				           
+				           tooltip.style("display", "block")
+				           .html("Counts: "+"<span style='font-weight:bold'>"+d.value+"</span>"+"<br/>"+"Click to see subclasses")
+				           .style("top",h+margin.bottom-margin.top+heightOffset-27+"px")
+				           .style("left",width+w+25+"px");
 				     })
 			         .on("mouseout", function(){
 			            d3.select(this)
 			              .style("fill", function(d) { return color(d.name); });
+			            tooltip.style("display", "none");
 			         })
 			         .style("fill", function(d) { return color(d.name); });
 	        }

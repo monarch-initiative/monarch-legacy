@@ -49,6 +49,7 @@ form {
     background:rgba(0,0,0,0.7);
     padding: 2px 5px;
     border: 1px solid black;
+    border-radius: 5px;
     max-width: 150px;
     z-index: 10;
 }
