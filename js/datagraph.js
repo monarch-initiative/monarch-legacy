@@ -204,8 +204,6 @@ $(document).ready(function() {
 		        .attr("width", function(d) { return x(d.value); })
 		        
 		    rect.on("mouseover", function(d){
-	 	        d3.select(this)
-		        .style("fill", "#EA763B");
 	 	         
 	 	        var w = this.getBBox().width;
                 var coords = d3.transform(d3.select(this.parentNode).attr("transform")).translate;
@@ -218,8 +216,6 @@ $(document).ready(function() {
                 .style("left",width+w+25+"px");
 		       })
 	          .on("mouseout", function(){
-                  d3.select(this)
-                  .style("fill", function(d) { return color(d.name); });
                   tooltip.style("display", "none")
                })
 		}
@@ -242,8 +238,6 @@ $(document).ready(function() {
 			    .attr("y", function(d) { return y1(d.name); })
 			    
 			rect.on("mouseover", function(d){
-		           d3.select(this)
-		           .style("fill", "#EA763B");
 		           
 		           var w = this.getBBox().width;
 		           var coords = d3.transform(d3.select(this.parentNode).attr("transform")).translate;
@@ -257,9 +251,6 @@ $(document).ready(function() {
 
 		        })
 		       .on("mouseout", function(){
-		           d3.select(this)
-		           .style("fill", function(d) { return color(d.name); });
-		           
 		           tooltip.style("display", "none");
 		        })
 		}
@@ -458,9 +449,9 @@ $(document).ready(function() {
 		        .on("mouseout", function(){
 		            d3.select(this)
 		            .style("fill", function(d) { return color(d.name); });
-		           
 		            tooltip.style("display", "none");
 		        })
+		        .style("fill", function(d) { return color(d.name); });
 	        }
 		    
 		    d3.selectAll("input").on("change", change);
@@ -484,8 +475,6 @@ $(document).ready(function() {
 			        .attr("width", function(d) { return x(d.value); })	 
 			        
 			      rect.on("mouseover", function(d){
-	 	               d3.select(this)
-		                  .style("fill", "#EA763B");
 	 	                
 	 		           var w = this.getBBox().width;
 	 		           var coords = d3.transform(d3.select(this.parentNode).attr("transform")).translate;
@@ -498,8 +487,6 @@ $(document).ready(function() {
 	 		           .style("left",width+w+25+"px");
 		            })
 	                .on("mouseout", function(){
-	                    d3.select(this)
-	                      .style("fill", function(d) { return color(d.name); });
 	                    tooltip.style("display", "none")
 	                })
 		      } else {
@@ -521,8 +508,6 @@ $(document).ready(function() {
 				    .attr("y", function(d) { return y1(d.name); })
 				    
 				   rect.on("mouseover", function(d){
-		           d3.select(this)
-		           .style("fill", "#EA763B");
 		           
 		           var w = this.getBBox().width;
 		           var coords = d3.transform(d3.select(this.parentNode).attr("transform")).translate;
@@ -536,10 +521,7 @@ $(document).ready(function() {
 
 		           })
 		           .on("mouseout", function(){
-		           d3.select(this)
-		           .style("fill", function(d) { return color(d.name); });
-		           
-		           tooltip.style("display", "none");
+		               tooltip.style("display", "none");
 		           })
 		      }
 		    }
