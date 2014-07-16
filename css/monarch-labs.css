@@ -63,3 +63,10 @@ form {
     max-width: 150px;
     z-index: 10;
 }
+.superbtn{
+	background-color: #2C2B33;
+	color: white;
+}
+.superbtn hover{
+    background-color: #2C2B33;
+}

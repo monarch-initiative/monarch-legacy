@@ -39,6 +39,7 @@ $(document).ready(function() {
 
 	    var groups = json.groups;
 	    var data = json.dataGraph;
+	    var parents = [];	    
 
 	    y0.domain(data.map(function(d) { return d.phenotype; }));
 	    y1.domain(groups).rangeRoundBands([0, y0.rangeBand()]);
@@ -100,7 +101,7 @@ $(document).ready(function() {
 	        .enter().append("svg:g")
 	        .attr("class", "bar")
 	        .on("click", function(d){
-	        	   if (d.subGraph){
+	        	   if (d.subGraph && d.subGraph[0]){
 	        		   
 	    		       transitionSubGraph(d.subGraph,groups,data);
 	    		       
@@ -201,6 +202,26 @@ $(document).ready(function() {
 		        .transition()
 		        .attr("x", 0)
 		        .attr("width", function(d) { return x(d.value); })
+		        
+		    rect.on("mouseover", function(d){
+	 	        d3.select(this)
+		        .style("fill", "#EA763B");
+	 	         
+	 	        var w = this.getBBox().width;
+                var coords = d3.transform(d3.select(this.parentNode).attr("transform")).translate;
+                var h = coords[1];
+	            var heightOffset = this.getBBox().y;
+	 		           
+                tooltip.style("display", "block")
+                .html("Counts: "+"<span style='font-weight:bold'>"+d.value+"</span>"+"<br/>"+"Click to see subclasses")
+                .style("top",h+margin.bottom-margin.top+heightOffset-15+"px")
+                .style("left",width+w+25+"px");
+		       })
+	          .on("mouseout", function(){
+                  d3.select(this)
+                  .style("fill", function(d) { return color(d.name); });
+                  tooltip.style("display", "none")
+               })
 		}
 
 		function transitionStacked() {
@@ -219,6 +240,28 @@ $(document).ready(function() {
 			    .transition()
 			    .attr("height", y0.rangeBand())
 			    .attr("y", function(d) { return y1(d.name); })
+			    
+			rect.on("mouseover", function(d){
+		           d3.select(this)
+		           .style("fill", "#EA763B");
+		           
+		           var w = this.getBBox().width;
+		           var coords = d3.transform(d3.select(this.parentNode).attr("transform")).translate;
+		           var h = coords[1];
+		           var heightOffset = this.getBBox().y;
+		           
+		           tooltip.style("display", "block")
+		           .html("Counts: "+"<span style='font-weight:bold'>"+d.value+"</span>"+"<br/>"+"Click to see subclasses")
+		           .style("top",h+margin.bottom-margin.top+heightOffset-40+"px")
+		           .style("left",width+w+"px");
+
+		        })
+		       .on("mouseout", function(){
+		           d3.select(this)
+		           .style("fill", function(d) { return color(d.name); });
+		           
+		           tooltip.style("display", "none");
+		        })
 		}
 		
 		function getPhenotype(d,data){
@@ -232,15 +275,36 @@ $(document).ready(function() {
         }
 		
 	    function transitionSubGraph(subGraph,groups,parent) {
-	    	
+	    		    	
 		    var groups = groups;
 		    var rect;
+		    if (parent){
+		        parents.unshift(parent);
+		    }
+		    
+		    if (parents[0]){
+		    	 $('.superbtn').css('background-color', '#44A293');
+		    	 $('.superbtn').mouseenter(function () {
+		    		  $(this).css("background-color", "#38787B");
+                 });
+		    	 $('.superbtn').mouseleave(function () {
+		    		  $(this).css('background-color', '#44A293');
+                 });
+		    } else {
+		    	$('.superbtn').css('background-color', '#2C2B33');
+		    	$('.superbtn').mouseenter(function () {
+		    		  $(this).css("background-color", "#2C2B33");
+               });
+		    	 $('.superbtn').mouseleave(function () {
+		    		  $(this).css('background-color', '#2C2B33');
+               });
+		    }
 		    
 		    if (subGraph.length < 10){
 		         height = subGraph.length*45;
 		    } else if (subGraph.length < 20){
 		         height = subGraph.length*40;
-		    } else if (subGraph.length < 30){
+		    } else {
 		         height = subGraph.length*32;
 		    }
 		    
@@ -302,7 +366,7 @@ $(document).ready(function() {
 	            .enter().append("svg:g")
 	            .attr("class", "bar")
 	            .on("click", function(d){
-	        	    if (d.subGraph){
+	        	    if (d.subGraph && d.subGraph[0]){
 
 	        	    	transitionSubGraph(d.subGraph,groups,subGraph);
 	        	    	
@@ -377,25 +441,26 @@ $(document).ready(function() {
 			        .attr("height", y0.rangeBand())
 			        .attr("y", function(d) { return y1(d.name); })
 			        .on("mouseover", function(d){
-			 	        d3.select(this)
-				          .style("fill", "#EA763B");
-			 	        
-				           var w = this.getBBox().width;
-				           var coords = d3.transform(d3.select(this.parentNode).attr("transform")).translate;
-				           var h = coords[1];
-				           var heightOffset = this.getBBox().y;
-				           
-				           tooltip.style("display", "block")
-				           .html("Counts: "+"<span style='font-weight:bold'>"+d.value+"</span>"+"<br/>"+"Click to see subclasses")
-				           .style("top",h+margin.bottom-margin.top+heightOffset-15+"px")
-				           .style("left",width+w+25+"px");
-				     })
-			         .on("mouseout", function(){
-			            d3.select(this)
-			              .style("fill", function(d) { return color(d.name); });
-			            tooltip.style("display", "none");
-			         })
-			         .style("fill", function(d) { return color(d.name); });
+		               d3.select(this)
+		               .style("fill", "#EA763B");
+		           
+		               var w = this.getBBox().width;
+		               var coords = d3.transform(d3.select(this.parentNode).attr("transform")).translate;
+		               var h = coords[1];
+		               var heightOffset = this.getBBox().y;
+		           
+		               tooltip.style("display", "block")
+		               .html("Counts: "+"<span style='font-weight:bold'>"+d.value+"</span>"+"<br/>"+"Click to see subclasses")
+		               .style("top",h+margin.bottom-margin.top+heightOffset-40+"px")
+		               .style("left",width+w+"px");
+
+		        })
+		        .on("mouseout", function(){
+		            d3.select(this)
+		            .style("fill", function(d) { return color(d.name); });
+		           
+		            tooltip.style("display", "none");
+		        })
 	        }
 		    
 		    d3.selectAll("input").on("change", change);
@@ -416,7 +481,27 @@ $(document).ready(function() {
 			        .attr("y", function(d) { return y1(d.name); })  
 			        .transition()
 			        .attr("x", 0)
-			        .attr("width", function(d) { return x(d.value); })	  
+			        .attr("width", function(d) { return x(d.value); })	 
+			        
+			      rect.on("mouseover", function(d){
+	 	               d3.select(this)
+		                  .style("fill", "#EA763B");
+	 	                
+	 		           var w = this.getBBox().width;
+	 		           var coords = d3.transform(d3.select(this.parentNode).attr("transform")).translate;
+	 		           var h = coords[1];
+	 		           var heightOffset = this.getBBox().y;
+	 		           
+	 		           tooltip.style("display", "block")
+	 		           .html("Counts: "+"<span style='font-weight:bold'>"+d.value+"</span>"+"<br/>"+"Click to see subclasses")
+	 		           .style("top",h+margin.bottom-margin.top+heightOffset-15+"px")
+	 		           .style("left",width+w+25+"px");
+		            })
+	                .on("mouseout", function(){
+	                    d3.select(this)
+	                      .style("fill", function(d) { return color(d.name); });
+	                    tooltip.style("display", "none")
+	                })
 		      } else {
 		    	  
 					
@@ -434,26 +519,51 @@ $(document).ready(function() {
 				    .transition()
 				    .attr("height", y0.rangeBand())
 				    .attr("y", function(d) { return y1(d.name); })
+				    
+				   rect.on("mouseover", function(d){
+		           d3.select(this)
+		           .style("fill", "#EA763B");
+		           
+		           var w = this.getBBox().width;
+		           var coords = d3.transform(d3.select(this.parentNode).attr("transform")).translate;
+		           var h = coords[1];
+		           var heightOffset = this.getBBox().y;
+		           
+		           tooltip.style("display", "block")
+		           .html("Counts: "+"<span style='font-weight:bold'>"+d.value+"</span>"+"<br/>"+"Click to see subclasses")
+		           .style("top",h+margin.bottom-margin.top+heightOffset-40+"px")
+		           .style("left",width+w+"px");
+
+		           })
+		           .on("mouseout", function(){
+		           d3.select(this)
+		           .style("fill", function(d) { return color(d.name); });
+		           
+		           tooltip.style("display", "none");
+		           })
 		      }
 		    }
 		    
 		    d3.select(".superbtn").on("click", function(){
-		    	transitionSubGraph(parent,groups);
+		    	
+		    	if (parents[0]){
+		    	    superclass = parents[0];
+		    	    parents.shift();
+		    	    transitionSubGraph(superclass,groups);
     	    	
-                phenotype.transition()
-	   		        .duration(750)
-	   		        .attr("y", 60)
-	   		        .style("fill-opacity", 1e-6)
-	   		        .remove();
+                    phenotype.transition()
+	   		            .duration(750)
+	   		            .attr("y", 60)
+	   		            .style("fill-opacity", 1e-6)
+	   		            .remove();
     		       
-    		    rect.transition()
-	   		        .duration(750)
-	   		        .attr("y", 60)
-	   		        .style("fill-opacity", 1e-6)
-	   		        .remove();
+    		        rect.transition()
+	   		            .duration(750)
+	   		            .attr("y", 60)
+	   		            .style("fill-opacity", 1e-6)
+	   		            .remove();
+		    	}
 		    });
-
 		}
-
 	});
 });
