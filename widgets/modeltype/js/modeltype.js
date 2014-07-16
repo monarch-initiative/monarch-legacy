@@ -1728,15 +1728,7 @@ var url = document.URL;
 	//something like this: $( "p" ).addClass( "myClass yourClass" );
 	 _createModelRects: function() {
 		var self = this;
-		var data = [];
-		//This is for the new "Overview" target option 
-		if (this.options.targetSpeciesName == "Overview"){	
-			data = this.options.combinedModelData.slice();
-		}
-		else
-		{
-			data = this.options.filteredModelData.slice();
-		}		  
+		var data = this.options.filteredModelData.slice();
 		
 		var model_rects = this.options.svg.selectAll(".models")
 			.data( data, function(d) {
