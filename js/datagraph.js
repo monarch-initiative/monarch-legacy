@@ -80,7 +80,7 @@ $(document).ready(function() {
 	           
 	           tooltip.style("display", "block")
 	           .html(window.location.hostname+"/phenotype/" +"<br/>"+ monarchID)
-	           .style("top",h+margin.bottom-62+"px")
+	           .style("top",h+margin.bottom-50+"px")
 	           .style("left",width-offset-w-margin.right-50+"px");
 	     })
 	    .on("mouseout", function(){
@@ -102,7 +102,7 @@ $(document).ready(function() {
 	        .on("click", function(d){
 	        	   if (d.subGraph){
 	        		   
-	    		       transitionSubGraph(d,groups);
+	    		       transitionSubGraph(d.subGraph,groups,data);
 	    		       
 		        	   //remove old bars
 	    		       phenotype.transition()
@@ -139,7 +139,7 @@ $(document).ready(function() {
 	           
 	           tooltip.style("display", "block")
 	           .html("Counts: "+"<span style='font-weight:bold'>"+d.value+"</span>"+"<br/>"+"Click to see subclasses")
-	           .style("top",h+margin.bottom-margin.top+heightOffset-27+"px")
+	           .style("top",h+margin.bottom-margin.top+heightOffset-15+"px")
 	           .style("left",width+w+25+"px");
 
 	        })
@@ -231,9 +231,8 @@ $(document).ready(function() {
      	   }
         }
 		
-	    function transitionSubGraph(d,groups) {
+	    function transitionSubGraph(subGraph,groups,parent) {
 	    	
-	        var subGraph = d.subGraph;
 		    var groups = groups;
 		    var rect;
 		    
@@ -242,7 +241,7 @@ $(document).ready(function() {
 		    } else if (subGraph.length < 20){
 		         height = subGraph.length*40;
 		    } else if (subGraph.length < 30){
-		         height = subGraph.length*25;
+		         height = subGraph.length*32;
 		    }
 		    
 		    
@@ -282,7 +281,7 @@ $(document).ready(function() {
 		           
 		           tooltip.style("display", "block")
 		           .html(window.location.hostname+"/phenotype/" + monarchID)
-		           .style("top",h+margin.bottom-62+"px")
+		           .style("top",h+margin.bottom-50+"px")
 		           .style("left",width-offset-w-margin.right-73+"px");
 		           
 		         })
@@ -305,7 +304,7 @@ $(document).ready(function() {
 	            .on("click", function(d){
 	        	    if (d.subGraph){
 
-	        	    	transitionSubGraph(d,groups);
+	        	    	transitionSubGraph(d.subGraph,groups,subGraph);
 	        	    	
 	                    phenotype.transition()
 			   		        .duration(750)
@@ -351,7 +350,7 @@ $(document).ready(function() {
 	 		           
 	 		           tooltip.style("display", "block")
 	 		           .html("Counts: "+"<span style='font-weight:bold'>"+d.value+"</span>"+"<br/>"+"Click to see subclasses")
-	 		           .style("top",h+margin.bottom-margin.top+heightOffset-27+"px")
+	 		           .style("top",h+margin.bottom-margin.top+heightOffset-15+"px")
 	 		           .style("left",width+w+25+"px");
 		            })
 	                .on("mouseout", function(){
@@ -388,7 +387,7 @@ $(document).ready(function() {
 				           
 				           tooltip.style("display", "block")
 				           .html("Counts: "+"<span style='font-weight:bold'>"+d.value+"</span>"+"<br/>"+"Click to see subclasses")
-				           .style("top",h+margin.bottom-margin.top+heightOffset-27+"px")
+				           .style("top",h+margin.bottom-margin.top+heightOffset-15+"px")
 				           .style("left",width+w+25+"px");
 				     })
 			         .on("mouseout", function(){
@@ -437,6 +436,22 @@ $(document).ready(function() {
 				    .attr("y", function(d) { return y1(d.name); })
 		      }
 		    }
+		    
+		    d3.select(".superbtn").on("click", function(){
+		    	transitionSubGraph(parent,groups);
+    	    	
+                phenotype.transition()
+	   		        .duration(750)
+	   		        .attr("y", 60)
+	   		        .style("fill-opacity", 1e-6)
+	   		        .remove();
+    		       
+    		    rect.transition()
+	   		        .duration(750)
+	   		        .attr("y", 60)
+	   		        .style("fill-opacity", 1e-6)
+	   		        .remove();
+		    });
 
 		}
 

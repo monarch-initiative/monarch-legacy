@@ -35,9 +35,19 @@
   stroke: #000;
   shape-rendering: crispEdges;
 }
+.interaction{
+   margin-left: 380px;
+   margin-top: 10px;
+   position: relative;
+}
+.interaction li{
+	list-style-type: none;
+}
 form {
-  position: relative;
-  margin-left: 840px;
+   display: inline;
+   margin-left: 280px;
+   margin-top: 5px;
+   position:absolute;
 }
 .bartip {
     position: absolute;
