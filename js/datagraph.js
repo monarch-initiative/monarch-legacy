@@ -295,10 +295,10 @@ $(document).ready(function() {
 		         height = subGraph.length*45;
 		    } else if (subGraph.length < 20){
 		         height = subGraph.length*40;
-		    } else if (subGraph.length < 30){
+		    } else if (subGraph.length < 25){
 		         height = subGraph.length*32;
 		    } else {
-		    	 height = 900;
+		    	 height = 900 - margin.top - margin.bottom;
 		    }
 		    
 		    
