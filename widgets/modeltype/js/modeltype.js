@@ -1728,15 +1728,7 @@ var url = document.URL;
 	//something like this: $( "p" ).addClass( "myClass yourClass" );
 	 _createModelRects: function() {
 		var self = this;
-		var data = [];
-		//This is for the new "Overview" target option 
-		//if (this.options.targetSpeciesName == "Overview"){	
-		//	data = this.options.combinedModelData.slice();
-		//}
-		//else
-		//{
-			data = this.options.filteredModelData.slice();
-		//}		  
+		var data = this.options.filteredModelData.slice();
 		
 		var model_rects = this.options.svg.selectAll(".models")
 			.data( data, function(d) {
@@ -1755,10 +1747,10 @@ var url = document.URL;
 			  return "models " + " " +  self._getConceptId(d.model_id) + " " +  self._getConceptId(d.id);
 		    })
 		    .attr("y", function(d, i) { 
-				console.log("Y Pos: " + (self._getYPosition(d.id_a) - 10) + 
-				"  X Pos: " + self.options.xScale(d.model_id) + "  Model Name: " + d.model_label +  "  Model Id: " + //d.model_id +
-				"  Phen: " + d.label_a  + 
-				"  IA_a: " + d.id_a );
+				//console.log("Y Pos: " + (self._getYPosition(d.id_a) - 10) + 
+				//"  X Pos: " + self.options.xScale(d.model_id) + "  Model Name: " + d.model_label +  "  Model Id: " + //d.model_id +
+				//"  Phen: " + d.label_a  + 
+				//"  IA_a: " + d.id_a );
 			  return self._getYPosition(d.id_a) + (self.options.yTranslation + self.options.yoffsetOver  + 10) ;
 		    })
 		   .attr("x", function(d) { return self.options.xScale(d.model_id);})
