@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Monarch Diseases and Phenotypes</title>
+    {{#scripts}}
+    <script type="text/javascript" src="{{url}}"></script>
+    {{/scripts}}
+    {{#stylesheets}}
+    <link rel="stylesheet" type="text/css" href="{{url}}"/>
+    {{/stylesheets}}
+    <link rel="icon" href="/image/favicon.ico" type="image/x-icon">
+    <meta charset="utf-8"/>
+</head>
+<body>
+    {{{includes.navbar}}}
+    <div class="monarch-container">
+        <div class="content">
+            <div class="wrapperforfooter">
+            <div class="jumbotron">
+                <img id="monarch-logo-horizontal" class="downloadline" src="/image/logo-horizontal-sneak.png"/>
+                <a id="feedback-main" class="downloadline downloadline-left btn btn-large btn-default btn-monarch-main monarch-feedback-dark"
+                        href="mailto:info@monarchinitiative.org">Your feedback welcome!</a>
+                <div class="tagline">
+                    Enabling navigation across a rich landscape of phenotypes, diseases,
+                    models, and genes for translational
+                    research. <a href="/page/about">Find out more</a>.<br/>
+                    <a href="http://mail.monarchinitiative.org/mailman/listinfo/users">Sign up for our listserve to receive announcements</a>.
+                </div>
+            </div>
+            <div id="graphic">
+                <img src="/image/homepage.png"/>
+                <a href="/disease"><div id="diseasebutton" class="graphicbutton"></div></a>
+                <a href="/phenotype"><div id="phenotypebutton" class="graphicbutton"></div></a>
+                <a href="/gene"><div id="genebutton" class="graphicbutton"></div></a>
+                <a href="/model"><div id="modelbutton" class="graphicbutton"></div></a>
+            </div>
+            
+            <div class="graph-container">
+                <div id="graph">
+                    <div class="title">
+                          Phenotype Annotation Distribution
+                    </div>
+                    <div class=interaction>
+                        <li>
+                        <a class="superbtn btn monarch-gene-dark">Superclass</a>
+                        <form>
+                            <label><input id="group" type="radio" name="mode" value="grouped" checked> Grouped</label>
+                            <label><input id="stack" type="radio" name="mode" value="stacked"> Stacked</label>
+                        </form> 
+                        </li>
+                    </div>
+                </div>
+            </div>
+
+            
+            </div> <!-- closes wrapperforfooter -->
+            {{{includes.footer}}}
+        </div> <!-- closes content -->
+    </div> <!-- closes container -->
+</body>
+</html>
