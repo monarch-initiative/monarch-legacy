@@ -599,10 +599,13 @@ var url = document.URL;
 
 	    if (typeof taxonid === 'undefined' || taxonid === null) {
 		taxonid="10090";
+		
 	    }
+		//if the taxonid is an empty string, set it to Overview - taxonid - 2
+		if (taxonid === "") { taxonid = 2;}
 	    var tempdata;
 	    for (var i  = 0; i  <self.options.targetSpeciesList.length; i++) {
-			if (self.options.targetSpeciesList[i].taxon === taxonid) {
+			if (self.options.targetSpeciesList[i].taxon == taxonid) {
 				tempdata  = self.options.targetSpeciesList[i];
 				break;
 			}
@@ -1046,7 +1049,7 @@ var url = document.URL;
 		//we need to adjust the display counts and indexing if there are fewer models
 		if (this.options.combinedModelList.length < this.options.modelDisplayCount) {
 			this.options.currModelIdx = this.options.combinedModelList.length-1;
-			this.options.modelDisplayCount = this.options.modelList.length;
+			this.options.modelDisplayCount = this.options.combinedModelList.length;
 		}
 		
 		//initialize the filtered model list
