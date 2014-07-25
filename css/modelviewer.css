@@ -131,49 +131,83 @@ text.accent{
 }
 
 .selects{
-  float:right;
-  position:absolute;
-
-  top:590px;
-  left:820px;
-
   background-color:#f5f5f5; 
   padding: 0 7px 8px 6px;
   width: 205px;
+  
+  position:relative;
+  margin-top:-330px;
+  top:650px;
+  left:50.5%;
+  padding: 0 7px 8px 6px;
+  margin-left:-10px;
 }
 
-.shortselects{
+.shortSelects{
+	background-color: #f5f5f5;
+	width: 205px;
+    margin-left: 8px;
+  
+  
   float:right;
   position:absolute;
   top:480px;
   left:820px;
-  background-color:#f5f5f5; 
+  
   padding: 0 7px 8px 6px;
   margin-left:-10px;
-  width: 205px;
+ 
 }
 
-.overviewselects{
-  float:right; 
-  position:absolute;
-  top:665px;
-  left:820px;
-  background-color:#f5f5f5; 
-  padding: 0 7px 8px 6px;
-  margin-left:-10px;
-  width: 205px; 
+.shortNarrowSelects{
+	background-color: #f5f5f5;
+	width: 205px;
+    margin-left: 8px;
+	margin-top:-300px;
+	position: relative;
+    top: 550px;
+	left: 41%;
+
 }
 
-.overviewShortselects{
-  float:right;
-  position:absolute;
-  top:580px;
-  left:820px;
-  background-color:#f5f5f5; 
-  padding: 0 7px 8px 6px;
-  margin-left:-10px;
-  width: 205px; 
+.overviewSelects{
+	background-color: #f5f5f5;
+	width: 205px;
+    margin-left: 8px;
+  
+    position:relative;
+	margin-top:-330px;
+	top:650px;
+	left:51%;
+    padding: 0 7px 8px 6px;
+    margin-left:-10px;
+ 
 }
+
+.overviewShortSelects {
+    background-color: #f5f5f5;
+	width: 205px;
+    margin-left: 8px;
+	
+    left: 41%;
+    margin-left: 8px;
+    margin-top: -300px;
+    position: relative;
+    top: 550px;
+   
+}
+
+.overviewShortNarrowSelects {
+	background-color: #f5f5f5;
+	width: 205px;
+    margin-left: 8px;
+    
+	margin-top:-300px;
+	position: relative;
+    top: 550px;
+	left: 41%;
+}
+
 
 #org_div div, #calc_div div{
 	font-weight:bold;
@@ -183,6 +217,9 @@ text.accent{
    font-size:14px;
 }
 
+#calc_sel{
+
+}
 #calcs {
   margin-left:10px;
   font-size: 22px;
@@ -190,12 +227,14 @@ text.accent{
   font-weight:bold;
 }
 
-#clabel{
+#clabel, #olabel{
   font-weight:bold;
+  margin-left:5px;
 }
 
 #organism , #calculation{
-   margin-top: 5px;  
+   margin-top: 5px; 
+   margin-left: 5px;
 }
 
 #org_div div, #calc_div div {

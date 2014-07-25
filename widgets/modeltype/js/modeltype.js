@@ -78,6 +78,10 @@ var url = document.URL;
 	    modelWidth: undefined,
 		multiOrganismCt: 10,
 		multiOrgModelLimit: 750,
+		multiOrgModelCt: [{ taxon: "9606", count: 10},
+						  { taxon: "10090", count: 10},
+						  { taxon: "7955", count: 10},
+						  { taxon: "7227", count: 0}],
 		orangeHighlight: "#ea763b",
 		orgModelList: [],
 		origPhenotypeData: [],
@@ -96,9 +100,10 @@ var url = document.URL;
 		selectRectHeight : 0,
 		selectRectWidth : 0,
 		serverURL : "",
-		sortList: [{type: "Alphabetic", order: 0},{type: "Frequency and Rarity", order:1} ,{type: "Frequency", order:2} ],
-	    smallXScale: undefined,
+		smallestModelWidth: 400,
+		smallXScale: undefined,
 	    smallYScale: undefined,	
+		sortList: [{type: "Alphabetic", order: 0},{type: "Frequency and Rarity", order:1} ,{type: "Frequency", order:2} ],	    
 		speciesList : [],		
 	    svg: undefined,
 		targetSpecies: "2",
@@ -974,7 +979,8 @@ var url = document.URL;
 			fdata=[],
 			speciesList = [];
 			
-		var modList = [];
+		var modList = [],
+			orgCtr = 0;
 		
 		if (this.options.humandata != null  && this.options.humandata.b.length > 0){
 			for (var idx=0;idx<this.options.humandata.b.length;idx++) {
@@ -984,10 +990,12 @@ var url = document.URL;
 				 model_score: this.options.humandata.b[idx].score.score, 
 				 model_rank: this.options.humandata.b[idx].score.rank});
 				
+				this.options.multiOrgModelCt[orgCtr].count = this.options.humandata.b.length;
 				this._loadDataForModel(this.options.humandata.b[idx]);	
 			} 
 			speciesList.push("Homo sapiens");
 		} 
+		orgCtr++;
 		//sort the model list by rank
 			hdata.sort(function(a,b) { return a.model_rank - b.model_rank; });			 
 			modList= modList.concat(hdata.slice()); 
@@ -999,11 +1007,13 @@ var url = document.URL;
 				 model_label: this.options.mousedata.b[idx].label,
 				 model_score: this.options.mousedata.b[idx].score.score, 
 				 model_rank: this.options.mousedata.b[idx].score.rank});
-				
+		
+				this.options.multiOrgModelCt[orgCtr].count = this.options.mousedata.b.length;
 				this._loadDataForModel(this.options.mousedata.b[idx]);			 
 			} 
 			speciesList.push("Mus musculus");			
 		} 		
+		orgCtr++;
 		//sort the model list by rank
 			mdata.sort(function(a,b) { return a.model_rank - b.model_rank; });			 
 			modList = modList.concat(mdata.slice());  		
@@ -1015,12 +1025,13 @@ var url = document.URL;
 				 model_label: this.options.zfishdata.b[idx].label,
 				 model_score: this.options.zfishdata.b[idx].score.score, 
 				 model_rank: this.options.zfishdata.b[idx].score.rank});
-				
+
+				this.options.multiOrgModelCt[orgCtr].count = this.options.zfishdata.b.length;
 				this._loadDataForModel(this.options.zfishdata.b[idx]);			 
 			} 
 			speciesList.push("Danio rerio");
-		} 
-		//sort the model list by rank
+		}
+		orgCtr++;		
 		//sort the model list by rank
 			zdata.sort(function(a,b) { return a.model_rank - b.model_rank; });			 
 			modList = modList.concat(zdata.slice());  
@@ -1032,12 +1043,13 @@ var url = document.URL;
 				 model_label: this.options.flydata.b[idx].label,
 				 model_score: this.options.flydata.b[idx].score.score, 
 				 model_rank: this.options.flydata.b[idx].score.rank});
-				
+
+				this.options.multiOrgModelCt[orgCtr].count = this.options.flydata.b.length;
 				this._loadDataForModel(this.options.flydata.b[idx]);			 
 			} 
 			speciesList.push("Drosophila melanogaster");
 		} 
-		//sort the model list by rank
+		orgCtr++;
 		 //sort the model list by rank
 			fdata.sort(function(a,b) { return a.model_rank - b.model_rank; });			 
 			modList = modList.concat(fdata.slice());  
@@ -1050,12 +1062,20 @@ var url = document.URL;
 		if (this.options.combinedModelList.length < this.options.modelDisplayCount) {
 			this.options.currModelIdx = this.options.combinedModelList.length-1;
 			this.options.modelDisplayCount = this.options.combinedModelList.length;
+			this._fixForFewerModels(this.options.modelDisplayCount);
 		}
 		
 		//initialize the filtered model list
 		for (var idx=0;idx<this.options.modelDisplayCount;idx++) {
 			this.options.filteredModelList.push(this.options.combinedModelList[idx]);
 		}
+	},
+	
+	_fixForFewerModels : function(modelCt){
+	
+	
+	
+	
 	},
 		
 	//generic ajax call for all queries
@@ -1157,6 +1177,7 @@ var url = document.URL;
 		if (this.options.modelList.length < this.options.modelDisplayCount) {
 			this.options.currModelIdx = this.options.modelList.length-1;
 			this.options.modelDisplayCount = this.options.modelList.length;
+			this._fixForFewerModels(this.options.modelDisplayCount);
 		}
 
 		//initialize the filtered model list
@@ -1402,13 +1423,17 @@ var url = document.URL;
 		self._create();
 	},
 	
-	_addLogoImage : function() {     
-	  
+	_addLogoImage : function() { 
+
+	  var start = 0;
+		
+	  if(this.options.filteredModelData.length < 30)
+	  { start = 680; } else { start = 850;}
 	  var imgs = this.options.svg.selectAll("image").data([0]);
       imgs.enter()
                 .append("svg:image")
                 .attr("xlink:href", this.options.scriptpath + "../image/logo.png")
-                .attr("x", 850)
+                .attr("x", start)
                 .attr("y", this.options.yTranslation - 10)
 				.attr("id", "logo")
                 .attr("width", "60")
@@ -1678,7 +1703,8 @@ var url = document.URL;
     	        })
     	        .on("mouseout", function(d) {
     	    	   self._clearModelData(d, d3.mouse(this));
-				   self._deselectData(self.options.selectedRow);
+				   if(self.options.selectedRow){
+				   self._deselectData(self.options.selectedRow);}
     	        })
     	       .attr("class", this._getConceptId(data.model_id) + " model_label")
     	       .style("font-size", "12px")
@@ -1885,7 +1911,8 @@ var url = document.URL;
 		  })
 		  .on("mouseout", function(d) {
 			  self._clearModelData(d, d3.mouse(this));
-			  self._deselectData(self.options.selectedRow);
+			  if(self.options.selectedRow){
+			  self._deselectData(self.options.selectedRow);}
 		  })
 		  .style('opacity', '1.0')
 		  .attr("fill", function(d, i) {
@@ -1924,19 +1951,24 @@ var url = document.URL;
 		var list = self.options.speciesList;
 		var ct = self.options.multiOrganismCt,
 			vwidthAndGap = 13,
-			hwidthAndGap = 18;
-		
-		
+			hwidthAndGap = 18,
+			totCt = 0,
+			parCt = 0;
+			
 		var highlight_rect = self.options.svg.selectAll(".species_accent")
 			.data(list)
 			.enter()
 			.append("rect")			
 		  	.attr("transform",
 		  			  "translate(" + (self.options.textWidth + 30) + "," +( self.options.yTranslation + self.options.yoffsetOver)+ ")")
-			.attr("x", function(d,i) { return (i * (hwidthAndGap * ct));})
+			//.attr("x", function(d,i) { return (i * (hwidthAndGap * ct));})
+			.attr("x", function(d,i) { totCt += self.options.multiOrgModelCt[i].count; 
+									   if (i==0) { return 0; }
+									   else {parCt = totCt - self.options.multiOrgModelCt[i].count;  
+									   return hwidthAndGap * parCt;}})
 			.attr("y", self.options.yoffset)
 			.attr("class", "species_accent")
-			.attr("width", hwidthAndGap * ct)
+			.attr("width",  function(d,i) { return ((hwidthAndGap * self.options.multiOrgModelCt[i].count));})
 			.attr("height", vwidthAndGap * self.options.phenotypeDisplayCount + 5)
 			.attr("stroke", function(d,i){ return self.options.targetSpeciesList[i].color;})
 			.attr("stroke-width", 3)
@@ -2349,15 +2381,20 @@ var url = document.URL;
 	    var self=this;
 	    //For Overview of Organisms 0 width = ((multiOrganismCt*2)+2) *18	
 		//Add two  extra columns as separators
-
+		self.options.axis_pos_list = [];
 		this.options.modelWidth = this.options.filteredModelList.length * 18;
 		//add an axis for each ordinal scale found in the data
 	    for (var i=0;i<this.options.dimensions.length;i++) {
 	    	//move the last accent over a bit for the scrollbar
 			if (i == 2) {
+				var w = 0;
+				if(this.options.modelWidth < this.options.smallestModelWidth)
+				{ w = this.options.smallestModelWidth;}
+				else {w = this.options.modelWidth;}
+				
 				self.options.axis_pos_list.push((this.options.textWidth + 30) 
 					       + this.options.colStartingPos 
-					       + this.options.modelWidth);
+					       + w);
 			} else {
 				self.options.axis_pos_list.push((i*(this.options.textWidth + 10)) + 
 					       this.options.colStartingPos);
@@ -2376,7 +2413,8 @@ var url = document.URL;
 		})		
 		.attr("height",  function(d, i) {
 		    //return i == 2 ? self.options.h /**- 216*/ : self.options.h;
-			return i == 2 ? self.options.h : (self.options.phenotypeDisplayCount *  13) + 10;  //phenotype count * height of rect + padding
+			//return i == 2 ? self.options.h : (self.options.phenotypeDisplayCount *  //13) + 10;  //phenotype count * height of rect + padding
+			return self.options.phenotypeDisplayCount * 13 + 10;
 		})
 		.attr("id", function(d, i) {
 		    if(i==0) {return "leftrect";} else if(i==1) {return "centerrect";} else {return "rightrect";}
@@ -2586,7 +2624,7 @@ var url = document.URL;
 					.attr("transform","translate(0,10)")
 					.attr("class", "legend_rect")
 					.attr("id","legendscale_blue")
-					.attr("y", (y1 - 20) + this.options.yTranslation + self.options.yoffsetOver)
+					.attr("y", (y1 - 10) + this.options.yTranslation + self.options.yoffsetOver)
 					.attr("x", self.options.axis_pos_list[2] + 12)
 					.attr("rx",8)
 					.attr("ry",8)
@@ -2599,7 +2637,7 @@ var url = document.URL;
 					
 					var grad_text1 = self.options.svg.append("svg:text")
 					.attr("class", "bluetext")
-					.attr("y", y2  + this.options.yTranslation +15+ self.options.yoffsetOver)
+					.attr("y", y2  + this.options.yTranslation +25+ self.options.yoffsetOver)
 					.attr("x", self.options.axis_pos_list[2] + 205)
 					.style("font-size", "11px")
 					.text("Homo sapiens");
@@ -2641,7 +2679,7 @@ var url = document.URL;
 					.attr("class", "legend_rect")
 					.attr("id","legendscale_red")
 
-					.attr("y", (y1 + 0) + this.options.yTranslation + self.options.yoffsetOver)
+					.attr("y", (y1 + 10) + this.options.yTranslation + self.options.yoffsetOver)
 					.attr("x", self.options.axis_pos_list[2] + 12)
 					.attr("rx",8)
 					.attr("ry",8)
@@ -2651,7 +2689,7 @@ var url = document.URL;
 					
 				var grad_text2 = self.options.svg.append("svg:text")
 					.attr("class", "redtext")
-					.attr("y", (y2 + 35)  + this.options.yTranslation + self.options.yoffsetOver)
+					.attr("y", (y2 + 45)  + this.options.yTranslation + self.options.yoffsetOver)
 					.attr("x", self.options.axis_pos_list[2] + 205)
 					.style("font-size", "11px")
 					.text("Mus musculus");
@@ -2689,7 +2727,7 @@ var url = document.URL;
 					.attr("transform","translate(0,10)")
 					.attr("class", "legend_rect")
 					.attr("id","legendscale_green")
-					.attr("y", (y1 + 20) + this.options.yTranslation + self.options.yoffsetOver)
+					.attr("y", (y1 + 30) + this.options.yTranslation + self.options.yoffsetOver)
 					.attr("x", self.options.axis_pos_list[2] + 12)
 					.attr("rx",8)
 					.attr("ry",8)
@@ -2699,7 +2737,7 @@ var url = document.URL;
 					
 			var grad_text3 = self.options.svg.append("svg:text")
 				.attr("class", "greentext")
-				.attr("y", y2 + 55  + this.options.yTranslation + self.options.yoffsetOver)
+				.attr("y", y2 + 65  + this.options.yTranslation + self.options.yoffsetOver)
 				.attr("x", self.options.axis_pos_list[2] + 205)
 				.style("font-size", "10px")
 				.text("Danio rerieo");
@@ -2722,54 +2760,68 @@ var url = document.URL;
 	
 		    var div_text1 = self.options.svg.append("svg:text")
 				.attr("class", "detail_text")
-				.attr("y", y1  + this.options.yTranslation + self.options.yoffsetOver-15)
+				.attr("y", y1  + this.options.yTranslation + self.options.yoffsetOver-5)
 				.attr("x", self.options.axis_pos_list[2] + 10)
 				.style("font-size", "10px")
 				.text(text1);
 		    
 			var div_text2 = self.options.svg.append("svg:text")
 				.attr("class", "detail_text")
-				.attr("y", y2  + this.options.yTranslation + self.options.yoffsetOver -10)
+				.attr("y", y2  + this.options.yTranslation + self.options.yoffsetOver)
 				.attr("x", self.options.axis_pos_list[2] + 75)
 				.style("font-size", "12px")
 				.text(text2);
 				
 		    var div_text3 = self.options.svg.append("svg:text")
 				.attr("class", "detail_text")
-				.attr("y", y1 + this.options.yTranslation + self.options.yoffsetOver-15)
+				.attr("y", y1 + this.options.yTranslation + self.options.yoffsetOver-5)
 				.attr("x", self.options.axis_pos_list[2] + 125)
 				.style("font-size", "10px")
 				.text(text3);	
 				
 			//Position the max more carefully	
-			if (text2 == "Distance") {
+		/**	if (text2 == "Distance") {
 				div_text2.attr("x", "860px");			
 			}
 			if (text2 == "Uniqueness") {
 				div_text2.attr("x", "845px");			
-			}
+			} */
 			if (text3 == "Max") {
-				div_text3.attr("x","945px");			
+				div_text3.attr("x",self.options.axis_pos_list[2] + 150);			
 			}
 			if (text3 == "Highest") {
 				div_text3.attr("x",self.options.axis_pos_list[2] + 150);			
 			}
-						
+		}				
 			var selClass = "";
 
 			//This is for the new "Overview" target option 
 			if (self.options.targetSpeciesName == "Overview") {
-				if (self.options.filteredPhenotypeData.length < 14) 
-				{ 
-					selClass = "overviewShortselects"; 
-				} 
-				else { selClass = "overviewselects"; }
+				if(self.options.modelWidth <= self.options.smallestModelWidth)
+				{
+					if (self.options.filteredPhenotypeData.length < 14) 
+					{ 
+						selClass = "overviewShortNarrowSelects"; 
+					} 
+					else { selClass = "overviewShortSelects";}
+				}
+				else { selClass = "overviewSelects"; }
 			} 
-			else{
-				if (self.options.filteredPhenotypeData.length < 14) { selClass = "shortselects"; } else { selClass = "selects";}
+			else if (self.options.filteredPhenotypeData.length < 14) 
+			{	selClass = "shortSelects";
+			}
+			else 
+			{
+				if(self.options.modelWidth <= self.options.smallestModelWidth)
+				{
+					if (self.options.filteredPhenotypeData.length < 14) 
+					{ selClass = "shortNarrowSelects"; } 
+					else { selClass = "shortSelects";}
+				}
+				else (selClass = "selects");
 			}
 		
-			var optionhtml = "<div id='selects' class='" + selClass + "'><div id='org_div'><div>Species</div><span><select id=\'organism\'>";
+			var optionhtml = "<div id='selects' class='" + selClass + "'><div id='org_div'><span id='olabel'>Species</span><span id='org_sel'><select id=\'organism\'>";
 
 			for (var idx=0;idx<self.options.targetSpeciesList.length;idx++) {
 				var selecteditem = "";
@@ -2779,7 +2831,7 @@ var url = document.URL;
 				optionhtml = optionhtml + "<option value='" + self.options.targetSpeciesList[idx].label +"' "+ selecteditem +">" + self.options.targetSpeciesList[idx].name +"</option>"
 			}
 	
-			optionhtml = optionhtml + "</select></span></div><div id='calc_div'><span id='clabel'>Display<span id='calcs'><img class='calcs' src='" + this.options.scriptpath + "../image/greeninfo30.png' height='15px'></span></span><br /><span id='calc_sel'><select id=\"calculation\">";
+			optionhtml = optionhtml + "</select></span></div><div id='calc_div'><span id='clabel'>Display</span><span id='calcs'><img class='calcs' src='" + this.options.scriptpath + "../image/greeninfo30.png' height='15px'></span><br /><span id='calc_sel'><select id=\"calculation\">";
        	   
 
 			for (var idx=0;idx<self.options.selectList.length;idx++) {
@@ -2794,7 +2846,18 @@ var url = document.URL;
 			}
 			optionhtml = optionhtml + "</select></span></div></div>";
 			this.element.append(optionhtml);			
-
+		/**	self.options.svg.append("svg:foreignObject")
+		    //.attr("width", w + 60)
+			//.attr("height", h)
+			.attr("id", "selectiondiv")
+			.attr("y", (y1 +400) + this.options.yTranslation + self.options.yoffsetOver)
+		    .attr("x", self.options.axis_pos_list[2]) 
+			.append("xhtml:body")
+			.attr("id","selections")
+			.html(optionhtml);  */	
+			
+			
+			
 			var calcs = d3.selectAll("#calcs")
 				.on("click", function(d,i){
 					self._showDialog( "calcs");
@@ -2816,7 +2879,7 @@ var url = document.URL;
 				self._resetSelections();
 			});
 	    
-		}
+		
 	},
 	
 	update: function() {
