@@ -4,17 +4,19 @@
 
 .graph-container{
     position: relative;
-    background-color: #E8E8E8;
+    width: 1000px;
+    float:left;
+    /*background-color: #E8E8E8;*/
 }
 
 #graph {
-    margin: 0px 0px 0px 300px;
-    padding: 50px 0px 0px 0px;
+    /*margin: 0px 0px 0px 700px;*/
+    padding: 10px 0px 0px 0px;
 }
 .title{
-    margin-left: 440px;
+    margin-left: 400px;
     padding-bottom: 10px;
-    font-size : 25px;
+    font-size : 20px;
     font-weight: bold;
 }
 .axis path,
@@ -33,7 +35,7 @@
 }
 form {
    display: inline;
-   margin-left: 280px;
+   margin-left: 50px;
    margin-top: 5px;
    position:absolute;
 }

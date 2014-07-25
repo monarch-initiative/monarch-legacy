@@ -9,3 +9,21 @@
     visibility: hidden;
     display: none;
 }
+
+#main-container {
+    position: absolute;
+    width: 1760px;
+    float:left;
+}
+
+/* Graphic */
+#graphic-test {
+    position: relative;
+    width: 760px;
+    padding-top: 50px;
+    float:left;
+   /*margin: 0px auto;*/
+}
+#graphic-test > img {
+    width: 100%;
+}

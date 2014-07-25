@@ -1,8 +1,8 @@
 $(document).ready(function() {
 
 	var margin = {top: 30, right: 80, bottom: 200, left: 320},
-	width = 1000 - margin.left - margin.right,
-	height = 900 - margin.top - margin.bottom;
+	width = 800 - margin.left - margin.right,
+	height = 800 - margin.top - margin.bottom;
 
 	var y0 = d3.scale.ordinal()
 	    .rangeRoundBands([0,height], .1);
@@ -80,7 +80,7 @@ $(document).ready(function() {
 	           var offset = 100*(1/w);
 	           
 	           tooltip.style("display", "block")
-	           .html(window.location.hostname+"/phenotype/" +"<br/>"+ monarchID)
+	           .html(window.location.hostname +"<br/>"+"/phenotype/"+ monarchID)
 	           .style("top",h+margin.bottom-50+"px")
 	           .style("left",width-offset-w-margin.right-50+"px");
 	     })
@@ -292,13 +292,13 @@ $(document).ready(function() {
 		    }
 		    
 		    if (subGraph.length < 10){
-		         height = subGraph.length*45;
-		    } else if (subGraph.length < 20){
 		         height = subGraph.length*40;
+		    } else if (subGraph.length < 20){
+		         height = subGraph.length*30;
 		    } else if (subGraph.length < 25){
-		         height = subGraph.length*32;
+		         height = subGraph.length*26;
 		    } else {
-		    	 height = 900 - margin.top - margin.bottom;
+		    	 height = 800 - margin.top - margin.bottom;
 		    }
 		    
 		    
