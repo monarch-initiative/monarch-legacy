@@ -12,7 +12,7 @@
 
 #main-container {
     position: absolute;
-    width: 1760px;
+    width: 1586px;
     float:left;
 }
 
@@ -20,8 +20,10 @@
 #graphic-test {
     position: relative;
     width: 760px;
+    height:750px;
     padding-top: 50px;
     float:left;
+    background-color: #FCFCFE;
    /*margin: 0px auto;*/
 }
 #graphic-test > img {
