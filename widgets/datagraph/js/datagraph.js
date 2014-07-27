@@ -81,8 +81,8 @@ $(document).ready(function() {
 	           
 	           tooltip.style("display", "block")
 	           .html(window.location.hostname +"<br/>"+"/phenotype/"+ monarchID)
-	           .style("top",h+margin.bottom-50+"px")
-	           .style("left",width-offset-w-margin.right-50+"px");
+	           .style("top",h+margin.bottom-97+"px")
+	           .style("left",width-offset-w-margin.right-165+"px");
 	     })
 	    .on("mouseout", function(){
 	           d3.select(this).style("fill", "#000000" );
@@ -140,8 +140,8 @@ $(document).ready(function() {
 	           
 	           tooltip.style("display", "block")
 	           .html("Counts: "+"<span style='font-weight:bold'>"+d.value+"</span>"+"<br/>"+"Click to see subclasses")
-	           .style("top",h+margin.bottom-margin.top+heightOffset-15+"px")
-	           .style("left",width+w+25+"px");
+	           .style("top",h+margin.bottom+heightOffset-margin.top-62+"px")
+	           .style("left",width+w-70+"px");
 
 	        })
 	       .on("mouseout", function(){
@@ -212,8 +212,8 @@ $(document).ready(function() {
 	 		           
                 tooltip.style("display", "block")
                 .html("Counts: "+"<span style='font-weight:bold'>"+d.value+"</span>"+"<br/>"+"Click to see subclasses")
-                .style("top",h+margin.bottom-margin.top+heightOffset-15+"px")
-                .style("left",width+w+25+"px");
+                .style("top",h+margin.bottom+heightOffset-margin.top-62+"px")
+                .style("left",width+w-70+"px");
 		       })
 	          .on("mouseout", function(){
                   tooltip.style("display", "none")
@@ -246,8 +246,8 @@ $(document).ready(function() {
 		           
 		           tooltip.style("display", "block")
 		           .html("Counts: "+"<span style='font-weight:bold'>"+d.value+"</span>"+"<br/>"+"Click to see subclasses")
-		           .style("top",h+margin.bottom-margin.top+heightOffset-40+"px")
-		           .style("left",width+w+"px");
+		           .style("top",h+margin.bottom-margin.top+heightOffset-87+"px")
+		           .style("left",width+w-100+"px");
 
 		        })
 		       .on("mouseout", function(){
@@ -338,8 +338,8 @@ $(document).ready(function() {
 		           
 		           tooltip.style("display", "block")
 		           .html(window.location.hostname+"/phenotype/" + monarchID)
-		           .style("top",h+margin.bottom-50+"px")
-		           .style("left",width-offset-w-margin.right-73+"px");
+		           .style("top",h+margin.bottom-97+"px")
+		           .style("left",width-offset-w-margin.right-170+"px");
 		           
 		         })
 		        .on("mouseout", function(){
@@ -407,8 +407,8 @@ $(document).ready(function() {
 	 		           
 	 		           tooltip.style("display", "block")
 	 		           .html("Counts: "+"<span style='font-weight:bold'>"+d.value+"</span>"+"<br/>"+"Click to see subclasses")
-	 		           .style("top",h+margin.bottom-margin.top+heightOffset-15+"px")
-	 		           .style("left",width+w+25+"px");
+	 		           .style("top",h+margin.bottom+heightOffset-margin.top-62+"px")
+	 		           .style("left",width+w-70+"px");
 		            })
 	                .on("mouseout", function(){
 	                    d3.select(this)
@@ -444,8 +444,8 @@ $(document).ready(function() {
 		           
 		               tooltip.style("display", "block")
 		               .html("Counts: "+"<span style='font-weight:bold'>"+d.value+"</span>"+"<br/>"+"Click to see subclasses")
-		               .style("top",h+margin.bottom-margin.top+heightOffset-40+"px")
-		               .style("left",width+w+"px");
+		               .style("top",h+margin.bottom-margin.top+heightOffset-87+"px")
+		               .style("left",width+w-100+"px");
 
 		        })
 		        .on("mouseout", function(){
@@ -485,8 +485,8 @@ $(document).ready(function() {
 	 		           
 	 		           tooltip.style("display", "block")
 	 		           .html("Counts: "+"<span style='font-weight:bold'>"+d.value+"</span>"+"<br/>"+"Click to see subclasses")
-	 		           .style("top",h+margin.bottom-margin.top+heightOffset-15+"px")
-	 		           .style("left",width+w+25+"px");
+	 		           .style("top",h+margin.bottom+heightOffset-margin.top-62+"px")
+	 		           .style("left",width+w-70+"px");
 		            })
 	                .on("mouseout", function(){
 	                    tooltip.style("display", "none")
@@ -518,8 +518,8 @@ $(document).ready(function() {
 		           
 		           tooltip.style("display", "block")
 		           .html("Counts: "+"<span style='font-weight:bold'>"+d.value+"</span>"+"<br/>"+"Click to see subclasses")
-		           .style("top",h+margin.bottom-margin.top+heightOffset-40+"px")
-		           .style("left",width+w+"px");
+		           .style("top",h+margin.bottom-margin.top+heightOffset-87+"px")
+		           .style("left",width+w-100+"px");
 
 		           })
 		           .on("mouseout", function(){
