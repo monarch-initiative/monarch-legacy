@@ -384,7 +384,7 @@ $(document).ready(function() {
 			    	  
 		        x.domain([0, xGroupMax]);
 		    
-		        var xTransition = svg.transition().duration(500);
+		        var xTransition = svg.transition().duration(1000);
 		        xTransition.select(".x.axis")
 		        .attr("transform", "translate(0," + height + ")")
 		        .call(xAxis);
@@ -421,7 +421,7 @@ $(document).ready(function() {
 		        x.domain([0, xStackMax]);
 		        y1.domain(groups).rangeRoundBands([0,0]);
 				    
-				var xTransition = svg.transition().duration(500);
+				var xTransition = svg.transition().duration(1000);
 				xTransition.select(".x.axis")
 				.attr("transform", "translate(0," + height + ")")
 				.call(xAxis);
