@@ -11,8 +11,8 @@
 }
 
 #main-container {
-    position: absolute;
     width: 1586px;
+    margin: 0px auto;
     float:left;
 }
 

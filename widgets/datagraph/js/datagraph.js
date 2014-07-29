@@ -1,4 +1,7 @@
 $(document).ready(function() {
+	
+	var isOpera = !!window.opera || navigator.userAgent.indexOf(' OPR/') >= 0;
+    var isChrome = !!window.chrome && !isOpera;  
 
 	var margin = {top: 30, right: 80, bottom: 200, left: 320},
 	width = 800 - margin.left - margin.right,
@@ -127,7 +130,7 @@ $(document).ready(function() {
 	       .enter().append("rect")
 	       .attr("height", y1.rangeBand())
 	       .attr("y", function(d) { return y1(d.name); })
-	       .attr("x", 0)
+	       .attr("x", function(){if (isChrome) {return 1;}else{ return 0;}})
 	       .attr("width", function(d) { return x(d.value); })
 	       .on("mouseover", function(d){
 	           d3.select(this)
@@ -200,7 +203,7 @@ $(document).ready(function() {
 		        .attr("height", y1.rangeBand())
 		        .attr("y", function(d) { return y1(d.name); })  
 		        .transition()
-		        .attr("x", 0)
+		        .attr("x", function(){if (isChrome) {return 1;}else{ return 0;}})
 		        .attr("width", function(d) { return x(d.value); })
 		        
 		    rect.on("mouseover", function(d){
@@ -337,7 +340,7 @@ $(document).ready(function() {
 		           var offset = 100*(1/w);
 		           
 		           tooltip.style("display", "block")
-		           .html(window.location.hostname+"/phenotype/" + monarchID)
+		           .html(window.location.hostname +"<br/>"+"/phenotype/"+ monarchID)
 		           .style("top",h+margin.bottom-97+"px")
 		           .style("left",width-offset-w-margin.right-170+"px");
 		           
@@ -394,7 +397,7 @@ $(document).ready(function() {
 	                .enter().append("rect")
 	                .attr("height", y1.rangeBand())
 	                .attr("y", function(d) { return y1(d.name); })
-	                .attr("x", 0)
+	                .attr("x", function(){if (isChrome) {return 1;}else{ return 0;}})
 	                .attr("width", function(d) { return x(d.value); })
 	                .on("mouseover", function(d){
 	 	                d3.select(this)
@@ -473,7 +476,7 @@ $(document).ready(function() {
 			        .attr("height", y1.rangeBand())
 			        .attr("y", function(d) { return y1(d.name); })  
 			        .transition()
-			        .attr("x", 0)
+			        .attr("x", function(){if (isChrome) {return 1;}else{ return 0;}})
 			        .attr("width", function(d) { return x(d.value); })	 
 			        
 			      rect.on("mouseover", function(d){
