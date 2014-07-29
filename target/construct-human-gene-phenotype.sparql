@@ -1,0 +1,9 @@
+prefix obo: <http://purl.obolibrary.org/obo/>
+
+CONSTRUCT {
+  ?x obo:RO_0002200 ?z
+}
+WHERE {
+  ?x obo:RO_0002200 ?y .
+  ?y obo:RO_0002200 ?z 
+}
