@@ -1,0 +1,87 @@
+"@base": http://monarch-initiative.org/
+"@context": ~
+BFO: http://purl.obolibrary.org/obo/BFO_
+DOID: http://purl.obolibrary.org/obo/DOID_
+ECO: http://purl.obolibrary.org/obo/ECO_
+GENO: http://purl.obolibrary.org/obo/GENO_
+HP: http://purl.obolibrary.org/obo/HP_
+MESH: http://purl.obolibrary.org/obo/MESH_
+MGI: http://monarch-initiative.org/data/MGI_
+MP: http://purl.obolibrary.org/obo/MP_
+MedGen: http://purl.obolibrary.org/obo/MedGen_
+NCBIGene: http://purl.obolibrary.org/obo/NCBIGene_
+OMIM: http://purl.obolibrary.org/obo/OMIM_
+ORPHANET: http://purl.obolibrary.org/obo/ORPHANET_
+PMID: http://www.ncbi.nlm.nih.gov/pubmed/
+RO: http://purl.obolibrary.org/obo/RO_
+SIO: http://semanticscience.org/resource/SIO_
+SO: http://purl.obolibrary.org/obo/SO_
+ZP: http://purl.obolibrary.org/obo/ZP_
+
+Association: SIO:000897
+Class: owl:Class
+chromosomal_region: GENO:0000390
+chromosome: GENO:0000323
+comment: rdfs:comment
+created: 
+  "@id": dc:created
+  "@type": xsd:dateTime
+creator: 
+  "@id": dc:creator
+  "@type": "@id"
+dc: http://purl.org/dc/terms/
+depiction: 
+  "@id": foaf:depiction
+  "@type": "@id"
+description: dc:description
+disease: monarch:disease
+effective_genotype: GENO:0000525
+email: foaf:mbox
+environment: GENO:0000099
+evidence: monarch:evidence
+extrinsic_genotype: GENO:0000524
+faldo: http://biohackathon.org/resource/faldo#
+foaf: http://xmlns.com/foaf/0.1/
+frequency: monarch:frequency
+gene_locus: GENO:0000014
+genomic_background: GENO:0000010
+genomic_variation_complement: GENO:0000009
+genotype: GENO:0000000
+genotype_associations: rdfs:seeAlso
+has_background: GENO:0000010
+has_genotype: GENO:0000222
+has_part: BFO:0000051
+has_phenotype: RO:0002200
+id: "@id"
+inheritance: monarch:mode_of_inheritance
+intrinsic_genotype: GENO:0000000
+label: rdfs:label
+monarch: http://monarch-initiative.org/
+morpholino: GENO:0000417
+obo: http://purl.obolibrary.org/obo/
+oboInOwl: http://www.geneontology.org/formats/oboInOwl#
+onset: monarch:age_of_onset
+owl: http://www.w3.org/2002/07/owl#
+pathway_associations: rdfs:seeAlso
+phenotype: monarch:phenotype
+phenotype_associations: rdfs:seeAlso
+rdf: http://www.w3.org/1999/02/22-rdf-syntax-ns#
+rdfs: http://www.w3.org/2000/01/rdf-schema#
+reference: dc:publication
+reference_locus: GENO:0000036
+resource: monarch:nif-resource
+sequence_alteration: SO:0001059
+sequence_alteration_collection: GENO:0000025
+source: dc:source
+subClassOf: owl:subClassOf
+title: dc:title
+type: 
+  "@id": rdf:type
+  "@type": "@id"
+variant_loci: GENO:0000027
+variant_locus: GENO:0000481
+website: 
+  "@id": foaf:homepage
+  "@type": "@id"
+xsd: http://www.w3.org/2001/XMLSchema#
+zygosity: GENO:0000133
