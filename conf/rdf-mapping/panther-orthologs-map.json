@@ -1,64 +1,62 @@
 {
-    "status" : "alpha",
-    "graphs": [
-        {
-            "graph" : "panther-orthologs",
-            "view" : "nlx_84521-1",
-            "mapVersion" : "2014-05-16",
-            "objects" : [
-                {
-                    "id" : "RO:0002162",
-                    "rdf:type" : "owl:ObjectProperty"
-                }
-            ],
-            "filter" : {
-                "tax_id_a" : "9606"
-            },
-            "columns" : [
-                {
-                    "name" : "tax_id_a",
-                    "prefix" : "http://purl.obolibrary.org/obo/NCBITaxon_",
-                    "type" : "owl:Class"
-                },
-               {
-                    "name" : "tax_id_b",
-                    "prefix" : "http://purl.obolibrary.org/obo/NCBITaxon_",
-                    "type" : "owl:Class"
-                },
-                {
-                    "name" : "genea",
-                    "type" : "owl:Class"
-                },
-                {
-                    "name" : "geneb",
-                    "type" : "owl:Class"
-                },
-                {
-                    "name" : "orthology_class",
-                    "prefix" : "http://purl.obolibrary.org/obo/PORTHO_"
-                },
-                {
-                    "name" : "orthology_class_label",
-                    "type" : "rdfs:Literal"
-                }
-            ],
-            "mappings" : [
-                {"subject" : "genea",
-                 "predicate" : "orthology_class",
-                 "object" : "geneb"
-		},
-                {"subject" : "genea",
-                 "predicate" : "RO:0002162",
-                 "object" : "tax_id_a"
-                },
-                {"subject" : "geneb",
-                 "predicate" : "RO:0002162",
-                 "object" : "tax_id_b"
-                },
-                {"subject" : "orthology_class",
-                 "predicate" : "rdfs:label",
-                 "object" : "orthology_class_label"}
-            ]
-        }
-   ]
+   "status" : "alpha",
+   "mappings" : [
+      {
+         "object" : "geneb",
+         "predicate" : "orthology_class",
+         "subject" : "genea"
+      },
+      {
+         "object" : "tax_id_a",
+         "predicate" : "RO:0002162",
+         "subject" : "genea"
+      },
+      {
+         "object" : "tax_id_b",
+         "predicate" : "RO:0002162",
+         "subject" : "geneb"
+      }
+   ],
+   "filter" : {
+      "tax_id_a" : "NCBITaxon:9606"
+   },
+   "objects" : [
+      {
+         "rdf:type" : "owl:ObjectProperty",
+         "id" : "RO:0002162"
+      }
+   ],
+   "view" : "nlx_84521-1",
+   "columns" : [
+      {
+         "name" : "tax_id_a",
+         "type" : "owl:Class",
+         "prefix" : "http://purl.obolibrary.org/obo/"
+      },
+      {
+         "name" : "tax_id_b",
+         "type" : "owl:Class",
+         "prefix" : "http://purl.obolibrary.org/obo/"
+      },
+      {
+         "name" : "genea",
+         "type" : "owl:Class"
+      },
+      {
+         "name" : "geneb",
+         "type" : "owl:Class"
+      },
+      {
+         "name" : "orthology_class",
+         "type" : "owl:ObjectProperty"
+      }
+   ],
+   "prefixes" : {
+      "O" : "http://purl.obolibrary.org/obo/RO_HOM0000037",
+      "X" : "http://purl.obolibrary.org/obo/RO_HOM0000018",
+      "LDO" : "http://purl.obolibrary.org/obo/RO_HOM0000019",
+      "P" : "http://purl.obolibrary.org/obo/RO_HOM0000011",
+      "LDX" : "http://purl.obolibrary.org/obo/RO_HOM0000018"
+   },
+   "graph" : "panther-orthologs"
 }
