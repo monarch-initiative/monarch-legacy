@@ -74,7 +74,7 @@ function main(args) {
         if (gset.forceConfiguration != null) {
             engine.setConfiguration( gset.forceConfiguration );
         }
-        if (gset.isDisabled) {
+        if (gset.isDisabled && gset.isDisabled != "0") {
             console.log("Skipping disabled conf");
             continue;
         }
@@ -378,7 +378,7 @@ function emit(io, sv, pv, ov, mapping) {
     }
     else {
         // special case for OWL constructs
-        if (mapping != null && mapping.isExistential) {
+        if (mapping != null && mapping.isExistential && mapping.isExistential != "0") {
             io.print(sv + " rdfs:subClassOf [a owl:Restriction ; owl:onProperty " + pv + " ; owl:someValuesFrom " + ov + " ] .");
             numTriplesDumped += 4;
             numAxiomsDumped ++;

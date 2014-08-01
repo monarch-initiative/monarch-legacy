@@ -66,6 +66,6 @@ graphs:
         predicate: http://uri.neuinfo.org/connectivity#referenceLink
         subject: v_uuid
     view: nlx_154697-8
-isDisabled: !!perl/scalar:JSON::XS::Boolean 0
+isDisabled: false
 mapVersion: 2014-05-16
 notes: currently just stores interaction as a graph. In future we will need to store the interaction as an entity

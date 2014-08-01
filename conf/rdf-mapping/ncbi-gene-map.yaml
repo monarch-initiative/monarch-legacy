@@ -44,7 +44,7 @@ graphs:
         predicate: oboInOwl:hasRelatedSynonym
         subject: geneid
       - 
-        isExistential: !!perl/scalar:JSON::XS::Boolean 1
+        isExistential: true
         object: tax_id
         predicate: RO:0002162
         subject: geneid
