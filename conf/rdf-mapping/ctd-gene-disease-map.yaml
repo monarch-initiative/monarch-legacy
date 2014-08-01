@@ -1,0 +1,47 @@
+--- 
+graphs: 
+  - 
+    columns: 
+      - 
+        name: v_uuid
+      - 
+        name: gene_id
+      - 
+        name: disease_id
+      - 
+        name: disease_label
+        type: rdfs:Literal
+      - 
+        list_delimiter: ", "
+        name: publication_ids
+    filter: 
+      direct_or_inferred: direct
+    graph: ctd-gene-disease-map
+    mapVersion: 2014-05-13
+    mappings: 
+      - 
+        object: disease_id
+        predicate: RO:0002200
+        subject: gene_id
+      - 
+        object: disease_label
+        predicate: rdfs:Label
+        subject: disease_id
+      - 
+        object: SIO:association
+        predicate: rdf:type
+        subject: v_uuid
+      - 
+        object: gene_id
+        predicate: hasSubject
+        subject: v_uuid
+      - 
+        object: disease_id
+        predicate: hasObject
+        subject: v_uuid
+      - 
+        object: publication_ids
+        predicate: dc:source
+        subject: v_uuid
+    view: nif-0000-02683-4
+status: alpha

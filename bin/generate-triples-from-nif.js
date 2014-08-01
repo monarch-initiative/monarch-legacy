@@ -1,3 +1,6 @@
+// generate-triples-from-nif, AKA "DISCO 2 TURTLE"
+// See:
+//  https://github.com/monarch-initiative/monarch-app/tree/master/conf/rdf-mapping
 load('lib/monarch/api.js');
 var Parser = require('ringo/args').Parser;
 var system = require('system');
@@ -12,6 +15,7 @@ var ldcontext;
 var targetDir;
 var numTriplesDumped;
 var numAxiomsDumped;
+var prefixMap = {};
 
 function main(args) {
     var script = args.shift();
@@ -41,15 +45,13 @@ function main(args) {
     targetDir = options.targetDir != null ? options.targetDir : "target";
 
 
-    if (options.context || options.target != null) {
-        //engine.addJsonLdContext(JSON.parse(fs.read(options.context)));
+    if (options.context) {
+        ldcontext = JSON.parse(fs.read(options.config));
     }
     else {
-
+        ldcontext = JSON.parse(fs.read("conf/monarch-context.json"));
     }
     
-    ldcontext = engine.getJsonLdContext();
-
     var gsets = [];
     if (options.mappings != null) {
         gsets = [JSON.parse(fs.read(options.mappings))];
@@ -64,13 +66,18 @@ function main(args) {
         var gset = gsets[j];
         var graphs = gset.graphs;
 
+        // tp level object does not need to be a set of graphs
+        if (graphs == null) {
+            graphs = [gset];
+        }
+
         if (options.config != null) {
             engine.setConfiguration( JSON.parse(fs.read(options.config)) );
         }
         if (gset.forceConfiguration != null) {
             engine.setConfiguration( gset.forceConfiguration );
         }
-        if (gset.isDisabled) {
+        if (gset.isDisabled && gset.isDisabled != "0") {
             console.log("Skipping disabled conf");
             continue;
         }
@@ -98,13 +105,15 @@ function generateNamedGraph(gconf) {
     var mdFilePath = targetFileBaseName + "-meta.json";
 
     var lastDumpMetadata;
+    var isMapVersionIdentical = false;
+    var isDataCurrent = true;
     if (fs.exists(mdFilePath)) {
         lastDumpMetadata = JSON.parse(fs.read(mdFilePath));
         if (lastDumpMetadata.mapVersion != null) {
             console.info("Comparing last dump version: "+lastDumpMetadata.mapVersion+ " with current: " + gconf.mapVersion);
             if (lastDumpMetadata.mapVersion == gconf.mapVersion) {
                 console.info("Identical - will not redump");
-                return;
+                isMapVersionIdentical = true;
             }
             else {
                 if (lastDumpMetadata.mapVersion > gconf.mapVersion) {
@@ -112,9 +121,35 @@ function generateNamedGraph(gconf) {
                 }
             }
         }
+        var numDays = gconf.lengthOfCycleInDays;
+        if (numDays == null) {
+            numDays = 7;
+        }
+        var lastExportDate = lastDumpMetadata.exportDate;
+        if (lastExportDate == null) {
+            console.info("No last export date - assuming stale, will redump");
+            isDataCurrent = false;
+        }
+        else {
+            var now = new Date(Date.now());
+            var nextExportDate = Date.add(lastExportDate, numDays, 'day');
+            console.log("Next export scheduled on: "+nextExportDate);
+            if (Date.after(now, nextExportDate)) {
+                isDataCurrent = false;
+            }
+            else {
+                isDataCurrent = true;
+            }
+
+        }
     }
     else {
         console.log("Cannot find "+mdFilePath+ " -- assuming this is initial dump");
+    }
+
+    if (isMapVersionIdentical && isDataCurrent) {
+        console.info("Mapping is unchanged AND data is current, so I will skip the dump");
+        return;
     }
 
     // globals ahoy
@@ -122,20 +157,23 @@ function generateNamedGraph(gconf) {
     numAxiomsDumped = 0;
 
     // write each NG to its own turtle file
-    var io = fs.open(targetFileBaseName + ".ttl", {write: true});
+    var ioFile = targetFileBaseName + ".ttl";
+    var stageFile = ioFile + ".tmp";
+    var io = fs.open(stageFile, {write: true});
+    console.log("Writing: "+ioFile);
 
     // HEADER
-    emitPrefixes(io);
+    emitPrefixes(io, gconf.prefixes);
 
     // OBJECTS
     if (gconf.objects != null) {
         gconf.objects.forEach(function(obj) {
-            var id = mapRdfResource(obj.id);
+            var id = normalizeUriRef(obj.id);
             for (var k in obj) {
                 if (k == 'id') {
                 }
                 else {
-                    emit(io, id, mapRdfResource(k), mapRdfResource(obj[k]));
+                    emit(io, id, normalizeUriRef(k), normalizeUriRef(obj[k]));
                 }
             }
         });
@@ -228,6 +266,7 @@ function generateNamedGraph(gconf) {
         console.log("nDupes = "+nDupes);
     }
     io.close();
+    fs.move(stageFile, ioFile);
 
     var mdObj =
         {
@@ -236,6 +275,7 @@ function generateNamedGraph(gconf) {
             numSourceRows : numSourceRows,
             numTriplesDumped : numTriplesDumped,
             numAxiomsDumped : numAxiomsDumped,
+            exportDate : new Date(Date.now())
         };
 
     fs.write(mdFilePath, JSON.stringify(mdObj));
@@ -254,14 +294,14 @@ function mapColumn(ix, row, cmap, gconf) {
     }
     else {
         // ix is a fixed RDF resource
-        return mapRdfResource(ix);
+        return normalizeUriRef(ix);
     }
 }
 
 // Expand CURIE or shortform ID to IRI.
 // E.g. GO:1234 --> http://purl.obolibrary.org/obo/GO_1234
 //
-function mapRdfResource(iri) {
+function normalizeUriRef(iri) {
     // remove whitespace
     if (iri.match(/\s/) != null) {
         console.warn("Whitespace in "+iri);
@@ -271,18 +311,45 @@ function mapRdfResource(iri) {
     if (iri.indexOf("http") == 0) {
         return "<"+iri+">";
     }
-    iri = engine.expandIdToURL(iri);
-    if (iri.indexOf("http") == 0) {
-        return "<"+iri+">";
+
+    var pos = iri.indexOf(":");
+    var prefix;
+    if (pos == -1) {
+        prefix = iri;
+        if (prefixMap[prefix] == null) {
+            // no : separator
+            // use base prefix
+            iri = ":" + iri;
+        }
+        else {
+            // the ID field is itself a prefix entry.
+            // This is useful for certain kinds of values; e.g.
+            // a string "P" can be mapped to a full URI (e.g. in panther mapping)
+            iri = iri + ":";
+        }
     }
+    else {
+        prefix = iri.slice(0,pos);
+
+        // validate prefix
+        if (prefixMap[prefix] == null) {
+            console.error("Not a valid prefix: "+prefix);
+            system.exit(1);
+        }
+
+    }
+
+    return iri;
 }
 
 
+
 // Arguments:
-//  - ix : column mapping spec
-//  - v : column value obtained from row
+//  - ix : index
+//  - v : column value obtained from data row
+//  - cmap : column map
 function mapColumnValue(ix, v, cmap, gconf) {
-    var cobj = cmap[ix];
+    var cobj = cmap[ix]; // metadata on column
     var type = cobj.type;
 
     // JSON-LD context;
@@ -303,9 +370,9 @@ function mapColumnValue(ix, v, cmap, gconf) {
     }
 
 
-    // column
+    // if column metadata includes a prefix, then prepend this
     if (cobj.prefix != null) {
-        return mapRdfResource(cobj.prefix + v);
+        return normalizeUriRef(cobj.prefix + v);
     }
     
     // Remove this code when this is fixed: https://support.crbs.ucsd.edu/browse/NIF-10646
@@ -330,7 +397,7 @@ function mapColumnValue(ix, v, cmap, gconf) {
     if (type == 'rdfs:Literal') {
         return engine.quote(v);
     }
-    return mapRdfResource(v);
+    return normalizeUriRef(v);
 }
 
 
@@ -351,11 +418,13 @@ function emit(io, sv, pv, ov, mapping) {
         return;
     }
     if (ov.forEach != null) {
+        // special case: Object is a list
         //console.log("Emitting multiple triples: "+ov.length);
         ov.forEach(function(x) { emit(io, sv, pv, x, mapping) });
     }
     else {
-        if (mapping != null && mapping.isExistential) {
+        // special case for OWL constructs
+        if (mapping != null && mapping.isExistential && mapping.isExistential != "0") {
             io.print(sv + " rdfs:subClassOf [a owl:Restriction ; owl:onProperty " + pv + " ; owl:someValuesFrom " + ov + " ] .");
             numTriplesDumped += 4;
             numAxiomsDumped ++;
@@ -369,7 +438,7 @@ function emit(io, sv, pv, ov, mapping) {
 }
 
 // TODO: we can reduce the size of the triple dump by making use of these
-function emitPrefixes(io) {
+function emitPrefixes(io, extraPrefixes) {
     for (var k in ldcontext) {
         var pfx = ldcontext[k];
         if (k.indexOf('@') == 0) {
@@ -379,10 +448,45 @@ function emitPrefixes(io) {
             if (pfx.indexOf('@') == 0) {
                 continue;
             }
-            io.print("@prefix "+k+": <"+pfx+"> .");
+            prefixMap[k] = pfx;
         }
     }
+    if (extraPrefixes != null) {
+        for (var k in extraPrefixes) {
+            var pfx = extraPrefixes[k];
+            prefixMap[k] = pfx;
+        }
+    }
+    if (prefixMap[""] == null) {
+        prefixMap[""] = ldcontext['@base'];
+    }
+    for (var k in prefixMap) {
+        var pfx = prefixMap[k];
+        var pfxUri = expandUri(pfx);
+        io.print("@prefix "+k+": <"+pfxUri+"> .");
+    }
     io.print("");
+}
+
+function expandUri(ref) {
+    //console.log("Expanding: "+ref);
+    if (ref.indexOf("http") == 0) {
+        return ref;
+    }
+    var pos = ref.indexOf(":");
+    if (pos == -1) {
+        console.error("Cannot expand: "+ref);
+        system.exit(1);
+    }
+    var prefix = ref.slice(0, pos);
+    if (prefixMap[prefix] == null) {
+        console.error("Cannot expand: "+prefix);
+        system.exit(1);
+    }
+    var newRef = prefixMap[prefix] + ref.slice(pos+1);
+    //console.log("  EXP: "+prefix+" --> "+newRef);
+    return newRef;
+    
 }
 
 // remove offensive characters for IRI construction

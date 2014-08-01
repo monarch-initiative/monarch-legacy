@@ -78,6 +78,10 @@ var url = document.URL;
 	    modelWidth: undefined,
 		multiOrganismCt: 10,
 		multiOrgModelLimit: 750,
+		multiOrgModelCt: [{ taxon: "9606", count: 10},
+						  { taxon: "10090", count: 10},
+						  { taxon: "7955", count: 10},
+						  { taxon: "7227", count: 0}],
 		orangeHighlight: "#ea763b",
 		orgModelList: [],
 		origPhenotypeData: [],
@@ -96,9 +100,10 @@ var url = document.URL;
 		selectRectHeight : 0,
 		selectRectWidth : 0,
 		serverURL : "",
-		sortList: [{type: "Alphabetic", order: 0},{type: "Frequency and Rarity", order:1} ,{type: "Frequency", order:2} ],
-	    smallXScale: undefined,
+		smallestModelWidth: 400,
+		smallXScale: undefined,
 	    smallYScale: undefined,	
+		sortList: [{type: "Alphabetic", order: 0},{type: "Frequency and Rarity", order:1} ,{type: "Frequency", order:2} ],	    
 		speciesList : [],		
 	    svg: undefined,
 		targetSpecies: "2",
@@ -599,10 +604,13 @@ var url = document.URL;
 
 	    if (typeof taxonid === 'undefined' || taxonid === null) {
 		taxonid="10090";
+		
 	    }
+		//if the taxonid is an empty string, set it to Overview - taxonid - 2
+		if (taxonid === "") { taxonid = 2;}
 	    var tempdata;
 	    for (var i  = 0; i  <self.options.targetSpeciesList.length; i++) {
-			if (self.options.targetSpeciesList[i].taxon === taxonid) {
+			if (self.options.targetSpeciesList[i].taxon == taxonid) {
 				tempdata  = self.options.targetSpeciesList[i];
 				break;
 			}
@@ -971,7 +979,8 @@ var url = document.URL;
 			fdata=[],
 			speciesList = [];
 			
-		var modList = [];
+		var modList = [],
+			orgCtr = 0;
 		
 		if (this.options.humandata != null  && this.options.humandata.b.length > 0){
 			for (var idx=0;idx<this.options.humandata.b.length;idx++) {
@@ -981,10 +990,12 @@ var url = document.URL;
 				 model_score: this.options.humandata.b[idx].score.score, 
 				 model_rank: this.options.humandata.b[idx].score.rank});
 				
+				this.options.multiOrgModelCt[orgCtr].count = this.options.humandata.b.length;
 				this._loadDataForModel(this.options.humandata.b[idx]);	
 			} 
 			speciesList.push("Homo sapiens");
 		} 
+		orgCtr++;
 		//sort the model list by rank
 			hdata.sort(function(a,b) { return a.model_rank - b.model_rank; });			 
 			modList= modList.concat(hdata.slice()); 
@@ -996,12 +1007,13 @@ var url = document.URL;
 				 model_label: this.options.mousedata.b[idx].label,
 				 model_score: this.options.mousedata.b[idx].score.score, 
 				 model_rank: this.options.mousedata.b[idx].score.rank});
-				
+		
+				this.options.multiOrgModelCt[orgCtr].count = this.options.mousedata.b.length;
 				this._loadDataForModel(this.options.mousedata.b[idx]);			 
 			} 
 			speciesList.push("Mus musculus");			
 		} 		
-		//sort the model list by rank
+		orgCtr++;
 		//sort the model list by rank
 			mdata.sort(function(a,b) { return a.model_rank - b.model_rank; });			 
 			modList = modList.concat(mdata.slice());  		
@@ -1013,12 +1025,13 @@ var url = document.URL;
 				 model_label: this.options.zfishdata.b[idx].label,
 				 model_score: this.options.zfishdata.b[idx].score.score, 
 				 model_rank: this.options.zfishdata.b[idx].score.rank});
-				
+
+				this.options.multiOrgModelCt[orgCtr].count = this.options.zfishdata.b.length;
 				this._loadDataForModel(this.options.zfishdata.b[idx]);			 
 			} 
 			speciesList.push("Danio rerio");
-		} 
-		//sort the model list by rank
+		}
+		orgCtr++;		
 		//sort the model list by rank
 			zdata.sort(function(a,b) { return a.model_rank - b.model_rank; });			 
 			modList = modList.concat(zdata.slice());  
@@ -1030,12 +1043,13 @@ var url = document.URL;
 				 model_label: this.options.flydata.b[idx].label,
 				 model_score: this.options.flydata.b[idx].score.score, 
 				 model_rank: this.options.flydata.b[idx].score.rank});
-				
+
+				this.options.multiOrgModelCt[orgCtr].count = this.options.flydata.b.length;
 				this._loadDataForModel(this.options.flydata.b[idx]);			 
 			} 
 			speciesList.push("Drosophila melanogaster");
 		} 
-		//sort the model list by rank
+		orgCtr++;
 		 //sort the model list by rank
 			fdata.sort(function(a,b) { return a.model_rank - b.model_rank; });			 
 			modList = modList.concat(fdata.slice());  
@@ -1047,13 +1061,21 @@ var url = document.URL;
 		//we need to adjust the display counts and indexing if there are fewer models
 		if (this.options.combinedModelList.length < this.options.modelDisplayCount) {
 			this.options.currModelIdx = this.options.combinedModelList.length-1;
-			this.options.modelDisplayCount = this.options.modelList.length;
+			this.options.modelDisplayCount = this.options.combinedModelList.length;
+			this._fixForFewerModels(this.options.modelDisplayCount);
 		}
 		
 		//initialize the filtered model list
 		for (var idx=0;idx<this.options.modelDisplayCount;idx++) {
 			this.options.filteredModelList.push(this.options.combinedModelList[idx]);
 		}
+	},
+	
+	_fixForFewerModels : function(modelCt){
+	
+	
+	
+	
 	},
 		
 	//generic ajax call for all queries
@@ -1155,6 +1177,7 @@ var url = document.URL;
 		if (this.options.modelList.length < this.options.modelDisplayCount) {
 			this.options.currModelIdx = this.options.modelList.length-1;
 			this.options.modelDisplayCount = this.options.modelList.length;
+			this._fixForFewerModels(this.options.modelDisplayCount);
 		}
 
 		//initialize the filtered model list
@@ -1317,23 +1340,14 @@ var url = document.URL;
     	
 	    this.options.colorScaleB = d3.scale.linear().domain([3, maxScore]);
         this.options.colorScaleB.domain([0, 0.2, 0.4, 0.6, 0.8, 1].map(this.options.colorScaleB.invert));
-
-        //this.options.colorScaleB.range(['rgb(255,255,204)','rgb(199,233,180)','rgb(127,205,187)','rgb(65,182,196)','rgb(44,12//7,184)','rgb(37,52,148)']); 
 		this.options.colorScaleB.range(['rgb(229,229,229)','rgb(164,214,212)','rgb(68,162,147)','rgb(97,142,153)','rgb(66,139,202)','rgb(25,59,143)']);
 		  
- 
 		this.options.colorScaleR = d3.scale.linear().domain([3, maxScore]);
         this.options.colorScaleR.domain([0, 0.2, 0.4, 0.6, 0.8, 1].map(this.options.colorScaleR.invert));
-        //this.options.colorScaleR.range(['rgb(255,255,178)','rgb(254,217,118)','rgb(254,178,76)','rgb(253,141,60)','rgb(240,59//,32)','rgb(189,0,38)']); 
 		this.options.colorScaleR.range(['rgb(252,248,227)','rgb(249,205,184)','rgb(234,118,59)','rgb(221,56,53)','rgb(181,92,85)','rgb(70,19,19)']);
-		//this.options.colorScaleR.range(['rgb(252,248,227)','rgb(230,209,178)','rgb(234,118,59)','rgb(221,56,53)','rgb(181,92,85)','rgb(70,19,19)']);
-		
-		
+			
 		this.options.colorScaleG = d3.scale.linear().domain([3, maxScore]);
 		this.options.colorScaleG.domain([0, 0.2, 0.4, 0.6, 0.8, 1].map(this.options.colorScaleG.invert));
-		//this.options.colorScaleG.range(['rgb(140,81,10)','rgb(216,179,101)','rgb(246,232,195)','rgb//(199,234,229)','rgb(90,180,172)','rgb(1,102,94)']);
-		//this.options.colorScaleG.range(['rgb(1,102,94)','rgb(90,180,172)','rgb(199,234,229)','rgb(246,232,19//5)','rgb(216,179,101)','rgb(140,81,10)']);
-
 		this.options.colorScaleG.range(['rgb(230,209,178)','rgb(210,173,116)','rgb(148,114,60)','rgb(68,162,147)','rgb(31,128,113)','rgb(3,82,70)']);
 	},
 
@@ -1380,35 +1394,46 @@ var url = document.URL;
 		
 		//add the handler for the select control
         $( "#sortphenotypes" ).change(function(d) {
+			console.log("Inside sortphenotypes change");
+			//this._showThrobber();
         	self.options.selectedSort = self.options.sortList[d.target.selectedIndex].type;
         	self.options.selectedOrder = self.options.sortList[d.target.selectedIndex].order;
-        	$("#unmatchedlabel").remove();
-			$("#unmatchedlabelhide").remove();
-			$("#unmatched").remove();
-			$("#selects").remove();
-			$("#org_div").remove();
-			$("#calc_div").remove();
-			$("#sort_div").remove();
-			$("#mtitle").remove();
-			$("#header").remove();
-        	$("#svg_area").remove();
-        	self.options.phenotypeData = self.options.origPhenotypeData.slice();
-        	self._reset();
-        	self._create();
-        	});
+			self._resetSelections();
+        });
 			
 		this.element.append("<svg id='svg_area'></svg>");		
 		this.options.svg = d3.select("#svg_area");
 			
     },
 
-	_addLogoImage : function() {     
-	  
+	_resetSelections : function() {
+		var self = this;
+		$("#unmatchedlabel").remove();
+		$("#unmatchedlabelhide").remove();
+		$("#unmatched").remove();
+		$("#selects").remove();
+		$("#org_div").remove();
+		$("#calc_div").remove();
+		$("#sort_div").remove();
+		$("#mtitle").remove();
+		$("#header").remove();
+		$("#svg_area").remove();
+		self.options.phenotypeData = self.options.origPhenotypeData.slice();
+		self._reset();
+		self._create();
+	},
+	
+	_addLogoImage : function() { 
+
+	  var start = 0;
+		
+	  if(this.options.filteredModelData.length < 30)
+	  { start = 680; } else { start = 850;}
 	  var imgs = this.options.svg.selectAll("image").data([0]);
       imgs.enter()
                 .append("svg:image")
                 .attr("xlink:href", this.options.scriptpath + "../image/logo.png")
-                .attr("x", 850)
+                .attr("x", start)
                 .attr("y", this.options.yTranslation - 10)
 				.attr("id", "logo")
                 .attr("width", "60")
@@ -1421,15 +1446,27 @@ var url = document.URL;
     	var link_lines = d3.selectAll(".data_text");
     	link_lines.style("font-weight", "normal");
     	link_lines.style("text-decoration", "none");
-    	link_lines.style("color", "black");
+    	link_lines.style("fill", "black");
 		link_lines.style("text-anchor", "end");
 		var link_labels = d3.selectAll(".model_label");
     	link_labels.style("font-weight", "normal");
     	link_labels.style("text-decoration", "none");
-    	link_labels.style("color", "black");
 		link_labels.attr("fill", "black");
 	},
 	
+	//I need to check to see if the modelData is an object.  If so, get the model_id
+    _clearModelData: function(modelData) {
+	    this.options.svg.selectAll("#detail_content").remove();
+	    this.options.svg.selectAll(".model_accent").remove();
+		var model_text = "";
+	    if (modelData != null && typeof modelData != 'object') {
+		   model_text = this.options.svg.selectAll("text#" + this._getConceptId(modelData));   
+		} else {model_text = this.options.svg.selectAll("text#" + this._getConceptId(modelData.model_id));}
+		
+		model_text.style("font-weight","normal");
+		model_text.style("text-decoration", "none");
+		model_text.style("fill", "black");    
+    },
 	
     _selectData: function(curr_data, obj) {    	
     	
@@ -1438,11 +1475,11 @@ var url = document.URL;
 		//create the related row rectangle
 		var highlight_rect = self.options.svg.append("svg:rect")
 		  	.attr("transform","translate(" + (self.options.axis_pos_list[1]) +"," + ( self.options.yTranslation + self.options.yoffsetOver + 4)  + ")")
-			/**+ self.options.yoffsetOver) */
-			.attr("x", 10)
+			
+			.attr("x", 12)
 			.attr("y", function(d) {return self._getYPosition(curr_data[0].id_a) ;}) //rowid
 			.attr("class", "row_accent")
-			.attr("width", this.options.modelWidth)
+			.attr("width", this.options.modelWidth - 4)
 			.attr("height", 12);
 	
     	this._resetLinks();
@@ -1452,31 +1489,47 @@ var url = document.URL;
     		txt = curr_data[0].id_a;
     	}
     	alabels.text(txt)
+			   .style("font-weight", "bold")
+			   .style("fill", "blue")
 			   .on("click",function(d){
 					self._clickPhenotype(self._getConceptId(curr_data[0].id_a), self.document[0].location.origin);
 				});
 
-    	var sublabels = this.options.svg.selectAll("text.lcs_text." + this._getConceptId(curr_data[0].id) + ", ." + this._getConceptId(curr_data[0].subsumer_id));
-    	var txt = curr_data.subsumer_label;
-    	
-    	if (txt == undefined) {
-    		txt = curr_data[0].subsumer_id;
-    	}
-    	sublabels.text(txt);
-    	var all_links = this.options.svg.selectAll("." + this._getConceptId(curr_data[0].id) + ", ." + this._getConceptId(curr_data[0].subsumer_id));
-    	all_links.style("font-weight", "bold");
-		
-    	/* TEMPORARY!!! REMOVE FOR HARRY's POSTER!!!
-    	var retData = "What data do we want to show for phentoypes?";
-	    this._updateDetailSection(retData, this._getXYPos(obj));
-	    */    	
+		this._highlightMatchingModels(curr_data);
+  
     },
+	_highlightMatchingModels : function(curr_data){
+		var self = this;
+		var  models = self.options.combinedModelData,
+		     alabels = this.options.svg.selectAll("text");
+		for (var i = 0; i < curr_data.length; i++){
+			var label = curr_data[i].model_label;
+			for (var j=0; j < alabels[0].length; j++){
+			    var shortTxt = self._getShortLabel(label,15);
+				if(alabels[0][j].innerHTML == shortTxt){
+					alabels[0][j].style.fill = "blue";
+				}			
+			}
+		}	 
+	},
 	
-	 _clickPhenotype: function(data, url_origin) {
-    	var url = url_origin + "/phenotype/" + data;
-    	var win = window.open(url, '_blank');
-    },	
-
+	_deselectMatchingModels : function(curr_data){
+		
+		var  models = this.options.combinedModelData,
+		alabels = this.options.svg.selectAll("text");
+		
+		for (var i = 0; i < curr_data.length; i++){
+			var label = curr_data[i].model_label;
+			for (var j=0; j < alabels[0].length; j++){
+			    var shortTxt = this._getShortLabel(label,15);
+				if(alabels[0][j].innerHTML == shortTxt){
+					alabels[0][j].style.fill = "black";
+				}			
+			}
+		}	 
+	},
+	
+	
     _deselectData: function (curr_data) {
     	
 		this.options.svg.selectAll(".row_accent").remove();
@@ -1486,10 +1539,93 @@ var url = document.URL;
 		
 		var alabels = this.options.svg.selectAll("text.a_text." + this._getConceptId(row.id));
 		alabels.text(this._getShortLabel(row.label_a));
-
-		var sublabels = this.options.svg.selectAll("text.lcs_text." + this._getConceptId(row.id));
-		sublabels.text(this._getShortLabel(row.subsumer_label));		
+		data_text = this.options.svg.selectAll("text.a_text");
+		data_text.style("text-decoration", "none");
+		data_text.style("fill", "black");    
+			
+		this._deselectMatchingModels(curr_data);
     },
+		
+	_selectModel: function(modelData, obj) {
+		var self=this;
+		
+		//create the related model rectangles
+		var highlight_rect = self.options.svg.append("svg:rect")
+		  	.attr("transform",
+		  			  "translate(" + (self.options.textWidth + 32) + "," +( self.options.yTranslation + self.options.yoffsetOver)+ ")")
+			.attr("x", function(d) { return (self.options.xScale(modelData.model_id)-1);})
+			.attr("y", self.options.yoffset + 2)
+			.attr("class", "model_accent")
+			.attr("width", 14)
+			.attr("height", (self.options.phenotypeDisplayCount * 13));
+
+		//select the model label
+	
+		var model_label = self.options.svg.selectAll("text#" + this._getConceptId(modelData.model_id));
+		
+    	model_label.style("font-weight", "bold");
+		model_label.style("fill", "blue");
+		
+		
+		var retData;
+		//initialize the model data based on the scores
+		retData = "<strong>" +  self._toProperCase(self.options.comparisonType).substring(0, self.options.comparisonType.length-1) +" Label:</strong> "   
+			+ modelData.model_label + "<br/><strong>Rank:</strong> " + (parseInt(modelData.model_rank) + 1);
+
+		//obj = try creating an ojbect with an attributes array including "attributes", but I may need to define
+		//getAttrbitues
+		//just create a temporary object to pass to the next method...
+		var obj = {				
+			attributes: [],
+				getAttribute: function(keystring) {
+					var ret = self.options.xScale(modelData.model_id)-2
+					if (keystring == "y") {
+						ret = Number(self.options.yoffset + /**self.options.yoffsetOver)*/-190);
+					}
+					return ret;
+				},
+        };		
+		obj.attributes['transform'] = {value: highlight_rect.attr("transform")};		
+		this._updateDetailSection(retData, this._getXYPos(obj), undefined, 50);
+		self._highlightMatchingPhenotypes(modelData);
+	},
+	
+	_highlightMatchingPhenotypes: function(curr_data){
+	
+		var self = this;
+		var  models = self.options.combinedModelData;
+				
+		for(var i = 0; i < models.length; i++){
+			//models[i] is the matching model that contains all phenotypes 
+			if (models[i].model_id == curr_data.model_id)
+			{
+				var alabels = this.options.svg.selectAll("text.a_text");
+				var mtxt = models[i].label_a;
+				if (mtxt == undefined) {
+					mtxt = models[i].id_a;
+				}
+				var shortTxt = self._getShortLabel(mtxt);
+				for (var j=0; j < alabels[0].length; j++){
+					if (alabels[0][j].innerHTML == shortTxt){
+						alabels[0][j].style.fill = "blue";
+								
+						break;
+					}
+				}
+			}			
+		}
+	},		
+	
+	_deselectMatchingPhenotypes : function(curr_data){
+	    var self = this;
+		self.options.svg.selectAll("text.a_text")
+							.style("fill","black");                      
+	},
+
+	 _clickPhenotype: function(data, url_origin) {
+    	var url = url_origin + "/phenotype/" + data;
+    	var win = window.open(url, '_blank');
+    },	
 
 	//return a label for use in the list.  This label is shortened
 	//to fit within the space in the column
@@ -1553,7 +1689,7 @@ var url = document.URL;
     	       	.attr('x', x + 15)
     	        .attr('y', y -5)
     	        .attr("width", width)
-    	        .attr("id", self._getConceptId(data.model_id))
+    	        .attr("id", this._getConceptId(data.model_id))
     	        .attr("model_id", data.model_id)
     	        .attr("height", 60)
     	        .attr("transform", function(d) {
@@ -1567,7 +1703,8 @@ var url = document.URL;
     	        })
     	        .on("mouseout", function(d) {
     	    	   self._clearModelData(d, d3.mouse(this));
-				   self._deselectData(self.options.selectedRow);
+				   if(self.options.selectedRow){
+				   self._deselectData(self.options.selectedRow);}
     	        })
     	       .attr("class", this._getConceptId(data.model_id) + " model_label")
     	       .style("font-size", "12px")
@@ -1708,20 +1845,6 @@ var url = document.URL;
 	    this._updateDetailSection(retData, this._getXYPos(obj));
 	  
     },
-    	
-    //I need to check to see if the modelData is an object.  If so, get the model_id
-    _clearModelData: function(modelData) {
-	    this.options.svg.selectAll("#detail_content").remove();
-	    this.options.svg.selectAll(".model_accent").remove();
-		var model_text = "";
-	    if (modelData != null && typeof modelData != 'object') {
-		    model_text = this.options.svg.selectAll("text#" + this._getConceptId(modelData));
-		} else {model_text = this.options.svg.selectAll("text#" + this._getConceptId(modelData.model_id));}
-		model_text.style("font-weight","normal");
-		model_text.style("text-decoration", "none");
-		model_text.style("fill", "black");    
-    },
-
 
 	//NOTE: I need to find a way to either add the model class to the phenotypes when they load OR
 	//select the rect objects related to the model and append the class to them.
@@ -1788,7 +1911,8 @@ var url = document.URL;
 		  })
 		  .on("mouseout", function(d) {
 			  self._clearModelData(d, d3.mouse(this));
-			  self._deselectData(self.options.selectedRow);
+			  if(self.options.selectedRow){
+			  self._deselectData(self.options.selectedRow);}
 		  })
 		  .style('opacity', '1.0')
 		  .attr("fill", function(d, i) {
@@ -1827,19 +1951,24 @@ var url = document.URL;
 		var list = self.options.speciesList;
 		var ct = self.options.multiOrganismCt,
 			vwidthAndGap = 13,
-			hwidthAndGap = 18;
-		
-		
+			hwidthAndGap = 18,
+			totCt = 0,
+			parCt = 0;
+			
 		var highlight_rect = self.options.svg.selectAll(".species_accent")
 			.data(list)
 			.enter()
 			.append("rect")			
 		  	.attr("transform",
 		  			  "translate(" + (self.options.textWidth + 30) + "," +( self.options.yTranslation + self.options.yoffsetOver)+ ")")
-			.attr("x", function(d,i) { return (i * (hwidthAndGap * ct));})
+			//.attr("x", function(d,i) { return (i * (hwidthAndGap * ct));})
+			.attr("x", function(d,i) { totCt += self.options.multiOrgModelCt[i].count; 
+									   if (i==0) { return 0; }
+									   else {parCt = totCt - self.options.multiOrgModelCt[i].count;  
+									   return hwidthAndGap * parCt;}})
 			.attr("y", self.options.yoffset)
 			.attr("class", "species_accent")
-			.attr("width", hwidthAndGap * ct)
+			.attr("width",  function(d,i) { return ((hwidthAndGap * self.options.multiOrgModelCt[i].count));})
 			.attr("height", vwidthAndGap * self.options.phenotypeDisplayCount + 5)
 			.attr("stroke", function(d,i){ return self.options.targetSpeciesList[i].color;})
 			.attr("stroke-width", 3)
@@ -1868,10 +1997,10 @@ var url = document.URL;
 		//Highlight Row
 		var highlight_rect = self.options.svg.append("svg:rect")
 		  	.attr("transform","translate(" + self.options.axis_pos_list[1] + ","+ (self.options.yTranslation + self.options.yoffsetOver + 4 ) + ")")
-			.attr("x", 10)
+			.attr("x", 12)
 			.attr("y", function(d) {return self._getYPosition(curr_data.id_a) ;}) //rowid
 			.attr("class", "row_accent")
-			.attr("width", this.options.modelWidth)
+			.attr("width", this.options.modelWidth - 4)
 			.attr("height", 12);
 	
     	this.options.selectedRow = curr_data;
@@ -1884,27 +2013,20 @@ var url = document.URL;
     		txt = curr_data.id_a;
     	}
     	alabels.text(txt);
+		alabels.style("font-weight", "bold");
+		alabels.style("fill", "blue");
 
-    	var sublabels = this.options.svg.selectAll("text.lcs_text." + this._getConceptId(curr_data.id) + ", ." + this._getConceptId(curr_data.subsumer_id));
-    	var txt = curr_data.subsumer_label;
-    	
-    	if (txt == undefined) {
-    		txt = curr_data.subsumer_id;
-    	}
-    	sublabels.text(txt);
-    	var all_links = this.options.svg.selectAll("." + this._getConceptId(curr_data.id) + ", ." + this._getConceptId(curr_data.subsumer_id));
-    	all_links.style("font-weight", "bold");
-		
 		//Highlight Column
 		var model_label = self.options.svg.selectAll("text#" + this._getConceptId(curr_data.model_id));
-    	model_label.style("fill", "blue");
-		model_label.style("text-decoration", "underline");
+		
+    	model_label.style("font-weight", "bold");
+		model_label.style("fill", "blue");
 
 		//create the related model rectangles
 		var highlight_rect2 = self.options.svg.append("svg:rect")
 		  	.attr("transform",
 		  			  "translate(" + (self.options.textWidth + 34) + "," +( self.options.yTranslation + self.options.yoffsetOver)+ ")")
-			.attr("x", function(d) { return (self.options.xScale(curr_data.model_id)-2);})
+			.attr("x", function(d) { return (self.options.xScale(curr_data.model_id) - 1);})
 			.attr("y", self.options.yoffset + 2 )
 			.attr("class", "model_accent")
 			.attr("width", 12)
@@ -2192,8 +2314,8 @@ var url = document.URL;
 					.attr("y", 10)
 					.attr("width", function(d,i){return self.options.modelWidth/speciesList.length;})
 					.attr("height", 10)
-					.attr("stroke", "#0F473E")
-					.attr("stroke-width", 1)
+					.attr("fill", "#0F473E")
+					//.attr("stroke-width", 1)
 					.text(function (d,i){return speciesList[i];})
 					.attr("text-anchor","middle");
 		}
@@ -2259,15 +2381,20 @@ var url = document.URL;
 	    var self=this;
 	    //For Overview of Organisms 0 width = ((multiOrganismCt*2)+2) *18	
 		//Add two  extra columns as separators
-
+		self.options.axis_pos_list = [];
 		this.options.modelWidth = this.options.filteredModelList.length * 18;
 		//add an axis for each ordinal scale found in the data
 	    for (var i=0;i<this.options.dimensions.length;i++) {
 	    	//move the last accent over a bit for the scrollbar
 			if (i == 2) {
+				var w = 0;
+				if(this.options.modelWidth < this.options.smallestModelWidth)
+				{ w = this.options.smallestModelWidth;}
+				else {w = this.options.modelWidth;}
+				
 				self.options.axis_pos_list.push((this.options.textWidth + 30) 
 					       + this.options.colStartingPos 
-					       + this.options.modelWidth);
+					       + w);
 			} else {
 				self.options.axis_pos_list.push((i*(this.options.textWidth + 10)) + 
 					       this.options.colStartingPos);
@@ -2286,7 +2413,8 @@ var url = document.URL;
 		})		
 		.attr("height",  function(d, i) {
 		    //return i == 2 ? self.options.h /**- 216*/ : self.options.h;
-			return i == 2 ? self.options.h - 216 : (self.options.phenotypeDisplayCount *  13) + 10;  //phenotype count * height of rect + padding
+			//return i == 2 ? self.options.h : (self.options.phenotypeDisplayCount *  //13) + 10;  //phenotype count * height of rect + padding
+			return self.options.phenotypeDisplayCount * 13 + 10;
 		})
 		.attr("id", function(d, i) {
 		    if(i==0) {return "leftrect";} else if(i==1) {return "centerrect";} else {return "rightrect";}
@@ -2338,7 +2466,6 @@ var url = document.URL;
 		//This is for the new "Overview" target option 
 		if (this.options.targetSpeciesName == "Overview"){	
 			list = this.options.combinedModelList.slice();			
-			//this._createOrgOverviewXAxis();
 		}
 		else
 		{		
@@ -2359,7 +2486,7 @@ var url = document.URL;
 			.attr("class", "x axis")
 			//this be some voodoo...
 			//to rotate the text, I need to select it as it was added by the axis
-			.selectAll("text") 
+			.selectAll("text")
 			.each(function(d,i) { 
 					//This is for the new "Overview" target option 
 					if (self.options.targetSpeciesName == "Overview"){	
@@ -2425,8 +2552,8 @@ var url = document.URL;
 					.attr("y", 10)
 					.attr("width", function(d,i){return self.options.modelWidth/speciesList.length;})
 					.attr("height", 10)
-					.attr("stroke", "#0F473E")
-					.attr("stroke-width", 1)
+					.attr("fill", "#0F473E")
+					//.attr("fill-width", 1)
 					.text(function (d,i){return speciesList[i];})
 					.attr("text-anchor","middle");
 		
@@ -2463,10 +2590,6 @@ var url = document.URL;
 			
 			var color_values_red =  ['rgb(252,248,227)','rgb(230,209,178)','rgb(234,118,59)','rgb(221,56,53)','rgb(181,92,85)','rgb(70,19,19)'];
 			
-			//var color_values_green =  //['rgb(140,81,10)','rgb(216,179,101)','rgb(246,232,195)','rgb(199,234,229)','rgb(90,180,172)','rgb(1,102,94)'];
-			
-			//var color_values_green = //['rgb(1,102,94)','rgb(90,180,172)','rgb(199,234,229)','rgb(246,232,195)','rgb(216,179,101)','rgb//(140,81,10)'];
-			
 			var color_values_green = ['rgb(230,209,178)','rgb(210,173,116)','rgb(148,114,60)','rgb(68,162,147)','rgb(31,128,113)','rgb(3,82,70)'];
 			
 			   
@@ -2501,7 +2624,7 @@ var url = document.URL;
 					.attr("transform","translate(0,10)")
 					.attr("class", "legend_rect")
 					.attr("id","legendscale_blue")
-					.attr("y", (y1 - 20) + this.options.yTranslation + self.options.yoffsetOver)
+					.attr("y", (y1 - 10) + this.options.yTranslation + self.options.yoffsetOver)
 					.attr("x", self.options.axis_pos_list[2] + 12)
 					.attr("rx",8)
 					.attr("ry",8)
@@ -2514,7 +2637,7 @@ var url = document.URL;
 					
 					var grad_text1 = self.options.svg.append("svg:text")
 					.attr("class", "bluetext")
-					.attr("y", y2  + this.options.yTranslation +15+ self.options.yoffsetOver)
+					.attr("y", y2  + this.options.yTranslation +25+ self.options.yoffsetOver)
 					.attr("x", self.options.axis_pos_list[2] + 205)
 					.style("font-size", "11px")
 					.text("Homo sapiens");
@@ -2528,7 +2651,7 @@ var url = document.URL;
 						.attr("y2", "0%");
 							
 					//Red values: 
-					/**var color_values_red =  ['rgb(252,248,227)','rgb(230,209,178)','rgb(234,118,59)','rgb(221,56,53)','rgb(181,92,85)','rgb(70,19,19)'];*/
+					
 					var color_values_red =  ['rgb(252,248,227)','rgb(249,205,184)','rgb(234,118,59)','rgb(221,56,53)','rgb(181,92,85)','rgb(70,19,19)'];
 					
 				gradient_red.append("svg:stop")
@@ -2556,7 +2679,7 @@ var url = document.URL;
 					.attr("class", "legend_rect")
 					.attr("id","legendscale_red")
 
-					.attr("y", (y1 + 0) + this.options.yTranslation + self.options.yoffsetOver)
+					.attr("y", (y1 + 10) + this.options.yTranslation + self.options.yoffsetOver)
 					.attr("x", self.options.axis_pos_list[2] + 12)
 					.attr("rx",8)
 					.attr("ry",8)
@@ -2566,7 +2689,7 @@ var url = document.URL;
 					
 				var grad_text2 = self.options.svg.append("svg:text")
 					.attr("class", "redtext")
-					.attr("y", (y2 + 35)  + this.options.yTranslation + self.options.yoffsetOver)
+					.attr("y", (y2 + 45)  + this.options.yTranslation + self.options.yoffsetOver)
 					.attr("x", self.options.axis_pos_list[2] + 205)
 					.style("font-size", "11px")
 					.text("Mus musculus");
@@ -2578,12 +2701,7 @@ var url = document.URL;
 					.attr("x2", "100%")
 					.attr("y1", "0%")
 					.attr("y2", "0%");
-						
-				//Green values: 				
-				//new: var color_values_green = ['rgb(1,102,94)','rgb(90.180,172)','rgb(199,234,229)','rgb(246,232,195)','rgb(216,179,101)','rgb(140,81,10)'];
-				//OLD: 'rgb(140,81,10)','rgb(216,179,101)','rgb(246,232,195)','rgb(199,234,229)','rgb(90,180,172)','rgb(1,102,94)']
-				//NEWEST:	//'rgb(230,209,178)','rgb(210,173,116)','rgb(148,114,60)','rgb(68,162,147)','rgb(31,128,113)',//'rgb(3,82,70)'
-				
+			
 				
 				gradient_green.append("svg:stop")
 					.attr("offset", "20%")
@@ -2609,7 +2727,7 @@ var url = document.URL;
 					.attr("transform","translate(0,10)")
 					.attr("class", "legend_rect")
 					.attr("id","legendscale_green")
-					.attr("y", (y1 + 20) + this.options.yTranslation + self.options.yoffsetOver)
+					.attr("y", (y1 + 30) + this.options.yTranslation + self.options.yoffsetOver)
 					.attr("x", self.options.axis_pos_list[2] + 12)
 					.attr("rx",8)
 					.attr("ry",8)
@@ -2619,7 +2737,7 @@ var url = document.URL;
 					
 			var grad_text3 = self.options.svg.append("svg:text")
 				.attr("class", "greentext")
-				.attr("y", y2 + 55  + this.options.yTranslation + self.options.yoffsetOver)
+				.attr("y", y2 + 65  + this.options.yTranslation + self.options.yoffsetOver)
 				.attr("x", self.options.axis_pos_list[2] + 205)
 				.style("font-size", "10px")
 				.text("Danio rerieo");
@@ -2642,54 +2760,68 @@ var url = document.URL;
 	
 		    var div_text1 = self.options.svg.append("svg:text")
 				.attr("class", "detail_text")
-				.attr("y", y1  + this.options.yTranslation + self.options.yoffsetOver-15)
+				.attr("y", y1  + this.options.yTranslation + self.options.yoffsetOver-5)
 				.attr("x", self.options.axis_pos_list[2] + 10)
 				.style("font-size", "10px")
 				.text(text1);
 		    
 			var div_text2 = self.options.svg.append("svg:text")
 				.attr("class", "detail_text")
-				.attr("y", y2  + this.options.yTranslation + self.options.yoffsetOver -10)
+				.attr("y", y2  + this.options.yTranslation + self.options.yoffsetOver)
 				.attr("x", self.options.axis_pos_list[2] + 75)
 				.style("font-size", "12px")
 				.text(text2);
 				
 		    var div_text3 = self.options.svg.append("svg:text")
 				.attr("class", "detail_text")
-				.attr("y", y1 + this.options.yTranslation + self.options.yoffsetOver-15)
+				.attr("y", y1 + this.options.yTranslation + self.options.yoffsetOver-5)
 				.attr("x", self.options.axis_pos_list[2] + 125)
 				.style("font-size", "10px")
 				.text(text3);	
 				
 			//Position the max more carefully	
-			if (text2 == "Distance") {
+		/**	if (text2 == "Distance") {
 				div_text2.attr("x", "860px");			
 			}
 			if (text2 == "Uniqueness") {
 				div_text2.attr("x", "845px");			
-			}
+			} */
 			if (text3 == "Max") {
-				div_text3.attr("x","945px");			
+				div_text3.attr("x",self.options.axis_pos_list[2] + 150);			
 			}
 			if (text3 == "Highest") {
 				div_text3.attr("x",self.options.axis_pos_list[2] + 150);			
 			}
-						
+		}				
 			var selClass = "";
 
 			//This is for the new "Overview" target option 
 			if (self.options.targetSpeciesName == "Overview") {
-				if (self.options.filteredPhenotypeData.length < 14) 
-				{ 
-					selClass = "overviewShortselects"; 
-				} 
-				else { selClass = "overviewselects"; }
+				if(self.options.modelWidth <= self.options.smallestModelWidth)
+				{
+					if (self.options.filteredPhenotypeData.length < 14) 
+					{ 
+						selClass = "overviewShortNarrowSelects"; 
+					} 
+					else { selClass = "overviewShortSelects";}
+				}
+				else { selClass = "overviewSelects"; }
 			} 
-			else{
-				if (self.options.filteredPhenotypeData.length < 14) { selClass = "shortselects"; } else { selClass = "selects";}
+			else if (self.options.filteredPhenotypeData.length < 14) 
+			{	selClass = "shortSelects";
+			}
+			else 
+			{
+				if(self.options.modelWidth <= self.options.smallestModelWidth)
+				{
+					if (self.options.filteredPhenotypeData.length < 14) 
+					{ selClass = "shortNarrowSelects"; } 
+					else { selClass = "shortSelects";}
+				}
+				else (selClass = "selects");
 			}
 		
-			var optionhtml = "<div id='selects' class='" + selClass + "'><div id='org_div'><div>Species</div><span><select id=\'organism\'>";
+			var optionhtml = "<div id='selects' class='" + selClass + "'><div id='org_div'><span id='olabel'>Species</span><span id='org_sel'><select id=\'organism\'>";
 
 			for (var idx=0;idx<self.options.targetSpeciesList.length;idx++) {
 				var selecteditem = "";
@@ -2699,7 +2831,7 @@ var url = document.URL;
 				optionhtml = optionhtml + "<option value='" + self.options.targetSpeciesList[idx].label +"' "+ selecteditem +">" + self.options.targetSpeciesList[idx].name +"</option>"
 			}
 	
-			optionhtml = optionhtml + "</select></span></div><div id='calc_div'><span id='clabel'>Display<span id='calcs'><img class='calcs' src='" + this.options.scriptpath + "../image/greeninfo30.png' height='15px'></span></span><br /><span id='calc_sel'><select id=\"calculation\">";
+			optionhtml = optionhtml + "</select></span></div><div id='calc_div'><span id='clabel'>Display</span><span id='calcs'><img class='calcs' src='" + this.options.scriptpath + "../image/greeninfo30.png' height='15px'></span><br /><span id='calc_sel'><select id=\"calculation\">";
        	   
 
 			for (var idx=0;idx<self.options.selectList.length;idx++) {
@@ -2714,7 +2846,18 @@ var url = document.URL;
 			}
 			optionhtml = optionhtml + "</select></span></div></div>";
 			this.element.append(optionhtml);			
-
+		/**	self.options.svg.append("svg:foreignObject")
+		    //.attr("width", w + 60)
+			//.attr("height", h)
+			.attr("id", "selectiondiv")
+			.attr("y", (y1 +400) + this.options.yTranslation + self.options.yoffsetOver)
+		    .attr("x", self.options.axis_pos_list[2]) 
+			.append("xhtml:body")
+			.attr("id","selections")
+			.html(optionhtml);  */	
+			
+			
+			
 			var calcs = d3.selectAll("#calcs")
 				.on("click", function(d,i){
 					self._showDialog( "calcs");
@@ -2725,19 +2868,7 @@ var url = document.URL;
 				//msg =  "Handler for .change() called." );
 				self.options.targetSpecies = self.options.targetSpeciesList[d.target.selectedIndex].taxon;
 				self.options.targetSpeciesName = self.options.targetSpeciesList[d.target.selectedIndex].name;
-				$("#unmatchedlabel").remove();
-				$("#unmatchedlabelhide").remove();
-				$("#unmatched").remove();
-				$("#selects").remove();
-				$("#org_div").remove();
-				$("#calc_div").remove();
-				$("#sort_div").remove();
-				$("#mtitle").remove();
-				$("#header").remove();
-				$("#svg_area").remove();
-				self.options.phenotypeData = self.options.origPhenotypeData.slice();
-				self._reset();
-				self._create();
+				self._resetSelections();
 				});
 			
         
@@ -2745,22 +2876,10 @@ var url = document.URL;
 				//msg =  "Handler for .change() called." );
 				self.options.selectedCalculation = self.options.selectList[d.target.selectedIndex].calc;
 				self.options.selectedLabel = self.options.selectList[d.target.selectedIndex].label;
-				$("#unmatchedlabel").remove();
-				$("#unmatchedlabelhide").remove();
-				$("#unmatched").remove();
-				$("#selects").remove();
-				$("#calc_div").remove();
-				$("#org_div").remove();
-				$("#sort_div").remove();
-				$("#mtitle").remove();
-				$("#header").remove();
-				$("#svg_area").remove();
-				self.options.phenotypeData = self.options.origPhenotypeData.slice();
-				self._reset();
-				self._create();
+				self._resetSelections();
 			});
 	    
-		}
+		
 	},
 	
 	update: function() {
@@ -2885,45 +3004,7 @@ var url = document.URL;
 	    return oldstring.replace(/\w\S*/g, function(txt){return txt.charAt(0).toUpperCase() + txt.substr(1).toLowerCase();});
 	},
 	
-	_selectModel: function(modelData, obj) {
-		var self=this;
-		//select the model label		
-		var model_label = self.options.svg.selectAll("text#" + this._getConceptId(modelData.model_id));
-    	model_label.style("fill", "blue");
-		model_label.style("text-decoration", "underline");
-
-		//create the related model rectangles
-		var highlight_rect = self.options.svg.append("svg:rect")
-		  	.attr("transform",
-		  			  "translate(" + (self.options.textWidth + 30) + "," + 1 +( self.options.yTranslation + self.options.yoffsetOver)+ ")")
-					  .attr("x", function(d) { return (self.options.xScale(modelData.model_id)-2);})
-			.attr("y", self.options.yoffset + self.options.yoffsetOver)
-			.attr("class", "model_accent")
-			.attr("width", 14)
-			.attr("height", (self.options.yAxisMax-75));
-
-		var retData;
-		//initialize the model data based on the scores
-		retData = "<strong>" +  self._toProperCase(self.options.comparisonType).substring(0, self.options.comparisonType.length-1) +" Label:</strong> "   
-			+ modelData.model_label + "<br/><strong>Rank:</strong> " + (parseInt(modelData.model_rank) + 1);
-
-		//obj = try creating an ojbect with an attributes array including "attributes", but I may need to define
-		//getAttrbitues
-		//just create a temporary object to pass to the next method...
-		var obj = {				
-			attributes: [],
-				getAttribute: function(keystring) {
-					var ret = self.options.xScale(modelData.model_id)-2;
-					if (keystring == "y") {
-						ret = Number(self.options.yoffset + /**self.options.yoffsetOver)*/-190);
-					}
-					return ret;
-				},
-        };		
-		obj.attributes['transform'] = {value: highlight_rect.attr("transform")};		
-		this._updateDetailSection(retData, this._getXYPos(obj), undefined, 50);
-	},
-
+	
 	//given an array of phenotype objects 
 	//edit the object array.
 	// items are either ontology ids as strings, in which case they are handled as is,

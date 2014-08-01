@@ -1,0 +1,84 @@
+--- 
+graphs: 
+  - 
+    columns: 
+      - 
+        name: v_uuid
+      - 
+        name: breed_id
+        type: owl:Class
+      - 
+        name: breed_label
+        type: rdfs:Literal
+      - 
+        name: taxon_id
+        type: owl:Class
+      - 
+        name: taxon_label
+        type: rdfs:Literal
+      - 
+        name: taxon_alt_label
+        type: rdfs:Literal
+      - 
+        name: phenotype_id
+        type: owl:Class
+      - 
+        name: phenotype_label
+        type: rdfs:Literal
+      - 
+        name: publication_id
+      - 
+        name: omim_id
+        type: owl:Class
+      - 
+        name: species_specific_phenotype_name
+        type: rdfs:Literal
+    graph: animal-breed-disease
+    mapVersion: 2014-04-30
+    mappings: 
+      - 
+        object: phenotype_id
+        predicate: RO:0002200
+        subject: breed_id
+      - 
+        object: phenotype_label
+        predicate: rdfs:label
+        subject: phenotype_id
+      - 
+        object: species_specific_phenotype_name
+        predicate: oboInOwl:hasRelatedSynonym
+        subject: phenotype_id
+      - 
+        object: SIO:association
+        predicate: rdf:type
+        subject: v_uuid
+      - 
+        object: breed_id
+        predicate: hasSubject
+        subject: v_uuid
+      - 
+        object: phenotype_id
+        predicate: hasObject
+        subject: v_uuid
+      - 
+        object: publication_id
+        predicate: dc:source
+        subject: v_uuid
+      - 
+        object: taxon_id
+        predicate: RO:0002162
+        subject: breed_id
+      - 
+        object: taxon_label
+        predicate: rdfs:label
+        subject: taxon_id
+      - 
+        object: taxon_alt_label
+        predicate: oboInOwl:hasRelatedSynonym
+        subject: taxon_id
+      - 
+        object: omim_id
+        predicate: putatively_homologous_to
+        subject: phenotype_id
+    view: nif-0000-03215-2
+status: alpha
