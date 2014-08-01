@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Data Sources: {{term}}</title>
+    {{#scripts}}
+    <script type="text/javascript" src="{{url}}"></script>
+    {{/scripts}}
+    {{{includes.analytics}}}
+    {{#stylesheets}}
+    <link rel="stylesheet" type="text/css" href="{{url}}"/>
+    {{/stylesheets}}
+    <link rel="stylesheet" type="text/css" href="/css/monarch-specific.css"/>
+    <link rel="stylesheet" type="text/css" href="/css/search.css"/>
+    <link rel="icon" href="/image/favicon.ico" type="image/x-icon">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+    <meta charset="utf-8"/> 
+</head>
+<body>
+    {{{includes.navbar}}}
+    <div class="monarch-container">
+        <div class="content">
+            <div class="wrapperforfooter">
+            <div class="jumbotron">
+                <div id="description">
+                    <img id="monarch-logo" class="downloadline" src="/image/logo.png"/>
+                    <h1 class="downloadline">Search Results: {{term}}</h1>
+					Monarch integrates a variety of datasources, primarily focused on genotype- and disease-phenotype associations.  The following are a list of the sources currently integrated and available for browsing in our website.
+                    <a href="{{{download.json}}}" class="downloadline btn btn-info">JSON</a>
+                </div>
+            </div>
+            <div id="complete-info">
+                <table class="{{css.table}}">
+                    {{{sourcesTable}}}
+                </table>
+            </div>
+            </div> <!-- closes wrapperforfooter -->
+            {{{includes.footer}}}
+        </div>
+    </div>
+</body>
+</html>
