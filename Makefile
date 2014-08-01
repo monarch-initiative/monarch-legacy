@@ -36,8 +36,22 @@ nif-production-url-test:
 
 triples:
 	$(RINGO_BIN) bin/generate-triples-from-nif.js -c conf/server_config_production.json conf/rdf-mapping/*-map.json && ./bin/target-ttl-to-owl.sh
-target/%.ttl:
-	$(RINGO_BIN) bin/generate-triples-from-nif.js -c conf/server_config_production.json conf/rdf-mapping/$*-map.json && ./bin/target-ttl-to-owl.sh
+
+SERVERCONF := production
+target/%.ttl: conf/rdf-mapping/%-map.json conf/monarch-context.json
+	$(RINGO_BIN) bin/generate-triples-from-nif.js -c conf/server_config_$(SERVERCONF).json $<
+
+target/%.owl: target/%.ttl
+	owltools $< --set-ontology-id http://purl.obolibrary.org/obo/upheno/data/$*.owl -o -f ofn target/$*.owl 
+
+conf/rdf-mapping/%-derived.yaml: conf/rdf-mapping/%.json
+	json2yaml.pl $< > $@.tmp && mv $@.tmp $@
+
+conf/rdf-mapping/%.json: conf/rdf-mapping/%.yaml
+	yaml2json.pl $< > $@.tmp && mv $@.tmp $@
+
+conf/monarch-context.json: conf/monarch-context.yaml
+	yaml2json.pl $< > $@.tmp && mv $@.tmp $@
 
 ###
 ### Documentation.

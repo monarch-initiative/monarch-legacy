@@ -8,7 +8,29 @@ disco2turtle to extract triples from DISCO via Federation services.
 Each YAML configuration file describes how to generate a single
 particular named graph, in turtle format.
 
-## Running the system
+## Basic Concepts
+
+Monarch requires ingested data to be structured/nested
+appropriately. Currently we use DISCO to ingest external resources,
+but this has the disadvantage of flattening everything.
+
+As an interim workaround until we start ingesting structured data
+directly, we have developed a system that maps a NIF view to
+normalized RDF triples. The default serialization format is turtle
+(ttl), which is nice and compact. Each dumped file constitutes an
+individual Named Graph (or OWL ontology, in the OWL translation).
+
+The regurgitated triples can be found here:
+
+ * http://purl.obolibrary.org/obo/upheno/data
+
+These triples can be ingested directly into a triplestore, or for
+Monarch, into our SciGraph instance.
+
+Note that additional post-processing can be done directly on the
+triples using SPARQL rewrites.
+
+## Running disco2turtle
 
 Check out the monarch-app project from github. Currently the
 disco2turtle script relies on some Monarch API calls but these may be
@@ -32,14 +54,71 @@ This is a useful check - OWL sometimes requires additional
 declarations and will often use annotation properties as a default
 where object properties should be used. this should be avoided.
 
+## Scheduled Exports
+
+The following Jenkins job dumps all triples:
+
+ * http://build.berkeleybop.org/job/generate-triples-from-nif/
 
 ## Authoring a configuration
 
-To get started, copy an existing mapping as a template. Always use -map.json.
+To get started, copy an existing mapping as a template. Always name
+the file *-map.yaml
 
-When done, type "make triples" in top level directory.
+(note you should make the yaml file primary, with the json conf
+derived from the yaml)
 
- * mapVersion - increase this if you want to re-dump
+When done, type "make triples" in top level directory, or just make
+your file
+
+### Mapping configuration structure
+
+Note that it is best to understand configurations by looking at existing examples.
+
+The following top-level tags are used:
+
+ * graph - name of the named graph
+ * mapVersion - the version ID for the mapping (not the data)
+ * view - the NIF view ID
+ * prefixes - to define URI prefixes (in addition to those in the monarch JSON-LD configuation)
+ * columns - metadata on each column. Every column mapped should be here
+ * filter (optional) - key-value pairs used to filter the NIF view
+ * mappings - an array of Subject-Predicate-Object templates
+ * objects - additional RDF objects that should be inserted into each graph
+
+The core of the configuration is in the set of mappings. Any given NIF
+view can generate 1 to N triples per row, where N is the number of
+mappings specified.
+
+Here is an example of a mapping from the panther ortholog view:
+
+      subject: genea
+      predicate: orthology_class
+      object: geneb
+
+genea, geneb and orthology_class are all column names in the NIF view,
+so the values of each of these columns will be used to populate a value.
+
+Note that all these should expand to valid IRIs. This can be done at
+different levels. First, this is a well behave view that uses valid
+CURIES. For example, every mouse gene ID is of the form
+MGI:3030900. As MGI is declared in the Monarch JSON LD context file
+(in conf/monarch-context.json) this will be correctly expanded.
+
+Note the value of the orthology_class field is single letter codes
+such as 'P' for paralogy. These are not valid URIs, but we include a
+prefix for each of these that is local to this mapping. In this case:
+
+    P:   http://purl.obolibrary.org/obo/RO_HOM0000011 ## in paralogy relationship with
+
+Additional notes:
+
+mapVersion - increase this if you want to re-dump
+
+### IRI abbreviations and curies
+
+The monarch JSON-LD context is always used for prefix abbreviations
+
 
 ## Future plans
 

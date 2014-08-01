@@ -1,3 +1,5 @@
+view: nlx_84521-1
+status: alpha
 prefixes:
   ## Panther prefixes - need verified
   P:   http://purl.obolibrary.org/obo/RO_HOM0000011 ## in paralogy relationship with
@@ -43,5 +45,4 @@ objects:
   - 
     id: RO:0002162
     rdf:type: owl:ObjectProperty
-view: nlx_84521-1
-status: alpha
+
