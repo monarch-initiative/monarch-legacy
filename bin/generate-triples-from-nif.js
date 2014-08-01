@@ -1,3 +1,6 @@
+// generate-triples-from-nif, AKA "DISCO 2 TURTLE"
+// See:
+//  https://github.com/monarch-initiative/monarch-app/tree/master/conf/rdf-mapping
 load('lib/monarch/api.js');
 var Parser = require('ringo/args').Parser;
 var system = require('system');
@@ -102,13 +105,15 @@ function generateNamedGraph(gconf) {
     var mdFilePath = targetFileBaseName + "-meta.json";
 
     var lastDumpMetadata;
+    var isMapVersionIdentical = false;
+    var isDataCurrent = true;
     if (fs.exists(mdFilePath)) {
         lastDumpMetadata = JSON.parse(fs.read(mdFilePath));
         if (lastDumpMetadata.mapVersion != null) {
             console.info("Comparing last dump version: "+lastDumpMetadata.mapVersion+ " with current: " + gconf.mapVersion);
             if (lastDumpMetadata.mapVersion == gconf.mapVersion) {
                 console.info("Identical - will not redump");
-                return;
+                isMapVersionIdentical = true;
             }
             else {
                 if (lastDumpMetadata.mapVersion > gconf.mapVersion) {
@@ -116,9 +121,35 @@ function generateNamedGraph(gconf) {
                 }
             }
         }
+        var numDays = gconf.lengthOfCycleInDays;
+        if (numDays == null) {
+            numDays = 7;
+        }
+        var lastExportDate = lastDumpMetadata.exportDate;
+        if (lastExportDate == null) {
+            console.info("No last export date - assuming stale, will redump");
+            isDataCurrent = false;
+        }
+        else {
+            var now = new Date(Date.now());
+            var nextExportDate = Date.add(lastExportDate, numDays, 'day');
+            console.log("Next export scheduled on: "+nextExportDate);
+            if (Date.after(now, nextExportDate)) {
+                isDataCurrent = false;
+            }
+            else {
+                isDataCurrent = true;
+            }
+
+        }
     }
     else {
         console.log("Cannot find "+mdFilePath+ " -- assuming this is initial dump");
+    }
+
+    if (isMapVersionIdentical && isDataCurrent) {
+        console.info("Mapping is unchanged AND data is current, so I will skip the dump");
+        return;
     }
 
     // globals ahoy
@@ -244,6 +275,7 @@ function generateNamedGraph(gconf) {
             numSourceRows : numSourceRows,
             numTriplesDumped : numTriplesDumped,
             numAxiomsDumped : numAxiomsDumped,
+            exportDate : new Date(Date.now())
         };
 
     fs.write(mdFilePath, JSON.stringify(mdObj));
