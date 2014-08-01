@@ -93,15 +93,93 @@ Note that it is best to understand configurations by looking at
 existing examples. Let's look at one,
 [panther-orthologs-map.yaml](panther-orthologs-map.yaml) .
 
+The first lines in the file are:
 
-Here is an example of a mapping from the panther ortholog view:
+    graph: panther-orthologs
+    view: nlx_84521-1
+    filter: 
+      tax_id_a: NCBITaxon:9606
 
-      subject: genea
-      predicate: orthology_class
-      object: geneb
+This states the name of the named graph (which is also used the name
+the file) and the ID of the view used as source. Only one view can be
+specified, this is deliberate, there is no need for additional views
+as NGs can be trivially combined.
+
+The filter parameter is optional, and is passed on to the federation
+API call to selectivelt filter rows (here we are just getting human
+homologs).
+
+Next up are the prefixes:
+
+    prefixes:
+      ## Panther prefixes - need verified
+      P:   http://purl.obolibrary.org/obo/RO_HOM0000011 ## in paralogy relationship with
+      O:   http://purl.obolibrary.org/obo/RO_HOM0000037 ## in 1 to many homology relationship with
+      LDO: http://purl.obolibrary.org/obo/RO_HOM0000019 ## in 1 to 1 homology relationship with
+      X: http://purl.obolibrary.org/obo/RO_HOM0000018 ## in xenology relationship with
+      LDX: http://purl.obolibrary.org/obo/RO_HOM0000018 ## in xenology relationship with
+
+To fully grok these you should have a basic understanding of how URI
+prefixing works. Note also that prefixes from the [monarch JSON LD context file](../../conf/monarch-context.json) are automatically used.
+
+These prefixes actually map abbreviations in the panther source to
+complete URIs. This is actually a common and convenient paradigm in
+JSON-LD.
+
+Next up are the column declarations:
+
+    columns: 
+      - 
+        name: tax_id_a
+        prefix: http://purl.obolibrary.org/obo/
+        type: owl:Class
+      - 
+        name: tax_id_b
+        prefix: http://purl.obolibrary.org/obo/
+        type: owl:Class
+      - 
+        name: genea
+        type: owl:Class
+      - 
+        name: geneb
+        type: owl:Class
+      - 
+        name: orthology_class
+        type: owl:ObjectProperty
+
+You don't need to declare every column in the view, just those you are
+mapping with this conf. Only minimal metadata is required for each.
+
+If the input view is badly behaved (does not use valid CURIEs) you may
+need to declare prefixes for the columns here.
+
+The real meat and potatoes of disco2turtle is in the mappings. Each
+entry here is a triple template:
+
+    mappings: 
+      - 
+        object: geneb
+        predicate: orthology_class
+        subject: genea
+      - 
+        object: tax_id_a
+        predicate: RO:0002162
+        subject: genea
+      - 
+        object: tax_id_b
+        predicate: RO:0002162
+        subject: geneb
 
 genea, geneb and orthology_class are all column names in the NIF view,
 so the values of each of these columns will be used to populate a value.
+
+For the second two templates, a hardcoded value is used - here two
+URIs from the relations ontology -- for the relation [in taxon](http://purl.obolibrary.org/obo/RO_0002162) .
+
+These second two templates are not strictly required - we should
+follow a normalized pattern and get metadata about genes from a
+different view. However, a little redundancy is not a problem (but
+might be if data was inconsistent).
 
 Note that all these should expand to valid IRIs. This can be done at
 different levels. First, this is a well behave view that uses valid
@@ -115,9 +193,12 @@ prefix for each of these that is local to this mapping. In this case:
 
     P:   http://purl.obolibrary.org/obo/RO_HOM0000011 ## in paralogy relationship with
 
-Additional notes:
+Further down we see
 
-mapVersion - increase this if you want to re-dump
+    mapVersion: 2014-07-30
+
+This is the version number of the mapping (not the data). If this is
+increased it will force a re-dump.
 
 ### IRI abbreviations and curies
 

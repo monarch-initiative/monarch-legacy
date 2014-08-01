@@ -1,3 +1,4 @@
+graph: panther-orthologs
 view: nlx_84521-1
 status: alpha
 prefixes:
@@ -27,7 +28,6 @@ columns:
     type: owl:ObjectProperty
 filter: 
   tax_id_a: NCBITaxon:9606
-graph: panther-orthologs
 mappings: 
   - 
     object: geneb
