@@ -54,11 +54,15 @@ PMID: http://www.ncbi.nlm.nih.gov/pubmed/
 MedGen: http://purl.obolibrary.org/obo/MedGen_
 
 # MODs
-MGI: "http://identifiers.org/mgd/MGI:"
+#
+# TODO: check these
+MGI: "http://identifiers.org/mgd/mgi:"
 ZFIN: "http://identifiers.org/zfin:"
 FlyBase: "http://identifiers.org/flybase:"
 dictyBase: "http://identifiers.org/dictyBase:"
 WormBase: "http://identifiers.org/WormBase:"
+WB: "http://identifiers.org/WormBase:"
+PomBase: "http://identifiers.org/PomBase:"
 Ensembl: "http://identifiers.org/ensembl:"
 ENSEMBL: "http://identifiers.org/ensembl:"
 GeneID: http://purl.obolibrary.org/obo/NCBIGene_
