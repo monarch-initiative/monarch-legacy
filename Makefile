@@ -44,8 +44,9 @@ target/%.ttl: conf/rdf-mapping/%-map.json conf/monarch-context.json
 target/%.owl: target/%.ttl
 	owltools $< --set-ontology-id http://purl.obolibrary.org/obo/upheno/data/$*.owl -o -f ofn target/$*.owl 
 
-conf/rdf-mapping/%-derived.yaml: conf/rdf-mapping/%.json
-	json2yaml.pl $< > $@.tmp && mv $@.tmp $@
+# TEMP
+#conf/rdf-mapping/%.yaml: conf/rdf-mapping/%.json
+#	json2yaml.pl $< > $@.tmp && mv $@.tmp $@
 
 conf/rdf-mapping/%.json: conf/rdf-mapping/%.yaml
 	yaml2json.pl $< > $@.tmp && mv $@.tmp $@

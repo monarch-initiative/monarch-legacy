@@ -23,7 +23,7 @@
                 {
                     "name" : "con_from_id",
                     "prefix" : "http://uri.neuinfo.org/nif/nifstd/"
-                },
+                }
             ],
             "mappings" : [
 
