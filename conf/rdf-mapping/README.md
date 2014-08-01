@@ -124,7 +124,7 @@ prefixing works. Note also that prefixes from the [monarch JSON LD context file]
 
 These prefixes actually map abbreviations in the panther source to
 complete URIs. This is actually a common and convenient paradigm in
-JSON-LD.
+[JSON-LD](http://json-ld.org/).
 
 Next up are the column declarations:
 
