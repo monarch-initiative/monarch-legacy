@@ -22,7 +22,7 @@ individual Named Graph (or OWL ontology, in the OWL translation).
 
 The regurgitated triples can be found here:
 
- * http://purl.obolibrary.org/obo/upheno/data
+ * http://purl.obolibrary.org/obo/upheno/data/
 
 These triples can be ingested directly into a triplestore, or for
 Monarch, into our SciGraph instance.
@@ -73,7 +73,6 @@ your file
 
 ### Mapping configuration structure
 
-Note that it is best to understand configurations by looking at existing examples.
 
 The following top-level tags are used:
 
@@ -89,6 +88,11 @@ The following top-level tags are used:
 The core of the configuration is in the set of mappings. Any given NIF
 view can generate 1 to N triples per row, where N is the number of
 mappings specified.
+
+Note that it is best to understand configurations by looking at
+existing examples. Let's look at one,
+[panther-orthologs-map.yaml](panther-orthologs-map.yaml) .
+
 
 Here is an example of a mapping from the panther ortholog view:
 
