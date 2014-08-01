@@ -129,6 +129,7 @@ function generateNamedGraph(gconf) {
     var ioFile = targetFileBaseName + ".ttl";
     var stageFile = ioFile + ".tmp";
     var io = fs.open(stageFile, {write: true});
+    console.log("Writing: "+ioFile);
 
     // HEADER
     emitPrefixes(io, gconf.prefixes);
@@ -283,14 +284,27 @@ function normalizeUriRef(iri) {
     var prefix;
     if (pos == -1) {
         prefix = iri;
-        iri = iri + ":";
+        if (prefixMap[prefix] == null) {
+            // no : separator
+            // use base prefix
+            iri = ":" + iri;
+        }
+        else {
+            // the ID field is itself a prefix entry.
+            // This is useful for certain kinds of values; e.g.
+            // a string "P" can be mapped to a full URI (e.g. in panther mapping)
+            iri = iri + ":";
+        }
     }
     else {
         prefix = iri.slice(0,pos);
-    }
-    if (prefixMap[prefix] == null) {
-        console.error("Not a valid prefix: "+prefix);
-        system.exit(1);
+
+        // validate prefix
+        if (prefixMap[prefix] == null) {
+            console.error("Not a valid prefix: "+prefix);
+            system.exit(1);
+        }
+
     }
 
     return iri;
@@ -411,6 +425,9 @@ function emitPrefixes(io, extraPrefixes) {
             prefixMap[k] = pfx;
         }
     }
+    if (prefixMap[""] == null) {
+        prefixMap[""] = ldcontext['@base'];
+    }
     for (var k in prefixMap) {
         var pfx = prefixMap[k];
         var pfxUri = expandUri(pfx);
@@ -420,7 +437,7 @@ function emitPrefixes(io, extraPrefixes) {
 }
 
 function expandUri(ref) {
-    console.log("Expanding: "+ref);
+    //console.log("Expanding: "+ref);
     if (ref.indexOf("http") == 0) {
         return ref;
     }
@@ -435,7 +452,7 @@ function expandUri(ref) {
         system.exit(1);
     }
     var newRef = prefixMap[prefix] + ref.slice(pos+1);
-    console.log("  EXP: "+prefix+" --> "+newRef);
+    //console.log("  EXP: "+prefix+" --> "+newRef);
     return newRef;
     
 }
