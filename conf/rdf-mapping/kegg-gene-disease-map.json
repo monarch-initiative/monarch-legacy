@@ -19,7 +19,7 @@
                 {
                     "name" : "disease_label",
 					"type" : "rdfs:Literal"
-                },
+                }
             ],
             "mappings" : [
 
@@ -42,7 +42,7 @@
                 {"subject" : "disease_id",
                  "predicate" : "rdfs:Label",
                  "object" : "disease_label"
-                },
+                }
 
             ]
         }

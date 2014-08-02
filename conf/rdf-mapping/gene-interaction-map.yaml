@@ -1,0 +1,25 @@
+--- 
+graphs: 
+  - 
+    columns: 
+      - 
+        name: interactor_a_gene_id
+        prefix: http://purl.obolibrary.org/obo/NCBIGene_
+      - 
+        name: interactor_b_gene_id
+        prefix: http://purl.obolibrary.org/obo/NCBIGene_
+    filter: 
+      interactor_a_taxon_id: 9606
+    graph: gene-interactions
+    mapVersion: 2014-05-16
+    mappings: 
+      - 
+        object: interactor_b_gene_id
+        predicate: RO:0002434
+        subject: interactor_a_gene_id
+    objects: 
+      - 
+        id: RO:0002434
+        rdf:type: owl:ObjectProperty
+    view: nif-0000-00432-1
+notes: currently just stores interaction as a graph. In future we will need to store the interaction as an entity

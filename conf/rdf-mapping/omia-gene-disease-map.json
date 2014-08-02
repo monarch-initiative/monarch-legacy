@@ -26,7 +26,7 @@
 					"type" : "rdfs:Literal"
                 },
 				{
-                    "name" : "publication_id",
+                    "name" : "publication_id"
                 },
                 {
                     "name" : "omim_id",
@@ -35,7 +35,7 @@
                 {
                     "name" : "species_specific_phenotype_name",
                     "type" : "rdfs:Literal"
-                },
+                }
             ],
             "mappings" : [
 
@@ -78,7 +78,7 @@
                 {"subject" : "phenotype_id",
                  "predicate" : "putatively_homologous_to",
                  "object" : "omim_id"
-                },
+                }
 
             ]
         }

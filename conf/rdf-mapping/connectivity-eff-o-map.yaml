@@ -1,0 +1,19 @@
+--- 
+graphs: 
+  - 
+    columns: 
+      - 
+        name: v_uuid
+      - 
+        name: con_to_id
+        prefix: http://uri.neuinfo.org/nif/nifstd/
+    filter: 
+      con_to_expr: overlaps
+    graph: brain-connectivity-eff-overlaps
+    mappings: 
+      - 
+        object: con_to_id
+        predicate: http://uri.neuinfo.org/connectivity#efferent_overlaps
+        subject: v_uuid
+    view: nlx_154697-8
+notes: currently just stores interaction as a graph. In future we will need to store the interaction as an entity

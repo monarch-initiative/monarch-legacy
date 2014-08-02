@@ -2807,19 +2807,21 @@ var url = document.URL;
 				}
 				else { selClass = "overviewSelects"; }
 			} 
-			else if (self.options.filteredPhenotypeData.length < 14) 
-			{	selClass = "shortSelects";
-			}
-			else 
+			//else if (self.options.filteredPhenotypeData.length < 14) 
+			//{	selClass = "shortSelects";
+			//}
+			else if (self.options.modelWidth <= self.options.smallestModelWidth)
 			{
-				if(self.options.modelWidth <= self.options.smallestModelWidth)
-				{
 					if (self.options.filteredPhenotypeData.length < 14) 
 					{ selClass = "shortNarrowSelects"; } 
 					else { selClass = "shortSelects";}
-				}
-				else (selClass = "selects");
 			}
+			else if (self.options.filteredPhenotypeData.length < 14)
+			{ 
+				selClass = "shortSelects"; 
+			} 
+			else { selClass = "selects";}
+			
 		
 			var optionhtml = "<div id='selects' class='" + selClass + "'><div id='org_div'><span id='olabel'>Species</span><span id='org_sel'><select id=\'organism\'>";
 

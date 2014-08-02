@@ -1,0 +1,78 @@
+--- 
+forceConfiguration: 
+  federation_services_url: http://beta.neuinfo.org/services/v1/federation/
+graphs: 
+  - 
+    columns: 
+      - 
+        name: v_uuid
+      - 
+        name: clinvar_allele_id
+        prefix: http://monarchinitiative.org/variant/
+      - 
+        name: phenotype_id
+      - 
+        name: assembly
+        type: rdfs:Literal
+      - 
+        name: chromosome
+        type: rdfs:Literal
+      - 
+        name: starting_location
+      - 
+        name: ending_location
+      - 
+        derivedFrom: clinvar_allele_id
+        name: location
+        prefix: http://monarchinitiative.org/variant/location/
+      - 
+        name: clinical_significance
+        type: rdfs:Literal
+      - 
+        list_delimiter: ", "
+        name: sequence_alteration_xrefs
+    graph: clinvar
+    mapVersion: 2014-04-27
+    mappings: 
+      - 
+        object: phenotype_id
+        predicate: RO:0002200
+        subject: clinvar_allele_id
+      - 
+        object: location
+        predicate: faldo:location
+        subject: clinvar_allele_id
+      - 
+        object: starting_location
+        predicate: http://monarchinitiative.org/vocab/begin
+        subject: location
+      - 
+        object: ending_location
+        predicate: http://monarchinitiative.org/vocab/end
+        subject: location
+      - 
+        object: chromosome
+        predicate: http://monarchinitiative.org/vocab/chromosome
+        subject: location
+      - 
+        object: assembly
+        predicate: http://monarchinitiative.org/vocab/assembly
+        subject: location
+      - 
+        object: SIO:association
+        predicate: rdf:type
+        subject: v_uuid
+      - 
+        object: clinvar_allele_id
+        predicate: hasSubject
+        subject: v_uuid
+      - 
+        object: phenotype_id
+        predicate: hasObject
+        subject: v_uuid
+      - 
+        object: clinical_significance
+        predicate: http://monarchinitiative.org/vocab/clinicalSignificance
+        subject: v_uuid
+    view: nlx_151671-3
+status: alpha

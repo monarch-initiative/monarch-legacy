@@ -1,0 +1,42 @@
+--- 
+graphs: 
+  - 
+    columns: 
+      - 
+        name: v_uuid
+      - 
+        name: gene_id
+      - 
+        "@context": {}
+
+        name: disorder_qualifier
+      - 
+        name: phenotype_id
+      - 
+        list_delimiter: ;
+        name: publication_id
+    graph: human-gene-phenotype
+    mapVersion: 2014-04-26
+    mappings: 
+      - 
+        object: phenotype_id
+        predicate: RO:0002200
+        subject: disorder_id
+      - 
+        object: SIO:association
+        predicate: rdf:type
+        subject: v_uuid
+      - 
+        object: disorder_id
+        predicate: hasSubject
+        subject: v_uuid
+      - 
+        object: phenotype_id
+        predicate: hasObject
+        subject: v_uuid
+      - 
+        object: publication_id
+        predicate: dc:source
+        subject: v_uuid
+    view: nif-0000-03216-9
+status: alpha

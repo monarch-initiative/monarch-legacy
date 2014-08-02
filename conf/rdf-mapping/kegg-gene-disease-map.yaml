@@ -1,0 +1,39 @@
+--- 
+graphs: 
+  - 
+    columns: 
+      - 
+        name: v_uuid
+      - 
+        list_delimiter: ","
+        name: gene_ids
+      - 
+        name: disease_id
+      - 
+        name: disease_label
+        type: rdfs:Literal
+    graph: kegg-gene-disease
+    mapVersion: 2014-05-14
+    mappings: 
+      - 
+        object: disease_id
+        predicate: RO:0002200
+        subject: gene_id
+      - 
+        object: SIO:association
+        predicate: rdf:type
+        subject: v_uuid
+      - 
+        object: gene_ids
+        predicate: hasSubject
+        subject: v_uuid
+      - 
+        object: disease_id
+        predicate: hasObject
+        subject: v_uuid
+      - 
+        object: disease_label
+        predicate: rdfs:Label
+        subject: disease_id
+    view: nlx_31015-2
+status: alpha
