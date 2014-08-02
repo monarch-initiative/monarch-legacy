@@ -3,9 +3,9 @@ $(document).ready(function() {
 	var isOpera = !!window.opera || navigator.userAgent.indexOf(' OPR/') >= 0;
     var isChrome = !!window.chrome && !isOpera;  
 
-	var margin = {top: 30, right: 80, bottom: 200, left: 320},
+	var margin = {top: 50, right: 80, bottom: 200, left: 320},
 	width = 800 - margin.left - margin.right,
-	height = 800 - margin.top - margin.bottom;
+	height = 830 - margin.top - margin.bottom;
 
 	var y0 = d3.scale.ordinal()
 	    .rangeRoundBands([0,height], .1);
@@ -20,7 +20,7 @@ $(document).ready(function() {
 
 	var xAxis = d3.svg.axis()
 	    .scale(x)
-	    .orient("bottom")
+	    .orient("top")
 	    .tickFormat(d3.format(".2s"));
 
 	var yAxis = d3.svg.axis()
@@ -56,13 +56,12 @@ $(document).ready(function() {
 	    
 	    var xTicks = svg.append("g")
 	        .attr("class", "x axis")
-	        .attr("transform", "translate(0," + height + ")")
 	        .call(xAxis)
 	        .append("text")
 	        .attr("transform", "rotate(0)")
-	        .attr("y", 6)
-	        .attr("dx", "27em")
-	        .attr("dy", "3em")
+	        .attr("y", -29)
+	        .attr("dx", "20em")
+	        .attr("dy", "0em")
 	        .style("text-anchor", "end")
 	        .text("Number Of Annotations");
 
@@ -84,8 +83,8 @@ $(document).ready(function() {
 	           
 	           tooltip.style("display", "block")
 	           .html(window.location.hostname +"<br/>"+"/phenotype/"+ monarchID)
-	           .style("top",h+margin.bottom-97+"px")
-	           .style("left",width-offset-w-margin.right-165+"px");
+	           .style("top",h+margin.bottom-78+"px")
+	           .style("left",width-offset-w-margin.right-185+"px");
 	     })
 	    .on("mouseout", function(){
 	           d3.select(this).style("fill", "#000000" );
@@ -97,14 +96,52 @@ $(document).ready(function() {
             document.location.href = "/phenotype/" + monarchID;
          })
 	    .style("text-anchor", "end")
-	    .attr("dx", "-.5em");
+	    .attr("dx", "-2em");
 	    
-	    var phenotype = svg.selectAll(".phenotype")
-	        .data(data)
-	        .enter().append("svg:g")
-	        .attr("class", "bar")
-	        .on("click", function(d){
+       var navigate = svg.selectAll(".y.axis");
+       
+       var arrow = navigate.selectAll(".tick.major")
+            .data(data)
+            .append("svg:polygon")
+	        .attr("points","-30,-5 -20,-5 -20,-11 -10,0 -20,10 -20,5 -30,5")
+	        .attr("stroke","#660000")
+            .attr("stroke-width","0")
+            .attr("stroke-linejoin","round")
+		    .attr("fill", function(d){
+		        if (d.subGraph && d.subGraph[0]){ return "#496265";}
+		        else {return "#2C2B33";} })
+		            
+		    .on("mouseover", function(d){
+			           
+			       if (d.subGraph && d.subGraph[0]){
+			        	   
+			           d3.select(this)
+				       .style("fill", "#EA763B");
+			           
+			           var w = this.getBBox().width;
+			           var coords = d3.transform(d3.select(this.parentNode).attr("transform")).translate;
+			           var h = coords[1];
+			           var heightOffset = this.getBBox().y;
+			           
+			           tooltip.style("display", "block")
+			           .html("Click to see subclasses")
+			           .style("top",h+margin.bottom+heightOffset-margin.top-33+"px")
+			           .style("left",width+w-190+"px");
+			           
+			       } 
+			})
+			.on("mouseout", function(){
+			    d3.select(this)
+			        .style("fill",function(d){
+			            if (d.subGraph && d.subGraph[0]){ return "#496265";}
+			            else {return "#2C2B33";} });
+			    tooltip.style("display", "none");
+			 })
+            .on("click", function(d){
 	        	   if (d.subGraph && d.subGraph[0]){
+	        		   
+	        		   tooltip.style("display", "none");
+                       svg.selectAll(".tick.major").remove();
 	        		   
 	    		       transitionSubGraph(d.subGraph,groups,data);
 	    		       
@@ -122,8 +159,14 @@ $(document).ready(function() {
 		   		        .remove();
 	        	   }
 	    	   
-	       })
-	        .attr("transform", function(d) { return "translate(0," + y0(d.phenotype) + ")"; });
+	       });
+       
+	    
+	    var phenotype = svg.selectAll(".phenotype")
+	        .data(data)
+	        .enter().append("svg:g")
+	        .attr("class", "bar")
+	      	.attr("transform", function(d) { return "translate(0," + y0(d.phenotype) + ")"; });
 
 	    var rect = phenotype.selectAll("rect")
 	       .data(function(d) { return d.counts; })
@@ -142,8 +185,9 @@ $(document).ready(function() {
 	           var heightOffset = this.getBBox().y;
 	           
 	           tooltip.style("display", "block")
-	           .html("Counts: "+"<span style='font-weight:bold'>"+d.value+"</span>"+"<br/>"+"Click to see subclasses")
-	           .style("top",h+margin.bottom+heightOffset-margin.top-62+"px")
+	           .html("Counts: "+"<span style='font-weight:bold'>"+d.value+"</span>"+"<br/>"
+	        		+"Organism: "+ "<span style='font-weight:bold'>"+d.name)
+	           .style("top",h+margin.bottom+heightOffset-margin.top-24+"px")
 	           .style("left",width+w-70+"px");
 
 	        })
@@ -214,8 +258,9 @@ $(document).ready(function() {
 	            var heightOffset = this.getBBox().y;
 	 		           
                 tooltip.style("display", "block")
-                .html("Counts: "+"<span style='font-weight:bold'>"+d.value+"</span>"+"<br/>"+"Click to see subclasses")
-                .style("top",h+margin.bottom+heightOffset-margin.top-62+"px")
+                .html("Counts: "+"<span style='font-weight:bold'>"+d.value+"</span>"+"<br/>"
+	        		+"Organism: "+ "<span style='font-weight:bold'>"+d.name)
+                .style("top",h+margin.bottom+heightOffset-margin.top-24+"px")
                 .style("left",width+w-70+"px");
 		       })
 	          .on("mouseout", function(){
@@ -248,8 +293,9 @@ $(document).ready(function() {
 		           var heightOffset = this.getBBox().y;
 		           
 		           tooltip.style("display", "block")
-		           .html("Counts: "+"<span style='font-weight:bold'>"+d.value+"</span>"+"<br/>"+"Click to see subclasses")
-		           .style("top",h+margin.bottom-margin.top+heightOffset-87+"px")
+		           .html("Counts: "+"<span style='font-weight:bold'>"+d.value+"</span>"+"<br/>"
+	        		+"Organism: "+ "<span style='font-weight:bold'>"+d.name)
+		           .style("top",h+margin.bottom-margin.top+heightOffset-48+"px")
 		           .style("left",width+w-100+"px");
 
 		        })
@@ -321,7 +367,7 @@ $(document).ready(function() {
 		    var xStackMax = d3.max(subGraph, function(d) { 
 		        return d3.max(d.counts, function(d) { return d.x1; }); });
 		    
-		    var yTransition = svg.transition().duration(750);
+		    var yTransition = svg.transition().duration(1000);
 		    yTransition.select(".y.axis").call(yAxis);
 		    
 		    svg.select(".y.axis")
@@ -341,8 +387,8 @@ $(document).ready(function() {
 		           
 		           tooltip.style("display", "block")
 		           .html(window.location.hostname +"<br/>"+"/phenotype/"+ monarchID)
-		           .style("top",h+margin.bottom-97+"px")
-		           .style("left",width-offset-w-margin.right-170+"px");
+		           .style("top",h+margin.bottom-78+"px")
+		           .style("left",width-offset-w-margin.right-185+"px");
 		           
 		         })
 		        .on("mouseout", function(){
@@ -355,33 +401,81 @@ $(document).ready(function() {
 	                document.location.href = "/phenotype/" + monarchID;
 	            })
 	            .style("text-anchor", "end")
-	            .attr("dx", "-.5em");
-
-		    var phenotype = svg.selectAll(".phenotype")
-	            .data(subGraph)
-	            .enter().append("svg:g")
-	            .attr("class", "bar")
-	            .on("click", function(d){
-	        	    if (d.subGraph && d.subGraph[0]){
-
-	        	    	transitionSubGraph(d.subGraph,groups,subGraph);
-	        	    	
-	                    phenotype.transition()
-			   		        .duration(750)
-			   		        .attr("y", 60)
-			   		        .style("fill-opacity", 1e-6)
-			   		        .remove();
-		    		       
-		    		    rect.transition()
-			   		        .duration(750)
-			   		        .attr("y", 60)
-			   		        .style("fill-opacity", 1e-6)
-			   		        .remove();
-	        	    }
-	    	   
-	             })
-	             .attr("transform", function(d) {
-	            	 return "translate(0," + y0(d.phenotype) + ")"; });
+	            .attr("dx", "-2em");
+		    
+		       var navigate = svg.selectAll(".y.axis");
+		       
+		       console.log(svg.selectAll(".y.axis"));
+		       console.log(navigate.selectAll(".tick.major"));
+		       
+		      
+		       var arrow = navigate.selectAll(".tick.major")
+                    .data(subGraph)
+		            .append("svg:polygon")
+			        .attr("points","-30,-5 -20,-5 -20,-11 -10,0 -20,10 -20,5 -30,5")
+			        .attr("stroke","#660000")
+		            .attr("stroke-width","0")
+		            .attr("stroke-linejoin","round")
+		            .attr("fill", function(d){
+		            	if (d.subGraph && d.subGraph[0]){ return "#496265";}
+		            	else {return "#2C2B33";} })
+		            
+		            .on("mouseover", function(d){
+			           
+			           if (d.subGraph && d.subGraph[0]){
+			        	   
+			        	   d3.select(this)
+				           .style("fill", "#EA763B");
+			           
+			               var w = this.getBBox().width;
+			               var coords = d3.transform(d3.select(this.parentNode).attr("transform")).translate;
+			               var h = coords[1];
+			               var heightOffset = this.getBBox().y;
+			           
+			               tooltip.style("display", "block")
+			               .html("Click to see subclasses")
+			               .style("top",h+margin.bottom+heightOffset-margin.top-33+"px")
+			               .style("left",width+w-190+"px");
+			           
+			           } 
+			        })
+			       .on("mouseout", function(){
+			           d3.select(this)
+			           .style("fill",function(d){
+			               if (d.subGraph && d.subGraph[0]){ return "#496265";}
+			               else {return "#2C2B33";} });
+			           tooltip.style("display", "none");
+			        })
+		            .on("click", function(d){
+			        	   if (d.subGraph && d.subGraph[0]){
+			        		   
+			        		   tooltip.style("display", "none");
+			        		   svg.selectAll(".tick.major").remove();
+			        		   
+			        		   transitionSubGraph(d.subGraph,groups,subGraph);
+			        		   
+				        	   //remove old bars
+			    		       phenotype.transition()
+				   		        .duration(750)
+				   		        .attr("y", 60)
+				   		        .style("fill-opacity", 1e-6)
+				   		        .remove();
+			        		   
+			        		   rect.transition()
+				   		        .duration(750)
+				   		        .attr("y", 60)
+				   		        .style("fill-opacity", 1e-6)
+				   		        .remove();
+			        	   }
+			    	   
+			       });
+		       
+			    
+			    var phenotype = svg.selectAll(".phenotype")
+			        .data(subGraph)
+			        .enter().append("svg:g")
+			        .attr("class", "bar")
+			      	.attr("transform", function(d) { return "translate(0," + y0(d.phenotype) + ")"; });
 
 		    if ($('input[name=mode]:checked').val()=== 'grouped') {
 			    	  
@@ -389,7 +483,7 @@ $(document).ready(function() {
 		    
 		        var xTransition = svg.transition().duration(1000);
 		        xTransition.select(".x.axis")
-		        .attr("transform", "translate(0," + height + ")")
+		        //.attr("transform", "translate(0," + height + ")")
 		        .call(xAxis);
 		    
 	            rect = phenotype.selectAll("rect")
@@ -409,8 +503,9 @@ $(document).ready(function() {
 	 		           var heightOffset = this.getBBox().y;
 	 		           
 	 		           tooltip.style("display", "block")
-	 		           .html("Counts: "+"<span style='font-weight:bold'>"+d.value+"</span>"+"<br/>"+"Click to see subclasses")
-	 		           .style("top",h+margin.bottom+heightOffset-margin.top-62+"px")
+	 		           .html("Counts: "+"<span style='font-weight:bold'>"+d.value+"</span>"+"<br/>"
+	        		         +"Organism: "+ "<span style='font-weight:bold'>"+d.name)
+	 		           .style("top",h+margin.bottom+heightOffset-margin.top-24+"px")
 	 		           .style("left",width+w-70+"px");
 		            })
 	                .on("mouseout", function(){
@@ -426,7 +521,7 @@ $(document).ready(function() {
 				    
 				var xTransition = svg.transition().duration(1000);
 				xTransition.select(".x.axis")
-				.attr("transform", "translate(0," + height + ")")
+				//.attr("transform", "translate(0," + height + ")")
 				.call(xAxis);
 				    
 			    rect = phenotype.selectAll("rect")
@@ -446,8 +541,9 @@ $(document).ready(function() {
 		               var heightOffset = this.getBBox().y;
 		           
 		               tooltip.style("display", "block")
-		               .html("Counts: "+"<span style='font-weight:bold'>"+d.value+"</span>"+"<br/>"+"Click to see subclasses")
-		               .style("top",h+margin.bottom-margin.top+heightOffset-87+"px")
+		               .html("Counts: "+"<span style='font-weight:bold'>"+d.value+"</span>"+"<br/>"
+	        		    +"Organism: "+ "<span style='font-weight:bold'>"+d.name)
+		               .style("top",h+margin.bottom-margin.top+heightOffset-48+"px")
 		               .style("left",width+w-100+"px");
 
 		        })
@@ -487,8 +583,9 @@ $(document).ready(function() {
 	 		           var heightOffset = this.getBBox().y;
 	 		           
 	 		           tooltip.style("display", "block")
-	 		           .html("Counts: "+"<span style='font-weight:bold'>"+d.value+"</span>"+"<br/>"+"Click to see subclasses")
-	 		           .style("top",h+margin.bottom+heightOffset-margin.top-62+"px")
+	 		           .html("Counts: "+"<span style='font-weight:bold'>"+d.value+"</span>"+"<br/>"
+	        		        +"Organism: "+ "<span style='font-weight:bold'>"+d.name)
+	 		           .style("top",h+margin.bottom+heightOffset-margin.top-24+"px")
 	 		           .style("left",width+w-70+"px");
 		            })
 	                .on("mouseout", function(){
@@ -520,8 +617,9 @@ $(document).ready(function() {
 		           var heightOffset = this.getBBox().y;
 		           
 		           tooltip.style("display", "block")
-		           .html("Counts: "+"<span style='font-weight:bold'>"+d.value+"</span>"+"<br/>"+"Click to see subclasses")
-		           .style("top",h+margin.bottom-margin.top+heightOffset-87+"px")
+		           .html("Counts: "+"<span style='font-weight:bold'>"+d.value+"</span>"+"<br/>"
+	        		+"Organism: "+ "<span style='font-weight:bold'>"+d.name)
+		           .style("top",h+margin.bottom-margin.top+heightOffset-48+"px")
 		           .style("left",width+w-100+"px");
 
 		           })
@@ -536,6 +634,10 @@ $(document).ready(function() {
 		    	if (parents[0]){
 		    	    superclass = parents[0];
 		    	    parents.shift();
+		    	    
+		    	    tooltip.style("display", "none");
+		    	    svg.selectAll(".tick.major").remove();
+		    	    
 		    	    transitionSubGraph(superclass,groups);
     	    	
                     phenotype.transition()
@@ -551,6 +653,7 @@ $(document).ready(function() {
 	   		            .remove();
 		    	}
 		    });
+		    console.log(navigate.selectAll(".tick.major"));
 		}
 	});
 });
