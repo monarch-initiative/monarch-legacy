@@ -207,7 +207,15 @@ function generateNamedGraph(gconf) {
             qopts[apikey] = options.apikey;
         }
         // Federation query
-        var resultObj = engine.fetchDataFromResource(null, gconf.view, null, queryColNames, null, gconf.filter, null, maxLimit, null, qopts);
+        var resultObj;
+        try {
+            resultObj = engine.fetchDataFromResource(null, gconf.view, null, queryColNames, null, gconf.filter, null, maxLimit, null, qopts);
+        }
+        catch (err) {
+            console.err(JSON.stringify(err));
+            system.exit(1);
+        }
+
         numSourceRows = resultObj.resultCount;
         console.info(offset + " / "+ numSourceRows + " rows");
 
