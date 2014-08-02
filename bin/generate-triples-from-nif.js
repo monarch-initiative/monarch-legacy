@@ -108,6 +108,8 @@ function generateNamedGraph(gconf) {
     var mdFilePath = targetFileBaseName + "-meta.json";
     var isFileExists = fs.exists(ioFile);
 
+    console.log("Target: "+ioFile);
+
     var lastDumpMetadata;
     var isMapVersionIdentical = false;
     var isDataCurrent = true;
@@ -443,6 +445,11 @@ function emit(io, sv, pv, ov, mapping) {
         // special case: Object is a list
         //console.log("Emitting multiple triples: "+ov.length);
         ov.forEach(function(x) { emit(io, sv, pv, x, mapping) });
+    }
+    else if (sv.forEach != null) {
+        // special case: Subject is a list
+        //console.log("Emitting multiple triples: "+ov.length);
+        sv.forEach(function(x) { emit(io, x, pv, ov, mapping) });
     }
     else {
         // special case for OWL constructs

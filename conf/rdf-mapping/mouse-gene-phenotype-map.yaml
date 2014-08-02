@@ -1,49 +1,52 @@
---- 
-graphs: 
-  - 
-    columns: 
-      - 
-        name: v_uuid
-      - 
-        list_delimiter: ","
-        name: implicated_gene_ids
-        prefix: http://purl.obolibrary.org/obo/
-      - 
-        name: phenotype_id
-      - 
-        list_delimiter: ;
-        name: publication_id
-    graph: mouse-gene-phenotype
-    mapVersion: 2014-04-26
-    mappings: 
-      - 
-        object: phenotype_id
-        predicate: RO:0002200
-        subject: implicated_gene_ids
-      - 
-        object: SIO:association
-        predicate: rdf:type
-        subject: v_uuid
-      - 
-        object: gene_id
-        predicate: hasSubject
-        subject: v_uuid
-      - 
-        object: phenotype_id
-        predicate: hasObject
-        subject: v_uuid
-      - 
-        object: publication_id
-        predicate: dc:source
-        subject: v_uuid
-      - 
-        notes: TODO
-        object: evidence_code_id
-        predicate: dc:evidence
-        subject: v_uuid
-      - 
-        object: phenotype_description_free_text
-        predicate: dc:description
-        subject: v_uuid
-    view: nif-0000-00096-6
+graph: mouse-gene-phenotype
+mapVersion: 2014-04-26
+view: nif-0000-00096-6
 status: alpha
+prefixes:
+  J:   "http://www.informatics.jax.org/reference/J:"
+columns: 
+  - 
+    name: v_uuid
+  - 
+    name: implicated_gene_ids
+    list_delimiter: ","
+  - 
+    name: phenotype_id
+  - 
+    name: phenotype_description_free_text
+    type: rdfs:Literal
+  - 
+    name: evidence_code_id
+  - 
+    list_delimiter: ";"
+    name: publication_id
+mappings: 
+  - 
+    subject: implicated_gene_ids
+    predicate: RO:0002200
+    object: phenotype_id
+  - 
+    object: Annotation
+    predicate: rdf:type
+    subject: v_uuid
+  - 
+    object: gene_id
+    predicate: hasSubject
+    subject: v_uuid
+  - 
+    object: phenotype_id
+    predicate: hasObject
+    subject: v_uuid
+  - 
+    object: publication_id
+    predicate: dc:source
+    subject: v_uuid
+  - 
+    notes: TODO
+    object: evidence_code_id
+    predicate: dc:evidence
+    subject: v_uuid
+  - 
+    object: phenotype_description_free_text
+    predicate: dc:description
+    subject: v_uuid
