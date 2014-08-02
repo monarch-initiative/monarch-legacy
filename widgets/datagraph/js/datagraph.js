@@ -107,10 +107,7 @@ $(document).ready(function() {
 	        .attr("stroke","#660000")
             .attr("stroke-width","0")
             .attr("stroke-linejoin","round")
-		    .attr("fill", function(d){
-		        if (d.subGraph && d.subGraph[0]){ return "#496265";}
-		        else {return "#2C2B33";} })
-		            
+		    .attr("fill", "#496265")  
 		    .on("mouseover", function(d){
 			           
 			       if (d.subGraph && d.subGraph[0]){
@@ -132,9 +129,7 @@ $(document).ready(function() {
 			})
 			.on("mouseout", function(){
 			    d3.select(this)
-			        .style("fill",function(d){
-			            if (d.subGraph && d.subGraph[0]){ return "#496265";}
-			            else {return "#2C2B33";} });
+			        .style("fill","#496265");
 			    tooltip.style("display", "none");
 			 })
             .on("click", function(d){
@@ -317,6 +312,7 @@ $(document).ready(function() {
 	    function transitionSubGraph(subGraph,groups,parent) {
 	    		    	
 		    var groups = groups;
+		    var isSubClass;
 		    var rect;
 		    if (parent){
 		        parents.unshift(parent);
@@ -404,22 +400,21 @@ $(document).ready(function() {
 	            .attr("dx", "-2em");
 		    
 		       var navigate = svg.selectAll(".y.axis");
-		       
-		       console.log(svg.selectAll(".y.axis"));
-		       console.log(navigate.selectAll(".tick.major"));
-		       
-		      
 		       var arrow = navigate.selectAll(".tick.major")
                     .data(subGraph)
 		            .append("svg:polygon")
+		            .attr("class","arr")
 			        .attr("points","-30,-5 -20,-5 -20,-11 -10,0 -20,10 -20,5 -30,5")
 			        .attr("stroke","#660000")
 		            .attr("stroke-width","0")
 		            .attr("stroke-linejoin","round")
-		            .attr("fill", function(d){
-		            	if (d.subGraph && d.subGraph[0]){ return "#496265";}
-		            	else {return "#2C2B33";} })
-		            
+		            .attr("fill", "#496265")
+		            .attr("display", function(d){
+		            	if (d.subGraph && d.subGraph[0]){
+		            		isSubClass=1; return "initial";
+		                } else {
+		                	return "none";}
+		            })
 		            .on("mouseover", function(d){
 			           
 			           if (d.subGraph && d.subGraph[0]){
@@ -441,9 +436,7 @@ $(document).ready(function() {
 			        })
 			       .on("mouseout", function(){
 			           d3.select(this)
-			           .style("fill",function(d){
-			               if (d.subGraph && d.subGraph[0]){ return "#496265";}
-			               else {return "#2C2B33";} });
+			           .style("fill","#496265");
 			           tooltip.style("display", "none");
 			        })
 		            .on("click", function(d){
@@ -470,7 +463,29 @@ $(document).ready(function() {
 			    	   
 			       });
 		       
-			    
+		       if (!isSubClass){
+		    	   svg.selectAll("polygon.arr").remove();
+		    	   svg.select(".y.axis")
+			           .selectAll("text")
+			           .attr("dx","0")
+		    	       .on("mouseover", function(d){
+			               d3.select(this).style("fill", "#EA763B");
+			               d3.select(this).style("text-decoration", "underline");
+			           
+			               var monarchID = getPhenotype(d,subGraph);
+			               var w = this.getBBox().width;
+			               var coords = d3.transform(d3.select(this.parentNode).attr("transform")).translate;
+			               var h = coords[1];
+			               var offset = 100*(1/w);
+			           
+			               tooltip.style("display", "block")
+			               .html(window.location.hostname +"<br/>"+"/phenotype/"+ monarchID)
+			               .style("top",h+margin.bottom-78+"px")
+			               .style("left",width-offset-w-margin.right-157+"px");
+			           
+			         });
+		       }
+
 			    var phenotype = svg.selectAll(".phenotype")
 			        .data(subGraph)
 			        .enter().append("svg:g")
@@ -653,7 +668,6 @@ $(document).ready(function() {
 	   		            .remove();
 		    	}
 		    });
-		    console.log(navigate.selectAll(".tick.major"));
 		}
 	});
 });
