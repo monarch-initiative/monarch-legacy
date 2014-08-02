@@ -38,6 +38,7 @@
    "phenotype_associations" : "rdfs:seeAlso",
    "ECO" : "http://purl.obolibrary.org/obo/ECO_",
    "Annotation" : "oa:Annotation",
+   "KEGG" : "http://identifiers.org/kegg:",
    "WB" : "http://identifiers.org/WormBase:",
    "rdfs" : "http://www.w3.org/2000/01/rdf-schema#",
    "GeneID" : "http://purl.obolibrary.org/obo/NCBIGene_",
