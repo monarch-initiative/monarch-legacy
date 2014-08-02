@@ -3,6 +3,7 @@
 //  https://github.com/monarch-initiative/monarch-app/tree/master/conf/rdf-mapping
 load('lib/monarch/api.js');
 var Parser = require('ringo/args').Parser;
+var dates = require('ringo/utils/dates');
 var system = require('system');
 var fs = require('fs');
 var httpclient = require('ringo/httpclient');
@@ -102,7 +103,10 @@ function generateNamedGraph(gconf) {
 
     var targetFileBaseName = targetDir + "/" + gconf.graph;
 
+    // write each NG to its own turtle file
+    var ioFile = targetFileBaseName + ".ttl";
     var mdFilePath = targetFileBaseName + "-meta.json";
+    var isFileExists = fs.exists(ioFile);
 
     var lastDumpMetadata;
     var isMapVersionIdentical = false;
@@ -125,16 +129,16 @@ function generateNamedGraph(gconf) {
         if (numDays == null) {
             numDays = 7;
         }
-        var lastExportDate = lastDumpMetadata.exportDate;
-        if (lastExportDate == null) {
+        if (lastDumpMetadata.exportDate == null) {
             console.info("No last export date - assuming stale, will redump");
             isDataCurrent = false;
         }
         else {
+            var lastExportDate = new Date(lastDumpMetadata.exportDate);
             var now = new Date(Date.now());
-            var nextExportDate = Date.add(lastExportDate, numDays, 'day');
+            var nextExportDate = dates.add(lastExportDate, numDays, 'day');
             console.log("Next export scheduled on: "+nextExportDate);
-            if (Date.after(now, nextExportDate)) {
+            if (dates.after(now, nextExportDate)) {
                 isDataCurrent = false;
             }
             else {
@@ -147,7 +151,7 @@ function generateNamedGraph(gconf) {
         console.log("Cannot find "+mdFilePath+ " -- assuming this is initial dump");
     }
 
-    if (isMapVersionIdentical && isDataCurrent) {
+    if (isMapVersionIdentical && isDataCurrent && isFileExists) {
         console.info("Mapping is unchanged AND data is current, so I will skip the dump");
         return;
     }
@@ -156,8 +160,6 @@ function generateNamedGraph(gconf) {
     numTriplesDumped = 0;
     numAxiomsDumped = 0;
 
-    // write each NG to its own turtle file
-    var ioFile = targetFileBaseName + ".ttl";
     var stageFile = ioFile + ".tmp";
     var io = fs.open(stageFile, {write: true});
     console.log("Writing: "+ioFile);
@@ -205,7 +207,15 @@ function generateNamedGraph(gconf) {
             qopts[apikey] = options.apikey;
         }
         // Federation query
-        var resultObj = engine.fetchDataFromResource(null, gconf.view, null, queryColNames, null, gconf.filter, null, maxLimit, null, qopts);
+        var resultObj;
+        try {
+            resultObj = engine.fetchDataFromResource(null, gconf.view, null, queryColNames, null, gconf.filter, null, maxLimit, null, qopts);
+        }
+        catch (err) {
+            console.err(JSON.stringify(err));
+            system.exit(1);
+        }
+
         numSourceRows = resultObj.resultCount;
         console.info(offset + " / "+ numSourceRows + " rows");
 
@@ -258,8 +268,13 @@ function generateNamedGraph(gconf) {
                 var sv = mapColumn(mapping.subject, r, cmap);
                 var pv = mapColumn(mapping.predicate, r, cmap);
                 var ov = mapColumn(mapping.object, r, cmap);
-                
-                emit(io, sv, pv, ov, mapping);
+
+                if (sv == null || pv == null || ov == null) {
+                    console.warn(" Triple [ "+sv+" "+pv+" "+ov+" ] has null value in "+r.v_uuid);
+                }
+                else {
+                    emit(io, sv, pv, ov, mapping);
+                }
                 
             }
         }
@@ -306,6 +321,12 @@ function normalizeUriRef(iri) {
     if (iri.match(/\s/) != null) {
         console.warn("Whitespace in "+iri);
         iri = iri.replace(/\s/g, "");
+    }
+
+    if (iri == "") {
+        console.warn("Empty IRI");
+        //system.exit(1);
+        return null;
     }
 
     if (iri.indexOf("http") == 0) {
@@ -390,6 +411,7 @@ function mapColumnValue(ix, v, cmap, gconf) {
             return null;
         }
         if (vl.length > 1) {
+            vl = vl.map(function(e) { return e.replace(/^\s+/g,"");});
             return vl.map(function(e) { return mapColumnValue(ix, e, cmap, gconf) });
         }
         // carry on, just use v, as it is a singleton list

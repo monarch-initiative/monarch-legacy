@@ -37,6 +37,7 @@ DOID: http://purl.obolibrary.org/obo/DOID_
 ECO: http://purl.obolibrary.org/obo/ECO_
 GENO: http://purl.obolibrary.org/obo/GENO_
 HP: http://purl.obolibrary.org/obo/HP_
+DECIPHER: http://purl.obolibrary.org/obo/DECIPHER_
 MESH: http://purl.obolibrary.org/obo/MESH_
 UMLS: http://purl.obolibrary.org/obo/UMLS_
 MP: http://purl.obolibrary.org/obo/MP_
@@ -70,6 +71,8 @@ WB: "http://identifiers.org/WormBase:"
 PomBase: "http://identifiers.org/PomBase:"
 Ensembl: "http://identifiers.org/ensembl:"
 ENSEMBL: "http://identifiers.org/ensembl:"
+KEGG: "http://identifiers.org/kegg:"
+
 GeneID: http://purl.obolibrary.org/obo/NCBIGene_
 
 ##
