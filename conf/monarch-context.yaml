@@ -38,10 +38,14 @@ ECO: http://purl.obolibrary.org/obo/ECO_
 GENO: http://purl.obolibrary.org/obo/GENO_
 HP: http://purl.obolibrary.org/obo/HP_
 MESH: http://purl.obolibrary.org/obo/MESH_
+UMLS: http://purl.obolibrary.org/obo/UMLS_
 MP: http://purl.obolibrary.org/obo/MP_
 NCBIGene: http://purl.obolibrary.org/obo/NCBIGene_
 OMIM: http://purl.obolibrary.org/obo/OMIM_
-ORPHANET: http://purl.obolibrary.org/obo/ORDO_
+ORPHANET: http://purl.obolibrary.org/obo/ORPHANET_
+Orphanet: http://purl.obolibrary.org/obo/ORPHANET_
+SNOMED_CT: http://purl.obolibrary.org/obo/SNOMED_
+ClinVar: http://purl.obolibrary.org/obo/ClinVar_
 RO: http://purl.obolibrary.org/obo/RO_
 SO: http://purl.obolibrary.org/obo/SO_
 ZP: http://purl.obolibrary.org/obo/ZP_
@@ -52,6 +56,7 @@ SIO: http://semanticscience.org/resource/SIO_
 # Resources
 PMID: http://www.ncbi.nlm.nih.gov/pubmed/
 MedGen: http://purl.obolibrary.org/obo/MedGen_
+GeneReviews: http://www.ncbi.nlm.nih.gov/books/
 
 # MODs
 #

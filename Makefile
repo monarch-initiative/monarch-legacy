@@ -34,7 +34,7 @@ production-test-%:
 nif-production-url-test:
 	$(RINGO_BIN) tests/urltester.js -s production -c vocabulary,ontoquest,federation,monarch
 
-triples:
+triples: conf/monarch-context.json
 	$(RINGO_BIN) bin/generate-triples-from-nif.js -c conf/server_config_production.json conf/rdf-mapping/*-map.json && ./bin/target-ttl-to-owl.sh
 
 SERVERCONF := production
