@@ -467,7 +467,23 @@ $(document).ready(function() {
 		    	   svg.selectAll("polygon.arr").remove();
 		    	   svg.select(".y.axis")
 			           .selectAll("text")
-			           .attr("dx","0");
+			           .attr("dx","0")
+		    	       .on("mouseover", function(d){
+			               d3.select(this).style("fill", "#EA763B");
+			               d3.select(this).style("text-decoration", "underline");
+			           
+			               var monarchID = getPhenotype(d,subGraph);
+			               var w = this.getBBox().width;
+			               var coords = d3.transform(d3.select(this.parentNode).attr("transform")).translate;
+			               var h = coords[1];
+			               var offset = 100*(1/w);
+			           
+			               tooltip.style("display", "block")
+			               .html(window.location.hostname +"<br/>"+"/phenotype/"+ monarchID)
+			               .style("top",h+margin.bottom-78+"px")
+			               .style("left",width-offset-w-margin.right-157+"px");
+			           
+			         });
 		       }
 
 			    var phenotype = svg.selectAll(".phenotype")
