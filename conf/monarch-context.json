@@ -32,6 +32,7 @@
    "reference_locus" : "GENO:0000036",
    "has_part" : "BFO:0000051",
    "gene_locus" : "GENO:0000014",
+   "DESCIPHER" : "http://purl.obolibrary.org/obo/DECIPHER_",
    "effective_genotype" : "GENO:0000525",
    "Association" : "SIO:000897",
    "resource" : "monarch:nif-resource",
