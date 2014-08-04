@@ -1,0 +1,85 @@
+{
+   "objects" : [
+      {
+         "rdf:type" : "owl:ObjectProperty",
+         "id" : "RO:0002162"
+      }
+   ],
+   "mappings" : [
+      {
+         "object" : "Annotation",
+         "predicate" : "rdf:type",
+         "subject" : "v_uuid"
+      },
+      {
+         "object" : "omim_id",
+         "predicate" : "hasSubject",
+         "subject" : "v_uuid"
+      },
+      {
+         "object" : "model_id",
+         "predicate" : "hasObject",
+         "subject" : "v_uuid"
+      },
+      {
+         "object" : "linkage_description",
+         "predicate" : "dc:description",
+         "subject" : "v_uuid"
+      },
+      {
+         "object" : "clean_model_symbol",
+         "predicate" : "rdfs:label",
+         "subject" : "model_id"
+      },
+      {
+         "object" : "taxon_id",
+         "predicate" : "RO:0002162",
+         "subject" : "model_id"
+      }
+   ],
+   "status" : "alpha",
+   "view" : "nlx_152525-2",
+   "columns" : [
+      {
+         "name" : "v_uuid"
+      },
+      {
+         "name" : "omim_id"
+      },
+      {
+         "@context" : {},
+         "name" : "disease_model_type"
+      },
+      {
+         "@context" : {},
+         "name" : "model_type"
+      },
+      {
+         "@context" : {},
+         "name" : "model_subtype"
+      },
+      {
+         "name" : "linkage_description",
+         "type" : "rdfs:Literal"
+      },
+      {
+         "name" : "model_id"
+      },
+      {
+         "name" : "clean_model_symbol",
+         "type" : "rdfs:Literal"
+      },
+      {
+         "name" : "taxon_id",
+         "type" : "owl:Class",
+         "prefix" : "http://purl.obolibrary.org/obo/NCBITaxon_"
+      },
+      {
+         "name" : "mode_type",
+         "type" : "rdfs:Literal"
+      }
+   ],
+   "mapVersion" : "2014-05-16",
+   "graph" : "disease-model"
+}
+
