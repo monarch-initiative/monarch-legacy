@@ -22,9 +22,9 @@ columns:
   - 
     name: ending_location
   - 
+    name: location
     derivedFrom: sequence_alteration_id
-    name: locationOf
-    prefix: http://monarchinitiative.org/variant/location/
+    prefix: http://monarchinitiative.org/variant/locationOf/
   - 
     name: clinical_significance
     type: rdfs:Literal
@@ -37,9 +37,9 @@ mappings:
     predicate: RO:0002200
     subject: sequence_alteration_id
   - 
-    object: location
-    predicate: faldo:location
     subject: sequence_alteration_id
+    predicate: faldo:location
+    object: location
   - 
     object: starting_location
     predicate: http://monarchinitiative.org/vocab/begin

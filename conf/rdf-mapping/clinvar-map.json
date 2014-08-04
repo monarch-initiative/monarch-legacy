@@ -79,8 +79,8 @@
       },
       {
          "derivedFrom" : "sequence_alteration_id",
-         "name" : "locationOf",
-         "prefix" : "http://monarchinitiative.org/variant/location/"
+         "name" : "location",
+         "prefix" : "http://monarchinitiative.org/variant/locationOf/"
       },
       {
          "name" : "clinical_significance",

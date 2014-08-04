@@ -34,11 +34,16 @@ production-test-%:
 nif-production-url-test:
 	$(RINGO_BIN) tests/urltester.js -s production -c vocabulary,ontoquest,federation,monarch
 
-triples: conf/monarch-context.json
-	$(RINGO_BIN) bin/generate-triples-from-nif.js -c conf/server_config_production.json conf/rdf-mapping/*-map.json && ./bin/target-ttl-to-owl.sh
+D2T_YAMLS = $(wildcard conf/rdf-mapping/*.yaml)
+D2T_JSONS = $(D2T_YAMLS:.yaml=.json)
+
+d2t: $(D2T_JSONS)
+
+triples: conf/monarch-context.jsonld d2t
+	$(RINGO_BIN) bin/generate-triples-from-nif.js -c conf/server_config_production.json $(D2T_ARGS) conf/rdf-mapping/*-map.json && ./bin/target-ttl-to-owl.sh
 
 SERVERCONF := production
-target/%.ttl: conf/rdf-mapping/%-map.json conf/monarch-context.json
+target/%.ttl: conf/rdf-mapping/%-map.json conf/monarch-context.jsonld
 	$(RINGO_BIN) bin/generate-triples-from-nif.js -c conf/server_config_$(SERVERCONF).json $<
 
 target/%.owl: target/%.ttl
@@ -51,7 +56,7 @@ target/%.owl: target/%.ttl
 conf/rdf-mapping/%.json: conf/rdf-mapping/%.yaml
 	yaml2json.pl $< > $@.tmp && mv $@.tmp $@
 
-conf/monarch-context.json: conf/monarch-context.yaml
+conf/monarch-context.jsonld: conf/monarch-context.yaml
 	yaml2json.pl $< > $@.tmp && mv $@.tmp $@
 
 ###

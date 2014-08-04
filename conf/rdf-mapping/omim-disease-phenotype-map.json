@@ -1,59 +1,62 @@
 {
-    "status" : "alpha",
-    "graphs": [
-        {
-            "graph" : "omim-disease-phenotype",
-            "view" : "nlx_151835-1",
-            "mapVersion" : "2014-05-16",
-            "objects" : [
-                {
-                    "id" : "RO:0002200",
-                    "rdf:type" : "owl:ObjectProperty"
-                }
-            ],
-            "columns" : [
-                {
-                    "name" : "v_uuid"
-                },
-                {
-                    "name" : "disorder_id"
-                },
-                {
-                    "name" : "disorder_qualifier",
-                    "@context" : {
-                    }
-                },
-                {
-                    "name" : "phenotype_id"
-                },
-                {
-                    "name" : "publication_id",
-                    "list_delimiter" : ";"
-                }
-            ],
-            "mappings" : [
-
-                {"subject" : "disorder_id",
-                 "predicate" : "RO:0002200",
-                 "object" : "phenotype_id"
-                },
-                {"subject" : "v_uuid",
-                 "predicate" : "rdf:type",
-                 "object" : "SIO:association"
-                },
-                {"subject" : "v_uuid",
-                 "predicate" : "hasSubject",
-                 "object" : "disorder_id"
-                },
-                {"subject" : "v_uuid",
-                 "predicate" : "hasObject",
-                 "object" : "phenotype_id"
-                },
-                {"subject" : "v_uuid",
-                 "predicate" : "dc:source",
-                 "object" : "publication_id"
-                }
-            ]
-        }
-   ]
+   "graphs" : [
+      {
+         "objects" : [
+            {
+               "rdf:type" : "owl:ObjectProperty",
+               "id" : "RO:0002200"
+            }
+         ],
+         "view" : "nlx_151835-1",
+         "mappings" : [
+            {
+               "object" : "phenotype_id",
+               "predicate" : "RO:0002200",
+               "subject" : "disorder_id"
+            },
+            {
+               "object" : "SIO:association",
+               "predicate" : "rdf:type",
+               "subject" : "v_uuid"
+            },
+            {
+               "object" : "disorder_id",
+               "predicate" : "hasSubject",
+               "subject" : "v_uuid"
+            },
+            {
+               "object" : "phenotype_id",
+               "predicate" : "hasObject",
+               "subject" : "v_uuid"
+            },
+            {
+               "object" : "publication_id",
+               "predicate" : "dc:source",
+               "subject" : "v_uuid"
+            }
+         ],
+         "columns" : [
+            {
+               "name" : "v_uuid"
+            },
+            {
+               "name" : "disorder_id"
+            },
+            {
+               "@context" : {},
+               "name" : "disorder_qualifier"
+            },
+            {
+               "name" : "phenotype_id"
+            },
+            {
+               "name" : "publication_id",
+               "list_delimiter" : ";"
+            }
+         ],
+         "mapVersion" : "2014-05-16",
+         "graph" : "omim-disease-phenotype"
+      }
+   ],
+   "status" : "alpha"
 }

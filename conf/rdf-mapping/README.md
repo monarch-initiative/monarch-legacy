@@ -200,10 +200,21 @@ Further down we see
 This is the version number of the mapping (not the data). If this is
 increased it will force a re-dump.
 
+## Tips
+
 ### IRI abbreviations and curies
 
 The monarch JSON-LD context is always used for prefix abbreviations
 
+### Always set type for non-ID columns
+
+The default assumption is that a column contains an ID that cab be expanded to a URI.
+
+This means in the 'columns' section, you only need to specify column names.
+
+However, if the column contains a non-ID you should set the type. A
+good choice is rdfs:Literal. However, if you are sure that a column
+contains a numeric type, go ahead and use the xsd type
 
 ## Future plans
 

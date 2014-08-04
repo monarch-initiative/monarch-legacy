@@ -1,5 +1,4 @@
 {
-   "status" : "alpha",
    "mappings" : [
       {
          "object" : "geneb",
@@ -20,6 +19,7 @@
    "filter" : {
       "tax_id_a" : "NCBITaxon:9606"
    },
+   "status" : "alpha",
    "objects" : [
       {
          "rdf:type" : "owl:ObjectProperty",
@@ -51,6 +51,13 @@
          "type" : "owl:ObjectProperty"
       }
    ],
+   "metadata" : {
+      "source" : "http://pantherdb.org",
+      "title" : "Monarch ingest of Panther Orthologs (human subset)",
+      "type" : "void:Dataset",
+      "publisher" : "http://monarchinitiative.org",
+      "description" : "Monarch ingest of Panther Orthologs"
+   },
    "prefixes" : {
       "O" : "http://purl.obolibrary.org/obo/RO_HOM0000037",
       "X" : "http://purl.obolibrary.org/obo/RO_HOM0000018",

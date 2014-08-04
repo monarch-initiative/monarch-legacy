@@ -1,31 +1,31 @@
---- 
-"@": {}
-
-graphs: 
+graph: disorder
+view: nlx_151835-1
+metadata:
+  type: void:Dataset
+  title: "Monarch Disorder Catalog"
+  publisher: http://monarchinitiative.org
+columns: 
   - 
-    columns: 
-      - 
-        name: disorder_id
-        type: owl:Class
-      - 
-        name: disorder_name
-        type: rdfs:Literal
-      - 
-        list_delimiter: ","
-        name: synonyms
-        type: rdfs:Literal
-    graph: disorders
-    mappings: 
-      - 
-        object: disorder_name
-        predicate: rdfs:label
-        subject: disorder_id
-      - 
-        object: DOID:630
-        predicate: rdfs:subClassOf
-        subject: disorder_id
-      - 
-        object: synonyms
-        predicate: oboInOwl:hasRelatedSynonym
-        subject: disorder_id
-    view: nlx_151835-1
+    name: disorder_id
+    type: owl:Class
+  - 
+    name: disorder_name
+    type: rdfs:Literal
+  - 
+    list_delimiter: ","
+    name: synonyms
+    type: rdfs:Literal
+mappings: 
+  - 
+    object: disorder_name
+    predicate: rdfs:label
+    subject: disorder_id
+  - 
+    object: DOID:630
+    predicate: rdfs:subClassOf
+    subject: disorder_id
+  - 
+    object: synonyms
+    predicate: oboInOwl:hasRelatedSynonym
+    subject: disorder_id
+

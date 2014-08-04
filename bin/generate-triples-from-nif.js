@@ -24,13 +24,17 @@ function main(args) {
 
     parser.addOption("g","graph","ID", "E.g. ncbi-gene");
     parser.addOption("m","mappings","JSONFile", "E.g. conf/rdf-mapping/ncbi-gene-map.json");
-    parser.addOption("C","context","JSONFile", "E.g. conf/context.json");
+    parser.addOption("C","context","JSONFile", "E.g. conf/context.jsonld");
     parser.addOption("c","config","JSONFile", "E.g. conf/production.json");
     parser.addOption("d","targetDir","Directory", "E.g. target");
+    parser.addOption("s","skip","GraphNamePattern", "E.g. disease. Performs text match");
+    parser.addOption("l","limit","Number", "Default 1000");
     parser.addOption("k","apikey","ID", "NIF/SciCrunch API Key");
     parser.addOption('h', 'help', null, 'Display help');
 
     options = parser.parse(args);
+
+    var skipGraphsMatching = options.skip;
 
     if (options.help) {
 	print(parser.help());
@@ -43,6 +47,10 @@ function main(args) {
         engine.setConfiguration( JSON.parse(fs.read(options.config)) );
     }
 
+    if (options.limit) {
+        maxLimit = options.limit;
+    }
+
     targetDir = options.targetDir != null ? options.targetDir : "target";
 
 
@@ -50,7 +58,7 @@ function main(args) {
         ldcontext = JSON.parse(fs.read(options.config));
     }
     else {
-        ldcontext = JSON.parse(fs.read("conf/monarch-context.json"));
+        ldcontext = JSON.parse(fs.read("conf/monarch-context.jsonld"));
     }
     
     var gsets = [];
@@ -86,6 +94,12 @@ function main(args) {
         for (var k in graphs) {
             var graphconf = graphs[k];
             if (options.graph == null || graphconf.graph == options.graph) {
+                if (skipGraphsMatching) {
+                    if (graphconf.graph.match(skipGraphsMatching)) {
+                        console.log("Skipping: "+graphconf.graph);
+                        continue;
+                    }
+                }
                 generateNamedGraph(graphconf);
             }
         }
@@ -106,6 +120,7 @@ function generateNamedGraph(gconf) {
     // write each NG to its own turtle file
     var ioFile = targetFileBaseName + ".ttl";
     var mdFilePath = targetFileBaseName + "-meta.json";
+    var voidFilePath = targetFileBaseName + "-void.jsonld";
     var isFileExists = fs.exists(ioFile);
 
     console.log("Target: "+ioFile);
@@ -122,10 +137,15 @@ function generateNamedGraph(gconf) {
                 isMapVersionIdentical = true;
             }
             else {
+                console.info("mapVersion is different");
                 if (lastDumpMetadata.mapVersion > gconf.mapVersion) {
                     console.warn("Kind of weird; lastDumpMetadata.mapVersion > gconf.mapVersion");
                 }
             }
+        }
+        if (!gconf.mapVersion) {
+            console.log("Configuration doe not have a mapVersion tag - assuming constant");
+            isMapVersionIdentical = true;
         }
         var numDays = gconf.lengthOfCycleInDays;
         if (numDays == null) {
@@ -141,9 +161,11 @@ function generateNamedGraph(gconf) {
             var nextExportDate = dates.add(lastExportDate, numDays, 'day');
             console.log("Next export scheduled on: "+nextExportDate);
             if (dates.after(now, nextExportDate)) {
+                console.log("data is stale");
                 isDataCurrent = false;
             }
             else {
+                console.log("data is current");
                 isDataCurrent = true;
             }
 
@@ -154,7 +176,7 @@ function generateNamedGraph(gconf) {
     }
 
     if (isMapVersionIdentical && isDataCurrent && isFileExists) {
-        console.info("Mapping is unchanged AND data is current, so I will skip the dump");
+        console.info("Mapping is unchanged AND data is current, so I will skip the dump for "+ioFile);
         return;
     }
 
@@ -214,7 +236,7 @@ function generateNamedGraph(gconf) {
             resultObj = engine.fetchDataFromResource(null, gconf.view, null, queryColNames, null, gconf.filter, null, maxLimit, null, qopts);
         }
         catch (err) {
-            console.err(JSON.stringify(err));
+            console.error(JSON.stringify(err));
             system.exit(1);
         }
 
@@ -233,6 +255,7 @@ function generateNamedGraph(gconf) {
         var results = resultObj.results;
         for (var k in results) {
             var r = results[k];
+            //console.log(JSON.stringify(r));
 
             derivedColNames.forEach( function(c) {
                 var dc = cmap[c].derivedFrom;
@@ -294,8 +317,28 @@ function generateNamedGraph(gconf) {
             numAxiomsDumped : numAxiomsDumped,
             exportDate : new Date(Date.now())
         };
-
     fs.write(mdFilePath, JSON.stringify(mdObj));
+
+
+    // VOID: todo
+    var voidDataset = gconf.metadata;
+    if (voidDataset == null) {
+        voidDataset = {};
+    };
+    if (!voidDataset.type) {
+        voidDataset.type = "void:Dataset";
+    };
+    if (!voidDataset.title) {
+        voidDataset.type = gconf.graph;
+    };
+    var exportDate = new Date(Date.now());
+    voidDataset.id = "http://purl.obolibrary.org/obo/upheno/data/"+gconf.graph;
+    voidDataset["dcterms:created"] = exportDate;
+    voidDataset["dcterms:nifVew"] = gconf.view; // TODO
+    voidDataset["void:triples"] = numTriplesDumped;
+    voidDataset["@context"] = ldcontext['@context'];
+
+    fs.write(voidFilePath, JSON.stringify(voidDataset));
 }
 
 // Arguments:
@@ -392,7 +435,6 @@ function mapColumnValue(ix, v, cmap, gconf) {
         return null;
     }
 
-
     // if column metadata includes a prefix, then prepend this
     if (cobj.prefix != null) {
         return normalizeUriRef(cobj.prefix + v);
@@ -418,6 +460,7 @@ function mapColumnValue(ix, v, cmap, gconf) {
         }
         // carry on, just use v, as it is a singleton list
     }
+    //console.log("TYPE of '"+v+"' is "+type+"."+JSON.stringify(cobj));
     if (type == 'rdfs:Literal') {
         return engine.quote(v);
     }
@@ -468,8 +511,9 @@ function emit(io, sv, pv, ov, mapping) {
 
 // TODO: we can reduce the size of the triple dump by making use of these
 function emitPrefixes(io, extraPrefixes) {
-    for (var k in ldcontext) {
-        var pfx = ldcontext[k];
+    var ldmap = ldcontext["@context"];
+    for (var k in ldmap) {
+        var pfx = ldmap[k];
         if (k.indexOf('@') == 0) {
             continue;
         }
@@ -487,7 +531,7 @@ function emitPrefixes(io, extraPrefixes) {
         }
     }
     if (prefixMap[""] == null) {
-        prefixMap[""] = ldcontext['@base'];
+        prefixMap[""] = ldmap['@base'];
     }
     for (var k in prefixMap) {
         var pfx = prefixMap[k];
