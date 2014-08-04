@@ -274,7 +274,14 @@ $(document).ready(function() {
 		    rect.transition()
 		        .duration(500)
 		        .delay(function(d, i) { return i * 10; })
-		        .attr("x", function(d) { return x(d.x0); })
+		        .attr("x", function(d){
+		        	if (d.x0 == 0){
+		        	    if (isChrome){return 1;}
+		        	    else {return d.x0;}
+		        	} else { 
+		        		return x(d.x0);
+		        	}
+		        })
 			    .attr("width", function(d) { return x(d.x1) - x(d.x0); })
 			    .transition()
 			    .attr("height", y0.rangeBand())
@@ -542,7 +549,14 @@ $(document).ready(function() {
 			    rect = phenotype.selectAll("rect")
 			        .data(function(d) { return d.counts; })
 			        .enter().append("rect")
-			        .attr("x", function(d) { return x(d.x0); })
+			        .attr("x", function(d){
+		        	    if (d.x0 == 0){
+		        	        if (isChrome){return 1;}
+		        	        else {return d.x0;}
+		        	    } else { 
+		        		    return x(d.x0);
+		        	    }
+                    })
 			        .attr("width", function(d) { return x(d.x1) - x(d.x0); })
 			        .attr("height", y0.rangeBand())
 			        .attr("y", function(d) { return y1(d.name); })
@@ -618,7 +632,14 @@ $(document).ready(function() {
 		    	  rect.transition()
 			        .duration(500)
 			        .delay(function(d, i) { return i * 10; })
-			        .attr("x", function(d) { return x(d.x0); })
+                    .attr("x", function(d){
+		        	    if (d.x0 == 0){
+		        	        if (isChrome){return 1;}
+		        	        else {return d.x0;}
+		        	    } else { 
+		        		    return x(d.x0);
+		        	    }
+		            })
 				    .attr("width", function(d) { return x(d.x1) - x(d.x0); })
 				    .transition()
 				    .attr("height", y0.rangeBand())
