@@ -1,11 +1,35 @@
 $(document).ready(function() {
 	
-	var isOpera = !!window.opera || navigator.userAgent.indexOf(' OPR/') >= 0;
-    var isChrome = !!window.chrome && !isOpera;  
-
-	var margin = {top: 50, right: 80, bottom: 200, left: 320},
+    //Chart margins
+	var margin = {top: 40, right: 80, bottom: 200, left: 320},
 	width = 800 - margin.left - margin.right,
-	height = 830 - margin.top - margin.bottom;
+	height = 820 - margin.top - margin.bottom;
+	
+	//Tooltip offsets (HARDCODE)
+	var yAxOffset = 0;
+	var arrowOffset = 44;
+	var barOffset = 0;
+	
+	//Arrow dimensions
+	var arrowDim = "-30,-5 -20,-5 -20,-11 -10,0 -20,10 -20,5 -30,5";
+	
+	//Breadcrumb area dimensions
+	var bcWidth = 550;
+	var bcHeight = 40;
+	
+	//Breadcrumb dimensions
+	var firstCr = "0,0 0,40 100,40 115,20 100,0";
+	var trailCrumbs = "0,0 15,20 0,40 100,40 115,20 100,0";
+	var bread = {width:115, height: 40, offset:100};
+	var breadSpace = 1;
+	
+	//Array to store crumbs
+	var breadcrumbs = [];
+	var level = 0;
+	
+	//Check browser
+	var isOpera = !!window.opera || navigator.userAgent.indexOf(' OPR/') >= 0;
+    var isChrome = !!window.chrome && !isOpera; 
 
 	var y0 = d3.scale.ordinal()
 	    .rangeRoundBands([0,height], .1);
@@ -14,7 +38,8 @@ $(document).ready(function() {
 
 	var x = d3.scale.linear()
 	    .range([0, width]);
-
+    
+	//Bar colors
 	var color = d3.scale.ordinal()
 	    .range(["#44A293","#A4D6D4"]);
 
@@ -26,13 +51,76 @@ $(document).ready(function() {
 	var yAxis = d3.svg.axis()
 	    .scale(y0)
 	    .orient("left");
-	    //.tickFormat(d3.format(".2s"));
 
 	var svg = d3.select("#graph").append("svg")
 	    .attr("width", width + margin.left + margin.right)
 	    .attr("height", height + margin.top + margin.bottom)
 	    .append("g")
 	    .attr("transform", "translate(" + margin.left + "," + margin.top + ")");
+	
+	
+	var crumbSVG = d3.select(".breadcrumbs")
+        .append("svg")
+        .attr("height",bcHeight)
+        .attr("width",bcWidth);
+	
+	/*var firstCrumb = d3.select(".breadcrumbs")
+	    .append("svg")
+	    .attr("height",bcHeight)
+	    .attr("width",bcWidth)
+	    .append("g")  
+	    .attr("transform", "translate(0,0)")
+	    //.attr("transform", "translate(" + index*(bread.offset) + ", 0)")
+	    .append("svg:polygon")
+	    .attr("class","firstCrumb")
+        .attr("points",firstCr)
+		.attr("fill", "#496265");
+	
+	
+	d3.select(".breadcrumbs").select("g")
+	    .append("text")
+	    .each(function (d) {
+            var arr = "Phenotypic Abnormality".split(" ");
+            if (arr != undefined) {
+                for (i = 0; i < arr.length; i++) {
+                    d3.select(this).append("tspan")
+                        .text(arr[i])
+                        .attr("x", (bread.width)*.45)
+                        .attr("y", (bread.height)*.42)
+                        .attr("dy", i ? "1.2em" : 0)
+                        .attr("dx", i ? ".05em" : 0)
+                        .attr("text-anchor", "middle")
+                        .attr("class", "tspan" + i);
+                }
+            }
+        });
+	    .attr("x", (bread.width)*.5)
+        .attr("y", (bread.height)*.5)
+        .attr("dy", "0.35em")
+        .attr("text-anchor", "middle")
+		.text("Phenotypic Abnormality");
+	
+	var firstCrumb2 = d3.select(".breadcrumbs")
+    .select("svg")
+    .append("g")  
+    .attr("transform", "translate(" + (breadSpace+bread.offset) + ", 0)")
+    //.attr("transform", "translate(" + index*(bread.offset) + ", 0)")
+    .append("svg:polygon")
+    .attr("class","firstCrumb1")
+    .attr("points",trailCrumbs)
+	.attr("fill", "#496265");
+	
+	
+	d3.select(".breadcrumbs")
+    .select("svg")
+    .append("g")  
+    .attr("transform", "translate(" + 4*(bread.offset+1) + ", 0)")
+    //.attr("transform", "translate(" + index*(bread.offset) + ", 0)")
+    .append("svg:polygon")
+    .attr("class","firstCrumb1")
+    .attr("points",trailCrumbs)
+	.attr("fill", "#496265");*/
+	
 	
 	var tooltip = d3.select("#graph")
 	    .append("div")
@@ -42,7 +130,10 @@ $(document).ready(function() {
 
 	    var groups = json.groups;
 	    var data = json.dataGraph;
-	    var parents = [];	    
+	    var parents = [];
+	    
+	    //Make first breadcrumb
+	    makeBreadcrumb(level,data);
 
 	    y0.domain(data.map(function(d) { return d.phenotype; }));
 	    y1.domain(groups).rangeRoundBands([0, y0.rangeBand()]);
@@ -103,7 +194,7 @@ $(document).ready(function() {
        var arrow = navigate.selectAll(".tick.major")
             .data(data)
             .append("svg:polygon")
-	        .attr("points","-30,-5 -20,-5 -20,-11 -10,0 -20,10 -20,5 -30,5")
+	        .attr("points",arrowDim)
 	        .attr("stroke","#660000")
             .attr("stroke-width","0")
             .attr("stroke-linejoin","round")
@@ -122,7 +213,7 @@ $(document).ready(function() {
 			           
 			           tooltip.style("display", "block")
 			           .html("Click to see subclasses")
-			           .style("top",h+margin.bottom+heightOffset-margin.top-33+"px")
+			           .style("top",h+margin.bottom+heightOffset-margin.top-arrowOffset+"px")
 			           .style("left",width+w-190+"px");
 			           
 			       } 
@@ -152,6 +243,8 @@ $(document).ready(function() {
 		   		        .attr("y", 60)
 		   		        .style("fill-opacity", 1e-6)
 		   		        .remove();
+	        		   level++;
+	        		   makeBreadcrumb(level,d);
 	        	   }
 	    	   
 	       });
@@ -194,9 +287,7 @@ $(document).ready(function() {
 	        })
 	       .style("fill", function(d) { return color(d.name); });
 	    
-	    //rect.transition()
-	    //.delay(function(d, i) { return i * 100; });
-	    
+	    //Set legend
 	    var legend = svg.selectAll(".legend")
 	       .data(groups.slice())
 	       .enter().append("g")
@@ -226,7 +317,6 @@ $(document).ready(function() {
 	    	  transitionStacked();
 	      }
 	    }
-	    
 	    
 	    function transitionGrouped() {
 	    	
@@ -316,6 +406,86 @@ $(document).ready(function() {
      	   }
         }
 		
+		function makeBreadcrumb(index,data) {
+			
+			var subGraph = data.subGraph;
+			var phenotype = data.phenotype;
+			if (!phenotype){
+				phenotype = "Phenotypic Abnormality";
+			}
+			var phenLen = phenotype.length;
+			var fontSize = "default";
+			if (phenLen > 25){
+				fontSize = ((1/phenLen)*400);
+			}
+			
+            d3.select(".breadcrumbs")
+		        .select("svg")
+		        .append("g")  
+		        .attr("class",("level"+level))
+		        .attr("transform", "translate(" + index*(bread.offset+breadSpace) + ", 0)")
+		        .append("svg:polygon")
+	            .attr("points",index ? trailCrumbs : firstCr)
+			    .attr("fill", "#496265")
+			    .on("mouseover", function(){
+	               d3.select(this)
+	               .style("fill", "#EA763B");
+			    })
+			    .on("mouseout", function(){
+	               d3.select(this)
+	               .style("fill", "#496265");
+			    })
+			    .on("click", function(){
+			           //TODO
+				});
+		
+		    d3.select((".level"+level))
+		        .append("text")
+		        .attr("font-size", fontSize)
+		        .each(function () {
+		        	var words = phenotype.split(/\s|-|\//);
+		        	var len = words.length;
+	                if (words != undefined) {
+	                    for (i = 0;i < len; i++) {
+	                    	if (words[i].length > 12){
+	                    		fontSize = ((1/words[i].length)*175);
+	                    	}
+	                        d3.select(this).append("tspan")
+	                            .text(words[i])
+	                            .attr("font-size",fontSize)
+	                            .attr("x", (bread.width)*.45)
+	                            .attr("y", (bread.height)*.42)
+	                            .attr("dy", function(){
+	                            	if (i == 0 && len == 1){
+	                            		return ".6em";
+	                                } else if (i == 0){
+	                            		return "0";
+	                            	} else {
+	                            		return "1.2em";
+	                            	}
+	                             })
+	                            .attr("dx", i ? ".35em" : ".30em")
+	                            .attr("text-anchor", "middle")
+	                            .attr("class", "tspan" + i);
+	                    }
+	                }
+	            })
+	            .on("mouseover", function(){
+		               d3.select(this.parentNode)
+		               .select("polygon")
+		               .style("fill", "#EA763B");
+				})
+				.on("mouseout", function(){
+			           d3.select(this.parentNode)
+			           .select("polygon")
+		               .style("fill", "#496265");
+				})
+				.on("click", function(){
+			           //TODO
+				});
+			
+		}
+		
 	    function transitionSubGraph(subGraph,groups,parent) {
 	    		    	
 		    var groups = groups;
@@ -323,24 +493,6 @@ $(document).ready(function() {
 		    var rect;
 		    if (parent){
 		        parents.unshift(parent);
-		    }
-		    
-		    if (parents[0]){
-		    	 $('.superbtn').css('background-color', '#44A293');
-		    	 $('.superbtn').mouseenter(function () {
-		    		  $(this).css("background-color", "#38787B");
-                 });
-		    	 $('.superbtn').mouseleave(function () {
-		    		  $(this).css('background-color', '#44A293');
-                 });
-		    } else {
-		    	$('.superbtn').css('background-color', '#2C2B33');
-		    	$('.superbtn').mouseenter(function () {
-		    		  $(this).css("background-color", "#2C2B33");
-               });
-		    	 $('.superbtn').mouseleave(function () {
-		    		  $(this).css('background-color', '#2C2B33');
-               });
 		    }
 		    
 		    if (subGraph.length < 10){
@@ -411,7 +563,7 @@ $(document).ready(function() {
                     .data(subGraph)
 		            .append("svg:polygon")
 		            .attr("class","arr")
-			        .attr("points","-30,-5 -20,-5 -20,-11 -10,0 -20,10 -20,5 -30,5")
+			        .attr("points",arrowDim)
 			        .attr("stroke","#660000")
 		            .attr("stroke-width","0")
 		            .attr("stroke-linejoin","round")
@@ -436,7 +588,7 @@ $(document).ready(function() {
 			           
 			               tooltip.style("display", "block")
 			               .html("Click to see subclasses")
-			               .style("top",h+margin.bottom+heightOffset-margin.top-33+"px")
+			               .style("top",h+margin.bottom+heightOffset-margin.top-arrowOffset+"px")
 			               .style("left",width+w-190+"px");
 			           
 			           } 
@@ -466,6 +618,9 @@ $(document).ready(function() {
 				   		        .attr("y", 60)
 				   		        .style("fill-opacity", 1e-6)
 				   		        .remove();
+			        		   
+			        		   level++;
+			        		   makeBreadcrumb(level,d);
 			        	   }
 			    	   
 			       });
@@ -665,7 +820,7 @@ $(document).ready(function() {
 		      }
 		    }
 		    
-		    d3.select(".superbtn").on("click", function(){
+		    /*d3.select(".superbtn").on("click", function(){
 		    	
 		    	if (parents[0]){
 		    	    superclass = parents[0];
@@ -688,7 +843,8 @@ $(document).ready(function() {
 	   		            .style("fill-opacity", 1e-6)
 	   		            .remove();
 		    	}
-		    });
+		    });*/
 		}
+	    
 	});
 });

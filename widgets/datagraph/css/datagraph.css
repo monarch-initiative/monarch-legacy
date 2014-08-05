@@ -14,7 +14,7 @@
     padding: 10px 0px 0px 0px;
 }
 .title{
-    margin-left: 400px;
+    margin-left: 360px;
     padding-bottom: 10px;
     font-size : 20px;
     font-weight: bold;
@@ -26,18 +26,26 @@
   shape-rendering: crispEdges;
 }
 .interaction{
-   margin-left: 380px;
-   margin-top: 10px;
+   margin-left: 120px;
+   margin-top: 6px;
    position: relative;
 }
 .interaction li{
     list-style-type: none;
 }
+.breadcrumbs{
+   display:inline;
+   position: relative;
+}
+.breadcrumbs text{
+   fill:white;
+   cursor:default;
+}
 form {
    display: inline;
-   margin-left: 50px;
+   float:right;
    margin-top: 5px;
-   position:absolute;
+   position:relative;
 }
 .bartip {
     position: absolute;
