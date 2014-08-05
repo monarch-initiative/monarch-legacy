@@ -4718,7 +4718,7 @@
       "url_syntax" : "https://www.ncbi.nlm.nih.gov/clinvar/?term=[example_id]",
       "datatype" : null
    },
-   "BioGRID" : {
+   "biogrid" : {
       "object" : "Identifier",
       "uri_prefix" : null,
       "name" : "BioGRID",
@@ -4733,12 +4733,12 @@
       "url_syntax" : "http://thebiogrid.org/[example_id]",
       "datatype" : null
    },
-   "CTD" : {
+   "ctd" : {
       "object" : "Identifier",
       "uri_prefix" : null,
       "name" : "CTD",
       "url_example" : "http://ctdbase.org/detail.go?type=chem&acc=D002104",
-      "database" : "CTD",
+      "database" : "Comparative Toxicogenomics Database",
       "description" : "BioGRID is an online interaction repository with data compiled through comprehensive curation efforts.",
       "example_id" : "D002104",
       "generic_url" : "http://www.ctdbase.org",
@@ -4748,6 +4748,19 @@
       "url_syntax" : "http://ctdbase.org/basicQuery.go?bqCat=all&bq=[example_id]",
       "datatype" : null
    },
-
-
+   "omia" : {
+      "object" : "Identifier",
+      "uri_prefix" : null,
+      "name" : "Online Mendelian Inheritance in Animals",
+      "url_example" : "http://omia.angis.org.au/OMIA000901/9615/",
+      "database" : "Online Mendelian Inheritance in Animals",
+      "description" : "BioGRID is an online interaction repository with data compiled through comprehensive curation efforts.",
+      "example_id" : "OMIA000901",
+      "generic_url" : "http://omia.angis.org.au/",
+      "fullname" : "Online Mendelian Inheritance in Animals",
+      "id" : null,
+      "abbreviation" : "OMIA",
+      "url_syntax" : "http://omia.angis.org.au/[example_id]",
+      "datatype" : null
+   },
 }

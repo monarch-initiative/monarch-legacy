@@ -1,0 +1,69 @@
+{
+   "graphs" : [
+      {
+         "objects" : [
+            {
+               "rdf:type" : "owl:ObjectProperty",
+               "id" : "RO:0002162"
+            }
+         ],
+         "view" : "nlx_84521-1",
+         "mappings" : [
+            {
+               "object" : "geneb",
+               "predicate" : "orthology_class",
+               "subject" : "genea"
+            },
+            {
+               "object" : "tax_id_a",
+               "predicate" : "RO:0002162",
+               "subject" : "genea"
+            },
+            {
+               "object" : "tax_id_b",
+               "predicate" : "RO:0002162",
+               "subject" : "geneb"
+            },
+            {
+               "object" : "orthology_class_label",
+               "predicate" : "rdfs:label",
+               "subject" : "orthology_class"
+            }
+         ],
+         "filter" : {
+            "tax_id_a" : 9606
+         },
+         "columns" : [
+            {
+               "name" : "tax_id_a",
+               "type" : "owl:Class",
+               "prefix" : "http://purl.obolibrary.org/obo/NCBITaxon_"
+            },
+            {
+               "name" : "tax_id_b",
+               "type" : "owl:Class",
+               "prefix" : "http://purl.obolibrary.org/obo/NCBITaxon_"
+            },
+            {
+               "name" : "genea",
+               "type" : "owl:Class"
+            },
+            {
+               "name" : "geneb",
+               "type" : "owl:Class"
+            },
+            {
+               "name" : "orthology_class",
+               "prefix" : "http://purl.obolibrary.org/obo/PORTHO_"
+            },
+            {
+               "name" : "orthology_class_label",
+               "type" : "rdfs:Literal"
+            }
+         ],
+         "mapVersion" : "2014-05-16",
+         "graph" : "panther-orthologs"
+      }
+   ],
+   "status" : "alpha"
+}
