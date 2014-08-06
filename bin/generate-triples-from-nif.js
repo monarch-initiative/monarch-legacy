@@ -347,7 +347,7 @@ function generateNamedGraph(gconf) {
     voidDataset["void:triples"] = numTriplesDumped;
     voidDataset["@context"] = ldcontext['@context'];
 
-    fs.write(voidFilePath, JSON.stringify(voidDataset));
+    fs.write(voidFilePath, JSON.stringify(voidDataset, null, ' '));
 }
 
 // Arguments:
