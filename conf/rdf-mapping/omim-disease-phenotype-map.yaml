@@ -1,46 +1,51 @@
---- 
-graphs: 
-  - 
-    columns: 
-      - 
-        name: v_uuid
-      - 
-        name: disorder_id
-      - 
-        "@context": {}
-
-        name: disorder_qualifier
-      - 
-        name: phenotype_id
-      - 
-        list_delimiter: ;
-        name: publication_id
-    graph: omim-disease-phenotype
-    mapVersion: 2014-05-16
-    mappings: 
-      - 
-        object: phenotype_id
-        predicate: RO:0002200
-        subject: disorder_id
-      - 
-        object: SIO:association
-        predicate: rdf:type
-        subject: v_uuid
-      - 
-        object: disorder_id
-        predicate: hasSubject
-        subject: v_uuid
-      - 
-        object: phenotype_id
-        predicate: hasObject
-        subject: v_uuid
-      - 
-        object: publication_id
-        predicate: dc:source
-        subject: v_uuid
-    objects: 
-      - 
-        id: RO:0002200
-        rdf:type: owl:ObjectProperty
-    view: nlx_151835-1
+view: nlx_151835-1
 status: alpha
+graph: omim-disease-phenotype
+mapVersion: 2014-05-16
+prefixUnmappable: http://monarchinitiative.org/unmapped/
+prefixes:
+  ## TODO: FIX
+  PMS: http://www.ncbi.nlm.nih.gov/pubmed/
+  ## TODO: FIX
+  IM: http://purl.obolibrary.org/obo/OMIM_
+  ## E.g. HPO:sdoelken 
+  HPO: http://human-phenotype-ontology.org/
+columns: 
+  - 
+    name: v_uuid
+  - 
+    name: disorder_id
+  - 
+    "@context": {}
+
+    name: disorder_qualifier
+  - 
+    name: phenotype_id
+  - 
+    list_delimiter: ;
+    name: publication_id
+mappings: 
+  - 
+    object: phenotype_id
+    predicate: RO:0002200
+    subject: disorder_id
+  - 
+    object: SIO:association
+    predicate: rdf:type
+    subject: v_uuid
+  - 
+    object: disorder_id
+    predicate: hasSubject
+    subject: v_uuid
+  - 
+    object: phenotype_id
+    predicate: hasObject
+    subject: v_uuid
+  - 
+    object: publication_id
+    predicate: dc:source
+    subject: v_uuid
+objects: 
+  - 
+    id: RO:0002200
+    rdf:type: owl:ObjectProperty

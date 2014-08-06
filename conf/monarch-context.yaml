@@ -46,6 +46,7 @@
   MP: http://purl.obolibrary.org/obo/MP_
   NCBIGene: http://purl.obolibrary.org/obo/NCBIGene_
   OMIM: http://purl.obolibrary.org/obo/OMIM_
+  MIM: http://purl.obolibrary.org/obo/OMIM_
   OMIA: http://purl.obolibrary.org/obo/OMIA_
   OMIABreed: http://purl.obolibrary.org/obo/OMIA_
   OMIAPub: http://purl.obolibrary.org/obo/OMIAPub_
@@ -62,7 +63,8 @@
   SIO: http://semanticscience.org/resource/SIO_
   
   # Resources
-  ISBN-13: http://monarch-initiative.org/publications/
+  ISBN-13: "http://monarch-initiative.org/publications/ISBN:"
+  ISBN-10: "http://monarch-initiative.org/publications/ISBN:"
   PMID: http://www.ncbi.nlm.nih.gov/pubmed/
   MedGen: http://purl.obolibrary.org/obo/MedGen_
   GeneReviews: http://www.ncbi.nlm.nih.gov/books/

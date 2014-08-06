@@ -223,6 +223,7 @@ function generateNamedGraph(gconf) {
     var seenMap = {};
     var nDupes = 0;
     var numSourceRows;
+    var numNullWarnings = 0;
 
     while (!done) {
 
@@ -236,12 +237,14 @@ function generateNamedGraph(gconf) {
             resultObj = engine.fetchDataFromResource(null, gconf.view, null, queryColNames, null, gconf.filter, null, maxLimit, null, qopts);
         }
         catch (err) {
-            console.error(JSON.stringify(err));
+            console.error("Failed on call to "+gconf.view);
+            var stm = require("ringo/logging").getScriptStack(err);
+            console.error(stm);
             system.exit(1);
         }
 
         numSourceRows = resultObj.resultCount;
-        console.info(offset + " / "+ numSourceRows + " rows");
+        console.info(offset + " / "+ numSourceRows + " row from "+gconf.graph);
 
 
         offset += maxLimit;
@@ -295,7 +298,14 @@ function generateNamedGraph(gconf) {
                 var ov = mapColumn(mapping.object, r, cmap);
 
                 if (sv == null || pv == null || ov == null) {
-                    console.warn(" Triple [ "+sv+" "+pv+" "+ov+" ] has null value in "+r.v_uuid);
+                    numNullWarnings++;
+                    if (numNullWarnings < 10) {
+                        console.warn(" Triple [ "+sv+" "+pv+" "+ov+" ] has null value in "+r.v_uuid);
+                        if (numNullWarnings == 9) {
+                            console.warn("Will not warn about this again");
+                        }
+
+                    }
                 }
                 else {
                     emit(io, sv, pv, ov, mapping);
@@ -369,7 +379,7 @@ function normalizeUriRef(iri) {
     }
 
     if (iri == "") {
-        console.warn("Empty IRI");
+        //console.warn("Empty IRI");
         //system.exit(1);
         return null;
     }
@@ -377,7 +387,7 @@ function normalizeUriRef(iri) {
     if (iri.indexOf("http") == 0) {
         return "<"+iri+">";
     }
-
+    
     var pos = iri.indexOf(":");
     var prefix;
     if (pos == -1) {
@@ -399,7 +409,11 @@ function normalizeUriRef(iri) {
 
         // validate prefix
         if (prefixMap[prefix] == null) {
-            console.error("Not a valid prefix: "+prefix);
+            if (prefixMap[prefix.toUpperCase()] != null) {
+                console.log("Replacing "+prefix+" with upper case form");
+                return iri.replace(prefix, prefix.toUpperCase());
+            }
+            console.error("Not a valid prefix: "+prefix+" in IRI: "+iri);
             system.exit(1);
         }
 
