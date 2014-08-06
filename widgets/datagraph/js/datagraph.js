@@ -372,12 +372,13 @@ $(document).ready(function() {
 		    
 		    parents.splice(index,(parents.length));		
 		    
+		    //Deactivate top level crumb
 		    d3.select(".poly"+index)
 			  .attr("fill", "#496265")
 			  .on("mouseover", function(){})
 		      .on("mouseout", function(){
                  d3.select(this)
-                 .style("fill", "#496265");
+                 .attr("fill", "#496265");
 		      })
 		      .on("click", function(){});
 			
@@ -386,7 +387,7 @@ $(document).ready(function() {
 			  .on("mouseout", function(){
 		           d3.select(this.parentNode)
 		           .select("polygon")
-	               .style("fill", "#496265");
+	               .attr("fill", "#496265");
 			  })
 			  .on("click", function(){});
 	    }
@@ -409,11 +410,11 @@ $(document).ready(function() {
 				  .attr("fill", "#026CBA")
 				  .on("mouseover", function(){
 	                  d3.select(this)
-	                  .style("fill", "#EA763B");
+	                  .attr("fill", "#EA763B");
 			      })
 			      .on("mouseout", function(){
 	                  d3.select(this)
-	                  .style("fill", "#026CBA");
+	                  .attr("fill", "#026CBA");
 			      })
 			      .on("click", function(){
 			          pickUpBreadcrumb(lastIndex,groups,rect,phenoDiv);
@@ -423,12 +424,12 @@ $(document).ready(function() {
 				  .on("mouseover", function(){
 		               d3.select(this.parentNode)
 		               .select("polygon")
-		               .style("fill", "#EA763B");
+		               .attr("fill", "#EA763B");
 				  })
 				  .on("mouseout", function(){
 			           d3.select(this.parentNode)
 			           .select("polygon")
-		               .style("fill", "#026CBA");
+		               .attr("fill", "#026CBA");
 				  })
 				  .on("click", function(){
 				        pickUpBreadcrumb(lastIndex,groups,rect,phenoDiv);
