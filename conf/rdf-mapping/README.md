@@ -120,7 +120,7 @@ Next up are the prefixes:
       LDX: http://purl.obolibrary.org/obo/RO_HOM0000018 ## in xenology relationship with
 
 To fully grok these you should have a basic understanding of how URI
-prefixing works. Note also that prefixes from the [monarch JSON LD context file](../../conf/monarch-context.json) are automatically used.
+prefixing works. Note also that prefixes from the [monarch JSON LD context file](../../conf/monarch-context.jsonld) are automatically used.
 
 These prefixes actually map abbreviations in the panther source to
 complete URIs. This is actually a common and convenient paradigm in
@@ -185,7 +185,7 @@ Note that all these should expand to valid IRIs. This can be done at
 different levels. First, this is a well behave view that uses valid
 CURIES. For example, every mouse gene ID is of the form
 MGI:3030900. As MGI is declared in the Monarch JSON LD context file
-(in conf/monarch-context.json) this will be correctly expanded.
+(in conf/monarch-context.jsonld) this will be correctly expanded.
 
 Note the value of the orthology_class field is single letter codes
 such as 'P' for paralogy. These are not valid URIs, but we include a

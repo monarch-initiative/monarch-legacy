@@ -329,7 +329,6 @@ function generateNamedGraph(gconf) {
         };
     fs.write(mdFilePath, JSON.stringify(mdObj));
 
-
     // VOID: todo
     var voidDataset = gconf.metadata;
     if (voidDataset == null) {
