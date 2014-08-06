@@ -1,9 +1,11 @@
 graph: disorder
 view: nlx_151835-1
+mapVersion: 2014-08-06
 metadata:
   type: void:Dataset
   title: "Monarch Disorder Catalog"
   publisher: http://monarchinitiative.org
+  description: "Basic metadata on disorders, from OMIM, DECIPHER, etc"
 columns: 
   - 
     name: disorder_id

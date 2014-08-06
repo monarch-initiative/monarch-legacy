@@ -30,13 +30,11 @@
    "columns" : [
       {
          "name" : "tax_id_a",
-         "type" : "owl:Class",
-         "prefix" : "http://purl.obolibrary.org/obo/"
+         "type" : "owl:Class"
       },
       {
          "name" : "tax_id_b",
-         "type" : "owl:Class",
-         "prefix" : "http://purl.obolibrary.org/obo/"
+         "type" : "owl:Class"
       },
       {
          "name" : "genea",
@@ -60,6 +58,7 @@
    },
    "prefixes" : {
       "O" : "http://purl.obolibrary.org/obo/RO_HOM0000037",
+      "EnsemblGenome" : "http://identifiers.org/ensembl:",
       "X" : "http://purl.obolibrary.org/obo/RO_HOM0000018",
       "LDO" : "http://purl.obolibrary.org/obo/RO_HOM0000019",
       "P" : "http://purl.obolibrary.org/obo/RO_HOM0000011",

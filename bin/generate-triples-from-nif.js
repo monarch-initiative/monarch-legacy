@@ -194,12 +194,12 @@ function generateNamedGraph(gconf) {
     // OBJECTS
     if (gconf.objects != null) {
         gconf.objects.forEach(function(obj) {
-            var id = normalizeUriRef(obj.id);
+            var id = normalizeUriRef(obj.id, gconf);
             for (var k in obj) {
                 if (k == 'id') {
                 }
                 else {
-                    emit(io, id, normalizeUriRef(k), normalizeUriRef(obj[k]));
+                    emit(io, id, normalizeUriRef(k), normalizeUriRef(obj[k], gconf));
                 }
             }
         });
@@ -223,6 +223,7 @@ function generateNamedGraph(gconf) {
     var seenMap = {};
     var nDupes = 0;
     var numSourceRows;
+    var numNullWarnings = 0;
 
     while (!done) {
 
@@ -236,12 +237,14 @@ function generateNamedGraph(gconf) {
             resultObj = engine.fetchDataFromResource(null, gconf.view, null, queryColNames, null, gconf.filter, null, maxLimit, null, qopts);
         }
         catch (err) {
-            console.error(JSON.stringify(err));
+            console.error("Failed on call to "+gconf.view);
+            var stm = require("ringo/logging").getScriptStack(err);
+            console.error(stm);
             system.exit(1);
         }
 
         numSourceRows = resultObj.resultCount;
-        console.info(offset + " / "+ numSourceRows + " rows");
+        console.info(offset + " / "+ numSourceRows + " row from "+gconf.graph);
 
 
         offset += maxLimit;
@@ -295,7 +298,14 @@ function generateNamedGraph(gconf) {
                 var ov = mapColumn(mapping.object, r, cmap);
 
                 if (sv == null || pv == null || ov == null) {
-                    console.warn(" Triple [ "+sv+" "+pv+" "+ov+" ] has null value in "+r.v_uuid);
+                    numNullWarnings++;
+                    if (numNullWarnings < 10) {
+                        console.warn(" Triple [ "+sv+" "+pv+" "+ov+" ] has null value in "+r.v_uuid);
+                        if (numNullWarnings == 9) {
+                            console.warn("Will not warn about this again");
+                        }
+
+                    }
                 }
                 else {
                     emit(io, sv, pv, ov, mapping);
@@ -319,7 +329,6 @@ function generateNamedGraph(gconf) {
         };
     fs.write(mdFilePath, JSON.stringify(mdObj));
 
-
     // VOID: todo
     var voidDataset = gconf.metadata;
     if (voidDataset == null) {
@@ -338,7 +347,7 @@ function generateNamedGraph(gconf) {
     voidDataset["void:triples"] = numTriplesDumped;
     voidDataset["@context"] = ldcontext['@context'];
 
-    fs.write(voidFilePath, JSON.stringify(voidDataset));
+    fs.write(voidFilePath, JSON.stringify(voidDataset, null, ' '));
 }
 
 // Arguments:
@@ -354,14 +363,14 @@ function mapColumn(ix, row, cmap, gconf) {
     }
     else {
         // ix is a fixed RDF resource
-        return normalizeUriRef(ix);
+        return normalizeUriRef(ix, gconf);
     }
 }
 
 // Expand CURIE or shortform ID to IRI.
 // E.g. GO:1234 --> http://purl.obolibrary.org/obo/GO_1234
 //
-function normalizeUriRef(iri) {
+function normalizeUriRef(iri, gconf) {
     // remove whitespace
     if (iri.match(/\s/) != null) {
         console.warn("Whitespace in "+iri);
@@ -369,7 +378,7 @@ function normalizeUriRef(iri) {
     }
 
     if (iri == "") {
-        console.warn("Empty IRI");
+        //console.warn("Empty IRI");
         //system.exit(1);
         return null;
     }
@@ -377,7 +386,7 @@ function normalizeUriRef(iri) {
     if (iri.indexOf("http") == 0) {
         return "<"+iri+">";
     }
-
+    
     var pos = iri.indexOf(":");
     var prefix;
     if (pos == -1) {
@@ -399,7 +408,11 @@ function normalizeUriRef(iri) {
 
         // validate prefix
         if (prefixMap[prefix] == null) {
-            console.error("Not a valid prefix: "+prefix);
+            console.error("Not a valid prefix: "+prefix+" in IRI: "+iri+" graph:"+ gconf ? gconf.graph : "-");
+            if (prefixMap[prefix.toUpperCase()] != null) {
+                console.log("Replacing "+prefix+" with upper case form");
+                return iri.replace(prefix, prefix.toUpperCase());
+            }
             system.exit(1);
         }
 
@@ -437,7 +450,7 @@ function mapColumnValue(ix, v, cmap, gconf) {
 
     // if column metadata includes a prefix, then prepend this
     if (cobj.prefix != null) {
-        return normalizeUriRef(cobj.prefix + v);
+        return normalizeUriRef(cobj.prefix + v, gconf);
     }
     
     // Remove this code when this is fixed: https://support.crbs.ucsd.edu/browse/NIF-10646
@@ -464,7 +477,7 @@ function mapColumnValue(ix, v, cmap, gconf) {
     if (type == 'rdfs:Literal') {
         return engine.quote(v);
     }
-    return normalizeUriRef(v);
+    return normalizeUriRef(v, gconf);
 }
 
 

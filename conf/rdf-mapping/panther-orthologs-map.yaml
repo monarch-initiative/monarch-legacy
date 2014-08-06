@@ -14,14 +14,16 @@ prefixes:
   LDO: http://purl.obolibrary.org/obo/RO_HOM0000019 ## in 1 to 1 homology relationship with
   X: http://purl.obolibrary.org/obo/RO_HOM0000018 ## in xenology relationship with
   LDX: http://purl.obolibrary.org/obo/RO_HOM0000018 ## in xenology relationship with
+
+  ## TODO: fix
+  EnsemblGenome: "http://identifiers.org/ensembl:"
+
 columns: 
   - 
     name: tax_id_a
-    prefix: http://purl.obolibrary.org/obo/
     type: owl:Class
   - 
     name: tax_id_b
-    prefix: http://purl.obolibrary.org/obo/
     type: owl:Class
   - 
     name: genea

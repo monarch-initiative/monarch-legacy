@@ -35,7 +35,9 @@
    "metadata" : {
       "title" : "Monarch Disorder Catalog",
       "type" : "void:Dataset",
+      "description" : "Basic metadata on disorders, from OMIM, DECIPHER, etc",
       "publisher" : "http://monarchinitiative.org"
    },
+   "mapVersion" : "2014-08-06",
    "graph" : "disorder"
 }
