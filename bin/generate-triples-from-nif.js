@@ -194,12 +194,12 @@ function generateNamedGraph(gconf) {
     // OBJECTS
     if (gconf.objects != null) {
         gconf.objects.forEach(function(obj) {
-            var id = normalizeUriRef(obj.id);
+            var id = normalizeUriRef(obj.id, gconf);
             for (var k in obj) {
                 if (k == 'id') {
                 }
                 else {
-                    emit(io, id, normalizeUriRef(k), normalizeUriRef(obj[k]));
+                    emit(io, id, normalizeUriRef(k), normalizeUriRef(obj[k], gconf));
                 }
             }
         });
@@ -364,14 +364,14 @@ function mapColumn(ix, row, cmap, gconf) {
     }
     else {
         // ix is a fixed RDF resource
-        return normalizeUriRef(ix);
+        return normalizeUriRef(ix, gconf);
     }
 }
 
 // Expand CURIE or shortform ID to IRI.
 // E.g. GO:1234 --> http://purl.obolibrary.org/obo/GO_1234
 //
-function normalizeUriRef(iri) {
+function normalizeUriRef(iri, gconf) {
     // remove whitespace
     if (iri.match(/\s/) != null) {
         console.warn("Whitespace in "+iri);
@@ -409,11 +409,11 @@ function normalizeUriRef(iri) {
 
         // validate prefix
         if (prefixMap[prefix] == null) {
+            console.error("Not a valid prefix: "+prefix+" in IRI: "+iri+" graph:"+gconf.graph);
             if (prefixMap[prefix.toUpperCase()] != null) {
                 console.log("Replacing "+prefix+" with upper case form");
                 return iri.replace(prefix, prefix.toUpperCase());
             }
-            console.error("Not a valid prefix: "+prefix+" in IRI: "+iri);
             system.exit(1);
         }
 
@@ -451,7 +451,7 @@ function mapColumnValue(ix, v, cmap, gconf) {
 
     // if column metadata includes a prefix, then prepend this
     if (cobj.prefix != null) {
-        return normalizeUriRef(cobj.prefix + v);
+        return normalizeUriRef(cobj.prefix + v, gconf);
     }
     
     // Remove this code when this is fixed: https://support.crbs.ucsd.edu/browse/NIF-10646
@@ -478,7 +478,7 @@ function mapColumnValue(ix, v, cmap, gconf) {
     if (type == 'rdfs:Literal') {
         return engine.quote(v);
     }
-    return normalizeUriRef(v);
+    return normalizeUriRef(v, gconf);
 }
 
 
