@@ -402,7 +402,6 @@ $(document).ready(function() {
 			var fontSize = "default";
 
 			//Change color of previous crumb
-			console.log(lastIndex);
 			if (lastIndex > -1){
 				d3.select(".poly"+lastIndex)
 				  .attr("fill", "#3D6FB7")
