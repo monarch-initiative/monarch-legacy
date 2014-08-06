@@ -400,21 +400,19 @@ $(document).ready(function() {
 			var lastIndex = (index-1);
 			var phenLen = phenotype.length;
 			var fontSize = "default";
-			if (phenLen > 25){
-				fontSize = ((1/phenLen)*400);
-			}
+
 			//Change color of previous crumb
 			console.log(lastIndex);
 			if (lastIndex > -1){
 				d3.select(".poly"+lastIndex)
-				  .attr("fill", "#026CBA")
+				  .attr("fill", "#3D6FB7")
 				  .on("mouseover", function(){
 	                  d3.select(this)
 	                  .attr("fill", "#EA763B");
 			      })
 			      .on("mouseout", function(){
 	                  d3.select(this)
-	                  .attr("fill", "#026CBA");
+	                  .attr("fill", "#3D6FB7");
 			      })
 			      .on("click", function(){
 			          pickUpBreadcrumb(lastIndex,groups,rect,phenoDiv);
@@ -429,7 +427,7 @@ $(document).ready(function() {
 				  .on("mouseout", function(){
 			           d3.select(this.parentNode)
 			           .select("polygon")
-		               .attr("fill", "#026CBA");
+		               .attr("fill", "#3D6FB7");
 				  })
 				  .on("click", function(){
 				        pickUpBreadcrumb(lastIndex,groups,rect,phenoDiv);
@@ -455,8 +453,12 @@ $(document).ready(function() {
 		        .attr("class",("text"+index))
 		        .attr("font-size", fontSize)
 		        .each(function () {
-		        	var words = phenotype.split(/\s|\//);
+		        	var words = phenotype.split(/\s|\/|\-/);
 		        	var len = words.length;
+		        	if (len > 2 && !phenotype.match(/head and neck/i)){
+		        	    words.splice(2,len);
+			        	words[1]=words[1]+"...";
+		        	}
 	                if (words != undefined) {
 	                    for (i = 0;i < len; i++) {
 	                    	if (words[i].length > 12){
@@ -472,6 +474,9 @@ $(document).ready(function() {
 	                            		return ".6em";
 	                                } else if (i == 0){
 	                            		return "0";
+	                            	} else if (i < 2 && len > 2 
+	                            			   && words[i].match(/and/i)){
+	                            		return "0";
 	                            	} else {
 	                            		return "1.2em";
 	                            	}
@@ -479,8 +484,14 @@ $(document).ready(function() {
 	                            .attr("dx", function(){
 	                            	if (i == 0 && len == 1){
 	                            		return ".6em";
-	                                } else if (i == 0){
+	                                } else if (i == 0 && len >2
+	                                		   && words[1].match(/and/i)){
+	                            		return "-1.2em";
+	                            	} else if (i == 0){
 	                            		return ".2em";
+	                            	} else if (i == 1 && len > 2
+	                            			   && words[1].match(/and/i)){
+	                            		return "1.2em";
 	                            	} else {
 	                            		return ".25em";
 	                            	}
