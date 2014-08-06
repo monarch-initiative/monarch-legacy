@@ -8,7 +8,7 @@ $(document).ready(function() {
 	//Tooltip offsets (HARDCODE)
 	var yAxOffset = 0;
 	var arrowOffset = 44;
-	var barOffset = 0;
+	var barOffset = {grouped:32, stacked:56};
 	
 	//Arrow dimensions
 	var arrowDim = "-30,-5 -20,-5 -20,-11 -10,0 -20,10 -20,5 -30,5";
@@ -212,7 +212,7 @@ $(document).ready(function() {
 	           tooltip.style("display", "block")
 	           .html("Counts: "+"<span style='font-weight:bold'>"+d.value+"</span>"+"<br/>"
 	        		+"Organism: "+ "<span style='font-weight:bold'>"+d.name)
-	           .style("top",h+margin.bottom+heightOffset-margin.top-24+"px")
+	           .style("top",h+margin.bottom+heightOffset-margin.top-barOffset.grouped+"px")
 	           .style("left",width+w-70+"px");
 
 	        })
@@ -285,7 +285,7 @@ $(document).ready(function() {
                 tooltip.style("display", "block")
                 .html("Counts: "+"<span style='font-weight:bold'>"+d.value+"</span>"+"<br/>"
 	        		+"Organism: "+ "<span style='font-weight:bold'>"+d.name)
-                .style("top",h+margin.bottom+heightOffset-margin.top-24+"px")
+                .style("top",h+margin.bottom+heightOffset-margin.top-barOffset.grouped+"px")
                 .style("left",width+w-70+"px");
 		       })
 	          .on("mouseout", function(){
@@ -327,7 +327,7 @@ $(document).ready(function() {
 		           tooltip.style("display", "block")
 		           .html("Counts: "+"<span style='font-weight:bold'>"+d.value+"</span>"+"<br/>"
 	        		+"Organism: "+ "<span style='font-weight:bold'>"+d.name)
-		           .style("top",h+margin.bottom-margin.top+heightOffset-48+"px")
+		           .style("top",h+margin.bottom-margin.top+heightOffset-barOffset.stacked+"px")
 		           .style("left",width+w-100+"px");
 
 		        })
@@ -698,7 +698,7 @@ $(document).ready(function() {
 	 		           tooltip.style("display", "block")
 	 		           .html("Counts: "+"<span style='font-weight:bold'>"+d.value+"</span>"+"<br/>"
 	        		         +"Organism: "+ "<span style='font-weight:bold'>"+d.name)
-	 		           .style("top",h+margin.bottom+heightOffset-margin.top-24+"px")
+	 		           .style("top",h+margin.bottom+heightOffset-margin.top-barOffset.grouped+"px")
 	 		           .style("left",width+w-70+"px");
 		            })
 	                .on("mouseout", function(){
@@ -744,7 +744,7 @@ $(document).ready(function() {
 		               tooltip.style("display", "block")
 		               .html("Counts: "+"<span style='font-weight:bold'>"+d.value+"</span>"+"<br/>"
 	        		    +"Organism: "+ "<span style='font-weight:bold'>"+d.name)
-		               .style("top",h+margin.bottom-margin.top+heightOffset-48+"px")
+		               .style("top",h+margin.bottom-margin.top+heightOffset-barOffset.stacked+"px")
 		               .style("left",width+w-100+"px");
 
 		        })
@@ -786,7 +786,7 @@ $(document).ready(function() {
 	 		           tooltip.style("display", "block")
 	 		           .html("Counts: "+"<span style='font-weight:bold'>"+d.value+"</span>"+"<br/>"
 	        		        +"Organism: "+ "<span style='font-weight:bold'>"+d.name)
-	 		           .style("top",h+margin.bottom+heightOffset-margin.top-24+"px")
+	 		           .style("top",h+margin.bottom+heightOffset-margin.top-barOffset.grouped+"px")
 	 		           .style("left",width+w-70+"px");
 		            })
 	                .on("mouseout", function(){
@@ -827,7 +827,7 @@ $(document).ready(function() {
 		           tooltip.style("display", "block")
 		           .html("Counts: "+"<span style='font-weight:bold'>"+d.value+"</span>"+"<br/>"
 	        		+"Organism: "+ "<span style='font-weight:bold'>"+d.name)
-		           .style("top",h+margin.bottom-margin.top+heightOffset-48+"px")
+		           .style("top",h+margin.bottom-margin.top+heightOffset-barOffset.stacked+"px")
 		           .style("left",width+w-100+"px");
 
 		           })
