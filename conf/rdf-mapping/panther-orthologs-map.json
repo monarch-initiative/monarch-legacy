@@ -30,13 +30,11 @@
    "columns" : [
       {
          "name" : "tax_id_a",
-         "type" : "owl:Class",
-         "prefix" : "http://purl.obolibrary.org/obo/"
+         "type" : "owl:Class"
       },
       {
          "name" : "tax_id_b",
-         "type" : "owl:Class",
-         "prefix" : "http://purl.obolibrary.org/obo/"
+         "type" : "owl:Class"
       },
       {
          "name" : "genea",

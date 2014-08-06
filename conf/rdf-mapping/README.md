@@ -6,7 +6,7 @@ This folder contains YAML configurations for Monarch resources used by
 disco2turtle to extract triples from DISCO via Federation services.
 
 Each YAML configuration file describes how to generate a single
-particular named graph, in turtle format.
+particular Mamed Graph, in turtle format.
 
 ## Basic Concepts
 
@@ -215,6 +215,21 @@ This means in the 'columns' section, you only need to specify column names.
 However, if the column contains a non-ID you should set the type. A
 good choice is rdfs:Literal. However, if you are sure that a column
 contains a numeric type, go ahead and use the xsd type
+
+## Modeling Patterns and Best Practice
+
+This will be defined in a separate document. Some rough guidelines for now:
+
+ * use standard vocabularies
+ * We try and follow a general Annotation model, similar to a reified triple
+    * exact vocabulary TBD
+ * stay normalized. If another NG provides labels for all genes, you don't need to redundantly include this in a gene-disease view
+
+## Pre- and Post-processing
+
+The assumption that is that any pre-processing is already done by the time the view is exposed (e.g. in DISCO/CM).
+
+SPARQL can be used for post-processing.
 
 ## Future plans
 
