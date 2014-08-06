@@ -458,6 +458,7 @@ $(document).ready(function() {
 		        	    words.splice(2,len);
 			        	words[1]=words[1]+"...";
 		        	}
+		        	len = words.length;
 	                if (words != undefined) {
 	                    for (i = 0;i < len; i++) {
 	                    	if (words[i].length > 12){
