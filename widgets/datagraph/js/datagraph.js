@@ -23,8 +23,7 @@ $(document).ready(function() {
 	var bread = {width:115, height: 40, offset:100};
 	var breadSpace = 1;
 	
-	//Array to store crumbs
-	var breadcrumbs = [];
+	//breadcrumb counter
 	var level = 0;
 	
 	//Check browser
@@ -63,65 +62,7 @@ $(document).ready(function() {
         .append("svg")
         .attr("height",bcHeight)
         .attr("width",bcWidth);
-	
-	/*var firstCrumb = d3.select(".breadcrumbs")
-	    .append("svg")
-	    .attr("height",bcHeight)
-	    .attr("width",bcWidth)
-	    .append("g")  
-	    .attr("transform", "translate(0,0)")
-	    //.attr("transform", "translate(" + index*(bread.offset) + ", 0)")
-	    .append("svg:polygon")
-	    .attr("class","firstCrumb")
-        .attr("points",firstCr)
-		.attr("fill", "#496265");
-	
-	
-	d3.select(".breadcrumbs").select("g")
-	    .append("text")
-	    .each(function (d) {
-            var arr = "Phenotypic Abnormality".split(" ");
-            if (arr != undefined) {
-                for (i = 0; i < arr.length; i++) {
-                    d3.select(this).append("tspan")
-                        .text(arr[i])
-                        .attr("x", (bread.width)*.45)
-                        .attr("y", (bread.height)*.42)
-                        .attr("dy", i ? "1.2em" : 0)
-                        .attr("dx", i ? ".05em" : 0)
-                        .attr("text-anchor", "middle")
-                        .attr("class", "tspan" + i);
-                }
-            }
-        });
-	    .attr("x", (bread.width)*.5)
-        .attr("y", (bread.height)*.5)
-        .attr("dy", "0.35em")
-        .attr("text-anchor", "middle")
-		.text("Phenotypic Abnormality");
-	
-	var firstCrumb2 = d3.select(".breadcrumbs")
-    .select("svg")
-    .append("g")  
-    .attr("transform", "translate(" + (breadSpace+bread.offset) + ", 0)")
-    //.attr("transform", "translate(" + index*(bread.offset) + ", 0)")
-    .append("svg:polygon")
-    .attr("class","firstCrumb1")
-    .attr("points",trailCrumbs)
-	.attr("fill", "#496265");
-	
-	
-	d3.select(".breadcrumbs")
-    .select("svg")
-    .append("g")  
-    .attr("transform", "translate(" + 4*(bread.offset+1) + ", 0)")
-    //.attr("transform", "translate(" + index*(bread.offset) + ", 0)")
-    .append("svg:polygon")
-    .attr("class","firstCrumb1")
-    .attr("points",trailCrumbs)
-	.attr("fill", "#496265");*/
-	
-	
+
 	var tooltip = d3.select("#graph")
 	    .append("div")
 	    .attr("class", "bartip");
@@ -132,9 +73,6 @@ $(document).ready(function() {
 	    var data = json.dataGraph;
 	    var parents = [];
 	    
-	    //Make first breadcrumb
-	    makeBreadcrumb(level,data);
-
 	    y0.domain(data.map(function(d) { return d.phenotype; }));
 	    y1.domain(groups).rangeRoundBands([0, y0.rangeBand()]);
 	    
@@ -228,7 +166,7 @@ $(document).ready(function() {
 	        		   
 	        		   tooltip.style("display", "none");
                        svg.selectAll(".tick.major").remove();
-	        		   
+	        		   level++;
 	    		       transitionSubGraph(d.subGraph,groups,data);
 	    		       
 		        	   //remove old bars
@@ -243,22 +181,21 @@ $(document).ready(function() {
 		   		        .attr("y", 60)
 		   		        .style("fill-opacity", 1e-6)
 		   		        .remove();
-	        		   level++;
-	        		   makeBreadcrumb(level,d);
+
+	        		   makeBreadcrumb(level,d.phenotype,groups,rect,phenotype);
 	        	   }
-	    	   
 	       });
-       
-	    
+         
 	    var phenotype = svg.selectAll(".phenotype")
 	        .data(data)
 	        .enter().append("svg:g")
-	        .attr("class", "bar")
+	        .attr("class", ("bar"+level))
 	      	.attr("transform", function(d) { return "translate(0," + y0(d.phenotype) + ")"; });
 
 	    var rect = phenotype.selectAll("rect")
 	       .data(function(d) { return d.counts; })
 	       .enter().append("rect")
+	       .attr("class",("rect"+level))
 	       .attr("height", y1.rangeBand())
 	       .attr("y", function(d) { return y1(d.name); })
 	       .attr("x", function(){if (isChrome) {return 1;}else{ return 0;}})
@@ -307,6 +244,9 @@ $(document).ready(function() {
 	       .attr("dy", ".35em")
 	       .style("text-anchor", "end")
 	       .text(function(d) { return d; });   
+	    
+	    //Make first breadcrumb
+	    makeBreadcrumb(level,"Phenotypic Abnormality",groups,rect,phenotype);
 	    
 	    d3.selectAll("input").on("change", change);
 
@@ -406,44 +346,115 @@ $(document).ready(function() {
      	   }
         }
 		
-		function makeBreadcrumb(index,data) {
+		function pickUpBreadcrumb(index,groups,rect,phenotype) {
 			
-			var subGraph = data.subGraph;
-			var phenotype = data.phenotype;
+			lastIndex = level;
+			level = index;
+	        superclass = parents[index];
+    	    svg.selectAll(".tick.major").remove();
+	        transitionSubGraph(superclass,groups);
+	        
+	        for (var i=(index+1); i <= parents.length; i++){
+	  	        d3.select(".bread"+i).remove();
+	        }
+   
+            svg.selectAll((".rect"+lastIndex)).transition()
+   		        .duration(750)
+   		        .attr("y", 60)
+   		        .style("fill-opacity", 1e-6)
+   		        .remove();
+	        
+	        svg.selectAll((".bar"+lastIndex)).transition()
+		        .duration(750)
+		        .attr("y", 60)
+		        .style("fill-opacity", 1e-6)
+		        .remove();
+		    
+		    parents.splice(index,(parents.length));		
+		    
+		    d3.select(".poly"+index)
+			  .attr("fill", "#496265")
+			  .on("mouseover", function(){})
+		      .on("mouseout", function(){
+                 d3.select(this)
+                 .style("fill", "#496265");
+		      })
+		      .on("click", function(){});
+			
+			d3.select(".text"+index)
+			  .on("mouseover", function(){})
+			  .on("mouseout", function(){
+		           d3.select(this.parentNode)
+		           .select("polygon")
+	               .style("fill", "#496265");
+			  })
+			  .on("click", function(){});
+	    }
+		
+		function makeBreadcrumb(index,phenotype,groups,rect,phenoDiv) {
+			
 			if (!phenotype){
 				phenotype = "Phenotypic Abnormality";
 			}
+			var lastIndex = (index-1);
 			var phenLen = phenotype.length;
 			var fontSize = "default";
 			if (phenLen > 25){
 				fontSize = ((1/phenLen)*400);
 			}
+			//Change color of previous crumb
+			console.log(lastIndex);
+			if (lastIndex > -1){
+				d3.select(".poly"+lastIndex)
+				  .attr("fill", "#026CBA")
+				  .on("mouseover", function(){
+	                  d3.select(this)
+	                  .style("fill", "#EA763B");
+			      })
+			      .on("mouseout", function(){
+	                  d3.select(this)
+	                  .style("fill", "#026CBA");
+			      })
+			      .on("click", function(){
+			          pickUpBreadcrumb(lastIndex,groups,rect,phenoDiv);
+				  });
+				
+				d3.select(".text"+lastIndex)
+				  .on("mouseover", function(){
+		               d3.select(this.parentNode)
+		               .select("polygon")
+		               .style("fill", "#EA763B");
+				  })
+				  .on("mouseout", function(){
+			           d3.select(this.parentNode)
+			           .select("polygon")
+		               .style("fill", "#026CBA");
+				  })
+				  .on("click", function(){
+				        pickUpBreadcrumb(lastIndex,groups,rect,phenoDiv);
+				  });
+			}
 			
             d3.select(".breadcrumbs")
 		        .select("svg")
 		        .append("g")  
-		        .attr("class",("level"+level))
+		        .attr("class",("bread"+index))
 		        .attr("transform", "translate(" + index*(bread.offset+breadSpace) + ", 0)")
 		        .append("svg:polygon")
+		        .attr("class",("poly"+index))
 	            .attr("points",index ? trailCrumbs : firstCr)
-			    .attr("fill", "#496265")
-			    .on("mouseover", function(){
-	               d3.select(this)
-	               .style("fill", "#EA763B");
-			    })
-			    .on("mouseout", function(){
-	               d3.select(this)
-	               .style("fill", "#496265");
-			    })
-			    .on("click", function(){
-			           //TODO
-				});
+			    .attr("fill", "#496265");
+            
+            d3.select((".bread"+index))
+            		.append("svg:title")
+    				.text(phenotype);	
 		
-		    d3.select((".level"+level))
+		    d3.select((".bread"+index))
 		        .append("text")
+		        .attr("class",("text"+index))
 		        .attr("font-size", fontSize)
 		        .each(function () {
-		        	var words = phenotype.split(/\s|-|\//);
+		        	var words = phenotype.split(/\s|\//);
 		        	var len = words.length;
 	                if (words != undefined) {
 	                    for (i = 0;i < len; i++) {
@@ -464,35 +475,28 @@ $(document).ready(function() {
 	                            		return "1.2em";
 	                            	}
 	                             })
-	                            .attr("dx", i ? ".35em" : ".30em")
+	                            .attr("dx", function(){
+	                            	if (i == 0 && len == 1){
+	                            		return ".6em";
+	                                } else if (i == 0){
+	                            		return ".2em";
+	                            	} else {
+	                            		return ".25em";
+	                            	}
+	                             })
 	                            .attr("text-anchor", "middle")
 	                            .attr("class", "tspan" + i);
 	                    }
 	                }
-	            })
-	            .on("mouseover", function(){
-		               d3.select(this.parentNode)
-		               .select("polygon")
-		               .style("fill", "#EA763B");
-				})
-				.on("mouseout", function(){
-			           d3.select(this.parentNode)
-			           .select("polygon")
-		               .style("fill", "#496265");
-				})
-				.on("click", function(){
-			           //TODO
-				});
-			
+	            });
 		}
 		
 	    function transitionSubGraph(subGraph,groups,parent) {
 	    		    	
-		    var groups = groups;
 		    var isSubClass;
 		    var rect;
 		    if (parent){
-		        parents.unshift(parent);
+		        parents.push(parent);
 		    }
 		    
 		    if (subGraph.length < 10){
@@ -603,7 +607,7 @@ $(document).ready(function() {
 			        		   
 			        		   tooltip.style("display", "none");
 			        		   svg.selectAll(".tick.major").remove();
-			        		   
+			        		   level++;
 			        		   transitionSubGraph(d.subGraph,groups,subGraph);
 			        		   
 				        	   //remove old bars
@@ -619,8 +623,7 @@ $(document).ready(function() {
 				   		        .style("fill-opacity", 1e-6)
 				   		        .remove();
 			        		   
-			        		   level++;
-			        		   makeBreadcrumb(level,d);
+			        		   makeBreadcrumb(level,d.phenotype,groups,rect,phenotype);
 			        	   }
 			    	   
 			       });
@@ -651,7 +654,7 @@ $(document).ready(function() {
 			    var phenotype = svg.selectAll(".phenotype")
 			        .data(subGraph)
 			        .enter().append("svg:g")
-			        .attr("class", "bar")
+			        .attr("class", ("bar"+level))
 			      	.attr("transform", function(d) { return "translate(0," + y0(d.phenotype) + ")"; });
 
 		    if ($('input[name=mode]:checked').val()=== 'grouped') {
@@ -666,6 +669,7 @@ $(document).ready(function() {
 	            rect = phenotype.selectAll("rect")
 	                .data(function(d) { return d.counts; })
 	                .enter().append("rect")
+	                .attr("class",("rect"+level))
 	                .attr("height", y1.rangeBand())
 	                .attr("y", function(d) { return y1(d.name); })
 	                .attr("x", function(){if (isChrome) {return 1;}else{ return 0;}})
@@ -704,6 +708,7 @@ $(document).ready(function() {
 			    rect = phenotype.selectAll("rect")
 			        .data(function(d) { return d.counts; })
 			        .enter().append("rect")
+			        .attr("class",("rect"+level))
 			        .attr("x", function(d){
 		        	    if (d.x0 == 0){
 		        	        if (isChrome){return 1;}
