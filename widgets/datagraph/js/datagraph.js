@@ -6,29 +6,32 @@ $(document).ready(function() {
 	height = 820 - margin.top - margin.bottom;
 	
 	//Tooltip offsets (HARDCODE)
-	var yAxOffset = 0;
-	var arrowOffset = 44;
+	//var yAxOffset = 0;
+	var arrowOffset = 49;
 	var barOffset = {grouped:32, stacked:56};
 	
 	//Arrow dimensions
-	var arrowDim = "-30,-5 -20,-5 -20,-11 -10,0 -20,10 -20,5 -30,5";
+	var arrowDim = "-23,-6, -12,0 -23,6";
 	
 	//Breadcrumb area dimensions
 	var bcWidth = 550;
-	var bcHeight = 40;
+	var bcHeight = 35;
 	
 	//Breadcrumb dimensions
-	var firstCr = "0,0 0,34 90,34 105,17 90,0";
-	var trailCrumbs = "0,0 15,17 0,34 90,34 105,17 90,0";
-	
-	var bread = {width:105, height: 34, offset:90};
+	var firstCr = "0,0 0,30 90,30 105,15 90,0";
+	var trailCrumbs = "0,0 15,15 0,30 90,30 105,15 90,0";
+
+	var bread = {width:105, height: 30, offset:90};
 	var breadSpace = 1;
 	
 	//breadcrumb counter
 	var level = 0;
 	
 	//Breadcrumb Font size
-	var font = 13;
+	var font = 10;
+	
+	//Y axis positioning when arrow present
+	var yOffset = "-1.5em";
 	
 	//Check browser
 	var isOpera = !!window.opera || navigator.userAgent.indexOf(' OPR/') >= 0;
@@ -107,17 +110,6 @@ $(document).ready(function() {
         .on("mouseover", function(d){
 	           d3.select(this).style("fill", "#EA763B");
 	           d3.select(this).style("text-decoration", "underline");
-	           
-	           var monarchID = getPhenotype(d,data);
-	           var w = this.getBBox().width;
-	           var coords = d3.transform(d3.select(this.parentNode).attr("transform")).translate;
-	           var h = coords[1];
-	           var offset = 100*(1/w);
-	           
-	           tooltip.style("display", "block")
-	           .html(window.location.hostname +"<br/>"+"/phenotype/"+ monarchID)
-	           .style("top",h+margin.bottom-78+"px")
-	           .style("left",width-offset-w-margin.right-185+"px");
 	     })
 	    .on("mouseout", function(){
 	           d3.select(this).style("fill", "#000000" );
@@ -129,7 +121,7 @@ $(document).ready(function() {
             document.location.href = "/phenotype/" + monarchID;
          })
 	    .style("text-anchor", "end")
-	    .attr("dx", "-2em");
+	    .attr("dx", yOffset);
 	    
        var navigate = svg.selectAll(".y.axis");
        
@@ -465,7 +457,7 @@ $(document).ready(function() {
 		        	len = words.length;
 		        	for (i = 0;i < len; i++) {
                     	if (words[i].length > 12){
-                    		fontSize = ((1/words[i].length)*175);
+                    		fontSize = ((1/words[i].length)*160);
                         }
 		        	}
 	                for (i = 0;i < len; i++) {
@@ -478,7 +470,7 @@ $(document).ready(function() {
 	                            if (i == 0 && len == 1){
 	                            	return ".55em";
 	                            } else if (i == 0){
-	                            	return "0";
+	                            	return ".1em";
 	                            } else if (i < 2 && len > 2 
 	                            		   && words[i].match(/and/i)){
 	                            	return "0";
@@ -488,12 +480,12 @@ $(document).ready(function() {
 	                        })
 	                        .attr("dx", function(){
 	                            if (i == 0 && len == 1){
-	                            	return ".6em";
+	                            	return ".8em";
 	                            } else if (i == 0 && len >2
 	                                	   && words[1].match(/and/i)){
 	                            	return "-1.2em";
 	                            } else if (i == 0){
-	                            	return ".2em";
+	                            	return ".3em";
 	                            } else if (i == 1 && len > 2
 	                            		   && words[1].match(/and/i)){
 	                            	return "1.2em";
@@ -552,19 +544,7 @@ $(document).ready(function() {
 	            //.style("font-size","12px")
 	            .on("mouseover", function(d){
 		           d3.select(this).style("fill", "#EA763B");
-		           d3.select(this).style("text-decoration", "underline");
-		           
-		           var monarchID = getPhenotype(d,subGraph);
-		           var w = this.getBBox().width;
-		           var coords = d3.transform(d3.select(this.parentNode).attr("transform")).translate;
-		           var h = coords[1];
-		           var offset = 100*(1/w);
-		           
-		           tooltip.style("display", "block")
-		           .html(window.location.hostname +"<br/>"+"/phenotype/"+ monarchID)
-		           .style("top",h+margin.bottom-78+"px")
-		           .style("left",width-offset-w-margin.right-185+"px");
-		           
+		           d3.select(this).style("text-decoration", "underline");		           
 		         })
 		        .on("mouseout", function(){
 		           d3.select(this).style("fill", "#000000" );
@@ -576,7 +556,7 @@ $(document).ready(function() {
 	                document.location.href = "/phenotype/" + monarchID;
 	            })
 	            .style("text-anchor", "end")
-	            .attr("dx", "-2em");
+	            .attr("dx", yOffset);
 		    
 		       var navigate = svg.selectAll(".y.axis");
 		       var arrow = navigate.selectAll(".tick.major")
@@ -651,19 +631,7 @@ $(document).ready(function() {
 			           .attr("dx","0")
 		    	       .on("mouseover", function(d){
 			               d3.select(this).style("fill", "#EA763B");
-			               d3.select(this).style("text-decoration", "underline");
-			           
-			               var monarchID = getPhenotype(d,subGraph);
-			               var w = this.getBBox().width;
-			               var coords = d3.transform(d3.select(this.parentNode).attr("transform")).translate;
-			               var h = coords[1];
-			               var offset = 100*(1/w);
-			           
-			               tooltip.style("display", "block")
-			               .html(window.location.hostname +"<br/>"+"/phenotype/"+ monarchID)
-			               .style("top",h+margin.bottom-78+"px")
-			               .style("left",width-offset-w-margin.right-157+"px");
-			           
+			               d3.select(this).style("text-decoration", "underline");			           
 			         });
 		       }
 
