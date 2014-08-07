@@ -1,0 +1,54 @@
+graph: ncbi-gene-interactions
+mapVersion: 2014-08-07
+view: nif-0000-02801-4
+filter: interactor_a_taxon_id: NCBITaxon:9606
+
+columns: 
+  - name: interactor_a_gene_id
+  - name: interactor_b_gene_id
+  - name: complex_id
+  - name: complex_name
+    type: rdfs:Literal
+  - name: complex_id_type_label
+    type: rdfs:Literal
+  - name: description
+    type: rdfs:Literal
+  - name: interaction_id
+  - @context: {}
+  - name: pubmed_ids
+    list_delimiter: ","
+
+mappings: 
+  - object: interactor_a_gene_id
+    predicate: RO:0002434    #interacts_with
+    subject: interactor_b_gene_id
+
+  - object: Interaction
+    predicate: rdf:type
+    subject: interaction_id
+
+  - object: interaction_id
+    predicate: RO:0002461    #partner_in
+    subject: interactor_a_gene_id
+
+  - object: interaction_id
+    predicate: RO:0002461    #partner_in
+    subject: interactor_b_gene_id
+
+  - object: pubmed_ids
+    predicate: dc:source
+    subject: interaction_id
+
+  - object: complex_id
+    predicate: BFO:0000066    #occurs_in
+    subject: interaction_id
+
+  - object: complex_name
+    predicate: rdfs:label
+    subject: complex_id
+
+  - object: description
+	predicate: dc:description
+    subject: interaction_id
+
+notes: association types are not uniformly added to the interactions.  may need to scrub data with this.  also, the interactions sometimes come from external sources... how should this be tracked?  is "source" the right link between a pubmed_id and the interaction?  the pmid is the evidence, but the source is actually either this resource or the one it pulls from.
