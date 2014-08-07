@@ -129,9 +129,6 @@ $(document).ready(function() {
             .data(data)
             .append("svg:polygon")
 	        .attr("points",arrowDim)
-	        .attr("stroke","#660000")
-            .attr("stroke-width","0")
-            .attr("stroke-linejoin","round")
 		    .attr("fill", "#496265")  
 		    .on("mouseover", function(d){
 			           
@@ -564,9 +561,6 @@ $(document).ready(function() {
 		            .append("svg:polygon")
 		            .attr("class","arr")
 			        .attr("points",arrowDim)
-			        .attr("stroke","#660000")
-		            .attr("stroke-width","0")
-		            .attr("stroke-linejoin","round")
 		            .attr("fill", "#496265")
 		            .attr("display", function(d){
 		            	if (d.subGraph && d.subGraph[0]){
