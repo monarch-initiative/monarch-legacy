@@ -1,7 +1,8 @@
 graph: ncbi-gene-interactions
 mapVersion: 2014-08-07
 view: nif-0000-02801-4
-filter: interactor_a_taxon_id: NCBITaxon:9606
+filter: 
+  interactor_a_taxon_id: NCBITaxon:9606
 
 columns: 
   - name: interactor_a_gene_id
@@ -48,7 +49,7 @@ mappings:
     subject: complex_id
 
   - object: description
-	predicate: dc:description
+    predicate: dc:description
     subject: interaction_id
 
 notes: association types are not uniformly added to the interactions.  may need to scrub data with this.  also, the interactions sometimes come from external sources... how should this be tracked?  is "source" the right link between a pubmed_id and the interaction?  the pmid is the evidence, but the source is actually either this resource or the one it pulls from.
