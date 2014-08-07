@@ -18,13 +18,17 @@ $(document).ready(function() {
 	var bcHeight = 40;
 	
 	//Breadcrumb dimensions
-	var firstCr = "0,0 0,40 100,40 115,20 100,0";
-	var trailCrumbs = "0,0 15,20 0,40 100,40 115,20 100,0";
-	var bread = {width:115, height: 40, offset:100};
+	var firstCr = "0,0 0,34 90,34 105,17 90,0";
+	var trailCrumbs = "0,0 15,17 0,34 90,34 105,17 90,0";
+	
+	var bread = {width:105, height: 34, offset:90};
 	var breadSpace = 1;
 	
 	//breadcrumb counter
 	var level = 0;
+	
+	//Breadcrumb Font size
+	var font = 13;
 	
 	//Check browser
 	var isOpera = !!window.opera || navigator.userAgent.indexOf(' OPR/') >= 0;
@@ -399,7 +403,7 @@ $(document).ready(function() {
 			}
 			var lastIndex = (index-1);
 			var phenLen = phenotype.length;
-			var fontSize = "default";
+			var fontSize = font;
 
 			//Change color of previous crumb
 			if (lastIndex > -1){
@@ -459,46 +463,46 @@ $(document).ready(function() {
 			        	words[1]=words[1]+"...";
 		        	}
 		        	len = words.length;
-	                if (words != undefined) {
-	                    for (i = 0;i < len; i++) {
-	                    	if (words[i].length > 12){
-	                    		fontSize = ((1/words[i].length)*175);
-	                    	}
-	                        d3.select(this).append("tspan")
-	                            .text(words[i])
-	                            .attr("font-size",fontSize)
-	                            .attr("x", (bread.width)*.45)
-	                            .attr("y", (bread.height)*.42)
-	                            .attr("dy", function(){
-	                            	if (i == 0 && len == 1){
-	                            		return ".6em";
-	                                } else if (i == 0){
-	                            		return "0";
-	                            	} else if (i < 2 && len > 2 
-	                            			   && words[i].match(/and/i)){
-	                            		return "0";
-	                            	} else {
-	                            		return "1.2em";
-	                            	}
-	                             })
-	                            .attr("dx", function(){
-	                            	if (i == 0 && len == 1){
-	                            		return ".6em";
-	                                } else if (i == 0 && len >2
-	                                		   && words[1].match(/and/i)){
-	                            		return "-1.2em";
-	                            	} else if (i == 0){
-	                            		return ".2em";
-	                            	} else if (i == 1 && len > 2
-	                            			   && words[1].match(/and/i)){
-	                            		return "1.2em";
-	                            	} else {
-	                            		return ".25em";
-	                            	}
-	                             })
-	                            .attr("text-anchor", "middle")
-	                            .attr("class", "tspan" + i);
-	                    }
+		        	for (i = 0;i < len; i++) {
+                    	if (words[i].length > 12){
+                    		fontSize = ((1/words[i].length)*175);
+                        }
+		        	}
+	                for (i = 0;i < len; i++) {
+	                    d3.select(this).append("tspan")
+	                        .text(words[i])
+	                        .attr("font-size",fontSize)
+	                        .attr("x", (bread.width)*.45)
+	                        .attr("y", (bread.height)*.42)
+	                        .attr("dy", function(){
+	                            if (i == 0 && len == 1){
+	                            	return ".55em";
+	                            } else if (i == 0){
+	                            	return "0";
+	                            } else if (i < 2 && len > 2 
+	                            		   && words[i].match(/and/i)){
+	                            	return "0";
+	                            } else {
+	                            	return "1.2em";
+	                            }
+	                        })
+	                        .attr("dx", function(){
+	                            if (i == 0 && len == 1){
+	                            	return ".6em";
+	                            } else if (i == 0 && len >2
+	                                	   && words[1].match(/and/i)){
+	                            	return "-1.2em";
+	                            } else if (i == 0){
+	                            	return ".2em";
+	                            } else if (i == 1 && len > 2
+	                            		   && words[1].match(/and/i)){
+	                            	return "1.2em";
+	                            } else {
+	                            	return ".25em";
+	                            }
+	                        })
+	                        .attr("text-anchor", "middle")
+	                        .attr("class", "tspan" + i);
 	                }
 	            });
 		}
@@ -836,32 +840,6 @@ $(document).ready(function() {
 		           })
 		      }
 		    }
-		    
-		    /*d3.select(".superbtn").on("click", function(){
-		    	
-		    	if (parents[0]){
-		    	    superclass = parents[0];
-		    	    parents.shift();
-		    	    
-		    	    tooltip.style("display", "none");
-		    	    svg.selectAll(".tick.major").remove();
-		    	    
-		    	    transitionSubGraph(superclass,groups);
-    	    	
-                    phenotype.transition()
-	   		            .duration(750)
-	   		            .attr("y", 60)
-	   		            .style("fill-opacity", 1e-6)
-	   		            .remove();
-    		       
-    		        rect.transition()
-	   		            .duration(750)
-	   		            .attr("y", 60)
-	   		            .style("fill-opacity", 1e-6)
-	   		            .remove();
-		    	}
-		    });*/
-		}
-	    
+		}	    
 	});
 });
