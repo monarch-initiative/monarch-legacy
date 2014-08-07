@@ -408,7 +408,7 @@ function normalizeUriRef(iri, gconf) {
 
         // validate prefix
         if (prefixMap[prefix] == null) {
-            console.error("Not a valid prefix: "+prefix+" in IRI: "+iri+" graph:"+ gconf ? gconf.graph : "-");
+            console.error("Not a valid prefix: "+prefix+" in IRI: "+iri+" graph:"+ (gconf == null ? "-" :  gconf.graph));
             if (prefixMap[prefix.toUpperCase()] != null) {
                 console.log("Replacing "+prefix+" with upper case form");
                 return iri.replace(prefix, prefix.toUpperCase());
