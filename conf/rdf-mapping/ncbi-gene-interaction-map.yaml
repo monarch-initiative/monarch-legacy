@@ -3,6 +3,8 @@ mapVersion: 2014-08-07
 view: nif-0000-02801-4
 filter: 
   interactor_a_taxon_id: NCBITaxon:9606
+#forceConfiguration: 
+#  federation_services_url: http://beta.neuinfo.org/services/v1/federation/
 
 columns: 
   - name: interactor_a_gene_id

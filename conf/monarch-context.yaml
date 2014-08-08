@@ -68,7 +68,10 @@
   PMID: http://www.ncbi.nlm.nih.gov/pubmed/
   MedGen: http://purl.obolibrary.org/obo/MedGen_
   GeneReviews: http://www.ncbi.nlm.nih.gov/books/
-  
+  BioGRID: http://purl.obolibrary.org/BioGRID_
+  HPRD: "http://identifiers.org/hprd/hprd:" 
+  BIND: "http://identifiers.org/bind/bind:"
+
   # MODs
   #
   # TODO: check these
