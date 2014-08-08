@@ -94,8 +94,10 @@ $(document).ready(function() {
         
         //Dynamically decrease font size for large labels
         var yFont = 'default';
-        if (yMax > 42){
-    		yFont = ((1/yMax)*620);
+        if (yMax > 42 && yMax < 47){
+    		yFont = ((1/yMax)*570);
+        } else if (yMax >= 47){
+        	yFont = ((1/yMax)*620);
         }
 	    
 	    var xTicks = svg.append("g")
@@ -544,8 +546,10 @@ $(document).ready(function() {
 		    	return d.phenotype.length; });
 		    
 		    var yFont = 'default';
-	        if (yMax > 42){
-	    		yFont = ((1/yMax)*620);
+	        if (yMax > 42 && yMax < 47){
+	    		yFont = ((1/yMax)*570);
+	        } else if (yMax >= 47){
+	        	yFont = ((1/yMax)*620);
 	        }
 		    
 		    var yTransition = svg.transition().duration(1000);
@@ -556,7 +560,6 @@ $(document).ready(function() {
 		        .filter(function(d){ return typeof(d) == "string"; })
 		        .attr("font-size", yFont)
 	            .style("cursor", "pointer")
-	            //.style("font-size","12px")
 	            .on("mouseover", function(d){
 		           d3.select(this).style("fill", "#EA763B");
 		           d3.select(this).style("text-decoration", "underline");		           
