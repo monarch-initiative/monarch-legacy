@@ -14,7 +14,7 @@ $(document).ready(function() {
 	var arrowDim = "-23,-6, -12,0 -23,6";
 	
 	//Breadcrumb area dimensions
-	var bcWidth = 550;
+	var bcWidth = 560;
 	var bcHeight = 35;
 	
 	//Breadcrumb dimensions

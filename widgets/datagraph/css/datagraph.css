@@ -26,7 +26,7 @@
   shape-rendering: crispEdges;
 }
 .interaction{
-   margin-left: 120px;
+   margin-left: 100px;
    margin-top: 6px;
    position: relative;
 }
@@ -44,7 +44,7 @@
 form {
    display: inline;
    float:right;
-   margin-top: 5px;
+   margin-top: 3px;
    position:relative;
 }
 .bartip {
