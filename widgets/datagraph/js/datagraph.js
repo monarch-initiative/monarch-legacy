@@ -7,8 +7,8 @@ $(document).ready(function() {
 	
 	//Tooltip offsets (HARDCODE)
 	//var yAxOffset = 0;
-	var arrowOffset = 49;
-	var barOffset = {grouped:32, stacked:56};
+	var arrowOffset = {height: 49, width: 180};
+	var barOffset = {grouped:40, stacked:61};
 	
 	//Arrow dimensions
 	var arrowDim = "-23,-6, -12,0 -23,6";
@@ -87,8 +87,16 @@ $(document).ready(function() {
             return d3.max(d.counts, function(d) { return d.value; }); });
         var xStackMax = d3.max(data, function(d) { 
 	    	return d3.max(d.counts, function(d) { return d.x1; }); });
+        var yMax = d3.max(data, function(d) { 
+	    	return d.phenotype.length; });
         
         x.domain([0, xGroupMax]);
+        
+        //Dynamically decrease font size for large labels
+        var yFont = 'default';
+        if (yMax > 42){
+    		yFont = ((1/yMax)*620);
+        }
 	    
 	    var xTicks = svg.append("g")
 	        .attr("class", "x axis")
@@ -106,6 +114,7 @@ $(document).ready(function() {
 	    .call(yAxis)
 	    .selectAll("text")
 	    .filter(function(d){ return typeof(d) == "string"; })
+	    .attr("font-size", yFont)
         .style("cursor", "pointer")
         .on("mouseover", function(d){
 	           d3.select(this).style("fill", "#EA763B");
@@ -144,8 +153,8 @@ $(document).ready(function() {
 			           
 			           tooltip.style("display", "block")
 			           .html("Click to see subclasses")
-			           .style("top",h+margin.bottom+heightOffset-margin.top-arrowOffset+"px")
-			           .style("left",width+w-190+"px");
+			           .style("top",h+margin.bottom+heightOffset-margin.top-arrowOffset.height+"px")
+			           .style("left",width+w-arrowOffset.width+"px");
 			           
 			       } 
 			})
@@ -531,12 +540,21 @@ $(document).ready(function() {
 		    var xStackMax = d3.max(subGraph, function(d) { 
 		        return d3.max(d.counts, function(d) { return d.x1; }); });
 		    
+		    var yMax = d3.max(subGraph, function(d) { 
+		    	return d.phenotype.length; });
+		    
+		    var yFont = 'default';
+	        if (yMax > 42){
+	    		yFont = ((1/yMax)*620);
+	        }
+		    
 		    var yTransition = svg.transition().duration(1000);
 		    yTransition.select(".y.axis").call(yAxis);
 		    
 		    svg.select(".y.axis")
 		        .selectAll("text")
 		        .filter(function(d){ return typeof(d) == "string"; })
+		        .attr("font-size", yFont)
 	            .style("cursor", "pointer")
 	            //.style("font-size","12px")
 	            .on("mouseover", function(d){
@@ -582,8 +600,8 @@ $(document).ready(function() {
 			           
 			               tooltip.style("display", "block")
 			               .html("Click to see subclasses")
-			               .style("top",h+margin.bottom+heightOffset-margin.top-arrowOffset+"px")
-			               .style("left",width+w-190+"px");
+			               .style("top",h+margin.bottom+heightOffset-margin.top-arrowOffset.height+"px")
+			               .style("left",width+w-arrowOffset.width+"px");
 			           
 			           } 
 			        })
