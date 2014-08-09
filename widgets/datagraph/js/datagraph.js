@@ -7,7 +7,7 @@ $(document).ready(function() {
 	
 	//Tooltip offsets (HARDCODE)
 	//var yAxOffset = 0;
-	var arrowOffset = {height: 49, width: 180};
+	var arrowOffset = {height: 50, width: 180};
 	var barOffset = {grouped:40, stacked:61};
 	
 	//Arrow dimensions
@@ -93,11 +93,14 @@ $(document).ready(function() {
         x.domain([0, xGroupMax]);
         
         //Dynamically decrease font size for large labels
-        var yFont = 'default';
-        if (yMax > 42 && yMax < 47){
+	    var yFont = 'default';
+        if (yMax > 42 && yMax < 53){
     		yFont = ((1/yMax)*570);
-        } else if (yMax >= 47){
+        } else if (yMax >= 53 && yMax <65){
         	yFont = ((1/yMax)*620);
+        } else if (yMax >= 65){
+        	yFont = ((1/yMax)*700);
+        	yOffset = "-1.7em";
         }
 	    
 	    var xTicks = svg.append("g")
@@ -465,7 +468,7 @@ $(document).ready(function() {
 		        	len = words.length;
 		        	for (i = 0;i < len; i++) {
                     	if (words[i].length > 12){
-                    		fontSize = ((1/words[i].length)*160);
+                    		fontSize = ((1/words[i].length)*150);
                         }
 		        	}
 	                for (i = 0;i < len; i++) {
@@ -546,10 +549,13 @@ $(document).ready(function() {
 		    	return d.phenotype.length; });
 		    
 		    var yFont = 'default';
-	        if (yMax > 42 && yMax < 47){
+	        if (yMax > 42 && yMax < 53){
 	    		yFont = ((1/yMax)*570);
-	        } else if (yMax >= 47){
+	        } else if (yMax >= 53 && yMax <65){
 	        	yFont = ((1/yMax)*620);
+	        } else if (yMax >= 65){
+	        	yFont = ((1/yMax)*700);
+	        	yOffset = "-1.7em";
 	        }
 		    
 		    var yTransition = svg.transition().duration(1000);
