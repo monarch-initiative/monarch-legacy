@@ -19,8 +19,10 @@
   faldo: http://biohackathon.org/resource/faldo#
   foaf: http://xmlns.com/foaf/0.1/
   oa: http://www.w3.org/ns/oa#
-  identifers: http://identifiers.org/
+  idot: http://identifiers.org/
   void: http://rdfs.org/ns/void#
+  prov: http://www.w3.org/ns/prov#
+  dcat: http://www.w3.org/ns/dcat#
   
   ## Other general prefixes
   
@@ -116,6 +118,17 @@
   depiction: 
     "@id": foaf:depiction
     "@type": "@id"
+  type: 
+    "@id": rdf:type
+    "@type": "@id"
+
+  reference: dc:publication
+  source: dc:source
+  subClassOf: owl:subClassOf
+  title: dc:title
+  homepage: 
+    "@id": foaf:homepage
+    "@type": "@id"
   
   disease: monarch:disease
   frequency: monarch:frequency
@@ -145,21 +158,12 @@
   pathway_associations: rdfs:seeAlso
   phenotype: monarch:phenotype
   phenotype_associations: rdfs:seeAlso
-  reference: dc:publication
   reference_locus: GENO:0000036
   resource: monarch:nif-resource
   sequence_alteration: SO:0001059
   sequence_alteration_collection: GENO:0000025
-  source: dc:source
-  subClassOf: owl:subClassOf
-  title: dc:title
-  type: 
-    "@id": rdf:type
-    "@type": "@id"
   variant_loci: GENO:0000027
   variant_locus: GENO:0000481
-  website: 
-    "@id": foaf:homepage
-    "@type": "@id"
   zygosity: GENO:0000133
+
   
