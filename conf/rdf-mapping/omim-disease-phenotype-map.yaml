@@ -22,6 +22,12 @@ columns:
   - 
     name: phenotype_id
   - 
+    name: onset
+    type: rdfs:Literal
+  - 
+    name: frequency
+    type: rdfs:Literal
+  - 
     list_delimiter: ;
     name: publication_id
 mappings: 
@@ -30,7 +36,7 @@ mappings:
     predicate: RO:0002200
     subject: disorder_id
   - 
-    object: SIO:association
+    object: Annotation
     predicate: rdf:type
     subject: v_uuid
   - 
@@ -45,6 +51,14 @@ mappings:
     object: publication_id
     predicate: dc:source
     subject: v_uuid
+  - 
+    subject: v_uuid
+    predicate: ageOfOnset
+    object: onset
+  - 
+    subject: v_uuid
+    predicate: frequencyOfPhenotype
+    object: frequency
 objects: 
   - 
     id: RO:0002200

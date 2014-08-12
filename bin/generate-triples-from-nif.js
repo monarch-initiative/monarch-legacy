@@ -334,16 +334,23 @@ function generateNamedGraph(gconf) {
     if (voidDataset == null) {
         voidDataset = {};
     };
-    if (!voidDataset.type) {
+    if (voidDataset.type == null) {
         voidDataset.type = "void:Dataset";
     };
-    if (!voidDataset.title) {
-        voidDataset.type = gconf.graph;
+    if (voidDataset.title == null) {
+        voidDataset.title = gconf.graph;
+    };
+    if (voidDataset.title == null) {
+        voidDataset.title = gconf.graph;
+    };
+    if (voidDataset.description == null) {
+        voidDataset.description = "Automatically derived triples for "+gconf.graph;
     };
     var exportDate = new Date(Date.now());
     voidDataset.id = "http://purl.obolibrary.org/obo/upheno/data/"+gconf.graph;
+    voidDataset.type = "void:Dataset";
     voidDataset["dcterms:created"] = exportDate;
-    voidDataset["dcterms:nifVew"] = gconf.view; // TODO
+    voidDataset["prov:wasDerivedFrom"] = gconf.view; 
     voidDataset["void:triples"] = numTriplesDumped;
     voidDataset["@context"] = ldcontext['@context'];
 
