@@ -31,7 +31,7 @@ $(document).ready(function() {
 	var font = 10;
 	
 	//Y axis positioning when arrow present
-	var yOffset = "-1.5em";
+	var yOffset = "-1.48em";
 	
 	//Check browser
 	var isOpera = !!window.opera || navigator.userAgent.indexOf(' OPR/') >= 0;
@@ -96,11 +96,14 @@ $(document).ready(function() {
 	    var yFont = 'default';
         if (yMax > 42 && yMax < 53){
     		yFont = ((1/yMax)*570);
-        } else if (yMax >= 53 && yMax <65){
+        } else if (yMax >= 53 && yMax <66){
         	yFont = ((1/yMax)*620);
-        } else if (yMax >= 65){
-        	yFont = ((1/yMax)*700);
+        	yOffset = "-1.6em";
+        	arrowDim = "-20,-5, -9,1 -20,7";
+        } else if (yMax >= 66){
+        	yFont = ((1/yMax)*660);
         	yOffset = "-1.7em";
+        	arrowDim = "-20,-5, -9,1 -20,7";
         }
 	    
 	    var xTicks = svg.append("g")
@@ -551,11 +554,16 @@ $(document).ready(function() {
 		    var yFont = 'default';
 	        if (yMax > 42 && yMax < 53){
 	    		yFont = ((1/yMax)*570);
-	        } else if (yMax >= 53 && yMax <65){
+	    		arrowDim = "-23,-6, -12,0 -23,6";
+	        } else if (yMax >= 53 && yMax <66){
 	        	yFont = ((1/yMax)*620);
-	        } else if (yMax >= 65){
-	        	yFont = ((1/yMax)*700);
+	        	arrowDim = "-20,-5, -9,1 -20,7";
+	        } else if (yMax >= 66){
+	        	yFont = ((1/yMax)*660);
 	        	yOffset = "-1.7em";
+	        	arrowDim = "-20,-5, -9,1 -20,7";
+	        } else {
+	        	arrowDim = "-23,-6, -12,0 -23,6";
 	        }
 		    
 		    var yTransition = svg.transition().duration(1000);
