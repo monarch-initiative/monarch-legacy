@@ -4739,7 +4739,7 @@
       "name" : "CTD",
       "url_example" : "http://ctdbase.org/detail.go?type=chem&acc=D002104",
       "database" : "Comparative Toxicogenomics Database",
-      "description" : "BioGRID is an online interaction repository with data compiled through comprehensive curation efforts.",
+      "description" : "",
       "example_id" : "D002104",
       "generic_url" : "http://www.ctdbase.org",
       "fullname" : "Comparative Toxicogenomics Database",
@@ -4754,7 +4754,7 @@
       "name" : "Online Mendelian Inheritance in Animals",
       "url_example" : "http://omia.angis.org.au/OMIA000901/9615/",
       "database" : "Online Mendelian Inheritance in Animals",
-      "description" : "BioGRID is an online interaction repository with data compiled through comprehensive curation efforts.",
+      "description" : "",
       "example_id" : "OMIA000901",
       "generic_url" : "http://omia.angis.org.au/",
       "fullname" : "Online Mendelian Inheritance in Animals",
@@ -4763,4 +4763,20 @@
       "url_syntax" : "http://omia.angis.org.au/[example_id]",
       "datatype" : null
    },
+   "mpd" : {
+      "object" : "Identifier",
+      "uri_prefix" : null,
+      "name" : "Mouse Phenome Database",
+      "url_example" : "http://phenome.jax.org/db/qp?rtn=views/measplot&brieflook=1402",
+      "database" : "Mouse Phenome Database",
+      "description" : "MPD is a collaborative standardized collection of measured data on laboratory mouse strains. Includes baseline phenotype data sets as well as studies of drug, diet, disease and aging effect. Also includes protocols, projects and publications, and SNP, variation and gene expression studies.",
+      "example_id" : "MPD:1402",
+      "generic_url" : "http://phenome.jax.org/",
+      "fullname" : "Mouse Phenome Database",
+      "id" : null,
+      "abbreviation" : "MPD",
+      "url_syntax" : "http://phenome.jax.org/db/qp?rtn=views/measplot&brieflook=[example_id]",
+      "datatype" : null
+   },
+
 }
