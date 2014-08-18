@@ -1,0 +1,28 @@
+{
+    "name": "pup-tent",
+    "version": "[% version %]",
+    "license": "BSD",
+    "description": "File caching and template rendering femto-framework using mustache and some assumptions.",
+    "author": {
+	"name": "Seth Carbon",
+	"email": "http://github.com/kltm/pup-tent"
+    },
+    "repository": {
+      "type": "git",
+      "url": "http://github.com/kltm/pup-tent"
+    },
+    "keywords": [
+	"femto",
+	"framework",
+	"template",
+	"cross-platform",
+	"Node.js",
+	"RingoJS"
+    ],
+    "engines": {"node" : ">=0.10.0"},
+    "dependencies": {
+	"underscore": "~1.6.0",
+	"mustache": "~0.8.2"
+    },
+    "main": "./pup-tent.js"
+}

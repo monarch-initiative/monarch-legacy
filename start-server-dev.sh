@@ -9,4 +9,5 @@ if [ $PORT ]
    MARGS="--port 8080"
 fi
 echo starting server
+export RINGO_MODULE_PATH=./modules/:$RINGO_MODULE_PATH
 ./ringojs/bin/ringo lib/monarch/web/webapp_launcher_dev.js $MARGS
