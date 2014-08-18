@@ -1,0 +1,141 @@
+#+TITLE: PUP TENT README
+#+Options: num:nil
+#+STARTUP: odd
+#+Style: <style> h1,h2,h3 {font-family: arial, helvetica, sans-serif} </style>
+
+* Overview
+
+  Pup Tent is a femto-framework for template (Mustache) and static
+  content delivery for Node.js and RingoJS (beta) web apps.
+
+  The idea is to quickly turn a pile of related JS, template, CSS, and
+  static files into a whole coherent enough to deliver with a proper
+  web app/routing framework, such as express.
+
+  There are two main aspects to Pup Tent. The first is searching for
+  and synchronously caching static content on the filesystem,
+  (including caching templates for later use), and then producing
+  those when given the filename key (all filenames must be unique in
+  Pup Tent). The second is aiding in using a couple of common template
+  patterns using Mustache, examples below.
+
+** Usage
+
+   There are other examples in the tests/ directory, but a full
+   example might look like this.
+
+   Lets say you have the following files:
+
+   - static/frame.tmpl
+   - static/content.tmpl
+   - static/bar.css
+   - static/foo.js
+   - static/App.js
+
+   The file content.tmpl looks like:
+
+  #+BEGIN_SRC html
+{{ content }}
+  #+END_SRC
+
+   And the file frame.tmpl looks like:
+
+  #+BEGIN_SRC html
+<html>
+  <head>
+    <title>{{title}}</title>
+    {{#pup_tent_css_libraries}}
+    <link rel="stylesheet" type="text/css" href="{{{.}}}">
+    {{/pup_tent_css_libraries}}
+    {{#pup_tent_js_variables}}
+    <script type="text/javascript">var {{name}} = {{{value}}};</script>
+    {{/pup_tent_js_variables}}
+    {{#pup_tent_js_libraries}}
+    <script type="text/javascript" src="{{{.}}}"></script>
+    {{/pup_tent_js_libraries}}
+  </head>
+  <body>
+  {{ &pup_tent_content }}
+  </body>
+</html>
+  #+END_SRC
+
+   The easiest way to deploy my App.js using this template and file
+   structure could be something like:
+
+  #+BEGIN_SRC javascript
+var pup_tent = require('pup-tent')(['static']);
+  #+END_SRC
+
+   Set the common variables:
+
+  #+BEGIN_SRC javascript
+pup_tent.set_common('js_vars', {'name': 'foo', 'value': 'bar'});
+pup_tent.set_common('js_libs', 'foo.js');
+pup_tent.set_common('css_libs', 'bar.css');
+  #+END_SRC
+
+   Set the variables for just this page:
+
+  #+BEGIN_SRC javascript
+var targs = {content: 'bar', title: 'foo', 'pup_tent_js_libraries': ['App.js']};
+  #+END_SRC
+
+  #+BEGIN_SRC javascript
+var output = pup_tent.render('content.tmpl', targs, 'frame.tmpl');
+  #+END_SRC
+
+   This would give output like:
+
+  #+BEGIN_SRC html
+<html>
+  <head>
+    <title>foo</title>
+    <link rel="stylesheet" type="text/css" href="bar.css">
+    <script type="text/javascript">var foo = "bar";</script>
+    <script type="text/javascript" src="foo.js"></script>
+    <script type="text/javascript" src="App.js"></script>
+  </head>
+  <body>
+  bar
+  </body>
+</html>
+  #+END_SRC
+
+*** Special variables
+
+    The special stack variables are:
+
+    - css_libs: will map to pup_tent_css_libraries
+    - js_vars: will map to pup_tent_js_variables
+    - js_libs: will map to pup_tent_js_libraries
+
+    The special template variables are:
+    
+    - pup_tent_css_libraries: list of CSS files to use
+    - pup_tent_js_libraries: list of JS files to use
+    - pup_tent_js_variables: list of name/value objects to convert to vaiables
+    - pup_tent_content: meant for use in _base_tmpl_name_ to embed one template in another
+
+** Tests
+*** Node.js
+
+    Given the right environment, the tests can be easily run from the
+    command line using the Makefile.
+
+  #+BEGIN_SRC
+    make test
+  #+END_SRC    
+
+*** RingoJS
+
+    The RingoJS tests are not integrated with the Makefile (yet), but
+    can be run from the command line interface like:
+
+  #+BEGIN_SRC
+    ringo -m ./lib -m ./node_modules/underscore/ -m node_modules/mustache tests/full-tmpl.js.tests
+  #+END_SRC
+
+** API
+   More or less current API documentation (using Natural Docs) can be
+   found [[https://kltm.github.io/pup-tent/][here]].
