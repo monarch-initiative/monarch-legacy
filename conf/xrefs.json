@@ -4793,5 +4793,20 @@
       "url_syntax" : "https://www.mousephenotype.org/data/search?q=[example_id]",
       "datatype" : null
    },
+   "genereviews" : {
+      "object" : "Identifier",
+      "uri_prefix" : null,
+      "name" : "Gene Reviews",
+      "url_example" : "http://www.ncbi.nlm.nih.gov/books/NBK11167/",
+      "database" : "Gene Reviews",
+      "description" : "GeneReviews are expert-authored, peer-reviewed disease descriptions (chapters) presented in a standardized format and focused on clinically relevant and medically actionable information on the diagnosis, management, and genetic counseling of patients and families with specific inherited conditions.",
+      "example_id" : "GeneReviews:NBK11167",
+      "generic_url" : "http://www.ncbi.nlm.nih.gov/books/NBK1116/",
+      "fullname" : "Gene Reviews",
+      "id" : null,
+      "abbreviation" : "GeneReviews",
+      "url_syntax" : "http://www.ncbi.nlm.nih.gov/books/[example_id]",
+      "datatype" : null
+   },
 
 }
