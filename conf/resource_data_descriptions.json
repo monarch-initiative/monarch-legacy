@@ -1,112 +1,145 @@
 [
 {
-  "ontologies_or_vocabularies": "MI",
-  "monarch_use": "We indicate gene-gene/protein-protein interactions on gene pages.  We also use many of the id mappings  to resolve ids in our own site.",
-  "data_categories": "protein-protein interaction",
   "resource_description": "BioGRID is an curated gene and protein interaction repository with for major model organism species. ",
-  "resource": "BioGRID"
+  "ontologies_or_vocabularies": "MI",
+  "resource": "BioGRID",
+  "data_categories": "protein-protein interaction",
+  "monarch_use": "We indicate gene-gene/protein-protein interactions on gene pages.  We also use many of the id mappings  to resolve ids in our own site."
 },
 {
-  "ontologies_or_vocabularies": "UMLS",
-  "monarch_use": "Presently we utilize the disease-gene associations, and their evidence. We will soon include variant-disease associations.",
-  "data_categories": "disease-gene association",
   "resource_description": "ClinVar archives and aggregates information about relationships among variation and human health. ClinVar collects reports of variants found in patient samples, assertions made regarding their clinical significance, information about the submitter, and other supporting data.",
-  "resource": "ClinVar"
+  "ontologies_or_vocabularies": "UMLS",
+  "taxa": "human",
+  "resource": "ClinVar",
+  "data_categories": "disease-gene association; variant-disease association; variant definitions",
+  "monarch_use": "We utilize the asserted disease-gene, variant-disease, and variant-gene associations, together with their evidence."
 },
 {
-  "ontologies_or_vocabularies": "OMIM",
-  "monarch_use": "We link pertinent cell lines to any diseases for which they are asserted models.",
-  "data_categories": "disease-model association",
   "resource_description": "The Coriell Cell Repositories provide essential research reagents to the scientific community by establishing, verifying, maintaining, and distributing cell cultures and DNA derived from cell cultures. These collections, supported by funds from the National Institutes of Health (NIH) and several foundations, are extensively utilized by research scientists around the world. NINDS and NIGMS cell line catalog.  NIGMS samples represent a variety of disease states, chromosomal abnormalities, apparently healthy individuals and many distinct human populations.  NINDS samples are drawn from subjects with cerebrovascular disease, epilepsy, motor neuron disease, Parkinsonism and Tourette Syndrome, as well as controls.",
-  "resource": "Coriell"
+  "ontologies_or_vocabularies": "OMIM",
+  "taxa": "human",
+  "resource": "Coriell",
+  "data_categories": "disease-model association",
+  "monarch_use": "We link pertinent cell lines to any diseases for which they are asserted models."
 },
 {
-  "ontologies_or_vocabularies": "MESH; OMIM",
-  "monarch_use": "We integrate the asserted (curated) disease-gene associations, and their evidence.",
-  "data_categories": "disease-gene association",
   "resource_description": "CTD promotes understanding about the effects of environmental chemicals on human health by integrating data from curated scientific literature to describe chemical interactions with genes and proteins, and associations between diseases and chemicals, and diseases and genes/proteins.",
-  "resource": "CTD"
-},
-{
-  "ontologies_or_vocabularies": "FBbt; FBcv; FBdv",
-  "monarch_use": "We integrate the genotype-phenotype associations.",
-  "data_categories": "genotype-phenotype association",
-  "resource_description": "FlyBase is the model organism database providing integrated genetic, genomic, phenomic, and biological data for Drosophila melanogaster.",
-  "resource": "FlyBase"
-},
-{
-  "ontologies_or_vocabularies": "ECO; HPO",
-  "monarch_use": "We use the HPO disease-phenotype annotations as the primary atomic description of a disease, and list them on the disease pages, together with their references.  The Human Phenotype Ontology is integrated into our cross-species phenotype ontology.",
-  "data_categories": "disease-phenotype association",
-  "resource_description": "A curated database of human hereditary syndromes from OMIM, Orphanet, and DECIPHER mapped to classes of the human phenotype ontology. Various meta-attributes such as frequency, references and negations are associated with each annotation. These are presently limited to rare mendelian diseases.",
-  "resource": "HPO"
-},
-{
   "ontologies_or_vocabularies": "MESH; OMIM",
-  "monarch_use": "We list disease-gene associations, and gene-pathway associations.  We utilize the KEGG Ortholog (KO) gene-pathway associations, and infer a specific-organisms' participation in that pathway based on the gene-KO links.",
-  "data_categories": "gene-pathway association; disease-gene association; orthology",
-  "resource_description": "KEGG is an integrated database resource consisting of the seventeen main  databases including systems, genomic, chemical, and health  information.",
-  "resource": "KEGG"
-},
-{
-  "ontologies_or_vocabularies": "ECO; MA; MP; SO",
-  "monarch_use": "We list genotype-phenotype associations and asserted disease-models. We use MGI identifiers as the main hook into mouse data.  Additionally, we utilize the Mouse Phenotype Ontology (MP) in our cross-species ontology, to link all mouse phenotype annotations from various sources, which is developed by MGI.",
-  "data_categories": "genotype-phenotype association; disease-model association",
-  "resource_description": "MGI is the international database resource for the laboratory mouse, providing integrated genetic, genomic, and biological data to facilitate the study of human health and disease.",
-  "resource": "MGI"
-},
-{
-  "monarch_use": "We use mygene.info's REST-services to fetch and display the genomic coordinates and curated RefSeq gene descriptions.",
-  "data_categories": "gene definition",
-  "resource_description": "MyGene.info provides a simple-to-use REST web services to query/retrieve gene annotation data.",
-  "resource": "MyGene.info"
-},
-{
-  "monarch_use": "We use NCBIGene ids and symbols as the primary identifier and label for all genes in our system and NCBITaxon identifiers and scientific name for species-specific labeling.  For any given gene, we also list the annotated pmids from Pub2Gene.",
-  "data_categories": "gene definition; taxon definition; gene-publication association",
-  "resource_description": "Gene integrates information from a wide range of species, and includes nomenclature, Reference Sequences (RefSeqs), maps, pathways, variations, phenotypes, and links to genome-, phenotype-, and locus-specific resources worldwide. Taxon lists the taxinomic organization of organisms.  Pub2Gene serves links between genes and pubmed identifiers where they are mentioned.",
-  "resource": "NCBI"
-},
-{
-  "ontologies_or_vocabularies": "OMIM",
-  "monarch_use": "Animal species and breeds with high-incidence of disease, and with links to human OMIM diseases, are listed as animal models for that disease.",
-  "data_categories": "gene-disease association",
-  "resource_description": "Online Mendelian Inheritance in Animals (OMIA) is a catalogue/compendium of inherited disorders, other (single-locus) traits, and genes in 215 (non-model) animal species.",
-  "resource": "OMIA"
-},
-{
-  "ontologies_or_vocabularies": "OMIM",
-  "monarch_use": "We use curated disease-gene, disease-locus, and variant-disease associations, together with their annotated references.  Most OMIM diseases are further curated by the HPO group.  Most OMIM diseases are integrated into the Disease Ontology.",
-  "data_categories": "gene-disease association; variant-disease association",
-  "resource_description": "OMIM is a comprehensive, authoritative compendium of human genes and genetic phenotypes with full-text, referenced overviews that contains information on all known mendelian disorders and over 12,000 genes. OMIM focuses on the relationship between phenotype and genotype.",
-  "resource": "OMIM"
-},
-{
-  "ontologies_or_vocabularies": "HPO",
-  "monarch_use": "We use the Orphanet disease-gene associations.",
+  "taxa": "human",
+  "resource": "CTD",
   "data_categories": "disease-gene association",
+  "monarch_use": "We integrate the asserted (curated) disease-gene associations, and their evidence."
+},
+{
+  "resource_description": "FlyBase is the model organism database providing integrated genetic, genomic, phenomic, and biological data for Drosophila melanogaster.",
+  "ontologies_or_vocabularies": "FBbt; FBcv; FBdv",
+  "taxa": "fruitfly",
+  "resource": "FlyBase",
+  "data_categories": "genotype-phenotype association",
+  "monarch_use": "We integrate the genotype-phenotype associations."
+},
+{
+  "resource_description": "A curated database of human hereditary syndromes from OMIM, Orphanet, and DECIPHER mapped to classes of the human phenotype ontology. Various meta-attributes such as frequency, references and negations are associated with each annotation. These are presently limited to rare mendelian diseases.",
+  "ontologies_or_vocabularies": "ECO; HPO",
+  "taxa": "human",
+  "resource": "HPO",
+  "data_categories": "disease-phenotype association",
+  "monarch_use": "We use the HPO disease-phenotype annotations as the primary atomic description of a disease, and list them on the disease pages, together with their references.  The Human Phenotype Ontology is integrated into our cross-species phenotype ontology."
+},
+{
+  "resource_description": "The International Mouse Phenotyping Consortium (IMPC) is generating a knockout mouse strain for every protein coding gene by using the embryonic stem cell resource generated by the International Knockout Mouse Consortium (IKMC). Systematic broad-based phenotyping is performed by each IMPC center using standardized procedures found within the International Mouse Phenotyping Resource of Standardised Screens (IMPReSS) resource. Gene-to-phenotype associations are made by a versioned statistical analysis.",
+  "ontologies_or_vocabularies": "MP",
+  "taxa": "mouse",
+  "resource": "IMPC",
+  "data_categories": "genotype-phenotype association",
+  "monarch_use": "We use the allele-phenotype associations recorded by the consortium.  In addition, we map their allele+zygosity+background to MGI genotype identifiers.  Where they do not map to MGI genotype identifiers, we create temporary identifiers for navigation purposes."
+},
+{
+  "resource_description": "KEGG is an integrated database resource consisting of the seventeen main  databases including systems, genomic, chemical, and health  information.",
+  "ontologies_or_vocabularies": "MESH; OMIM",
+  "taxa": "human; zebrafish; fruitfly; mouse; rat; worm",
+  "resource": "KEGG",
+  "data_categories": "gene-pathway association; disease-gene association; orthology",
+  "monarch_use": "We list disease-gene associations, and gene-pathway associations.  We utilize the KEGG Ortholog (KO) gene-pathway associations, and infer a specific-organisms' participation in that pathway based on the gene-KO links."
+},
+{
+  "resource_description": "MGI is the international database resource for the laboratory mouse, providing integrated genetic, genomic, and biological data to facilitate the study of human health and disease.",
+  "ontologies_or_vocabularies": "ECO; MA; MP; SO",
+  "taxa": "mouse",
+  "resource": "MGI",
+  "data_categories": "genotype-phenotype association; disease-model association",
+  "monarch_use": "We list genotype-phenotype associations and asserted disease-models. We use MGI identifiers as the main hook into mouse data.  Additionally, we utilize the Mouse Phenotype Ontology (MP) in our cross-species ontology, to link all mouse phenotype annotations from various sources, which is developed by MGI."
+},
+{
+  "resource_description": "The Mouse Phenome Database is a collaborative standardized collection of measured data on laboratory mouse strains, and includes: baseline phenotype data sets; studies of drug, diet, disease and aging effect; protocols, projects, and publications; and SNP, variation and gene expression studies. MPD collects data for classical inbred strains, other fixed-genotype strains, derived lines and populations that are openly acquirable (strain panel examples). Strains can be from JAX-Mice or from any other vendor that's a recognized breeding source.",
+  "ontologies_or_vocabularies": "MP",
+  "taxa": "mouse",
+  "resource": "MPD",
+  "data_categories": "genotype (strain)-phenotype association",
+  "monarch_use": "We compute the strain-phenotype associations for extreme outliers (>3 s.d.) based on comparison to all strains tested.  We link out to MPD where more detail can be found for each of the experimental protocols used to quantify the results and map the measurements to the resulting qualitative phenotypes."
+},
+{
+  "resource_description": "MyGene.info provides a simple-to-use REST web services to query/retrieve gene annotation data.",
+  "ontologies_or_vocabularies": "",
+  "taxa": "all",
+  "resource": "MyGene.info",
+  "data_categories": "gene definition",
+  "monarch_use": "We use mygene.info's REST-services to fetch and display the genomic coordinates and curated RefSeq gene descriptions."
+},
+{
+  "resource_description": "Gene integrates information from a wide range of species, and includes nomenclature, Reference Sequences (RefSeqs), maps, pathways, variations, phenotypes, and links to genome-, phenotype-, and locus-specific resources worldwide. Taxon lists the taxinomic organization of organisms.  Pub2Gene serves links between genes and pubmed identifiers where they are mentioned.",
+  "ontologies_or_vocabularies": "",
+  "taxa": "all",
+  "resource": "NCBI",
+  "data_categories": "gene definition; taxon definition; gene-publication association",
+  "monarch_use": "We use NCBIGene ids and symbols as the primary identifier and label for all genes in our system and NCBITaxon identifiers and scientific name for species-specific labeling.  For any given gene, we also list the annotated pmids from Pub2Gene."
+},
+{
+  "resource_description": "Online Mendelian Inheritance in Animals (OMIA) is a catalogue/compendium of inherited disorders, other (single-locus) traits, and genes in 215 (non-model) animal species.",
+  "ontologies_or_vocabularies": "OMIM",
+  "taxa": "African clawed frog; African hunting dog; agile gibbon; alpaca; Alpine marmot; Amazona amazonica; American black bear; American flamingo; American mink; Amur tiger; Anser anser domesticus; aoudad; Arabian camel; Arabian oryx; Arctic fox; argali; Arizona pocket mouse; Asiatic elephant; Asiatic golden cat; ass; Astyanax; aurochs; axolotl; bald eagle; Bananaquit; bats; beluga whale; Bengal tiger; bighorn sheep; black rhinoceros; black swan; black-footed cat; black-footed ferret; black-tailed deer; blue antelope; blue-and-yellow macaw; Bolivian squirrel monkey; bongo; bottlenosed dolphin; brown bear; brown booby; brush-tailed possums; budgerigar; California condor; California sea lion; Campbell's desert hamster; cattle; cheetah; chicken; chimpanzee; chinchilla; Chinese painted quail; cockatiel; coffee berry borer; common canary; common carp; common gibbon; common quail; Coscoroba swan; coyote; crab-eating macaque; deer; degu; dog; dolphinfishes; domestic cat; domestic ferret; domestic goose; domestic guinea pig; domestic pig; domestic silkworm; domestic yak; ducks; eastern chipmunk; eland; emu; Equus zebra zebra; Eurasian bullfinch; Eurasian water mole; Eurasian wolf; European mole; European shrew; European woodmouse; Gloydius halys caraganus; goat; golden hamster; golden lion tamarin; goldfish; grass carp; gray short-tailed opossum; gray squirrel; gray wolf; great apes; greater kudu; grivet; guanaco; guineafowls; gyrfalcon; hares; hedgehogs; helmeted guineafowl; hill myna; hippopotamus; horse; human; humpback whale; hybrid; Indian peafowl; Indo-Pacific finless porpoise; jaguar; jaguarundi; Japanese macaque; Japanese medaka; Japanese quail; Japanese wrinkled frog; kangaroo; killer whale; koala; kouprey; Lacerta; leopard; Lesser dwarf lemur; lesser earless lizard; lesser panda; Lesser snow goose; lion; little striped whiptail; llama; long-beaked common dolphin; macaques; mallard; Manchurian Wapiti; marsupials; meadow voles; minke whale; Monarcha castaneiventris; Mongolian gerbil; mongooses; mouflon; mountain zebra; muntjak; Muscovy duck; muskrat; North American deer mouse; northern bobwhite; Northern mole vole; northern pocket gopher; Norway rat; nutria; Odocoileus virginianus texanus; oldfield mouse; olive baboon; Omura's baleen whale; Ovis sp.; owls; oxen, cattle; panther genet; Pardosa agrestis; peach-faced lovebird; Phragmatopoma californica; pig; pocket gophers; Pongo pygmaeus pygmaeus; puma; quagga; rabbit; raccoon; raccoon dog; rainbow trout; red deer; red fox; red-footed booby; reindeer; rheas; Rhesus monkey; Ring-necked pheasant; ring-tailed coati; Ring-tailed lemur; rock pigeon; rock pocket mouse; rufous rat-kangaroo; salmonids; sea otter; sheep; siamang; snow leopard; springbok; Stercorarius parasiticus; Sumatran rhinoceros; Sumatran tiger; tammar wallaby; teleost fishes; tench; Thamnophis sirtalis; tiger; torafugu; turkey; turkey vulture; wapiti; water buffalo; western chorus frog; western gorilla; western lowland gorilla; western mosquitofish; Western roe deer; whales; white rhinoceros; white-tufted-ear marmoset; wood lemming; woolly mammoth; woolly monkeys; Yangtze River dolphin; yellow-crowned parrot; zebra finch; zebrafish; zebu",
+  "resource": "OMIA",
+  "data_categories": "gene-disease association",
+  "monarch_use": "Animal species and breeds with high-incidence of disease, and with links to human OMIM diseases, are listed as animal models for that disease."
+},
+{
+  "resource_description": "OMIM is a comprehensive, authoritative compendium of human genes and genetic phenotypes with full-text, referenced overviews that contains information on all known mendelian disorders and over 12,000 genes. OMIM focuses on the relationship between phenotype and genotype.",
+  "ontologies_or_vocabularies": "OMIM",
+  "taxa": "human",
+  "resource": "OMIM",
+  "data_categories": "gene-disease association; variant-disease association",
+  "monarch_use": "We use curated disease-gene, disease-locus, and variant-disease associations, together with their annotated references.  Most OMIM diseases are further curated by the HPO group.  Most OMIM diseases are integrated into the Disease Ontology."
+},
+{
   "resource_description": "Orphanet provides reference information on rare diseases and orphan drugs to help improve the diagnosis, care and treatment of patients with rare diseases.",
-  "resource": "Orphanet"
+  "ontologies_or_vocabularies": "HPO",
+  "taxa": "human",
+  "resource": "Orphanet",
+  "data_categories": "disease-gene association",
+  "monarch_use": "We use the Orphanet disease-gene associations."
 },
 {
-  "ontologies_or_vocabularies": "RO",
-  "monarch_use": "We currently utilize the 12 RefGenome species, as well as HUGO HCOP species, to seed the orthology calls.  Species currently include:  arabidopsis, budding yeast, chicken, chimp, dog, fission yeast, fruitfly, green lizzard, horse, human, macaque, mouse, opossum, pig, platypus, rat, slime mold, worms, zebrafish.  We use the orthology calls to populate the orthologs tabs for genes, as well as to infer disease-model associations via homology.",
-  "data_categories": "orthology",
   "resource_description": "The PANTHER (Protein ANalysis THrough Evolutionary Relationships) Classification System was designed to classify proteins (and their genes) according to evolutionary family/subfamily, molecular function, biological process, and pathway. The PANTHER Classifications are the result of human curation as well as sophisticated    bioinformatics algorithms.",
-  "resource": "PANTHER"
+  "ontologies_or_vocabularies": "RO",
+  "taxa": "arabidopsis, budding yeast, chicken, chimp, dog, fission yeast, fruitfly, green lizzard, horse, human, macaque, mouse, opossum, pig, platypus, rat, slime mold, worm, zebrafish",
+  "resource": "PANTHER",
+  "data_categories": "orthology",
+  "monarch_use": "We currently utilize the 12 RefGenome species, as well as HUGO HCOP species, to seed the orthology calls.  Species currently include:  arabidopsis, budding yeast, chicken, chimp, dog, fission yeast, fruitfly, green lizzard, horse, human, macaque, mouse, opossum, pig, platypus, rat, slime mold, worms, zebrafish.  We use the orthology calls to populate the orthologs tabs for genes, as well as to infer disease-model associations via homology."
 },
 {
-  "ontologies_or_vocabularies": "WBbt; WBls; WBPhenotype",
-  "monarch_use": "Wormbase curates variant (allele)-phenotype associations. The variants are both genetic (intrinsic) and induced through application of reagents such as RNAi (extrinsic).  We list the variant-phenotype associations.",
-  "data_categories": "allele-phenotype association",
   "resource_description": "WormBase is an international consortium dedicated to providing the research community with accurate, current, accessible information concerning the genetics, genomics and biology of C. elegans and related nematodes. ",
-  "resource": "WormBase"
+  "ontologies_or_vocabularies": "WBbt; WBls; WBPhenotype",
+  "taxa": "worm",
+  "resource": "WormBase",
+  "data_categories": "allele-phenotype association",
+  "monarch_use": "Wormbase curates variant (allele)-phenotype associations. The variants are both genetic (intrinsic) and induced through application of reagents such as RNAi (extrinsic).  We list the variant-phenotype associations. Some data is pulled from WormBase directly, other data is routed via WormMine."
 },
 {
-  "ontologies_or_vocabularies": "ECO; PATO; SO; ZFA; ZFS; ZP",
-  "monarch_use": "We integrate the curated genotype-phenotype data, including experimentally derived fish (such as via application of morpholions), and links to the literature as evidence.  Some data is pulled from WormBase directly, other data is routed via WormMine.",
-  "data_categories": "genotype-phenotype association; experimental reagents (morpholinos)",
   "resource_description": "The Zebrafish Information Resource is the community database resource for the laboratory use of zebrafish which develops and supports integrated zebrafish genetic, genomic and developmental information, maintains the definitive reference data sets of zebrafish research information toward facilitation of the use of zebrafish as a model for human biology.",
-  "resource": "ZFIN"
+  "ontologies_or_vocabularies": "ECO; PATO; SO; ZFA; ZFS; ZP",
+  "taxa": "zebrafish",
+  "resource": "ZFIN",
+  "data_categories": "genotype-phenotype association; experimental reagents (morpholinos)",
+  "monarch_use": "We integrate the curated genotype-phenotype data, including experimentally derived fish (such as via application of morpholions), and links to the literature as evidence.  "
 },
 ]
