@@ -2,14 +2,24 @@
 <html>
 <head>
     <title>About Monarch</title>
-    {{#scripts}}
-    <script type="text/javascript" src="{{url}}"></script>
-    {{/scripts}}
+    
     {{{includes.analytics}}}
-    {{#stylesheets}}
-    <link rel="stylesheet" type="text/css" href="{{url}}"/>
-    {{/stylesheets}}
-    <link rel="stylesheet" type="text/css" href="/css/tour.css"/>
+    
+    <!-- CSS. -->
+    {{#pup_tent_css_libraries}}
+    <link rel="stylesheet" type="text/css" href="{{{.}}}">
+    {{/pup_tent_css_libraries}}
+    
+    <!-- JS variables. -->
+    {{#pup_tent_js_variables}}
+    <script type="text/javascript">var {{name}} = {{{value}}};</script>
+    {{/pup_tent_js_variables}}
+    
+    <!-- JS libraries. -->
+    {{#pup_tent_js_libraries}}
+    <script type="text/javascript" src="{{{.}}}"></script>
+    {{/pup_tent_js_libraries}}
+    
     <link rel="icon" href="/image/favicon.ico" type="image/x-icon">
     <meta charset="utf-8"/> 
 </head>
