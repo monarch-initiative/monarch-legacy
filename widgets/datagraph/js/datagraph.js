@@ -1,42 +1,62 @@
 $(document).ready(function() {
 	
-    //Chart margins
-	var margin = {top: 40, right: 80, bottom: 200, left: 320},
-	width = 800 - margin.left - margin.right,
-	height = 820 - margin.top - margin.bottom;
+	//Data
+	var JSON = "/labs/datagraph.json";
 	
-	//Tooltip offsets (HARDCODE)
-	//var yAxOffset = 0;
+    //Chart margins
+	var margin = {top: 40, right: 80, bottom: 200, left: 320};
+	var width = 800 - margin.left - margin.right;
+	var height = 820 - margin.top - margin.bottom;
+	
+	//Tooltip offsets
 	var arrowOffset = {height: 50, width: 180};
 	var barOffset = {grouped:40, stacked:61};
-	
-	//Arrow dimensions
+
+	// Nav arrow (now triangle)
 	var arrowDim = "-23,-6, -12,0 -23,6";
-	
-	//Breadcrumb area dimensions
-	var bcWidth = 560;
-	var bcHeight = 35;
-	
+
 	//Breadcrumb dimensions
 	var firstCr = "0,0 0,30 90,30 105,15 90,0";
 	var trailCrumbs = "0,0 15,15 0,30 90,30 105,15 90,0";
-
-	var bread = {width:105, height: 30, offset:90};
-	var breadSpace = 1;
 	
-	//breadcrumb counter
-	var level = 0;
-	
-	//Breadcrumb Font size
-	var font = 10;
+	//Breadcrumb configuration
+	//HTML div dimensions
+	var bcWidth = 560;
+	var bcHeight = 35;
+    
+	//Polygon dimensions
+	var bread = {width:105, height: 30, offset:90, space: 1, font:10};
 	
 	//Y axis positioning when arrow present
 	var yOffset = "-1.48em";
 	
 	//Check browser
 	var isOpera = !!window.opera || navigator.userAgent.indexOf(' OPR/') >= 0;
-    var isChrome = !!window.chrome && !isOpera; 
-
+    var isChrome = !!window.chrome && !isOpera;
+    
+    //Colors
+    var COL = { human : '#44A293',
+    		    mouse : '#A4D6D4',
+    		    yLabel : { 
+    		    	fill  : '#000000',
+    		    	hover : '#EA763B'
+    		    },
+                arrow : {
+                	fill  : "#496265",
+                    hover : "#EA763B"
+                },
+    		    bar : {
+    		    	fill  : '#EA763B'
+    		    },
+    		    crumb : {
+    		    	top   : '#496265',
+    		    	bottom: '#3D6FB7',
+    		    	hover : '#EA763B'
+    		    }
+    };
+    
+    //D3 starts here
+    //Define scales
 	var y0 = d3.scale.ordinal()
 	    .rangeRoundBands([0,height], .1);
 
@@ -47,7 +67,7 @@ $(document).ready(function() {
     
 	//Bar colors
 	var color = d3.scale.ordinal()
-	    .range(["#44A293","#A4D6D4"]);
+	    .range([COL.human,COL.mouse]);
 
 	var xAxis = d3.svg.axis()
 	    .scale(x)
@@ -74,11 +94,14 @@ $(document).ready(function() {
 	    .append("div")
 	    .attr("class", "bartip");
 
-	d3.json("/labs/datagraph.json", function(error, json) {
+	d3.json(JSON, function(error, json) {
 
 	    var groups = json.groups;
 	    var data = json.dataGraph;
 	    var parents = [];
+	    
+		//breadcrumb counter
+		var level = 0;
 	    
 	    y0.domain(data.map(function(d) { return d.phenotype; }));
 	    y1.domain(groups).rangeRoundBands([0, y0.rangeBand()]);
@@ -118,27 +141,27 @@ $(document).ready(function() {
 	        .text("Number Of Annotations");
 
 	    var yTicks = svg.append("g")
-	    .attr("class", "y axis")
-	    .call(yAxis)
-	    .selectAll("text")
-	    .filter(function(d){ return typeof(d) == "string"; })
-	    .attr("font-size", yFont)
-        .style("cursor", "pointer")
-        .on("mouseover", function(d){
-	           d3.select(this).style("fill", "#EA763B");
-	           d3.select(this).style("text-decoration", "underline");
-	     })
-	    .on("mouseout", function(){
-	           d3.select(this).style("fill", "#000000" );
-	           d3.select(this).style("text-decoration", "none");
-	           tooltip.style("display", "none");
-	     })
-        .on("click", function(d){
-        	var monarchID = getPhenotype(d,data);
-            document.location.href = "/phenotype/" + monarchID;
-         })
-	    .style("text-anchor", "end")
-	    .attr("dx", yOffset);
+	        .attr("class", "y axis")
+	        .call(yAxis)
+	        .selectAll("text")
+	        .filter(function(d){ return typeof(d) == "string"; })
+	        .attr("font-size", yFont)
+            .style("cursor", "pointer")
+            .on("mouseover", function(d){
+	            d3.select(this).style("fill", COL.yLabel.hover);
+	            d3.select(this).style("text-decoration", "underline");
+	        })
+	        .on("mouseout", function(){
+	            d3.select(this).style("fill", COL.yLabel.fill );
+	            d3.select(this).style("text-decoration", "none");
+	            tooltip.style("display", "none");
+	         })
+            .on("click", function(d){
+        	    var monarchID = getPhenotype(d,data);
+                document.location.href = "/phenotype/" + monarchID;
+             })
+	        .style("text-anchor", "end")
+	        .attr("dx", yOffset);
 	    
        var navigate = svg.selectAll(".y.axis");
        
@@ -146,13 +169,13 @@ $(document).ready(function() {
             .data(data)
             .append("svg:polygon")
 	        .attr("points",arrowDim)
-		    .attr("fill", "#496265")  
+		    .attr("fill", COL.arrow.fill)  
 		    .on("mouseover", function(d){
 			           
 			       if (d.subGraph && d.subGraph[0]){
 			        	   
 			           d3.select(this)
-				       .style("fill", "#EA763B");
+				       .style("fill", COL.arrow.hover);
 			           
 			           var w = this.getBBox().width;
 			           var coords = d3.transform(d3.select(this.parentNode).attr("transform")).translate;
@@ -168,7 +191,7 @@ $(document).ready(function() {
 			})
 			.on("mouseout", function(){
 			    d3.select(this)
-			        .style("fill","#496265");
+			        .style("fill",COL.arrow.fill);
 			    tooltip.style("display", "none");
 			 })
             .on("click", function(d){
@@ -212,7 +235,7 @@ $(document).ready(function() {
 	       .attr("width", function(d) { return x(d.value); })
 	       .on("mouseover", function(d){
 	           d3.select(this)
-	           .style("fill", "#EA763B");
+	           .style("fill", COL.bar.fill);
 	           
 	           var w = this.getBBox().width;
 	           var coords = d3.transform(d3.select(this.parentNode).attr("transform")).translate;
@@ -384,11 +407,11 @@ $(document).ready(function() {
 		    
 		    //Deactivate top level crumb
 		    d3.select(".poly"+index)
-			  .attr("fill", "#496265")
+			  .attr("fill", COL.crumb.top)
 			  .on("mouseover", function(){})
 		      .on("mouseout", function(){
                  d3.select(this)
-                 .attr("fill", "#496265");
+                 .attr("fill", COL.crumb.top);
 		      })
 		      .on("click", function(){});
 			
@@ -397,7 +420,7 @@ $(document).ready(function() {
 			  .on("mouseout", function(){
 		           d3.select(this.parentNode)
 		           .select("polygon")
-	               .attr("fill", "#496265");
+	               .attr("fill", COL.crumb.top);
 			  })
 			  .on("click", function(){});
 	    }
@@ -409,19 +432,19 @@ $(document).ready(function() {
 			}
 			var lastIndex = (index-1);
 			var phenLen = phenotype.length;
-			var fontSize = font;
+			var fontSize = bread.font;
 
 			//Change color of previous crumb
 			if (lastIndex > -1){
 				d3.select(".poly"+lastIndex)
-				  .attr("fill", "#3D6FB7")
+				  .attr("fill", COL.crumb.bottom)
 				  .on("mouseover", function(){
 	                  d3.select(this)
-	                  .attr("fill", "#EA763B");
+	                  .attr("fill", COL.crumb.hover);
 			      })
 			      .on("mouseout", function(){
 	                  d3.select(this)
-	                  .attr("fill", "#3D6FB7");
+	                  .attr("fill", COL.crumb.bottom);
 			      })
 			      .on("click", function(){
 			          pickUpBreadcrumb(lastIndex,groups,rect,phenoDiv);
@@ -431,12 +454,12 @@ $(document).ready(function() {
 				  .on("mouseover", function(){
 		               d3.select(this.parentNode)
 		               .select("polygon")
-		               .attr("fill", "#EA763B");
+		               .attr("fill", COL.crumb.hover);
 				  })
 				  .on("mouseout", function(){
 			           d3.select(this.parentNode)
 			           .select("polygon")
-		               .attr("fill", "#3D6FB7");
+		               .attr("fill", COL.crumb.bottom);
 				  })
 				  .on("click", function(){
 				        pickUpBreadcrumb(lastIndex,groups,rect,phenoDiv);
@@ -447,11 +470,11 @@ $(document).ready(function() {
 		        .select("svg")
 		        .append("g")  
 		        .attr("class",("bread"+index))
-		        .attr("transform", "translate(" + index*(bread.offset+breadSpace) + ", 0)")
+		        .attr("transform", "translate(" + index*(bread.offset+bread.space) + ", 0)")
 		        .append("svg:polygon")
 		        .attr("class",("poly"+index))
 	            .attr("points",index ? trailCrumbs : firstCr)
-			    .attr("fill", "#496265");
+			    .attr("fill", COL.crumb.top);
             
             d3.select((".bread"+index))
             		.append("svg:title")
@@ -575,11 +598,11 @@ $(document).ready(function() {
 		        .attr("font-size", yFont)
 	            .style("cursor", "pointer")
 	            .on("mouseover", function(d){
-		           d3.select(this).style("fill", "#EA763B");
+		           d3.select(this).style("fill",COL.yLabel.hover);
 		           d3.select(this).style("text-decoration", "underline");		           
 		         })
 		        .on("mouseout", function(){
-		           d3.select(this).style("fill", "#000000" );
+		           d3.select(this).style("fill",COL.yLabel.fill);
 		           d3.select(this).style("text-decoration", "none");
 		           tooltip.style("display", "none");
 		        })
@@ -596,7 +619,7 @@ $(document).ready(function() {
 		            .append("svg:polygon")
 		            .attr("class","arr")
 			        .attr("points",arrowDim)
-		            .attr("fill", "#496265")
+		            .attr("fill",COL.arrow.fill)
 		            .attr("display", function(d){
 		            	if (d.subGraph && d.subGraph[0]){
 		            		isSubClass=1; return "initial";
@@ -608,7 +631,7 @@ $(document).ready(function() {
 			           if (d.subGraph && d.subGraph[0]){
 			        	   
 			        	   d3.select(this)
-				           .style("fill", "#EA763B");
+				           .style("fill",COL.arrow.hover);
 			           
 			               var w = this.getBBox().width;
 			               var coords = d3.transform(d3.select(this.parentNode).attr("transform")).translate;
@@ -624,7 +647,7 @@ $(document).ready(function() {
 			        })
 			       .on("mouseout", function(){
 			           d3.select(this)
-			           .style("fill","#496265");
+			           .style("fill",COL.arrow.fill);
 			           tooltip.style("display", "none");
 			        })
 		            .on("click", function(d){
@@ -650,7 +673,6 @@ $(document).ready(function() {
 			        		   
 			        		   makeBreadcrumb(level,d.phenotype,groups,rect,phenotype);
 			        	   }
-			    	   
 			       });
 		       
 		       if (!isSubClass){
@@ -659,7 +681,7 @@ $(document).ready(function() {
 			           .selectAll("text")
 			           .attr("dx","0")
 		    	       .on("mouseover", function(d){
-			               d3.select(this).style("fill", "#EA763B");
+			               d3.select(this).style("fill",COL.yLabel.hover);
 			               d3.select(this).style("text-decoration", "underline");			           
 			         });
 		       }
@@ -689,7 +711,7 @@ $(document).ready(function() {
 	                .attr("width", function(d) { return x(d.value); })
 	                .on("mouseover", function(d){
 	 	                d3.select(this)
-		                  .style("fill", "#EA763B");
+		                  .style("fill",COL.bar.fill);
 	 	                
 	 		           var w = this.getBBox().width;
 	 		           var coords = d3.transform(d3.select(this.parentNode).attr("transform")).translate;
@@ -735,7 +757,7 @@ $(document).ready(function() {
 			        .attr("y", function(d) { return y1(d.name); })
 			        .on("mouseover", function(d){
 		               d3.select(this)
-		               .style("fill", "#EA763B");
+		               .style("fill", COL.bar.fill);
 		           
 		               var w = this.getBBox().width;
 		               var coords = d3.transform(d3.select(this.parentNode).attr("transform")).translate;
