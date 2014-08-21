@@ -6,7 +6,7 @@
          "subject" : "disorder_id"
       },
       {
-         "object" : "SIO:association",
+         "object" : "Annotation",
          "predicate" : "rdf:type",
          "subject" : "v_uuid"
       },
@@ -23,6 +23,16 @@
       {
          "object" : "publication_id",
          "predicate" : "dc:source",
+         "subject" : "v_uuid"
+      },
+      {
+         "object" : "onset",
+         "predicate" : "ageOfOnset",
+         "subject" : "v_uuid"
+      },
+      {
+         "object" : "frequency",
+         "predicate" : "frequencyOfPhenotype",
          "subject" : "v_uuid"
       }
    ],
@@ -48,6 +58,14 @@
       },
       {
          "name" : "phenotype_id"
+      },
+      {
+         "name" : "onset",
+         "type" : "rdfs:Literal"
+      },
+      {
+         "name" : "frequency",
+         "type" : "rdfs:Literal"
       },
       {
          "name" : "publication_id",
