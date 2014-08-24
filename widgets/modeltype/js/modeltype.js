@@ -133,7 +133,6 @@ var url = document.URL;
 	   		
 		//reset option values if needed before reloading data
 		_reset: function() {
-		    console.log("reset is being called..");
 			var self = this;
 
 			self.options.currModelIdx = 0;
@@ -195,19 +194,15 @@ var url = document.URL;
 	 * [ {"id": "HP:12345", "observed" :"positive"}, {"id: "HP:23451", "observed" : "negative"}, É]
 	 */
 	_create: function() {
-	    console.log("in create - about to call getJson");
 	    var configoptions;
 	    $.ajax( {dataType: "json",
 		     url:"/widgets/modeltype/js/phenogrid_conf.json",
 		     async: false,
 		     success: function(d) {
-			 console.log("got json...data is.."+JSON.stringify(d));
 			 configoptions = d;
 			 }
 		     });
 	    $.extend(true,this.options,configoptions);
-	    console.log("got json");
-	    console.log("new options are..."+JSON.stringify(this.options));
 	    
 		//save a copy of the original phenotype data
 		this.options.origPhenotypeData = this.options.phenotypeData.slice();
@@ -1421,7 +1416,6 @@ var url = document.URL;
 		
 		//add the handler for the select control
         $( "#sortphenotypes" ).change(function(d) {
-			console.log("Inside sortphenotypes change");
 			//this._showThrobber();
         	self.options.selectedSort = self.options.sortList[d.target.selectedIndex].type;
         	self.options.selectedOrder = self.options.sortList[d.target.selectedIndex].order;
