@@ -133,6 +133,7 @@ var url = document.URL;
 	   		
 		//reset option values if needed before reloading data
 		_reset: function() {
+		    console.log("reset is being called..");
 			var self = this;
 
 			self.options.currModelIdx = 0;
@@ -194,6 +195,19 @@ var url = document.URL;
 	 * [ {"id": "HP:12345", "observed" :"positive"}, {"id: "HP:23451", "observed" : "negative"}, É]
 	 */
 	_create: function() {
+	    console.log("in create - about to call getJson");
+	    var configoptions;
+	    $.ajax( {dataType: "json",
+		     url:"/widgets/modeltype/js/phenogrid_conf.json",
+		     async: false,
+		     success: function(d) {
+			 console.log("got json...data is.."+JSON.stringify(d));
+			 configoptions = d;
+			 }
+		     });
+	    $.extend(true,this.options,configoptions);
+	    console.log("got json");
+	    console.log("new options are..."+JSON.stringify(this.options));
 	    
 		//save a copy of the original phenotype data
 		this.options.origPhenotypeData = this.options.phenotypeData.slice();
@@ -244,6 +258,19 @@ var url = document.URL;
 	    		this._createOverviewSection();
 	    } 
 	},
+	
+	/* dummy option procedures as per 
+	   http://learn.jquery.com/jquery-ui/widget-factory/how-to-use-the-widget-factory/
+	   likely to have some content added as we proceed
+	 */
+	_setOption: function( key, value ) {
+            this._super( key, value );
+	},
+
+	_setOptions: function( options ) {
+            this._super( options );
+	},
+
 	
 	//create this visualization if no phenotypes or models are returned
 	_createEmptyVisualization: function(url, organism) {

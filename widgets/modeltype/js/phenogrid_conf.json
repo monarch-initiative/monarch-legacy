@@ -1,0 +1,121 @@
+{
+	"species": [
+		{
+			"name":"All",
+			"listname":"All",
+			"taxon":"",
+			"level":0	
+		},
+		{
+			"name":"Metazoa",
+			"listname":"Metazoa",
+			"taxon":"",
+			"level":1	
+		},
+		{
+			"name":"Fish",
+			"listname":"Fish",
+			"taxon":"",
+			"level":2	
+		},
+		{
+			"name":"Danio Rerio",
+			"listname":"Zebrafish",
+			"taxon":"NCBITaxon:7955",
+			"level":3	
+		},
+		{
+			"name":"Fly",
+			"listname":"Fly",
+			"taxon":"",
+			"level":2	
+		},
+		{
+			"name":"Drosophila melanogaster",
+			"listname":"Fly",
+			"taxon":"NCBITaxon:7227",
+			"level":3	
+		},	
+		{
+			"name":"Worm",
+			"listname":"Worm",
+			"taxon":"",
+			"level":2	
+		},
+		{
+			"name":"Chordata",
+			"listname":"Chordata",
+			"taxon":"",
+			"level":2	
+		},
+		{
+			"name":"Dog",
+			"listname":"Dog",
+			"taxon":"",
+			"level":3	
+		},
+		{
+			"name":"Homo sapiens",
+			"listname":"Human",
+			"taxon":"NCBITaxon:9606",
+			"level":3	
+		},
+		{
+			"name":"Mus Musculus",
+			"listname":"Mouse",
+			"taxon":"NCBITaxon:10090",
+			"level":3	
+		},
+		{
+			"name":"Rat",
+			"listname":"Rat",
+			"taxon":"",
+			"level":3	
+		}
+	],
+	"type": [
+		"Disease",
+		"Gene",
+		"Genotype",
+		"Strain",
+		"Variant"
+	],
+	"root": [
+		"Abnormal Phenotype"
+	],
+	"calculation": [
+		{
+			"label":"Distance",
+			"calc":0
+		},
+		{
+			"label":"Ratio (q)",
+			"calc":1
+		},
+		{
+			"label":"Ratio (t)",
+			"calc":3
+		},
+		{
+			"label":"Uniqueness",
+			"calc":2
+		}
+	],
+	"phenotypesort": [
+		{
+			"type":"Alphabetic",
+			"order":0
+		},
+		{
+			"type":"Frequency and Rarity",
+			"order":1
+		},
+		{
+			"type":"Frequency",
+			"order":2
+		}
+		
+	]
+}	
+		
+
