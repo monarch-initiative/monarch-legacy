@@ -1,41 +1,70 @@
 /*
  *
- * modeltype - 
-
- * TO USE:
- * create an instance of the widget on your page like this:
+ * Modeltype - the Phenogrid widget.
  * 
- * 		modeltype.init(html_div, data);
- *  where: 
- *         -html_div is the location on the page where you want the widget to appear
- *  
- *  	   -data is an array of the phenotype and model information.  Each record of the array should
- *            contain the following information in a Javascript object:
+ * implemented as a jQuery UI (jqueryui.com) widget, this can be instantiated on a jquery-enabled web page
+ *  with a call of the form 
+ *  $("#mydiv).modeltype({phenotypeData: phenotypeList}).
+ * 
+ *  where 
+ *
+ *   #mydiv is the id of the div that will contain the phenogrid widget
+ *   
+ *   and phenotypeList takes one of two forms:
+ *
+ *   1. a list of hashes of the form 
+ * [ {"id": "HP:12345", "observed" :"positive"}, {"id: "HP:23451", "observed" : "negative"},]
+ *   2. a simple list of ids..
+ *  [ "HP:12345", "HP:23451"], etc.
+ *
+ * Configuration options useful for setting species displayed, similarity calculations, and 
+ * related parameters can also be passed in this hash. As of September
+ * 2014, these options are currently being refactored - further
+ * documentation hopefully coming soon.
+ *
+ *
+ *  The phneogrid widget uses semantic similarity calculations
+ *  provided by OWLSim (www.owlsim.org), as provided through APIs from
+ *  the Monarch initiative (www.monarchinitiative.org). 
+ * 
+ *  Given an input list of phenotypes and parameters indicating
+ *  desired source of matching models (humans, model organisms, etc.),
+ *  the phenogrid will call the Monarch API to get OWLSim results
+ *  consisting of arrays of the items of the following form:
  *  {
-      "id":"HP_0000716_MP_0001413_MGI_006446",
-      "label_a":"Depression",
-      "id_a":"HP:0000716",
-      "subsumer_label":"Abnormal emotion/affect behavior",
-      "subsumer_id":"HP:0100851",
-      "value":5.667960271407814,
-      "label_b":"abnormal response to new environment",
-      "id_b":"MP:0001413",
-      "model_id":"MGI_006446",
-      "model_label":"B10.Cg-H2<sup>h4</sup>Sh3pxd2b<sup>nee</sup>/GrsrJ",
-      "rowid":"HP_0000716_HP_0100851"
-   },
-
-
-NOTE: I probably need a model_url to render additional model info on the screen.  Alternatively I can load the data
-as a separate call in the init function.
+ *     "id":"HP_0000716_MP_0001413_MGI_006446",
+ *     "label_a":"Depression",
+ *     "id_a":"HP:0000716",
+ *     "subsumer_label":"Abnormal emotion/affect behavior",
+ *     "subsumer_id":"HP:0100851",
+ *     "value":5.667960271407814,
+ *     "label_b":"abnormal response to new environment",
+ *     "id_b":"MP:0001413",
+ *     "model_id":"MGI_006446",
+ *     "model_label":"B10.Cg-H2<sup>h4</sup>Sh3pxd2b<sup>nee</sup>/GrsrJ",
+ *     "rowid":"HP_0000716_HP_0100851"
+ *  },
+ *
+ * These results will then be rendered in the phenogrid
+ *
+ *
+ *
+ *
+ * NOTE: I probably need a model_url to render additional model info on 
+ * the screen.  Alternatively I can load the data 
+ * as a separate call in the init function.
+ *
+ * META NOTE (HSH - 8/25/2014): Can we remove this note, or at least clarify?
  */
 var url = document.URL;
-//Save this for future use - this appends a link for a css file - for now the styles are embedded in the code 
-/**$(document).ready(function(){    
+/*Save this for future use - this appends a link for a css file - for now the styles are embedded in the code 
+/$(document).ready(function(){    
 	 //console.log(url);
 	 if (url != "http://localhost:8080/page/widget"){
      $('head').append('<link href="/css/modelviewer.css" type="text/css" rel="stylesheet" />');} 
-});*/
+});
+META NOTE (HSH - 8/25/2014): Can we remove this note, or at least clarify?
+*/
 
 (function($) {
     
@@ -191,7 +220,9 @@ var url = document.URL;
 	/**
 	 * imageDiv - the place you want the widget to appear
 	 * phenotype_data - a list of phenotypes in the following format:
-	 * [ {"id": "HP:12345", "observed" :"positive"}, {"id: "HP:23451", "observed" : "negative"}, É]
+	 * [ {"id": "HP:12345", "observed" :"positive"}, {"id: "HP:23451", "observed" : "negative"},]
+	 * or simply a list of IDs.
+	 * [ "HP:12345", "HP:23451", ...]
 	 */
 	_create: function() {
 	    var configoptions;
