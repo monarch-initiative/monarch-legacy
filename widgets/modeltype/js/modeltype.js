@@ -211,7 +211,7 @@ META NOTE (HSH - 8/25/2014): Can we remove this note, or at least clarify?
 			//self.options.modelList = [];
 			//self.options.filteredPhenotypeData = [];
 			
-			
+		    this.state = $.extend(true,{},self.options);
 	},
 	
 	
@@ -234,44 +234,45 @@ META NOTE (HSH - 8/25/2014): Can we remove this note, or at least clarify?
 			 }
 		     });
 	    $.extend(true,this.options,configoptions);
+	    this.state = $.extend(true,{},this.options);
 	    
 		//save a copy of the original phenotype data
-		this.options.origPhenotypeData = this.options.phenotypeData.slice();
-		this._setTargetSpeciesName(this.options.targetSpecies);
-		this._setSelectedCalculation(this.options.selectedCalculation);
-		this._setSelectedSort(this.options.selectedSort);
-		this.options.yTranslation =(this.options.targetSpecies == '9606') ? 0 : 0;
-		this.options.w = this.options.m[1]-this.options.m[3];
-	    this.options.h = 1300 -this.options.m[0]-this.options.m[2];
-	    this.options.currModelIdx = this.options.modelDisplayCount-1;
-	    this.options.currPhenotypeIdx = this.options.phenotypeDisplayCount-1;
-		this.options.phenotypeLabels = this._filterPhenotypeLabels(this.options.phenotypeData);
-	    this.options.phenotypeData = this._filterPhenotypeResults(this.options.phenotypeData);
-	    this.options.inputPhenotypeData = this.options.phenotypeData.slice();
+		this.state.origPhenotypeData = this.state.phenotypeData.slice();
+		this._setTargetSpeciesName(this.state.targetSpecies);
+		this._setSelectedCalculation(this.state.selectedCalculation);
+		this._setSelectedSort(this.state.selectedSort);
+		this.state.yTranslation =(this.state.targetSpecies == '9606') ? 0 : 0;
+		this.state.w = this.state.m[1]-this.state.m[3];
+	    this.state.h = 1300 -this.state.m[0]-this.state.m[2];
+	    this.state.currModelIdx = this.state.modelDisplayCount-1;
+	    this.state.currPhenotypeIdx = this.state.phenotypeDisplayCount-1;
+		this.state.phenotypeLabels = this._filterPhenotypeLabels(this.state.phenotypeData);
+	    this.state.phenotypeData = this._filterPhenotypeResults(this.state.phenotypeData);
+	    this.state.inputPhenotypeData = this.state.phenotypeData.slice();
 		this._loadData();
 		var modData = [];
-		if (this.options.targetSpeciesName == "Overview") {
-			modData = this.options.combinedModelData.slice();
-			this.options.yoffsetOver = 30;
+		if (this.state.targetSpeciesName == "Overview") {
+			modData = this.state.combinedModelData.slice();
+			this.state.yoffsetOver = 30;
 		}
 		else {
-			modData = this.options.modelData.slice();
-			this.options.yoffsetOver = 0;
+			modData = this.state.modelData.slice();
+			this.state.yoffsetOver = 0;
 		}	    
 		this._filterData(modData.slice());
-		this.options.unmatchedPhenotypes = this._getUnmatchedPhenotypes();
+		this.state.unmatchedPhenotypes = this._getUnmatchedPhenotypes();
 		
-	    if ((this.options.combinedModelData.length != 0) ||
-		    (modData.length != 0 && this.options.phenotypeData.length != 0 && this.options.filteredPhenotypeData.length != 0)){	    
+	    if ((this.state.combinedModelData.length != 0) ||
+		    (modData.length != 0 && this.state.phenotypeData.length != 0 && this.state.filteredPhenotypeData.length != 0)){	    
 	         
 	            //this._createYAxis();
 	    	    //just pad the overall height by a skosh...
-	    	    this.options.h = this.options.yAxisMax + 60;
+	    	    this.state.h = this.state.yAxisMax + 60;
 	            this._initCanvas(); 
 				this._addLogoImage();	        
-	            this.options.svg
+	            this.state.svg
 					.attr("width", "100%")
-					.attr("height", 480); //this.options.h - 20 + this.options.yTranslation);
+					.attr("height", 480); //this.state.h - 20 + this.state.yTranslation);
 				this._createAccentBoxes();				
 	            //this._createScrollBars();
 	            this._createColorScale();
@@ -305,13 +306,13 @@ META NOTE (HSH - 8/25/2014): Can we remove this note, or at least clarify?
 		var fullmsg = "There are no " + organism + " models for this disease. "
 		d3.select("#svg_area").remove();
 		this.element.append("<svg id='svg_area'></svg>");
-        this.options.svg = d3.select("#svg_area");
-        self.options.svg
+        this.state.svg = d3.select("#svg_area");
+        self.state.svg
 			.attr("width", 1100)
 			.attr("height", 70);
-        self.options.h = 60;
-        self.options.yoffset = 50;
-        self.options.svg.append("text")
+        self.state.h = 60;
+        self.state.yoffset = 50;
+        self.state.svg.append("text")
             .attr("x", 80)
             .attr("y", 60)
             .attr("height", 70)
@@ -325,7 +326,10 @@ META NOTE (HSH - 8/25/2014): Can we remove this note, or at least clarify?
 			.on("click", function(d,i){
 				$("#return").remove();
 				$("#errmsg").remove();
-				d3.select("#svg_area").remove();
+			        d3.select("#svg_area").remove();
+
+			    /*** HSH 20140825 MUST BE CHANGED !!!! */
+			    
 				self.options.phenotypeData = self.options.origPhenotypeData.slice();
 				self.options.targetSpecies =  '2';
 				self._reset();
@@ -342,10 +346,10 @@ META NOTE (HSH - 8/25/2014): Can we remove this note, or at least clarify?
 			modelCt = 0;
 		
 		//This is for the new "Overview" target option 		
-		//if (this.options.targetSpeciesName == "Overview"){ modelCt = self.options.multiOrganismCt * 3;}
-		//else { modelCt = self.options.modelDisplayCount;}
-		modelCt = self.options.modelDisplayCount;
-		for (var k = 0; k < self.options.phenotypeDisplayCount; k++){
+		//if (this.state.targetSpeciesName == "Overview"){ modelCt = self.state.multiOrganismCt * 3;}
+		//else { modelCt = self.state.modelDisplayCount;}
+		modelCt = self.state.modelDisplayCount;
+		for (var k = 0; k < self.state.phenotypeDisplayCount; k++){
 			for (var l = 0; l < modelCt; l++) {
 			   var r = [];
 			   r.push(k);
@@ -353,12 +357,12 @@ META NOTE (HSH - 8/25/2014): Can we remove this note, or at least clarify?
 			   data.push( r );
 			}
 		}
-		self.options.svg.selectAll("rect.bordered")
+		self.state.svg.selectAll("rect.bordered")
 				   .data(data)
 				   .enter()
 				   .append("rect")
 				   .attr("id","gridline")
-				   .attr("transform","translate(232, " + (self.options.yoffset + self.options.yoffsetOver + 5) +")")
+				   .attr("transform","translate(232, " + (self.state.yoffset + self.state.yoffsetOver + 5) +")")
 				   .attr("x", function(d,i) { return d[1] * 18 })
 				   .attr("y", function(d,i) { return d[0] * 13 })  
 				   .attr("class", "hour bordered deselected")
@@ -371,28 +375,28 @@ META NOTE (HSH - 8/25/2014): Can we remove this note, or at least clarify?
 	_createOverviewSection: function() {
 		var self=this;
 		
-		if (this.options.phenotypeData.length < 26) {
-			self.options.globalViewHeight = 30;
+		if (this.state.phenotypeData.length < 26) {
+			self.state.globalViewHeight = 30;
 		}
-		var globalview = self.options.svg.append("rect")
+		var globalview = self.state.svg.append("rect")
 			//note: I had to make the rectangle slightly bigger to compensate for the strike-width
-			.attr("x", self.options.axis_pos_list[2] + 42)
-			.attr("y", self.options.yoffset + self.options.yoffsetOver+ 30 + this.options.yTranslation)
+			.attr("x", self.state.axis_pos_list[2] + 42)
+			.attr("y", self.state.yoffset + self.state.yoffsetOver+ 30 + this.state.yTranslation)
 			.attr("id", "globalview")
-			.attr("height", self.options.globalViewHeight + 6)
-			.attr("width", self.options.globalViewWidth + 6);
+			.attr("height", self.state.globalViewHeight + 6)
+			.attr("width", self.state.globalViewWidth + 6);
 			
-		var scoretip = self.options.svg.append("text")
-				.attr("transform","translate(" + (self.options.axis_pos_list[2] ) + "," + (self.options.yTranslation + self.options.yoffset - 6) + ")")
+		var scoretip = self.state.svg.append("text")
+				.attr("transform","translate(" + (self.state.axis_pos_list[2] ) + "," + (self.state.yTranslation + self.state.yoffset - 6) + ")")
     	        .attr("x", 0)
 				.attr("y", 0)
 				.attr("class", "tip")
 				.text("< Model Scores");			
 		
-		var tip	= self.options.svg
+		var tip	= self.state.svg
 				.append("svg:image")				
-				.attr("xlink:href", this.options.scriptpath + "../image/greeninfo30.png")
-				.attr("transform","translate(" + (self.options.axis_pos_list[2] +102) + "," + (self.options.yTranslation + self.options.yoffset - 20) + ")")
+				.attr("xlink:href", this.state.scriptpath + "../image/greeninfo30.png")
+				.attr("transform","translate(" + (self.state.axis_pos_list[2] +102) + "," + (self.state.yTranslation + self.state.yoffset - 20) + ")")
 				.attr("id","modelscores")
 				.attr("x", 0)
 				.attr("y", 0)
@@ -403,48 +407,48 @@ META NOTE (HSH - 8/25/2014): Can we remove this note, or at least clarify?
 					self._showDialog(name);
 				});
 		
-		var rect_instructions = self.options.svg.append("text")
- 			.attr("x", self.options.axis_pos_list[2] + 10)
-			.attr("y", self.options.yoffset + self.options.yoffsetOver + 5 + this.options.yTranslation)
+		var rect_instructions = self.state.svg.append("text")
+ 			.attr("x", self.state.axis_pos_list[2] + 10)
+			.attr("y", self.state.yoffset + self.state.yoffsetOver + 5 + this.state.yTranslation)
  			.attr("class", "instruct")
  			.text("Use the phenotype map below to");
  		
- 		var rect_instructions = self.options.svg.append("text")
- 			.attr("x", self.options.axis_pos_list[2] + 10)
-			.attr("y", self.options.yoffset + self.options.yoffsetOver + 15 + this.options.yTranslation) 
+ 		var rect_instructions = self.state.svg.append("text")
+ 			.attr("x", self.state.axis_pos_list[2] + 10)
+			.attr("y", self.state.yoffset + self.state.yoffsetOver + 15 + this.state.yTranslation) 
  			.attr("class", "instruct")
  			.text("navigate the model view on the left");
 			
 	    var  sortDataList = [];
 		
-		for (i=0; i<self.options.phenotypeSortData.length; i++) {
-			sortDataList.push(self.options.phenotypeSortData[i][0].id_a);  //rowid
+		for (i=0; i<self.state.phenotypeSortData.length; i++) {
+			sortDataList.push(self.state.phenotypeSortData[i][0].id_a);  //rowid
 		}
 		var mods = [],
 			modData = [];
 		
 		//This is for the new "Overview" target option 
-		if (this.options.targetSpeciesName == "Overview") {
-			mods = self.options.combinedModelList;
-			modData = self.options.combinedModelData;
+		if (this.state.targetSpeciesName == "Overview") {
+			mods = self.state.combinedModelList;
+			modData = self.state.combinedModelData;
 		}
 		else {
-			mods = self.options.modelList;
-			modData = self.options.modelData;
+			mods = self.state.modelList;
+			modData = self.state.modelData;
 		}
 	
-		this.options.smallYScale = d3.scale.ordinal()
+		this.state.smallYScale = d3.scale.ordinal()
 		    .domain(sortDataList.map(function (d) {return d; }))				    
-		    .rangePoints([0,self.options.globalViewHeight]);
+		    .rangePoints([0,self.state.globalViewHeight]);
 
-		this.options.smallXScale = d3.scale.ordinal()
+		this.state.smallXScale = d3.scale.ordinal()
 		    .domain(mods.map(function (d) {return d.model_id; }))
-		    .rangePoints([0,self.options.globalViewWidth]);
+		    .rangePoints([0,self.state.globalViewWidth]);
 
   		//next assign the x and y axis using the full list
 		//add the items using smaller rects
 
-	     var model_rects = this.options.svg.selectAll(".mini_models")
+	     var model_rects = this.state.svg.selectAll(".mini_models")
 	      	.data(modData, function(d) {
 	      	    return d.id;
 	      	});
@@ -452,30 +456,30 @@ META NOTE (HSH - 8/25/2014): Can we remove this note, or at least clarify?
 	     model_rects.enter()
 		  	  .append("rect")
 		  	  .attr("transform",
-		  		"translate(" + (self.options.axis_pos_list[2] + 42) + "," + (self.options.yoffset + self.options.yoffsetOver +30 + self.options.yTranslation) + ")")
+		  		"translate(" + (self.state.axis_pos_list[2] + 42) + "," + (self.state.yoffset + self.state.yoffsetOver +30 + self.state.yTranslation) + ")")
 		  	  .attr("class",  "mini_model")
-		  	  .attr("y", function(d, i) { return self.options.smallYScale(d.id_a);})
-		  	  .attr("x", function(d) { return self.options.smallXScale(d.model_id);})
+		  	  .attr("y", function(d, i) { return self.state.smallYScale(d.id_a);})
+		  	  .attr("x", function(d) { return self.state.smallXScale(d.model_id);})
 		  	  .attr("width", 2)
 		  	  .attr("height", 2)
 		  	  .attr("fill", function(d, i) {
 					//This is for the new "Overview" target option 
-					if (self.options.targetSpeciesName == "Overview"){
-						if (d.species == "Homo sapiens") {return self.options.colorScaleB(d.value);} 
-						else if (d.species == "Mus musculus") {return self.options.colorScaleR(d.value);}
-						else if (d.species == "Danio rerio") {return self.options.colorScaleG(d.value);}
+					if (self.state.targetSpeciesName == "Overview"){
+						if (d.species == "Homo sapiens") {return self.state.colorScaleB(d.value);} 
+						else if (d.species == "Mus musculus") {return self.state.colorScaleR(d.value);}
+						else if (d.species == "Danio rerio") {return self.state.colorScaleG(d.value);}
 					}	
 					else {	
-						return self.options.colorScaleB(d.value); 
+						return self.state.colorScaleB(d.value); 
 				  }
 		  	  });
 			  
-		selectRectHeight = self.options.smallYScale(self.options.phenotypeSortData[self.options.phenotypeDisplayCount-1][0].id_a); //rowid
-		selectRectWidth = self.options.smallXScale(mods[self.options.modelDisplayCount-1].model_id);
+		selectRectHeight = self.state.smallYScale(self.state.phenotypeSortData[self.state.phenotypeDisplayCount-1][0].id_a); //rowid
+		selectRectWidth = self.state.smallXScale(mods[self.state.modelDisplayCount-1].model_id);
 		//create the "highlight" rectangle
-		self.options.highlightRect = self.options.svg.append("rect")
+		self.state.highlightRect = self.state.svg.append("rect")
 			.attr("transform",												//133
-		  		"translate(" + (self.options.axis_pos_list[2] + 41) + "," + (116+ self.options.yoffsetOver + self.options.yTranslation) + ")")
+		  		"translate(" + (self.state.axis_pos_list[2] + 41) + "," + (116+ self.state.yoffsetOver + self.state.yTranslation) + ")")
 			.attr("x", 0)
 			.attr("y", 0)		
 			.attr("class", "draggable")					
@@ -488,36 +492,36 @@ META NOTE (HSH - 8/25/2014): Can we remove this note, or at least clarify?
                 	
                 	//notes: account for the width of the rectangle in my x and y calculations
                 	//do not use the event x and y, they will be out of range at times.  use the converted values instead.
-                	var rect = self.options.svg.select("#selectionrect");
+                	var rect = self.state.svg.select("#selectionrect");
         		  	rect.attr("transform","translate(0,0)")
         			//limit the range of the x value
-        			var newX = d3.event.x - (self.options.axis_pos_list[2] + 45);
+        			var newX = d3.event.x - (self.state.axis_pos_list[2] + 45);
         		  	newX = Math.max(newX,0);
-        		  	newX = Math.min(newX,(110-self.options.smallXScale(mods[self.options.modelDisplayCount-1].model_id)));
-               	    rect.attr("x", newX + (self.options.axis_pos_list[2] + 45))
+        		  	newX = Math.min(newX,(110-self.state.smallXScale(mods[self.state.modelDisplayCount-1].model_id)));
+               	    rect.attr("x", newX + (self.state.axis_pos_list[2] + 45))
                	    //limit the range of the y value
         			var newY = d3.event.y - 119;					
         		  	newY = Math.max(newY,0);
-        		  	newY = Math.min(newY,(self.options.globalViewHeight-self.options.smallYScale(self.options.phenotypeSortData[self.options.phenotypeDisplayCount-1][0].id_a)));  //rowid
-               	    rect.attr("y", newY + 119 + self.options.yTranslation + self.options.yoffsetOver);
+        		  	newY = Math.min(newY,(self.state.globalViewHeight-self.state.smallYScale(self.state.phenotypeSortData[self.state.phenotypeDisplayCount-1][0].id_a)));  //rowid
+               	    rect.attr("y", newY + 119 + self.state.yTranslation + self.state.yoffsetOver);
 					
         			var xPos = newX;
         			
-        			var leftEdges = self.options.smallXScale.range();
-			        var width = self.options.smallXScale.rangeBand()+10;
+        			var leftEdges = self.state.smallXScale.range();
+			        var width = self.state.smallXScale.rangeBand()+10;
 			        var j;
 			        for(j=0; xPos > (leftEdges[j] + width); j++) {}
 			            //do nothing, just increment j until case fails
-               	    var newModelPos = j+self.options.modelDisplayCount;
+               	    var newModelPos = j+self.state.modelDisplayCount;
 
 			  		var yPos = newY;
 			  		
-        			var leftEdges = self.options.smallYScale.range();
-			        var height = self.options.smallYScale.rangeBand();// + self.options.yTranslation;
+        			var leftEdges = self.state.smallYScale.range();
+			        var height = self.state.smallYScale.rangeBand();// + self.state.yTranslation;
 			        var j;
 			        for(j=0; yPos > (leftEdges[j] + height); j++) {}
 			            //do nothing, just increment j until case fails
-               	    var newPhenotypePos = j+self.options.phenotypeDisplayCount;
+               	    var newPhenotypePos = j+self.state.phenotypeDisplayCount;
 
                     self._updateModel(newModelPos, newPhenotypePos);
                 
@@ -526,14 +530,14 @@ META NOTE (HSH - 8/25/2014): Can we remove this note, or at least clarify?
 
 			.attr("id", "selectionrect")
 			//set the height and width to match the number of items shown on the axes
-			.attr("height", self.options.smallYScale(self.options.phenotypeSortData[self.options.phenotypeDisplayCount-1][0].id_a))  //rowid
-			.attr("width", self.options.smallXScale(mods[self.options.modelDisplayCount-1].model_id));
+			.attr("height", self.state.smallYScale(self.state.phenotypeSortData[self.state.phenotypeDisplayCount-1][0].id_a))  //rowid
+			.attr("width", self.state.smallXScale(mods[self.state.modelDisplayCount-1].model_id));
 	},
 
 	_getUnmatchedPhenotypes : function(){
 	
-		var fullset = this.options.inputPhenotypeData,
-			partialset = this.options.phenotypeSortData,
+		var fullset = this.state.inputPhenotypeData,
+			partialset = this.state.phenotypeSortData,
 			full = [],
 			partial = [],
 			matchedset = [],
@@ -565,7 +569,7 @@ META NOTE (HSH - 8/25/2014): Can we remove this note, or at least clarify?
 			}					
 			if (dupArray[0] == undefined) {dupArray = []};
 			
-			/**self.options.phenotypeSortData.sort(function(a,b) {
+			/**self.state.phenotypeSortData.sort(function(a,b) {
 		    var labelA = a.label.toLowerCase(), 
 				labelB = b.label.toLowerCase();
 			if (labelA < labelB) {return -1;}
@@ -580,7 +584,7 @@ META NOTE (HSH - 8/25/2014): Can we remove this note, or at least clarify?
 	_showUnmatchedPhenotypes : function(){
 		var self=this;
 	
-		var unmatched = self.options.unmatchedPhenotypes,
+		var unmatched = self.state.unmatchedPhenotypes,
 			dupLabels = [],
 			text = "";
 			
@@ -588,7 +592,7 @@ META NOTE (HSH - 8/25/2014): Can we remove this note, or at least clarify?
 			vst phenA = a.
 		}*/
 		
-		var labels = self.options.phenotypeLabels;
+		var labels = self.state.phenotypeLabels;
 		for (i = 0; i < unmatched.length; i++)
 		{
 			for (j=0; j<labels.length; j++){
@@ -609,10 +613,10 @@ META NOTE (HSH - 8/25/2014): Can we remove this note, or at least clarify?
 	
 	_getUnmatchedLabels: function() {
 	  	var unmatchedLabels = [];
-		for (i=0;i<this.options.unmatchedPhenotypes.length; i++){
+		for (i=0;i<this.state.unmatchedPhenotypes.length; i++){
 		
 			jQuery.ajax({
-				url : this.options.serverURL + "/phenotype/" + this.options.unmatchedPhenotypes[i] + ".json",
+				url : this.state.serverURL + "/phenotype/" + this.state.unmatchedPhenotypes[i] + ".json",
 				async : false,
 				dataType : 'json',
 				success : function(data) {
@@ -627,10 +631,10 @@ META NOTE (HSH - 8/25/2014): Can we remove this note, or at least clarify?
 	_getPhenotypeLabel : function(id){
 		var label = "";
 		
-		for (i=0; i < this.options.phenotypeSortData.length; i++){
-			if(id == this.options.phenotypeSortData[i][0].id_a.replace("_",":"))
+		for (i=0; i < this.state.phenotypeSortData.length; i++){
+			if(id == this.state.phenotypeSortData[i][0].id_a.replace("_",":"))
 			{ 
-				label = this.options.phenotypeSortData[i][0].label_a;
+				label = this.state.phenotypeSortData[i][0].label_a;
 				break;
 			}
 		}
@@ -641,13 +645,13 @@ META NOTE (HSH - 8/25/2014): Can we remove this note, or at least clarify?
 		var self = this;
 		
 		if (comp != undefined || comp != null)
-			{ this.options.comparisonType = comp + "s";}
+			{ this.state.comparisonType = comp + "s";}
 		else {
-			if (this.options.targetSpecies === "9606") {
-				this.options.comparisonType = "models";
+			if (this.state.targetSpecies === "9606") {
+				this.state.comparisonType = "models";
 			}
 			else {
-				this.options.comparisonType = "genes";
+				this.state.comparisonType = "genes";
 			}
 		}
 	},
@@ -662,36 +666,36 @@ META NOTE (HSH - 8/25/2014): Can we remove this note, or at least clarify?
 		//if the taxonid is an empty string, set it to Overview - taxonid - 2
 		if (taxonid === "") { taxonid = 2;}
 	    var tempdata;
-	    for (var i  = 0; i  <self.options.targetSpeciesList.length; i++) {
-			if (self.options.targetSpeciesList[i].taxon == taxonid) {
-				tempdata  = self.options.targetSpeciesList[i];
+	    for (var i  = 0; i  <self.state.targetSpeciesList.length; i++) {
+			if (self.state.targetSpeciesList[i].taxon == taxonid) {
+				tempdata  = self.state.targetSpeciesList[i];
 				break;
 			}
 	    }	    
-	    self.options.targetSpeciesName = tempdata.name;
-	    self.options.targetSpecies = tempdata.taxon;
+	    self.state.targetSpeciesName = tempdata.name;
+	    self.state.targetSpecies = tempdata.taxon;
 	},
 
 	_setSelectedCalculation: function(calc) {
 		var self = this;
 		
-		var tempdata = self.options.selectList.filter(function(d) {
+		var tempdata = self.state.selectList.filter(function(d) {
 	    	return d.calc === calc;
 	    });
 
-		self.options.selectedLabel = tempdata[0].label;
-		self.options.selectedCalculation = tempdata[0].calc;
+		self.state.selectedLabel = tempdata[0].label;
+		self.state.selectedCalculation = tempdata[0].calc;
 	},
 
 	_setSelectedSort: function(type) {
 		var self = this;
 		
-		var tempdata = self.options.sortList.filter(function(d) {
+		var tempdata = self.state.sortList.filter(function(d) {
 	    	return d.type === type;
 	    });
 
-		self.options.selectedSort = tempdata[0].type;
-		self.options.selectedOrder = tempdata[0].order;
+		self.state.selectedSort = tempdata[0].type;
+		self.state.selectedOrder = tempdata[0].order;
 	},
 
 	//given the full dataset, return a filtered dataset containing the
@@ -729,20 +733,20 @@ META NOTE (HSH - 8/25/2014): Can we remove this note, or at least clarify?
 			}
     	}
     	//copy the phenotypeArray to phenotypeData array - now instead of ALL phenotypes, it will be limited to unique phenotypes for this disease
-		//do not alter this array: this.options.phenotypeData
-    	this.options.phenotypeData = phenotypeArray.slice();
+		//do not alter this array: this.state.phenotypeData
+    	this.state.phenotypeData = phenotypeArray.slice();
 
     	//we need to adjust the display counts and indexing if there are fewer phenotypes than the default phenotypeDisplayCount
-    	if (this.options.phenotypeData.length < this.options.phenotypeDisplayCount) {
-    		this.options.currPhenotypeIdx = this.options.phenotypeData.length-1;
-    		this.options.phenotypeDisplayCount = this.options.phenotypeData.length;
+    	if (this.state.phenotypeData.length < this.state.phenotypeDisplayCount) {
+    		this.state.currPhenotypeIdx = this.state.phenotypeData.length-1;
+    		this.state.phenotypeDisplayCount = this.state.phenotypeData.length;
     	}
 		
 		//Step 2: Select phenotype sort method based on options in #sortphenotypes dropdown
 		//Alphabetic: sorted alphabetically
 		//Frequency and Rarity: sorted by the sum of each phenotype across all models
 		//Frequency: sorted by the count of number of model matches per phenotype
-		switch(this.options.selectedSort) {
+		switch(this.state.selectedSort) {
 			case "Alphabetic":  this._alphabetizePhenotypes();
 								break;
 			case "Frequency and Uniqueness":    this._rankPhenotypes();
@@ -753,31 +757,31 @@ META NOTE (HSH - 8/25/2014): Can we remove this note, or at least clarify?
 		}
 		
 		//Soted phenotype data, "phenotypeSortData", is returned from each sorting function; 
-		this.options.phenotypeSortData = this.options.phenotypeSortData.slice();
+		this.state.phenotypeSortData = this.state.phenotypeSortData.slice();
 		
 		//Step 3: Filter for the next n phenotypes based on phenotypeDisplayCount and update the y-axis
-		this.options.filteredPhenotypeData = [];
-		this.options.yAxis = [];
-		this.options.filteredModelData = [];
+		this.state.filteredPhenotypeData = [];
+		this.state.yAxis = [];
+		this.state.filteredModelData = [];
 		//begin to sort batches of phenotypes based on the phenotypeDisplayCount
-		var startIdx = this.options.currPhenotypeIdx - (this.options.phenotypeDisplayCount -1);		
+		var startIdx = this.state.currPhenotypeIdx - (this.state.phenotypeDisplayCount -1);		
 		//extract the new array of filtered Phentoypes
 		//also update the axis
 		//also update the modeldata
 		var axis_idx = 0;
 		var tempFilteredModelData = [];
 		
-		if (this.options.targetSpeciesName == "Overview") {
-			modData = this.options.combinedModelData.slice();
+		if (this.state.targetSpeciesName == "Overview") {
+			modData = this.state.combinedModelData.slice();
 		}
 		else {
-			modData = this.options.modelData.slice();
+			modData = this.state.modelData.slice();
 		}	 
 		
 		//get phenotype[startIdx] up to phenotype[currPhenotypeIdx] from the array of sorted phenotypes
-		for (var i = startIdx;i <self.options.currPhenotypeIdx + 1;i++) {
+		for (var i = startIdx;i <self.state.currPhenotypeIdx + 1;i++) {
 			//move the ranked phenotypes onto the filteredPhenotypeData array
-			self.options.filteredPhenotypeData.push(self.options.phenotypeSortData[i]);
+			self.state.filteredPhenotypeData.push(self.state.phenotypeSortData[i]);
 			//update the YAxis   	
 			//the height of each row
 			var size = 10;
@@ -785,24 +789,24 @@ META NOTE (HSH - 8/25/2014): Can we remove this note, or at least clarify?
 			var gap = 3;
 			//push the rowid and ypos onto the yaxis array
 			//so now the yaxis will be in the order of the ranked phenotypes
-			var stuff = {"id": self.options.phenotypeSortData[i][0].id_a, "ypos" : ((axis_idx * (size+gap)) + self.options.yoffset)};// + self.options.yoffsetOver)};
-			self.options.yAxis.push(stuff); 
+			var stuff = {"id": self.state.phenotypeSortData[i][0].id_a, "ypos" : ((axis_idx * (size+gap)) + self.state.yoffset)};// + self.state.yoffsetOver)};
+			self.state.yAxis.push(stuff); 
 			axis_idx = axis_idx + 1;
 			//update the ModelData
 			
 			//find the rowid in the original ModelData (list of models and their matching phenotypes) and write it to tempdata if it matches this phenotypeSortData rowid.
 			//In this case, the rowid is just the id_a value in the model data
 			var tempdata = modData.filter(function(d) {
-				return d.id_a == self.options.phenotypeSortData[i][0].id_a;
+				return d.id_a == self.state.phenotypeSortData[i][0].id_a;
 			});
 			tempFilteredModelData = tempFilteredModelData.concat(tempdata);
 		}
 		
-		for (var idx=0;idx<self.options.filteredModelList.length;idx++) {
+		for (var idx=0;idx<self.state.filteredModelList.length;idx++) {
 			var tempdata = tempFilteredModelData.filter(function(d) {
-				return d.model_id == self._getConceptId(self.options.filteredModelList[idx].model_id);
+				return d.model_id == self._getConceptId(self.state.filteredModelList[idx].model_id);
 			});
-			self.options.filteredModelData = self.options.filteredModelData.concat(tempdata);
+			self.state.filteredModelData = self.state.filteredModelData.concat(tempdata);
 		}
 	},
 		
@@ -813,16 +817,16 @@ META NOTE (HSH - 8/25/2014): Can we remove this note, or at least clarify?
 		
 		var self = this;
 		var modelDataForSorting = [];
-		if (this.options.targetSpeciesName == "Overview") {
-			modData = self.options.combinedModelData.slice();
+		if (this.state.targetSpeciesName == "Overview") {
+			modData = self.state.combinedModelData.slice();
 		}
 		else {
-			modData = self.options.modelData.slice();
+			modData = self.state.modelData.slice();
 		}	    
 		
-		for (var idx=0;idx<self.options.phenotypeData.length;idx++) {			
+		for (var idx=0;idx<self.state.phenotypeData.length;idx++) {			
 			var tempdata = modData.filter(function(d) {
-    	    	return d.id_a == self.options.phenotypeData[idx].id_a;
+    	    	return d.id_a == self.state.phenotypeData[idx].id_a;
     	    });	
 			modelDataForSorting.push(tempdata);
 		}
@@ -831,24 +835,24 @@ META NOTE (HSH - 8/25/2014): Can we remove this note, or at least clarify?
 			return a.id_a - b.id_a; 
 		});
 		
-		self.options.phenotypeData.sort(function(a,b) {
+		self.state.phenotypeData.sort(function(a,b) {
 		return a.id_a-b.id_a;
 	    });
 	    
 		for (var k =0; k < modelDataForSorting.length;k++) {
 			var ct  = 0;
 			var d = modelDataForSorting[k];
-			if (d[0].id_a === self.options.phenotypeData[k].id_a){
+			if (d[0].id_a === self.state.phenotypeData[k].id_a){
 				for (var i=0; i< d.length; i++)
 				{
 					ct+= 1;
 				}
 				d["count"] = ct;
-				self.options.phenotypeSortData.push(d);
+				self.state.phenotypeSortData.push(d);
 			}
 	    }		
 		//sort the phenotype list by sum of LCS
-		self.options.phenotypeSortData.sort(function(a,b) { 
+		self.state.phenotypeSortData.sort(function(a,b) { 
 			return b.count - a.count; 
 		});	 	
 	},
@@ -863,16 +867,16 @@ META NOTE (HSH - 8/25/2014): Can we remove this note, or at least clarify?
 		var modelDataForSorting = [],
 			modData = [];
 		
-		if (this.options.targetSpeciesName == "Overview") {
-			modData = self.options.combinedModelData.slice();
+		if (this.state.targetSpeciesName == "Overview") {
+			modData = self.state.combinedModelData.slice();
 		}
 		else {
-			modData = self.options.modelData.slice();
+			modData = self.state.modelData.slice();
 		}
 		
-		for (var idx=0;idx<self.options.phenotypeData.length;idx++) {			
+		for (var idx=0;idx<self.state.phenotypeData.length;idx++) {			
 			var tempdata = modData.filter(function(d) {
-    	    	return d.id_a == self.options.phenotypeData[idx].id_a;
+    	    	return d.id_a == self.state.phenotypeData[idx].id_a;
     	    });	
 			modelDataForSorting.push(tempdata);
 		}
@@ -881,24 +885,24 @@ META NOTE (HSH - 8/25/2014): Can we remove this note, or at least clarify?
 			return a.id - b.id; 
 		});
 		
-		self.options.phenotypeData.sort(function(a,b) {
+		self.state.phenotypeData.sort(function(a,b) {
 		return a.id_a-b.id_a;
 	    });
 	    
 		for (var k =0; k < modelDataForSorting.length;k++) {
 			var sum  = 0;
 			var d = modelDataForSorting[k];
-			if (d[0].id_a === self.options.phenotypeData[k].id_a){
+			if (d[0].id_a === self.state.phenotypeData[k].id_a){
 				for (var i=0; i< d.length; i++)
 				{
 				sum+= +d[i].subsumer_IC;
 				}
 				d["sum"] = sum;
-				self.options.phenotypeSortData.push(d);
+				self.state.phenotypeSortData.push(d);
 			}
 	    }		
 		//sort the phenotype list by sum of LCS
-		self.options.phenotypeSortData.sort(function(a,b) { 
+		self.state.phenotypeSortData.sort(function(a,b) { 
 			return b.sum - a.sum; 
 		});
 	},
@@ -913,16 +917,16 @@ META NOTE (HSH - 8/25/2014): Can we remove this note, or at least clarify?
 		var modelDataForSorting = [],
 			modData = [];
 		
-		if (this.options.targetSpeciesName == "Overview") {
-			modData = self.options.combinedModelData.slice();
+		if (this.state.targetSpeciesName == "Overview") {
+			modData = self.state.combinedModelData.slice();
 		}
 		else {
-			modData = self.options.modelData.slice();
+			modData = self.state.modelData.slice();
 		}
 		
-		for (var idx=0;idx<self.options.phenotypeData.length;idx++) {			
+		for (var idx=0;idx<self.state.phenotypeData.length;idx++) {			
 			var tempdata = modData.filter(function(d) {
-    	    	return d.id_a == self.options.phenotypeData[idx].id_a;
+    	    	return d.id_a == self.state.phenotypeData[idx].id_a;
     	    });	
 			modelDataForSorting.push(tempdata);
 		}
@@ -934,13 +938,13 @@ META NOTE (HSH - 8/25/2014): Can we remove this note, or at least clarify?
 		for (var k =0; k < modelDataForSorting.length;k++) {
 			var sum  = 0;
 			var d = modelDataForSorting[k];
-			if (d[0].id_a === self.options.phenotypeData[k].id_a){
+			if (d[0].id_a === self.state.phenotypeData[k].id_a){
 				d["label"] = d[0].label_a;
-				self.options.phenotypeSortData.push(d);
+				self.state.phenotypeSortData.push(d);
 			}
 	    }		
 			
-		self.options.phenotypeSortData.sort(function(a,b) {
+		self.state.phenotypeSortData.sort(function(a,b) {
 		    var labelA = a.label.toLowerCase(), 
 				labelB = b.label.toLowerCase();
 			if (labelA < labelB) {return -1;}
@@ -948,7 +952,7 @@ META NOTE (HSH - 8/25/2014): Can we remove this note, or at least clarify?
 			return 0;
 		});		
 	    //Save this - it works
-		//this.options.phenotypeSortData = d3.nest().key(function(d, i){return //d.label_a}).sortKeys(d3.ascending).entries(self.options.phenotypeData);	    
+		//this.state.phenotypeSortData = d3.nest().key(function(d, i){return //d.label_a}).sortKeys(d3.ascending).entries(self.state.phenotypeData);	    
 	},
 	
 	//given a list of phenotypes, find the top n models
@@ -956,26 +960,26 @@ META NOTE (HSH - 8/25/2014): Can we remove this note, or at least clarify?
     _loadData: function() {
 		var url = '';
 		var self=this;
-    	var phenotypeList = this.options.phenotypeData;
+    	var phenotypeList = this.state.phenotypeData;
 		
-		switch(this.options.targetSpeciesName){
+		switch(this.state.targetSpeciesName){
 			case "Overview": this._loadOverviewData(); break;
 			case "All": 
-					url = this.options.serverURL + "/simsearch/phenotype/?input_items=" + 
+					url = this.state.serverURL + "/simsearch/phenotype/?input_items=" + 
 						phenotypeList.join(",");
-					this._ajaxLoadData(this.options.targetSpeciesName, url);
+					this._ajaxLoadData(this.state.targetSpeciesName, url);
 					break;
 			case "Mus musculus":
 			case "Danio rerio":
 			case "Homo sapiens":
 			case "Drosophila melanogaster":
-					url = this.options.serverURL + "/simsearch/phenotype/?input_items=" + 
-						phenotypeList.join(",") + "&target_species=" + this.options.targetSpecies;
-					this._ajaxLoadData(this.options.targetSpeciesName, url);
+					url = this.state.serverURL + "/simsearch/phenotype/?input_items=" + 
+						phenotypeList.join(",") + "&target_species=" + this.state.targetSpecies;
+					this._ajaxLoadData(this.state.targetSpeciesName, url);
 					break;
-			default: url = this.options.serverURL + "/simsearch/phenotype/?input_items=" + 
-						phenotypeList.join(",") + "&target_species=" + this.options.targetSpecies;
-					this._ajaxLoadData(this.options.targetSpeciesName, url);
+			default: url = this.state.serverURL + "/simsearch/phenotype/?input_items=" + 
+						phenotypeList.join(",") + "&target_species=" + this.state.targetSpecies;
+					this._ajaxLoadData(this.state.targetSpeciesName, url);
 		}
     },
     
@@ -988,28 +992,28 @@ META NOTE (HSH - 8/25/2014): Can we remove this note, or at least clarify?
 		
 		var self=this;
 		
-    	var phenotypeList = this.options.phenotypeData;
-		var limit = this.options.multiOrganismCt;
+    	var phenotypeList = this.state.phenotypeData;
+		var limit = this.state.multiOrganismCt;
 		//For the Overview, we need to create grid for human data first - top 10  models
 		//Taxon is hard-coded since the targetSpecies is "Overview"
-		hurl = this.options.serverURL + "/simsearch/phenotype/?input_items=" + 
+		hurl = this.state.serverURL + "/simsearch/phenotype/?input_items=" + 
 						phenotypeList.join(",") + "&limit=" + limit + "&target_species=9606";
 		this._ajaxLoadData("Homo sapiens", hurl);
 		
 		//Now get the other species' matches		
-		murl = this.options.serverURL + "/simsearch/phenotype/?input_items=" + 
+		murl = this.state.serverURL + "/simsearch/phenotype/?input_items=" + 
 						phenotypeList.join(",") + "&limit=" + limit + "&target_species=10090";
 		this._ajaxLoadData("Mus musculus", murl);
-		var mousedata = this.options.mousedata;
+		var mousedata = this.state.mousedata;
 		
 		if(mousedata.length < limit) {limit = (limit - mousedata.length);}
-		zurl = this.options.serverURL + "/simsearch/phenotype/?input_items=" + 
+		zurl = this.state.serverURL + "/simsearch/phenotype/?input_items=" + 
 						phenotypeList.join(",") + "&limit=" + limit + "&target_species=7955";
 		this._ajaxLoadData("Danio rerio", zurl);
-		var zfishdata = this.options.zfishdata;
+		var zfishdata = this.state.zfishdata;
 		
 		if(zfishdata.length < limit) {limit = (limit - zfishdata.length);}
-		furl = this.options.serverURL + "/simsearch/phenotype/?input_items=" + 
+		furl = this.state.serverURL + "/simsearch/phenotype/?input_items=" + 
 						phenotypeList.join(",") + "&limit=" + limit + "&target_species=7227";
 		this._ajaxLoadData("Drosophila melanogaster", furl);
 		
@@ -1035,16 +1039,16 @@ META NOTE (HSH - 8/25/2014): Can we remove this note, or at least clarify?
 		var modList = [],
 			orgCtr = 0;
 		
-		if (this.options.humandata != null  && this.options.humandata.b.length > 0){
-			for (var idx=0;idx<this.options.humandata.b.length;idx++) {
+		if (this.state.humandata != null  && this.state.humandata.b.length > 0){
+			for (var idx=0;idx<this.state.humandata.b.length;idx++) {
 				 hdata.push(
-				{model_id: self._getConceptId(this.options.humandata.b[idx].id), 
-				 model_label: this.options.humandata.b[idx].label,
-				 model_score: this.options.humandata.b[idx].score.score, 
-				 model_rank: this.options.humandata.b[idx].score.rank});
+				{model_id: self._getConceptId(this.state.humandata.b[idx].id), 
+				 model_label: this.state.humandata.b[idx].label,
+				 model_score: this.state.humandata.b[idx].score.score, 
+				 model_rank: this.state.humandata.b[idx].score.rank});
 				
-				this.options.multiOrgModelCt[orgCtr].count = this.options.humandata.b.length;
-				this._loadDataForModel(this.options.humandata.b[idx]);	
+				this.state.multiOrgModelCt[orgCtr].count = this.state.humandata.b.length;
+				this._loadDataForModel(this.state.humandata.b[idx]);	
 			} 
 			speciesList.push("Homo sapiens");
 		} 
@@ -1053,16 +1057,16 @@ META NOTE (HSH - 8/25/2014): Can we remove this note, or at least clarify?
 			hdata.sort(function(a,b) { return a.model_rank - b.model_rank; });			 
 			modList= modList.concat(hdata.slice()); 
 		
-		if (this.options.mousedata != null  && this.options.mousedata.b.length > 0){
-			for (var idx=0;idx<this.options.mousedata.b.length;idx++) {
+		if (this.state.mousedata != null  && this.state.mousedata.b.length > 0){
+			for (var idx=0;idx<this.state.mousedata.b.length;idx++) {
 				mdata.push(
-				{model_id: self._getConceptId(this.options.mousedata.b[idx].id), 
-				 model_label: this.options.mousedata.b[idx].label,
-				 model_score: this.options.mousedata.b[idx].score.score, 
-				 model_rank: this.options.mousedata.b[idx].score.rank});
+				{model_id: self._getConceptId(this.state.mousedata.b[idx].id), 
+				 model_label: this.state.mousedata.b[idx].label,
+				 model_score: this.state.mousedata.b[idx].score.score, 
+				 model_rank: this.state.mousedata.b[idx].score.rank});
 		
-				this.options.multiOrgModelCt[orgCtr].count = this.options.mousedata.b.length;
-				this._loadDataForModel(this.options.mousedata.b[idx]);			 
+				this.state.multiOrgModelCt[orgCtr].count = this.state.mousedata.b.length;
+				this._loadDataForModel(this.state.mousedata.b[idx]);			 
 			} 
 			speciesList.push("Mus musculus");			
 		} 		
@@ -1071,16 +1075,16 @@ META NOTE (HSH - 8/25/2014): Can we remove this note, or at least clarify?
 			mdata.sort(function(a,b) { return a.model_rank - b.model_rank; });			 
 			modList = modList.concat(mdata.slice());  		
 		
-		if (this.options.zfishdata != null  && this.options.zfishdata.b.length > 0){
-			for (var idx=0;idx<this.options.zfishdata.b.length;idx++) {
+		if (this.state.zfishdata != null  && this.state.zfishdata.b.length > 0){
+			for (var idx=0;idx<this.state.zfishdata.b.length;idx++) {
 				zdata.push(
-				{model_id: self._getConceptId(this.options.zfishdata.b[idx].id), 
-				 model_label: this.options.zfishdata.b[idx].label,
-				 model_score: this.options.zfishdata.b[idx].score.score, 
-				 model_rank: this.options.zfishdata.b[idx].score.rank});
+				{model_id: self._getConceptId(this.state.zfishdata.b[idx].id), 
+				 model_label: this.state.zfishdata.b[idx].label,
+				 model_score: this.state.zfishdata.b[idx].score.score, 
+				 model_rank: this.state.zfishdata.b[idx].score.rank});
 
-				this.options.multiOrgModelCt[orgCtr].count = this.options.zfishdata.b.length;
-				this._loadDataForModel(this.options.zfishdata.b[idx]);			 
+				this.state.multiOrgModelCt[orgCtr].count = this.state.zfishdata.b.length;
+				this._loadDataForModel(this.state.zfishdata.b[idx]);			 
 			} 
 			speciesList.push("Danio rerio");
 		}
@@ -1089,16 +1093,16 @@ META NOTE (HSH - 8/25/2014): Can we remove this note, or at least clarify?
 			zdata.sort(function(a,b) { return a.model_rank - b.model_rank; });			 
 			modList = modList.concat(zdata.slice());  
 		
-		if (this.options.flydata != null  && this.options.flydata.b.length > 0){
-			for (var idx=0;idx<this.options.flydata.b.length;idx++) {
+		if (this.state.flydata != null  && this.state.flydata.b.length > 0){
+			for (var idx=0;idx<this.state.flydata.b.length;idx++) {
 				fdata.push(
-				{model_id: self._getConceptId(this.options.flydata.b[idx].id), 
-				 model_label: this.options.flydata.b[idx].label,
-				 model_score: this.options.flydata.b[idx].score.score, 
-				 model_rank: this.options.flydata.b[idx].score.rank});
+				{model_id: self._getConceptId(this.state.flydata.b[idx].id), 
+				 model_label: this.state.flydata.b[idx].label,
+				 model_score: this.state.flydata.b[idx].score.score, 
+				 model_rank: this.state.flydata.b[idx].score.rank});
 
-				this.options.multiOrgModelCt[orgCtr].count = this.options.flydata.b.length;
-				this._loadDataForModel(this.options.flydata.b[idx]);			 
+				this.state.multiOrgModelCt[orgCtr].count = this.state.flydata.b.length;
+				this._loadDataForModel(this.state.flydata.b[idx]);			 
 			} 
 			speciesList.push("Drosophila melanogaster");
 		} 
@@ -1106,21 +1110,21 @@ META NOTE (HSH - 8/25/2014): Can we remove this note, or at least clarify?
 		 //sort the model list by rank
 			fdata.sort(function(a,b) { return a.model_rank - b.model_rank; });			 
 			modList = modList.concat(fdata.slice());  
-		this.options.combinedModelList = modList.slice();	
-		this.options.speciesList = speciesList.slice();
+		this.state.combinedModelList = modList.slice();	
+		this.state.speciesList = speciesList.slice();
 		//console.log("Combined Model List: ");		
-		//console.log(this.options.combinedModelList);
+		//console.log(this.state.combinedModelList);
 		
 		//we need to adjust the display counts and indexing if there are fewer models
-		if (this.options.combinedModelList.length < this.options.modelDisplayCount) {
-			this.options.currModelIdx = this.options.combinedModelList.length-1;
-			this.options.modelDisplayCount = this.options.combinedModelList.length;
-			this._fixForFewerModels(this.options.modelDisplayCount);
+		if (this.state.combinedModelList.length < this.state.modelDisplayCount) {
+			this.state.currModelIdx = this.state.combinedModelList.length-1;
+			this.state.modelDisplayCount = this.state.combinedModelList.length;
+			this._fixForFewerModels(this.state.modelDisplayCount);
 		}
 		
 		//initialize the filtered model list
-		for (var idx=0;idx<this.options.modelDisplayCount;idx++) {
-			this.options.filteredModelList.push(this.options.combinedModelList[idx]);
+		for (var idx=0;idx<this.state.modelDisplayCount;idx++) {
+			this.state.filteredModelList.push(this.state.combinedModelList[idx]);
 		}
 	},
 	
@@ -1142,23 +1146,23 @@ META NOTE (HSH - 8/25/2014): Can we remove this note, or at least clarify?
 			success : function(data) {
 			   if (Object.getOwnPropertyNames(data).length == 0)
 			   {
-					if (self.options.targetSpeciesName != "Overview") {
-						self._createEmptyVisualization(url, self.options.targetSpeciesName);
+					if (self.state.targetSpeciesName != "Overview") {
+						self._createEmptyVisualization(url, self.state.targetSpeciesName);
 					}
 			   }
 			   else {
 					//This is for the new "Overview" target option 
-					if (self.options.targetSpeciesName == "Overview") {
+					if (self.state.targetSpeciesName == "Overview") {
 						switch(target){
-							case "Homo sapiens": self.options.humandata = data;
+							case "Homo sapiens": self.state.humandata = data;
 							//extract the maxIC score
-							self.options.maxICScore = data.metadata.maxMaxIC;
+							self.state.maxICScore = data.metadata.maxMaxIC;
 								break;
-							case "Mus musculus": self.options.mousedata = data;
+							case "Mus musculus": self.state.mousedata = data;
 								break;
-							case "Danio rerio": self.options.zfishdata = data;
+							case "Danio rerio": self.state.zfishdata = data;
 								break;
-							case "Drosophila melanogaster": self.options.flydata = data;
+							case "Drosophila melanogaster": self.state.flydata = data;
 								break;
 							default: break;						
 						}
@@ -1210,12 +1214,12 @@ META NOTE (HSH - 8/25/2014): Can we remove this note, or at least clarify?
     _finishLoad: function(data) {
 		var retData = data;
 		//extract the maxIC score
-		this.options.maxICScore = retData.metadata.maxMaxIC;
+		this.state.maxICScore = retData.metadata.maxMaxIC;
 		var self= this;
 		
-		this.options.modelList = [];
+		this.state.modelList = [];
 		for (var idx=0;idx<retData.b.length;idx++) {
-			this.options.modelList.push(
+			this.state.modelList.push(
 			{model_id: self._getConceptId(retData.b[idx].id), 
 			 model_label: retData.b[idx].label, 
 			 model_score: retData.b[idx].score.score, 
@@ -1223,19 +1227,19 @@ META NOTE (HSH - 8/25/2014): Can we remove this note, or at least clarify?
 			this._loadDataForModel(retData.b[idx]);
 		}
 		//sort the model list by rank
-		this.options.modelList.sort(function(a,b) { 
+		this.state.modelList.sort(function(a,b) { 
 			return a.model_rank - b.model_rank; } );
 		
 		//we need to adjust the display counts and indexing if there are fewer models
-		if (this.options.modelList.length < this.options.modelDisplayCount) {
-			this.options.currModelIdx = this.options.modelList.length-1;
-			this.options.modelDisplayCount = this.options.modelList.length;
-			this._fixForFewerModels(this.options.modelDisplayCount);
+		if (this.state.modelList.length < this.state.modelDisplayCount) {
+			this.state.currModelIdx = this.state.modelList.length-1;
+			this.state.modelDisplayCount = this.state.modelList.length;
+			this._fixForFewerModels(this.state.modelDisplayCount);
 		}
 
 		//initialize the filtered model list
-		for (var idx=0;idx<this.options.modelDisplayCount;idx++) {
-			this.options.filteredModelList.push(this.options.modelList[idx]);
+		for (var idx=0;idx<this.state.modelDisplayCount;idx++) {
+			this.state.filteredModelList.push(this.state.modelList[idx]);
 		}
 		
 		//TO DO: Check on the source field, it doesn't seem to be contain any data in general
@@ -1297,12 +1301,12 @@ META NOTE (HSH - 8/25/2014): Can we remove this note, or at least clarify?
     	    if (new_row.subsumer_id.indexOf("0005753") > -1) {
     	    	console.out("got it");
     	    }
-			if (this.options.targetSpeciesName == "Overview"){
-					this.options.combinedModelData.push(new_row);	
+			if (this.state.targetSpeciesName == "Overview"){
+					this.state.combinedModelData.push(new_row);	
 					
 			}
 			else {    
-					this.options.modelData.push(new_row); 
+					this.state.modelData.push(new_row); 
 				 }
     	}
 		//we may use this when normalization and ranking have been determined
@@ -1321,7 +1325,7 @@ META NOTE (HSH - 8/25/2014): Can we remove this note, or at least clarify?
 			lIC = datarow.lcs.IC,
 			nic;
 		
-		var calcMethod = this.options.selectedCalculation;
+		var calcMethod = this.state.selectedCalculation;
 		
 		switch(calcMethod){
 			case 2: nic = lIC;
@@ -1329,7 +1333,7 @@ META NOTE (HSH - 8/25/2014): Can we remove this note, or at least clarify?
 			case 1: nic = ((lIC/aIC) * 100);
 					break;
 			case 0: nic = Math.sqrt((Math.pow(aIC-lIC,2)) + (Math.pow(bIC-lIC,2)));
-					nic = (1 - (nic/+this.options.maxICScore)) * 100;					
+					nic = (1 - (nic/+this.state.maxICScore)) * 100;					
 					break;
 			case 3: nic = ((lIC/bIC) * 100);
 					break;
@@ -1351,20 +1355,20 @@ META NOTE (HSH - 8/25/2014): Can we remove this note, or at least clarify?
     	var gap = 3;
     
     	//use the max phenotype size to limit the number of phenotypes shown 
-    	var yLength = self.options.phenotypeSortData.length > this.options.phenotypeDisplayCount ? this.options.phenotypeDisplayCount : self.options.phenotypeSortData.length;
+    	var yLength = self.state.phenotypeSortData.length > this.state.phenotypeDisplayCount ? this.state.phenotypeDisplayCount : self.state.phenotypeSortData.length;
     	for (var idx=0;idx<yLength;idx++) {
-    		var stuff = {"id": self.options.phenotypeSortData[idx][0].id_a, "ypos" : ((idx * (size+gap)) + this.options.yoffset + 10)};
-    	    this.options.yAxis.push(stuff);
-    	    if (((idx * (size+gap)) + this.options.yoffset) > this.options.yAxisMax) {
-    	    	this.options.yAxisMax = (idx * (size+gap)) + this.options.yoffset;
+    		var stuff = {"id": self.state.phenotypeSortData[idx][0].id_a, "ypos" : ((idx * (size+gap)) + this.state.yoffset + 10)};
+    	    this.state.yAxis.push(stuff);
+    	    if (((idx * (size+gap)) + this.state.yoffset) > this.state.yAxisMax) {
+    	    	this.state.yAxisMax = (idx * (size+gap)) + this.state.yoffset;
     	    }
     	}
     },
     
     //given a rowid, return the y-axis position
     _getYPosition: function(newRowId) {
-    	var retValue = this.options.yoffset;
-    	var newObj = this.options.yAxis.filter(function(d){
+    	var retValue = this.state.yoffset;
+    	var newObj = this.state.yAxis.filter(function(d){
 	    	return d.id == newRowId;
 	    });
     	if (newObj[0]) {
@@ -1376,10 +1380,10 @@ META NOTE (HSH - 8/25/2014): Can we remove this note, or at least clarify?
     _createColorScale: function() {
 		
 		var maxScore = 0,
-			method = this.options.selectedCalculation;
+			method = this.state.selectedCalculation;
 		
 		switch(method){
-			case 2: maxScore = this.options.maxICScore;
+			case 2: maxScore = this.state.maxICScore;
 					break;
 			case 1: maxScore = 100;
 					break;
@@ -1387,21 +1391,21 @@ META NOTE (HSH - 8/25/2014): Can we remove this note, or at least clarify?
 					break;
 			case 3: maxScore = 100;
 					break;
-			default: maxScore = this.options.maxICScore;
+			default: maxScore = this.state.maxICScore;
 					break;
 		}				
     	
-	    this.options.colorScaleB = d3.scale.linear().domain([3, maxScore]);
-        this.options.colorScaleB.domain([0, 0.2, 0.4, 0.6, 0.8, 1].map(this.options.colorScaleB.invert));
-		this.options.colorScaleB.range(['rgb(229,229,229)','rgb(164,214,212)','rgb(68,162,147)','rgb(97,142,153)','rgb(66,139,202)','rgb(25,59,143)']);
+	    this.state.colorScaleB = d3.scale.linear().domain([3, maxScore]);
+        this.state.colorScaleB.domain([0, 0.2, 0.4, 0.6, 0.8, 1].map(this.state.colorScaleB.invert));
+		this.state.colorScaleB.range(['rgb(229,229,229)','rgb(164,214,212)','rgb(68,162,147)','rgb(97,142,153)','rgb(66,139,202)','rgb(25,59,143)']);
 		  
-		this.options.colorScaleR = d3.scale.linear().domain([3, maxScore]);
-        this.options.colorScaleR.domain([0, 0.2, 0.4, 0.6, 0.8, 1].map(this.options.colorScaleR.invert));
-		this.options.colorScaleR.range(['rgb(252,248,227)','rgb(249,205,184)','rgb(234,118,59)','rgb(221,56,53)','rgb(181,92,85)','rgb(70,19,19)']);
+		this.state.colorScaleR = d3.scale.linear().domain([3, maxScore]);
+        this.state.colorScaleR.domain([0, 0.2, 0.4, 0.6, 0.8, 1].map(this.state.colorScaleR.invert));
+		this.state.colorScaleR.range(['rgb(252,248,227)','rgb(249,205,184)','rgb(234,118,59)','rgb(221,56,53)','rgb(181,92,85)','rgb(70,19,19)']);
 			
-		this.options.colorScaleG = d3.scale.linear().domain([3, maxScore]);
-		this.options.colorScaleG.domain([0, 0.2, 0.4, 0.6, 0.8, 1].map(this.options.colorScaleG.invert));
-		this.options.colorScaleG.range(['rgb(230,209,178)','rgb(210,173,116)','rgb(148,114,60)','rgb(68,162,147)','rgb(31,128,113)','rgb(3,82,70)']);
+		this.state.colorScaleG = d3.scale.linear().domain([3, maxScore]);
+		this.state.colorScaleG.domain([0, 0.2, 0.4, 0.6, 0.8, 1].map(this.state.colorScaleG.invert));
+		this.state.colorScaleG.range(['rgb(230,209,178)','rgb(210,173,116)','rgb(148,114,60)','rgb(68,162,147)','rgb(31,128,113)','rgb(3,82,70)']);
 	},
 
     _initCanvas : function() {
@@ -1412,25 +1416,25 @@ META NOTE (HSH - 8/25/2014): Can we remove this note, or at least clarify?
 			optionhtml = '';
 		
 		//This is for the new "Overview" target option 
-		if (this.options.targetSpeciesName == "Overview") {
+		if (this.state.targetSpeciesName == "Overview") {
 			species = "All";
 			optionhtml = "<span id='mtitle'><span id='s2title'><b>Cross-species Overview</b></span>";	
 		} else {
-			species= this.options.targetSpeciesName;
-			optionhtml = "<span id='mtitle'><span id='stitle'><b>Phenotype comparison (grouped by " + species + " " + this.options.comparisonType + ")</b></span>";	
+			species= this.state.targetSpeciesName;
+			optionhtml = "<span id='mtitle'><span id='stitle'><b>Phenotype comparison (grouped by " + species + " " + this.state.comparisonType + ")</b></span>";	
 		}
 		
-		optionhtml = optionhtml + "<span id='faq'><img class='faq' src='" + this.options.scriptpath + "../image/greeninfo30.png' height='15px'></span><br /></span><div id='header'><span id='sort_div'><span id='slabel' >Sort Phenotypes<span id='sorts'></span></span><br /><span><select id=\'sortphenotypes\'>";	
+		optionhtml = optionhtml + "<span id='faq'><img class='faq' src='" + this.state.scriptpath + "../image/greeninfo30.png' height='15px'></span><br /></span><div id='header'><span id='sort_div'><span id='slabel' >Sort Phenotypes<span id='sorts'></span></span><br /><span><select id=\'sortphenotypes\'>";	
 			
-		for (var idx=0;idx<self.options.sortList.length;idx++) {
+		for (var idx=0;idx<self.state.sortList.length;idx++) {
     		var selecteditem = "";
-    		if (self.options.sortList[idx].type === self.options.selectedSort) {
+    		if (self.state.sortList[idx].type === self.state.selectedSort) {
     			selecteditem = "selected";
     		}
-			if (self.options.sortList[idx].order  === self.options.selectedOrder) {
+			if (self.state.sortList[idx].order  === self.state.selectedOrder) {
     			selecteditem = "selected";
     		}
-			optionhtml = optionhtml + "<option value='" + self.options.sortList[idx].order +"' "+ selecteditem +">" + self.options.sortList[idx].type +"</option>"
+			optionhtml = optionhtml + "<option value='" + self.state.sortList[idx].order +"' "+ selecteditem +">" + self.state.sortList[idx].type +"</option>"
 		}
 		
 		optionhtml = optionhtml + "</select></span>";			
@@ -1447,14 +1451,15 @@ META NOTE (HSH - 8/25/2014): Can we remove this note, or at least clarify?
 		
 		//add the handler for the select control
         $( "#sortphenotypes" ).change(function(d) {
-			//this._showThrobber();
-        	self.options.selectedSort = self.options.sortList[d.target.selectedIndex].type;
-        	self.options.selectedOrder = self.options.sortList[d.target.selectedIndex].order;
+	    //this._showThrobber();
+    	       /** HSH 20140825 MUST BE FIXED !!! */
+        	self.options.selectedSort = self.state.sortList[d.target.selectedIndex].type;
+        	self.options.selectedOrder = self.state.sortList[d.target.selectedIndex].order;
 			self._resetSelections();
         });
 			
 		this.element.append("<svg id='svg_area'></svg>");		
-		this.options.svg = d3.select("#svg_area");
+		this.state.svg = d3.select("#svg_area");
 			
     },
 
@@ -1469,8 +1474,9 @@ META NOTE (HSH - 8/25/2014): Can we remove this note, or at least clarify?
 		$("#sort_div").remove();
 		$("#mtitle").remove();
 		$("#header").remove();
-		$("#svg_area").remove();
-		self.options.phenotypeData = self.options.origPhenotypeData.slice();
+	    $("#svg_area").remove();
+	       /** HSH 20140825 MUST BE FIXED !!! */
+		self.options.phenotypeData = self.state.origPhenotypeData.slice();
 		self._reset();
 		self._create();
 	},
@@ -1479,14 +1485,14 @@ META NOTE (HSH - 8/25/2014): Can we remove this note, or at least clarify?
 
 	  var start = 0;
 		
-	  if(this.options.filteredModelData.length < 30)
+	  if(this.state.filteredModelData.length < 30)
 	  { start = 680; } else { start = 850;}
-	  var imgs = this.options.svg.selectAll("image").data([0]);
+	  var imgs = this.state.svg.selectAll("image").data([0]);
       imgs.enter()
                 .append("svg:image")
-                .attr("xlink:href", this.options.scriptpath + "../image/logo.png")
+                .attr("xlink:href", this.state.scriptpath + "../image/logo.png")
                 .attr("x", start)
-                .attr("y", this.options.yTranslation - 10)
+                .attr("y", this.state.yTranslation - 10)
 				.attr("id", "logo")
                 .attr("width", "60")
                 .attr("height", "90");       
@@ -1494,7 +1500,7 @@ META NOTE (HSH - 8/25/2014): Can we remove this note, or at least clarify?
 	
     _resetLinks: function() {
 	    //don't put these styles in css file - these stuyles change depending on state
-		this.options.svg.selectAll("#detail_content").remove();
+		this.state.svg.selectAll("#detail_content").remove();
     	var link_lines = d3.selectAll(".data_text");
     	link_lines.style("font-weight", "normal");
     	link_lines.style("text-decoration", "none");
@@ -1508,12 +1514,12 @@ META NOTE (HSH - 8/25/2014): Can we remove this note, or at least clarify?
 	
 	//I need to check to see if the modelData is an object.  If so, get the model_id
     _clearModelData: function(modelData) {
-	    this.options.svg.selectAll("#detail_content").remove();
-	    this.options.svg.selectAll(".model_accent").remove();
+	    this.state.svg.selectAll("#detail_content").remove();
+	    this.state.svg.selectAll(".model_accent").remove();
 		var model_text = "";
 	    if (modelData != null && typeof modelData != 'object') {
-		   model_text = this.options.svg.selectAll("text#" + this._getConceptId(modelData));   
-		} else {model_text = this.options.svg.selectAll("text#" + this._getConceptId(modelData.model_id));}
+		   model_text = this.state.svg.selectAll("text#" + this._getConceptId(modelData));   
+		} else {model_text = this.state.svg.selectAll("text#" + this._getConceptId(modelData.model_id));}
 		
 		model_text.style("font-weight","normal");
 		model_text.style("text-decoration", "none");
@@ -1525,17 +1531,17 @@ META NOTE (HSH - 8/25/2014): Can we remove this note, or at least clarify?
     	//create a highlight row
 		var self=this;
 		//create the related row rectangle
-		var highlight_rect = self.options.svg.append("svg:rect")
-		  	.attr("transform","translate(" + (self.options.axis_pos_list[1]) +"," + ( self.options.yTranslation + self.options.yoffsetOver + 4)  + ")")
+		var highlight_rect = self.state.svg.append("svg:rect")
+		  	.attr("transform","translate(" + (self.state.axis_pos_list[1]) +"," + ( self.state.yTranslation + self.state.yoffsetOver + 4)  + ")")
 			
 			.attr("x", 12)
 			.attr("y", function(d) {return self._getYPosition(curr_data[0].id_a) ;}) //rowid
 			.attr("class", "row_accent")
-			.attr("width", this.options.modelWidth - 4)
+			.attr("width", this.state.modelWidth - 4)
 			.attr("height", 12);
 	
     	this._resetLinks();
-    	var alabels = this.options.svg.selectAll("text.a_text." + this._getConceptId(curr_data[0].id));
+    	var alabels = this.state.svg.selectAll("text.a_text." + this._getConceptId(curr_data[0].id));
     	var txt = curr_data[0].label_a;
     	if (txt == undefined) {
     		txt = curr_data[0].id_a;
@@ -1552,8 +1558,8 @@ META NOTE (HSH - 8/25/2014): Can we remove this note, or at least clarify?
     },
 	_highlightMatchingModels : function(curr_data){
 		var self = this;
-		var  models = self.options.combinedModelData,
-		     alabels = this.options.svg.selectAll("text");
+		var  models = self.state.combinedModelData,
+		     alabels = this.state.svg.selectAll("text");
 		for (var i = 0; i < curr_data.length; i++){
 			var label = curr_data[i].model_label;
 			for (var j=0; j < alabels[0].length; j++){
@@ -1567,8 +1573,8 @@ META NOTE (HSH - 8/25/2014): Can we remove this note, or at least clarify?
 	
 	_deselectMatchingModels : function(curr_data){
 		
-		var  models = this.options.combinedModelData,
-		alabels = this.options.svg.selectAll("text");
+		var  models = this.state.combinedModelData,
+		alabels = this.state.svg.selectAll("text");
 		
 		for (var i = 0; i < curr_data.length; i++){
 			var label = curr_data[i].model_label;
@@ -1584,14 +1590,14 @@ META NOTE (HSH - 8/25/2014): Can we remove this note, or at least clarify?
 	
     _deselectData: function (curr_data) {
     	
-		this.options.svg.selectAll(".row_accent").remove();
+		this.state.svg.selectAll(".row_accent").remove();
     	this._resetLinks();
 		if (curr_data[0] == undefined) { var row = curr_data;}
 		else {row = curr_data[0];}
 		
-		var alabels = this.options.svg.selectAll("text.a_text." + this._getConceptId(row.id));
+		var alabels = this.state.svg.selectAll("text.a_text." + this._getConceptId(row.id));
 		alabels.text(this._getShortLabel(row.label_a));
-		data_text = this.options.svg.selectAll("text.a_text");
+		data_text = this.state.svg.selectAll("text.a_text");
 		data_text.style("text-decoration", "none");
 		data_text.style("fill", "black");    
 			
@@ -1602,18 +1608,18 @@ META NOTE (HSH - 8/25/2014): Can we remove this note, or at least clarify?
 		var self=this;
 		
 		//create the related model rectangles
-		var highlight_rect = self.options.svg.append("svg:rect")
+		var highlight_rect = self.state.svg.append("svg:rect")
 		  	.attr("transform",
-		  			  "translate(" + (self.options.textWidth + 32) + "," +( self.options.yTranslation + self.options.yoffsetOver)+ ")")
-			.attr("x", function(d) { return (self.options.xScale(modelData.model_id)-1);})
-			.attr("y", self.options.yoffset + 2)
+		  			  "translate(" + (self.state.textWidth + 32) + "," +( self.state.yTranslation + self.state.yoffsetOver)+ ")")
+			.attr("x", function(d) { return (self.state.xScale(modelData.model_id)-1);})
+			.attr("y", self.state.yoffset + 2)
 			.attr("class", "model_accent")
 			.attr("width", 14)
-			.attr("height", (self.options.phenotypeDisplayCount * 13));
+			.attr("height", (self.state.phenotypeDisplayCount * 13));
 
 		//select the model label
 	
-		var model_label = self.options.svg.selectAll("text#" + this._getConceptId(modelData.model_id));
+		var model_label = self.state.svg.selectAll("text#" + this._getConceptId(modelData.model_id));
 		
     	model_label.style("font-weight", "bold");
 		model_label.style("fill", "blue");
@@ -1621,7 +1627,7 @@ META NOTE (HSH - 8/25/2014): Can we remove this note, or at least clarify?
 		
 		var retData;
 		//initialize the model data based on the scores
-		retData = "<strong>" +  self._toProperCase(self.options.comparisonType).substring(0, self.options.comparisonType.length-1) +" Label:</strong> "   
+		retData = "<strong>" +  self._toProperCase(self.state.comparisonType).substring(0, self.state.comparisonType.length-1) +" Label:</strong> "   
 			+ modelData.model_label + "<br/><strong>Rank:</strong> " + (parseInt(modelData.model_rank) + 1);
 
 		//obj = try creating an ojbect with an attributes array including "attributes", but I may need to define
@@ -1630,9 +1636,9 @@ META NOTE (HSH - 8/25/2014): Can we remove this note, or at least clarify?
 		var obj = {				
 			attributes: [],
 				getAttribute: function(keystring) {
-					var ret = self.options.xScale(modelData.model_id)-2
+					var ret = self.state.xScale(modelData.model_id)-2
 					if (keystring == "y") {
-						ret = Number(self.options.yoffset + /**self.options.yoffsetOver)*/-190);
+						ret = Number(self.state.yoffset + /**self.state.yoffsetOver)*/-190);
 					}
 					return ret;
 				},
@@ -1645,13 +1651,13 @@ META NOTE (HSH - 8/25/2014): Can we remove this note, or at least clarify?
 	_highlightMatchingPhenotypes: function(curr_data){
 	
 		var self = this;
-		var  models = self.options.combinedModelData;
+		var  models = self.state.combinedModelData;
 				
 		for(var i = 0; i < models.length; i++){
 			//models[i] is the matching model that contains all phenotypes 
 			if (models[i].model_id == curr_data.model_id)
 			{
-				var alabels = this.options.svg.selectAll("text.a_text");
+				var alabels = this.state.svg.selectAll("text.a_text");
 				var mtxt = models[i].label_a;
 				if (mtxt == undefined) {
 					mtxt = models[i].id_a;
@@ -1670,7 +1676,7 @@ META NOTE (HSH - 8/25/2014): Can we remove this note, or at least clarify?
 	
 	_deselectMatchingPhenotypes : function(curr_data){
 	    var self = this;
-		self.options.svg.selectAll("text.a_text")
+		self.state.svg.selectAll("text.a_text")
 							.style("fill","black");                      
 	},
 
@@ -1685,7 +1691,7 @@ META NOTE (HSH - 8/25/2014): Can we remove this note, or at least clarify?
 		if (label != undefined){
 			var retLabel = label;
 			if (!newlength) {
-					newlength = this.options.textLength;
+					newlength = this.state.textLength;
 			}
 			if (label.length > newlength) {
 				retLabel = label.substring(0,newlength-3) + "...";
@@ -1755,8 +1761,8 @@ META NOTE (HSH - 8/25/2014): Can we remove this note, or at least clarify?
     	        })
     	        .on("mouseout", function(d) {
     	    	   self._clearModelData(d, d3.mouse(this));
-				   if(self.options.selectedRow){
-				   self._deselectData(self.options.selectedRow);}
+				   if(self.state.selectedRow){
+				   self._deselectData(self.state.selectedRow);}
     	        })
     	       .attr("class", this._getConceptId(data.model_id) + " model_label")
     	       .style("font-size", "12px")
@@ -1772,26 +1778,26 @@ META NOTE (HSH - 8/25/2014): Can we remove this note, or at least clarify?
 
     _updateDetailSection: function(htmltext, coords, width, height) {
 
-	    this.options.svg.selectAll("#detail_content").remove();
+	    this.state.svg.selectAll("#detail_content").remove();
 	    
-	    var w = this.options.detailRectWidth-(this.options.detailRectStrokeWidth*2);
-	    var h = this.options.detailRectHeight-(this.options.detailRectStrokeWidth*2);
+	    var w = this.state.detailRectWidth-(this.state.detailRectStrokeWidth*2);
+	    var h = this.state.detailRectHeight-(this.state.detailRectStrokeWidth*2);
 	    if (width != undefined) {
 	    	w = width;
 	    }
 	    if (height != undefined) {
 	    	h = height;
 	    }
-		var wdt = this.options.axis_pos_list[1] + ((this.options.axis_pos_list[2] - this.options.axis_pos_list[1])/2);
-		var hgt = this.options.phenotypeDisplayCount*10 + this.options.yoffset, yv = 0;
+		var wdt = this.state.axis_pos_list[1] + ((this.state.axis_pos_list[2] - this.state.axis_pos_list[1])/2);
+		var hgt = this.state.phenotypeDisplayCount*10 + this.state.yoffset, yv = 0;
 		
-		if (coords.y > hgt) { yv = coords.y - this.options.detailRectHeight - 10;}
+		if (coords.y > hgt) { yv = coords.y - this.state.detailRectHeight - 10;}
 		else {yv = coords.y + 20;}
 		
-		if (coords.x > wdt) { wv = coords.x - this.options.detailRectWidth - 70;}
+		if (coords.x > wdt) { wv = coords.x - this.state.detailRectWidth - 70;}
 		else {wv = coords.x + 20;}
 
-	    this.options.svg.append("foreignObject")
+	    this.state.svg.append("foreignObject")
 		    .attr("width", w + 60)
 			.attr("height", h)
 			.attr("id", "detail_content")
@@ -1804,19 +1810,19 @@ META NOTE (HSH - 8/25/2014): Can we remove this note, or at least clarify?
     },
     
     _showThrobber: function() {
-	    this.options.svg.selectAll("#detail_content").remove();
-	    this.options.svg.append("svg:text")
+	    this.state.svg.selectAll("#detail_content").remove();
+	    this.state.svg.append("svg:text")
 			.attr("id", "detail_content")
-			.attr("y", (26+this.options.detailRectStrokeWidth))
-		    .attr("x", (440+this.options.detailRectStrokeWidth))
+			.attr("y", (26+this.state.detailRectStrokeWidth))
+		    .attr("x", (440+this.state.detailRectStrokeWidth))
 			.style("font-size", "12px")
 			.text("Searching for data")
-	    this.options.svg.append("svg:image")
+	    this.state.svg.append("svg:image")
 			.attr("width", 16)
 			.attr("height", 16)
 			.attr("id", "detail_content")
-			.attr("y", (16+this.options.detailRectStrokeWidth))
-		    .attr("x", (545+this.options.detailRectStrokeWidth))
+			.attr("y", (16+this.state.detailRectStrokeWidth))
+		    .attr("x", (545+this.state.detailRectStrokeWidth))
 		    .attr("xlink:href","/widgets/modeltype/image/throbber.gif");	       
     },
     
@@ -1879,7 +1885,7 @@ META NOTE (HSH - 8/25/2014): Can we remove this note, or at least clarify?
 			if (taxon.indexOf("NCBITaxon:") != -1) {taxon = taxon.slice(10);}
 		}
 		
-		var calc = this.options.selectedCalculation;
+		var calc = this.state.selectedCalculation;
 		var suffix = "";
 		var prefix = "";
 		if (calc == 0 || calc == 1 || calc == 3) {suffix = '%';}
@@ -1891,7 +1897,7 @@ META NOTE (HSH - 8/25/2014): Can we remove this note, or at least clarify?
 	    retData = "<strong>Query: </strong> " + d.label_a + " (IC: " + d.IC_a.toFixed(2) + ")"   
 		    + "<br/><strong>Match: </strong> " + d.label_b + " (IC: " + d.IC_b.toFixed(2) +")"
 			+ "<br/><strong>Common: </strong> " + d.subsumer_label + " (IC: " + d.subsumer_IC.toFixed(2) +")"
-     	    + "<br/><strong>" + this._toProperCase(this.options.comparisonType).substring(0, this.options.comparisonType.length-1)  +": </strong> " + d.model_label
+     	    + "<br/><strong>" + this._toProperCase(this.state.comparisonType).substring(0, this.state.comparisonType.length-1)  +": </strong> " + d.model_label
 			+ "<br/><strong>" + prefix + ":</strong> " + d.value.toFixed(2) + suffix
 			+ "<br/><strong>Species: </strong> " + d.species + " (" + taxon + ")";
 	    this._updateDetailSection(retData, this._getXYPos(obj));
@@ -1903,32 +1909,32 @@ META NOTE (HSH - 8/25/2014): Can we remove this note, or at least clarify?
 	//something like this: $( "p" ).addClass( "myClass yourClass" );
 	 _createModelRects: function() {
 		var self = this;
-		var data = this.options.filteredModelData.slice();
+		var data = this.state.filteredModelData.slice();
 		
-		var model_rects = this.options.svg.selectAll(".models")
+		var model_rects = this.state.svg.selectAll(".models")
 			.data( data, function(d) {
 				return d.id;
 			});
 		model_rects.enter()
 		    .append("rect")
 		    .attr("transform",
-			  "translate(" + ((this.options.textWidth + 30) + 4) + "," + (self.options.yTranslation + self.options.yoffsetOver + 15)+   ")")
+			  "translate(" + ((this.state.textWidth + 30) + 4) + "," + (self.state.yTranslation + self.state.yoffsetOver + 15)+   ")")
 		    .attr("class", function(d) { 
 			  //append the model id to all related items
 			  if (d.value > 0) {
-			  var bla = self.options.svg.selectAll(".data_text." + self._getConceptId(d.id));	    	
+			  var bla = self.state.svg.selectAll(".data_text." + self._getConceptId(d.id));	    	
 					bla.classed(self._getConceptId(d.model_id), true);
 			  }
 			  return "models " + " " +  self._getConceptId(d.model_id) + " " +  self._getConceptId(d.id);
 		    })
 		    .attr("y", function(d, i) { 
 				//console.log("Y Pos: " + (self._getYPosition(d.id_a) - 10) + 
-				//"  X Pos: " + self.options.xScale(d.model_id) + "  Model Name: " + d.model_label +  "  Model Id: " + //d.model_id +
+				//"  X Pos: " + self.state.xScale(d.model_id) + "  Model Name: " + d.model_label +  "  Model Id: " + //d.model_id +
 				//"  Phen: " + d.label_a  + 
 				//"  IA_a: " + d.id_a );
-			  return self._getYPosition(d.id_a) + (self.options.yTranslation + self.options.yoffsetOver  + 10) ;
+			  return self._getYPosition(d.id_a) + (self.state.yTranslation + self.state.yoffsetOver  + 10) ;
 		    })
-		   .attr("x", function(d) { return self.options.xScale(d.model_id);})
+		   .attr("x", function(d) { return self.state.xScale(d.model_id);})
 		   .attr("width", 10)
 		   .attr("height", 10)
 		   .attr("rx", "3")
@@ -1938,49 +1944,49 @@ META NOTE (HSH - 8/25/2014): Can we remove this note, or at least clarify?
 			  this.parentNode.appendChild(this);
 				
 			  //if this column and row are selected, clear the column/row and unset the column/row flag
-			  if (self.options.selectedColumn != undefined && self.options.selectedRow != undefined) 
+			  if (self.state.selectedColumn != undefined && self.state.selectedRow != undefined) 
 			  {
-					self._clearModelData(self.options.selectedColumn);
-					self.options.selectedColumn = undefined;
-					self._deselectData(self.options.selectedRow);
-					self.options.selectedRow = undefined;	
-					if (this != self.options.currSelectedRect){
+					self._clearModelData(self.state.selectedColumn);
+					self.state.selectedColumn = undefined;
+					self._deselectData(self.state.selectedRow);
+					self.state.selectedRow = undefined;	
+					if (this != self.state.currSelectedRect){
 						self._highlightIntersection(d, d3.mouse(this));
 						//put the clicked rect on the top layer of the svg so other events work
 						this.parentNode.appendChild(this);
 						self._enableRowColumnRects(this);
 						//set the current selected rectangle
-						self.options.currSelectedRect = this;  
+						self.state.currSelectedRect = this;  
 					}
 			   }
 			   else {
 					self._highlightIntersection(d, d3.mouse(this));
 					this.parentNode.appendChild(this);
 					self._enableRowColumnRects(this);
-					self.options.currSelectedRect = this;  
+					self.state.currSelectedRect = this;  
 			   }
 			   self._showModelData(d, this);
 		  })
 		  .on("mouseout", function(d) {
 			  self._clearModelData(d, d3.mouse(this));
-			  if(self.options.selectedRow){
-			  self._deselectData(self.options.selectedRow);}
+			  if(self.state.selectedRow){
+			  self._deselectData(self.state.selectedRow);}
 		  })
 		  .style('opacity', '1.0')
 		  .attr("fill", function(d, i) {
 
 			  //This is for the new "Overview" target option 
-			  if (self.options.targetSpeciesName == "Overview"){
-						if (d.species == "Homo sapiens") {return self.options.colorScaleB(d.value);} 
-						else if (d.species == "Mus musculus")  {return self.options.colorScaleR(d.value);} 
-						else if (d.species == "Danio rerio")  {return self.options.colorScaleG(d.value);} 
+			  if (self.state.targetSpeciesName == "Overview"){
+						if (d.species == "Homo sapiens") {return self.state.colorScaleB(d.value);} 
+						else if (d.species == "Mus musculus")  {return self.state.colorScaleR(d.value);} 
+						else if (d.species == "Danio rerio")  {return self.state.colorScaleG(d.value);} 
 					}	
 					else {	
-						return self.options.colorScaleB(d.value); 
+						return self.state.colorScaleB(d.value); 
 					}
 			  });
 		  		
-		if (self.options.targetSpeciesName == "Overview") {
+		if (self.state.targetSpeciesName == "Overview") {
 			this._highlightSpecies();
 		}		
 		  model_rects.transition()
@@ -1989,7 +1995,7 @@ META NOTE (HSH - 8/25/2014): Can we remove this note, or at least clarify?
 			  .attr("y", function(d) {
 			  return self._getYPosition(d.id_a) -10; //rowid
 		  })
-		  .attr("x", function(d) { return self.options.xScale(d.model_id);})
+		  .attr("x", function(d) { return self.state.xScale(d.model_id);})
 
 		  model_rects.exit().transition()
 			.style('opacity', '0.0')
@@ -2000,29 +2006,29 @@ META NOTE (HSH - 8/25/2014): Can we remove this note, or at least clarify?
 	_highlightSpecies : function () {
 		//create the related model rectangles
 		var self = this;
-		var list = self.options.speciesList;
-		var ct = self.options.multiOrganismCt,
+		var list = self.state.speciesList;
+		var ct = self.state.multiOrganismCt,
 			vwidthAndGap = 13,
 			hwidthAndGap = 18,
 			totCt = 0,
 			parCt = 0;
 			
-		var highlight_rect = self.options.svg.selectAll(".species_accent")
+		var highlight_rect = self.state.svg.selectAll(".species_accent")
 			.data(list)
 			.enter()
 			.append("rect")			
 		  	.attr("transform",
-		  			  "translate(" + (self.options.textWidth + 30) + "," +( self.options.yTranslation + self.options.yoffsetOver)+ ")")
+		  			  "translate(" + (self.state.textWidth + 30) + "," +( self.state.yTranslation + self.state.yoffsetOver)+ ")")
 			//.attr("x", function(d,i) { return (i * (hwidthAndGap * ct));})
-			.attr("x", function(d,i) { totCt += self.options.multiOrgModelCt[i].count; 
+			.attr("x", function(d,i) { totCt += self.state.multiOrgModelCt[i].count; 
 									   if (i==0) { return 0; }
-									   else {parCt = totCt - self.options.multiOrgModelCt[i].count;  
+									   else {parCt = totCt - self.state.multiOrgModelCt[i].count;  
 									   return hwidthAndGap * parCt;}})
-			.attr("y", self.options.yoffset)
+			.attr("y", self.state.yoffset)
 			.attr("class", "species_accent")
-			.attr("width",  function(d,i) { return ((hwidthAndGap * self.options.multiOrgModelCt[i].count));})
-			.attr("height", vwidthAndGap * self.options.phenotypeDisplayCount + 5)
-			.attr("stroke", function(d,i){ return self.options.targetSpeciesList[i].color;})
+			.attr("width",  function(d,i) { return ((hwidthAndGap * self.state.multiOrgModelCt[i].count));})
+			.attr("height", vwidthAndGap * self.state.phenotypeDisplayCount + 5)
+			.attr("stroke", function(d,i){ return self.state.targetSpeciesList[i].color;})
 			.attr("stroke-width", 3)
 			.attr("fill", "none");
 	},
@@ -2031,12 +2037,12 @@ META NOTE (HSH - 8/25/2014): Can we remove this note, or at least clarify?
 	_enableRowColumnRects :  function(curr_rect){
 		var self = this;
 		
-		var model_rects = self.options.svg.selectAll("rect.models")
+		var model_rects = self.state.svg.selectAll("rect.models")
 			.filter(function (d) { return d.rowid == curr_rect.__data__.rowid;});
 		for (var i = 0; i < model_rects[0].length; i++){
                model_rects[0][i].parentNode.appendChild(model_rects[0][i]);
 		}
-		var data_rects = self.options.svg.selectAll("rect.models")
+		var data_rects = self.state.svg.selectAll("rect.models")
 			.filter(function (d) { return d.model_id == curr_rect.__data__.model_id;});
 		for (var j = 0; j < data_rects[0].length; j++){
                data_rects[0][j].parentNode.appendChild(data_rects[0][j]);
@@ -2047,19 +2053,19 @@ META NOTE (HSH - 8/25/2014): Can we remove this note, or at least clarify?
 		var self=this;
 		
 		//Highlight Row
-		var highlight_rect = self.options.svg.append("svg:rect")
-		  	.attr("transform","translate(" + self.options.axis_pos_list[1] + ","+ (self.options.yTranslation + self.options.yoffsetOver + 4 ) + ")")
+		var highlight_rect = self.state.svg.append("svg:rect")
+		  	.attr("transform","translate(" + self.state.axis_pos_list[1] + ","+ (self.state.yTranslation + self.state.yoffsetOver + 4 ) + ")")
 			.attr("x", 12)
 			.attr("y", function(d) {return self._getYPosition(curr_data.id_a) ;}) //rowid
 			.attr("class", "row_accent")
-			.attr("width", this.options.modelWidth - 4)
+			.attr("width", this.state.modelWidth - 4)
 			.attr("height", 12);
 	
-    	this.options.selectedRow = curr_data;
-		this.options.selectedColumn = curr_data;
+    	this.state.selectedRow = curr_data;
+		this.state.selectedColumn = curr_data;
 		this._resetLinks();
 		
-		var alabels = this.options.svg.selectAll("text.a_text." + this._getConceptId(curr_data.id));
+		var alabels = this.state.svg.selectAll("text.a_text." + this._getConceptId(curr_data.id));
 		var txt = curr_data.label_a;
     	if (txt == undefined) {
     		txt = curr_data.id_a;
@@ -2069,20 +2075,20 @@ META NOTE (HSH - 8/25/2014): Can we remove this note, or at least clarify?
 		alabels.style("fill", "blue");
 
 		//Highlight Column
-		var model_label = self.options.svg.selectAll("text#" + this._getConceptId(curr_data.model_id));
+		var model_label = self.state.svg.selectAll("text#" + this._getConceptId(curr_data.model_id));
 		
     	model_label.style("font-weight", "bold");
 		model_label.style("fill", "blue");
 
 		//create the related model rectangles
-		var highlight_rect2 = self.options.svg.append("svg:rect")
+		var highlight_rect2 = self.state.svg.append("svg:rect")
 		  	.attr("transform",
-		  			  "translate(" + (self.options.textWidth + 34) + "," +( self.options.yTranslation + self.options.yoffsetOver)+ ")")
-			.attr("x", function(d) { return (self.options.xScale(curr_data.model_id) - 1);})
-			.attr("y", self.options.yoffset + 2 )
+		  			  "translate(" + (self.state.textWidth + 34) + "," +( self.state.yTranslation + self.state.yoffsetOver)+ ")")
+			.attr("x", function(d) { return (self.state.xScale(curr_data.model_id) - 1);})
+			.attr("y", self.state.yoffset + 2 )
 			.attr("class", "model_accent")
 			.attr("width", 12)
-			.attr("height", (self.options.phenotypeDisplayCount * 13));
+			.attr("height", (self.state.phenotypeDisplayCount * 13));
 	},
   
     _updateAxes: function() {
@@ -2090,54 +2096,54 @@ META NOTE (HSH - 8/25/2014): Can we remove this note, or at least clarify?
 		var data = [];
 		
 		//This is for the new "Overview" target option 
-		if (this.options.targetSpeciesName == "Overview"){	
-			data = this.options.combinedModelData;
+		if (this.state.targetSpeciesName == "Overview"){	
+			data = this.state.combinedModelData;
 		}
 		else
 		{
-			data = self.options.filteredModelData;	
+			data = self.state.filteredModelData;	
 		}
 		
-		this.options.h = (data.length*2.5);
-		self.options.yScale = d3.scale.ordinal()
+		this.state.h = (data.length*2.5);
+		self.state.yScale = d3.scale.ordinal()
 			.domain(data.map(function (d) {return d.id_a; }))
 		.range([0,data.length])
-		.rangePoints([ self.options.yoffset + self.options.yoffsetOver, self.options.yoffset + self.options.yoffsetOver +this.options.h ]);
+		.rangePoints([ self.state.yoffset + self.state.yoffsetOver, self.state.yoffset + self.state.yoffsetOver +this.state.h ]);
 		
 		//update accent boxes
-		self.options.svg.selectAll("#rect.accent").attr("height", self.options.h);
+		self.state.svg.selectAll("#rect.accent").attr("height", self.state.h);
 	},
 
 	_createScrollBars: function() {
 		var self = this;
 		//show the vertical scrollbar if necessary
-		if (this.options.phenotypeData.length > this.options.phenotypeDisplayCount) {
-			var xpos = self.options.axis_pos_list[2] - 20;
-			var ypos = self.options.yAxisMax -16;
-			var vert_slider_background = this.options.svg.append("svg:rect")
+		if (this.state.phenotypeData.length > this.state.phenotypeDisplayCount) {
+			var xpos = self.state.axis_pos_list[2] - 20;
+			var ypos = self.state.yAxisMax -16;
+			var vert_slider_background = this.state.svg.append("svg:rect")
 				.attr("class", "vert_slider")
 				.attr("x", xpos)
 				.attr("width", 16)
-				.attr("y", this.options.yoffset+ 18)
-				.attr("height", this.options.h - (this.options.yoffset+ 50))
+				.attr("y", this.state.yoffset+ 18)
+				.attr("height", this.state.h - (this.state.yoffset+ 50))
 				.attr("fill", "lightgrey");
 			
-			var rect_slider_up = this.options.svg.append("svg:image")
+			var rect_slider_up = this.state.svg.append("svg:image")
 				.attr("class", "vert_slider")
 				.attr("x", xpos)
 				.attr("width", 16)
-				.attr("y", this.options.yoffset+ 18)
+				.attr("y", this.state.yoffset+ 18)
 				.attr("height", 16)
 				.on("click", function(d) {
 					self._clickPhenotypeSlider(-1);
 				})
 			    .attr("xlink:href","/widgets/modeltype/image/up_arrow.png");
 				
-			var rect_slider_down = this.options.svg.append("svg:image")
+			var rect_slider_down = this.state.svg.append("svg:image")
 				.attr("class", "vert_slider")
 				.attr("x", xpos)
 				.attr("width", 16)
-				.attr("y", this.options.yAxisMax +18)
+				.attr("y", this.state.yAxisMax +18)
 				.attr("height", 16)
 				.on("click", function(d) {
 					self._clickPhenotypeSlider(1);
@@ -2145,33 +2151,33 @@ META NOTE (HSH - 8/25/2014): Can we remove this note, or at least clarify?
 			    .attr("xlink:href","/widgets/modeltype/image/down_arrow.png");
 		}
 		//show the model scrollbar if necessary
-		if (this.options.modelList.length > this.options.modelDisplayCount) {
-			var xpos = self.options.axis_pos_list[1] -5;
-			var xpos2 = self.options.axis_pos_list[2] - 37;
-			var horz_slider_background = this.options.svg.append("svg:rect")
+		if (this.state.modelList.length > this.state.modelDisplayCount) {
+			var xpos = self.state.axis_pos_list[1] -5;
+			var xpos2 = self.state.axis_pos_list[2] - 37;
+			var horz_slider_background = this.state.svg.append("svg:rect")
 				.attr("class", "horz_slider")
 				.attr("x", xpos)
 				.attr("width", xpos2-xpos)
-				.attr("y", this.options.yAxisMax+ 33)
+				.attr("y", this.state.yAxisMax+ 33)
 				.attr("height", 16)
 				.attr("fill", "lightgrey");
 		
-			var rect_slider_left = this.options.svg.append("svg:image")
+			var rect_slider_left = this.state.svg.append("svg:image")
 				.attr("class", "horz_slider")
 				.attr("x", xpos)
 				.attr("width", 16)
-				.attr("y", this.options.yAxisMax+ 33)
+				.attr("y", this.state.yAxisMax+ 33)
 				.attr("height", 16)
 				.on("click", function(d) {
 					self._clickModelSlider(-1);
 				})
 			    .attr("xlink:href","/widgets/modeltype/image/left_arrow.png");
 					
-			var rect_slider_right = this.options.svg.append("svg:image")
+			var rect_slider_right = this.state.svg.append("svg:image")
 				.attr("class", "horz_slider")
 				.attr("x", xpos2)
 				.attr("width", 16)
-				.attr("y", this.options.yAxisMax+ 33)
+				.attr("y", this.state.yAxisMax+ 33)
 				.attr("height", 16)
 				.on("click", function(d) {
 					self._clickModelSlider(1);
@@ -2182,31 +2188,31 @@ META NOTE (HSH - 8/25/2014): Can we remove this note, or at least clarify?
 	
 	//change the text shown on the screen as the scrollbars are used
 	_updateScrollCounts: function() {
-		this.options.svg.selectAll(".scroll_text").remove();
+		this.state.svg.selectAll(".scroll_text").remove();
 	
 	//account for a grid with less than 14 phenotypes
 		var y1 = 257,
 			y2 = 273;
-		if (this.options.filteredPhenotypeData.length < 14) {y1 = 172; y2 = 188;}
+		if (this.state.filteredPhenotypeData.length < 14) {y1 = 172; y2 = 188;}
 		
 		
-		var startModelIdx = (this.options.currModelIdx - this.options.modelDisplayCount) + 2;
-		var max_count = ((this.options.modelDisplayCount + startModelIdx) >= this.options.modelList.length) ? this.options.modelList.length : this.options.modelDisplayCount + startModelIdx; 
-		var display_text = "Matches [" + startModelIdx + "-"+ max_count + "] out of " + (this.options.modelList.length);
-		var div_text = this.options.svg.append("svg:text")
+		var startModelIdx = (this.state.currModelIdx - this.state.modelDisplayCount) + 2;
+		var max_count = ((this.state.modelDisplayCount + startModelIdx) >= this.state.modelList.length) ? this.state.modelList.length : this.state.modelDisplayCount + startModelIdx; 
+		var display_text = "Matches [" + startModelIdx + "-"+ max_count + "] out of " + (this.state.modelList.length);
+		var div_text = this.state.svg.append("svg:text")
 			.attr("class", "scroll_text")
-			.attr("x", this.options.axis_pos_list[2] +45)
-			.attr("y", y1 + this.options.yTranslation)
+			.attr("x", this.state.axis_pos_list[2] +45)
+			.attr("y", y1 + this.state.yTranslation)
 			.text(display_text);
 		
-		var startPhenIdx = (this.options.currPhenotypeIdx - this.options.phenotypeDisplayCount) + 2
+		var startPhenIdx = (this.state.currPhenotypeIdx - this.state.phenotypeDisplayCount) + 2
 		;
-		var max_count = ((this.options.phenotypeDisplayCount + startPhenIdx) >= this.options.phenotypeData.length) ? this.options.phenotypeData.length : this.options.phenotypeDisplayCount + startPhenIdx ; 
-		var display_text = "Phenotypes [" + startPhenIdx + "-"+ max_count + "] out of " + (this.options.phenotypeData.length);
-		var div_text = this.options.svg.append("svg:text")
+		var max_count = ((this.state.phenotypeDisplayCount + startPhenIdx) >= this.state.phenotypeData.length) ? this.state.phenotypeData.length : this.state.phenotypeDisplayCount + startPhenIdx ; 
+		var display_text = "Phenotypes [" + startPhenIdx + "-"+ max_count + "] out of " + (this.state.phenotypeData.length);
+		var div_text = this.state.svg.append("svg:text")
 			.attr("class", "scroll_text")
-			.attr("x", this.options.axis_pos_list[2] +45)
-			.attr("y", y2  + this.options.yTranslation)
+			.attr("x", this.state.axis_pos_list[2] +45)
+			.attr("y", y2  + this.state.yTranslation)
 			.text(display_text);
 	},
 	
@@ -2219,43 +2225,43 @@ META NOTE (HSH - 8/25/2014): Can we remove this note, or at least clarify?
 		//This is for the new "Overview" target option 
 		var modelData = [].
 			modelList = [];
-		if (this.options.targetSpeciesName == "Overview"){	
-		    modelData = this.options.combinedModelData;
-			modelList = this.options.combinedModelList;
+		if (this.state.targetSpeciesName == "Overview"){	
+		    modelData = this.state.combinedModelData;
+			modelList = this.state.combinedModelList;
 		}
 		else
 		{
-			modelData = this.options.modelData;
-			modelList = this.options.modelList;
+			modelData = this.state.modelData;
+			modelList = this.state.modelList;
 		}
 		//check to see if the phenotypeIdx is greater than the number of items in the list
-		if (phenotypeIdx > this.options.phenotypeData.length) {
-			this.options.currPhenotypeIdx = this.options.phenotypeSortData.length;
-		} else if (phenotypeIdx - (this.options.phenotypeDisplayCount -1) < 0) {
+		if (phenotypeIdx > this.state.phenotypeData.length) {
+			this.state.currPhenotypeIdx = this.state.phenotypeSortData.length;
+		} else if (phenotypeIdx - (this.state.phenotypeDisplayCount -1) < 0) {
 			//check to see if the min of the slider is less than the 0
-			  this.options.currPhenotypeIdx = (this.options.phenotypeDisplayCount -1);
+			  this.state.currPhenotypeIdx = (this.state.phenotypeDisplayCount -1);
 		} else {
-			this.options.currPhenotypeIdx = phenotypeIdx;
+			this.state.currPhenotypeIdx = phenotypeIdx;
 		}
-		var startPhenotypeIdx = this.options.currPhenotypeIdx - this.options.phenotypeDisplayCount;
+		var startPhenotypeIdx = this.state.currPhenotypeIdx - this.state.phenotypeDisplayCount;
 		
-		this.options.filteredPhenotypeData = [];
-		this.options.yAxis = [];
+		this.state.filteredPhenotypeData = [];
+		this.state.yAxis = [];
 		
 		//fix model list
 		//check to see if the max of the slider is greater than the number of items in the list
 		if (modelIdx > modelList.length) {
-			this.options.currModelIdx = modelList.length;
-		} else if (modelIdx - (this.options.modelDisplayCount -1) < 0) {
+			this.state.currModelIdx = modelList.length;
+		} else if (modelIdx - (this.state.modelDisplayCount -1) < 0) {
 			//check to see if the min of the slider is less than the 0
-			  this.options.currModelIdx = (this.options.modelDisplayCount -1);
+			  this.state.currModelIdx = (this.state.modelDisplayCount -1);
 		} else {
-			this.options.currModelIdx = modelIdx;
+			this.state.currModelIdx = modelIdx;
 		}
-		var startModelIdx = this.options.currModelIdx - this.options.modelDisplayCount;
+		var startModelIdx = this.state.currModelIdx - this.state.modelDisplayCount;
 
-		this.options.filteredModelList = [];
-		this.options.filteredModelData = [];
+		this.state.filteredModelList = [];
+		this.state.filteredModelData = [];
 				
 		//extract the new array of filtered Phentoypes
 		//also update the axis
@@ -2263,8 +2269,8 @@ META NOTE (HSH - 8/25/2014): Can we remove this note, or at least clarify?
 
 		var tempFilteredModelData = [];
 		var axis_idx = 0;
-    	for (var idx=startModelIdx;idx<self.options.currModelIdx;idx++) {
-    		self.options.filteredModelList.push(modelList[idx]);
+    	for (var idx=startModelIdx;idx<self.state.currModelIdx;idx++) {
+    		self.state.filteredModelList.push(modelList[idx]);
     	}
 		
 		//extract the new array of filtered Phentoypes
@@ -2273,98 +2279,98 @@ META NOTE (HSH - 8/25/2014): Can we remove this note, or at least clarify?
 
 		var tempFilteredModelData = [];
 		var axis_idx = 0;
-    	for (var idx=startPhenotypeIdx;idx<self.options.currPhenotypeIdx;idx++) {
-    		self.options.filteredPhenotypeData.push(self.options.phenotypeSortData[idx]);
+    	for (var idx=startPhenotypeIdx;idx<self.state.currPhenotypeIdx;idx++) {
+    		self.state.filteredPhenotypeData.push(self.state.phenotypeSortData[idx]);
     		//update the YAxis   	    		
     		//the height of each row
         	var size = 10;
         	//the spacing you want between rows
         	var gap = 3;
 
-    		var stuff = {"id": self.options.phenotypeSortData[idx][0].id_a, "ypos" : ((axis_idx * (size+gap)) + self.options.yoffset /**+ self.options.yoffsetOver +10*/)};
-    		self.options.yAxis.push(stuff); 
+    		var stuff = {"id": self.state.phenotypeSortData[idx][0].id_a, "ypos" : ((axis_idx * (size+gap)) + self.state.yoffset /**+ self.state.yoffsetOver +10*/)};
+    		self.state.yAxis.push(stuff); 
     	    axis_idx = axis_idx + 1;
     	    //update the ModelData
     		var tempdata = modelData.filter(function(d) {
-    	    	return d.id_a == self.options.phenotypeSortData[idx][0].id_a;
+    	    	return d.id_a == self.state.phenotypeSortData[idx][0].id_a;
     	    });
     		tempFilteredModelData = tempFilteredModelData.concat(tempdata);
     	}
 
-    	self.options.svg.selectAll("g .x.axis")
+    	self.state.svg.selectAll("g .x.axis")
 			.remove();
-		self.options.svg.selectAll("g .tick.major")
+		self.state.svg.selectAll("g .tick.major")
 			.remove();
 		//update the x axis
-		self.options.xScale = d3.scale.ordinal()
-			.domain(self.options.filteredModelList.map(function (d) {
+		self.state.xScale = d3.scale.ordinal()
+			.domain(self.state.filteredModelList.map(function (d) {
 				return d.model_id; }))
-	        .rangeRoundBands([0,self.options.modelWidth]);
+	        .rangeRoundBands([0,self.state.modelWidth]);
 	    model_x_axis = d3.svg.axis()
-			.scale(self.options.xScale).orient("top");
+			.scale(self.state.xScale).orient("top");
 	    //model_x_axis.tickEndSize = 1;
 				
-		var model_region = self.options.svg.append("g")
-	  		.attr("transform","translate(" + (self.options.textWidth +28) +"," + (self.options.yTranslation + self.options.yoffset /**+ self.options.yoffsetOver*/) + ")")
+		var model_region = self.state.svg.append("g")
+	  		.attr("transform","translate(" + (self.state.textWidth +28) +"," + (self.state.yTranslation + self.state.yoffset /**+ self.state.yoffsetOver*/) + ")")
 	  		.attr("class", "x axis")
 	  		.call(model_x_axis)			
 	  	    //this be some voodoo...
 	  	    //to rotate the text, I need to select it as it was added by the axis
 	  		.selectAll("text") 
 	  		.each(function(d,i) { 
-	  		    self._convertLabelHTML(this, self._getShortLabel(self.options.filteredModelList[i].model_label, 15),self.options.filteredModelList[i]);}); 
+	  		    self._convertLabelHTML(this, self._getShortLabel(self.state.filteredModelList[i].model_label, 15),self.state.filteredModelList[i]);}); 
 		
 		//The pathline creates a line  below the labels. We don't want two lines to show up so fill=white hides the line.
-		var w = self.options.modelWidth;		
-		this.options.svg.selectAll("path.domain").remove();	
-		self.options.svg.selectAll("text.scores").remove();
-		self.options.svg.selectAll("#specieslist").remove();
+		var w = self.state.modelWidth;		
+		this.state.svg.selectAll("path.domain").remove();	
+		self.state.svg.selectAll("text.scores").remove();
+		self.state.svg.selectAll("#specieslist").remove();
 				
-		self.options.svg.append("line")
-				.attr("transform","translate(" + (self.options.textWidth + 30) +"," + (self.options.yTranslation + self.options.yoffset - 16) + ")")
+		self.state.svg.append("line")
+				.attr("transform","translate(" + (self.state.textWidth + 30) +"," + (self.state.yTranslation + self.state.yoffset - 16) + ")")
 				.attr("x1", 0)
 				.attr("y1", 0)
-				.attr("x2", self.options.modelWidth)
+				.attr("x2", self.state.modelWidth)
 				.attr("y2", 0)
 				.attr("stroke", "#0F473E")
 				.attr("stroke-width", 1);
 				
 		
-		var scores = self.options.svg.selectAll("text.scores")
-				.data(self.options.filteredModelList)
+		var scores = self.state.svg.selectAll("text.scores")
+				.data(self.state.filteredModelList)
 				.enter()	
 				.append("text")
-				.attr("transform","translate(" + (self.options.textWidth + 34) +"," + (self.options.yTranslation + self.options.yoffset - 3) + ")")
+				.attr("transform","translate(" + (self.state.textWidth + 34) +"," + (self.state.yTranslation + self.state.yoffset - 3) + ")")
     	        .attr("id", "scorelist")
 				.attr("x",function(d,i){return i*18})
 				.attr("y", 0)
 				.attr("width", 18)
     	        .attr("height", 10)
 				.attr("class", "scores")
-				.text(function (d,i){return self.options.filteredModelList[i].model_score;});
+				.text(function (d,i){return self.state.filteredModelList[i].model_score;});
 		
-		self.options.svg.append("line")
-				.attr("transform","translate(" + (self.options.textWidth + 30) +"," + (self.options.yTranslation + self.options.yoffset + 0) + ")")
+		self.state.svg.append("line")
+				.attr("transform","translate(" + (self.state.textWidth + 30) +"," + (self.state.yTranslation + self.state.yoffset + 0) + ")")
 				.attr("x1", 0)
 				.attr("y1", 0)
-				.attr("x2", self.options.modelWidth)
+				.attr("x2", self.state.modelWidth)
 				.attr("y2", 0)
 				.attr("stroke", "#0F473E")
 				.attr("stroke-width", 1);
 				
-		if (self.options.targetSpeciesName == "Overview") {
+		if (self.state.targetSpeciesName == "Overview") {
 		
-			var speciesList = self.options.speciesList;
+			var speciesList = self.state.speciesList;
 			
-			var species = self.options.svg.selectAll("#specieslist")
+			var species = self.state.svg.selectAll("#specieslist")
 					.data(speciesList)
 					.enter()
 					.append("text")
-					.attr("transform","translate(" + (self.options.textWidth + 30) +"," + (self.options.yTranslation + self.options.yoffset + 10) + ")")
-					.attr("x", function(d,i){return ((i+1) * (self.options.modelWidth/(speciesList.length))) - ((self.options.modelWidth/speciesList.length)/2);})
+					.attr("transform","translate(" + (self.state.textWidth + 30) +"," + (self.state.yTranslation + self.state.yoffset + 10) + ")")
+					.attr("x", function(d,i){return ((i+1) * (self.state.modelWidth/(speciesList.length))) - ((self.state.modelWidth/speciesList.length)/2);})
 					.attr("id", "specieslist")
 					.attr("y", 10)
-					.attr("width", function(d,i){return self.options.modelWidth/speciesList.length;})
+					.attr("width", function(d,i){return self.state.modelWidth/speciesList.length;})
 					.attr("height", 10)
 					.attr("fill", "#0F473E")
 					//.attr("stroke-width", 1)
@@ -2373,11 +2379,11 @@ META NOTE (HSH - 8/25/2014): Can we remove this note, or at least clarify?
 		}
 	
 		//now, limit the data returned by models as well
-    	for (var idx=0;idx<self.options.filteredModelList.length;idx++) {
+    	for (var idx=0;idx<self.state.filteredModelList.length;idx++) {
     		var tempdata = tempFilteredModelData.filter(function(d) {
-    	    	return d.model_id == self.options.filteredModelList[idx].model_id;
+    	    	return d.model_id == self.state.filteredModelList[idx].model_id;
     	    });
-    		self.options.filteredModelData = self.options.filteredModelData.concat(tempdata);   		
+    		self.state.filteredModelData = self.state.filteredModelData.concat(tempdata);   		
     	}	
 		
 	    this._createModelRects();
@@ -2433,40 +2439,40 @@ META NOTE (HSH - 8/25/2014): Can we remove this note, or at least clarify?
 	    var self=this;
 	    //For Overview of Organisms 0 width = ((multiOrganismCt*2)+2) *18	
 		//Add two  extra columns as separators
-		self.options.axis_pos_list = [];
-		this.options.modelWidth = this.options.filteredModelList.length * 18;
+		self.state.axis_pos_list = [];
+		this.state.modelWidth = this.state.filteredModelList.length * 18;
 		//add an axis for each ordinal scale found in the data
-	    for (var i=0;i<this.options.dimensions.length;i++) {
+	    for (var i=0;i<this.state.dimensions.length;i++) {
 	    	//move the last accent over a bit for the scrollbar
 			if (i == 2) {
 				var w = 0;
-				if(this.options.modelWidth < this.options.smallestModelWidth)
-				{ w = this.options.smallestModelWidth;}
-				else {w = this.options.modelWidth;}
+				if(this.state.modelWidth < this.state.smallestModelWidth)
+				{ w = this.state.smallestModelWidth;}
+				else {w = this.state.modelWidth;}
 				
-				self.options.axis_pos_list.push((this.options.textWidth + 30) 
-					       + this.options.colStartingPos 
+				self.state.axis_pos_list.push((this.state.textWidth + 30) 
+					       + this.state.colStartingPos 
 					       + w);
 			} else {
-				self.options.axis_pos_list.push((i*(this.options.textWidth + 10)) + 
-					       this.options.colStartingPos);
+				self.state.axis_pos_list.push((i*(this.state.textWidth + 10)) + 
+					       this.state.colStartingPos);
 			}
 	    }	
 	    //create accent boxes
-	    var rect_accents = this.options.svg.selectAll("#rect.accent")
-		.data(this.options.dimensions, function(d) { return d;});
+	    var rect_accents = this.state.svg.selectAll("#rect.accent")
+		.data(this.state.dimensions, function(d) { return d;});
 	    rect_accents.enter()
 	    	.append("rect")
 		.attr("class", "accent")
-		.attr("x", function(d, i) { return self.options.axis_pos_list[i];})
-		.attr("y", self.options.yoffset + self.options.yoffsetOver + this.options.yTranslation )
+		.attr("x", function(d, i) { return self.state.axis_pos_list[i];})
+		.attr("y", self.state.yoffset + self.state.yoffsetOver + this.state.yTranslation )
 		.attr("width", function(d, i) {
-		    return i == 2 ? self.options.textWidth + 5 : self.options.textWidth + 5;
+		    return i == 2 ? self.state.textWidth + 5 : self.state.textWidth + 5;
 		})		
 		.attr("height",  function(d, i) {
-		    //return i == 2 ? self.options.h /**- 216*/ : self.options.h;
-			//return i == 2 ? self.options.h : (self.options.phenotypeDisplayCount *  //13) + 10;  //phenotype count * height of rect + padding
-			return self.options.phenotypeDisplayCount * 13 + 10;
+		    //return i == 2 ? self.state.h /**- 216*/ : self.state.h;
+			//return i == 2 ? self.state.h : (self.state.phenotypeDisplayCount *  //13) + 10;  //phenotype count * height of rect + padding
+			return self.state.phenotypeDisplayCount * 13 + 10;
 		})
 		.attr("id", function(d, i) {
 		    if(i==0) {return "leftrect";} else if(i==1) {return "centerrect";} else {return "rightrect";}
@@ -2476,17 +2482,17 @@ META NOTE (HSH - 8/25/2014): Can we remove this note, or at least clarify?
 		    return i != 1 ? d3.rgb("#e5e5e5") : "white";
 		});
 			
-		if (self.options.targetSpeciesName == "Overview") { var ct = 0;}
+		if (self.state.targetSpeciesName == "Overview") { var ct = 0;}
 		else { var ct = -15;}
 			
 	    //add text headers
-	    var rect_headers = this.options.svg.selectAll("#text.accent")
-		.data(this.options.dimensions, function(d) { return d;});
+	    var rect_headers = this.state.svg.selectAll("#text.accent")
+		.data(this.state.dimensions, function(d) { return d;});
 	    rect_headers.enter()
 	    	.append("text")
 		.attr("class", "accent")
-		.attr("x", function(d, i) { return i == 0 ?(self.options.axis_pos_list[i]+10)+25 : (self.options.axis_pos_list[i]);})
-		.attr("y", self.options.yoffset +(this.options.yTranslation) + ct) //+ self.options.yoffsetOver))
+		.attr("x", function(d, i) { return i == 0 ?(self.state.axis_pos_list[i]+10)+25 : (self.state.axis_pos_list[i]);})
+		.attr("y", self.state.yoffset +(this.state.yTranslation) + ct) //+ self.state.yoffsetOver))
 		.style("display", function(d, i) {
 		    return i == 0 ? "" : "none";
 		})
@@ -2499,11 +2505,11 @@ META NOTE (HSH - 8/25/2014): Can we remove this note, or at least clarify?
 		var self = this;
 		if (model != "")
 		{
-			for(var i=0;i<=self.options.orgModelList.length;i++)
+			for(var i=0;i<=self.state.orgModelList.length;i++)
 			{	
-				if(model == self._getConceptId(self.options.orgModelList[i].model_id))
+				if(model == self._getConceptId(self.state.orgModelList[i].model_id))
 				{
-					return self.options.orgModelList[i].model_score;
+					return self.state.orgModelList[i].model_score;
 				}
 			}
 		}
@@ -2516,24 +2522,24 @@ META NOTE (HSH - 8/25/2014): Can we remove this note, or at least clarify?
 		var list = [];
 		
 		//This is for the new "Overview" target option 
-		if (this.options.targetSpeciesName == "Overview"){	
-			list = this.options.combinedModelList.slice();			
+		if (this.state.targetSpeciesName == "Overview"){	
+			list = this.state.combinedModelList.slice();			
 		}
 		else
 		{		
-			list =this.options.filteredModelList.slice();
+			list =this.state.filteredModelList.slice();
 		}
 		
-		this.options.xScale = d3.scale.ordinal()
+		this.state.xScale = d3.scale.ordinal()
 		.domain(list.map(function (d) {
 			return d.model_id; }))
-			.rangeRoundBands([0,this.options.modelWidth]);
+			.rangeRoundBands([0,this.state.modelWidth]);
 	   
 		model_x_axis = d3.svg.axis()
-			.scale(this.options.xScale).orient("top");
+			.scale(this.state.xScale).orient("top");
 
-		var model_region = this.options.svg.append("g")
-			.attr("transform","translate(" + (this.options.textWidth + 30) + "," + (this.options.yoffset  + this.options.yTranslation) + ")")
+		var model_region = this.state.svg.append("g")
+			.attr("transform","translate(" + (this.state.textWidth + 30) + "," + (this.state.yoffset  + this.state.yTranslation) + ")")
 			.call(model_x_axis)
 			.attr("class", "x axis")
 			//this be some voodoo...
@@ -2541,68 +2547,68 @@ META NOTE (HSH - 8/25/2014): Can we remove this note, or at least clarify?
 			.selectAll("text")
 			.each(function(d,i) { 
 					//This is for the new "Overview" target option 
-					if (self.options.targetSpeciesName == "Overview"){	
-						if (self.options.combinedModelList[i].model_label != undefined){
-							self._convertLabelHTML(this, self._getShortLabel(self.options.combinedModelList[i].model_label, 15), self.options.combinedModelList[i]);
+					if (self.state.targetSpeciesName == "Overview"){	
+						if (self.state.combinedModelList[i].model_label != undefined){
+							self._convertLabelHTML(this, self._getShortLabel(self.state.combinedModelList[i].model_label, 15), self.state.combinedModelList[i]);
 						} 
 						else {
-							self._convertLabelHTML(this, "", self.options.combinedModelList[i]);
+							self._convertLabelHTML(this, "", self.state.combinedModelList[i]);
 						}
 					 }
 					else {
-						self._convertLabelHTML(this, self._getShortLabel(self.options.filteredModelList[i].model_label, 15),self.options.filteredModelList[i]);
+						self._convertLabelHTML(this, self._getShortLabel(self.state.filteredModelList[i].model_label, 15),self.state.filteredModelList[i]);
 					}
 			});
 				
-		var w = self.options.modelWidth;
+		var w = self.state.modelWidth;
 		
-		this.options.svg.selectAll("path.domain").remove();	
-		self.options.svg.selectAll("text.scores").remove();
-		self.options.svg.selectAll("#specieslist").remove();
+		this.state.svg.selectAll("path.domain").remove();	
+		self.state.svg.selectAll("text.scores").remove();
+		self.state.svg.selectAll("#specieslist").remove();
 
 
-		self.options.svg.append("line")
-				.attr("transform","translate(" + (self.options.textWidth + 30) +"," + (self.options.yTranslation + self.options.yoffset - 16) + ")")
+		self.state.svg.append("line")
+				.attr("transform","translate(" + (self.state.textWidth + 30) +"," + (self.state.yTranslation + self.state.yoffset - 16) + ")")
 				.attr("x1", 0)
 				.attr("y1", 0)
-				.attr("x2", self.options.modelWidth)
+				.attr("x2", self.state.modelWidth)
 				.attr("y2", 0)
 				.attr("stroke", "#0F473E")
 				.attr("stroke-width", 1);
 				
-		var scores = self.options.svg.selectAll("text.scores")
+		var scores = self.state.svg.selectAll("text.scores")
 				.data(list)
 				.enter()	
 				.append("text")
-				.attr("transform","translate(" + (self.options.textWidth + 34) +"," + (self.options.yTranslation + self.options.yoffset - 3) + ")")
+				.attr("transform","translate(" + (self.state.textWidth + 34) +"," + (self.state.yTranslation + self.state.yoffset - 3) + ")")
 				.attr("id", "scorelist")
 				.attr("x",function(d,i){return i*18})
 				.attr("y", 0)
 				.attr("width", 18)
 				.attr("height", 10)
 				.attr("class", "scores")
-				.text(function (d,i){return self.options.filteredModelList[i].model_score;});
+				.text(function (d,i){return self.state.filteredModelList[i].model_score;});
 				
-		self.options.svg.append("line")
-				.attr("transform","translate(" + (self.options.textWidth + 30) +"," + (self.options.yTranslation + self.options.yoffset + 0) + ")")
+		self.state.svg.append("line")
+				.attr("transform","translate(" + (self.state.textWidth + 30) +"," + (self.state.yTranslation + self.state.yoffset + 0) + ")")
 				.attr("x1", 0)
 				.attr("y1", 0)
-				.attr("x2", self.options.modelWidth)
+				.attr("x2", self.state.modelWidth)
 				.attr("y2", 0);
 	    				
-		if (self.options.targetSpeciesName == "Overview") {
+		if (self.state.targetSpeciesName == "Overview") {
 		
-			var speciesList = self.options.speciesList;
+			var speciesList = self.state.speciesList;
 					
-			var species = self.options.svg.selectAll("#specieslist")
+			var species = self.state.svg.selectAll("#specieslist")
 					.data(speciesList)
 					.enter()
 					.append("text")
-					.attr("transform","translate(" + (self.options.textWidth + 30) +"," + (self.options.yTranslation + self.options.yoffset + 10) + ")")
-					.attr("x", function(d,i){return ((i+1) * (self.options.modelWidth/(speciesList.length))) - ((self.options.modelWidth/speciesList.length)/2);})
+					.attr("transform","translate(" + (self.state.textWidth + 30) +"," + (self.state.yTranslation + self.state.yoffset + 10) + ")")
+					.attr("x", function(d,i){return ((i+1) * (self.state.modelWidth/(speciesList.length))) - ((self.state.modelWidth/speciesList.length)/2);})
 					.attr("id", "specieslist")
 					.attr("y", 10)
-					.attr("width", function(d,i){return self.options.modelWidth/speciesList.length;})
+					.attr("width", function(d,i){return self.state.modelWidth/speciesList.length;})
 					.attr("height", 10)
 					.attr("fill", "#0F473E")
 					//.attr("fill-width", 1)
@@ -2614,13 +2620,13 @@ META NOTE (HSH - 8/25/2014): Can we remove this note, or at least clarify?
 		var modData = [];
 		
 		//This is for the new "Overview" target option 
-		if (this.options.targetSpeciesName == "Overview"){	
-			modData = this.options.combinedModelData.slice();			
+		if (this.state.targetSpeciesName == "Overview"){	
+			modData = this.state.combinedModelData.slice();			
 			//this._createOrgOverviewXAxis();
 		}
 		else
 		{		
-			modData =this.options.modelData.slice();
+			modData =this.state.modelData.slice();
 		}
 		
 		var temp_data = modData.map(function(d) { 
@@ -2633,7 +2639,7 @@ META NOTE (HSH - 8/25/2014): Can we remove this note, or at least clarify?
 		var y1 = 267,
 			y2 = 254;
 			
-		if (this.options.filteredPhenotypeData.length < 14) {y1 =177; y2 = 164;} //{y1 =217; y2 = 204;}
+		if (this.state.filteredPhenotypeData.length < 14) {y1 =177; y2 = 164;} //{y1 =217; y2 = 204;}
 	    //only show the scale if there is more than one value represented
 	    //in the scale
 	    if (diff > 0) {
@@ -2645,7 +2651,7 @@ META NOTE (HSH - 8/25/2014): Can we remove this note, or at least clarify?
 			var color_values_green = ['rgb(230,209,178)','rgb(210,173,116)','rgb(148,114,60)','rgb(68,162,147)','rgb(31,128,113)','rgb(3,82,70)'];
 			
 			   
-				var gradient_blue = this.options.svg.append("svg:linearGradient")
+				var gradient_blue = this.state.svg.append("svg:linearGradient")
 					.attr("id", "gradient_blue")
 					.attr("x1", "0")
 					.attr("x2", "100%")
@@ -2672,12 +2678,12 @@ META NOTE (HSH - 8/25/2014): Can we remove this note, or at least clarify?
 					.style("stop-color", 'rgb(25,59,143)')
 					.style("stop-opacity", 1);
 
-				var legend_rects_blue = this.options.svg.append("rect")
+				var legend_rects_blue = this.state.svg.append("rect")
 					.attr("transform","translate(0,10)")
 					.attr("class", "legend_rect")
 					.attr("id","legendscale_blue")
-					.attr("y", (y1 - 10) + this.options.yTranslation + self.options.yoffsetOver)
-					.attr("x", self.options.axis_pos_list[2] + 12)
+					.attr("y", (y1 - 10) + this.state.yTranslation + self.state.yoffsetOver)
+					.attr("x", self.state.axis_pos_list[2] + 12)
 					.attr("rx",8)
 					.attr("ry",8)
 					.attr("width", 180)
@@ -2685,17 +2691,17 @@ META NOTE (HSH - 8/25/2014): Can we remove this note, or at least clarify?
 					.attr("fill", "url(#gradient_blue)");
 					
 				//This is for the new "Overview" target option 
-				if (this.options.targetSpeciesName == "Overview" || this.options.targetSpeciesName == "All"){			
+				if (this.state.targetSpeciesName == "Overview" || this.state.targetSpeciesName == "All"){			
 					
-					var grad_text1 = self.options.svg.append("svg:text")
+					var grad_text1 = self.state.svg.append("svg:text")
 					.attr("class", "bluetext")
-					.attr("y", y2  + this.options.yTranslation +25+ self.options.yoffsetOver)
-					.attr("x", self.options.axis_pos_list[2] + 205)
+					.attr("y", y2  + this.state.yTranslation +25+ self.state.yoffsetOver)
+					.attr("x", self.state.axis_pos_list[2] + 205)
 					.style("font-size", "11px")
 					.text("Homo sapiens");
 					
 					
-					var gradient_red = this.options.svg.append("svg:linearGradient")
+					var gradient_red = this.state.svg.append("svg:linearGradient")
 						.attr("id", "gradient_red")
 						.attr("x1", "0")
 						.attr("x2", "100%")
@@ -2726,28 +2732,28 @@ META NOTE (HSH - 8/25/2014): Can we remove this note, or at least clarify?
 					.style("stop-color", 'rgb(70,19,19)')
 					.style("stop-opacity", 1);
 
-				var legend_rects_red = this.options.svg.append("rect")
+				var legend_rects_red = this.state.svg.append("rect")
 					.attr("transform","translate(0,10)")
 					.attr("class", "legend_rect")
 					.attr("id","legendscale_red")
 
-					.attr("y", (y1 + 10) + this.options.yTranslation + self.options.yoffsetOver)
-					.attr("x", self.options.axis_pos_list[2] + 12)
+					.attr("y", (y1 + 10) + this.state.yTranslation + self.state.yoffsetOver)
+					.attr("x", self.state.axis_pos_list[2] + 12)
 					.attr("rx",8)
 					.attr("ry",8)
 					.attr("width", 180)
 					.attr("height", 15)
 					.attr("fill", "url(#gradient_red)");
 					
-				var grad_text2 = self.options.svg.append("svg:text")
+				var grad_text2 = self.state.svg.append("svg:text")
 					.attr("class", "redtext")
-					.attr("y", (y2 + 45)  + this.options.yTranslation + self.options.yoffsetOver)
-					.attr("x", self.options.axis_pos_list[2] + 205)
+					.attr("y", (y2 + 45)  + this.state.yTranslation + self.state.yoffsetOver)
+					.attr("x", self.state.axis_pos_list[2] + 205)
 					.style("font-size", "11px")
 					.text("Mus musculus");
 
 				
-				var gradient_green = this.options.svg.append("svg:linearGradient")
+				var gradient_green = this.state.svg.append("svg:linearGradient")
 					.attr("id", "gradient_green")
 					.attr("x1", "0")
 					.attr("x2", "100%")
@@ -2775,27 +2781,27 @@ META NOTE (HSH - 8/25/2014): Can we remove this note, or at least clarify?
 					.style("stop-color", 'rgb(3,82,70)')
 					.style("stop-opacity", 1);
 
-				var legend_rects_green = this.options.svg.append("rect")
+				var legend_rects_green = this.state.svg.append("rect")
 					.attr("transform","translate(0,10)")
 					.attr("class", "legend_rect")
 					.attr("id","legendscale_green")
-					.attr("y", (y1 + 30) + this.options.yTranslation + self.options.yoffsetOver)
-					.attr("x", self.options.axis_pos_list[2] + 12)
+					.attr("y", (y1 + 30) + this.state.yTranslation + self.state.yoffsetOver)
+					.attr("x", self.state.axis_pos_list[2] + 12)
 					.attr("rx",8)
 					.attr("ry",8)
 					.attr("width", 180)
 					.attr("height", 15)
 					.attr("fill", "url(#gradient_green)");
 					
-			var grad_text3 = self.options.svg.append("svg:text")
+			var grad_text3 = self.state.svg.append("svg:text")
 				.attr("class", "greentext")
-				.attr("y", y2 + 65  + this.options.yTranslation + self.options.yoffsetOver)
-				.attr("x", self.options.axis_pos_list[2] + 205)
+				.attr("y", y2 + 65  + this.state.yTranslation + self.state.yoffsetOver)
+				.attr("x", self.state.axis_pos_list[2] + 205)
 				.style("font-size", "10px")
 				.text("Danio rerieo");
 			}
 		  
-			var calc = this.options.selectedCalculation,
+			var calc = this.state.selectedCalculation,
 				text1 = "",
 				text2 = "",
 				text3 = "";
@@ -2803,31 +2809,31 @@ META NOTE (HSH - 8/25/2014): Can we remove this note, or at least clarify?
 			//account for a grid with less than 5 phenotypes
 			var y1 = 267,
 				y2 = 257;
-			if (this.options.filteredPhenotypeData.length < 14) {y1 = 172; y2 = 162;}
+			if (this.state.filteredPhenotypeData.length < 14) {y1 = 172; y2 = 162;}
 			
 			if (calc == 2) {text1 = "Lowest"; text2 = "Uniqueness"; text3 = "Highest";}
 			else if (calc == 1) {text1 = "Less Similar"; text2 = "Ratio (q)"; text3 = "More Similar";}
 			else if (calc == 3) {text1 = "Less Similar"; text2 = "Ratio (t)"; text3 = "More Similar";}
 			else if (calc == 0) {text1 = "Min"; text2 = "Distance"; text3 = "Max";}
 	
-		    var div_text1 = self.options.svg.append("svg:text")
+		    var div_text1 = self.state.svg.append("svg:text")
 				.attr("class", "detail_text")
-				.attr("y", y1  + this.options.yTranslation + self.options.yoffsetOver-5)
-				.attr("x", self.options.axis_pos_list[2] + 10)
+				.attr("y", y1  + this.state.yTranslation + self.state.yoffsetOver-5)
+				.attr("x", self.state.axis_pos_list[2] + 10)
 				.style("font-size", "10px")
 				.text(text1);
 		    
-			var div_text2 = self.options.svg.append("svg:text")
+			var div_text2 = self.state.svg.append("svg:text")
 				.attr("class", "detail_text")
-				.attr("y", y2  + this.options.yTranslation + self.options.yoffsetOver)
-				.attr("x", self.options.axis_pos_list[2] + 75)
+				.attr("y", y2  + this.state.yTranslation + self.state.yoffsetOver)
+				.attr("x", self.state.axis_pos_list[2] + 75)
 				.style("font-size", "12px")
 				.text(text2);
 				
-		    var div_text3 = self.options.svg.append("svg:text")
+		    var div_text3 = self.state.svg.append("svg:text")
 				.attr("class", "detail_text")
-				.attr("y", y1 + this.options.yTranslation + self.options.yoffsetOver-5)
-				.attr("x", self.options.axis_pos_list[2] + 125)
+				.attr("y", y1 + this.state.yTranslation + self.state.yoffsetOver-5)
+				.attr("x", self.state.axis_pos_list[2] + 125)
 				.style("font-size", "10px")
 				.text(text3);	
 				
@@ -2839,19 +2845,19 @@ META NOTE (HSH - 8/25/2014): Can we remove this note, or at least clarify?
 				div_text2.attr("x", "845px");			
 			} */
 			if (text3 == "Max") {
-				div_text3.attr("x",self.options.axis_pos_list[2] + 150);			
+				div_text3.attr("x",self.state.axis_pos_list[2] + 150);			
 			}
 			if (text3 == "Highest") {
-				div_text3.attr("x",self.options.axis_pos_list[2] + 150);			
+				div_text3.attr("x",self.state.axis_pos_list[2] + 150);			
 			}
 		}				
 			var selClass = "";
 
 			//This is for the new "Overview" target option 
-			if (self.options.targetSpeciesName == "Overview") {
-				if(self.options.modelWidth <= self.options.smallestModelWidth)
+			if (self.state.targetSpeciesName == "Overview") {
+				if(self.state.modelWidth <= self.state.smallestModelWidth)
 				{
-					if (self.options.filteredPhenotypeData.length < 14) 
+					if (self.state.filteredPhenotypeData.length < 14) 
 					{ 
 						selClass = "overviewShortNarrowSelects"; 
 					} 
@@ -2859,16 +2865,16 @@ META NOTE (HSH - 8/25/2014): Can we remove this note, or at least clarify?
 				}
 				else { selClass = "overviewSelects"; }
 			} 
-			//else if (self.options.filteredPhenotypeData.length < 14) 
+			//else if (self.state.filteredPhenotypeData.length < 14) 
 			//{	selClass = "shortSelects";
 			//}
-			else if (self.options.modelWidth <= self.options.smallestModelWidth)
+			else if (self.state.modelWidth <= self.state.smallestModelWidth)
 			{
-					if (self.options.filteredPhenotypeData.length < 14) 
+					if (self.state.filteredPhenotypeData.length < 14) 
 					{ selClass = "shortNarrowSelects"; } 
 					else { selClass = "shortSelects";}
 			}
-			else if (self.options.filteredPhenotypeData.length < 14)
+			else if (self.state.filteredPhenotypeData.length < 14)
 			{ 
 				selClass = "shortSelects"; 
 			} 
@@ -2877,35 +2883,35 @@ META NOTE (HSH - 8/25/2014): Can we remove this note, or at least clarify?
 		
 			var optionhtml = "<div id='selects' class='" + selClass + "'><div id='org_div'><span id='olabel'>Species</span><span id='org_sel'><select id=\'organism\'>";
 
-			for (var idx=0;idx<self.options.targetSpeciesList.length;idx++) {
+			for (var idx=0;idx<self.state.targetSpeciesList.length;idx++) {
 				var selecteditem = "";
-				if (self.options.targetSpeciesList[idx].name === self.options.targetSpeciesName) {
+				if (self.state.targetSpeciesList[idx].name === self.state.targetSpeciesName) {
 					selecteditem = "selected";
 				}
-				optionhtml = optionhtml + "<option value='" + self.options.targetSpeciesList[idx].label +"' "+ selecteditem +">" + self.options.targetSpeciesList[idx].name +"</option>"
+				optionhtml = optionhtml + "<option value='" + self.state.targetSpeciesList[idx].label +"' "+ selecteditem +">" + self.state.targetSpeciesList[idx].name +"</option>"
 			}
 	
-			optionhtml = optionhtml + "</select></span></div><div id='calc_div'><span id='clabel'>Display</span><span id='calcs'><img class='calcs' src='" + this.options.scriptpath + "../image/greeninfo30.png' height='15px'></span><br /><span id='calc_sel'><select id=\"calculation\">";
+			optionhtml = optionhtml + "</select></span></div><div id='calc_div'><span id='clabel'>Display</span><span id='calcs'><img class='calcs' src='" + this.state.scriptpath + "../image/greeninfo30.png' height='15px'></span><br /><span id='calc_sel'><select id=\"calculation\">";
        	   
 
-			for (var idx=0;idx<self.options.selectList.length;idx++) {
+			for (var idx=0;idx<self.state.selectList.length;idx++) {
 				var selecteditem = "";
-				if (self.options.selectList[idx].label === self.options.selectedLabel) {
+				if (self.state.selectList[idx].label === self.state.selectedLabel) {
 					selecteditem = "selected";
 				}
-				if (self.options.selectList[idx].calc === self.options.selectedCalculation) {
+				if (self.state.selectList[idx].calc === self.state.selectedCalculation) {
 					selecteditem = "selected";
 				}
-				optionhtml = optionhtml + "<option value='" + self.options.selectList[idx].calc +"' "+ selecteditem +">" + self.options.selectList[idx].label +"</option>"
+				optionhtml = optionhtml + "<option value='" + self.state.selectList[idx].calc +"' "+ selecteditem +">" + self.state.selectList[idx].label +"</option>"
 			}
 			optionhtml = optionhtml + "</select></span></div></div>";
 			this.element.append(optionhtml);			
-		/**	self.options.svg.append("svg:foreignObject")
+		/**	self.state.svg.append("svg:foreignObject")
 		    //.attr("width", w + 60)
 			//.attr("height", h)
 			.attr("id", "selectiondiv")
-			.attr("y", (y1 +400) + this.options.yTranslation + self.options.yoffsetOver)
-		    .attr("x", self.options.axis_pos_list[2]) 
+			.attr("y", (y1 +400) + this.state.yTranslation + self.state.yoffsetOver)
+		    .attr("x", self.state.axis_pos_list[2]) 
 			.append("xhtml:body")
 			.attr("id","selections")
 			.html(optionhtml);  */	
@@ -2919,17 +2925,21 @@ META NOTE (HSH - 8/25/2014): Can we remove this note, or at least clarify?
 			
 			//add the handler for the select control
 			$( "#organism" ).change(function(d) {
-				//msg =  "Handler for .change() called." );
-				self.options.targetSpecies = self.options.targetSpeciesList[d.target.selectedIndex].taxon;
-				self.options.targetSpeciesName = self.options.targetSpeciesList[d.target.selectedIndex].name;
+				//msg =  "Handler for .change()
+			    //called." );
+			    			    /*** HSH 20140825 MUST BE CHANGED !!!! */
+				self.options.targetSpecies = self.state.targetSpeciesList[d.target.selectedIndex].taxon;
+				self.options.targetSpeciesName = self.state.targetSpeciesList[d.target.selectedIndex].name;
 				self._resetSelections();
 				});
 			
         
 			 $( "#calculation" ).change(function(d) {
-				//msg =  "Handler for .change() called." );
-				self.options.selectedCalculation = self.options.selectList[d.target.selectedIndex].calc;
-				self.options.selectedLabel = self.options.selectList[d.target.selectedIndex].label;
+				//msg =  "Handler for .change()
+			     //called." );
+     			     /*** HSH 20140825 MUST BE CHANGED !!!! */
+				self.options.selectedCalculation = self.state.selectList[d.target.selectedIndex].calc;
+				self.options.selectedLabel = self.state.selectList[d.target.selectedIndex].label;
 				self._resetSelections();
 			});
 	    
@@ -2957,9 +2967,9 @@ META NOTE (HSH - 8/25/2014): Can we remove this note, or at least clarify?
 		
 	    var self=this;
 		
-	    var rect_text = this.options.svg
+	    var rect_text = this.state.svg
 		.selectAll(".a_text")
-		.data(self.options.filteredPhenotypeData, function(d, i) {  return d[0].id_a; });//rowid
+		.data(self.state.filteredPhenotypeData, function(d, i) {  return d[0].id_a; });//rowid
 	    rect_text.enter()
 		.append("text")
 		.attr("class", function(d) {
@@ -2971,19 +2981,19 @@ META NOTE (HSH - 8/25/2014): Can we remove this note, or at least clarify?
 		})
 		.attr("x", 208)
 		.attr("y", function(d) {
-			 return self._getYPosition(d[0].id_a) + (self.options.yTranslation) + 10;   //rowid
+			 return self._getYPosition(d[0].id_a) + (self.state.yTranslation) + 10;   //rowid
 		})
 		.on("mouseover", function(d) {
-		    if (self.options.clickedData == undefined) {
+		    if (self.state.clickedData == undefined) {
 			  self._selectData(d, this);
 		    }
 		})
 		.on("mouseout", function(d) {
-	    	if (self.options.clickedData == undefined) {
+	    	if (self.state.clickedData == undefined) {
 				self._deselectData(d, d3.mouse(this));
 			}
 		})
-		.attr("width", self.options.textWidth)
+		.attr("width", self.state.textWidth)
 		.attr("height", 50)
 		.text(function(d) {
 			var txt = d[0].label_a;
@@ -2993,7 +3003,7 @@ META NOTE (HSH - 8/25/2014): Can we remove this note, or at least clarify?
 			return self._getShortLabel(txt);
 		})
 		
-		if (this.options.unmatchedPhenotypes != undefined && this.options.unmatchedPhenotypes.length > 0){
+		if (this.state.unmatchedPhenotypes != undefined && this.state.unmatchedPhenotypes.length > 0){
 			d3.select("#unmatchedlabel").remove();
 			d3.select("#unmatchedlabelhide").remove();
 			d3.select("#prebl").remove();
@@ -3022,7 +3032,7 @@ META NOTE (HSH - 8/25/2014): Can we remove this note, or at least clarify?
 				});
 		}
 		
-		if (this.options.targetSpeciesName == "Overview") {var pad = 14;}
+		if (this.state.targetSpeciesName == "Overview") {var pad = 14;}
 		else { var pad = 10;}
 		
 		rect_text.transition()
@@ -3030,7 +3040,8 @@ META NOTE (HSH - 8/25/2014): Can we remove this note, or at least clarify?
 		.delay(5)
 		.attr("y", function(d) {
 			//controls position of phenotype list
-			return self._getYPosition(d[0].id_a) + (self.options.yTranslation + self.options.yoffsetOver) + pad;//rowid
+			return self._getYPosition(d[0].id_a) +
+   		(self.state.yTranslation + self.state.yoffsetOver) + pad;//rowid
 		})
 	    rect_text.exit()
 	   	.transition()
@@ -3043,7 +3054,7 @@ META NOTE (HSH - 8/25/2014): Can we remove this note, or at least clarify?
 	    var retData;
 	    this._showThrobber();
 	    jQuery.ajax({
-			url : this.options.serverURL + "/phenotype/" + data.attributes["ontology_id"].value + ".json",
+			url : this.state.serverURL + "/phenotype/" + data.attributes["ontology_id"].value + ".json",
 			async : false,
 			dataType : 'json',
 			success : function(data) {
@@ -3066,7 +3077,7 @@ META NOTE (HSH - 8/25/2014): Can we remove this note, or at least clarify?
 	// { "id": <id>, "observed": <obs>} .
 	// in that case take id  if  "observed" is "positive"
     _filterPhenotypeResults : function(phenotypelist) {
-    	//this.options.phenotypeData = phenotypelist.slice();
+    	//this.state.phenotypeData = phenotypelist.slice();
 		var newlist = [];
 
 
@@ -3085,7 +3096,7 @@ META NOTE (HSH - 8/25/2014): Can we remove this note, or at least clarify?
     //given an array of phenotype objects 
 	//Create a new array for only id and label 
     _filterPhenotypeLabels : function(phenotypelist) {
-    	//this.options.phenotypeData = phenotypelist.slice();
+    	//this.state.phenotypeData = phenotypelist.slice();
 		var newlist = [];
 
 		for (var i = 0; i < phenotypelist.length; i++) {
