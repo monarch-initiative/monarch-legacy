@@ -6,11 +6,9 @@
     position: relative;
     width: 826px;
     float:left;
-    /*background-color: #E8E8E8;*/
 }
 
 #graph {
-    /*margin: 0px 0px 0px 700px;*/
     padding: 10px 0px 0px 0px;
 }
 .title{

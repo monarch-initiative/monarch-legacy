@@ -1,76 +1,75 @@
-var datagraph = {};
-datagraph.init = function (html_div,JSON){
-
-  $(document).ready(function() {
-
-	//Data
-	//var JSON = "/labs/datagraph.json";
+var datagraph = {
+  //Chart margins	
+  margin : {top: 40, right: 80, bottom: 200, left: 320},
+  width : 400,
+  height : 580,
+  
+  //Tooltip offsets
+  arrowOffset : {height: 50, width: 180},
+  barOffset : {grouped:40, stacked:61},
+  
+  //Nav arrow (now triangle) 
+  arrowDim : "-23,-6, -12,0 -23,6",
+  
+  //Breadcrumb dimensions
+  firstCr : "0,0 0,30 90,30 105,15 90,0",
+  trailCrumbs : "0,0 15,15 0,30 90,30 105,15 90,0",
+  
+  //breadcrumb div dimensions
+  bcWidth : 560,
+  bcHeight : 35,
+  
+  //Polygon dimensions
+  bread : {width:105, height: 30, offset:90, space: 1, font:10},
+  
+  //Y axis positioning when arrow present
+  yOffset : "-1.48em",
+  
+  //Check browser
+  isOpera : (!!window.opera || navigator.userAgent.indexOf(' OPR/') >= 0),
+  isChrome : (!!window.chrome && !isOpera),
+  
+  //X Axis Label
+  xAxisLabel : "Number Of Annotations",
+  
+  //Colors
+  COL : { 
+	       human : '#44A293',
+  		   mouse : '#A4D6D4',
+  		   yLabel : { 
+  		     fill  : '#000000',
+  		     hover : '#EA763B'
+  		   },
+           arrow : {
+             fill  : "#496265",
+             hover : "#EA763B"
+           },
+  		   bar : {
+  		     fill  : '#EA763B'
+  		   },
+  		   crumb : {
+  		     top   : '#496265',
+  		     bottom: '#3D6FB7',
+  		     hover : '#EA763B'
+  		   }
+  },
+  init : function (html_div,DATA){
+	  
+	var conf = this;
 	
-    //Chart margins
-	var margin = {top: 40, right: 80, bottom: 200, left: 320};
-	var width = 800 - margin.left - margin.right;
-	var height = 820 - margin.top - margin.bottom;
-	
-	//Tooltip offsets
-	var arrowOffset = {height: 50, width: 180};
-	var barOffset = {grouped:40, stacked:61};
-
-	// Nav arrow (now triangle)
-	var arrowDim = "-23,-6, -12,0 -23,6";
-
-	//Breadcrumb dimensions
-	var firstCr = "0,0 0,30 90,30 105,15 90,0";
-	var trailCrumbs = "0,0 15,15 0,30 90,30 105,15 90,0";
-	
-	//Breadcrumb configuration
-	//HTML div dimensions
-	var bcWidth = 560;
-	var bcHeight = 35;
-    
-	//Polygon dimensions
-	var bread = {width:105, height: 30, offset:90, space: 1, font:10};
-	
-	//Y axis positioning when arrow present
-	var yOffset = "-1.48em";
-	
-	//Check browser
-	var isOpera = !!window.opera || navigator.userAgent.indexOf(' OPR/') >= 0;
-    var isChrome = !!window.chrome && !isOpera;
-    
-    //Colors
-    var COL = { human : '#44A293',
-    		    mouse : '#A4D6D4',
-    		    yLabel : { 
-    		    	fill  : '#000000',
-    		    	hover : '#EA763B'
-    		    },
-                arrow : {
-                	fill  : "#496265",
-                    hover : "#EA763B"
-                },
-    		    bar : {
-    		    	fill  : '#EA763B'
-    		    },
-    		    crumb : {
-    		    	top   : '#496265',
-    		    	bottom: '#3D6FB7',
-    		    	hover : '#EA763B'
-    		    }
-    };
-    
     //D3 starts here
     //Define scales
 	var y0 = d3.scale.ordinal()
-	    .rangeRoundBands([0,height], .1);
+	    .rangeRoundBands([0,this.height], .1);
 
 	var y1 = d3.scale.ordinal();
 
 	var x = d3.scale.linear()
-	    .range([0, width]);
+	    .range([0, this.width]);
     
 	//Bar colors
 	var color = d3.scale.ordinal()
-	    .range([COL.human,COL.mouse]);
+	    .range([this.COL.human,this.COL.mouse]);
 
 	var xAxis = d3.svg.axis()
 	    .scale(x)
@@ -82,25 +81,46 @@ datagraph.init = function (html_div,JSON){
 	    .orient("left");
 
 	var svg = d3.select(html_div).append("svg")
-	    .attr("width", width + margin.left + margin.right)
-	    .attr("height", height + margin.top + margin.bottom)
+	    .attr("width", this.width + this.margin.left + this.margin.right)
+	    .attr("height", this.height + this.margin.top + this.margin.bottom)
 	    .append("g")
-	    .attr("transform", "translate(" + margin.left + "," + margin.top + ")");
+	    .attr("transform", "translate(" + this.margin.left + "," + this.margin.top + ")");
 	
 	
 	var crumbSVG = d3.select(".breadcrumbs")
         .append("svg")
-        .attr("height",bcHeight)
-        .attr("width",bcWidth);
+        .attr("height",this.bcHeight)
+        .attr("width",this.bcWidth);
 
 	var tooltip = d3.select(html_div)
 	    .append("div")
 	    .attr("class", "bartip");
+	
+	//set X Axis limit for grouped configuration
+	function getGroupMax(data){
+		return d3.max(data, function(d) { 
+            return d3.max(d.counts, function(d) { return d.value; });
+        });
+	}
+	//set X Axis limit for stacked configuration
+	function getStackMax(data){
+		return d3.max(data, function(d) { 
+	    	return d3.max(d.counts, function(d) { return d.x1; });
+	    });
+	}
+	//get largest Y axis label for font resizing
+	function getYMax(data){
+		return d3.max(data, function(d) { 
+	    	return d.phenotype.length;
+	    });
+	}
+	
+	function drawGraph (config) {
 
-	d3.json(JSON, function(error, json) {
+	    d3.json(DATA,function(error, json) {
 
-	    var groups = json.groups;
 	    var data = json.dataGraph;
+	    var groups = getGroups(data);
 	    var parents = [];
 	    
 		//breadcrumb counter
@@ -109,28 +129,21 @@ datagraph.init = function (html_div,JSON){
 	    y0.domain(data.map(function(d) { return d.phenotype; }));
 	    y1.domain(groups).rangeRoundBands([0, y0.rangeBand()]);
 	    
-	    var xGroupMax = d3.max(data, function(d) { 
-            return d3.max(d.counts, function(d) { return d.value; }); });
-        var xStackMax = d3.max(data, function(d) { 
-	    	return d3.max(d.counts, function(d) { return d.x1; }); });
-        var yMax = d3.max(data, function(d) { 
-	    	return d.phenotype.length; });
+	    var xGroupMax = getGroupMax(data);
+        var xStackMax = getStackMax(data);
+        var yMax = getYMax(data);
         
         x.domain([0, xGroupMax]);
         
         //Dynamically decrease font size for large labels
-	    var yFont = 'default';
-        if (yMax > 42 && yMax < 53){
-    		yFont = ((1/yMax)*570);
-        } else if (yMax >= 53 && yMax <66){
-        	yFont = ((1/yMax)*620);
-        	yOffset = "-1.6em";
-        	arrowDim = "-20,-5, -9,1 -20,7";
-        } else if (yMax >= 66){
-        	yFont = ((1/yMax)*660);
-        	yOffset = "-1.7em";
-        	arrowDim = "-20,-5, -9,1 -20,7";
-        }
+        var yFont = 'default';
+        var yLabelPos = config.yOffset;
+        var triangleDim = config.arrowDim;
+	    var confList = getYFontSize(yMax);
+	    yFont = confList[0];
+	    yLabelPos = confList[1];
+	    triangleDim = confList[2];
+	    
 	    
 	    var xTicks = svg.append("g")
 	        .attr("class", "x axis")
@@ -141,7 +154,7 @@ datagraph.init = function (html_div,JSON){
 	        .attr("dx", "20em")
 	        .attr("dy", "0em")
 	        .style("text-anchor", "end")
-	        .text("Number Of Annotations");
+	        .text(config.xAxisLabel);
 
 	    var yTicks = svg.append("g")
 	        .attr("class", "y axis")
@@ -151,11 +164,11 @@ datagraph.init = function (html_div,JSON){
 	        .attr("font-size", yFont)
             .style("cursor", "pointer")
             .on("mouseover", function(d){
-	            d3.select(this).style("fill", COL.yLabel.hover);
+	            d3.select(this).style("fill", config.COL.yLabel.hover);
 	            d3.select(this).style("text-decoration", "underline");
 	        })
 	        .on("mouseout", function(){
-	            d3.select(this).style("fill", COL.yLabel.fill );
+	            d3.select(this).style("fill", config.COL.yLabel.fill );
 	            d3.select(this).style("text-decoration", "none");
 	            tooltip.style("display", "none");
 	         })
@@ -164,21 +177,21 @@ datagraph.init = function (html_div,JSON){
                 document.location.href = "/phenotype/" + monarchID;
              })
 	        .style("text-anchor", "end")
-	        .attr("dx", yOffset);
+	        .attr("dx", yLabelPos);
 	    
        var navigate = svg.selectAll(".y.axis");
        
        var arrow = navigate.selectAll(".tick.major")
             .data(data)
             .append("svg:polygon")
-	        .attr("points",arrowDim)
-		    .attr("fill", COL.arrow.fill)  
+	        .attr("points",triangleDim)
+		    .attr("fill", config.COL.arrow.fill)  
 		    .on("mouseover", function(d){
 			           
 			       if (d.subGraph && d.subGraph[0]){
 			        	   
 			           d3.select(this)
-				       .style("fill", COL.arrow.hover);
+				       .style("fill", config.COL.arrow.hover);
 			           
 			           var w = this.getBBox().width;
 			           var coords = d3.transform(d3.select(this.parentNode).attr("transform")).translate;
@@ -187,14 +200,14 @@ datagraph.init = function (html_div,JSON){
 			           
 			           tooltip.style("display", "block")
 			           .html("Click to see subclasses")
-			           .style("top",h+margin.bottom+heightOffset-margin.top-arrowOffset.height+"px")
-			           .style("left",width+w-arrowOffset.width+"px");
+			           .style("top",h+config.margin.bottom+heightOffset-config.margin.top-config.arrowOffset.height+"px")
+			           .style("left",config.width+w-config.arrowOffset.width+"px");
 			           
 			       } 
 			})
 			.on("mouseout", function(){
 			    d3.select(this)
-			        .style("fill",COL.arrow.fill);
+			        .style("fill",config.COL.arrow.fill);
 			    tooltip.style("display", "none");
 			 })
             .on("click", function(d){
@@ -234,11 +247,11 @@ datagraph.init = function (html_div,JSON){
 	       .attr("class",("rect"+level))
 	       .attr("height", y1.rangeBand())
 	       .attr("y", function(d) { return y1(d.name); })
-	       .attr("x", function(){if (isChrome) {return 1;}else{ return 0;}})
+	       .attr("x", function(){if (config.isChrome) {return 1;}else{ return 0;}})
 	       .attr("width", function(d) { return x(d.value); })
 	       .on("mouseover", function(d){
 	           d3.select(this)
-	           .style("fill", COL.bar.fill);
+	           .style("fill", config.COL.bar.fill);
 	           
 	           var w = this.getBBox().width;
 	           var coords = d3.transform(d3.select(this.parentNode).attr("transform")).translate;
@@ -248,8 +261,8 @@ datagraph.init = function (html_div,JSON){
 	           tooltip.style("display", "block")
 	           .html("Counts: "+"<span style='font-weight:bold'>"+d.value+"</span>"+"<br/>"
 	        		+"Organism: "+ "<span style='font-weight:bold'>"+d.name)
-	           .style("top",h+margin.bottom+heightOffset-margin.top-barOffset.grouped+"px")
-	           .style("left",width+w-70+"px");
+	           .style("top",h+config.margin.bottom+heightOffset-config.margin.top-config.barOffset.grouped+"px")
+	           .style("left",config.width+w-70+"px");
 
 	        })
 	       .on("mouseout", function(){
@@ -268,14 +281,14 @@ datagraph.init = function (html_div,JSON){
 	       .attr("transform", function(d, i) { return "translate(0," + i * 25 + ")"; });
 
 	    legend.append("rect")
-	       .attr("x", width+55)
+	       .attr("x", config.width+55)
 	       .attr("y", 4)
 	       .attr("width", 18)
 	       .attr("height", 18)
 	       .style("fill", color);
 
 	    legend.append("text")
-	       .attr("x", width+50)
+	       .attr("x", config.width+50)
 	       .attr("y", 12)
 	       .attr("dy", ".35em")
 	       .style("text-anchor", "end")
@@ -285,6 +298,18 @@ datagraph.init = function (html_div,JSON){
 	    makeBreadcrumb(level,"Phenotypic Abnormality",groups,rect,phenotype);
 	    
 	    d3.selectAll("input").on("change", change);
+	    
+	    function getGroups(data) {
+	    	var groups = [];
+	    	var unique = {};
+	        for (var i=0, len=data.length; i<len; i++) { 
+	        	for (var j=0, cLen=data[i].counts.length; j<cLen; j++) { 
+	        		unique[ data[i].counts[j].name ] =1;
+	            }
+	        }
+	        groups = Object.keys(unique);
+	        return groups;
+		}
 
 	    function change() {
 	      if (this.value === "grouped"){
@@ -308,7 +333,7 @@ datagraph.init = function (html_div,JSON){
 		        .attr("height", y1.rangeBand())
 		        .attr("y", function(d) { return y1(d.name); })  
 		        .transition()
-		        .attr("x", function(){if (isChrome) {return 1;}else{ return 0;}})
+		        .attr("x", function(){if (config.isChrome) {return 1;}else{ return 0;}})
 		        .attr("width", function(d) { return x(d.value); })
 		        
 		    rect.on("mouseover", function(d){
@@ -321,8 +346,8 @@ datagraph.init = function (html_div,JSON){
                 tooltip.style("display", "block")
                 .html("Counts: "+"<span style='font-weight:bold'>"+d.value+"</span>"+"<br/>"
 	        		+"Organism: "+ "<span style='font-weight:bold'>"+d.name)
-                .style("top",h+margin.bottom+heightOffset-margin.top-barOffset.grouped+"px")
-                .style("left",width+w-70+"px");
+                .style("top",h+config.margin.bottom+heightOffset-config.margin.top-config.barOffset.grouped+"px")
+                .style("left",config.width+w-70+"px");
 		       })
 	          .on("mouseout", function(){
                   tooltip.style("display", "none")
@@ -342,7 +367,7 @@ datagraph.init = function (html_div,JSON){
 		        .delay(function(d, i) { return i * 10; })
 		        .attr("x", function(d){
 		        	if (d.x0 == 0){
-		        	    if (isChrome){return 1;}
+		        	    if (config.isChrome){return 1;}
 		        	    else {return d.x0;}
 		        	} else { 
 		        		return x(d.x0);
@@ -363,8 +388,8 @@ datagraph.init = function (html_div,JSON){
 		           tooltip.style("display", "block")
 		           .html("Counts: "+"<span style='font-weight:bold'>"+d.value+"</span>"+"<br/>"
 	        		+"Organism: "+ "<span style='font-weight:bold'>"+d.name)
-		           .style("top",h+margin.bottom-margin.top+heightOffset-barOffset.stacked+"px")
-		           .style("left",width+w-100+"px");
+		           .style("top",h+config.margin.bottom-config.margin.top+heightOffset-config.barOffset.stacked+"px")
+		           .style("left",config.width+w-100+"px");
 
 		        })
 		       .on("mouseout", function(){
@@ -410,11 +435,11 @@ datagraph.init = function (html_div,JSON){
 		    
 		    //Deactivate top level crumb
 		    d3.select(".poly"+index)
-			  .attr("fill", COL.crumb.top)
+			  .attr("fill", config.COL.crumb.top)
 			  .on("mouseover", function(){})
 		      .on("mouseout", function(){
                  d3.select(this)
-                 .attr("fill", COL.crumb.top);
+                 .attr("fill", config.COL.crumb.top);
 		      })
 		      .on("click", function(){});
 			
@@ -423,7 +448,7 @@ datagraph.init = function (html_div,JSON){
 			  .on("mouseout", function(){
 		           d3.select(this.parentNode)
 		           .select("polygon")
-	               .attr("fill", COL.crumb.top);
+	               .attr("fill", config.COL.crumb.top);
 			  })
 			  .on("click", function(){});
 	    }
@@ -435,19 +460,19 @@ datagraph.init = function (html_div,JSON){
 			}
 			var lastIndex = (index-1);
 			var phenLen = phenotype.length;
-			var fontSize = bread.font;
+			var fontSize = config.bread.font;
 
 			//Change color of previous crumb
 			if (lastIndex > -1){
 				d3.select(".poly"+lastIndex)
-				  .attr("fill", COL.crumb.bottom)
+				  .attr("fill", config.COL.crumb.bottom)
 				  .on("mouseover", function(){
 	                  d3.select(this)
-	                  .attr("fill", COL.crumb.hover);
+	                  .attr("fill", config.COL.crumb.hover);
 			      })
 			      .on("mouseout", function(){
 	                  d3.select(this)
-	                  .attr("fill", COL.crumb.bottom);
+	                  .attr("fill", config.COL.crumb.bottom);
 			      })
 			      .on("click", function(){
 			          pickUpBreadcrumb(lastIndex,groups,rect,phenoDiv);
@@ -457,12 +482,12 @@ datagraph.init = function (html_div,JSON){
 				  .on("mouseover", function(){
 		               d3.select(this.parentNode)
 		               .select("polygon")
-		               .attr("fill", COL.crumb.hover);
+		               .attr("fill", config.COL.crumb.hover);
 				  })
 				  .on("mouseout", function(){
 			           d3.select(this.parentNode)
 			           .select("polygon")
-		               .attr("fill", COL.crumb.bottom);
+		               .attr("fill", config.COL.crumb.bottom);
 				  })
 				  .on("click", function(){
 				        pickUpBreadcrumb(lastIndex,groups,rect,phenoDiv);
@@ -473,11 +498,11 @@ datagraph.init = function (html_div,JSON){
 		        .select("svg")
 		        .append("g")  
 		        .attr("class",("bread"+index))
-		        .attr("transform", "translate(" + index*(bread.offset+bread.space) + ", 0)")
+		        .attr("transform", "translate(" + index*(config.bread.offset+config.bread.space) + ", 0)")
 		        .append("svg:polygon")
 		        .attr("class",("poly"+index))
-	            .attr("points",index ? trailCrumbs : firstCr)
-			    .attr("fill", COL.crumb.top);
+	            .attr("points",index ? config.trailCrumbs : config.firstCr)
+			    .attr("fill", config.COL.crumb.top);
             
             d3.select((".bread"+index))
             		.append("svg:title")
@@ -504,8 +529,8 @@ datagraph.init = function (html_div,JSON){
 	                    d3.select(this).append("tspan")
 	                        .text(words[i])
 	                        .attr("font-size",fontSize)
-	                        .attr("x", (bread.width)*.45)
-	                        .attr("y", (bread.height)*.42)
+	                        .attr("x", (config.bread.width)*.45)
+	                        .attr("y", (config.bread.height)*.42)
 	                        .attr("dy", function(){
 	                            if (i == 0 && len == 1){
 	                            	return ".55em";
@@ -539,6 +564,49 @@ datagraph.init = function (html_div,JSON){
 	            });
 		}
 		
+        function getYFontSize(yMax) {
+        	//Dynamically decrease font size for large labels
+
+    	    var yFont = 'default';
+    	    var yOffset = config.yOffset;
+    	    var arrowDim = config.arrowDim;
+    	    
+            if (yMax > 42 && yMax < 53){
+        		yFont = ((1/yMax)*570);
+            } else if (yMax >= 53 && yMax <66){
+            	yFont = ((1/yMax)*620);
+            	yOffset = "-1.55em";
+            	arrowDim = "-20,-5, -9,1 -20,7";
+            } else if (yMax >= 66){
+            	yFont = ((1/yMax)*640);
+            	yOffset = "-1.4em";
+            	arrowDim = "-20,-5, -9,1 -20,7";
+            }
+            var retList = [yFont,yOffset,arrowDim];
+            return retList; 	
+        }
+        //Resize height of chart after transition
+        function resizeChart(subGraph){
+        	var height = config.height;
+        	if (subGraph.length < 10){
+		         height = subGraph.length*40;
+		         if (height > config.height){
+		        	 height = config.height;
+		         }
+		    } else if (subGraph.length < 20){
+		         height = subGraph.length*30;
+		         if (height > config.height){
+		        	 height = config.height;
+		         }
+		    } else if (subGraph.length < 25){
+		         height = subGraph.length*26;
+		         if (height > config.height){
+		        	 height = config.height;
+		         }
+		    }
+        	return height;
+        }
+		
 	    function transitionSubGraph(subGraph,groups,parent) {
 	    		    	
 		    var isSubClass;
@@ -547,16 +615,7 @@ datagraph.init = function (html_div,JSON){
 		        parents.push(parent);
 		    }
 		    
-		    if (subGraph.length < 10){
-		         height = subGraph.length*40;
-		    } else if (subGraph.length < 20){
-		         height = subGraph.length*30;
-		    } else if (subGraph.length < 25){
-		         height = subGraph.length*26;
-		    } else {
-		    	 height = 800 - margin.top - margin.bottom;
-		    }
-		    
+		    height = resizeChart(subGraph);
 		    
 			y0 = d3.scale.ordinal()
 		        .rangeRoundBands([0,height], .1);
@@ -568,29 +627,18 @@ datagraph.init = function (html_div,JSON){
 		    y0.domain(subGraph.map(function(d) { return d.phenotype; }));
 		    y1.domain(groups).rangeRoundBands([0, y0.rangeBand()]);
 		    
-		    var xGroupMax = d3.max(subGraph, function(d) { 
-	            return d3.max(d.counts, function(d) { return d.value; }); });
+		    var xGroupMax = getGroupMax(subGraph);
+	        var xStackMax = getStackMax(subGraph);
+	        var yMax = getYMax(subGraph);
 		    
-		    var xStackMax = d3.max(subGraph, function(d) { 
-		        return d3.max(d.counts, function(d) { return d.x1; }); });
-		    
-		    var yMax = d3.max(subGraph, function(d) { 
-		    	return d.phenotype.length; });
-		    
-		    var yFont = 'default';
-	        if (yMax > 42 && yMax < 53){
-	    		yFont = ((1/yMax)*570);
-	    		arrowDim = "-23,-6, -12,0 -23,6";
-	        } else if (yMax >= 53 && yMax <66){
-	        	yFont = ((1/yMax)*620);
-	        	arrowDim = "-20,-5, -9,1 -20,7";
-	        } else if (yMax >= 66){
-	        	yFont = ((1/yMax)*660);
-	        	yOffset = "-1.7em";
-	        	arrowDim = "-20,-5, -9,1 -20,7";
-	        } else {
-	        	arrowDim = "-23,-6, -12,0 -23,6";
-	        }
+	        //Dynamically decrease font size for large labels
+	        var yFont = 'default';
+	        var yLabelPos = config.yOffset;
+	        var triangleDim = config.arrowDim;
+		    var confList = getYFontSize(yMax);
+		    yFont = confList[0];
+		    yLabelPos = confList[1];
+		    triangleDim = confList[2];
 		    
 		    var yTransition = svg.transition().duration(1000);
 		    yTransition.select(".y.axis").call(yAxis);
@@ -601,11 +649,11 @@ datagraph.init = function (html_div,JSON){
 		        .attr("font-size", yFont)
 	            .style("cursor", "pointer")
 	            .on("mouseover", function(d){
-		           d3.select(this).style("fill",COL.yLabel.hover);
+		           d3.select(this).style("fill",config.COL.yLabel.hover);
 		           d3.select(this).style("text-decoration", "underline");		           
 		         })
 		        .on("mouseout", function(){
-		           d3.select(this).style("fill",COL.yLabel.fill);
+		           d3.select(this).style("fill",config.COL.yLabel.fill);
 		           d3.select(this).style("text-decoration", "none");
 		           tooltip.style("display", "none");
 		        })
@@ -614,15 +662,15 @@ datagraph.init = function (html_div,JSON){
 	                document.location.href = "/phenotype/" + monarchID;
 	            })
 	            .style("text-anchor", "end")
-	            .attr("dx", yOffset);
+	            .attr("dx", yLabelPos);
 		    
 		       var navigate = svg.selectAll(".y.axis");
 		       var arrow = navigate.selectAll(".tick.major")
                     .data(subGraph)
 		            .append("svg:polygon")
 		            .attr("class","arr")
-			        .attr("points",arrowDim)
-		            .attr("fill",COL.arrow.fill)
+			        .attr("points",triangleDim)
+		            .attr("fill",config.COL.arrow.fill)
 		            .attr("display", function(d){
 		            	if (d.subGraph && d.subGraph[0]){
 		            		isSubClass=1; return "initial";
@@ -634,7 +682,7 @@ datagraph.init = function (html_div,JSON){
 			           if (d.subGraph && d.subGraph[0]){
 			        	   
 			        	   d3.select(this)
-				           .style("fill",COL.arrow.hover);
+				           .style("fill",config.COL.arrow.hover);
 			           
 			               var w = this.getBBox().width;
 			               var coords = d3.transform(d3.select(this.parentNode).attr("transform")).translate;
@@ -643,14 +691,14 @@ datagraph.init = function (html_div,JSON){
 			           
 			               tooltip.style("display", "block")
 			               .html("Click to see subclasses")
-			               .style("top",h+margin.bottom+heightOffset-margin.top-arrowOffset.height+"px")
-			               .style("left",width+w-arrowOffset.width+"px");
+			               .style("top",h+config.margin.bottom+heightOffset-config.margin.top-config.arrowOffset.height+"px")
+			               .style("left",config.width+w-config.arrowOffset.width+"px");
 			           
 			           } 
 			        })
 			       .on("mouseout", function(){
 			           d3.select(this)
-			           .style("fill",COL.arrow.fill);
+			           .style("fill",config.COL.arrow.fill);
 			           tooltip.style("display", "none");
 			        })
 		            .on("click", function(d){
@@ -684,7 +732,7 @@ datagraph.init = function (html_div,JSON){
 			           .selectAll("text")
 			           .attr("dx","0")
 		    	       .on("mouseover", function(d){
-			               d3.select(this).style("fill",COL.yLabel.hover);
+			               d3.select(this).style("fill",config.COL.yLabel.hover);
 			               d3.select(this).style("text-decoration", "underline");			           
 			         });
 		       }
@@ -710,11 +758,11 @@ datagraph.init = function (html_div,JSON){
 	                .attr("class",("rect"+level))
 	                .attr("height", y1.rangeBand())
 	                .attr("y", function(d) { return y1(d.name); })
-	                .attr("x", function(){if (isChrome) {return 1;}else{ return 0;}})
+	                .attr("x", function(){if (config.isChrome) {return 1;}else{ return 0;}})
 	                .attr("width", function(d) { return x(d.value); })
 	                .on("mouseover", function(d){
 	 	                d3.select(this)
-		                  .style("fill",COL.bar.fill);
+		                  .style("fill",config.COL.bar.fill);
 	 	                
 	 		           var w = this.getBBox().width;
 	 		           var coords = d3.transform(d3.select(this.parentNode).attr("transform")).translate;
@@ -724,8 +772,8 @@ datagraph.init = function (html_div,JSON){
 	 		           tooltip.style("display", "block")
 	 		           .html("Counts: "+"<span style='font-weight:bold'>"+d.value+"</span>"+"<br/>"
 	        		         +"Organism: "+ "<span style='font-weight:bold'>"+d.name)
-	 		           .style("top",h+margin.bottom+heightOffset-margin.top-barOffset.grouped+"px")
-	 		           .style("left",width+w-70+"px");
+	 		           .style("top",h+config.margin.bottom+heightOffset-config.margin.top-config.barOffset.grouped+"px")
+	 		           .style("left",config.width+w-70+"px");
 		            })
 	                .on("mouseout", function(){
 	                    d3.select(this)
@@ -749,7 +797,7 @@ datagraph.init = function (html_div,JSON){
 			        .attr("class",("rect"+level))
 			        .attr("x", function(d){
 		        	    if (d.x0 == 0){
-		        	        if (isChrome){return 1;}
+		        	        if (config.isChrome){return 1;}
 		        	        else {return d.x0;}
 		        	    } else { 
 		        		    return x(d.x0);
@@ -760,7 +808,7 @@ datagraph.init = function (html_div,JSON){
 			        .attr("y", function(d) { return y1(d.name); })
 			        .on("mouseover", function(d){
 		               d3.select(this)
-		               .style("fill", COL.bar.fill);
+		               .style("fill", config.COL.bar.fill);
 		           
 		               var w = this.getBBox().width;
 		               var coords = d3.transform(d3.select(this.parentNode).attr("transform")).translate;
@@ -770,8 +818,8 @@ datagraph.init = function (html_div,JSON){
 		               tooltip.style("display", "block")
 		               .html("Counts: "+"<span style='font-weight:bold'>"+d.value+"</span>"+"<br/>"
 	        		    +"Organism: "+ "<span style='font-weight:bold'>"+d.name)
-		               .style("top",h+margin.bottom-margin.top+heightOffset-barOffset.stacked+"px")
-		               .style("left",width+w-100+"px");
+		               .style("top",h+config.margin.bottom-config.margin.top+heightOffset-config.barOffset.stacked+"px")
+		               .style("left",config.width+w-100+"px");
 
 		        })
 		        .on("mouseout", function(){
@@ -799,7 +847,7 @@ datagraph.init = function (html_div,JSON){
 			        .attr("height", y1.rangeBand())
 			        .attr("y", function(d) { return y1(d.name); })  
 			        .transition()
-			        .attr("x", function(){if (isChrome) {return 1;}else{ return 0;}})
+			        .attr("x", function(){if (config.isChrome) {return 1;}else{ return 0;}})
 			        .attr("width", function(d) { return x(d.value); })	 
 			        
 			      rect.on("mouseover", function(d){
@@ -812,8 +860,8 @@ datagraph.init = function (html_div,JSON){
 	 		           tooltip.style("display", "block")
 	 		           .html("Counts: "+"<span style='font-weight:bold'>"+d.value+"</span>"+"<br/>"
 	        		        +"Organism: "+ "<span style='font-weight:bold'>"+d.name)
-	 		           .style("top",h+margin.bottom+heightOffset-margin.top-barOffset.grouped+"px")
-	 		           .style("left",width+w-70+"px");
+	 		           .style("top",h+config.margin.bottom+heightOffset-config.margin.top-config.barOffset.grouped+"px")
+	 		           .style("left",config.width+w-70+"px");
 		            })
 	                .on("mouseout", function(){
 	                    tooltip.style("display", "none")
@@ -832,7 +880,7 @@ datagraph.init = function (html_div,JSON){
 			        .delay(function(d, i) { return i * 10; })
                     .attr("x", function(d){
 		        	    if (d.x0 == 0){
-		        	        if (isChrome){return 1;}
+		        	        if (config.isChrome){return 1;}
 		        	        else {return d.x0;}
 		        	    } else { 
 		        		    return x(d.x0);
@@ -853,8 +901,8 @@ datagraph.init = function (html_div,JSON){
 		           tooltip.style("display", "block")
 		           .html("Counts: "+"<span style='font-weight:bold'>"+d.value+"</span>"+"<br/>"
 	        		+"Organism: "+ "<span style='font-weight:bold'>"+d.name)
-		           .style("top",h+margin.bottom-margin.top+heightOffset-barOffset.stacked+"px")
-		           .style("left",width+w-100+"px");
+		           .style("top",h+config.margin.bottom-config.margin.top+heightOffset-config.barOffset.stacked+"px")
+		           .style("left",config.width+w-100+"px");
 
 		           })
 		           .on("mouseout", function(){
@@ -864,5 +912,7 @@ datagraph.init = function (html_div,JSON){
 		    }
 		}	    
 	});
-  });
-}
+  }
+  drawGraph(conf);
+  }
+};
