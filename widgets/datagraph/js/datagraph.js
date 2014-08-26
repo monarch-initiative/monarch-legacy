@@ -37,8 +37,13 @@ var datagraph = {
   
   //Colors
   COL : { 
-	       human : '#44A293',
-  		   mouse : '#A4D6D4',
+	       first  : '#44A293',
+  		   second : '#A4D6D4',
+  		   third  : '#EA763B',
+  		   fourth : '#496265',
+  		   fifth  : '#44A293',
+  		   sixth  : '#A4D6D4',
+  		   
   		   yLabel : { 
   		     fill  : '#000000',
   		     hover : '#EA763B'
@@ -82,7 +87,8 @@ var datagraph = {
     
 	//Bar colors
 	var color = d3.scale.ordinal()
-	    .range([this.COL.human,this.COL.mouse]);
+	    .range([this.COL.first,this.COL.second,this.COL.third,
+	            this.COL.fourth,this.COL.fifth,this.COL.sixth]);
 
 	var xAxis = d3.svg.axis()
 	    .scale(x)
