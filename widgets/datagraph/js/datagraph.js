@@ -35,7 +35,7 @@ var datagraph = {
   title : "Phenotype Annotation Distribution",
   firstCrumb : "Phenotypic Abnormality",
   
-  //Colors
+  //Colors set in the order they appear in the JSON object
   COL : { 
 	       first  : '#44A293',
   		   second : '#A4D6D4',
