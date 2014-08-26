@@ -32,6 +32,9 @@ var datagraph = {
   //X Axis Label
   xAxisLabel : "Number Of Annotations",
   
+  title : "Phenotype Annotation Distribution",
+  firstCrumb : "Phenotypic Abnormality",
+  
   //Colors
   COL : { 
 	       human : '#44A293',
@@ -57,6 +60,16 @@ var datagraph = {
 	  
 	var conf = this;
 	
+	//Create html structure
+	//Add graph element
+	$(html_div).append( "<div id=graph></div>" );
+	//Add graph title
+	$("#graph").append( "<div class=title>"+this.title+"</div>" );
+	$("#graph").append( "<div class=interaction></div>" );
+	$(".interaction").append( "<li></li>" );
+	$(".interaction li").append("<div class=breadcrumbs></div>");
+	
+	
     //D3 starts here
     //Define scales
 	var y0 = d3.scale.ordinal()
@@ -80,7 +93,7 @@ var datagraph = {
 	    .scale(y0)
 	    .orient("left");
 
-	var svg = d3.select(html_div).append("svg")
+	var svg = d3.select("#graph").append("svg")
 	    .attr("width", this.width + this.margin.left + this.margin.right)
 	    .attr("height", this.height + this.margin.top + this.margin.bottom)
 	    .append("g")
@@ -121,10 +134,19 @@ var datagraph = {
 
 	    var data = json.dataGraph;
 	    var groups = getGroups(data);
-	    var parents = [];
 	    
-		//breadcrumb counter
-		var level = 0;
+	    //Add stacked/grouped form if more than one group
+	    if (groups.length >1){
+	    	$(".interaction li").append(" <form class=configure>" +
+			        "<label><input id=\"group\" type=\"radio\" name=\"mode\"" +
+			            " value=\"grouped\" checked> Grouped</label> " +
+					"<label><input id=\"stack\" type=\"radio\" name=\"mode\"" +
+					    " value=\"stacked\"> Stacked</label>" +
+				"</form> ");
+	    }
+	    
+	    var parents = [];
+		var level = 0;  //breadcrumb counter
 	    
 	    y0.domain(data.map(function(d) { return d.phenotype; }));
 	    y1.domain(groups).rangeRoundBands([0, y0.rangeBand()]);
@@ -295,7 +317,7 @@ var datagraph = {
 	       .text(function(d) { return d; });   
 	    
 	    //Make first breadcrumb
-	    makeBreadcrumb(level,"Phenotypic Abnormality",groups,rect,phenotype);
+	    makeBreadcrumb(level,config.firstCrumb,groups,rect,phenotype);
 	    
 	    d3.selectAll("input").on("change", change);
 	    
@@ -456,7 +478,7 @@ var datagraph = {
 		function makeBreadcrumb(index,phenotype,groups,rect,phenoDiv) {
 			
 			if (!phenotype){
-				phenotype = "Phenotypic Abnormality";
+				phenotype = config.firstCrumb;
 			}
 			var lastIndex = (index-1);
 			var phenLen = phenotype.length;
@@ -743,7 +765,7 @@ var datagraph = {
 			        .attr("class", ("bar"+level))
 			      	.attr("transform", function(d) { return "translate(0," + y0(d.phenotype) + ")"; });
 
-		    if ($('input[name=mode]:checked').val()=== 'grouped') {
+		    if ($('input[name=mode]:checked').val()=== 'grouped' || groups.length == 1) {
 			    	  
 		        x.domain([0, xGroupMax]);
 		    

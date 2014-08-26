@@ -39,7 +39,7 @@
    fill:white;
    cursor:default;
 }
-form {
+.configure {
    display: inline;
    float:right;
    margin-top: 3px;
