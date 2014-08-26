@@ -1,7 +1,10 @@
-$(document).ready(function() {
-	
+var datagraph = {};
+datagraph.init = function (html_div,JSON){
+
+  $(document).ready(function() {
+
 	//Data
-	var JSON = "/labs/datagraph.json";
+	//var JSON = "/labs/datagraph.json";
 	
     //Chart margins
 	var margin = {top: 40, right: 80, bottom: 200, left: 320};
@@ -78,7 +81,7 @@ $(document).ready(function() {
 	    .scale(y0)
 	    .orient("left");
 
-	var svg = d3.select("#graph").append("svg")
+	var svg = d3.select(html_div).append("svg")
 	    .attr("width", width + margin.left + margin.right)
 	    .attr("height", height + margin.top + margin.bottom)
 	    .append("g")
@@ -90,7 +93,7 @@ $(document).ready(function() {
         .attr("height",bcHeight)
         .attr("width",bcWidth);
 
-	var tooltip = d3.select("#graph")
+	var tooltip = d3.select(html_div)
 	    .append("div")
 	    .attr("class", "bartip");
 
@@ -861,4 +864,5 @@ $(document).ready(function() {
 		    }
 		}	    
 	});
-});
+  });
+}
