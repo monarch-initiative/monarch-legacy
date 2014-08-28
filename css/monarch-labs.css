@@ -28,3 +28,9 @@
 #graphic-test > img {
     width: 100%;
 }
+
+.graph-container{
+    position: relative;
+    width: 826px;
+    float:left;
+}
