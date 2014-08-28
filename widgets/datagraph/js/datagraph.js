@@ -160,11 +160,8 @@ var datagraph = {
 	    });
 	}
 	
-	function drawGraph (config) {
+	function drawGraph (config,data) {
 
-	    d3.json(DATA,function(error, json) {
-
-	    var data = json.dataGraph;
 	    var groups = getGroups(data);
 	    
 	    //Add breadcrumb div
@@ -658,8 +655,8 @@ var datagraph = {
     	    var yOffset = config.yOffset;
     	    var arrowDim = config.arrowDim;
     	    
-            if (yMax > 42 && yMax < 53){
-        		yFont = ((1/yMax)*570);
+            if (yMax > 41 && yMax < 53){
+        		yFont = ((1/yMax)*565);
             } else if (yMax >= 53 && yMax <66){
             	yFont = ((1/yMax)*615);
             	yOffset = "-1.45em";
@@ -1004,9 +1001,9 @@ var datagraph = {
 		      }
 		    }
 		}	    
-	});
+	//});
   }
   //Call function to draw graph
-  drawGraph(conf);
+  drawGraph(conf,DATA);
   }
 };
