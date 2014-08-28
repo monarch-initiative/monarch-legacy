@@ -4,46 +4,23 @@ var datagraph = {
   width : 400,
   height : 580,
   
-  //Tooltip offsets
-  arrowOffset : {height: 104, width: 231},
-  barOffset : {
-	            grouped:{
-	              height: 120,
-	              width: 325
-                },
-                stacked:{
-            	  height: 99,
-            	  width: 300
-                }
- },
-  
-  //Nav arrow (now triangle) 
-  arrowDim : "-23,-6, -12,0 -23,6",
-  
-  //Breadcrumb dimensions
-  firstCr : "0,0 0,30 90,30 105,15 90,0",
-  trailCrumbs : "0,0 15,15 0,30 90,30 105,15 90,0",
-  
-  //breadcrumb div dimensions
-  bcWidth : 560,
-  bcHeight : 35,
-  
-  //Polygon dimensions
-  bread : {width:105, height: 30, offset:90, space: 1, font:10},
-  
-  //Y axis positioning when arrow present
-  yOffset : "-1.48em",
-  
-  //Check browser
-  isOpera : (!!window.opera || navigator.userAgent.indexOf(' OPR/') >= 0),
-  isChrome : (!!window.chrome && !isOpera),
-  
   //X Axis Label
   xAxisLabel : "Number Of Annotations",
   
   //Chart title and first breadcrumb
   chartTitle : "Phenotype Annotation Distribution",
   firstCrumb : "Phenotypic Abnormality",
+  
+  //Title size/font settings
+  title : {
+            'margin-left' : '360px',
+            'padding-bottom': '10px',
+            'font-size' : '20px',
+            'font-weight': 'bold'
+  },
+  
+  //Turn on/off breadcrumbs, default: true
+  useCrumb : false,
   
   //Colors set in the order they appear in the JSON object
   COL : { 
@@ -71,6 +48,40 @@ var datagraph = {
   		     hover : '#EA763B'
   		   }
   },
+  //Tooltip offsets
+  arrowOffset : {height: 104, width: 231},
+  barOffset : {
+	            grouped:{
+	              height: 120,
+	              width: 325
+                },
+                stacked:{
+            	  height: 99,
+            	  width: 300
+                }
+  },
+  
+  //Nav arrow (now triangle) 
+  arrowDim : "-23,-6, -12,0 -23,6",
+  
+  //Breadcrumb dimensions
+  firstCr : "0,0 0,30 90,30 105,15 90,0",
+  trailCrumbs : "0,0 15,15 0,30 90,30 105,15 90,0",
+  
+  //breadcrumb div dimensions
+  bcWidth : 560,
+  bcHeight : 35,
+  
+  //Polygon dimensions
+  bread : {width:105, height: 30, offset:90, space: 1, font:10},
+  
+  //Y axis positioning when arrow present
+  yOffset : "-1.48em",
+  
+  //Check browser
+  isOpera : (!!window.opera || navigator.userAgent.indexOf(' OPR/') >= 0),
+  isChrome : (!!window.chrome && !isOpera),
+  
   init : function (html_div,DATA){
 	  
 	var conf = this;
@@ -79,7 +90,12 @@ var datagraph = {
 	//Add graph element
 	$(html_div).append( "<div id=graph></div>" );
 	//Add graph title
-	$("#graph").append( "<div class=title>"+this.chartTitle+"</div>" );
+	$("#graph").append( "<div class=title"+
+			" style=margin-left:" + this.title['margin-left'] +
+			";padding-bottom:" + this.title['padding-bottom'] +
+			";font-size:" + this.title['font-size'] +
+			";font-weight:" + this.title['font-weight'] +
+			"; >"+this.chartTitle+"</div>" );
 	$("#graph").append( "<div class=interaction></div>" );
 	$(".interaction").append( "<li></li>" );
 	$(".interaction li").append("<div class=breadcrumbs></div>");
@@ -151,6 +167,10 @@ var datagraph = {
 	    var data = json.dataGraph;
 	    var groups = getGroups(data);
 	    
+	    //Add breadcrumb div
+	    if (!config.useCrumb){
+	    	$(".breadcrumbs").remove();
+	    }
 	    //Add stacked/grouped form if more than one group
 	    if (groups.length >1){
 	    	$(".interaction li").append(" <form class=configure>" +
@@ -159,6 +179,15 @@ var datagraph = {
 					"<label><input id=\"stack\" type=\"radio\" name=\"mode\"" +
 					    " value=\"stacked\"> Stacked</label>" +
 				"</form> ");
+	    }
+	    if (!config.useCrumb && groups.length>1){
+	    	config.arrowOffset.height = 96;
+	    	config.barOffset.grouped.height = 112;
+	    	config.barOffset.stacked.height = 91;
+	    } else if (!config.useCrumb){
+	    	config.arrowOffset.height = 65;
+	    	config.barOffset.grouped.height = 81;
+	    	config.barOffset.stacked.height = 60;
 	    }
 	    
 	    var parents = [];
@@ -182,7 +211,7 @@ var datagraph = {
 	    yLabelPos = confList[1];
 	    triangleDim = confList[2];
 	    
-	    
+	    //Set x axis ticks
 	    var xTicks = svg.append("g")
 	        .attr("class", "x axis")
 	        .call(xAxis)
@@ -194,6 +223,7 @@ var datagraph = {
 	        .style("text-anchor", "end")
 	        .text(config.xAxisLabel);
 
+	    //Set Y axis ticks and labels
 	    var yTicks = svg.append("g")
 	        .attr("class", "y axis")
 	        .call(yAxis)
@@ -215,7 +245,8 @@ var datagraph = {
              })
 	        .style("text-anchor", "end")
 	        .attr("dx", yLabelPos);
-	    
+	   
+	   //Create navigation arrow
        var navigate = svg.selectAll(".y.axis");
        
        var arrow = navigate.selectAll(".tick.major")
@@ -273,17 +304,20 @@ var datagraph = {
 		   		        .attr("y", 60)
 		   		        .style("fill-opacity", 1e-6)
 		   		        .remove();
-
-	        		   makeBreadcrumb(level,d.phenotype,groups,rect,phenotype);
+                       if (config.useCrumb){
+	        		       makeBreadcrumb(level,d.phenotype,groups,rect,phenotype);
+                       }
 	        	   }
 	       });
-         
+       
+        //Create SVG:G element that holds groups
 	    var phenotype = svg.selectAll(".phenotype")
 	        .data(data)
 	        .enter().append("svg:g")
 	        .attr("class", ("bar"+level))
 	      	.attr("transform", function(d) { return "translate(0," + y0(d.phenotype) + ")"; });
-
+	    
+        //Create bars 
 	    var rect = phenotype.selectAll("g")
 	       .data(function(d) { return d.counts; })
 	       .enter().append("rect")
@@ -321,7 +355,9 @@ var datagraph = {
 	    makeLegend();
 	    
 	    //Make first breadcrumb
-	    makeBreadcrumb(level,config.firstCrumb,groups,rect,phenotype);
+	    if (config.useCrumb){
+	        makeBreadcrumb(level,config.firstCrumb,groups,rect,phenotype);
+	    }
 	    
 	    d3.selectAll("input").on("change", change);
 	    
@@ -625,8 +661,8 @@ var datagraph = {
             if (yMax > 42 && yMax < 53){
         		yFont = ((1/yMax)*570);
             } else if (yMax >= 53 && yMax <66){
-            	yFont = ((1/yMax)*620);
-            	yOffset = "-1.55em";
+            	yFont = ((1/yMax)*615);
+            	yOffset = "-1.45em";
             	arrowDim = "-20,-5, -9,1 -20,7";
             } else if (yMax >= 66){
             	yFont = ((1/yMax)*640);
@@ -657,7 +693,9 @@ var datagraph = {
 		    }
         	return height;
         }
-		
+		//TODO DRY - there is quite a bit of duplicated code
+        //     here from the parent drawGraph() function
+        //     NOTE - this will be refactored as AJAX calls
 	    function transitionSubGraph(subGraph,groups,parent) {
 	    		    	
 		    var isSubClass;
@@ -771,7 +809,9 @@ var datagraph = {
 				   		        .style("fill-opacity", 1e-6)
 				   		        .remove();
 			        		   
-			        		   makeBreadcrumb(level,d.phenotype,groups,rect,phenotype);
+			        		   if (config.useCrumb){
+			        		       makeBreadcrumb(level,d.phenotype,groups,rect,phenotype);
+			        		   }
 			        	   }
 			       });
 		       
@@ -966,6 +1006,7 @@ var datagraph = {
 		}	    
 	});
   }
+  //Call function to draw graph
   drawGraph(conf);
   }
 };
