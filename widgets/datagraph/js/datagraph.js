@@ -5,8 +5,17 @@ var datagraph = {
   height : 580,
   
   //Tooltip offsets
-  arrowOffset : {height: 50, width: 180},
-  barOffset : {grouped:40, stacked:61},
+  arrowOffset : {height: 104, width: 231},
+  barOffset : {
+	            grouped:{
+	              height: 120,
+	              width: 325
+                },
+                stacked:{
+            	  height: 99,
+            	  width: 300
+                }
+ },
   
   //Nav arrow (now triangle) 
   arrowDim : "-23,-6, -12,0 -23,6",
@@ -32,7 +41,8 @@ var datagraph = {
   //X Axis Label
   xAxisLabel : "Number Of Annotations",
   
-  title : "Phenotype Annotation Distribution",
+  //Chart title and first breadcrumb
+  chartTitle : "Phenotype Annotation Distribution",
   firstCrumb : "Phenotypic Abnormality",
   
   //Colors set in the order they appear in the JSON object
@@ -69,7 +79,7 @@ var datagraph = {
 	//Add graph element
 	$(html_div).append( "<div id=graph></div>" );
 	//Add graph title
-	$("#graph").append( "<div class=title>"+this.title+"</div>" );
+	$("#graph").append( "<div class=title>"+this.chartTitle+"</div>" );
 	$("#graph").append( "<div class=interaction></div>" );
 	$(".interaction").append( "<li></li>" );
 	$(".interaction li").append("<div class=breadcrumbs></div>");
@@ -111,9 +121,9 @@ var datagraph = {
         .attr("height",this.bcHeight)
         .attr("width",this.bcWidth);
 
-	var tooltip = d3.select(html_div)
+	var tooltip = d3.select('#graph')
 	    .append("div")
-	    .attr("class", "bartip");
+	    .attr("class", "tip");
 	
 	//set X Axis limit for grouped configuration
 	function getGroupMax(data){
@@ -198,7 +208,6 @@ var datagraph = {
 	        .on("mouseout", function(){
 	            d3.select(this).style("fill", config.COL.yLabel.fill );
 	            d3.select(this).style("text-decoration", "none");
-	            tooltip.style("display", "none");
 	         })
             .on("click", function(d){
         	    var monarchID = getPhenotype(d,data);
@@ -213,23 +222,29 @@ var datagraph = {
             .data(data)
             .append("svg:polygon")
 	        .attr("points",triangleDim)
-		    .attr("fill", config.COL.arrow.fill)  
+		    .attr("fill", config.COL.arrow.fill)
+		    .attr("display", function(d){
+		         if (d.subGraph && d.subGraph[0]){
+		             isSubClass=1; return "initial";
+		         } else {
+		             return "none";
+		         }
+		    })
 		    .on("mouseover", function(d){
 			           
 			       if (d.subGraph && d.subGraph[0]){
 			        	   
 			           d3.select(this)
 				       .style("fill", config.COL.arrow.hover);
-			           
-			           var w = this.getBBox().width;
+
 			           var coords = d3.transform(d3.select(this.parentNode).attr("transform")).translate;
 			           var h = coords[1];
-			           var heightOffset = this.getBBox().y;
+			           var w = coords[0];
 			           
 			           tooltip.style("display", "block")
 			           .html("Click to see subclasses")
-			           .style("top",h+config.margin.bottom+heightOffset-config.margin.top-config.arrowOffset.height+"px")
-			           .style("left",config.width+w-config.arrowOffset.width+"px");
+			           .style("top",h+config.arrowOffset.height+"px")
+			           .style("left",w+config.arrowOffset.width+"px");
 			           
 			       } 
 			})
@@ -269,7 +284,7 @@ var datagraph = {
 	        .attr("class", ("bar"+level))
 	      	.attr("transform", function(d) { return "translate(0," + y0(d.phenotype) + ")"; });
 
-	    var rect = phenotype.selectAll("rect")
+	    var rect = phenotype.selectAll("g")
 	       .data(function(d) { return d.counts; })
 	       .enter().append("rect")
 	       .attr("class",("rect"+level))
@@ -281,16 +296,17 @@ var datagraph = {
 	           d3.select(this)
 	           .style("fill", config.COL.bar.fill);
 	           
-	           var w = this.getBBox().width;
 	           var coords = d3.transform(d3.select(this.parentNode).attr("transform")).translate;
+	           var w = coords[0];
 	           var h = coords[1];
 	           var heightOffset = this.getBBox().y;
+	           var widthOffset = this.getBBox().width;
 	           
 	           tooltip.style("display", "block")
 	           .html("Counts: "+"<span style='font-weight:bold'>"+d.value+"</span>"+"<br/>"
 	        		+"Organism: "+ "<span style='font-weight:bold'>"+d.name)
-	           .style("top",h+config.margin.bottom+heightOffset-config.margin.top-config.barOffset.grouped+"px")
-	           .style("left",config.width+w-70+"px");
+	           .style("top",h+heightOffset+config.barOffset.grouped.height+"px")
+	           .style("left",w+config.barOffset.grouped.width+widthOffset+"px");
 
 	        })
 	       .on("mouseout", function(){
@@ -301,31 +317,36 @@ var datagraph = {
 	        })
 	       .style("fill", function(d) { return color(d.name); });
 	    
-	    //Set legend
-	    var legend = svg.selectAll(".legend")
-	       .data(groups.slice())
-	       .enter().append("g")
-	       .attr("class", "legend")
-	       .attr("transform", function(d, i) { return "translate(0," + i * 25 + ")"; });
-
-	    legend.append("rect")
-	       .attr("x", config.width+55)
-	       .attr("y", 4)
-	       .attr("width", 18)
-	       .attr("height", 18)
-	       .style("fill", color);
-
-	    legend.append("text")
-	       .attr("x", config.width+50)
-	       .attr("y", 12)
-	       .attr("dy", ".35em")
-	       .style("text-anchor", "end")
-	       .text(function(d) { return d; });   
+	    //Create legend
+	    makeLegend();
 	    
 	    //Make first breadcrumb
 	    makeBreadcrumb(level,config.firstCrumb,groups,rect,phenotype);
 	    
 	    d3.selectAll("input").on("change", change);
+	    
+	    function makeLegend(){
+	    	//Set legend
+		    var legend = svg.selectAll(".legend")
+		       .data(groups.slice())
+		       .enter().append("g")
+		       .attr("class", "legend")
+		       .attr("transform", function(d, i) { return "translate(0," + i * 25 + ")"; });
+
+		    legend.append("rect")
+		       .attr("x", config.width+55)
+		       .attr("y", 4)
+		       .attr("width", 18)
+		       .attr("height", 18)
+		       .style("fill", color);
+
+		    legend.append("text")
+		       .attr("x", config.width+50)
+		       .attr("y", 12)
+		       .attr("dy", ".35em")
+		       .style("text-anchor", "end")
+		       .text(function(d) { return d; });
+	    }
 	    
 	    function getGroups(data) {
 	    	var groups = [];
@@ -366,20 +387,21 @@ var datagraph = {
 		        
 		    rect.on("mouseover", function(d){
 	 	         
-	 	        var w = this.getBBox().width;
-                var coords = d3.transform(d3.select(this.parentNode).attr("transform")).translate;
-                var h = coords[1];
-	            var heightOffset = this.getBBox().y;
-	 		           
-                tooltip.style("display", "block")
-                .html("Counts: "+"<span style='font-weight:bold'>"+d.value+"</span>"+"<br/>"
-	        		+"Organism: "+ "<span style='font-weight:bold'>"+d.name)
-                .style("top",h+config.margin.bottom+heightOffset-config.margin.top-config.barOffset.grouped+"px")
-                .style("left",config.width+w-70+"px");
-		       })
-	          .on("mouseout", function(){
+		        var coords = d3.transform(d3.select(this.parentNode).attr("transform")).translate;
+		        var w = coords[0];
+		        var h = coords[1];
+		        var heightOffset = this.getBBox().y;
+		        var widthOffset = this.getBBox().width;
+		           
+		        tooltip.style("display", "block")
+		          .html("Counts: "+"<span style='font-weight:bold'>"+d.value+"</span>"+"<br/>"
+		        		+"Organism: "+ "<span style='font-weight:bold'>"+d.name)
+		          .style("top",h+heightOffset+config.barOffset.grouped.height+"px")
+		          .style("left",w+config.barOffset.grouped.width+widthOffset+"px");
+		    })
+	            .on("mouseout", function(){
                   tooltip.style("display", "none")
-               })
+            })
 		}
 
 		function transitionStacked() {
@@ -408,21 +430,22 @@ var datagraph = {
 			    
 			rect.on("mouseover", function(d){
 		           
-		           var w = this.getBBox().width;
-		           var coords = d3.transform(d3.select(this.parentNode).attr("transform")).translate;
-		           var h = coords[1];
-		           var heightOffset = this.getBBox().y;
+			    var coords = d3.transform(d3.select(this.parentNode).attr("transform")).translate;
+		        var w = coords[0];
+		        var h = coords[1];
+		        var heightOffset = this.getBBox().y;
+		        var widthOffset = this.getBBox().width;
 		           
-		           tooltip.style("display", "block")
-		           .html("Counts: "+"<span style='font-weight:bold'>"+d.value+"</span>"+"<br/>"
-	        		+"Organism: "+ "<span style='font-weight:bold'>"+d.name)
-		           .style("top",h+config.margin.bottom-config.margin.top+heightOffset-config.barOffset.stacked+"px")
-		           .style("left",config.width+w-100+"px");
+		        tooltip.style("display", "block")
+		            .html("Counts: "+"<span style='font-weight:bold'>"+d.value+"</span>"+"<br/>"
+		        	 	+"Organism: "+ "<span style='font-weight:bold'>"+d.name)
+		            .style("top",h+heightOffset+config.barOffset.stacked.height+"px")
+		            .style("left",w+config.barOffset.stacked.width+widthOffset+"px");
 
-		        })
+		    })
 		       .on("mouseout", function(){
 		           tooltip.style("display", "none");
-		        })
+		    })
 		}
 		
 		function getPhenotype(d,data){
@@ -709,19 +732,17 @@ var datagraph = {
 			           
 			           if (d.subGraph && d.subGraph[0]){
 			        	   
-			        	   d3.select(this)
-				           .style("fill",config.COL.arrow.hover);
-			           
-			               var w = this.getBBox().width;
-			               var coords = d3.transform(d3.select(this.parentNode).attr("transform")).translate;
-			               var h = coords[1];
-			               var heightOffset = this.getBBox().y;
-			           
-			               tooltip.style("display", "block")
-			               .html("Click to see subclasses")
-			               .style("top",h+config.margin.bottom+heightOffset-config.margin.top-config.arrowOffset.height+"px")
-			               .style("left",config.width+w-config.arrowOffset.width+"px");
-			           
+				           d3.select(this)
+					       .style("fill", config.COL.arrow.hover);
+
+				           var coords = d3.transform(d3.select(this.parentNode).attr("transform")).translate;
+				           var h = coords[1];
+				           var w = coords[0];
+				           
+				           tooltip.style("display", "block")
+				           .html("Click to see subclasses")
+				           .style("top",h+config.arrowOffset.height+"px")
+				           .style("left",w+config.arrowOffset.width+"px");           
 			           } 
 			        })
 			       .on("mouseout", function(){
@@ -780,7 +801,7 @@ var datagraph = {
 		        //.attr("transform", "translate(0," + height + ")")
 		        .call(xAxis);
 		    
-	            rect = phenotype.selectAll("rect")
+	            rect = phenotype.selectAll("g")
 	                .data(function(d) { return d.counts; })
 	                .enter().append("rect")
 	                .attr("class",("rect"+level))
@@ -792,16 +813,17 @@ var datagraph = {
 	 	                d3.select(this)
 		                  .style("fill",config.COL.bar.fill);
 	 	                
-	 		           var w = this.getBBox().width;
-	 		           var coords = d3.transform(d3.select(this.parentNode).attr("transform")).translate;
-	 		           var h = coords[1];
-	 		           var heightOffset = this.getBBox().y;
+	 		            var coords = d3.transform(d3.select(this.parentNode).attr("transform")).translate;
+	 		            var w = coords[0];
+	 		            var h = coords[1];
+	 		            var heightOffset = this.getBBox().y;
+	 		            var widthOffset = this.getBBox().width;
 	 		           
-	 		           tooltip.style("display", "block")
-	 		           .html("Counts: "+"<span style='font-weight:bold'>"+d.value+"</span>"+"<br/>"
-	        		         +"Organism: "+ "<span style='font-weight:bold'>"+d.name)
-	 		           .style("top",h+config.margin.bottom+heightOffset-config.margin.top-config.barOffset.grouped+"px")
-	 		           .style("left",config.width+w-70+"px");
+	 		            tooltip.style("display", "block")
+	 		            .html("Counts: "+"<span style='font-weight:bold'>"+d.value+"</span>"+"<br/>"
+	 		        	 	+"Organism: "+ "<span style='font-weight:bold'>"+d.name)
+	 		            .style("top",h+heightOffset+config.barOffset.grouped.height+"px")
+	 		            .style("left",w+config.barOffset.grouped.width+widthOffset+"px");
 		            })
 	                .on("mouseout", function(){
 	                    d3.select(this)
@@ -819,7 +841,7 @@ var datagraph = {
 				//.attr("transform", "translate(0," + height + ")")
 				.call(xAxis);
 				    
-			    rect = phenotype.selectAll("rect")
+			    rect = phenotype.selectAll("g")
 			        .data(function(d) { return d.counts; })
 			        .enter().append("rect")
 			        .attr("class",("rect"+level))
@@ -838,18 +860,20 @@ var datagraph = {
 		               d3.select(this)
 		               .style("fill", config.COL.bar.fill);
 		           
-		               var w = this.getBBox().width;
-		               var coords = d3.transform(d3.select(this.parentNode).attr("transform")).translate;
-		               var h = coords[1];
-		               var heightOffset = this.getBBox().y;
-		           
-		               tooltip.style("display", "block")
-		               .html("Counts: "+"<span style='font-weight:bold'>"+d.value+"</span>"+"<br/>"
-	        		    +"Organism: "+ "<span style='font-weight:bold'>"+d.name)
-		               .style("top",h+config.margin.bottom-config.margin.top+heightOffset-config.barOffset.stacked+"px")
-		               .style("left",config.width+w-100+"px");
+		               
+					    var coords = d3.transform(d3.select(this.parentNode).attr("transform")).translate;
+				        var w = coords[0];
+				        var h = coords[1];
+				        var heightOffset = this.getBBox().y;
+				        var widthOffset = this.getBBox().width;
+				           
+				        tooltip.style("display", "block")
+				            .html("Counts: "+"<span style='font-weight:bold'>"+d.value+"</span>"+"<br/>"
+				        	 	+"Organism: "+ "<span style='font-weight:bold'>"+d.name)
+				            .style("top",h+heightOffset+config.barOffset.stacked.height+"px")
+				            .style("left",w+config.barOffset.stacked.width+widthOffset+"px");
 
-		        })
+				 })
 		        .on("mouseout", function(){
 		            d3.select(this)
 		            .style("fill", function(d) { return color(d.name); });
@@ -880,20 +904,21 @@ var datagraph = {
 			        
 			      rect.on("mouseover", function(d){
 	 	                
-	 		           var w = this.getBBox().width;
-	 		           var coords = d3.transform(d3.select(this.parentNode).attr("transform")).translate;
-	 		           var h = coords[1];
-	 		           var heightOffset = this.getBBox().y;
-	 		           
-	 		           tooltip.style("display", "block")
-	 		           .html("Counts: "+"<span style='font-weight:bold'>"+d.value+"</span>"+"<br/>"
-	        		        +"Organism: "+ "<span style='font-weight:bold'>"+d.name)
-	 		           .style("top",h+config.margin.bottom+heightOffset-config.margin.top-config.barOffset.grouped+"px")
-	 		           .style("left",config.width+w-70+"px");
-		            })
-	                .on("mouseout", function(){
-	                    tooltip.style("display", "none")
-	                })
+			          var coords = d3.transform(d3.select(this.parentNode).attr("transform")).translate;
+			          var w = coords[0];
+			          var h = coords[1];
+			          var heightOffset = this.getBBox().y;
+			          var widthOffset = this.getBBox().width;
+			           
+			          tooltip.style("display", "block")
+			              .html("Counts: "+"<span style='font-weight:bold'>"+d.value+"</span>"+"<br/>"
+			        		+"Organism: "+ "<span style='font-weight:bold'>"+d.name)
+			              .style("top",h+heightOffset+config.barOffset.grouped.height+"px")
+			              .style("left",w+config.barOffset.grouped.width+widthOffset+"px");
+		             })
+	                 .on("mouseout", function(){
+	                     tooltip.style("display", "none")
+	                 })
 		      } else {
 		    	  
 					
@@ -920,19 +945,19 @@ var datagraph = {
 				    .attr("y", function(d) { return y1(d.name); })
 				    
 				   rect.on("mouseover", function(d){
-		           
-		           var w = this.getBBox().width;
-		           var coords = d3.transform(d3.select(this.parentNode).attr("transform")).translate;
-		           var h = coords[1];
-		           var heightOffset = this.getBBox().y;
-		           
-		           tooltip.style("display", "block")
-		           .html("Counts: "+"<span style='font-weight:bold'>"+d.value+"</span>"+"<br/>"
-	        		+"Organism: "+ "<span style='font-weight:bold'>"+d.name)
-		           .style("top",h+config.margin.bottom-config.margin.top+heightOffset-config.barOffset.stacked+"px")
-		           .style("left",config.width+w-100+"px");
-
-		           })
+		      
+					   var coords = d3.transform(d3.select(this.parentNode).attr("transform")).translate;
+				       var w = coords[0];
+				       var h = coords[1];
+				       var heightOffset = this.getBBox().y;
+				       var widthOffset = this.getBBox().width;
+				          
+				       tooltip.style("display", "block")
+				           .html("Counts: "+"<span style='font-weight:bold'>"+d.value+"</span>"+"<br/>"
+				       	 	+"Organism: "+ "<span style='font-weight:bold'>"+d.name)
+				           .style("top",h+heightOffset+config.barOffset.stacked.height+"px")
+				           .style("left",w+config.barOffset.stacked.width+widthOffset+"px");
+				    })
 		           .on("mouseout", function(){
 		               tooltip.style("display", "none");
 		           })
