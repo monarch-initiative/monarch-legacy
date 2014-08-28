@@ -15,17 +15,7 @@
             </div>
             
             <div id="main-container">
-            
-             <div id="graphic-test">
-                <img src="/image/homepage.png"/>
-                <a href="/disease"><div id="diseasebutton" class="graphicbutton"></div></a>
-                <a href="/phenotype"><div id="phenotypebutton" class="graphicbutton"></div></a>
-                <a href="/gene"><div id="genebutton" class="graphicbutton"></div></a>
-                <a href="/model"><div id="modelbutton" class="graphicbutton"></div></a>
-             </div>
-            
-             <div class="graph-container"></div>
-            
+                <div class="graph-container"></div>
             </div>
 
             
@@ -33,4 +23,6 @@
             {{{includes.footer}}}
         </div> <!-- closes content -->
     </div> <!-- closes container -->
-    <script> datagraph.init(".graph-container","/labs/datagraph.json"); </script>
+    <script>datagraph.useCrumb = true; 
+            datagraph.init(".graph-container","/labs/datagraph.json");
+    </script>
