@@ -2,15 +2,7 @@
  * Data Graph
 **/
 
-.graph-container{
-    position: relative;
-    width: 826px;
-    float:left;
-    /*background-color: #E8E8E8;*/
-}
-
 #graph {
-    /*margin: 0px 0px 0px 700px;*/
     padding: 10px 0px 0px 0px;
 }
 .title{
@@ -41,13 +33,13 @@
    fill:white;
    cursor:default;
 }
-form {
+.configure {
    display: inline;
    float:right;
    margin-top: 3px;
    position:relative;
 }
-.bartip {
+.tip {
     position: absolute;
     font-size: 12px;
     color:white;
