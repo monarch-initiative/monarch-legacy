@@ -19,9 +19,6 @@ var datagraph = {
             'font-weight': 'bold'
   },
   
-  //Turn on/off breadcrumbs, default: true
-  useCrumb : false,
-  
   //Colors set in the order they appear in the JSON object
   color : { 
 	       first  : '#44A293',
@@ -77,6 +74,9 @@ var datagraph = {
   
   //Y axis positioning when arrow present
   yOffset : "-1.48em",
+  
+  //Turn on/off breadcrumbs
+  useCrumb : false,
   
   //Check browser
   isOpera : (!!window.opera || navigator.userAgent.indexOf(' OPR/') >= 0),
@@ -158,6 +158,15 @@ var datagraph = {
 	    });
 	}
 	
+	function checkForSubGraphs(data){
+		for (i = 0;i < data.length; i++) {
+	 	    if (!(Object.keys(data[i]).indexOf('subGraph') >= 0)) {
+	 	    	return true;
+	 	    } 
+	    }
+	    return false;
+	}
+	
 	function getStackedStats(data,groups){
 	    //Add x0,x1 values for stacked barchart
 	    data.forEach(function (r){
@@ -185,6 +194,7 @@ var datagraph = {
 
 	    var groups = getGroups(data);
 	    data = getStackedStats(data,groups);
+	    config.useCrumb = checkForSubGraphs(data);
 	    
 	    //remove breadcrumb div
 	    if (!config.useCrumb){

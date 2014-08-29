@@ -172,10 +172,10 @@ Steps for Adding the Monarch Graph Widget to Your Webpage
 
        Bread Crumbs:
            The Monarch Graph creates bread crumbs when traversing layered data.  
-           To activate breads crumbs set the following parameters:
-
-            a. datagraph.useCrumb = true;  - add breadcrumbs when storing layered graphs
-            b. datagraph.firstCrumb = "Phenotypic Abnormality"; - Name of first bread crumb
+           When using breadcrumbs the first "crumb" can be set since this value
+           is not stored in the JSON object.
+           
+            a. datagraph.firstCrumb = "Phenotypic Abnormality"; - Name of first bread crumb
 
 
     Add the statistics array or URL and the jQuery function between <script> tags in the html <head>
@@ -183,8 +183,6 @@ Steps for Adding the Monarch Graph Widget to Your Webpage
 
         <script type="text/javascript">
             jQuery(document).ready(function(){
-
-                datagraph.useCrumb = true; 
             
                 jQuery.getJSON( "/labs/datagraph.json", function(data) {
                     var graph = data.dataGraph;
