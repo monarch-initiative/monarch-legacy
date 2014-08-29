@@ -70,6 +70,26 @@ META NOTE (HSH - 8/25/2014): Can we remove this note, or at least clarify?
     
     $.widget("ui.modeltype", {
 
+    config: {
+        comparisonType : "genes",
+        h : 0,
+        inputPhenotypeData : [],	
+		modelDisplayCount : 30,
+		multiOrgModelLimit: 750,
+		multiOrgModelCt: [{ taxon: "9606", count: 10},
+						  { taxon: "10090", count: 10},
+						  { taxon: "7955", count: 10},
+						  { taxon: "7227", count: 0}],
+	    phenotypeDisplayCount : 26,
+		serverURL : "",
+		targetSpeciesList : [{ name: "Homo sapiens", taxon: "9606", color: 'rgb(25,59,143)'}, 
+							 { name: "Mus musculus", taxon: "10090", color: 'rgb(70,19,19)'},
+							 { name: "Danio rerio", taxon: "7955", color: 'rgb(1,102,94)'}, 
+							 { name: "Drosophila melanogaster", taxon: "7227", color:'purple'} , 
+							 { name: "Overview", taxon: "2"}], //, {name: "All", taxon: "1"}],
+		w : 0,
+    },
+    
 	options:   {
 	    axis_pos_list: [],
 		clickedData: undefined, 
@@ -78,7 +98,6 @@ META NOTE (HSH - 8/25/2014): Can we remove this note, or at least clarify?
 		colStartingPos: 10,
 		combinedModelData : [],
 		combinedModelList : [],
-		comparisonType : "genes",
 		currModelIdx : 0,
 	    currPhenotypeIdx : 0,
 		currSelectedRect: undefined,
@@ -96,26 +115,17 @@ META NOTE (HSH - 8/25/2014): Can we remove this note, or at least clarify?
 		filteredOtherModelData: [],
 	    globalViewWidth : 110,
 	    globalViewHeight : 110,	
-	    h : 0,
 		highlightRect: undefined,
-		inputPhenotypeData : [],	  	    
 	    m :[ 30, 10, 10, 10 ], 
 		maxICScore : 0,
 	    modelData: [],
-		modelDisplayCount : 30,
 	    modelList: [],
 	    modelWidth: undefined,
 		multiOrganismCt: 10,
-		multiOrgModelLimit: 750,
-		multiOrgModelCt: [{ taxon: "9606", count: 10},
-						  { taxon: "10090", count: 10},
-						  { taxon: "7955", count: 10},
-						  { taxon: "7227", count: 0}],
 		orangeHighlight: "#ea763b",
 		orgModelList: [],
 		origPhenotypeData: [],
 		phenotypeData: [],
-	    phenotypeDisplayCount : 26,
 		phenotypeLabels : [],
 		phenotypeSortData: [],
 		scriptpath : $('script[src]').last().attr('src').split('?')[0].split('/').slice(0, -1).join('/')+'/',
@@ -128,7 +138,6 @@ META NOTE (HSH - 8/25/2014): Can we remove this note, or at least clarify?
 		selectList: [{label: "Distance", calc: 0}, {label: "Ratio (q)", calc: 1}, {label: "Ratio (t)", calc: 3} , {label: "Uniqueness", calc: 2}],
 		selectRectHeight : 0,
 		selectRectWidth : 0,
-		serverURL : "",
 		smallestModelWidth: 400,
 		smallXScale: undefined,
 	    smallYScale: undefined,	
@@ -136,16 +145,10 @@ META NOTE (HSH - 8/25/2014): Can we remove this note, or at least clarify?
 		speciesList : [],		
 	    svg: undefined,
 		defaultTargetSpecies: "2",
-		targetSpeciesList : [{ name: "Homo sapiens", taxon: "9606", color: 'rgb(25,59,143)'}, 
-							 { name: "Mus musculus", taxon: "10090", color: 'rgb(70,19,19)'},
-							 { name: "Danio rerio", taxon: "7955", color: 'rgb(1,102,94)'}, 
-							 { name: "Drosophila melanogaster", taxon: "7227", color:'purple'} , 
-							 { name: "Overview", taxon: "2"}], //, {name: "All", taxon: "1"}],
 	    defaultTargetSpeciesName : "Overview",
 		textLength: 34,
 		textWidth: 200,
 		unmatchedPhenotypes: [],
-		w : 0,
 	    xScale: undefined, 
 		yAxis: [],
 		yAxisMax : 0,
@@ -211,7 +214,7 @@ META NOTE (HSH - 8/25/2014): Can we remove this note, or at least clarify?
 			//self.options.modelList = [];
 			//self.options.filteredPhenotypeData = [];
 	    // we want to overwrite all options in state , so don't pass in true for a recursive merge
-	    this.state = $.extend(this.state,self.options);
+	    this.state = $.extend(this.state,self.options,self.config);
 
 	},
 	
@@ -235,7 +238,7 @@ META NOTE (HSH - 8/25/2014): Can we remove this note, or at least clarify?
 			 }
 		     });
 	    $.extend(true,this.options,configoptions);
-	    this.state = $.extend(true,{},this.options);
+	    this.state = $.extend(true,{},this.options,this.config);
 	    this._copyDefaultState();
 	},
 	
