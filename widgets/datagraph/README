@@ -1,16 +1,19 @@
 Monarch Graph Widget
 
-The Monarch Graph Widget creates a horizontal bar chart using D3.js and jQuery.  The chart allows a user to transition
-between stacked and grouped configurations.  In addition, the graph can traverse layered data, such as data
-structured as a heirarchy, directed graph, or directed acyclic graph.  For example, data represented by an
-ontology can be stored and traversed using navigation arrows and breadcrumbs.
+The Monarch Graph Widget creates a horizontal bar chart using D3.js and jQuery.  The chart
+allows a user to transition between stacked and grouped configurations.  In addition, the
+graph can traverse layered data, such as data structured as a heirarchy, directed graph,
+or a directed acyclic graph.  For example, data represented by an ontology can be stored
+and traversed using navigation arrows and breadcrumbs.
 
 Steps for Adding the Monarch Graph Widget to Your Webpage
 
-   This page describes how to include the Monarch Graph Widget on any webpage. Steps are provided for adding required javascript files*, 
-   adding parameters to the widget call, and adding the widget to the html file.
+   This page describes how to include the Monarch Graph Widget on any webpage. Steps are
+   provided for adding required javascript files*, adding parameters to the widget call,
+   and adding the widget to the html file.
 
-	*Required files are available at: https://github.com/monarch-initiative/monarch-app/tree/master/widgets/datagraph
+	*Required files are available at: 
+	    https://github.com/monarch-initiative/monarch-app/tree/master/widgets/datagraph
 	
 1. Add the Required Javascript Libraries and Image
 
@@ -30,7 +33,8 @@ Steps for Adding the Monarch Graph Widget to Your Webpage
 
 2. Add a List of  and a jQuery Function Call
 
-    Create a list of statistics as an array of Javascript objects with the following attributes:
+    Create a list of statistics as an array of Javascript
+    objects with the following attributes:
 
         [
           {
@@ -50,8 +54,9 @@ Steps for Adding the Monarch Graph Widget to Your Webpage
         ]
 
 
-    Add a jQuery .ready function that will add the widget to an empty div tag (see Step 3) as follows (The following example assumes you are adding the widget to a 
-    div with an class=".graph_container" and have stored your data in the variable 'graph'):
+    Add a jQuery .ready function that will add the widget to an empty div tag (see Step 3) as
+    follows (The following example assumes you are adding the widget to a div with a
+    class=".graph_container" and have stored your data in the variable 'graph'):
 
         jQuery(document).ready(function(){
                 datagraph.init(".graph-container",graph);
@@ -112,7 +117,8 @@ Steps for Adding the Monarch Graph Widget to Your Webpage
    For a practical example see http://monarchinitiative.org/labs/datagraph.json
 
    Widget Parameters
-        Additional parameters can be set to customize the data graph, such setting the title, axis labels, colors, size etc.
+        Additional parameters can be set to customize the data graph, such setting the title,
+        axis labels, colors, size etc.
 
         Basic Settings:
 
@@ -193,6 +199,7 @@ Steps for Adding the Monarch Graph Widget to Your Webpage
 
 
 4. Add tbe HTML File on the Server
-Just add your html file and the required .js libraries where they are visible on your server. You're done!
+Just add your html file and the required .js libraries where they are visible on your server.
+You're done!
 
 Please contact us at info@monarchinitiative.org if you have any problems or questions.
