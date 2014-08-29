@@ -119,12 +119,12 @@ META NOTE (HSH - 8/25/2014): Can we remove this note, or at least clarify?
 		phenotypeLabels : [],
 		phenotypeSortData: [],
 		scriptpath : $('script[src]').last().attr('src').split('?')[0].split('/').slice(0, -1).join('/')+'/',
-		selectedCalculation: 0,
+		defaultSelectedCalculation: 0,
 		selectedColumn: undefined,
-		selectedLabel: "Default",
-		selectedOrder: 0,
+		defaultSelectedLabel: "Default",
+		defultSelectedOrder: 0,
 		selectedRow: undefined,
-		selectedSort: "Frequency",
+		defaultSelectedSort: "Frequency",
 		selectList: [{label: "Distance", calc: 0}, {label: "Ratio (q)", calc: 1}, {label: "Ratio (t)", calc: 3} , {label: "Uniqueness", calc: 2}],
 		selectRectHeight : 0,
 		selectRectWidth : 0,
@@ -135,13 +135,13 @@ META NOTE (HSH - 8/25/2014): Can we remove this note, or at least clarify?
 		sortList: [{type: "Alphabetic", order: 0},{type: "Frequency and Rarity", order:1} ,{type: "Frequency", order:2} ],	    
 		speciesList : [],		
 	    svg: undefined,
-		targetSpecies: "2",
+		defaultTargetSpecies: "2",
 		targetSpeciesList : [{ name: "Homo sapiens", taxon: "9606", color: 'rgb(25,59,143)'}, 
 							 { name: "Mus musculus", taxon: "10090", color: 'rgb(70,19,19)'},
 							 { name: "Danio rerio", taxon: "7955", color: 'rgb(1,102,94)'}, 
 							 { name: "Drosophila melanogaster", taxon: "7227", color:'purple'} , 
 							 { name: "Overview", taxon: "2"}], //, {name: "All", taxon: "1"}],
-	    targetSpeciesName : "Overview",
+	    defaultTargetSpeciesName : "Overview",
 		textLength: 34,
 		textWidth: 200,
 		unmatchedPhenotypes: [],
@@ -161,7 +161,7 @@ META NOTE (HSH - 8/25/2014): Can we remove this note, or at least clarify?
 	},
 	   		
 		//reset option values if needed before reloading data
-		_reset: function() {
+	_reset: function() {
 			var self = this;
 
 			self.options.currModelIdx = 0;
@@ -210,8 +210,9 @@ META NOTE (HSH - 8/25/2014): Can we remove this note, or at least clarify?
 			//self.options.modelData = [];
 			//self.options.modelList = [];
 			//self.options.filteredPhenotypeData = [];
-			
-		    this.state = $.extend(true,{},self.options);
+	    // we want to overwrite all options in state , so don't pass in true for a recursive merge
+	    this.state = $.extend(this.state,self.options);
+
 	},
 	
 	
@@ -235,6 +236,10 @@ META NOTE (HSH - 8/25/2014): Can we remove this note, or at least clarify?
 		     });
 	    $.extend(true,this.options,configoptions);
 	    this.state = $.extend(true,{},this.options);
+	    this._copyDefaultState();
+	},
+	
+	_init: function() {
 	    
 		//save a copy of the original phenotype data
 		this.state.origPhenotypeData = this.state.phenotypeData.slice();
@@ -275,17 +280,27 @@ META NOTE (HSH - 8/25/2014): Can we remove this note, or at least clarify?
 					.attr("height", 480); //this.state.h - 20 + this.state.yTranslation);
 				this._createAccentBoxes();				
 	            //this._createScrollBars();
-	            this._createColorScale();
-	            this._createModelRegion();
-	    	    this._updateAxes();
-				this._createGridlines();
-	    	    this._createModelRects();
-	    	    this._createRects();			
-	    		//this._updateScrollCounts();
-	    		this._createOverviewSection();
+	        this._createColorScale();
+		this._createModelRegion();
+	    	this._updateAxes();
+		this._createGridlines();
+	    	this._createModelRects();
+	         this._createRects();			
+	    	//this._updateScrollCounts();
+		this._createOverviewSection();
 	    } 
 	},
-	
+
+	_copyDefaultState: function() {
+	    this.state.targetSpecies = this.options.defaultTargetSpecies;
+	    this.state.targetSpeciesName = this.options.targetSpeciesName;
+	    this.state.selectedCalculation = this.options.defaultSelectedCalculation;
+	    this.state.selectedLabel = this.options.defaultelectedLabel;
+	    this.state.selectedSort = this.options.defaultSelectedSort;
+	    this.state.selectedSorder = this.options.defaultSelectedOrder;
+	},
+
+	    
 	/* dummy option procedures as per 
 	   http://learn.jquery.com/jquery-ui/widget-factory/how-to-use-the-widget-factory/
 	   likely to have some content added as we proceed
@@ -328,12 +343,12 @@ META NOTE (HSH - 8/25/2014): Can we remove this note, or at least clarify?
 				$("#errmsg").remove();
 			        d3.select("#svg_area").remove();
 
-			    /*** HSH 20140825 MUST BE CHANGED !!!! */
+			    /*** HSH 20140825 MUST BE CHANGED !!!! - I think I have it.*/
 			    
-				self.options.phenotypeData = self.options.origPhenotypeData.slice();
-				self.options.targetSpecies =  '2';
+				self.state.phenotypeData = self.state.origPhenotypeData.slice();
+				self.state.targetSpecies =  '2';
 				self._reset();
-				self._create();
+				self._init();
 		});
 	},
 	
@@ -681,8 +696,7 @@ META NOTE (HSH - 8/25/2014): Can we remove this note, or at least clarify?
 		
 		var tempdata = self.state.selectList.filter(function(d) {
 	    	return d.calc === calc;
-	    });
-
+		});
 		self.state.selectedLabel = tempdata[0].label;
 		self.state.selectedCalculation = tempdata[0].calc;
 	},
@@ -1028,7 +1042,6 @@ META NOTE (HSH - 8/25/2014): Can we remove this note, or at least clarify?
 	
 	_finishOverviewLoad : function () {
 		var speciesData = [];
-		
 		var self = this,
 			hdata=[],
 			mdata=[],
@@ -1112,8 +1125,6 @@ META NOTE (HSH - 8/25/2014): Can we remove this note, or at least clarify?
 			modList = modList.concat(fdata.slice());  
 		this.state.combinedModelList = modList.slice();	
 		this.state.speciesList = speciesList.slice();
-		//console.log("Combined Model List: ");		
-		//console.log(this.state.combinedModelList);
 		
 		//we need to adjust the display counts and indexing if there are fewer models
 		if (this.state.combinedModelList.length < this.state.modelDisplayCount) {
@@ -1211,7 +1222,7 @@ META NOTE (HSH - 8/25/2014): Can we remove this note, or at least clarify?
 	//Finish the data load after the ajax request
 	//Create the modelList array: model_id, model_label, model_score, model_rank
 	//Call _loadDataForModel to put the matches in an array
-    _finishLoad: function(data) {
+	_finishLoad: function(data) {
 		var retData = data;
 		//extract the maxIC score
 		this.state.maxICScore = retData.metadata.maxMaxIC;
@@ -1241,6 +1252,7 @@ META NOTE (HSH - 8/25/2014): Can we remove this note, or at least clarify?
 		for (var idx=0;idx<this.state.modelDisplayCount;idx++) {
 			this.state.filteredModelList.push(this.state.modelList[idx]);
 		}
+
 		
 		//TO DO: Check on the source field, it doesn't seem to be contain any data in general
 		this._setComparisonType(retData.source.b_type);		
@@ -1452,9 +1464,8 @@ META NOTE (HSH - 8/25/2014): Can we remove this note, or at least clarify?
 		//add the handler for the select control
         $( "#sortphenotypes" ).change(function(d) {
 	    //this._showThrobber();
-    	       /** HSH 20140825 MUST BE FIXED !!! */
-        	self.options.selectedSort = self.state.sortList[d.target.selectedIndex].type;
-        	self.options.selectedOrder = self.state.sortList[d.target.selectedIndex].order;
+        	self.state.selectedSort = self.state.sortList[d.target.selectedIndex].type;
+        	self.state.selectedOrder = self.state.sortList[d.target.selectedIndex].order;
 			self._resetSelections();
         });
 			
@@ -1475,10 +1486,9 @@ META NOTE (HSH - 8/25/2014): Can we remove this note, or at least clarify?
 		$("#mtitle").remove();
 		$("#header").remove();
 	    $("#svg_area").remove();
-	       /** HSH 20140825 MUST BE FIXED !!! */
-		self.options.phenotypeData = self.state.origPhenotypeData.slice();
+		self.state.phenotypeData = self.state.origPhenotypeData.slice();
 		self._reset();
-		self._create();
+		self._init();
 	},
 	
 	_addLogoImage : function() { 
@@ -1741,7 +1751,8 @@ META NOTE (HSH - 8/25/2014): Can we remove this note, or at least clarify?
     		  el = d3.select(t),
     	      p = d3.select(t.parentNode),
 			  x = +t.getAttribute("x"),
-			  y = +t.getAttribute("y");
+		    y = +t.getAttribute("y");
+
 			
     	    p.append("text")
     	       	.attr('x', x + 15)
@@ -2437,11 +2448,12 @@ META NOTE (HSH - 8/25/2014): Can we remove this note, or at least clarify?
 	
 	_createAccentBoxes: function() {
 	    var self=this;
+	    
 	    //For Overview of Organisms 0 width = ((multiOrganismCt*2)+2) *18	
 		//Add two  extra columns as separators
 		self.state.axis_pos_list = [];
-		this.state.modelWidth = this.state.filteredModelList.length * 18;
-		//add an axis for each ordinal scale found in the data
+	    this.state.modelWidth = this.state.filteredModelList.length * 18;
+	    //add an axis for each ordinal scale found in the data
 	    for (var i=0;i<this.state.dimensions.length;i++) {
 	    	//move the last accent over a bit for the scrollbar
 			if (i == 2) {
@@ -2520,7 +2532,7 @@ META NOTE (HSH - 8/25/2014): Can we remove this note, or at least clarify?
 	_createModelRegion: function () {
 	    var self=this;
 		var list = [];
-		
+
 		//This is for the new "Overview" target option 
 		if (this.state.targetSpeciesName == "Overview"){	
 			list = this.state.combinedModelList.slice();			
@@ -2532,8 +2544,9 @@ META NOTE (HSH - 8/25/2014): Can we remove this note, or at least clarify?
 		
 		this.state.xScale = d3.scale.ordinal()
 		.domain(list.map(function (d) {
-			return d.model_id; }))
-			.rangeRoundBands([0,this.state.modelWidth]);
+			return d.model_id; })).rangeRoundBands([0,this.state.modelWidth]);
+
+
 	   
 		model_x_axis = d3.svg.axis()
 			.scale(this.state.xScale).orient("top");
@@ -2565,7 +2578,6 @@ META NOTE (HSH - 8/25/2014): Can we remove this note, or at least clarify?
 		this.state.svg.selectAll("path.domain").remove();	
 		self.state.svg.selectAll("text.scores").remove();
 		self.state.svg.selectAll("#specieslist").remove();
-
 
 		self.state.svg.append("line")
 				.attr("transform","translate(" + (self.state.textWidth + 30) +"," + (self.state.yTranslation + self.state.yoffset - 16) + ")")
@@ -2622,11 +2634,11 @@ META NOTE (HSH - 8/25/2014): Can we remove this note, or at least clarify?
 		//This is for the new "Overview" target option 
 		if (this.state.targetSpeciesName == "Overview"){	
 			modData = this.state.combinedModelData.slice();			
-			//this._createOrgOverviewXAxis();
+		    //this._createOrgOverviewXAxis();
 		}
 		else
 		{		
-			modData =this.state.modelData.slice();
+		    modData =this.state.modelData.slice();
 		}
 		
 		var temp_data = modData.map(function(d) { 
@@ -2814,8 +2826,9 @@ META NOTE (HSH - 8/25/2014): Can we remove this note, or at least clarify?
 			if (calc == 2) {text1 = "Lowest"; text2 = "Uniqueness"; text3 = "Highest";}
 			else if (calc == 1) {text1 = "Less Similar"; text2 = "Ratio (q)"; text3 = "More Similar";}
 			else if (calc == 3) {text1 = "Less Similar"; text2 = "Ratio (t)"; text3 = "More Similar";}
-			else if (calc == 0) {text1 = "Min"; text2 = "Distance"; text3 = "Max";}
-	
+		        else if (calc == 0) {text1 = "Min"; text2 = "Distance"; text3 = "Max";}
+
+		
 		    var div_text1 = self.state.svg.append("svg:text")
 				.attr("class", "detail_text")
 				.attr("y", y1  + this.state.yTranslation + self.state.yoffsetOver-5)
@@ -2927,9 +2940,8 @@ META NOTE (HSH - 8/25/2014): Can we remove this note, or at least clarify?
 			$( "#organism" ).change(function(d) {
 				//msg =  "Handler for .change()
 			    //called." );
-			    			    /*** HSH 20140825 MUST BE CHANGED !!!! */
-				self.options.targetSpecies = self.state.targetSpeciesList[d.target.selectedIndex].taxon;
-				self.options.targetSpeciesName = self.state.targetSpeciesList[d.target.selectedIndex].name;
+				self.state.targetSpecies = self.state.targetSpeciesList[d.target.selectedIndex].taxon;
+			    self.state.targetSpeciesName = self.state.targetSpeciesList[d.target.selectedIndex].name;
 				self._resetSelections();
 				});
 			
@@ -2937,9 +2949,8 @@ META NOTE (HSH - 8/25/2014): Can we remove this note, or at least clarify?
 			 $( "#calculation" ).change(function(d) {
 				//msg =  "Handler for .change()
 			     //called." );
-     			     /*** HSH 20140825 MUST BE CHANGED !!!! */
-				self.options.selectedCalculation = self.state.selectList[d.target.selectedIndex].calc;
-				self.options.selectedLabel = self.state.selectList[d.target.selectedIndex].label;
+				self.state.selectedCalculation = self.state.selectList[d.target.selectedIndex].calc;
+				self.state.selectedLabel = self.state.selectList[d.target.selectedIndex].label;
 				self._resetSelections();
 			});
 	    
