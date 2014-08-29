@@ -23,6 +23,16 @@ Or, if you installed ringo directly in your repo:
 
 ## Continuous Integration Tests
 
-Currently the followingh job runs the URL test:
+Currently the following job runs the URL test:
 
  * http://build.berkeleybop.org/job/check-monarch-urls
+
+## Testing Ancillary Modules
+
+## Running Pup-Tent Tests
+
+ringo -m ./modules/pup-tent/ -m ./modules/underscore/ -m ./modules/mustache/ tests/full-tmpl.js.tests
+
+Or,
+
+./ringojs/bin/ringo -m ./modules/pup-tent/ -m ./modules/underscore/ -m ./modules/mustache/ tests/full-tmpl.js.tests

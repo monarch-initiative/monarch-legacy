@@ -1,17 +1,3 @@
-<!DOCTYPE html>
-<html>
-<head>
-    <title>Monarch Diseases and Phenotypes</title>
-    {{#scripts}}
-    <script type="text/javascript" src="{{url}}"></script>
-    {{/scripts}}
-    {{#stylesheets}}
-    <link rel="stylesheet" type="text/css" href="{{url}}"/>
-    {{/stylesheets}}
-    <link rel="icon" href="/image/favicon.ico" type="image/x-icon">
-    <meta charset="utf-8"/>
-</head>
-<body>
     {{{includes.navbar}}}
     <div class="monarch-container">
         <div class="content">
@@ -29,17 +15,7 @@
             </div>
             
             <div id="main-container">
-            
-             <div id="graphic-test">
-                <img src="/image/homepage.png"/>
-                <a href="/disease"><div id="diseasebutton" class="graphicbutton"></div></a>
-                <a href="/phenotype"><div id="phenotypebutton" class="graphicbutton"></div></a>
-                <a href="/gene"><div id="genebutton" class="graphicbutton"></div></a>
-                <a href="/model"><div id="modelbutton" class="graphicbutton"></div></a>
-             </div>
-            
-             <div class="graph-container"></div>
-            
+                <div class="graph-container"></div>
             </div>
 
             
@@ -47,6 +23,16 @@
             {{{includes.footer}}}
         </div> <!-- closes content -->
     </div> <!-- closes container -->
-    <script> datagraph.init(".graph-container","/labs/datagraph.json"); </script>
-</body>
-</html>
+    <script type="text/javascript">
+        jQuery(document).ready(function(){
+           /* d3.json("/labs/datagraph.json",function(error,data) {
+                var graph = data.dataGraph;
+                datagraph.init(".graph-container",json);
+            });*/
+            
+            jQuery.getJSON( "/labs/datagraph.json", function(data) {
+                var graph = data.dataGraph;
+                datagraph.init(".graph-container",graph);
+            });
+        });
+    </script>

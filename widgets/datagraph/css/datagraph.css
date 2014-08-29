@@ -6,10 +6,6 @@
     padding: 10px 0px 0px 0px;
 }
 .title{
-    margin-left: 360px;
-    padding-bottom: 10px;
-    font-size : 20px;
-    font-weight: bold;
 }
 .axis path,
 .axis line {
@@ -52,11 +48,4 @@
     border-radius: 5px;
     max-width: 150px;
     z-index: 10;
-}
-.superbtn{
-    background-color: #2C2B33;
-    color: white;
-}
-.superbtn hover{
-    background-color: #2C2B33;
 }

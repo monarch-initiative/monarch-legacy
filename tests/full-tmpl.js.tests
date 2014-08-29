@@ -1,0 +1,97 @@
+////
+//// A more realistic example.
+////
+
+var assert = require('assert');
+
+// Use of apply().
+(function(){
+
+    var pup_tent = require('pup-tent')(['tests/rsrc3']);
+    assert.ok(pup_tent, 'constructor okay');
+
+    var a = pup_tent.apply('content.tmpl', {content: 'foo'});
+    assert.equal(a, 'foo',  "content only");
+    //console.log('html (a): ', a);
+
+})();
+
+// Short use of render().
+(function(){
+
+    var pup_tent = require('pup-tent')(['tests/rsrc3']);
+    assert.ok(pup_tent, 'constructor okay');
+
+    var s = pup_tent.render('content.tmpl', {content: 'foo'});
+    assert.equal(s, 'foo',  "content only");
+    //console.log('html (s): ', s);
+
+})();
+
+// Long use of render().
+(function(){
+
+    var pup_tent = require('pup-tent')(['tests/rsrc3']);
+    assert.ok(pup_tent, 'constructor okay');
+
+    var l = pup_tent.render('content.tmpl',
+			    {content: 'bar', title: 'foo'},
+			    'frame.tmpl');
+    // console.log('html (l):\n', l);
+    var expected = [
+    	'<html>',
+    	'  <head>',
+    	'    <title>foo</title>',
+    	'  </head>',
+    	'  <body>',
+    	'  bar',
+    	'  </body>',
+    	'</html>',
+    	''
+    ];
+    var e = expected.join("\n");
+    // console.log('html (e):\n', e);
+    // console.log('html (l):', l.length);
+    // console.log('html (e):', e.length);
+    assert.equal(l.length, e.length,  "inner and outer template lengths");
+    assert.equal(l, e,  "inner and outer templates");
+    
+})();
+
+// Usual use of render().
+(function(){
+
+    var pup_tent = require('pup-tent')(['tests/rsrc3']);
+    assert.ok(pup_tent, 'constructor okay');
+
+    pup_tent.set_common('js_vars', {'name': 'foo', 'value': 'bar'});
+    pup_tent.set_common('js_libs', 'foo.js');
+    pup_tent.set_common('css_libs', 'bar.css');
+    var u = pup_tent.render('content.tmpl',
+			    {content: 'bar', title: 'foo',
+			    'pup_tent_js_libraries': ['App.js']},
+			    'frame.tmpl');
+    // console.log('html (u):\n', u);
+    var expected = [
+    	'<html>',
+    	'  <head>',
+    	'    <title>foo</title>',
+	'    <link rel="stylesheet" type="text/css" href="bar.css">',
+	'    <script type="text/javascript">var foo = "bar";</script>',
+	'    <script type="text/javascript" src="foo.js"></script>',
+	'    <script type="text/javascript" src="App.js"></script>',
+    	'  </head>',
+    	'  <body>',
+    	'  bar',
+    	'  </body>',
+    	'</html>',
+	''
+    ];
+    var e = expected.join("\n");
+    // console.log('html (e):\n', e);
+    // console.log('html (u):', u.length);
+    // console.log('html (e):', e.length);
+    assert.equal(u.length, e.length,  "inner and outer template lengths");
+    assert.equal(u, e,  "inner and outer templates");
+    
+})();
