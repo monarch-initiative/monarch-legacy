@@ -160,7 +160,7 @@ var datagraph = {
 	
 	function checkForSubGraphs(data){
 		for (i = 0;i < data.length; i++) {
-	 	    if (!(Object.keys(data[i]).indexOf('subGraph') >= 0)) {
+	 	    if (Object.keys(data[i]).indexOf('subGraph') >= 0) {
 	 	    	return true;
 	 	    } 
 	    }

@@ -132,26 +132,26 @@ Steps for Adding the Monarch Graph Widget to Your Webpage
             
                The color variable is a JSON object with the following format:
                datagraph.color = { 
-	             first  : '#44A293',   //First group
-  		         second : '#A4D6D4',   //Second group
-  		         ... 
-  		   
-  		         yLabel : { 
-  		             fill  : '#000000',
-  		             hover : '#EA763B'
-  		         },
+                 first  : '#44A293',   //First group
+                 second : '#A4D6D4',   //Second group
+  	             ... 
+
+  	             yLabel : { 
+  	                 fill  : '#000000',
+  	                 hover : '#EA763B'
+  	             },
                  arrow : {
                      fill  : "#496265",
                      hover : "#EA763B"
                  },
-  		         bar : {
-  		             fill  : '#EA763B'
-  		         },
-  		         crumb : {
-  		             top   : '#496265',
-  		             bottom: '#3D6FB7',
-  		             hover : '#EA763B'
-  		         }
+                 bar : {
+  	                 fill  : '#EA763B'
+                 },
+  	             crumb : {
+  	                 top   : '#496265',
+  	                 bottom: '#3D6FB7',
+  	                 hover : '#EA763B'
+  	             }
                };
                 Any setting can be updated without creating the entire color object,
                 for example:
