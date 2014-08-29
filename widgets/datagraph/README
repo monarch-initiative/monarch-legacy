@@ -1,0 +1,198 @@
+Monarch Graph Widget
+
+The Monarch Graph Widget creates a horizontal bar chart using D3.js and jQuery.  The chart allows a user to transition
+between stacked and grouped configurations.  In addition, the graph can traverse layered data, such as data
+structured as a heirarchy, directed graph, or directed acyclic graph.  For example, data represented by an
+ontology can be stored and traversed using navigation arrows and breadcrumbs.
+
+Steps for Adding the Monarch Graph Widget to Your Webpage
+
+   This page describes how to include the Monarch Graph Widget on any webpage. Steps are provided for adding required javascript files*, 
+   adding parameters to the widget call, and adding the widget to the html file.
+
+	*Required files are available at: https://github.com/monarch-initiative/monarch-app/tree/master/widgets/datagraph
+	
+1. Add the Required Javascript Libraries and Image
+
+    The following .js code libraries are required:
+        jQuery (tested with 1.11.0)
+        d3 (tested with 3.2.4)
+    The custom javascript file for the Monarch Graph widget is required.
+        datagraph.js
+    Create a new html file and add all required javascript files within the html <head> tags
+        Example:
+
+        <head>
+             <script src="js/jquery-1.11.0.min.js"></script>
+             <script src="js/d3.min.js"></script>
+             <script src="js/datagraph.js"></script>
+        </head>
+
+2. Add a List of  and a jQuery Function Call
+
+    Create a list of statistics as an array of Javascript objects with the following attributes:
+
+        [
+          {
+            "phenotype": "Nervous System",
+            "id": "HP:0000707",
+            "counts": [
+              {
+                "value": 21290,
+                "name": "Human"
+              },
+              {
+               "value": 38136,
+               "name": "Mouse"
+              }
+             ] 
+           },...
+        ]
+
+
+    Add a jQuery .ready function that will add the widget to an empty div tag (see Step 3) as follows (The following example assumes you are adding the widget to a 
+    div with an class=".graph_container" and have stored your data in the variable 'graph'):
+
+        jQuery(document).ready(function(){
+                datagraph.init(".graph-container",graph);
+        });
+
+   Alternatively, data can be stored from a URL with jQuery or D3, for example:
+
+        jQuery(document).ready(function(){
+
+            //Using D3
+            d3.json("/labs/datagraph.json",function(error,data) {
+                var graph = data.dataGraph;
+                datagraph.init(".graph-container",json);
+            });
+
+            //Or alternatively using jQuery
+            jQuery.getJSON( "/labs/datagraph.json", function(data) {
+                var graph = data.dataGraph;
+                datagraph.init(".graph-container",graph);
+            });
+        });
+
+   Storing Layered Data
+
+   Layered data can be stored in the folowing format:
+
+        [
+          {
+            "phenotype": "Nervous System",
+            "id": "HP:0000707",
+            "counts": [
+              {
+                "value": 21290,
+                "name": "Human"
+              },
+              {
+               "value": 38136,
+               "name": "Mouse"
+              }
+             ],
+             "subGraph":[
+                 {
+                   "phenotype":"Nervous System Morphology",
+                   "id":"HP:0012639",
+                   "counts": [
+                     {
+                       "value":7431,
+                       "name":"Human",
+                     {
+                       "value":24948,
+                       "name":"Mouse"
+                     }
+                    ],
+                 },...
+           },...
+        ]
+
+   For a practical example see http://monarchinitiative.org/labs/datagraph.json
+
+   Widget Parameters
+        Additional parameters can be set to customize the data graph, such setting the title, axis labels, colors, size etc.
+
+        Basic Settings:
+
+            a. datagraph.chartTitle - Chart Title
+            b. datagraph.xAxisLabel - X Axis Label
+            c. datagraph.width - Chart Width
+            d. datagraph.height - Chart Height
+            e. datagraph.color - CSS colors
+            
+               The color variable is a JSON object with the following format:
+               datagraph.color = { 
+	             first  : '#44A293',   //First group
+  		         second : '#A4D6D4',   //Second group
+  		         ... 
+  		   
+  		         yLabel : { 
+  		             fill  : '#000000',
+  		             hover : '#EA763B'
+  		         },
+                 arrow : {
+                     fill  : "#496265",
+                     hover : "#EA763B"
+                 },
+  		         bar : {
+  		             fill  : '#EA763B'
+  		         },
+  		         crumb : {
+  		             top   : '#496265',
+  		             bottom: '#3D6FB7',
+  		             hover : '#EA763B'
+  		         }
+               };
+                Any setting can be updated without creating the entire color object, for example:
+                datagraph.color.first = '#44A293';
+  		        datagraph.color.second = '#A4D6D4';
+
+       Advanced Settings:
+   
+            a. datagraph.margin = {top: 40, right: 80, bottom: 200, left: 320} - Chart Margins
+            b. datagraph.title = { 
+                 'margin-left' : '360px',
+                 'padding-bottom': '10px',
+                 'font-size' : '20px',
+                 'font-weight': 'bold'
+               };
+
+       Bread Crumbs:
+           The Monarch Graph creates bread crumbs when traversing layered data.  To turn on breads crumbs
+           set the following parameters:
+
+            a. datagraph.useCrumb = true;  - turn breadcrumbs when storing layered graphs
+            b. datagraph.firstCrumb = "Phenotypic Abnormality"; - Name of first bread crumb
+
+
+    Add the statistics array or URL and the jQuery function between <script> tags in the html <head>
+        Example:
+
+        <script type="text/javascript">
+            jQuery(document).ready(function(){
+
+                datagraph.useCrumb = true; 
+            
+                jQuery.getJSON( "/labs/datagraph.json", function(data) {
+                    var graph = data.dataGraph;
+                    datagraph.init(".graph-container",graph);
+                });
+            });
+        </script>
+
+3. Add the Widget <div>:
+
+    Add an empty <div> tag in the body of the html file.
+    Example:
+
+    <body>	
+    	 <div class="graph-container"></div>
+    <body>
+
+
+4. Add tbe HTML File on the Server
+Just add your html file and the required .js libraries where they are visible on your server. You're done!
+
+Please contact us at info@monarchinitiative.org if you have any problems or questions.

@@ -26,14 +26,13 @@
     <script type="text/javascript">
         jQuery(document).ready(function(){
             datagraph.useCrumb = true; 
-            var graph;
            /* d3.json("/labs/datagraph.json",function(error,data) {
-                graph = data.dataGraph;
+                var graph = data.dataGraph;
                 datagraph.init(".graph-container",json);
             });*/
             
             jQuery.getJSON( "/labs/datagraph.json", function(data) {
-                graph = data.dataGraph;
+                var graph = data.dataGraph;
                 datagraph.init(".graph-container",graph);
             });
         });

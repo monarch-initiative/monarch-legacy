@@ -23,7 +23,7 @@ var datagraph = {
   useCrumb : false,
   
   //Colors set in the order they appear in the JSON object
-  COL : { 
+  color : { 
 	       first  : '#44A293',
   		   second : '#A4D6D4',
   		   third  : '#EA763B',
@@ -100,7 +100,6 @@ var datagraph = {
 	$(".interaction").append( "<li></li>" );
 	$(".interaction li").append("<div class=breadcrumbs></div>");
 	
-	
     //D3 starts here
     //Define scales
 	var y0 = d3.scale.ordinal()
@@ -113,8 +112,8 @@ var datagraph = {
     
 	//Bar colors
 	var color = d3.scale.ordinal()
-	    .range([this.COL.first,this.COL.second,this.COL.third,
-	            this.COL.fourth,this.COL.fifth,this.COL.sixth]);
+	    .range([this.color.first,this.color.second,this.color.third,
+	            this.color.fourth,this.color.fifth,this.color.sixth]);
 
 	var xAxis = d3.svg.axis()
 	    .scale(x)
@@ -130,7 +129,6 @@ var datagraph = {
 	    .attr("height", this.height + this.margin.top + this.margin.bottom)
 	    .append("g")
 	    .attr("transform", "translate(" + this.margin.left + "," + this.margin.top + ")");
-	
 	
 	var crumbSVG = d3.select(".breadcrumbs")
         .append("svg")
@@ -160,11 +158,35 @@ var datagraph = {
 	    });
 	}
 	
+	function getStackedStats(data,groups){
+	    //Add x0,x1 values for stacked barchart
+	    data.forEach(function (r){
+	 	    var count = 0;
+	        r.counts.forEach(function (i){
+	 		    i["x0"] = count;
+	 		    i["x1"] = i.value+count;
+	 		    if (i.value > 0){
+	 		        count = i.value;
+	 		    }
+	 		});
+	    });
+	    var lastElement = groups.length-1;
+	    data.sort(function(obj1, obj2) {
+	    	if ((obj2.counts[lastElement])&&(obj1.counts[lastElement])){
+	    	    return obj2.counts[lastElement].x1 - obj1.counts[lastElement].x1;
+	    	} else {
+	    		return 0;
+	    	}
+	    });
+	    return data;
+	}
+	
 	function drawGraph (config,data) {
 
 	    var groups = getGroups(data);
+	    data = getStackedStats(data,groups);
 	    
-	    //Add breadcrumb div
+	    //remove breadcrumb div
 	    if (!config.useCrumb){
 	    	$(".breadcrumbs").remove();
 	    }
@@ -177,6 +199,7 @@ var datagraph = {
 					    " value=\"stacked\"> Stacked</label>" +
 				"</form> ");
 	    }
+	    //Update tooltip positioning
 	    if (!config.useCrumb && groups.length>1){
 	    	config.arrowOffset.height = 96;
 	    	config.barOffset.grouped.height = 112;
@@ -200,13 +223,10 @@ var datagraph = {
         x.domain([0, xGroupMax]);
         
         //Dynamically decrease font size for large labels
-        var yFont = 'default';
-        var yLabelPos = config.yOffset;
-        var triangleDim = config.arrowDim;
 	    var confList = getYFontSize(yMax);
-	    yFont = confList[0];
-	    yLabelPos = confList[1];
-	    triangleDim = confList[2];
+	    var yFont = confList[0];
+	    var yLabelPos = confList[1];
+	    var triangleDim = confList[2];
 	    
 	    //Set x axis ticks
 	    var xTicks = svg.append("g")
@@ -229,11 +249,11 @@ var datagraph = {
 	        .attr("font-size", yFont)
             .style("cursor", "pointer")
             .on("mouseover", function(d){
-	            d3.select(this).style("fill", config.COL.yLabel.hover);
+	            d3.select(this).style("fill", config.color.yLabel.hover);
 	            d3.select(this).style("text-decoration", "underline");
 	        })
 	        .on("mouseout", function(){
-	            d3.select(this).style("fill", config.COL.yLabel.fill );
+	            d3.select(this).style("fill", config.color.yLabel.fill );
 	            d3.select(this).style("text-decoration", "none");
 	         })
             .on("click", function(d){
@@ -242,70 +262,6 @@ var datagraph = {
              })
 	        .style("text-anchor", "end")
 	        .attr("dx", yLabelPos);
-	   
-	   //Create navigation arrow
-       var navigate = svg.selectAll(".y.axis");
-       
-       var arrow = navigate.selectAll(".tick.major")
-            .data(data)
-            .append("svg:polygon")
-	        .attr("points",triangleDim)
-		    .attr("fill", config.COL.arrow.fill)
-		    .attr("display", function(d){
-		         if (d.subGraph && d.subGraph[0]){
-		             isSubClass=1; return "initial";
-		         } else {
-		             return "none";
-		         }
-		    })
-		    .on("mouseover", function(d){
-			           
-			       if (d.subGraph && d.subGraph[0]){
-			        	   
-			           d3.select(this)
-				       .style("fill", config.COL.arrow.hover);
-
-			           var coords = d3.transform(d3.select(this.parentNode).attr("transform")).translate;
-			           var h = coords[1];
-			           var w = coords[0];
-			           
-			           tooltip.style("display", "block")
-			           .html("Click to see subclasses")
-			           .style("top",h+config.arrowOffset.height+"px")
-			           .style("left",w+config.arrowOffset.width+"px");
-			           
-			       } 
-			})
-			.on("mouseout", function(){
-			    d3.select(this)
-			        .style("fill",config.COL.arrow.fill);
-			    tooltip.style("display", "none");
-			 })
-            .on("click", function(d){
-	        	   if (d.subGraph && d.subGraph[0]){
-	        		   
-	        		   tooltip.style("display", "none");
-                       svg.selectAll(".tick.major").remove();
-	        		   level++;
-	    		       transitionSubGraph(d.subGraph,groups,data);
-	    		       
-		        	   //remove old bars
-	    		       phenotype.transition()
-		   		        .duration(750)
-		   		        .attr("y", 60)
-		   		        .style("fill-opacity", 1e-6)
-		   		        .remove();
-	        		   
-	        		   rect.transition()
-		   		        .duration(750)
-		   		        .attr("y", 60)
-		   		        .style("fill-opacity", 1e-6)
-		   		        .remove();
-                       if (config.useCrumb){
-	        		       makeBreadcrumb(level,d.phenotype,groups,rect,phenotype);
-                       }
-	        	   }
-	       });
        
         //Create SVG:G element that holds groups
 	    var phenotype = svg.selectAll(".phenotype")
@@ -325,7 +281,7 @@ var datagraph = {
 	       .attr("width", function(d) { return x(d.value); })
 	       .on("mouseover", function(d){
 	           d3.select(this)
-	           .style("fill", config.COL.bar.fill);
+	           .style("fill", config.color.bar.fill);
 	           
 	           var coords = d3.transform(d3.select(this.parentNode).attr("transform")).translate;
 	           var w = coords[0];
@@ -348,6 +304,10 @@ var datagraph = {
 	        })
 	       .style("fill", function(d) { return color(d.name); });
 	    
+	    //Create navigation arrow
+        var navigate = svg.selectAll(".y.axis");
+        makeNavArrow(data,navigate,triangleDim,phenotype,rect);
+	    
 	    //Create legend
 	    makeLegend();
 	    
@@ -357,6 +317,71 @@ var datagraph = {
 	    }
 	    
 	    d3.selectAll("input").on("change", change);
+	    
+	    function makeNavArrow(data,navigate,triangleDim,phenotype,rect){
+	    	var isSubClass;
+	    	var arrow = navigate.selectAll(".tick.major")
+            .data(data)
+            .append("svg:polygon")
+	        .attr("points",triangleDim)
+		    .attr("fill", config.color.arrow.fill)
+		    .attr("display", function(d){
+		         if (d.subGraph && d.subGraph[0]){
+		             isSubClass=1; return "initial";
+		         } else {
+		             return "none";
+		         }
+		    })
+		    .on("mouseover", function(d){
+			           
+			       if (d.subGraph && d.subGraph[0]){
+			        	   
+			           d3.select(this)
+				       .style("fill", config.color.arrow.hover);
+
+			           var coords = d3.transform(d3.select(this.parentNode).attr("transform")).translate;
+			           var h = coords[1];
+			           var w = coords[0];
+			           
+			           tooltip.style("display", "block")
+			           .html("Click to see subclasses")
+			           .style("top",h+config.arrowOffset.height+"px")
+			           .style("left",w+config.arrowOffset.width+"px");
+			           
+			       } 
+			})
+			.on("mouseout", function(){
+			    d3.select(this)
+			        .style("fill",config.color.arrow.fill);
+			    tooltip.style("display", "none");
+			 })
+            .on("click", function(d){
+	        	   if (d.subGraph && d.subGraph[0]){
+	        		   
+	        		   tooltip.style("display", "none");
+                       svg.selectAll(".tick.major").remove();
+	        		   level++;
+	    		       transitionSubGraph(d.subGraph,data);
+	    		       
+		        	   //remove old bars
+	    		       phenotype.transition()
+		   		        .duration(750)
+		   		        .attr("y", 60)
+		   		        .style("fill-opacity", 1e-6)
+		   		        .remove();
+	        		   
+	        		   rect.transition()
+		   		        .duration(750)
+		   		        .attr("y", 60)
+		   		        .style("fill-opacity", 1e-6)
+		   		        .remove();
+                       if (config.useCrumb){
+	        		       makeBreadcrumb(level,d.phenotype,groups,rect,phenotype);
+                       }
+	        	   }
+	       });
+	       return isSubClass;
+	    }
 	    
 	    function makeLegend(){
 	    	//Set legend
@@ -497,7 +522,7 @@ var datagraph = {
 			level = index;
 	        superclass = parents[index];
     	    svg.selectAll(".tick.major").remove();
-	        transitionSubGraph(superclass,groups);
+	        transitionSubGraph(superclass);
 	        
 	        for (var i=(index+1); i <= parents.length; i++){
 	  	        d3.select(".bread"+i).remove();
@@ -519,11 +544,11 @@ var datagraph = {
 		    
 		    //Deactivate top level crumb
 		    d3.select(".poly"+index)
-			  .attr("fill", config.COL.crumb.top)
+			  .attr("fill", config.color.crumb.top)
 			  .on("mouseover", function(){})
 		      .on("mouseout", function(){
                  d3.select(this)
-                 .attr("fill", config.COL.crumb.top);
+                 .attr("fill", config.color.crumb.top);
 		      })
 		      .on("click", function(){});
 			
@@ -532,7 +557,7 @@ var datagraph = {
 			  .on("mouseout", function(){
 		           d3.select(this.parentNode)
 		           .select("polygon")
-	               .attr("fill", config.COL.crumb.top);
+	               .attr("fill", config.color.crumb.top);
 			  })
 			  .on("click", function(){});
 	    }
@@ -549,14 +574,14 @@ var datagraph = {
 			//Change color of previous crumb
 			if (lastIndex > -1){
 				d3.select(".poly"+lastIndex)
-				  .attr("fill", config.COL.crumb.bottom)
+				  .attr("fill", config.color.crumb.bottom)
 				  .on("mouseover", function(){
 	                  d3.select(this)
-	                  .attr("fill", config.COL.crumb.hover);
+	                  .attr("fill", config.color.crumb.hover);
 			      })
 			      .on("mouseout", function(){
 	                  d3.select(this)
-	                  .attr("fill", config.COL.crumb.bottom);
+	                  .attr("fill", config.color.crumb.bottom);
 			      })
 			      .on("click", function(){
 			          pickUpBreadcrumb(lastIndex,groups,rect,phenoDiv);
@@ -566,12 +591,12 @@ var datagraph = {
 				  .on("mouseover", function(){
 		               d3.select(this.parentNode)
 		               .select("polygon")
-		               .attr("fill", config.COL.crumb.hover);
+		               .attr("fill", config.color.crumb.hover);
 				  })
 				  .on("mouseout", function(){
 			           d3.select(this.parentNode)
 			           .select("polygon")
-		               .attr("fill", config.COL.crumb.bottom);
+		               .attr("fill", config.color.crumb.bottom);
 				  })
 				  .on("click", function(){
 				        pickUpBreadcrumb(lastIndex,groups,rect,phenoDiv);
@@ -586,7 +611,7 @@ var datagraph = {
 		        .append("svg:polygon")
 		        .attr("class",("poly"+index))
 	            .attr("points",index ? config.trailCrumbs : config.firstCr)
-			    .attr("fill", config.COL.crumb.top);
+			    .attr("fill", config.color.crumb.top);
             
             d3.select((".bread"+index))
             		.append("svg:title")
@@ -657,6 +682,7 @@ var datagraph = {
     	    
             if (yMax > 41 && yMax < 53){
         		yFont = ((1/yMax)*565);
+        		arrowDim = "-20,-5, -9,1 -20,7";
             } else if (yMax >= 53 && yMax <66){
             	yFont = ((1/yMax)*615);
             	yOffset = "-1.45em";
@@ -693,10 +719,11 @@ var datagraph = {
 		//TODO DRY - there is quite a bit of duplicated code
         //     here from the parent drawGraph() function
         //     NOTE - this will be refactored as AJAX calls
-	    function transitionSubGraph(subGraph,groups,parent) {
-	    		    	
-		    var isSubClass;
-		    var rect;
+	    function transitionSubGraph(subGraph,parent) {
+	    	
+	    	var groups = getGroups(subGraph);
+	    	subGraph = getStackedStats(subGraph,groups);
+	    	var rect;
 		    if (parent){
 		        parents.push(parent);
 		    }
@@ -718,13 +745,10 @@ var datagraph = {
 	        var yMax = getYMax(subGraph);
 		    
 	        //Dynamically decrease font size for large labels
-	        var yFont = 'default';
-	        var yLabelPos = config.yOffset;
-	        var triangleDim = config.arrowDim;
 		    var confList = getYFontSize(yMax);
-		    yFont = confList[0];
-		    yLabelPos = confList[1];
-		    triangleDim = confList[2];
+		    var yFont = confList[0];
+		    var yLabelPos = confList[1];
+		    var triangleDim = confList[2];
 		    
 		    var yTransition = svg.transition().duration(1000);
 		    yTransition.select(".y.axis").call(yAxis);
@@ -735,11 +759,11 @@ var datagraph = {
 		        .attr("font-size", yFont)
 	            .style("cursor", "pointer")
 	            .on("mouseover", function(d){
-		           d3.select(this).style("fill",config.COL.yLabel.hover);
+		           d3.select(this).style("fill",config.color.yLabel.hover);
 		           d3.select(this).style("text-decoration", "underline");		           
 		         })
 		        .on("mouseout", function(){
-		           d3.select(this).style("fill",config.COL.yLabel.fill);
+		           d3.select(this).style("fill",config.color.yLabel.fill);
 		           d3.select(this).style("text-decoration", "none");
 		           tooltip.style("display", "none");
 		        })
@@ -750,93 +774,19 @@ var datagraph = {
 	            .style("text-anchor", "end")
 	            .attr("dx", yLabelPos);
 		    
-		       var navigate = svg.selectAll(".y.axis");
-		       var arrow = navigate.selectAll(".tick.major")
-                    .data(subGraph)
-		            .append("svg:polygon")
-		            .attr("class","arr")
-			        .attr("points",triangleDim)
-		            .attr("fill",config.COL.arrow.fill)
-		            .attr("display", function(d){
-		            	if (d.subGraph && d.subGraph[0]){
-		            		isSubClass=1; return "initial";
-		                } else {
-		                	return "none";}
-		            })
-		            .on("mouseover", function(d){
-			           
-			           if (d.subGraph && d.subGraph[0]){
-			        	   
-				           d3.select(this)
-					       .style("fill", config.COL.arrow.hover);
-
-				           var coords = d3.transform(d3.select(this.parentNode).attr("transform")).translate;
-				           var h = coords[1];
-				           var w = coords[0];
-				           
-				           tooltip.style("display", "block")
-				           .html("Click to see subclasses")
-				           .style("top",h+config.arrowOffset.height+"px")
-				           .style("left",w+config.arrowOffset.width+"px");           
-			           } 
-			        })
-			       .on("mouseout", function(){
-			           d3.select(this)
-			           .style("fill",config.COL.arrow.fill);
-			           tooltip.style("display", "none");
-			        })
-		            .on("click", function(d){
-			        	   if (d.subGraph && d.subGraph[0]){
-			        		   
-			        		   tooltip.style("display", "none");
-			        		   svg.selectAll(".tick.major").remove();
-			        		   level++;
-			        		   transitionSubGraph(d.subGraph,groups,subGraph);
-			        		   
-				        	   //remove old bars
-			    		       phenotype.transition()
-				   		        .duration(750)
-				   		        .attr("y", 60)
-				   		        .style("fill-opacity", 1e-6)
-				   		        .remove();
-			        		   
-			        		   rect.transition()
-				   		        .duration(750)
-				   		        .attr("y", 60)
-				   		        .style("fill-opacity", 1e-6)
-				   		        .remove();
-			        		   
-			        		   if (config.useCrumb){
-			        		       makeBreadcrumb(level,d.phenotype,groups,rect,phenotype);
-			        		   }
-			        	   }
-			       });
-		       
-		       if (!isSubClass){
-		    	   svg.selectAll("polygon.arr").remove();
-		    	   svg.select(".y.axis")
-			           .selectAll("text")
-			           .attr("dx","0")
-		    	       .on("mouseover", function(d){
-			               d3.select(this).style("fill",config.COL.yLabel.hover);
-			               d3.select(this).style("text-decoration", "underline");			           
-			         });
-		       }
-
-			    var phenotype = svg.selectAll(".phenotype")
-			        .data(subGraph)
-			        .enter().append("svg:g")
-			        .attr("class", ("bar"+level))
-			      	.attr("transform", function(d) { return "translate(0," + y0(d.phenotype) + ")"; });
+			var phenotype = svg.selectAll(".phenotype")
+			    .data(subGraph)
+			    .enter().append("svg:g")
+			    .attr("class", ("bar"+level))
+			    .attr("transform", function(d) { return "translate(0," + y0(d.phenotype) + ")"; });
 
 		    if ($('input[name=mode]:checked').val()=== 'grouped' || groups.length == 1) {
 			    	  
 		        x.domain([0, xGroupMax]);
 		    
 		        var xTransition = svg.transition().duration(1000);
-		        xTransition.select(".x.axis")
-		        //.attr("transform", "translate(0," + height + ")")
-		        .call(xAxis);
+		            xTransition.select(".x.axis")
+		            .call(xAxis);
 		    
 	            rect = phenotype.selectAll("g")
 	                .data(function(d) { return d.counts; })
@@ -848,7 +798,7 @@ var datagraph = {
 	                .attr("width", function(d) { return x(d.value); })
 	                .on("mouseover", function(d){
 	 	                d3.select(this)
-		                  .style("fill",config.COL.bar.fill);
+		                  .style("fill",config.color.bar.fill);
 	 	                
 	 		            var coords = d3.transform(d3.select(this.parentNode).attr("transform")).translate;
 	 		            var w = coords[0];
@@ -874,9 +824,8 @@ var datagraph = {
 		        y1.domain(groups).rangeRoundBands([0,0]);
 				    
 				var xTransition = svg.transition().duration(1000);
-				xTransition.select(".x.axis")
-				//.attr("transform", "translate(0," + height + ")")
-				.call(xAxis);
+				    xTransition.select(".x.axis")
+				    .call(xAxis);
 				    
 			    rect = phenotype.selectAll("g")
 			        .data(function(d) { return d.counts; })
@@ -895,7 +844,7 @@ var datagraph = {
 			        .attr("y", function(d) { return y1(d.name); })
 			        .on("mouseover", function(d){
 		               d3.select(this)
-		               .style("fill", config.COL.bar.fill);
+		               .style("fill", config.color.bar.fill);
 		           
 		               
 					    var coords = d3.transform(d3.select(this.parentNode).attr("transform")).translate;
@@ -918,6 +867,20 @@ var datagraph = {
 		        })
 		        .style("fill", function(d) { return color(d.name); });
 	        }
+		    
+	        var navigate = svg.selectAll(".y.axis");
+		    var isSubClass = makeNavArrow(subGraph,navigate,triangleDim,phenotype,rect);
+		       
+		    if (!isSubClass){
+		    	svg.selectAll("polygon.arr").remove();
+		    	svg.select(".y.axis")
+			        .selectAll("text")
+			        .attr("dx","0")
+		    	    .on("mouseover", function(d){
+			               d3.select(this).style("fill",config.color.yLabel.hover);
+			               d3.select(this).style("text-decoration", "underline");			           
+			         });
+		    }
 		    
 		    d3.selectAll("input").on("change", change);
 
