@@ -72,9 +72,8 @@ META NOTE (HSH - 8/25/2014): Can we remove this note, or at least clarify?
 
     config: {
         comparisonType : "genes",
-        h : 0,
+        h : 490,
         inputPhenotypeData : [],	
-		modelDisplayCount : 30,
 		multiOrgModelLimit: 750,
 		multiOrgModelCt: [{ taxon: "9606", count: 10},
 						  { taxon: "10090", count: 10},
@@ -96,6 +95,8 @@ META NOTE (HSH - 8/25/2014): Can we remove this note, or at least clarify?
 		colorScaleB: undefined,
 		colorScaleR: undefined,
 		colStartingPos: 10,
+		modelDisplayCount : 30,
+	    phenotypeDisplayCount : 26,
 		combinedModelData : [],
 		combinedModelList : [],
 		currModelIdx : 0,
@@ -161,6 +162,7 @@ META NOTE (HSH - 8/25/2014): Can we remove this note, or at least clarify?
 		humandata : undefined,
 		mousedata : undefined,
 		zfishdata : undefined,
+		headerAreaHeight: 130,
 	},
 	   		
 		//reset option values if needed before reloading data
@@ -218,6 +220,18 @@ META NOTE (HSH - 8/25/2014): Can we remove this note, or at least clarify?
 
 	},
 	
+	//this function will use the desired height to determine how many phenotype rows to display
+	//the basic formula is: (height - headerAreaHeight)/14.
+	//return -1 if the available space is too small to properly display the grid   
+	_calcPhenotypeDisplayCount: function() {
+		var self = this;
+		var pCount = Math.round((self.state.h - self.state.headerAreaHeight) / 14);
+		if (pCount < 10) {
+		   pCount = -1;
+		}
+		return pCount;
+	},
+	
 	
 	//NOTE: I'm not too sure what the default init() method signature should be
 	//given an imageDiv and phenotype_data list
@@ -244,6 +258,7 @@ META NOTE (HSH - 8/25/2014): Can we remove this note, or at least clarify?
 	
 	_init: function() {
 	    
+	    this.state.phenotypeDisplayCount = this._calcPhenotypeDisplayCount();
 		//save a copy of the original phenotype data
 		this.state.origPhenotypeData = this.state.phenotypeData.slice();
 		this._setTargetSpeciesName(this.state.targetSpecies);
@@ -251,7 +266,7 @@ META NOTE (HSH - 8/25/2014): Can we remove this note, or at least clarify?
 		this._setSelectedSort(this.state.selectedSort);
 		this.state.yTranslation =(this.state.targetSpecies == '9606') ? 0 : 0;
 		this.state.w = this.state.m[1]-this.state.m[3];
-	    this.state.h = 1300 -this.state.m[0]-this.state.m[2];
+
 	    this.state.currModelIdx = this.state.modelDisplayCount-1;
 	    this.state.currPhenotypeIdx = this.state.phenotypeDisplayCount-1;
 		this.state.phenotypeLabels = this._filterPhenotypeLabels(this.state.phenotypeData);
@@ -270,28 +285,7 @@ META NOTE (HSH - 8/25/2014): Can we remove this note, or at least clarify?
 		this._filterData(modData.slice());
 		this.state.unmatchedPhenotypes = this._getUnmatchedPhenotypes();
 		
-	    if ((this.state.combinedModelData.length != 0) ||
-		    (modData.length != 0 && this.state.phenotypeData.length != 0 && this.state.filteredPhenotypeData.length != 0)){	    
-	         
-	            //this._createYAxis();
-	    	    //just pad the overall height by a skosh...
-	    	    this.state.h = this.state.yAxisMax + 60;
-	            this._initCanvas(); 
-				this._addLogoImage();	        
-	            this.state.svg
-					.attr("width", "100%")
-					.attr("height", 480); //this.state.h - 20 + this.state.yTranslation);
-				this._createAccentBoxes();				
-	            //this._createScrollBars();
-	        this._createColorScale();
-		this._createModelRegion();
-	    	this._updateAxes();
-		this._createGridlines();
-	    	this._createModelRects();
-	         this._createRects();			
-	    	//this._updateScrollCounts();
-		this._createOverviewSection();
-	    } 
+	    this._reDraw(); 
 	},
 
 	_copyDefaultState: function() {
@@ -301,6 +295,34 @@ META NOTE (HSH - 8/25/2014): Can we remove this note, or at least clarify?
 	    this.state.selectedLabel = this.options.defaultelectedLabel;
 	    this.state.selectedSort = this.options.defaultSelectedSort;
 	    this.state.selectedSorder = this.options.defaultSelectedOrder;
+	},
+	
+	_reDraw: function() {
+	    if ((this.state.combinedModelData.length != 0) ||
+		    (modData.length != 0 && this.state.phenotypeData.length != 0 && this.state.filteredPhenotypeData.length != 0)){	    
+	         
+	            this._initCanvas(); 
+				this._addLogoImage();	        
+	            this.state.svg
+					.attr("width", "100%")
+//					.attr("height", 480); //this.state.h - 20 + this.state.yTranslation);
+					.attr("height", this.state.phenotypeDisplayCount * 18);
+				this._createAccentBoxes();				
+	        this._createColorScale();
+		this._createModelRegion();
+	    	this._updateAxes();
+		this._createGridlines();
+	    	this._createModelRects();
+	         this._createRects();			
+		this._createOverviewSection();
+	    } 
+	
+	},
+	
+	_resetIndicies: function() {
+	    this.state.currModelIdx = this.state.modelDisplayCount-1;
+	    this.state.currPhenotypeIdx = this.state.phenotypeDisplayCount-1;
+	
 	},
 
 	    
@@ -2119,6 +2141,7 @@ META NOTE (HSH - 8/25/2014): Can we remove this note, or at least clarify?
 		}
 		
 		this.state.h = (data.length*2.5);
+
 		self.state.yScale = d3.scale.ordinal()
 			.domain(data.map(function (d) {return d.id_a; }))
 		.range([0,data.length])
@@ -2128,107 +2151,7 @@ META NOTE (HSH - 8/25/2014): Can we remove this note, or at least clarify?
 		self.state.svg.selectAll("#rect.accent").attr("height", self.state.h);
 	},
 
-	_createScrollBars: function() {
-		var self = this;
-		//show the vertical scrollbar if necessary
-		if (this.state.phenotypeData.length > this.state.phenotypeDisplayCount) {
-			var xpos = self.state.axis_pos_list[2] - 20;
-			var ypos = self.state.yAxisMax -16;
-			var vert_slider_background = this.state.svg.append("svg:rect")
-				.attr("class", "vert_slider")
-				.attr("x", xpos)
-				.attr("width", 16)
-				.attr("y", this.state.yoffset+ 18)
-				.attr("height", this.state.h - (this.state.yoffset+ 50))
-				.attr("fill", "lightgrey");
-			
-			var rect_slider_up = this.state.svg.append("svg:image")
-				.attr("class", "vert_slider")
-				.attr("x", xpos)
-				.attr("width", 16)
-				.attr("y", this.state.yoffset+ 18)
-				.attr("height", 16)
-				.on("click", function(d) {
-					self._clickPhenotypeSlider(-1);
-				})
-			    .attr("xlink:href","/widgets/modeltype/image/up_arrow.png");
-				
-			var rect_slider_down = this.state.svg.append("svg:image")
-				.attr("class", "vert_slider")
-				.attr("x", xpos)
-				.attr("width", 16)
-				.attr("y", this.state.yAxisMax +18)
-				.attr("height", 16)
-				.on("click", function(d) {
-					self._clickPhenotypeSlider(1);
-				})
-			    .attr("xlink:href","/widgets/modeltype/image/down_arrow.png");
-		}
-		//show the model scrollbar if necessary
-		if (this.state.modelList.length > this.state.modelDisplayCount) {
-			var xpos = self.state.axis_pos_list[1] -5;
-			var xpos2 = self.state.axis_pos_list[2] - 37;
-			var horz_slider_background = this.state.svg.append("svg:rect")
-				.attr("class", "horz_slider")
-				.attr("x", xpos)
-				.attr("width", xpos2-xpos)
-				.attr("y", this.state.yAxisMax+ 33)
-				.attr("height", 16)
-				.attr("fill", "lightgrey");
-		
-			var rect_slider_left = this.state.svg.append("svg:image")
-				.attr("class", "horz_slider")
-				.attr("x", xpos)
-				.attr("width", 16)
-				.attr("y", this.state.yAxisMax+ 33)
-				.attr("height", 16)
-				.on("click", function(d) {
-					self._clickModelSlider(-1);
-				})
-			    .attr("xlink:href","/widgets/modeltype/image/left_arrow.png");
-					
-			var rect_slider_right = this.state.svg.append("svg:image")
-				.attr("class", "horz_slider")
-				.attr("x", xpos2)
-				.attr("width", 16)
-				.attr("y", this.state.yAxisMax+ 33)
-				.attr("height", 16)
-				.on("click", function(d) {
-					self._clickModelSlider(1);
-				})
-			    .attr("xlink:href","/widgets/modeltype/image/right_arrow.png");
-		}
-	},
 	
-	//change the text shown on the screen as the scrollbars are used
-	_updateScrollCounts: function() {
-		this.state.svg.selectAll(".scroll_text").remove();
-	
-	//account for a grid with less than 14 phenotypes
-		var y1 = 257,
-			y2 = 273;
-		if (this.state.filteredPhenotypeData.length < 14) {y1 = 172; y2 = 188;}
-		
-		
-		var startModelIdx = (this.state.currModelIdx - this.state.modelDisplayCount) + 2;
-		var max_count = ((this.state.modelDisplayCount + startModelIdx) >= this.state.modelList.length) ? this.state.modelList.length : this.state.modelDisplayCount + startModelIdx; 
-		var display_text = "Matches [" + startModelIdx + "-"+ max_count + "] out of " + (this.state.modelList.length);
-		var div_text = this.state.svg.append("svg:text")
-			.attr("class", "scroll_text")
-			.attr("x", this.state.axis_pos_list[2] +45)
-			.attr("y", y1 + this.state.yTranslation)
-			.text(display_text);
-		
-		var startPhenIdx = (this.state.currPhenotypeIdx - this.state.phenotypeDisplayCount) + 2
-		;
-		var max_count = ((this.state.phenotypeDisplayCount + startPhenIdx) >= this.state.phenotypeData.length) ? this.state.phenotypeData.length : this.state.phenotypeDisplayCount + startPhenIdx ; 
-		var display_text = "Phenotypes [" + startPhenIdx + "-"+ max_count + "] out of " + (this.state.phenotypeData.length);
-		var div_text = this.state.svg.append("svg:text")
-			.attr("class", "scroll_text")
-			.attr("x", this.state.axis_pos_list[2] +45)
-			.attr("y", y2  + this.state.yTranslation)
-			.text(display_text);
-	},
 	
 	//NOTE: FOR FILTERING IT MAY BE FASTER TO CONCATENATE THE PHENOTYPE and MODEL into an attribute
 	
@@ -2402,7 +2325,6 @@ META NOTE (HSH - 8/25/2014): Can we remove this note, or at least clarify?
 		
 	    this._createModelRects();
 	    this._createRects();
-	    //this._updateScrollCounts();
 	},
 	
 	_showDialog : function( dname ) {				
@@ -2958,12 +2880,6 @@ META NOTE (HSH - 8/25/2014): Can we remove this note, or at least clarify?
 			});
 	    
 		
-	},
-	
-	update: function() {
-		this._updateAxes();
-		this._createRects();
-		this._createModelRects();
 	},
 
 	//this code creates the text and rectangles containing the text 
