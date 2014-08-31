@@ -76,17 +76,17 @@ META NOTE (HSH - 8/25/2014): Can we remove this note, or at least clarify?
         inputPhenotypeData : [],	
 		multiOrgModelLimit: 750,
 		multiOrgModelCt: [{ taxon: "9606", count: 10},
-						  { taxon: "10090", count: 10},
-						  { taxon: "7955", count: 10},
-						  { taxon: "7227", count: 0}],
-	    phenotypeDisplayCount : 26,
-		serverURL : "",
-		targetSpeciesList : [{ name: "Homo sapiens", taxon: "9606", color: 'rgb(25,59,143)'}, 
-							 { name: "Mus musculus", taxon: "10090", color: 'rgb(70,19,19)'},
-							 { name: "Danio rerio", taxon: "7955", color: 'rgb(1,102,94)'}, 
-							 { name: "Drosophila melanogaster", taxon: "7227", color:'purple'} , 
-							 { name: "Overview", taxon: "2"}], //, {name: "All", taxon: "1"}],
-		w : 0,
+				  { taxon: "10090", count: 10},
+				  { taxon: "7955", count: 10},
+				  { taxon: "7227", count: 0}],
+	phenotypeDisplayCount : 26,
+	serverURL : "",
+	targetSpeciesList : [{ name: "Homo sapiens", taxon: "9606", color: 'rgb(25,59,143)'}, 
+			     { name: "Mus musculus", taxon: "10090", color: 'rgb(70,19,19)'},
+			     { name: "Danio rerio", taxon: "7955", color: 'rgb(1,102,94)'}, 
+			     { name: "Drosophila melanogaster", taxon: "7227", color:'purple'} , 
+			     { name: "Overview", taxon: "2"}], //, {name: "All", taxon: "1"}],
+	w : 0,
     },
     
 	options:   {
@@ -130,12 +130,11 @@ META NOTE (HSH - 8/25/2014): Can we remove this note, or at least clarify?
 		phenotypeLabels : [],
 		phenotypeSortData: [],
 		scriptpath : $('script[src]').last().attr('src').split('?')[0].split('/').slice(0, -1).join('/')+'/',
-		defaultSelectedCalculation: 0,
+		selectedCalculation: 0,
 		selectedColumn: undefined,
-		defaultSelectedLabel: "Default",
-		defultSelectedOrder: 0,
+		selectedLabel: "Default",
 		selectedRow: undefined,
-		defaultSelectedSort: "Frequency",
+		selectedSort: "Frequency",
 		selectList: [{label: "Distance", calc: 0}, {label: "Ratio (q)", calc: 1}, {label: "Ratio (t)", calc: 3} , {label: "Uniqueness", calc: 2}],
 		selectRectHeight : 0,
 		selectRectWidth : 0,
@@ -145,8 +144,8 @@ META NOTE (HSH - 8/25/2014): Can we remove this note, or at least clarify?
 		sortList: [{type: "Alphabetic", order: 0},{type: "Frequency and Rarity", order:1} ,{type: "Frequency", order:2} ],	    
 		speciesList : [],		
 	    svg: undefined,
-		defaultTargetSpecies: "2",
-	    defaultTargetSpeciesName : "Overview",
+		targetSpecies: "2",
+	    targetSpeciesName : "Overview",
 		textLength: 34,
 		textWidth: 200,
 		unmatchedPhenotypes: [],
@@ -164,10 +163,13 @@ META NOTE (HSH - 8/25/2014): Can we remove this note, or at least clarify?
 		zfishdata : undefined,
 		headerAreaHeight: 130,
 	},
-	   		
-		//reset option values if needed before reloading data
+	
+	//reset option values if needed before reloading data
+	// eventually, reset will work away from recopying this.options, instead
+	// handling only those variables that convey manipulable state..
 	_reset: function() {
 			var self = this;
+	    // saving a couple of things for later..
 
 			self.options.currModelIdx = 0;
 			self.options.currPhenotypeIdx = 0;						
@@ -210,6 +212,14 @@ META NOTE (HSH - 8/25/2014): Can we remove this note, or at least clarify?
 			self.options.mousedata = undefined;
 			self.options.speciesList = [];
 			self.options.zfishdata = undefined;
+
+	                // copying stuff that I need to have handled correctly when I reset the 
+	              // state. this  will disappear when we no longer need the $.extend()
+	              self.options.targetSpecies = this.state.targetSepecies;
+	              self.options.targetSpeciesName = this.state.targetSpeciesName;
+	              self.options.selectedCalculation = this.state.selectedCalculation;
+	              self.options.selectedLabel = this.state.selectedLabel;
+	              self.options.selectedSort = this.state.selectedSort;
 			
 			//starting arrays:
 			//self.options.modelData = [];
@@ -251,9 +261,9 @@ META NOTE (HSH - 8/25/2014): Can we remove this note, or at least clarify?
 			 configoptions = d;
 			 }
 		     });
-	    $.extend(true,this.options,configoptions);
+	    /** check these */
+	    $.extend(true,{},this.options,configoptions);
 	    this.state = $.extend(true,{},this.options,this.config);
-	    this._copyDefaultState();
 	},
 	
 	_init: function() {
@@ -262,7 +272,8 @@ META NOTE (HSH - 8/25/2014): Can we remove this note, or at least clarify?
 		//save a copy of the original phenotype data
 		this.state.origPhenotypeData = this.state.phenotypeData.slice();
 		this._setTargetSpeciesName(this.state.targetSpecies);
-		this._setSelectedCalculation(this.state.selectedCalculation);
+
+	    this._setSelectedCalculation(this.state.selectedCalculation);
 		this._setSelectedSort(this.state.selectedSort);
 		this.state.yTranslation =(this.state.targetSpecies == '9606') ? 0 : 0;
 		this.state.w = this.state.m[1]-this.state.m[3];
@@ -288,15 +299,7 @@ META NOTE (HSH - 8/25/2014): Can we remove this note, or at least clarify?
 	    this._reDraw(); 
 	},
 
-	_copyDefaultState: function() {
-	    this.state.targetSpecies = this.options.defaultTargetSpecies;
-	    this.state.targetSpeciesName = this.options.targetSpeciesName;
-	    this.state.selectedCalculation = this.options.defaultSelectedCalculation;
-	    this.state.selectedLabel = this.options.defaultelectedLabel;
-	    this.state.selectedSort = this.options.defaultSelectedSort;
-	    this.state.selectedSorder = this.options.defaultSelectedOrder;
-	},
-	
+
 	_reDraw: function() {
 	    if ((this.state.combinedModelData.length != 0) ||
 		    (modData.length != 0 && this.state.phenotypeData.length != 0 && this.state.filteredPhenotypeData.length != 0)){	    
@@ -368,8 +371,6 @@ META NOTE (HSH - 8/25/2014): Can we remove this note, or at least clarify?
 				$("#errmsg").remove();
 			        d3.select("#svg_area").remove();
 
-			    /*** HSH 20140825 MUST BE CHANGED !!!! - I think I have it.*/
-			    
 				self.state.phenotypeData = self.state.origPhenotypeData.slice();
 				self.state.targetSpecies =  '2';
 				self._reset();
@@ -734,7 +735,6 @@ META NOTE (HSH - 8/25/2014): Can we remove this note, or at least clarify?
 	    });
 
 		self.state.selectedSort = tempdata[0].type;
-		self.state.selectedOrder = tempdata[0].order;
 	},
 
 	//given the full dataset, return a filtered dataset containing the
@@ -785,10 +785,11 @@ META NOTE (HSH - 8/25/2014): Can we remove this note, or at least clarify?
 		//Alphabetic: sorted alphabetically
 		//Frequency and Rarity: sorted by the sum of each phenotype across all models
 		//Frequency: sorted by the count of number of model matches per phenotype
+	        console.log("selecting sort based on "+this.state.selectedSort);
 		switch(this.state.selectedSort) {
 			case "Alphabetic":  this._alphabetizePhenotypes();
 								break;
-			case "Frequency and Uniqueness":    this._rankPhenotypes();
+			case "Frequency and Rarity":    this._rankPhenotypes();
 								break;
 			case "Frequency": this._sortByModelMatches();
 								break;
@@ -854,6 +855,7 @@ META NOTE (HSH - 8/25/2014): Can we remove this note, or at least clarify?
 	//4. Sort the array by matches. descending
 	_sortByModelMatches: function() {
 		
+	        console.log("calling sort by model matches..");
 		var self = this;
 		var modelDataForSorting = [];
 		if (this.state.targetSpeciesName == "Overview") {
@@ -901,6 +903,7 @@ META NOTE (HSH - 8/25/2014): Can we remove this note, or at least clarify?
 	//3. Get the sum of all of this phenotype's LCS scores and add to array
 	//4. Sort the array by sums. descending
 	_rankPhenotypes: function() {
+	         console.log("calling rank phenotypes....");
 		
 		var self = this;
 		var modelDataForSorting = [],
@@ -951,7 +954,7 @@ META NOTE (HSH - 8/25/2014): Can we remove this note, or at least clarify?
 	//3. Get the sum of all of this phenotype's LCS scores and add to array
 	//4. Sort the array by sums. descending
 	_alphabetizePhenotypes: function() {
-		
+		console.log("calling alphabetize phenotypes..");
 		var self = this;
 		var modelDataForSorting = [],
 			modData = [];
@@ -1468,9 +1471,6 @@ META NOTE (HSH - 8/25/2014): Can we remove this note, or at least clarify?
     		if (self.state.sortList[idx].type === self.state.selectedSort) {
     			selecteditem = "selected";
     		}
-			if (self.state.sortList[idx].order  === self.state.selectedOrder) {
-    			selecteditem = "selected";
-    		}
 			optionhtml = optionhtml + "<option value='" + self.state.sortList[idx].order +"' "+ selecteditem +">" + self.state.sortList[idx].type +"</option>"
 		}
 		
@@ -1490,8 +1490,7 @@ META NOTE (HSH - 8/25/2014): Can we remove this note, or at least clarify?
         $( "#sortphenotypes" ).change(function(d) {
 	    //this._showThrobber();
         	self.state.selectedSort = self.state.sortList[d.target.selectedIndex].type;
-        	self.state.selectedOrder = self.state.sortList[d.target.selectedIndex].order;
-			self._resetSelections();
+	    self._resetSelections();
         });
 			
 		this.element.append("<svg id='svg_area'></svg>");		
