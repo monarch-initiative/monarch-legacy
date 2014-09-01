@@ -70,17 +70,18 @@ META NOTE (HSH - 8/25/2014): Can we remove this note, or at least clarify?
     
     $.widget("ui.modeltype", {
 
+	// core commit. Not changeable by options. 
     config: {
         comparisonType : "genes",
         h : 490,
-        inputPhenotypeData : [],	
 		multiOrgModelLimit: 750,
 		multiOrgModelCt: [{ taxon: "9606", count: 10},
 				  { taxon: "10090", count: 10},
 				  { taxon: "7955", count: 10},
 				  { taxon: "7227", count: 0}],
-	phenotypeDisplayCount : 26,
 	serverURL : "",
+	selectList: [{label: "Distance", calc: 0}, {label: "Ratio (q)", calc: 1}, {label: "Ratio (t)", calc: 3} , {label: "Uniqueness", calc: 2}],
+	sortList: [{type: "Alphabetic", order: 0},{type: "Frequency and Rarity", order:1} ,{type: "Frequency", order:2} ],	    
 	targetSpeciesList : [{ name: "Homo sapiens", taxon: "9606", color: 'rgb(25,59,143)'}, 
 			     { name: "Mus musculus", taxon: "10090", color: 'rgb(70,19,19)'},
 			     { name: "Danio rerio", taxon: "7955", color: 'rgb(1,102,94)'}, 
@@ -90,65 +91,37 @@ META NOTE (HSH - 8/25/2014): Can we remove this note, or at least clarify?
     },
     
 	options:   {
-	    axis_pos_list: [],
-		clickedData: undefined, 
+	    /// good - legit options
 		colorScaleB: undefined,
 		colorScaleR: undefined,
 		colStartingPos: 10,
 		modelDisplayCount : 30,
 	    phenotypeDisplayCount : 26,
-		combinedModelData : [],
-		combinedModelList : [],
-		currModelIdx : 0,
-	    currPhenotypeIdx : 0,
-		currSelectedRect: undefined,
 	    detailRectWidth: 240,   
         detailRectHeight: 140,
         detailRectStrokeWidth: 3,
 	    dimensions: [ "Phenotype Profile", "Lowest Common Subsumer", "Phenotypes in common" ], 
 		drag: undefined,
-		filteredHumanModelData: [],
-	    filteredModelData: [],
-		filteredModelList: [],
-	    filteredPhenotypeData: [],
-		filteredFullModelData: [],
-		filteredFullPhenotypeData: [],
-		filteredOtherModelData: [],
 	    globalViewWidth : 110,
 	    globalViewHeight : 110,	
-		highlightRect: undefined,
 	    m :[ 30, 10, 10, 10 ], 
-		maxICScore : 0,
-	    modelData: [],
-	    modelList: [],
+
 	    modelWidth: undefined,
 		multiOrganismCt: 10,
 		orangeHighlight: "#ea763b",
-		orgModelList: [],
-		origPhenotypeData: [],
-		phenotypeData: [],
-		phenotypeLabels : [],
-		phenotypeSortData: [],
 		scriptpath : $('script[src]').last().attr('src').split('?')[0].split('/').slice(0, -1).join('/')+'/',
-		selectedCalculation: 0,
-		selectedColumn: undefined,
-		selectedLabel: "Default",
-		selectedRow: undefined,
+		
+	    // selectedCalculation and selectedSort  we should keep
+	        selectedCalculation: 0,
 		selectedSort: "Frequency",
-		selectList: [{label: "Distance", calc: 0}, {label: "Ratio (q)", calc: 1}, {label: "Ratio (t)", calc: 3} , {label: "Uniqueness", calc: 2}],
 		selectRectHeight : 0,
 		selectRectWidth : 0,
 		smallestModelWidth: 400,
 		smallXScale: undefined,
 	    smallYScale: undefined,	
-		sortList: [{type: "Alphabetic", order: 0},{type: "Frequency and Rarity", order:1} ,{type: "Frequency", order:2} ],	    
-		speciesList : [],		
-	    svg: undefined,
-		targetSpecies: "2",
 	    targetSpeciesName : "Overview",
 		textLength: 34,
 		textWidth: 200,
-		unmatchedPhenotypes: [],
 	    xScale: undefined, 
 		yAxis: [],
 		yAxisMax : 0,
@@ -156,11 +129,6 @@ META NOTE (HSH - 8/25/2014): Can we remove this note, or at least clarify?
 		yoffsetOver: 0,
 	    yScale: undefined,	
 		yTranslation: 0,
-		//Overview data
-		flydata : undefined,
-		humandata : undefined,
-		mousedata : undefined,
-		zfishdata : undefined,
 		headerAreaHeight: 130,
 	},
 	
@@ -171,14 +139,9 @@ META NOTE (HSH - 8/25/2014): Can we remove this note, or at least clarify?
 			var self = this;
 	    // saving a couple of things for later..
 
-			self.options.currModelIdx = 0;
-			self.options.currPhenotypeIdx = 0;						
 			self.options.globalViewWidth = 110;
 			self.options.globalViewHeight = 110;			
-			self.options.maxICScore = 0;			
-			self.options.modelDisplayCount = 30;
 			self.options.modelWidth = undefined;			
-			self.options.phenotypeDisplayCount = 26;
 			self.options.selectRectHeight = 0;
 			self.options.smallXScale = undefined;
 			self.options.smallYScale = undefined;
@@ -192,41 +155,51 @@ META NOTE (HSH - 8/25/2014): Can we remove this note, or at least clarify?
 			self.options.yTranslation = undefined;
 			
 			//reset data arrays
-			self.options.combinedModelData = [];
-			self.options.combinedModelList = [];
-			self.options.filteredFullModelData = [];
-			self.options.filteredFullPhenotypeData = [];
-			self.options.filteredHumanModelData = [];
-			self.options.filteredModelData = [];
-			self.options.filteredModelList = [];
-			self.options.filteredOtherModelData = [];
-			self.options.filteredPhenotypeData = [];
-			self.options.modelData = [];
-			self.options.modelList = [];
-			self.options.orgModelList = [];
-			self.options.phenotypeSortData = [];	
-
+//	                self.options.speciesList = [];
 			//Overview data
-			self.options.flydata = undefined;
-			self.options.humandata = undefined;
-			self.options.mousedata = undefined;
-			self.options.speciesList = [];
-			self.options.zfishdata = undefined;
-
+		
 	                // copying stuff that I need to have handled correctly when I reset the 
 	              // state. this  will disappear when we no longer need the $.extend()
-	              self.options.targetSpecies = this.state.targetSepecies;
 	              self.options.targetSpeciesName = this.state.targetSpeciesName;
 	              self.options.selectedCalculation = this.state.selectedCalculation;
 	              self.options.selectedLabel = this.state.selectedLabel;
 	              self.options.selectedSort = this.state.selectedSort;
-			
-			//starting arrays:
-			//self.options.modelData = [];
-			//self.options.modelList = [];
-			//self.options.filteredPhenotypeData = [];
-	    // we want to overwrite all options in state , so don't pass in true for a recursive merge
+
+	    // We want to overwrite all options in state , so don't pass in true for a recursive merge
 	    this.state = $.extend(this.state,self.options,self.config);
+
+	    this.state.combinedModelData  = [];
+	    this.state.combinedModelList = [];
+
+	    // hardcode alert -these should not be hardwired! 
+	    this.state.flydata = undefined;
+	    this.state.humandata = undefined;
+	    this.state.mousedata = undefined;
+	    this.state.zfishdata = undefined;
+
+	    this.state.filteredModelData =  [];
+	    this.state.filteredModelList = [];
+
+	    this.state.filteredFullModelData = [];
+	    this.state.filteredFullPhenotypeData = [];
+	    this.state.filteredOtherModelData = [];
+
+	    this.state.modelData = [];
+	    this.state.modelList = [];
+
+	    this.state.filteredPhenotypeData = [];
+
+	    this.state.axis_pos_list  = [];
+
+	    this.state.currModelIdx = 0;
+	    this.state.currPhenotypeIdx = 0;
+	    this.currSelectedRect = undefined;
+
+	    this.state.orgModelList = [];
+
+	    this.state.phenotypeSortData = [];
+//	    this.state.unmatchedPhenotypes = [];
+	    console.log("reset... target species is..."+this.state.targetSpeciesName);
 
 	},
 	
@@ -264,6 +237,9 @@ META NOTE (HSH - 8/25/2014): Can we remove this note, or at least clarify?
 	    /** check these */
 	    $.extend(true,{},this.options,configoptions);
 	    this.state = $.extend(true,{},this.options,this.config);
+	    // will this work?
+	    this._reset();
+	    // other state initialization
 	},
 	
 	_init: function() {
@@ -271,11 +247,10 @@ META NOTE (HSH - 8/25/2014): Can we remove this note, or at least clarify?
 	    this.state.phenotypeDisplayCount = this._calcPhenotypeDisplayCount();
 		//save a copy of the original phenotype data
 		this.state.origPhenotypeData = this.state.phenotypeData.slice();
-		this._setTargetSpeciesName(this.state.targetSpecies);
 
 	    this._setSelectedCalculation(this.state.selectedCalculation);
 		this._setSelectedSort(this.state.selectedSort);
-		this.state.yTranslation =(this.state.targetSpecies == '9606') ? 0 : 0;
+		this.state.yTranslation =(this.state.targetSpeciesName == 'Homo sapiens') ? 0 : 0;
 		this.state.w = this.state.m[1]-this.state.m[3];
 
 	    this.state.currModelIdx = this.state.modelDisplayCount-1;
@@ -367,13 +342,14 @@ META NOTE (HSH - 8/25/2014): Can we remove this note, or at least clarify?
 					
 		var btn = d3.selectAll("#button")
 			.on("click", function(d,i){
+			    console.log("in button");
 				$("#return").remove();
 				$("#errmsg").remove();
 			        d3.select("#svg_area").remove();
 
 				self.state.phenotypeData = self.state.origPhenotypeData.slice();
-				self.state.targetSpecies =  '2';
 				self._reset();
+			        self.state.targetSpeciesName ="Overview";
 				self._init();
 		});
 	},
@@ -683,12 +659,13 @@ META NOTE (HSH - 8/25/2014): Can we remove this note, or at least clarify?
 	},
 	
 	_setComparisonType : function(comp){
+	    console.log("in set Comparison type");
 		var self = this;
 		
 		if (comp != undefined || comp != null)
 			{ this.state.comparisonType = comp + "s";}
 		else {
-			if (this.state.targetSpecies === "9606") {
+			if (this.state.targetSpeciesName === "Homo sapiens") {
 				this.state.comparisonType = "models";
 			}
 			else {
@@ -714,7 +691,6 @@ META NOTE (HSH - 8/25/2014): Can we remove this note, or at least clarify?
 			}
 	    }	    
 	    self.state.targetSpeciesName = tempdata.name;
-	    self.state.targetSpecies = tempdata.taxon;
 	},
 
 	_setSelectedCalculation: function(calc) {
@@ -785,7 +761,6 @@ META NOTE (HSH - 8/25/2014): Can we remove this note, or at least clarify?
 		//Alphabetic: sorted alphabetically
 		//Frequency and Rarity: sorted by the sum of each phenotype across all models
 		//Frequency: sorted by the count of number of model matches per phenotype
-	        console.log("selecting sort based on "+this.state.selectedSort);
 		switch(this.state.selectedSort) {
 			case "Alphabetic":  this._alphabetizePhenotypes();
 								break;
@@ -855,7 +830,6 @@ META NOTE (HSH - 8/25/2014): Can we remove this note, or at least clarify?
 	//4. Sort the array by matches. descending
 	_sortByModelMatches: function() {
 		
-	        console.log("calling sort by model matches..");
 		var self = this;
 		var modelDataForSorting = [];
 		if (this.state.targetSpeciesName == "Overview") {
@@ -903,7 +877,6 @@ META NOTE (HSH - 8/25/2014): Can we remove this note, or at least clarify?
 	//3. Get the sum of all of this phenotype's LCS scores and add to array
 	//4. Sort the array by sums. descending
 	_rankPhenotypes: function() {
-	         console.log("calling rank phenotypes....");
 		
 		var self = this;
 		var modelDataForSorting = [],
@@ -954,7 +927,6 @@ META NOTE (HSH - 8/25/2014): Can we remove this note, or at least clarify?
 	//3. Get the sum of all of this phenotype's LCS scores and add to array
 	//4. Sort the array by sums. descending
 	_alphabetizePhenotypes: function() {
-		console.log("calling alphabetize phenotypes..");
 		var self = this;
 		var modelDataForSorting = [],
 			modData = [];
@@ -1003,7 +975,6 @@ META NOTE (HSH - 8/25/2014): Can we remove this note, or at least clarify?
 		var url = '';
 		var self=this;
     	var phenotypeList = this.state.phenotypeData;
-		
 		switch(this.state.targetSpeciesName){
 			case "Overview": this._loadOverviewData(); break;
 			case "All": 
@@ -1016,14 +987,22 @@ META NOTE (HSH - 8/25/2014): Can we remove this note, or at least clarify?
 			case "Homo sapiens":
 			case "Drosophila melanogaster":
 					url = this.state.serverURL + "/simsearch/phenotype/?input_items=" + 
-						phenotypeList.join(",") + "&target_species=" + this.state.targetSpecies;
+						phenotypeList.join(",") + "&target_species=" + this._getTaxon(this.state.targetSpeciesName);
 					this._ajaxLoadData(this.state.targetSpeciesName, url);
 					break;
 			default: url = this.state.serverURL + "/simsearch/phenotype/?input_items=" + 
-						phenotypeList.join(",") + "&target_species=" + this.state.targetSpecies;
+						phenotypeList.join(",") + "&target_species=" + this._getTaxon(this.state.targetSpeciesName);
 					this._ajaxLoadData(this.state.targetSpeciesName, url);
 		}
     },
+
+      _getTaxon: function(speciesName) {
+	  var self = this;
+	  var tempdata = self.state.targetSpeciesList.filter(function(d) {
+	      return d.name === speciesName;
+	  });
+	  return tempdata[0].taxon;
+      },
     
 	_loadOverviewData: function() {
 		var hurl = '',
@@ -2862,10 +2841,11 @@ META NOTE (HSH - 8/25/2014): Can we remove this note, or at least clarify?
 			
 			//add the handler for the select control
 			$( "#organism" ).change(function(d) {
+			    console.log("changing organism");
 				//msg =  "Handler for .change()
 			    //called." );
-				self.state.targetSpecies = self.state.targetSpeciesList[d.target.selectedIndex].taxon;
 			    self.state.targetSpeciesName = self.state.targetSpeciesList[d.target.selectedIndex].name;
+			    console.log("changing organism to..."+self.state.targetSpeciesName);
 				self._resetSelections();
 				});
 			
@@ -2913,14 +2893,10 @@ META NOTE (HSH - 8/25/2014): Can we remove this note, or at least clarify?
 			 return self._getYPosition(d[0].id_a) + (self.state.yTranslation) + 10;   //rowid
 		})
 		.on("mouseover", function(d) {
-		    if (self.state.clickedData == undefined) {
-			  self._selectData(d, this);
-		    }
+		    self._selectData(d, d3.mouse(this));
 		})
 		.on("mouseout", function(d) {
-	    	if (self.state.clickedData == undefined) {
-				self._deselectData(d, d3.mouse(this));
-			}
+		    self._deselectData(d, d3.mouse(this));
 		})
 		.attr("width", self.state.textWidth)
 		.attr("height", 50)
