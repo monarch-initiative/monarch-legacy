@@ -116,57 +116,22 @@ META NOTE (HSH - 8/25/2014): Can we remove this note, or at least clarify?
 	    	serverURL : ""
 	},
 	
-	//reset option values if needed before reloading data
-	// eventually, reset will work away from recopying this.options, instead
-	// handling only those variables that convey manipulable state..
+	//reset state values that must be cleared before reloading data
 	_reset: function() {
-			var self = this;
 
 	    this.state.combinedModelData  = [];
-	    this.state.combinedModelList = [];
 
-	    // hardcode alert -these should not be hardwired! 
-	    this.state.flydata = undefined;
-	    this.state.humandata = undefined;
-	    this.state.mousedata = undefined;
-	    this.state.zfishdata = undefined;
-
-	    this.state.filteredModelData =  [];
 	    this.state.filteredModelList = [];
-
-	    this.state.filteredFullModelData = [];
-	    this.state.filteredFullPhenotypeData = [];
-	    this.state.filteredOtherModelData = [];
 
 	    this.state.modelData = [];
 	    this.state.modelList = [];
-
-	    this.state.filteredPhenotypeData = [];
-
-	    this.state.axis_pos_list  = [];
-
-	    this.state.currModelIdx = 0;
-	    this.state.currPhenotypeIdx = 0;
-	    this.currSelectedRect = undefined;
-
-	    this.state.orgModelList = [];
-
 	    this.state.phenotypeSortData = [];
 
-	    this.state.xScale = undefined;
-	    this.state.yAxis = [];
 	    this.state.yAxisMax = 0;
 	    this.state.yoffset  = 85;
 	    this.state.yoffsetOver = 0;
 
-	    this.state.yScale = undefined;
 	    this.state.yTranslation =0;
-	    this.state.smallXScale = undefined,
-	    this.state.smallYScale = undefined,
-
-
-	    console.log("reset... target species is..."+this.state.targetSpeciesName);
-
 	},
 	
 	//this function will use the desired height to determine how many phenotype rows to display
@@ -178,6 +143,9 @@ META NOTE (HSH - 8/25/2014): Can we remove this note, or at least clarify?
 		if (pCount < 10) {
 		   pCount = -1;
 		}
+	    if (pCount > this.state.phenotypeDisplayCount) {
+		pCount = this.state.phenotypeDisplayCount;
+	    }
 		return pCount;
 	},
 	
@@ -665,7 +633,7 @@ META NOTE (HSH - 8/25/2014): Can we remove this note, or at least clarify?
 		var tempdata = self.state.selectList.filter(function(d) {
 	    	return d.calc === calc;
 		});
-		self.state.selectedLabel = tempdata[0].label;
+		//self.state.selectedLabel = tempdata[0].label;
 		self.state.selectedCalculation = tempdata[0].calc;
 	},
 
@@ -2382,7 +2350,8 @@ META NOTE (HSH - 8/25/2014): Can we remove this note, or at least clarify?
 	},
 	
 	
-	_getModelScore : function(model) {
+	/* 9/12/14 hsh - probably obsolteete. not called anywhere
+	   _getModelScore : function(model) {
 		var self = this;
 		if (model != "")
 		{
@@ -2395,7 +2364,7 @@ META NOTE (HSH - 8/25/2014): Can we remove this note, or at least clarify?
 			}
 		}
 		else return "";
-	},
+	},*/
 
 	//this code creates the colored rectangles below the models
 	_createModelRegion: function () {
@@ -2778,9 +2747,9 @@ META NOTE (HSH - 8/25/2014): Can we remove this note, or at least clarify?
 
 			for (var idx=0;idx<self.state.selectList.length;idx++) {
 				var selecteditem = "";
-			    if (self.state.selectList[idx].label === self.state.selectedLabel){
-					selecteditem = "selected";
-				}
+			//    if (self.state.selectList[idx].label === self.state.selectedLabel){
+			//		selecteditem = "selected";
+		//		}
 				if (self.state.selectList[idx].calc === self.state.selectedCalculation) {
 					selecteditem = "selected";
 				}
@@ -2807,7 +2776,6 @@ META NOTE (HSH - 8/25/2014): Can we remove this note, or at least clarify?
 			
 			//add the handler for the select control
 			$( "#organism" ).change(function(d) {
-			    console.log("changing organism");
 				//msg =  "Handler for .change()
 			    //called." );
 			    self.state.targetSpeciesName = self.state.targetSpeciesList[d.target.selectedIndex].name;
@@ -2820,7 +2788,7 @@ META NOTE (HSH - 8/25/2014): Can we remove this note, or at least clarify?
 				//msg =  "Handler for .change()
 			     //called." );
 				self.state.selectedCalculation = self.state.selectList[d.target.selectedIndex].calc;
-				self.state.selectedLabel = self.state.selectList[d.target.selectedIndex].label;
+//				self.state.selectedLabel = self.state.selectList[d.target.selectedIndex].label;
 				self._resetSelections();
 			});
 	    
