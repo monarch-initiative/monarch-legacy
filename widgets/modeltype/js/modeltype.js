@@ -79,7 +79,6 @@ META NOTE (HSH - 8/25/2014): Can we remove this note, or at least clarify?
 				  { taxon: "10090", count: 10},
 				  { taxon: "7955", count: 10},
 				  { taxon: "7227", count: 0}],
-	serverURL : "",
 	selectList: [{label: "Distance", calc: 0}, {label: "Ratio (q)", calc: 1}, {label: "Ratio (t)", calc: 3} , {label: "Uniqueness", calc: 2}],
 	sortList: [{type: "Alphabetic", order: 0},{type: "Frequency and Rarity", order:1} ,{type: "Frequency", order:2} ],	    
 	targetSpeciesList : [{ name: "Homo sapiens", taxon: "9606", color: 'rgb(25,59,143)'}, 
@@ -88,48 +87,33 @@ META NOTE (HSH - 8/25/2014): Can we remove this note, or at least clarify?
 			     { name: "Drosophila melanogaster", taxon: "7227", color:'purple'} , 
 			     { name: "Overview", taxon: "2"}], //, {name: "All", taxon: "1"}],
 	w : 0,
+	colStartingPos: 10,
+	detailRectWidth: 240,   
+        detailRectHeight: 140,
+        detailRectStrokeWidth: 3,
+	globalViewWidth : 110,
+	globalViewHeight : 110,
+	m :[ 30, 10, 10, 10 ],
+	multiOrganismCt: 10,
+	smallestModelWidth: 400,
+	textLength: 34,
+	textWidth: 200,
+	headerAreaHeight: 130,
     },
     
 	options:   {
 	    /// good - legit options
 		colorScaleB: undefined,
 		colorScaleR: undefined,
-		colStartingPos: 10,
 		modelDisplayCount : 30,
 	    phenotypeDisplayCount : 26,
-	    detailRectWidth: 240,   
-        detailRectHeight: 140,
-        detailRectStrokeWidth: 3,
 	    dimensions: [ "Phenotype Profile", "Lowest Common Subsumer", "Phenotypes in common" ], 
-		drag: undefined,
-	    globalViewWidth : 110,
-	    globalViewHeight : 110,	
-	    m :[ 30, 10, 10, 10 ], 
-
-	    modelWidth: undefined,
-		multiOrganismCt: 10,
-		orangeHighlight: "#ea763b",
 		scriptpath : $('script[src]').last().attr('src').split('?')[0].split('/').slice(0, -1).join('/')+'/',
 		
-	    // selectedCalculation and selectedSort  we should keep
 	        selectedCalculation: 0,
 		selectedSort: "Frequency",
-		selectRectHeight : 0,
-		selectRectWidth : 0,
-		smallestModelWidth: 400,
-		smallXScale: undefined,
-	    smallYScale: undefined,	
 	    targetSpeciesName : "Overview",
-		textLength: 34,
-		textWidth: 200,
-	    xScale: undefined, 
-		yAxis: [],
-		yAxisMax : 0,
-		yoffset: 85,
-		yoffsetOver: 0,
-	    yScale: undefined,	
-		yTranslation: 0,
-		headerAreaHeight: 130,
+	    	serverURL : ""
 	},
 	
 	//reset option values if needed before reloading data
@@ -137,36 +121,6 @@ META NOTE (HSH - 8/25/2014): Can we remove this note, or at least clarify?
 	// handling only those variables that convey manipulable state..
 	_reset: function() {
 			var self = this;
-	    // saving a couple of things for later..
-
-			self.options.globalViewWidth = 110;
-			self.options.globalViewHeight = 110;			
-			self.options.modelWidth = undefined;			
-			self.options.selectRectHeight = 0;
-			self.options.smallXScale = undefined;
-			self.options.smallYScale = undefined;
-			self.options.svg = undefined;
-			self.options.xScale = undefined;
-			self.options.yAxis = [];
-			self.options.yAxisMax = 0;
-			self.options.yoffset = 85;
-			self.options.yoffsetOver = 0;
-			self.options.yScale = undefined;			
-			self.options.yTranslation = undefined;
-			
-			//reset data arrays
-//	                self.options.speciesList = [];
-			//Overview data
-		
-	                // copying stuff that I need to have handled correctly when I reset the 
-	              // state. this  will disappear when we no longer need the $.extend()
-	              self.options.targetSpeciesName = this.state.targetSpeciesName;
-	              self.options.selectedCalculation = this.state.selectedCalculation;
-	              self.options.selectedLabel = this.state.selectedLabel;
-	              self.options.selectedSort = this.state.selectedSort;
-
-	    // We want to overwrite all options in state , so don't pass in true for a recursive merge
-	    this.state = $.extend(this.state,self.options,self.config);
 
 	    this.state.combinedModelData  = [];
 	    this.state.combinedModelList = [];
@@ -198,7 +152,19 @@ META NOTE (HSH - 8/25/2014): Can we remove this note, or at least clarify?
 	    this.state.orgModelList = [];
 
 	    this.state.phenotypeSortData = [];
-//	    this.state.unmatchedPhenotypes = [];
+
+	    this.state.xScale = undefined;
+	    this.state.yAxis = [];
+	    this.state.yAxisMax = 0;
+	    this.state.yoffset  = 85;
+	    this.state.yoffsetOver = 0;
+
+	    this.state.yScale = undefined;
+	    this.state.yTranslation =0;
+	    this.state.smallXScale = undefined,
+	    this.state.smallYScale = undefined,
+
+
 	    console.log("reset... target species is..."+this.state.targetSpeciesName);
 
 	},
@@ -2812,7 +2778,7 @@ META NOTE (HSH - 8/25/2014): Can we remove this note, or at least clarify?
 
 			for (var idx=0;idx<self.state.selectList.length;idx++) {
 				var selecteditem = "";
-				if (self.state.selectList[idx].label === self.state.selectedLabel) {
+			    if (self.state.selectList[idx].label === self.state.selectedLabel){
 					selecteditem = "selected";
 				}
 				if (self.state.selectList[idx].calc === self.state.selectedCalculation) {
