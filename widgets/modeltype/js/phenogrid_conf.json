@@ -1,5 +1,7 @@
 {
-	"species": [
+    "serverURL": "",
+    "species": [
+
 		{
 			"name":"All",
 			"listname":"All",
@@ -83,7 +85,7 @@
 	"root": [
 		"Abnormal Phenotype"
 	],
-	"calculation": [
+	"similarityCalculation": [
 		{
 			"label":"Distance",
 			"calc":0
@@ -101,7 +103,7 @@
 			"calc":2
 		}
 	],
-	"phenotypesort": [
+	"phenotypeSort": [
 		{
 			"type":"Alphabetic",
 			"order":0

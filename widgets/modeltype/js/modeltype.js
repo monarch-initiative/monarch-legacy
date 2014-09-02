@@ -79,8 +79,8 @@ META NOTE (HSH - 8/25/2014): Can we remove this note, or at least clarify?
 				  { taxon: "10090", count: 10},
 				  { taxon: "7955", count: 10},
 				  { taxon: "7227", count: 0}],
-	selectList: [{label: "Distance", calc: 0}, {label: "Ratio (q)", calc: 1}, {label: "Ratio (t)", calc: 3} , {label: "Uniqueness", calc: 2}],
-	sortList: [{type: "Alphabetic", order: 0},{type: "Frequency and Rarity", order:1} ,{type: "Frequency", order:2} ],	    
+	similarityCalculation: [{label: "Distance", calc: 0}, {label: "Ratio (q)", calc: 1}, {label: "Ratio (t)", calc: 3} , {label: "Uniqueness", calc: 2}],
+	phenotypeSort: [{type: "Alphabetic", order: 0},{type: "Frequency and Rarity", order:1} ,{type: "Frequency", order:2} ],	    
 	targetSpeciesList : [{ name: "Homo sapiens", taxon: "9606", color: 'rgb(25,59,143)'}, 
 			     { name: "Mus musculus", taxon: "10090", color: 'rgb(70,19,19)'},
 			     { name: "Danio rerio", taxon: "7955", color: 'rgb(1,102,94)'}, 
@@ -160,20 +160,34 @@ META NOTE (HSH - 8/25/2014): Can we remove this note, or at least clarify?
 	 * [ "HP:12345", "HP:23451", ...]
 	 */
 	_create: function() {
-	    var configoptions;
+	    var self= this;
 	    $.ajax( {dataType: "json",
 		     url:"/widgets/modeltype/js/phenogrid_conf.json",
 		     async: false,
+		     dataType: "json",
 		     success: function(d) {
-			 configoptions = d;
-			 }
-		     });
+			 console.log("got config file..");
+			 self.configoptions = d;
+		     },
+		     fail: function() {
+			 console.log("config options failed..");
+			 configoptions = undefined;
+		     },
+		     error: function(jqXHR,textStatus,errorThrown) {
+			 console.log("status is "+textStatus+", error is "+errorThrown);
+		     },
+            });
+	    console.log("server url is "+this.configoptions.serverURL);
 	    /** check these */
-	    $.extend(true,{},this.options,configoptions);
-	    this.state = $.extend(true,{},this.options,this.config);
+	    console.log("options server url is "+this.options.serverURL);
+	//    $.extend(true,{},this.configoptions,this.options);
+	    this.state = $.extend(this.options,this.configoptions,this.config);
+	    console.log("after extend.."+this.state.serverURL);
+	    console.log("..this.state is...");
+	    console.log(JSON.stringify(this.state));
 	    // will this work?
+	    this.configoptions = undefined;
 	    this._reset();
-	    // other state initialization
 	},
 	
 	_init: function() {
@@ -630,7 +644,7 @@ META NOTE (HSH - 8/25/2014): Can we remove this note, or at least clarify?
 	_setSelectedCalculation: function(calc) {
 		var self = this;
 		
-		var tempdata = self.state.selectList.filter(function(d) {
+		var tempdata = self.state.similarityCalculation.filter(function(d) {
 	    	return d.calc === calc;
 		});
 		//self.state.selectedLabel = tempdata[0].label;
@@ -640,7 +654,7 @@ META NOTE (HSH - 8/25/2014): Can we remove this note, or at least clarify?
 	_setSelectedSort: function(type) {
 		var self = this;
 		
-		var tempdata = self.state.sortList.filter(function(d) {
+		var tempdata = self.state.phenotypeSort.filter(function(d) {
 	    	return d.type === type;
 	    });
 
@@ -907,7 +921,8 @@ META NOTE (HSH - 8/25/2014): Can we remove this note, or at least clarify?
     //I may need to rename this method "getModelData".  It should extract the models and reformat the data 
     _loadData: function() {
 		var url = '';
-		var self=this;
+	var self=this;
+	console.log("in loadData.. server is "+this.state.serverURL);
     	var phenotypeList = this.state.phenotypeData;
 		switch(this.state.targetSpeciesName){
 			case "Overview": this._loadOverviewData(); break;
@@ -948,7 +963,8 @@ META NOTE (HSH - 8/25/2014): Can we remove this note, or at least clarify?
 		var self=this;
 		
     	var phenotypeList = this.state.phenotypeData;
-		var limit = this.state.multiOrganismCt;
+	    var limit = this.state.multiOrganismCt;
+	    console.log("in load overview data.. server url is "+this.state.serverURL);
 		//For the Overview, we need to create grid for human data first - top 10  models
 		//Taxon is hard-coded since the targetSpecies is "Overview"
 		hurl = this.state.serverURL + "/simsearch/phenotype/?input_items=" + 
@@ -1379,12 +1395,12 @@ META NOTE (HSH - 8/25/2014): Can we remove this note, or at least clarify?
 		
 		optionhtml = optionhtml + "<span id='faq'><img class='faq' src='" + this.state.scriptpath + "../image/greeninfo30.png' height='15px'></span><br /></span><div id='header'><span id='sort_div'><span id='slabel' >Sort Phenotypes<span id='sorts'></span></span><br /><span><select id=\'sortphenotypes\'>";	
 			
-		for (var idx=0;idx<self.state.sortList.length;idx++) {
+		for (var idx=0;idx<self.state.phenotypeSort.length;idx++) {
     		var selecteditem = "";
-    		if (self.state.sortList[idx].type === self.state.selectedSort) {
+    		if (self.state.phenotypeSort[idx].type === self.state.selectedSort) {
     			selecteditem = "selected";
     		}
-			optionhtml = optionhtml + "<option value='" + self.state.sortList[idx].order +"' "+ selecteditem +">" + self.state.sortList[idx].type +"</option>"
+			optionhtml = optionhtml + "<option value='" + self.state.phenotypeSort[idx].order +"' "+ selecteditem +">" + self.state.phenotypeSort[idx].type +"</option>"
 		}
 		
 		optionhtml = optionhtml + "</select></span>";			
@@ -1402,7 +1418,7 @@ META NOTE (HSH - 8/25/2014): Can we remove this note, or at least clarify?
 		//add the handler for the select control
         $( "#sortphenotypes" ).change(function(d) {
 	    //this._showThrobber();
-        	self.state.selectedSort = self.state.sortList[d.target.selectedIndex].type;
+        	self.state.selectedSort = self.state.phenotypeSort[d.target.selectedIndex].type;
 	    self._resetSelections();
         });
 			
@@ -2745,15 +2761,15 @@ META NOTE (HSH - 8/25/2014): Can we remove this note, or at least clarify?
 			optionhtml = optionhtml + "</select></span></div><div id='calc_div'><span id='clabel'>Display</span><span id='calcs'><img class='calcs' src='" + this.state.scriptpath + "../image/greeninfo30.png' height='15px'></span><br /><span id='calc_sel'><select id=\"calculation\">";
        	   
 
-			for (var idx=0;idx<self.state.selectList.length;idx++) {
+			for (var idx=0;idx<self.state.similarityCalculation.length;idx++) {
 				var selecteditem = "";
-			//    if (self.state.selectList[idx].label === self.state.selectedLabel){
+			//    if (self.state.similarityCalculation[idx].label === self.state.selectedLabel){
 			//		selecteditem = "selected";
 		//		}
-				if (self.state.selectList[idx].calc === self.state.selectedCalculation) {
+				if (self.state.similarityCalculation[idx].calc === self.state.selectedCalculation) {
 					selecteditem = "selected";
 				}
-				optionhtml = optionhtml + "<option value='" + self.state.selectList[idx].calc +"' "+ selecteditem +">" + self.state.selectList[idx].label +"</option>"
+				optionhtml = optionhtml + "<option value='" + self.state.similarityCalculation[idx].calc +"' "+ selecteditem +">" + self.state.similarityCalculation[idx].label +"</option>"
 			}
 			optionhtml = optionhtml + "</select></span></div></div>";
 			this.element.append(optionhtml);			
@@ -2787,8 +2803,8 @@ META NOTE (HSH - 8/25/2014): Can we remove this note, or at least clarify?
 			 $( "#calculation" ).change(function(d) {
 				//msg =  "Handler for .change()
 			     //called." );
-				self.state.selectedCalculation = self.state.selectList[d.target.selectedIndex].calc;
-//				self.state.selectedLabel = self.state.selectList[d.target.selectedIndex].label;
+				self.state.selectedCalculation = self.state.similarityCalculation[d.target.selectedIndex].calc;
+//				self.state.selectedLabel = self.state.similarityCalculation[d.target.selectedIndex].label;
 				self._resetSelections();
 			});
 	    
