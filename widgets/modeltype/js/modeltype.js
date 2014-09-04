@@ -151,6 +151,8 @@ META NOTE (HSH - 8/25/2014): Can we remove this note, or at least clarify?
 
 	    // must reset height explicitly
 	    this.state.h = this.config.h;
+
+	    this.data = {};
 	},
 	
 	//this function will use the desired height to determine how many phenotype rows to display
@@ -195,6 +197,7 @@ META NOTE (HSH - 8/25/2014): Can we remove this note, or at least clarify?
 	    /** check these */
 	//    $.extend(true,{},this.configoptions,this.options);
 	    this.state = $.extend(this.options,this.configoptions,this.config);
+	    this.state.data = {};
 	    // will this work?
 	    this.configoptions = undefined;
 	    this._reset();
@@ -934,27 +937,14 @@ META NOTE (HSH - 8/25/2014): Can we remove this note, or at least clarify?
     _loadData: function() {
 		var url = '';
 	var self=this;
-    	var phenotypeList = this.state.phenotypeData;
-		switch(this.state.targetSpeciesName){
-			case "Overview": this._loadOverviewData(); break;
-			//case "All": 
-					url = this.state.serverURL + "/simsearch/phenotype/?input_items=" + 
-						phenotypeList.join(",");
-					this._ajaxLoadData(this.state.targetSpeciesName, url);
-					break;
-			/*case "Mus musculus":
-			case "Danio rerio":
-			case "Homo sapiens":
-			case "Drosophila melanogaster":
-					url = this.state.serverURL + "/simsearch/phenotype/?input_items=" + 
-						phenotypeList.join(",") + "&target_species=" + this._getTaxon(this.state.targetSpeciesName);
-					this._ajaxLoadData(this.state.targetSpeciesName, url);
-					break;*/
-			default: url = this.state.serverURL + "/simsearch/phenotype/?input_items=" + 
-						phenotypeList.join(",") + "&target_species=" + this._getTaxon(this.state.targetSpeciesName);
-					this._ajaxLoadData(this.state.targetSpeciesName, url);
-		}
+	if (this.state.targetSpeciesName === "Overview") {
+	    this._loadOverviewData();
+	}
+	else {
+	    this._loadSpeciesData(this.state.targetSpeciesName);
+	}
     },
+
 
       _getTaxon: function(speciesName) {
 	  var self = this;
@@ -963,6 +953,16 @@ META NOTE (HSH - 8/25/2014): Can we remove this note, or at least clarify?
 	  });
 	  return tempdata[0].taxon;
       },
+
+	_loadSpeciesData: function(speciesName,limit) {
+	    var phenotypeList = this.state.phenotypeData;
+	    var url = this.state.serverURL+"/simsearch/phenotype?input_items="+
+		phenotypeList.join(",")+"&target_species="+this._getTaxon(speciesName);
+	    if (typeof(limit) !== 'undefined') {
+		url = url +"&limit="+limit;
+	    }
+	    this._ajaxLoadData(speciesName,url);
+	},
     
 	_loadOverviewData: function() {
 		var hurl = '',
@@ -976,27 +976,20 @@ META NOTE (HSH - 8/25/2014): Can we remove this note, or at least clarify?
     	var phenotypeList = this.state.phenotypeData;
 	    var limit = this.state.multiOrganismCt;
 		//For the Overview, we need to create grid for human data first - top 10  models
-		//Taxon is hard-coded since the targetSpecies is "Overview"
-		hurl = this.state.serverURL + "/simsearch/phenotype/?input_items=" + 
-						phenotypeList.join(",") + "&limit=" + limit + "&target_species=9606";
-		this._ajaxLoadData("Homo sapiens", hurl);
+	    //Taxon is hard-coded since the targetSpecies is "Overview"
+	    this._loadSpeciesData("Homo sapiens",limit);
+	    this.state.maxICScore = this.state.data["Homo sapiens"].metadata.maxMaxIC;
 		
-		//Now get the other species' matches		
-		murl = this.state.serverURL + "/simsearch/phenotype/?input_items=" + 
-						phenotypeList.join(",") + "&limit=" + limit + "&target_species=10090";
-		this._ajaxLoadData("Mus musculus", murl);
-		var mousedata = this.state.mousedata;
+	    this._loadSpeciesData("Mus musculus",limit);
+	    var data = this.state.data["Mus musculus"];
 		
-		if(mousedata.length < limit) {limit = (limit - mousedata.length);}
-		zurl = this.state.serverURL + "/simsearch/phenotype/?input_items=" + 
-						phenotypeList.join(",") + "&limit=" + limit + "&target_species=7955";
-		this._ajaxLoadData("Danio rerio", zurl);
-		var zfishdata = this.state.zfishdata;
-		
-		if(zfishdata.length < limit) {limit = (limit - zfishdata.length);}
-		furl = this.state.serverURL + "/simsearch/phenotype/?input_items=" + 
-						phenotypeList.join(",") + "&limit=" + limit + "&target_species=7227";
-		this._ajaxLoadData("Drosophila melanogaster", furl);
+	    if(data.length < limit) {limit = (limit - mousedata.length);}
+
+	    this._loadSpeciesData("Danio rerio",limit);
+	    data = this.state.data["Danio rerio"];
+	    if(data.length < limit) {limit = (limit - zfishdata.length);}
+	    
+	    this._loadSpeciesData("Drosophila melanogaster",limit);
 		
 		//Now we have top 10 model matches for Human data in humandata, 
 		//Top n model matches for Mouse data in mousedata
@@ -1019,16 +1012,16 @@ META NOTE (HSH - 8/25/2014): Can we remove this note, or at least clarify?
 		var modList = [],
 			orgCtr = 0;
 		
-		if (this.state.humandata != null  && this.state.humandata.b.length > 0){
-			for (var idx=0;idx<this.state.humandata.b.length;idx++) {
+		if (this.state.data["Homo sapiens"] != null  && this.state.data["Homo sapiens"].b.length > 0){
+			for (var idx=0;idx<this.state.data["Homo sapiens"].b.length;idx++) {
 				 hdata.push(
-				{model_id: self._getConceptId(this.state.humandata.b[idx].id), 
-				 model_label: this.state.humandata.b[idx].label,
-				 model_score: this.state.humandata.b[idx].score.score, 
-				 model_rank: this.state.humandata.b[idx].score.rank});
+				{model_id: self._getConceptId(this.state.data["Homo sapiens"].b[idx].id), 
+				 model_label: this.state.data["Homo sapiens"].b[idx].label,
+				 model_score: this.state.data["Homo sapiens"].b[idx].score.score, 
+				 model_rank: this.state.data["Homo sapiens"].b[idx].score.rank});
 				
-				this.state.multiOrgModelCt[orgCtr].count = this.state.humandata.b.length;
-				this._loadDataForModel(this.state.humandata.b[idx]);	
+				this.state.multiOrgModelCt[orgCtr].count = this.state.data["Homo sapiens"].b.length;
+				this._loadDataForModel(this.state.data["Homo sapiens"].b[idx]);	
 			} 
 			speciesList.push("Homo sapiens");
 		} 
@@ -1037,16 +1030,16 @@ META NOTE (HSH - 8/25/2014): Can we remove this note, or at least clarify?
 			hdata.sort(function(a,b) { return a.model_rank - b.model_rank; });			 
 			modList= modList.concat(hdata.slice()); 
 		
-		if (this.state.mousedata != null  && this.state.mousedata.b.length > 0){
-			for (var idx=0;idx<this.state.mousedata.b.length;idx++) {
+		if (this.state.data["Mus musculus"] != null  && this.state.data["Mus musculus"].b.length > 0){
+			for (var idx=0;idx<this.state.data["Mus musculus"].b.length;idx++) {
 				mdata.push(
-				{model_id: self._getConceptId(this.state.mousedata.b[idx].id), 
-				 model_label: this.state.mousedata.b[idx].label,
-				 model_score: this.state.mousedata.b[idx].score.score, 
-				 model_rank: this.state.mousedata.b[idx].score.rank});
+				{model_id: self._getConceptId(this.state.data["Mus musculus"].b[idx].id), 
+				 model_label: this.state.data["Mus musculus"].b[idx].label,
+				 model_score: this.state.data["Mus musculus"].b[idx].score.score, 
+				 model_rank: this.state.data["Mus musculus"].b[idx].score.rank});
 		
-				this.state.multiOrgModelCt[orgCtr].count = this.state.mousedata.b.length;
-				this._loadDataForModel(this.state.mousedata.b[idx]);			 
+				this.state.multiOrgModelCt[orgCtr].count = this.state.data["Mus musculus"].b.length;
+				this._loadDataForModel(this.state.data["Mus musculus"].b[idx]);			 
 			} 
 			speciesList.push("Mus musculus");			
 		} 		
@@ -1055,16 +1048,16 @@ META NOTE (HSH - 8/25/2014): Can we remove this note, or at least clarify?
 			mdata.sort(function(a,b) { return a.model_rank - b.model_rank; });			 
 			modList = modList.concat(mdata.slice());  		
 		
-		if (this.state.zfishdata != null  && this.state.zfishdata.b.length > 0){
-			for (var idx=0;idx<this.state.zfishdata.b.length;idx++) {
+		if (this.state.data["Danio rerio"] != null  && this.state.data["Danio rerio"].b.length > 0){
+			for (var idx=0;idx<this.state.data["Danio rerio"].b.length;idx++) {
 				zdata.push(
-				{model_id: self._getConceptId(this.state.zfishdata.b[idx].id), 
-				 model_label: this.state.zfishdata.b[idx].label,
-				 model_score: this.state.zfishdata.b[idx].score.score, 
-				 model_rank: this.state.zfishdata.b[idx].score.rank});
+				{model_id: self._getConceptId(this.state.data["Danio rerio"].b[idx].id), 
+				 model_label: this.state.data["Danio rerio"].b[idx].label,
+				 model_score: this.state.data["Danio rerio"].b[idx].score.score, 
+				 model_rank: this.state.data["Danio rerio"].b[idx].score.rank});
 
-				this.state.multiOrgModelCt[orgCtr].count = this.state.zfishdata.b.length;
-				this._loadDataForModel(this.state.zfishdata.b[idx]);			 
+				this.state.multiOrgModelCt[orgCtr].count = this.state.data["Danio rerio"].b.length;
+				this._loadDataForModel(this.state.data["Danio rerio"].b[idx]);			 
 			} 
 			speciesList.push("Danio rerio");
 		}
@@ -1073,16 +1066,16 @@ META NOTE (HSH - 8/25/2014): Can we remove this note, or at least clarify?
 			zdata.sort(function(a,b) { return a.model_rank - b.model_rank; });			 
 			modList = modList.concat(zdata.slice());  
 		
-		if (this.state.flydata != null  && this.state.flydata.b.length > 0){
-			for (var idx=0;idx<this.state.flydata.b.length;idx++) {
+		if (this.state.data["Drosophila melanogaster"] != null  && this.state.data["Drosophila melanogaster"].b.length > 0){
+			for (var idx=0;idx<this.state.data["Drosophila melanogaster"].b.length;idx++) {
 				fdata.push(
-				{model_id: self._getConceptId(this.state.flydata.b[idx].id), 
-				 model_label: this.state.flydata.b[idx].label,
-				 model_score: this.state.flydata.b[idx].score.score, 
-				 model_rank: this.state.flydata.b[idx].score.rank});
+				{model_id: self._getConceptId(this.state.data["Drosophila melanogaster"].b[idx].id), 
+				 model_label: this.state.data["Drosophila melanogaster"].b[idx].label,
+				 model_score: this.state.data["Drosophila melanogaster"].b[idx].score.score, 
+				 model_rank: this.state.data["Drosophila melanogaster"].b[idx].score.rank});
 
-				this.state.multiOrgModelCt[orgCtr].count = this.state.flydata.b.length;
-				this._loadDataForModel(this.state.flydata.b[idx]);			 
+				this.state.multiOrgModelCt[orgCtr].count = this.state.data["Drosophila melanogaster"].b.length;
+				this._loadDataForModel(this.state.data["Drosophila melanogaster"].b[idx]);			 
 			} 
 			speciesList.push("Drosophila melanogaster");
 		} 
@@ -1130,22 +1123,10 @@ META NOTE (HSH - 8/25/2014): Can we remove this note, or at least clarify?
 			   }
 			   else {
 					//This is for the new "Overview" target option 
-					if (self.state.targetSpeciesName == "Overview") {
-						switch(target){
-							case "Homo sapiens": self.state.humandata = data;
-							//extract the maxIC score
-							self.state.maxICScore = data.metadata.maxMaxIC;
-								break;
-							case "Mus musculus": self.state.mousedata = data;
-								break;
-							case "Danio rerio": self.state.zfishdata = data;
-								break;
-							case "Drosophila melanogaster": self.state.flydata = data;
-								break;
-							default: break;						
-						}
-					}
-					else {self._finishLoad(data);}			   
+			       if (self.state.targetSpeciesName == "Overview") {
+				   self.state.data[target] = data;
+			       }
+			       else {self._finishLoad(data);}			   
 			   }
 			},
 			error: function ( xhr, errorType, exception ) { //Triggered if an error communicating with server  
