@@ -86,6 +86,15 @@ META NOTE (HSH - 8/25/2014): Can we remove this note, or at least clarify?
 			     { name: "Danio rerio", taxon: "7955", color: 'rgb(1,102,94)'}, 
 			     { name: "Drosophila melanogaster", taxon: "7227", color:'purple'} , 
 			     { name: "Overview", taxon: "2"}], //, {name: "All", taxon: "1"}],
+	colorDomains: [ 0, 0.2, 0.4, 0.6, 0.8, 1],
+	colorRanges: { "Homo sapiens" :	    ['rgb(229,229,229)','rgb(164,214,212)',
+		    'rgb(68,162,147)','rgb(97,142,153)','rgb(66,139,202)','rgb(25,59,143)'],
+		       "Mus musculus" :   ['rgb(252,248,227)','rgb(249,205,184)','rgb(234,118,59)',
+		    'rgb(221,56,53)','rgb(181,92,85)','rgb(70,19,19)'],
+		       "Danio rerio" : ['rgb(230,209,178)','rgb(210,173,116)',
+		    'rgb(148,114,60)','rgb(68,162,147)','rgb(31,128,113)','rgb(3,82,70)']
+		       },
+	    
 	w : 0,
 	colStartingPos: 10,
 	detailRectWidth: 240,   
@@ -424,17 +433,7 @@ META NOTE (HSH - 8/25/2014): Can we remove this note, or at least clarify?
 		  	  .attr("x", function(d) { return self.state.smallXScale(d.model_id);})
 		  	  .attr("width", 2)
 		  	  .attr("height", 2)
-		  	  .attr("fill", function(d, i) {
-					//This is for the new "Overview" target option 
-					if (self.state.targetSpeciesName == "Overview"){
-						if (d.species == "Homo sapiens") {return self.state.colorScaleB(d.value);} 
-						else if (d.species == "Mus musculus") {return self.state.colorScaleR(d.value);}
-						else if (d.species == "Danio rerio") {return self.state.colorScaleG(d.value);}
-					}	
-					else {	
-						return self.state.colorScaleB(d.value); 
-				  }
-		  	  });
+		  	  .attr("fill", function(d,i) { return self._setRectFill(self,d,i)});
 			  
 		selectRectHeight = self.state.smallYScale(self.state.phenotypeSortData[self.state.phenotypeDisplayCount-1][0].id_a); //rowid
 		selectRectWidth = self.state.smallXScale(mods[self.state.modelDisplayCount-1].model_id);
@@ -495,6 +494,21 @@ META NOTE (HSH - 8/25/2014): Can we remove this note, or at least clarify?
 			.attr("height", self.state.smallYScale(self.state.phenotypeSortData[self.state.phenotypeDisplayCount-1][0].id_a))  //rowid
 			.attr("width", self.state.smallXScale(mods[self.state.modelDisplayCount-1].model_id));
 	},
+
+	/* 3 september 2014 HARCODE ALERT */
+	/* this should be replaced with something that keys off of a list of names, not  
+	   'Homo sapiens' */
+	_setRectFill: function(self,d,i) {
+	    //This is for the new "Overview" target option 
+	    if (typeof (self.state.colorScale[d.species]) !== 'undefined') {
+		return self.state.colorScale[d.species](d.value);
+	    }
+	    else
+	    {
+		return self.state.colorScale["Homo sapiens"](d.value);
+	    }
+	},
+
 
 	_getUnmatchedPhenotypes : function(){
 	
@@ -959,7 +973,6 @@ META NOTE (HSH - 8/25/2014): Can we remove this note, or at least clarify?
 		
     	var phenotypeList = this.state.phenotypeData;
 	    var limit = this.state.multiOrganismCt;
-	    console.log("in load overview data.. server url is "+this.state.serverURL);
 		//For the Overview, we need to create grid for human data first - top 10  models
 		//Taxon is hard-coded since the targetSpecies is "Overview"
 		hurl = this.state.serverURL + "/simsearch/phenotype/?input_items=" + 
@@ -1357,19 +1370,28 @@ META NOTE (HSH - 8/25/2014): Can we remove this note, or at least clarify?
 					break;
 			default: maxScore = this.state.maxICScore;
 					break;
-		}				
-    	
-	    this.state.colorScaleB = d3.scale.linear().domain([3, maxScore]);
-        this.state.colorScaleB.domain([0, 0.2, 0.4, 0.6, 0.8, 1].map(this.state.colorScaleB.invert));
-		this.state.colorScaleB.range(['rgb(229,229,229)','rgb(164,214,212)','rgb(68,162,147)','rgb(97,142,153)','rgb(66,139,202)','rgb(25,59,143)']);
+		}	
+	/** 3 september 2014 HARDCODE ALERT ** 
+	    make these key off of a list somehow.., but how do we generalize beyond 3? or do we have to.. */
+
+    	    this.state.colorScale={};
+	    this.state.colorScale["Homo sapiens"] = d3.scale.linear().domain([3, maxScore]);
+        this.state.colorScale["Homo sapiens"]
+	    .domain(this.state.colorDomains.map(this.state.colorScale["Homo sapiens"].invert));
+ 	this.state.colorScale["Homo sapiens"]
+	    .range(this.state.colorRanges["Homo sapiens"]);
 		  
-		this.state.colorScaleR = d3.scale.linear().domain([3, maxScore]);
-        this.state.colorScaleR.domain([0, 0.2, 0.4, 0.6, 0.8, 1].map(this.state.colorScaleR.invert));
-		this.state.colorScaleR.range(['rgb(252,248,227)','rgb(249,205,184)','rgb(234,118,59)','rgb(221,56,53)','rgb(181,92,85)','rgb(70,19,19)']);
+	this.state.colorScale["Mus musculus"] = d3.scale.linear().domain([3, maxScore]);
+        this.state.colorScale["Mus musculus"]
+	    .domain(this.state.colorDomains.map(this.state.colorScale["Mus musculus"].invert));
+	this.state.colorScale["Mus musculus"]
+	    .range(this.state.colorRanges["Mus musculus"]);
 			
-		this.state.colorScaleG = d3.scale.linear().domain([3, maxScore]);
-		this.state.colorScaleG.domain([0, 0.2, 0.4, 0.6, 0.8, 1].map(this.state.colorScaleG.invert));
-		this.state.colorScaleG.range(['rgb(230,209,178)','rgb(210,173,116)','rgb(148,114,60)','rgb(68,162,147)','rgb(31,128,113)','rgb(3,82,70)']);
+	this.state.colorScale["Danio rerio"] = d3.scale.linear().domain([3, maxScore]);
+	this.state.colorScale["Danio rerio"]
+	    .domain(this.state.colorDomains.map(this.state.colorScale["Danio rerio"].invert));
+	this.state.colorScale["Danio rerio"]
+	    .range(this.state.colorRanges["Danio rerio"]);
 	},
 
     _initCanvas : function() {
@@ -1932,18 +1954,7 @@ META NOTE (HSH - 8/25/2014): Can we remove this note, or at least clarify?
 			  self._deselectData(self.state.selectedRow);}
 		  })
 		  .style('opacity', '1.0')
-		  .attr("fill", function(d, i) {
-
-			  //This is for the new "Overview" target option 
-			  if (self.state.targetSpeciesName == "Overview"){
-						if (d.species == "Homo sapiens") {return self.state.colorScaleB(d.value);} 
-						else if (d.species == "Mus musculus")  {return self.state.colorScaleR(d.value);} 
-						else if (d.species == "Danio rerio")  {return self.state.colorScaleG(d.value);} 
-					}	
-					else {	
-						return self.state.colorScaleB(d.value); 
-					}
-			  });
+		  .attr("fill", function(d,i) { return self._setRectFill(self,d,i)});
 		  		
 		if (self.state.targetSpeciesName == "Overview") {
 			this._highlightSpecies();
