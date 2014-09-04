@@ -92,7 +92,9 @@ META NOTE (HSH - 8/25/2014): Can we remove this note, or at least clarify?
 		       "Mus musculus" :   ['rgb(252,248,227)','rgb(249,205,184)','rgb(234,118,59)',
 		    'rgb(221,56,53)','rgb(181,92,85)','rgb(70,19,19)'],
 		       "Danio rerio" : ['rgb(230,209,178)','rgb(210,173,116)',
-		    'rgb(148,114,60)','rgb(68,162,147)','rgb(31,128,113)','rgb(3,82,70)']
+		    'rgb(148,114,60)','rgb(68,162,147)','rgb(31,128,113)','rgb(3,82,70)'],
+		       "default" : ['rgb(229,229,229)','rgb(164,214,212)',
+		    'rgb(68,162,147)','rgb(97,142,153)','rgb(66,139,202)','rgb(25,59,143)']
 		       },
 	    
 	w : 0,
@@ -135,6 +137,7 @@ META NOTE (HSH - 8/25/2014): Can we remove this note, or at least clarify?
 	    this.state.combinedModelData  = [];
 
 	    this.state.filteredModelList = [];
+	    this.state.phenotypeDisplayCount = 26;
 
 	    this.state.modelData = [];
 	    this.state.modelList = [];
@@ -434,7 +437,7 @@ META NOTE (HSH - 8/25/2014): Can we remove this note, or at least clarify?
 		  	  .attr("width", 2)
 		  	  .attr("height", 2)
 		  	  .attr("fill", function(d,i) { return self._setRectFill(self,d,i)});
-			  
+		
 		selectRectHeight = self.state.smallYScale(self.state.phenotypeSortData[self.state.phenotypeDisplayCount-1][0].id_a); //rowid
 		selectRectWidth = self.state.smallXScale(mods[self.state.modelDisplayCount-1].model_id);
 		//create the "highlight" rectangle
@@ -495,9 +498,7 @@ META NOTE (HSH - 8/25/2014): Can we remove this note, or at least clarify?
 			.attr("width", self.state.smallXScale(mods[self.state.modelDisplayCount-1].model_id));
 	},
 
-	/* 3 september 2014 HARCODE ALERT */
-	/* this should be replaced with something that keys off of a list of names, not  
-	   'Homo sapiens' */
+	/* we only have 3 color,s but that will do for now */
 	_setRectFill: function(self,d,i) {
 	    //This is for the new "Overview" target option 
 	    if (typeof (self.state.colorScale[d.species]) !== 'undefined') {
@@ -505,7 +506,7 @@ META NOTE (HSH - 8/25/2014): Can we remove this note, or at least clarify?
 	    }
 	    else
 	    {
-		return self.state.colorScale["Homo sapiens"](d.value);
+		return self.state.colorScale['default'](d.value);
 	    }
 	},
 
@@ -1371,28 +1372,27 @@ META NOTE (HSH - 8/25/2014): Can we remove this note, or at least clarify?
 			default: maxScore = this.state.maxICScore;
 					break;
 		}	
-	/** 3 september 2014 HARDCODE ALERT ** 
-	    make these key off of a list somehow.., but how do we generalize beyond 3? or do we have to.. */
+	/** 3 september 2014  still a bit clunky in handling many organisms, 
+	    but much less hardbound. */
+    	this.state.colorScale={};
+	for (ts in this.state.targetSpeciesList) {
+	    species = this.state.targetSpeciesList[ts].name;
+	    var speciesindex;
+	    if (typeof(this.state.colorRanges[species]) === 'undefined') {
+		speciesindex = "default";
+	    }
+	    else speciesindex = species;
+	    this.state.colorScale[species] = this._getColorScale(speciesindex,maxScore);
+	}
+	this.state.colorScale['default'] = this._getColorScale('default',maxScore);
+    },
 
-    	    this.state.colorScale={};
-	    this.state.colorScale["Homo sapiens"] = d3.scale.linear().domain([3, maxScore]);
-        this.state.colorScale["Homo sapiens"]
-	    .domain(this.state.colorDomains.map(this.state.colorScale["Homo sapiens"].invert));
- 	this.state.colorScale["Homo sapiens"]
-	    .range(this.state.colorRanges["Homo sapiens"]);
-		  
-	this.state.colorScale["Mus musculus"] = d3.scale.linear().domain([3, maxScore]);
-        this.state.colorScale["Mus musculus"]
-	    .domain(this.state.colorDomains.map(this.state.colorScale["Mus musculus"].invert));
-	this.state.colorScale["Mus musculus"]
-	    .range(this.state.colorRanges["Mus musculus"]);
-			
-	this.state.colorScale["Danio rerio"] = d3.scale.linear().domain([3, maxScore]);
-	this.state.colorScale["Danio rerio"]
-	    .domain(this.state.colorDomains.map(this.state.colorScale["Danio rerio"].invert));
-	this.state.colorScale["Danio rerio"]
-	    .range(this.state.colorRanges["Danio rerio"]);
-	},
+    _getColorScale: function(speciesIndex,maxScore) {
+	var cs =  d3.scale.linear().domain([3, maxScore]);
+	cs.domain(this.state.colorDomains.map(cs.invert));
+	cs.range(this.state.colorRanges[speciesIndex]);
+	return cs;
+    },
 
     _initCanvas : function() {
 
