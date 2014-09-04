@@ -66,19 +66,7 @@
             </div>
             <div id="complete-info">
                 <div id="overview" class="first category">
-                    <div class="ids">
-                        <b>ID:</b> {{id}} <br />
-                    </div>
-					Genetic Background: {{background}} <br />
-					Genomic Variation Complements: <br />
-					Variant Genes: {{genes}} <br />
-					Variants : {{variants}} <br />
-					{{^hasDescription}}
-					Description : (none provided)
-					{{/hasDescription}}
-					{{#hasDescription}}
-					Description : {{description}} <br />
-					{{/hasDescription}}
+					{{{overview}}}
                 </div>
                 {{#hasPhenotypes}}
                 <div id="phenotypes" class="category">
