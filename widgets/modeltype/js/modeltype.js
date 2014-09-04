@@ -240,7 +240,8 @@ META NOTE (HSH - 8/25/2014): Can we remove this note, or at least clarify?
 
 	_reDraw: function() {
 	    if ((this.state.combinedModelData.length != 0) ||
-		(modData.length != 0 && this.state.phenotypeData.length != 0 && this.state.filteredPhenotypeData.length != 0)){
+		(this.state.modelData.length != 0 && this.state.phenotypeData.length != 0
+		 && this.state.filteredPhenotypeData.length != 0)){
 	         
 	            this._initCanvas(); 
 				this._addLogoImage();	        
@@ -971,16 +972,14 @@ META NOTE (HSH - 8/25/2014): Can we remove this note, or at least clarify?
 	    
 	    for (i in this.state.targetSpeciesList) {
 		var species = this.state.targetSpeciesList[i].name;
-		if (species !== 'Overview') {
-		    this._loadSpeciesData(species,limit);
-		    if (species === this.state.refSpecies) { // if it's the one we're reffering to
-			this.state.maxICScore = this.state.data[species].metadata.maxMaxIC;
-		    }
-		    else {
-			var data = this.state.data[species];
-			if(typeof(data) !== 'undefined' && data.length < limit) {
+		this._loadSpeciesData(species,limit);
+		if (species === this.state.refSpecies) { // if it's the one we're reffering to
+		    this.state.maxICScore = this.state.data[species].metadata.maxMaxIC;
+		}
+		else {
+		    var data = this.state.data[species];
+		    if(typeof(data) !== 'undefined' && data.length < limit) {
 			limit = (limit - data.length);
-			}
 		    }
 		}
 	    }
@@ -995,88 +994,38 @@ META NOTE (HSH - 8/25/2014): Can we remove this note, or at least clarify?
 	},
 	
 	_finishOverviewLoad : function () {
-		var speciesData = [];
+		/*var speciesData = [];
 		var self = this,
 			hdata=[],
 			mdata=[],
 			zdata=[],
-			fdata=[],
-			speciesList = [];
+			fdata=[],*/
+	        var speciesList = [];
 			
 		var modList = [],
-			orgCtr = 0;
-		
-	    if (this.state.data["Homo sapiens"] != null  && this.state.data["Homo sapiens"].b.length > 0){
-			for (var idx=0;idx<this.state.data["Homo sapiens"].b.length;idx++) {
-				 hdata.push(
-				{model_id: self._getConceptId(this.state.data["Homo sapiens"].b[idx].id), 
-				 model_label: this.state.data["Homo sapiens"].b[idx].label,
-				 model_score: this.state.data["Homo sapiens"].b[idx].score.score, 
-				 model_rank: this.state.data["Homo sapiens"].b[idx].score.rank});
-				
-				this.state.multiOrgModelCt[orgCtr].count = this.state.data["Homo sapiens"].b.length;
-				this._loadDataForModel(this.state.data["Homo sapiens"].b[idx]);	
-			} 
-			speciesList.push("Homo sapiens");
-		} 
-		orgCtr++;
-		//sort the model list by rank
-	    hdata.sort(function(a,b) { return a.model_rank - b.model_rank; });
-			modList= modList.concat(hdata.slice()); 
-		
-	    if (this.state.data["Mus musculus"] != null  && this.state.data["Mus musculus"].b.length > 0){
-			for (var idx=0;idx<this.state.data["Mus musculus"].b.length;idx++) {
-				mdata.push(
-				{model_id: self._getConceptId(this.state.data["Mus musculus"].b[idx].id), 
-				 model_label: this.state.data["Mus musculus"].b[idx].label,
-				 model_score: this.state.data["Mus musculus"].b[idx].score.score, 
-				 model_rank: this.state.data["Mus musculus"].b[idx].score.rank});
-		
-				this.state.multiOrgModelCt[orgCtr].count = this.state.data["Mus musculus"].b.length;
-				this._loadDataForModel(this.state.data["Mus musculus"].b[idx]);			 
-			} 
-			speciesList.push("Mus musculus");			
-		} 		
-		orgCtr++;
-		//sort the model list by rank
-	    mdata.sort(function(a,b) { return a.model_rank - b.model_rank; });
-			modList = modList.concat(mdata.slice());  		
-		
-	    if (this.state.data["Danio rerio"] != null  && this.state.data["Danio rerio"].b.length > 0){
-			for (var idx=0;idx<this.state.data["Danio rerio"].b.length;idx++) {
-				zdata.push(
-				{model_id: self._getConceptId(this.state.data["Danio rerio"].b[idx].id), 
-				 model_label: this.state.data["Danio rerio"].b[idx].label,
-				 model_score: this.state.data["Danio rerio"].b[idx].score.score, 
-				 model_rank: this.state.data["Danio rerio"].b[idx].score.rank});
+		    orgCtr = 0;
 
-				this.state.multiOrgModelCt[orgCtr].count = this.state.data["Danio rerio"].b.length;
-				this._loadDataForModel(this.state.data["Danio rerio"].b[idx]);			 
-			} 
-			speciesList.push("Danio rerio");
+	    for (i in this.state.targetSpeciesList) {
+		var species = this.state.targetSpeciesList[i].name;
+		var specData = this.state.data[species];
+		if (specData != null && specData.b.length > 0) {
+		    var data = [];
+		    for (var idx= 0; idx <specData.b.length; idx++) {
+			var item = specData.b[idx];
+			data.push( {
+			    model_id: this._getConceptId(item.id),
+			    model_label: item.label,
+			    model_score: item.score.score,
+			    model_rank: item.score.rank});
+			this._loadDataForModel(item);
+		    }
+		    this.state.multiOrgModelCt[orgCtr].count=specData.b.length;
+		    speciesList.push(species);
+		    orgCtr++;
+		    data.sort(function(a,b) { return a.model_rank - b.model_rank;});
+		    modList = modList.concat(data.slice());
 		}
-		orgCtr++;		
-		//sort the model list by rank
-	    zdata.sort(function(a,b) { return a.model_rank - b.model_rank; });
-			modList = modList.concat(zdata.slice());  
-		
-		if (this.state.data["Drosophila melanogaster"] != null  && this.state.data["Drosophila melanogaster"].b.length > 0){
-			for (var idx=0;idx<this.state.data["Drosophila melanogaster"].b.length;idx++) {
-				fdata.push(
-				{model_id: self._getConceptId(this.state.data["Drosophila melanogaster"].b[idx].id), 
-				 model_label: this.state.data["Drosophila melanogaster"].b[idx].label,
-				 model_score: this.state.data["Drosophila melanogaster"].b[idx].score.score, 
-				 model_rank: this.state.data["Drosophila melanogaster"].b[idx].score.rank});
-
-				this.state.multiOrgModelCt[orgCtr].count = this.state.data["Drosophila melanogaster"].b.length;
-				this._loadDataForModel(this.state.data["Drosophila melanogaster"].b[idx]);			 
-			} 
-			speciesList.push("Drosophila melanogaster");
-		} 
-		orgCtr++;
-		 //sort the model list by rank
-	    fdata.sort(function(a,b) { return a.model_rank - b.model_rank; });			 
-			modList = modList.concat(fdata.slice());  
+	    }
 		this.state.combinedModelList = modList.slice();	
 		this.state.speciesList = speciesList.slice();
 		//we need to adjust the display counts and indexing if there are fewer models
