@@ -84,8 +84,10 @@ META NOTE (HSH - 8/25/2014): Can we remove this note, or at least clarify?
 	targetSpeciesList : [{ name: "Homo sapiens", taxon: "9606", color: 'rgb(25,59,143)'}, 
 			     { name: "Mus musculus", taxon: "10090", color: 'rgb(70,19,19)'},
 			     { name: "Danio rerio", taxon: "7955", color: 'rgb(1,102,94)'}, 
-			     { name: "Drosophila melanogaster", taxon: "7227", color:'purple'} , 
-			     { name: "Overview", taxon: "2"}], //, {name: "All", taxon: "1"}],
+			     { name: "Drosophila melanogaster", taxon: "7227", color:'purple'} ,
+			     { name: "Overview", taxon: "2"}
+			    ],
+	refSpecies: "Homo sapiens", 
 	colorDomains: [ 0, 0.2, 0.4, 0.6, 0.8, 1],
 	colorRanges: { "Homo sapiens" :	    ['rgb(229,229,229)','rgb(164,214,212)',
 		    'rgb(68,162,147)','rgb(97,142,153)','rgb(66,139,202)','rgb(25,59,143)'],
@@ -238,7 +240,7 @@ META NOTE (HSH - 8/25/2014): Can we remove this note, or at least clarify?
 
 	_reDraw: function() {
 	    if ((this.state.combinedModelData.length != 0) ||
-		    (modData.length != 0 && this.state.phenotypeData.length != 0 && this.state.filteredPhenotypeData.length != 0)){	    
+		(modData.length != 0 && this.state.phenotypeData.length != 0 && this.state.filteredPhenotypeData.length != 0)){
 	         
 	            this._initCanvas(); 
 				this._addLogoImage();	        
@@ -965,32 +967,24 @@ META NOTE (HSH - 8/25/2014): Can we remove this note, or at least clarify?
 	},
     
 	_loadOverviewData: function() {
-		var hurl = '',
-			murl = '',
-			zurl = '',
-			furl = '',
-			speciesWithData = [];
-		
-		var self=this;
-		
-    	var phenotypeList = this.state.phenotypeData;
 	    var limit = this.state.multiOrganismCt;
-		//For the Overview, we need to create grid for human data first - top 10  models
-	    //Taxon is hard-coded since the targetSpecies is "Overview"
-	    this._loadSpeciesData("Homo sapiens",limit);
-	    this.state.maxICScore = this.state.data["Homo sapiens"].metadata.maxMaxIC;
-		
-	    this._loadSpeciesData("Mus musculus",limit);
-	    var data = this.state.data["Mus musculus"];
-		
-	    if(data.length < limit) {limit = (limit - mousedata.length);}
-
-	    this._loadSpeciesData("Danio rerio",limit);
-	    data = this.state.data["Danio rerio"];
-	    if(data.length < limit) {limit = (limit - zfishdata.length);}
 	    
-	    this._loadSpeciesData("Drosophila melanogaster",limit);
-		
+	    for (i in this.state.targetSpeciesList) {
+		var species = this.state.targetSpeciesList[i].name;
+		if (species !== 'Overview') {
+		    this._loadSpeciesData(species,limit);
+		    if (species === this.state.refSpecies) { // if it's the one we're reffering to
+			this.state.maxICScore = this.state.data[species].metadata.maxMaxIC;
+		    }
+		    else {
+			var data = this.state.data[species];
+			if(typeof(data) !== 'undefined' && data.length < limit) {
+			limit = (limit - data.length);
+			}
+		    }
+		}
+	    }
+
 		//Now we have top 10 model matches for Human data in humandata, 
 		//Top n model matches for Mouse data in mousedata
 		//Top n model matches for zebrashish data in zfishdata
@@ -1012,7 +1006,7 @@ META NOTE (HSH - 8/25/2014): Can we remove this note, or at least clarify?
 		var modList = [],
 			orgCtr = 0;
 		
-		if (this.state.data["Homo sapiens"] != null  && this.state.data["Homo sapiens"].b.length > 0){
+	    if (this.state.data["Homo sapiens"] != null  && this.state.data["Homo sapiens"].b.length > 0){
 			for (var idx=0;idx<this.state.data["Homo sapiens"].b.length;idx++) {
 				 hdata.push(
 				{model_id: self._getConceptId(this.state.data["Homo sapiens"].b[idx].id), 
@@ -1027,10 +1021,10 @@ META NOTE (HSH - 8/25/2014): Can we remove this note, or at least clarify?
 		} 
 		orgCtr++;
 		//sort the model list by rank
-			hdata.sort(function(a,b) { return a.model_rank - b.model_rank; });			 
+	    hdata.sort(function(a,b) { return a.model_rank - b.model_rank; });
 			modList= modList.concat(hdata.slice()); 
 		
-		if (this.state.data["Mus musculus"] != null  && this.state.data["Mus musculus"].b.length > 0){
+	    if (this.state.data["Mus musculus"] != null  && this.state.data["Mus musculus"].b.length > 0){
 			for (var idx=0;idx<this.state.data["Mus musculus"].b.length;idx++) {
 				mdata.push(
 				{model_id: self._getConceptId(this.state.data["Mus musculus"].b[idx].id), 
@@ -1045,10 +1039,10 @@ META NOTE (HSH - 8/25/2014): Can we remove this note, or at least clarify?
 		} 		
 		orgCtr++;
 		//sort the model list by rank
-			mdata.sort(function(a,b) { return a.model_rank - b.model_rank; });			 
+	    mdata.sort(function(a,b) { return a.model_rank - b.model_rank; });
 			modList = modList.concat(mdata.slice());  		
 		
-		if (this.state.data["Danio rerio"] != null  && this.state.data["Danio rerio"].b.length > 0){
+	    if (this.state.data["Danio rerio"] != null  && this.state.data["Danio rerio"].b.length > 0){
 			for (var idx=0;idx<this.state.data["Danio rerio"].b.length;idx++) {
 				zdata.push(
 				{model_id: self._getConceptId(this.state.data["Danio rerio"].b[idx].id), 
@@ -1063,7 +1057,7 @@ META NOTE (HSH - 8/25/2014): Can we remove this note, or at least clarify?
 		}
 		orgCtr++;		
 		//sort the model list by rank
-			zdata.sort(function(a,b) { return a.model_rank - b.model_rank; });			 
+	    zdata.sort(function(a,b) { return a.model_rank - b.model_rank; });
 			modList = modList.concat(zdata.slice());  
 		
 		if (this.state.data["Drosophila melanogaster"] != null  && this.state.data["Drosophila melanogaster"].b.length > 0){
@@ -1081,30 +1075,22 @@ META NOTE (HSH - 8/25/2014): Can we remove this note, or at least clarify?
 		} 
 		orgCtr++;
 		 //sort the model list by rank
-			fdata.sort(function(a,b) { return a.model_rank - b.model_rank; });			 
+	    fdata.sort(function(a,b) { return a.model_rank - b.model_rank; });			 
 			modList = modList.concat(fdata.slice());  
 		this.state.combinedModelList = modList.slice();	
 		this.state.speciesList = speciesList.slice();
-		
 		//we need to adjust the display counts and indexing if there are fewer models
 		if (this.state.combinedModelList.length < this.state.modelDisplayCount) {
 			this.state.currModelIdx = this.state.combinedModelList.length-1;
 			this.state.modelDisplayCount = this.state.combinedModelList.length;
-			this._fixForFewerModels(this.state.modelDisplayCount);
 		}
 		
-		//initialize the filtered model list
+	    //initialize the filtered model list
 		for (var idx=0;idx<this.state.modelDisplayCount;idx++) {
 			this.state.filteredModelList.push(this.state.combinedModelList[idx]);
 		}
 	},
 	
-	_fixForFewerModels : function(modelCt){
-	
-	
-	
-	
-	},
 		
 	//generic ajax call for all queries
 	_ajaxLoadData : function (target, url) {
@@ -1196,6 +1182,7 @@ META NOTE (HSH - 8/25/2014): Can we remove this note, or at least clarify?
 			this._fixForFewerModels(this.state.modelDisplayCount);
 		}
 
+	        this.state.filteredModelllist=[];
 		//initialize the filtered model list
 		for (var idx=0;idx<this.state.modelDisplayCount;idx++) {
 			this.state.filteredModelList.push(this.state.modelList[idx]);
@@ -2363,7 +2350,7 @@ META NOTE (HSH - 8/25/2014): Can we remove this note, or at least clarify?
 		var list = [];
 
 		//This is for the new "Overview" target option 
-		if (this.state.targetSpeciesName == "Overview"){	
+	    if (this.state.targetSpeciesName == "Overview"){
 			list = this.state.combinedModelList.slice();			
 		}
 		else
@@ -2428,8 +2415,8 @@ META NOTE (HSH - 8/25/2014): Can we remove this note, or at least clarify?
 				.attr("width", 18)
 				.attr("height", 10)
 				.attr("class", "scores")
-				.text(function (d,i){return self.state.filteredModelList[i].model_score;});
-				
+		    .text(function (d,i){ return self.state.filteredModelList[i].model_score;});
+	            				
 		self.state.svg.append("line")
 				.attr("transform","translate(" + (self.state.textWidth + 30) +"," + (self.state.yTranslation + self.state.yoffset + 0) + ")")
 				.attr("x1", 0)
