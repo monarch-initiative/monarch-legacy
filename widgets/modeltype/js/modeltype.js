@@ -137,7 +137,7 @@ META NOTE (HSH - 8/25/2014): Can we remove this note, or at least clarify?
 	    this.state.combinedModelData  = [];
 
 	    this.state.filteredModelList = [];
-	    this.state.phenotypeDisplayCount = 26;
+	    
 
 	    this.state.modelData = [];
 	    this.state.modelList = [];
@@ -148,21 +148,22 @@ META NOTE (HSH - 8/25/2014): Can we remove this note, or at least clarify?
 	    this.state.yoffsetOver = 0;
 
 	    this.state.yTranslation =0;
+
+	    // must reset height explicitly
+	    this.state.h = this.config.h;
 	},
 	
 	//this function will use the desired height to determine how many phenotype rows to display
 	//the basic formula is: (height - headerAreaHeight)/14.
 	//return -1 if the available space is too small to properly display the grid   
 	_calcPhenotypeDisplayCount: function() {
-		var self = this;
-		var pCount = Math.round((self.state.h - self.state.headerAreaHeight) / 14);
-		if (pCount < 10) {
-		   pCount = -1;
-		}
-	    if (pCount > this.state.phenotypeDisplayCount) {
-		pCount = this.state.phenotypeDisplayCount;
+	    var self = this;
+
+	    var pCount = Math.round((self.state.h - self.state.headerAreaHeight) / 14);
+	    if (pCount < 10) {
+		pCount = -1;
 	    }
-		return pCount;
+	    return pCount;
 	},
 	
 	
