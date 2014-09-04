@@ -85,7 +85,7 @@ META NOTE (HSH - 8/25/2014): Can we remove this note, or at least clarify?
 			     { name: "Mus musculus", taxon: "10090", color: 'rgb(70,19,19)'},
 			     { name: "Danio rerio", taxon: "7955", color: 'rgb(1,102,94)'}, 
 			     { name: "Drosophila melanogaster", taxon: "7227", color:'purple'} ,
-			     { name: "Overview", taxon: "2"}
+			    // { name: "Overview", taxon: "2"}
 			    ],
 	refSpecies: "Homo sapiens", 
 	colorDomains: [ 0, 0.2, 0.4, 0.6, 0.8, 1],
@@ -2709,42 +2709,15 @@ META NOTE (HSH - 8/25/2014): Can we remove this note, or at least clarify?
 			} 
 			else { selClass = "selects";}
 			
-		
-			var optionhtml = "<div id='selects' class='" + selClass + "'><div id='org_div'><span id='olabel'>Species</span><span id='org_sel'><select id=\'organism\'>";
 
-			for (var idx=0;idx<self.state.targetSpeciesList.length;idx++) {
-				var selecteditem = "";
-				if (self.state.targetSpeciesList[idx].name === self.state.targetSpeciesName) {
-					selecteditem = "selected";
-				}
-				optionhtml = optionhtml + "<option value='" + self.state.targetSpeciesList[idx].label +"' "+ selecteditem +">" + self.state.targetSpeciesList[idx].name +"</option>"
-			}
-	
-			optionhtml = optionhtml + "</select></span></div><div id='calc_div'><span id='clabel'>Display</span><span id='calcs'><img class='calcs' src='" + this.state.scriptpath + "../image/greeninfo30.png' height='15px'></span><br /><span id='calc_sel'><select id=\"calculation\">";
-       	   
+	    
+	             var optionhtml = self._createOrganismSelection(selClass);
+	             var disthtml = self._createCalculationSelection();
+	             optionhtml = optionhtml+"<span id=\'calc_sel\'><select id=\"calculation\">";
 
-			for (var idx=0;idx<self.state.similarityCalculation.length;idx++) {
-				var selecteditem = "";
-			//    if (self.state.similarityCalculation[idx].label === self.state.selectedLabel){
-			//		selecteditem = "selected";
-		//		}
-				if (self.state.similarityCalculation[idx].calc === self.state.selectedCalculation) {
-					selecteditem = "selected";
-				}
-				optionhtml = optionhtml + "<option value='" + self.state.similarityCalculation[idx].calc +"' "+ selecteditem +">" + self.state.similarityCalculation[idx].label +"</option>"
-			}
-			optionhtml = optionhtml + "</select></span></div></div>";
+
+	    optionhtml = optionhtml+disthtml;
 			this.element.append(optionhtml);			
-		/**	self.state.svg.append("svg:foreignObject")
-		    //.attr("width", w + 60)
-			//.attr("height", h)
-			.attr("id", "selectiondiv")
-			.attr("y", (y1 +400) + this.state.yTranslation + self.state.yoffsetOver)
-		    .attr("x", self.state.axis_pos_list[2]) 
-			.append("xhtml:body")
-			.attr("id","selections")
-			.html(optionhtml);  */	
-			
 			
 			
 			var calcs = d3.selectAll("#calcs")
@@ -2756,9 +2729,15 @@ META NOTE (HSH - 8/25/2014): Can we remove this note, or at least clarify?
 			$( "#organism" ).change(function(d) {
 				//msg =  "Handler for .change()
 			    //called." );
-			    self.state.targetSpeciesName = self.state.targetSpeciesList[d.target.selectedIndex].name;
-				self._resetSelections();
-				});
+			    var index = d.target.selectedIndex;
+			    if  (typeof(self.state.targetSpeciesList[index]) !== 'undefined') {
+				self.state.targetSpeciesName = self.state.targetSpeciesList[index].name;
+			    }
+			    else {
+				self.state.targetSpeciesName = 'Overview';
+			    }
+			    self._resetSelections();
+			});
 			
         
 			 $( "#calculation" ).change(function(d) {
@@ -2770,6 +2749,56 @@ META NOTE (HSH - 8/25/2014): Can we remove this note, or at least clarify?
 			});
 	    
 		
+	},
+
+	_createOrganismSelection: function(selClass) {
+	    var selectedItem="";
+	    var optionhtml = "<div id='selects' class='" + selClass +
+		"'><div id='org_div'><span id='olabel'>Species</span>"+
+		"<span id='org_sel'><select id=\'organism\'>";
+
+	    for (var idx=0;idx<this.state.targetSpeciesList.length;idx++) {
+		var selecteditem = "";
+		if (this.state.targetSpeciesList[idx].name === this.state.targetSpeciesName) {
+		    selecteditem = "selected";
+		}
+		optionhtml = optionhtml +
+		    "<option value=\""+this.state.targetSpeciesList[idx.name]+
+		    "\" " + selecteditem +">" + this.state.targetSpeciesList[idx].name +"</option>"
+
+
+	    }
+	    // add one for overivew.
+	    if (this.state.targetSpeciesName === "Overview") {
+		selecteditem = "selected";
+	    } else {
+		selecteditem = "";
+	    }
+	    optionhtml = optionhtml +
+		"<option value=\"Overview\" "+ selecteditem +">Overview</option>"
+	    
+	    optionhtml = optionhtml +
+		"</select></span></div><div id=\"calc_div\"><span id=\"clabel\">Display</span><span id=\"calcs\"><img class=\"calcs\" src=\"" +
+		this.state.scriptpath +
+		"../image/greeninfo30.png\" height=\"15px\"></span><br />";
+
+	    return optionhtml;
+	},
+
+	_createCalculationSelection: function () {
+
+	    var optionhtml;
+	    for (var idx=0;idx<this.state.similarityCalculation.length;idx++) {
+		var selecteditem = "";
+		if (this.state.similarityCalculation[idx].calc === this.state.selectedCalculation) {
+		    selecteditem = "selected";
+		}
+		optionhtml = optionhtml + "<option value='" +
+		    this.state.similarityCalculation[idx].calc +"' "+ selecteditem +">" +
+		    this.state.similarityCalculation[idx].label +"</option>";
+	    }
+	    optionhtml = optionhtml + "</select></span></div></div>";
+	    return optionhtml;
 	},
 
 	//this code creates the text and rectangles containing the text 
