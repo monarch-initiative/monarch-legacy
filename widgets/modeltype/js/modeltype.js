@@ -136,7 +136,6 @@ META NOTE (HSH - 8/25/2014): Can we remove this note, or at least clarify?
 	//reset state values that must be cleared before reloading data
 	_reset: function() {
 
-	    this.state.combinedModelData  = [];
 
 	    this.state.filteredModelList = [];
 	    
@@ -224,13 +223,10 @@ META NOTE (HSH - 8/25/2014): Can we remove this note, or at least clarify?
 		this._loadData();
 		var modData = [];
 		if (this.state.targetSpeciesName == "Overview") {
-			modData = this.state.combinedModelData.slice();
-			this.state.yoffsetOver = 30;
+		    this.state.yoffsetOver = 30;
 		}
-		else {
-			modData = this.state.modelData.slice();
-			this.state.yoffsetOver = 0;
-		}	    
+	        modData = this.state.modelData.slice();
+
 		this._filterData(modData.slice());
 		this.state.unmatchedPhenotypes = this._getUnmatchedPhenotypes();
 		
@@ -239,9 +235,8 @@ META NOTE (HSH - 8/25/2014): Can we remove this note, or at least clarify?
 
 
 	_reDraw: function() {
-	    if ((this.state.combinedModelData.length != 0) ||
-		(this.state.modelData.length != 0 && this.state.phenotypeData.length != 0
-		 && this.state.filteredPhenotypeData.length != 0)){
+		if (this.state.modelData.length != 0 && this.state.phenotypeData.length != 0
+		 && this.state.filteredPhenotypeData.length != 0){
 	         
 	            this._initCanvas(); 
 				this._addLogoImage();	        
@@ -255,7 +250,7 @@ META NOTE (HSH - 8/25/2014): Can we remove this note, or at least clarify?
 	    	this._updateAxes();
 		this._createGridlines();
 	    	this._createModelRects();
-	         this._createRects();			
+	        this._createRects();			
 		this._createOverviewSection();
 	    } 
 	
@@ -408,15 +403,8 @@ META NOTE (HSH - 8/25/2014): Can we remove this note, or at least clarify?
 		var mods = [],
 			modData = [];
 		
-		//This is for the new "Overview" target option 
-		if (this.state.targetSpeciesName == "Overview") {
-			mods = self.state.combinedModelList;
-			modData = self.state.combinedModelData;
-		}
-		else {
-			mods = self.state.modelList;
-			modData = self.state.modelData;
-		}
+	    mods = self.state.modelList;
+	    modData = self.state.modelData;
 	
 		this.state.smallYScale = d3.scale.ordinal()
 		    .domain(sortDataList.map(function (d) {return d; }))				    
@@ -752,12 +740,7 @@ META NOTE (HSH - 8/25/2014): Can we remove this note, or at least clarify?
 		var axis_idx = 0;
 		var tempFilteredModelData = [];
 		
-		if (this.state.targetSpeciesName == "Overview") {
-			modData = this.state.combinedModelData.slice();
-		}
-		else {
-			modData = this.state.modelData.slice();
-		}	 
+	    modData = this.state.modelData.slice();
 		
 		//get phenotype[startIdx] up to phenotype[currPhenotypeIdx] from the array of sorted phenotypes
 		for (var i = startIdx;i <self.state.currPhenotypeIdx + 1;i++) {
@@ -798,12 +781,7 @@ META NOTE (HSH - 8/25/2014): Can we remove this note, or at least clarify?
 		
 		var self = this;
 		var modelDataForSorting = [];
-		if (this.state.targetSpeciesName == "Overview") {
-			modData = self.state.combinedModelData.slice();
-		}
-		else {
-			modData = self.state.modelData.slice();
-		}	    
+	    modData = self.state.modelData.slice();
 		
 		for (var idx=0;idx<self.state.phenotypeData.length;idx++) {			
 			var tempdata = modData.filter(function(d) {
@@ -848,12 +826,7 @@ META NOTE (HSH - 8/25/2014): Can we remove this note, or at least clarify?
 		var modelDataForSorting = [],
 			modData = [];
 		
-		if (this.state.targetSpeciesName == "Overview") {
-			modData = self.state.combinedModelData.slice();
-		}
-		else {
-			modData = self.state.modelData.slice();
-		}
+	    modData = self.state.modelData.slice();
 		
 		for (var idx=0;idx<self.state.phenotypeData.length;idx++) {			
 			var tempdata = modData.filter(function(d) {
@@ -896,13 +869,7 @@ META NOTE (HSH - 8/25/2014): Can we remove this note, or at least clarify?
 		var self = this;
 		var modelDataForSorting = [],
 			modData = [];
-		
-		if (this.state.targetSpeciesName == "Overview") {
-			modData = self.state.combinedModelData.slice();
-		}
-		else {
-			modData = self.state.modelData.slice();
-		}
+	    modData = self.state.modelData.slice();
 		
 		for (var idx=0;idx<self.state.phenotypeData.length;idx++) {			
 			var tempdata = modData.filter(function(d) {
@@ -1026,17 +993,16 @@ META NOTE (HSH - 8/25/2014): Can we remove this note, or at least clarify?
 		    modList = modList.concat(data.slice());
 		}
 	    }
-		this.state.combinedModelList = modList.slice();	
+	    this.state.modelList = modList.slice();	
 		this.state.speciesList = speciesList.slice();
-		//we need to adjust the display counts and indexing if there are fewer models
-		if (this.state.combinedModelList.length < this.state.modelDisplayCount) {
-			this.state.currModelIdx = this.state.combinedModelList.length-1;
-			this.state.modelDisplayCount = this.state.combinedModelList.length;
-		}
+	    if (this.state.modelList.length < this.state.modelDisplayCount) {
+		this.state.currModelIdx = this.state.modelList.length-1;
+		this.state.modelDisplayCount = this.state.modelList.length;
+	    }
 		
 	    //initialize the filtered model list
 		for (var idx=0;idx<this.state.modelDisplayCount;idx++) {
-			this.state.filteredModelList.push(this.state.combinedModelList[idx]);
+		    this.state.filteredModelList.push(this.state.modelList[idx]);
 		}
 	},
 	
@@ -1197,13 +1163,8 @@ META NOTE (HSH - 8/25/2014): Can we remove this note, or at least clarify?
     	    if (new_row.subsumer_id.indexOf("0005753") > -1) {
     	    	console.out("got it");
     	    }
-			if (this.state.targetSpeciesName == "Overview"){
-					this.state.combinedModelData.push(new_row);	
-					
-			}
-			else {    
-					this.state.modelData.push(new_row); 
-				 }
+		    this.state.modelData.push(new_row); 
+
     	}
 		//we may use this when normalization and ranking have been determined
 		this._rankLCSScores();
@@ -1456,7 +1417,7 @@ META NOTE (HSH - 8/25/2014): Can we remove this note, or at least clarify?
     },
 	_highlightMatchingModels : function(curr_data){
 		var self = this;
-		var  models = self.state.combinedModelData,
+	    var models = self.state.modelData,
 		     alabels = this.state.svg.selectAll("text");
 		for (var i = 0; i < curr_data.length; i++){
 			var label = curr_data[i].model_label;
@@ -1471,7 +1432,7 @@ META NOTE (HSH - 8/25/2014): Can we remove this note, or at least clarify?
 	
 	_deselectMatchingModels : function(curr_data){
 		
-		var  models = this.state.combinedModelData,
+			    var models = this.state.modelData,
 		alabels = this.state.svg.selectAll("text");
 		
 		for (var i = 0; i < curr_data.length; i++){
@@ -1549,7 +1510,7 @@ META NOTE (HSH - 8/25/2014): Can we remove this note, or at least clarify?
 	_highlightMatchingPhenotypes: function(curr_data){
 	
 		var self = this;
-		var  models = self.state.combinedModelData;
+	    	var  models = self.state.modelData;
 				
 		for(var i = 0; i < models.length; i++){
 			//models[i] is the matching model that contains all phenotypes 
@@ -1985,13 +1946,12 @@ META NOTE (HSH - 8/25/2014): Can we remove this note, or at least clarify?
 		
 		//This is for the new "Overview" target option 
 		if (this.state.targetSpeciesName == "Overview"){	
-			data = this.state.combinedModelData;
+		    data = this.state.modelData;
 		}
 		else
 		{
 			data = self.state.filteredModelData;	
 		}
-		
 		this.state.h = (data.length*2.5);
 
 		self.state.yScale = d3.scale.ordinal()
@@ -2014,15 +1974,9 @@ META NOTE (HSH - 8/25/2014): Can we remove this note, or at least clarify?
 		//This is for the new "Overview" target option 
 		var modelData = [].
 			modelList = [];
-		if (this.state.targetSpeciesName == "Overview"){	
-		    modelData = this.state.combinedModelData;
-			modelList = this.state.combinedModelList;
-		}
-		else
-		{
 			modelData = this.state.modelData;
 			modelList = this.state.modelList;
-		}
+
 		//check to see if the phenotypeIdx is greater than the number of items in the list
 		if (phenotypeIdx > this.state.phenotypeData.length) {
 			this.state.currPhenotypeIdx = this.state.phenotypeSortData.length;
@@ -2150,7 +2104,6 @@ META NOTE (HSH - 8/25/2014): Can we remove this note, or at least clarify?
 		if (self.state.targetSpeciesName == "Overview") {
 		
 			var speciesList = self.state.speciesList;
-			
 			var species = self.state.svg.selectAll("#specieslist")
 					.data(speciesList)
 					.enter()
@@ -2300,12 +2253,13 @@ META NOTE (HSH - 8/25/2014): Can we remove this note, or at least clarify?
 
 		//This is for the new "Overview" target option 
 	    if (this.state.targetSpeciesName == "Overview"){
-			list = this.state.combinedModelList.slice();			
-		}
-		else
-		{		
-			list =this.state.filteredModelList.slice();
-		}
+		list = this.state.modelList.slice();	
+	    }
+	    else
+	    {
+		list =this.state.filteredModelList.slice();
+	    }
+
 		
 		this.state.xScale = d3.scale.ordinal()
 		.domain(list.map(function (d) {
@@ -2326,11 +2280,11 @@ META NOTE (HSH - 8/25/2014): Can we remove this note, or at least clarify?
 			.each(function(d,i) { 
 					//This is for the new "Overview" target option 
 					if (self.state.targetSpeciesName == "Overview"){	
-						if (self.state.combinedModelList[i].model_label != undefined){
-							self._convertLabelHTML(this, self._getShortLabel(self.state.combinedModelList[i].model_label, 15), self.state.combinedModelList[i]);
+						if (self.state.modelList[i].model_label != undefined){
+   							self._convertLabelHTML(this, self._getShortLabel(self.state.modelList[i].model_label, 15), self.state.modelList[i]);
 						} 
 						else {
-							self._convertLabelHTML(this, "", self.state.combinedModelList[i]);
+						   self._convertLabelHTML(this, "", self.state.modelList[i]);
 						}
 					 }
 					else {
@@ -2376,7 +2330,6 @@ META NOTE (HSH - 8/25/2014): Can we remove this note, or at least clarify?
 		if (self.state.targetSpeciesName == "Overview") {
 		
 			var speciesList = self.state.speciesList;
-					
 			var species = self.state.svg.selectAll("#specieslist")
 					.data(speciesList)
 					.enter()
@@ -2396,15 +2349,7 @@ META NOTE (HSH - 8/25/2014): Can we remove this note, or at least clarify?
 		
 		var modData = [];
 		
-		//This is for the new "Overview" target option 
-		if (this.state.targetSpeciesName == "Overview"){	
-			modData = this.state.combinedModelData.slice();			
-		    //this._createOrgOverviewXAxis();
-		}
-		else
-		{		
 		    modData =this.state.modelData.slice();
-		}
 		
 		var temp_data = modData.map(function(d) { 
 			return d.value;});
@@ -2420,25 +2365,38 @@ META NOTE (HSH - 8/25/2014): Can we remove this note, or at least clarify?
 	    //only show the scale if there is more than one value represented
 	    //in the scale
 	    if (diff > 0) {
-
-			var color_values_blue = ['rgb(229,229,229)','rgb(164,214,212)','rgb(68,162,147)','rgb(97,142,153)','rgb(66,139,202)','rgb(25,59,143)'];
+		var color_values_blue = ['rgb(229,229,229)',
+					 'rgb(164,214,212)',
+					 'rgb(68,162,147)',
+					 'rgb(97,142,153)',
+					 'rgb(66,139,202)',
+					 'rgb(25,59,143)'];
 			
-			var color_values_red =  ['rgb(252,248,227)','rgb(230,209,178)','rgb(234,118,59)','rgb(221,56,53)','rgb(181,92,85)','rgb(70,19,19)'];
+		var color_values_red =  ['rgb(252,248,227)',
+					 'rgb(230,209,178)',
+					 'rgb(234,118,59)',
+					 'rgb(221,56,53)',
+					 'rgb(181,92,85)',
+					 'rgb(70,19,19)'];
 			
-			var color_values_green = ['rgb(230,209,178)','rgb(210,173,116)','rgb(148,114,60)','rgb(68,162,147)','rgb(31,128,113)','rgb(3,82,70)'];
-			
+		var color_values_green = ['rgb(230,209,178)',
+					  'rgb(210,173,116)',
+					  'rgb(148,114,60)',
+					  'rgb(68,162,147)',
+					  'rgb(31,128,113)',
+					  'rgb(3,82,70)'];
 			   
-				var gradient_blue = this.state.svg.append("svg:linearGradient")
-					.attr("id", "gradient_blue")
-					.attr("x1", "0")
-					.attr("x2", "100%")
-					.attr("y1", "0%")
-					.attr("y2", "0%");
+		var gradient_blue = this.state.svg.append("svg:linearGradient")
+			.attr("id", "gradient_blue")
+			.attr("x1", "0")
+		        .attr("x2", "100%")
+			.attr("y1", "0%")
+			.attr("y2", "0%");
 					
-				gradient_blue.append("svg:stop")
-					.attr("offset", "20%")
-					.style("stop-color", 'rgb(164,214,212)')
-					.style("stop-opacity", 1);
+			gradient_blue.append("svg:stop")
+		              .attr("offset", "20%")
+			      .style("stop-color", 'rgb(164,214,212)')
+		              .style("stop-opacity", 1);
 				
 				gradient_blue.append("svg:stop")
 					.attr("offset", "40%")
@@ -2575,7 +2533,7 @@ META NOTE (HSH - 8/25/2014): Can we remove this note, or at least clarify?
 				.attr("y", y2 + 65  + this.state.yTranslation + self.state.yoffsetOver)
 				.attr("x", self.state.axis_pos_list[2] + 205)
 				.style("font-size", "10px")
-				.text("Danio rerieo");
+				.text("Danio rerio");
 			}
 		  
 			var calc = this.state.selectedCalculation,
@@ -2717,7 +2675,7 @@ META NOTE (HSH - 8/25/2014): Can we remove this note, or at least clarify?
 
 
 	    }
-	    // add one for overivew.
+	    // add one for overview.
 	    if (this.state.targetSpeciesName === "Overview") {
 		selecteditem = "selected";
 	    } else {
