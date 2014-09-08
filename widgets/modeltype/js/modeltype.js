@@ -72,46 +72,37 @@ META NOTE (HSH - 8/25/2014): Can we remove this note, or at least clarify?
 
 	// core commit. Not changeable by options. 
     config: {
-        comparisonType : "genes",
-        h : 490,
-		multiOrgModelLimit: 750,
-		multiOrgModelCt: [{ taxon: "9606", count: 10},
-				  { taxon: "10090", count: 10},
-				  { taxon: "7955", count: 10},
-				  { taxon: "7227", count: 0}],
-	similarityCalculation: [{label: "Distance", calc: 0}, {label: "Ratio (q)", calc: 1}, {label: "Ratio (t)", calc: 3} , {label: "Uniqueness", calc: 2}],
-	phenotypeSort: [{type: "Alphabetic", order: 0},{type: "Frequency and Rarity", order:1} ,{type: "Frequency", order:2} ],	    
-	targetSpeciesList : [{ name: "Homo sapiens", taxon: "9606", color: 'rgb(25,59,143)'}, 
-			     { name: "Mus musculus", taxon: "10090", color: 'rgb(70,19,19)'},
-			     { name: "Danio rerio", taxon: "7955", color: 'rgb(1,102,94)'}, 
-			     { name: "Drosophila melanogaster", taxon: "7227", color:'purple'} ,
-			    // { name: "Overview", taxon: "2"}
-			    ],
-	refSpecies: "Homo sapiens", 
-	colorDomains: [ 0, 0.2, 0.4, 0.6, 0.8, 1],
-	colorRanges: { "Homo sapiens" :	    ['rgb(229,229,229)','rgb(164,214,212)',
-		    'rgb(68,162,147)','rgb(97,142,153)','rgb(66,139,202)','rgb(25,59,143)'],
-		       "Mus musculus" :   ['rgb(252,248,227)','rgb(249,205,184)','rgb(234,118,59)',
-		    'rgb(221,56,53)','rgb(181,92,85)','rgb(70,19,19)'],
-		       "Danio rerio" : ['rgb(230,209,178)','rgb(210,173,116)',
-		    'rgb(148,114,60)','rgb(68,162,147)','rgb(31,128,113)','rgb(3,82,70)'],
-		       "default" : ['rgb(229,229,229)','rgb(164,214,212)',
-		    'rgb(68,162,147)','rgb(97,142,153)','rgb(66,139,202)','rgb(25,59,143)']
-		       },
-	    
-	w : 0,
-	colStartingPos: 10,
-	detailRectWidth: 240,   
+        
+		comparisonType : "genes",
+   		colorDomains: [0, 0.2, 0.4, 0.6, 0.8, 1],
+		colorRanges: [['rgb(229,229,229)','rgb(164,214,212)','rgb(68,162,147)','rgb(97,142,153)','rgb(66,139,202)','rgb(25,59,143)'],
+				 ['rgb(252,248,227)','rgb(249,205,184)','rgb(234,118,59)','rgb(221,56,53)','rgb(181,92,85)','rgb(70,19,19)'],
+				 ['rgb(230,209,178)','rgb(210,173,116)','rgb(148,114,60)','rgb(68,162,147)','rgb(31,128,113)','rgb(3,82,70)'],
+				 ['rgb(229,229,229)','rgb(164,214,212)','rgb(68,162,147)','rgb(97,142,153)','rgb(66,139,202)','rgb(25,59,143)']], 
+		colStartingPos: 10,
+		detailRectWidth: 240,   
         detailRectHeight: 140,
         detailRectStrokeWidth: 3,
-	globalViewWidth : 110,
-	globalViewHeight : 110,
-	m :[ 30, 10, 10, 10 ],
-	multiOrganismCt: 10,
-	smallestModelWidth: 400,
-	textLength: 34,
-	textWidth: 200,
-	headerAreaHeight: 130,
+		globalViewWidth : 110,
+		globalViewHeight : 110,
+		h : 490,
+		m :[ 30, 10, 10, 10 ],
+		multiOrganismCt: 10,
+		multiOrgModelLimit: 750,
+		phenotypeSort: [{type: "Alphabetic", order: 0},{type: "Frequency and Rarity", order:1} ,{type: "Frequency", order:2} ],	    
+		refSpecies: "Homo sapiens",
+		serverURL : "",
+		similarityCalculation: [{label: "Distance", calc: 0}, {label: "Ratio (q)", calc: 1}, {label: "Ratio (t)", calc: 3} , {label: "Uniqueness", calc: 2}],
+		smallestModelWidth: 400,
+		targetSpeciesList : [{ name: "Homo sapiens", taxon: "9606", idx:0},
+			     { name: "Mus musculus", taxon: "10090" , idx: 1},
+			     { name: "Danio rerio", taxon: "7955", idx:2},
+			     { name: "Drosophila melanogaster", taxon: "7227"},
+			    ],
+		textLength: 34,
+		textWidth: 200,
+		w : 0,
+		headerAreaHeight: 130,
     },
 
 	tooltips: {
@@ -127,19 +118,16 @@ META NOTE (HSH - 8/25/2014): Can we remove this note, or at least clarify?
 	    dimensions: [ "Phenotype Profile", "Lowest Common Subsumer", "Phenotypes in common" ], 
 		scriptpath : $('script[src]').last().attr('src').split('?')[0].split('/').slice(0, -1).join('/')+'/',
 		
-	        selectedCalculation: 0,
+	    selectedCalculation: 0,
 		selectedSort: "Frequency",
-	    targetSpeciesName : "Overview",
-	    	serverURL : ""
+	    targetSpeciesName : "Overview",	    	
 	},
 	
 	//reset state values that must be cleared before reloading data
 	_reset: function() {
 
-
 	    this.state.filteredModelList = [];
 	    
-
 	    this.state.modelData = [];
 	    this.state.modelList = [];
 	    this.state.phenotypeSortData = [];
@@ -212,7 +200,7 @@ META NOTE (HSH - 8/25/2014): Can we remove this note, or at least clarify?
 
 	    this._setSelectedCalculation(this.state.selectedCalculation);
 		this._setSelectedSort(this.state.selectedSort);
-		this.state.yTranslation =(this.state.targetSpeciesName == 'Homo sapiens') ? 0 : 0;
+		this.state.yTranslation = 0;
 		this.state.w = this.state.m[1]-this.state.m[3];
 
 	    this.state.currModelIdx = this.state.modelDisplayCount-1;
@@ -233,7 +221,6 @@ META NOTE (HSH - 8/25/2014): Can we remove this note, or at least clarify?
 	    this._reDraw(); 
 	},
 
-
 	_reDraw: function() {
 		if (this.state.modelData.length != 0 && this.state.phenotypeData.length != 0
 		 && this.state.filteredPhenotypeData.length != 0){
@@ -245,23 +232,20 @@ META NOTE (HSH - 8/25/2014): Can we remove this note, or at least clarify?
 //					.attr("height", 480); //this.state.h - 20 + this.state.yTranslation);
 					.attr("height", this.state.phenotypeDisplayCount * 18);
 				this._createAccentBoxes();				
-	        this._createColorScale();
-		this._createModelRegion();
-	    	this._updateAxes();
-		this._createGridlines();
-	    	this._createModelRects();
-	        this._createRects();			
-		this._createOverviewSection();
-	    } 
-	
+				this._createColorScale();
+				this._createModelRegion();
+				this._updateAxes();
+				this._createGridlines();
+				this._createModelRects();
+				this._createRects();			
+				this._createOverviewSection();
+	    } 	
 	},
 	
 	_resetIndicies: function() {
 	    this.state.currModelIdx = this.state.modelDisplayCount-1;
-	    this.state.currPhenotypeIdx = this.state.phenotypeDisplayCount-1;
-	
+	    this.state.currPhenotypeIdx = this.state.phenotypeDisplayCount-1;	
 	},
-
 	    
 	/* dummy option procedures as per 
 	   http://learn.jquery.com/jquery-ui/widget-factory/how-to-use-the-widget-factory/
@@ -496,16 +480,22 @@ META NOTE (HSH - 8/25/2014): Can we remove this note, or at least clarify?
 	/* we only have 3 color,s but that will do for now */
 	_setRectFill: function(self,d,i) {
 	    //This is for the new "Overview" target option 
-	    if (typeof (self.state.colorScale[d.species]) !== 'undefined') {
-		return self.state.colorScale[d.species](d.value);
+		var scale;
+		for (var j=0; j < this.state.targetSpeciesList.length; j++){
+			if (this.state.targetSpeciesList[j].name === d.species)
+				scale = j;
+		}
+		
+	    if (typeof (self.state.colorScale[scale]) !== 'undefined') {
+			return self.state.colorScale[scale](d.value);
 	    }
 	    else
 	    {
-		return self.state.colorScale['default'](d.value);
+			//If there is no default, do we use the colorScale.length-1?
+			//return self.state.colorScale['default'](d.value);
 	    }
 	},
-
-
+	
 	_getUnmatchedPhenotypes : function(){
 	
 		var fullset = this.state.inputPhenotypeData,
@@ -986,7 +976,7 @@ META NOTE (HSH - 8/25/2014): Can we remove this note, or at least clarify?
 			    model_rank: item.score.rank});
 			this._loadDataForModel(item);
 		    }
-		    this.state.multiOrgModelCt[orgCtr].count=specData.b.length;
+		    this.state.multiOrganismCt=specData.b.length;
 		    speciesList.push(species);
 		    orgCtr++;
 		    data.sort(function(a,b) { return a.model_rank - b.model_rank;});
@@ -1254,23 +1244,27 @@ META NOTE (HSH - 8/25/2014): Can we remove this note, or at least clarify?
 	/** 3 september 2014  still a bit clunky in handling many organisms, 
 	    but much less hardbound. */
     	this.state.colorScale={};
-	for (ts in this.state.targetSpeciesList) {
-	    species = this.state.targetSpeciesList[ts].name;
-	    var speciesindex;
-	    if (typeof(this.state.colorRanges[species]) === 'undefined') {
-		speciesindex = "default";
+	
+		for(var i = 0; i < this.state.targetSpeciesList.length; i++) {	
+			var speciesindex;
+			if (typeof(this.state.colorRanges[i]) === 'undefined') {
+				speciesindex = -1;
 	    }
-	    else speciesindex = species;
-	    this.state.colorScale[species] = this._getColorScale(speciesindex,maxScore);
+	    else speciesindex = i;
+		if (speciesindex != -1)
+	       this.state.colorScale[speciesindex] = this._getColorScale(speciesindex, maxScore);
 	}
-	this.state.colorScale['default'] = this._getColorScale('default',maxScore);
+	//no color range default option
+	//this.state.colorScale['default'] = this._getColorScale('default',maxScore);
     },
 
     _getColorScale: function(speciesIndex,maxScore) {
-	var cs =  d3.scale.linear().domain([3, maxScore]);
-	cs.domain(this.state.colorDomains.map(cs.invert));
-	cs.range(this.state.colorRanges[speciesIndex]);
-	return cs;
+	
+		var cs =  d3.scale.linear();
+		cs.domain([3, maxScore]);
+		cs.domain(this.state.colorDomains.map(cs.invert));
+		cs.range(this.state.colorRanges[speciesIndex]);
+		return cs;
     },
 
     _initCanvas : function() {
@@ -1720,6 +1714,7 @@ META NOTE (HSH - 8/25/2014): Can we remove this note, or at least clarify?
 	    	aSpecies = "Fly";
 	    }
 		
+//Do we still need this since we no longer display the subsumer?		
 	    var subSpecies = "Human";
 	    if (d.subsumer_id.indexOf("MP") > -1) {
 	    	subSpecies = "Mouse";
@@ -1869,15 +1864,15 @@ META NOTE (HSH - 8/25/2014): Can we remove this note, or at least clarify?
 		  	.attr("transform",
 		  			  "translate(" + (self.state.textWidth + 30) + "," +( self.state.yTranslation + self.state.yoffsetOver)+ ")")
 			//.attr("x", function(d,i) { return (i * (hwidthAndGap * ct));})
-			.attr("x", function(d,i) { totCt += self.state.multiOrgModelCt[i].count; 
+			.attr("x", function(d,i) { totCt += self.state.multiOrganismCt; 
 									   if (i==0) { return 0; }
-									   else {parCt = totCt - self.state.multiOrgModelCt[i].count;  
+									   else {parCt = totCt - self.state.multiOrganismCt;  
 									   return hwidthAndGap * parCt;}})
 			.attr("y", self.state.yoffset)
 			.attr("class", "species_accent")
-			.attr("width",  function(d,i) { return ((hwidthAndGap * self.state.multiOrgModelCt[i].count));})
+			.attr("width",  function(d,i) { return (hwidthAndGap * self.state.multiOrganismCt);})
 			.attr("height", vwidthAndGap * self.state.phenotypeDisplayCount + 5)
-			.attr("stroke", function(d,i){ return self.state.targetSpeciesList[i].color;})
+			.attr("stroke", "black")
 			.attr("stroke-width", 3)
 			.attr("fill", "none");
 	},
@@ -2115,7 +2110,7 @@ META NOTE (HSH - 8/25/2014): Can we remove this note, or at least clarify?
 					.attr("width", function(d,i){return self.state.modelWidth/speciesList.length;})
 					.attr("height", 10)
 					.attr("fill", "#0F473E")
-					//.attr("stroke-width", 1)
+					.attr("stroke-width", 1)
 					.text(function (d,i){return speciesList[i];})
 					.attr("text-anchor","middle");
 		}
@@ -2257,15 +2252,12 @@ META NOTE (HSH - 8/25/2014): Can we remove this note, or at least clarify?
 	    }
 	    else
 	    {
-		list =this.state.filteredModelList.slice();
+		list = this.state.filteredModelList.slice();
 	    }
-
 		
 		this.state.xScale = d3.scale.ordinal()
 		.domain(list.map(function (d) {
 			return d.model_id; })).rangeRoundBands([0,this.state.modelWidth]);
-
-
 	   
 		model_x_axis = d3.svg.axis()
 			.scale(this.state.xScale).orient("top");
@@ -2343,13 +2335,12 @@ META NOTE (HSH - 8/25/2014): Can we remove this note, or at least clarify?
 					.attr("fill", "#0F473E")
 					//.attr("fill-width", 1)
 					.text(function (d,i){return speciesList[i];})
-					.attr("text-anchor","middle");
-		
+					.attr("text-anchor","middle");	
 		}
 		
 		var modData = [];
 		
-		    modData =this.state.modelData.slice();
+		modData =this.state.modelData.slice();
 		
 		var temp_data = modData.map(function(d) { 
 			return d.value;});
@@ -2364,178 +2355,26 @@ META NOTE (HSH - 8/25/2014): Can we remove this note, or at least clarify?
 		if (this.state.filteredPhenotypeData.length < 14) {y1 =177; y2 = 164;} //{y1 =217; y2 = 204;}
 	    //only show the scale if there is more than one value represented
 	    //in the scale
-	    if (diff > 0) {
-		var color_values_blue = ['rgb(229,229,229)',
-					 'rgb(164,214,212)',
-					 'rgb(68,162,147)',
-					 'rgb(97,142,153)',
-					 'rgb(66,139,202)',
-					 'rgb(25,59,143)'];
-			
-		var color_values_red =  ['rgb(252,248,227)',
-					 'rgb(230,209,178)',
-					 'rgb(234,118,59)',
-					 'rgb(221,56,53)',
-					 'rgb(181,92,85)',
-					 'rgb(70,19,19)'];
-			
-		var color_values_green = ['rgb(230,209,178)',
-					  'rgb(210,173,116)',
-					  'rgb(148,114,60)',
-					  'rgb(68,162,147)',
-					  'rgb(31,128,113)',
-					  'rgb(3,82,70)'];
-			   
-		var gradient_blue = this.state.svg.append("svg:linearGradient")
-			.attr("id", "gradient_blue")
-			.attr("x1", "0")
-		        .attr("x2", "100%")
-			.attr("y1", "0%")
-			.attr("y2", "0%");
-					
-			gradient_blue.append("svg:stop")
-		              .attr("offset", "20%")
-			      .style("stop-color", 'rgb(164,214,212)')
-		              .style("stop-opacity", 1);
-				
-				gradient_blue.append("svg:stop")
-					.attr("offset", "40%")
-					.style("stop-color", 'rgb(68,162,147)')
-					.style("stop-opacity", 1);
-				
-				gradient_blue.append("svg:stop")
-					.attr("offset", "60%")
-					.style("stop-color", 'rgb(66,139,202)')
-					.style("stop-opacity", 1);
-					
-				gradient_blue.append("svg:stop")
-					.attr("offset", "80%")
-					.style("stop-color", 'rgb(25,59,143)')
-					.style("stop-opacity", 1);
-
-				var legend_rects_blue = this.state.svg.append("rect")
-					.attr("transform","translate(0,10)")
-					.attr("class", "legend_rect")
-					.attr("id","legendscale_blue")
-					.attr("y", (y1 - 10) + this.state.yTranslation + self.state.yoffsetOver)
-					.attr("x", self.state.axis_pos_list[2] + 12)
-					.attr("rx",8)
-					.attr("ry",8)
-					.attr("width", 180)
-					.attr("height", 15)
-					.attr("fill", "url(#gradient_blue)");
-					
-				//This is for the new "Overview" target option 
-				if (this.state.targetSpeciesName == "Overview" || this.state.targetSpeciesName == "All"){			
-					
-					var grad_text1 = self.state.svg.append("svg:text")
-					.attr("class", "bluetext")
-					.attr("y", y2  + this.state.yTranslation +25+ self.state.yoffsetOver)
-					.attr("x", self.state.axis_pos_list[2] + 205)
-					.style("font-size", "11px")
-					.text("Homo sapiens");
-					
-					
-					var gradient_red = this.state.svg.append("svg:linearGradient")
-						.attr("id", "gradient_red")
-						.attr("x1", "0")
-						.attr("x2", "100%")
-						.attr("y1", "0%")
-						.attr("y2", "0%");
-							
-					//Red values: 
-					
-					var color_values_red =  ['rgb(252,248,227)','rgb(249,205,184)','rgb(234,118,59)','rgb(221,56,53)','rgb(181,92,85)','rgb(70,19,19)'];
-					
-				gradient_red.append("svg:stop")
-					.attr("offset", "20%")
-					.style("stop-color", 'rgb(249,205,184)')
-
-					.style("stop-opacity", 1);
-				
-				gradient_red.append("svg:stop")
-					.attr("offset", "40%")
-					.style("stop-color", 'rgb(234,118,5)')
-					.style("stop-opacity", 1);
-				
-				gradient_red.append("svg:stop")
-					.attr("offset", "60%")
-					.style("stop-color", 'rgb(181,92,85)')
-					.style("stop-opacity", 1);
-				gradient_red.append("svg:stop")
-					.attr("offset", "80%")
-					.style("stop-color", 'rgb(70,19,19)')
-					.style("stop-opacity", 1);
-
-				var legend_rects_red = this.state.svg.append("rect")
-					.attr("transform","translate(0,10)")
-					.attr("class", "legend_rect")
-					.attr("id","legendscale_red")
-
-					.attr("y", (y1 + 10) + this.state.yTranslation + self.state.yoffsetOver)
-					.attr("x", self.state.axis_pos_list[2] + 12)
-					.attr("rx",8)
-					.attr("ry",8)
-					.attr("width", 180)
-					.attr("height", 15)
-					.attr("fill", "url(#gradient_red)");
-					
-				var grad_text2 = self.state.svg.append("svg:text")
-					.attr("class", "redtext")
-					.attr("y", (y2 + 45)  + this.state.yTranslation + self.state.yoffsetOver)
-					.attr("x", self.state.axis_pos_list[2] + 205)
-					.style("font-size", "11px")
-					.text("Mus musculus");
-
-				
-				var gradient_green = this.state.svg.append("svg:linearGradient")
-					.attr("id", "gradient_green")
-					.attr("x1", "0")
-					.attr("x2", "100%")
-					.attr("y1", "0%")
-					.attr("y2", "0%");
-			
-				
-				gradient_green.append("svg:stop")
-					.attr("offset", "20%")
-					.style("stop-color", 'rgb(210,173,116)')
-					.style("stop-opacity", 1);
-				
-				gradient_green.append("svg:stop")
-					.attr("offset", "40%")
-					.style("stop-color", 'rgb(148,114,60)')
-					.style("stop-opacity", 1);
-				
-				gradient_green.append("svg:stop")
-					.attr("offset", "60%")
-					.style("stop-color", 'rgb(31,128,113)')
-					.style("stop-opacity", 1);
-					
-				gradient_green.append("svg:stop")
-					.attr("offset", "80%")
-					.style("stop-color", 'rgb(3,82,70)')
-					.style("stop-opacity", 1);
-
-				var legend_rects_green = this.state.svg.append("rect")
-					.attr("transform","translate(0,10)")
-					.attr("class", "legend_rect")
-					.attr("id","legendscale_green")
-					.attr("y", (y1 + 30) + this.state.yTranslation + self.state.yoffsetOver)
-					.attr("x", self.state.axis_pos_list[2] + 12)
-					.attr("rx",8)
-					.attr("ry",8)
-					.attr("width", 180)
-					.attr("height", 15)
-					.attr("fill", "url(#gradient_green)");
-					
-			var grad_text3 = self.state.svg.append("svg:text")
-				.attr("class", "greentext")
-				.attr("y", y2 + 65  + this.state.yTranslation + self.state.yoffsetOver)
-				.attr("x", self.state.axis_pos_list[2] + 205)
-				.style("font-size", "10px")
-				.text("Danio rerio");
+	    if (diff > 0) {	
+			//If this is the Overview, get gradients for all species with an index
+			if (self.state.targetSpeciesName == "Overview" || self.state.targetSpeciesName == "All") {
+				for (var i = 0; i < this.state.targetSpeciesList.length; i++)
+				{					
+					if (this.state.targetSpeciesList[i].idx !== undefined){
+						this._createGradients(i, y1, y2);
+					}
+				}
 			}
-		  
+			else {  //This is not the overview - determine species and create single gradient
+				for (var i = 0; i <= this.state.targetSpeciesList.length; i++)
+				{
+					if (self.state.targetSpeciesName === this.state.targetSpeciesList[i].name){
+						this._createGradients(i, y1, y2);
+						break;
+					}
+				}
+			}			
+			
 			var calc = this.state.selectedCalculation,
 				text1 = "",
 				text2 = "",
@@ -2549,16 +2388,16 @@ META NOTE (HSH - 8/25/2014): Can we remove this note, or at least clarify?
 			if (calc == 2) {text1 = "Lowest"; text2 = "Uniqueness"; text3 = "Highest";}
 			else if (calc == 1) {text1 = "Less Similar"; text2 = "Ratio (q)"; text3 = "More Similar";}
 			else if (calc == 3) {text1 = "Less Similar"; text2 = "Ratio (t)"; text3 = "More Similar";}
-		        else if (calc == 0) {text1 = "Min"; text2 = "Distance"; text3 = "Max";}
+				else if (calc == 0) {text1 = "Min"; text2 = "Distance"; text3 = "Max";}
 
 		
-		    var div_text1 = self.state.svg.append("svg:text")
+			var div_text1 = self.state.svg.append("svg:text")
 				.attr("class", "detail_text")
 				.attr("y", y1  + this.state.yTranslation + self.state.yoffsetOver-5)
 				.attr("x", self.state.axis_pos_list[2] + 10)
 				.style("font-size", "10px")
 				.text(text1);
-		    
+			
 			var div_text2 = self.state.svg.append("svg:text")
 				.attr("class", "detail_text")
 				.attr("y", y2  + this.state.yTranslation + self.state.yoffsetOver)
@@ -2566,7 +2405,7 @@ META NOTE (HSH - 8/25/2014): Can we remove this note, or at least clarify?
 				.style("font-size", "12px")
 				.text(text2);
 				
-		    var div_text3 = self.state.svg.append("svg:text")
+			var div_text3 = self.state.svg.append("svg:text")
 				.attr("class", "detail_text")
 				.attr("y", y1 + this.state.yTranslation + self.state.yoffsetOver-5)
 				.attr("x", self.state.axis_pos_list[2] + 125)
@@ -2574,90 +2413,118 @@ META NOTE (HSH - 8/25/2014): Can we remove this note, or at least clarify?
 				.text(text3);	
 				
 			//Position the max more carefully	
-		/**	if (text2 == "Distance") {
-				div_text2.attr("x", "860px");			
-			}
-			if (text2 == "Uniqueness") {
-				div_text2.attr("x", "845px");			
-			} */
 			if (text3 == "Max") {
 				div_text3.attr("x",self.state.axis_pos_list[2] + 150);			
 			}
 			if (text3 == "Highest") {
 				div_text3.attr("x",self.state.axis_pos_list[2] + 150);			
 			}
-		}				
-			var selClass = "";
+		}					
+		var selClass = "";
 
-			//This is for the new "Overview" target option 
-			if (self.state.targetSpeciesName == "Overview") {
-				if(self.state.modelWidth <= self.state.smallestModelWidth)
-				{
-					if (self.state.filteredPhenotypeData.length < 14) 
-					{ 
-						selClass = "overviewShortNarrowSelects"; 
-					} 
-					else { selClass = "overviewShortSelects";}
-				}
-				else { selClass = "overviewSelects"; }
-			} 
-			//else if (self.state.filteredPhenotypeData.length < 14) 
-			//{	selClass = "shortSelects";
-			//}
-			else if (self.state.modelWidth <= self.state.smallestModelWidth)
+		//This is for the new "Overview" target option 
+		if (self.state.targetSpeciesName == "Overview") {
+			if(self.state.modelWidth <= self.state.smallestModelWidth)
 			{
-					if (self.state.filteredPhenotypeData.length < 14) 
-					{ selClass = "shortNarrowSelects"; } 
-					else { selClass = "shortSelects";}
+				if (self.state.filteredPhenotypeData.length < 14) 
+				{ 
+					selClass = "overviewShortNarrowSelects"; 
+				} 
+				else { selClass = "overviewShortSelects";}
 			}
-			else if (self.state.filteredPhenotypeData.length < 14)
-			{ 
-				selClass = "shortSelects"; 
-			} 
-			else { selClass = "selects";}
-			
-
+			else { selClass = "overviewSelects"; }
+		} 
+		//else if (self.state.filteredPhenotypeData.length < 14) 
+		//{	selClass = "shortSelects";
+		//}
+		else if (self.state.modelWidth <= self.state.smallestModelWidth)
+		{
+				if (self.state.filteredPhenotypeData.length < 14) 
+				{ selClass = "shortNarrowSelects"; } 
+				else { selClass = "shortSelects";}
+		}
+		else if (self.state.filteredPhenotypeData.length < 14)
+		{ 
+			selClass = "shortSelects"; 
+		} 
+		else { selClass = "selects";}
 	    
-	             var optionhtml = self._createOrganismSelection(selClass);
-	             var disthtml = self._createCalculationSelection();
-	             optionhtml = optionhtml+"<span id=\'calc_sel\'><select id=\"calculation\">";
-
+		var optionhtml = self._createOrganismSelection(selClass);
+		var disthtml = self._createCalculationSelection();
+		optionhtml = optionhtml+"<span id=\'calc_sel\'><select id=\"calculation\">";
 
 	    optionhtml = optionhtml+disthtml;
-			this.element.append(optionhtml);			
-			
-			
-			var calcs = d3.selectAll("#calcs")
-				.on("click", function(d,i){
-					self._showDialog( "calcs");
-			});
-			
-			//add the handler for the select control
-			$( "#organism" ).change(function(d) {
-				//msg =  "Handler for .change()
-			    //called." );
-			    var index = d.target.selectedIndex;
-			    if  (typeof(self.state.targetSpeciesList[index]) !== 'undefined') {
-				self.state.targetSpeciesName = self.state.targetSpeciesList[index].name;
-			    }
-			    else {
-				self.state.targetSpeciesName = 'Overview';
-			    }
-			    self._resetSelections();
-			});
-			
-        
-			 $( "#calculation" ).change(function(d) {
-				//msg =  "Handler for .change()
-			     //called." );
-				self.state.selectedCalculation = self.state.similarityCalculation[d.target.selectedIndex].calc;
-//				self.state.selectedLabel = self.state.similarityCalculation[d.target.selectedIndex].label;
-				self._resetSelections();
-			});
-	    
+		this.element.append(optionhtml);			
 		
+		
+		var calcs = d3.selectAll("#calcs")
+			.on("click", function(d,i){
+				self._showDialog( "calcs");
+		});
+		
+		//add the handler for the select control
+		$( "#organism" ).change(function(d) {
+			//msg =  "Handler for .change()
+			//called." );
+			var index = d.target.selectedIndex;
+			if  (typeof(self.state.targetSpeciesList[index]) !== 'undefined') {
+			self.state.targetSpeciesName = self.state.targetSpeciesList[index].name;
+			}
+			else {
+			self.state.targetSpeciesName = 'Overview';
+			}
+			self._resetSelections();
+		});
+		
+	
+		 $( "#calculation" ).change(function(d) {
+			//msg =  "Handler for .change()
+			 //called." );
+			self.state.selectedCalculation = self.state.similarityCalculation[d.target.selectedIndex].calc;
+//				self.state.selectedLabel = self.state.similarityCalculation[d.target.selectedIndex].label;
+			self._resetSelections();
+		});	
 	},
 
+	//This renders ALL gradients - need to make it conditional on precise number of // target species
+	_createGradients: function(i, y1, y2){
+		self=this;
+ 
+		var gradient = this.state.svg.append("svg:linearGradient")
+			.attr("id",  "gradient_" + i)
+			.attr("x1", "0")
+			.attr("x2", "100%")
+			.attr("y1", "0%")
+			.attr("y2", "0%");
+			
+		for (j in this.state.colorDomains)
+		{
+			gradient.append("svg:stop")
+				.attr("offset", this.state.colorDomains[j])
+				.style("stop-color", this.state.colorRanges[i][j])
+				.style("stop-opacity", 1);				
+		}
+		
+		var legend = this.state.svg.append("rect")
+			.attr("transform","translate(0,10)")
+			.attr("class", "legend_rect_" + i)
+			.attr("id","legendscale_" + i)
+			.attr("y", (y1 + (-5 + (20 * i))) + this.state.yTranslation + self.state.yoffsetOver)
+			.attr("x", self.state.axis_pos_list[2] + 12)
+			.attr("rx",8)
+			.attr("ry",8)
+			.attr("width", 180)
+			.attr("height", 15)
+			.attr("fill", "url(#gradient_" + i + ")");
+		
+		var grad_text = self.state.svg.append("svg:text")
+			.attr("class", "grad_text_" + i)
+			.attr("y", y2 + (27 + (i*20)) + this.state.yTranslation + self.state.yoffsetOver)
+			.attr("x", self.state.axis_pos_list[2] + 205)
+			.style("font-size", "11px")
+			.text(this.state.targetSpeciesList[i].name);	
+	},
+	
 	_createOrganismSelection: function(selClass) {
 	    var selectedItem="";
 	    var optionhtml = "<div id='selects' class='" + selClass +
@@ -2665,21 +2532,19 @@ META NOTE (HSH - 8/25/2014): Can we remove this note, or at least clarify?
 		"<span id='org_sel'><select id=\'organism\'>";
 
 	    for (var idx=0;idx<this.state.targetSpeciesList.length;idx++) {
-		var selecteditem = "";
-		if (this.state.targetSpeciesList[idx].name === this.state.targetSpeciesName) {
-		    selecteditem = "selected";
-		}
-		optionhtml = optionhtml +
+			var selecteditem = "";
+			if (this.state.targetSpeciesList[idx].name === this.state.targetSpeciesName) {
+				selecteditem = "selected";
+			}
+			optionhtml = optionhtml +
 		    "<option value=\""+this.state.targetSpeciesList[idx.name]+
 		    "\" " + selecteditem +">" + this.state.targetSpeciesList[idx].name +"</option>"
-
-
 	    }
 	    // add one for overview.
 	    if (this.state.targetSpeciesName === "Overview") {
-		selecteditem = "selected";
+			selecteditem = "selected";
 	    } else {
-		selecteditem = "";
+			selecteditem = "";
 	    }
 	    optionhtml = optionhtml +
 		"<option value=\"Overview\" "+ selecteditem +">Overview</option>"
