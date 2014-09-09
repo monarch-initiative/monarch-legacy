@@ -215,7 +215,9 @@ META NOTE (HSH - 8/25/2014): Can we remove this note, or at least clarify?
 		}
 	        modData = this.state.modelData.slice();
 
-		this._filterData(modData.slice());
+	    console.log("in init.. first model is "+JSON.stringify(modData[0]));
+   	        this._filterData(modData.slice());
+	    
 		this.state.unmatchedPhenotypes = this._getUnmatchedPhenotypes();
 		
 	    this._reDraw(); 
@@ -389,6 +391,7 @@ META NOTE (HSH - 8/25/2014): Can we remove this note, or at least clarify?
 		
 	    mods = self.state.modelList;
 	    modData = self.state.modelData;
+	    console.log("in create overview section..."+JSON.stringify(modData[0]));
 	
 		this.state.smallYScale = d3.scale.ordinal()
 		    .domain(sortDataList.map(function (d) {return d; }))				    
@@ -415,7 +418,7 @@ META NOTE (HSH - 8/25/2014): Can we remove this note, or at least clarify?
 		  	  .attr("x", function(d) { return self.state.smallXScale(d.model_id);})
 		  	  .attr("width", 2)
 		  	  .attr("height", 2)
-		  	  .attr("fill", function(d,i) { return self._setRectFill(self,d,i)});
+		.attr("fill", function(d,i) { return self._setRectFill(self,d,i)});
 		
 		selectRectHeight = self.state.smallYScale(self.state.phenotypeSortData[self.state.phenotypeDisplayCount-1][0].id_a); //rowid
 		selectRectWidth = self.state.smallXScale(mods[self.state.modelDisplayCount-1].model_id);
@@ -479,23 +482,25 @@ META NOTE (HSH - 8/25/2014): Can we remove this note, or at least clarify?
 
 	/* we only have 3 color,s but that will do for now */
 	_setRectFill: function(self,d,i) {
-	    //This is for the new "Overview" target option 
-		var scale;
-		for (var j=0; j < this.state.targetSpeciesList.length; j++){
-			if (this.state.targetSpeciesList[j].name === d.species)
-				scale = j;
-		}
-		
-	    if (typeof (self.state.colorScale[scale]) !== 'undefined') {
-			return self.state.colorScale[scale](d.value);
-	    }
-	    else
-	    {
-			//If there is no default, do we use the colorScale.length-1?
-			//return self.state.colorScale['default'](d.value);
-	    }
+	    //This is for the new "Overview" target option
+	    var selectedScale;
+	    var scaleIndex  = this._getTargetSpeciesIndexByName(self,d.species);
+	    var selectedScale = self.state.colorScale[scaleIndex];
+	    return selectedScale(d.value);
 	},
 	
+
+	_getTargetSpeciesIndexByName: function(self,name) {
+	    var index = 0;
+	    for (var j=0; j < this.state.targetSpeciesList.length; j++){
+		if (this.state.targetSpeciesList[j].name === name) {
+		    index = j;
+		    break;
+		}
+	    }
+	    return index;
+	},
+
 	_getUnmatchedPhenotypes : function(){
 	
 		var fullset = this.state.inputPhenotypeData,
@@ -994,6 +999,8 @@ META NOTE (HSH - 8/25/2014): Can we remove this note, or at least clarify?
 		for (var idx=0;idx<this.state.modelDisplayCount;idx++) {
 		    this.state.filteredModelList.push(this.state.modelList[idx]);
 		}
+	    console.log("finishing overview....")
+	    console.log("model list 0 is "+JSON.stringify(this.state.modelList[0]));
 	},
 	
 		
@@ -1249,14 +1256,17 @@ META NOTE (HSH - 8/25/2014): Can we remove this note, or at least clarify?
 			var speciesindex;
 			if (typeof(this.state.colorRanges[i]) === 'undefined') {
 				speciesindex = -1;
-	    }
-	    else speciesindex = i;
-		if (speciesindex != -1)
-	       this.state.colorScale[speciesindex] = this._getColorScale(speciesindex, maxScore);
-	}
-	//no color range default option
-	//this.state.colorScale['default'] = this._getColorScale('default',maxScore);
+			}
+		    else  {
+			speciesindex = i;
+		    }  
+		    if (speciesindex != -1) {
+			console.log("setting color scale for species..."+speciesindex)
+			this.state.colorScale[speciesindex] = this._getColorScale(speciesindex, maxScore);
+		    }
+		}
     },
+
 
     _getColorScale: function(speciesIndex,maxScore) {
 	
@@ -1828,7 +1838,7 @@ META NOTE (HSH - 8/25/2014): Can we remove this note, or at least clarify?
 			  self._deselectData(self.state.selectedRow);}
 		  })
 		  .style('opacity', '1.0')
-		  .attr("fill", function(d,i) { return self._setRectFill(self,d,i)});
+		 .attr("fill", function(d,i) { return self._setRectFill(self,d,i)});
 		  		
 		if (self.state.targetSpeciesName == "Overview") {
 			this._highlightSpecies();
@@ -2468,10 +2478,10 @@ META NOTE (HSH - 8/25/2014): Can we remove this note, or at least clarify?
 			//called." );
 			var index = d.target.selectedIndex;
 			if  (typeof(self.state.targetSpeciesList[index]) !== 'undefined') {
-			self.state.targetSpeciesName = self.state.targetSpeciesList[index].name;
+			    self.state.targetSpeciesName = self.state.targetSpeciesList[index].name;
 			}
 			else {
-			self.state.targetSpeciesName = 'Overview';
+			    self.state.targetSpeciesName = 'Overview';
 			}
 			self._resetSelections();
 		});
