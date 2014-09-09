@@ -14,7 +14,7 @@ Steps for Adding the Monarch Graph Widget to Your Webpage
 
    *Required files are available at: 
        https://github.com/monarch-initiative/monarch-app/tree/master/widgets/datagraph
-	
+    
 1. Add the Required Javascript Libraries and Image
 
     The following .js code libraries are required:
@@ -40,7 +40,7 @@ Steps for Adding the Monarch Graph Widget to Your Webpage
 
         [
           {
-            "phenotype": "Nervous System",
+            "label": "Nervous System",
             "id": "HP:0000707",
             "counts": [
               {
@@ -87,7 +87,7 @@ Steps for Adding the Monarch Graph Widget to Your Webpage
 
         [
           {
-            "phenotype": "Nervous System",
+            "label": "Nervous System",
             "id": "HP:0000707",
             "counts": [
               {
@@ -132,38 +132,41 @@ Steps for Adding the Monarch Graph Widget to Your Webpage
             
                The color variable is a JSON object with the following format:
                datagraph.color = { 
-	             first  : '#44A293',   //First group
-  		         second : '#A4D6D4',   //Second group
-  		         ... 
-  		   
-  		         yLabel : { 
-  		             fill  : '#000000',
-  		             hover : '#EA763B'
-  		         },
+                 first  : '#44A293',   //First group
+                 second : '#A4D6D4',   //Second group
+                   ... 
+
+                 yLabel : { 
+                     fill  : '#000000',
+                     hover : '#EA763B'
+                 },
                  arrow : {
                      fill  : "#496265",
                      hover : "#EA763B"
                  },
-  		         bar : {
-  		             fill  : '#EA763B'
-  		         },
-  		         crumb : {
-  		             top   : '#496265',
-  		             bottom: '#3D6FB7',
-  		             hover : '#EA763B'
-  		         }
+                 bar : {
+                       fill  : '#EA763B'
+                 },
+                   crumb : {
+                       top   : '#496265',
+                       bottom: '#3D6FB7',
+                       hover : '#EA763B'
+                   }
                };
                 Any setting can be updated without creating the entire color object,
                 for example:
                 datagraph.color.first = '#44A293';
-  		        datagraph.color.second = '#A4D6D4';
-  		        
-  		        Note: Colors are set in the order they appear in the JSON object
+                  datagraph.color.second = '#A4D6D4';
+                  
+                  Note: Colors are set in the order they appear in the JSON object
 
        Advanced Settings:
-   
-            a. datagraph.margin = {top: 40, right: 80, bottom: 200, left: 320} - Chart Margins
-            b. datagraph.title = { 
+       
+            a. datagraph.isYLabelURL = true; - Is the yLabel linkable?
+            b. datagraph.yLabelBaseURL = '/phenotype' - Y axis base URLs
+                                                        Group IDs are appended to the base URL
+            c. datagraph.margin = {top: 40, right: 80, bottom: 200, left: 320} - Chart Margins
+            d. datagraph.title = { 
                  'margin-left' : '360px',
                  'padding-bottom': '10px',
                  'font-size' : '20px',
@@ -196,8 +199,8 @@ Steps for Adding the Monarch Graph Widget to Your Webpage
     Add an empty <div> tag in the body of the html file.
     For example:
 
-    <body>	
-    	 <div class="graph-container"></div>
+    <body>    
+         <div class="graph-container"></div>
     <body>
 
 
