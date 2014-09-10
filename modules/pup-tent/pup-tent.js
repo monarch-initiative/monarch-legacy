@@ -324,8 +324,8 @@ module.exports = function(search_path_list, filename_list){
 	var ret = null;
 
 	// Pull from cache or re-read from fs.
-	console.log('key: ' + key)
-	console.log('use_zcache_p: ' + use_zcache_p)
+	//console.log('key: ' + key)
+	//console.log('use_zcache_p: ' + use_zcache_p)
 	if( use_zcache_p ){
 	    ret = zcache[key];
 	}else{
@@ -516,6 +516,8 @@ module.exports = function(search_path_list, filename_list){
 		}else if( type == 'object' ){
 		    out_val = JSON.stringify(in_val);
 		}else if( type == 'number' ){
+		    out_val = in_val;
+		}else if( type == 'boolean' ){
 		    out_val = in_val;
 		}else{
 		    // some kind of null/undefined anyways?
