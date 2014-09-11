@@ -47,22 +47,23 @@ jQuery(document).ready(function(){
 	'Porta ac consectetur ac',
 	    'Vestibulum at eros',
     ];
-	
+    
     function _cycle_ticker(){
 
 	// Rotate top item to end.
 	var top = ticker_cache.shift();
 	ticker_cache.push(top);
 	
-	// Slide up and remove.
+	// Slide up and remove. Plus removal step (arbitrary--could be below).
 	jQuery('#ticker-demo li').first().slideUp(500, function(){
+	    // Get rid of the disappeared element.
 	    jQuery('#ticker-demo li').first().remove();
-	    
-	    var new_elt = '<li class="list-group-item">' + top +'</li>';
-	    jQuery(new_elt).hide().appendTo('#ticker-demo').slideDown(500,function(){
-		// When done, start countdown to new cycle.
-		window.setTimeout(_cycle_ticker, 3500);
-	    });	    
+	}); 
+	// Add and slide in. Plus restart wait (arbitrary--could be above).
+	var new_elt = '<li class="list-group-item">' + top +'</li>';
+	jQuery(new_elt).hide().appendTo('#ticker-demo').slideDown(500,function(){
+	    // When done, start countdown to new cycle.
+	    window.setTimeout(_cycle_ticker, 3500);
 	});
     }
     _cycle_ticker(); // start cycling
