@@ -72,7 +72,7 @@ META NOTE (HSH - 8/25/2014): Can we remove this note, or at least clarify?
 
 	// core commit. Not changeable by options. 
     config: {
-        
+	scriptpath : $('script[src]').last().attr('src').split('?')[0].split('/').slice(0, -1).join('/')+'/',        
 		comparisonType : "genes",
    		colorDomains: [0, 0.2, 0.4, 0.6, 0.8, 1],
 		colorRanges: [['rgb(229,229,229)','rgb(164,214,212)','rgb(68,162,147)','rgb(97,142,153)','rgb(66,139,202)','rgb(25,59,143)'],
@@ -115,7 +115,7 @@ META NOTE (HSH - 8/25/2014): Can we remove this note, or at least clarify?
 	    modelDisplayCount : 30,
 	    phenotypeDisplayCount : 26,
 	    dimensions: [ "Phenotype Profile", "Lowest Common Subsumer", "Phenotypes in common" ], 
-	    scriptpath : $('script[src]').last().attr('src').split('?')[0].split('/').slice(0, -1).join('/')+'/',
+
 	    
 	    selectedCalculation: 0,
 	    selectedSort: "Frequency",
@@ -212,8 +212,9 @@ META NOTE (HSH - 8/25/2014): Can we remove this note, or at least clarify?
 	 */
 	_create: function() {
 	    var self= this;
+	    var confURL=this._getResourceUrl('phenogrid_conf','json');
 	    $.ajax( {dataType: "json",
-		     url:"/widgets/modeltype/js/res/phenogrid_conf.json",
+		     url: confURL,
 		     async: false,
 		     dataType: "json",
 		     success: function(d) {
@@ -222,23 +223,22 @@ META NOTE (HSH - 8/25/2014): Can we remove this note, or at least clarify?
 		     fail: function() {
 			 configoptions = undefined;
 		     },
-		     error: function(jqXHR,textStatus,errorThrown) {
+		     error: function(jqXHR,textStatus,errorThrown)  {
 			 console.log("status is "+textStatus+", error is "+errorThrown);
 		     },
             });
 	    /** check these */
-	//    $.extend(true,{},this.configoptions,this.options);
 	    this.state = $.extend(this.options,this.configoptions,this.config);
 	    this.state.data = {}
 	    // will this work?
 	    this.configoptions = undefined;
-	    this._setTargetSpeciesIndices();
 	    this._reset();
 	},
 
-	_setTargetSpeciesIndices: function() {
-
+	_getResourceUrl: function(name,type) {
+	    return this.config.scriptpath+'res/'+name+'.'+type;
 	},
+
 	
 	_init: function() {
 	    
@@ -2163,7 +2163,7 @@ META NOTE (HSH - 8/25/2014): Can we remove this note, or at least clarify?
 	// we might want to modify this to do a dynamic http retrieval to grab the dialog components...
 	_showDialog : function(name){
 	    var self= this;
-	    var url = '/widgets/modeltype/js/res/'+name+'.html';
+	    var url = this._getResourceUrl(name,'html'); 
 	    if (typeof(self.state.tooltips[name]) === 'undefined') {
 		$.ajax( {url: url,
 			 dataType: 'html',
