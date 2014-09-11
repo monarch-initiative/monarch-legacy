@@ -67,5 +67,5 @@ jQuery(document).ready(function(){
 	});
     }
     _cycle_ticker(); // start cycling
-
+    
 });
