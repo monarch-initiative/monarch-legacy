@@ -2078,7 +2078,7 @@ META NOTE (HSH - 8/25/2014): Can we remove this note, or at least clarify?
 		
 		//The pathline creates a line  below the labels. We don't want two lines to show up so fill=white hides the line.
 	        this._createModelLines();
-		this._createTextScores();
+		this._createTextScores(this.state.filteredModelList);
 		
 		if (self.state.targetSpeciesName == "Overview") {
 		    this._createOverviewList();
@@ -2121,10 +2121,10 @@ META NOTE (HSH - 8/25/2014): Can we remove this note, or at least clarify?
 
 	},
 
-	_createTextScores: function() {
+	_createTextScores: function(list) {
 	    var self =this;
 	    this.state.svg.selectAll("text.scores")
-		.data(this.state.filteredModelList)
+		.data(list) 
 		.enter()	
 		.append("text")
 		.attr("transform","translate(" + (this.state.textWidth + 34) +"," 
@@ -2307,7 +2307,7 @@ META NOTE (HSH - 8/25/2014): Can we remove this note, or at least clarify?
 			});*/
 				
 	        this._createModelLines();
-	        this._createTextScores();
+	        this._createTextScores(list);
 
 		
 		if (self.state.targetSpeciesName == "Overview") {
