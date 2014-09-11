@@ -156,6 +156,43 @@ META NOTE (HSH - 8/25/2014): Can we remove this note, or at least clarify?
 	    }
 	    return pCount;
 	},
+
+	
+	/** Several procedures for various aspects of filtering/identifying appropriate entries
+	    in the target species list.. */
+	_getTargetSpeciesIndexByName: function(self,name) {
+	    var index = 0;
+	    for (var j=0; j < this.state.targetSpeciesList.length; j++){
+		if (this.state.targetSpeciesList[j].name === name) {
+		    index = j;
+		    break;
+		}
+	    }
+	    return index;
+	},
+
+	_getTargetSpeciesNameByIndex: function(self,index) {
+	    var species
+	    if  (typeof(self.state.targetSpeciesList[index]) !== 'undefined') {
+		species = self.state.targetSpeciesList[index].name;
+	    }
+	    else {
+		species = 'Overview';
+	    }
+	    return species;
+	},
+
+	_getTargetSpeciesTaxonByName: function(self,name) {
+	    var index = 0;
+	    for (var j=0; j < this.state.targetSpeciesList.length; j++){
+		if (this.state.targetSpeciesList[j].name === name) {
+		    index = j;
+		    break;
+		}
+	    }
+	    return self.state.targetSpeciesList[index].taxon;
+	},	 
+
 	
 	
 	//NOTE: I'm not too sure what the default init() method signature should be
@@ -215,7 +252,6 @@ META NOTE (HSH - 8/25/2014): Can we remove this note, or at least clarify?
 		}
 	        modData = this.state.modelData.slice();
 
-	    console.log("in init.. first model is "+JSON.stringify(modData[0]));
    	        this._filterData(modData.slice());
 	    
 		this.state.unmatchedPhenotypes = this._getUnmatchedPhenotypes();
@@ -287,7 +323,6 @@ META NOTE (HSH - 8/25/2014): Can we remove this note, or at least clarify?
 					
 		var btn = d3.selectAll("#button")
 			.on("click", function(d,i){
-			    console.log("in button");
 				$("#return").remove();
 				$("#errmsg").remove();
 			        d3.select("#svg_area").remove();
@@ -391,7 +426,6 @@ META NOTE (HSH - 8/25/2014): Can we remove this note, or at least clarify?
 		
 	    mods = self.state.modelList;
 	    modData = self.state.modelData;
-	    console.log("in create overview section..."+JSON.stringify(modData[0]));
 	
 		this.state.smallYScale = d3.scale.ordinal()
 		    .domain(sortDataList.map(function (d) {return d; }))				    
@@ -489,17 +523,6 @@ META NOTE (HSH - 8/25/2014): Can we remove this note, or at least clarify?
 	    return selectedScale(d.value);
 	},
 	
-
-	_getTargetSpeciesIndexByName: function(self,name) {
-	    var index = 0;
-	    for (var j=0; j < this.state.targetSpeciesList.length; j++){
-		if (this.state.targetSpeciesList[j].name === name) {
-		    index = j;
-		    break;
-		}
-	    }
-	    return index;
-	},
 
 	_getUnmatchedPhenotypes : function(){
 	
@@ -621,25 +644,6 @@ META NOTE (HSH - 8/25/2014): Can we remove this note, or at least clarify?
 				this.state.comparisonType = "genes";
 			}
 		}
-	},
-		
-	_setTargetSpeciesName: function(taxonid) {
-		var self = this;
-
-	    if (typeof taxonid === 'undefined' || taxonid === null) {
-		taxonid="10090";
-		
-	    }
-		//if the taxonid is an empty string, set it to Overview - taxonid - 2
-		if (taxonid === "") { taxonid = 2;}
-	    var tempdata;
-	    for (var i  = 0; i  <self.state.targetSpeciesList.length; i++) {
-			if (self.state.targetSpeciesList[i].taxon == taxonid) {
-				tempdata  = self.state.targetSpeciesList[i];
-				break;
-			}
-	    }	    
-	    self.state.targetSpeciesName = tempdata.name;
 	},
 
 	_setSelectedCalculation: function(calc) {
@@ -910,19 +914,11 @@ META NOTE (HSH - 8/25/2014): Can we remove this note, or at least clarify?
 	}
     },
 
-
-      _getTaxon: function(speciesName) {
-	  var self = this;
-	  var tempdata = self.state.targetSpeciesList.filter(function(d) {
-	      return d.name === speciesName;
-	  });
-	  return tempdata[0].taxon;
-      },
-
 	_loadSpeciesData: function(speciesName,limit) {
 	    var phenotypeList = this.state.phenotypeData;
 	    var url = this.state.serverURL+"/simsearch/phenotype?input_items="+
-		phenotypeList.join(",")+"&target_species="+this._getTaxon(speciesName);
+		phenotypeList.join(",")+"&target_species="+
+		this._getTargetSpeciesTaxonByName(this,speciesName);
 	    if (typeof(limit) !== 'undefined') {
 		url = url +"&limit="+limit;
 	    }
@@ -999,8 +995,6 @@ META NOTE (HSH - 8/25/2014): Can we remove this note, or at least clarify?
 		for (var idx=0;idx<this.state.modelDisplayCount;idx++) {
 		    this.state.filteredModelList.push(this.state.modelList[idx]);
 		}
-	    console.log("finishing overview....")
-	    console.log("model list 0 is "+JSON.stringify(this.state.modelList[0]));
 	},
 	
 		
@@ -1261,7 +1255,6 @@ META NOTE (HSH - 8/25/2014): Can we remove this note, or at least clarify?
 			speciesindex = i;
 		    }  
 		    if (speciesindex != -1) {
-			console.log("setting color scale for species..."+speciesindex)
 			this.state.colorScale[speciesindex] = this._getColorScale(speciesindex, maxScore);
 		    }
 		}
@@ -2476,22 +2469,15 @@ META NOTE (HSH - 8/25/2014): Can we remove this note, or at least clarify?
 		$( "#organism" ).change(function(d) {
 			//msg =  "Handler for .change()
 			//called." );
-			var index = d.target.selectedIndex;
-			if  (typeof(self.state.targetSpeciesList[index]) !== 'undefined') {
-			    self.state.targetSpeciesName = self.state.targetSpeciesList[index].name;
-			}
-			else {
-			    self.state.targetSpeciesName = 'Overview';
-			}
-			self._resetSelections();
+		    self.state.targetSpeciesName = 
+			self._getTargetSpeciesNameByIndex(self,d.target.selectedIndex);
+		    self._resetSelections();
 		});
 		
 	
 		 $( "#calculation" ).change(function(d) {
-			//msg =  "Handler for .change()
-			 //called." );
-			self.state.selectedCalculation = self.state.similarityCalculation[d.target.selectedIndex].calc;
-//				self.state.selectedLabel = self.state.similarityCalculation[d.target.selectedIndex].label;
+			self.state.selectedCalculation = 
+			 self.state.similarityCalculation[d.target.selectedIndex].calc;
 			self._resetSelections();
 		});	
 	},
