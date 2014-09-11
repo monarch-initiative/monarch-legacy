@@ -23,16 +23,4 @@
             {{{includes.footer}}}
         </div> <!-- closes content -->
     </div> <!-- closes container -->
-    <script type="text/javascript">
-        jQuery(document).ready(function(){
-           /* d3.json("/labs/datagraph.json",function(error,data) {
-                var graph = data.dataGraph;
-                datagraph.init(".graph-container",json);
-            });*/
-            
-            jQuery.getJSON( "/labs/datagraph.json", function(data) {
-                var graph = data.dataGraph;
-                datagraph.init(".graph-container",graph);
-            });
-        });
-    </script>
+    {{{phenoGraph}}}
