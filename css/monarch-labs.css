@@ -48,3 +48,12 @@
   font: 10px sans-serif;
   text-anchor: end;
 }
+
+/*
+ * Stuff for the d3 demo on the landing.
+ */
+
+.branding-logo {
+    max-height: 30px;
+    padding-bottom: 5px;
+}
