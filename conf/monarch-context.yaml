@@ -92,6 +92,7 @@
   ENSEMBL: "http://identifiers.org/ensembl:"
   KEGG: "http://identifiers.org/kegg:"
   FBInternalGT: "http://monarchinitiative.org/genotype/"
+  EOM: http://purl.obolibrary.org/obo/EOM_
   
   GeneID: http://purl.obolibrary.org/obo/NCBIGene_
   Gene: http://purl.obolibrary.org/obo/NCBIGene_
