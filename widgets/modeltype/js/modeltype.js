@@ -99,7 +99,13 @@ META NOTE (HSH - 8/25/2014): Can we remove this note, or at least clarify?
 		textWidth: 200,
 		w : 0,
 		headerAreaHeight: 130,
-	        defaultComparisonType: { "Homo sapiens": "models"}
+	        defaultComparisonType: { "Homo sapiens": "models"},
+	        speciesLabels : [ { abbrev: "HP", label: "Human"},
+				  { abbrev: "MP", label: "Mouse"},
+				  { abbrev: "ZFIN", label: "Zebrafish"},
+				  { abbrev: "ZP", label: "Zebrafish"},
+				  { abbrev: "FB", label:  "Fly"},
+				  { abbrev: "GO", label: "Gene Ontology"}]
     },
 
 
@@ -644,7 +650,6 @@ META NOTE (HSH - 8/25/2014): Can we remove this note, or at least clarify?
 	_setComparisonType : function(comp){
 		var self = this;
 		
-	    console.log("setting comparison type to ..."+comp);
 		if (comp != undefined || comp != null)
 			{ this.state.comparisonType = comp + "s";}
 		else { 
@@ -1725,33 +1730,10 @@ META NOTE (HSH - 8/25/2014): Can we remove this note, or at least clarify?
     
     _showModelData: function(d, obj) {
 	    var retData;
-	    var aSpecies = "Human";
-	    if (d.id_a.indexOf("MP") > -1) {
-	    	aSpecies = "Mouse";
-	    } else if (d.id_a.indexOf("ZFIN") > -1) {
-	    	aSpecies = "Zebrafish";
-	    }else if (d.id_a.indexOf("FB") > -1) {
-	    	aSpecies = "Fly";
-	    }
-		
-//Do we still need this since we no longer display the subsumer?		
-	    var subSpecies = "Human";
-	    if (d.subsumer_id.indexOf("MP") > -1) {
-	    	subSpecies = "Mouse";
-	    } else if (d.subsumer_id.indexOf("ZFIN") > -1) {
-	    	subSpecies = "Zebrafish";
-	    }else if (d.subsumer_id.indexOf("FB") > -1) {
-	    	subSpecies = "Fly";
-	    }
-
-	    var bSpecies = "Human";
-	    if (d.id_b.indexOf("MP") > -1) {
-	    	bSpecies = "Mouse";
-	    } else if (d.id_b.indexOf("ZFIN") > -1) {
-	    	bSpecies = "Zebrafish";
-	    }else if (d.id_b.indexOf("FB") > -1) {
-	    	bSpecies = "Fly";
-	    }
+	    /* we aren't currently using these, but we might later.*/
+	    var aSpecies = this._getSpeciesLabel(d.id_a);
+           var subSpecies = this._getSpeciesLabel(d.subsumer_id);
+	    var bSpecies = this._getSpeciesLabel(d.id_b);
 		
 		var species = d.species,
 		    taxon =   d.taxon;
@@ -1778,6 +1760,22 @@ META NOTE (HSH - 8/25/2014): Can we remove this note, or at least clarify?
 	    this._updateDetailSection(retData, this._getXYPos(obj));
 	  
     },
+
+    _getSpeciesLabel: function(idstring) {
+
+	var label;
+	for (var i = 0; i < this.state.speciesLabels.length; i++) {
+	    var labinfo = this.state.speciesLabels[i];
+	    if (idstring.indexOf(labinfo.abbrev) > -1) {
+		label = labinfo.label;
+		break;
+	    }
+	}
+	return label;
+    },
+
+
+	
 
 	//NOTE: I need to find a way to either add the model class to the phenotypes when they load OR
 	//select the rect objects related to the model and append the class to them.
@@ -2079,60 +2077,11 @@ META NOTE (HSH - 8/25/2014): Can we remove this note, or at least clarify?
 	  		    self._convertLabelHTML(this, self._getShortLabel(self.state.filteredModelList[i].model_label, 15),self.state.filteredModelList[i]);}); 
 		
 		//The pathline creates a line  below the labels. We don't want two lines to show up so fill=white hides the line.
-		var w = self.state.modelWidth;		
-		this.state.svg.selectAll("path.domain").remove();	
-		self.state.svg.selectAll("text.scores").remove();
-		self.state.svg.selectAll("#specieslist").remove();
-				
-		self.state.svg.append("line")
-				.attr("transform","translate(" + (self.state.textWidth + 30) +"," + (self.state.yTranslation + self.state.yoffset - 16) + ")")
-				.attr("x1", 0)
-				.attr("y1", 0)
-				.attr("x2", self.state.modelWidth)
-				.attr("y2", 0)
-				.attr("stroke", "#0F473E")
-				.attr("stroke-width", 1);
-				
+	        this._createModelLines();
+		this._createTextScores();
 		
-		var scores = self.state.svg.selectAll("text.scores")
-				.data(self.state.filteredModelList)
-				.enter()	
-				.append("text")
-				.attr("transform","translate(" + (self.state.textWidth + 34) +"," + (self.state.yTranslation + self.state.yoffset - 3) + ")")
-    	        .attr("id", "scorelist")
-				.attr("x",function(d,i){return i*18})
-				.attr("y", 0)
-				.attr("width", 18)
-    	        .attr("height", 10)
-				.attr("class", "scores")
-				.text(function (d,i){return self.state.filteredModelList[i].model_score;});
-		
-		self.state.svg.append("line")
-				.attr("transform","translate(" + (self.state.textWidth + 30) +"," + (self.state.yTranslation + self.state.yoffset + 0) + ")")
-				.attr("x1", 0)
-				.attr("y1", 0)
-				.attr("x2", self.state.modelWidth)
-				.attr("y2", 0)
-				.attr("stroke", "#0F473E")
-				.attr("stroke-width", 1);
-				
 		if (self.state.targetSpeciesName == "Overview") {
-		
-			var speciesList = self.state.speciesList;
-			var species = self.state.svg.selectAll("#specieslist")
-					.data(speciesList)
-					.enter()
-					.append("text")
-					.attr("transform","translate(" + (self.state.textWidth + 30) +"," + (self.state.yTranslation + self.state.yoffset + 10) + ")")
-					.attr("x", function(d,i){return ((i+1) * (self.state.modelWidth/(speciesList.length))) - ((self.state.modelWidth/speciesList.length)/2);})
-					.attr("id", "specieslist")
-					.attr("y", 10)
-					.attr("width", function(d,i){return self.state.modelWidth/speciesList.length;})
-					.attr("height", 10)
-					.attr("fill", "#0F473E")
-					.attr("stroke-width", 1)
-					.text(function (d,i){return speciesList[i];})
-					.attr("text-anchor","middle");
+		    this._createOverviewList();
 		}
 	
 		//now, limit the data returned by models as well
@@ -2147,6 +2096,74 @@ META NOTE (HSH - 8/25/2014): Can we remove this note, or at least clarify?
 	    this._createRects();
 	},
 	
+
+	_createModelLines: function() {
+		this.state.svg.selectAll("path.domain").remove();	
+		this.state.svg.selectAll("text.scores").remove();
+		this.state.svg.selectAll("#specieslist").remove();
+
+		this.state.svg.append("line")
+				.attr("transform","translate(" + (this.state.textWidth + 30) +"," + (this.state.yTranslation + this.state.yoffset - 16) + ")")
+				.attr("x1", 0)
+				.attr("y1", 0)
+				.attr("x2", this.state.modelWidth)
+				.attr("y2", 0)
+				.attr("stroke", "#0F473E")
+				.attr("stroke-width", 1);
+
+	    this.state.svg.append("line")
+				.attr("transform","translate(" + (this.state.textWidth + 30) +"," + (this.state.yTranslation + this.state.yoffset + 0) + ")")
+				.attr("x1", 0)
+				.attr("y1", 0)
+				.attr("x2", this.state.modelWidth)
+				.attr("y2", 0);
+	
+
+	},
+
+	_createTextScores: function() {
+	    var self =this;
+	    this.state.svg.selectAll("text.scores")
+		.data(this.state.filteredModelList)
+		.enter()	
+		.append("text")
+		.attr("transform","translate(" + (this.state.textWidth + 34) +"," 
+		      + (this.state.yTranslation + this.state.yoffset - 3) + ")")
+    	        .attr("id", "scorelist")
+				.attr("x",function(d,i){return i*18})
+				.attr("y", 0)
+				.attr("width", 18)
+    	        .attr("height", 10)
+				.attr("class", "scores")
+				.text(function (d,i){return self.state.filteredModelList[i].model_score;});
+	},
+
+	_createOverviewList: function () {
+	    var self = this;
+	    
+	    var speciesList = self.state.speciesList;
+	    var species = self.state.svg.selectAll("#specieslist")
+		.data(speciesList)
+		.enter()
+		.append("text")
+		.attr("transform","translate(" + (self.state.textWidth + 30) +"," + 
+		      (self.state.yTranslation + self.state.yoffset + 10) + ")")
+		.attr("x", function(d,i){
+		    return ((i+1) * (self.state.modelWidth/(speciesList.length))) - 
+			((self.state.modelWidth/speciesList.length)/2);})
+		.attr("id", "specieslist")
+		.attr("y", 10)
+		.attr("width", function(d,i){return self.state.modelWidth/speciesList.length;})
+		.attr("height", 10)
+		.attr("fill", "#0F473E")
+		.attr("stroke-width", 1)
+		.text(function (d,i){return speciesList[i];})
+		.attr("text-anchor","middle");
+	   },
+
+
+
+
 	_showDialog : function( dname ) {				
 		
 		var text = this._getDialogText(dname);
@@ -2245,22 +2262,6 @@ META NOTE (HSH - 8/25/2014): Can we remove this note, or at least clarify?
 	},
 	
 	
-	/* 9/12/14 hsh - probably obsolteete. not called anywhere
-	   _getModelScore : function(model) {
-		var self = this;
-		if (model != "")
-		{
-			for(var i=0;i<=self.state.orgModelList.length;i++)
-			{	
-				if(model == self._getConceptId(self.state.orgModelList[i].model_id))
-				{
-					return self.state.orgModelList[i].model_score;
-				}
-			}
-		}
-		else return "";
-	},*/
-
 	//this code creates the colored rectangles below the models
 	_createModelRegion: function () {
 	    var self=this;
@@ -2304,58 +2305,12 @@ META NOTE (HSH - 8/25/2014): Can we remove this note, or at least clarify?
 					}
 			});
 				
-		var w = self.state.modelWidth;
-		
-		this.state.svg.selectAll("path.domain").remove();	
-		self.state.svg.selectAll("text.scores").remove();
-		self.state.svg.selectAll("#specieslist").remove();
+	        this._createModelLines();
+	        this._createTextScores();
 
-		self.state.svg.append("line")
-				.attr("transform","translate(" + (self.state.textWidth + 30) +"," + (self.state.yTranslation + self.state.yoffset - 16) + ")")
-				.attr("x1", 0)
-				.attr("y1", 0)
-				.attr("x2", self.state.modelWidth)
-				.attr("y2", 0)
-				.attr("stroke", "#0F473E")
-				.attr("stroke-width", 1);
-				
-		var scores = self.state.svg.selectAll("text.scores")
-				.data(list)
-				.enter()	
-				.append("text")
-				.attr("transform","translate(" + (self.state.textWidth + 34) +"," + (self.state.yTranslation + self.state.yoffset - 3) + ")")
-				.attr("id", "scorelist")
-				.attr("x",function(d,i){return i*18})
-				.attr("y", 0)
-				.attr("width", 18)
-				.attr("height", 10)
-				.attr("class", "scores")
-		    .text(function (d,i){ return self.state.filteredModelList[i].model_score;});
-	            				
-		self.state.svg.append("line")
-				.attr("transform","translate(" + (self.state.textWidth + 30) +"," + (self.state.yTranslation + self.state.yoffset + 0) + ")")
-				.attr("x1", 0)
-				.attr("y1", 0)
-				.attr("x2", self.state.modelWidth)
-				.attr("y2", 0);
-	    				
-		if (self.state.targetSpeciesName == "Overview") {
 		
-			var speciesList = self.state.speciesList;
-			var species = self.state.svg.selectAll("#specieslist")
-					.data(speciesList)
-					.enter()
-					.append("text")
-					.attr("transform","translate(" + (self.state.textWidth + 30) +"," + (self.state.yTranslation + self.state.yoffset + 10) + ")")
-					.attr("x", function(d,i){return ((i+1) * (self.state.modelWidth/(speciesList.length))) - ((self.state.modelWidth/speciesList.length)/2);})
-					.attr("id", "specieslist")
-					.attr("y", 10)
-					.attr("width", function(d,i){return self.state.modelWidth/speciesList.length;})
-					.attr("height", 10)
-					.attr("fill", "#0F473E")
-					//.attr("fill-width", 1)
-					.text(function (d,i){return speciesList[i];})
-					.attr("text-anchor","middle");	
+		if (self.state.targetSpeciesName == "Overview") {
+	            this._createOverviewList();		
 		}
 		
 		var modData = [];
