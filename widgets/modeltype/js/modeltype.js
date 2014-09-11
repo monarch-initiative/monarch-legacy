@@ -2291,8 +2291,9 @@ META NOTE (HSH - 8/25/2014): Can we remove this note, or at least clarify?
 			//to rotate the text, I need to select it as it was added by the axis
 			.selectAll("text")
 			.each(function(d,i) { 
-					//This is for the new "Overview" target option 
-					if (self.state.targetSpeciesName == "Overview"){	
+			    self._convertLabelHTML(this, self._getShortLabel(self.state.filteredModelList[i].model_label, 15),self.state.filteredModelList[i]);}); 					
+	            //This is for the new "Overview" target option 
+					/*if (self.state.targetSpeciesName == "Overview"){	
 						if (self.state.modelList[i].model_label != undefined){
    							self._convertLabelHTML(this, self._getShortLabel(self.state.modelList[i].model_label, 15), self.state.modelList[i]);
 						} 
@@ -2303,7 +2304,7 @@ META NOTE (HSH - 8/25/2014): Can we remove this note, or at least clarify?
 					else {
 						self._convertLabelHTML(this, self._getShortLabel(self.state.filteredModelList[i].model_label, 15),self.state.filteredModelList[i]);
 					}
-			});
+			});*/
 				
 	        this._createModelLines();
 	        this._createTextScores();
