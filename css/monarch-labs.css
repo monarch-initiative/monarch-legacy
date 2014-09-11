@@ -34,3 +34,17 @@
     width: 826px;
     float:left;
 }
+
+/*
+ * Stuff for the d3 demo on the landing.
+ */
+
+#d3-chart rect {
+  fill: steelblue;
+}
+
+#d3-chart text {
+  fill: white;
+  font: 10px sans-serif;
+  text-anchor: end;
+}
