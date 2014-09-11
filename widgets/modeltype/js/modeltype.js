@@ -79,6 +79,7 @@ META NOTE (HSH - 8/25/2014): Can we remove this note, or at least clarify?
 				 ['rgb(252,248,227)','rgb(249,205,184)','rgb(234,118,59)','rgb(221,56,53)','rgb(181,92,85)','rgb(70,19,19)'],
 				 ['rgb(230,209,178)','rgb(210,173,116)','rgb(148,114,60)','rgb(68,162,147)','rgb(31,128,113)','rgb(3,82,70)'],
 				 ['rgb(229,229,229)','rgb(164,214,212)','rgb(68,162,147)','rgb(97,142,153)','rgb(66,139,202)','rgb(25,59,143)']], 
+	        overviewCount: 3,
 		colStartingPos: 10,
 		detailRectWidth: 240,   
         detailRectHeight: 140,
@@ -94,16 +95,13 @@ META NOTE (HSH - 8/25/2014): Can we remove this note, or at least clarify?
 		serverURL : "",
 		similarityCalculation: [{label: "Distance", calc: 0}, {label: "Ratio (q)", calc: 1}, {label: "Ratio (t)", calc: 3} , {label: "Uniqueness", calc: 2}],
 		smallestModelWidth: 400,
-		targetSpeciesList : [{ name: "Homo sapiens", taxon: "9606", idx:0},
-			     { name: "Mus musculus", taxon: "10090" , idx: 1},
-			     { name: "Danio rerio", taxon: "7955", idx:2},
-			     { name: "Drosophila melanogaster", taxon: "7227"},
-			    ],
-		textLength: 34,
+	        textLength: 34,
 		textWidth: 200,
 		w : 0,
 		headerAreaHeight: 130,
+	        defaultComparisonType: { "Homo sapiens": "models"}
     },
+
 
 	tooltips: {
 	    modelscores: "<h5>What is the score shown at the top of the grid?</h5><div>The score indicated at the top of each column, below the target label, is the overall similarity score between the query and target. Briefly, for each of the targets (columns) listed, the set of Q(1..n) phenotypes of the query are pairwise compared against all of the T(1..m) phenotypes in the target.<br /><br />Then, for each pairwise comparison of phenotypes (q x P1...n), the best comparison is retained for each q and summed for all p1..n. </div><br /><div>The raw score is then normalized against the maximal possible score, which is the query matching to itself. Therefore, range of scores displayed is 0..100. For more details, please see (Smedley et al, 2012 <a href='http://www.ncbi.nlm.nih.gov/pubmed/23660285' target='_blank'>http://www.ncbi.nlm.nih.gov/pubmed/23660285</a> and <a href='http://www.owlsim.org' target='_blank'>http://www.owlsim.org</a>).",
@@ -113,14 +111,21 @@ META NOTE (HSH - 8/25/2014): Can we remove this note, or at least clarify?
 
 	options:   {
 	    /// good - legit options
-		modelDisplayCount : 30,
+	    modelDisplayCount : 30,
 	    phenotypeDisplayCount : 26,
 	    dimensions: [ "Phenotype Profile", "Lowest Common Subsumer", "Phenotypes in common" ], 
-		scriptpath : $('script[src]').last().attr('src').split('?')[0].split('/').slice(0, -1).join('/')+'/',
-		
+	    scriptpath : $('script[src]').last().attr('src').split('?')[0].split('/').slice(0, -1).join('/')+'/',
+	    
 	    selectedCalculation: 0,
-		selectedSort: "Frequency",
+	    selectedSort: "Frequency",
 	    targetSpeciesName : "Overview",	    	
+	    
+	    targetSpeciesList : [{ name: "Homo sapiens", taxon: "9606"},
+				 { name: "Mus musculus", taxon: "10090" },
+				 { name: "Danio rerio", taxon: "7955"},
+				 { name: "Drosophila melanogaster", taxon: "7227"},
+				],
+	    
 	},
 	
 	//reset state values that must be cleared before reloading data
@@ -223,10 +228,15 @@ META NOTE (HSH - 8/25/2014): Can we remove this note, or at least clarify?
 	    /** check these */
 	//    $.extend(true,{},this.configoptions,this.options);
 	    this.state = $.extend(this.options,this.configoptions,this.config);
-	    this.state.data = {};
+	    this.state.data = {}
 	    // will this work?
 	    this.configoptions = undefined;
+	    this._setTargetSpeciesIndices();
 	    this._reset();
+	},
+
+	_setTargetSpeciesIndices: function() {
+
 	},
 	
 	_init: function() {
@@ -634,16 +644,23 @@ META NOTE (HSH - 8/25/2014): Can we remove this note, or at least clarify?
 	_setComparisonType : function(comp){
 		var self = this;
 		
+	    console.log("setting comparison type to ..."+comp);
 		if (comp != undefined || comp != null)
 			{ this.state.comparisonType = comp + "s";}
-		else {
-			if (this.state.targetSpeciesName === "Homo sapiens") {
+		else { 
+		    comp = this.state.defaultComparisonType[this.state.targetSpeciesName];
+		    if (typeof(comp) === 'undefined') {
+			comp = 'genes';
+		    }
+		    this.state.comparisonType = comp;
+		}
+/*			if (this.state.targetSpeciesName === "Homo sapiens") {
 				this.state.comparisonType = "models";
 			}
 			else {
 				this.state.comparisonType = "genes";
 			}
-		}
+		}*/
 	},
 
 	_setSelectedCalculation: function(calc) {
@@ -2361,21 +2378,15 @@ META NOTE (HSH - 8/25/2014): Can we remove this note, or at least clarify?
 	    if (diff > 0) {	
 			//If this is the Overview, get gradients for all species with an index
 			if (self.state.targetSpeciesName == "Overview" || self.state.targetSpeciesName == "All") {
-				for (var i = 0; i < this.state.targetSpeciesList.length; i++)
-				{					
-					if (this.state.targetSpeciesList[i].idx !== undefined){
-						this._createGradients(i, y1, y2);
-					}
+
+			        //this.state.overviewCount tells us how many fit in the overview
+				for (var i = 0; i < this.state.overviewCount; i++) {	
+				    this._createGradients(i,y1,y2);
 				}
 			}
 			else {  //This is not the overview - determine species and create single gradient
-				for (var i = 0; i <= this.state.targetSpeciesList.length; i++)
-				{
-					if (self.state.targetSpeciesName === this.state.targetSpeciesList[i].name){
-						this._createGradients(i, y1, y2);
-						break;
-					}
-				}
+			    var i = this._getTargetSpeciesIndexByName(self,self.state.targetSpeciesName);
+			    this._createGradients(i,y1,y2);
 			}			
 			
 			var calc = this.state.selectedCalculation,
