@@ -1,36 +1,52 @@
 <!-- Banner. -->
-<div class="jumbotron">
-  <img id="monarch-logo-horizontal"
-       class="downloadline"
-       src="/image/logo-horizontal.png"/>
-  <a id="feedback-main"
-     class="downloadline downloadline-left btn btn-large btn-default btn-monarch-main monarch-feedback-dark"
-     href="mailto:info@monarchinitiative.org">Your feedback welcome!</a>
-  <div class="tagline">
-    Enabling navigation across a rich landscape of
-    phenotypes, diseases, models, and genes for
-    translational research.
-    <a href="/page/about">Find out more</a>.<br/>
-    <a href="http://mail.monarchinitiative.org/mailman/listinfo/users">Sign up for our listserve to receive announcements</a>.
-  </div>
-</div>
+<!-- <div class="jumbotron"> -->
+<!--   <img id="monarch-logo-horizontal" -->
+<!--        class="downloadline" -->
+<!--        src="/image/logo-horizontal.png"/> -->
+<!--   <a id="feedback-main" -->
+<!--      class="downloadline downloadline-left btn btn-large btn-default btn-monarch-main monarch-feedback-dark" -->
+<!--      href="mailto:info@monarchinitiative.org">Your feedback welcome!</a> -->
+<!--   <div class="tagline"> -->
+<!--     Enabling navigation across a rich landscape of -->
+<!--     phenotypes, diseases, models, and genes for -->
+<!--     translational research. -->
+<!--     <a href="/page/about">Find out more</a>.<br/> -->
+<!--     <a href="http://mail.monarchinitiative.org/mailman/listinfo/users">Sign up for our listserve to receive announcements</a>. -->
+<!--   </div> -->
+<!-- </div> -->
 
-<!-- Open row section. -->
+<!-- Top-level internal container. -->
 <div class="container-fluid" style="margin: 1em;">
-  <!-- <div class="row"> -->
-  <div class="row" style="margin-left: -15px; margin-right: -14px;">
+
+  <!-- Open first row section. -->
+  <div class="row">
+  <!-- <div class="row" style="margin-left: -15px; margin-right: -14px;"> -->
     
     <!-- Graphic. -->
-    <div id="graphic" class="col-xs-12 col-sm-8 col-md-8 col-lg-8">
-      <img src="/image/homepage.png"/>
-      <a href="/disease"><div id="diseasebutton" class="graphicbutton"></div></a>
-      <a href="/phenotype"><div id="phenotypebutton" class="graphicbutton"></div></a>
-      <a href="/gene"><div id="genebutton" class="graphicbutton"></div></a>
-      <a href="/model"><div id="modelbutton" class="graphicbutton"></div></a>
+    <div id="graphic" class="col-xs-12 col-sm-12 col-md-5 col-lg-5">
+      <img class="img-responsive" src="/image/scratch-homepage.png"/>
+      <!-- <a href="/disease"><div id="diseasebutton" class="graphicbutton"></div></a> -->
+      <!-- <a href="/phenotype"><div id="phenotypebutton" class="graphicbutton"></div></a> -->
+      <!-- <a href="/gene"><div id="genebutton" class="graphicbutton"></div></a> -->
+      <!-- <a href="/model"><div id="modelbutton" class="graphicbutton"></div></a> -->
     </div>
     
+    <!-- Data. -->
+    <div class="col-xs-12 col-sm-6 col-md-4 col-lg-4">
+
+      <div class="panel panel-default">
+	<div class="panel-heading">
+	  <h3 class="panel-title">Data Overview</h3>
+	</div>
+	<div class="panel-body">
+	  <svg id="d3-chart"></svg>
+	</div>
+      </div>
+    </div>
+
+
     <!-- Blog. -->
-    <div id="graphic" class="col-xs-12 col-sm-4 col-md-4 col-lg-4">
+    <div class="col-xs-12 col-sm-6 col-md-3 col-lg-3">
 
       <div class="panel panel-default">
 	<div class="panel-heading">
@@ -56,5 +72,119 @@
     </div>
     
   </div>
+  <!-- Close first row section. -->
+
+  <!-- Open second row section. -->
+  <div class="row">
+  <!-- <div class="row" style="margin-left: -15px; margin-right: -14px;"> -->
+    
+    <!-- Explanation and entry points. -->
+    <div class="col-xs-12 col-sm-12 col-md-6 col-lg-6">
+      <div class="panel panel-default">
+      <!-- 	<div class="panel-heading"> -->
+      <!-- 	  <h3 class="panel-title">Explanations and Entry Points</h3> -->
+      <!-- 	</div> -->
+      <!-- 	<div class="panel-body"> -->
+      <p>Entry points into the data: blah blah blah...</p>
+
+	  <div class="container-fluid">	    
+	    <div class="row">
+	      <div class="col-xs-12 col-sm-12 col-md-4 col-lg-4">
+		<h4>Phenotype</h4>
+		<dl>
+		  <dt>A title/link</dt>
+		  <dd>An explanation of the thing above.</dd>
+		</dl>
+		<dl>
+		  <dt>A title/link</dt>
+		  <dd>An explanation of the thing above.</dd>
+		</dl>
+		<dl>
+		  <dt>A title/link</dt>
+		  <dd>An explanation of the thing above.</dd>
+		</dl>
+	      </div>
+	      <div class="col-xs-12 col-sm-12 col-md-4 col-lg-4">
+		<h4>Text</h4>
+		<dl>
+		  <dt>A title/link</dt>
+		  <dd>An explanation of the thing above.</dd>
+		</dl>
+		<dl>
+		  <dt>A title/link</dt>
+		  <dd>An explanation of the thing above.</dd>
+		</dl>
+		<dl>
+		  <dt>A title/link</dt>
+		  <dd>An explanation of the thing above.</dd>
+		</dl>
+	      </div>
+	      <div class="col-xs-12 col-sm-12 col-md-4 col-lg-4">
+		<h4>Exomiser</h4>
+		<dl>
+		  <dt>A title/link</dt>
+		  <dd>An explanation of the thing above.</dd>
+		</dl>
+		<dl>
+		  <dt>A title/link</dt>
+		  <dd>An explanation of the thing above.</dd>
+		</dl>
+		<dl>
+		  <dt>A title/link</dt>
+		  <dd>An explanation of the thing above.</dd>
+		</dl>
+	      </div>
+	    </div>
+	  </div>
+
+      <!-- 	</div> -->
+      </div>
+    </div>
+
+    <!-- Data sources. -->
+    <div class="col-xs-12 col-sm-6 col-md-3 col-lg-3">
+      <!-- <div class="panel panel-default"> -->
+      <!-- 	<div class="panel-heading"> -->
+      <!-- 	  <h3 class="panel-title">Data Sources</h3> -->
+      <!-- 	</div> -->
+      <!-- 	<div class="panel-body"> -->
+      <!-- 	</div> -->
+      <!-- </div> -->
+      <h4>Data Sources</h4>
+      <ul id="ticker-demo" class="list-group">
+	<li class="list-group-item">Cras justo odio</li>
+	<li class="list-group-item">Dapibus ac facilisis in</li>
+	<li class="list-group-item">Morbi leo risus</li>
+	<li class="list-group-item">Porta ac consectetur ac</li>
+	<li class="list-group-item">Vestibulum at eros</li>
+      </ul>
+    </div>
+
+    <!-- Social. -->
+    <div class="col-xs-12 col-sm-6 col-md-3 col-lg-3">
+      <!-- <div class="panel panel-default"> -->
+      <!-- 	<div class="panel-heading"> -->
+      <!-- 	  <h3 class="panel-title">Social Media</h3> -->
+      <!-- 	</div> -->
+      <!-- 	<div class="panel-body"> -->
+	  <!-- <ul class="list-group"> -->
+	  <!--   <li class="list-group-item">C</li> -->
+	  <!--   <li class="list-group-item">Dapibus ac facilisis in</li> -->
+	  <!--   <li class="list-group-item">Morbi leo risus</li> -->
+	  <!--   <li class="list-group-item">Porta ac consectetur ac</li> -->
+	  <!--   <li class="list-group-item">Vestibulum at eros</li> -->
+	  <!-- </ul> -->
+<p>
+<a class="twitter-timeline" data-dnt="true" href="https://twitter.com/search?q=%23geneontology+OR+%40news4go"  data-widget-id="393469634726199296">Tweets about "#geneontology OR @news4go"</a>
+    <script>!function(d,s,id){var js,fjs=d.getElementsByTagName(s)[0],p=/^http:/.test(d.location)?'http':'https';if(!d.getElementById(id)){js=d.createElement(s);js.id=id;js.src=p+"://platform.twitter.com/widgets.js";fjs.parentNode.insertBefore(js,fjs);}}(document,"script","twitter-wjs");</script>
+</p>
+      <!-- 	</div> -->
+      <!-- </div> -->
+    </div>
+
+  </div>
+  <!-- Close second row section. -->
+
+
 </div>
-<!-- Close row section. -->
+<!-- Close top-level container. -->
