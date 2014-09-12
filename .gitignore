@@ -12,3 +12,6 @@ ringojs-0.9
 *.iml
 *.ipr
 *.iws
+templates/labs/jbrowse
+*.swp
+*.swo
