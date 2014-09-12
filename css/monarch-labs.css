@@ -61,9 +61,14 @@
 /*
  * Compact the news list just a little. Assumes dl.
  */
-.news-list{
+.news-list {
     margin-bottom: 10px;
     margin-top: 10px;
+}
+.news-more {
+}
+.news-panel {
+    padding-bottom: 3px;
 }
 
 /*
