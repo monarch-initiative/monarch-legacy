@@ -92,6 +92,6 @@ jQuery(document).ready(function(){
 	    window.setTimeout(_cycle_ticker, 3500);
 	});
     }
-    //_cycle_ticker(); // start cycling
+    _cycle_ticker(); // start cycling
     
 });
