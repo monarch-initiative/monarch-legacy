@@ -1000,7 +1000,7 @@ var url = document.URL;
 			hdata.sort(function(a,b) { return a.model_rank - b.model_rank; });			 
 			modList= modList.concat(hdata.slice()); 
 		
-		if (this.options.mousedata != null  && this.options.mousedata.b.length > 0){
+	    if (this.options.mousedata != null  && typeof(this.options.mousedata.b) !== 'undefined' && this.options.mousedata.b.length > 0){
 			for (var idx=0;idx<this.options.mousedata.b.length;idx++) {
 				mdata.push(
 				{model_id: self._getConceptId(this.options.mousedata.b[idx].id), 
@@ -1018,7 +1018,7 @@ var url = document.URL;
 			mdata.sort(function(a,b) { return a.model_rank - b.model_rank; });			 
 			modList = modList.concat(mdata.slice());  		
 		
-		if (this.options.zfishdata != null  && this.options.zfishdata.b.length > 0){
+	    if (this.options.zfishdata != null  && typeof(this.options.zfishdata.b) !== 'undefined' && this.options.zfishdata.b.length > 0){
 			for (var idx=0;idx<this.options.zfishdata.b.length;idx++) {
 				zdata.push(
 				{model_id: self._getConceptId(this.options.zfishdata.b[idx].id), 
@@ -1036,7 +1036,7 @@ var url = document.URL;
 			zdata.sort(function(a,b) { return a.model_rank - b.model_rank; });			 
 			modList = modList.concat(zdata.slice());  
 		
-		if (this.options.flydata != null  && this.options.flydata.b.length > 0){
+	    if (this.options.flydata != null  && typeof(this.options.flydata.b) !== 'undefined' && this.options.flydata.b.length > 0){
 			for (var idx=0;idx<this.options.flydata.b.length;idx++) {
 				fdata.push(
 				{model_id: self._getConceptId(this.options.flydata.b[idx].id), 
