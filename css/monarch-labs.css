@@ -34,3 +34,79 @@
     width: 826px;
     float:left;
 }
+
+/*
+ * Stuff for the d3 demo on the landing.
+ */
+
+/* #d3-chart rect { */
+/*   fill: steelblue; */
+/* } */
+
+/* #d3-chart text { */
+/*   fill: white; */
+/*   font: 10px sans-serif; */
+/*   text-anchor: end; */
+/* } */
+
+/*
+ * Stuff for the d3 demo on the landing.
+ */
+
+.branding-logo {
+    max-height: 30px;
+    padding-bottom: 5px;
+}
+
+/*
+ * Compact the news list just a little. Assumes dl.
+ */
+.news-list {
+    margin-bottom: 10px;
+    margin-top: 10px;
+}
+.news-more {
+}
+.news-panel {
+    padding-bottom: 3px;
+}
+
+/*
+ * Experimenting with compaction in the ticker, and making sure
+ * the tooltips are high enough.
+ */
+.data-ticker{
+    height: 15em;
+    overflow: scroll;
+    overflow-x: hidden;
+    /* margin-bottom: 10px; */
+    /* margin-top: 10px; */
+}
+.data-ticker-line {
+    padding-top: 5px;
+    padding-bottom: 5px;
+    border-left-style-value: none;
+    border-right-style-value: none;
+    border-left-width-value: 0;
+    border-right-width-value: 0;
+}
+
+/*
+ * Get BS3 carousel images to center.
+ */
+
+#graphic {
+    padding-bottom: 1em;
+}
+
+.carousel-inner .item {
+    text-align: center;
+}
+
+/*
+ * Getting the explanaion image to work right.
+ */
+
+.welcome-image {
+    max-height: 25em;
+}
