@@ -72,7 +72,8 @@
 }
 
 /*
- * 
+ * Experimenting with compaction in the ticker, and making sure
+ * the tooltips are high enough.
  */
 .data-ticker{
     height: 15em;

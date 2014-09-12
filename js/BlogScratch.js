@@ -40,23 +40,39 @@ jQuery(document).ready(function(){
     /// Do a demo ticker.
     ///
 
-    // var ticker_cache = [
-    // 	'Cras justo odio',
-    // 	'Dapibus ac facilisis in',
-    // 	'Morbi leo risus',
-    // 	'Porta ac consectetur ac',
-    // 	'Vestibulum at eros',
-    // 	'Cras justo odio 2',
-    // 	'Dapibus ac facilisis in 2',
-    // 	'Morbi leo risus 2',
-    // 	'Porta ac consectetur ac 2',
-    // 	'Vestibulum at eros 2'
-    // ];
-    
-    // // Add the above to the doc at point.
+    var ticker_cache = global_data_ticker;
+    function _ticker_item_to_string(item){
+	var buff = [
+	    '<li class="list-group-item data-ticker-line">',
+	    '<a href="' + '#' + '" data-toggle="tooltip" title="' + item['resource'] + '" data-content="' + item['monarch_use'] + '">',
+	    item['resource'] || '???',
+	    '</a>',
+	    '</li>'
+	    // '<dt>',
+	    // item['resource'] || '???',
+	    // '</dt>',
+	    // '<dd>',
+	    // item['data_categories'] || '???',
+	    // '</dd>'
+	];
+	return buff.join('');
+    }
+
+    // Add the data to the doc at point.
+    (function(){
+	var cache = [] 
+	_.each(ticker_cache, function(item){
+	    cache.push(_ticker_item_to_string(item));
+	});
+	jQuery('#ticker-demo').empty();
+	jQuery('#ticker-demo').append(cache.join("\n"));
+	jQuery('#ticker-demo li a').popover({
+	    'container': 'body',
+	    'trigger': 'hover'
+	});
+    })();
 
     // The cycler.
-    var ticker_cache = global_data_ticker;
     function _cycle_ticker(){
 
 	// Rotate top item to end.
@@ -69,13 +85,13 @@ jQuery(document).ready(function(){
 	    jQuery('#ticker-demo li').first().remove();
 	}); 
 	// Add and slide in. Plus restart wait (arbitrary--could be above).
-	var new_elt = '<li class="list-group-item data-ticker-line">' + top +'</li>';
+	var new_elt = _ticker_item_to_string(top);
 	// var new_elt = '<tr><td>' + top + '</td></tr>';
 	jQuery(new_elt).hide().appendTo('#ticker-demo').slideDown(500,function(){
 	    // When done, start countdown to new cycle.
 	    window.setTimeout(_cycle_ticker, 3500);
 	});
     }
-    _cycle_ticker(); // start cycling
+    //_cycle_ticker(); // start cycling
     
 });
