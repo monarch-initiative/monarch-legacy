@@ -241,6 +241,11 @@ META NOTE (HSH - 8/25/2014): Can we remove this note, or at least clarify?
 
 	
 	_init: function() {
+
+	    console.log("this is where the delay starts...."+JSON.stringify(this.element));
+	    this.element.empty();
+	    var elt = $("<div>loading..</div>");
+	    elt.appendTo(this.element)
 	    
 	    this.state.phenotypeDisplayCount = this._calcPhenotypeDisplayCount();
 		//save a copy of the original phenotype data
@@ -266,8 +271,10 @@ META NOTE (HSH - 8/25/2014): Can we remove this note, or at least clarify?
    	        this._filterData(modData.slice());
 	    
 		this.state.unmatchedPhenotypes = this._getUnmatchedPhenotypes();
-		
+	    console.log("and this is where it ends...");
+	    this.element.empty();
 	    this._reDraw(); 
+
 	},
 
 	_reDraw: function() {
@@ -316,19 +323,19 @@ META NOTE (HSH - 8/25/2014): Can we remove this note, or at least clarify?
 		var fullmsg = "There are no " + organism + " models for this disease. "
 		d3.select("#svg_area").remove();
 		this.element.append("<svg id='svg_area'></svg>");
-        this.state.svg = d3.select("#svg_area");
-        self.state.svg
-			.attr("width", 1100)
-			.attr("height", 70);
-        self.state.h = 60;
-        self.state.yoffset = 50;
-        self.state.svg.append("text")
-            .attr("x", 80)
-            .attr("y", 60)
-            .attr("height", 70)
-            .attr("width", 200)
-			.attr("id", "errmsg")
-            .text(fullmsg);	
+            this.state.svg = d3.select("#svg_area");
+            self.state.svg
+		.attr("width", 1100)
+		.attr("height", 70);
+            self.state.h = 60;
+            self.state.yoffset = 50;
+            self.state.svg.append("text")
+		.attr("x", 80)
+		.attr("y", 60)
+		.attr("height", 70)
+		.attr("width", 200)
+		.attr("id", "errmsg")
+		.text(fullmsg);	
 	
 		var html = "<br /><div id='return'><button id='button' type='button'>Return</button></div>";	this.element.append(html);
 					
@@ -2060,16 +2067,7 @@ META NOTE (HSH - 8/25/2014): Can we remove this note, or at least clarify?
 	    model_x_axis = d3.svg.axis()
 			.scale(self.state.xScale).orient("top");
 	    //model_x_axis.tickEndSize = 1;
-				
-		var model_region = self.state.svg.append("g")
-	  		.attr("transform","translate(" + (self.state.textWidth +28) +"," + (self.state.yTranslation + self.state.yoffset /**+ self.state.yoffsetOver*/) + ")")
-	  		.attr("class", "x axis")
-	  		.call(model_x_axis)			
-	  	    //this be some voodoo...
-	  	    //to rotate the text, I need to select it as it was added by the axis
-	  		.selectAll("text") 
-	  		.each(function(d,i) { 
-	  		    self._convertLabelHTML(this, self._getShortLabel(self.state.filteredModelList[i].model_label, 15),self.state.filteredModelList[i]);}); 
+	    this._createModelLabels(self);
 		
 		//The pathline creates a line  below the labels. We don't want two lines to show up so fill=white hides the line.
 	        this._createModelLines();
@@ -2089,6 +2087,19 @@ META NOTE (HSH - 8/25/2014): Can we remove this note, or at least clarify?
 		
 	    this._createModelRects();
 	    this._createRects();
+	},
+
+	_createModelLabels: function(self) {
+	    self.state.svg.append("g")
+	  	.attr("transform","translate(" + (self.state.textWidth +28) +"," + 
+		      (self.state.yTranslation + self.state.yoffset ) + ")")
+	  	.attr("class", "x axis")
+	  	.call(model_x_axis)			
+	    //this be some voodoo...
+	    //to rotate the text, I need to select it as it was added by the axis
+	  	.selectAll("text") 
+	  	.each(function(d,i) { 
+	  	    self._convertLabelHTML(this, self._getShortLabel(self.state.filteredModelList[i].model_label, 15),self.state.filteredModelList[i]);}); 
 	},
 	
 
@@ -2291,28 +2302,7 @@ META NOTE (HSH - 8/25/2014): Can we remove this note, or at least clarify?
 		model_x_axis = d3.svg.axis()
 			.scale(this.state.xScale).orient("top");
 
-		var model_region = this.state.svg.append("g")
-			.attr("transform","translate(" + (this.state.textWidth + 30) + "," + (this.state.yoffset  + this.state.yTranslation) + ")")
-			.call(model_x_axis)
-			.attr("class", "x axis")
-			//this be some voodoo...
-			//to rotate the text, I need to select it as it was added by the axis
-			.selectAll("text")
-			.each(function(d,i) { 
-			    self._convertLabelHTML(this, self._getShortLabel(self.state.filteredModelList[i].model_label, 15),self.state.filteredModelList[i]);}); 					
-	            //This is for the new "Overview" target option 
-					/*if (self.state.targetSpeciesName == "Overview"){	
-						if (self.state.modelList[i].model_label != undefined){
-   							self._convertLabelHTML(this, self._getShortLabel(self.state.modelList[i].model_label, 15), self.state.modelList[i]);
-						} 
-						else {
-						   self._convertLabelHTML(this, "", self.state.modelList[i]);
-						}
-					 }
-					else {
-						self._convertLabelHTML(this, self._getShortLabel(self.state.filteredModelList[i].model_label, 15),self.state.filteredModelList[i]);
-					}
-			});*/
+	       this._createModelLabels(self);
 				
 	        this._createModelLines();
 	        this._createTextScores(list);
