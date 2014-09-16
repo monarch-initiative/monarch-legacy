@@ -244,6 +244,7 @@
                     "Parkinsonism", // HP term associated
                     "PINK1", // 
                     "Parkinson Disease 14", // OMIM subtype
+		    "Model Scores", // from phenogrid
                 ]
             }
         },
