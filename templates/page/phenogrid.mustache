@@ -7,8 +7,8 @@
     {{/scripts}}	
     
     <script src="/js/tabs.js"></script>
-    <script src="/js/stupidtable.min.js"></script>
-    <script src="/js/tables.js"></script>
+ <!--   <script src="/js/stupidtable.min.js"></script>
+    <script src="/js/tables.js"></script> -->
 	<script src="/widgets/modeltype/js/jquery-1.11.0.min.js"></script>
     <script src="/widgets/modeltype/js/jquery-ui-1.10.3.custom.min.js"></script>
     <script src="/widgets/modeltype/js/d3.min.js"></script>
@@ -21,8 +21,8 @@
 	<link rel="stylesheet" type="text/css" href="/css/monarch-main.css"/>
     <link rel="stylesheet" type="text/css" href="/css/monarch-specific.css"/>
     <link rel="stylesheet" type="text/css" href="/css/imagehover.css"/>	
-	<link rel="stylesheet" type="text/css" href="/css/instructions.css"/>
-	<link rel="stylesheet" type="text/css" href="/css/modelviewer.css"/>
+	<link rel="stylesheet" type="text/css" href="/widgets/modeltype//css/instructions.css"/>
+	<link rel="stylesheet" type="text/css" href="/widgets/modeltype/css/modelviewer.css"/>
     <meta name="viewport" content="width=device-width, initial-scale=1.0"/> 
     <link rel="icon" href="/image/favicon.ico" type="image/x-icon">
     <meta charset="utf-8"/> 
@@ -54,10 +54,8 @@
 		   jQuery(document).ready(
 			   function(){
 
-			$("#phen_vis").modeltype({serverURL: "http://tartini.crbs.ucsd.edu", phenotypeData: phenotypes,
-							  targetSpecies: "10090" });
-			
-			});	
+			$("#phen_vis").modeltype({serverURL: "http://tartini.crbs.ucsd.edu", phenotypeData: phenotypes});
+	   });
    </script>
 
 </head>
@@ -67,7 +65,7 @@
         <div class="content">
             <div class="wrapperforfooter">
 			<span class="header">Monarch Phenotype Grid Widget</span></span>
-			<div id="viscontent"><div id="phen_vis"></div></div><br />
+			<div id="viscontent"><div id="phen_vis" style="height:500px"></div></div><br />
             <div id="phencontent">
 			<div class="title">Steps for Adding the Monarch Phenotype Grid to Your Webpage</div>
 				<div class="text">
