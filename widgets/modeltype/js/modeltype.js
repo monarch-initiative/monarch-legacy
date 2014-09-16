@@ -242,10 +242,9 @@ META NOTE (HSH - 8/25/2014): Can we remove this note, or at least clarify?
 	
 	_init: function() {
 
-	    console.log("this is where the delay starts...."+JSON.stringify(this.element));
+
 	    this.element.empty();
-	    var elt = $("<div>loading..</div>");
-	    elt.appendTo(this.element)
+	    this._loadSpinner();
 	    
 	    this.state.phenotypeDisplayCount = this._calcPhenotypeDisplayCount();
 		//save a copy of the original phenotype data
@@ -271,11 +270,17 @@ META NOTE (HSH - 8/25/2014): Can we remove this note, or at least clarify?
    	        this._filterData(modData.slice());
 	    
 		this.state.unmatchedPhenotypes = this._getUnmatchedPhenotypes();
-	    console.log("and this is where it ends...");
 	    this.element.empty();
 	    this._reDraw(); 
 
 	},
+
+	_loadSpinner: function() {
+
+	    var element =$('<div id="spinner"><h3>Loading...</h3><div class="cube1"></div><div class="cube2"></div></div>');
+	    element.appendTo(this.element);
+	},
+	
 
 	_reDraw: function() {
 		if (this.state.modelData.length != 0 && this.state.phenotypeData.length != 0
