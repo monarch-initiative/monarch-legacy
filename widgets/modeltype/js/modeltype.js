@@ -1186,7 +1186,12 @@ var url = document.URL;
 		}
 		
 		//TO DO: Check on the source field, it doesn't seem to be contain any data in general
-		this._setComparisonType(retData.source.b_type);		
+	       var compType;
+	       if (typeof (retData.source)  !=='undefined' && typeof(retData.source.b_type) !== 'undefined') {
+		   compType = retData.source.b_type;
+		   console.log("about to call set comparison type. value is..."+retData.source.b_type);
+	       }
+	       this._setComparisonType(compType);
     },
     
     //for a given model, extract the sim search data including IC scores and the triple:

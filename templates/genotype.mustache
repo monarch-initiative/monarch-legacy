@@ -10,8 +10,7 @@
                     <a class="downloadline btn btn-large btn-default btn-monarch-main monarch-feedback-dark"
                             href="mailto:info@monarchinitiative.org">Your feedback welcome!</a>
                     <p>
-						Notice: Model/Genotype pages are under construction and incomplete. Updates are coming soon.<br/>
-                        Organism: {{taxon.label}} [{{taxon.id}}]<br/>
+                        Organism: {{{taxon_xref}}} <br/>
 						Source: {{{primary_xref}}}
                     </p>
                 </div>
@@ -27,31 +26,8 @@
                         {{/hasPhenotypes}}
                     </div>
                     <div class="tabcontainer">
-                        <div class="tabhover">Find diseases that are phenotypically similar</div>
-                        {{#hasDiseases}}
-                            <a href="#disease"><div id="longertab" class="tab contenttab">Related Diseases ({{diseaseNum}})</div></a>
-                        {{/hasDiseases}}
-                        {{^hasDiseases}}
-                            <div class="tab greyed-out">Related Diseases (0)</div>
-                        {{/hasDiseases}}
-                    </div>
-                    <div class="tabcontainer">
-                        <div class="tabhover">View genes known to be variant in this model</div>
-                        {{#hasGenes}}
-                            <a href="#genes"><div class="tab contenttab">Genes ({{geneNum}})</div></a>
-                        {{/hasGenes}}
-                        {{^hasGenes}}
-                            <div class="tab greyed-out">Genes (0)</div>
-                        {{/hasGenes}}
-                    </div>
-                    <div class="tabcontainer">
-                        <div class="tabhover">View models that have phenotypes in common</div>
-                        {{#hasSim}}
-                            <a href="#similarity"><div class="tab contenttab">Similar Models ({{simNum}})</div></a>
-                        {{/hasSim}}
-                        {{^hasSim}}
-                            <div class="tab greyed-out">Similar Models (0)</div>
-                        {{/hasSim}}
+                        <div class="tabhover">View phenotypically similar diseases and genes in a grid</div>
+                            <a href="#compare"><div class="tab contenttab">Compare</div></a>
                     </div>
                     <div class="tabcontainer">
                         <div class="tabhover">View citations for the data on this page</div>
@@ -66,9 +42,7 @@
             </div>
             <div id="complete-info">
                 <div id="overview" class="first category">
-                    <div class="ids">
-                        <b>ID:</b> {{id}} <br />
-                    </div>
+					{{{overview}}}
                 </div>
                 {{#hasPhenotypes}}
                 <div id="phenotypes" class="category">
@@ -103,6 +77,12 @@
                     </table>
                 </div>
                 {{/hasGenes}}
+
+				{{#hasPhenotypes}}
+                <div id="compare" class="category">
+                    <div id="phen_vis"></div>
+                </div>
+				{{/hasPhenotypes}}
                 {{#hasSim}}
                 <div id="similarity" class="category">
                     <table class="{{css.table}}">

@@ -60,7 +60,12 @@
   SO: http://purl.obolibrary.org/obo/SO_
   ZP: http://purl.obolibrary.org/obo/ZP_
   NCBITaxon: http://purl.obolibrary.org/obo/NCBITaxon_
-  
+  FBbt: http://purl.obolibrary.org/obo/FBbt_ 
+  FBdv: http://purl.obolibrary.org/obo/FBdv_
+  FBcv: http://purl.obolibrary.org/obo/FBcv_
+  VT: http://purl.obolibrary.org/obo/VT_
+  AQTLTrait: http://purl.obolibrary.org/obo/AQTLTrait_
+
   # Other ontologies
   SIO: http://semanticscience.org/resource/SIO_
   
