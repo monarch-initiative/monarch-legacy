@@ -2,41 +2,52 @@
 <div class="monarch-container">
     <div class="content">
         <div class="wrapperforfooter">
-            <div class="jumbotron">
-                <img id="monarch-logo-horizontal" class="downloadline" src="/image/logo-horizontal-sneak.png"/>
-                <!--<a id="feedback-main" class="downloadline downloadline-left btn btn-large btn-default btn-monarch-main monarch-feedback-dark"-->
-                   <!--href="mailto:info@monarchinitiative.org">Your feedback welcome!</a>-->
-                <div class="tagline">
-                    <!--Enabling navigation across a rich landscape of phenotypes, diseases,-->
-                    <!--models, and genes for translational-->
-                    <!--research. <a href="/page/about">Find out more</a>.<br/>-->
-                    <!--<a href="http://mail.monarchinitiative.org/mailman/listinfo/users">Sign up for our listserve to receive announcements</a>.-->
-                </div>
-            </div>
+            <!--<div class="jumbotron">-->
+
+                <!--<img id="monarch-logo-horizontal" class="downloadline" src="/image/logo-horizontal-sneak.png"/>-->
+                <!--&lt;!&ndash;<a id="feedback-main" class="downloadline downloadline-left btn btn-large btn-default btn-monarch-main monarch-feedback-dark"&ndash;&gt;-->
+                <!--&lt;!&ndash;href="mailto:info@monarchinitiative.org">Your feedback welcome!</a>&ndash;&gt;-->
+                <!--&lt;!&ndash;<div class="tagline">&ndash;&gt;-->
+                <!--&lt;!&ndash;Enabling navigation across a rich landscape of phenotypes, diseases,&ndash;&gt;-->
+                <!--&lt;!&ndash;models, and genes for translational&ndash;&gt;-->
+                <!--&lt;!&ndash;research. <a href="/page/about">Find out more</a>.<br/>&ndash;&gt;-->
+                <!--&lt;!&ndash;<a href="http://mail.monarchinitiative.org/mailman/listinfo/users">Sign up for our listserve to receive announcements</a>.&ndash;&gt;-->
+            <!--</div>-->
 
             <div id="main-container">
 
-                Yippy dippy doo.
+                <div style="margin: 20px; ">
+                    <br/>
+                    <iframe style="border: 1px solid black"
+                            src="jbrowse/index.html?data=sample_data/json/volvox&tracklist=0&nav=0&overview=0&tracks=DNA%2CExampleFeatures%2CNameTest%2CMotifs%2CAlignments%2CGenes%2CReadingFrame%2CCDS%2CTranscript%2CClones%2CEST"
+                            width="600" height="400">
 
-                <a href="jbrowse/index.html">Straight JBrowse</a>
+                    </iframe>
+                </div>
+
+                <!--<a href="jbrowse/index.html">Straight JBrowse</a>-->
+
+
                 <!--<div class="graph-container"></div>-->
             </div>
 
+        </div>
 
-        </div> <!-- closes wrapperforfooter -->
+        <!-- closes wrapperforfooter -->
         {{{includes.footer}}}
-    </div> <!-- closes content -->
+    </div>
+    <!-- closes content -->
 </div> <!-- closes container -->
 <script type="text/javascript">
-//    jQuery(document).ready(function(){
-//        /* d3.json("/labs/datagraph.json",function(error,data) {
-//             var graph = data.dataGraph;
-//             datagraph.init(".graph-container",json);
-//         });*/
-//
-//        jQuery.getJSON( "/labs/datagraph.json", function(data) {
-//            var graph = data.dataGraph;
-//            datagraph.init(".graph-container",graph);
-//        });
-//    });
+    //    jQuery(document).ready(function(){
+    //        /* d3.json("/labs/datagraph.json",function(error,data) {
+    //             var graph = data.dataGraph;
+    //             datagraph.init(".graph-container",json);
+    //         });*/
+    //
+    //        jQuery.getJSON( "/labs/datagraph.json", function(data) {
+    //            var graph = data.dataGraph;
+    //            datagraph.init(".graph-container",graph);
+    //        });
+    //    });
 </script>
