@@ -47,8 +47,8 @@ body{
 }
 	
 #viscontent .shortselects {
-    left: 855px;
-    top: 390px;
+    left: 770px;
+    top: 520px;
 }
 
 #phenogrid .shortselects {
@@ -109,18 +109,14 @@ body{
 #phen_vis svg{
   margin-top:-35px;
   padding-bottom: 30px;
+  height:600px;
 }
 
 li{ padding-bottom: 7px;}
 
 div .title{
-	margin-top:-30px;
+	margin-top:-410px;
 	clear:both;
-}
-
-#viscontent .shortselects{
-	top:360px;
-	left:855px;
 }
 
 #viscontent {
