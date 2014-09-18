@@ -39,7 +39,7 @@ body{
 }	
 
 #phenogrid #sort_div{
-	margin-top:50px;
+	margin-top:10px;
 }
 
 #phenogrid #prebl{
@@ -126,7 +126,6 @@ div .title{
 #viscontent {
     height: 100%;
     width: 100%;
-	padding-top:30px;
 }
 
 #footer {

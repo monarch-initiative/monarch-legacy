@@ -7,12 +7,9 @@
     {{/scripts}}	
     
     <script src="/js/tabs.js"></script>
- <!--   <script src="/js/stupidtable.min.js"></script>
-    <script src="/js/tables.js"></script> -->
 	<script src="/widgets/modeltype/js/jquery-1.11.0.min.js"></script>
     <script src="/widgets/modeltype/js/jquery-ui-1.10.3.custom.min.js"></script>
     <script src="/widgets/modeltype/js/d3.min.js"></script>
-	<script type="text/javascript" src="/widgets/modeltype/js/modeltype.js"></script>
     {{{includes.analytics}}}
     {{#stylesheets}}
     <link rel="stylesheet" type="text/css" href="{{url}}"/>
@@ -21,42 +18,9 @@
 	<link rel="stylesheet" type="text/css" href="/css/monarch-main.css"/>
     <link rel="stylesheet" type="text/css" href="/css/monarch-specific.css"/>
     <link rel="stylesheet" type="text/css" href="/css/imagehover.css"/>	
-	<link rel="stylesheet" type="text/css" href="/widgets/modeltype//css/instructions.css"/>
-	<link rel="stylesheet" type="text/css" href="/widgets/modeltype/css/modelviewer.css"/>
     <meta name="viewport" content="width=device-width, initial-scale=1.0"/> 
     <link rel="icon" href="/image/favicon.ico" type="image/x-icon">
     <meta charset="utf-8"/> 
-		
-	<script>
-	   var phenotypes = [
-			{ id:"HP:0000006", observed:"positive"},
-			{ id:"HP:0000726", observed:"positive"},
-			{ id:"HP:0000746", observed:"positive"},
-			{ id:"HP:0001300", observed:"positive"},
-			{ id:"HP:0002367", observed:"positive"},
-			{ id:"HP:0000007", observed:"positive"},
-			{ id:"HP:0000012", observed:"positive"},
-			{ id:"HP:0000716", observed:"positive"},
-			{ id:"HP:0000726", observed:"positive"},
-			{ id:"HP:0000739", observed:"positive"},
-			{ id:"HP:0001332", observed:"positive"},
-			{ id:"HP:0001347", observed:"positive"},
-			{ id:"HP:0002063", observed:"positive"},
-			{ id:"HP:0002067", observed:"positive"},
-			{ id:"HP:0002172", observed:"positive"},
-			{ id:"HP:0002322", observed:"positive"},
-			{ id:"HP:0003539", observed:"positive"},
-			{ id:"HP:0003677", observed:"positive"},
-			{ id:"HP:0007159", observed:"positive"}];	
-	   
-	   
-		// jQuery gets to bootstrap everything.
-		   jQuery(document).ready(
-			   function(){
-
-			$("#phen_vis").modeltype({serverURL: "http://tartini.crbs.ucsd.edu", phenotypeData: phenotypes});
-	   });
-   </script>
 
 </head>
 <body id="phenogrid">
@@ -64,120 +28,8 @@
         {{{includes.navbar}}}
         <div class="content">
             <div class="wrapperforfooter">
-			<span class="header">Monarch Phenotype Grid Widget</span></span>
-			<div id="viscontent"><div id="phen_vis" style="height:500px"></div></div><br />
-            <div id="phencontent">
-			<div class="title">Steps for Adding the Monarch Phenotype Grid to Your Webpage</div>
-				<div class="text">
-                    This page describes how to include the  phenogrid widget on any webpage.  Steps are provided for adding required javascript files<b>*</b>, adding parameters to the widget call, and adding the widget to the html file. <br /><br />
-					
-					<span style="font-weight:bold; font-size:1.1em;">*Required files are available at: <a href="https://github.com/monarch-initiative/monarch-app/tree/master/widgets/modeltype">https://github.com/monarch-initiative/monarch-app/tree/master/widgets/modeltype</a></span>
-                </div>
-				<div class="section">
-				  <div class="sectiontitle">1. Create a directory</div>
-				  <div class="text"> As this directory will be used to hold all of the files, it should be visible to your HTML server.</div>		  
-                <div class="sectiontitle">2. Add the Required Files</div>
-                <div class="text">
-                    <ul>
-						<li>Go to your main directory and create a subdirectory named. &quot;js&quot; and add these files to it. The following .js code libraries are required:
-							<ul>
-								<li>jQuery (tested with 1.11.0)</li>
-								<li>jQuery UI (tested with 1.10.3)</li>
-								<li>d3 (tested with 3.2.4)</li>
-							</ul>
-						</li>
-						<li>The custom javascript file for the phenogrid widget is required.
-							<ul>
-								<li>modeltype.js</li>
-							</ul>
-						</li>
-						<li>Create a new html file in your main directory and add all required javascript files within the html &lt;head&gt; tags
-							<ul>
-								<li>Example:<br />
-<pre>&lt;head&gt;
-     &lt;script src="js/jquery-1.11.0.min.js"&gt;&lt;/script&gt;
-     &lt;script src="js/jquery-ui-1.10.3.custom.min.js"&gt;&lt;/script&gt;
-     &lt;script src="js/d3.min.js"&gt;&lt;/script&gt;
-     &lt;script src="js/modeltype.js"&gt;&lt;/script&gt;
-&lt;/head&gt;</pre>				</li>
-							</ul>
-						</li>
-						<li>Create an image subdirectory and place all of the files in the image subdirectory of the installation into that directory.
-						
-						</li>
-						<li>Create a css subdirectory and copy instructions.css and modelviewer.css from the css subdirectory of the installation into your directory.
-						
-						</li>
-					</ul>
-                </div><br />
-				<div class="sectiontitle">3. Add a List of Phenotyopes and a jQuery Function Call</div>
-                <div class="text">
-                    <ul>
-						<li>Create a list of phenotypes as an array of Javascript objects with the following attributes:
-							<ul><li><pre>[{ id:"HP:0000006", observed:"positive"}, id:"HP:0000726", observed:"positive"},...];</pre>
-							</li>
-							<li>Note that the phenotypes may also be passed in as a JSON list and that the "observed" tag may be omitted.  <pre>Example: { "HP:0000006" , "HP0000726",...}</pre>
-							<li>Note that if there are no phenotype matches in the models, you may see a "No Models found" message.</li>
-						</ul>
-						</li>
-						<li>Add a jQuery .ready function that will add the widget to an empty div tag (see Step 4) as follows  (The following example assumes you are adding the widget to a div with an id="phen_vis"): 
-							<ul><li><pre>jQuery(document).ready(function(){$("#phen_vis").modeltype(
-	{serverURL: "http://tartini.crbs.ucsd.edu", phenotypeData: phenotypes, target_species: "10090" });
-});</pre>	
-							</li>
-							<li>
-							<div class="subsectiontitle">Widget Parameters</div>
-							<div class="text">To add the widget, you must set some parameters. The following are the most common parameters:
-								<ul>
-									<li><b><em>phenotypeData</em></b> [required] - It is a Javascript array of objects listing the phenotypes to be rendered in the widget.
-									</li>
-									<li><b><em>serverURL</em></b> [required] - This URL should be pointed to the OWLSim URL server associated with your installation containing the Monarch web services. You have three options:<br/>
-										<ol><li>Use http://tartini.crbs.ucsd.edu to connect to the development/test web services.  This server is less stable than the production server.</li> 
-										  <li>Use http://monarch.monarchinitiative.org to connect to the stable, production version of the web services (better uptime)</li>
-										  <li>If you are running the complete monarch-app, you can point it to http://localhost:8080, or whichever server/port you are using in your local installation.</li></ol>
-									</li>
-									<li><b><em>targetSpecies</em></b> [optional]- this parameter defaults to 10090 (mus musculus).  Change this parameter if you want to compare the phenotypes in the phenotypeData parameter against a different species. Available Species: 
-									<ul><li>Name: Homo sapiens  Taxon: 9606</li>
-										<li>Name: Dani rerio    Taxon: 7955</li>
-										<li>Name: Drosophila melanogaster  Taxon: 7227</li>
-									</ul>
-									</li>
-								</ul>
-							</li>
-						</ul>
-						</li>
-						<li>Add the phenotype array and the jQuery function between &lt;script&gt; tags in the html &lt;head&gt; of the index file that you created above.</li>
-							<ul>Example:<br />					
-<pre>&lt;script&gt;
-	var phenotypes = [
-		{ id:"HP:0000006", observed:"positive"},
-		{ id:"HP:0000726", observed:"positive"},
-		{ id:"HP:0000746", observed:"positive"}];
-		
-	jQuery(document).ready(function(){
-		$("#phen_vis").modeltype({serverURL : "http://tartini.crbs.ucsd.edu", 
-			phenotypeData: phenotypes, targetSpecies: "10090" });	
-	});
-&lt;/script&gt;</pre>
-							</ul></li>	
-					</ul></li>
-                </div><br />
-				<div class="sectiontitle">4. Add the Widget &lt;div&gt;:</div>
-                <div class="text">
-                    <ul>
-						<li>Add an empty &lt;div&gt; tag in the body of the html file. The id of this &lt;div&gt; must match the id that you used in the Javascript fragment given above.</li>
-						<li>Example:<br />
-<pre>&lt;body&gt;	
-	&lt;div id="phen_vis"&gt;&lt;/div&gt;
-&lt;body&gt;</pre>						
-						</li>
-					</ul>										
-				</div><br />
-				
-
-			<div class="sectiontitle">5. Load your HTML file into a browser.</div><br/>
-			<div class="sectiontitle">Please contact us at <a href="mailto:info@monarchinitiative.org">info@monarchinitiative.org</a> if you have any problems or questions.</div>
-				</div>
+	         <IFRAME src="../widgets/modeltype/index.html"
+	         width="1500" frameBorder="0" height="1000"></iframe>
             </div> <!-- closes wrapperforfooter -->
         </div>	
 	</div>

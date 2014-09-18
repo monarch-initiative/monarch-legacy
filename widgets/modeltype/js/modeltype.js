@@ -960,7 +960,7 @@ META NOTE (HSH - 8/25/2014): Can we remove this note, or at least clarify?
 	    for (i in this.state.targetSpeciesList) {
 		var species = this.state.targetSpeciesList[i].name;
 		this._loadSpeciesData(species,limit);
-		if (species === this.state.refSpecies) { // if it's the one we're reffering to
+		if (species === this.state.refSpecies && typeof(this.state.data[species]) !== 'undefined') { // if it's the one we're reffering to
 		    this.state.maxICScore = this.state.data[species].metadata.maxMaxIC;
 		}
 		else {
