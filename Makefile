@@ -6,7 +6,7 @@
 ### Environment variables.
 ###
 
-RINGO_MODULE_PATH ?= ../stick/lib
+RINGO_MODULE_PATH ?= ../stick/lib:./modules/
 ## TODO/BUG: highly non-canonical location--should be passed as
 ## variable, not hard-coded.
 RINGO_BIN ?= ./ringojs/bin/ringo

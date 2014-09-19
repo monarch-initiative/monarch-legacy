@@ -39,7 +39,13 @@
                         </div>
                     <div class="tabcontainer">
                         <div class="tabhover">View phenotypically similar diseases and genes in a grid</div>
+						{{#hasPhenotypes}}
                             <a href="#compare"><div class="tab contenttab">Compare</div></a>
+						{{/hasPhenotypes}}
+                        {{^hasPhenotypes}}
+                            <div class="tab greyed-out">Compare</div>
+                        {{/hasPhenotypes}}
+						
 					</div>
                     <div class="tabcontainer">
                         <div class="tabhover">View a list of asserted and inferred animal models for this disease</div>
@@ -151,6 +157,8 @@
                     </table>
                 </div>
                 {{/hasAlleles}}
+                {{#hasPhenotypes}}
+
 				<div id="compare" class="category">
 					<div id="phen_vis"></div>
 				</div>
@@ -161,6 +169,7 @@
                     </table>                
                     {{/hasModels}}
                 </div>
+				{{/hasPhenotypes}}
                 {{#hasSim}}
                 <div id="similarity" class="category">
                     <div class="text">
