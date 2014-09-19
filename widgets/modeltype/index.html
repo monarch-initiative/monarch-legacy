@@ -1,4 +1,4 @@
-<o!--
+<!--
   File: /widget/modeltype/index.html 
   
   Authors: Harry Hochheiser, Chuck Boromeo, Becky Boes (University of Pittsburgh)
@@ -47,11 +47,10 @@
    
    
 	// jQuery gets to bootstrap everything.
-	   jQuery(document).ready(
-	       function(){
-
-	   	$("#phen_vis").modeltype({serverURL : "http://tartini.crbs.ucsd.edu", phenotypeData: phenotypes, targetSpecies: "10090" });
-	   	});
+	jQuery(document).ready(
+	function(){
+	$("#phen_vis").modeltype({serverURL : "http://tartini.crbs.ucsd.edu", phenotypeData: phenotypes, targetSpecies: "10090" });
+	   });
 	
 	</script>
 	
@@ -59,7 +58,7 @@
   <body id="phenogrid">
 		
 			<span class="headtitle"><img id="monarch-logo"  width="90px" class="downloadline" src="image/logo.png"/>
-			<span class="header">Monarch Phenotype Grid Widget</span></span><br />  <br /> <br />          
+			<span class="header">Monarch Phenotype Grid Widget</span>
 			<div id="viscontent">
 			<div id="phen_vis"></div></div>
 				<div class="text">

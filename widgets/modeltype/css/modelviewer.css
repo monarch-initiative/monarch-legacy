@@ -361,6 +361,7 @@ margin-left: 55px;
 /* spinner code from http://tobiasahlin.com/spinkit */
 #spinner {
     margin: 30px  auto;
+    padding: 70px;
     width: 100%;
 }
 
@@ -369,7 +370,7 @@ cube1, .cube2 {
   width: 10px;
   height: 10px;
   position: absolute;
-  top: 50;
+  top: 100;
   left: 300;
   
   -webkit-animation: cubemove 1.8s infinite ease-in-out;

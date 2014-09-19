@@ -91,9 +91,8 @@ META NOTE (HSH - 8/25/2014): Can we remove this note, or at least clarify?
 		multiOrganismCt: 10,
 		multiOrgModelLimit: 750,
 		phenotypeSort: [{type: "Alphabetic", order: 0},{type: "Frequency and Rarity", order:1} ,{type: "Frequency", order:2} ],	    
-		refSpecies: "Homo sapiens",
 		serverURL : "",
-		similarityCalculation: [{label: "Distance", calc: 0}, {label: "Ratio (q)", calc: 1}, {label: "Ratio (t)", calc: 3} , {label: "Uniqueness", calc: 2}],
+		similarityCalculation: [{label: "Similarity", calc: 0}, {label: "Ratio (q)", calc: 1}, {label: "Ratio (t)", calc: 3} , {label: "Uniqueness", calc: 2}],
 		smallestModelWidth: 400,
 	        textLength: 34,
 		textWidth: 200,
@@ -106,21 +105,22 @@ META NOTE (HSH - 8/25/2014): Can we remove this note, or at least clarify?
 				  { abbrev: "ZP", label: "Zebrafish"},
 				  { abbrev: "FB", label:  "Fly"},
 				  { abbrev: "GO", label: "Gene Ontology"}],
+	modelDisplayCount : 30,
+	phenotypeDisplayCount : 26,
+	dimensions: [ "Phenotype Profile", "Lowest Common Subsumer", "Phenotypes in common" ], 
 	       tooltips: {}
     },
 
 
 	options:   {
 	    /// good - legit options
-	    modelDisplayCount : 30,
-	    phenotypeDisplayCount : 26,
-	    dimensions: [ "Phenotype Profile", "Lowest Common Subsumer", "Phenotypes in common" ], 
+
 
 	    
 	    selectedCalculation: 0,
 	    selectedSort: "Frequency",
 	    targetSpeciesName : "Overview",	    	
-	    
+	    refSpecies: "Homo sapiens",
 	    targetSpeciesList : [{ name: "Homo sapiens", taxon: "9606"},
 				 { name: "Mus musculus", taxon: "10090" },
 				 { name: "Danio rerio", taxon: "7955"},
@@ -271,7 +271,7 @@ META NOTE (HSH - 8/25/2014): Can we remove this note, or at least clarify?
 	    
 		this.state.unmatchedPhenotypes = this._getUnmatchedPhenotypes();
 	    this.element.empty();
-	    this._reDraw(); 
+	    this.reDraw(); 
 
 	},
 
@@ -282,7 +282,7 @@ META NOTE (HSH - 8/25/2014): Can we remove this note, or at least clarify?
 	},
 	
 
-	_reDraw: function() {
+	reDraw: function() {
 		if (this.state.modelData.length != 0 && this.state.phenotypeData.length != 0
 		 && this.state.filteredPhenotypeData.length != 0){
 	         
@@ -290,7 +290,6 @@ META NOTE (HSH - 8/25/2014): Can we remove this note, or at least clarify?
 				this._addLogoImage();	        
 	            this.state.svg
 					.attr("width", "100%")
-//					.attr("height", 480); //this.state.h - 20 + this.state.yTranslation);
 					.attr("height", this.state.phenotypeDisplayCount * 18);
 				this._createAccentBoxes();				
 				this._createColorScale();
@@ -652,7 +651,7 @@ META NOTE (HSH - 8/25/2014): Can we remove this note, or at least clarify?
 			}
 		}
 		return label;
-	},
+	}, 
 	
 	_setComparisonType : function(comp){
 		var self = this;
@@ -677,12 +676,12 @@ META NOTE (HSH - 8/25/2014): Can we remove this note, or at least clarify?
 
 	_setSelectedCalculation: function(calc) {
 		var self = this;
-		
-		var tempdata = self.state.similarityCalculation.filter(function(d) {
-	    	return d.calc === calc;
+
+	    var tempdata = self.state.similarityCalculation.filter(function(d) {
+	    	return d.calc == calc;
 		});
-		//self.state.selectedLabel = tempdata[0].label;
-		self.state.selectedCalculation = tempdata[0].calc;
+	    //self.state.selectedLabel = tempdata[0].label;
+	    self.state.selectedCalculation = tempdata[0].calc;
 	},
 
 	_setSelectedSort: function(type) {
@@ -1753,7 +1752,7 @@ META NOTE (HSH - 8/25/2014): Can we remove this note, or at least clarify?
 		var suffix = "";
 		var prefix = "";
 		if (calc == 0 || calc == 1 || calc == 3) {suffix = '%';}
-		if (calc == 0) {prefix = "Distance";}
+		if (calc == 0) {prefix = "Similarity";}
 		else if (calc == 1) {prefix = "Ratio (q)";}
 		else if (calc == 2) {prefix = "Uniquesness";}
 		else if (calc == 3) {prefix = "Ratio (t)";}
@@ -2361,7 +2360,7 @@ META NOTE (HSH - 8/25/2014): Can we remove this note, or at least clarify?
 			if (calc == 2) {text1 = "Lowest"; text2 = "Uniqueness"; text3 = "Highest";}
 			else if (calc == 1) {text1 = "Less Similar"; text2 = "Ratio (q)"; text3 = "More Similar";}
 			else if (calc == 3) {text1 = "Less Similar"; text2 = "Ratio (t)"; text3 = "More Similar";}
-				else if (calc == 0) {text1 = "Min"; text2 = "Distance"; text3 = "Max";}
+				else if (calc == 0) {text1 = "Min"; text2 = "Similarity"; text3 = "Max";}
 
 		
 			var div_text1 = self.state.svg.append("svg:text")

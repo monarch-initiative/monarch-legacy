@@ -1,7 +1,7 @@
 /**These styles are specific to the widgets instruction page (templates/page/widgets.mustache)*/
 body{
 	margin-left:25px;
-	width:100%;
+	width:70%;
 	font-family: Arial, Helvetica, sans-serif;
 	font-size: 14px;
 }
@@ -17,7 +17,7 @@ body{
 	margin-bottom:15px;
 }
 
-#phenogrid .header{
+#phenogrid.header{
 	border-top: 0px solid black;
 	
 	padding-bottom:15px;
@@ -27,16 +27,6 @@ body{
 	font-size: 1.8em;
 	font-weight:bold;
 }
-	
-#phenogrid #unmatchedlabel, #phenogrid #unmatchedlabelhide {
-
-    margin-top: -100px;
-}
-	
-#phenogrid .header #title {
-
-	margin-top:50px;
-}	
 
 #phenogrid #sort_div{
 	margin-top:10px;
@@ -45,7 +35,7 @@ body{
 #phenogrid #prebl{
 	display:none;
 }
-	
+
 #viscontent .shortselects {
     left: 770px;
     top: 520px;
@@ -54,6 +44,8 @@ body{
 #phenogrid .shortselects {
     top: 360x;
 }
+
+
 .subsectiontitle{
 	font-size:1.0em;
 }
@@ -68,7 +60,7 @@ body{
 }
 
 #title b{
-  position:absolute;
+//  position:absolute;
   top:100px;
   left:73px;
 }
@@ -76,12 +68,12 @@ body{
 #title2{
 	
 	float:left;
-	position: absolute;
+//	position: absolute;
 	top:130px;
 	left:72px;
 }
 #organism_div {  
-	position:absolute;
+//	position:absolute;
 	top:97px;
 	left:610px;
 }
@@ -89,12 +81,8 @@ body{
     font-size: 32px;
 }
 
-#phenogrid .content{
-	height:80%;
-}
-
 #calculation_div {
-	position:absolute;
+//	position:absolute;
 	top:130px;
 	left:620px; 
 }
@@ -106,21 +94,16 @@ body{
 .headtitle img{
 	vertical-align:bottom;
 }
-#phen_vis svg{
-  margin-top:-35px;
-  padding-bottom: 30px;
-  height:600px;
-}
 
 li{ padding-bottom: 7px;}
 
 div .title{
-	margin-top:-410px;
+//	margin-top:-410px;
 	clear:both;
 }
 
-#viscontent {
-    height: 100%;
+#viscontent { 
+    height: 525px;
     width: 100%;
 }
 
