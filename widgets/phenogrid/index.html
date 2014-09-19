@@ -1,11 +1,11 @@
 <!--
-  File: /widget/modeltype/index.html 
+  File: /widget/phenogrid/index.html 
   
   Authors: Harry Hochheiser, Chuck Boromeo, Becky Boes (University of Pittsburgh)
   
   Version: Model Viewer v5.9.2014
   
-  Purpose: This file provides step-by-step instructions on how to create an instance of the ModelType Viewer (modeltype.js) widget on any webpage.
+  Purpose: This file provides step-by-step instructions on how to create an instance of the Phenogrid Viewer (phenogrid.js) widget on any webpage.
   
   General Steps include:  
   1. Add appropriate Javascript libraries and files
@@ -20,9 +20,9 @@
     <script src="js/jquery-1.11.0.min.js"></script>
     <script src="js/jquery-ui-1.10.3.custom.min.js"></script>
     <script src="js/d3.min.js"></script>
-    <script src="js/modeltype.js"></script>
+    <script src="js/phenogrid.js"></script>
 	<link rel="stylesheet" type="text/css" href="css/instructions.css"/>
-	<link rel="stylesheet" type="text/css" href="css/modelviewer.css"/>
+	<link rel="stylesheet" type="text/css" href="css/phenogrid.css"/>
     <script>
 	var phenotypes = [
 	   	{ id:"HP:0000006", observed:"positive"},
@@ -49,7 +49,7 @@
 	// jQuery gets to bootstrap everything.
 	jQuery(document).ready(
 	function(){
-	$("#phen_vis").modeltype({serverURL : "http://tartini.crbs.ucsd.edu", phenotypeData: phenotypes, targetSpecies: "10090" });
+	$("#phen_vis").phenogrid({serverURL : "http://tartini.crbs.ucsd.edu", phenotypeData: phenotypes, targetSpecies: "10090" });
 	   });
 	
 	</script>
@@ -65,7 +65,7 @@
 				<div class="title">Steps for Adding the Monarch Phenotype Grid to Your Webpage</div>
                     This page describes how to include the phenogrid widget on any webpage.  Steps are provided for adding required javascript files<b>*</b>, adding parameters to the widget call, and adding the widget to the html file. <br /><br />
 					
-					<span style="font-weight:bold; font-size:1.1em;">*Required files are available at: <a href="https://github.com/monarch-initiative/monarch-app/tree/master/widgets/modeltype">https://github.com/monarch-initiative/monarch-app/tree/master/widgets/modeltype</a></span>
+					<span style="font-weight:bold; font-size:1.1em;">*Required files are available at: <a href="https://github.com/monarch-initiative/monarch-app/tree/master/widgets/phenogrid">https://github.com/monarch-initiative/monarch-app/tree/master/widgets/phenogrid</a></span>
                 </div><br />
             <div class="section">
                 <div class="sectiontitle">1. Create a directory</div>
@@ -82,7 +82,7 @@
 						</li>
 						<li>The custom javascript file for the phenogrid widget is required.
 							<ul>
-								<li>modeltype.js</li>
+								<li>phenogrid.js</li>
 							</ul>
 						</li>
 						<li>Create a new html file in your main directory and add all required javascript files within the html &lt;head&gt; tags
@@ -92,7 +92,7 @@
      &lt;script src="js/jquery-1.11.0.min.js"&gt;&lt;/script&gt;
      &lt;script src="js/jquery-ui-1.10.3.custom.min.js"&gt;&lt;/script&gt;
      &lt;script src="js/d3.min.js"&gt;&lt;/script&gt;
-     &lt;script src="js/modeltype.js"&gt;&lt;/script&gt;
+     &lt;script src="js/phenogrid.js"&gt;&lt;/script&gt;
 &lt;/head&gt;</pre>				</li>
 							</ul>
 						</li>
@@ -100,7 +100,7 @@
 						
 						</li>
 						</li>
-						<li>Create a css subdirectory and copy instructions.css and modelviewer.css from the css subdirectory of the installation into your directory.
+						<li>Create a css subdirectory and copy instructions.css and phenogrid.css from the css subdirectory of the installation into your directory.
 						
 					    </ul>
                 </div><br />			   
@@ -115,7 +115,7 @@
 						</ul>
 						</li>
 						<li>Add a jQuery .ready function that will add the widget to an empty div tag (see Step 4) as follows  (The following example assumes you are adding the widget to a div with an id="phen_vis"): 
-							<ul><li><pre>jQuery(document).ready(function(){$("#phen_vis").modeltype(
+							<ul><li><pre>jQuery(document).ready(function(){$("#phen_vis").phenogrid(
 	{serverURL: "http://tartini.crbs.ucsd.edu", phenotypeData: phenotypes, target_species: "10090" });
 });</pre>	
 							</li>
@@ -149,7 +149,7 @@
 		{ id:"HP:0000746", observed:"positive"}];
 		
 	jQuery(document).ready(function(){
-		$("#phen_vis").modeltype({serverURL : "http://tartini.crbs.ucsd.edu", 
+		$("#phen_vis").phenogrid({serverURL : "http://tartini.crbs.ucsd.edu", 
 			phenotypeData: phenotypes, targetSpecies: "10090" });	
 	});
 &lt;/script&gt;</pre>

@@ -248,7 +248,7 @@ jQuery(document).ready(
 	    var text = $("#analyze_auto_target").val();
 	    var species = $("#analyze_auto_species").val();
 	    var phenotypes  = text.split(/[\s,]+/);
-	    $("#phen_vis").modeltype({phenotypeData: phenotypes,
+	    $("#phen_vis").phenogrid({phenotypeData: phenotypes,
 				      targetSpecies: species });
 	}
     });

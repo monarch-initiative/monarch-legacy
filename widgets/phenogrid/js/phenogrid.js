@@ -1,10 +1,10 @@
 /*
  *
- * Modeltype - the Phenogrid widget.
+ * Phenogrid - the Phenogrid widget.
  * 
  * implemented as a jQuery UI (jqueryui.com) widget, this can be instantiated on a jquery-enabled web page
  *  with a call of the form 
- *  $("#mydiv).modeltype({phenotypeData: phenotypeList}).
+ *  $("#mydiv).phenogrid({phenotypeData: phenotypeList}).
  * 
  *  where 
  *
@@ -57,18 +57,10 @@
  * META NOTE (HSH - 8/25/2014): Can we remove this note, or at least clarify?
  */
 var url = document.URL;
-/*Save this for future use - this appends a link for a css file - for now the styles are embedded in the code 
-/$(document).ready(function(){    
-	 //console.log(url);
-	 if (url != "http://localhost:8080/page/widget"){
-     $('head').append('<link href="/css/modelviewer.css" type="text/css" rel="stylesheet" />');} 
-});
-META NOTE (HSH - 8/25/2014): Can we remove this note, or at least clarify?
-*/
 
 (function($) {
     
-    $.widget("ui.modeltype", {
+    $.widget("ui.phenogrid", {
 
 	// core commit. Not changeable by options. 
     config: {
@@ -360,7 +352,7 @@ META NOTE (HSH - 8/25/2014): Can we remove this note, or at least clarify?
 	_createGridlines: function() { 
 		var self=this;
 		
-		//create a blank grid to match the size of the modelviewer grid				
+		//create a blank grid to match the size of the phenogrid grid				
 		var data = new Array(),
 			modelCt = 0;
 		
@@ -1708,7 +1700,7 @@ META NOTE (HSH - 8/25/2014): Can we remove this note, or at least clarify?
 			.attr("id", "detail_content")
 			.attr("y", (16+this.state.detailRectStrokeWidth))
 		    .attr("x", (545+this.state.detailRectStrokeWidth))
-		    .attr("xlink:href","/widgets/modeltype/image/throbber.gif");	       
+		    .attr("xlink:href","/widgets/phenogrid/image/throbber.gif");	       
     },
     
     //extract the x,y values from a SVG transform string (ex: transform(200,20))
