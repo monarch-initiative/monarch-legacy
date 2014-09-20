@@ -118,3 +118,15 @@
 .conflict-tab-padding > li > a {
     padding: 7px;
 }
+
+/*
+ * Slow down the carousel.
+ */
+.carousel-inner > .item {
+    /* -webkit-transition: 2.0s ease-in-out left; */
+    /* -moz-transition: 2.0s ease-in-out left; */
+    /* -o-transition: 2.0s ease-in-out left; */
+    /* transition: 2.0s ease-in-out left; */
+    transition-duration: 1.0s;
+    transition-delay: 5.0s;
+}
