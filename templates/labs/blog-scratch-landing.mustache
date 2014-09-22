@@ -182,8 +182,9 @@
 	      {{/category}}
 	    </dt>
 	    <dd>
-	      <strong>{{date}}</strong>
-	      {{description}}
+	      <strong>{{moddate}}</strong>
+	      <!-- <strong>{{pubdate}}</strong> -->
+	      <!-- {{{truncated}}} -->
 	    </dd>
 	  </dl>
 	  {{/blog_results}}
@@ -200,132 +201,106 @@
 
   <!-- Open second row section. -->
   <div class="row">
-  <!-- <div class="row" style="margin-left: -15px; margin-right: -14px;"> -->
     
-    <!-- Explanation and entry points. -->
-    <div class="col-xs-12 col-sm-12 col-md-6 col-lg-6">
-      <div class="panel panel-default">
-	<!-- 	<div class="panel-heading"> -->
-	<!-- 	  <h3 class="panel-title">Explanations and Entry Points</h3> -->
-	<!-- 	</div> -->
-	<!-- 	<div class="panel-body"> -->
-	<!-- <h4>Explanations and Entry Points</h4> -->
-	<!-- <hr /> -->
-	<!-- <p>Entry points into the data: blah blah blah...</p> -->
+    <!-- Explanation and entry points tabs. -->
+    <div class="col-xs-12 col-sm-9 col-md-9 col-lg-9">
 	
-	<div class="container-fluid">	    
-	  <div class="row">
-	    <div class="col-xs-12 col-sm-6 col-md-3 col-lg-3">
-	      <h4>Browse</h4>
-	      <dl>
-		<dt><a href="/gene">Genes</a></dt>
-	      </dl>
-	      <dl>
-		<dt><a href="/disease">Diseases</a></dt>
-	      </dl>
-              <dl>
-                <dt><a href="/phenotype">Phenotypes</a></dt>
-              </dl>
-              <dl>
-                <dt><a href="/model">Models</a></dt>
-              </dl>
-              <dl>
-                <dt>Literature</dt>
-              </dl>
-              <dl>
-                <dt>Species</dt>
-              </dl>
+	<ul class="nav nav-tabs conflict-tab-padding" role="tablist">
+	  <li class="active">
+	    <a href="#browse" role="tab" data-toggle="tab">Browse</a>
+	  </li>
+	  <li>
+	    <a href="#discover" role="tab" data-toggle="tab">Discover</a>
+	  </li>
+	  <li>
+	    <a href="#learn" role="tab" data-toggle="tab">Learn</a>
+	  </li>
+	  <li>
+	    <a href="#contribute" role="tab" data-toggle="tab">Contribute</a>
+	  </li>
+	</ul>
+	<div class="tab-content" style="padding-left: 1em;">
 
-	    </div>
-	    <div class="col-xs-12 col-sm-6 col-md-3 col-lg-3">
-	      <h4>Discover</h4>
-              <dl>
-                <dt>Overview (datagraphs)</dt>
-                <dd>Interact with a birds-eye view of cross-species phenotype data</dd>
-              </dl>
+	  <div class="tab-pane active" id="browse">
+	    <dl>
+	      <dt><a href="/gene">Genes</a></dt>
+	    </dl>
+	    <dl>
+	      <dt><a href="/disease">Diseases</a></dt>
+	    </dl>
+            <dl>
+              <dt><a href="/phenotype">Phenotypes</a></dt>
+            </dl>
+            <dl>
+              <dt><a href="/model">Models</a></dt>
+            </dl>
+            <dl>
+              <dt>Literature</dt>
+            </dl>
+            <dl>
+              <dt>Species</dt>
+            </dl>
+	  </div>
 
-	      <dl>
-		<dt><a href="/analyze/phenotypes">Analyze Phenotypes</a></dt>
-		<dd>Enter your own set of phenotypes to discover phenotypically similar diseases, genes, or models.</dd>
-	      </dl>
-              <dl>
-                <dt><a href="/annotate/text">Annotate Text</a></dt>
-                <dd>Mark up text with our ontologies</dd>
-              </dl>
-              <dl>
-                <dt><a href="/page/exomes">Analyze Exomes</a></dt>                
-		<dd>Use phenotype data to enhance exome analysis for variant selection</dd>
-              </dl>
-	    </div>
-	    <div class="col-xs-12 col-sm-6 col-md-3 col-lg-3">
-	      <h4>Learn</h4>
-	      <dl>
-		<dt><a href="/page/about">Background</a></dt>
-		<dd>An introduction to the methods we use</dd>
-	      </dl>
-	      <dl>
-		<dt><a href="/sources">Data</a></dt>
-		<dd>About the sources of data we've integrated.</dd>
-	      </dl>
-              <dl>
-                <dt><a href="/page/about#ontologies">Ontologies</a></dt>
-                <dd>How ontologies enable connectivity.</dd>
-              </dl>
-	    </div>
-            <div class="col-xs-12 col-sm-6 col-md-3 col-lg-3">
-              <h4>Contribute</h4>
-              <dl>
-                <dt>Submit data</dt>
-		<!-- TODO make a new page for emailing or contributions -->
-                <dd>We would be thrilled to add your data into our system.</dd>
-              </dl>
-              <dl>
+	  <div class="tab-pane" id="discover">
+            <dl>
+              <dt>Overview (datagraphs)</dt>
+              <dd>Interact with a birds-eye view of cross-species phenotype data</dd>
+            </dl>
+	    <dl>
+	      <dt><a href="/analyze/phenotypes">Analyze Phenotypes</a></dt>
+	      <dd>Enter your own set of phenotypes to discover phenotypically similar diseases, genes, or models.</dd>
+	    </dl>
+            <dl>
+              <dt><a href="/annotate/text">Annotate Text</a></dt>
+              <dd>Mark up text with our ontologies</dd>
+            </dl>
+            <dl>
+              <dt><a href="/page/exomes">Analyze Exomes</a></dt>                
+	      <dd>Use phenotype data to enhance exome analysis for variant selection</dd>
+            </dl>
+	  </div>
+
+	  <div class="tab-pane" id="learn">
+	    <dl>
+	      <dt><a href="/page/about">Background</a></dt>
+	      <dd>An introduction to the methods we use</dd>
+	    </dl>
+	    <dl>
+	      <dt><a href="/sources">Data</a></dt>
+	      <dd>About the sources of data we've integrated.</dd>
+	    </dl>
+            <dl>
+              <dt><a href="/page/about#ontologies">Ontologies</a></dt>
+              <dd>How ontologies enable connectivity.</dd>
+            </dl>
+	  </div>
+
+	  <div class="tab-pane" id="contribute">
+            <dl>
+              <dt>Submit data</dt>
+	      <!-- TODO make a new page for emailing or contributions -->
+              <dd>We would be thrilled to add your data into our system.</dd>
+            </dl>
+            <dl>
                 <dt>Collaborate</dt>
                 <dd>Let's work together!</dd>
-              </dl>
+            </dl>
+          </div>
 
-            </div>
-
-	  </div>
 	</div>
-	
-	<!-- 	</div> -->
-      </div>
     </div>
-
+    
     <!-- Data sources. -->
-    <div class="col-xs-12 col-sm-6 col-md-3 col-lg-3">
-      <!-- <div class="panel panel-default"> -->
-      <!-- 	<div class="panel-heading"> -->
-      <!-- 	  <h3 class="panel-title">Data Sources</h3> -->
-      <!-- 	</div> -->
-      <!-- 	<div class="panel-body"> -->
-      <!-- 	</div> -->
-      <!-- </div> -->
-      <h4>Data Sources</h4>
-      <!-- <table -->
-      <!-- 	     class="table table-striped table-hover table-condensed"> -->
-      <!-- 	<tbody id="ticker-demo"> -->
-      <!-- 	  <tr><td>Cras justo odio</td></tr> -->
-      <!-- 	  <tr><td>Dapibus ac facilisis in</td></tr> -->
-      <!-- 	  <tr><td>Morbi leo risus</td></tr> -->
-      <!-- 	  <tr><td>Porta ac consectetur ac</td></tr> -->
-      <!-- 	  <tr><td>Vestibulum at eros</td></tr> -->
-      <!-- 	<tbody> -->
-      <!-- </table> -->
-      <ul id="ticker-demo" class="list-group data-ticker">
-	<li><strong>Loading...</strong></li>
-      	<!-- {{#ticker_results}} -->
-      	<!-- <li class="list-group-item data-ticker-line">{{{.}}}</li> -->
-      	<!-- {{/ticker_results}} -->
-      </ul>
-      <!-- <dl id="ticker-demo"> -->
-      <!-- </dl> -->
-      <!-- </div> -->
-    </div>
+    <!-- <div class="col-xs-12 col-sm-6 col-md-3 col-lg-3"> -->
+    <!--   <h4>Data Sources</h4> -->
+    <!--   <ul id="ticker-demo" class="list-group data-ticker"> -->
+    <!-- 	<li><strong>Loading...</strong></li> -->
+    <!--   </ul> -->
+    <!-- </div> -->
 
     <!-- Social. -->
-    <div class="col-xs-12 col-sm-6 col-md-3 col-lg-3">
+    <div class="col-xs-12 col-sm-3 col-md-3 col-lg-3">
       <!-- <div class="panel panel-default"> -->
       <!-- 	<div class="panel-heading"> -->
       <!-- 	  <h3 class="panel-title">Social Media</h3> -->

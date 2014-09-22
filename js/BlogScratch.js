@@ -36,62 +36,62 @@ jQuery(document).ready(function(){
     // 	.attr("dy", ".35em")
     // 	.text(function(d) { return d; });
 
-    ///
-    /// Do a demo ticker.
-    ///
+    // ///
+    // /// Do a demo ticker.
+    // ///
 
-    var ticker_cache = global_data_ticker;
-    function _ticker_item_to_string(item){
-	var buff = [
-	    '<li class="list-group-item data-ticker-line">',
-	    '<a href="' + '#' + '" data-toggle="tooltip" title="' + item['resource'] + '" data-content="' + item['monarch_use'] + '">',
-	    item['resource'] || '???',
-	    '</a>',
-	    '</li>'
-	    // '<dt>',
-	    // item['resource'] || '???',
-	    // '</dt>',
-	    // '<dd>',
-	    // item['data_categories'] || '???',
-	    // '</dd>'
-	];
-	return buff.join('');
-    }
+    // var ticker_cache = global_data_ticker;
+    // function _ticker_item_to_string(item){
+    // 	var buff = [
+    // 	    '<li class="list-group-item data-ticker-line">',
+    // 	    '<a href="' + '#' + '" data-toggle="tooltip" title="' + item['resource'] + '" data-content="' + item['monarch_use'] + '">',
+    // 	    item['resource'] || '???',
+    // 	    '</a>',
+    // 	    '</li>'
+    // 	    // '<dt>',
+    // 	    // item['resource'] || '???',
+    // 	    // '</dt>',
+    // 	    // '<dd>',
+    // 	    // item['data_categories'] || '???',
+    // 	    // '</dd>'
+    // 	];
+    // 	return buff.join('');
+    // }
 
-    // Add the data to the doc at point.
-    (function(){
-	var cache = [] 
-	_.each(ticker_cache, function(item){
-	    cache.push(_ticker_item_to_string(item));
-	});
-	jQuery('#ticker-demo').empty();
-	jQuery('#ticker-demo').append(cache.join("\n"));
-	jQuery('#ticker-demo li a').popover({
-	    'container': 'body',
-	    'trigger': 'hover'
-	});
-    })();
+    // // Add the data to the doc at point.
+    // (function(){
+    // 	var cache = [] 
+    // 	_.each(ticker_cache, function(item){
+    // 	    cache.push(_ticker_item_to_string(item));
+    // 	});
+    // 	jQuery('#ticker-demo').empty();
+    // 	jQuery('#ticker-demo').append(cache.join("\n"));
+    // 	jQuery('#ticker-demo li a').popover({
+    // 	    'container': 'body',
+    // 	    'trigger': 'hover'
+    // 	});
+    // })();
 
-    // The cycler.
-    function _cycle_ticker(){
+    // // The cycler.
+    // function _cycle_ticker(){
 
-	// Rotate top item to end.
-	var top = ticker_cache.shift();
-	ticker_cache.push(top);
+    // 	// Rotate top item to end.
+    // 	var top = ticker_cache.shift();
+    // 	ticker_cache.push(top);
 	
-	// Slide up and remove. Plus removal step (arbitrary--could be below).
-	jQuery('#ticker-demo li').first().slideUp(500, function(){
-	    // Get rid of the disappeared element.
-	    jQuery('#ticker-demo li').first().remove();
-	}); 
-	// Add and slide in. Plus restart wait (arbitrary--could be above).
-	var new_elt = _ticker_item_to_string(top);
-	// var new_elt = '<tr><td>' + top + '</td></tr>';
-	jQuery(new_elt).hide().appendTo('#ticker-demo').slideDown(500,function(){
-	    // When done, start countdown to new cycle.
-	    window.setTimeout(_cycle_ticker, 3500);
-	});
-    }
-    _cycle_ticker(); // start cycling
+    // 	// Slide up and remove. Plus removal step (arbitrary--could be below).
+    // 	jQuery('#ticker-demo li').first().slideUp(500, function(){
+    // 	    // Get rid of the disappeared element.
+    // 	    jQuery('#ticker-demo li').first().remove();
+    // 	}); 
+    // 	// Add and slide in. Plus restart wait (arbitrary--could be above).
+    // 	var new_elt = _ticker_item_to_string(top);
+    // 	// var new_elt = '<tr><td>' + top + '</td></tr>';
+    // 	jQuery(new_elt).hide().appendTo('#ticker-demo').slideDown(500,function(){
+    // 	    // When done, start countdown to new cycle.
+    // 	    window.setTimeout(_cycle_ticker, 3500);
+    // 	});
+    // }
+    // _cycle_ticker(); // start cycling
     
 });
