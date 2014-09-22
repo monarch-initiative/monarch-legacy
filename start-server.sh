@@ -12,7 +12,6 @@ else
 fi
 
 PATH_TO_ME=`which $0`
-case 
 cd `dirname $PATH_TO_ME`
 if [ $PORT ]
   then
