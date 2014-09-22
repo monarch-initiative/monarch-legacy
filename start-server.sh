@@ -1,5 +1,18 @@
 #!/bin/sh
+# get/update phenogrid
+CWD=`pwd`
+if [ ! -d ./widgets/phenogrid ]; then
+    cd ./widgets
+    git clone https://github.com/monarch-initiative/phenogrid.git
+    cd $CWD
+else 
+    cd ./widgets/phenogrid
+    git pull
+    cd $CWD
+fi
+
 PATH_TO_ME=`which $0`
+
 cd `dirname $PATH_TO_ME`
 if [ $PORT ]
   then
