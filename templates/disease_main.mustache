@@ -1,71 +1,82 @@
 <!DOCTYPE html>
 <html>
 <head>
-    <title>Monarch Diseases</title>
-    
-    {{{includes.analytics}}}
-    
-    <!-- CSS. -->
-    {{#pup_tent_css_libraries}}
-    <link rel="stylesheet" type="text/css" href="{{{.}}}">
-    {{/pup_tent_css_libraries}}
-    
-    <!-- JS variables. -->
-    {{#pup_tent_js_variables}}
-    <script type="text/javascript">var {{name}} = {{{value}}};</script>
-    {{/pup_tent_js_variables}}
-    
-    <!-- JS libraries. -->
-    {{#pup_tent_js_libraries}}
-    <script type="text/javascript" src="{{{.}}}"></script>
-    {{/pup_tent_js_libraries}}
+  <title>Monarch Diseases</title>
 
-    <link rel="icon" href="/image/favicon.ico" type="image/x-icon">
-    <meta charset="utf-8"/>
+  {{{includes.analytics}}}
+
+  <!-- CSS. -->
+  {{#pup_tent_css_libraries}}
+  <link rel="stylesheet" type="text/css" href="{{{.}}}">
+  {{/pup_tent_css_libraries}}
+
+  <!-- JS variables. -->
+  {{#pup_tent_js_variables}}
+  <script type="text/javascript">var {{name}} = {{{value}}};</script>
+  {{/pup_tent_js_variables}}
+
+  <!-- JS libraries. -->
+  {{#pup_tent_js_libraries}}
+  <script type="text/javascript" src="{{{.}}}"></script>
+  {{/pup_tent_js_libraries}}
+
+  <link rel="icon" href="/image/favicon.ico" type="image/x-icon">
+  <meta charset="utf-8"/>
 </head>
-<body>
-    {{{includes.navbar}}}
-    <div class="monarch-container">
-        <div class="content">
-            <div class="wrapperforfooter">
-            <div class="jumbotron monarch-disease-light">
-                <img id="monarch-logo" class="downloadline" src="/image/logo.png"/>
-                <h1 class="downloadline">Disease spotlight: Parkinson's disease</h1>
-                <a href="/disease/DOID_14330" class="downloadline downloadline-left btn btn-large btn-default btn-monarch-main monarch-disease-dark">Find out more</a>
-                <a class="downloadline btn btn-large btn-default btn-monarch-main monarch-feedback-dark"
-                        href="mailto:info@monarchinitiative.org">Your feedback welcome!</a>
-                <p>A neurodegenerative disease that has material basis in
-                degeneration of the central nervous system that often impairs
-                the sufferer's motor skills, speech, and other
-                functions. Monarch includes information on a number of
-                  different variants of PD.</p>
-            </div>
-            <div class="col-lg-9">
-                <h1>Highlighted diseases</h1>
-                <ul>
-                    <li><a href="/disease/DOID_14692">Smith-Lemli-Opitz syndrome</a></li>
-                    <li><a href="/disease/DOID_1932">Angelman syndrome</a></li>
-                    <li><a href="/disease/DOID_6683">Aarskog-Scott syndrome</a></li>
-                    <li><a href="/disease/OMIM_255800">Schwartz-jampel Syndrome, Type 1</a></li>
-                </ul>
-                <h1>Disease set highlight: Neurodegenerative diseases</h1>
-                <ul>
-                    <li><a href="/disease/OMIM_127750">Dementia, lewy body</a> DLB</li>
-                    <li><a href="/disease/OMIM_607060">Parkinson disease 8, autosomal dominant</a> PARK8</li>
-                    <li><a href="/disease/OMIM_168600">Parkinson disease, late-onset</a> PD</li>
-                    <li><a href="/disease/OMIM_260300">Parkinson disease 15, autosomal recessive early-onset</a> PARK15</li>
-                    <li><a href="/disease/OMIM_606324">Parkinson disease 7, autosomal recessive early-onset</a> PARK7</li>
-                    <li><a href="/disease/OMIM_605909">Parkinson disease 6, autosomal recessive early-onset</a> PARK6</li>
-                    <li><a href="/disease/OMIM_146500">Multiple system atrophy 1, susceptibility to</a> MSA1</li>
-                    <li><a href="/disease/OMIM_183090">Spinocerebellar ataxia 2</a> SCA2</li>
-                    <li><a href="/disease/OMIM_314250">Dystonia 3, torsion, X-linked</a> DYT3</li>
-                    <li><a href="/disease/OMIM_606688">Spongiform encephalopathy with neuropsychiatric features</a></li>
-                    <li><a href="/disease/OMIM_162350">Ceroid lipofuscinosis, neuronal, 4b, autosomal dominant</a> CLN4B</li>
-                </ul>
-            </div>
-            </div> <!-- closes wrapperforfooter -->
-            {{{includes.footer}}}
+<body style="padding-top: 50px;">
+  {{{includes.navbar}}}
+  <div class="container-fluid" style="margin: 1em;">
+    <!-- Open first row section. -->
+    <div class="row">
+      <!-- Disease spotlight -->
+      <div class="col-xs-12 col-sm-12 col-md-6 col-lg-6">
+        <div class="panel panel-default">
+          <h4>Disease Spotlight: sed do eiusmod</h4>
+          <div>Bacon ipsum dolor sit amet ad exercitation leberkas et ground
+            round kielbasa. T-bone corned beef enim, in shankle laboris ut
+            ham biltong chicken jowl cow drumstick est shank. Biltong
+            brisket shank labore chicken ut. Nisi doner sint elit ea,
+            cow deserunt flank enim consequat. Meatball short ribs
+            laborum ball tip elit.</div>
+          </div>
         </div>
+        <!-- Getting started area or disease browser -->
+        <div class="col-xs-12 col-sm-12 col-md-6 col-lg-6">
+          <div class="panel panel-default">
+            <p>Some kind of getting started area? Or maybe disease browser</p>
+          </div>
+        </div>
+      </div>
+      <!-- Close first row section. -->
+      <!-- Open second row section. -->
+      <div class="row">
+        <!-- Recent updates -->
+        <div class="col-xs-12 col-sm-12 col-md-6 col-lg-6">
+          <div class="panel panel-default">
+            <h4>Recent Updates</h4>
+            {{#blog_results}}
+            <ul>
+              <li>
+                <a href="{{link}}">{{title}}</a> <small>({{date}})</small>
+              </li>
+            </ul>
+            {{/blog_results}}
+            {{#blog_results.length}}
+            <p class="text-right"><a href="http://monarch-initiative.blogspot.com/search/label/test">More</a></p>
+            {{/blog_results.length}}
+            {{^blog_results}}
+            <p>No news is good news.</p>
+            {{/blog_results}}
+          </div>
+        </div>
+        <!-- Annotation Graph-->
+        <div class="col-xs-12 col-sm-12 col-md-6 col-lg-6">
+          <div class="panel panel-default">
+            <p>Annotation Graph</p>
+          </div>
+        </div>
+      </div>
+      <!-- Close second row section. -->
     </div>
-</body>
+  </body>
 </html>

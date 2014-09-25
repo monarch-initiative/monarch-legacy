@@ -28,7 +28,7 @@
 
     <!-- Nav. -->
     <div class="navbar navbar-inverse navbar-fixed-top" role="navigation">
-      <div class="containter-fluid"> <!-- monarch-navbar-container">-->
+      <div class="container-fluid"> <!-- monarch-navbar-container">-->
 	<div class="navbar-header">
 	  <button type="button" class="navbar-toggle" data-toggle="collapse"
 		  data-target="#collapsed-navbar">
@@ -99,11 +99,21 @@
               </ul>
             </li>
 	  </ul>
-	  <form id="search_form" class="navbar-form navbar-left searchspace" action="/search" role="search">
-            <div class="form-group">
-              <input id="search" type="text" class="form-control search-box" placeholder="Search (e.g. Parkinson's)"/>
-            </div>
-	  </form>
+          <ul class="nav navbar-nav navbar-right searchspace">
+	    <li>
+	      <form id="search_form"
+		    class="navbar-form"
+		    action="/search"
+		    role="search">
+		<div class="form-group">
+		  <input id="search"
+			 type="text"
+			 class="form-control"
+			 placeholder="Search (e.g. Parkinson's)" />
+		</div>
+	      </form>
+	    </li>
+	  </ul>
 	</div>
       </div>
     </div>

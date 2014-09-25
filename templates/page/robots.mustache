@@ -4,12 +4,15 @@
 # just don't use our services, thanks
 
 User-agent: *
+Crawl-delay: 10
 Disallow: /analyze/
 Disallow: /simsearch/
 Disallow: /annotate/
 Disallow: /admin/
+Disallow: /references/
 
 User-Agent: W3C-checklink
+Crawl-delay: 10
 Disallow:
 {{/isProduction}}
 {{^isProduction}}
