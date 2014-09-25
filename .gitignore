@@ -8,3 +8,10 @@ semantic.cache
 ringojs-0.9
 *~
 .emacs.*
+.idea/**
+*.iml
+*.ipr
+*.iws
+templates/labs/jbrowse
+*.swp
+*.swo
