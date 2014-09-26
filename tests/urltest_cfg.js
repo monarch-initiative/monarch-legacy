@@ -268,6 +268,7 @@
         // --json--
         // monarch API calls can return deeply nested/structured objects, these are
         // checked recursively
+        // TODO - check for taxon
         {
             component : "monarch",
             priority : 1,
@@ -278,7 +279,7 @@
                 must_contain : [
                     {
                         tax_xref: {
-                            "id": "NCBITaxon:9606"
+                            "id": "SO_0001217"
                         }
                     }
                 ]
