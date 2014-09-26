@@ -34,6 +34,9 @@ production-test-%:
 nif-production-url-test:
 	$(RINGO_BIN) tests/urltester.js -s production -c vocabulary,ontoquest,federation,monarch
 
+nif-production-federation-tests:
+	$(RINGO_BIN) tests/urltester.js -s production -c federation
+
 D2T_YAMLS = $(wildcard conf/rdf-mapping/*.yaml)
 D2T_JSONS = $(D2T_YAMLS:.yaml=.json)
 
