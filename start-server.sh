@@ -1,4 +1,6 @@
 #!/bin/sh
+sh ./update_dependencies.sh
+
 PATH_TO_ME=`which $0`
 cd `dirname $PATH_TO_ME`
 if [ $PORT ]
