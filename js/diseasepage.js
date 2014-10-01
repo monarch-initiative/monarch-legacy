@@ -17,6 +17,5 @@ $(function () {
         });
 
 
-       //mt.initPhenotype($("#phen_vis"), phenotype_list);
-       $("#phen_vis").modeltype({phenotypeData: phenotype_list});
+       $("#phen_vis").phenogrid({phenotypeData: phenotype_list});
 });        

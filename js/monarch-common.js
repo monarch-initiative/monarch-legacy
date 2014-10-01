@@ -32,4 +32,21 @@ $(document).ready(function(){
         $(this).find('.linkedterms').css({'display': 'none'});
     });
 
+
+    /* Show/Hide items */
+    /* Used when a "more..." kind of functionality is desired */
+    $('.fewitems').click(function(event) {
+        $(this).hide();
+        $(this).parent().find('.moreitems').show();
+        $(this).parent().find('.hideitems').show();
+    });
+
+    $('.hideitems').click(function(event) {
+        $(this).hide();
+        $(this).parent().find('.moreitems').hide();
+        $(this).parent().find('.hideitems').hide();
+        $(this).parent().find('.fewitems').show();
+    });
+
+
 });

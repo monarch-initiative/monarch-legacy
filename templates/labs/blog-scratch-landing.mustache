@@ -1,329 +1,207 @@
 <!-- Top-level internal container. -->
-<div class="container-fluid" style="margin: 1em;">
+<div class="container-fluid" style="margin: 1.001em;">
 
   <!-- Open first row section. -->
   <div class="row">
     
-    <!-- Graphic. -->
-    <div id="graphic" class="col-xs-12 col-sm-12 col-md-5 col-lg-5">
-
-      <div id="carousel-example-generic" class="carousel slide" data-ride="carousel">
-	<!-- Indicators -->
-	<ol class="carousel-indicators">
-	  <li data-target="#carousel-example-generic" data-slide-to="0" class="active"></li>
-	  <li data-target="#carousel-example-generic" data-slide-to="1"></li>
-	  <li data-target="#carousel-example-generic" data-slide-to="2"></li>
-	  <li data-target="#carousel-example-generic" data-slide-to="3"></li>
-	  <li data-target="#carousel-example-generic" data-slide-to="4"></li>
-	  <li data-target="#carousel-example-generic" data-slide-to="5"></li>
-	  <li data-target="#carousel-example-generic" data-slide-to="6"></li>
-	  <li data-target="#carousel-example-generic" data-slide-to="7"></li>
-	</ol>
-	
-	<!-- Wrapper for slides -->
-	<div class="carousel-inner">
-          <div class="item active">
-            <img src="/image/logo-monarch_stacked_transp30.jpg" alt="About">
-            <div class="carousel-caption">
-              <h3><a href="/page/about">What makes Monarch different?</a></h3>
-		<p>The goal of the Monarch Initiative is to use 
-		semantic web technologies to link together 
-		seemingly disparate genotype and phenotype data from
-		many corners of the biomedical research community,
-		to hasten the time for discovery of relevant research data
-		and facilitate the identification of animal models of disease.
-              </p>
-            </div>
-          </div>
-	  <div class="item">
-	    <img src="/image/slide-1.png" alt="Diseases">
-	    <div class="carousel-caption">
-              <h3><a href="/disease">Learn about Mendelian diseases</a></h3>
-	      <p>
-		Diseases described by collections of phenotypes
-		can be compared to each other and to animal models
-		to investigate genetic underpinnings.
-	      </p>
-	    </div>
-	  </div>
-	  <div class="item">
-	    <img src="/image/slide-4.png" alt="Phenotypes">
-	    <div class="carousel-caption">
-              <h3><a href="/phenotype">Explore phenotypes</a></h3>
-	      <p>
-		Similar phenotypes may be observed in various
-		diseases and across species.   
-	      </p>
-	    </div>
-	  </div>
-	  <div class="item">
-	    <img src="/image/slide-2.png" alt="Models">
-	    <div class="carousel-caption">
-              <h3><a href="/model">Find models of disease</a></h3>
-	      <p>
-		In vitro and in vivo disease models can recapitulate
-		some or all phenotypes of human disease.  Comparison
-		of animal model phenotypes with human disease
-		can suggest candidate genes.
-	      </p>
-	    </div>
-	  </div>
-	  <div class="item">
-	    <img src="/image/slide-3.png" alt="Genes">
-	    <div class="carousel-caption">
-              <h3><a href="/gene">Understand the genetics</a></h3>
-	      <p>
-		Variations in genes and other genomic features
-		are often associated with diseases and variant phenotypes.
-		Learn about the phenotypes associated with your favorite gene. 
-	      </p>
-	    </div>
-	  </div>
-          <div class="item">
-            <img src="/image/slide-logos.png" alt="Data Sources">
-            <div class="carousel-caption">
-              <h3><a href="/page/about#etl">Data. Integrated.</a></h3>
-              <p>We bring together curated gene, genotype, phenotype, disease, 
-		pathway, ortholog, and publication information from a variety of 
-		expertly curated external sources.
-              </p>
-            </div>
-          </div>
-          <div class="item">
-            <img src="/image/explore-graph.png" alt="Data graph">
-            <div class="carousel-caption">
-              <h3><a href="">Interact</a></h3>
-              <p>...with the data landscape through our ontology-aware data charts.
-              </p>
-            </div>
-          </div>
-          <div class="item">
-            <img src="/image/slide-phenogrid.png" alt="Phenogrid">
-            <div class="carousel-caption">
-              <h3><a href="/">Compare</a></h3>
-		<!-- TODO add static page that describes phenogrid - possibly taken from poster -->
-              <p>Compare phenotype profiles between genes, diseases, and models
-		with our Phenogrid, including across species!
-              </p>
-            </div>
-          </div>
-
+    <!-- Two-column layout, col. 1 -->
+    <div id="col-1" class="col-xs-12 col-sm-8 col-md-8 col-lg-8">
+      
+      <!-- Quiet rollover. -->
+      <div class="panel panel-default">
+	<div class="panel-heading">
+	  <h3 class="panel-title">Welcome to Monarch</h3>
 	</div>
-	
-	<!-- Controls -->
-	<a class="left carousel-control" href="#carousel-example-generic" role="button" data-slide="prev">
-	  <!-- <span class="glyphicon glyphicon-chevron-left"></span> -->
-	  <span class="glyphicon">&laquo;</span>
-	</a>
-	<a class="right carousel-control" href="#carousel-example-generic" role="button" data-slide="next">
-	  <!-- <span class="glyphicon glyphicon-chevron-right"></span> -->
-	  <span class="glyphicon">&raquo;</span>
-	</a>
+	<div class="panel-body" style="height: 7em;">
+	  <p>
+	    <img src="/image/slide-1.png" style="max-height: 5em; width: auto; float: left; padding-right: 1em;" alt="Diseases" />
+	    <strong>Learn about Mendelian diseases</strong><br />
+      	    Diseases described by collections of phenotypes
+      	    can be compared to each other and to animal models
+      	    to investigate genetic underpinnings.
+	  </p>
+	</div>
+	<div class="panel-footer text-right">ooo</div>
       </div>
 
-      <!-- <img class="img-responsive" src="/image/scratch-homepage.png"/> -->
+      <!-- <img src="/image/slide-1.png" alt="Diseases"> -->
+      <!-- 	<h3><a href="/disease">Learn about Mendelian diseases</a></h3> -->
+      <!-- 	  Diseases described by collections of phenotypes -->
+      <!-- 	  can be compared to each other and to animal models -->
+      <!-- 	  to investigate genetic underpinnings. -->
+      <!-- <img src="/image/slide-4.png" alt="Phenotypes"> -->
+      <!-- 	<h3><a href="/phenotype">Explore phenotypes</a></h3> -->
+      <!-- 	  Similar phenotypes may be observed in various -->
+      <!-- 	  diseases and across species.    -->
+      <!-- <img src="/image/slide-2.png" alt="Models"> -->
+      <!-- 	<h3><a href="/model">Find models of disease</a></h3> -->
+      <!-- 	  In vitro and in vivo disease models can recapitulate -->
+      <!-- 	  some or all phenotypes of human disease.  Comparison -->
+      <!-- 	  of animal model phenotypes with human disease -->
+      <!-- 	  can suggest candidate genes. -->
+      <!-- <img src="/image/slide-3.png" alt="Genes"> -->
+      <!-- 	<h3><a href="/gene">Understand the genetics</a></h3> -->
+      <!-- 	  Variations in genes and other genomic features -->
+      <!-- 	  are often associated with diseases and variant phenotypes. -->
+      <!-- 	  Learn about the phenotypes associated with your favorite gene.  -->
 
-    </div>
-    
-    <!-- Data. -->
-    <div class="col-xs-12 col-sm-6 col-md-4 col-lg-4">
+      <!-- About. -->
+      <div>
+	<div class="panel panel-default">
+	  <div class="panel-heading">
+	    <h3 class="panel-title">About</h3>
+	  </div>
+	  <div class="panel-body">
+	    <p>
+	      Enabling navigation across a rich landscape of phenotypes, 
+	      diseases, models, and genes for translational research
+	    </p>
+	  </div>
+	</div>
+      </div>
 
-      <div class="panel panel-default">
-	<!-- <div class="panel-heading"> -->
-	<!--   <h3 class="panel-title">Data Overview</h3> -->
-	<!-- </div> -->
-	<!-- <div class="panel-body"> -->
-	  <h4 class="panel-title">Welcome to Monarch</h4>
-	  <!-- <svg id="d3-chart"></svg> -->
-	  <hr />
+      <!-- News and twitter combo. -->
+      <div class="row">
+	<div id="blog" class="col-xs-12 col-sm-6 col-md-6 col-lg-6">
+
+	  <div class="panel panel-default news-panel">
+	    <!-- <div class="panel-heading"> -->
+	    <!--   <h3 class="panel-title">News and Events</h3> -->
+	    <!-- </div> -->
+	    <!-- <div class="panel-body"> -->
+	    <h4 class="panel-title">News and Events</h4>
+	    <hr />
+	    {{#blog_results}}
+	    <dl class="news-list">
+	      <dt>
+		<a href="{{link}}">{{title}}</a>
+		{{#category}}
+		<a href="{{link}}" class="label label-default">{{label}}</a>
+		{{/category}}
+	      </dt>
+	      <dd>
+		<strong>{{moddate}}</strong>
+		<!-- <strong>{{pubdate}}</strong> -->
+		<!-- {{{truncated}}} -->
+	      </dd>
+	    </dl>
+	    {{/blog_results}}
+	    <p class="news-more">
+	      <a href="http://monarch-initiative.blogspot.com/"
+		 alt="More posts"><strong>More...</strong></a>
+	    </p>
+	  </div>
+
+	</div>
+	<div id="twitter" class="col-xs-12 col-sm-6 col-md-6 col-lg-6">
+
 	  <p>
-		Enabling navigation across a rich landscape of phenotypes, 
-		diseases, models, and genes for translational research
+	    <a class="twitter-timeline" data-dnt="true" href="https://twitter.com/search?q=%23geneontology+OR+%40news4go"  data-widget-id="393469634726199296">Tweets about "#geneontology OR @news4go"</a>
+	    <script>!function(d,s,id){var js,fjs=d.getElementsByTagName(s)[0],p=/^http:/.test(d.location)?'http':'https';if(!d.getElementById(id)){js=d.createElement(s);js.id=id;js.src=p+"://platform.twitter.com/widgets.js";fjs.parentNode.insertBefore(js,fjs);}}(document,"script","twitter-wjs");</script>
 	  </p>
-	  <!-- <p> -->
-	  <!--    I met a traveller from an antique land<br /> -->
-	  <!--    Who said: "Two vast and trunkless legs of stone<br /> -->
-	  <!--    Stand in the desert. Near them on the sand,<br /> -->
-	  <!--    Half sunk, a shattered visage lies, whose frown<br /> -->
-	  <!--    And wrinkled lip and sneer of cold command<br /> -->
-	  <!--    Tell that its sculptor well those passions read<br /> -->
-	  <!--    Which yet survive, stamped on these lifeless things,<br /> -->
-	  <!--    The hand that mocked them and the heart that fed.<br /> -->
-	  <!--    <\!-- And on the pedestal these words appear:<br /> -\-> -->
-	  <!--    <\!-- `My name is Ozymandias, King of Kings:<br /> -\-> -->
-	  <!--    <\!-- Look on my works, ye mighty, and despair!'<br /> -\-> -->
-	  <!--    <\!-- Nothing beside remains. Round the decay<br /> -\-> -->
-	  <!--    <\!-- Of that colossal wreck, boundless and bare,<br /> -\-> -->
-	  <!--    <\!-- The lone and level sands stretch far away".  -\-> -->
-	  <!-- </p> -->
 
-	  <img src="/image/explore-graph.png"
-	       class="img-responsive welcome-image"> 
 	</div>
-      <!-- </div> -->
+      </div>
+
     </div>
 
-    <!-- Blog. -->
-    <div class="col-xs-12 col-sm-6 col-md-3 col-lg-3">
-
-      <div class="panel panel-default news-panel">
-	<!-- <div class="panel-heading"> -->
-	<!--   <h3 class="panel-title">News and Events</h3> -->
-	<!-- </div> -->
-	<!-- <div class="panel-body"> -->
-	<h4 class="panel-title">News and Events</h4>
-	<hr />
-	  {{#blog_results}}
-	  <dl class="news-list">
-	    <dt>
-	      <a href="{{link}}">{{title}}</a>
-	      {{#category}}
-	      <a href="{{link}}" class="label label-default">{{label}}</a>
-	      {{/category}}
-	    </dt>
-	    <dd>
-	      <strong>{{moddate}}</strong>
-	      <!-- <strong>{{pubdate}}</strong> -->
-	      <!-- {{{truncated}}} -->
-	    </dd>
-	  </dl>
-	  {{/blog_results}}
-	  <p class="news-more">
-	    <a href="http://monarch-initiative.blogspot.com/"
-	       alt="More posts"><strong>More...</strong></a>
-	  </p>
+    <!-- Two-column layout, col. 2 -->
+    <div id="col-1" class="col-xs-12 col-sm-4 col-md-4 col-lg-4">
+      <!-- Search. -->
+      <div>
+	<div class="panel panel-default">
+	  <div class="panel-heading">
+	    <h3 class="panel-title">Search</h3>
+	  </div>
+	  <div class="panel-body">
+	    <p>
+	      Seqrch for things.
+	    </p>
+	    <form id="search_form"
+		  class="navbar-form"
+		  action="/search"
+		  role="search">
+	      <div class="form-group">
+		<input id="search"
+		       type="text"
+		       class="form-control"
+		       placeholder="Search (e.g. Parkinson's)" />
+		<br />
+		<div class="radio">
+		  <label>
+		    <input type="radio" name="optionsRadios" id="optionsRadios1" value="option1" checked>
+		    Option one
+		  </label>
+		</div>
+		<br />
+		<div class="radio">
+		  <label>
+		    <input type="radio" name="optionsRadios" id="optionsRadios2" value="option2">
+		    Option two
+		  </label>
+		</div>
+		<br />
+		<div class="radio disabled">
+		  <label>
+		    <input type="radio" name="optionsRadios" id="optionsRadios3" value="option3" disabled>
+		    Option three
+		  </label>
+		</div>
+		
+	      </div>
+	    </form>
+	  </div>
 	</div>
-      <!-- </div> -->
+      </div>
+
+      <!-- Explore. -->
+      <div>
+	<div class="panel panel-default">
+	  <div class="panel-heading">
+	    <h3 class="panel-title">Explore</h3>
+	  </div>
+	  <div class="panel-body">
+
+	    <div class="list-group">
+	      <a href="#" class="list-group-item list-group-item-success" style="color:#3c763d;background-color:#dff0d8">
+		Learn about Mendelian diseases
+	      </a>
+	      <a href="#" class="list-group-item list-group-item-info" style="color:#31708f;background-color:#d9edf7">
+		Explore phenotypes
+	      </a>
+	      <a href="#" class="list-group-item list-group-item-warning" style="color:#8a6d3b;background-color:#fcf8e3">
+		Find models of disease
+	      </a>
+	      <a href="#" class="list-group-item list-group-item-danger" style="color:#a94442;background-color:#f2dede">
+		Understand the genetics
+	      </a>
+	    </div>
+
+	  </div>
+	</div>
+      </div>
+
+      <!-- Pheno Search. -->
+      <div>
+	<div class="panel panel-default">
+	  <div class="panel-heading">
+	    <h3 class="panel-title">Pheno Search</h3>
+	  </div>
+	  <div class="panel-body">
+	    <p>
+	      Search phenotypes.
+	    </p>
+	    <input id="pheno-search"
+		   type="text"
+		   class="form-control"
+		   placeholder="Search (e.g. Parkinson's)" />
+	  </div>
+	</div>
+      </div>
+      
     </div>
     
   </div>
-  <!-- Close first row section. -->
-
-  <!-- Open second row section. -->
-  <div class="row">
-    
-    <!-- Explanation and entry points tabs. -->
-    <div class="col-xs-12 col-sm-9 col-md-9 col-lg-9">
-	
-	<ul class="nav nav-tabs conflict-tab-padding" role="tablist">
-	  <li class="active">
-	    <a href="#browse" role="tab" data-toggle="tab">Browse</a>
-	  </li>
-	  <li>
-	    <a href="#discover" role="tab" data-toggle="tab">Discover</a>
-	  </li>
-	  <li>
-	    <a href="#learn" role="tab" data-toggle="tab">Learn</a>
-	  </li>
-	  <li>
-	    <a href="#contribute" role="tab" data-toggle="tab">Contribute</a>
-	  </li>
-	</ul>
-	<div class="tab-content" style="padding-left: 1em;">
-
-	  <div class="tab-pane active" id="browse">
-	    <dl>
-	      <dt><a href="/gene">Genes</a></dt>
-	    </dl>
-	    <dl>
-	      <dt><a href="/disease">Diseases</a></dt>
-	    </dl>
-            <dl>
-              <dt><a href="/phenotype">Phenotypes</a></dt>
-            </dl>
-            <dl>
-              <dt><a href="/model">Models</a></dt>
-            </dl>
-            <dl>
-              <dt>Literature</dt>
-            </dl>
-            <dl>
-              <dt>Species</dt>
-            </dl>
-	  </div>
-
-	  <div class="tab-pane" id="discover">
-            <dl>
-              <dt>Overview (datagraphs)</dt>
-              <dd>Interact with a birds-eye view of cross-species phenotype data</dd>
-            </dl>
-	    <dl>
-	      <dt><a href="/analyze/phenotypes">Analyze Phenotypes</a></dt>
-	      <dd>Enter your own set of phenotypes to discover phenotypically similar diseases, genes, or models.</dd>
-	    </dl>
-            <dl>
-              <dt><a href="/annotate/text">Annotate Text</a></dt>
-              <dd>Mark up text with our ontologies</dd>
-            </dl>
-            <dl>
-              <dt><a href="/page/exomes">Analyze Exomes</a></dt>                
-	      <dd>Use phenotype data to enhance exome analysis for variant selection</dd>
-            </dl>
-	  </div>
-
-	  <div class="tab-pane" id="learn">
-	    <dl>
-	      <dt><a href="/page/about">Background</a></dt>
-	      <dd>An introduction to the methods we use</dd>
-	    </dl>
-	    <dl>
-	      <dt><a href="/sources">Data</a></dt>
-	      <dd>About the sources of data we've integrated.</dd>
-	    </dl>
-            <dl>
-              <dt><a href="/page/about#ontologies">Ontologies</a></dt>
-              <dd>How ontologies enable connectivity.</dd>
-            </dl>
-	  </div>
-
-	  <div class="tab-pane" id="contribute">
-            <dl>
-              <dt>Submit data</dt>
-	      <!-- TODO make a new page for emailing or contributions -->
-              <dd>We would be thrilled to add your data into our system.</dd>
-            </dl>
-            <dl>
-                <dt>Collaborate</dt>
-                <dd>Let's work together!</dd>
-            </dl>
-          </div>
-
-	</div>
-    </div>
-    
-    <!-- Data sources. -->
-    <!-- <div class="col-xs-12 col-sm-6 col-md-3 col-lg-3"> -->
-    <!--   <h4>Data Sources</h4> -->
-    <!--   <ul id="ticker-demo" class="list-group data-ticker"> -->
-    <!-- 	<li><strong>Loading...</strong></li> -->
-    <!--   </ul> -->
-    <!-- </div> -->
-
-    <!-- Social. -->
-    <div class="col-xs-12 col-sm-3 col-md-3 col-lg-3">
-      <!-- <div class="panel panel-default"> -->
-      <!-- 	<div class="panel-heading"> -->
-      <!-- 	  <h3 class="panel-title">Social Media</h3> -->
-      <!-- 	</div> -->
-      <!-- 	<div class="panel-body"> -->
-	  <!-- <ul class="list-group"> -->
-	  <!--   <li class="list-group-item">C</li> -->
-	  <!--   <li class="list-group-item">Dapibus ac facilisis in</li> -->
-	  <!--   <li class="list-group-item">Morbi leo risus</li> -->
-	  <!--   <li class="list-group-item">Porta ac consectetur ac</li> -->
-	  <!--   <li class="list-group-item">Vestibulum at eros</li> -->
-	  <!-- </ul> -->
-<p>
-<a class="twitter-timeline" data-dnt="true" href="https://twitter.com/search?q=%23geneontology+OR+%40news4go"  data-widget-id="393469634726199296">Tweets about "#geneontology OR @news4go"</a>
-    <script>!function(d,s,id){var js,fjs=d.getElementsByTagName(s)[0],p=/^http:/.test(d.location)?'http':'https';if(!d.getElementById(id)){js=d.createElement(s);js.id=id;js.src=p+"://platform.twitter.com/widgets.js";fjs.parentNode.insertBefore(js,fjs);}}(document,"script","twitter-wjs");</script>
-</p>
-      <!-- 	</div> -->
-      <!-- </div> -->
-    </div>
-
-  </div>
-  <!-- Close second row section. -->
-
-
+  
 </div>
 <!-- Close top-level container. -->

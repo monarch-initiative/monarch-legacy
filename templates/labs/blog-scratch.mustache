@@ -41,39 +41,103 @@
       <!-- <div class="row"> -->
       <div class="row" style="margin-left: -15px; margin-right: -14px;">
 	
-	<!-- Graphic. -->
-	<div id="graphic" class="col-xs-12 col-sm-8 col-md-8 col-lg-8">
-	  <img src="/image/homepage.png"/>
-	  <a href="/disease"><div id="diseasebutton" class="graphicbutton"></div></a>
-	  <a href="/phenotype"><div id="phenotypebutton" class="graphicbutton"></div></a>
-	  <a href="/gene"><div id="genebutton" class="graphicbutton"></div></a>
-	  <a href="/model"><div id="modelbutton" class="graphicbutton"></div></a>
-        </div>
-	
-	<!-- Blog. -->
-	<div id="graphic" class="col-xs-12 col-sm-4 col-md-4 col-lg-4">
+	<!-- Two-column layout, col. 1 -->
+	<div id="col-1" class="col-xs-12 col-sm-8 col-md-8 col-lg-8">
 
-	  <div class="panel panel-default">
-	    <div class="panel-heading">
-	      <h3 class="panel-title">News and Events</h3>
-	    </div>
-	    <div class="panel-body">
-	      {{#blog_results}}
-	      <dl>
-		<dt>
-		  <a href="{{link}}">{{title}}</a>
-		  {{#category}}
-		  <a href="{{link}}" class="label label-default">{{label}}</a>
-		  {{/category}}
-		</dt>
-		<dd>
-		  <strong>{{date}}</strong>
-		  {{{description}}}
-		</dd>
-	      </dl>
-	      {{/blog_results}}
+	  <!-- Graphic roll. -->
+	  <div id="graphic">
+	    <img src="/image/homepage.png"/>
+	    <a href="/disease"><div id="diseasebutton" class="graphicbutton"></div></a>
+	    <a href="/phenotype"><div id="phenotypebutton" class="graphicbutton"></div></a>
+	    <a href="/gene"><div id="genebutton" class="graphicbutton"></div></a>
+	    <a href="/model"><div id="modelbutton" class="graphicbutton"></div></a>
+          </div>	
+
+	  <!-- About. -->
+	  <div>
+	    <div class="panel panel-default">
+	      <div class="panel-heading">
+		<h3 class="panel-title">About</h3>
+	      </div>
+	      <div class="panel-body">
+		Nya!
+	      </div>
 	    </div>
 	  </div>
+
+	  <!-- News and twitter combo. -->
+	  <div class="row">
+	    <div id="blog" class="col-xs-12 col-sm-6 col-md-6 col-lg-6">
+	      
+	      <div class="panel panel-default">
+		<div class="panel-heading">
+		  <h3 class="panel-title">News and Events</h3>
+		</div>
+		<div class="panel-body">
+		  {{#blog_results}}
+		  <dl>
+		    <dt>
+		      <a href="{{link}}">{{title}}</a>
+		      {{#category}}
+		      <a href="{{link}}" class="label label-default">{{label}}</a>
+		      {{/category}}
+		    </dt>
+		    <dd>
+		      <strong>{{date}}</strong>
+		      {{{description}}}
+		    </dd>
+		  </dl>
+		  {{/blog_results}}
+		</div>
+	      </div>
+	      
+	    </div>
+	    
+	    <div id="twitter" class="col-xs-12 col-sm-6 col-md-6 col-lg-6">
+	    </div>	    
+	    
+	  </div>
+	</div>
+
+	<!-- Two-column layout, col. 2 -->
+	<div id="col-2" class="col-xs-12 col-sm-4 col-md-4 col-lg-4">
+
+	  <!-- Search. -->
+	  <div>
+	    <div class="panel panel-default">
+	      <div class="panel-heading">
+		<h3 class="panel-title">Search</h3>
+	      </div>
+	      <div class="panel-body">
+		Nya!
+	      </div>
+	    </div>
+	  </div>
+
+	  <!-- Explore. -->
+	  <div>
+	    <div class="panel panel-default">
+	      <div class="panel-heading">
+		<h3 class="panel-title">Explore</h3>
+	      </div>
+	      <div class="panel-body">
+		Nya! 1234
+	      </div>
+	    </div>
+	  </div>
+
+	  <!-- Pheno Search. -->
+	  <div>
+	    <div class="panel panel-default">
+	      <div class="panel-heading">
+		<h3 class="panel-title">Pheno search</h3>
+	      </div>
+	      <div class="panel-body">
+		Nya!
+	      </div>
+	    </div>
+	  </div>
+	  
 	</div>
 	
       </div>
