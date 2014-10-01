@@ -17,3 +17,4 @@ widgets/phenogrid/*
 templates/labs/jbrowse
 *.swp
 *.swo
+!cache/stats/*

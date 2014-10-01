@@ -82,6 +82,9 @@ var datagraph = {
   //Turn on/off breadcrumbs
   useCrumb : false,
   
+  //Turn on/off breadcrumbs
+  useLegend : true,
+  
   //Check browser
   isOpera : (!!window.opera || navigator.userAgent.indexOf(' OPR/') >= 0),
   isChrome : (!!window.chrome && !isOpera),
@@ -328,7 +331,9 @@ var datagraph = {
         makeNavArrow(data,navigate,triangleDim,barGroup,rect);
         
         //Create legend
-        makeLegend();
+        if (config.useLegend){
+            makeLegend();
+        }
         
         //Make first breadcrumb
         if (config.useCrumb){
