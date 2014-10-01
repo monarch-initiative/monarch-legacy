@@ -50,6 +50,11 @@
       }
    ],
    "metadata" : {
+      "keyword" : [
+         "orthology",
+         "sequence",
+         "phylogeny"
+      ],
       "source" : "http://pantherdb.org",
       "title" : "Monarch ingest of Panther Orthologs (human subset)",
       "type" : "void:Dataset",
