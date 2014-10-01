@@ -104,9 +104,29 @@
 }
 
 /*
- * Getting the explanaion image to work right.
+ * Getting the explanation image to work right.
  */
 
 .welcome-image {
     max-height: 25em;
+}
+
+/*
+ * Fighting with monarch-common.css: it has a global setting for nav
+ * elements, which affects tabs. This is to add the padding back to them.
+ */
+.conflict-tab-padding > li > a {
+    padding: 7px;
+}
+
+/*
+ * Slow down the carousel.
+ */
+.carousel-inner > .item {
+    /* -webkit-transition: 2.0s ease-in-out left; */
+    /* -moz-transition: 2.0s ease-in-out left; */
+    /* -o-transition: 2.0s ease-in-out left; */
+    /* transition: 2.0s ease-in-out left; */
+    /* transition-duration: 1.0s; */
+    /* transition-delay: 5.0s; */
 }

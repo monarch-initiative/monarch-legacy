@@ -1,52 +1,64 @@
 {
-   "graphs" : [
+   "lengthOfCycleInDays" : 3,
+   "objects" : [
       {
-         "view" : "nif-0000-03216-9",
-         "mappings" : [
-            {
-               "object" : "phenotype_id",
-               "predicate" : "RO:0002200",
-               "subject" : "gene_id"
-            },
-            {
-               "object" : "SIO:association",
-               "predicate" : "rdf:type",
-               "subject" : "v_uuid"
-            },
-            {
-               "object" : "gene_id",
-               "predicate" : "hasSubject",
-               "subject" : "v_uuid"
-            },
-            {
-               "object" : "phenotype_id",
-               "predicate" : "hasObject",
-               "subject" : "v_uuid"
-            },
-            {
-               "object" : "publication_id",
-               "predicate" : "dc:source",
-               "subject" : "v_uuid"
-            }
-         ],
-         "columns" : [
-            {
-               "name" : "v_uuid"
-            },
-            {
-               "name" : "gene_id"
-            },
-            {
-               "name" : "phenotype_id"
-            },
-            {
-               "name" : "publication_id",
-               "list_delimiter" : ";"
-            }
-         ],
-         "mapVersion" : "2014-05-14",
-         "graph" : "human-gene-disease"
+         "rdf:type" : "owl:ObjectProperty",
+         "id" : "RO:0002162"
       }
    ],
-   "status" : "alpha"
+   "mappings" : [
+      {
+         "object" : "phenotype_id",
+         "predicate" : "RO:0002200",
+         "subject" : "gene_id"
+      },
+      {
+         "object" : "Annotation",
+         "predicate" : "rdf:type",
+         "subject" : "v_uuid"
+      },
+      {
+         "object" : "gene_id",
+         "predicate" : "hasSubject",
+         "subject" : "v_uuid"
+      },
+      {
+         "object" : "phenotype_id",
+         "predicate" : "hasObject",
+         "subject" : "v_uuid"
+      },
+      {
+         "object" : "publication_id",
+         "predicate" : "dc:source",
+         "subject" : "v_uuid"
+      }
+   ],
+   "view" : "nif-0000-03216-9",
+   "columns" : [
+      {
+         "name" : "v_uuid"
+      },
+      {
+         "name" : "gene_id"
+      },
+      {
+         "name" : "phenotype_inheritance"
+      },
+      {
+         "name" : "phenotype_id"
+      },
+      {
+         "name" : "publication_id",
+         "list_delimiter" : ","
+      }
+   ],
+   "metadata" : {
+      "keyword" : [
+         "disease,gene"
+      ],
+      "type" : "void:Dataset",
+      "publisher" : "http://monarchinitiative.org"
+   },
+   "mapVersion" : "2014-08-19",
+   "graph" : "human-gene-disease"
 }

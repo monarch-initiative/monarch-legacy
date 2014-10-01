@@ -136,6 +136,12 @@ var testUrl = function(urlinfo) {
         }
         else if (component == 'federation') {
             results = resultObj.result.result; // yes this looks odd, but this is how fed returns data
+            //console.log("RESULTS "+results);
+        }
+        else if (component == 'federation-search') {
+            //results = resultObj.query.clauses;
+            results = [resultObj.query.clauses];
+            //console.log("RESULTS "+ results);
         }
         else if (component == 'ontoquest') {
             // TODO - OQ XML layered on JSON is complex - best just do raw checks for now

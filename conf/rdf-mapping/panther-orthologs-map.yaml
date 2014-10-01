@@ -7,6 +7,7 @@ metadata:
   description: "Monarch ingest of Panther Orthologs"
   publisher: http://monarchinitiative.org
   source: http://pantherdb.org
+  keyword: [orthology, sequence, phylogeny]
 prefixes:
   ## Panther prefixes - need verified
   P:   http://purl.obolibrary.org/obo/RO_HOM0000011 ## in paralogy relationship with

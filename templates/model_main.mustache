@@ -1,70 +1,82 @@
 <!DOCTYPE html>
 <html>
 <head>
-    <title>Monarch Models</title>
-    
-    {{{includes.analytics}}}
-    
-    <!-- CSS. -->
-    {{#pup_tent_css_libraries}}
-    <link rel="stylesheet" type="text/css" href="{{{.}}}">
-    {{/pup_tent_css_libraries}}
-    
-    <!-- JS variables. -->
-    {{#pup_tent_js_variables}}
-    <script type="text/javascript">var {{name}} = {{{value}}};</script>
-    {{/pup_tent_js_variables}}
-    
-    <!-- JS libraries. -->
-    {{#pup_tent_js_libraries}}
-    <script type="text/javascript" src="{{{.}}}"></script>
-    {{/pup_tent_js_libraries}}
-    
-    <link rel="icon" href="/image/favicon.ico" type="image/x-icon">
-    <meta charset="utf-8"/>
+  <title>Monarch Models</title>
+
+  {{{includes.analytics}}}
+
+  <!-- CSS. -->
+  {{#pup_tent_css_libraries}}
+  <link rel="stylesheet" type="text/css" href="{{{.}}}">
+  {{/pup_tent_css_libraries}}
+
+  <!-- JS variables. -->
+  {{#pup_tent_js_variables}}
+  <script type="text/javascript">var {{name}} = {{{value}}};</script>
+  {{/pup_tent_js_variables}}
+
+  <!-- JS libraries. -->
+  {{#pup_tent_js_libraries}}
+  <script type="text/javascript" src="{{{.}}}"></script>
+  {{/pup_tent_js_libraries}}
+
+  <link rel="icon" href="/image/favicon.ico" type="image/x-icon">
+  <meta charset="utf-8"/>
 </head>
-<body>
-    {{{includes.navbar}}}
-    <div class="monarch-container">
-        <div class="content">
-            <div class="wrapperforfooter">
-            <div class="jumbotron monarch-model-light">
-                <img id="monarch-logo" class="downloadline" src="/image/logo.png"/>
-                <h1 class="downloadline">Model spotlight: Blue Meanie Mouse</h1>
-                <a href="/model/MGI:5313509" class="downloadline downloadline-left btn btn-large btn-default btn-monarch-main monarch-model-dark">Find out more</a>
-                <a class="downloadline btn btn-large btn-default btn-monarch-main monarch-feedback-dark"
-                        href="mailto:info@monarchinitiative.org">Your feedback welcome!</a>
-                <p>
-                  A mutation in Cc2d2a (coiled-coil and C2 domain
-                  containing 2A) was identified in an ENU screen for
-                  recessive cardiovascular development phenotypes in
-                  Dr. Cecilia Lo's laboratory, NHLBI Cardiovascular
-                  Development Consortium (CvDC). Homozygotes
-                  demonstrate cardiovascular defects and congenital
-                  heart defects ( such as transposition of the great
-                  arteries, double outlet right ventricle, and
-                  tricuspid atresia; Preaxial digit
-                  duplication/polydactyly; duplex and cystic kidneys;
-                  cleft palate; and eye defects.
-                </p>
-            </div>
-            <div class="col-lg-9">
-                <h1>Highlighted models</h1>
-                <ul>
-                    <li><a href="/genotype/MGI:2668213">Mouse: Tgfb2/Tgfb2 [involves: 129P2/OlaHsd * Black Swiss]</a></li>
-                    <li><a href="/genotype/MGI:3047228">Mouse: Vegfa/Vegfa [involves: 129S1/Sv * 129X1/SvJ]</a></li>
-                </ul>
-            </div>
-            <div class="col-lg-9">
-                <h1>Model set highlights of Charcot-marie-tooth Disease</h1>
-                <ul>
-                    <li><a href="/genotype/MGI:3043397">Mouse: Ndrg1/Ndrg1 [involves: 129S1/Sv * 129X1/SvJ * C57BL/6]</a></li>
-                    <li><a href="/genotype/MGI:5515892">Mouse: Pmp22/Pmp22<+> [C57BL/6J-Pmp22/GrsrJ]</a></li>
-                </ul>
-            </div>
-            </div> <!-- closes wrapperforfooter -->
-            {{{includes.footer}}}
+<body style="padding-top: 50px;">
+  {{{includes.navbar}}}
+  <div class="container-fluid" style="margin: 1em;">
+    <!-- Open first row section. -->
+    <div class="row">
+      <!-- Disease spotlight -->
+      <div class="col-xs-12 col-sm-12 col-md-6 col-lg-6">
+        <div class="panel panel-default">
+          <h4>Model Spotlight: sed do eiusmod</h4>
+          <div>Bacon ipsum dolor sit amet ad exercitation leberkas et ground
+            round kielbasa. T-bone corned beef enim, in shankle laboris ut
+            ham biltong chicken jowl cow drumstick est shank. Biltong
+            brisket shank labore chicken ut. Nisi doner sint elit ea,
+            cow deserunt flank enim consequat. Meatball short ribs
+            laborum ball tip elit.</div>
+          </div>
         </div>
+        <!-- Getting started area or disease browser -->
+        <div class="col-xs-12 col-sm-12 col-md-6 col-lg-6">
+          <div class="panel panel-default">
+            <p>Some kind of getting started area? Or maybe disease browser</p>
+          </div>
+        </div>
+      </div>
+      <!-- Close first row section. -->
+      <!-- Open second row section. -->
+      <div class="row">
+        <!-- Recent updates -->
+        <div class="col-xs-12 col-sm-12 col-md-6 col-lg-6">
+          <div class="panel panel-default">
+            <h4>Recent Updates</h4>
+            {{#blog_results}}
+            <ul>
+              <li>
+                <a href="{{link}}">{{title}}</a> <small>({{date}})</small>
+              </li>
+            </ul>
+            {{/blog_results}}
+            {{#blog_results.length}}
+            <p class="text-right"><a href="http://monarch-initiative.blogspot.com/search/label/test">More</a></p>
+            {{/blog_results.length}}
+            {{^blog_results}}
+            <p>No news is good news.</p>
+            {{/blog_results}}
+          </div>
+        </div>
+        <!-- Annotation Graph-->
+        <div class="col-xs-12 col-sm-12 col-md-6 col-lg-6">
+          <div class="panel panel-default">
+            <p>Annotation Graph</p>
+          </div>
+        </div>
+      </div>
+      <!-- Close second row section. -->
     </div>
-</body>
+  </body>
 </html>

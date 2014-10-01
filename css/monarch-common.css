@@ -120,6 +120,20 @@ p {
     height: 100%;
 }
 
+.toggleitems > .fewitems {
+    color: #EA763B;
+    cursor: pointer;
+}
+.moreitems {
+    display: none;
+}
+.toggleitems > .hideitems {
+    color: #EA763B;
+    display: none;
+    cursor: pointer;
+}
+
+
 /* Logos */
 /* These styles standardize the size of logos over all Monarch pages. */
 

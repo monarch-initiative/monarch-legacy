@@ -135,6 +135,7 @@
   source: dc:source
   subClassOf: owl:subClassOf
   title: dc:title
+  keyword: dcat:keyword
   homepage: 
     "@id": foaf:homepage
     "@type": "@id"

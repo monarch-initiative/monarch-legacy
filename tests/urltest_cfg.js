@@ -125,6 +125,30 @@
             }
         },
 
+         // NIF FEDERATION SEARCH TERM EXPANSION
+        {
+            component : "federation-search",
+            priority : 1,
+            url : "http://nif-services.neuinfo.org/servicesv1/v1/federation/search.json?exportType=data&q=birnlex_721",
+            desc : "Query NIF to confirm terms available from expansion",
+            maxTimeMilliseconds : 12000,
+            expects : {
+                format : "json",
+                min_results : 1,
+                must_contain : {
+                    query: "Hippocampus"
+                },   
+                raw_contains: 
+                   ["ammon\'s horn",
+                    "ammon gyrus",
+                    "hippocampus major",
+                    "ammon horn",
+                    "hippocampus proper",
+                    "cornu ammonis",
+                    "hippocampus proprius"]
+            }
+        },
+
         // ORPHANET
         {
             component : "federation",
@@ -244,7 +268,6 @@
                     "Parkinsonism", // HP term associated
                     "PINK1", // 
                     "Parkinson Disease 14", // OMIM subtype
-		    "Model Scores", // from phenogrid
                 ]
             }
         },
@@ -269,6 +292,7 @@
         // --json--
         // monarch API calls can return deeply nested/structured objects, these are
         // checked recursively
+        // TODO - check for taxon
         {
             component : "monarch",
             priority : 1,
@@ -279,7 +303,7 @@
                 must_contain : [
                     {
                         tax_xref: {
-                            "id": "NCBITaxon:9606"
+                            "id": "SO_0001217"
                         }
                     }
                 ]

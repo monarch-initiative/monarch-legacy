@@ -34,10 +34,17 @@ production-test-%:
 nif-production-url-test:
 	$(RINGO_BIN) tests/urltester.js -s production -c vocabulary,ontoquest,federation,monarch
 
+nif-production-federation-tests:
+	$(RINGO_BIN) tests/urltester.js -s production -c federation
+
+nif-production-federation-search-tests:
+	$(RINGO_BIN) tests/urltester.js -s production -c federation-search
+
 D2T_YAMLS = $(wildcard conf/rdf-mapping/*.yaml)
 D2T_JSONS = $(D2T_YAMLS:.yaml=.json)
 
 d2t: $(D2T_JSONS)
+	echo YAMLS: $^
 
 triples: conf/monarch-context.jsonld d2t
 	$(RINGO_BIN) bin/generate-triples-from-nif.js -c conf/server_config_production.json $(D2T_ARGS) conf/rdf-mapping/*-map.json && ./bin/target-ttl-to-owl.sh
@@ -85,13 +92,16 @@ heroku-deploy:
 app-engine:
 	ringo-admin create --google-appengine gae
 
+dependencies:
+	sh ./update_dependencies.sh
+
 ## Setup portable Ubuntu environment. -SJC
 .PHONY: cli-launch-prod
-cli-launch-prod:
+cli-launch-prod: dependencies
 	RINGO_MODULE_PATH=$(RINGO_MODULE_PATH) $(RINGO_CLI_BIN) ./lib/monarch/web/webapp_launcher_production.js --port=$(RINGO_PORT)
 .PHONY: cli-launch-dev
-cli-launch-dev:
+cli-launch-dev: dependencies
 	RINGO_MODULE_PATH=$(RINGO_MODULE_PATH) $(RINGO_CLI_BIN) ./lib/monarch/web/webapp_launcher_dev.js --port=$(RINGO_PORT)
 .PHONY: cli-launch
-cli-launch:
+cli-launch: dependencies
 	RINGO_MODULE_PATH=$(RINGO_MODULE_PATH) $(RINGO_CLI_BIN) ./lib/monarch/web/webapp_launcher.js --port=$(RINGO_PORT)
