@@ -1,6 +1,6 @@
 var datagraph = {
   //Chart margins    
-  margin : {top: 40, right: 80, bottom: 200, left: 320},
+  margin : {top: 40, right: 80, bottom: 80, left: 320},
   width : 400,
   height : 580,
   
@@ -13,8 +13,7 @@ var datagraph = {
   
   //Title size/font settings
   title : {
-            'margin-left' : '360px',
-            'padding-bottom': '10px',
+            'margin-left' : '0px',
             'font-size' : '20px',
             'font-weight': 'bold'
   },
@@ -50,10 +49,10 @@ var datagraph = {
            }
   },
   //Tooltip offsets
-  arrowOffset : {height: 104, width: 231},
+  arrowOffset : {height: 94, width: 231},
   barOffset : {
                 grouped:{
-                  height: 120,
+                  height: 110,
                   width: 325
                 },
                 stacked:{
@@ -87,25 +86,22 @@ var datagraph = {
   
   //Check browser
   isOpera : (!!window.opera || navigator.userAgent.indexOf(' OPR/') >= 0),
-  isChrome : (!!window.chrome && !isOpera),
+  isChrome : (!!window.chrome && (!!window.opera || navigator.userAgent.indexOf(' OPR/') >= 0)),
   
   init : function (html_div,DATA){
       
     var conf = this;
     
     //Create html structure
-    //Add graph element
-    $(html_div).append( "<div id=graph></div>" );
     //Add graph title
-    $("#graph").append( "<div class=title"+
+    $(html_div).append( "<div class=title"+
             " style=margin-left:" + conf.title['margin-left'] +
-            ";padding-bottom:" + conf.title['padding-bottom'] +
             ";font-size:" + conf.title['font-size'] +
             ";font-weight:" + conf.title['font-weight'] +
             "; >"+conf.chartTitle+"</div>" );
-    $("#graph").append( "<div class=interaction></div>" );
-    $(".interaction").append( "<li></li>" );
-    $(".interaction li").append("<div class=breadcrumbs></div>");
+    $(html_div).append( "<div class=interaction></div>" );
+    $(html_div+" .interaction").append( "<li></li>" );
+    $(html_div+" .interaction li").append("<div class=breadcrumbs></div>");
     
     //D3 starts here
     //Define scales
@@ -131,18 +127,18 @@ var datagraph = {
         .scale(y0)
         .orient("left");
 
-    var svg = d3.select("#graph").append("svg")
+    var svg = d3.select(html_div).append("svg")
         .attr("width", conf.width + conf.margin.left + conf.margin.right)
         .attr("height", conf.height + conf.margin.top + conf.margin.bottom)
         .append("g")
         .attr("transform", "translate(" + conf.margin.left + "," + conf.margin.top + ")");
     
-    var crumbSVG = d3.select(".breadcrumbs")
+    var crumbSVG = d3.select(html_div).select(".breadcrumbs")
         .append("svg")
         .attr("height",conf.bcHeight)
         .attr("width",conf.bcWidth);
 
-    var tooltip = d3.select('#graph')
+    var tooltip = d3.select(html_div)
         .append("div")
         .attr("class", "tip");
     
@@ -205,11 +201,11 @@ var datagraph = {
         
         //remove breadcrumb div
         if (!config.useCrumb){
-            $(".breadcrumbs").remove();
+            $(html_div+" .breadcrumbs").remove();
         }
         //Add stacked/grouped form if more than one group
         if (groups.length >1){
-            $(".interaction li").append(" <form class=configure>" +
+            $(html_div+" .interaction li").append(" <form class=configure>" +
                     "<label><input id=\"group\" type=\"radio\" name=\"mode\"" +
                         " value=\"grouped\" checked> Grouped</label> " +
                     "<label><input id=\"stack\" type=\"radio\" name=\"mode\"" +
@@ -218,13 +214,18 @@ var datagraph = {
         }
         //Update tooltip positioning
         if (!config.useCrumb && groups.length>1){
-            config.arrowOffset.height = 96;
-            config.barOffset.grouped.height = 112;
-            config.barOffset.stacked.height = 91;
+            config.arrowOffset.height = 86;
+            config.barOffset.grouped.height = 102;
+            config.barOffset.stacked.height = 81;
         } else if (!config.useCrumb){
-            config.arrowOffset.height = 65;
-            config.barOffset.grouped.height = 81;
-            config.barOffset.stacked.height = 60;
+            config.arrowOffset.height = 55;
+            config.barOffset.grouped.height = 71;
+            config.barOffset.stacked.height = 50;
+        }
+        
+        if (groups.length == 1){
+        	config.barOffset.grouped.height = config.barOffset.grouped.height+8;
+        	config.barOffset.stacked.height = config.barOffset.stacked.height+8;
         }
         
         var parents = [];
@@ -340,7 +341,7 @@ var datagraph = {
             makeBreadcrumb(level,config.firstCrumb,groups,rect,barGroup);
         }
         
-        d3.selectAll("input").on("change", change);
+        d3.select(html_div).selectAll("input").on("change", change);
         
         function makeNavArrow(data,navigate,triangleDim,barGroup,rect){
             var isSubClass;
@@ -549,7 +550,7 @@ var datagraph = {
             transitionSubGraph(superclass);
             
             for (var i=(index+1); i <= parents.length; i++){
-                  d3.select(".bread"+i).remove();
+                d3.select(html_div).select(".bread"+i).remove();
             }
    
             svg.selectAll((".rect"+lastIndex)).transition()
@@ -567,7 +568,7 @@ var datagraph = {
             parents.splice(index,(parents.length));        
             
             //Deactivate top level crumb
-            d3.select(".poly"+index)
+            d3.select(html_div).select(".poly"+index)
               .attr("fill", config.color.crumb.top)
               .on("mouseover", function(){})
               .on("mouseout", function(){
@@ -576,7 +577,7 @@ var datagraph = {
               })
               .on("click", function(){});
             
-            d3.select(".text"+index)
+            d3.select(html_div).select(".text"+index)
               .on("mouseover", function(){})
               .on("mouseout", function(){
                    d3.select(this.parentNode)
@@ -597,7 +598,7 @@ var datagraph = {
 
             //Change color of previous crumb
             if (lastIndex > -1){
-                d3.select(".poly"+lastIndex)
+                d3.select(html_div).select(".poly"+lastIndex)
                   .attr("fill", config.color.crumb.bottom)
                   .on("mouseover", function(){
                       d3.select(this)
@@ -611,14 +612,14 @@ var datagraph = {
                       pickUpBreadcrumb(lastIndex,groups,rect,phenoDiv);
                   });
                 
-                d3.select(".text"+lastIndex)
+                d3.select(html_div).select(".text"+lastIndex)
                   .on("mouseover", function(){
-                       d3.select(this.parentNode)
+                	  d3.select(this.parentNode)
                        .select("polygon")
                        .attr("fill", config.color.crumb.hover);
                   })
                   .on("mouseout", function(){
-                       d3.select(this.parentNode)
+                	  d3.select(this.parentNode)
                        .select("polygon")
                        .attr("fill", config.color.crumb.bottom);
                   })
@@ -627,7 +628,7 @@ var datagraph = {
                   });
             }
             
-            d3.select(".breadcrumbs")
+            d3.select(html_div).select(".breadcrumbs")
                 .select("svg")
                 .append("g")  
                 .attr("class",("bread"+index))
@@ -637,11 +638,11 @@ var datagraph = {
                 .attr("points",index ? config.trailCrumbs : config.firstCr)
                 .attr("fill", config.color.crumb.top);
             
-            d3.select((".bread"+index))
+            d3.select(html_div).select((".bread"+index))
                     .append("svg:title")
                     .text(label);    
         
-            d3.select((".bread"+index))
+            d3.select(html_div).select((".bread"+index))
                 .append("text")
                 .attr("class",("text"+index))
                 .attr("font-size", fontSize)
@@ -910,7 +911,7 @@ var datagraph = {
                      });
             }
             
-            d3.selectAll("input").on("change", change);
+            d3.select(html_div).selectAll("input").on("change", change);
 
             function change() {
               if (this.value === "grouped"){
