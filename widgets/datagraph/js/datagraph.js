@@ -796,7 +796,7 @@ var datagraph = {
                 .on("click", function(d){
                     if (config.isYLabelURL){
                         d3.select(this).style("cursor", "pointer");
-                        var monarchID = getGroupID(d,data);
+                        var monarchID = getGroupID(d,subGraph);
                         document.location.href = config.yLabelBaseURL + monarchID;
                     }
                 })
