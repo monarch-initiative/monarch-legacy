@@ -1,5 +1,5 @@
 graph: mouse-gene-phenotype
-mapVersion: 2014-04-26
+mapVersion: 2014-10-03
 view: nif-0000-00096-6
 status: alpha
 prefixes:
@@ -50,3 +50,5 @@ mappings:
     object: phenotype_description_free_text
     predicate: dc:description
     subject: v_uuid
+filter:
+    phenotype_modifier: "abnormal"

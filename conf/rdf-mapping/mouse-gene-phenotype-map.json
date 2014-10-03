@@ -1,4 +1,7 @@
 {
+   "filter" : {
+      "phenotype_modifier" : "abnormal"
+   },
    "mappings" : [
       {
          "object" : "phenotype_id",
@@ -65,6 +68,6 @@
    "prefixes" : {
       "J" : "http://www.informatics.jax.org/reference/J:"
    },
-   "mapVersion" : "2014-04-26",
-   "graph" : "mouse-gene-phenotype"
+   "graph" : "mouse-gene-phenotype",
+   "mapVersion" : "2014-10-03"
 }
