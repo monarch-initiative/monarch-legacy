@@ -46,6 +46,7 @@
       "OMIA" : "http://purl.obolibrary.org/obo/OMIA_",
       "has_part" : "BFO:0000051",
       "gene_locus" : "GENO:0000014",
+      "ClinVarVariant" : "http://identifiers.org/ClinVarVariant:",
       "AQTLTrait" : "http://purl.obolibrary.org/obo/AQTLTrait_",
       "effective_genotype" : "GENO:0000525",
       "Association" : "SIO:000897",
@@ -137,6 +138,7 @@
       "SO" : "http://purl.obolibrary.org/obo/SO_",
       "ZFIN" : "http://identifiers.org/zfin:",
       "HP" : "http://purl.obolibrary.org/obo/HP_",
+      "dbSNP" : "http://identifiers.org/dbSNP:",
       "MESH" : "http://purl.obolibrary.org/obo/MESH_"
    }
 }
