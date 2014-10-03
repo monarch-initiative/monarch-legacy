@@ -34,6 +34,11 @@
          "object" : "frequency",
          "predicate" : "frequencyOfPhenotype",
          "subject" : "v_uuid"
+      },
+      {
+         "object" : "evidence_code_id",
+         "predicate" : "dc:evidence",
+         "subject" : "v_uuid"
       }
    ],
    "status" : "alpha",
@@ -53,7 +58,6 @@
          "name" : "disorder_id"
       },
       {
-         "@context" : {},
          "name" : "disorder_qualifier"
       },
       {
@@ -70,6 +74,9 @@
       {
          "name" : "publication_id",
          "list_delimiter" : ";"
+      },
+      {
+         "name" : "evidence_code_id"
       }
    ],
    "prefixes" : {
@@ -78,5 +85,5 @@
       "IM" : "http://purl.obolibrary.org/obo/OMIM_"
    },
    "graph" : "omim-disease-phenotype",
-   "mapVersion" : "2014-05-16"
+   "mapVersion" : "2014-10-03"
 }
