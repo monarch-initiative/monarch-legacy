@@ -157,9 +157,9 @@ Steps for Adding the Monarch Graph Widget to Your Webpage
                 Any setting can be updated without creating the entire color object,
                 for example:
                 datagraph.color.first = '#44A293';
-                  datagraph.color.second = '#A4D6D4';
+                datagraph.color.second = '#A4D6D4';
                   
-                  Note: Colors are set in the order they appear in the JSON object
+                Note: Colors are set in the order they appear in the JSON object
 
        Advanced Settings:
        
