@@ -21,7 +21,6 @@ body {
     width: 826px;
     float:left;
     border-style:solid;
-    border-top:none;
     border-width:1px;
 }
 .pheno-geno-container{
@@ -29,7 +28,6 @@ body {
     width: 826px;
     float:left;
     border-style:solid;
-    border-top:none;
     border-width:1px;
 }
 
