@@ -1,6 +1,6 @@
 var datagraph = {
   //Chart margins    
-  margin : {top: 40, right: 80, bottom: 80, left: 320},
+  margin : {top: 40, right: 80, bottom: 30, left: 320},
   width : 400,
   height : 580,
   
