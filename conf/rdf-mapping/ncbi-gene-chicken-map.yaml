@@ -31,8 +31,8 @@ graphs:
         name: synonyms
         type: rdfs:Literal
     filter: 
-      tax_id: 10090
-    graph: human-genes
+      tax_id: 9031
+    graph: chicken-genes
     mapVersion: 2014-10-03
     mappings: 
       - 
@@ -52,7 +52,7 @@ graphs:
         object: type_of_gene
         predicate: rdfs:subClassOf
         subject: geneid
-    notes: This is a copy of ncbi-gene-map.json specifically for mouse - soon these will be merged
+    notes: This is a copy of ncbi-gene-map.json specifically for chicken - soon these will be merged
     objects: 
       - 
         id: RO:0002162
