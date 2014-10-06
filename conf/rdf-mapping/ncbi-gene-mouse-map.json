@@ -71,8 +71,8 @@
                "list_delimiter" : ","
             }
          ],
-         "graph" : "human-genes",
-         "mapVersion" : "2014-10-03"
+         "graph" : "mouse-genes",
+         "mapVersion" : "2014-10-06"
       }
    ]
 }

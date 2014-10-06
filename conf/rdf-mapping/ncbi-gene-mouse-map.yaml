@@ -32,8 +32,8 @@ graphs:
         type: rdfs:Literal
     filter: 
       tax_id: 10090
-    graph: human-genes
-    mapVersion: 2014-10-03
+    graph: mouse-genes
+    mapVersion: 2014-10-06
     mappings: 
       - 
         object: symbol
