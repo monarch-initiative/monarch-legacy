@@ -906,6 +906,7 @@ var datagraph = {
                     .selectAll("text")
                     .attr("dx","0")
                     .on("mouseover", function(d){
+                    	   d3.select(this).style("cursor", "pointer");
                            d3.select(this).style("fill",config.color.yLabel.hover);
                            d3.select(this).style("text-decoration", "underline");                       
                      });
