@@ -1,7 +1,7 @@
 view: nlx_151835-1
 status: alpha
 graph: omim-disease-phenotype
-mapVersion: 2014-05-16
+mapVersion: 2014-10-03
 prefixUnmappable: http://monarchinitiative.org/unmapped/
 prefixes:
   ## TODO: FIX
@@ -16,8 +16,6 @@ columns:
   - 
     name: disorder_id
   - 
-    "@context": {}
-
     name: disorder_qualifier
   - 
     name: phenotype_id
@@ -28,8 +26,11 @@ columns:
     name: frequency
     type: rdfs:Literal
   - 
-    list_delimiter: ;
+    list_delimiter: ';'
     name: publication_id
+  -
+    name: evidence_code_id
+
 mappings: 
   - 
     object: phenotype_id
@@ -59,6 +60,10 @@ mappings:
     subject: v_uuid
     predicate: frequencyOfPhenotype
     object: frequency
+  -
+    object: evidence_code_id
+    predicate: dc:evidence
+    subject: v_uuid
 objects: 
   - 
     id: RO:0002200

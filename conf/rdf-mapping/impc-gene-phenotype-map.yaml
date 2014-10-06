@@ -1,17 +1,13 @@
-graph: mouse-gene-phenotype
+graph: impc-gene-phenotype
 mapVersion: 2014-10-03
-view: nif-0000-00096-6
+view: nlx_151660-3
 status: alpha
-prefixes:
-  J:   "http://www.informatics.jax.org/reference/J:"
 columns: 
   - 
     name: v_uuid
   - 
     name: implicated_gene_ids
     list_delimiter: ","
-  - 
-    name: phenotype_id
   - 
     name: phenotype_description_free_text
     type: rdfs:Literal
@@ -38,10 +34,6 @@ mappings:
     predicate: hasObject
     subject: v_uuid
   - 
-    object: publication_id
-    predicate: dc:source
-    subject: v_uuid
-  - 
     notes: TODO
     object: evidence_code_id
     predicate: dc:evidence
@@ -50,5 +42,3 @@ mappings:
     object: phenotype_description_free_text
     predicate: dc:description
     subject: v_uuid
-filter:
-    phenotype_modifier: "abnormal"

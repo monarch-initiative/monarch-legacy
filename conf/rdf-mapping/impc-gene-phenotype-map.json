@@ -1,7 +1,4 @@
 {
-   "filter" : {
-      "phenotype_modifier" : "abnormal"
-   },
    "mappings" : [
       {
          "object" : "phenotype_id",
@@ -24,11 +21,6 @@
          "subject" : "v_uuid"
       },
       {
-         "object" : "publication_id",
-         "predicate" : "dc:source",
-         "subject" : "v_uuid"
-      },
-      {
          "object" : "evidence_code_id",
          "predicate" : "dc:evidence",
          "subject" : "v_uuid",
@@ -41,7 +33,7 @@
       }
    ],
    "status" : "alpha",
-   "view" : "nif-0000-00096-6",
+   "view" : "nlx_151660-3",
    "columns" : [
       {
          "name" : "v_uuid"
@@ -49,9 +41,6 @@
       {
          "name" : "implicated_gene_ids",
          "list_delimiter" : ","
-      },
-      {
-         "name" : "phenotype_id"
       },
       {
          "name" : "phenotype_description_free_text",
@@ -65,9 +54,6 @@
          "list_delimiter" : ";"
       }
    ],
-   "prefixes" : {
-      "J" : "http://www.informatics.jax.org/reference/J:"
-   },
-   "graph" : "mouse-gene-phenotype",
-   "mapVersion" : "2014-10-03"
+   "mapVersion" : "2014-10-03",
+   "graph" : "impc-gene-phenotype"
 }

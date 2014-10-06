@@ -1,22 +1,45 @@
 {
+   "filter" : {
+      "variant_locus_id" : "ClinVarVariant:54685"
+   },
    "mappings" : [
+      {
+         "object" : "variant_locus_label",
+         "predicate" : "rdfs:Label",
+         "subject" : "variant_locus_id"
+      },
+      {
+         "object" : "sequence_alteration_id",
+         "predicate" : "GENO:0000531",
+         "subject" : "variant_locus_id"
+      },
+      {
+         "object" : "gene_ids",
+         "predicate" : "GENO:0000440",
+         "subject" : "variant_locus_id"
+      },
       {
          "object" : "phenotype_id",
          "predicate" : "RO:0002200",
+         "subject" : "variant_locus_id"
+      },
+      {
+         "object" : "gene_ids",
+         "predicate" : "GENO:0000224",
          "subject" : "sequence_alteration_id"
       },
       {
-         "object" : "location",
-         "predicate" : "faldo:location",
+         "object" : "sequence_alteration_label",
+         "predicate" : "rdfs:Label",
          "subject" : "sequence_alteration_id"
       },
       {
-         "object" : "starting_location",
+         "object" : "sequence_start",
          "predicate" : "http://monarchinitiative.org/vocab/begin",
          "subject" : "location"
       },
       {
-         "object" : "ending_location",
+         "object" : "sequence_stop",
          "predicate" : "http://monarchinitiative.org/vocab/end",
          "subject" : "location"
       },
@@ -28,6 +51,11 @@
       {
          "object" : "assembly",
          "predicate" : "http://monarchinitiative.org/vocab/assembly",
+         "subject" : "location"
+      },
+      {
+         "object" : "cytogenetic_locations",
+         "predicate" : "http://monarchinitiative.org/vocab/cytogenic_location",
          "subject" : "location"
       },
       {
@@ -49,16 +77,34 @@
          "object" : "clinical_significance",
          "predicate" : "http://monarchinitiative.org/vocab/clinicalSignificance",
          "subject" : "v_uuid"
+      },
+      {
+         "object" : "submitters",
+         "predicate" : "dc:source",
+         "subject" : "v_uuid"
       }
    ],
    "status" : "alpha",
-   "view" : "nlx_151671-3",
+   "view" : "nlx_151671-1",
    "columns" : [
       {
          "name" : "v_uuid"
       },
       {
-         "name" : "sequence_alteration_id"
+         "name" : "variant_locus_id",
+         "type" : "variant_locus"
+      },
+      {
+         "name" : "variant_locus_label",
+         "type" : "rdfs:Literal"
+      },
+      {
+         "name" : "sequence_alteration_id",
+         "type" : "SO:0001059"
+      },
+      {
+         "name" : "sequence_alteration_label",
+         "type" : "rdfs:Literal"
       },
       {
          "name" : "phenotype_id"
@@ -72,14 +118,14 @@
          "type" : "rdfs:Literal"
       },
       {
-         "name" : "starting_location"
+         "name" : "sequence_start"
       },
       {
-         "name" : "ending_location"
+         "name" : "sequence_stop"
       },
       {
          "derivedFrom" : "sequence_alteration_id",
-         "name" : "location",
+         "name" : "genomic_location",
          "prefix" : "http://monarchinitiative.org/variant/locationOf/"
       },
       {
@@ -89,11 +135,25 @@
       {
          "name" : "sequence_alteration_xrefs",
          "list_delimiter" : ","
+      },
+      {
+         "name" : "gene_ids",
+         "list_delimiter" : ","
+      },
+      {
+         "name" : "publication_ids",
+         "list_delimiter" : ","
+      },
+      {
+         "name" : "cytogenic_locations",
+         "list_delimiter" : ","
+      },
+      {
+         "name" : "submitters",
+         "type" : "rdfs:Literal",
+         "list_delimiter" : ","
       }
    ],
-   "mapVersion" : "2014-04-27",
-   "graph" : "clinvar",
-   "forceConfiguration" : {
-      "federation_services_url" : "http://beta.neuinfo.org/services/v1/federation/"
-   }
+   "mapVersion" : "2014-10-03",
+   "graph" : "clinvar"
 }

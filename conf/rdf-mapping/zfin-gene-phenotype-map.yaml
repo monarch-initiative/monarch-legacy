@@ -1,6 +1,6 @@
-graph: mouse-gene-phenotype
+graph: zfin-gene-phenotype
 mapVersion: 2014-10-03
-view: nif-0000-00096-6
+view: nif-0000-21427-10
 status: alpha
 prefixes:
   J:   "http://www.informatics.jax.org/reference/J:"
@@ -51,4 +51,7 @@ mappings:
     predicate: dc:description
     subject: v_uuid
 filter:
-    phenotype_modifier: "abnormal"
+  -
+    "environment_id" : "ZDB-EXP-041102-1"
+    "phenotype_modifier" : "abnormal"
+notes: w.t. environments and abnormal phenotypes only
