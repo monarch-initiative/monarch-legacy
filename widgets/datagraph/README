@@ -128,7 +128,8 @@ Steps for Adding the Monarch Graph Widget to Your Webpage
             b. datagraph.xAxisLabel - X Axis Label
             c. datagraph.width - Chart Width
             d. datagraph.height - Chart Height
-            e. datagraph.color - CSS colors
+            e. datagraph.useLegend - Use Chart Legend (default: true)
+            f. datagraph.color - CSS colors
             
                The color variable is a JSON object with the following format:
                datagraph.color = { 
@@ -156,9 +157,9 @@ Steps for Adding the Monarch Graph Widget to Your Webpage
                 Any setting can be updated without creating the entire color object,
                 for example:
                 datagraph.color.first = '#44A293';
-                  datagraph.color.second = '#A4D6D4';
+                datagraph.color.second = '#A4D6D4';
                   
-                  Note: Colors are set in the order they appear in the JSON object
+                Note: Colors are set in the order they appear in the JSON object
 
        Advanced Settings:
        

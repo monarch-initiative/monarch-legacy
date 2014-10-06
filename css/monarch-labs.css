@@ -15,25 +15,42 @@
     margin: 0px auto;
 }
 
-/* Graphic */
-#graphic-test {
-    position: relative;
-    width: 760px;
-    height:750px;
-    padding-top: 50px;
-    float:left;
-    background-color: #FCFCFE;
-   /*margin: 0px auto;*/
-}
-#graphic-test > img {
-    width: 100%;
+.graph{
+	padding-top:20px;
 }
 
 .graph-container{
     position: relative;
     width: 826px;
     float:left;
+    border-style:solid;
+    border-width:1px;
 }
+.disease-container{
+    position: relative;
+    width: 826px;
+    float:left;
+    border-style:solid;
+    border-top:none;
+    border-width:1px;
+}
+.disease-pheno-container{
+    position: relative;
+    width: 826px;
+    float:left;
+    border-style:solid;
+    border-top:none;
+    border-width:1px;
+}
+.pheno-geno-container{
+    position: relative;
+    width: 826px;
+    float:left;
+    border-style:solid;
+    border-top:none;
+    border-width:1px;
+}
+
 
 /*
  * Stuff for the d3 demo on the landing.
