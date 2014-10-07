@@ -412,6 +412,11 @@ function normalizeUriRef(iri, gconf) {
     }
     else {
         prefix = iri.slice(0,pos);
+        var frag = iri.slice(pos+1);
+        if (frag.indexOf(":") > -1) {
+            console.log("Fragment must not contain ':'s: " + iri);
+            return null;
+        }
 
         // validate prefix
         if (prefixMap[prefix] == null) {
@@ -423,6 +428,10 @@ function normalizeUriRef(iri, gconf) {
             system.exit(1);
         }
 
+    }
+    if (iri.indexOf("#") > -1) {
+        console.error("Hashes not allowed un CURIES; removing fragment: "+iri);
+        iri = iri.replace(/#.*/,"");
     }
 
     return iri;
@@ -482,6 +491,9 @@ function mapColumnValue(ix, v, cmap, gconf) {
     }
     //console.log("TYPE of '"+v+"' is "+type+"."+JSON.stringify(cobj));
     if (type == 'rdfs:Literal') {
+        if (v == null || v == "") {
+            return null;
+        }
         return engine.quote(v);
     }
     return normalizeUriRef(v, gconf);
@@ -515,6 +527,9 @@ function emit(io, sv, pv, ov, mapping) {
         sv.forEach(function(x) { emit(io, x, pv, ov, mapping) });
     }
     else {
+        if (ov == "") {
+            return;
+        }
         // special case for OWL constructs
         if (mapping != null && mapping.isExistential && mapping.isExistential != "0") {
             io.print(sv + " rdfs:subClassOf [a owl:Restriction ; owl:onProperty " + pv + " ; owl:someValuesFrom " + ov + " ] .");
