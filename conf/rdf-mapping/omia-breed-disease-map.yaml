@@ -34,7 +34,7 @@ graphs:
         name: species_specific_phenotype_name
         type: rdfs:Literal
     graph: animal-breed-disease
-    mapVersion: 2014-04-30
+    mapVersion: 2014-10-06
     mappings: 
       - 
         object: phenotype_id
@@ -42,7 +42,7 @@ graphs:
         subject: breed_id
       - 
         object: phenotype_label
-        predicate: rdfs:label
+        predicate: rdfs:Label
         subject: phenotype_id
       - 
         object: species_specific_phenotype_name
@@ -56,6 +56,10 @@ graphs:
         object: breed_id
         predicate: hasSubject
         subject: v_uuid
+      -
+        object: breed_label
+        predicate: rdfs:Label
+        subject: breed_id
       - 
         object: phenotype_id
         predicate: hasObject
@@ -70,7 +74,7 @@ graphs:
         subject: breed_id
       - 
         object: taxon_label
-        predicate: rdfs:label
+        predicate: rdfs:Label
         subject: taxon_id
       - 
         object: taxon_alt_label

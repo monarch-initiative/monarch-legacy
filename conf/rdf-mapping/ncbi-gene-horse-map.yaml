@@ -31,9 +31,9 @@ graphs:
         name: synonyms
         type: rdfs:Literal
     filter: 
-      tax_id: 10090
-    graph: mouse-genes
-    mapVersion: 2014-10-06
+      tax_id: 9796
+    graph: horse-genes
+    mapVersion: 2014-10-03
     mappings: 
       - 
         object: symbol
@@ -52,7 +52,7 @@ graphs:
         object: type_of_gene
         predicate: rdfs:subClassOf
         subject: geneid
-    notes: This is a copy of ncbi-gene-map.json specifically for mouse - soon these will be merged
+    notes: This is a copy of ncbi-gene-map.json specifically for horse - soon these will be merged
     objects: 
       - 
         id: RO:0002162

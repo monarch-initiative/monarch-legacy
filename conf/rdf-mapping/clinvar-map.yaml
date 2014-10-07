@@ -1,15 +1,23 @@
-forceConfiguration: 
-  federation_services_url: http://beta.neuinfo.org/services/v1/federation/
-view: nlx_151671-3
+view: nlx_151671-1
 status: alpha
 graph: clinvar
-mapVersion: 2014-04-27
+mapVersion: 2014-10-03
 columns: 
   - 
     name: v_uuid
+  -
+    name: variant_locus_id
+    type: variant_locus
+  -
+    name: variant_locus_label
+    type: rdfs:Literal 
   - 
     name: sequence_alteration_id
+    type: SO:0001059
   - 
+    name: sequence_alteration_label
+    type: rdfs:Literal
+  -
     name: phenotype_id
   - 
     name: assembly
@@ -18,11 +26,11 @@ columns:
     name: chromosome
     type: rdfs:Literal
   - 
-    name: starting_location
+    name: sequence_start
   - 
-    name: ending_location
+    name: sequence_stop
   - 
-    name: location
+    name: genomic_location
     derivedFrom: sequence_alteration_id
     prefix: http://monarchinitiative.org/variant/locationOf/
   - 
@@ -31,21 +39,50 @@ columns:
   - 
     list_delimiter: ","
     name: sequence_alteration_xrefs
+  -
+    name: gene_ids
+    list_delimiter: ","
+  -
+    name: publication_ids
+    list_delimiter: ","
+  -
+    name: cytogenic_locations
+    list_delimiter: ","
+  -
+    name: submitters
+    list_delimiter: ","
+    type: rdfs:Literal
 mappings: 
-  - 
+  -
+    subject: variant_locus_id
+    predicate: rdfs:Label
+    object: variant_locus_label
+  -
+    object: sequence_alteration_id
+    predicate: GENO:0000531  #has_sequence-variant_part
+    subject: variant_locus_id
+  -
+    subject: variant_locus_id 
+    predicate: GENO:0000440 #is_mutant_of
+    object: gene_ids
+  -
     object: phenotype_id
     predicate: RO:0002200
-    subject: sequence_alteration_id
+    subject: variant_locus_id
   - 
     subject: sequence_alteration_id
-    predicate: faldo:location
-    object: location
+    predicate: GENO:0000224  #has_locus
+    object: gene_ids
+  -
+    subject: sequence_alteration_id
+    predicate: rdfs:Label
+    object: sequence_alteration_label
   - 
-    object: starting_location
+    object: sequence_start
     predicate: http://monarchinitiative.org/vocab/begin
     subject: location
   - 
-    object: ending_location
+    object: sequence_stop
     predicate: http://monarchinitiative.org/vocab/end
     subject: location
   - 
@@ -56,7 +93,11 @@ mappings:
     object: assembly
     predicate: http://monarchinitiative.org/vocab/assembly
     subject: location
-  - 
+  -
+    object: cytogenetic_locations
+    predicate: http://monarchinitiative.org/vocab/cytogenic_location
+    subject: location
+  -
     object: Annotation
     predicate: rdf:type
     subject: v_uuid
@@ -72,3 +113,10 @@ mappings:
     object: clinical_significance
     predicate: http://monarchinitiative.org/vocab/clinicalSignificance
     subject: v_uuid
+  -
+    object: submitters
+    predicate: dc:source
+    subject: v_uuid
+#for testing
+#filter:
+#    variant_locus_id: "ClinVarVariant:54685"

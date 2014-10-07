@@ -25,7 +25,7 @@
             }
          ],
          "filter" : {
-            "tax_id" : 10090
+            "tax_id" : 9796
          },
          "objects" : [
             {
@@ -33,7 +33,7 @@
                "id" : "RO:0002162"
             }
          ],
-         "notes" : "This is a copy of ncbi-gene-map.json specifically for mouse - soon these will be merged",
+         "notes" : "This is a copy of ncbi-gene-map.json specifically for horse - soon these will be merged",
          "view" : "nif-0000-02801-1",
          "columns" : [
             {
@@ -71,8 +71,8 @@
                "list_delimiter" : ","
             }
          ],
-         "graph" : "mouse-genes",
-         "mapVersion" : "2014-10-06"
+         "graph" : "horse-genes",
+         "mapVersion" : "2014-10-03"
       }
    ]
 }

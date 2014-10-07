@@ -1,5 +1,6 @@
 {
    "filter" : {
+      "environment_id" : "ZDB-EXP-041102-1",
       "phenotype_modifier" : "abnormal"
    },
    "mappings" : [
@@ -31,8 +32,7 @@
       {
          "object" : "evidence_code_id",
          "predicate" : "dc:evidence",
-         "subject" : "v_uuid",
-         "notes" : "TODO"
+         "subject" : "v_uuid"
       },
       {
          "object" : "phenotype_description_free_text",
@@ -41,7 +41,8 @@
       }
    ],
    "status" : "alpha",
-   "view" : "nif-0000-00096-6",
+   "view" : "nif-0000-21427-10",
+   "notes" : "w.t. environments and abnormal phenotypes only",
    "columns" : [
       {
          "name" : "v_uuid"
@@ -54,10 +55,6 @@
          "name" : "phenotype_id"
       },
       {
-         "name" : "phenotype_description_free_text",
-         "type" : "rdfs:Literal"
-      },
-      {
          "name" : "evidence_code_id"
       },
       {
@@ -65,9 +62,6 @@
          "list_delimiter" : ";"
       }
    ],
-   "prefixes" : {
-      "J" : "http://www.informatics.jax.org/reference/J:"
-   },
-   "graph" : "mouse-gene-phenotype",
+   "graph" : "zfin-gene-phenotype",
    "mapVersion" : "2014-10-03"
 }
