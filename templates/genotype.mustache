@@ -26,8 +26,13 @@
                         {{/hasPhenotypes}}
                     </div>
                     <div class="tabcontainer">
-                        <div class="tabhover">View phenotypically similar diseases and genes in a grid</div>
-                            <a href="#compare"><div class="tab contenttab">Compare</div></a>
+                        <div class="tabhover">View phenotypically  similar diseases and genes in a grid</div>
+ 			{{#hasPhenotypes}}
+                           <a href="#compare"><div class="tab contenttab">Compare</div></a>
+				{{/hasPhenotypes}}
+                        {{^hasPhenotypes}}
+                            <div class="tab greyed-out">Compare</div>
+                        {{/hasPhenotypes}}
                     </div>
                     <div class="tabcontainer">
                         <div class="tabhover">View citations for the data on this page</div>
