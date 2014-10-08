@@ -22,5 +22,5 @@ $(function () {
 		}
     });
 
-	$("#phen_vis").phenogrid({phenotypeData: phenotype_list});
+    $("#phen_vis").phenogrid({phenotypeData: phenotype_list, refSpecies: "Mus musculus"});
 });        
