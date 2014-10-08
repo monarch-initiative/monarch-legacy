@@ -205,10 +205,10 @@ figure {
 
 figcaption {
     text-align:justify;
-	font-size:12px;
-	word-wrap:normal;
-	display:table-caption;
-	caption-side: bottom;
+    font-size:12px;
+    word-wrap:normal;
+    display:table-caption;
+    caption-side: bottom;
     padding: 0 10px 5px;
     line-height: 16px;
 }
@@ -225,10 +225,10 @@ figcaption {
 }
 
 .collab-table img {
-	margin-left: auto;
-	margin-right: auto;
-	max-height: 125px;
-	max-width: 125px;
-	padding: 5px 20px"
+    margin-left: auto;
+    margin-right: auto;
+    max-height: 125px;
+    max-width: 125px;
+    padding: 5px 20px"
 }
 

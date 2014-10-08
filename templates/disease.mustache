@@ -21,10 +21,10 @@
                         {{#hasComment}}
                         {{comment}}<br/>
                         {{/hasComment}}
-			{{#hasHeritability}}
-			{{heritability}}<br />
-			{{/hasHeritability}}
-			Source: {{{primary_xref}}}
+            {{#hasHeritability}}
+            {{heritability}}<br />
+            {{/hasHeritability}}
+            Source: {{{primary_xref}}}
                     </p>
                 </div>
                 <div id="categories">
@@ -42,14 +42,14 @@
                         </div>
                     <div class="tabcontainer">
                         <div class="tabhover">View phenotypically similar diseases and genes in a grid</div>
-						{{#hasPhenotypes}}
+                        {{#hasPhenotypes}}
                             <a href="#compare"><div class="tab contenttab">Compare</div></a>
-						{{/hasPhenotypes}}
+                        {{/hasPhenotypes}}
                         {{^hasPhenotypes}}
                             <div class="tab greyed-out">Compare</div>
                         {{/hasPhenotypes}}
-						
-					</div>
+                        
+                    </div>
                     <div class="tabcontainer">
                         <div class="tabhover">View a list of asserted and inferred animal models for this disease</div>
                         {{#hasModels}}
@@ -108,7 +108,7 @@
                     {{/hasAka}}
                     {{#hasXrefs}}
                     <div class="ids">
-						<b>xref IDs:</b> {{{xrefs}}}
+                        <b>xref IDs:</b> {{{xrefs}}}
                     </div>
                     {{/hasXrefs}}
                     <h3>Classification</h3>
@@ -162,9 +162,9 @@
                 {{/hasAlleles}}
                 {{#hasPhenotypes}}
 
-				<div id="compare" class="category">
-					<div id="phen_vis"></div>
-				</div>
+                <div id="compare" class="category">
+                    <div id="phen_vis"></div>
+                </div>
                 <div id="model" class="category">
                     {{#hasModels}}
                     <table class="{{css.table}}">
@@ -172,7 +172,7 @@
                     </table>                
                     {{/hasModels}}
                 </div>
-				{{/hasPhenotypes}}
+                {{/hasPhenotypes}}
                 {{#hasSim}}
                 <div id="similarity" class="category">
                     <div class="text">
