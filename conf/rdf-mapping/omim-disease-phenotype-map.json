@@ -85,5 +85,5 @@
       "IM" : "http://purl.obolibrary.org/obo/OMIM_"
    },
    "graph" : "omim-disease-phenotype",
-   "mapVersion" : "2014-10-03"
+   "mapVersion" : "2014-10-07"
 }
