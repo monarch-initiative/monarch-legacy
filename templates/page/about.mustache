@@ -8,6 +8,7 @@
     <!-- CSS. -->
     {{#pup_tent_css_libraries}}
     <link rel="stylesheet" type="text/css" href="{{{.}}}">
+	<link rel="stylesheet" type="text/css" href="/monarch-specific.css"/>
     {{/pup_tent_css_libraries}}
     
     <!-- JS variables. -->
@@ -26,124 +27,368 @@
 <body>
     <div class="monarch-container">
         {{{includes.navbar}}}
-        <div class="content">
+        <div class="content" id="about">
             <div class="wrapperforfooter">
-            <div class="title">About Monarch Initiative</div>
-            <div class="section">
-                <div class="sectiontitle">Goals</div>
-                <div class="text">
-                    Model systems are the cornerstone of biomedical research for
-                    understanding of biological processes, testing gene-based disease
-                    hypotheses, and developing and testing disease treatments.
-                </div>
-                <div class="text">
-                    A wide-variety of model databases contain unparalleled content about
-                    genetics, genomics, anatomy, environmental interactions, and
-                    developmental processes. However, clinical and translational
-                    researchers face a daunting challenge in using these vast stores of
-                    biomedical data to inform their understanding of human disease mechanisms
-                    that drives new therapies. This is particularly difficult in the
-                    context of rare or undiagnosed diseases, where data is limited to
-                    descriptive phenotypic data and numerous candidate genomic variations.
-                </div>
-                <div class="text">
-                    Currently, tools that exploit similarities between phenotypes,
-                    organisms, and human diseases to leverage these rich data are in
-                    their infancy or are non-existent. To address this challenge, the
-                    Monarch Initiative Discovery System contains a wealth of information
-                    about model organisms, in vitro models, genes, pathways, gene
-                    expression, protein and genetic interactions, orthology, disease,
-                    phenotypes, publications, and authors with semantic similarity
-                    calculations that suggest novel relationships based on the information
-                    content of data descriptions.
-                </div>
-                <div class="text">
-                    We will provide tools that will use semantics and statistical models
-                    to support navigating through multi-scale spatial and temporal phenotypes
-                    across in vivo and in vitro model systems in the context of genetic and
-                    genomic data. These tools will provide basic and clinical science
-                    researchers, informaticists, and medical professionals with an integrated
-                    interface and set of discovery tools to reveal the genetic basis of
-                    disease, facilitate hypothesis generation, and identify novel candidate
-                    drug targets. We aim for this system to promote true translational
-                    research, connecting clinicians with model systems researchers who might
-                    shed light onrelated phenotypes, assays, or models.
-                </div>
-            </div>
-            <div class="clear"></div>
-            <div class="section">
-                <div class="sectiontitle">About the System</div>
-                <div class="text">
-                    The Monarch system is built based upon the foundation of the
-                    <a href="http://neuinfo.org/">Neuroscience Information Framework (NIF)</a>. NIF's large scale
-                    data ingest system, DISCO, enables the aggregation, provenance, and
-                    currency of hundreds of external resources. The Monarch Initiative is
-                    performing sophisticated curation and mapping of many of these resources
-                    to an integrated suite of ontologies for
-                    <a href="https://code.google.com/p/phenotype-ontologies/">phenotypes and diseases</a>,
-                    genotypes, and <a href="http://www.obofoundry.org/wiki/index.php/UBERON:Main_Page">anatomy</a>.
-                    The ontology services are provided by NIF Ontoquest. The OWLsim algorithmic
-                    tools enable the comparison of sets of entities across the corpus.
-                    Visualization tools to explore this semantic landscape are being developed
-                    by the University of Pittsburgh Human computer interactions team.
-                    See documentation for more information.
-                </div>
-            </div>
-            <div class="clear"></div>
-            <div class="section">
-                <div id="navigating">
-                    <div class="sectiontitle">Navigating</div>
-                    <div class="category text">1. Search Bar</div>
-                    <div class="text">
-                        You can use the search box in the upper right to find things of
-                        interest - information on disease, phenotypes, genes, and more. For
-                        example, you can search the term <a href="/search/angelman">Angelman</a>.
+				<div class="panel-group" id="accordion">
+					<div class="panel panel-default" id="goals" href="#goals">
+						<div class="panel-heading">
+							<h4 class="panel-title">
+								<a data-toggle="collapse" data-target="#goal-content" href="#goal-content" class="accordion-toggle" >Goals</a>
+							</h4>
+						</div>
+					    <div id="goal-content" class="panel-collapse collapse in">
+							<div class="panel-body">
+								<img id="monarch-logo-stacked" src="/image/logo-stacked.jpg" align="right" height="200px"/>
+								<ul>
+									<li>Integrate, align, and re-distribute cross-species gene,
+										genotype, variant, disease, and phenotype data
+				                    </li>
+									<li>Provide a portal for exploration of phenotype-based similarity
+									</li>
+									<li>Facilitate identification of animal models of human disease
+									through phenotypic similarity
+									</li>
+									<li>Enable quantitative comparison of cross-species phenotypes
+									</li>
+									<li>Develop embeddable widgets for data exploration
+									</li>
+									<li>Influence genotype and phenotype reporting standards
+									</li>
+									<li>Improve ontologies to better curate genotype-phenotype data
+									</li>
+								</ul>
+								<br />
+								<p>
+		                        Our philosophy is based on the premise that we want to <i>make all the data count</i>.
+				                Monarch isn’t just another database that slurps data from the typical
+						        places and renders it in a different format.  We are driven to
+								truly <i>integrate</i> biological information using semantics, and present it
+								in a novel way, leveraging phenotypes to bridge the knowledge gap.
+		                        Our niche is the use of computational reasoning to enable phenotype
+				                comparison both within and across species, with the ultimate goal of
+						        improving biomedical research.
+								</p>
+							</div> <!--panel-body-->
+						</div> <!--panel-collapse-->
+					</div><!--panel goals-->
+				</div> <!--panel-group accordion -->
+				<!-- end goal panel -->
+
+                <div class="panel-group" id="accordion">
+                    <div class="panel panel-default" id="background">
+                        <div class="panel-heading" href="#background">
+                            <h4 class="panel-title">
+                                <a data-toggle="collapse" data-target="#background-content" href="#background-content" class="accordion-toggle">Background</a>
+                            </h4>
+                        </div>
+                        <div id="background-content" class="panel-collapse collapse in">
+                            <div class="panel-body">                                
+								<p>
+								It is well-known that mutations in orthologous genes and genes in the same 
+								signaling pathway often manifest in similar phenotypes, and therefore study 
+								of variant phenotypes in model systems may provide insight into human gene 
+								function and understanding of disease.  For example, mutations in 
+								<a href="/gene/NCBIGene:5080">PAX6</a>, which gives rise to the condition 
+								<a haref="/disease/OMIM:106210">Aniridia</a> with striking eye phenotypes, 
+								also cause eye phenotypic abnormalities in mouse, zebrafish, and flies, 
+								including <a href="/phenotype/HP_0000517">abnormal lenses</a>, 
+								<a href="/phenotype/MP_0001286">underdeveloped</a> or even <a href="/phenotype/MP_0001293">
+								absent eyes</a>.
+								</p>
+								<figure class="right">
+									<img src="http://www.plosbiology.org/article/fetchObject.action?uri=info:doi/10.1371/journal.pbio.1000247.g001&representation=PNG_M" style="max-height:300px"/>
+									<figcaption >
+										Fig 1. Comparison of PAX6 abnormal phenotypes in human and model organism eyes.
+										(Image from <a href="http://www.plosbiology.org/article/info%3Adoi%2F10.1371%2Fjournal.pbio.1000247">Washington et al, 2009</a>)
+									</figcaption>
+								</figure>
+								<p>
+								Traditionally, basic researchers and clinical geneticists have searched
+								for and integrated this knowledge manually. However, with the rapid rise in
+								output of genomic sequencing technologies and high-throughput phenotyping
+								efforts, manual identification, integration, and evaluation of relevant
+								phenotype data will quickly become intractable.  Even with the rise of
+								biomedical and model organism databases, relevant data is often difficult
+								to find because it remains in disconnected information silos.  Even when
+								it is found, such data might be difficult to interpret, requiring domain
+								knowledge of each species’ genetics, development, and even the specialized
+								vocabulary used to describe anatomy, phenotype, and genotype.  Furthermore,
+								each organism is best suited for study of different biological phenomena,
+								meaning an integrated view over all organisms is best for seeing relevance
+								to human disease. However, unlike sequence comparison, there is a deficiency
+								of tools that enable quantitative comparison and evaluation of qualitative
+								data for cross-species phenotypes in a centralized location. The Monarch
+								Initiative has set out to fill this need.
+								</p>
+								<p>
+								Starting in 2009, we published several proof-of-concept experiments that
+								described how phenotypes captured with semantic descriptions (ontologies),
+								together with anatomical mappings between organisms, would provide the means
+								to enable comparison of phenotypes across species, even when the genetic basis
+								for those phenotypes was unknown (<a href="http://www.plosbiology.org/article/info%3Adoi%2F10.1371%2Fjournal.pbio.1000247">Washington et al, 2009</a>).
+								Furthermore, initial work on the <a href="http://human-phenotype-onotology.org">Human Phenotype Ontology</a> demonstrated
+								that similar methods could be employed to assist with differential diagnosis
+								in order to identify the best candidate disease to explain a patient’s clinical
+								features (<a href="http://www.sciencedirect.com/science/article/pii/S0002929709003991">Kohler et al 2009</a>).
+								</p>
+								<figure class="left">
+									<img src="http://genome.cshlp.org/content/24/2/340/F2.medium.gif" height="400" />
+									<figcaption>
+									Fig 2. Phenotypes in human patients and animal models can be computationally
+									compared and evaluated despite being recorded using different vocabularies.
+									These types of comparisons can aid identification of causitive
+									variants during exome analysis, even when human mutations may not
+									have been previously identified. Here, we demonstrate the phenotypes
+									in common between <a href="/disease/OMIM:101600">Pfeiffer Syndrome</a> and
+									mouse model <a href="/genotype/MGI:3053578">CD1.Cg-Fgfr2(tm4Lni)/H </a>.
+									(Image from <a href="http://genome.cshlp.org/content/24/2/340.short">Robinson et al, 2014</a>.)
+									</figcaption>
+								</figure>
+								<p>
+								Today, these same methods are getting used in the clinic, for aiding
+								diagnosis of both known and unknown diseases.  <a href="http://compbio.charite.de/PhenIX/">PhenIX</a>
+								is an exome analysis tool, that utilizes phenotypic similarity of diseases
+								associated with the genes harboring candidate variants to the phenotypic
+								profile of the individual being investigated.  It is actively being used
+								in the clinic to help solve difficult-to-diagnose cases (<a href="http://stm.sciencemag.org/content/6/252/252ra123.abstract">Zemojtel et al 2014</a>).
+								<a href="http://www.sanger.ac.uk/resources/databases/exomiser/">Exomiser</a>
+								utilizes both human and model organism data as well as interactome data to
+								assist prioritization of candidate variants for the extremely rare disease
+								cases of the NIH Intermural Undiagnosed Disease Program.  The same data
+								and methods that underlie PhenIX and Exomiser are available in the Monarch
+								Initiative for your investigation.
+								</p>
+								<p>
+								Model systems are the cornerstone of biomedical research for understanding of
+								biological processes, testing gene-based disease hypotheses, and developing
+								and testing disease treatments.  With the Monarch Initiative, we are providing
+								new tools for the biomedical researcher’s toolbox to explore the landscape of
+								interrelated phenotype data, evaluate qualitative similarities, and generate
+								novel hypotheses within and between species.
+								</p>
+
+								</div> <!--panel-body-->
+                        </div> <!--panel-collapse-->
+                    </div><!--panel goals-->
+                </div> <!--panel-group accordion -->
+				<!-- end background panel -->
+
+                <div class="panel-group" id="accordion">
+                    <div class="panel panel-default" id="dataflow">
+                        <div class="panel-heading" href="#dataflow">
+                            <h4 class="panel-title">
+                                <a data-toggle="collapse" data-target="#data-flow-content" href="#data-flow-content" class="accordion-toggle">The Monarch Data Flow</a>
+                            </h4>
+                        </div>
+                        <div id="data-flow-content" class="panel-collapse collapse in">
+                            <div class="panel-body">
+								<div class="text">
+									<h5>Data Sources</h5>
+									<p>
+									As with most biomedical databases, the first step is to identify relevant data 
+									from the research community.  The Monarch Initiative is focused primarily on 
+									phenotype-related resources.  We bring in data associated with those phenotypes 
+									so that our users can begin to make connections among other biological entities of 
+									interest, such as:</p>
+									<ul>
+										<li>genes</li>
+										<li>genotypes</li>
+										<li>gene variants (including SNPs, SNVs, QTLs, CNVs, and other rearrangements big and small)</li>
+										<li>models (including cell lines, animal strains, species, breeds, as well as targeted mutants)</li>
+										<li>pathways</li>
+										<li>orthologs</li>
+										<li>phenotypes</li>
+										<li>publications</li>
+									</ul>
+								</div>
+								<div class="text">
+								<h5>Data modeling, transformation, and curation</h5>
+							<p>
+							We import data from a variety of data sources in formats including databases, 
+							spreadsheets, delimited text files, XML, JSON, and Web APIs, on a monthly schedule, 
+							which is placed into a Postgres database (hosted by the <a href="http://neuinfo.org">NIF</a>).  
+							Our curation team semantically maps each 
+							resource into our data model, primarily using ontologies.  This involves both typing 
+							relevant columns, mappings between columns (such as between identifier and labels, but 
+							also more complex associations, such as between a genotype-phenotype association and 
+							the publication it was mentioned in), and value-level mapping. Because our focus is 
+							on genotype-phenotype data, we focus our efforts on ensuring that each resources’ 
+							variants, genes, genotypes, strains, and phenotypes are well-typed using ontologies 
+							and standardized identifiers.  Internally, we map all genes to 
+							<a href="http://www.ncbi.nlm.nih.gov/gene/">NCBI gene</a> identifiers, 
+							diseases to the <a href="http://www.diseaseontology.org">Disease Ontology</a>, and 
+							phenotypes into our unified phenotype ontology, <a href="https://code.google.com/p/phenotype-ontologies/wiki/CrossSpeciesPhenotypeOntology">Uberpheno</a>.  
+							With many resources integrated into a single database, we can join 
+							across the various data sources to produce integrated views.  We have started with 
+							the big players including ClinVar and OMIM, but are equally interested in boutique 
+							databases (which you will see more of in the coming months).  You can learn more 
+							about the sources of data that populate our system from our <a href="/sources">sources</a> page.
+							</p>
+							<figure class="center">
+								<img src="/image/ingest_curation_workflow.png" width="75%" style="max-width:750px"/> 
+								<figcaption class="center">
+									Fig 3.  The Monarch Initiative data workflow.
+								</figcaption>
+							</figure>
+							<p>
+								Once curated, we generate views and semantically index them into a Solr instance, 
+								and the data is served via REST services through NIF.  That way when a user is 
+								interested in exploring <a href="http://monarchinitiative.org/Phenotype/HP_0000598">abnormalities of the ear</a>,
+								a single query can retrieve all relevant data from the system.  
+								Our web application wraps <a href="http://nif-services.neuinfo.org/servicesv1/">NIF’s REST services</a>.  
+							</p>
+							<p>
+							Since all of our data is curated using ontologies, we are currently exploring the 
+							use of a graph database (based on Neo4j) to serve up all our data and ontologies.  
+							This will have the side benefit of providing the community our semantically mapped data in RDF. 
+							</p>
+						</div>
+						<div class="text">
+							<h5>Ontologies</h5>
+							<p>
+							For the Monarch system to work, we rely on and contribute to 
+							community-developed ontologies to describe the biological entities in the 
+							system, including:</p>
+							<ul> 
+								<li><b>Anatomy:</b>
+									We utilize a variety of species specific anatomy ontologies, for example 
+									the Zebrafish Anatomy ontology, which are all integrated in the context 
+									of the multi-species anatomy ontology <a href="http://uberon.org">Uberon</a>, 
+									which covers metazoans. We are 
+									working toward interoperating with other species as well (yeast, etc.)
+								</li>
+								<li><b>Disease:</b> 
+									We use an aggregated suite of disease definitions from many sources, 
+									integrating disease definitions from Online Mendelian Inheritance in Man (OMIM), 
+									Orphanet, ClinVar, Decipher, and from the Disease Ontology.  Mappings between 
+									these different vocabularies originate from those extracted from the above groups, 
+									as well as MeSH. 
+								</li>
+								<li><b>Phenotype:</b> 
+									We actively contribute to the development of the Mammalian Phenotype and Human Phenotype 
+									ontologies (MP and HPO). We have created an integrated phenotype ontology, as 
+									described in <a href="http://f1000research.com/articles/2-30/v2">Kohler et al (2014)</a> 
+									that leverages the logic implemented in MP and HPO to support phenotype 
+									comparisons across species.
+								</li>
+								<li><b>Everything else:</b>
+									Many of the above ontologies have logical definitions based on other ontologies, 
+									including the CL, GO, ChEBI, SO, .... (For example, ‘Abetalipoproteinemia’ which is 
+									defined as blood lacking CHEBI:low density lipoprotein) We are also developing a 
+									genotype ontology to support linking phenotypes to different components of the genotype.
+								</li>
+							</ul>
+							<p>
+								These ontologies are merged into monarch.owl, and used to drive the system.
+							</p>
+						</div>
+						<div class="text">
+							<h5>Semantic Similarity</h5>
+							<p>
+							Once data has been ingested and transformed as above, it is ready for loading into 
+							our semantic similarity engine.  <a href="http://www.owlsim.org">OWLSim</a> enables search, 
+							comparison, and analysis of semantic annotations between entities (genes, 
+							genotypes, diseases, etc.), leveraging ontologies and computational reasoners.  
+							In the case of Monarch, we currently utilize OWLSim for analysis of collections 
+							of abnormal phenotypes attributed to genes, genotypes, variants, and diseases.  
+							OWLSim is what computes the similarity values in the phenogrid, annotation 
+							sufficiency scores for each entity, and provides the engine behind the 
+							<a href="http://monarchinitiative.org/analyze/phenotypes/">Analyze</a> and Compare functions.  
+							The scores are based on a hybrid model of information content (IC) and Jaccard, 
+							further described in <a href="http://database.oxfordjournals.org/content/2013/bat025.long">Smedley et al (2013)</a>.  
+							We are currently working on new algorithms that will allow consideration of both 
+							abnormal and remarkably normal (NOT abnormal) phenotypes when searching and 
+							comparing collections of phenotypes.
+							</p>
+						</div>
+						<div class="text">
+                           <figure class="bottomright" href="#fig4">
+                                <img src="/image/pheno_species_coverage.jpg" height="200px">
+                                <figcaption>
+                                    Fig 4.  Availability of curated phenotypes (black) attributed to human
+                                    genes (direct or inferred via orthology) across a range of  model
+                                    organisms (Hs, Homo sapiens; Mm, Mus musculus; Rn, Rattus norvegius;
+                                    Dr, Danio rerio; Ce, Ceanorabditis elegans).  Merge shows the
+                                    overall representation of phenotypes to unique human genes, where
+                                    at least one organism contriubtes phenotypes.  Model organisms
+                                    may account for at least half of the overall phenotypic knowledge
+                                    to understand human gene function. (Data as of March 2014.)
+                                </figcaption>
+                            </figure>
+
+							<h5>Analysis</h5>
+							<p>
+							Given the integrated data sources, and their semantic mappings, we can start to do 
+							broad analysis of the data landscape.  For example, we have found that while &lt;40% 
+							of human genes have been linked to phenotypes either directly, via GWAS studies, 
+							or inferred through disease associations, there is &gt;75% coverage (via orthology) 
+							when you expand to the five most-typically studied model organisms (<a href="#fig4">Fig 4</a>).  As we expand our 
+							database to include other organisms, this is sure to rise.
+							</p>
+							<p>
+							We can also confirm what we have known for a long time, which is that different 
+							model organisms are used to study different areas of biology.  
+							</p>
+							</div>
+                            </div> <!--panel-body-->
+                        </div> <!--panel-collapse-->
+                    </div><!--panel -->
+                </div> <!--panel-group accordion -->
+				<!-- end monarch data flow panel -->
+
+                <div class="panel-group" id="accordion">
+                    <div class="panel panel-default" id="partners">
+                        <div class="panel-heading" href="#partners">
+                            <h4 class="panel-title">
+                                <a data-toggle="collapse" data-target="#partner-text" href="#partner-text" class="accordion-toggle">Collaborations and Partners</a>
+                            </h4>
+                        </div>
+                        <div id="partner-text" class="panel-collapse collapse in">
+                            <div class="panel-body">
+								<p>
+								We are proud to work with several organizations to develop ontologies, 
+								drive community standards, research rare disease, and influence publishers 
+								and the research community to make research results more identifiable and 
+								reproducible, including:  
+								</p>
+								<table class="collab-table">
+									<tr>
+										<td><a href="http://www.rarediseases.info.nih.gov/research/pages/27/undiagnosed-diseases-program"><img src="/image/partner-udp.png" alt="NIH Undiagnosed Disease Program"></a></td>
+										<td><a href="http://genomicsandhealth.org/"><img src="/image/partner-globalalliance.jpg" alt="Global Alliance"></a></td>
+										<td><a href="http://www.irdirc.org/"><img src="/image/partner-irdirc.png" alt="International Rare Diseases Research Consoritum"></a></td>
+										<td><a href="http://phenomecentral.org"><img src="/image/partner-phenomecentral.png" alt="Phenome Central"></a></td>
+										<td><a href="http://bio-lark.org/"><img src="/image/partner-biolark.png" alt="BioLARK"></a></td>
+									</tr>
+                                   <tr>
+                                        <td><a href="http://www.geneontology.org"><img src="/image/partner-go.png" alt="Gene Ontology"></a></td>
+                                        <td><a href="http://www.disease-ontology.org"><img src="/image/partner-do.png" alt="Disease Ontology"></a></td>
+                                        <td><a href="http://www.neuinfo.org"><img src="/image/partner-nif.png" alt="Neuroscience Information Framework"></a></td>
+                                        <td><a href="http://scicrunch.com/resources"><img src="/image/partner-rii.png" alt="Resource Identification Initiative"></a></td>
+                                        <td><a href="https://www.force11.org"><img src="/image/partner-force11.png" alt="Force11"></a></td>
+                                    </tr>
+								</table>
+                            </div> <!--panel-body-->
+                        </div> <!--panel-collapse-->
+                    </div><!--panel -->
+                </div> <!--panel-group accordion -->
+
+<!--  template for collapsable panels
+                <div class="panel-group" id="accordion">
+                    <div class="panel panel-default" id="template">
+                        <div class="panel-heading">
+                            <h4 class="panel-title">
+                                <a data-toggle="collapse" data-target="#template" href="#template" class="collapsed">Template</a>
+                            </h4>
+                        </div>
+                        <div id="template" class="panel-collapse collapse">
+                            <div class="panel-body">
+                            </div>
+                        </div>
                     </div>
-                    <div class="category text">2. Browse Tab</div>
-                    <div class="text">
-                        The browse tab at the navigation bar at the top of the page allows you
-                        to access the <a href="/disease">disease</a>, <a href="/gene">gene</a>,
-                        <a href="/model">models</a>, and <a href="/phenotype">phenotypes</a> overview pages.
-                        These pages provide access to a set of highlighted content, that provide
-                        an example entry into the system.
-                    </div>
-                    <div class="category text">3. Analyze Tab</div>
-                    <div class="text">
-                        This tab links to two types of tools, the <a href="/analyze/phenotypes/">Phenotype Comparison</a> tool,
-                        which allows comparison of a set of phenotypes against all other profiles
-                        in the system; and the <a href="/page/exomes/">Exomes tab</a>, which provides information about tools
-                        that leverage these semantic technologies in combination with exome analysis.
-                    </div>
-                    <div class="category text">4. Documentation Tab</div>
-                    <div class="text">
-                        Here we provide access to developing documentation about our our <a href="/page/software">software</a>,
-                        <a href="/page/services">RESTful API</a>, <a href="/docs/files/api-js.html">JavaScript API</a>,
-                        our <a href="https://github.com/monarch-initiative/monarch-app">GitHub</a> application project and tracker,
-                        our <a href="https://code.google.com/p/phenotype-ontologies/">ontology projects</a>,
-                        <a href="/page/pubs">publications</a>, and a <a href="/page/glossary">glossary</a>.
-                    </div>
                 </div>
-            </div>
-            <div class="clear"></div>
-            <div class="section">
-                <div id="teamfunding">
-                    <div class="sectiontitle">Team &amp; Funding</div>
-                    <div class="text">
-                        The Monarch Initiative is a collaboration between Oregon Health &amp;
-                        Sciences University (OHSU), University of California, San Diego (UCSD),
-                        Lawrence Berkeley National Laboratory (LBNL), the University of
-                        Pittsburgh (UPitt), Sanger, and Charité and is supported generously by a
-                        NIH Office of the Director Grant #5R24OD011883.
-                    </div>
-                    <div class="text">
-                        Read more about the Monarch development team
-                        <a href="/page/team">here</a>.
-                    </div>
-                </div>
-            </div>
-            <div class="clear"></div>
+
+-->
             </div> <!-- closes wrapperforfooter -->
-            {{{includes.footer}}}
         </div>
     </div>
 </body>
