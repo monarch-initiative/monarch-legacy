@@ -1,7 +1,7 @@
 view: nlx_151835-1
 status: alpha
 graph: omim-disease-phenotype
-mapVersion: 2014-10-03
+mapVersion: 2014-10-07
 prefixUnmappable: http://monarchinitiative.org/unmapped/
 prefixes:
   ## TODO: FIX
