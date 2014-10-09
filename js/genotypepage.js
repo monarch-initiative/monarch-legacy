@@ -4,6 +4,7 @@ $(function () {
     var slash_idx = id.indexOf('/');
     id = id.substring(slash_idx+1);
     var phenotype_list = [];
+    var species;
     console.log("genotype page ...id is..."+id);
     
     jQuery.ajax({ 
@@ -19,8 +20,14 @@ $(function () {
 					phenotype_list.push(pheno);
 				}
 			}
+	            // get the species
+	           // from the first phenotype_associations
+	          // grab the has_genotype.taxon.label
+	         try {
+		     species = data.phenotype_associations[0].has_genotype.taxon.label;
+		 } catch(e) {
+		 }
 		}
     });
-
-    $("#phen_vis").phenogrid({phenotypeData: phenotype_list, refSpecies: "Mus musculus"});
+    $("#phen_vis").phenogrid({phenotypeData: phenotype_list, refSpecies: species});
 });        
