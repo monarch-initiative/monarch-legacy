@@ -16,7 +16,7 @@
 }
 
 .graph{
-	padding-top:20px;
+    padding-top:20px;
 }
 
 .graph-container{
@@ -43,6 +43,14 @@
     border-width:1px;
 }
 .pheno-geno-container{
+    position: relative;
+    width: 826px;
+    float:left;
+    border-style:solid;
+    border-top:none;
+    border-width:1px;
+}
+.pheno-gene-container{
     position: relative;
     width: 826px;
     float:left;

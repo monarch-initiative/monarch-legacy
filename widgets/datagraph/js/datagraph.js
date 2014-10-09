@@ -86,7 +86,7 @@ var datagraph = {
   
   //Check browser
   isOpera : (!!window.opera || navigator.userAgent.indexOf(' OPR/') >= 0),
-  isChrome : (!!window.chrome && (!!window.opera || navigator.userAgent.indexOf(' OPR/') >= 0)),
+  isChrome : (!!window.chrome && !(!!window.opera || navigator.userAgent.indexOf(' OPR/') >= 0)),
   
   init : function (html_div,DATA){
       
@@ -224,8 +224,8 @@ var datagraph = {
         }
         
         if (groups.length == 1){
-        	config.barOffset.grouped.height = config.barOffset.grouped.height+8;
-        	config.barOffset.stacked.height = config.barOffset.stacked.height+8;
+            config.barOffset.grouped.height = config.barOffset.grouped.height+8;
+            config.barOffset.stacked.height = config.barOffset.stacked.height+8;
         }
         
         var parents = [];
@@ -614,12 +614,12 @@ var datagraph = {
                 
                 d3.select(html_div).select(".text"+lastIndex)
                   .on("mouseover", function(){
-                	  d3.select(this.parentNode)
+                      d3.select(this.parentNode)
                        .select("polygon")
                        .attr("fill", config.color.crumb.hover);
                   })
                   .on("mouseout", function(){
-                	  d3.select(this.parentNode)
+                      d3.select(this.parentNode)
                        .select("polygon")
                        .attr("fill", config.color.crumb.bottom);
                   })
@@ -906,7 +906,7 @@ var datagraph = {
                     .selectAll("text")
                     .attr("dx","0")
                     .on("mouseover", function(d){
-                    	   d3.select(this).style("cursor", "pointer");
+                           d3.select(this).style("cursor", "pointer");
                            d3.select(this).style("fill",config.color.yLabel.hover);
                            d3.select(this).style("text-decoration", "underline");                       
                      });

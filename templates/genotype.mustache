@@ -11,7 +11,7 @@
                             href="mailto:info@monarchinitiative.org">Your feedback welcome!</a>
                     <p>
                         Organism: {{{taxon_xref}}} <br/>
-						Source: {{{primary_xref}}}
+                        Source: {{{primary_xref}}}
                     </p>
                 </div>
                 <div id="categories">
@@ -26,8 +26,13 @@
                         {{/hasPhenotypes}}
                     </div>
                     <div class="tabcontainer">
-                        <div class="tabhover">View phenotypically similar diseases and genes in a grid</div>
-                            <a href="#compare"><div class="tab contenttab">Compare</div></a>
+                        <div class="tabhover">View phenotypically  similar diseases and genes in a grid</div>
+ 			{{#hasPhenotypes}}
+                           <a href="#compare"><div class="tab contenttab">Compare</div></a>
+				{{/hasPhenotypes}}
+                        {{^hasPhenotypes}}
+                            <div class="tab greyed-out">Compare</div>
+                        {{/hasPhenotypes}}
                     </div>
                     <div class="tabcontainer">
                         <div class="tabhover">View citations for the data on this page</div>
@@ -42,7 +47,7 @@
             </div>
             <div id="complete-info">
                 <div id="overview" class="first category">
-					{{{overview}}}
+                    {{{overview}}}
                 </div>
                 {{#hasPhenotypes}}
                 <div id="phenotypes" class="category">
@@ -78,11 +83,11 @@
                 </div>
                 {{/hasGenes}}
 
-				{{#hasPhenotypes}}
+                {{#hasPhenotypes}}
                 <div id="compare" class="category">
                     <div id="phen_vis"></div>
                 </div>
-				{{/hasPhenotypes}}
+                {{/hasPhenotypes}}
                 {{#hasSim}}
                 <div id="similarity" class="category">
                     <table class="{{css.table}}">
