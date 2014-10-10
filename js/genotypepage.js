@@ -5,29 +5,15 @@ $(function () {
     id = id.substring(slash_idx+1);
     var phenotype_list = [];
     var species;
-    console.log("genotype page ...id is..."+id);
     
     jQuery.ajax({ 
-		url : '/' + id + '/phenotype_associations.json', 
-		async : false, 
-		dataType : 'json', 
+		url : '/' + id + '/phenotype_list.json', 
+	async : false,
+	dataType : 'json', 
 	success : function(data) {
-		    for (var idx=0;idx<data.phenotype_associations.length;idx++) {
-				var assoc = data.phenotype_associations[idx];
-				if (typeof assoc.has_phenotype != 'undefined' && typeof assoc.has_phenotype.type != 'undefined') {
-					pheno = assoc.has_phenotype.type;
-					pheno.observed = "positive";
-					phenotype_list.push(pheno);
-				}
-			}
-	            // get the species
-	           // from the first phenotype_associations
-	          // grab the has_genotype.taxon.label
-	         try {
-		     species = data.phenotype_associations[0].has_genotype.taxon.label;
-		 } catch(e) {
-		 }
-		}
+	    phenotype_list = data.phenotype_list.phenotype_list;
+	    species = data.phenotype_list.species;
+	}
     });
     $("#phen_vis").phenogrid({phenotypeData: phenotype_list, refSpecies: species});
 });        
