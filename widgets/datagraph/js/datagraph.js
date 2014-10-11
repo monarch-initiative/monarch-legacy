@@ -86,7 +86,7 @@ var datagraph = {
   
   //Check browser
   isOpera : (!!window.opera || navigator.userAgent.indexOf(' OPR/') >= 0),
-  isChrome : (!!window.chrome && (!!window.opera || navigator.userAgent.indexOf(' OPR/') >= 0)),
+  isChrome : (!!window.chrome && !(!!window.opera || navigator.userAgent.indexOf(' OPR/') >= 0)),
   
   init : function (html_div,DATA){
       

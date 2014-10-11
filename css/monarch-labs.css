@@ -50,6 +50,14 @@
     border-top:none;
     border-width:1px;
 }
+.pheno-gene-container{
+    position: relative;
+    width: 826px;
+    float:left;
+    border-style:solid;
+    border-top:none;
+    border-width:1px;
+}
 
 
 /*
