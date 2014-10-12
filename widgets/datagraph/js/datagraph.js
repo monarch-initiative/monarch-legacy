@@ -763,7 +763,6 @@ var datagraph = {
             
             var groups = getGroups(subGraph);
             subGraph = config.getStackedStats(subGraph,groups);
-            subGraph = config.removeZeroCounts(subGraph);
             var rect;
             if (parent){
                 parents.push(parent);
