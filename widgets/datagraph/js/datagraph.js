@@ -119,7 +119,7 @@ var datagraph = {
   getStackedStats : function(data,groups){
       //Add x0,x1 values for stacked barchart
       data.forEach(function (r){
-           var count = 0;
+          var count = 0;
           r.counts.forEach(function (i){
                i["x0"] = count;
                i["x1"] = i.value+count;
@@ -137,6 +137,21 @@ var datagraph = {
           }
       });
       return data;
+  },
+  
+  //remove zero length bars
+  removeZeroCounts : function(data){
+      trimmedGraph = [];
+      data.forEach(function (r){
+          var count = 0;
+          r.counts.forEach(function (i){
+               count += i.value;
+           });
+          if (count > 0){
+              trimmedGraph.push(r);
+          }
+      });
+      return trimmedGraph;
   },
   
   init : function (html_div,DATA){
@@ -748,6 +763,7 @@ var datagraph = {
             
             var groups = getGroups(subGraph);
             subGraph = config.getStackedStats(subGraph,groups);
+            subGraph = config.removeZeroCounts(subGraph);
             var rect;
             if (parent){
                 parents.push(parent);
