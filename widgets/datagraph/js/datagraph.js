@@ -88,6 +88,72 @@ var datagraph = {
   isOpera : (!!window.opera || navigator.userAgent.indexOf(' OPR/') >= 0),
   isChrome : (!!window.chrome && !(!!window.opera || navigator.userAgent.indexOf(' OPR/') >= 0)),
   
+  //set X Axis limit for grouped configuration
+  getGroupMax : function(data){
+      return d3.max(data, function(d) { 
+          return d3.max(d.counts, function(d) { return d.value; });
+      });
+  },
+  //set X Axis limit for stacked configuration
+  getStackMax : function(data){
+      return d3.max(data, function(d) { 
+          return d3.max(d.counts, function(d) { return d.x1; });
+      }); 
+  },
+  //get largest Y axis label for font resizing
+  getYMax : function(data){
+      return d3.max(data, function(d) { 
+          return d.label.length;
+      });
+  },
+  
+  checkForSubGraphs : function(data){
+      for (i = 0;i < data.length; i++) {
+          if (Object.keys(data[i]).indexOf('subGraph') >= 0) {
+              return true;
+          } 
+     }
+     return false;
+  },
+  
+  getStackedStats : function(data,groups){
+      //Add x0,x1 values for stacked barchart
+      data.forEach(function (r){
+          var count = 0;
+          r.counts.forEach(function (i){
+               i["x0"] = count;
+               i["x1"] = i.value+count;
+               if (i.value > 0){
+                   count = i.value;
+               }
+           });
+      });
+      var lastElement = groups.length-1;
+      data.sort(function(obj1, obj2) {
+          if ((obj2.counts[lastElement])&&(obj1.counts[lastElement])){
+              return obj2.counts[lastElement].x1 - obj1.counts[lastElement].x1;
+          } else {
+              return 0;
+          }
+      });
+      return data;
+  },
+  
+  //remove zero length bars
+  removeZeroCounts : function(data){
+      trimmedGraph = [];
+      data.forEach(function (r){
+          var count = 0;
+          r.counts.forEach(function (i){
+               count += i.value;
+           });
+          if (count > 0){
+              trimmedGraph.push(r);
+          }
+      });
+      return trimmedGraph;
+  },
+  
   init : function (html_div,DATA){
       
     var conf = this;
@@ -141,63 +207,12 @@ var datagraph = {
     var tooltip = d3.select(html_div)
         .append("div")
         .attr("class", "tip");
-    
-    //set X Axis limit for grouped configuration
-    function getGroupMax(data){
-        return d3.max(data, function(d) { 
-            return d3.max(d.counts, function(d) { return d.value; });
-        });
-    }
-    //set X Axis limit for stacked configuration
-    function getStackMax(data){
-        return d3.max(data, function(d) { 
-            return d3.max(d.counts, function(d) { return d.x1; });
-        });
-    }
-    //get largest Y axis label for font resizing
-    function getYMax(data){
-        return d3.max(data, function(d) { 
-            return d.label.length;
-        });
-    }
-    
-    function checkForSubGraphs(data){
-        for (i = 0;i < data.length; i++) {
-             if (Object.keys(data[i]).indexOf('subGraph') >= 0) {
-                 return true;
-             } 
-        }
-        return false;
-    }
-    
-    function getStackedStats(data,groups){
-        //Add x0,x1 values for stacked barchart
-        data.forEach(function (r){
-             var count = 0;
-            r.counts.forEach(function (i){
-                 i["x0"] = count;
-                 i["x1"] = i.value+count;
-                 if (i.value > 0){
-                     count = i.value;
-                 }
-             });
-        });
-        var lastElement = groups.length-1;
-        data.sort(function(obj1, obj2) {
-            if ((obj2.counts[lastElement])&&(obj1.counts[lastElement])){
-                return obj2.counts[lastElement].x1 - obj1.counts[lastElement].x1;
-            } else {
-                return 0;
-            }
-        });
-        return data;
-    }
-    
+
     function drawGraph (config,data) {
 
         var groups = getGroups(data);
-        data = getStackedStats(data,groups);
-        config.useCrumb = checkForSubGraphs(data);
+        data = config.getStackedStats(data,groups);
+        config.useCrumb = config.checkForSubGraphs(data);
         
         //remove breadcrumb div
         if (!config.useCrumb){
@@ -234,9 +249,9 @@ var datagraph = {
         y0.domain(data.map(function(d) { return d.label; }));
         y1.domain(groups).rangeRoundBands([0, y0.rangeBand()]);
         
-        var xGroupMax = getGroupMax(data);
-        var xStackMax = getStackMax(data);
-        var yMax = getYMax(data);
+        var xGroupMax = config.getGroupMax(data);
+        var xStackMax = config.getStackMax(data);
+        var yMax = config.getYMax(data);
         
         x.domain([0, xGroupMax]);
         
@@ -747,7 +762,7 @@ var datagraph = {
         function transitionSubGraph(subGraph,parent) {
             
             var groups = getGroups(subGraph);
-            subGraph = getStackedStats(subGraph,groups);
+            subGraph = config.getStackedStats(subGraph,groups);
             var rect;
             if (parent){
                 parents.push(parent);
@@ -765,9 +780,9 @@ var datagraph = {
             y0.domain(subGraph.map(function(d) { return d.label; }));
             y1.domain(groups).rangeRoundBands([0, y0.rangeBand()]);
             
-            var xGroupMax = getGroupMax(subGraph);
-            var xStackMax = getStackMax(subGraph);
-            var yMax = getYMax(subGraph);
+            var xGroupMax = config.getGroupMax(subGraph);
+            var xStackMax = config.getStackMax(subGraph);
+            var yMax = config.getYMax(subGraph);
             
             //Dynamically decrease font size for large labels
             var confList = getYFontSize(yMax);
