@@ -104,6 +104,17 @@ function AnalyzeInit(){
     var search_set = {};
     var delete2val = {};
 
+
+//added CDB to extract query parameters
+    var curr_phenotypes = jQuery.cookie();
+    var phenoKeys = Object.keys(curr_phenotypes);
+    for (var iqp = 0;iqp < phenoKeys.length;iqp++) {
+        var pheno = curr_phenotypes[phenoKeys[iqp]];
+        search_set[phenoKeys[iqp]] = pheno;
+    }
+    
+    redraw_form_list();
+
     function update_form_value(){
 	jQuery(analyze_auto_target_elt).val('');
 	var vals = get_keys(search_set);
@@ -157,6 +168,9 @@ function AnalyzeInit(){
 	// Delete the item.
 	delete search_set[id];
 
+    // cdb Remove item from the cookie
+    jQuery.removeCookie(id);
+
 	// Update.
 	update_form_value();
 	redraw_form_list();	
@@ -170,6 +184,9 @@ function AnalyzeInit(){
 	// Add the item.
 	search_set[id] = label;
 
+    // cdb Add item to a cookie
+    jQuery.cookie(id, label);
+    
 	// Update.
 	update_form_value();
 	redraw_form_list();
