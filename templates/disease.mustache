@@ -140,8 +140,6 @@
             <!--TODO: centralize -->
             <script>
                 $.get("/disease_phenotype/{{id}}", function (data) {
-                    console.log(data);
-//                    data = "<b>balls</b>"
                     $('#loaded_phenotype').html(data) ;
                 });
             </script>
@@ -153,8 +151,6 @@
             <div id="loaded_genes">Loading ...</div>
             <script>
                 $.get("/disease_genes/{{id}}", function (data) {
-                    console.log(data);
-//                    data = "<b>balls</b>"
                     $('#loaded_genes').html(data) ;
                 });
             </script>
@@ -175,9 +171,14 @@
         </div>
         <div id="model" class="category">
             {{#hasModels}}
-                <table class="{{css.table}}">
-                    {{{modelTable}}}
-                </table>
+                <div id="loaded_models">Loading ...</div>
+                <script>
+                    $.get("/disease_models/{{id}}", function (data) {
+                        console.log(data);
+//                    data = "<b>balls</b>"
+                        $('#loaded_models').html(data) ;
+                    });
+                </script>
             {{/hasModels}}
         </div>
     {{/hasPhenotypes}}
