@@ -159,9 +159,13 @@
     {{/hasGenes}}
     {{#hasAlleles}}
         <div id="alleles" class="category">
-            <table class="{{css.table}}">
-                {{{alleleTable}}}
-            </table>
+            <!--TODO: centralize -->
+            <div id="loaded_alleles">Loading ...</div>
+            <script>
+                $.get("/disease_alleles/{{id}}", function (data) {
+                    $('#loaded_alleles').html(data) ;
+                });
+            </script>
         </div>
     {{/hasAlleles}}
     {{#hasPhenotypes}}
