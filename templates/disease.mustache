@@ -213,9 +213,14 @@
     {{/hasPathways}}
     {{#hasLiterature}}
         <div id="literature" class="category">
-            <table class="{{css.table}}">
-                {{{literatureTable}}}
-            </table>
+            <div id="loaded_literature">Loading ...</div>
+            <script>
+                $.get("/disease_literature/{{id}}", function (data) {
+                    console.log(data);
+//                    data = "<b>balls</b>"
+                    $('#loaded_literature').html(data) ;
+                });
+            </script>
         </div>
     {{/hasLiterature}}
 </div>
