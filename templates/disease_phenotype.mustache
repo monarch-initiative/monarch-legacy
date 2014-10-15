@@ -1,0 +1,37 @@
+<!--<div id="phenotypes" class="category">-->
+
+
+<div id="annotationscore">
+    <span class="annotatetext">Annotation Sufficiency:</span>
+    <span class="stars">{{annotationScore}}</span>
+    <span class="annotatequestion">?</span>
+                            <span class="annotatehelp">
+                                The annotation score reflects how the breadth and depth of
+                                annotations for this disease compares to all of the other phenotypic
+                                profiles in our corpus. A high score means that the disease is richly
+                                annotated, both across a diverse set of phenotypic categories,
+                                as well as in the number and specificity of each of the phenotypes.
+                            </span>
+</div>
+<table class="{{css.table}}">
+    {{{phenotypeTable}}}
+</table>
+
+<script>
+
+    $(document).ready(function() {
+        $.fn.stars = function () {
+            return this.each(function (i, e) {
+                $(e).html($('<span/>').width($(e).text() * 16));
+            });
+        };
+        $('.stars').stars();
+
+        $('#annotationscore > span.annotatequestion').hover(function() {
+            $('#annotationscore > span.annotatehelp').css({'display': 'block'});
+        }, function() {
+            $('#annotationscore > span.annotatehelp').css({'display': 'none'});
+        });
+    });
+</script>
+<!--</div>-->
