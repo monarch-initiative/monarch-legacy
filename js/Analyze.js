@@ -105,7 +105,7 @@ function AnalyzeInit(){
     var delete2val = {};
 
 
-//added CDB to extract query parameters
+//added CDB to extract current phenotype list
     var curr_phenotypes = jQuery.cookie();
     var phenoKeys = Object.keys(curr_phenotypes);
     for (var iqp = 0;iqp < phenoKeys.length;iqp++) {
@@ -114,6 +114,16 @@ function AnalyzeInit(){
     }
     
     redraw_form_list();
+    
+    //add these items to the list on the "Table View" tab
+    var result_list = jQuery('#result');
+    var term_list = '';
+    var select_terms = jQuery('.list-group-item');
+    jQuery.each(select_terms, function(key, value) {
+      term_list += (value.textContent.substring(0,value.textContent.length-1) + ', ');
+    });
+    result_list.prepend('<h3>Search Terms</h3> ' + term_list.substring(0, term_list.length-2) + '<br/>');
+
 
     function update_form_value(){
 	jQuery(analyze_auto_target_elt).val('');
