@@ -137,6 +137,7 @@
         <div id="phenotypes" class="category">
             <div id="loaded_phenotype">Loading ...</div>
 
+            <!--TODO: centralize -->
             <script>
                 $.get("/disease_phenotype/{{id}}", function (data) {
                     console.log(data);
@@ -144,41 +145,20 @@
                     $('#loaded_phenotype').html(data) ;
                 });
             </script>
-            <!--<div id="annotationscore">-->
-            <!--<span class="annotatetext">Annotation Sufficiency:</span>-->
-            <!--<span class="stars">{{annotationScore}}</span>-->
-            <!--<span class="annotatequestion">?</span>-->
-            <!--<span class="annotatehelp">-->
-            <!--The annotation score reflects how the breadth and depth of-->
-            <!--annotations for this disease compares to all of the other phenotypic-->
-            <!--profiles in our corpus. A high score means that the disease is richly-->
-            <!--annotated, both across a diverse set of phenotypic categories,-->
-            <!--as well as in the number and specificity of each of the phenotypes.-->
-            <!--</span>-->
-            <!--</div>-->
-            <!--<table class="{{css.table}}">-->
-            <!--{{{phenotypeTable}}}-->
-            <!--=</table>-->
         </div>
     {{/hasPhenotypes}}
     {{#hasGenes}}
         <div id="genes" class="category">
-            {{^hasSubClasses}}
-                <table class="{{css.table}}">
-                    {{{geneTable}}}
-                </table>
-            {{/hasSubClasses}}
-            {{#hasSubClasses}}
-                <p>
-                    Genes are associated with specific subtypes of this
-                    disease. Please select a disease subtype from the
-                    list below to see the associated genes.
-                    <!-- This will be fixed with issue 140 -->
-                </p>
-                <table class="{{css.table}}">
-                    {{{subClassTable}}}
-                </table>
-            {{/hasSubClasses}}
+            <!--TODO: centralize -->
+            <div id="loaded_genes">Loading ...</div>
+            <script>
+                $.get("/disease_genes/{{id}}", function (data) {
+                    console.log(data);
+//                    data = "<b>balls</b>"
+                    $('#loaded_genes').html(data) ;
+                });
+            </script>
+
         </div>
     {{/hasGenes}}
     {{#hasAlleles}}

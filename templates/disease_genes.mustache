@@ -1,0 +1,18 @@
+<!--<div id="phenotypes" class="category">-->
+{{^hasSubClasses}}
+    <table class="{{css.table}}">
+        {{{geneTable}}}
+    </table>
+{{/hasSubClasses}}
+{{#hasSubClasses}}
+    <p>
+        Genes are associated with specific subtypes of this
+        disease. Please select a disease subtype from the
+        list below to see the associated genes.
+        <!-- This will be fixed with issue 140 -->
+    </p>
+    <table class="{{css.table}}">
+        {{{subClassTable}}}
+    </table>
+{{/hasSubClasses}}
+
