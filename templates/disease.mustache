@@ -171,15 +171,13 @@
     {{#hasPhenotypes}}
 
         <div id="compare" class="category">
-            <div id="phen_vis"></div>
+            <div id="phen_vis">BOB IS YOUR UNCLE</div>
         </div>
         <div id="model" class="category">
             {{#hasModels}}
                 <div id="loaded_models">Loading ...</div>
                 <script>
                     $.get("/disease_models/{{id}}", function (data) {
-                        console.log(data);
-//                    data = "<b>balls</b>"
                         $('#loaded_models').html(data) ;
                     });
                 </script>
@@ -191,9 +189,13 @@
             <div class="text">
                 Note: Comparisons are based on abnormal phenotypes.
             </div>
-            <table class="{{css.table}}">
-                {{{simTable}}}
-            </table>
+            <div id="loaded_similarity">Loading ...</div>
+            <script>
+                $.get("/disease_similarity/{{id}}", function (data) {
+                    $('#loaded_similarity').html(data) ;
+                });
+            </script>
+
         </div>
     {{/hasSim}}
     {{#hasPathways}}
@@ -201,8 +203,6 @@
             <div id="loaded_pathways">Loading ...</div>
             <script>
                 $.get("/disease_pathways/{{id}}", function (data) {
-                    console.log(data);
-//                    data = "<b>balls</b>"
                     $('#loaded_pathways').html(data) ;
                 });
                 var keggerator = $("#keggerator_div").keggerator();
@@ -216,8 +216,6 @@
             <div id="loaded_literature">Loading ...</div>
             <script>
                 $.get("/disease_literature/{{id}}", function (data) {
-                    console.log(data);
-//                    data = "<b>balls</b>"
                     $('#loaded_literature').html(data) ;
                 });
             </script>
