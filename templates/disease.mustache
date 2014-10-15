@@ -198,12 +198,16 @@
     {{/hasSim}}
     {{#hasPathways}}
         <div id="pathways" class="category">
+            <div id="loaded_pathways">Loading ...</div>
             <script>
+                $.get("/disease_pathways/{{id}}", function (data) {
+                    console.log(data);
+//                    data = "<b>balls</b>"
+                    $('#loaded_pathways').html(data) ;
+                });
                 var keggerator = $("#keggerator_div").keggerator();
             </script>
-            <table class="{{css.table}}">
-                {{{pathwayTable}}}
-            </table>
+
             <div id="keggerator_div"></div>
         </div>
     {{/hasPathways}}
