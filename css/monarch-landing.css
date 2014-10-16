@@ -4,28 +4,24 @@ body {
 
 .graph-container{
     position: relative;
-    width: 826px;
     float:left;
     border-style:solid;
     border-width:1px;
 }
 .disease-gene-container{
     position: relative;
-    width: 826px;
     float:left;
     border-style:solid;
     border-width:1px;
 }
 .disease-pheno-container{
     position: relative;
-    width: 826px;
     float:left;
     border-style:solid;
     border-width:1px;
 }
 .pheno-geno-container{
     position: relative;
-    width: 826px;
     float:left;
     border-style:solid;
     border-width:1px;
