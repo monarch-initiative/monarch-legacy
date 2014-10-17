@@ -1,6 +1,6 @@
 var datagraph = {
   //Chart margins    
-  margin : {top: 40, right: 80, bottom: 30, left: 320},
+  margin : {top: 40, right: 80, bottom: 30, left: 255},
   width : 400,
   height : 580,
   
@@ -77,6 +77,8 @@ var datagraph = {
   
   //Y axis positioning when arrow present
   yOffset : "-1.48em",
+  
+  maxLabelSize : 31,
   
   //Turn on/off breadcrumbs
   useCrumb : false,
@@ -166,7 +168,9 @@ var datagraph = {
       var yOffset = this.yOffset;
       var arrowDim = this.arrowDim;
       
-      if (yMax > 41 && yMax < 53){
+      if (yMax > 31 && yMax < 41){
+          yFont = ((1/yMax)*450);
+      }else if (yMax > 41 && yMax < 53){
           yFont = ((1/yMax)*565);
           arrowDim = "-20,-5, -9,1 -20,7";
           isUpdated = true;
@@ -191,6 +195,16 @@ var datagraph = {
       }*/
       var retList = [yFont,yOffset,arrowDim];
       return retList;
+  },
+  
+  addEllipsisToLabel : function(data,max){
+      var reg = new RegExp("(.{"+max+"})(.+)"); 
+      data.forEach(function (r){
+          if (r.label.length > max){
+              r.label = r.label.replace(reg,"$1...");
+          }
+      });
+      return data;
   },
   
   init : function (html_div,DATA){
@@ -251,6 +265,7 @@ var datagraph = {
 
         var groups = getGroups(data);
         data = config.getStackedStats(data,groups);
+        data = config.addEllipsisToLabel(data,config.maxLabelSize);
         config.useCrumb = config.checkForSubGraphs(data);
         
         //remove breadcrumb div
@@ -780,6 +795,7 @@ var datagraph = {
             
             var groups = getGroups(subGraph);
             subGraph = config.getStackedStats(subGraph,groups);
+            subGraph = config.addEllipsisToLabel(subGraph,config.maxLabelSize);
             var rect;
             if (parent){
                 parents.push(parent);
