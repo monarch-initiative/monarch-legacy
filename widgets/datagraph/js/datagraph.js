@@ -49,7 +49,7 @@ var datagraph = {
            }
   },
   //Tooltip offsets
-  arrowOffset : {height: 94, width: 231},
+  arrowOffset : {height: 94, width: 170},
   barOffset : {
                 grouped:{
                   height: 110,
