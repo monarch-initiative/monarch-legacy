@@ -1,7 +1,7 @@
 var datagraph = {
   //Chart margins    
   margin : {top: 40, right: 80, bottom: 30, left: 255},
-  width : 400,
+  width : 375,
   height : 580,
   
   //X Axis Label
@@ -53,11 +53,11 @@ var datagraph = {
   barOffset : {
                 grouped:{
                   height: 110,
-                  width: 325
+                  width: 260
                 },
                 stacked:{
-                  height: 99,
-                  width: 300
+                  height: 95,
+                  width: 235
                 }
   },
   
@@ -139,6 +139,18 @@ var datagraph = {
           }
       });
       return data;
+  },
+  
+  getGroups : function (data) {
+      var groups = [];
+      var unique = {};
+      for (var i=0, len=data.length; i<len; i++) { 
+          for (var j=0, cLen=data[i].counts.length; j<cLen; j++) { 
+              unique[ data[i].counts[j].name ] =1;
+          }
+      }
+      groups = Object.keys(unique);
+      return groups;
   },
   
   //remove zero length bars
@@ -245,6 +257,15 @@ var datagraph = {
     var yAxis = d3.svg.axis()
         .scale(y0)
         .orient("left");
+    
+    //Increase margin to accomodate grouped/stacked option
+    if ((conf.getGroups(DATA)).length >1){
+        conf.margin.right += 60;
+    }
+    //Decrease margin if no legend
+    if (!conf.useLegend){
+        conf.margin.right -= 40;
+    }
 
     var svg = d3.select(html_div).append("svg")
         .attr("width", conf.width + conf.margin.left + conf.margin.right)
@@ -263,7 +284,7 @@ var datagraph = {
 
     function drawGraph (config,data) {
 
-        var groups = getGroups(data);
+        var groups = config.getGroups(data);
         data = config.getStackedStats(data,groups);
         data = config.addEllipsisToLabel(data,config.maxLabelSize);
         config.useCrumb = config.checkForSubGraphs(data);
@@ -498,18 +519,6 @@ var datagraph = {
                .attr("dy", ".35em")
                .style("text-anchor", "end")
                .text(function(d) { return d; });
-        }
-        
-        function getGroups(data) {
-            var groups = [];
-            var unique = {};
-            for (var i=0, len=data.length; i<len; i++) { 
-                for (var j=0, cLen=data[i].counts.length; j<cLen; j++) { 
-                    unique[ data[i].counts[j].name ] =1;
-                }
-            }
-            groups = Object.keys(unique);
-            return groups;
         }
 
         function change() {
@@ -793,7 +802,7 @@ var datagraph = {
         //     NOTE - this will be refactored as AJAX calls
         function transitionSubGraph(subGraph,parent) {
             
-            var groups = getGroups(subGraph);
+            var groups = config.getGroups(subGraph);
             subGraph = config.getStackedStats(subGraph,groups);
             subGraph = config.addEllipsisToLabel(subGraph,config.maxLabelSize);
             var rect;
