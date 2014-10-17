@@ -154,6 +154,45 @@ var datagraph = {
       return trimmedGraph;
   },
   
+  // Adjust Y label font, arrow size, and spacing
+  // when transitioning
+  adjustYAxisElements : function(yMax,len){
+      
+      var h = this.height;
+      var density = h/len;
+      var isUpdated = false;
+      
+      var yFont = 'default';
+      var yOffset = this.yOffset;
+      var arrowDim = this.arrowDim;
+      
+      if (yMax > 41 && yMax < 53){
+          yFont = ((1/yMax)*565);
+          arrowDim = "-20,-5, -9,1 -20,7";
+          isUpdated = true;
+      } else if (yMax >= 53 && yMax <66){
+          yFont = ((1/yMax)*615);
+          yOffset = "-1.45em";
+          arrowDim = "-20,-5, -9,1 -20,7";
+          isUpdated = true;
+      } else if (yMax >= 66){
+          yFont = ((1/yMax)*640);
+          yOffset = "-1.4em";
+          arrowDim = "-20,-5, -9,1 -20,7";
+          isUpdated = true;
+      }
+      
+      //Check for density BETA
+      /*
+      if (density < 15 && !isUpdated){
+          yFont = density;
+          yOffset = "-1.4em";
+          arrowDim = "-20,-5, -9,1 -20,7";
+      }*/
+      var retList = [yFont,yOffset,arrowDim];
+      return retList;
+  },
+  
   init : function (html_div,DATA){
       
     var conf = this;
@@ -256,7 +295,7 @@ var datagraph = {
         x.domain([0, xGroupMax]);
         
         //Dynamically decrease font size for large labels
-        var confList = getYFontSize(yMax);
+        var confList = config.adjustYAxisElements(yMax,data.length);
         var yFont = confList[0];
         var yLabelPos = confList[1];
         var triangleDim = confList[2];
@@ -712,29 +751,7 @@ var datagraph = {
                     }
                 });
         }
-        
-        function getYFontSize(yMax) {
-            //Dynamically decrease font size for large labels
 
-            var yFont = 'default';
-            var yOffset = config.yOffset;
-            var arrowDim = config.arrowDim;
-            
-            if (yMax > 41 && yMax < 53){
-                yFont = ((1/yMax)*565);
-                arrowDim = "-20,-5, -9,1 -20,7";
-            } else if (yMax >= 53 && yMax <66){
-                yFont = ((1/yMax)*615);
-                yOffset = "-1.45em";
-                arrowDim = "-20,-5, -9,1 -20,7";
-            } else if (yMax >= 66){
-                yFont = ((1/yMax)*640);
-                yOffset = "-1.4em";
-                arrowDim = "-20,-5, -9,1 -20,7";
-            }
-            var retList = [yFont,yOffset,arrowDim];
-            return retList;     
-        }
         //Resize height of chart after transition
         function resizeChart(subGraph){
             var height = config.height;
@@ -785,10 +802,11 @@ var datagraph = {
             var yMax = config.getYMax(subGraph);
             
             //Dynamically decrease font size for large labels
-            var confList = getYFontSize(yMax);
+            var confList = config.adjustYAxisElements(yMax,subGraph.length);
             var yFont = confList[0];
             var yLabelPos = confList[1];
             var triangleDim = confList[2];
+
             
             var yTransition = svg.transition().duration(1000);
             yTransition.select(".y.axis").call(yAxis);
