@@ -182,6 +182,7 @@ var datagraph = {
       
       if (yMax > 31 && yMax < 41){
           yFont = ((1/yMax)*450);
+          isUpdated = true;
       }else if (yMax > 41 && yMax < 53){
           yFont = ((1/yMax)*565);
           arrowDim = "-20,-5, -9,1 -20,7";
@@ -199,12 +200,11 @@ var datagraph = {
       }
       
       //Check for density BETA
-      /*
-      if (density < 15 && !isUpdated){
-          yFont = density;
-          yOffset = "-1.4em";
-          arrowDim = "-20,-5, -9,1 -20,7";
-      }*/
+      if (density < 15 && density < yFont ){
+          yFont = density+2;
+          yOffset = "-2em";
+          arrowDim = "-20,-3, -11,1 -20,5";
+      }
       var retList = [yFont,yOffset,arrowDim];
       return retList;
   },
@@ -271,11 +271,11 @@ var datagraph = {
     
     //Increase margin to accomodate grouped/stacked option
     if ((conf.getGroups(DATA)).length >1){
-        conf.margin.right += 60;
+        conf.margin.right += 60; //HARDCODE
     }
     //Decrease margin if no legend
     if (!conf.useLegend){
-        conf.margin.right -= 40;
+        conf.margin.right -= 40; //HARDCODE
     }
 
     var svg = d3.select(html_div).append("svg")
@@ -375,7 +375,11 @@ var datagraph = {
                 if (/\.\.\./.test(d)){
                     var fullLabel = config.getFullLabel(d,data);
                     d3.select(this).append("svg:title")
-                    .text(fullLabel);  
+                    .text(fullLabel);
+                //Hardcode alert
+                } else if (yFont < 12) {
+                    d3.select(this).append("svg:title")
+                    .text(d);
                 }
             })
             .on("mouseout", function(){
@@ -866,6 +870,9 @@ var datagraph = {
                         var fullLabel = config.getFullLabel(d,subGraph);
                         d3.select(this).append("svg:title")
                         .text(fullLabel);  
+                    } else if (yFont < 12) {//HARDCODE alert
+                    d3.select(this).append("svg:title")
+                    .text(d);
                     }
                 })
                 .on("mouseout", function(){
