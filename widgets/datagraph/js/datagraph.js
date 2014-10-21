@@ -210,13 +210,24 @@ var datagraph = {
   },
   
   addEllipsisToLabel : function(data,max){
-      var reg = new RegExp("(.{"+max+"})(.+)"); 
+      var reg = new RegExp("(.{"+max+"})(.+)");
       data.forEach(function (r){
           if (r.label.length > max){
-              r.label = r.label.replace(reg,"$1...");
+              r.fullLabel = r.label;
+              r.label = r.label.replace(reg,"$1...");      
           }
       });
       return data;
+  },
+  
+  getFullLabel : function (d,data){
+      for (var i=0, len=data.length; i < len; i++){
+          if (data[i].label === d){
+              var fullLabel = data[i].fullLabel;
+              return fullLabel;
+              break;
+          }
+      }
   },
   
   init : function (html_div,DATA){
@@ -360,6 +371,11 @@ var datagraph = {
                     d3.select(this).style("cursor", "pointer");
                     d3.select(this).style("fill", config.color.yLabel.hover);
                     d3.select(this).style("text-decoration", "underline");
+                }
+                if (/\.\.\./.test(d)){
+                    var fullLabel = config.getFullLabel(d,data);
+                    d3.select(this).append("svg:title")
+                    .text(fullLabel);  
                 }
             })
             .on("mouseout", function(){
@@ -845,6 +861,11 @@ var datagraph = {
                         d3.select(this).style("cursor", "pointer");
                         d3.select(this).style("fill", config.color.yLabel.hover);
                         d3.select(this).style("text-decoration", "underline");
+                    }
+                    if (/\.\.\./.test(d)){
+                        var fullLabel = config.getFullLabel(d,subGraph);
+                        d3.select(this).append("svg:title")
+                        .text(fullLabel);  
                     }
                 })
                 .on("mouseout", function(){
