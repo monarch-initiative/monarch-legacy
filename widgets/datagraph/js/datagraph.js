@@ -1,7 +1,7 @@
 var datagraph = {
   //Chart margins    
-  margin : {top: 40, right: 80, bottom: 30, left: 320},
-  width : 400,
+  margin : {top: 40, right: 80, bottom: 5, left: 255},
+  width : 375,
   height : 580,
   
   //X Axis Label
@@ -49,15 +49,15 @@ var datagraph = {
            }
   },
   //Tooltip offsets
-  arrowOffset : {height: 94, width: 231},
+  arrowOffset : {height: 94, width: 170},
   barOffset : {
                 grouped:{
                   height: 110,
-                  width: 325
+                  width: 260
                 },
                 stacked:{
-                  height: 99,
-                  width: 300
+                  height: 95,
+                  width: 235
                 }
   },
   
@@ -78,6 +78,8 @@ var datagraph = {
   //Y axis positioning when arrow present
   yOffset : "-1.48em",
   
+  maxLabelSize : 31,
+  
   //Turn on/off breadcrumbs
   useCrumb : false,
   
@@ -87,6 +89,146 @@ var datagraph = {
   //Check browser
   isOpera : (!!window.opera || navigator.userAgent.indexOf(' OPR/') >= 0),
   isChrome : (!!window.chrome && !(!!window.opera || navigator.userAgent.indexOf(' OPR/') >= 0)),
+  
+  //set X Axis limit for grouped configuration
+  getGroupMax : function(data){
+      return d3.max(data, function(d) { 
+          return d3.max(d.counts, function(d) { return d.value; });
+      });
+  },
+  //set X Axis limit for stacked configuration
+  getStackMax : function(data){
+      return d3.max(data, function(d) { 
+          return d3.max(d.counts, function(d) { return d.x1; });
+      }); 
+  },
+  //get largest Y axis label for font resizing
+  getYMax : function(data){
+      return d3.max(data, function(d) { 
+          return d.label.length;
+      });
+  },
+  
+  checkForSubGraphs : function(data){
+      for (i = 0;i < data.length; i++) {
+          if (Object.keys(data[i]).indexOf('subGraph') >= 0) {
+              return true;
+          } 
+     }
+     return false;
+  },
+  
+  getStackedStats : function(data,groups){
+      //Add x0,x1 values for stacked barchart
+      data.forEach(function (r){
+          var count = 0;
+          r.counts.forEach(function (i){
+               i["x0"] = count;
+               i["x1"] = i.value+count;
+               if (i.value > 0){
+                   count = i.value;
+               }
+           });
+      });
+      var lastElement = groups.length-1;
+      data.sort(function(obj1, obj2) {
+          if ((obj2.counts[lastElement])&&(obj1.counts[lastElement])){
+              return obj2.counts[lastElement].x1 - obj1.counts[lastElement].x1;
+          } else {
+              return 0;
+          }
+      });
+      return data;
+  },
+  
+  getGroups : function (data) {
+      var groups = [];
+      var unique = {};
+      for (var i=0, len=data.length; i<len; i++) { 
+          for (var j=0, cLen=data[i].counts.length; j<cLen; j++) { 
+              unique[ data[i].counts[j].name ] =1;
+          }
+      }
+      groups = Object.keys(unique);
+      return groups;
+  },
+  
+  //remove zero length bars
+  removeZeroCounts : function(data){
+      trimmedGraph = [];
+      data.forEach(function (r){
+          var count = 0;
+          r.counts.forEach(function (i){
+               count += i.value;
+           });
+          if (count > 0){
+              trimmedGraph.push(r);
+          }
+      });
+      return trimmedGraph;
+  },
+  
+  // Adjust Y label font, arrow size, and spacing
+  // when transitioning
+  adjustYAxisElements : function(yMax,len){
+      
+      var h = this.height;
+      var density = h/len;
+      var isUpdated = false;
+      
+      var yFont = 'default';
+      var yOffset = this.yOffset;
+      var arrowDim = this.arrowDim;
+      
+      if (yMax > 31 && yMax < 41){
+          yFont = ((1/yMax)*450);
+          isUpdated = true;
+      }else if (yMax > 41 && yMax < 53){
+          yFont = ((1/yMax)*565);
+          arrowDim = "-20,-5, -9,1 -20,7";
+          isUpdated = true;
+      } else if (yMax >= 53 && yMax <66){
+          yFont = ((1/yMax)*615);
+          yOffset = "-1.45em";
+          arrowDim = "-20,-5, -9,1 -20,7";
+          isUpdated = true;
+      } else if (yMax >= 66){
+          yFont = ((1/yMax)*640);
+          yOffset = "-1.4em";
+          arrowDim = "-20,-5, -9,1 -20,7";
+          isUpdated = true;
+      }
+      
+      //Check for density BETA
+      if (density < 15 && density < yFont ){
+          yFont = density+2;
+          yOffset = "-2em";
+          arrowDim = "-20,-3, -11,1 -20,5";
+      }
+      var retList = [yFont,yOffset,arrowDim];
+      return retList;
+  },
+  
+  addEllipsisToLabel : function(data,max){
+      var reg = new RegExp("(.{"+max+"})(.+)");
+      data.forEach(function (r){
+          if (r.label.length > max){
+              r.fullLabel = r.label;
+              r.label = r.label.replace(reg,"$1...");      
+          }
+      });
+      return data;
+  },
+  
+  getFullLabel : function (d,data){
+      for (var i=0, len=data.length; i < len; i++){
+          if (data[i].label === d){
+              var fullLabel = data[i].fullLabel;
+              return fullLabel;
+              break;
+          }
+      }
+  },
   
   init : function (html_div,DATA){
       
@@ -126,6 +268,15 @@ var datagraph = {
     var yAxis = d3.svg.axis()
         .scale(y0)
         .orient("left");
+    
+    //Increase margin to accomodate grouped/stacked option
+    if ((conf.getGroups(DATA)).length >1){
+        conf.margin.right += 60; //HARDCODE
+    }
+    //Decrease margin if no legend
+    if (!conf.useLegend){
+        conf.margin.right -= 40; //HARDCODE
+    }
 
     var svg = d3.select(html_div).append("svg")
         .attr("width", conf.width + conf.margin.left + conf.margin.right)
@@ -141,63 +292,13 @@ var datagraph = {
     var tooltip = d3.select(html_div)
         .append("div")
         .attr("class", "tip");
-    
-    //set X Axis limit for grouped configuration
-    function getGroupMax(data){
-        return d3.max(data, function(d) { 
-            return d3.max(d.counts, function(d) { return d.value; });
-        });
-    }
-    //set X Axis limit for stacked configuration
-    function getStackMax(data){
-        return d3.max(data, function(d) { 
-            return d3.max(d.counts, function(d) { return d.x1; });
-        });
-    }
-    //get largest Y axis label for font resizing
-    function getYMax(data){
-        return d3.max(data, function(d) { 
-            return d.label.length;
-        });
-    }
-    
-    function checkForSubGraphs(data){
-        for (i = 0;i < data.length; i++) {
-             if (Object.keys(data[i]).indexOf('subGraph') >= 0) {
-                 return true;
-             } 
-        }
-        return false;
-    }
-    
-    function getStackedStats(data,groups){
-        //Add x0,x1 values for stacked barchart
-        data.forEach(function (r){
-             var count = 0;
-            r.counts.forEach(function (i){
-                 i["x0"] = count;
-                 i["x1"] = i.value+count;
-                 if (i.value > 0){
-                     count = i.value;
-                 }
-             });
-        });
-        var lastElement = groups.length-1;
-        data.sort(function(obj1, obj2) {
-            if ((obj2.counts[lastElement])&&(obj1.counts[lastElement])){
-                return obj2.counts[lastElement].x1 - obj1.counts[lastElement].x1;
-            } else {
-                return 0;
-            }
-        });
-        return data;
-    }
-    
+
     function drawGraph (config,data) {
 
-        var groups = getGroups(data);
-        data = getStackedStats(data,groups);
-        config.useCrumb = checkForSubGraphs(data);
+        var groups = config.getGroups(data);
+        data = config.getStackedStats(data,groups);
+        data = config.addEllipsisToLabel(data,config.maxLabelSize);
+        config.useCrumb = config.checkForSubGraphs(data);
         
         //remove breadcrumb div
         if (!config.useCrumb){
@@ -234,14 +335,14 @@ var datagraph = {
         y0.domain(data.map(function(d) { return d.label; }));
         y1.domain(groups).rangeRoundBands([0, y0.rangeBand()]);
         
-        var xGroupMax = getGroupMax(data);
-        var xStackMax = getStackMax(data);
-        var yMax = getYMax(data);
+        var xGroupMax = config.getGroupMax(data);
+        var xStackMax = config.getStackMax(data);
+        var yMax = config.getYMax(data);
         
         x.domain([0, xGroupMax]);
         
         //Dynamically decrease font size for large labels
-        var confList = getYFontSize(yMax);
+        var confList = config.adjustYAxisElements(yMax,data.length);
         var yFont = confList[0];
         var yLabelPos = confList[1];
         var triangleDim = confList[2];
@@ -270,6 +371,15 @@ var datagraph = {
                     d3.select(this).style("cursor", "pointer");
                     d3.select(this).style("fill", config.color.yLabel.hover);
                     d3.select(this).style("text-decoration", "underline");
+                }
+                if (/\.\.\./.test(d)){
+                    var fullLabel = config.getFullLabel(d,data);
+                    d3.select(this).append("svg:title")
+                    .text(fullLabel);
+                //Hardcode alert
+                } else if (yFont < 12) {
+                    d3.select(this).append("svg:title")
+                    .text(d);
                 }
             })
             .on("mouseout", function(){
@@ -429,18 +539,6 @@ var datagraph = {
                .attr("dy", ".35em")
                .style("text-anchor", "end")
                .text(function(d) { return d; });
-        }
-        
-        function getGroups(data) {
-            var groups = [];
-            var unique = {};
-            for (var i=0, len=data.length; i<len; i++) { 
-                for (var j=0, cLen=data[i].counts.length; j<cLen; j++) { 
-                    unique[ data[i].counts[j].name ] =1;
-                }
-            }
-            groups = Object.keys(unique);
-            return groups;
         }
 
         function change() {
@@ -697,29 +795,7 @@ var datagraph = {
                     }
                 });
         }
-        
-        function getYFontSize(yMax) {
-            //Dynamically decrease font size for large labels
 
-            var yFont = 'default';
-            var yOffset = config.yOffset;
-            var arrowDim = config.arrowDim;
-            
-            if (yMax > 41 && yMax < 53){
-                yFont = ((1/yMax)*565);
-                arrowDim = "-20,-5, -9,1 -20,7";
-            } else if (yMax >= 53 && yMax <66){
-                yFont = ((1/yMax)*615);
-                yOffset = "-1.45em";
-                arrowDim = "-20,-5, -9,1 -20,7";
-            } else if (yMax >= 66){
-                yFont = ((1/yMax)*640);
-                yOffset = "-1.4em";
-                arrowDim = "-20,-5, -9,1 -20,7";
-            }
-            var retList = [yFont,yOffset,arrowDim];
-            return retList;     
-        }
         //Resize height of chart after transition
         function resizeChart(subGraph){
             var height = config.height;
@@ -746,8 +822,9 @@ var datagraph = {
         //     NOTE - this will be refactored as AJAX calls
         function transitionSubGraph(subGraph,parent) {
             
-            var groups = getGroups(subGraph);
-            subGraph = getStackedStats(subGraph,groups);
+            var groups = config.getGroups(subGraph);
+            subGraph = config.getStackedStats(subGraph,groups);
+            subGraph = config.addEllipsisToLabel(subGraph,config.maxLabelSize);
             var rect;
             if (parent){
                 parents.push(parent);
@@ -765,15 +842,16 @@ var datagraph = {
             y0.domain(subGraph.map(function(d) { return d.label; }));
             y1.domain(groups).rangeRoundBands([0, y0.rangeBand()]);
             
-            var xGroupMax = getGroupMax(subGraph);
-            var xStackMax = getStackMax(subGraph);
-            var yMax = getYMax(subGraph);
+            var xGroupMax = config.getGroupMax(subGraph);
+            var xStackMax = config.getStackMax(subGraph);
+            var yMax = config.getYMax(subGraph);
             
             //Dynamically decrease font size for large labels
-            var confList = getYFontSize(yMax);
+            var confList = config.adjustYAxisElements(yMax,subGraph.length);
             var yFont = confList[0];
             var yLabelPos = confList[1];
             var triangleDim = confList[2];
+
             
             var yTransition = svg.transition().duration(1000);
             yTransition.select(".y.axis").call(yAxis);
@@ -787,6 +865,14 @@ var datagraph = {
                         d3.select(this).style("cursor", "pointer");
                         d3.select(this).style("fill", config.color.yLabel.hover);
                         d3.select(this).style("text-decoration", "underline");
+                    }
+                    if (/\.\.\./.test(d)){
+                        var fullLabel = config.getFullLabel(d,subGraph);
+                        d3.select(this).append("svg:title")
+                        .text(fullLabel);  
+                    } else if (yFont < 12) {//HARDCODE alert
+                    d3.select(this).append("svg:title")
+                    .text(d);
                     }
                 })
                 .on("mouseout", function(){

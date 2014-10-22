@@ -21,14 +21,13 @@
 
 .graph-container{
     position: relative;
-    width: 826px;
     float:left;
     border-style:solid;
     border-width:1px;
 }
-.disease-container{
+.disease-gene-container{
     position: relative;
-    width: 826px;
+    width: 772px;
     float:left;
     border-style:solid;
     border-top:none;
@@ -36,7 +35,7 @@
 }
 .disease-pheno-container{
     position: relative;
-    width: 826px;
+    width: 772px;
     float:left;
     border-style:solid;
     border-top:none;
@@ -44,7 +43,7 @@
 }
 .pheno-geno-container{
     position: relative;
-    width: 826px;
+    width: 772px;
     float:left;
     border-style:solid;
     border-top:none;
@@ -52,7 +51,7 @@
 }
 .pheno-gene-container{
     position: relative;
-    width: 826px;
+    width: 772px;
     float:left;
     border-style:solid;
     border-top:none;
