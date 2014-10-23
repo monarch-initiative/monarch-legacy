@@ -3,6 +3,7 @@
   "resource_description": "BioGRID is an curated gene and protein interaction repository with for major model organism species. ",
   "ontologies_or_vocabularies": "MI",
   "resource": "BioGRID",
+  "id":"nif-0000-00432",
   "data_categories": "protein-protein interaction",
   "monarch_use": "We indicate gene-gene/protein-protein interactions on gene pages.  We also use many of the id mappings  to resolve ids in our own site."
 },
@@ -11,6 +12,7 @@
   "ontologies_or_vocabularies": "UMLS",
   "taxa": "human",
   "resource": "ClinVar",
+  "id":"nlx_151671",
   "data_categories": "disease-gene association; variant-disease association; variant definitions",
   "monarch_use": "We utilize the asserted disease-gene, variant-disease, and variant-gene associations, together with their evidence."
 },
@@ -19,6 +21,7 @@
   "ontologies_or_vocabularies": "OMIM",
   "taxa": "human",
   "resource": "Coriell",
+  "id":"nif-0000-00182",
   "data_categories": "disease-model association",
   "monarch_use": "We link pertinent cell lines to any diseases for which they are asserted models."
 },
@@ -27,6 +30,7 @@
   "ontologies_or_vocabularies": "MESH; OMIM",
   "taxa": "human",
   "resource": "CTD",
+  "id":"nif-0000-02683",
   "data_categories": "disease-gene association",
   "monarch_use": "We integrate the asserted (curated) disease-gene associations, and their evidence."
 },
@@ -35,6 +39,7 @@
   "ontologies_or_vocabularies": "FBbt; FBcv; FBdv",
   "taxa": "fruitfly",
   "resource": "FlyBase",
+  "id": "nif-0000-00053",
   "data_categories": "genotype-phenotype association",
   "monarch_use": "We integrate the genotype-phenotype associations."
 },
@@ -43,6 +48,7 @@
   "ontologies_or_vocabularies": "ECO; HPO",
   "taxa": "human",
   "resource": "HPO",
+  "id":"nlx_151835",
   "data_categories": "disease-phenotype association",
   "monarch_use": "We use the HPO disease-phenotype annotations as the primary atomic description of a disease, and list them on the disease pages, together with their references.  The Human Phenotype Ontology is integrated into our cross-species phenotype ontology."
 },
@@ -51,6 +57,7 @@
   "ontologies_or_vocabularies": "MP",
   "taxa": "mouse",
   "resource": "IMPC",
+  "id":"nlx_151660",
   "data_categories": "genotype-phenotype association",
   "monarch_use": "We use the allele-phenotype associations recorded by the consortium.  In addition, we map their allele+zygosity+background to MGI genotype identifiers.  Where they do not map to MGI genotype identifiers, we create temporary identifiers for navigation purposes."
 },
@@ -59,6 +66,7 @@
   "ontologies_or_vocabularies": "MESH; OMIM",
   "taxa": "human; zebrafish; fruitfly; mouse; rat; worm",
   "resource": "KEGG",
+  "id":"nlx_31015",
   "data_categories": "gene-pathway association; disease-gene association; orthology",
   "monarch_use": "We list disease-gene associations, and gene-pathway associations.  We utilize the KEGG Ortholog (KO) gene-pathway associations, and infer a specific-organisms' participation in that pathway based on the gene-KO links."
 },
@@ -67,6 +75,7 @@
   "ontologies_or_vocabularies": "ECO; MA; MP; SO",
   "taxa": "mouse",
   "resource": "MGI",
+  "id":"nif-0000-00096",
   "data_categories": "genotype-phenotype association; disease-model association",
   "monarch_use": "We list genotype-phenotype associations and asserted disease-models. We use MGI identifiers as the main hook into mouse data.  Additionally, we utilize the Mouse Phenotype Ontology (MP) in our cross-species ontology, to link all mouse phenotype annotations from various sources, which is developed by MGI."
 },
@@ -75,6 +84,7 @@
   "ontologies_or_vocabularies": "MP",
   "taxa": "mouse",
   "resource": "MPD",
+  "id":"nif-0000-03160",
   "data_categories": "genotype (strain)-phenotype association",
   "monarch_use": "We compute the strain-phenotype associations for extreme outliers (>3 s.d.) based on comparison to all strains tested.  We link out to MPD where more detail can be found for each of the experimental protocols used to quantify the results and map the measurements to the resulting qualitative phenotypes."
 },
@@ -91,6 +101,7 @@
   "ontologies_or_vocabularies": "",
   "taxa": "all",
   "resource": "NCBI",
+  "id":"nif-0000-02801",
   "data_categories": "gene definition; taxon definition; gene-publication association",
   "monarch_use": "We use NCBIGene ids and symbols as the primary identifier and label for all genes in our system and NCBITaxon identifiers and scientific name for species-specific labeling.  For any given gene, we also list the annotated pmids from Pub2Gene."
 },
@@ -99,6 +110,7 @@
   "ontologies_or_vocabularies": "OMIM",
   "taxa": "African clawed frog; African hunting dog; agile gibbon; alpaca; Alpine marmot; Amazona amazonica; American black bear; American flamingo; American mink; Amur tiger; Anser anser domesticus; aoudad; Arabian camel; Arabian oryx; Arctic fox; argali; Arizona pocket mouse; Asiatic elephant; Asiatic golden cat; ass; Astyanax; aurochs; axolotl; bald eagle; Bananaquit; bats; beluga whale; Bengal tiger; bighorn sheep; black rhinoceros; black swan; black-footed cat; black-footed ferret; black-tailed deer; blue antelope; blue-and-yellow macaw; Bolivian squirrel monkey; bongo; bottlenosed dolphin; brown bear; brown booby; brush-tailed possums; budgerigar; California condor; California sea lion; Campbell's desert hamster; cattle; cheetah; chicken; chimpanzee; chinchilla; Chinese painted quail; cockatiel; coffee berry borer; common canary; common carp; common gibbon; common quail; Coscoroba swan; coyote; crab-eating macaque; deer; degu; dog; dolphinfishes; domestic cat; domestic ferret; domestic goose; domestic guinea pig; domestic pig; domestic silkworm; domestic yak; ducks; eastern chipmunk; eland; emu; Equus zebra zebra; Eurasian bullfinch; Eurasian water mole; Eurasian wolf; European mole; European shrew; European woodmouse; Gloydius halys caraganus; goat; golden hamster; golden lion tamarin; goldfish; grass carp; gray short-tailed opossum; gray squirrel; gray wolf; great apes; greater kudu; grivet; guanaco; guineafowls; gyrfalcon; hares; hedgehogs; helmeted guineafowl; hill myna; hippopotamus; horse; human; humpback whale; hybrid; Indian peafowl; Indo-Pacific finless porpoise; jaguar; jaguarundi; Japanese macaque; Japanese medaka; Japanese quail; Japanese wrinkled frog; kangaroo; killer whale; koala; kouprey; Lacerta; leopard; Lesser dwarf lemur; lesser earless lizard; lesser panda; Lesser snow goose; lion; little striped whiptail; llama; long-beaked common dolphin; macaques; mallard; Manchurian Wapiti; marsupials; meadow voles; minke whale; Monarcha castaneiventris; Mongolian gerbil; mongooses; mouflon; mountain zebra; muntjak; Muscovy duck; muskrat; North American deer mouse; northern bobwhite; Northern mole vole; northern pocket gopher; Norway rat; nutria; Odocoileus virginianus texanus; oldfield mouse; olive baboon; Omura's baleen whale; Ovis sp.; owls; oxen, cattle; panther genet; Pardosa agrestis; peach-faced lovebird; Phragmatopoma californica; pig; pocket gophers; Pongo pygmaeus pygmaeus; puma; quagga; rabbit; raccoon; raccoon dog; rainbow trout; red deer; red fox; red-footed booby; reindeer; rheas; Rhesus monkey; Ring-necked pheasant; ring-tailed coati; Ring-tailed lemur; rock pigeon; rock pocket mouse; rufous rat-kangaroo; salmonids; sea otter; sheep; siamang; snow leopard; springbok; Stercorarius parasiticus; Sumatran rhinoceros; Sumatran tiger; tammar wallaby; teleost fishes; tench; Thamnophis sirtalis; tiger; torafugu; turkey; turkey vulture; wapiti; water buffalo; western chorus frog; western gorilla; western lowland gorilla; western mosquitofish; Western roe deer; whales; white rhinoceros; white-tufted-ear marmoset; wood lemming; woolly mammoth; woolly monkeys; Yangtze River dolphin; yellow-crowned parrot; zebra finch; zebrafish; zebu",
   "resource": "OMIA",
+  "id":"nif-0000-03125",
   "data_categories": "gene-disease association",
   "monarch_use": "Animal species and breeds with high-incidence of disease, and with links to human OMIM diseases, are listed as animal models for that disease."
 },
@@ -107,6 +119,7 @@
   "ontologies_or_vocabularies": "OMIM",
   "taxa": "human",
   "resource": "OMIM",
+  "id":"nif-0000-03216",
   "data_categories": "gene-disease association; variant-disease association",
   "monarch_use": "We use curated disease-gene, disease-locus, and variant-disease associations, together with their annotated references.  Most OMIM diseases are further curated by the HPO group.  Most OMIM diseases are integrated into the Disease Ontology."
 },
@@ -115,6 +128,7 @@
   "ontologies_or_vocabularies": "HPO",
   "taxa": "human",
   "resource": "Orphanet",
+  "id":"nif-0000-21306",
   "data_categories": "disease-gene association",
   "monarch_use": "We use the Orphanet disease-gene associations."
 },
@@ -123,6 +137,7 @@
   "ontologies_or_vocabularies": "RO",
   "taxa": "arabidopsis, budding yeast, chicken, chimp, dog, fission yeast, fruitfly, green lizzard, horse, human, macaque, mouse, opossum, pig, platypus, rat, slime mold, worm, zebrafish",
   "resource": "PANTHER",
+  "id":"nlx_84521",
   "data_categories": "orthology",
   "monarch_use": "We currently utilize the 12 RefGenome species, as well as HUGO HCOP species, to seed the orthology calls.  Species currently include:  arabidopsis, budding yeast, chicken, chimp, dog, fission yeast, fruitfly, green lizzard, horse, human, macaque, mouse, opossum, pig, platypus, rat, slime mold, worms, zebrafish.  We use the orthology calls to populate the orthologs tabs for genes, as well as to infer disease-model associations via homology."
 },
@@ -131,6 +146,7 @@
   "ontologies_or_vocabularies": "WBbt; WBls; WBPhenotype",
   "taxa": "worm",
   "resource": "WormBase",
+  "id":"nif-0000-00053",
   "data_categories": "allele-phenotype association",
   "monarch_use": "Wormbase curates variant (allele)-phenotype associations. The variants are both genetic (intrinsic) and induced through application of reagents such as RNAi (extrinsic).  We list the variant-phenotype associations. Some data is pulled from WormBase directly, other data is routed via WormMine."
 },
@@ -139,6 +155,7 @@
   "ontologies_or_vocabularies": "ECO; PATO; SO; ZFA; ZFS; ZP",
   "taxa": "zebrafish",
   "resource": "ZFIN",
+  "id":"nif-0000-21427",
   "data_categories": "genotype-phenotype association; experimental reagents (morpholinos)",
   "monarch_use": "We integrate the curated genotype-phenotype data, including experimentally derived fish (such as via application of morpholions), and links to the literature as evidence.  "
 },
