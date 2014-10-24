@@ -309,6 +309,10 @@
                             "subject": {
                                 "id": "NCBIGene_388552"
                             },
+                            "property": {
+                                "id": "subClassOf",
+                                "label": "subClassOf"
+                            },
                             "source": "OntoQuest"
                         }
                         //object: {
@@ -318,13 +322,13 @@
                 
             }
         },
-            
+    
 
         // --json--
         // monarch API calls can return deeply nested/structured objects, these are
         // checked recursively
         {
-            component : "monarch",
+            component : "monarch-ignore",
             priority : 1,
             url : "http://tartini.crbs.ucsd.edu/phenotype/HP:0001337.json",
             desc : "JSON for A HPO phenotype disease page, Tremor (and subtypes)",
