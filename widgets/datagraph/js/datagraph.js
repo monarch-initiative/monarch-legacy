@@ -511,7 +511,7 @@ var datagraph = {
                            .style("fill-opacity", 1e-6)
                            .remove();
                        if (config.useCrumb){
-                           makeBreadcrumb(level,d.label,groups,rect,barGroup);
+                           makeBreadcrumb(level,d.label,groups,rect,barGroup,d.fullLabel);
                        }
                    }
            });
@@ -567,6 +567,9 @@ var datagraph = {
                 .attr("width", function(d) { return x(d.value); })
                 
             rect.on("mouseover", function(d){
+                
+                d3.select(this)
+                .style("fill", config.color.bar.fill);
                   
                 var coords = d3.transform(d3.select(this.parentNode).attr("transform")).translate;
                 var w = coords[0];
@@ -582,6 +585,8 @@ var datagraph = {
             })
                 .on("mouseout", function(){
                   tooltip.style("display", "none")
+                  d3.select(this)
+                  .style("fill", function(d) { return color(d.name); });
             })
         }
 
@@ -610,6 +615,9 @@ var datagraph = {
                 .attr("y", function(d) { return y1(d.name); })
                 
             rect.on("mouseover", function(d){
+                
+                d3.select(this)
+                .style("fill", config.color.bar.fill);
                    
                 var coords = d3.transform(d3.select(this.parentNode).attr("transform")).translate;
                 var w = coords[0];
@@ -626,6 +634,8 @@ var datagraph = {
             })
                .on("mouseout", function(){
                    tooltip.style("display", "none");
+                   d3.select(this)
+                   .style("fill", function(d) { return color(d.name); });
             })
         }
         
@@ -645,7 +655,9 @@ var datagraph = {
             level = index;
             superclass = parents[index];
             svg.selectAll(".tick.major").remove();
-            transitionSubGraph(superclass);
+            var isFromCrumb = true;
+            var parent = undefined;
+            transitionSubGraph(superclass,parents,isFromCrumb);
             
             for (var i=(index+1); i <= parents.length; i++){
                 d3.select(html_div).select(".bread"+i).remove();
@@ -685,7 +697,7 @@ var datagraph = {
               .on("click", function(){});
         }
         
-        function makeBreadcrumb(index,label,groups,rect,phenoDiv) {
+        function makeBreadcrumb(index,label,groups,rect,phenoDiv,fullLabel) {
             
             if (!label){
                 label = config.firstCrumb;
@@ -736,9 +748,16 @@ var datagraph = {
                 .attr("points",index ? config.trailCrumbs : config.firstCr)
                 .attr("fill", config.color.crumb.top);
             
-            d3.select(html_div).select((".bread"+index))
+            if (fullLabel){
+                d3.select(html_div).select((".bread"+index))
+                .append("svg:title")
+                .text(fullLabel);    
+            } else { 
+                d3.select(html_div).select((".bread"+index))
                     .append("svg:title")
                     .text(label);    
+            }
+                   
         
             d3.select(html_div).select((".bread"+index))
                 .append("text")
@@ -820,11 +839,13 @@ var datagraph = {
         //TODO DRY - there is quite a bit of duplicated code
         //     here from the parent drawGraph() function
         //     NOTE - this will be refactored as AJAX calls
-        function transitionSubGraph(subGraph,parent) {
+        function transitionSubGraph(subGraph,parent,isFromCrumb) {
             
             var groups = config.getGroups(subGraph);
             subGraph = config.getStackedStats(subGraph,groups);
-            subGraph = config.addEllipsisToLabel(subGraph,config.maxLabelSize);
+            if (!isFromCrumb){
+                subGraph = config.addEllipsisToLabel(subGraph,config.maxLabelSize);
+            }
             var rect;
             if (parent){
                 parents.push(parent);
@@ -1019,6 +1040,9 @@ var datagraph = {
                     .attr("width", function(d) { return x(d.value); })     
                     
                   rect.on("mouseover", function(d){
+                      
+                      d3.select(this)
+                      .style("fill", config.color.bar.fill);
                          
                       var coords = d3.transform(d3.select(this.parentNode).attr("transform")).translate;
                       var w = coords[0];
@@ -1034,10 +1058,10 @@ var datagraph = {
                      })
                      .on("mouseout", function(){
                          tooltip.style("display", "none")
+                         d3.select(this)
+                         .style("fill", function(d) { return color(d.name); });
                      })
               } else {
-                  
-                    
                   x.domain([0, xStackMax]);
                   y1.domain(groups).rangeRoundBands([0,0]);
                     
@@ -1061,6 +1085,9 @@ var datagraph = {
                     .attr("y", function(d) { return y1(d.name); })
                     
                    rect.on("mouseover", function(d){
+                       
+                       d3.select(this)
+                       .style("fill", config.color.bar.fill);
               
                        var coords = d3.transform(d3.select(this.parentNode).attr("transform")).translate;
                        var w = coords[0];
@@ -1076,6 +1103,8 @@ var datagraph = {
                     })
                    .on("mouseout", function(){
                        tooltip.style("display", "none");
+                       d3.select(this)
+                       .style("fill", function(d) { return color(d.name); });
                    })
               }
             }

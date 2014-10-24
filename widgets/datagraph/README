@@ -101,7 +101,7 @@ Steps for Adding the Monarch Graph Widget to Your Webpage
              ],
              "subGraph":[
                  {
-                   "phenotype":"Nervous System Morphology",
+                   "label":"Nervous System Morphology",
                    "id":"HP:0012639",
                    "counts": [
                      {
