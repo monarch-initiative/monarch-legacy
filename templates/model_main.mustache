@@ -20,7 +20,14 @@
   <script type="text/javascript" src="{{{.}}}"></script>
   {{/pup_tent_js_libraries}}
   
-  {{{phenoGenoGraph}}}
+  <!-- JS launcher. -->
+  <script type="text/javascript">
+  jQuery(document).ready(function(){
+  {{#monarch_launchable}}
+  {{.}};
+  {{/monarch_launchable}}
+  });
+  </script>
 
   <link rel="icon" href="/image/favicon.ico" type="image/x-icon">
   <meta charset="utf-8"/>
