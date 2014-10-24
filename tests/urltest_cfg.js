@@ -300,13 +300,22 @@
             desc : "JSON for a gene",
             expects : {
                 format : "json",
-                must_contain : [
+                must_contain : 
                     {
-                        tax_xref: {
-                            "id": "SO_0001217"
+                        "id": "NCBIGene_388552",
+                        "label": "BLOC1S3",
+                        "has_exact_synonym": [],
+                        "relationships": {
+                            "subject": {
+                                "id": "NCBIGene_388552"
+                            },
+                            "source": "OntoQuest"
                         }
+                        //object: {
+                        //"id": "SO_0001217"
+                        //}
                     }
-                ]
+                
             }
         },
             
