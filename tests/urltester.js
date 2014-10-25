@@ -26,6 +26,7 @@ var cfgs =
     ];
 
 var components = null;  // list of components to be tested. Defaults to all
+var urlToTest = null;   // set if only a single URL is to be tested
 
 // test ALL configs
 exports.testAll = function() {
@@ -59,6 +60,12 @@ var testUrl = function(urlinfo) {
 
     if (components != null) {
         if (components.indexOf(component) == -1) {
+            console.log("Skipping test on: "+url);
+            return;
+        }
+    }
+    if (urlToTest != null) {
+        if (url != urlToTest) {
             console.log("Skipping test on: "+url);
             return;
         }
@@ -182,6 +189,9 @@ var testResults = function(urlinfo, results) {
         listify(expects.must_contain).forEach(
             function(matchObj) { 
                 var matches = results.filter(function(r) { return matchesQuery(r, matchObj) });
+                if (matches.length == 0) {
+                    console.error("ACTUAL="+JSON.stringify(results, null, ' '));
+                }
                 assert.notEqual(matches.length, 0);
             });
     }
@@ -265,7 +275,8 @@ if (require.main == module) {
     var parser = new Parser(system.args);
     parser.addOption('h', 'help', null, 'Display help');
     parser.addOption('c', 'components', 'String', 'comma separated list of components. "ALL" for all');
-    parser.addOption('s', 'setup', 'String', 'one of: alpha, beta, production (NOT IMPLEMENTED)');
+    parser.addOption('s', 'setup', 'String', 'one of: alpha, beta, production');
+    parser.addOption('u', 'url', 'URL', 'URL to test');
     
     var options = parser.parse(system.args);
     if (options.help) {
@@ -290,6 +301,9 @@ ringo  -c vocabulary tests/urltester.js\n\
     }
 
     console.log("options.components = " + options.components);
+    if (options.url != null) {
+        urlToTest = options.url;
+    }
     if (options.components != null) {
         console.log("SETTING = " + options.components);
         components = options.components.split(",");

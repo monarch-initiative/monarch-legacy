@@ -300,22 +300,35 @@
             desc : "JSON for a gene",
             expects : {
                 format : "json",
-                must_contain : [
+                must_contain : 
                     {
-                        tax_xref: {
-                            "id": "SO_0001217"
+                        "id": "NCBIGene_388552",
+                        "label": "BLOC1S3",
+                        "has_exact_synonym": [],
+                        "relationships": {
+                            "subject": {
+                                "id": "NCBIGene_388552"
+                            },
+                            "property": {
+                                "id": "subClassOf",
+                                "label": "subClassOf"
+                            },
+                            "source": "OntoQuest"
                         }
+                        //object: {
+                        //"id": "SO_0001217"
+                        //}
                     }
-                ]
+                
             }
         },
-            
+    
 
         // --json--
         // monarch API calls can return deeply nested/structured objects, these are
         // checked recursively
         {
-            component : "monarch",
+            component : "monarch-ignore",
             priority : 1,
             url : "http://tartini.crbs.ucsd.edu/phenotype/HP:0001337.json",
             desc : "JSON for A HPO phenotype disease page, Tremor (and subtypes)",
