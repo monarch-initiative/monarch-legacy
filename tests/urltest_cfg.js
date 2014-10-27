@@ -423,7 +423,7 @@
             notes : "Currently just checks for string matches in returned HTML",
             expects : {
                 format : "html",
-                raw_contains : "Monarch Analysis: phenotypes",
+                raw_contains : "Monarch Phenotype Profile Analysis",
             }
         },
 
