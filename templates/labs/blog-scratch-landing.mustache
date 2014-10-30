@@ -68,13 +68,13 @@
       <!-- About. -->
       <div>
 	<div class="panel panel-default">
-	  <div class="panel-heading">
-	    <h3 class="panel-title">About</h3>
-	  </div>
+	  <!-- <div class="panel-heading"> -->
+	  <!--   <h3 class="panel-title">About</h3> -->
+	  <!-- </div> -->
 	  <div class="panel-body">
 	    <p>
               <i>Enabling navigation across a rich landscape of phenotypes,
-		diseases, models, and genes for translational research</i>
+		diseases, models, and genes for translational research.</i>
 	    </p>
 	    <ul>
 	      <li><a href="/page/about#goals">What is Monarch?</a></li>
@@ -136,24 +136,32 @@
 
       <!-- Search. -->
       <div>
-	<div class="panel panel-default" style="padding-bottom: 0;">
+	<div class="panel panel-default"> <!-- style="padding-bottom: 0;"> -->
 	  <div class="panel-heading">
-	    <h3 class="panel-title">Search Monarch data</h3>
+	    <h3 class="panel-title">Search Monarch Data</h3>
 	  </div>
 	  <div class="panel-body">
 	    <!-- <p> -->
 	    <!--   Search Monarch data. -->
 	    <!-- </p> -->
-		  <!-- class="navbar-form" -->
-	    <form id="home_search_form"
-		  action="/search"
-		  role="form">
-	      <div class="form-group">
-		<input id="home-search"
+	    <!-- class="navbar-form" -->
+
+
+	    <h5><strong>Simple Search</strong></h5>
+	    <p>
+	      Select from autocomplete and jump to relevant pages.
+	    </p>
+	    <p>
+	      <form id="home_search_form"
+		    action="/search"
+		    role="form">
+		<div class="form-group">
+		  
+		<input id="home_search"
 		       type="text"
 		       class="form-control"
 		       placeholder="Search (e.g. Parkinson's)" />
-		
+
 		<!-- <select class="form-control"> -->
 		<!--   <option>1</option> -->
 		<!--   <option>2</option> -->
@@ -162,38 +170,51 @@
 		<!--   <option>5</option> -->
 		<!-- </select> -->
 		
-		<div class="panel panel-default" style="padding-bottom: 0;">
-		  <div class="panel-heading" style="margin-bottom: 0;">
-		    <span><small><a data-toggle="collapse" data-target="#collapseOne" aria-expanded="true" aria-controls="collapseOne">Advanced options</a></small></span>
-		  </div>
-		  <div id="collapseOne" class="panel-collapse collapse">
-		    <div class="panel-body">
+		<!-- <div class="panel panel-default" style="padding-bottom: 0;"> -->
+		<!--   <div class="panel-heading" style="margin-bottom: 0;"> -->
+		<!--     <span><small><a data-toggle="collapse" data-target="#collapseOne" aria-expanded="true" aria-controls="collapseOne">Advanced options</a></small></span> -->
+		<!--   </div> -->
+		<!--   <div id="collapseOne" class="panel-collapse collapse"> -->
+		<!--     <div class="panel-body"> -->
 		      
-		      <div class="radio">
-			<label>
-			  <input type="radio" name="optionsRadios" id="optionsRadios1" value="option1" checked>
-			  Option one
-			</label>
-		      </div>
-		      <div class="radio">
-			<label>
-			  <input type="radio" name="optionsRadios" id="optionsRadios2" value="option2">
-			  Option two
-			</label>
-		      </div>
-		      <div class="radio disabled">
-			<label>
-			  <input type="radio" name="optionsRadios" id="optionsRadios3" value="option3" disabled>
-			  Option three
-			</label>
-		      </div>
+		<!--       <div class="radio"> -->
+		<!-- 	<label> -->
+		<!-- 	  <input type="radio" name="optionsRadios" id="optionsRadios1" value="option1" checked> -->
+		<!-- 	  Option one -->
+		<!-- 	</label> -->
+		<!--       </div> -->
+		<!--       <div class="radio"> -->
+		<!-- 	<label> -->
+		<!-- 	  <input type="radio" name="optionsRadios" id="optionsRadios2" value="option2"> -->
+		<!-- 	  Option two -->
+		<!-- 	</label> -->
+		<!--       </div> -->
+		<!--       <div class="radio disabled"> -->
+		<!-- 	<label> -->
+		<!-- 	  <input type="radio" name="optionsRadios" id="optionsRadios3" value="option3" disabled> -->
+		<!-- 	  Option three -->
+		<!-- 	</label> -->
+		<!--       </div> -->
 		      
-		    </div>
-		  </div>
+		<!--     </div> -->
+		<!--   </div> -->
+		<!-- </div> -->
+		
 		</div>
+	      </form>
+	    </p>
 
-	      </div>
-	    </form>
+	    <h5><strong>Advanced Phenotype Search</strong></h5>
+	    <p class="">
+	      Find models and phenotypes similar to a set of
+	      abnormal phenotypes of interest.
+	    </p>
+	    <p class="">
+	      <a class="btn btn-primary" href="/analyze/phenotypes">
+		Go to Advanced Search &raquo;
+	      </a>
+	    </p>	    
+
 	  </div>
 	</div>
       </div>
@@ -230,29 +251,29 @@
       </div>
 
       <!-- Pheno Search. -->
-      <div>
-	<div class="panel panel-default">
-	  <div class="panel-heading">
-	    <h3 class="panel-title">Pheno Search</h3>
-	  </div>
-	  <div class="panel-body">
-	    <p>
-	      Search phenotypes.
-	    </p>
-	    <form id="pheno_search_form"
-		  action="/search"
-		  role="form">
-	      <div class="form-group">
-		<input id="pheno-search"
-		       type="text"
-		       class="form-control"
-		       placeholder="Search (e.g. Parkinson's)" />
-	      </div>
-	    </form>
-	  </div>
-	</div>
-      
-      </div>
+      <!-- <div> -->
+      <!-- 	<div class="panel panel-default"> -->
+      <!-- 	  <div class="panel-heading"> -->
+      <!-- 	    <h3 class="panel-title">Pheno Search</h3> -->
+      <!-- 	  </div> -->
+      <!-- 	  <div class="panel-body"> -->
+      <!-- 	    <p> -->
+      <!-- 	      Search phenotypes. -->
+      <!-- 	    </p> -->
+      <!-- 	    <form id="pheno_search_form" -->
+      <!-- 		  action="/search" -->
+      <!-- 		  role="form"> -->
+      <!-- 	      <div class="form-group"> -->
+      <!-- 		<input id="pheno-search" -->
+      <!-- 		       type="text" -->
+      <!-- 		       class="form-control" -->
+      <!-- 		       placeholder="Search (e.g. Parkinson's)" /> -->
+      <!-- 	      </div> -->
+      <!-- 	    </form> -->
+      <!-- 	  </div> -->
+      <!-- 	</div> -->      
+      <!-- </div> -->
+
     </div>
     
   </div>
