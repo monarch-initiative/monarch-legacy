@@ -8,42 +8,62 @@
     <div id="col-1" class="col-xs-12 col-sm-8 col-md-8 col-lg-8">
       
       <!-- Quiet rollover. -->
+      <!-- WARNING: There is an HTML/CSS trick in here--the largest -->
+      <!-- item is in "relative" position and the rest are in "absolute". -->
       <div class="panel panel-default">
 	<div class="panel-heading">
 	  <h3 class="panel-title">Welcome to Monarch</h3>
 	</div>
-	<div class="panel-body" style="height: 7em;">
-	  <p>
-	    <img src="/image/slide-1.png" style="max-height: 5em; width: auto; float: left; padding-right: 1em;" alt="Diseases" />
-	    <strong>Learn about Mendelian diseases</strong><br />
-      	    Diseases described by collections of phenotypes
-      	    can be compared to each other and to animal models
-      	    to investigate genetic underpinnings.
-	  </p>
+	<div class="panel-body">
+	  <div id="monarch-carousel" class="" style="position:relative;">
+	    <div class="monarch-carousel-item" style="opacity: 1.0; position: absolute; top: 0px; left: 0px;">
+	      <p>
+		<img src="/image/slide-1.png" style="max-height: 5em; width: auto; float: left; padding-right: 1em;" alt="Diseases" />
+		<strong>Learn about Mendelian diseases</strong><br />
+      		Diseases described by collections of phenotypes can be
+      		compared to each other and to animal models to
+      		investigate genetic underpinnings.
+		<a href="/disease">More &raquo;</a>
+	      </p>
+	    </div>
+	    <div class="monarch-carousel-item" style="opacity: 0.0; position: relative; top: 0px; left: 0px;">
+	      <p>
+		<img src="/image/slide-2.png" style="max-height: 5em; width: auto; float: left; padding-right: 1em;" alt="Models" />
+      		<strong>Find models of disease</strong><br /> In vitro
+      		and in vivo disease models can recapitulate some or
+      		all phenotypes of human disease.  Comparison of animal
+      		model phenotypes with human disease can suggest
+      		candidate genes.
+		<a href="/model">More &raquo;</a>
+	      </p>
+	    </div>
+	    <div class="monarch-carousel-item" style="opacity: 0.0; position: absolute; top: 0px; left: 0px;">
+	      <p>
+		<img src="/image/slide-3.png" style="max-height: 5em; width: auto; float: left; padding-right: 1em;" alt="Genes" />
+      		<strong>Understand the genetics</strong><br />
+      		Variations in genes and other genomic features are
+      		often associated with diseases and variant phenotypes.
+      		Learn about the phenotypes associated with your
+      		favorite gene.
+		<a href="/gene">More &raquo;</a>
+	      </p>
+	    </div>
+	    <div class="monarch-carousel-item" style="opacity: 0.0; position: absolute; top: 0px; left: 0px;">
+	      <p>
+		<img src="/image/slide-4.png" style="max-height: 5em; width: auto; float: left; padding-right: 1em;" alt="Phenotypes" />
+      		<strong>Explore phenotypes</strong><br /> Similar
+      		phenotypes may be observed in various diseases and
+      		across species.
+		<a href="/phenotype">More &raquo;</a>
+	      </p>
+	    </div>
+	  </div>
 	</div>
-	<div class="panel-footer text-right">ooo</div>
+	<div class="panel-footer text-right">
+	  <span id="monarch-carousel-indicator">
+	  &FilledSmallSquare;&EmptySmallSquare;&EmptySmallSquare;&EmptySmallSquare;
+	</div>
       </div>
-
-      <!-- <img src="/image/slide-1.png" alt="Diseases"> -->
-      <!-- 	<h3><a href="/disease">Learn about Mendelian diseases</a></h3> -->
-      <!-- 	  Diseases described by collections of phenotypes -->
-      <!-- 	  can be compared to each other and to animal models -->
-      <!-- 	  to investigate genetic underpinnings. -->
-      <!-- <img src="/image/slide-4.png" alt="Phenotypes"> -->
-      <!-- 	<h3><a href="/phenotype">Explore phenotypes</a></h3> -->
-      <!-- 	  Similar phenotypes may be observed in various -->
-      <!-- 	  diseases and across species.    -->
-      <!-- <img src="/image/slide-2.png" alt="Models"> -->
-      <!-- 	<h3><a href="/model">Find models of disease</a></h3> -->
-      <!-- 	  In vitro and in vivo disease models can recapitulate -->
-      <!-- 	  some or all phenotypes of human disease.  Comparison -->
-      <!-- 	  of animal model phenotypes with human disease -->
-      <!-- 	  can suggest candidate genes. -->
-      <!-- <img src="/image/slide-3.png" alt="Genes"> -->
-      <!-- 	<h3><a href="/gene">Understand the genetics</a></h3> -->
-      <!-- 	  Variations in genes and other genomic features -->
-      <!-- 	  are often associated with diseases and variant phenotypes. -->
-      <!-- 	  Learn about the phenotypes associated with your favorite gene.  -->
 
       <!-- About. -->
       <div>
@@ -52,15 +72,15 @@
 	    <h3 class="panel-title">About</h3>
 	  </div>
 	  <div class="panel-body">
-		<p>
-          <i>Enabling navigation across a rich landscape of phenotypes,
-          diseases, models, and genes for translational research</i>
-		</p>
-		<ul>
-			<li><a href="/page/about#goals">What is Monarch?</a></li>
-			<li><a href="/page/about#background">Can Monarch help me investigate biology of disease?</a></li>
-			<li><a href="/page/about#dataflow">How does Monarch integrate phenotype data?</a></li>
-			<li><a href="/page/about#partners">Who are our partners?</a></li>
+	    <p>
+              <i>Enabling navigation across a rich landscape of phenotypes,
+		diseases, models, and genes for translational research</i>
+	    </p>
+	    <ul>
+	      <li><a href="/page/about#goals">What is Monarch?</a></li>
+	      <li><a href="/page/about#background">Can Monarch help me investigate biology of disease?</a></li>
+	      <li><a href="/page/about#dataflow">How does Monarch integrate phenotype data?</a></li>
+	      <li><a href="/page/about#partners">Who are our partners?</a></li>
 	  </div>
 	</div>
       </div>
