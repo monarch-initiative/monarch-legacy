@@ -1,5 +1,6 @@
 <!-- Top-level internal container. -->
 <div class="container-fluid" style="margin: 1.001em;">
+<!-- <div class="container-fluid" class="conflict-top-container-margin"> -->
 
   <!-- Open first row section. -->
   <div class="row">
@@ -33,10 +34,10 @@
 	  
 	  <!-- <hr /> -->
 
-	  <div id="monarch-carousel" class="" style="position:relative;">
-	    <div class="monarch-carousel-item" style="opacity: 1.0; position: absolute; top: 0px; left: 0px;">
+	  <div id="monarch-carousel" class="monarch-carousel">
+	    <div class="monarch-carousel-item monarch-carousel-item-selected">
 	      <p>
-		<img src="/image/slide-1.png" style="max-height: 5em; width: auto; float: left; padding-right: 1em;" alt="Diseases" />
+		<img src="/image/carousel-diseases.png" class="monarch-carousel-embedded-image" alt="Diseases" />
 		<strong>Learn about Mendelian diseases</strong><br />
       		Diseases described by collections of phenotypes can be
       		compared to each other and to animal models to
@@ -44,9 +45,9 @@
 		<a href="/disease">More &raquo;</a>
 	      </p>
 	    </div>
-	    <div class="monarch-carousel-item" style="opacity: 0.0; position: relative; top: 0px; left: 0px;">
+	    <div class="monarch-carousel-item monarch-carousel-item-unselected monarch-carousel-item-largest">
 	      <p>
-		<img src="/image/slide-2.png" style="max-height: 5em; width: auto; float: left; padding-right: 1em;" alt="Models" />
+		<img src="/image/carousel-models.png" class="monarch-carousel-embedded-image" alt="Models" />
       		<strong>Find models of disease</strong><br /> In vitro
       		and in vivo disease models can recapitulate some or
       		all phenotypes of human disease.  Comparison of animal
@@ -55,9 +56,9 @@
 		<a href="/model">More &raquo;</a>
 	      </p>
 	    </div>
-	    <div class="monarch-carousel-item" style="opacity: 0.0; position: absolute; top: 0px; left: 0px;">
+	    <div class="monarch-carousel-item monarch-carousel-item-unselected">
 	      <p>
-		<img src="/image/slide-3.png" style="max-height: 5em; width: auto; float: left; padding-right: 1em;" alt="Genes" />
+		<img src="/image/carousel-genes.png" class="monarch-carousel-embedded-image" alt="Genes" />
       		<strong>Understand the genetics</strong><br />
       		Variations in genes and other genomic features are
       		often associated with diseases and variant phenotypes.
@@ -66,9 +67,9 @@
 		<a href="/gene">More &raquo;</a>
 	      </p>
 	    </div>
-	    <div class="monarch-carousel-item" style="opacity: 0.0; position: absolute; top: 0px; left: 0px;">
+	    <div class="monarch-carousel-item monarch-carousel-item-unselected">
 	      <p>
-		<img src="/image/slide-4.png" style="max-height: 5em; width: auto; float: left; padding-right: 1em;" alt="Phenotypes" />
+		<img src="/image/carousel-phenotypes.png" class="monarch-carousel-embedded-image" alt="Phenotypes" />
       		<strong>Explore phenotypes</strong><br /> Similar
       		phenotypes may be observed in various diseases and
       		across species.
@@ -78,6 +79,7 @@
 	  </div>
 	</div>
 	<div class="panel-footer text-right">
+	  <!-- This is temporary and will be overwritten almost immediately. -->
 	  <span id="monarch-carousel-indicator">
 	    &FilledSmallSquare;&EmptySmallSquare;&EmptySmallSquare;&EmptySmallSquare;</span>
 	</div>
@@ -247,23 +249,23 @@
       <!-- 	  <div class="panel-body"> -->
 
 	    <div class="list-group">
-	      <span class="list-group-item" style="font-size: 17.5px; font-weight: 500; background-color: #f5f5f5;">
+	      <span class="list-group-item panel-mimic-for-list-header">
 		Explore
 	      </span>
-	      <a href="/disease" class="list-group-item" style="">
-		<img src="/image/slide-1.png" style="max-height: 1.5em; width: auto; float: left; padding-right: 1em;" alt="Diseases" />
+	      <a href="/disease" class="list-group-item">
+		<img src="/image/carousel-diseases.png" class="monarch-nav-embedded-image" alt="Diseases" />
 		Mendelian diseases
 	      </a>
-	      <a href="/phenotype" class="list-group-item" style="">
-		<img src="/image/slide-4.png" style="max-height: 1.5em; width: auto; float: left; padding-right: 1em;" alt="Phenotypes" />
+	      <a href="/phenotype" class="list-group-item">
+		<img src="/image/carousel-phenotypes.png" class="monarch-nav-embedded-image" alt="Phenotypes" />
 		Phenotypes
 	      </a>
-	      <a href="/model" class="list-group-item" style="">
-		<img src="/image/slide-2.png" style="max-height: 1.5em; width: auto; float: left; padding-right: 1em;" alt="Models" />
+	      <a href="/model" class="list-group-item">
+		<img src="/image/carousel-models.png" class="monarch-nav-embedded-image" alt="Models" />
 		Models of Disease
 	      </a>
-	      <a href="/gene" class="list-group-item" style="">
-		<img src="/image/slide-3.png" style="max-height: 1.5em; width: auto; float: left; padding-right: 1em;" alt="Genetics" />
+	      <a href="/gene" class="list-group-item">
+		<img src="/image/carousel-genes.png" class="monarch-nav-embedded-image" alt="Genetics" />
 		Understand the genetics
 	      </a>
 	    </div>
