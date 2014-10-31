@@ -133,7 +133,7 @@ jQuery(document).ready(function(){
 			    // Update to the new position.
 			    var target_pos = cbox.get_position();
 			    //alert('boom: ' + target_pos);
-			    _update_from_to(current, target_pos, function(){
+			    _update_from_to(count, target_pos, function(){
 				_refresh_carousel_boxes(celt, belt);
 			    });
 			});
@@ -145,15 +145,26 @@ jQuery(document).ready(function(){
 
     // Fade the current, move to the next.
     // WARNING: This one does little to no error checking.
-    function _update_from_to(from_pos, to_pos, run_at_end_fun){
+    function _update_from_to(pos_count, to_pos, run_at_end_fun){
 
 	// Since they are piled on top of eachother, just fade in
 	// and out. Also, need positions, not indexes here, so +1.
-	var curr_ref =
-	    mcid + ' .monarch-carousel-item:nth-child(' + from_pos + ')';
+	// There can be a race condition with the timer, so fade
+	// everything out but the one to be displayed.
+	_.times(pos_count, function(i){
+	    var from_pos = i+1;
+	    if( from_pos != to_pos ){
+		var curr_ref =
+		    mcid + ' .monarch-carousel-item:nth-child(' + from_pos + ')';
+		if( jQuery(curr_ref).css('opacity') != '0' &&
+		    jQuery(curr_ref).css('opacity') != '0.0' ){
+		    jQuery(curr_ref).fadeTo('slow', '0.0');
+		}
+	    }
+	});
+	// Bring up next one.
 	var next_ref =
 	    mcid + ' .monarch-carousel-item:nth-child(' + to_pos + ')';
-	jQuery(curr_ref).fadeTo('slow', '0.0');
 	jQuery(next_ref).fadeTo('slow', '1.0', function(){
 	    if( run_at_end_fun ){
 		run_at_end_fun();
@@ -191,7 +202,7 @@ jQuery(document).ready(function(){
 		var next = (current % count) + 1;
 		
 		//
-		_update_from_to(current, next, function(){
+		_update_from_to(count, next, function(){
 		    // Fresh the indicator to the new status.
 		    _refresh_carousel_boxes(mcid, indid);
 		});
