@@ -159,3 +159,26 @@
     float: left;
     padding-right: 1em;
 }
+
+.monarch-home-splash {
+    background-image: url('/image/home-splash.png');
+    margin-bottom: 17.5px;
+    padding-top: 40px;
+    padding-bottom: 40px;
+    padding-left: 40px;
+    /* padding-right: 60px; */
+}
+.monarch-home-splash-text {
+    color: #ffffff;
+    font-size: 30px;
+    font-weight: 500;
+    /* Attempt at outline. */
+   /* -webkit-text-fill-color: white; */
+   /* -webkit-text-stroke-width: 1px; */
+   /* -webkit-text-stroke-color: black; */
+  text-shadow:
+   -1px -1px 0 #000,  
+    1px -1px 0 #000,
+    -1px 1px 0 #000,
+     1px 1px 0 #000;
+}

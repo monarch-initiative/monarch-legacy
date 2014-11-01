@@ -1,6 +1,16 @@
 <!-- Top-level internal container. -->
-<div class="container-fluid" style="margin: 1.001em;">
 <!-- <div class="container-fluid" class="conflict-top-container-margin"> -->
+<div class="container-fluid" style="margin: 1.1em;">
+
+  {{#monarch_home_test_p}}
+  <div class="jumbotron monarch-home-splash">
+    <span class="monarch-home-splash-text">
+      <strong>The Monarch Initiative</strong>
+    </span>
+  </div>
+  {{/monarch_home_test_p}}
+  {{^monarch_home_test_p}}
+  {{/monarch_home_test_p}}
 
   <!-- Open first row section. -->
   <div class="row">
@@ -12,8 +22,15 @@
       <!-- WARNING: There is an HTML/CSS trick in here--the largest -->
       <!-- item is in "relative" position and the rest are in "absolute". -->
       <div class="panel panel-default">
-	<div class="panel-heading">
-	  <h3 class="panel-title">Welcome to Monarch</h3>
+	<div class="panel-heading clearfix">
+	  <h3 class="panel-title pull-left">Welcome to Monarch</h3>
+	  {{#monarch_home_test_p}}
+	  <span id="monarch-carousel-indicator" class="pull-right">
+	    &FilledSmallSquare;&EmptySmallSquare;&EmptySmallSquare;&EmptySmallSquare;
+	  </span>
+	  {{/monarch_home_test_p}}
+	  {{^monarch_home_test_p}}
+	  {{/monarch_home_test_p}}
 	</div>
 	<div class="panel-body">
 
@@ -77,15 +94,43 @@
 	      </p>
 	    </div>
 	  </div>
+
+	  {{#monarch_home_test_p}}
+	  <hr />
+
+      	  <div class="">
+      	    <p>
+              <strong>Monarch enables navigation across a rich landscape of
+      		phenotypes, diseases, models, and genes for
+      		translational research.</strong>
+      	    </p>
+      	    <ul>
+      	      <li><a href="/page/about#goals">What is Monarch?</a></li>
+      	      <li><a href="/page/about#background">Can Monarch help me investigate biology of disease?</a></li>
+      	      <li><a href="/page/about#dataflow">How does Monarch integrate phenotype data?</a></li>
+      	      <li><a href="/page/about#partners">Who are our partners?</a></li>
+      	    </ul>
+      	  </div>
+	  {{/monarch_home_test_p}}
+	  {{^monarch_home_test_p}}
+	  {{/monarch_home_test_p}}
+
+
 	</div>
+	{{#monarch_home_test_p}}
+	{{/monarch_home_test_p}}
+	{{^monarch_home_test_p}}
 	<div class="panel-footer text-right">
-	  <!-- This is temporary and will be overwritten almost immediately. -->
 	  <span id="monarch-carousel-indicator">
 	    &FilledSmallSquare;&EmptySmallSquare;&EmptySmallSquare;&EmptySmallSquare;</span>
 	</div>
+	{{/monarch_home_test_p}}
       </div>
 
       <!-- About. -->
+      {{#monarch_home_test_p}}
+      {{/monarch_home_test_p}}
+      {{^monarch_home_test_p}}
       <div>
       	<div class="panel panel-default">
       	  <!-- <div class="panel-heading"> -->
@@ -106,6 +151,7 @@
       	  </div>
       	</div>
       </div>
+      {{/monarch_home_test_p}}
 
       <!-- News and twitter combo. -->
       <div class="row">
