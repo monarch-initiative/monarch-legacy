@@ -102,6 +102,7 @@
   ClinVarVariant: "http://identifiers.org/ClinVarVariant:"  
   GeneID: http://purl.obolibrary.org/obo/NCBIGene_
   Gene: http://purl.obolibrary.org/obo/NCBIGene_
+  WBStrain: "http://identifiers.org/WormBase:"
   ##
   ## -- Schema classes --
   ##
