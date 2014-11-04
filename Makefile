@@ -60,6 +60,9 @@ target/%.owl: target/%.ttl
 #conf/rdf-mapping/%.yaml: conf/rdf-mapping/%.json
 #	json2yaml.pl $< > $@.tmp && mv $@.tmp $@
 
+YAML2JSON = yaml2json.pl
+##YAML2JSON = python yaml2json.py
+
 conf/rdf-mapping/%.json: conf/rdf-mapping/%.yaml
 	yaml2json.pl $< > $@.tmp && mv $@.tmp $@
 
