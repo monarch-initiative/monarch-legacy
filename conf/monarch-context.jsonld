@@ -108,6 +108,7 @@
       "NCBIGene" : "http://purl.obolibrary.org/obo/NCBIGene_",
       "faldo" : "http://biohackathon.org/resource/faldo#",
       "FBcv" : "http://purl.obolibrary.org/obo/FBcv_",
+      "WBStrain" : "http://identifiers.org/WormBase:",
       "sequence_alteration_collection" : "GENO:0000025",
       "prov" : "http://www.w3.org/ns/prov#",
       "reference" : "dc:publication",
