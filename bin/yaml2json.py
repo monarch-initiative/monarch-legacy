@@ -12,3 +12,5 @@ data = yaml.load(stream)
 json = json.dumps(data)
 
 print(json)
+
+# To install: sudo easy_install pyyaml 
