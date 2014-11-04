@@ -1,5 +1,5 @@
 graph: zfin-gene-phenotype
-mapVersion: 2014-10-03
+mapVersion: 2014-11-04
 view: nif-0000-21427-10
 status: alpha
 notes: w.t. environments and abnormal phenotypes only
@@ -26,7 +26,7 @@ mappings:
     predicate: rdf:type
     subject: v_uuid
   - 
-    object: gene_id
+    object: implicated_gene_ids
     predicate: hasSubject
     subject: v_uuid
   - 
@@ -40,10 +40,6 @@ mappings:
   - 
     object: evidence_code_id
     predicate: dc:evidence
-    subject: v_uuid
-  - 
-    object: phenotype_description_free_text
-    predicate: dc:description
     subject: v_uuid
 filter:
     "environment_id" : "ZDB-EXP-041102-1"
