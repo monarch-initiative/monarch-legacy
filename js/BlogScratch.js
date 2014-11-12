@@ -218,4 +218,9 @@ jQuery(document).ready(function(){
 
     // Initial run of the stepper to get it started, after timing ms.
     init_timer = window.setTimeout(_monarch_carousel_step, timing);
+
+    ///
+    /// Do a rotating tabs section.
+    ///
+
 });
