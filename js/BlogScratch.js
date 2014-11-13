@@ -62,6 +62,18 @@ jQuery(document).ready(function(){
     }
 
     ///
+    /// Make some "neutral" timers for the various attempts to use.
+    ///
+
+    // Sloppy, but usable, way of stopping the timers when we want to.
+    var init_timer = null;
+    var step_timer = null;
+    function _cancel_timers(){
+	if( init_timer ){ clearTimeout(init_timer); }
+	if( step_timer ){ clearTimeout(step_timer); }
+    }
+
+    ///
     /// Do a demo carousel.
     ///
     /// We're going to do this as simply as possible by hand to keep
@@ -133,7 +145,7 @@ jQuery(document).ready(function(){
 			    // Update to the new position.
 			    var target_pos = cbox.get_position();
 			    //alert('boom: ' + target_pos);
-			    _update_from_to(count, target_pos, function(){
+			    _update_from_to_car(count, target_pos, function(){
 				_refresh_carousel_boxes(celt, belt);
 			    });
 			});
@@ -145,7 +157,7 @@ jQuery(document).ready(function(){
 
     // Fade the current, move to the next.
     // WARNING: This one does little to no error checking.
-    function _update_from_to(pos_count, to_pos, run_at_end_fun){
+    function _update_from_to_car(pos_count, to_pos, run_at_end_fun){
 
 	// Since they are piled on top of eachother, just fade in
 	// and out. Also, need positions, not indexes here, so +1.
@@ -173,14 +185,6 @@ jQuery(document).ready(function(){
 	
     }
 
-    // Sloppy, but usable, way of stopping the timers when we want to.
-    var init_timer = null;
-    var step_timer = null;
-    function _cancel_timers(){
-	if( init_timer ){ clearTimeout(init_timer); }
-	if( step_timer ){ clearTimeout(step_timer); }
-    }
-
     // Run only if sensible.
     var timing = 10000; // 10s
     var mcid = '#' + "monarch-carousel"; // carousel
@@ -202,7 +206,7 @@ jQuery(document).ready(function(){
 		var next = (current % count) + 1;
 		
 		//
-		_update_from_to(count, next, function(){
+		_update_from_to_car(count, next, function(){
 		    // Fresh the indicator to the new status.
 		    _refresh_carousel_boxes(mcid, indid);
 		});
@@ -212,15 +216,32 @@ jQuery(document).ready(function(){
 	// Wait to run this again in timing ms.
 	step_timer = window.setTimeout(_monarch_carousel_step, timing);
     }
-
-    // Make carousel boxes active immediately.
-    _refresh_carousel_boxes(mcid, indid);
-
-    // Initial run of the stepper to get it started, after timing ms.
-    init_timer = window.setTimeout(_monarch_carousel_step, timing);
+    // Only start up this way if both indicator and carousel are
+    // present.
+    if( jQuery(mcid).length && jQuery(indid).length ){
+	// Make carousel boxes active immediately.
+	_refresh_carousel_boxes(mcid, indid);	
+	// Initial run of the stepper to get it started, after timing ms.
+	init_timer = window.setTimeout(_monarch_carousel_step, timing);
+    }
 
     ///
     /// Do a rotating tabs section.
     ///
 
+    // Run only if sensible.
+    var tab_timing = 10000; // 1s
+    var mtid = '#' + "monarch-tabber"; // carousel
+    function _monarch_tabber_step(){
+	// Run if tabber controls and carousel are present.
+	if( jQuery(mcid).length && jQuery(mtid).length ){
+	    
+	    // TODO: 
+	   // alert('bing');
+
+	    // Wait to run this again in timing ms.
+	    step_timer = window.setTimeout(_monarch_tabber_step, tab_timing);
+	}
+    }
+    init_timer = window.setTimeout(_monarch_tabber_step, tab_timing);
 });

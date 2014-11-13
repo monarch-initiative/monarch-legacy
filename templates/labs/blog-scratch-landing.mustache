@@ -3,6 +3,13 @@
 <div class="container-fluid" style="margin: 1.1em;">
 
   <!-- b and c have the new splash. -->
+  {{#monarch_home_test_a_p}}
+  <div class="jumbotron monarch-home-splash">
+    <span class="monarch-home-splash-text">
+      <strong>The Monarch Initiative</strong>
+    </span>
+  </div>
+  {{/monarch_home_test_a_p}}
   {{#monarch_home_test_b_p}}
   <div class="jumbotron monarch-home-splash">
     <span class="monarch-home-splash-text">
@@ -46,9 +53,6 @@
 	  {{/monarch_home_test_b_p}}
 	</div>
 	<div class="panel-body">
-
-	  <!-- Only c is different here--a nd b do carousel. -->
-	  {{^monarch_home_test_c_p}}
 	  <div id="monarch-carousel" class="monarch-carousel">
 	    <div class="monarch-carousel-item monarch-carousel-item-selected">
 	      <p>
@@ -92,9 +96,44 @@
 	      </p>
 	    </div>
 	  </div>
-	  {{/monarch_home_test_c_p}}
+
+	  <!-- c does the weird tabber thing. -->
 	  {{#monarch_home_test_c_p}}
-	  TODO: tab/accordion rotation
+	  <div class="clearfix"></div>
+	  <div id="monarch-tabber" class="container">
+	    <div class="row monarch-tabber-controls">
+	      <div class="col-xs-12 col-sm-6 col-md-6 col-lg-3 monarch-tabber-control">
+		<button class="btn btn-default btn-block btn-sm monarch-tabber-control-btn">
+		  <img src="/image/carousel-diseases.png"
+		       class="monarch-nav-embedded-image" alt="Diseases" />
+		  <!-- Mendelian diseases -->
+		  Diseases
+		</button>
+	      </div>
+	      <div class="col-xs-12 col-sm-6 col-md-6 col-lg-3 monarch-tabber-control">
+		<button class="btn btn-primary btn-block btn-sm monarch-tabber-control-btn">
+		  <img src="/image/carousel-phenotypes.png"
+		       class="monarch-nav-embedded-image" alt="Phenotypes" />
+		  Phenotypes
+		</button>
+	      </div>
+	      <div class="col-xs-12 col-sm-6 col-md-6 col-lg-3 monarch-tabber-control">
+		<button class="btn btn-primary btn-block btn-sm monarch-tabber-control-btn">
+		  <img src="/image/carousel-models.png" class="monarch-nav-embedded-image" alt="Models" />
+		  <!-- Models of diseases -->
+		  Models
+		</button>
+	      </div>
+	      <div class="col-xs-12 col-sm-6 col-md-6 col-lg-3 monarch-tabber-control">
+		<button class="btn btn-primary btn-block btn-sm monarch-tabber-control-btn">
+		  <img src="/image/carousel-genes.png"
+		       class="monarch-nav-embedded-image" alt="Genetics" />
+		  <!-- Understand genetics -->
+		  Genetics
+		</button>
+	      </div>
+	    </div>
+	  </div>
 	  {{/monarch_home_test_c_p}}
 
 	  <!-- b and c move the links up. -->
@@ -144,8 +183,8 @@
       </div>
 
       <!-- About. -->
-      <!-- a has the ols about location. -->
-      {{^monarch_home_test_a_p}}
+      <!-- a has the old about location. -->
+      {{#monarch_home_test_a_p}}
       <div>
       	<div class="panel panel-default">
       	  <!-- <div class="panel-heading"> -->
@@ -237,7 +276,7 @@
 	    <!-- </p> -->
 	    <!-- class="navbar-form" -->
 
-	    <h5><strong>Simple Search</strong></h5>
+	    <h5><strong>Basic Search</strong></h5>
 	    <p>
 	      Select from autocomplete and jump to relevant pages.
 	    </p>
