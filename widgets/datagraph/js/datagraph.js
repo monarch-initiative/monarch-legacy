@@ -1,124 +1,136 @@
-var datagraph = {
-  //Chart margins    
-  margin : {top: 40, right: 80, bottom: 5, left: 255},
-  width : 375,
-  height : 580,
-  
-  //X Axis Label
-  xAxisLabel : "Number Of Annotations",
-  
-  //Chart title and first breadcrumb
-  chartTitle : "Phenotype Annotation Distribution",
-  firstCrumb : "Phenotypic Abnormality",
-  
-  //Title size/font settings
-  title : {
-            'margin-left' : '0px',
-            'font-size' : '20px',
-            'font-weight': 'bold'
-  },
-  
-  //Yaxis links
-  isYLabelURL : true,
-  yLabelBaseURL : "/phenotype/",
-  
-  //Colors set in the order they appear in the JSON object
-  color : { 
-           first  : '#44A293',
-           second : '#A4D6D4',
-           third  : '#EA763B',
-           fourth : '#496265',
-           fifth  : '#44A293',
-           sixth  : '#A4D6D4',
-             
-           yLabel : { 
-             fill  : '#000000',
-             hover : '#EA763B'
-           },
-           arrow : {
-             fill  : "#496265",
-             hover : "#EA763B"
-           },
-           bar : {
-             fill  : '#EA763B'
-           },
-           crumb : {
-             top   : '#496265',
-             bottom: '#3D6FB7',
-             hover : '#EA763B'
-           }
-  },
-  //Tooltip offsets
-  arrowOffset : {height: 94, width: 170},
-  barOffset : {
-                grouped:{
-                  height: 110,
-                  width: 260
-                },
-                stacked:{
-                  height: 95,
-                  width: 235
-                }
-  },
-  
-  //Nav arrow (now triangle) 
-  arrowDim : "-23,-6, -12,0 -23,6",
-  
-  //Breadcrumb dimensions
-  firstCr : "0,0 0,30 90,30 105,15 90,0",
-  trailCrumbs : "0,0 15,15 0,30 90,30 105,15 90,0",
-  
-  //breadcrumb div dimensions
-  bcWidth : 560,
-  bcHeight : 35,
-  
-  //Polygon dimensions
-  bread : {width:105, height: 30, offset:90, space: 1, font:10},
-  
-  //Y axis positioning when arrow present
-  yOffset : "-1.48em",
-  
-  maxLabelSize : 31,
-  
-  //Turn on/off breadcrumbs
-  useCrumb : false,
-  
-  //Turn on/off breadcrumbs
-  useLegend : true,
-  
-  //Check browser
-  isOpera : (!!window.opera || navigator.userAgent.indexOf(' OPR/') >= 0),
-  isChrome : (!!window.chrome && !(!!window.opera || navigator.userAgent.indexOf(' OPR/') >= 0)),
-  
-  //set X Axis limit for grouped configuration
-  getGroupMax : function(data){
+/* 
+ * Package: datagraph.js
+ * 
+ * Namespace: monarch.bbop.datagraph
+ * 
+ */
+
+// Module and namespace checking.
+if (typeof bbop == 'undefined') { var bbop = {};}
+if (typeof bbop.monarch == 'undefined') { bbop.monarch = {};}
+
+bbop.monarch.datagraph = function(config){
+    
+    if (config == null || typeof config == 'undefined'){
+        this.config = this.getDefaultConfig();
+    } else {
+        this.config = config;
+    }
+    
+    //datagraph default configurations
+    this.config.arrowOffset = {height: 94, width: 170};
+    this.config.barOffset = {
+                 grouped:{
+                    height: 110,
+                    width: 260
+                  },
+                  stacked:{
+                    height: 95,
+                    width: 235
+                  }
+    };
+    
+    //Nav arrow (now triangle) 
+    this.config.arrowDim = "-23,-6, -12,0 -23,6";
+    
+    //Breadcrumb dimensions
+    this.config.firstCr = "0,0 0,30 90,30 105,15 90,0";
+    this.config.trailCrumbs = "0,0 15,15 0,30 90,30 105,15 90,0";
+    
+    //breadcrumb div dimensions
+    this.config.bcWidth = 560;
+    this.config.bcHeight = 35;
+    
+    //Polygon dimensions
+    this.config.bread = {width:105, height: 30, offset:90, space: 1, font:10};
+    
+    //Y axis positioning when arrow present
+    this.config.yOffset = "-1.48em";
+    
+    this.config.maxLabelSize = 31;
+    
+    //Check browser
+    this.config.isOpera = (!!window.opera || navigator.userAgent.indexOf(' OPR/') >= 0);
+    this.config.isChrome = (!!window.chrome && !(!!window.opera || navigator.userAgent.indexOf(' OPR/') >= 0));
+    
+}
+        
+bbop.monarch.datagraph.prototype.init = function (html_div,DATA){
+            
+     conf = this.config;
+     datagraph = this;
+     var height;
+     var width;
+     
+     //Check screen size on page load
+     if ($(window).width() < 1500 || $(window).height() < 800){
+         width = conf.width;
+         height = conf.height;
+     } else {
+         width = conf.width;
+         height = conf.height;
+     }
+     //console.log($(window).width());
+     datagraph.makeGraphDOM(html_div);
+     var d3Config = datagraph.initSVG(html_div,DATA,height,width);
+     //Call function to draw graph
+     datagraph.drawGraph(DATA,d3Config,html_div);
+     
+     window.addEventListener('resize', function(event){
+         
+         if ($(window).width() < 1500 || $(window).height() < 800){
+             if (width == conf.width){
+                 return;
+             } else {
+                 width = conf.width;
+                 height = conf.height;
+             }
+         } else if (width == conf.width){
+                 return;
+         } else {
+             width = conf.width;
+             height = conf.height;
+         }
+
+         $(html_div).children().remove();
+         
+         datagraph.makeGraphDOM(html_div);
+         var d3Config = datagraph.initSVG(html_div,DATA,height,width);
+         datagraph.drawGraph(DATA,d3Config,html_div);
+      });
+}
+        
+//set X Axis limit for grouped configuration
+bbop.monarch.datagraph.prototype.getGroupMax = function(data){
       return d3.max(data, function(d) { 
           return d3.max(d.counts, function(d) { return d.value; });
       });
-  },
-  //set X Axis limit for stacked configuration
-  getStackMax : function(data){
+}
+
+//set X Axis limit for stacked configuration
+bbop.monarch.datagraph.prototype.getStackMax = function(data){
       return d3.max(data, function(d) { 
           return d3.max(d.counts, function(d) { return d.x1; });
       }); 
-  },
-  //get largest Y axis label for font resizing
-  getYMax : function(data){
+}
+
+//get largest Y axis label for font resizing
+bbop.monarch.datagraph.prototype.getYMax = function(data){
       return d3.max(data, function(d) { 
           return d.label.length;
       });
-  },
+}
   
-  checkForSubGraphs : function(data){
+bbop.monarch.datagraph.prototype.checkForSubGraphs = function(data){
       for (i = 0;i < data.length; i++) {
           if (Object.keys(data[i]).indexOf('subGraph') >= 0) {
               return true;
           } 
      }
      return false;
-  },
+}
   
-  getStackedStats : function(data,groups){
+bbop.monarch.datagraph.prototype.getStackedStats = function(data,groups){
       //Add x0,x1 values for stacked barchart
       data.forEach(function (r){
           var count = 0;
@@ -139,9 +151,9 @@ var datagraph = {
           }
       });
       return data;
-  },
+}
   
-  getGroups : function (data) {
+bbop.monarch.datagraph.prototype.getGroups = function(data) {
       var groups = [];
       var unique = {};
       for (var i=0, len=data.length; i<len; i++) { 
@@ -151,10 +163,10 @@ var datagraph = {
       }
       groups = Object.keys(unique);
       return groups;
-  },
+},
   
-  //remove zero length bars
-  removeZeroCounts : function(data){
+//remove zero length bars
+bbop.monarch.datagraph.prototype.removeZeroCounts = function(data){
       trimmedGraph = [];
       data.forEach(function (r){
           var count = 0;
@@ -166,19 +178,21 @@ var datagraph = {
           }
       });
       return trimmedGraph;
-  },
+ }
   
-  // Adjust Y label font, arrow size, and spacing
-  // when transitioning
-  adjustYAxisElements : function(yMax,len){
+// Adjust Y label font, arrow size, and spacing
+// when transitioning
+bbop.monarch.datagraph.prototype.adjustYAxisElements = function(yMax,len){
       
-      var h = this.height;
+      var conf = this.config;
+      var h = conf.height;
       var density = h/len;
       var isUpdated = false;
       
-      var yFont = 'default';
-      var yOffset = this.yOffset;
-      var arrowDim = this.arrowDim;
+      //var yFont = 'default';
+      yFont = conf.yFontSize;
+      var yOffset = conf.yOffset;
+      var arrowDim = conf.arrowDim;
       
       if (yMax > 31 && yMax < 41){
           yFont = ((1/yMax)*450);
@@ -207,9 +221,9 @@ var datagraph = {
       }
       var retList = [yFont,yOffset,arrowDim];
       return retList;
-  },
+}
   
-  addEllipsisToLabel : function(data,max){
+bbop.monarch.datagraph.prototype.addEllipsisToLabel = function(data,max){
       var reg = new RegExp("(.{"+max+"})(.+)");
       data.forEach(function (r){
           if (r.label.length > max){
@@ -218,9 +232,9 @@ var datagraph = {
           }
       });
       return data;
-  },
+}
   
-  getFullLabel : function (d,data){
+bbop.monarch.datagraph.prototype.getFullLabel = function (d,data){
       for (var i=0, len=data.length; i < len; i++){
           if (data[i].label === d){
               var fullLabel = data[i].fullLabel;
@@ -228,77 +242,91 @@ var datagraph = {
               break;
           }
       }
-  },
+}
   
-  init : function (html_div,DATA){
+bbop.monarch.datagraph.prototype.makeGraphDOM = function(html_div){
       
-    var conf = this;
-    
-    //Create html structure
-    //Add graph title
-    $(html_div).append( "<div class=title"+
-            " style=margin-left:" + conf.title['margin-left'] +
-            ";font-size:" + conf.title['font-size'] +
-            ";font-weight:" + conf.title['font-weight'] +
-            "; >"+conf.chartTitle+"</div>" );
-    $(html_div).append( "<div class=interaction></div>" );
-    $(html_div+" .interaction").append( "<li></li>" );
-    $(html_div+" .interaction li").append("<div class=breadcrumbs></div>");
-    
-    //D3 starts here
-    //Define scales
-    var y0 = d3.scale.ordinal()
-        .rangeRoundBands([0,conf.height], .1);
+      var conf = this.config;
+      
+      //Create html structure
+      //Add graph title
+      $(html_div).append( "<div class=title"+
+              " style=margin-left:" + conf.title['margin-left'] +
+              ";font-size:" + conf.title['font-size'] +
+              ";font-weight:" + conf.title['font-weight'] +
+              "; >"+conf.chartTitle+"</div>" );
+      $(html_div).append( "<div class=interaction></div>" );
+      $(html_div+" .interaction").append( "<li></li>" );
+      $(html_div+" .interaction li").append("<div class=breadcrumbs></div>");
+}
+  
+bbop.monarch.datagraph.prototype.initSVG = function (html_div,DATA,height,width){
+      
+      var d3Config = {};
+      var conf =  this.config;
+      
+      //D3 starts here
+      //Define scales
+      d3Config.y0 = d3.scale.ordinal()
+          .rangeRoundBands([0,height], .1);
 
-    var y1 = d3.scale.ordinal();
+      d3Config.y1 = d3.scale.ordinal();
 
-    var x = d3.scale.linear()
-        .range([0, conf.width]);
-    
-    //Bar colors
-    var color = d3.scale.ordinal()
-        .range([conf.color.first,conf.color.second,conf.color.third,
-                conf.color.fourth,conf.color.fifth,conf.color.sixth]);
+      d3Config.x = d3.scale.linear()
+          .range([0, width]);
+      
+      //Bar colors
+      d3Config.color = d3.scale.ordinal()
+          .range([conf.color.first,conf.color.second,conf.color.third,
+                  conf.color.fourth,conf.color.fifth,conf.color.sixth]);
 
-    var xAxis = d3.svg.axis()
-        .scale(x)
-        .orient("top")
-        .tickFormat(d3.format(".2s"));
+      d3Config.xAxis = d3.svg.axis()
+          .scale(d3Config.x)
+          .orient("top")
+          .tickFormat(d3.format(".2s"));
 
-    var yAxis = d3.svg.axis()
-        .scale(y0)
-        .orient("left");
-    
-    //Increase margin to accomodate grouped/stacked option
-    if ((conf.getGroups(DATA)).length >1){
-        conf.margin.right += 60; //HARDCODE
-    }
-    //Decrease margin if no legend
-    if (!conf.useLegend){
-        conf.margin.right -= 40; //HARDCODE
-    }
+      d3Config.yAxis = d3.svg.axis()
+          .scale(d3Config.y0)
+          .orient("left");
 
-    var svg = d3.select(html_div).append("svg")
-        .attr("width", conf.width + conf.margin.left + conf.margin.right)
-        .attr("height", conf.height + conf.margin.top + conf.margin.bottom)
-        .append("g")
-        .attr("transform", "translate(" + conf.margin.left + "," + conf.margin.top + ")");
-    
-    var crumbSVG = d3.select(html_div).select(".breadcrumbs")
-        .append("svg")
-        .attr("height",conf.bcHeight)
-        .attr("width",conf.bcWidth);
+      d3Config.svg = d3.select(html_div).append("svg")
+          .attr("width", width + conf.margin.left + conf.margin.right)
+          .attr("height", height + conf.margin.top + conf.margin.bottom)
+          .append("g")
+          .attr("transform", "translate(" + conf.margin.left + "," + conf.margin.top + ")");
+      
+      d3Config.crumbSVG = d3.select(html_div).select(".breadcrumbs")
+          .append("svg")
+          .attr("height",conf.bcHeight)
+          .attr("width",conf.bcWidth);
 
-    var tooltip = d3.select(html_div)
-        .append("div")
-        .attr("class", "tip");
+      d3Config.tooltip = d3.select(html_div)
+          .append("div")
+          .attr("class", "tip");
+      
+      return d3Config;
+}
 
-    function drawGraph (config,data) {
-
-        var groups = config.getGroups(data);
-        data = config.getStackedStats(data,groups);
-        data = config.addEllipsisToLabel(data,config.maxLabelSize);
-        config.useCrumb = config.checkForSubGraphs(data);
+bbop.monarch.datagraph.prototype.drawGraph = function (data,graphConfig,html_div) {
+        var datagraph = this;
+        var config = this.config;
+        var groups = datagraph.getGroups(data);
+        data = datagraph.getStackedStats(data,groups);
+        data = datagraph.addEllipsisToLabel(data,config.maxLabelSize);
+        
+        //Override breadcrumb config if subgraphs exist
+        config.useCrumb = datagraph.checkForSubGraphs(data);
+        
+        var y0       = graphConfig.y0;
+        var y1       = graphConfig.y1;
+        var x        = graphConfig.x;
+        var color    = graphConfig.color;
+        var xAxis    = graphConfig.xAxis;
+        var yAxis    = graphConfig.yAxis;
+        var svg      = graphConfig.svg;
+        var crumbSVG = graphConfig.crumbSVG;
+        var tooltip  = graphConfig.tooltip;
+            
         
         //remove breadcrumb div
         if (!config.useCrumb){
@@ -335,14 +363,14 @@ var datagraph = {
         y0.domain(data.map(function(d) { return d.label; }));
         y1.domain(groups).rangeRoundBands([0, y0.rangeBand()]);
         
-        var xGroupMax = config.getGroupMax(data);
-        var xStackMax = config.getStackMax(data);
-        var yMax = config.getYMax(data);
+        var xGroupMax = datagraph.getGroupMax(data);
+        var xStackMax = datagraph.getStackMax(data);
+        var yMax = datagraph.getYMax(data);
         
         x.domain([0, xGroupMax]);
         
         //Dynamically decrease font size for large labels
-        var confList = config.adjustYAxisElements(yMax,data.length);
+        var confList = datagraph.adjustYAxisElements(yMax,data.length);
         var yFont = confList[0];
         var yLabelPos = confList[1];
         var triangleDim = confList[2];
@@ -373,7 +401,7 @@ var datagraph = {
                     d3.select(this).style("text-decoration", "underline");
                 }
                 if (/\.\.\./.test(d)){
-                    var fullLabel = config.getFullLabel(d,data);
+                    var fullLabel = datagraph.getFullLabel(d,data);
                     d3.select(this).append("svg:title")
                     .text(fullLabel);
                 //Hardcode alert
@@ -817,6 +845,7 @@ var datagraph = {
 
         //Resize height of chart after transition
         function resizeChart(subGraph){
+            
             var height = config.height;
             if (subGraph.length < 10){
                  height = subGraph.length*40;
@@ -841,10 +870,10 @@ var datagraph = {
         //     NOTE - this will be refactored as AJAX calls
         function transitionSubGraph(subGraph,parent,isFromCrumb) {
             
-            var groups = config.getGroups(subGraph);
-            subGraph = config.getStackedStats(subGraph,groups);
+            var groups = datagraph.getGroups(subGraph);
+            subGraph = datagraph.getStackedStats(subGraph,groups);
             if (!isFromCrumb){
-                subGraph = config.addEllipsisToLabel(subGraph,config.maxLabelSize);
+                subGraph = datagraph.addEllipsisToLabel(subGraph,config.maxLabelSize);
             }
             var rect;
             if (parent){
@@ -863,12 +892,12 @@ var datagraph = {
             y0.domain(subGraph.map(function(d) { return d.label; }));
             y1.domain(groups).rangeRoundBands([0, y0.rangeBand()]);
             
-            var xGroupMax = config.getGroupMax(subGraph);
-            var xStackMax = config.getStackMax(subGraph);
-            var yMax = config.getYMax(subGraph);
+            var xGroupMax = datagraph.getGroupMax(subGraph);
+            var xStackMax = datagraph.getStackMax(subGraph);
+            var yMax = datagraph.getYMax(subGraph);
             
             //Dynamically decrease font size for large labels
-            var confList = config.adjustYAxisElements(yMax,subGraph.length);
+            var confList = datagraph.adjustYAxisElements(yMax,subGraph.length);
             var yFont = confList[0];
             var yLabelPos = confList[1];
             var triangleDim = confList[2];
@@ -888,7 +917,7 @@ var datagraph = {
                         d3.select(this).style("text-decoration", "underline");
                     }
                     if (/\.\.\./.test(d)){
-                        var fullLabel = config.getFullLabel(d,subGraph);
+                        var fullLabel = datagraph.getFullLabel(d,subGraph);
                         d3.select(this).append("svg:title")
                         .text(fullLabel);  
                     } else if (yFont < 12) {//HARDCODE alert
@@ -1110,8 +1139,69 @@ var datagraph = {
             }
         }        
     //});
-  }
-  //Call function to draw graph
-  drawGraph(conf,DATA);
-  }
-};
+}
+
+bbop.monarch.datagraph.prototype.getDefaultConfig = function(){
+    
+    var defaultConfiguration = {
+            
+            //Chart margins    
+            margin : {top: 40, right: 140, bottom: 5, left: 255},
+            
+            width : 375,
+            height : 400,
+            
+            //X Axis Label
+            xAxisLabel : "Some Metric",
+            
+            //Chart title and first breadcrumb
+            chartTitle : "Chart Title",
+            firstCrumb : "first bread crumb",
+            
+            //Title size/font settings
+            title : {
+                      'margin-left' : '0px',
+                      'font-size' : '20px',
+                      'font-weight': 'bold'
+            },
+            
+            //Yaxis links
+            yFontSize : 'default',
+            isYLabelURL : true,
+            yLabelBaseURL : "/phenotype/",
+            
+            //Colors set in the order they appear in the JSON object
+            color : { 
+                     first  : '#44A293',
+                     second : '#A4D6D4',
+                     third  : '#EA763B',
+                     fourth : '#496265',
+                     fifth  : '#44A293',
+                     sixth  : '#A4D6D4',
+                       
+                     yLabel : { 
+                       fill  : '#000000',
+                       hover : '#EA763B'
+                     },
+                     arrow : {
+                       fill  : "#496265",
+                       hover : "#EA763B"
+                     },
+                     bar : {
+                       fill  : '#EA763B'
+                     },
+                     crumb : {
+                       top   : '#496265',
+                       bottom: '#3D6FB7',
+                       hover : '#EA763B'
+                     }
+            },
+            
+            //Turn on/off breadcrumbs
+            useCrumb : false,
+            
+            //Turn on/off legend
+            useLegend : true    
+    };
+    return defaultConfiguration;
+}
