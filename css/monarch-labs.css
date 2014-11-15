@@ -183,6 +183,9 @@
      1px 1px 0 #000;
 }
 
+.monarch-tabber {
+    margin-top: 0.5em;
+}
 .monarch-tabber-controls {
     padding-left: 10px;
     padding-right: 10px;
