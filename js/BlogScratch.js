@@ -205,4 +205,7 @@ jQuery(document).ready(function(){
     var mtid = '#' + "monarch-tabber"; // carousel tabber
     var car = new MonarchCarousel(mcid, mtid);
     car.start_cycle();
+
+    // Get popovers ready.
+    jQuery('[data-toggle="popover"]').popover({'trigger':'hover'})
 });
