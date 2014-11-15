@@ -2,42 +2,16 @@
 <!-- <div class="container-fluid" class="conflict-top-container-margin"> -->
 <div class="container-fluid" style="margin: 1.1em;">
 
-  <!-- b and c have the new splash. -->
-  {{#monarch_home_test_a_p}}
   <div class="jumbotron monarch-home-splash">
     <span class="monarch-home-splash-text">
       <strong>The Monarch Initiative</strong>
     </span>
   </div>
-  {{/monarch_home_test_a_p}}
-  {{#monarch_home_test_b_p}}
-  <div class="jumbotron monarch-home-splash">
-    <span class="monarch-home-splash-text">
-      <strong>The Monarch Initiative</strong>
-    </span>
-  </div>
-  {{/monarch_home_test_b_p}}
-  {{#monarch_home_test_c_p}}
-  <div class="jumbotron monarch-home-splash">
-    <span class="monarch-home-splash-text">
-      <strong>The Monarch Initiative</strong>
-    </span>
-  </div>
-  {{/monarch_home_test_c_p}}
 
   <!-- Open first row section. -->
   <div class="row">
     
-    <!-- Two-column layout, col. 1 -->
-    {{#monarch_home_test_a_p}}
-    <div id="col-1" class="col-xs-12 col-sm-8 col-md-8 col-lg-8">
-    {{/monarch_home_test_a_p}}
-    {{#monarch_home_test_b_p}}
     <div id="col-1" class="col-xs-12 col-sm-7 col-md-7 col-lg-7">
-    {{/monarch_home_test_b_p}}
-    {{#monarch_home_test_c_p}}
-    <div id="col-1" class="col-xs-12 col-sm-7 col-md-7 col-lg-7">
-    {{/monarch_home_test_c_p}}
       
       <!-- Quiet rollover. -->
       <!-- WARNING: There is an HTML/CSS trick in here--the largest -->
@@ -45,12 +19,6 @@
       <div class="panel panel-default">
 	<div class="panel-heading clearfix">
 	  <h3 class="panel-title pull-left">Welcome to Monarch</h3>
-	  <!-- b has the carousel. -->
-	  {{#monarch_home_test_b_p}}
-	  <span id="monarch-carousel-indicator" class="pull-right">
-	    &FilledSmallSquare;&EmptySmallSquare;&EmptySmallSquare;&EmptySmallSquare;
-	  </span>
-	  {{/monarch_home_test_b_p}}
 	</div>
 	<div class="panel-body">
 	  <div id="monarch-carousel" class="monarch-carousel">
@@ -62,6 +30,15 @@
       		compared to each other and to animal models to
       		investigate genetic underpinnings.
 		<a href="/disease">More &raquo;</a>
+	      </p>
+	    </div>
+	    <div class="monarch-carousel-item monarch-carousel-item-unselected">
+	      <p>
+		<img src="/image/carousel-phenotypes.png" class="monarch-carousel-embedded-image" alt="Phenotypes" />
+      		<strong>Explore phenotypes</strong><br /> Similar
+      		phenotypes may be observed in various diseases and
+      		across species.
+		<a href="/phenotype">More &raquo;</a>
 	      </p>
 	    </div>
 	    <div class="monarch-carousel-item monarch-carousel-item-unselected monarch-carousel-item-largest">
@@ -86,19 +63,9 @@
 		<a href="/gene">More &raquo;</a>
 	      </p>
 	    </div>
-	    <div class="monarch-carousel-item monarch-carousel-item-unselected">
-	      <p>
-		<img src="/image/carousel-phenotypes.png" class="monarch-carousel-embedded-image" alt="Phenotypes" />
-      		<strong>Explore phenotypes</strong><br /> Similar
-      		phenotypes may be observed in various diseases and
-      		across species.
-		<a href="/phenotype">More &raquo;</a>
-	      </p>
-	    </div>
 	  </div>
 
-	  <!-- c does the weird tabber thing. -->
-	  {{#monarch_home_test_c_p}}
+	  <!-- The weird tabber thing. -->
 	  <div class="clearfix"></div>
 	  <div id="monarch-tabber" class="container">
 	    <div class="row monarch-tabber-controls">
@@ -134,10 +101,7 @@
 	      </div>
 	    </div>
 	  </div>
-	  {{/monarch_home_test_c_p}}
 
-	  <!-- b and c move the links up. -->
-	  {{#monarch_home_test_b_p}}
 	  <hr />
 
       	  <div class="">
@@ -153,59 +117,10 @@
       	      <li><a href="/page/about#partners">Who are our partners?</a></li>
       	    </ul>
       	  </div>
-	  {{/monarch_home_test_b_p}}
-	  {{#monarch_home_test_c_p}}
-	  <hr />
-
-      	  <div class="">
-      	    <p>
-              <strong>Monarch enables navigation across a rich landscape of
-      		phenotypes, diseases, models, and genes for
-      		translational research.</strong>
-      	    </p>
-      	    <ul>
-      	      <li><a href="/page/about#goals">What is Monarch?</a></li>
-      	      <li><a href="/page/about#background">Can Monarch help me investigate biology of disease?</a></li>
-      	      <li><a href="/page/about#dataflow">How does Monarch integrate phenotype data?</a></li>
-      	      <li><a href="/page/about#partners">Who are our partners?</a></li>
-      	    </ul>
-      	  </div>
-	  {{/monarch_home_test_c_p}}
 
 	</div>
-	<!-- a has the old carousel indicator location. -->
-	{{#monarch_home_test_a_p}}
-	<div class="panel-footer text-right">
-	  <span id="monarch-carousel-indicator">
-	    &FilledSmallSquare;&EmptySmallSquare;&EmptySmallSquare;&EmptySmallSquare;</span>
-	</div>
-	{{/monarch_home_test_a_p}}
-      </div>
 
-      <!-- About. -->
-      <!-- a has the old about location. -->
-      {{#monarch_home_test_a_p}}
-      <div>
-      	<div class="panel panel-default">
-      	  <!-- <div class="panel-heading"> -->
-      	  <!--   <h3 class="panel-title">Welcome to Monarch</h3> -->
-      	  <!-- </div> -->
-      	  <div class="panel-body">
-      	    <p>
-              <strong>Monarch enables navigation across a rich landscape of
-      		phenotypes, diseases, models, and genes for
-      		translational research.</strong>
-      	    </p>
-      	    <ul>
-      	      <li><a href="/page/about#goals">What is Monarch?</a></li>
-      	      <li><a href="/page/about#background">Can Monarch help me investigate biology of disease?</a></li>
-      	      <li><a href="/page/about#dataflow">How does Monarch integrate phenotype data?</a></li>
-      	      <li><a href="/page/about#partners">Who are our partners?</a></li>
-      	    </ul>
-      	  </div>
-      	</div>
       </div>
-      {{/monarch_home_test_a_p}}
 
       <!-- News and twitter combo. -->
       <div class="row">
@@ -253,15 +168,7 @@
     </div>
 
     <!-- Two-column layout, col. 2 -->
-    {{#monarch_home_test_a_p}}
-    <div id="col-1" class="col-xs-12 col-sm-4 col-md-4 col-lg-4">
-    {{/monarch_home_test_a_p}}
-    {{#monarch_home_test_b_p}}
-    <div id="col-1" class="col-xs-12 col-sm-4 col-md-5 col-lg-5">
-    {{/monarch_home_test_b_p}}
-    {{#monarch_home_test_c_p}}
     <div id="col-1" class="col-xs-12 col-sm-5 col-md-5 col-lg-5">
-    {{/monarch_home_test_c_p}}
 
       <!-- Search. -->
       <div>
@@ -348,48 +255,13 @@
 	</div>
       </div>
 
-      <!-- Explore/datasgrid. -->
-      <!-- a keeps last iteration explore. -->
-      {{#monarch_home_test_a_p}}
-      <div class="list-group">
-	<span class="list-group-item panel-mimic-for-list-header">
-	  Explore
-	</span>
-	<a href="/disease" class="list-group-item">
-	  <img src="/image/carousel-diseases.png" class="monarch-nav-embedded-image" alt="Diseases" />
-	  Mendelian diseases
-	</a>
-	<a href="/phenotype" class="list-group-item">
-	  <img src="/image/carousel-phenotypes.png" class="monarch-nav-embedded-image" alt="Phenotypes" />
-	  Phenotypes
-	</a>
-	<a href="/model" class="list-group-item">
-	  <img src="/image/carousel-models.png" class="monarch-nav-embedded-image" alt="Models" />
-	  Models of Disease
-	</a>
-	<a href="/gene" class="list-group-item">
-	  <img src="/image/carousel-genes.png" class="monarch-nav-embedded-image" alt="Genetics" />
-	  Understand the genetics
-	</a>
-      </div>
-      {{/monarch_home_test_a_p}}
-      <!-- b and c make room for datagrid. -->
-      {{#monarch_home_test_b_p}}
+      <!-- Placeholder. -->
       <div class="panel panel-default">
       	<div class="panel-body">
 	  <!-- Placeholder. -->
 	  <div style="height: 400px; background-color: #119911;">&nbsp;</div>
 	</div>
       </div>
-      {{/monarch_home_test_b_p}}      
-      {{#monarch_home_test_c_p}}
-      <div class="panel panel-default">
-      	<div class="panel-body">
-	  <!-- Placeholder. -->
-	  <div style="height: 400px; background-color: #119911;">&nbsp;</div>
-	</div>
-      </div>
-      {{/monarch_home_test_c_p}}
 
     </div>
     

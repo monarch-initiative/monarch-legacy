@@ -1,173 +1,101 @@
 ////
-//// NOTE: This is test/demo code--don't worry too much about it.
+//// ...
 ////
 
-jQuery(document).ready(function(){
+//
+function MonarchCarousel(carousel_elt, tabber_elt){
 
-    // Ready search form in corner, with non-standard names.
-    // (Default should not load as the default ids do not exists here.)
-    navbar_search_init('home_search', 'home_search_form');
+    var self = this;
 
-    ///
-    /// Well...it again looks like I'm starting to rewrite some
-    /// BBOP-JS stuff agagin. Maybe just import it?
-    ///
+    var celt = carousel_elt;
+    var telt = tabber_elt;
 
-    // RFC 4122 v4 compliant UUID generator.
-    // From: http://stackoverflow.com/questions/105034/how-to-create-a-guid-uuid-in-javascript/2117523#2117523
-    function _uuid(){
-	// Replace x (and y) in string.
-	function replacer(c) {
-	    var r = Math.random()*16|0, v = c == 'x' ? r : (r&0x3|0x8);
-	    return v.toString(16);
-	}
-	var target_str = 'xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx';
-	return target_str.replace(/[xy]/g, replacer);
-    }
+    // The classes to switch on the tabber during cycling.
+    var on_class = 'btn-default';
+    var off_class = 'btn-primary';
 
-    // Carousel clickable box object.
-    function carousel_box(filled_p, position){
+    var timing = 10000; // 10s
 
-	var elt_id =  'monarch_carousel_box_' + _uuid();
-	var cache = [];
-	var str = '';
-	
-	var ucl = '';
-	var ust = '';
-	if( ! filled_p ){
-	    ust = 'cursor: pointer; cursor: hand;';
-	}
-
-	cache.push('<span id='+ elt_id +' class="'+ ucl +'" style="'+ ust +'">');
-	if( filled_p ){
-	    cache.push('&FilledSmallSquare;');
-	}else{
-	    cache.push('&EmptySmallSquare;');
-	}
-	cache.push('</span>');
-	str = cache.join('');
-
-	this.get_id = function(){
-	    return elt_id;
-	};
-	this.get_position = function(){
-	    return position;
-	};
-	this.to_string = function(){
-	    return str;
-	};
-	this.filled_p = function(){
-	    return filled_p;
-	};
-    }
-
-    ///
-    /// Make some "neutral" timers for the various attempts to use.
-    ///
+    var count = null; // total # "tabs"
 
     // Sloppy, but usable, way of stopping the timers when we want to.
-    var init_timer = null;
+    //var init_timer = null;
     var step_timer = null;
     function _cancel_timers(){
-	if( init_timer ){ clearTimeout(init_timer); }
+	//if( init_timer ){ clearTimeout(init_timer); }
 	if( step_timer ){ clearTimeout(step_timer); }
     }
 
-    ///
-    /// Do a demo carousel.
-    ///
-    /// We're going to do this as simply as possible by hand to keep
-    /// it small and in control.
-    ///
+    // Test the tabber structure to be sane or not. Perform no
+    // operations in insane structures.
+    self.okay_p = function(){
+	var ret = false;
+	
+	// Count errors.
+	// Yes, I'm cycling through all--it makes debugging easier and
+	// costs almost nothing.
+	var strikes = 0;
 
-    // Get the number of items.
-    function _get_carousel_count(elt){
-	var ret = null;
-	if( jQuery(elt).length ){ // determine existance
-	    ret = jQuery(elt).children().length
-	}
-	return ret;
-    }
+	// Double check carsousel/slide structure.
+	if( jQuery(celt).length && jQuery(telt).length &&
+	    (jQuery(celt).length == jQuery(telt).length) ){
+	    // Good.
+	}else{ strikes = strikes + 1; }
 
-    // Get the currently exposed item, starting from 1.
-    function _get_carousel_current(elt){
-	var ret = null;
-	if( jQuery(elt).length ){ // determine existance
-	    _.each(jQuery(elt).children(), function(child, index){
-		if( jQuery(child).hasClass('monarch-carousel-item') ){
-		    if( jQuery(child).css('opacity') == '1' ||
-			jQuery(child).css('opacity') == '1.0' ){
-			ret = index + 1;
-		    }
-		}
+	// Probe tabber structure.
+	if( jQuery(telt).length && // determine existance
+	    jQuery(telt).children() &&
+	    jQuery(telt).children().children() ){
+	    var kids = jQuery(telt).children().children();
+	    _.each(kids, function(child, index){
+		if( jQuery(child).children() ){
+		    if( jQuery(jQuery(child).children()[0]).is('button') ){
+			// Only safe place!
+		    }else{ strikes = strikes + 1; }
+		}else{ strikes = strikes + 1; }
 	    });
+	}else{ strikes = strikes + 1; }
+	
+	// Only good if no strikes.
+	if( strikes == 0 ){
+	    ret = true;
 	}
+	
+	return ret;
+    };
+    
+    // Get the number of items.
+    self.get_count = function(){
+	var ret = null;
+	ret = jQuery(telt).children().children().length
 	return ret;
     }
-
-    // Update the carousel boxes according to the current state.
-    function _refresh_carousel_boxes(celt, belt){
-	if( jQuery(celt).length && jQuery(belt).length ){ // determine existence
-
-	    var count = _get_carousel_count(celt);
-	    var current = _get_carousel_current(celt);
-	    if( count && current ){
-	    
-		// Collect the new carousel_box objects.
-		var cbox_cache = [];
-		_.times(count, function(i){
-		    var cbox = null;
-		    if( i+1 != current ){
-			cbox = new carousel_box(false, i+1);
-		    }else{
-			cbox = new carousel_box(true, i+1);
-		    }
-		    cbox_cache.push(cbox);
-		});
-
-		// Add them to the DOM.
-		var out_cache = [];
-		_.each(cbox_cache, function(cbox){
-		    out_cache.push(cbox.to_string());
-		});
-		jQuery(belt).html(out_cache.join(''));
-	    
-		// Activate them.
-		_.each(cbox_cache, function(cbox){
-		    if( cbox.filled_p() ){
-			// Filled do nothing.
-		    }else{
-			jQuery('#' + cbox.get_id()).click(function(){
-
-			    // First, stop future timing.
-			    _cancel_timers();
-
-			    // Update to the new position.
-			    var target_pos = cbox.get_position();
-			    //alert('boom: ' + target_pos);
-			    _update_from_to_car(count, target_pos, function(){
-				_refresh_carousel_boxes(celt, belt);
-			    });
-			});
-		    }
-		});			
-	    }	
-	}
+    
+    // Get the currently exposed item, starting from 1.
+    // Yes, I'm cycling through all--it makes debugging easier and 
+    // costs almost nothing.
+    self.get_current = function(){
+	var ret = null;
+	_.each(jQuery(telt).children().children(), function(child, index){
+	    if( jQuery(jQuery(child).children()[0]).hasClass(on_class) ){
+		ret = index + 1;
+	    }
+	});
+	return ret;
     }
 
     // Fade the current, move to the next.
-    // WARNING: This one does little to no error checking.
-    function _update_from_to_car(pos_count, to_pos, run_at_end_fun){
+    self.update_carousel_to = function(to_pos, run_at_end_fun){
 
 	// Since they are piled on top of eachother, just fade in
 	// and out. Also, need positions, not indexes here, so +1.
 	// There can be a race condition with the timer, so fade
 	// everything out but the one to be displayed.
-	_.times(pos_count, function(i){
+	_.times(count, function(i){
 	    var from_pos = i+1;
 	    if( from_pos != to_pos ){
 		var curr_ref =
-		    mcid + ' .monarch-carousel-item:nth-child(' + from_pos + ')';
+		    celt + ' .monarch-carousel-item:nth-child(' + from_pos + ')';
 		if( jQuery(curr_ref).css('opacity') != '0' &&
 		    jQuery(curr_ref).css('opacity') != '0.0' ){
 		    jQuery(curr_ref).fadeTo('slow', '0.0');
@@ -175,73 +103,104 @@ jQuery(document).ready(function(){
 	    }
 	});
 	// Bring up next one.
-	var next_ref =
-	    mcid + ' .monarch-carousel-item:nth-child(' + to_pos + ')';
+	var next_ref = celt +' .monarch-carousel-item:nth-child('+ to_pos +')';
 	jQuery(next_ref).fadeTo('slow', '1.0', function(){
 	    if( run_at_end_fun ){
 		run_at_end_fun();
 	    }
 	});
+    }
+
+    // 
+    self.update_tabber_to = function(to_pos){
+
+	// Rotate tabber location.
+	var from_pos = 1;
+	_.each(jQuery(telt).children().children(), function(child, index){
+	    if( from_pos != to_pos ){
+		jQuery(jQuery(child).children()[0]).removeClass(on_class);
+		jQuery(jQuery(child).children()[0]).addClass(off_class);
+	    }else{
+		jQuery(jQuery(child).children()[0]).removeClass(off_class);
+		jQuery(jQuery(child).children()[0]).addClass(on_class);
+	    }
+	    
+	    //_reactivate_tab_clicks(pos_count, tabber_elt);
+	    
+	    from_pos = from_pos + 1;	    
+	});	
+    }
+
+    // This is a step in the timed loop.
+    function _step(){
+	    
+    	// First, determine how many items and which is currently
+    	// visible.
+    	var count = self.get_count();
+    	var current = self.get_current();
 	
-    }
-
-    // Run only if sensible.
-    var timing = 10000; // 10s
-    var mcid = '#' + "monarch-carousel"; // carousel
-    var indid = '#' + "monarch-carousel-indicator"; // carousel boxes
-    function _monarch_carousel_step(){
-	if( jQuery(mcid).length ){ // determine existance
-
-	    // First, determine how many items and which is currently
-	    // visible.
-	    var count = _get_carousel_count(mcid);
-	    var current = _get_carousel_current(mcid);
+    	// Get new numbers.
+    	var next = (current % count) + 1;
 	    
-	    // Another sanity check.
-	    if( ! count || ! current ){
-		// Couldn't figure out what's going on.
-	    }else{ // Redo display as step.
-		
-		// Get new numbers.
-		var next = (current % count) + 1;
-		
-		//
-		_update_from_to_car(count, next, function(){
-		    // Fresh the indicator to the new status.
-		    _refresh_carousel_boxes(mcid, indid);
-		});
-	    }	    
-	}
-
+    	//
+    	self.update_carousel_to(next, function(){
+    	    // Fresh the indicator to the new status.
+    	    self.update_tabber_to(next);
+    	});
+	
 	// Wait to run this again in timing ms.
-	step_timer = window.setTimeout(_monarch_carousel_step, timing);
+	step_timer = window.setTimeout(_step, timing);
     }
-    // Only start up this way if both indicator and carousel are
-    // present.
-    if( jQuery(mcid).length && jQuery(indid).length ){
-	// Make carousel boxes active immediately.
-	_refresh_carousel_boxes(mcid, indid);	
-	// Initial run of the stepper to get it started, after timing ms.
-	init_timer = window.setTimeout(_monarch_carousel_step, timing);
+
+    self.start_cycle = function(tcount){
+
+	// Override default.
+	if( tcount ){ timing = tcount; }
+
+	step_timer = window.setTimeout(_step, timing);	
     }
 
     ///
-    /// Do a rotating tabs section.
+    /// Init.
     ///
 
-    // Run only if sensible.
-    var tab_timing = 10000; // 1s
-    var mtid = '#' + "monarch-tabber"; // carousel
-    function _monarch_tabber_step(){
-	// Run if tabber controls and carousel are present.
-	if( jQuery(mcid).length && jQuery(mtid).length ){
-	    
-	    // TODO: 
-	   // alert('bing');
+    if( ! self.okay_p() ){
+	console.log('bad MonarchCarousel setup');
+    }else{
 
-	    // Wait to run this again in timing ms.
-	    step_timer = window.setTimeout(_monarch_tabber_step, tab_timing);
-	}
+	// Init our internal count.
+	count = self.get_count();
+
+	// Activate tabber buttons.
+	_.each(jQuery(telt).children().children(), function(child, index){
+	    // // Unbind old event.
+	    // jQuery(jQuery(child).children()[0]).unbind('click');
+	    // Add new event.
+	    jQuery(jQuery(child).children()[0]).click(function(){
+
+		// First, stop future timing.
+    		_cancel_timers();
+		
+		// Then move on to click event.
+		//alert('boom: ' + target_pos);
+    		self.update_carousel_to(index+1, function(){
+    		    self.update_tabber_to(index+1);
+    		});
+	    });
+	});
     }
-    init_timer = window.setTimeout(_monarch_tabber_step, tab_timing);
+}
+
+//
+jQuery(document).ready(function(){
+
+    // Ready search form in corner, with non-standard names.
+    // (Default should not load as the default ids do not exists here.)
+    navbar_search_init('home_search', 'home_search_form');
+
+    // Start carsousel.
+    var mcid = '#' + "monarch-carousel"; // carousel series
+    var mtid = '#' + "monarch-tabber"; // carousel tabber
+    var car = new MonarchCarousel(mcid, mtid);
+    car.start_cycle();
 });
