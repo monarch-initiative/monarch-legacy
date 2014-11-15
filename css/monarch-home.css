@@ -1,0 +1,111 @@
+/**
+ ** Additional CSS to make the home page specific things look nice.
+ **/
+
+/*
+ * Compact the news list just a little. Assumes dl.
+ */
+.news-list {
+    margin-bottom: 10px;
+    margin-top: 10px;
+}
+.news-more {
+}
+.news-panel {
+    padding-bottom: 3px;
+}
+
+/*
+ * Carousel and tabber.
+ */
+
+.monarch-carousel {
+    position: relative;
+}
+
+.monarch-carousel-item {
+    position: absolute;
+    top: 0px;
+    left: 0px;
+}
+
+/* Reserved for the largest item to get layout sizing correct. */
+.monarch-carousel-item-largest {
+    position: relative;
+}
+
+.monarch-carousel-item-selected {
+    opacity: 1.0;
+    z-index: 1;
+}
+
+.monarch-carousel-item-unselected {
+    opacity: 0.0;
+    z-index: 0;
+}
+
+.monarch-carousel-embedded-image {
+    max-height: 5em;
+    width: auto;
+    float: left;
+    padding-right: 1em;
+}
+
+.monarch-nav-embedded-image {
+    max-height: 1.5em;
+    width: auto;
+    float: left;
+    padding-right: 0.5em;
+}
+
+.monarch-home-splash {
+    background-image: url('/image/home-splash.png');
+    margin-bottom: 17.5px;
+    padding-top: 40px;
+    padding-bottom: 40px;
+    padding-left: 40px;
+    /* padding-right: 60px; */
+}
+.monarch-home-splash-text {
+    color: #ffffff;
+    font-size: 30px;
+    font-weight: 500;
+    /* Attempt at outline. */
+   /* -webkit-text-fill-color: white; */
+   /* -webkit-text-stroke-width: 1px; */
+   /* -webkit-text-stroke-color: black; */
+  text-shadow:
+   -1px -1px 0 #000,  
+    1px -1px 0 #000,
+    -1px 1px 0 #000,
+     1px 1px 0 #000;
+}
+
+.monarch-tabber {
+    margin-top: 0.5em;
+}
+.monarch-tabber-controls {
+    padding-left: 10px;
+    padding-right: 10px;
+}
+.monarch-tabber-control {
+    padding-top: 2.5px;
+    padding-bottom: 2.5px;
+    padding-left: 5px;
+    padding-right: 5px;
+}
+.monarch-tabber-control-btn {
+    padding-left: 10px;
+    padding-right: 10px;
+}
+.monarch-tabber-content {
+}
+
+/*
+ * Static exploration images (lower-right).
+ */
+
+.monarch-home-explore-img {
+    max-height: 300px;
+}
+
