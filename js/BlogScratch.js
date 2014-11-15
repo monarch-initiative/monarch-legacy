@@ -99,12 +99,14 @@ function MonarchCarousel(carousel_elt, tabber_elt){
 		if( jQuery(curr_ref).css('opacity') != '0' &&
 		    jQuery(curr_ref).css('opacity') != '0.0' ){
 		    jQuery(curr_ref).fadeTo('slow', '0.0');
+		    jQuery(curr_ref).zIndex('0');
 		}
 	    }
 	});
 	// Bring up next one.
 	var next_ref = celt +' .monarch-carousel-item:nth-child('+ to_pos +')';
 	jQuery(next_ref).fadeTo('slow', '1.0', function(){
+	    jQuery(next_ref).zIndex('1');
 	    if( run_at_end_fun ){
 		run_at_end_fun();
 	    }

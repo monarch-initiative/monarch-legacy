@@ -134,10 +134,12 @@
 
 .monarch-carousel-item-selected {
     opacity: 1.0;
+    z-index: 1;
 }
 
 .monarch-carousel-item-unselected {
     opacity: 0.0;
+    z-index: 0;
 }
 
 .monarch-carousel-embedded-image {
