@@ -127,8 +127,6 @@ function MonarchCarousel(carousel_elt, tabber_elt){
 		jQuery(jQuery(child).children()[0]).addClass(on_class);
 	    }
 	    
-	    //_reactivate_tab_clicks(pos_count, tabber_elt);
-	    
 	    from_pos = from_pos + 1;	    
 	});	
     }
@@ -175,8 +173,6 @@ function MonarchCarousel(carousel_elt, tabber_elt){
 
 	// Activate tabber buttons.
 	_.each(jQuery(telt).children().children(), function(child, index){
-	    // // Unbind old event.
-	    // jQuery(jQuery(child).children()[0]).unbind('click');
 	    // Add new event.
 	    jQuery(jQuery(child).children()[0]).click(function(){
 
@@ -206,6 +202,6 @@ jQuery(document).ready(function(){
     var car = new MonarchCarousel(mcid, mtid);
     car.start_cycle();
 
-    // Get popovers ready.
+    // Get explore popovers ready.
     jQuery('[data-toggle="popover"]').popover({'trigger':'hover'})
 });
