@@ -52,14 +52,13 @@ bbop.monarch.phenotypeAnnotationConfig = {
              top   : '#496265',
              bottom: '#3D6FB7',
              hover : '#EA763B'
-           }
+           },
+           crumbText : '#FFFFFF'
   },
-  
-  //Turn on/off breadcrumbs
+
   useCrumb : false,
-  
-  //Turn on/off legend
-  useLegend : true
+  useLegend : true,
+  useCrumbShape : true
 };
 
 bbop.monarch.diseaseGeneConfig = {
@@ -113,14 +112,13 @@ bbop.monarch.diseaseGeneConfig = {
                    top   : '#496265',
                    bottom: '#3D6FB7',
                    hover : '#EA763B'
-                 }
+                 },
+                 crumbText : '#FFFFFF'
         },
-        
-        //Turn on/off breadcrumbs
+
         useCrumb : false,
-        
-        //Turn on/off legend
-        useLegend : false
+        useLegend : false,
+        useCrumbShape : true
 };
 
 bbop.monarch.diseasePhenotypeConfig = {
@@ -174,14 +172,13 @@ bbop.monarch.diseasePhenotypeConfig = {
                    top   : '#496265',
                    bottom: '#3D6FB7',
                    hover : '#EA763B'
-                 }
+                 },
+                 crumbText : '#FFFFFF'
         },
         
-        //Turn on/off breadcrumbs
         useCrumb : false,
-        
-        //Turn on/off legend
-        useLegend : false
+        useLegend : false,
+        useCrumbShape : true
 };
 
 bbop.monarch.genotypePhenotypeConfig = {
@@ -235,12 +232,11 @@ bbop.monarch.genotypePhenotypeConfig = {
                    top   : '#496265',
                    bottom: '#3D6FB7',
                    hover : '#EA763B'
-                 }
+                 },
+                 crumbText : '#FFFFFF'
         },
         
-        //Turn on/off breadcrumbs
         useCrumb : false,
-        
-        //Turn on/off legend
-        useLegend : true
+        useLegend : true,
+        useCrumbShape : true
 };

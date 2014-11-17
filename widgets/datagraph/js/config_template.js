@@ -49,7 +49,8 @@ bbop.monarch.exampleConfig = {
             top   : '#496265',
             bottom: '#3D6FB7',
             hover : '#EA763B'
-        }
+        },
+        crumbText : '#FFFFFF'
     },
                 
     //Turn on/off breadcrumbs
@@ -57,4 +58,7 @@ bbop.monarch.exampleConfig = {
                 
     //Turn on/off legend
     useLegend : true
+    
+    //Turn on/off breadcrumb shapes
+    useCrumbShape = true;
 };

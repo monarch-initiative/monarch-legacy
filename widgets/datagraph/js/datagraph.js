@@ -706,23 +706,31 @@ bbop.monarch.datagraph.prototype.drawGraph = function (data,graphConfig,html_div
             parents.splice(index,(parents.length));        
             
             //Deactivate top level crumb
-            d3.select(html_div).select(".poly"+index)
-              .attr("fill", config.color.crumb.top)
-              .on("mouseover", function(){})
-              .on("mouseout", function(){
-                 d3.select(this)
-                 .attr("fill", config.color.crumb.top);
-              })
-              .on("click", function(){});
-            
-            d3.select(html_div).select(".text"+index)
-              .on("mouseover", function(){})
-              .on("mouseout", function(){
-                   d3.select(this.parentNode)
-                   .select("polygon")
-                   .attr("fill", config.color.crumb.top);
-              })
-              .on("click", function(){});
+            if (config.useCrumbShape){
+                d3.select(html_div).select(".poly"+index)
+                  .attr("fill", config.color.crumb.top)
+                  .on("mouseover", function(){})
+                  .on("mouseout", function(){
+                      d3.select(this)
+                        .attr("fill", config.color.crumb.top);
+                  })
+                  .on("click", function(){});
+                
+                d3.select(html_div).select(".text"+index)
+                .on("mouseover", function(){})
+                .on("mouseout", function(){
+                     d3.select(this.parentNode)
+                     .select("polygon")
+                     .attr("fill", config.color.crumb.top);
+                })
+                .on("click", function(){});
+            } else {
+                d3.select(html_div).select(".text"+index)
+                  .style("fill",config.color.crumbText)
+                  .on("mouseover", function(){})
+                  .on("mouseout", function(){})
+                  .on("click", function(){});
+            }
         }
         
         function makeBreadcrumb(index,label,groups,rect,phenoDiv,fullLabel) {
@@ -736,59 +744,82 @@ bbop.monarch.datagraph.prototype.drawGraph = function (data,graphConfig,html_div
 
             //Change color of previous crumb
             if (lastIndex > -1){
-                d3.select(html_div).select(".poly"+lastIndex)
-                  .attr("fill", config.color.crumb.bottom)
-                  .on("mouseover", function(){
-                      d3.select(this)
-                      .attr("fill", config.color.crumb.hover);
-                  })
-                  .on("mouseout", function(){
-                      d3.select(this)
-                      .attr("fill", config.color.crumb.bottom);
-                  })
-                  .on("click", function(){
-                      pickUpBreadcrumb(lastIndex,groups,rect,phenoDiv);
-                  });
+                if (config.useCrumbShape){
+                    d3.select(html_div).select(".poly"+lastIndex)
+                        .attr("fill", config.color.crumb.bottom)
+                        .on("mouseover", function(){
+                        d3.select(this)
+                          .attr("fill", config.color.crumb.hover);
+                    })
+                    .on("mouseout", function(){
+                        d3.select(this)
+                       .attr("fill", config.color.crumb.bottom);
+                    })
+                    .on("click", function(){
+                        pickUpBreadcrumb(lastIndex,groups,rect,phenoDiv);
+                    });
+                }
                 
                 d3.select(html_div).select(".text"+lastIndex)
                   .on("mouseover", function(){
                       d3.select(this.parentNode)
                        .select("polygon")
                        .attr("fill", config.color.crumb.hover);
+                      
+                      if (!config.useCrumbShape){
+                          d3.select(this)
+                            .style("fill",config.color.crumb.hover);
+                      }
                   })
                   .on("mouseout", function(){
                       d3.select(this.parentNode)
                        .select("polygon")
                        .attr("fill", config.color.crumb.bottom);
+                      if (!config.useCrumbShape){
+                          d3.select(this)
+                            .style("fill",config.color.crumbText);
+                      }
                   })
                   .on("click", function(){
                         pickUpBreadcrumb(lastIndex,groups,rect,phenoDiv);
                   });
             }
             
-            d3.select(html_div).select(".breadcrumbs")
-                .select("svg")
-                .append("g")  
-                .attr("class",("bread"+index))
-                .attr("transform", "translate(" + index*(config.bread.offset+config.bread.space) + ", 0)")
+            if (config.useCrumbShape){
+                d3.select(html_div).select(".breadcrumbs")
+                  .select("svg")
+                  .append("g")  
+                  .attr("class",("bread"+index))
+                  .attr("transform", "translate(" + index*(config.bread.offset+config.bread.space) + ", 0)");
+                
+                d3.select(html_div).select((".bread"+index))
                 .append("svg:polygon")
                 .attr("class",("poly"+index))
                 .attr("points",index ? config.trailCrumbs : config.firstCr)
                 .attr("fill", config.color.crumb.top);
+                
+            } else {
+                d3.select(html_div).select(".breadcrumbs")
+                .select("svg")
+                .append("g")  
+                .attr("class",("bread"+index))
+                .attr("transform", "translate(" + index*70 + ", 0)");
+            }
             
+            //This creates the hover tooltip
             if (fullLabel){
                 d3.select(html_div).select((".bread"+index))
-                .append("svg:title")
-                .text(fullLabel);    
+                    .append("svg:title")
+                    .text(fullLabel);
             } else { 
                 d3.select(html_div).select((".bread"+index))
                     .append("svg:title")
-                    .text(label);    
+                    .text(label);
             }
                    
-        
             d3.select(html_div).select((".bread"+index))
                 .append("text")
+                .style("fill",config.color.crumbText)
                 .attr("class",("text"+index))
                 .attr("font-size", fontSize)
                 .each(function () {
@@ -817,7 +848,7 @@ bbop.monarch.datagraph.prototype.drawGraph = function (data,graphConfig,html_div
                                     return ".1em";
                                 } else if (i < 2 && len > 2 
                                            && words[i].match(/and/i)){
-                                    return "0";
+                                    return ".1em";;
                                 } else {
                                     return "1.2em";
                                 }
@@ -1194,7 +1225,8 @@ bbop.monarch.datagraph.prototype.getDefaultConfig = function(){
                        top   : '#496265',
                        bottom: '#3D6FB7',
                        hover : '#EA763B'
-                     }
+                     },
+                     crumbText : '#FFFFFF'
             },
             
             //Turn on/off breadcrumbs
