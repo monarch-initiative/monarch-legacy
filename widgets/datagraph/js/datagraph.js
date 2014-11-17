@@ -16,43 +16,7 @@ bbop.monarch.datagraph = function(config){
     } else {
         this.config = config;
     }
-    
-    //datagraph default configurations
-    this.config.arrowOffset = {height: 94, width: 170};
-    this.config.barOffset = {
-                 grouped:{
-                    height: 110,
-                    width: 260
-                  },
-                  stacked:{
-                    height: 95,
-                    width: 235
-                  }
-    };
-    
-    //Nav arrow (now triangle) 
-    this.config.arrowDim = "-23,-6, -12,0 -23,6";
-    
-    //Breadcrumb dimensions
-    this.config.firstCr = "0,0 0,30 90,30 105,15 90,0";
-    this.config.trailCrumbs = "0,0 15,15 0,30 90,30 105,15 90,0";
-    
-    //breadcrumb div dimensions
-    this.config.bcWidth = 560;
-    this.config.bcHeight = 35;
-    
-    //Polygon dimensions
-    this.config.bread = {width:105, height: 30, offset:90, space: 1, font:10};
-    
-    //Y axis positioning when arrow present
-    this.config.yOffset = "-1.48em";
-    
-    this.config.maxLabelSize = 31;
-    
-    //Check browser
-    this.config.isOpera = (!!window.opera || navigator.userAgent.indexOf(' OPR/') >= 0);
-    this.config.isChrome = (!!window.chrome && !(!!window.opera || navigator.userAgent.indexOf(' OPR/') >= 0));
-    
+    this.setNonConfigurableParameters();
 }
         
 bbop.monarch.datagraph.prototype.init = function (html_div,DATA){
@@ -213,6 +177,10 @@ bbop.monarch.datagraph.prototype.adjustYAxisElements = function(yMax,len){
           isUpdated = true;
       }
       
+      if (isUpdated && yFont > conf.yFontSize){
+          yFont = conf.yFontSize;
+      }
+      
       //Check for density BETA
       if (density < 15 && density < yFont ){
           yFont = density+2;
@@ -251,7 +219,10 @@ bbop.monarch.datagraph.prototype.makeGraphDOM = function(html_div){
       //Create html structure
       //Add graph title
       $(html_div).append( "<div class=title"+
-              " style=margin-left:" + conf.title['margin-left'] +
+              " style=text-indent:" + conf.title['text-indent'] +
+              ";text-align:" + conf.title['text-align'] +
+              ";background-color:" + conf.title['background-color'] +
+              ";border-bottom-color:" + conf.title['border-bottom-color'] +
               ";font-size:" + conf.title['font-size'] +
               ";font-weight:" + conf.title['font-weight'] +
               "; >"+conf.chartTitle+"</div>" );
@@ -334,7 +305,8 @@ bbop.monarch.datagraph.prototype.drawGraph = function (data,graphConfig,html_div
         }
         //Add stacked/grouped form if more than one group
         if (groups.length >1){
-            $(html_div+" .interaction li").append(" <form class=configure>" +
+            $(html_div+" .interaction li").append(" <form class=configure"+
+                    " style=font-size:" + config.settingsFontSize + "; >" +
                     "<label><input id=\"group\" type=\"radio\" name=\"mode\"" +
                         " value=\"grouped\" checked> Grouped</label> " +
                     "<label><input id=\"stack\" type=\"radio\" name=\"mode\"" +
@@ -379,12 +351,14 @@ bbop.monarch.datagraph.prototype.drawGraph = function (data,graphConfig,html_div
         var xTicks = svg.append("g")
             .attr("class", "x axis")
             .call(xAxis)
+            .style("font-size",config.xFontSize)
             .append("text")
             .attr("transform", "rotate(0)")
             .attr("y", -29)
-            .attr("dx", "20em")
+            .attr("dx", config.xAxisPos)
             .attr("dy", "0em")
             .style("text-anchor", "end")
+            .style("font-size",config.xLabelFontSize)
             .text(config.xAxisLabel);
 
         //Set Y axis ticks and labels
@@ -454,7 +428,7 @@ bbop.monarch.datagraph.prototype.drawGraph = function (data,graphConfig,html_div
                .html("Counts: "+"<span style='font-weight:bold'>"+d.value+"</span>"+"<br/>"
                     +"Organism: "+ "<span style='font-weight:bold'>"+d.name)
                .style("top",h+heightOffset+config.barOffset.grouped.height+"px")
-               .style("left",w+config.barOffset.grouped.width+widthOffset+"px");
+               .style("left",w+config.barOffset.grouped.width+widthOffset+conf.margin.left+"px");
 
             })
            .on("mouseout", function(){
@@ -509,7 +483,7 @@ bbop.monarch.datagraph.prototype.drawGraph = function (data,graphConfig,html_div
                        tooltip.style("display", "block")
                        .html("Click to see subclasses")
                        .style("top",h+config.arrowOffset.height+"px")
-                       .style("left",w+config.arrowOffset.width+"px");
+                       .style("left",w+config.margin.left+config.arrowOffset.width+"px");
                        
                    } 
             })
@@ -557,14 +531,15 @@ bbop.monarch.datagraph.prototype.drawGraph = function (data,graphConfig,html_div
             legend.append("rect")
                .attr("x", config.width+55)
                .attr("y", 4)
-               .attr("width", 18)
-               .attr("height", 18)
+               .attr("width", config.legend.width)
+               .attr("height", config.legend.height)
                .style("fill", color);
 
             legend.append("text")
                .attr("x", config.width+50)
                .attr("y", 12)
-               .attr("dy", ".35em")
+               .attr("dy", config.legendText.height)
+               .attr("font-size",config.legendFontSize)
                .style("text-anchor", "end")
                .text(function(d) { return d; });
         }
@@ -609,7 +584,7 @@ bbop.monarch.datagraph.prototype.drawGraph = function (data,graphConfig,html_div
                   .html("Counts: "+"<span style='font-weight:bold'>"+d.value+"</span>"+"<br/>"
                         +"Organism: "+ "<span style='font-weight:bold'>"+d.name)
                   .style("top",h+heightOffset+config.barOffset.grouped.height+"px")
-                  .style("left",w+config.barOffset.grouped.width+widthOffset+"px");
+                  .style("left",w+config.barOffset.grouped.width+widthOffset+conf.margin.left+"px");
             })
                 .on("mouseout", function(){
                   tooltip.style("display", "none")
@@ -657,8 +632,7 @@ bbop.monarch.datagraph.prototype.drawGraph = function (data,graphConfig,html_div
                     .html("Counts: "+"<span style='font-weight:bold'>"+d.value+"</span>"+"<br/>"
                          +"Organism: "+ "<span style='font-weight:bold'>"+d.name)
                     .style("top",h+heightOffset+config.barOffset.stacked.height+"px")
-                    .style("left",w+config.barOffset.stacked.width+widthOffset+"px");
-
+                    .style("left",w+config.barOffset.grouped.width+widthOffset+conf.margin.left+"px");
             })
                .on("mouseout", function(){
                    tooltip.style("display", "none");
@@ -740,7 +714,7 @@ bbop.monarch.datagraph.prototype.drawGraph = function (data,graphConfig,html_div
             }
             var lastIndex = (index-1);
             var phenLen = label.length;
-            var fontSize = config.bread.font;
+            var fontSize = config.crumbFontSize;
 
             //Change color of previous crumb
             if (lastIndex > -1){
@@ -1006,7 +980,7 @@ bbop.monarch.datagraph.prototype.drawGraph = function (data,graphConfig,html_div
                          .html("Counts: "+"<span style='font-weight:bold'>"+d.value+"</span>"+"<br/>"
                               +"Organism: "+ "<span style='font-weight:bold'>"+d.name)
                          .style("top",h+heightOffset+config.barOffset.grouped.height+"px")
-                         .style("left",w+config.barOffset.grouped.width+widthOffset+"px");
+                         .style("left",w+config.barOffset.grouped.width+widthOffset+conf.margin.left+"px");
                     })
                     .on("mouseout", function(){
                         d3.select(this)
@@ -1053,7 +1027,7 @@ bbop.monarch.datagraph.prototype.drawGraph = function (data,graphConfig,html_div
                             .html("Counts: "+"<span style='font-weight:bold'>"+d.value+"</span>"+"<br/>"
                                  +"Organism: "+ "<span style='font-weight:bold'>"+d.name)
                             .style("top",h+heightOffset+config.barOffset.stacked.height+"px")
-                            .style("left",w+config.barOffset.stacked.width+widthOffset+"px");
+                            .style("left",w+config.barOffset.grouped.width+widthOffset+conf.margin.left+"px");
 
                  })
                 .on("mouseout", function(){
@@ -1114,7 +1088,7 @@ bbop.monarch.datagraph.prototype.drawGraph = function (data,graphConfig,html_div
                           .html("Counts: "+"<span style='font-weight:bold'>"+d.value+"</span>"+"<br/>"
                             +"Organism: "+ "<span style='font-weight:bold'>"+d.name)
                           .style("top",h+heightOffset+config.barOffset.grouped.height+"px")
-                          .style("left",w+config.barOffset.grouped.width+widthOffset+"px");
+                          .style("left",w+config.barOffset.grouped.width+widthOffset+conf.margin.left+"px");
                      })
                      .on("mouseout", function(){
                          tooltip.style("display", "none")
@@ -1159,7 +1133,7 @@ bbop.monarch.datagraph.prototype.drawGraph = function (data,graphConfig,html_div
                            .html("Counts: "+"<span style='font-weight:bold'>"+d.value+"</span>"+"<br/>"
                                 +"Organism: "+ "<span style='font-weight:bold'>"+d.name)
                            .style("top",h+heightOffset+config.barOffset.stacked.height+"px")
-                           .style("left",w+config.barOffset.stacked.width+widthOffset+"px");
+                           .style("left",w+config.barOffset.grouped.width+widthOffset+conf.margin.left+"px");
                     })
                    .on("mouseout", function(){
                        tooltip.style("display", "none");
@@ -1170,6 +1144,58 @@ bbop.monarch.datagraph.prototype.drawGraph = function (data,graphConfig,html_div
             }
         }        
     //});
+}
+//datagraph default configurations
+bbop.monarch.datagraph.prototype.setNonConfigurableParameters = function(){
+    
+    //Nav arrow (now triangle) 
+    if (this.config.arrowDim == null || typeof this.config.arrowDim == 'undefined'){
+        this.config.arrowDim = "-23,-6, -12,0 -23,6";
+    }
+    
+    //Breadcrumb dimensions
+    if (this.config.firstCr == null || typeof this.config.firstCr == 'undefined'){
+        this.config.firstCr = "0,0 0,30 90,30 105,15 90,0";
+    }
+    if (this.config.trailCrumbs == null || typeof this.config.trailCrumbs == 'undefined'){
+        this.config.trailCrumbs = "0,0 15,15 0,30 90,30 105,15 90,0";
+    }
+    
+    //Polygon dimensions
+    if (this.config.bread == null || typeof this.config.bread == 'undefined'){
+        this.config.bread = {width:105, height: 30, offset:90, space: 1};
+    }
+    
+    //breadcrumb div dimensions
+    this.config.bcWidth = 560;
+    this.config.bcHeight = 35;
+    
+    //Y axis positioning when arrow present
+    if (this.config.yOffset == null || typeof this.config.yOffset == 'undefined'){
+        this.config.yOffset = "-1.48em";
+    }
+    
+    //Tooltip offsetting
+    this.config.arrowOffset = {height: 94, width: -90};
+    this.config.barOffset = {
+                 grouped:{
+                    height: 110,
+                    width: 10
+                  },
+                  stacked:{
+                    height: 95,
+                    width: 10
+                  }
+    };
+    
+    //Check browser
+    this.config.isOpera = (!!window.opera || navigator.userAgent.indexOf(' OPR/') >= 0);
+    this.config.isChrome = (!!window.chrome && !(!!window.opera || navigator.userAgent.indexOf(' OPR/') >= 0));
+    
+    //Check that breadcrumb width is valid
+    if (this.config.bcWidth > this.config.width+this.config.margin.right+this.config.margin.left){
+        this.config.bcWidth = this.config.width+this.config.margin.right+this.config.margin.left-80;
+    }
 }
 
 bbop.monarch.datagraph.prototype.getDefaultConfig = function(){
@@ -1184,6 +1210,9 @@ bbop.monarch.datagraph.prototype.getDefaultConfig = function(){
             
             //X Axis Label
             xAxisLabel : "Some Metric",
+            xLabelFontSize : "14px",
+            xFontSize : "14px",
+            xAxisPos : "20em",
             
             //Chart title and first breadcrumb
             chartTitle : "Chart Title",
@@ -1191,15 +1220,33 @@ bbop.monarch.datagraph.prototype.getDefaultConfig = function(){
             
             //Title size/font settings
             title : {
-                      'margin-left' : '0px',
+                      'text-align': 'center',
+                      'text-indent' : '0px',
                       'font-size' : '20px',
-                      'font-weight': 'bold'
+                      'font-weight': 'bold',
+                      'background-color' : '#E8E8E8',
+                      'border-bottom-color' : '#000000'
             },
             
             //Yaxis links
             yFontSize : 'default',
             isYLabelURL : true,
             yLabelBaseURL : "/phenotype/",
+            
+            //Font sizes
+            settingsFontSize : '14px',
+            
+            //Maximum label length before adding an ellipse
+            maxLabelSize : 31,
+            
+            //Turn on/off legend
+            useLegend : true,
+            
+            //Fontsize
+            legendFontSize : 14,
+            //Legend dimensions
+            legend : {width:18,height:18},
+            legendText : {height:".35em"},
             
             //Colors set in the order they appear in the JSON object
             color : { 
@@ -1231,9 +1278,10 @@ bbop.monarch.datagraph.prototype.getDefaultConfig = function(){
             
             //Turn on/off breadcrumbs
             useCrumb : false,
+            crumbFontSize : 10,
             
-            //Turn on/off legend
-            useLegend : true    
+            //Turn on/off breadcrumb shapes
+            useCrumbShape : true
     };
     return defaultConfiguration;
 }

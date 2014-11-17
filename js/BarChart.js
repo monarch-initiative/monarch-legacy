@@ -1,3 +1,34 @@
+function makeHomePageGraph(data){
+    var phenoGraph = 
+        new bbop.monarch.datagraph(bbop.monarch.homePageConfig);
+    phenoGraph.init(".graph-container",data);
+    
+    //Add min width and height for bootstrap
+    var minWidth = phenoGraph.config.width + 
+                   phenoGraph.config.margin.left + 
+                   phenoGraph.config.margin.right + 35;
+    var minHeight = phenoGraph.config.height + 
+                    phenoGraph.config.margin.top + 
+                    phenoGraph.config.margin.bottom;
+    $(".graph-container").parent()
+        .css( {"min-width" : minWidth+"px", "min-height" : minHeight+"px"});
+    //$(".graph-container").parent()
+    //.css( {"width" : minWidth+"px", "height" : minHeight+125+"px"});
+    
+    window.addEventListener('resize', function(event){
+        minWidth = phenoGraph.config.width + 
+                   phenoGraph.config.margin.left + 
+                   phenoGraph.config.margin.right + 35;
+        
+        minHeight = phenoGraph.config.height + 
+                    phenoGraph.config.margin.top + 
+                    phenoGraph.config.margin.bottom;
+
+        $(".graph-container").parent()
+        .css( {"min-width" : minWidth+"px", "min-height" : minHeight+"px"});
+    });  
+}
+
 function makeDiseaseGeneGraph(data){
     var disGraph = 
         new bbop.monarch.datagraph(bbop.monarch.diseaseGeneConfig);
