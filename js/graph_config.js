@@ -15,7 +15,7 @@ bbop.monarch.homePageConfig = {
         //Chart margins    
         margin : {top: 40, right: 65, bottom: 5, left: 152},
         
-        width : 180,
+        width : 250,
         height : 300,
         
         //X Axis Label

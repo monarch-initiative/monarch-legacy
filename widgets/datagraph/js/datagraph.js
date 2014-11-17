@@ -1194,7 +1194,7 @@ bbop.monarch.datagraph.prototype.setNonConfigurableParameters = function(){
     
     //Check that breadcrumb width is valid
     if (this.config.bcWidth > this.config.width+this.config.margin.right+this.config.margin.left){
-        this.config.bcWidth = this.config.width+this.config.margin.right+this.config.margin.left-80;
+        this.config.bcWidth = this.config.width+this.config.margin.right+this.config.margin.left-140;
     }
 }
 
