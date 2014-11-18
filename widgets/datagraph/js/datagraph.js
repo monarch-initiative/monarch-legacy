@@ -80,155 +80,7 @@ bbop.monarch.datagraph.prototype.init = function (html_div,DATA){
          datagraph.drawGraph(DATA,d3Config,html_div);
       });
 }
-        
-//set X Axis limit for grouped configuration
-bbop.monarch.datagraph.prototype.getGroupMax = function(data){
-      return d3.max(data, function(d) { 
-          return d3.max(d.counts, function(d) { return d.value; });
-      });
-}
-
-//set X Axis limit for stacked configuration
-bbop.monarch.datagraph.prototype.getStackMax = function(data){
-      return d3.max(data, function(d) { 
-          return d3.max(d.counts, function(d) { return d.x1; });
-      }); 
-}
-
-//get largest Y axis label for font resizing
-bbop.monarch.datagraph.prototype.getYMax = function(data){
-      return d3.max(data, function(d) { 
-          return d.label.length;
-      });
-}
-  
-bbop.monarch.datagraph.prototype.checkForSubGraphs = function(data){
-      for (i = 0;i < data.length; i++) {
-          if (Object.keys(data[i]).indexOf('subGraph') >= 0) {
-              return true;
-          } 
-     }
-     return false;
-}
-  
-bbop.monarch.datagraph.prototype.getStackedStats = function(data,groups){
-      //Add x0,x1 values for stacked barchart
-      data.forEach(function (r){
-          var count = 0;
-          r.counts.forEach(function (i){
-               i["x0"] = count;
-               i["x1"] = i.value+count;
-               if (i.value > 0){
-                   count = i.value;
-               }
-           });
-      });
-      var lastElement = groups.length-1;
-      data.sort(function(obj1, obj2) {
-          if ((obj2.counts[lastElement])&&(obj1.counts[lastElement])){
-              return obj2.counts[lastElement].x1 - obj1.counts[lastElement].x1;
-          } else {
-              return 0;
-          }
-      });
-      return data;
-}
-  
-bbop.monarch.datagraph.prototype.getGroups = function(data) {
-      var groups = [];
-      var unique = {};
-      for (var i=0, len=data.length; i<len; i++) { 
-          for (var j=0, cLen=data[i].counts.length; j<cLen; j++) { 
-              unique[ data[i].counts[j].name ] =1;
-          }
-      }
-      groups = Object.keys(unique);
-      return groups;
-},
-  
-//remove zero length bars
-bbop.monarch.datagraph.prototype.removeZeroCounts = function(data){
-      trimmedGraph = [];
-      data.forEach(function (r){
-          var count = 0;
-          r.counts.forEach(function (i){
-               count += i.value;
-           });
-          if (count > 0){
-              trimmedGraph.push(r);
-          }
-      });
-      return trimmedGraph;
- }
-  
-// Adjust Y label font, arrow size, and spacing
-// when transitioning
-bbop.monarch.datagraph.prototype.adjustYAxisElements = function(yMax,len){
-      
-      var conf = this.config;
-      var h = conf.height;
-      var density = h/len;
-      var isUpdated = false;
-      
-      //var yFont = 'default';
-      yFont = conf.yFontSize;
-      var yOffset = conf.yOffset;
-      var arrowDim = conf.arrowDim;
-      
-      if (yMax > 31 && yMax < 41){
-          yFont = ((1/yMax)*450);
-          isUpdated = true;
-      }else if (yMax > 41 && yMax < 53){
-          yFont = ((1/yMax)*565);
-          arrowDim = "-20,-5, -9,1 -20,7";
-          isUpdated = true;
-      } else if (yMax >= 53 && yMax <66){
-          yFont = ((1/yMax)*615);
-          yOffset = "-1.45em";
-          arrowDim = "-20,-5, -9,1 -20,7";
-          isUpdated = true;
-      } else if (yMax >= 66){
-          yFont = ((1/yMax)*640);
-          yOffset = "-1.4em";
-          arrowDim = "-20,-5, -9,1 -20,7";
-          isUpdated = true;
-      }
-      
-      if (isUpdated && yFont > conf.yFontSize){
-          yFont = conf.yFontSize;
-      }
-      
-      //Check for density BETA
-      if (density < 15 && density < yFont ){
-          yFont = density+2;
-          yOffset = "-2em";
-          arrowDim = "-20,-3, -11,1 -20,5";
-      }
-      var retList = [yFont,yOffset,arrowDim];
-      return retList;
-}
-  
-bbop.monarch.datagraph.prototype.addEllipsisToLabel = function(data,max){
-      var reg = new RegExp("(.{"+max+"})(.+)");
-      data.forEach(function (r){
-          if (r.label.length > max){
-              r.fullLabel = r.label;
-              r.label = r.label.replace(reg,"$1...");      
-          }
-      });
-      return data;
-}
-  
-bbop.monarch.datagraph.prototype.getFullLabel = function (d,data){
-      for (var i=0, len=data.length; i < len; i++){
-          if (data[i].label === d){
-              var fullLabel = data[i].fullLabel;
-              return fullLabel;
-              break;
-          }
-      }
-}
-  
+//Uses JQuery to create the DOM for the datagraph
 bbop.monarch.datagraph.prototype.makeGraphDOM = function(html_div){
       
       var conf = this.config;
@@ -543,17 +395,17 @@ bbop.monarch.datagraph.prototype.drawGraph = function (data,graphConfig,html_div
                .data(groups.slice())
                .enter().append("g")
                .attr("class", "legend")
-               .attr("transform", function(d, i) { return "translate(0," + i * 25 + ")"; });
+               .attr("transform", function(d, i) { return "translate(0," + i * (config.legend.height+7) + ")"; });
 
             legend.append("rect")
-               .attr("x", config.width+55)
+               .attr("x", config.width+config.legend.width+37)//HARDCODE
                .attr("y", 4)
                .attr("width", config.legend.width)
                .attr("height", config.legend.height)
                .style("fill", color);
 
             legend.append("text")
-               .attr("x", config.width+50)
+               .attr("x", config.width+config.legend.width+32)
                .attr("y", 12)
                .attr("dy", config.legendText.height)
                .attr("font-size",config.legendFontSize)
@@ -794,7 +646,7 @@ bbop.monarch.datagraph.prototype.drawGraph = function (data,graphConfig,html_div
                 .select("svg")
                 .append("g")  
                 .attr("class",("bread"+index))
-                .attr("transform", "translate(" + index*70 + ", 0)");
+                .attr("transform", "translate(" + index*70 + ", 0)");//HARDCODE
             }
             
             //This creates the hover tooltip
@@ -824,7 +676,13 @@ bbop.monarch.datagraph.prototype.drawGraph = function (data,graphConfig,html_div
                     for (i = 0;i < len; i++) {
                         if (words[i].length > 12){
                             fontSize = ((1/words[i].length)*150);
+                            var reg = new RegExp("(.{"+8+"})(.+)");
+                            words[i] = words[i].replace(reg,"$1...");
                         }
+                    }
+                    //Check that we haven't increased over the default
+                    if (fontSize > config.crumbFontSize){
+                        fontSize = config.crumbFontSize;
                     }
                     for (i = 0;i < len; i++) {
                         d3.select(this).append("tspan")
@@ -1162,7 +1020,165 @@ bbop.monarch.datagraph.prototype.drawGraph = function (data,graphConfig,html_div
         }        
     //});
 }
-//datagraph default configurations
+////////////////////////////////////////////////////////////////////
+//
+//Data object manipulation
+//
+//The functions below manipulate the data object for
+//various functionality
+//
+
+//get X Axis limit for grouped configuration
+bbop.monarch.datagraph.prototype.getGroupMax = function(data){
+      return d3.max(data, function(d) { 
+          return d3.max(d.counts, function(d) { return d.value; });
+      });
+}
+
+//get X Axis limit for stacked configuration
+bbop.monarch.datagraph.prototype.getStackMax = function(data){
+      return d3.max(data, function(d) { 
+          return d3.max(d.counts, function(d) { return d.x1; });
+      }); 
+}
+
+//get largest Y axis label for font resizing
+bbop.monarch.datagraph.prototype.getYMax = function(data){
+      return d3.max(data, function(d) { 
+          return d.label.length;
+      });
+}
+  
+bbop.monarch.datagraph.prototype.checkForSubGraphs = function(data){
+      for (i = 0;i < data.length; i++) {
+          if (Object.keys(data[i]).indexOf('subGraph') >= 0) {
+              return true;
+          } 
+     }
+     return false;
+}
+  
+bbop.monarch.datagraph.prototype.getStackedStats = function(data,groups){
+      //Add x0,x1 values for stacked barchart
+      data.forEach(function (r){
+          var count = 0;
+          r.counts.forEach(function (i){
+               i["x0"] = count;
+               i["x1"] = i.value+count;
+               if (i.value > 0){
+                   count = i.value;
+               }
+           });
+      });
+      var lastElement = groups.length-1;
+      data.sort(function(obj1, obj2) {
+          if ((obj2.counts[lastElement])&&(obj1.counts[lastElement])){
+              return obj2.counts[lastElement].x1 - obj1.counts[lastElement].x1;
+          } else {
+              return 0;
+          }
+      });
+      return data;
+}
+  
+bbop.monarch.datagraph.prototype.getGroups = function(data) {
+      var groups = [];
+      var unique = {};
+      for (var i=0, len=data.length; i<len; i++) { 
+          for (var j=0, cLen=data[i].counts.length; j<cLen; j++) { 
+              unique[ data[i].counts[j].name ] =1;
+          }
+      }
+      groups = Object.keys(unique);
+      return groups;
+},
+  
+//remove zero length bars
+bbop.monarch.datagraph.prototype.removeZeroCounts = function(data){
+      trimmedGraph = [];
+      data.forEach(function (r){
+          var count = 0;
+          r.counts.forEach(function (i){
+               count += i.value;
+           });
+          if (count > 0){
+              trimmedGraph.push(r);
+          }
+      });
+      return trimmedGraph;
+ }
+bbop.monarch.datagraph.prototype.addEllipsisToLabel = function(data,max){
+    var reg = new RegExp("(.{"+max+"})(.+)");
+    data.forEach(function (r){
+        if (r.label.length > max){
+            r.fullLabel = r.label;
+            r.label = r.label.replace(reg,"$1...");      
+        }
+    });
+    return data;
+}
+
+bbop.monarch.datagraph.prototype.getFullLabel = function (d,data){
+    for (var i=0, len=data.length; i < len; i++){
+        if (data[i].label === d){
+            var fullLabel = data[i].fullLabel;
+            return fullLabel;
+            break;
+        }
+    }
+}
+////////////////////////////////////////////////////////////////////
+//End data object functions
+////////////////////////////////////////////////////////////////////
+
+//Adjust Y label font, arrow size, and spacing
+//when transitioning
+bbop.monarch.datagraph.prototype.adjustYAxisElements = function(yMax,len){
+   
+   var conf = this.config;
+   var h = conf.height;
+   var density = h/len;
+   var isUpdated = false;
+   
+   //var yFont = 'default';
+   yFont = conf.yFontSize;
+   var yOffset = conf.yOffset;
+   var arrowDim = conf.arrowDim;
+   
+   if (yMax > 31 && yMax < 41){
+       yFont = ((1/yMax)*450);
+       isUpdated = true;
+   }else if (yMax > 41 && yMax < 53){
+       yFont = ((1/yMax)*565);
+       arrowDim = "-20,-5, -9,1 -20,7";
+       isUpdated = true;
+   } else if (yMax >= 53 && yMax <66){
+       yFont = ((1/yMax)*615);
+       yOffset = "-1.45em";
+       arrowDim = "-20,-5, -9,1 -20,7";
+       isUpdated = true;
+   } else if (yMax >= 66){
+       yFont = ((1/yMax)*640);
+       yOffset = "-1.4em";
+       arrowDim = "-20,-5, -9,1 -20,7";
+       isUpdated = true;
+   }
+   
+   if (isUpdated && yFont > conf.yFontSize){
+       yFont = conf.yFontSize;
+   }
+   
+   //Check for density BETA
+   if (density < 15 && density < yFont ){
+       yFont = density+2;
+       yOffset = "-2em";
+       arrowDim = "-20,-3, -11,1 -20,5";
+   }
+   var retList = [yFont,yOffset,arrowDim];
+   return retList;
+}
+
+//datagraph default SVG Coordinates
 bbop.monarch.datagraph.prototype.setPolygonCoordinates = function(){
     
     //Nav arrow (now triangle) 
@@ -1197,7 +1213,7 @@ bbop.monarch.datagraph.prototype.setPolygonCoordinates = function(){
         this.config.bcWidth = this.config.width+this.config.margin.right+this.config.margin.left-150;
     }
 }
-
+//datagraph default configurations
 bbop.monarch.datagraph.prototype.getDefaultConfig = function(){
     
     var defaultConfiguration = {

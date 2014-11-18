@@ -13,7 +13,7 @@ bbop.monarch.homePageConfig = {
         bread : {width:60, height: 25, offset:50, space: 1},
         
         //Chart margins    
-        margin : {top: 40, right: 65, bottom: 5, left: 152},
+        margin : {top: 40, right: 62, bottom: 5, left: 152},
         
         width : 250,
         height : 300,
