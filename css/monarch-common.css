@@ -328,3 +328,12 @@ p {
     border-radius: 0px 0px 3px 3px;
     border-top: none;
 }
+
+/*
+ * This is a common setting for the new BS3 base attempt.
+ */
+
+.branding-logo {
+    max-height: 30px;
+    padding-bottom: 5px;
+}
