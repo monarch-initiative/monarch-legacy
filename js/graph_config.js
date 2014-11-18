@@ -636,15 +636,15 @@ bbop.monarch.genotypePhenotypeConfigSmall = {
 bbop.monarch.homePageConfigSmall = {
         
         //override default
-        arrowDim : "-17,-5, -10,0 -17,5",
-        yOffset : "-1.3em",
+        arrowDim : "-18,-5, -10,0 -18,5",
+        yOffset : "-1.5em",
         
         firstCr : "0,4 0,22 37,22 47,13 37,4",
         trailCrumbs : "0,4 10,13, 0,22 37,22 47,13 37,4",
         bread : {width:30, height: 25, offset:30, space: 0},
         
         //Chart margins    
-        margin : {top: 40, right: 60, bottom: 5, left: 120},
+        margin : {top: 40, right: 55, bottom: 5, left: 100},
         
         width : 140,
         height : 300,
@@ -652,7 +652,7 @@ bbop.monarch.homePageConfigSmall = {
         //X Axis Label
         xAxisLabel : "Number Of Annotations",
         xAxisPos : "12em",
-        xLabelFontSize : "11px",
+        xLabelFontSize : "10px",
         xFontSize : "8px",
         
         //Chart title and first breadcrumb
@@ -670,20 +670,20 @@ bbop.monarch.homePageConfigSmall = {
         },
         
         //Yaxis links
-        yFontSize : 9,
+        yFontSize : 8,
         isYLabelURL : true,
         yLabelBaseURL : "/phenotype/",
         
         //font sizes
         legendFontSize : 9,
-        settingsFontSize : '9px',
+        settingsFontSize : '8px',
         
-        maxLabelSize : 18,
+        maxLabelSize : 17,
         
         //Turn on/off legend
         useLegend : true,
         //Legend dimensions
-        legend : {width:10,height:10},
+        legend : {width:9,height:9},
         legendText : {height:".01em"},
         
         //Colors set in the order they appear in the JSON object
