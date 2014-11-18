@@ -26,7 +26,8 @@ bbop.monarch.homePageConfig = {
         
         //Chart title and first breadcrumb
         chartTitle : "Phenotype Annotation Distribution",
-        firstCrumb : "Phenotypic Abnormality",
+        //firstCrumb : "Phenotypic Abnormality",
+        firstCrumb : "foobar2",
         
         //Title size/font settings
         title : {
@@ -657,7 +658,8 @@ bbop.monarch.homePageConfigSmall = {
         
         //Chart title and first breadcrumb
         chartTitle : "Phenotype Annotation Distribution",
-        firstCrumb : "Phenotypic Abnormality",
+        //firstCrumb : "Phenotypic Abnormality",
+        firstCrumb : "foobar",
         
         //Title size/font settings
         title : {
