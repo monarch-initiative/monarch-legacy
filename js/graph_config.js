@@ -26,7 +26,7 @@ bbop.monarch.homePageConfig = {
         
         //Chart title and first breadcrumb
         chartTitle : "Phenotype Annotation Distribution",
-        firstCrumb : "Phenotypic Abnormality2",
+        firstCrumb : "Phenotypic Abnormality",
         
         //Title size/font settings
         title : {
@@ -641,18 +641,18 @@ bbop.monarch.homePageConfigSmall = {
         
         firstCr : "0,4 0,22 37,22 47,13 37,4",
         trailCrumbs : "0,4 10,13, 0,22 37,22 47,13 37,4",
-        bread : {width:30, height: 25, offset:30, space: 0},
+        bread : {width:30, height: 25, offset:26, space: 0},
         
         //Chart margins    
-        margin : {top: 40, right: 55, bottom: 5, left: 100},
+        margin : {top: 40, right: 55, bottom: 5, left: 95},
         
-        width : 140,
+        width : 125,
         height : 300,
         
         //X Axis Label
         xAxisLabel : "Number Of Annotations",
         xAxisPos : "12em",
-        xLabelFontSize : "10px",
+        xLabelFontSize : "9px",
         xFontSize : "8px",
         
         //Chart title and first breadcrumb
@@ -663,7 +663,7 @@ bbop.monarch.homePageConfigSmall = {
         title : {
                   'text-align': 'none',
                   'text-indent' : '20px',
-                  'font-size' : '18px',
+                  'font-size' : '16px',
                   'font-weight': 'none',
                   'background-color' : '#f5f5f5',
                   'border-bottom-color' : '#ddd'
@@ -676,15 +676,15 @@ bbop.monarch.homePageConfigSmall = {
         
         //font sizes
         legendFontSize : 9,
-        settingsFontSize : '8px',
+        settingsFontSize : '7.5px',
         
-        maxLabelSize : 17,
+        maxLabelSize : 15,
         
         //Turn on/off legend
         useLegend : true,
         //Legend dimensions
         legend : {width:9,height:9},
-        legendText : {height:".01em"},
+        legendText : {height:"0em"},
         
         //Colors set in the order they appear in the JSON object
         color : { 
@@ -711,6 +711,6 @@ bbop.monarch.homePageConfigSmall = {
         },
 
         useCrumb : true,
-        crumbFontSize : 6,
+        crumbFontSize : 5.5,
         useCrumbShape : false
  };
