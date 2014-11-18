@@ -641,12 +641,12 @@ bbop.monarch.homePageConfigSmall = {
         
         firstCr : "0,4 0,22 37,22 47,13 37,4",
         trailCrumbs : "0,4 10,13, 0,22 37,22 47,13 37,4",
-        bread : {width:30, height: 25, offset:30, space: 1},
+        bread : {width:30, height: 25, offset:30, space: 0},
         
         //Chart margins    
         margin : {top: 40, right: 60, bottom: 5, left: 120},
         
-        width : 150,
+        width : 140,
         height : 300,
         
         //X Axis Label
@@ -675,8 +675,8 @@ bbop.monarch.homePageConfigSmall = {
         yLabelBaseURL : "/phenotype/",
         
         //font sizes
-        legendFontSize : 10,
-        settingsFontSize : '10px',
+        legendFontSize : 9,
+        settingsFontSize : '9px',
         
         maxLabelSize : 18,
         

@@ -8,7 +8,7 @@ function makeHomePageGraph(data){
     this.makeTwoSizeGraph(data,graphDiv,
             bbop.monarch.homePageConfig,
             bbop.monarch.homePageConfigSmall,
-            640,700)
+            640,640)
 }
 
 function makeDiseaseGeneGraph(data){
