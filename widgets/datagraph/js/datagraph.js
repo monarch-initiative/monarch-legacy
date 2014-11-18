@@ -16,7 +16,24 @@ bbop.monarch.datagraph = function(config){
     } else {
         this.config = config;
     }
-    this.setNonConfigurableParameters();
+    this.setPolygonCoordinates();
+    
+    //Check browser
+    this.config.isOpera = (!!window.opera || navigator.userAgent.indexOf(' OPR/') >= 0);
+    this.config.isChrome = (!!window.chrome && !(!!window.opera || navigator.userAgent.indexOf(' OPR/') >= 0));
+    
+    //Tooltip offsetting
+    this.config.arrowOffset = {height: 94, width: -90};
+    this.config.barOffset = {
+                 grouped:{
+                    height: 110,
+                    width: 10
+                  },
+                  stacked:{
+                    height: 95,
+                    width: 10
+                  }
+    };
 }
         
 bbop.monarch.datagraph.prototype.init = function (html_div,DATA){
@@ -1146,7 +1163,7 @@ bbop.monarch.datagraph.prototype.drawGraph = function (data,graphConfig,html_div
     //});
 }
 //datagraph default configurations
-bbop.monarch.datagraph.prototype.setNonConfigurableParameters = function(){
+bbop.monarch.datagraph.prototype.setPolygonCoordinates = function(){
     
     //Nav arrow (now triangle) 
     if (this.config.arrowDim == null || typeof this.config.arrowDim == 'undefined'){
@@ -1174,23 +1191,6 @@ bbop.monarch.datagraph.prototype.setNonConfigurableParameters = function(){
     if (this.config.yOffset == null || typeof this.config.yOffset == 'undefined'){
         this.config.yOffset = "-1.48em";
     }
-    
-    //Tooltip offsetting
-    this.config.arrowOffset = {height: 94, width: -90};
-    this.config.barOffset = {
-                 grouped:{
-                    height: 110,
-                    width: 10
-                  },
-                  stacked:{
-                    height: 95,
-                    width: 10
-                  }
-    };
-    
-    //Check browser
-    this.config.isOpera = (!!window.opera || navigator.userAgent.indexOf(' OPR/') >= 0);
-    this.config.isChrome = (!!window.chrome && !(!!window.opera || navigator.userAgent.indexOf(' OPR/') >= 0));
     
     //Check that breadcrumb width is valid
     if (this.config.bcWidth > this.config.width+this.config.margin.right+this.config.margin.left){
