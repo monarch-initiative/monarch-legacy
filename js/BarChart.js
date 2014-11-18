@@ -1,145 +1,118 @@
 function makeHomePageGraph(data){
-    var phenoGraph = 
+    /*var phenoGraph = 
         new bbop.monarch.datagraph(bbop.monarch.homePageConfig);
     phenoGraph.init(".graph-container",data);
-    
-    //Add min width and height for bootstrap
-    var minWidth = phenoGraph.config.width + 
-                   phenoGraph.config.margin.left + 
-                   phenoGraph.config.margin.right + 35;
-    var minHeight = phenoGraph.config.height + 
-                    phenoGraph.config.margin.top + 
-                    phenoGraph.config.margin.bottom;
-    $(".graph-container").parent()
-        .css( {"min-width" : minWidth+"px", "min-height" : minHeight+"px"});
-    //$(".graph-container").parent()
-    //.css( {"width" : minWidth+"px", "height" : minHeight+125+"px"});
-    
-    window.addEventListener('resize', function(event){
-        minWidth = phenoGraph.config.width + 
-                   phenoGraph.config.margin.left + 
-                   phenoGraph.config.margin.right + 35;
-        
-        minHeight = phenoGraph.config.height + 
-                    phenoGraph.config.margin.top + 
-                    phenoGraph.config.margin.bottom;
 
-        $(".graph-container").parent()
-        .css( {"min-width" : minWidth+"px", "min-height" : minHeight+"px"});
-    });  
+    this.setMinHeightWidth(phenoGraph,".graph-container");*/
+    var graphDiv = '.graph-container';
+    this.makeTwoSizeGraph(data,graphDiv,
+            bbop.monarch.homePageConfig,
+            bbop.monarch.homePageConfigSmall,
+            640,700)
 }
 
 function makeDiseaseGeneGraph(data){
-    var disGraph = 
+    /*var disGraph = 
         new bbop.monarch.datagraph(bbop.monarch.diseaseGeneConfig);
-    disGraph.init(".disease-gene-container",data);
-    
-    //Add min width and height for bootstrap
-    var minWidth = disGraph.config.width + disGraph.config.margin.left + disGraph.config.margin.right + 35;
-    var minHeight = disGraph.config.height + disGraph.config.margin.top + disGraph.config.margin.bottom;
-    $(".disease-gene-container").parent().parent()
-        .css( {"min-width" : minWidth+"px", "min-height" : minHeight+"px"});
-    $(".disease-gene-container").parent()
-        .css( {"width" : minWidth+"px", "height" : minHeight+125+"px"});
- 
-    window.addEventListener('resize', function(event){
-       minWidth = disGraph.config.width + disGraph.config.margin.left + disGraph.config.margin.right + 35;
-       minHeight = disGraph.config.height + disGraph.config.margin.top + disGraph.config.margin.bottom;
+    disGraph.init(".disease-gene-container",data);*/
 
-        $(".disease-gene-container").parent().parent()
-        .css( {"min-width" : minWidth+"px", "min-height" : minHeight+"px"});
-        $(".disease-gene-container").parent()
-        .css( {"width" : minWidth+"px", "height" : minHeight+125+"px"});
-    });
+    var graphDiv = ".disease-gene-container";
+    this.makeTwoSizeGraph(data,graphDiv,
+                          bbop.monarch.diseaseGeneConfig,
+                          bbop.monarch.diseaseGeneConfigSmall,
+                          1900,950)
 }
 
 function makePhenotypeAnnotationGraph(data){
 
-    var phenoGraph = 
+    /*var phenoGraph = 
         new bbop.monarch.datagraph(bbop.monarch.phenotypeAnnotationConfig);
-    phenoGraph.init(".graph-container",data);
-    
-    //Add min width and height for bootstrap
-    var minWidth = phenoGraph.config.width + 
-                   phenoGraph.config.margin.left + 
-                   phenoGraph.config.margin.right + 35;
-    var minHeight = phenoGraph.config.height + 
-                    phenoGraph.config.margin.top + 
-                    phenoGraph.config.margin.bottom;
-    $(".graph-container").parent().parent()
-        .css( {"min-width" : minWidth+"px", "min-height" : minHeight+"px"});
-    $(".graph-container").parent()
-    .css( {"width" : minWidth+"px", "height" : minHeight+125+"px"});
-    
-    window.addEventListener('resize', function(event){
-        minWidth = phenoGraph.config.width + 
-                   phenoGraph.config.margin.left + 
-                   phenoGraph.config.margin.right + 35;
-        
-        minHeight = phenoGraph.config.height + 
-                    phenoGraph.config.margin.top + 
-                    phenoGraph.config.margin.bottom;
-
-        $(".graph-container").parent().parent()
-        .css( {"min-width" : minWidth+"px", "min-height" : minHeight+"px"});
-        $(".graph-container").parent()
-        .css( {"width" : minWidth+"px", "height" : minHeight+125+"px"});
-    });
+    phenoGraph.init(".graph-container",data);*/
+    var graphDiv = ".graph-container";
+    this.makeTwoSizeGraph(data,graphDiv,
+            bbop.monarch.phenotypeAnnotationConfig,
+            bbop.monarch.homePageConfig,
+            1900,950)
 }
                   
 function makeDiseasePhenotypeGraph(data) {
 
-    var disPhenoGraph = 
+    /*var disPhenoGraph = 
         new bbop.monarch.datagraph(bbop.monarch.diseasePhenotypeConfig);
-    disPhenoGraph.init(".disease-pheno-container",data);
+    disPhenoGraph.init(".disease-pheno-container",data);*/
     
-    //bootstrap
-    var minWidth = disPhenoGraph.config.width + disPhenoGraph.config.margin.left + disPhenoGraph.config.margin.right + 35;
-    var minHeight = disPhenoGraph.config.height + disPhenoGraph.config.margin.top + disPhenoGraph.config.margin.bottom;
-    $(".disease-pheno-container").parent().parent()
-        .css( {"min-width" : minWidth+"px", "min-height" : minHeight+"px"});
-    $(".disease-pheno-container").parent()
-        .css( {"width" : minWidth+"px", "height" : minHeight+125+"px"});
-    
-    window.addEventListener('resize', function(event){
-        minWidth = disPhenoGraph.config.width + disPhenoGraph.config.margin.left + disPhenoGraph.config.margin.right + 35;
-        minHeight = disPhenoGraph.config.height + disPhenoGraph.config.margin.top + disPhenoGraph.config.margin.bottom;
-        $(".disease-pheno-container").parent().parent()
-            .css( {"min-width" : minWidth+"px", "min-height" : minHeight+"px"});
-        $(".disease-pheno-container").parent()
-            .css( {"width" : minWidth+"px", "height" : minHeight+125+"px"});
-    });
+    var graphDiv = ".disease-pheno-container";
+    this.makeTwoSizeGraph(data,graphDiv,
+            bbop.monarch.diseasePhenotypeConfig,
+            bbop.monarch.diseasePhenotypeConfigSmall,
+            1900,950)
 }
 
 function makePhenoGenoGraph(data) {
-    var genoGraph = 
+    /*var genoGraph = 
         new bbop.monarch.datagraph(bbop.monarch.genotypePhenotypeConfig);
-    genoGraph.init(".pheno-geno-container",data);
+    genoGraph.init(".pheno-geno-container",data);*/
     
-    //bootstrap
-    var minWidth = genoGraph.config.width + genoGraph.config.margin.left + genoGraph.config.margin.right + 35;
-    var minHeight = genoGraph.config.height + genoGraph.config.margin.top + genoGraph.config.margin.bottom;
-    $(".pheno-geno-container").parent().parent()
-        .css( {"min-width" : minWidth+"px", "min-height" : minHeight+"px"});
-    $(".pheno-geno-container").parent()
-        .css( {"width" : minWidth+"px", "height" : minHeight+125+"px"});
+    var graphDiv = ".pheno-geno-container";
+    this.makeTwoSizeGraph(data,graphDiv,
+            bbop.monarch.genotypePhenotypeConfig,
+            bbop.monarch.genotypePhenotypeConfigSmall,
+            1900,950)
+}
+
+function makeTwoSizeGraph(data,graphDiv,largeConfig,smallConfig,width,height){
+
+    var sizeTracker;
+    var graphObject;
+    //console.log($(window).width());
+    //console.log(width);
+      
+    //Check screen size on page load
+    if ($(window).width() > width && $(window).height() > height){
+        graphObject = 
+            new bbop.monarch.datagraph(largeConfig);
+        graphObject.init(graphDiv,data);
+        sizeTracker = 'large';
+    } else {
+        graphObject = 
+            new bbop.monarch.datagraph(smallConfig);
+        graphObject.init(graphDiv,data);
+        sizeTracker = 'small';
+    }
+    this.setMinHeightWidth(graphObject,graphDiv);
     
     window.addEventListener('resize', function(event){
-        minWidth = genoGraph.config.width + genoGraph.config.margin.left + genoGraph.config.margin.right + 35;
-        minHeight = genoGraph.config.height + genoGraph.config.margin.top + genoGraph.config.margin.bottom;
-        $(".pheno-geno-container").parent().parent()
-            .css( {"min-width" : minWidth+"px", "min-height" : minHeight+"px"});
-        $(".pheno-geno-container").parent()
-            .css( {"width" : minWidth+"px", "height" : minHeight+125+"px"});
+ 
+        if ($(window).width() > width && $(window).height() > height && sizeTracker != 'large'){
+            $(graphDiv).children().remove();
+            graphObject = 
+                new bbop.monarch.datagraph(largeConfig);
+            graphObject.init(graphDiv,data);
+            this.setMinHeightWidth(graphObject,graphDiv);
+            sizeTracker = 'large';
+        } else if (sizeTracker != 'small') {
+            $(graphDiv).children().remove();
+            graphObject = 
+                new bbop.monarch.datagraph(smallConfig);
+            graphObject.init(graphDiv,data);
+            this.setMinHeightWidth(graphObject,graphDiv);
+            sizeTracker = 'small';
+        }
     });
 }
-//TODO implement when graph is available
-function makePhenoGeneGraph(data) {
-   /* var geneGraph = jQuery.extend(true, {}, datagraph);
-    geneGraph.height=400;
-    geneGraph.margin.right = 40;
-    geneGraph.chartTitle = "Phenotype Gene Annotation Distribution";
-    geneGraph.xAxisLabel= "Number Of Genes";
-    geneGraph.init(".pheno-gene-container",data);
-    */
+
+function setMinHeightWidth(graphObject,div){
+    
+    var minWidth = graphObject.config.width + graphObject.config.margin.left + graphObject.config.margin.right + 35;
+    var minHeight = graphObject.config.height + graphObject.config.margin.top + graphObject.config.margin.bottom;
+
+    if (_.isEqual($(div).parent(),$(div).parent('.panel.panel-default'))){
+        $(div).parent().parent()
+            .css( {"min-width" : minWidth+"px", "min-height" : minHeight+"px"});
+        $(div).parent()
+            .css( {"width" : minWidth+"px", "height" : minHeight+125+"px"});
+    } else {
+        $(div).parent()
+            .css( {"width" : minWidth+"px", "height" : minHeight+125+"px"});
+    }
 }

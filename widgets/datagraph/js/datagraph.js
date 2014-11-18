@@ -1210,7 +1210,7 @@ bbop.monarch.datagraph.prototype.setPolygonCoordinates = function(){
     
     //Check that breadcrumb width is valid
     if (this.config.bcWidth > this.config.width+this.config.margin.right+this.config.margin.left){
-        this.config.bcWidth = this.config.width+this.config.margin.right+this.config.margin.left-150;
+        this.config.bcWidth = this.config.bread.width+(this.config.bread.offset*5)+5;
     }
 }
 //datagraph default configurations
