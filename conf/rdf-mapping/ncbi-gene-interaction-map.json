@@ -44,11 +44,12 @@
    "filter" : {
       "interactor_a_taxon_id" : "NCBITaxon:9606"
    },
+   "isDisabled" : "1",
    "forceConfiguration" : {
       "federation_services_url" : "http://beta.neuinfo.org/services/v1/federation/"
    },
-   "view" : "nif-0000-02801-4",
    "notes" : "association types are not uniformly added to the interactions.  may need to scrub data with this.  also, the interactions sometimes come from external sources... how should this be tracked?  is \"source\" the right link between a pubmed_id and the interaction?  the pmid is the evidence, but the source is actually either this resource or the one it pulls from.",
+   "view" : "nif-0000-02801-4",
    "columns" : [
       {
          "name" : "interactor_a_gene_id"
@@ -83,5 +84,5 @@
       }
    ],
    "graph" : "ncbi-gene-interactions",
-   "mapVersion" : "2014-08-07"
+   "mapVersion" : "2014-11-14"
 }

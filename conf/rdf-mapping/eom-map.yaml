@@ -3,8 +3,8 @@ forceConfiguration:
 view: nlx_157874-1
 status: alpha
 graph: eom
-mapVersion: 2014-09-04
-
+mapVersion: 2014-11-17
+isDisabled: true
 columns: 
   - 
     name: v_uuid
