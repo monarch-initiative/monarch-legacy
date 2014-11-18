@@ -644,7 +644,7 @@ bbop.monarch.homePageConfigSmall = {
         bread : {width:52, height: 25, offset:42, space: 1},
         
         //Chart margins    
-        margin : {top: 40, right: 57, bottom: 5, left: 152},
+        margin : {top: 40, right: 59, bottom: 5, left: 152},
         
         width : 200,
         height : 300,
