@@ -26,8 +26,7 @@ bbop.monarch.homePageConfig = {
         
         //Chart title and first breadcrumb
         chartTitle : "Phenotype Annotation Distribution",
-        //firstCrumb : "Phenotypic Abnormality",
-        firstCrumb : "foobar2",
+        firstCrumb : "Phenotypic Abnormality2",
         
         //Title size/font settings
         title : {
@@ -637,29 +636,28 @@ bbop.monarch.genotypePhenotypeConfigSmall = {
 bbop.monarch.homePageConfigSmall = {
         
         //override default
-        arrowDim : "-19,-5, -10,0 -19,5",
+        arrowDim : "-17,-5, -10,0 -17,5",
         yOffset : "-1.3em",
         
         firstCr : "0,4 0,22 37,22 47,13 37,4",
         trailCrumbs : "0,4 10,13, 0,22 37,22 47,13 37,4",
-        bread : {width:47, height: 25, offset:37, space: 1},
+        bread : {width:30, height: 25, offset:30, space: 1},
         
         //Chart margins    
-        margin : {top: 40, right: 60, bottom: 5, left: 152},
+        margin : {top: 40, right: 60, bottom: 5, left: 120},
         
-        width : 160,
+        width : 150,
         height : 300,
         
         //X Axis Label
         xAxisLabel : "Number Of Annotations",
         xAxisPos : "12em",
-        xLabelFontSize : "12px",
+        xLabelFontSize : "11px",
         xFontSize : "8px",
         
         //Chart title and first breadcrumb
         chartTitle : "Phenotype Annotation Distribution",
-        //firstCrumb : "Phenotypic Abnormality",
-        firstCrumb : "foobar",
+        firstCrumb : "Phenotypic Abnormality",
         
         //Title size/font settings
         title : {
@@ -672,7 +670,7 @@ bbop.monarch.homePageConfigSmall = {
         },
         
         //Yaxis links
-        yFontSize : 11,
+        yFontSize : 9,
         isYLabelURL : true,
         yLabelBaseURL : "/phenotype/",
         
@@ -680,7 +678,7 @@ bbop.monarch.homePageConfigSmall = {
         legendFontSize : 10,
         settingsFontSize : '10px',
         
-        maxLabelSize : 20,
+        maxLabelSize : 18,
         
         //Turn on/off legend
         useLegend : true,
@@ -709,10 +707,10 @@ bbop.monarch.homePageConfigSmall = {
                    bottom: '#3D6FB7',
                    hover : '#EA763B'
                  },
-                 crumbText : '#FFFFFF'
+                 crumbText : 'black'
         },
 
-        useCrumb : false,
+        useCrumb : true,
         crumbFontSize : 6,
-        useCrumbShape : true
+        useCrumbShape : false
  };

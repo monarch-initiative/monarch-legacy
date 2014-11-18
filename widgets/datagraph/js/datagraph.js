@@ -628,12 +628,13 @@ bbop.monarch.datagraph.prototype.drawGraph = function (data,graphConfig,html_div
                   });
             }
             
+            d3.select(html_div).select(".breadcrumbs")
+            .select("svg")
+            .append("g")  
+            .attr("class",("bread"+index))
+            .attr("transform", "translate(" + index*(config.bread.offset+config.bread.space) + ", 0)");
+            
             if (config.useCrumbShape){
-                d3.select(html_div).select(".breadcrumbs")
-                  .select("svg")
-                  .append("g")  
-                  .attr("class",("bread"+index))
-                  .attr("transform", "translate(" + index*(config.bread.offset+config.bread.space) + ", 0)");
                 
                 d3.select(html_div).select((".bread"+index))
                 .append("svg:polygon")
@@ -641,13 +642,7 @@ bbop.monarch.datagraph.prototype.drawGraph = function (data,graphConfig,html_div
                 .attr("points",index ? config.trailCrumbs : config.firstCr)
                 .attr("fill", config.color.crumb.top);
                 
-            } else {
-                d3.select(html_div).select(".breadcrumbs")
-                .select("svg")
-                .append("g")  
-                .attr("class",("bread"+index))
-                .attr("transform", "translate(" + index*70 + ", 0)");//HARDCODE
-            }
+            } 
             
             //This creates the hover tooltip
             if (fullLabel){
