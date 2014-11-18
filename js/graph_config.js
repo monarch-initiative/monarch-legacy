@@ -639,21 +639,21 @@ bbop.monarch.homePageConfigSmall = {
         arrowDim : "-19,-5, -10,0 -19,5",
         yOffset : "-1.3em",
         
-        firstCr : "0,1 0,26 42,26 52,12.5 42,1",
-        trailCrumbs : "0,1 10,12.5, 0,26 42,26 52,12.5 42,1",
-        bread : {width:52, height: 25, offset:42, space: 1},
+        firstCr : "0,4 0,22 37,22 47,13 37,4",
+        trailCrumbs : "0,4 10,13, 0,22 37,22 47,13 37,4",
+        bread : {width:47, height: 25, offset:37, space: 1},
         
         //Chart margins    
-        margin : {top: 40, right: 59, bottom: 5, left: 152},
+        margin : {top: 40, right: 60, bottom: 5, left: 152},
         
-        width : 200,
+        width : 160,
         height : 300,
         
         //X Axis Label
         xAxisLabel : "Number Of Annotations",
-        xAxisPos : "15em",
+        xAxisPos : "12em",
         xLabelFontSize : "12px",
-        xFontSize : "9px",
+        xFontSize : "8px",
         
         //Chart title and first breadcrumb
         chartTitle : "Phenotype Annotation Distribution",
@@ -676,7 +676,7 @@ bbop.monarch.homePageConfigSmall = {
         
         //font sizes
         legendFontSize : 10,
-        settingsFontSize : '11px',
+        settingsFontSize : '10px',
         
         maxLabelSize : 20,
         
@@ -711,6 +711,6 @@ bbop.monarch.homePageConfigSmall = {
         },
 
         useCrumb : false,
-        crumbFontSize : 7.6,
+        crumbFontSize : 6,
         useCrumbShape : true
  };
