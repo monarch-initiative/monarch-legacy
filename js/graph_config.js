@@ -20,7 +20,7 @@ bbop.monarch.homePageConfig = {
         
         //X Axis Label
         xAxisLabel : "Number Of Annotations",
-        xAxisPos : "13em",
+        xAxisPos : "15em",
         xLabelFontSize : "12px",
         xFontSize : "9px",
         
