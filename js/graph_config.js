@@ -646,7 +646,7 @@ bbop.monarch.homePageConfigSmall = {
         //Chart margins    
         margin : {top: 40, right: 55, bottom: 5, left: 95},
         
-        width : 125,
+        width : 127,
         height : 300,
         
         //X Axis Label
