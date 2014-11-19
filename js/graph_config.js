@@ -641,12 +641,12 @@ bbop.monarch.homePageConfigSmall = {
         
         firstCr : "0,4 0,22 37,22 47,13 37,4",
         trailCrumbs : "0,4 10,13, 0,22 37,22 47,13 37,4",
-        bread : {width:30, height: 25, offset:26, space: 0},
+        bread : {width:30, height: 25, offset:25, space: 0},
         
         //Chart margins    
         margin : {top: 40, right: 55, bottom: 5, left: 95},
         
-        width : 127,
+        width : 130,
         height : 300,
         
         //X Axis Label
@@ -711,6 +711,6 @@ bbop.monarch.homePageConfigSmall = {
         },
 
         useCrumb : true,
-        crumbFontSize : 5.5,
+        crumbFontSize : 5,
         useCrumbShape : false
  };
