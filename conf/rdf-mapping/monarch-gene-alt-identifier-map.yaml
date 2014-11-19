@@ -1,4 +1,5 @@
 --- 
+isDisabled: true
 graphs: 
   - 
     columns: 
@@ -10,9 +11,6 @@ graphs:
         name: taxon_id
       - 
         name: mapped_id
-        type: rdfs:Literal
-      - 
-        name: mapped_source 
         type: rdfs:Literal
     filter: 
       taxon_id: "9606"
