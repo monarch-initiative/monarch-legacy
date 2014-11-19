@@ -40,45 +40,13 @@ bbop.monarch.datagraph.prototype.init = function (html_div,DATA){
             
      conf = this.config;
      datagraph = this;
-     var height;
-     var width;
+     var height = conf.height;
+     var width = conf.width;;
      
-     //Check screen size on page load
-     if ($(window).width() < 1500 || $(window).height() < 800){
-         width = conf.width;
-         height = conf.height;
-     } else {
-         width = conf.width;
-         height = conf.height;
-     }
-     //console.log($(window).width());
      datagraph.makeGraphDOM(html_div);
-     var d3Config = datagraph.initSVG(html_div,DATA,height,width);
+     var d3Config = datagraph.setD3Config(html_div,DATA,height,width);
      //Call function to draw graph
      datagraph.drawGraph(DATA,d3Config,html_div);
-     
-     window.addEventListener('resize', function(event){
-         
-         if ($(window).width() < 1500 || $(window).height() < 800){
-             if (width == conf.width){
-                 return;
-             } else {
-                 width = conf.width;
-                 height = conf.height;
-             }
-         } else if (width == conf.width){
-                 return;
-         } else {
-             width = conf.width;
-             height = conf.height;
-         }
-
-         $(html_div).children().remove();
-         
-         datagraph.makeGraphDOM(html_div);
-         var d3Config = datagraph.initSVG(html_div,DATA,height,width);
-         datagraph.drawGraph(DATA,d3Config,html_div);
-      });
 }
 //Uses JQuery to create the DOM for the datagraph
 bbop.monarch.datagraph.prototype.makeGraphDOM = function(html_div){
@@ -100,7 +68,7 @@ bbop.monarch.datagraph.prototype.makeGraphDOM = function(html_div){
       $(html_div+" .interaction li").append("<div class=breadcrumbs></div>");
 }
   
-bbop.monarch.datagraph.prototype.initSVG = function (html_div,DATA,height,width){
+bbop.monarch.datagraph.prototype.setD3Config = function (html_div,DATA,height,width){
       
       var d3Config = {};
       var conf =  this.config;
