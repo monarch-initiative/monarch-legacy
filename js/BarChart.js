@@ -64,8 +64,6 @@ function makeTwoSizeGraph(data,graphDiv,largeConfig,smallConfig,width,height){
 
     var sizeTracker;
     var graphObject;
-    //console.log($(window).width());
-    //console.log(width);
       
     //Check screen size on page load
     if ($(window).width() > width && $(window).height() > height){

@@ -1,0 +1,97 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Monarch Genes</title>
+
+  {{{includes.analytics}}}
+
+  <!-- CSS. -->
+  {{#pup_tent_css_libraries}}
+  <link rel="stylesheet" type="text/css" href="{{{.}}}">
+  {{/pup_tent_css_libraries}}
+
+  <!-- JS variables. -->
+  {{#pup_tent_js_variables}}
+  <script type="text/javascript">var {{name}} = {{{value}}};</script>
+  {{/pup_tent_js_variables}}
+
+  <!-- JS libraries. -->
+  {{#pup_tent_js_libraries}}
+  <script type="text/javascript" src="{{{.}}}"></script>
+  {{/pup_tent_js_libraries}}
+  
+  <!-- JS launcher. -->
+  <script type="text/javascript">
+  jQuery(document).ready(function(){
+  {{#monarch_launchable}}
+  {{.}};
+  {{/monarch_launchable}}
+  });
+  </script>
+
+  <link rel="icon" href="/image/favicon.ico" type="image/x-icon">
+  <meta charset=”utf-8”></meta>
+</head>
+<body style="padding-top: 50px;">
+  {{{includes.navbar}}}
+  <div class="container-fluid" style="margin: 1em;">
+    <!-- Open first row section. -->
+    <div class="row">
+        <!-- Annotation Graph-->
+        <div class="col-xs-12 col-sm-12 col-md-4 col-lg-4">
+          <div class="panel panel-default">
+           <div class="disease-gene-container"></div>
+          </div>
+        <div class="panel panel-default">
+            <h4>Recent Updates</h4>
+            {{#blog_results}}
+            <ul>
+              <li>
+                <a href="{{link}}">{{title}}</a> <small>({{date}})</small>
+              </li>
+            </ul>
+            {{/blog_results}}
+            {{#blog_results.length}}
+            <p class="text-right"><a href="http://monarch-initiative.blogspot.com/search/label/test">More</a></p>
+            {{/blog_results.length}}
+            {{^blog_results}}
+            <p>No news is good news.</p>
+            {{/blog_results}}
+          </div>
+        </div>
+      <!-- Disease spotlight -->
+      <div class="col-xs-12 col-sm-12 col-md-6 col-lg-6">
+        <div class="panel panel-default">
+          <h4>Gene Spotlight: {{{spotlight.label}}}</h4>
+          <div>
+        <p>{{spotlight.description}}</p>
+        <ul>
+        <li>Name:  {{spotlight.name}}</li>
+        <li>Taxon: {{spotlight.taxon}} </li>
+        <li>Variant Genotypes: {{spotlight.genotype_count}} </li>
+        <li>Phenotypes: {{{spotlight.phenotypes}}}</li>
+        <li>Diseases: {{{spotlight.diseases}}}</li>
+        <li>Pathways: {{{spotlight.pathways}}}</li>
+        <li>Publications: {{spotlight.publication_count}}</li>
+        </ul>
+      </div>
+          <p class="text-right">{{{spotlight.link}}}</p>
+          </div>
+        </div>
+        <!-- Getting started area or disease browser -->
+        <div class="col-xs-12 col-sm-12 col-md-6 col-lg-6">
+          <div class="panel panel-default">
+            <p>Quick look:</p>
+            <ul>
+              <li>genes with phenotypes: 4,000 in 10 species</li>
+              <li>species with gene-associations: 15</li>
+              <li>human genes with direct phenotype association: 3,000</li>
+              <li>human genes with inferred phenotype association: 20,000</li>
+            </ul>
+          </div>
+        </div>
+      </div>
+      <!-- Close first row section. -->
+    </div>
+  </body>
+  </html>
