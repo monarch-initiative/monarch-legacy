@@ -40,45 +40,13 @@ bbop.monarch.datagraph.prototype.init = function (html_div,DATA){
             
      conf = this.config;
      datagraph = this;
-     var height;
-     var width;
+     var height = conf.height;
+     var width = conf.width;;
      
-     //Check screen size on page load
-     if ($(window).width() < 1500 || $(window).height() < 800){
-         width = conf.width;
-         height = conf.height;
-     } else {
-         width = conf.width;
-         height = conf.height;
-     }
-     //console.log($(window).width());
      datagraph.makeGraphDOM(html_div);
-     var d3Config = datagraph.initSVG(html_div,DATA,height,width);
+     var d3Config = datagraph.setD3Config(html_div,DATA,height,width);
      //Call function to draw graph
      datagraph.drawGraph(DATA,d3Config,html_div);
-     
-     window.addEventListener('resize', function(event){
-         
-         if ($(window).width() < 1500 || $(window).height() < 800){
-             if (width == conf.width){
-                 return;
-             } else {
-                 width = conf.width;
-                 height = conf.height;
-             }
-         } else if (width == conf.width){
-                 return;
-         } else {
-             width = conf.width;
-             height = conf.height;
-         }
-
-         $(html_div).children().remove();
-         
-         datagraph.makeGraphDOM(html_div);
-         var d3Config = datagraph.initSVG(html_div,DATA,height,width);
-         datagraph.drawGraph(DATA,d3Config,html_div);
-      });
 }
 //Uses JQuery to create the DOM for the datagraph
 bbop.monarch.datagraph.prototype.makeGraphDOM = function(html_div){
@@ -100,7 +68,7 @@ bbop.monarch.datagraph.prototype.makeGraphDOM = function(html_div){
       $(html_div+" .interaction li").append("<div class=breadcrumbs></div>");
 }
   
-bbop.monarch.datagraph.prototype.initSVG = function (html_div,DATA,height,width){
+bbop.monarch.datagraph.prototype.setD3Config = function (html_div,DATA,height,width){
       
       var d3Config = {};
       var conf =  this.config;
@@ -628,12 +596,13 @@ bbop.monarch.datagraph.prototype.drawGraph = function (data,graphConfig,html_div
                   });
             }
             
+            d3.select(html_div).select(".breadcrumbs")
+            .select("svg")
+            .append("g")  
+            .attr("class",("bread"+index))
+            .attr("transform", "translate(" + index*(config.bread.offset+config.bread.space) + ", 0)");
+            
             if (config.useCrumbShape){
-                d3.select(html_div).select(".breadcrumbs")
-                  .select("svg")
-                  .append("g")  
-                  .attr("class",("bread"+index))
-                  .attr("transform", "translate(" + index*(config.bread.offset+config.bread.space) + ", 0)");
                 
                 d3.select(html_div).select((".bread"+index))
                 .append("svg:polygon")
@@ -641,13 +610,7 @@ bbop.monarch.datagraph.prototype.drawGraph = function (data,graphConfig,html_div
                 .attr("points",index ? config.trailCrumbs : config.firstCr)
                 .attr("fill", config.color.crumb.top);
                 
-            } else {
-                d3.select(html_div).select(".breadcrumbs")
-                .select("svg")
-                .append("g")  
-                .attr("class",("bread"+index))
-                .attr("transform", "translate(" + index*70 + ", 0)");//HARDCODE
-            }
+            } 
             
             //This creates the hover tooltip
             if (fullLabel){
@@ -1210,7 +1173,7 @@ bbop.monarch.datagraph.prototype.setPolygonCoordinates = function(){
     
     //Check that breadcrumb width is valid
     if (this.config.bcWidth > this.config.width+this.config.margin.right+this.config.margin.left){
-        this.config.bcWidth = this.config.width+this.config.margin.right+this.config.margin.left-150;
+        this.config.bcWidth = this.config.bread.width+(this.config.bread.offset*5)+5;
     }
 }
 //datagraph default configurations

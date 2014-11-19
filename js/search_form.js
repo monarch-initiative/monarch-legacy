@@ -79,13 +79,15 @@ function navbar_search_init(in_search_id, in_form_id){
 
 		    return {
 			label: item.term,
+			id : item.id,
+			category : item.category,
 			tag: appendee,
 			name: item.id
 		    };
 		};
 		var _on_success = function(data) {
 
-		    // Pare out duplicates. Assume existance of 'id'
+		    // Pare out duplicates. Assume existence of 'id'
 		    // field. Would really be nice to have bbop.core in
 		    // here...
 		    var pared_data = [];
@@ -121,9 +123,9 @@ function navbar_search_init(in_search_id, in_form_id){
 		results: function() {}
             },
 	    select: function(event,ui) {
-		if (ui.item !== null) { 
-		    var newurl = "http://"+window.location.host+"/search/"
-	      		+encodeURIComponent(ui.item.label);
+		if (ui.item !== null) {
+		    var newurl = "http://"+window.location.host+"/"+ui.item.category+"/"
+	      		+encodeURIComponent(ui.item.id);
 		    window.location.replace(newurl);
 		}
 	    }	
