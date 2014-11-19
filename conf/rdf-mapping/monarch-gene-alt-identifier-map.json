@@ -24,14 +24,11 @@
             {
                "name" : "mapped_id",
                "type" : "rdfs:Literal"
-            },
-            {
-               "name" : "mapped_source",
-               "type" : "rdfs:Literal"
             }
          ],
          "mapVersion" : "2014-11-03",
          "graph" : "equivalent-ids"
       }
-   ]
+   ],
+   "isDisabled" : "1"
 }
