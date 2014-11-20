@@ -40,7 +40,7 @@
                  "object" : "disease_id"
                 },
                 {"subject" : "disease_id",
-                 "predicate" : "rdfs:Label",
+                 "predicate" : "rdfs:label",
                  "object" : "disease_label"
                 }
 
