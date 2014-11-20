@@ -33,7 +33,7 @@ graphs:
         subject: v_uuid
       - 
         object: disease_label
-        predicate: rdfs:Label
+        predicate: rdfs:label
         subject: disease_id
     view: nlx_31015-2
 status: alpha

@@ -42,7 +42,7 @@ graphs:
         subject: breed_id
       - 
         object: phenotype_label
-        predicate: rdfs:Label
+        predicate: rdfs:label
         subject: phenotype_id
       - 
         object: species_specific_phenotype_name
@@ -58,7 +58,7 @@ graphs:
         subject: v_uuid
       -
         object: breed_label
-        predicate: rdfs:Label
+        predicate: rdfs:label
         subject: breed_id
       - 
         object: phenotype_id
@@ -74,7 +74,7 @@ graphs:
         subject: breed_id
       - 
         object: taxon_label
-        predicate: rdfs:Label
+        predicate: rdfs:label
         subject: taxon_id
       - 
         object: taxon_alt_label

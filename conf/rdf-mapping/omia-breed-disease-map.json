@@ -10,7 +10,7 @@
             },
             {
                "object" : "phenotype_label",
-               "predicate" : "rdfs:Label",
+               "predicate" : "rdfs:label",
                "subject" : "phenotype_id"
             },
             {
@@ -30,7 +30,7 @@
             },
             {
                "object" : "breed_label",
-               "predicate" : "rdfs:Label",
+               "predicate" : "rdfs:label",
                "subject" : "breed_id"
             },
             {
@@ -50,7 +50,7 @@
             },
             {
                "object" : "taxon_label",
-               "predicate" : "rdfs:Label",
+               "predicate" : "rdfs:label",
                "subject" : "taxon_id"
             },
             {
