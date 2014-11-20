@@ -64,8 +64,6 @@ function makeTwoSizeGraph(data,graphDiv,largeConfig,smallConfig,width,height){
 
     var sizeTracker;
     var graphObject;
-    //console.log($(window).width());
-    //console.log(width);
       
     //Check screen size on page load
     if ($(window).width() > width && $(window).height() > height){
@@ -90,7 +88,7 @@ function makeTwoSizeGraph(data,graphDiv,largeConfig,smallConfig,width,height){
             graphObject.init(graphDiv,data);
             this.setMinHeightWidth(graphObject,graphDiv);
             sizeTracker = 'large';
-        } else if (sizeTracker != 'small') {
+        } else if (sizeTracker != 'large') {
             $(graphDiv).children().remove();
             graphObject = 
                 new bbop.monarch.datagraph(smallConfig);
