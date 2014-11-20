@@ -192,55 +192,55 @@
 	      <form id="home_search_form"
 		    action="/search"
 		    role="form">
+		
+		<div class="input-group">
 		  
-		  <div class="input-group">
-          
-            <input id="home_search"
-               type="text"
-               class="form-control"
-               placeholder="Search (e.g. Parkinson's)" />
-            <span class="input-group-btn">
-                <button class="btn btn-default" type="submit">Go</button>
-            </span>
-          </div>
+		  <input id="home_search"
+			 type="text"
+			 class="form-control"
+			 placeholder="Search (e.g. Parkinson's)" />
+		  <span class="input-group-btn">
+                    <button class="btn btn-default" type="submit">Go</button>
+		  </span>
+		</div>
 
-		  <!-- <select class="form-control"> -->
-		  <!--   <option>1</option> -->
-		  <!--   <option>2</option> -->
-		  <!--   <option>3</option> -->
-		  <!--   <option>4</option> -->
-		  <!--   <option>5</option> -->
-		  <!-- </select> -->
-		  
-		  <!-- <div class="panel panel-default" style="padding-bottom: 0;"> -->
-		  <!--   <div class="panel-heading" style="margin-bottom: 0;"> -->
-		  <!--     <span><small><a data-toggle="collapse" data-target="#collapseOne" aria-expanded="true" aria-controls="collapseOne">Advanced options</a></small></span> -->
-		  <!--   </div> -->
-		  <!--   <div id="collapseOne" class="panel-collapse collapse"> -->
-		  <!--     <div class="panel-body"> -->
-		  
-		  <!--       <div class="radio"> -->
-		  <!-- 	<label> -->
-		  <!-- 	  <input type="radio" name="optionsRadios" id="optionsRadios1" value="option1" checked> -->
-		  <!-- 	  Option one -->
-		  <!-- 	</label> -->
-		  <!--       </div> -->
-		  <!--       <div class="radio"> -->
-		  <!-- 	<label> -->
-		  <!-- 	  <input type="radio" name="optionsRadios" id="optionsRadios2" value="option2"> -->
-		  <!-- 	  Option two -->
-		  <!-- 	</label> -->
-		  <!--       </div> -->
-		  <!--       <div class="radio disabled"> -->
-		  <!-- 	<label> -->
-		  <!-- 	  <input type="radio" name="optionsRadios" id="optionsRadios3" value="option3" disabled> -->
-		  <!-- 	  Option three -->
-		  <!-- 	</label> -->
-		  <!--       </div> -->
-		  
-		  <!--     </div> -->
-		  <!--   </div> -->
-		  <!-- </div> -->
+		<!-- <select class="form-control"> -->
+		<!--   <option>1</option> -->
+		<!--   <option>2</option> -->
+		<!--   <option>3</option> -->
+		<!--   <option>4</option> -->
+		<!--   <option>5</option> -->
+		<!-- </select> -->
+		
+		<!-- <div class="panel panel-default" style="padding-bottom: 0;"> -->
+		<!--   <div class="panel-heading" style="margin-bottom: 0;"> -->
+		<!--     <span><small><a data-toggle="collapse" data-target="#collapseOne" aria-expanded="true" aria-controls="collapseOne">Advanced options</a></small></span> -->
+		<!--   </div> -->
+		<!--   <div id="collapseOne" class="panel-collapse collapse"> -->
+		<!--     <div class="panel-body"> -->
+		
+		<!--       <div class="radio"> -->
+		<!-- 	<label> -->
+		<!-- 	  <input type="radio" name="optionsRadios" id="optionsRadios1" value="option1" checked> -->
+		<!-- 	  Option one -->
+		<!-- 	</label> -->
+		<!--       </div> -->
+		<!--       <div class="radio"> -->
+		<!-- 	<label> -->
+		<!-- 	  <input type="radio" name="optionsRadios" id="optionsRadios2" value="option2"> -->
+		<!-- 	  Option two -->
+		<!-- 	</label> -->
+		<!--       </div> -->
+		<!--       <div class="radio disabled"> -->
+		<!-- 	<label> -->
+		<!-- 	  <input type="radio" name="optionsRadios" id="optionsRadios3" value="option3" disabled> -->
+		<!-- 	  Option three -->
+		<!-- 	</label> -->
+		<!--       </div> -->
+		
+		<!--     </div> -->
+		<!--   </div> -->
+		<!-- </div> -->
 
 	      </form>
 	    </p>
@@ -261,59 +261,77 @@
       </div>
 
       <!-- Placeholder. -->
-      <!-- <div class="panel panel-default"> -->
-      <!-- 	<div class="panel-body"> -->
-      <!-- 	  <div style="height: 400px; background-color: #119911;">&nbsp;</div> -->
-      <!-- 	</div> -->
-      <!-- </div> -->
-
-      <!-- Explore mk2. -->
-      <div class="panel panel-default">
-      	<div class="panel-body">
-	  <div class="row">
-	    <div class="col-xs-12 col-sm-12 col-md-6 col-lg-6 monarch-home-explore-img">
-	      <a href="/model/"
-		 title="Explore Models"
-		 data-container="body"
-		 data-toggle="popover"
-		 data-placement="auto"
-		 data-content="See awesome stuff.">
+      <div class="row">
+	<div class="col-xs-12 col-sm-12 col-md-6 col-lg-6 monarch-home-explore-img">
+	  <div class="panel panel-default"
+	       title="Explore Models"
+	       data-container="body"
+	       data-toggle="popover"
+	       data-placement="auto"
+	       data-content="See awesome stuff.">
+	    <div class="panel-heading">
+	      Explore Models
+	    </div>
+      	    <div class="panel-body">
+	      <a href="/model/" title="Explore Models">
 		<img src="/image/explore-graph-mod.png"
 		     class="img-responsive"
 		     alt="Explore Models" />
 	      </a>
 	    </div>
-	    <div class="col-xs-12 col-sm-12 col-md-6 col-lg-6 monarch-home-explore-img">
-	      <a href="/phenotype/"
-		 title="Explore Phenotypes"
-		 data-container="body"
-		 data-toggle="popover"
-		 data-placement="auto"
-		 data-content="See awesome stuff.">
+	  </div>
+	</div>
+	<div class="col-xs-12 col-sm-12 col-md-6 col-lg-6 monarch-home-explore-img">
+	  <div class="panel panel-default"
+	       title="Explore Phenotypes"
+	       data-container="body"
+	       data-toggle="popover"
+	       data-placement="auto"
+	       data-content="See awesome stuff.">
+	    <div class="panel-heading">
+	      Explore Phenotypes
+	    </div>
+      	    <div class="panel-body">
+	      <a href="/phenotype/" title="Explore Phenotypes">
 		<img src="/image/explore-graph-phe.png"
 		     class="img-responsive"
 		     alt="Explore Phenotypes" />
 	      </a>
 	    </div>
-	    <div class="col-xs-12 col-sm-12 col-md-6 col-lg-6 monarch-home-explore-img">
-	      <a href="/disease/"
-		 title="Explore Diseases"
-		 data-container="body"
-		 data-toggle="popover"
-		 data-placement="auto"
-		 data-content="See awesome stuff.">
+	  </div>
+	</div>
+
+	<div class="col-xs-12 col-sm-12 col-md-6 col-lg-6 monarch-home-explore-img">
+	  <div class="panel panel-default"
+	       title="Explore Diseases"
+	       data-container="body"
+	       data-toggle="popover"
+	       data-placement="auto"
+	       data-content="See awesome stuff.">
+	    <div class="panel-heading">
+	      Explore Diseases
+	    </div>
+      	    <div class="panel-body">
+	      <a href="/disease/" title="Explore Diseases">
 		<img src="/image/explore-graph-dis.png"
 		     class="img-responsive"
 		     alt="Explore Diseases" />
 	      </a>
 	    </div>
-	    <div class="col-xs-12 col-sm-12 col-md-6 col-lg-6 monarch-home-explore-img">
-	      <a href="/gene/"
-		 title="Explore Genes"
-		 data-container="body"
-		 data-toggle="popover"
-		 data-placement="auto"
-		 data-content="See awesome stuff.">
+	  </div>
+	</div>
+	<div class="col-xs-12 col-sm-12 col-md-6 col-lg-6 monarch-home-explore-img">
+	  <div class="panel panel-default"
+	       title="Explore Genes"
+	       data-container="body"
+	       data-toggle="popover"
+	       data-placement="auto"
+	       data-content="See awesome stuff.">
+	    <div class="panel-heading">
+	      Explore Genes
+	    </div>
+      	    <div class="panel-body">
+	      <a href="/gene/" title="Explore Genes">
 		<img src="/image/explore-graph-gen.png"
 		     class="img-responsive"
 		     alt="Explore Genes" />
