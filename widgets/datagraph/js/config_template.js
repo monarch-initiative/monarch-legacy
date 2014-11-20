@@ -9,7 +9,7 @@ bbop.monarch.exampleConfig = {
     //X Axis Label
     xAxisLabel : "Some Metric",
     //Horizontal positioning of x Axis Label
-    xAxisPos : "20em",
+    xAxisPos : {dx:"20em",y:"-29"},
     xLabelFontSize : "14px",
     xFontSize : "14px",
                 

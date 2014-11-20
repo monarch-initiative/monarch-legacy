@@ -13,14 +13,14 @@ bbop.monarch.homePageConfig = {
         bread : {width:60, height: 25, offset:50, space: 1},
         
         //Chart margins    
-        margin : {top: 40, right: 63, bottom: 5, left: 152},
+        margin : {top: 35, right: 63, bottom: 5, left: 152},
         
         width : 250,
         height : 300,
         
         //X Axis Label
         xAxisLabel : "Number Of Annotations",
-        xAxisPos : "15em",
+        xAxisPos : {dx:"15em",y:"-22"},
         xLabelFontSize : "12px",
         xFontSize : "9px",
         
@@ -94,7 +94,7 @@ bbop.monarch.phenotypeAnnotationConfig = {
   
   //X Axis Label
   xAxisLabel : "Number Of Annotations",
-  xAxisPos : "20em",
+  xAxisPos : {dx:"20em",y:"-29"},
   xLabelFontSize : "14px",
   xFontSize : "14px",
   
@@ -168,7 +168,7 @@ bbop.monarch.diseaseGeneConfig = {
         
         //X Axis Label
         xAxisLabel : "Number Of Associations",
-        xAxisPos : "20em",
+        xAxisPos : {dx:"20em",y:"-29"},
         xLabelFontSize : "14px",
         xFontSize : "14px",
         
@@ -242,7 +242,7 @@ bbop.monarch.diseasePhenotypeConfig = {
         
         //X Axis Label
         xAxisLabel : "Number Of Associations",
-        xAxisPos : "20em",
+        xAxisPos : {dx:"20em",y:"-29"},
         xLabelFontSize : "14px",
         xFontSize : "14px",
         
@@ -316,7 +316,7 @@ bbop.monarch.genotypePhenotypeConfig = {
         
         //X Axis Label
         xAxisLabel : "Number Of Associations",
-        xAxisPos : "20em",
+        xAxisPos : {dx:"20em",y:"-29"},
         xLabelFontSize : "14px",
         xFontSize : "14px",
         
@@ -398,14 +398,14 @@ bbop.monarch.diseaseGeneConfigSmall = {
         bread : {width:60, height: 25, offset:50, space: 1},
         
         //Chart margins    
-        margin : {top: 40, right: 40, bottom: 5, left: 152},
+        margin : {top: 35, right: 40, bottom: 5, left: 152},
         
         width : 250,
         height : 240,
         
         //X Axis Label
         xAxisLabel : "Number Of Associations",
-        xAxisPos : "15em",
+        xAxisPos : {dx:"15em",y:"-22"},
         xLabelFontSize : "12px",
         xFontSize : "9px",
         
@@ -480,14 +480,14 @@ bbop.monarch.diseasePhenotypeConfigSmall = {
         bread : {width:60, height: 25, offset:50, space: 1},
         
         //Chart margins    
-        margin : {top: 40, right: 40, bottom: 5, left: 152},
+        margin : {top: 35, right: 40, bottom: 5, left: 152},
         
         width : 250,
         height : 240,
         
         //X Axis Label
         xAxisLabel : "Number Of Associations",
-        xAxisPos : "15em",
+        xAxisPos : {dx:"15em",y:"-22"},
         xLabelFontSize : "12px",
         xFontSize : "9px",
         
@@ -562,14 +562,14 @@ bbop.monarch.genotypePhenotypeConfigSmall = {
         bread : {width:60, height: 25, offset:50, space: 1},
         
         //Chart margins    
-        margin : {top: 40, right: 63, bottom: 5, left: 152},
+        margin : {top: 35, right: 63, bottom: 5, left: 152},
         
         width : 250,
         height : 340,
         
         //X Axis Label
         xAxisLabel : "Number Of Associations",
-        xAxisPos : "15em",
+        xAxisPos : {dx:"15em",y:"-22"},
         xLabelFontSize : "12px",
         xFontSize : "9px",
         
@@ -641,17 +641,17 @@ bbop.monarch.homePageConfigSmall = {
         
         firstCr : "0,4 0,22 37,22 47,13 37,4",
         trailCrumbs : "0,4 10,13, 0,22 37,22 47,13 37,4",
-        bread : {width:30, height: 25, offset:25, space: 0},
+        bread : {width:30, height: 22, offset:25, space: 0},
         
         //Chart margins    
-        margin : {top: 40, right: 55, bottom: 5, left: 97},
+        margin : {top: 35, right: 55, bottom: 5, left: 97},
         
         width : 130,
         height : 220,
         
         //X Axis Label
         xAxisLabel : "Number Of Annotations",
-        xAxisPos : "12em",
+        xAxisPos : {dx:"12em",y:"-22"},
         xLabelFontSize : "9px",
         xFontSize : "8px",
         
