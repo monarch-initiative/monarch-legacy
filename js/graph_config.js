@@ -647,7 +647,7 @@ bbop.monarch.homePageConfigSmall = {
         margin : {top: 40, right: 55, bottom: 5, left: 97},
         
         width : 130,
-        height : 300,
+        height : 220,
         
         //X Axis Label
         xAxisLabel : "Number Of Annotations",
