@@ -10,12 +10,12 @@
             },
             {
                "object" : "disease_label",
-               "predicate" : "rdfs:Label",
+               "predicate" : "rdfs:label",
                "subject" : "disease_id"
             },
             {
                "object" : "chemical_label",
-               "predicate" : "rdfs:Label",
+               "predicate" : "rdfs:label",
                "subject" : "chemical_id"
             },
             {

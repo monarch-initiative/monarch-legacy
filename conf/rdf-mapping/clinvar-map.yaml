@@ -55,7 +55,7 @@ columns:
 mappings: 
   -
     subject: variant_locus_id
-    predicate: rdfs:Label
+    predicate: rdfs:label
     object: variant_locus_label
   -
     object: sequence_alteration_id
@@ -75,7 +75,7 @@ mappings:
     object: gene_ids
   -
     subject: sequence_alteration_id
-    predicate: rdfs:Label
+    predicate: rdfs:label
     object: sequence_alteration_label
   - 
     object: sequence_start
