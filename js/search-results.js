@@ -11,8 +11,13 @@ function search_results_init(term){
         var results = data;
         $("#spinner").hide();
         
-        var genResultsTable = function() {return genTableOfSearchDataResults(results.otherResults) };
-        var resultsTable = genResultsTable();
+        if (results.otherResults.length > 0){
+            var genResultsTable = function() {return genTableOfSearchDataResults(results.otherResults) };
+            var resultsTable = genResultsTable();
+        } else {
+            resultsTable = "<span class=\"no-results\">&nbsp;&nbsp;No results found</span>";
+        }
+        
         $("#complete-info").append(resultsTable);
     });
     
