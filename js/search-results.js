@@ -16,6 +16,7 @@ function search_results_init(term){
             var resultsTable = genResultsTable();
         } else {
             resultsTable = "<span class=\"no-results\">&nbsp;&nbsp;No results found</span>";
+            $("#text-search").remove();
         }
         
         $("#complete-info").append(resultsTable);
