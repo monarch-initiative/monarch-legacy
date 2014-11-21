@@ -88,7 +88,7 @@ function makeTwoSizeGraph(data,graphDiv,largeConfig,smallConfig,width,height){
             graphObject.init(graphDiv,data);
             this.setMinHeightWidth(graphObject,graphDiv);
             sizeTracker = 'large';
-        } else if (sizeTracker != 'large') {
+        } else if ($(window).width() < width && $(window).height() < height && sizeTracker != 'small') {
             $(graphDiv).children().remove();
             graphObject = 
                 new bbop.monarch.datagraph(smallConfig);

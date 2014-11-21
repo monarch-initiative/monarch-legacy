@@ -23,7 +23,7 @@ bbop.monarch.datagraph = function(config){
     this.config.isChrome = (!!window.chrome && !(!!window.opera || navigator.userAgent.indexOf(' OPR/') >= 0));
     
     //Tooltip offsetting
-    this.config.arrowOffset = {height: 94, width: -90};
+    this.config.arrowOffset = {height: 21, width: -90};
     this.config.barOffset = {
                  grouped:{
                     height: 110,
@@ -43,37 +43,56 @@ bbop.monarch.datagraph.prototype.init = function (html_div,DATA){
      var height = conf.height;
      var width = conf.width;;
      
-     datagraph.makeGraphDOM(html_div);
+     datagraph.makeGraphDOM(html_div,DATA);
      var d3Config = datagraph.setD3Config(html_div,DATA,height,width);
      //Call function to draw graph
      datagraph.drawGraph(DATA,d3Config,html_div);
 }
 //Uses JQuery to create the DOM for the datagraph
-bbop.monarch.datagraph.prototype.makeGraphDOM = function(html_div){
+bbop.monarch.datagraph.prototype.makeGraphDOM = function(html_div,data){
       
-      var conf = this.config;
+      var config = this.config;    
+      var groups = datagraph.getGroups(data);
       
       //Create html structure
       //Add graph title
       $(html_div).append( "<div class=title"+
-              " style=text-indent:" + conf.title['text-indent'] +
-              ";text-align:" + conf.title['text-align'] +
-              ";background-color:" + conf.title['background-color'] +
-              ";border-bottom-color:" + conf.title['border-bottom-color'] +
-              ";font-size:" + conf.title['font-size'] +
-              ";font-weight:" + conf.title['font-weight'] +
-              "; >"+conf.chartTitle+"</div>" );
+              " style=text-indent:" + config.title['text-indent'] +
+              ";text-align:" + config.title['text-align'] +
+              ";background-color:" + config.title['background-color'] +
+              ";border-bottom-color:" + config.title['border-bottom-color'] +
+              ";font-size:" + config.title['font-size'] +
+              ";font-weight:" + config.title['font-weight'] +
+              "; >"+config.chartTitle+"</div>" );
       $(html_div).append( "<div class=interaction></div>" );
       $(html_div+" .interaction").append( "<li></li>" );
-      $(html_div+" .interaction li").append("<div class=breadcrumbs></div>");
+         
+      //Override breadcrumb config if subgraphs exist
+      config.useCrumb = datagraph.checkForSubGraphs(data);
+      
+      //remove breadcrumb div
+      if (config.useCrumb){
+          $(html_div+" .interaction li").append("<div class=breadcrumbs></div>");
+
+      }
+      
+      //Add stacked/grouped form if more than one group
+      if (groups.length >1){
+          $(html_div+" .interaction li").append(" <form class=configure"+
+                  " style=font-size:" + config.settingsFontSize + "; >" +
+                  "<label><input id=\"group\" type=\"radio\" name=\"mode\"" +
+                      " value=\"grouped\" checked> Grouped</label> " +
+                  "<label><input id=\"stack\" type=\"radio\" name=\"mode\"" +
+                      " value=\"stacked\"> Stacked</label>" +
+              "</form> ");
+      }
 }
   
 bbop.monarch.datagraph.prototype.setD3Config = function (html_div,DATA,height,width){
       
       var d3Config = {};
       var conf =  this.config;
-      
-      //D3 starts here
+
       //Define scales
       d3Config.y0 = d3.scale.ordinal()
           .rangeRoundBands([0,height], .1);
@@ -105,7 +124,7 @@ bbop.monarch.datagraph.prototype.setD3Config = function (html_div,DATA,height,wi
       
       d3Config.crumbSVG = d3.select(html_div).select(".breadcrumbs")
           .append("svg")
-          .attr("height",conf.bcHeight)
+          .attr("height",(conf.bread.height+2))
           .attr("width",conf.bcWidth);
 
       d3Config.tooltip = d3.select(html_div)
@@ -122,9 +141,6 @@ bbop.monarch.datagraph.prototype.drawGraph = function (data,graphConfig,html_div
         data = datagraph.getStackedStats(data,groups);
         data = datagraph.addEllipsisToLabel(data,config.maxLabelSize);
         
-        //Override breadcrumb config if subgraphs exist
-        config.useCrumb = datagraph.checkForSubGraphs(data);
-        
         var y0       = graphConfig.y0;
         var y1       = graphConfig.y1;
         var x        = graphConfig.x;
@@ -135,28 +151,13 @@ bbop.monarch.datagraph.prototype.drawGraph = function (data,graphConfig,html_div
         var crumbSVG = graphConfig.crumbSVG;
         var tooltip  = graphConfig.tooltip;
             
-        
-        //remove breadcrumb div
-        if (!config.useCrumb){
-            $(html_div+" .breadcrumbs").remove();
-        }
-        //Add stacked/grouped form if more than one group
-        if (groups.length >1){
-            $(html_div+" .interaction li").append(" <form class=configure"+
-                    " style=font-size:" + config.settingsFontSize + "; >" +
-                    "<label><input id=\"group\" type=\"radio\" name=\"mode\"" +
-                        " value=\"grouped\" checked> Grouped</label> " +
-                    "<label><input id=\"stack\" type=\"radio\" name=\"mode\"" +
-                        " value=\"stacked\"> Stacked</label>" +
-                "</form> ");
-        }
         //Update tooltip positioning
         if (!config.useCrumb && groups.length>1){
-            config.arrowOffset.height = 86;
+            config.arrowOffset.height = 12;
             config.barOffset.grouped.height = 102;
             config.barOffset.stacked.height = 81;
         } else if (!config.useCrumb){
-            config.arrowOffset.height = 55;
+            config.arrowOffset.height = -10;
             config.barOffset.grouped.height = 71;
             config.barOffset.stacked.height = 50;
         }
@@ -191,8 +192,8 @@ bbop.monarch.datagraph.prototype.drawGraph = function (data,graphConfig,html_div
             .style("font-size",config.xFontSize)
             .append("text")
             .attr("transform", "rotate(0)")
-            .attr("y", -29)
-            .attr("dx", config.xAxisPos)
+            .attr("y", config.xAxisPos.y)
+            .attr("dx", config.xAxisPos.dx)
             .attr("dy", "0em")
             .style("text-anchor", "end")
             .style("font-size",config.xLabelFontSize)
@@ -319,7 +320,7 @@ bbop.monarch.datagraph.prototype.drawGraph = function (data,graphConfig,html_div
                        
                        tooltip.style("display", "block")
                        .html("Click to see subclasses")
-                       .style("top",h+config.arrowOffset.height+"px")
+                       .style("top",h+config.margin.top+config.bread.height+config.arrowOffset.height+"px")
                        .style("left",w+config.margin.left+config.arrowOffset.width+"px");
                        
                    } 
@@ -1164,7 +1165,6 @@ bbop.monarch.datagraph.prototype.setPolygonCoordinates = function(){
     
     //breadcrumb div dimensions
     this.config.bcWidth = 560;
-    this.config.bcHeight = 35;
     
     //Y axis positioning when arrow present
     if (this.config.yOffset == null || typeof this.config.yOffset == 'undefined'){
@@ -1191,7 +1191,7 @@ bbop.monarch.datagraph.prototype.getDefaultConfig = function(){
             xAxisLabel : "Some Metric",
             xLabelFontSize : "14px",
             xFontSize : "14px",
-            xAxisPos : "20em",
+            xAxisPos : {dx:"20em",y:"-29"},
             
             //Chart title and first breadcrumb
             chartTitle : "Chart Title",

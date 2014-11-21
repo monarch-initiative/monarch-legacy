@@ -233,15 +233,6 @@ figcaption {
 }
 
 /* Global Ajax */
-/*
-.ajax-waiting{
-    position: relative;
-    float:left; 
-    display : none;
-}
-.ajax-loader {
-
-}*/
 
 /* spinner code from http://tobiasahlin.com/spinkit */
 #spinner {
