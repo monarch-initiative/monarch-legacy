@@ -79,12 +79,8 @@ p {
     .navbar-brand {
         padding: 8px 5px 0px 20px;
     }
-    #search_form{
-        width:90%;
-    }
-    #search {
-        margin: 0 20px;
-        font-size: 13px;
+    .searchspace {
+        float: right;
     }
 }
 @media (max-width: 768px) {
@@ -105,6 +101,9 @@ p {
     }
     .navbar-form {
         margin-top: 0px;
+    }
+    .searchspace {
+        float: none;
     }
     #search_form{
         width:90%;
