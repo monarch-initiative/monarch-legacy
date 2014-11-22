@@ -99,8 +99,10 @@ p {
     .navbar-form {
         margin-top: 0px;
     }
+    #search_form{
+        width:90%;
+    }
     #search {
-        width: 90%;
         margin: 0 20px;
         font-size: 13px;
     }
