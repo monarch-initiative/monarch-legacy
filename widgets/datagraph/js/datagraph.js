@@ -21,6 +21,7 @@ bbop.monarch.datagraph = function(config){
     //Check browser
     this.config.isOpera = (!!window.opera || navigator.userAgent.indexOf(' OPR/') >= 0);
     this.config.isChrome = (!!window.chrome && !(!!window.opera || navigator.userAgent.indexOf(' OPR/') >= 0));
+    this.config.isSafari = Object.prototype.toString.call(window.HTMLElement).indexOf('Constructor') > 0;
     
     //Tooltip offsetting
     this.config.arrowOffset = {height: 21, width: -90};
@@ -40,11 +41,9 @@ bbop.monarch.datagraph.prototype.init = function (html_div,DATA){
             
      conf = this.config;
      datagraph = this;
-     var height = conf.height;
-     var width = conf.width;;
      
      datagraph.makeGraphDOM(html_div,DATA);
-     var d3Config = datagraph.setD3Config(html_div,DATA,height,width);
+     var d3Config = datagraph.setD3Config(html_div,DATA);
      //Call function to draw graph
      datagraph.drawGraph(DATA,d3Config,html_div);
 }
@@ -88,19 +87,19 @@ bbop.monarch.datagraph.prototype.makeGraphDOM = function(html_div,data){
       }
 }
   
-bbop.monarch.datagraph.prototype.setD3Config = function (html_div,DATA,height,width){
+bbop.monarch.datagraph.prototype.setD3Config = function (html_div,DATA){
       
       var d3Config = {};
       var conf =  this.config;
 
       //Define scales
       d3Config.y0 = d3.scale.ordinal()
-          .rangeRoundBands([0,height], .1);
+          .rangeRoundBands([0,conf.height], .1);
 
       d3Config.y1 = d3.scale.ordinal();
 
       d3Config.x = d3.scale.linear()
-          .range([0, width]);
+          .range([0, conf.width]);
       
       //Bar colors
       d3Config.color = d3.scale.ordinal()
@@ -117,8 +116,8 @@ bbop.monarch.datagraph.prototype.setD3Config = function (html_div,DATA,height,wi
           .orient("left");
 
       d3Config.svg = d3.select(html_div).append("svg")
-          .attr("width", width + conf.margin.left + conf.margin.right)
-          .attr("height", height + conf.margin.top + conf.margin.bottom)
+          .attr("width", conf.width + conf.margin.left + conf.margin.right)
+          .attr("height", conf.height + conf.margin.top + conf.margin.bottom)
           .append("g")
           .attr("transform", "translate(" + conf.margin.left + "," + conf.margin.top + ")");
       
@@ -250,7 +249,7 @@ bbop.monarch.datagraph.prototype.drawGraph = function (data,graphConfig,html_div
            .attr("class",("rect"+level))
            .attr("height", y1.rangeBand())
            .attr("y", function(d) { return y1(d.name); })
-           .attr("x", function(){if (config.isChrome) {return 1;}else{ return 0;}})
+           .attr("x", function(){if (config.isChrome || config.isSafari) {return 1;}else{ return 0;}})
            .attr("width", function(d) { return x(d.value); })
            .on("mouseover", function(d){
                d3.select(this)
@@ -404,7 +403,7 @@ bbop.monarch.datagraph.prototype.drawGraph = function (data,graphConfig,html_div
                 .attr("height", y1.rangeBand())
                 .attr("y", function(d) { return y1(d.name); })  
                 .transition()
-                .attr("x", function(){if (config.isChrome) {return 1;}else{ return 0;}})
+                .attr("x", function(){if (config.isChrome || config.isSafari) {return 1;}else{ return 0;}})
                 .attr("width", function(d) { return x(d.value); })
                 
             rect.on("mouseover", function(d){
@@ -444,7 +443,7 @@ bbop.monarch.datagraph.prototype.drawGraph = function (data,graphConfig,html_div
                 .delay(function(d, i) { return i * 10; })
                 .attr("x", function(d){
                     if (d.x0 == 0){
-                        if (config.isChrome){return 1;}
+                        if (config.isChrome || config.isSafari){return 1;}
                         else {return d.x0;}
                     } else { 
                         return x(d.x0);
@@ -667,6 +666,9 @@ bbop.monarch.datagraph.prototype.drawGraph = function (data,graphConfig,html_div
                                 }
                             })
                             .attr("dx", function(){
+                                if (index == 0){
+                                    return ".1em";
+                                }
                                 if (i == 0 && len == 1){
                                     return ".8em";
                                 } else if (i == 0 && len >2
@@ -803,7 +805,7 @@ bbop.monarch.datagraph.prototype.drawGraph = function (data,graphConfig,html_div
                     .attr("class",("rect"+level))
                     .attr("height", y1.rangeBand())
                     .attr("y", function(d) { return y1(d.name); })
-                    .attr("x", function(){if (config.isChrome) {return 1;}else{ return 0;}})
+                    .attr("x", function(){if (config.isChrome || config.isSafari) {return 1;}else{ return 0;}})
                     .attr("width", function(d) { return x(d.value); })
                     .on("mouseover", function(d){
                          d3.select(this)
@@ -842,7 +844,7 @@ bbop.monarch.datagraph.prototype.drawGraph = function (data,graphConfig,html_div
                     .attr("class",("rect"+level))
                     .attr("x", function(d){
                         if (d.x0 == 0){
-                            if (config.isChrome){return 1;}
+                            if (config.isChrome || config.isSafari){return 1;}
                             else {return d.x0;}
                         } else { 
                             return x(d.x0);
@@ -909,7 +911,7 @@ bbop.monarch.datagraph.prototype.drawGraph = function (data,graphConfig,html_div
                     .attr("height", y1.rangeBand())
                     .attr("y", function(d) { return y1(d.name); })  
                     .transition()
-                    .attr("x", function(){if (config.isChrome) {return 1;}else{ return 0;}})
+                    .attr("x", function(){if (config.isChrome || config.isSafari) {return 1;}else{ return 0;}})
                     .attr("width", function(d) { return x(d.value); })     
                     
                   rect.on("mouseover", function(d){
@@ -946,7 +948,7 @@ bbop.monarch.datagraph.prototype.drawGraph = function (data,graphConfig,html_div
                     .delay(function(d, i) { return i * 10; })
                     .attr("x", function(d){
                         if (d.x0 == 0){
-                            if (config.isChrome){return 1;}
+                            if (config.isChrome || config.isSafari){return 1;}
                             else {return d.x0;}
                         } else { 
                             return x(d.x0);
