@@ -100,11 +100,12 @@ p {
         margin-top: 0px;
     }
     #search_form{
-        width: 260px;
+        float:left;
+        width: 250px;
     }
     #search { 
         margin: 0 20px;
-        font-size: 13px;
+        font-size: 13px;        
     }
 }
 
