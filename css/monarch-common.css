@@ -99,10 +99,11 @@ p {
     .navbar-form {
         margin-top: 0px;
     }
-    .input-group{
-        width:90%; 
+    #search_form{
+        width: 90%;
+        max-width :250px;
     }
-    #search {
+    #search { 
         margin: 0 20px;
         font-size: 13px;
     }
