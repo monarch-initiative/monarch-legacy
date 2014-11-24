@@ -100,8 +100,7 @@ p {
         margin-top: 0px;
     }
     #search_form{
-        width: 90%;
-        max-width :250px;
+        width: 260px;
     }
     #search { 
         margin: 0 20px;
