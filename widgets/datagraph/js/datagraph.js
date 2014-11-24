@@ -27,11 +27,11 @@ bbop.monarch.datagraph = function(config){
     this.config.arrowOffset = {height: 21, width: -90};
     this.config.barOffset = {
                  grouped:{
-                    height: 110,
+                    height: 95,
                     width: 10
                   },
                   stacked:{
-                    height: 95,
+                    height: 80,
                     width: 10
                   }
     };
