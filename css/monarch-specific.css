@@ -232,6 +232,10 @@ figcaption {
     padding: 5px 20px"
 }
 
+.no-results{
+	font-size:16px;
+}
+
 /* Global Ajax */
 
 /* spinner code from http://tobiasahlin.com/spinkit */
