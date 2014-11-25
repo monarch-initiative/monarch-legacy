@@ -748,7 +748,7 @@ bbop.monarch.resizeConfig = {
         },
         
         //Yaxis links
-        yFontSize : 'default',
+        yFontSize : 14,
         isYLabelURL : true,
         yLabelBaseURL : "/phenotype/",
         

@@ -32,7 +32,7 @@ bbop.monarch.datagraph = function(config){
                   },
                   stacked:{
                     height: 80,
-                    width: 10
+                    //width: 10
                   }
     };
     
@@ -41,17 +41,50 @@ bbop.monarch.datagraph = function(config){
     }
 }
 
-bbop.monarch.datagraph.prototype.setWidth = function(w){
-    this.config.width = w;
+bbop.monarch.datagraph.prototype.run = function(html_div,DATA){
+    var dataGraph = this;
+    
+    dataGraph.makeGraphDOM(html_div,DATA);
+    var d3Config = dataGraph.setD3Config(html_div,DATA);
+    dataGraph.drawGraph(DATA,d3Config,html_div);
 }
-bbop.monarch.datagraph.prototype.setHeight = function(h){
-    this.config.height = h;
+        
+bbop.monarch.datagraph.prototype.init = function(html_div,DATA){
+            
+     var dataGraph = this;
+     var config = dataGraph.config;
+     
+     if (config.isDynamicallyResized){
+     
+         if ($(window).width() < (config.benchmarkWidth-100) || $(window).height() < (config.benchmarkHeight-100)){
+             dataGraph.setSizeConfigurations(config.graphSizingRatios);
+             dataGraph.run(html_div,DATA);
+         } else {
+             dataGraph.run(html_div,DATA);
+         }
+     
+         window.addEventListener('resize', function(event){
+  
+             if ($(window).width() < (config.benchmarkWidth-100) || $(window).height() < (config.benchmarkHeight-100)){
+                 $(html_div).children().remove();
+                 dataGraph.setSizeConfigurations(config.graphSizingRatios);
+                 dataGraph.run(html_div,DATA);
+             } 
+         });
+     } else {
+         dataGraph.run(html_div,DATA);
+     }
 }
 
 bbop.monarch.datagraph.prototype.setSizeConfigurations = function(graphRatio){
     var dataGraph = this;
-    dataGraph.setWidth($(window).width()*graphRatio.width);
-    dataGraph.setHeight($(window).height()*graphRatio.height);
+    var w = $(window).width();
+    var h = $(window).height();
+    
+    //Most monitors are 16:9, but making log ratio 14:10
+    dataGraph.setWidth( ((w*graphRatio.width) / getBaseLog(12,w)) * 3);
+    dataGraph.setHeight( ((h*graphRatio.height) / getBaseLog(12,h)) *3.5);
+    dataGraph.setYFontSize((w+h)*(graphRatio.yFontSize));
 }
 
 bbop.monarch.datagraph.prototype.setSizingRatios = function(){
@@ -65,45 +98,11 @@ bbop.monarch.datagraph.prototype.setSizingRatios = function(){
     
     graphRatio.width = config.width / config.benchmarkWidth;
     graphRatio.height = config.height / config.benchmarkHeight;
+    graphRatio.yFontSize = (config.yFontSize / (config.benchmarkHeight+config.benchmarkWidth));
     
     return graphRatio;
 }
-        
-bbop.monarch.datagraph.prototype.init = function(html_div,DATA){
-            
-     var conf = this.config;
-     var dataGraph = this;
-     
-     if (conf.isDynamicallyResized){
-     
-         if ($(window).width() < (conf.benchmarkWidth-100) || $(window).height() < (conf.benchmarkHeight-100)){
-             dataGraph.setSizeConfigurations(conf.graphSizingRatios);
-             dataGraph.makeGraphDOM(html_div,DATA);
-             var d3Config = dataGraph.setD3Config(html_div,DATA);
-             dataGraph.drawGraph(DATA,d3Config,html_div);
-         } else {
-             dataGraph.makeGraphDOM(html_div,DATA);
-             var d3Config = dataGraph.setD3Config(html_div,DATA);
-             dataGraph.drawGraph(DATA,d3Config,html_div);
-         }
-     
-         window.addEventListener('resize', function(event){
-  
-             if ($(window).width() < (conf.benchmarkWidth-100) || $(window).height() < (conf.benchmarkHeight-100)){
-                 $(html_div).children().remove();
-                 dataGraph.setSizeConfigurations(conf.graphSizingRatios);
-                 dataGraph.makeGraphDOM(html_div,DATA);
-                 var d3Config = dataGraph.setD3Config(html_div,DATA);
-                 dataGraph.drawGraph(DATA,d3Config,html_div);
-             } 
-         });
-     } else {
-         dataGraph.makeGraphDOM(html_div,DATA);
-         var d3Config = dataGraph.setD3Config(html_div,DATA);
-         //Call function to draw graph
-         dataGraph.drawGraph(DATA,d3Config,html_div);
-     }
-}
+
 //Uses JQuery to create the DOM for the datagraph
 bbop.monarch.datagraph.prototype.makeGraphDOM = function(html_div,data){
       
@@ -479,7 +478,7 @@ bbop.monarch.datagraph.prototype.drawGraph = function (data,graphConfig,html_div
                   .html("Counts: "+"<span style='font-weight:bold'>"+d.value+"</span>"+"<br/>"
                         +"Organism: "+ "<span style='font-weight:bold'>"+d.name)
                   .style("top",h+heightOffset+config.barOffset.grouped.height+"px")
-                  .style("left",w+config.barOffset.grouped.width+widthOffset+conf.margin.left+"px");
+                  .style("left",w+config.barOffset.grouped.width+widthOffset+config.margin.left+"px");
             })
                 .on("mouseout", function(){
                   tooltip.style("display", "none")
@@ -527,7 +526,7 @@ bbop.monarch.datagraph.prototype.drawGraph = function (data,graphConfig,html_div
                     .html("Counts: "+"<span style='font-weight:bold'>"+d.value+"</span>"+"<br/>"
                          +"Organism: "+ "<span style='font-weight:bold'>"+d.name)
                     .style("top",h+heightOffset+config.barOffset.stacked.height+"px")
-                    .style("left",w+config.barOffset.grouped.width+widthOffset+conf.margin.left+"px");
+                    .style("left",w+config.barOffset.grouped.width+widthOffset+config.margin.left+"px");
             })
                .on("mouseout", function(){
                    tooltip.style("display", "none");
@@ -879,7 +878,7 @@ bbop.monarch.datagraph.prototype.drawGraph = function (data,graphConfig,html_div
                          .html("Counts: "+"<span style='font-weight:bold'>"+d.value+"</span>"+"<br/>"
                               +"Organism: "+ "<span style='font-weight:bold'>"+d.name)
                          .style("top",h+heightOffset+config.barOffset.grouped.height+"px")
-                         .style("left",w+config.barOffset.grouped.width+widthOffset+conf.margin.left+"px");
+                         .style("left",w+config.barOffset.grouped.width+widthOffset+config.margin.left+"px");
                     })
                     .on("mouseout", function(){
                         d3.select(this)
@@ -926,7 +925,7 @@ bbop.monarch.datagraph.prototype.drawGraph = function (data,graphConfig,html_div
                             .html("Counts: "+"<span style='font-weight:bold'>"+d.value+"</span>"+"<br/>"
                                  +"Organism: "+ "<span style='font-weight:bold'>"+d.name)
                             .style("top",h+heightOffset+config.barOffset.stacked.height+"px")
-                            .style("left",w+config.barOffset.grouped.width+widthOffset+conf.margin.left+"px");
+                            .style("left",w+config.barOffset.grouped.width+widthOffset+config.margin.left+"px");
 
                  })
                 .on("mouseout", function(){
@@ -987,7 +986,7 @@ bbop.monarch.datagraph.prototype.drawGraph = function (data,graphConfig,html_div
                           .html("Counts: "+"<span style='font-weight:bold'>"+d.value+"</span>"+"<br/>"
                             +"Organism: "+ "<span style='font-weight:bold'>"+d.name)
                           .style("top",h+heightOffset+config.barOffset.grouped.height+"px")
-                          .style("left",w+config.barOffset.grouped.width+widthOffset+conf.margin.left+"px");
+                          .style("left",w+config.barOffset.grouped.width+widthOffset+config.margin.left+"px");
                      })
                      .on("mouseout", function(){
                          tooltip.style("display", "none")
@@ -1032,7 +1031,7 @@ bbop.monarch.datagraph.prototype.drawGraph = function (data,graphConfig,html_div
                            .html("Counts: "+"<span style='font-weight:bold'>"+d.value+"</span>"+"<br/>"
                                 +"Organism: "+ "<span style='font-weight:bold'>"+d.name)
                            .style("top",h+heightOffset+config.barOffset.stacked.height+"px")
-                           .style("left",w+config.barOffset.grouped.width+widthOffset+conf.margin.left+"px");
+                           .style("left",w+config.barOffset.grouped.width+widthOffset+config.margin.left+"px");
                     })
                    .on("mouseout", function(){
                        tooltip.style("display", "none");
@@ -1155,8 +1154,14 @@ bbop.monarch.datagraph.prototype.getFullLabel = function (d,data){
 //End data object functions
 ////////////////////////////////////////////////////////////////////
 
+//Log given base x
+function getBaseLog(x, y) {
+    return Math.log(y) / Math.log(x);
+}
+
 //Adjust Y label font, arrow size, and spacing
 //when transitioning
+//this is getting funky with graph resizing, maybe should do away
 bbop.monarch.datagraph.prototype.adjustYAxisElements = function(yMax,len){
    
    var conf = this.config;
@@ -1164,7 +1169,6 @@ bbop.monarch.datagraph.prototype.adjustYAxisElements = function(yMax,len){
    var density = h/len;
    var isUpdated = false;
    
-   //var yFont = 'default';
    yFont = conf.yFontSize;
    var yOffset = conf.yOffset;
    var arrowDim = conf.arrowDim;
@@ -1174,33 +1178,48 @@ bbop.monarch.datagraph.prototype.adjustYAxisElements = function(yMax,len){
        isUpdated = true;
    }else if (yMax > 41 && yMax < 53){
        yFont = ((1/yMax)*565);
-       arrowDim = "-20,-5, -9,1 -20,7";
+   //    arrowDim = "-20,-5, -9,1 -20,7";
        isUpdated = true;
    } else if (yMax >= 53 && yMax <66){
        yFont = ((1/yMax)*615);
-       yOffset = "-1.45em";
-       arrowDim = "-20,-5, -9,1 -20,7";
+   //    yOffset = "-1.45em";
+   //    arrowDim = "-20,-5, -9,1 -20,7";
        isUpdated = true;
    } else if (yMax >= 66){
        yFont = ((1/yMax)*640);
-       yOffset = "-1.4em";
-       arrowDim = "-20,-5, -9,1 -20,7";
+   //    yOffset = "-1.4em";
+   //    arrowDim = "-20,-5, -9,1 -20,7";
        isUpdated = true;
-   }
-   
-   if (isUpdated && yFont > conf.yFontSize){
-       yFont = conf.yFontSize;
    }
    
    //Check for density BETA
    if (density < 15 && density < yFont ){
        yFont = density+2;
-       yOffset = "-2em";
-       arrowDim = "-20,-3, -11,1 -20,5";
+       //yOffset = "-2em";
+       //arrowDim = "-20,-3, -11,1 -20,5";
+       isUpdated = true;
    }
+    
+   if (isUpdated && yFont > conf.yFontSize){
+       yFont = conf.yFontSize;
+   }
+   
    var retList = [yFont,yOffset,arrowDim];
    return retList;
 }
+///////////////////////////////////
+//Setters for sizing configurations
+
+bbop.monarch.datagraph.prototype.setWidth = function(w){
+    this.config.width = w;
+}
+bbop.monarch.datagraph.prototype.setHeight = function(h){
+    this.config.height = h;
+}
+bbop.monarch.datagraph.prototype.setYFontSize = function(fSize){
+    this.config.setYFontSize = fSize;
+}
+
 
 //datagraph default SVG Coordinates
 bbop.monarch.datagraph.prototype.setPolygonCoordinates = function(){
