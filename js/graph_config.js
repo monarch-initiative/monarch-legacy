@@ -321,7 +321,7 @@ bbop.monarch.genotypePhenotypeConfig = {
         xFontSize : "14px",
         
         //Chart title and first breadcrumb
-        chartTitle : "Phentotype Genotype Distribution",
+        chartTitle : "Phenotype-Genotype Distribution",
         firstCrumb : "Phenotypic Abnormality",
         
         //Title size/font settings
@@ -574,7 +574,7 @@ bbop.monarch.genotypePhenotypeConfigSmall = {
         xFontSize : "9px",
         
         //Chart title and first breadcrumb
-        chartTitle : "Phentotype Genotype Distribution",
+        chartTitle : "Phenotype-Genotype Distribution",
         firstCrumb : "Phenotypic Abnormality",
         
         //Title size/font settings
