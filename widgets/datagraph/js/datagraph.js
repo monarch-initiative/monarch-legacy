@@ -35,23 +35,81 @@ bbop.monarch.datagraph = function(config){
                     width: 10
                   }
     };
+    
+    if (this.config.isDynamicallyResized){
+        this.config.graphSizingRatios = this.setSizingRatios();
+    }
+}
+
+bbop.monarch.datagraph.prototype.setWidth = function(w){
+    this.config.width = w;
+}
+bbop.monarch.datagraph.prototype.setHeight = function(h){
+    this.config.height = h;
+}
+
+bbop.monarch.datagraph.prototype.setSizeConfigurations = function(graphRatio){
+    var dataGraph = this;
+    dataGraph.setWidth($(window).width()*graphRatio.width);
+    dataGraph.setHeight($(window).height()*graphRatio.height);
+}
+
+bbop.monarch.datagraph.prototype.setSizingRatios = function(){
+    var config = this.config;
+    var graphRatio = {};
+    
+    if (!config.benchmarkHeight || !config.benchmarkWidth){
+        console.log("Dynamic sizing set without "+
+                    "setting benchmarkHeight and/or benchmarkWidth");
+    }
+    
+    graphRatio.width = config.width / config.benchmarkWidth;
+    graphRatio.height = config.height / config.benchmarkHeight;
+    
+    return graphRatio;
 }
         
-bbop.monarch.datagraph.prototype.init = function (html_div,DATA){
+bbop.monarch.datagraph.prototype.init = function(html_div,DATA){
             
-     conf = this.config;
-     datagraph = this;
+     var conf = this.config;
+     var dataGraph = this;
      
-     datagraph.makeGraphDOM(html_div,DATA);
-     var d3Config = datagraph.setD3Config(html_div,DATA);
-     //Call function to draw graph
-     datagraph.drawGraph(DATA,d3Config,html_div);
+     if (conf.isDynamicallyResized){
+     
+         if ($(window).width() < (conf.benchmarkWidth-100) || $(window).height() < (conf.benchmarkHeight-100)){
+             dataGraph.setSizeConfigurations(conf.graphSizingRatios);
+             dataGraph.makeGraphDOM(html_div,DATA);
+             var d3Config = dataGraph.setD3Config(html_div,DATA);
+             dataGraph.drawGraph(DATA,d3Config,html_div);
+         } else {
+             dataGraph.makeGraphDOM(html_div,DATA);
+             var d3Config = dataGraph.setD3Config(html_div,DATA);
+             dataGraph.drawGraph(DATA,d3Config,html_div);
+         }
+     
+         window.addEventListener('resize', function(event){
+  
+             if ($(window).width() < (conf.benchmarkWidth-100) || $(window).height() < (conf.benchmarkHeight-100)){
+                 $(html_div).children().remove();
+                 dataGraph.setSizeConfigurations(conf.graphSizingRatios);
+                 dataGraph.makeGraphDOM(html_div,DATA);
+                 var d3Config = dataGraph.setD3Config(html_div,DATA);
+                 dataGraph.drawGraph(DATA,d3Config,html_div);
+             } 
+         });
+     } else {
+         dataGraph.makeGraphDOM(html_div,DATA);
+         var d3Config = dataGraph.setD3Config(html_div,DATA);
+         //Call function to draw graph
+         dataGraph.drawGraph(DATA,d3Config,html_div);
+     }
 }
 //Uses JQuery to create the DOM for the datagraph
 bbop.monarch.datagraph.prototype.makeGraphDOM = function(html_div,data){
       
-      var config = this.config;    
-      var groups = datagraph.getGroups(data);
+      var config = this.config;
+      var dataGraph = this;
+      var groups = dataGraph.getGroups(data);
       
       //Create html structure
       //Add graph title
@@ -67,7 +125,7 @@ bbop.monarch.datagraph.prototype.makeGraphDOM = function(html_div,data){
       $(html_div+" .interaction").append( "<li></li>" );
          
       //Override breadcrumb config if subgraphs exist
-      config.useCrumb = datagraph.checkForSubGraphs(data);
+      config.useCrumb = dataGraph.checkForSubGraphs(data);
       
       //remove breadcrumb div
       if (config.useCrumb){
@@ -134,11 +192,11 @@ bbop.monarch.datagraph.prototype.setD3Config = function (html_div,DATA){
 }
 
 bbop.monarch.datagraph.prototype.drawGraph = function (data,graphConfig,html_div) {
-        var datagraph = this;
+        var dataGraph = this;
         var config = this.config;
-        var groups = datagraph.getGroups(data);
-        data = datagraph.getStackedStats(data,groups);
-        data = datagraph.addEllipsisToLabel(data,config.maxLabelSize);
+        var groups = dataGraph.getGroups(data);
+        data = dataGraph.getStackedStats(data,groups);
+        data = dataGraph.addEllipsisToLabel(data,config.maxLabelSize);
         
         var y0       = graphConfig.y0;
         var y1       = graphConfig.y1;
@@ -172,14 +230,14 @@ bbop.monarch.datagraph.prototype.drawGraph = function (data,graphConfig,html_div
         y0.domain(data.map(function(d) { return d.label; }));
         y1.domain(groups).rangeRoundBands([0, y0.rangeBand()]);
         
-        var xGroupMax = datagraph.getGroupMax(data);
-        var xStackMax = datagraph.getStackMax(data);
-        var yMax = datagraph.getYMax(data);
+        var xGroupMax = dataGraph.getGroupMax(data);
+        var xStackMax = dataGraph.getStackMax(data);
+        var yMax = dataGraph.getYMax(data);
         
         x.domain([0, xGroupMax]);
         
         //Dynamically decrease font size for large labels
-        var confList = datagraph.adjustYAxisElements(yMax,data.length);
+        var confList = dataGraph.adjustYAxisElements(yMax,data.length);
         var yFont = confList[0];
         var yLabelPos = confList[1];
         var triangleDim = confList[2];
@@ -212,7 +270,7 @@ bbop.monarch.datagraph.prototype.drawGraph = function (data,graphConfig,html_div
                     d3.select(this).style("text-decoration", "underline");
                 }
                 if (/\.\.\./.test(d)){
-                    var fullLabel = datagraph.getFullLabel(d,data);
+                    var fullLabel = dataGraph.getFullLabel(d,data);
                     d3.select(this).append("svg:title")
                     .text(fullLabel);
                 //Hardcode alert
@@ -265,7 +323,7 @@ bbop.monarch.datagraph.prototype.drawGraph = function (data,graphConfig,html_div
                .html("Counts: "+"<span style='font-weight:bold'>"+d.value+"</span>"+"<br/>"
                     +"Organism: "+ "<span style='font-weight:bold'>"+d.name)
                .style("top",h+heightOffset+config.barOffset.grouped.height+"px")
-               .style("left",w+config.barOffset.grouped.width+widthOffset+conf.margin.left+"px");
+               .style("left",w+config.barOffset.grouped.width+widthOffset+config.margin.left+"px");
 
             })
            .on("mouseout", function(){
@@ -716,10 +774,10 @@ bbop.monarch.datagraph.prototype.drawGraph = function (data,graphConfig,html_div
         //     NOTE - this will be refactored as AJAX calls
         function transitionSubGraph(subGraph,parent,isFromCrumb) {
             
-            var groups = datagraph.getGroups(subGraph);
-            subGraph = datagraph.getStackedStats(subGraph,groups);
+            var groups = dataGraph.getGroups(subGraph);
+            subGraph = dataGraph.getStackedStats(subGraph,groups);
             if (!isFromCrumb){
-                subGraph = datagraph.addEllipsisToLabel(subGraph,config.maxLabelSize);
+                subGraph = dataGraph.addEllipsisToLabel(subGraph,config.maxLabelSize);
             }
             var rect;
             if (parent){
@@ -738,12 +796,12 @@ bbop.monarch.datagraph.prototype.drawGraph = function (data,graphConfig,html_div
             y0.domain(subGraph.map(function(d) { return d.label; }));
             y1.domain(groups).rangeRoundBands([0, y0.rangeBand()]);
             
-            var xGroupMax = datagraph.getGroupMax(subGraph);
-            var xStackMax = datagraph.getStackMax(subGraph);
-            var yMax = datagraph.getYMax(subGraph);
+            var xGroupMax = dataGraph.getGroupMax(subGraph);
+            var xStackMax = dataGraph.getStackMax(subGraph);
+            var yMax = dataGraph.getYMax(subGraph);
             
             //Dynamically decrease font size for large labels
-            var confList = datagraph.adjustYAxisElements(yMax,subGraph.length);
+            var confList = dataGraph.adjustYAxisElements(yMax,subGraph.length);
             var yFont = confList[0];
             var yLabelPos = confList[1];
             var triangleDim = confList[2];
@@ -763,7 +821,7 @@ bbop.monarch.datagraph.prototype.drawGraph = function (data,graphConfig,html_div
                         d3.select(this).style("text-decoration", "underline");
                     }
                     if (/\.\.\./.test(d)){
-                        var fullLabel = datagraph.getFullLabel(d,subGraph);
+                        var fullLabel = dataGraph.getFullLabel(d,subGraph);
                         d3.select(this).append("svg:title")
                         .text(fullLabel);  
                     } else if (yFont < 12) {//HARDCODE alert
