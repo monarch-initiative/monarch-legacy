@@ -57,7 +57,7 @@ bbop.monarch.datagraph.prototype.init = function(html_div,DATA){
      if (config.isDynamicallyResized){
      
          if ($(window).width() < (config.benchmarkWidth-100) || $(window).height() < (config.benchmarkHeight-100)){
-             dataGraph.setSizeConfigurations(config.graphSizingRatios);
+             dataGraph.setSizeConfiguration(config.graphSizingRatios);
              dataGraph.run(html_div,DATA);
          } else {
              dataGraph.run(html_div,DATA);
@@ -67,7 +67,7 @@ bbop.monarch.datagraph.prototype.init = function(html_div,DATA){
   
              if ($(window).width() < (config.benchmarkWidth-100) || $(window).height() < (config.benchmarkHeight-100)){
                  $(html_div).children().remove();
-                 dataGraph.setSizeConfigurations(config.graphSizingRatios);
+                 dataGraph.setSizeConfiguration(config.graphSizingRatios);
                  dataGraph.run(html_div,DATA);
              } 
          });
@@ -76,15 +76,15 @@ bbop.monarch.datagraph.prototype.init = function(html_div,DATA){
      }
 }
 
-bbop.monarch.datagraph.prototype.setSizeConfigurations = function(graphRatio){
+bbop.monarch.datagraph.prototype.setSizeConfiguration = function(graphRatio){
     var dataGraph = this;
     var w = $(window).width();
     var h = $(window).height();
+    var total = w+h;
     
-    //Most monitors are 16:9, but making log ratio 14:10
     dataGraph.setWidth( ((w*graphRatio.width) / getBaseLog(12,w)) * 3);
     dataGraph.setHeight( ((h*graphRatio.height) / getBaseLog(12,h)) *3.5);
-    dataGraph.setYFontSize((w+h)*(graphRatio.yFontSize));
+    dataGraph.setYFontSize( ((total*(graphRatio.yFontSize))/ getBaseLog(20,total)) * 3);
 }
 
 bbop.monarch.datagraph.prototype.setSizingRatios = function(){
@@ -1174,19 +1174,19 @@ bbop.monarch.datagraph.prototype.adjustYAxisElements = function(yMax,len){
    var arrowDim = conf.arrowDim;
    
    if (yMax > 31 && yMax < 41){
-       yFont = ((1/yMax)*450);
+   //    yFont = ((1/yMax)*450);
        isUpdated = true;
    }else if (yMax > 41 && yMax < 53){
-       yFont = ((1/yMax)*565);
+   //    yFont = ((1/yMax)*565);
    //    arrowDim = "-20,-5, -9,1 -20,7";
        isUpdated = true;
    } else if (yMax >= 53 && yMax <66){
-       yFont = ((1/yMax)*615);
+   //    yFont = ((1/yMax)*615);
    //    yOffset = "-1.45em";
    //    arrowDim = "-20,-5, -9,1 -20,7";
        isUpdated = true;
    } else if (yMax >= 66){
-       yFont = ((1/yMax)*640);
+   //    yFont = ((1/yMax)*640);
    //    yOffset = "-1.4em";
    //    arrowDim = "-20,-5, -9,1 -20,7";
        isUpdated = true;
@@ -1217,7 +1217,16 @@ bbop.monarch.datagraph.prototype.setHeight = function(h){
     this.config.height = h;
 }
 bbop.monarch.datagraph.prototype.setYFontSize = function(fSize){
-    this.config.setYFontSize = fSize;
+    this.config.yFontSize = fSize;
+}
+bbop.monarch.datagraph.prototype.setxFontSize = function(fSize){
+    this.config.xFontSize = fSize;
+}
+bbop.monarch.datagraph.prototype.setXLabelFontSize = function(fSize){
+    this.config.xLabelFontSize = fSize;
+}
+bbop.monarch.datagraph.prototype.setXAxisPos = function(w,h){
+    this.config.xAxisPos = {dx:w,y:h};
 }
 
 
