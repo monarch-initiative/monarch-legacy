@@ -1,7 +1,4 @@
 {
-   "filter" : {
-      "variant_locus_id" : "ClinVarVariant:54685"
-   },
    "mappings" : [
       {
          "object" : "variant_locus_label",
