@@ -8,17 +8,22 @@
           <div class="graph-container"></div>
           </div>
       </div>
-      <!-- Disease spotlight -->
+      <!-- Spotlight -->
       <div class="col-xs-12 col-sm-12 col-md-6 col-lg-6">
         <div class="panel panel-default">
-          <h4>Phenotype Spotlight: sed do eiusmod</h4>
-          <div>Bacon ipsum dolor sit amet ad exercitation leberkas et ground
-            round kielbasa. T-bone corned beef enim, in shankle laboris ut
-            ham biltong chicken jowl cow drumstick est shank. Biltong
-            brisket shank labore chicken ut. Nisi doner sint elit ea,
-            cow deserunt flank enim consequat. Meatball short ribs
-            laborum ball tip elit.</div>
+          <h4>Phenotype Spotlight: {{{spotlight.label}}}</h4>
+          <div>
+            <p>{{spotlight.description}}</p>
+            <ul>
+                <li>Genes: {{{spotlight.genes}}}</li>
+                <li>Diseases: {{{spotlight.diseases}}}</li>
+                <li>Models: {{spotlight.model_count}}
+        <!--({{spotlight.model_with_phenotype_count}} with phenotypes) -->
+            </li>
+                <li>Publications: {{spotlight.publication_count}}</li>
+            </ul>
           </div>
+          <p class="text-right">{{{spotlight.link}}}</p>
         </div>
         <!-- Getting started area or disease browser -->
         <div class="col-xs-12 col-sm-12 col-md-6 col-lg-6">
