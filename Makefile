@@ -47,9 +47,11 @@ d2t: $(D2T_JSONS)
 	echo YAMLS: $^
 
 triples: conf/monarch-context.jsonld d2t
-	$(RINGO_BIN) bin/generate-triples-from-nif.js -c conf/server_config_production.json $(D2T_ARGS) conf/rdf-mapping/*-map.json && ./bin/target-ttl-to-owl.sh
+#	$(RINGO_BIN) bin/generate-triples-from-nif.js -c conf/server_config_production.json $(D2T_ARGS) conf/rdf-mapping/*-map.json && ./bin/target-ttl-to-owl.sh
+	$(RINGO_BIN) bin/generate-triples-from-nif.js -c conf/server_config_dev.json $(D2T_ARGS) conf/rdf-mapping/*-map.json && ./bin/target-ttl-to-owl.sh
 
-SERVERCONF := production
+#SERVERCONF := production
+SERVERCONF := dev
 target/%.ttl: conf/rdf-mapping/%-map.json conf/monarch-context.jsonld
 	$(RINGO_BIN) bin/generate-triples-from-nif.js -c conf/server_config_$(SERVERCONF).json $<
 

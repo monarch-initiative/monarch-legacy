@@ -714,3 +714,81 @@ bbop.monarch.homePageConfigSmall = {
         crumbFontSize : 5,
         useCrumbShape : false
  };
+
+bbop.monarch.resizeConfig = {
+        
+        isDynamicallyResized: true,
+        benchmarkHeight: 1080,
+        benchmarkWidth : 1920,
+                     
+        //Chart margins    
+        margin : {top: 40, right: 140, bottom: 5, left: 255},
+        
+        width : 375,
+        height : 400,
+        
+        //X Axis Label
+        xAxisLabel : "Number Of Annotations",
+        xAxisPos : {dx:"20em",y:"-29"},
+        xLabelFontSize : "14px",
+        xFontSize : "14px",
+        
+        //Chart title and first breadcrumb
+        chartTitle : "Phenotype Annotation Distribution",
+        firstCrumb : "Phenotypic Abnormality",
+        
+        //Title size/font settings
+        title : {
+                  'text-align': 'center',
+                  'text-indent' : '0px',
+                  'font-size' : '20px',
+                  'font-weight': 'bold',
+                  'background-color' : '#E8E8E8',
+                  'border-bottom-color' : '#000000'
+        },
+        
+        //Yaxis links
+        yFontSize : 14,
+        isYLabelURL : true,
+        yLabelBaseURL : "/phenotype/",
+        
+        //font sizes
+        legendFontSize : 14,
+        settingsFontSize : '14px',
+        
+        maxLabelSize : 31,
+        
+        //Turn on/off legend
+        useLegend : true,
+        //Legend dimensions
+        legend : {width:18,height:18},
+        legendText : {height:".35em"},
+        
+        //Colors set in the order they appear in the JSON object
+        color : { 
+                 first  : '#44A293',
+                 second : '#A4D6D4',
+                   
+                 yLabel : { 
+                   fill  : '#000000',
+                   hover : '#EA763B'
+                 },
+                 arrow : {
+                   fill  : "#496265",
+                   hover : "#EA763B"
+                 },
+                 bar : {
+                   fill  : '#EA763B'
+                 },
+                 crumb : {
+                   top   : '#496265',
+                   bottom: '#3D6FB7',
+                   hover : '#EA763B'
+                 },
+                 crumbText : '#FFFFFF'
+        },
+
+        useCrumb : false,
+        crumbFontSize : 10,
+        useCrumbShape : true
+};

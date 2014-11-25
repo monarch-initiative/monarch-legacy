@@ -1,50 +1,53 @@
 {
-    "status" : "alpha",
-    "graphs": [
-        {
-            "graph" : "kegg-gene-disease",
-            "view" : "nlx_31015-2",
-            "mapVersion" : "2014-05-14",
-            "columns" : [
-                {
-                    "name" : "v_uuid"
-                },
-                {
-                    "name" : "gene_ids",
-					"list_delimiter" : ","
-                },
-                {
-                    "name" : "disease_id"
-                },
-                {
-                    "name" : "disease_label",
-					"type" : "rdfs:Literal"
-                }
-            ],
-            "mappings" : [
-
-                {"subject" : "gene_id",
-                 "predicate" : "RO:0002200",
-                 "object" : "disease_id"
-                },
-                {"subject" : "v_uuid",
-                 "predicate" : "rdf:type",
-                 "object" : "SIO:association"
-                },
-                {"subject" : "v_uuid",
-                 "predicate" : "hasSubject",
-                 "object" : "gene_ids"
-                },
-                {"subject" : "v_uuid",
-                 "predicate" : "hasObject",
-                 "object" : "disease_id"
-                },
-                {"subject" : "disease_id",
-                 "predicate" : "rdfs:label",
-                 "object" : "disease_label"
-                }
-
-            ]
-        }
-   ]
+   "graphs" : [
+      {
+         "view" : "nlx_31015-2",
+         "mappings" : [
+            {
+               "object" : "disease_id",
+               "predicate" : "RO:0002200",
+               "subject" : "gene_id"
+            },
+            {
+               "object" : "SIO:association",
+               "predicate" : "rdf:type",
+               "subject" : "v_uuid"
+            },
+            {
+               "object" : "gene_ids",
+               "predicate" : "hasSubject",
+               "subject" : "v_uuid"
+            },
+            {
+               "object" : "disease_id",
+               "predicate" : "hasObject",
+               "subject" : "v_uuid"
+            },
+            {
+               "object" : "disease_label",
+               "predicate" : "rdfs:label",
+               "subject" : "disease_id"
+            }
+         ],
+         "columns" : [
+            {
+               "name" : "v_uuid"
+            },
+            {
+               "name" : "gene_ids",
+               "list_delimiter" : ","
+            },
+            {
+               "name" : "disease_id"
+            },
+            {
+               "name" : "disease_label",
+               "type" : "rdfs:Literal"
+            }
+         ],
+         "mapVersion" : "2014-05-14",
+         "graph" : "kegg-gene-disease"
+      }
+   ],
+   "status" : "alpha"
 }

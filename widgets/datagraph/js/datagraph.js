@@ -21,38 +21,94 @@ bbop.monarch.datagraph = function(config){
     //Check browser
     this.config.isOpera = (!!window.opera || navigator.userAgent.indexOf(' OPR/') >= 0);
     this.config.isChrome = (!!window.chrome && !(!!window.opera || navigator.userAgent.indexOf(' OPR/') >= 0));
+    this.config.isSafari = Object.prototype.toString.call(window.HTMLElement).indexOf('Constructor') > 0;
     
     //Tooltip offsetting
     this.config.arrowOffset = {height: 21, width: -90};
     this.config.barOffset = {
                  grouped:{
-                    height: 110,
+                    height: 95,
                     width: 10
                   },
                   stacked:{
-                    height: 95,
-                    width: 10
+                    height: 80,
+                    //width: 10
                   }
     };
+    
+    if (this.config.isDynamicallyResized){
+        this.config.graphSizingRatios = this.setSizingRatios();
+    }
+}
+
+bbop.monarch.datagraph.prototype.run = function(html_div,DATA){
+    var dataGraph = this;
+    
+    dataGraph.makeGraphDOM(html_div,DATA);
+    var d3Config = dataGraph.setD3Config(html_div,DATA);
+    dataGraph.drawGraph(DATA,d3Config,html_div);
 }
         
-bbop.monarch.datagraph.prototype.init = function (html_div,DATA){
+bbop.monarch.datagraph.prototype.init = function(html_div,DATA){
             
-     conf = this.config;
-     datagraph = this;
-     var height = conf.height;
-     var width = conf.width;;
+     var dataGraph = this;
+     var config = dataGraph.config;
      
-     datagraph.makeGraphDOM(html_div,DATA);
-     var d3Config = datagraph.setD3Config(html_div,DATA,height,width);
-     //Call function to draw graph
-     datagraph.drawGraph(DATA,d3Config,html_div);
+     if (config.isDynamicallyResized){
+     
+         if ($(window).width() < (config.benchmarkWidth-100) || $(window).height() < (config.benchmarkHeight-100)){
+             dataGraph.setSizeConfigurations(config.graphSizingRatios);
+             dataGraph.run(html_div,DATA);
+         } else {
+             dataGraph.run(html_div,DATA);
+         }
+     
+         window.addEventListener('resize', function(event){
+  
+             if ($(window).width() < (config.benchmarkWidth-100) || $(window).height() < (config.benchmarkHeight-100)){
+                 $(html_div).children().remove();
+                 dataGraph.setSizeConfigurations(config.graphSizingRatios);
+                 dataGraph.run(html_div,DATA);
+             } 
+         });
+     } else {
+         dataGraph.run(html_div,DATA);
+     }
 }
+
+bbop.monarch.datagraph.prototype.setSizeConfigurations = function(graphRatio){
+    var dataGraph = this;
+    var w = $(window).width();
+    var h = $(window).height();
+    
+    //Most monitors are 16:9, but making log ratio 14:10
+    dataGraph.setWidth( ((w*graphRatio.width) / getBaseLog(12,w)) * 3);
+    dataGraph.setHeight( ((h*graphRatio.height) / getBaseLog(12,h)) *3.5);
+    dataGraph.setYFontSize((w+h)*(graphRatio.yFontSize));
+}
+
+bbop.monarch.datagraph.prototype.setSizingRatios = function(){
+    var config = this.config;
+    var graphRatio = {};
+    
+    if (!config.benchmarkHeight || !config.benchmarkWidth){
+        console.log("Dynamic sizing set without "+
+                    "setting benchmarkHeight and/or benchmarkWidth");
+    }
+    
+    graphRatio.width = config.width / config.benchmarkWidth;
+    graphRatio.height = config.height / config.benchmarkHeight;
+    graphRatio.yFontSize = (config.yFontSize / (config.benchmarkHeight+config.benchmarkWidth));
+    
+    return graphRatio;
+}
+
 //Uses JQuery to create the DOM for the datagraph
 bbop.monarch.datagraph.prototype.makeGraphDOM = function(html_div,data){
       
-      var config = this.config;    
-      var groups = datagraph.getGroups(data);
+      var config = this.config;
+      var dataGraph = this;
+      var groups = dataGraph.getGroups(data);
       
       //Create html structure
       //Add graph title
@@ -68,7 +124,7 @@ bbop.monarch.datagraph.prototype.makeGraphDOM = function(html_div,data){
       $(html_div+" .interaction").append( "<li></li>" );
          
       //Override breadcrumb config if subgraphs exist
-      config.useCrumb = datagraph.checkForSubGraphs(data);
+      config.useCrumb = dataGraph.checkForSubGraphs(data);
       
       //remove breadcrumb div
       if (config.useCrumb){
@@ -88,19 +144,19 @@ bbop.monarch.datagraph.prototype.makeGraphDOM = function(html_div,data){
       }
 }
   
-bbop.monarch.datagraph.prototype.setD3Config = function (html_div,DATA,height,width){
+bbop.monarch.datagraph.prototype.setD3Config = function (html_div,DATA){
       
       var d3Config = {};
       var conf =  this.config;
 
       //Define scales
       d3Config.y0 = d3.scale.ordinal()
-          .rangeRoundBands([0,height], .1);
+          .rangeRoundBands([0,conf.height], .1);
 
       d3Config.y1 = d3.scale.ordinal();
 
       d3Config.x = d3.scale.linear()
-          .range([0, width]);
+          .range([0, conf.width]);
       
       //Bar colors
       d3Config.color = d3.scale.ordinal()
@@ -117,8 +173,8 @@ bbop.monarch.datagraph.prototype.setD3Config = function (html_div,DATA,height,wi
           .orient("left");
 
       d3Config.svg = d3.select(html_div).append("svg")
-          .attr("width", width + conf.margin.left + conf.margin.right)
-          .attr("height", height + conf.margin.top + conf.margin.bottom)
+          .attr("width", conf.width + conf.margin.left + conf.margin.right)
+          .attr("height", conf.height + conf.margin.top + conf.margin.bottom)
           .append("g")
           .attr("transform", "translate(" + conf.margin.left + "," + conf.margin.top + ")");
       
@@ -135,11 +191,11 @@ bbop.monarch.datagraph.prototype.setD3Config = function (html_div,DATA,height,wi
 }
 
 bbop.monarch.datagraph.prototype.drawGraph = function (data,graphConfig,html_div) {
-        var datagraph = this;
+        var dataGraph = this;
         var config = this.config;
-        var groups = datagraph.getGroups(data);
-        data = datagraph.getStackedStats(data,groups);
-        data = datagraph.addEllipsisToLabel(data,config.maxLabelSize);
+        var groups = dataGraph.getGroups(data);
+        data = dataGraph.getStackedStats(data,groups);
+        data = dataGraph.addEllipsisToLabel(data,config.maxLabelSize);
         
         var y0       = graphConfig.y0;
         var y1       = graphConfig.y1;
@@ -173,14 +229,14 @@ bbop.monarch.datagraph.prototype.drawGraph = function (data,graphConfig,html_div
         y0.domain(data.map(function(d) { return d.label; }));
         y1.domain(groups).rangeRoundBands([0, y0.rangeBand()]);
         
-        var xGroupMax = datagraph.getGroupMax(data);
-        var xStackMax = datagraph.getStackMax(data);
-        var yMax = datagraph.getYMax(data);
+        var xGroupMax = dataGraph.getGroupMax(data);
+        var xStackMax = dataGraph.getStackMax(data);
+        var yMax = dataGraph.getYMax(data);
         
         x.domain([0, xGroupMax]);
         
         //Dynamically decrease font size for large labels
-        var confList = datagraph.adjustYAxisElements(yMax,data.length);
+        var confList = dataGraph.adjustYAxisElements(yMax,data.length);
         var yFont = confList[0];
         var yLabelPos = confList[1];
         var triangleDim = confList[2];
@@ -213,7 +269,7 @@ bbop.monarch.datagraph.prototype.drawGraph = function (data,graphConfig,html_div
                     d3.select(this).style("text-decoration", "underline");
                 }
                 if (/\.\.\./.test(d)){
-                    var fullLabel = datagraph.getFullLabel(d,data);
+                    var fullLabel = dataGraph.getFullLabel(d,data);
                     d3.select(this).append("svg:title")
                     .text(fullLabel);
                 //Hardcode alert
@@ -250,7 +306,7 @@ bbop.monarch.datagraph.prototype.drawGraph = function (data,graphConfig,html_div
            .attr("class",("rect"+level))
            .attr("height", y1.rangeBand())
            .attr("y", function(d) { return y1(d.name); })
-           .attr("x", function(){if (config.isChrome) {return 1;}else{ return 0;}})
+           .attr("x", function(){if (config.isChrome || config.isSafari) {return 1;}else{ return 0;}})
            .attr("width", function(d) { return x(d.value); })
            .on("mouseover", function(d){
                d3.select(this)
@@ -266,7 +322,7 @@ bbop.monarch.datagraph.prototype.drawGraph = function (data,graphConfig,html_div
                .html("Counts: "+"<span style='font-weight:bold'>"+d.value+"</span>"+"<br/>"
                     +"Organism: "+ "<span style='font-weight:bold'>"+d.name)
                .style("top",h+heightOffset+config.barOffset.grouped.height+"px")
-               .style("left",w+config.barOffset.grouped.width+widthOffset+conf.margin.left+"px");
+               .style("left",w+config.barOffset.grouped.width+widthOffset+config.margin.left+"px");
 
             })
            .on("mouseout", function(){
@@ -404,7 +460,7 @@ bbop.monarch.datagraph.prototype.drawGraph = function (data,graphConfig,html_div
                 .attr("height", y1.rangeBand())
                 .attr("y", function(d) { return y1(d.name); })  
                 .transition()
-                .attr("x", function(){if (config.isChrome) {return 1;}else{ return 0;}})
+                .attr("x", function(){if (config.isChrome || config.isSafari) {return 1;}else{ return 0;}})
                 .attr("width", function(d) { return x(d.value); })
                 
             rect.on("mouseover", function(d){
@@ -422,7 +478,7 @@ bbop.monarch.datagraph.prototype.drawGraph = function (data,graphConfig,html_div
                   .html("Counts: "+"<span style='font-weight:bold'>"+d.value+"</span>"+"<br/>"
                         +"Organism: "+ "<span style='font-weight:bold'>"+d.name)
                   .style("top",h+heightOffset+config.barOffset.grouped.height+"px")
-                  .style("left",w+config.barOffset.grouped.width+widthOffset+conf.margin.left+"px");
+                  .style("left",w+config.barOffset.grouped.width+widthOffset+config.margin.left+"px");
             })
                 .on("mouseout", function(){
                   tooltip.style("display", "none")
@@ -444,7 +500,7 @@ bbop.monarch.datagraph.prototype.drawGraph = function (data,graphConfig,html_div
                 .delay(function(d, i) { return i * 10; })
                 .attr("x", function(d){
                     if (d.x0 == 0){
-                        if (config.isChrome){return 1;}
+                        if (config.isChrome || config.isSafari){return 1;}
                         else {return d.x0;}
                     } else { 
                         return x(d.x0);
@@ -470,7 +526,7 @@ bbop.monarch.datagraph.prototype.drawGraph = function (data,graphConfig,html_div
                     .html("Counts: "+"<span style='font-weight:bold'>"+d.value+"</span>"+"<br/>"
                          +"Organism: "+ "<span style='font-weight:bold'>"+d.name)
                     .style("top",h+heightOffset+config.barOffset.stacked.height+"px")
-                    .style("left",w+config.barOffset.grouped.width+widthOffset+conf.margin.left+"px");
+                    .style("left",w+config.barOffset.grouped.width+widthOffset+config.margin.left+"px");
             })
                .on("mouseout", function(){
                    tooltip.style("display", "none");
@@ -667,6 +723,9 @@ bbop.monarch.datagraph.prototype.drawGraph = function (data,graphConfig,html_div
                                 }
                             })
                             .attr("dx", function(){
+                                if (index == 0){
+                                    return ".1em";
+                                }
                                 if (i == 0 && len == 1){
                                     return ".8em";
                                 } else if (i == 0 && len >2
@@ -714,10 +773,10 @@ bbop.monarch.datagraph.prototype.drawGraph = function (data,graphConfig,html_div
         //     NOTE - this will be refactored as AJAX calls
         function transitionSubGraph(subGraph,parent,isFromCrumb) {
             
-            var groups = datagraph.getGroups(subGraph);
-            subGraph = datagraph.getStackedStats(subGraph,groups);
+            var groups = dataGraph.getGroups(subGraph);
+            subGraph = dataGraph.getStackedStats(subGraph,groups);
             if (!isFromCrumb){
-                subGraph = datagraph.addEllipsisToLabel(subGraph,config.maxLabelSize);
+                subGraph = dataGraph.addEllipsisToLabel(subGraph,config.maxLabelSize);
             }
             var rect;
             if (parent){
@@ -736,12 +795,12 @@ bbop.monarch.datagraph.prototype.drawGraph = function (data,graphConfig,html_div
             y0.domain(subGraph.map(function(d) { return d.label; }));
             y1.domain(groups).rangeRoundBands([0, y0.rangeBand()]);
             
-            var xGroupMax = datagraph.getGroupMax(subGraph);
-            var xStackMax = datagraph.getStackMax(subGraph);
-            var yMax = datagraph.getYMax(subGraph);
+            var xGroupMax = dataGraph.getGroupMax(subGraph);
+            var xStackMax = dataGraph.getStackMax(subGraph);
+            var yMax = dataGraph.getYMax(subGraph);
             
             //Dynamically decrease font size for large labels
-            var confList = datagraph.adjustYAxisElements(yMax,subGraph.length);
+            var confList = dataGraph.adjustYAxisElements(yMax,subGraph.length);
             var yFont = confList[0];
             var yLabelPos = confList[1];
             var triangleDim = confList[2];
@@ -761,7 +820,7 @@ bbop.monarch.datagraph.prototype.drawGraph = function (data,graphConfig,html_div
                         d3.select(this).style("text-decoration", "underline");
                     }
                     if (/\.\.\./.test(d)){
-                        var fullLabel = datagraph.getFullLabel(d,subGraph);
+                        var fullLabel = dataGraph.getFullLabel(d,subGraph);
                         d3.select(this).append("svg:title")
                         .text(fullLabel);  
                     } else if (yFont < 12) {//HARDCODE alert
@@ -803,7 +862,7 @@ bbop.monarch.datagraph.prototype.drawGraph = function (data,graphConfig,html_div
                     .attr("class",("rect"+level))
                     .attr("height", y1.rangeBand())
                     .attr("y", function(d) { return y1(d.name); })
-                    .attr("x", function(){if (config.isChrome) {return 1;}else{ return 0;}})
+                    .attr("x", function(){if (config.isChrome || config.isSafari) {return 1;}else{ return 0;}})
                     .attr("width", function(d) { return x(d.value); })
                     .on("mouseover", function(d){
                          d3.select(this)
@@ -819,7 +878,7 @@ bbop.monarch.datagraph.prototype.drawGraph = function (data,graphConfig,html_div
                          .html("Counts: "+"<span style='font-weight:bold'>"+d.value+"</span>"+"<br/>"
                               +"Organism: "+ "<span style='font-weight:bold'>"+d.name)
                          .style("top",h+heightOffset+config.barOffset.grouped.height+"px")
-                         .style("left",w+config.barOffset.grouped.width+widthOffset+conf.margin.left+"px");
+                         .style("left",w+config.barOffset.grouped.width+widthOffset+config.margin.left+"px");
                     })
                     .on("mouseout", function(){
                         d3.select(this)
@@ -842,7 +901,7 @@ bbop.monarch.datagraph.prototype.drawGraph = function (data,graphConfig,html_div
                     .attr("class",("rect"+level))
                     .attr("x", function(d){
                         if (d.x0 == 0){
-                            if (config.isChrome){return 1;}
+                            if (config.isChrome || config.isSafari){return 1;}
                             else {return d.x0;}
                         } else { 
                             return x(d.x0);
@@ -866,7 +925,7 @@ bbop.monarch.datagraph.prototype.drawGraph = function (data,graphConfig,html_div
                             .html("Counts: "+"<span style='font-weight:bold'>"+d.value+"</span>"+"<br/>"
                                  +"Organism: "+ "<span style='font-weight:bold'>"+d.name)
                             .style("top",h+heightOffset+config.barOffset.stacked.height+"px")
-                            .style("left",w+config.barOffset.grouped.width+widthOffset+conf.margin.left+"px");
+                            .style("left",w+config.barOffset.grouped.width+widthOffset+config.margin.left+"px");
 
                  })
                 .on("mouseout", function(){
@@ -909,7 +968,7 @@ bbop.monarch.datagraph.prototype.drawGraph = function (data,graphConfig,html_div
                     .attr("height", y1.rangeBand())
                     .attr("y", function(d) { return y1(d.name); })  
                     .transition()
-                    .attr("x", function(){if (config.isChrome) {return 1;}else{ return 0;}})
+                    .attr("x", function(){if (config.isChrome || config.isSafari) {return 1;}else{ return 0;}})
                     .attr("width", function(d) { return x(d.value); })     
                     
                   rect.on("mouseover", function(d){
@@ -927,7 +986,7 @@ bbop.monarch.datagraph.prototype.drawGraph = function (data,graphConfig,html_div
                           .html("Counts: "+"<span style='font-weight:bold'>"+d.value+"</span>"+"<br/>"
                             +"Organism: "+ "<span style='font-weight:bold'>"+d.name)
                           .style("top",h+heightOffset+config.barOffset.grouped.height+"px")
-                          .style("left",w+config.barOffset.grouped.width+widthOffset+conf.margin.left+"px");
+                          .style("left",w+config.barOffset.grouped.width+widthOffset+config.margin.left+"px");
                      })
                      .on("mouseout", function(){
                          tooltip.style("display", "none")
@@ -946,7 +1005,7 @@ bbop.monarch.datagraph.prototype.drawGraph = function (data,graphConfig,html_div
                     .delay(function(d, i) { return i * 10; })
                     .attr("x", function(d){
                         if (d.x0 == 0){
-                            if (config.isChrome){return 1;}
+                            if (config.isChrome || config.isSafari){return 1;}
                             else {return d.x0;}
                         } else { 
                             return x(d.x0);
@@ -972,7 +1031,7 @@ bbop.monarch.datagraph.prototype.drawGraph = function (data,graphConfig,html_div
                            .html("Counts: "+"<span style='font-weight:bold'>"+d.value+"</span>"+"<br/>"
                                 +"Organism: "+ "<span style='font-weight:bold'>"+d.name)
                            .style("top",h+heightOffset+config.barOffset.stacked.height+"px")
-                           .style("left",w+config.barOffset.grouped.width+widthOffset+conf.margin.left+"px");
+                           .style("left",w+config.barOffset.grouped.width+widthOffset+config.margin.left+"px");
                     })
                    .on("mouseout", function(){
                        tooltip.style("display", "none");
@@ -1095,8 +1154,14 @@ bbop.monarch.datagraph.prototype.getFullLabel = function (d,data){
 //End data object functions
 ////////////////////////////////////////////////////////////////////
 
+//Log given base x
+function getBaseLog(x, y) {
+    return Math.log(y) / Math.log(x);
+}
+
 //Adjust Y label font, arrow size, and spacing
 //when transitioning
+//this is getting funky with graph resizing, maybe should do away
 bbop.monarch.datagraph.prototype.adjustYAxisElements = function(yMax,len){
    
    var conf = this.config;
@@ -1104,7 +1169,6 @@ bbop.monarch.datagraph.prototype.adjustYAxisElements = function(yMax,len){
    var density = h/len;
    var isUpdated = false;
    
-   //var yFont = 'default';
    yFont = conf.yFontSize;
    var yOffset = conf.yOffset;
    var arrowDim = conf.arrowDim;
@@ -1114,33 +1178,48 @@ bbop.monarch.datagraph.prototype.adjustYAxisElements = function(yMax,len){
        isUpdated = true;
    }else if (yMax > 41 && yMax < 53){
        yFont = ((1/yMax)*565);
-       arrowDim = "-20,-5, -9,1 -20,7";
+   //    arrowDim = "-20,-5, -9,1 -20,7";
        isUpdated = true;
    } else if (yMax >= 53 && yMax <66){
        yFont = ((1/yMax)*615);
-       yOffset = "-1.45em";
-       arrowDim = "-20,-5, -9,1 -20,7";
+   //    yOffset = "-1.45em";
+   //    arrowDim = "-20,-5, -9,1 -20,7";
        isUpdated = true;
    } else if (yMax >= 66){
        yFont = ((1/yMax)*640);
-       yOffset = "-1.4em";
-       arrowDim = "-20,-5, -9,1 -20,7";
+   //    yOffset = "-1.4em";
+   //    arrowDim = "-20,-5, -9,1 -20,7";
        isUpdated = true;
-   }
-   
-   if (isUpdated && yFont > conf.yFontSize){
-       yFont = conf.yFontSize;
    }
    
    //Check for density BETA
    if (density < 15 && density < yFont ){
        yFont = density+2;
-       yOffset = "-2em";
-       arrowDim = "-20,-3, -11,1 -20,5";
+       //yOffset = "-2em";
+       //arrowDim = "-20,-3, -11,1 -20,5";
+       isUpdated = true;
    }
+    
+   if (isUpdated && yFont > conf.yFontSize){
+       yFont = conf.yFontSize;
+   }
+   
    var retList = [yFont,yOffset,arrowDim];
    return retList;
 }
+///////////////////////////////////
+//Setters for sizing configurations
+
+bbop.monarch.datagraph.prototype.setWidth = function(w){
+    this.config.width = w;
+}
+bbop.monarch.datagraph.prototype.setHeight = function(h){
+    this.config.height = h;
+}
+bbop.monarch.datagraph.prototype.setYFontSize = function(fSize){
+    this.config.setYFontSize = fSize;
+}
+
 
 //datagraph default SVG Coordinates
 bbop.monarch.datagraph.prototype.setPolygonCoordinates = function(){

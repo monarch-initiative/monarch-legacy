@@ -1,38 +1,3 @@
-<!DOCTYPE html>
-<html>
-<head>
-  <title>Monarch Genes</title>
-
-  {{{includes.analytics}}}
-
-  <!-- CSS. -->
-  {{#pup_tent_css_libraries}}
-  <link rel="stylesheet" type="text/css" href="{{{.}}}">
-  {{/pup_tent_css_libraries}}
-
-  <!-- JS variables. -->
-  {{#pup_tent_js_variables}}
-  <script type="text/javascript">var {{name}} = {{{value}}};</script>
-  {{/pup_tent_js_variables}}
-
-  <!-- JS libraries. -->
-  {{#pup_tent_js_libraries}}
-  <script type="text/javascript" src="{{{.}}}"></script>
-  {{/pup_tent_js_libraries}}
-  
-  <!-- JS launcher. -->
-  <script type="text/javascript">
-  jQuery(document).ready(function(){
-  {{#monarch_launchable}}
-  {{.}};
-  {{/monarch_launchable}}
-  });
-  </script>
-
-  <link rel="icon" href="/image/favicon.ico" type="image/x-icon">
-  <meta charset=”utf-8”></meta>
-</head>
-<body style="padding-top: 50px;">
   {{{includes.navbar}}}
   <div class="container-fluid" style="margin: 1em;">
     <!-- Open first row section. -->

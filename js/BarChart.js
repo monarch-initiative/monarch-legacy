@@ -60,6 +60,13 @@ function makePhenoGenoGraph(data) {
             1900,950)
 }
 
+function makeTestGraph(data){
+    
+    var graphDiv = '.graph-container';
+    this.makeResizableGraph(data,graphDiv,
+            bbop.monarch.resizeConfig);
+}
+
 function makeTwoSizeGraph(data,graphDiv,largeConfig,smallConfig,width,height){
 
     var sizeTracker;
@@ -96,6 +103,17 @@ function makeTwoSizeGraph(data,graphDiv,largeConfig,smallConfig,width,height){
             this.setMinHeightWidth(graphObject,graphDiv);
             sizeTracker = 'small';
         }
+    });
+}
+
+function makeResizableGraph(data,graphDiv,config){
+    
+    var graphObject = new bbop.monarch.datagraph(config);
+    graphObject.init(graphDiv,data);
+    this.setMinHeightWidth(graphObject,graphDiv);
+    
+    window.addEventListener('resize', function(event){
+        this.setMinHeightWidth(graphObject,graphDiv);   
     });
 }
 
