@@ -76,7 +76,8 @@ var url = document.URL;
             detailRectHeight: 140,
             detailRectStrokeWidth: 3,
 	    globalViewSize : 110,
-	    reducedGlobalViewSize: 30,
+	    reducedGlobalViewSize: 50,
+	    minHeight: 225,
 	    h : 526,
 	    m :[ 30, 10, 10, 10 ],
 	    multiOrganismCt: 10,
@@ -279,6 +280,11 @@ var url = document.URL;
 	    this.state.phenotypeLabels = this._filterPhenotypeLabels(this.state.phenotypeData);
 	    this.state.phenotypeData = this._filterPhenotypeResults(this.state.phenotypeData);
 	    this._loadData();
+	    console.log("data loaded... # of models...");
+	    console.log("human... "+this.state.data["Homo sapiens"].b.length);
+	    console.log("mouse... "+this.state.data["Mus musculus"].b.length);
+	    console.log("fish... "+this.state.data["Danio rerio"].b.length);
+
 
 	    // amont of extra space needed for overview
 	    if (this.state.targetSpeciesName == "Overview") {
@@ -311,10 +317,10 @@ var url = document.URL;
 		this.state.svg
 		    .attr("width", "100%")
 		    .attr("height", this.state.phenotypeDisplayCount * 18);
-		this._createRectangularContainers();				
+		var rectHeight = this._createRectangularContainers();				
 		this._createColorScale();
 
-		var ymax  = this._createModelRegion();
+		this._createModelRegion();
 
 		this._updateAxes();
 		
@@ -323,13 +329,12 @@ var url = document.URL;
 		this._createRowLabels();
 		this._createOverviewSection();
 		
-	    	ymax = ymax + 60; //gap MAGIC NUBER ALERT. DOES THIS
-		//NEED TO BE CLEANED?
 		var height = this.state.phenotypeDisplayCount*18+this.state.yoffsetOver;
-		
-		if (height < ymax) {
-		    height = ymax+60;
-		}
+		console.log("calculted height..."+height);
+		console.log("rect height is "+ rectHeight);
+
+		height = rectHeight+40;
+
 		var containerHeight = height + 10; // MAGIC NUMBER? OR OVERVIEWW OFFSET?
 		$("#svg_area").css("height",height);
 		$("#svg_container").css("height",containerHeight);
@@ -601,19 +606,22 @@ var url = document.URL;
 		.attr("id", "globalview")
 		.attr("height", overviewBoxDim)
 		.attr("width", overviewBoxDim);
+
+	    var overviewInstructionHeightOffset  =50;
+	    var lineHeight =12;
 	    
-	    
+	    var  y = self.state.yModelRegion+overviewBoxDim+overviewInstructionHeightOffset;
 	    var rect_instructions = self.state.svg.append("text")		
 		.attr("x", self.state.axis_pos_list[2] + 10)
 	    //This changes for vertical positioning
-		.attr("y", (self.state.yoffset * 2) + 50)
+		.attr("y", y)
  		.attr("class", "instruct")
  		.text("Use the phenotype map above to");
  	    
  	    var rect_instructions = self.state.svg.append("text")
- 		.attr("x", self.state.axis_pos_list[2] + 10)
+ 		.attr("x", self.state.axis_pos_list[2] + lineHeight)
  	    //This changes for vertical positioning
-		.attr("y", (self.state.yoffset * 2) +  60) 
+		.attr("y", y+10) 
  		.attr("class", "instruct")
  		.text("navigate the model view on the left");
 	},
@@ -1070,7 +1078,20 @@ var url = document.URL;
 	    if (typeof(limit) !== 'undefined') {
 		url = url +"&limit="+limit;
 	    }
+
 	    var res = this._ajaxLoadData(speciesName,url);
+	    if (res !== null) {
+		if (typeof(limit) !== 'undefined' && typeof(res.b) !== 'undefined' && res.b !== null &&
+		    res.b.length < limit) {
+
+		    console.log("need padding...");
+		    console.log("load data result for ..."+speciesName);
+		    console.log("# of results is "+res.b.length);
+		    
+		    console.log("result is .."+JSON.stringify(res));
+    		    /** add things to make up diff to limit.. */
+		}
+	    }
 	    this.state.data[speciesName]= res;
 	},
 	
@@ -1489,13 +1510,6 @@ var url = document.URL;
 	
 	_configureFaqs: function() {
 	    
-	   /* var faqs = ("#faq")
-		.on("click", function(d) {
-		    console.log("trying to show dialog for ...faq");
-		    self._showDialog("faq");
-		});	*/
-	    
-	    //var sorts = d3.selectAll("#sorts")
 	    var sorts = $("#sorts")
 		.on("click", function(d,i){
 		    console.log("trying to show dialog for ..sorts");
@@ -2452,15 +2466,15 @@ var url = document.URL;
 		.dialog({
 		    modal: true,
 		    minHeight: 200,
-		    maxHeight: 400,
+		    height: 250,
+		    maxHeight: 300,
 		    minWidth: 400,
-		    resizable: true,
+		    resizable: false,
 		    draggable:true,
-		    position: ['center', 'center'],
+		    position: { my: "top", at: "top+25%",of: "#svg_area"},
 		    title: 'Phenogrid Notes'});
-	    
-	    $dialog.dialog('open');
 	    $dialog.html(text);	
+	    $dialog.dialog('open');
 	    self.state.tooltips[name]=text;
 	},
 	
@@ -2477,6 +2491,11 @@ var url = document.URL;
 	    //if (self.state.targetSpeciesName === "Overview") {self.state.yoffsetOver = 35;}
 	    //else {yoffsetOver = 0;}
 	    var gridHeight = self.state.phenotypeDisplayCount * 13 + 10;
+	    if (gridHeight < self.state.minHeight) {
+		gridHeight = self.state.minHeight;
+	    }
+
+	    
 	    var y = self.state.yModelRegion;
 	    //create accent boxes
 	    var rect_accents = this.state.svg.selectAll("#rect.accent")
@@ -2499,6 +2518,8 @@ var url = document.URL;
 	    //Is this ct necessary? What does it do?
 	    if (self.state.targetSpeciesName == "Overview") { var ct = 0;}
 	    else { var ct = -15;}
+
+	    return gridHeight+self.state.yModelRegion;
 	    
 	},
 
@@ -2535,7 +2556,7 @@ var url = document.URL;
 	},
 
 	
-	//this code creates the colored rectangles below the models
+	//this code creates the labels for the models, the lines, scores, etc..
 	_createModelRegion: function () {
 
 	    var self=this;
@@ -2568,8 +2589,6 @@ var url = document.URL;
 				       );
 	    var diff = d3.max(temp_data) - d3.min(temp_data);
 
-	    // indicator for bottom of gradients
-	    var ymax = 0;
 	    
 	    //only show the scale if there is more than one value represented
 	    //in the scale
@@ -2577,10 +2596,10 @@ var url = document.URL;
 		// baseline for gradient positioning
 		var y1 = 262;  
 		//more magic data
-		if (this.state.filteredPhenotypeData.length < 14) {
+		if (this.state.phenotypeData.length < this.state.defaultPhenotypeDisplayCount) {
 		    y1=172;  
 		} 
-
+		console.log("y for the gradient display is..."+y1);
 		ymax = this._buildGradientDisplays(y1);
 		this._buildGradientTexts(y1);
 	    }					
@@ -2588,8 +2607,6 @@ var url = document.URL;
 	    var phenogridControls = $('<div id="phenogrid_controls"></div>');
 	    this.element.append(phenogridControls);
 	    this._createSelectionControls(phenogridControls); 
-
-	    return ymax;
 	},
 
 	/**
@@ -2699,7 +2716,7 @@ var url = document.URL;
 	    else if (calc == 3) {text1 = "Less Similar"; text2 = "Ratio (t)"; text3 = "More Similar";}
 	    else if (calc == 0) {text1 = "Min"; text2 = "Similarity"; text3 = "Max";}
 	    
-	    var ytext1 =  y1  + self.state.yoffset-5;
+	    var ytext1 =  y1  + self.state.yoffset;
 	    var xtext1= self.state.axis_pos_list[2] + 10;
 	    var div_text1 = self.state.svg.append("svg:text")
 		.attr("class", "detail_text")
@@ -2708,7 +2725,7 @@ var url = document.URL;
 		.style("font-size", "10px")
 		.text(text1);
 	    
-	    var ytext2 = y1-10  +  self.state.yoffset;
+	    var ytext2 = y1+  self.state.yoffset;
 	    var xtext2  = self.state.axis_pos_list[2] + 75;
 	    var div_text2 = self.state.svg.append("svg:text")
 		.attr("class", "detail_text")
@@ -2717,7 +2734,7 @@ var url = document.URL;
 		.style("font-size", "12px")
 		.text(text2);
 	    
-	    var ytext3 = y1 + self.state.yoffset-5;
+	    var ytext3 = y1 + self.state.yoffset;
 	    var xtext3 = self.state.axis_pos_list[2] + 125;
 	    var div_text3 = self.state.svg.append("svg:text")
 		.attr("class", "detail_text")
@@ -2838,9 +2855,9 @@ var url = document.URL;
 	_createSortPhenotypeSelection: function () {
 	    var optionhtml ="<span id='sort_div'>"+
 		"<span id='slabel' >Sort Phenotypes<span id=\"sorts\">"+
-		"<img class=\"sortimg\" src=\"" +this.state.scriptpath + 
+		"<img src=\"" +this.state.scriptpath + 
 		"../image/greeninfo30.png\" height=\"15px\"></span>"+
-		"<span id='sort'></span></span><br />"+
+		"</span>"+
 		"<span><select id=\'sortphenotypes\'>";
 	    
 	    for (var idx=0;idx<this.state.phenotypeSort.length;idx++) {
