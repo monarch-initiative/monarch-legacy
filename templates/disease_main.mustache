@@ -1,62 +1,65 @@
-  {{{includes.navbar}}}
-  <div class="container-fluid" style="margin: 1em;">
-    <!-- Open first row section. -->
-    <div class="row">
-      <!-- Annotation Graph-->
-        <div class="col-xs-12 col-sm-12 col-md-6 col-lg-6">
-          <div class="panel panel-default">
-              <div class="disease-pheno-container"></div>
-          </div>
-        </div>
-      <!-- Disease spotlight -->
-      <div class="col-xs-12 col-sm-12 col-md-6 col-lg-6">
-        <div class="panel panel-default">
-          <h4>Disease Spotlight: {{{spotlight.label}}}</h4>
-          <div>
-            <p>{{spotlight.description}}</p>
-            <ul>
-        <li>Heritability: {{{spotlight.heritability}}}</li>
-                <li>Phenotypes: {{{spotlight.phenotypes}}}</li>
-                <li>Genes: {{{spotlight.genes}}}</li>
-                <li>Models: {{spotlight.model_count}} 
-        <!--({{spotlight.model_with_phenotype_count}} with phenotypes) -->
-            </li>
-                <li>Publications: {{spotlight.publication_count}}</li>
-            </ul>
-          </div>
-          <p class="text-right">{{{spotlight.link}}}</p>
-        </div>
-        <!-- Getting started area or disease browser -->
-        <div class="col-xs-12 col-sm-12 col-md-6 col-lg-6">
-          <div class="panel panel-default">
-            <p>Some kind of getting started area? Or maybe disease browser</p>
-          </div>
-        </div>
+{{{includes.navbar}}}
+<div class="container-fluid" style="margin: 1em;">
+
+  <div class="text-center">
+    <h1>
+      Disease
+    </h1>
+  </div>
+
+  <!-- Open first row section. -->
+  <div class="row">
+
+    <!-- Blurb. -->
+    <div class="col-xs-12 col-sm-12 col-md-12 col-lg-3">
+      <div class="panel panel-default">
+	<p>
+	  Monarch <b>Disease</b> integrates information from a variety of
+	  sources. Each specific page includes identifiers,
+	  nomenclature, phenotypes, variations, curated and inferred
+	  animal models, pathways, aggregated literature, and
+	  external links to relevant resources.  Here we summarizes
+	  the phenotypically-curated disease data in the system.
+	</p>
       </div>
-      <!-- Close first row section. -->
-      <!-- Open second row section. -->
-      <div class="row">
-        <!-- Recent updates -->
-        <div class="col-xs-12 col-sm-12 col-md-6 col-lg-6">
-          <div class="panel panel-default">
-            <h4>Recent Updates</h4>
-            {{#blog_results}}
-            <ul>
-              <li>
-                <a href="{{link}}">{{title}}</a> <small>({{date}})</small>
-              </li>
-            </ul>
-            {{/blog_results}}
-            {{#blog_results.length}}
-            <p class="text-right"><a href="http://monarch-initiative.blogspot.com/search/label/test">More</a></p>
-            {{/blog_results.length}}
-            {{^blog_results}}
-            <p>No news is good news.</p>
-            {{/blog_results}}
-          </div>
-        </div>
-      </div>
-      <!-- Close second row section. -->
     </div>
-  </body>
+
+    <!-- Annotation Graph-->
+    <div class="col-xs-12 col-sm-12 col-md-12 col-lg-9">
+      <div class="panel panel-default">
+        <div class="disease-pheno-container"></div>
+	<p class="datagraph-caption">
+	  This <em>interactive graph</em> displays the number of
+	  disease-phenotype associations per major disease
+	  category. You can explore the distribution of disease
+	  subtypes by clicking on the wedge symbol, or visit the
+	  disease page itself by clicking on the disease name. You can
+	  navigate back to less-specific disease categories by
+	  clicking on the breadcrumbs listed in the top left-hand
+	  corner.
+	</p>
+      </div>
+    </div>
+    
+    <!-- Disease spotlight -->
+    <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
+      <div class="panel panel-default">
+        <h4>Disease Spotlight: {{{spotlight.label}}}</h4>
+        <div>
+          <p>{{spotlight.description}}</p>
+          <ul>
+            <li>Heritability: {{{spotlight.heritability}}}</li>
+            <li>Phenotypes: {{{spotlight.phenotypes}}}</li>
+            <li>Genes: {{{spotlight.genes}}}</li>
+            <li>Models: {{spotlight.model_count}} 
+              <!--({{spotlight.model_with_phenotype_count}} with phenotypes) -->
+            </li>
+            <li>Publications: {{spotlight.publication_count}}</li>
+          </ul>
+        </div>
+        <p class="text-right">{{{spotlight.link}}}</p>
+      </div>
+    </div>
+  </div>
+</body>
 </html>
