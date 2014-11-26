@@ -1426,7 +1426,6 @@ var url = document.URL;
 	    svgContainer.append("<svg id='svg_area'></svg>");		
 	    this.state.svg = d3.select("#svg_area");	 
 	    this._addGridTitle();	  
-	 //   this._configureFaqs();
 	},
 
 	_createSvgContainer : function() {
