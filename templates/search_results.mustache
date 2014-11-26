@@ -1,21 +1,3 @@
-<!DOCTYPE html>
-<html>
-<head>
-    <title>Search Results: {{term}}</title>
-    {{#scripts}}
-    <script type="text/javascript" src="{{url}}"></script>
-    {{/scripts}}
-    {{{includes.analytics}}}
-    {{#stylesheets}}
-    <link rel="stylesheet" type="text/css" href="{{url}}"/>
-    {{/stylesheets}}
-    <link rel="stylesheet" type="text/css" href="/css/monarch-specific.css"/>
-    <link rel="stylesheet" type="text/css" href="/css/search.css"/>
-    <link rel="icon" href="/image/favicon.ico" type="image/x-icon">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-    <meta charset="utf-8"/> 
-</head>
-<body>
     {{{includes.navbar}}}
     <div class="monarch-container">
         <div class="content">
@@ -28,13 +10,24 @@
                 </div>
             </div>
             <div id="complete-info">
-                <table class="{{css.table}}">
+                <h3>Exact Match</h3>
+                {{{description}}}
+                <table>
                     {{{resultsTable}}}
                 </table>
+                <h3>Site Search</h3>
+                <span id="text-search">Results for {{term}} using a general search over all text fields</span>
+                <div id="spinner">
+                        <h3>Loading...</h3>
+                        <div class="cube1"></div>
+                        <div class="cube2"></div>
+                </div>
+
             </div>
+
+
             </div> <!-- closes wrapperforfooter -->
             {{{includes.footer}}}
         </div>
     </div>
-</body>
-</html>
+

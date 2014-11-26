@@ -25,7 +25,7 @@ graphs:
         name: species_specific_phenotype_name
         type: rdfs:Literal
     graph: animal-gene-disease
-    mapVersion: 2014-04-30
+    mapVersion: 2014-10-06
     mappings: 
       - 
         object: phenotype_id

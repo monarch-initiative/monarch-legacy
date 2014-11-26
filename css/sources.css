@@ -1,0 +1,22 @@
+#description {
+    padding-bottom: 5px;
+}
+
+#complete-info {
+    padding: 0px 30px;
+}
+.category {
+    display: none;
+}
+.first {
+    display: block;
+}
+.source {
+    height: 50px;
+}
+.inlinesource {
+    display: inline-block;
+    margin-right: 5px;
+    margin-bottom: 5px;
+}
+

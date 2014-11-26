@@ -165,6 +165,7 @@ span.stars > *{
     cursor: pointer;
 }
 
+
 /* Analyze */
 
 #analyze-profile > ul#analyze_auto_list > li.list-group-item {
@@ -172,4 +173,117 @@ span.stars > *{
 }
 #analyze-profile > ul#analyze_auto_list > li#analyze-empty-item {
     background-color: white;
+}
+
+/* About */
+
+figure {
+    display:table;
+    padding: 15px;
+}
+
+.right {
+  float:right;
+}
+
+.left {
+  float:left;
+}
+.center {
+    margin-left:auto;
+    margin-right:auto;
+    vertical-align:middle;
+    text-align:center;
+}
+
+.bottomright {
+    float:right;
+    position:relative;
+    bottom:0;
+    right:0;
+}
+
+figcaption {
+    text-align:justify;
+    font-size:12px;
+    word-wrap:normal;
+    display:table-caption;
+    caption-side: bottom;
+    padding: 0 10px 5px;
+    line-height: 16px;
+}
+
+.collab-table {
+  table-layout: fixed;
+  width: 100%;
+}
+
+.collab-table td {
+  width: 125px;
+  vertical-align: middle;
+  text-align: center;
+}
+
+.collab-table img {
+    margin-left: auto;
+    margin-right: auto;
+    max-height: 125px;
+    max-width: 125px;
+    padding: 5px 20px"
+}
+
+.no-results{
+	font-size:16px;
+}
+
+/* Global Ajax */
+
+/* spinner code from http://tobiasahlin.com/spinkit */
+#spinner {
+	display:none;
+    width: 50%;
+    margin: 0 auto;
+}
+
+.cube1, .cube2 {
+  background-color: #333;
+  width: 10px;
+  height: 10px;
+  position: absolute;
+  top: 100;
+  left: 300;
+  
+  -webkit-animation: cubemove 1.8s infinite ease-in-out;
+  animation: cubemove 1.8s infinite ease-in-out;
+}
+
+.cube2 {
+  -webkit-animation-delay: -0.9s;
+  animation-delay: -0.9s;
+}
+
+@-webkit-keyframes cubemove {
+  25% { -webkit-transform: translateX(42px) rotate(-90deg) scale(0.5) }
+  50% { -webkit-transform: translateX(42px) translateY(42px) rotate(-180deg) }
+  75% { -webkit-transform: translateX(0px) translateY(42px) rotate(-270deg) scale(0.5) }
+  100% { -webkit-transform: rotate(-360deg) }
+}
+
+@keyframes cubemove {
+  25% { 
+    transform: translateX(42px) rotate(-90deg) scale(0.5);
+    -webkit-transform: translateX(42px) rotate(-90deg) scale(0.5);
+  } 50% { 
+    transform: translateX(42px) translateY(42px) rotate(-179deg);
+    -webkit-transform: translateX(42px) translateY(42px) rotate(-179deg);
+  } 50.1% { 
+    transform: translateX(42px) translateY(42px) rotate(-180deg);
+    -webkit-transform: translateX(42px) translateY(42px) rotate(-180deg);
+  } 75% { 
+    transform: translateX(0px) translateY(42px) rotate(-270deg) scale(0.5);
+    -webkit-transform: translateX(0px) translateY(42px) rotate(-270deg) scale(0.5);
+  } 100% { 
+    transform: rotate(-360deg);
+    -webkit-transform: rotate(-360deg);
+  }
 }

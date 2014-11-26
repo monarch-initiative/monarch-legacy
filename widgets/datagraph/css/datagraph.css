@@ -2,22 +2,11 @@
  * Data Graph
 **/
 
-.graph-container{
-    position: relative;
-    width: 826px;
-    float:left;
-    /*background-color: #E8E8E8;*/
-}
-
-#graph {
-    /*margin: 0px 0px 0px 700px;*/
-    padding: 10px 0px 0px 0px;
-}
 .title{
-    margin-left: 400px;
-    padding-bottom: 10px;
-    font-size : 20px;
-    font-weight: bold;
+    line-height:37px;
+    vertical-align: middle;
+    border-bottom: solid;
+    border-width: 1px;
 }
 .axis path,
 .axis line {
@@ -26,21 +15,33 @@
   shape-rendering: crispEdges;
 }
 .interaction{
-   margin-left: 380px;
-   margin-top: 10px;
-   position: relative;
+   margin-left: 10px;
+   margin-top: 6px;
    position: relative;
 }
 .interaction li{
     list-style-type: none;
 }
-form {
-   display: inline;
-   margin-left: 50px;
-   margin-top: 5px;
-   position:absolute;
+.breadcrumbs{
+   display:inline;
+   position: relative;
 }
-.bartip {
+.breadcrumbs text{
+   fill:white;
+   cursor:default;
+}
+.configure {
+   display: inline;
+   float:right;
+   margin-top: 3px;
+   margin-right: 5px;
+   position:relative;
+}
+.configure label{
+}
+.configure input{
+}
+.tip {
     position: absolute;
     font-size: 12px;
     color:white;
@@ -54,10 +55,7 @@ form {
     max-width: 150px;
     z-index: 10;
 }
-.superbtn{
-    background-color: #2C2B33;
-    color: white;
-}
-.superbtn hover{
-    background-color: #2C2B33;
+
+.datagraph-caption {
+    padding-top: 1em;
 }

@@ -3,6 +3,7 @@
 //  https://github.com/monarch-initiative/monarch-app/tree/master/conf/rdf-mapping
 load('lib/monarch/api.js');
 var Parser = require('ringo/args').Parser;
+var dates = require('ringo/utils/dates');
 var system = require('system');
 var fs = require('fs');
 var httpclient = require('ringo/httpclient');
@@ -23,13 +24,17 @@ function main(args) {
 
     parser.addOption("g","graph","ID", "E.g. ncbi-gene");
     parser.addOption("m","mappings","JSONFile", "E.g. conf/rdf-mapping/ncbi-gene-map.json");
-    parser.addOption("C","context","JSONFile", "E.g. conf/context.json");
+    parser.addOption("C","context","JSONFile", "E.g. conf/context.jsonld");
     parser.addOption("c","config","JSONFile", "E.g. conf/production.json");
     parser.addOption("d","targetDir","Directory", "E.g. target");
+    parser.addOption("s","skip","GraphNamePattern", "E.g. disease. Performs text match");
+    parser.addOption("l","limit","Number", "Default 1000");
     parser.addOption("k","apikey","ID", "NIF/SciCrunch API Key");
     parser.addOption('h', 'help', null, 'Display help');
 
     options = parser.parse(args);
+
+    var skipGraphsMatching = options.skip;
 
     if (options.help) {
 	print(parser.help());
@@ -42,6 +47,10 @@ function main(args) {
         engine.setConfiguration( JSON.parse(fs.read(options.config)) );
     }
 
+    if (options.limit) {
+        maxLimit = options.limit;
+    }
+
     targetDir = options.targetDir != null ? options.targetDir : "target";
 
 
@@ -49,7 +58,7 @@ function main(args) {
         ldcontext = JSON.parse(fs.read(options.config));
     }
     else {
-        ldcontext = JSON.parse(fs.read("conf/monarch-context.json"));
+        ldcontext = JSON.parse(fs.read("conf/monarch-context.jsonld"));
     }
     
     var gsets = [];
@@ -85,6 +94,12 @@ function main(args) {
         for (var k in graphs) {
             var graphconf = graphs[k];
             if (options.graph == null || graphconf.graph == options.graph) {
+                if (skipGraphsMatching) {
+                    if (graphconf.graph.match(skipGraphsMatching)) {
+                        console.log("Skipping: "+graphconf.graph);
+                        continue;
+                    }
+                }
                 generateNamedGraph(graphconf);
             }
         }
@@ -102,7 +117,13 @@ function generateNamedGraph(gconf) {
 
     var targetFileBaseName = targetDir + "/" + gconf.graph;
 
+    // write each NG to its own turtle file
+    var ioFile = targetFileBaseName + ".ttl";
     var mdFilePath = targetFileBaseName + "-meta.json";
+    var voidFilePath = targetFileBaseName + "-void.jsonld";
+    var isFileExists = fs.exists(ioFile);
+
+    console.log("Target: "+ioFile);
 
     var lastDumpMetadata;
     var isMapVersionIdentical = false;
@@ -116,28 +137,35 @@ function generateNamedGraph(gconf) {
                 isMapVersionIdentical = true;
             }
             else {
+                console.info("mapVersion is different");
                 if (lastDumpMetadata.mapVersion > gconf.mapVersion) {
                     console.warn("Kind of weird; lastDumpMetadata.mapVersion > gconf.mapVersion");
                 }
             }
         }
+        if (!gconf.mapVersion) {
+            console.log("Configuration doe not have a mapVersion tag - assuming constant");
+            isMapVersionIdentical = true;
+        }
         var numDays = gconf.lengthOfCycleInDays;
         if (numDays == null) {
             numDays = 7;
         }
-        var lastExportDate = lastDumpMetadata.exportDate;
-        if (lastExportDate == null) {
+        if (lastDumpMetadata.exportDate == null) {
             console.info("No last export date - assuming stale, will redump");
             isDataCurrent = false;
         }
         else {
+            var lastExportDate = new Date(lastDumpMetadata.exportDate);
             var now = new Date(Date.now());
-            var nextExportDate = Date.add(lastExportDate, numDays, 'day');
+            var nextExportDate = dates.add(lastExportDate, numDays, 'day');
             console.log("Next export scheduled on: "+nextExportDate);
-            if (Date.after(now, nextExportDate)) {
+            if (dates.after(now, nextExportDate)) {
+                console.log("data is stale");
                 isDataCurrent = false;
             }
             else {
+                console.log("data is current");
                 isDataCurrent = true;
             }
 
@@ -147,8 +175,8 @@ function generateNamedGraph(gconf) {
         console.log("Cannot find "+mdFilePath+ " -- assuming this is initial dump");
     }
 
-    if (isMapVersionIdentical && isDataCurrent) {
-        console.info("Mapping is unchanged AND data is current, so I will skip the dump");
+    if (isMapVersionIdentical && isDataCurrent && isFileExists) {
+        console.info("Mapping is unchanged AND data is current, so I will skip the dump for "+ioFile);
         return;
     }
 
@@ -156,8 +184,6 @@ function generateNamedGraph(gconf) {
     numTriplesDumped = 0;
     numAxiomsDumped = 0;
 
-    // write each NG to its own turtle file
-    var ioFile = targetFileBaseName + ".ttl";
     var stageFile = ioFile + ".tmp";
     var io = fs.open(stageFile, {write: true});
     console.log("Writing: "+ioFile);
@@ -168,12 +194,12 @@ function generateNamedGraph(gconf) {
     // OBJECTS
     if (gconf.objects != null) {
         gconf.objects.forEach(function(obj) {
-            var id = normalizeUriRef(obj.id);
+            var id = normalizeUriRef(obj.id, gconf);
             for (var k in obj) {
                 if (k == 'id') {
                 }
                 else {
-                    emit(io, id, normalizeUriRef(k), normalizeUriRef(obj[k]));
+                    emit(io, id, normalizeUriRef(k), normalizeUriRef(obj[k], gconf));
                 }
             }
         });
@@ -197,6 +223,7 @@ function generateNamedGraph(gconf) {
     var seenMap = {};
     var nDupes = 0;
     var numSourceRows;
+    var numNullWarnings = 0;
 
     while (!done) {
 
@@ -205,9 +232,19 @@ function generateNamedGraph(gconf) {
             qopts[apikey] = options.apikey;
         }
         // Federation query
-        var resultObj = engine.fetchDataFromResource(null, gconf.view, null, queryColNames, null, gconf.filter, null, maxLimit, null, qopts);
+        var resultObj;
+        try {
+            resultObj = engine.fetchDataFromResource(null, gconf.view, null, queryColNames, null, gconf.filter, null, maxLimit, null, qopts);
+        }
+        catch (err) {
+            console.error("Failed on call to "+gconf.view);
+            var stm = require("ringo/logging").getScriptStack(err);
+            console.error(stm);
+            system.exit(1);
+        }
+
         numSourceRows = resultObj.resultCount;
-        console.info(offset + " / "+ numSourceRows + " rows");
+        console.info(offset + " / "+ numSourceRows + " row from "+gconf.graph);
 
 
         offset += maxLimit;
@@ -221,6 +258,7 @@ function generateNamedGraph(gconf) {
         var results = resultObj.results;
         for (var k in results) {
             var r = results[k];
+            //console.log(JSON.stringify(r));
 
             derivedColNames.forEach( function(c) {
                 var dc = cmap[c].derivedFrom;
@@ -258,8 +296,20 @@ function generateNamedGraph(gconf) {
                 var sv = mapColumn(mapping.subject, r, cmap);
                 var pv = mapColumn(mapping.predicate, r, cmap);
                 var ov = mapColumn(mapping.object, r, cmap);
-                
-                emit(io, sv, pv, ov, mapping);
+
+                if (sv == null || pv == null || ov == null) {
+                    numNullWarnings++;
+                    if (numNullWarnings < 10) {
+                        console.warn(" Triple [ "+sv+" "+pv+" "+ov+" ] has null value in "+r.v_uuid);
+                        if (numNullWarnings == 9) {
+                            console.warn("Will not warn about this again");
+                        }
+
+                    }
+                }
+                else {
+                    emit(io, sv, pv, ov, mapping);
+                }
                 
             }
         }
@@ -277,8 +327,34 @@ function generateNamedGraph(gconf) {
             numAxiomsDumped : numAxiomsDumped,
             exportDate : new Date(Date.now())
         };
-
     fs.write(mdFilePath, JSON.stringify(mdObj));
+
+    // VOID: todo
+    var voidDataset = gconf.metadata;
+    if (voidDataset == null) {
+        voidDataset = {};
+    };
+    if (voidDataset.type == null) {
+        voidDataset.type = "void:Dataset";
+    };
+    if (voidDataset.title == null) {
+        voidDataset.title = gconf.graph;
+    };
+    if (voidDataset.title == null) {
+        voidDataset.title = gconf.graph;
+    };
+    if (voidDataset.description == null) {
+        voidDataset.description = "Automatically derived triples for "+gconf.graph;
+    };
+    var exportDate = new Date(Date.now());
+    voidDataset.id = "http://purl.obolibrary.org/obo/upheno/data/"+gconf.graph;
+    voidDataset.type = "void:Dataset";
+    voidDataset["dcterms:created"] = exportDate;
+    voidDataset["prov:wasDerivedFrom"] = gconf.view; 
+    voidDataset["void:triples"] = numTriplesDumped;
+    voidDataset["@context"] = ldcontext['@context'];
+
+    fs.write(voidFilePath, JSON.stringify(voidDataset, null, ' '));
 }
 
 // Arguments:
@@ -294,24 +370,30 @@ function mapColumn(ix, row, cmap, gconf) {
     }
     else {
         // ix is a fixed RDF resource
-        return normalizeUriRef(ix);
+        return normalizeUriRef(ix, gconf);
     }
 }
 
 // Expand CURIE or shortform ID to IRI.
 // E.g. GO:1234 --> http://purl.obolibrary.org/obo/GO_1234
 //
-function normalizeUriRef(iri) {
+function normalizeUriRef(iri, gconf) {
     // remove whitespace
     if (iri.match(/\s/) != null) {
         console.warn("Whitespace in "+iri);
         iri = iri.replace(/\s/g, "");
     }
 
+    if (iri == "") {
+        //console.warn("Empty IRI");
+        //system.exit(1);
+        return null;
+    }
+
     if (iri.indexOf("http") == 0) {
         return "<"+iri+">";
     }
-
+    
     var pos = iri.indexOf(":");
     var prefix;
     if (pos == -1) {
@@ -330,13 +412,26 @@ function normalizeUriRef(iri) {
     }
     else {
         prefix = iri.slice(0,pos);
+        var frag = iri.slice(pos+1);
+        if (frag.indexOf(":") > -1) {
+            console.log("Fragment must not contain ':'s: " + iri);
+            return null;
+        }
 
         // validate prefix
         if (prefixMap[prefix] == null) {
-            console.error("Not a valid prefix: "+prefix);
+            console.error("Not a valid prefix: "+prefix+" in IRI: "+iri+" graph:"+ (gconf == null ? "-" :  gconf.graph));
+            if (prefixMap[prefix.toUpperCase()] != null) {
+                console.log("Replacing "+prefix+" with upper case form");
+                return iri.replace(prefix, prefix.toUpperCase());
+            }
             system.exit(1);
         }
 
+    }
+    if (iri.indexOf("#") > -1) {
+        console.error("Hashes not allowed un CURIES; removing fragment: "+iri);
+        iri = iri.replace(/#.*/,"");
     }
 
     return iri;
@@ -369,10 +464,9 @@ function mapColumnValue(ix, v, cmap, gconf) {
         return null;
     }
 
-
     // if column metadata includes a prefix, then prepend this
     if (cobj.prefix != null) {
-        return normalizeUriRef(cobj.prefix + v);
+        return normalizeUriRef(cobj.prefix + v, gconf);
     }
     
     // Remove this code when this is fixed: https://support.crbs.ucsd.edu/browse/NIF-10646
@@ -390,14 +484,19 @@ function mapColumnValue(ix, v, cmap, gconf) {
             return null;
         }
         if (vl.length > 1) {
+            vl = vl.map(function(e) { return e.replace(/^\s+/g,"");});
             return vl.map(function(e) { return mapColumnValue(ix, e, cmap, gconf) });
         }
         // carry on, just use v, as it is a singleton list
     }
+    //console.log("TYPE of '"+v+"' is "+type+"."+JSON.stringify(cobj));
     if (type == 'rdfs:Literal') {
+        if (v == null || v == "") {
+            return null;
+        }
         return engine.quote(v);
     }
-    return normalizeUriRef(v);
+    return normalizeUriRef(v, gconf);
 }
 
 
@@ -422,7 +521,15 @@ function emit(io, sv, pv, ov, mapping) {
         //console.log("Emitting multiple triples: "+ov.length);
         ov.forEach(function(x) { emit(io, sv, pv, x, mapping) });
     }
+    else if (sv.forEach != null) {
+        // special case: Subject is a list
+        //console.log("Emitting multiple triples: "+ov.length);
+        sv.forEach(function(x) { emit(io, x, pv, ov, mapping) });
+    }
     else {
+        if (ov == "") {
+            return;
+        }
         // special case for OWL constructs
         if (mapping != null && mapping.isExistential && mapping.isExistential != "0") {
             io.print(sv + " rdfs:subClassOf [a owl:Restriction ; owl:onProperty " + pv + " ; owl:someValuesFrom " + ov + " ] .");
@@ -439,8 +546,9 @@ function emit(io, sv, pv, ov, mapping) {
 
 // TODO: we can reduce the size of the triple dump by making use of these
 function emitPrefixes(io, extraPrefixes) {
-    for (var k in ldcontext) {
-        var pfx = ldcontext[k];
+    var ldmap = ldcontext["@context"];
+    for (var k in ldmap) {
+        var pfx = ldmap[k];
         if (k.indexOf('@') == 0) {
             continue;
         }
@@ -458,7 +566,7 @@ function emitPrefixes(io, extraPrefixes) {
         }
     }
     if (prefixMap[""] == null) {
-        prefixMap[""] = ldcontext['@base'];
+        prefixMap[""] = ldmap['@base'];
     }
     for (var k in prefixMap) {
         var pfx = prefixMap[k];

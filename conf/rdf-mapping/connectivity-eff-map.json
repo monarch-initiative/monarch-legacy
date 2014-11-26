@@ -1,36 +1,36 @@
 {
-    "notes" : "currently just stores interaction as a graph. In future we will need to store the interaction as an entity",
-    "isDisabled" : false,
-    "graphs": [
-        {
-            "graph" : "brain-connectivity_eff",
-            "view" : "nlx_154697-8",
-            "mapVersion" : "2014-05-16",
-            "objects" : [
-                {
-                    "id" : "http://uri.neuinfo.org/connectivity#efferent",
-                    "rdf:type" : "owl:ObjectProperty"
-                }
-            ],
-            "filter" : {
-                "con_to_expr" : "is_a"
+   "graphs" : [
+      {
+         "objects" : [
+            {
+               "rdf:type" : "owl:ObjectProperty",
+               "id" : "http://uri.neuinfo.org/connectivity#efferent"
+            }
+         ],
+         "view" : "nlx_154697-8",
+         "mappings" : [
+            {
+               "object" : "con_to_id",
+               "predicate" : "http://uri.neuinfo.org/connectivity#efferent",
+               "subject" : "v_uuid"
+            }
+         ],
+         "filter" : {
+            "con_to_expr" : "is_a"
+         },
+         "columns" : [
+            {
+               "name" : "v_uuid"
             },
-
-            "columns" : [
-                {
-                    "name" : "v_uuid"
-                },
-                {
-                    "name" : "con_to_id",
-                    "prefix" : "http://uri.neuinfo.org/nif/nifstd/"
-                }
-            ],
-            "mappings" : [
-
-                {"subject" : "v_uuid",
-                 "predicate" : "http://uri.neuinfo.org/connectivity#efferent",
-                 "object" : "con_to_id"}
-            ]
-        }
-   ]
+            {
+               "name" : "con_to_id",
+               "prefix" : "http://uri.neuinfo.org/nif/nifstd/"
+            }
+         ],
+         "mapVersion" : "2014-05-16",
+         "graph" : "brain-connectivity_eff"
+      }
+   ],
+   "notes" : "currently just stores interaction as a graph. In future we will need to store the interaction as an entity",
+   "isDisabled" : ""
 }

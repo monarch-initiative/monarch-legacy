@@ -1,96 +1,156 @@
 {
-    "status" : "alpha",
-    "forceConfiguration" : 
-    {
-        "federation_services_url" : "http://beta.neuinfo.org/services/v1/federation/"
-    },
-    "graphs": [
-        {
-            "graph" : "clinvar",
-            "view" : "nlx_151671-3",
-            "mapVersion" : "2014-04-27",
-            "columns" : [
-                {
-                    "name" : "v_uuid"
-                },
-                {
-                    "name" : "clinvar_allele_id",
-                    "prefix" : "http://monarchinitiative.org/variant/"
-                },
-                {
-                    "name" : "phenotype_id"
-                },
-                {
-                    "name" : "assembly",
-                    "type" : "rdfs:Literal"
-                },
-                {
-                    "name" : "chromosome",
-                    "type" : "rdfs:Literal"
-                },
-                {
-                    "name" : "starting_location"
-                },
-                {
-                    "name" : "ending_location"
-                },
-                {
-                    "name" : "location",
-                    "derivedFrom" : "clinvar_allele_id",
-                    "prefix" : "http://monarchinitiative.org/variant/location/"
-                },
-                {
-                    "name" : "clinical_significance",
-                    "type" : "rdfs:Literal"
-                },
-                {
-                    "name" : "sequence_alteration_xrefs",
-                    "list_delimiter" : ", "
-                }
-            ],
-            "mappings" : [
-
-                {"subject" : "clinvar_allele_id",
-                 "predicate" : "RO:0002200",
-                 "object" : "phenotype_id"
-                },
-                {"subject" : "clinvar_allele_id",
-                 "predicate" : "faldo:location",
-                 "object" : "location"
-                },
-                {"subject" : "location",
-                 "predicate" : "http://monarchinitiative.org/vocab/begin",
-                 "object" : "starting_location"
-                },
-                {"subject" : "location",
-                 "predicate" : "http://monarchinitiative.org/vocab/end",
-                 "object" : "ending_location"
-                },
-                {"subject" : "location",
-                 "predicate" : "http://monarchinitiative.org/vocab/chromosome",
-                 "object" : "chromosome"
-                },
-                {"subject" : "location",
-                 "predicate" : "http://monarchinitiative.org/vocab/assembly",
-                 "object" : "assembly"
-                },
-                {"subject" : "v_uuid",
-                 "predicate" : "rdf:type",
-                 "object" : "SIO:association"
-                },
-                {"subject" : "v_uuid",
-                 "predicate" : "hasSubject",
-                 "object" : "clinvar_allele_id"
-                },
-                {"subject" : "v_uuid",
-                 "predicate" : "hasObject",
-                 "object" : "phenotype_id"
-                },
-                {"subject" : "v_uuid",
-                 "predicate" : "http://monarchinitiative.org/vocab/clinicalSignificance",
-                 "object" : "clinical_significance"
-                }
-            ]
-        }
-   ]
+   "mappings" : [
+      {
+         "object" : "variant_locus_label",
+         "predicate" : "rdfs:label",
+         "subject" : "variant_locus_id"
+      },
+      {
+         "object" : "sequence_alteration_id",
+         "predicate" : "GENO:0000531",
+         "subject" : "variant_locus_id"
+      },
+      {
+         "object" : "gene_ids",
+         "predicate" : "GENO:0000440",
+         "subject" : "variant_locus_id"
+      },
+      {
+         "object" : "phenotype_id",
+         "predicate" : "RO:0002200",
+         "subject" : "variant_locus_id"
+      },
+      {
+         "object" : "gene_ids",
+         "predicate" : "GENO:0000224",
+         "subject" : "sequence_alteration_id"
+      },
+      {
+         "object" : "sequence_alteration_label",
+         "predicate" : "rdfs:label",
+         "subject" : "sequence_alteration_id"
+      },
+      {
+         "object" : "sequence_start",
+         "predicate" : "http://monarchinitiative.org/vocab/begin",
+         "subject" : "location"
+      },
+      {
+         "object" : "sequence_stop",
+         "predicate" : "http://monarchinitiative.org/vocab/end",
+         "subject" : "location"
+      },
+      {
+         "object" : "chromosome",
+         "predicate" : "http://monarchinitiative.org/vocab/chromosome",
+         "subject" : "location"
+      },
+      {
+         "object" : "assembly",
+         "predicate" : "http://monarchinitiative.org/vocab/assembly",
+         "subject" : "location"
+      },
+      {
+         "object" : "cytogenetic_locations",
+         "predicate" : "http://monarchinitiative.org/vocab/cytogenic_location",
+         "subject" : "location"
+      },
+      {
+         "object" : "Annotation",
+         "predicate" : "rdf:type",
+         "subject" : "v_uuid"
+      },
+      {
+         "object" : "sequence_alteration_id",
+         "predicate" : "hasSubject",
+         "subject" : "v_uuid"
+      },
+      {
+         "object" : "phenotype_id",
+         "predicate" : "hasObject",
+         "subject" : "v_uuid"
+      },
+      {
+         "object" : "clinical_significance",
+         "predicate" : "http://monarchinitiative.org/vocab/clinicalSignificance",
+         "subject" : "v_uuid"
+      },
+      {
+         "object" : "submitters",
+         "predicate" : "dc:source",
+         "subject" : "v_uuid"
+      }
+   ],
+   "status" : "alpha",
+   "view" : "nlx_151671-1",
+   "columns" : [
+      {
+         "name" : "v_uuid"
+      },
+      {
+         "name" : "variant_locus_id",
+         "type" : "variant_locus"
+      },
+      {
+         "name" : "variant_locus_label",
+         "type" : "rdfs:Literal"
+      },
+      {
+         "name" : "sequence_alteration_id",
+         "type" : "SO:0001059"
+      },
+      {
+         "name" : "sequence_alteration_label",
+         "type" : "rdfs:Literal"
+      },
+      {
+         "name" : "phenotype_id"
+      },
+      {
+         "name" : "assembly",
+         "type" : "rdfs:Literal"
+      },
+      {
+         "name" : "chromosome",
+         "type" : "rdfs:Literal"
+      },
+      {
+         "name" : "sequence_start"
+      },
+      {
+         "name" : "sequence_stop"
+      },
+      {
+         "derivedFrom" : "sequence_alteration_id",
+         "name" : "genomic_location",
+         "prefix" : "http://monarchinitiative.org/variant/locationOf/"
+      },
+      {
+         "name" : "clinical_significance",
+         "type" : "rdfs:Literal"
+      },
+      {
+         "name" : "sequence_alteration_xrefs",
+         "list_delimiter" : ","
+      },
+      {
+         "name" : "gene_ids",
+         "list_delimiter" : ","
+      },
+      {
+         "name" : "publication_ids",
+         "list_delimiter" : ","
+      },
+      {
+         "name" : "cytogenic_locations",
+         "list_delimiter" : ","
+      },
+      {
+         "name" : "submitters",
+         "type" : "rdfs:Literal",
+         "list_delimiter" : ","
+      }
+   ],
+   "mapVersion" : "2014-10-03",
+   "graph" : "clinvar"
 }

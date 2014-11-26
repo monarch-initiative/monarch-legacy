@@ -125,6 +125,30 @@
             }
         },
 
+         // NIF FEDERATION SEARCH TERM EXPANSION
+        {
+            component : "federation-search",
+            priority : 1,
+            url : "http://nif-services.neuinfo.org/servicesv1/v1/federation/search.json?exportType=data&q=birnlex_721",
+            desc : "Query NIF to confirm terms available from expansion",
+            maxTimeMilliseconds : 12000,
+            expects : {
+                format : "json",
+                min_results : 1,
+                must_contain : {
+                    query: "Hippocampus"
+                },   
+                raw_contains: 
+                   ["ammon\'s horn",
+                    "ammon gyrus",
+                    "hippocampus major",
+                    "ammon horn",
+                    "hippocampus proper",
+                    "cornu ammonis",
+                    "hippocampus proprius"]
+            }
+        },
+
         // ORPHANET
         {
             component : "federation",
@@ -226,7 +250,7 @@
             notes : "Currently just checks for string matches in returned HTML",
             expects : {
                 format : "html",
-                raw_contains : "Enabling navigation",
+                raw_contains : "Disease",
             }
         },
 
@@ -240,7 +264,7 @@
                 format : "html",
                 raw_contains : 
                 [
-                    "DOID_14330",
+                    "14330",
                     "Parkinsonism", // HP term associated
                     "PINK1", // 
                     "Parkinson Disease 14", // OMIM subtype
@@ -268,29 +292,36 @@
         // --json--
         // monarch API calls can return deeply nested/structured objects, these are
         // checked recursively
+        // TODO - check for taxon
         {
             component : "monarch",
             priority : 1,
-            url : "http://tartini.crbs.ucsd.edu/phenotype/NCBIGene:388552.json",
+            url : "http://tartini.crbs.ucsd.edu/gene/NCBIGene:388552.json",
             desc : "JSON for a gene",
             expects : {
                 format : "json",
-                must_contain : [
+                must_contain : 
                     {
-                        tax_xref: {
-                            "id": "NCBITaxon:9606"
+                        "label": "BLOC1S3",
+                        "type": "gene",
+                        "taxon": {
+                            "label": "Homo sapiens"
                         }
+
+                        //object: {
+                        //"id": "SO_0001217"
+                        //}
                     }
-                ]
+                
             }
         },
-            
+    
 
         // --json--
         // monarch API calls can return deeply nested/structured objects, these are
         // checked recursively
         {
-            component : "monarch",
+            component : "monarch-ignore",
             priority : 1,
             url : "http://tartini.crbs.ucsd.edu/phenotype/HP:0001337.json",
             desc : "JSON for A HPO phenotype disease page, Tremor (and subtypes)",
@@ -385,7 +416,7 @@
             notes : "Currently just checks for string matches in returned HTML",
             expects : {
                 format : "html",
-                raw_contains : "Monarch Analysis: phenotypes",
+                raw_contains : "Monarch Phenotype Profile Analysis",
             }
         },
 

@@ -1,27 +1,3 @@
-<!DOCTYPE html>
-<html>
-<head>
-    <title>Monarch Gene: {{label}} ({{id}})</title>
-    {{#scripts}}
-    <script type="text/javascript" src="{{url}}"></script>
-    {{/scripts}}
-    <script type="text/javascript" src="/widgets/modeltype/js/modeltype.js"></script>
-   <script type="text/javascript" src="/js/genepage.js"></script>    <!-- TODO -->
-    <script src="/js/tabs.js"></script>
-    <script src="/js/stupidtable.min.js"></script>
-    <script src="/js/tables.js"></script>
-    {{{includes.analytics}}}
-    {{#stylesheets}}
-    <link rel="stylesheet" type="text/css" href="{{url}}"/>
-    {{/stylesheets}}
-    <link rel="stylesheet" type="text/css" href="/css/monarch-main.css"/>
-    <link rel="stylesheet" type="text/css" href="/css/monarch-specific.css"/>
-    <link rel="stylesheet" type="text/css" href="/css/imagehover.css"/>
-    <link rel="icon" href="/image/favicon.ico" type="image/x-icon">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-    <meta charset="utf-8"/>
-</head>
-<body>
     {{{includes.navbar}}}
     <div class="monarch-container">
         <div class="content">
@@ -35,8 +11,11 @@
                             href="mailto:info@monarchinitiative.org">Your feedback welcome!</a>
                     <p>
                     {{description}}<br/>
-					Organism: {{species}} [{{{taxon_xref}}}]<br/>
-					Source: {{{primary_xref}}}<br/>
+                    Organism: {{{taxon_xref}}}<br/>
+                    Source: {{{primary_xref}}}<br/>
+                    {{#hasSynonym}}
+                    Synonyms: {{{synonyms}}}<br/>
+                    {{/hasSynonym}}
                     {{comments}}
                     </p>
                 </div>
@@ -54,6 +33,17 @@
                             <div class="tab greyed-out">Phenotypes (0)</div>
                         {{/hasPhenotypes}}
                     </div>
+
+<div class="tabcontainer">
+                        <div class="tabhover">View phenotypically  similar diseases and genes in a grid</div>
+ 			{{#hasPhenotypes}}
+                           <a href="#compare"><div class="tab contenttab">Compare</div></a>
+				{{/hasPhenotypes}}
+                        {{^hasPhenotypes}}
+                            <div class="tab greyed-out">Compare</div>
+                        {{/hasPhenotypes}}
+                    </div>
+
                     <div class="tabcontainer">
                         <div class="tabhover">View diseases related to this gene</div>
                         {{#hasDiseases}}
@@ -206,6 +196,14 @@
                     </table>
                 </div>
                 {{/hasGenotypes}}
+
+                {{#hasPhenotypes}}
+                <div id="compare" class="category">
+                    <div id="phen_vis"></div>
+                </div>
+                {{/hasPhenotypes}}
+
+
                 {{#hasAlleles}}
                 <div id="alleles" class="category">
                     <table class="{{css.table}}">
@@ -246,5 +244,3 @@
             {{{includes.footer}}}
         </div>
     </div>
-</body>
-</html>

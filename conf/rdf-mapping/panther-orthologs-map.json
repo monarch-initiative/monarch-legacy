@@ -1,5 +1,4 @@
 {
-   "status" : "alpha",
    "mappings" : [
       {
          "object" : "geneb",
@@ -20,6 +19,7 @@
    "filter" : {
       "tax_id_a" : "NCBITaxon:9606"
    },
+   "status" : "alpha",
    "objects" : [
       {
          "rdf:type" : "owl:ObjectProperty",
@@ -30,13 +30,11 @@
    "columns" : [
       {
          "name" : "tax_id_a",
-         "type" : "owl:Class",
-         "prefix" : "http://purl.obolibrary.org/obo/"
+         "type" : "owl:Class"
       },
       {
          "name" : "tax_id_b",
-         "type" : "owl:Class",
-         "prefix" : "http://purl.obolibrary.org/obo/"
+         "type" : "owl:Class"
       },
       {
          "name" : "genea",
@@ -51,8 +49,21 @@
          "type" : "owl:ObjectProperty"
       }
    ],
+   "metadata" : {
+      "keyword" : [
+         "orthology",
+         "sequence",
+         "phylogeny"
+      ],
+      "source" : "http://pantherdb.org",
+      "title" : "Monarch ingest of Panther Orthologs (human subset)",
+      "type" : "void:Dataset",
+      "publisher" : "http://monarchinitiative.org",
+      "description" : "Monarch ingest of Panther Orthologs"
+   },
    "prefixes" : {
       "O" : "http://purl.obolibrary.org/obo/RO_HOM0000037",
+      "EnsemblGenome" : "http://identifiers.org/ensembl:",
       "X" : "http://purl.obolibrary.org/obo/RO_HOM0000018",
       "LDO" : "http://purl.obolibrary.org/obo/RO_HOM0000019",
       "P" : "http://purl.obolibrary.org/obo/RO_HOM0000011",

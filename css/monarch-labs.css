@@ -11,20 +11,65 @@
 }
 
 #main-container {
-    width: 1586px;
+    width: 1000px;
     margin: 0px auto;
 }
 
-/* Graphic */
-#graphic-test {
+.graph{
+    padding-top:20px;
+}
+
+.graph-container{
     position: relative;
-    width: 760px;
-    height:750px;
-    padding-top: 50px;
     float:left;
-    background-color: #FCFCFE;
-   /*margin: 0px auto;*/
+    border-style:solid;
+    border-width:1px;
 }
-#graphic-test > img {
-    width: 100%;
+.disease-gene-container{
+    position: relative;
+    width: 467px;
+    float:left;
+    border-style:solid;
+    border-top:none;
+    border-width:1px;
 }
+.disease-pheno-container{
+    position: relative;
+    width: 467px;
+    float:left;
+    border-style:solid;
+    border-top:none;
+    border-width:1px;
+}
+.pheno-geno-container{
+    position: relative;
+    float:left;
+    border-style:solid;
+    border-top:none;
+    border-width:1px;
+}
+.pheno-gene-container{
+    position: relative;
+    float:left;
+    border-style:solid;
+    border-top:none;
+    border-width:1px;
+}
+
+/*
+ * Fighting with monarch-common.css: it has a global setting for nav
+ * elements, which affects tabs. This is to add the padding back to them.
+ */
+.conflict-tab-padding > li > a {
+    padding: 7px;
+}
+
+/*
+ * This help to prevent the horizontal scrolling on the new home page.
+ * Like a fight with something in monarch-common.css or some misuse of
+ * structure.
+ */
+/* DOES NOT WORK!? */
+/* .conflict-top-container-margin { */
+/*     margin: 1.001em; */
+/* } */

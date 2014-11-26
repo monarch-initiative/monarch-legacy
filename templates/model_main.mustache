@@ -1,60 +1,78 @@
-<!DOCTYPE html>
-<html>
-<head>
-    <title>Monarch Models</title>
-    {{#scripts}}
-    <script type="text/javascript" src="{{url}}"></script>
-    {{/scripts}}
-    {{{includes.analytics}}}
-    {{#stylesheets}}
-    <link rel="stylesheet" type="text/css" href="{{url}}"/>
-    {{/stylesheets}}
-    <link rel="stylesheet" type="text/css" href="/css/monarch-main.css"/>
-    <link rel="icon" href="/image/favicon.ico" type="image/x-icon">
-    <meta charset="utf-8"/>
-</head>
-<body>
-    {{{includes.navbar}}}
-    <div class="monarch-container">
-        <div class="content">
-            <div class="wrapperforfooter">
-            <div class="jumbotron monarch-model-light">
-                <img id="monarch-logo" class="downloadline" src="/image/logo.png"/>
-                <h1 class="downloadline">Model spotlight: Blue Meanie Mouse</h1>
-                <a href="/model/MGI:5313509" class="downloadline downloadline-left btn btn-large btn-default btn-monarch-main monarch-model-dark">Find out more</a>
-                <a class="downloadline btn btn-large btn-default btn-monarch-main monarch-feedback-dark"
-                        href="mailto:info@monarchinitiative.org">Your feedback welcome!</a>
-                <p>
-                  A mutation in Cc2d2a (coiled-coil and C2 domain
-                  containing 2A) was identified in an ENU screen for
-                  recessive cardiovascular development phenotypes in
-                  Dr. Cecilia Lo's laboratory, NHLBI Cardiovascular
-                  Development Consortium (CvDC). Homozygotes
-                  demonstrate cardiovascular defects and congenital
-                  heart defects ( such as transposition of the great
-                  arteries, double outlet right ventricle, and
-                  tricuspid atresia; Preaxial digit
-                  duplication/polydactyly; duplex and cystic kidneys;
-                  cleft palate; and eye defects.
-                </p>
-            </div>
-            <div class="col-lg-9">
-                <h1>Highlighted models</h1>
-                <ul>
-                    <li><a href="/genotype/MGI:2668213">Mouse: Tgfb2/Tgfb2 [involves: 129P2/OlaHsd * Black Swiss]</a></li>
-                    <li><a href="/genotype/MGI:3047228">Mouse: Vegfa/Vegfa [involves: 129S1/Sv * 129X1/SvJ]</a></li>
-                </ul>
-            </div>
-            <div class="col-lg-9">
-                <h1>Model set highlights of Charcot-marie-tooth Disease</h1>
-                <ul>
-                    <li><a href="/genotype/MGI:3043397">Mouse: Ndrg1/Ndrg1 [involves: 129S1/Sv * 129X1/SvJ * C57BL/6]</a></li>
-                    <li><a href="/genotype/MGI:5515892">Mouse: Pmp22/Pmp22<+> [C57BL/6J-Pmp22/GrsrJ]</a></li>
-                </ul>
-            </div>
-            </div> <!-- closes wrapperforfooter -->
-            {{{includes.footer}}}
-        </div>
+{{{includes.navbar}}}
+<div class="container-fluid" style="margin: 1em;">
+
+  <div class="text-center">
+    <h1>
+      Model
+    </h1>
+  </div>
+
+  <!-- Open first row section. -->
+  <div class="row">
+
+    <!-- Blurb. -->
+    <div class="col-xs-12 col-sm-12 col-md-12 col-lg-3">
+      <div class="panel panel-default">
+	<p>
+	  Monarch <b>Model</b> integrates information from a variety
+	  of sources. Each specific page includes the abnormal genes
+	  and variations, phenotypes, and aggregated literature, with
+	  external links to relevant resources. Here we summarizes
+	  the curated genotype-phenotype data in the system.
+	</p>
+      </div>
     </div>
+
+    <!-- Annotation Graph-->
+    <div class="col-xs-12 col-sm-12 col-md-12 col-lg-9">
+      <div class="panel panel-default">
+        <div class="pheno-geno-container"></div>
+	<p class="datagraph-caption">
+	  This <em>interactive graph</em> displays the number of
+	  phenotype associations for mouse (genotypes) per major
+	  phenotypic category. You can explore the distribution of
+	  more specific phenotypes by clicking on the wedge symbol, or
+	  visit the phenotype page itself by clicking on the phenotype
+	  name. You can navigate back to less-specific phenotypes by
+	  clicking on the breadcrumbs listed in the top left-hand
+	  corner.
+	</p>
+      </div>
+    </div>
+
+    <!-- Spotlight -->
+    <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
+      <div class="panel panel-default">
+        <h4>Model Spotlight: {{{spotlight.label}}}</h4>
+        <div>
+          <p>{{spotlight.description}}</p>
+          <ul>
+            <li>Taxon: {{spotlight.taxon}} </li>
+            <li>Genes: {{{spotlight.genes}}} </li>
+            <li>Phenotypes: {{{spotlight.phenotypes}}}</li>
+            <li>Publications: {{spotlight.publication_count}}</li>
+          </ul>
+	</div>
+        <p class="text-right">{{{spotlight.link}}}</p>
+      </div>
+    </div>
+
+  </div>
+</div>
+
+<!-- Footer. -->
+<hr>
+<footer>
+  <!-- <div id="footer"> -->
+  <div style="padding: 10px 40px 10px; text-align: center; font-weight: 200; font-size: 12px;">
+    The Monarch Initiative is a collaboration between Oregon Health & Science University,
+    University of California, San Diego, Lawrence Berkeley National Laboratory, the University of
+    Pittsburgh, Sanger Institute, and Charité - Universitätsmedizin Berlin
+    and is supported generously by a NIH Office of the Director Grant #5R24OD011883.
+    <br />
+    Except where otherwise noted, this work is licensed under a Creative Commons <a href="https://creativecommons.org/licenses/by/3.0/us/">Attribution 3.0</a> License.
+  </div>
+</footer>
+
 </body>
 </html>

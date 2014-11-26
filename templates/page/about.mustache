@@ -2,21 +2,32 @@
 <html>
 <head>
     <title>About Monarch</title>
-    {{#scripts}}
-    <script type="text/javascript" src="{{url}}"></script>
-    {{/scripts}}
+    
     {{{includes.analytics}}}
-    {{#stylesheets}}
-    <link rel="stylesheet" type="text/css" href="{{url}}"/>
-    {{/stylesheets}}
-    <link rel="stylesheet" type="text/css" href="/css/tour.css"/>
+    
+    <!-- CSS. -->
+    {{#pup_tent_css_libraries}}
+    <link rel="stylesheet" type="text/css" href="{{{.}}}">
+	<link rel="stylesheet" type="text/css" href="/monarch-specific.css"/>
+    {{/pup_tent_css_libraries}}
+    
+    <!-- JS variables. -->
+    {{#pup_tent_js_variables}}
+    <script type="text/javascript">var {{name}} = {{{value}}};</script>
+    {{/pup_tent_js_variables}}
+    
+    <!-- JS libraries. -->
+    {{#pup_tent_js_libraries}}
+    <script type="text/javascript" src="{{{.}}}"></script>
+    {{/pup_tent_js_libraries}}
+    
     <link rel="icon" href="/image/favicon.ico" type="image/x-icon">
     <meta charset="utf-8"/> 
 </head>
 <body>
     <div class="monarch-container">
         {{{includes.navbar}}}
-        <div class="content">
+        <div class="content" id="about">
             <div class="wrapperforfooter">
             <div class="title">About Monarch Initiative</div>
             <div class="section">
@@ -130,10 +141,9 @@
                         <a href="/page/team">here</a>.
                     </div>
                 </div>
-            </div>
-            <div class="clear"></div>
+
+-->
             </div> <!-- closes wrapperforfooter -->
-            {{{includes.footer}}}
         </div>
     </div>
 </body>

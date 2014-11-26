@@ -1,17 +1,3 @@
-<!DOCTYPE html>
-<html>
-<head>
-    <title>Monarch Diseases and Phenotypes</title>
-    {{#scripts}}
-    <script type="text/javascript" src="{{url}}"></script>
-    {{/scripts}}
-    {{#stylesheets}}
-    <link rel="stylesheet" type="text/css" href="{{url}}"/>
-    {{/stylesheets}}
-    <link rel="icon" href="/image/favicon.ico" type="image/x-icon">
-    <meta charset="utf-8"/>
-</head>
-<body>
     {{{includes.navbar}}}
     <div class="monarch-container">
         <div class="content">
@@ -30,31 +16,14 @@
             
             <div id="main-container">
             
-            <div id="graphic-test">
-                <img src="/image/homepage.png"/>
-                <a href="/disease"><div id="diseasebutton" class="graphicbutton"></div></a>
-                <a href="/phenotype"><div id="phenotypebutton" class="graphicbutton"></div></a>
-                <a href="/gene"><div id="genebutton" class="graphicbutton"></div></a>
-                <a href="/model"><div id="modelbutton" class="graphicbutton"></div></a>
-            </div>
-            
-            <div class="graph-container">
-                <div id="graph">
-                    <div class="title">
-                          Phenotype Annotation Distribution
-                    </div>
-                    <div class=interaction>
-                        <li>
-                        <a class="superbtn btn monarch-gene-dark">Superclass</a>
-                        <form>
-                            <label><input id="group" type="radio" name="mode" value="grouped" checked> Grouped</label>
-                            <label><input id="stack" type="radio" name="mode" value="stacked"> Stacked</label>
-                        </form> 
-                        </li>
-                    </div>
+                <div class="graph">
+                    <div class="graph-container"></div>
+                    <div class="disease-gene-container"></div>
+                    <div class="disease-pheno-container"></div>
+                    <div class="pheno-geno-container"></div>
+                    <div class="pheno-gene-container"></div>
                 </div>
-            </div>
-            
+                
             </div>
 
             
@@ -62,5 +31,3 @@
             {{{includes.footer}}}
         </div> <!-- closes content -->
     </div> <!-- closes container -->
-</body>
-</html>

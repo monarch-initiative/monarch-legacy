@@ -3,142 +3,178 @@
 ## To make the json version, type:
 ##    make conf/monarch-context.yaml
 
-"@base": http://monarch-initiative.org/
-"@context": ~
+"@context":
+  "@base": http://monarch-initiative.org/
+  
+  ##
+  ## -- Semweb schema prefixes --
+  ##
+  
+  rdf: http://www.w3.org/1999/02/22-rdf-syntax-ns#
+  rdfs: http://www.w3.org/2000/01/rdf-schema#
+  owl: http://www.w3.org/2002/07/owl#
+  xsd: http://www.w3.org/2001/XMLSchema#
+  dc: http://purl.org/dc/terms/
+  dcterms: http://purl.org/dc/terms/
+  faldo: http://biohackathon.org/resource/faldo#
+  foaf: http://xmlns.com/foaf/0.1/
+  oa: http://www.w3.org/ns/oa#
+  idot: http://identifiers.org/
+  void: http://rdfs.org/ns/void#
+  prov: http://www.w3.org/ns/prov#
+  dcat: http://www.w3.org/ns/dcat#
+  
+  ## Other general prefixes
+  
+  obo: http://purl.obolibrary.org/obo/
+  oboInOwl: http://www.geneontology.org/formats/oboInOwl#
+  monarch: http://monarch-initiative.org/
+  
+  ##
+  ## -- Bio ID Spaces --
+  ##
+  
+  # OBO ontologies
+  
+  BFO: http://purl.obolibrary.org/obo/BFO_
+  DOID: http://purl.obolibrary.org/obo/DOID_
+  ECO: http://purl.obolibrary.org/obo/ECO_
+  GENO: http://purl.obolibrary.org/obo/GENO_
+  HP: http://purl.obolibrary.org/obo/HP_
+  DECIPHER: http://purl.obolibrary.org/obo/DECIPHER_
+  MESH: http://purl.obolibrary.org/obo/MESH_
+  CORIELL: http://purl.obolibrary.org/obo/CORIELL_
+  UMLS: http://purl.obolibrary.org/obo/UMLS_
+  MP: http://purl.obolibrary.org/obo/MP_
+  NCBIGene: http://purl.obolibrary.org/obo/NCBIGene_
+  OMIM: http://purl.obolibrary.org/obo/OMIM_
+  MIM: http://purl.obolibrary.org/obo/OMIM_
+  OMIA: http://purl.obolibrary.org/obo/OMIA_
+  OMIABreed: http://purl.obolibrary.org/obo/OMIA_
+  OMIAPub: http://purl.obolibrary.org/obo/OMIAPub_
+  ORPHANET: http://purl.obolibrary.org/obo/ORPHANET_
+  Orphanet: http://purl.obolibrary.org/obo/ORPHANET_
+  SNOMED_CT: http://purl.obolibrary.org/obo/SNOMED_
+  ClinVar: http://purl.obolibrary.org/obo/ClinVar_
+  RO: http://purl.obolibrary.org/obo/RO_
+  SO: http://purl.obolibrary.org/obo/SO_
+  ZP: http://purl.obolibrary.org/obo/ZP_
+  NCBITaxon: http://purl.obolibrary.org/obo/NCBITaxon_
+  FBbt: http://purl.obolibrary.org/obo/FBbt_ 
+  FBdv: http://purl.obolibrary.org/obo/FBdv_
+  FBcv: http://purl.obolibrary.org/obo/FBcv_
+  VT: http://purl.obolibrary.org/obo/VT_
+  AQTLTrait: http://purl.obolibrary.org/obo/AQTLTrait_
 
-##
-## -- Semweb schema prefixes --
-##
+  # Other ontologies
+  SIO: http://semanticscience.org/resource/SIO_
+  
+  # Resources
+  ISBN-13: "http://monarch-initiative.org/publications/ISBN:"
+  ISBN-10: "http://monarch-initiative.org/publications/ISBN:"
+  PMID: http://www.ncbi.nlm.nih.gov/pubmed/
+  MedGen: http://purl.obolibrary.org/obo/MedGen_
+  GeneReviews: http://www.ncbi.nlm.nih.gov/books/
+  BioGRID: http://purl.obolibrary.org/BioGRID_
+  HPRD: "http://identifiers.org/hprd/hprd:" 
+  BIND: "http://identifiers.org/bind/bind:"
 
-rdf: http://www.w3.org/1999/02/22-rdf-syntax-ns#
-rdfs: http://www.w3.org/2000/01/rdf-schema#
-owl: http://www.w3.org/2002/07/owl#
-xsd: http://www.w3.org/2001/XMLSchema#
-dc: http://purl.org/dc/terms/
-faldo: http://biohackathon.org/resource/faldo#
-foaf: http://xmlns.com/foaf/0.1/
-oa: http://www.w3.org/ns/oa#
-identifers: http://identifiers.org/
+  # MODs
+  #
+  # TODO: check these
+  MGI: "http://identifiers.org/mgd/mgi:"
+  RGD: "http://identifiers.org/mgd/rgd:"
+  TAIR: "http://identifiers.org/mgd/tair:"
+  SGD: "http://identifiers.org/mgd/sgd:"
+  ZFIN: "http://identifiers.org/zfin:"
+  FlyBase: "http://identifiers.org/flybase:"
+  FB: "http://identifiers.org/flybase:"
+  dictyBase: "http://identifiers.org/dictyBase:"
+  WormBase: "http://identifiers.org/WormBase:"
+  WB: "http://identifiers.org/WormBase:"
+  PomBase: "http://identifiers.org/PomBase:"
+  Ensembl: "http://identifiers.org/ensembl:"
+  ENSEMBL: "http://identifiers.org/ensembl:"
+  KEGG: "http://identifiers.org/kegg:"
+  FBInternalGT: "http://monarchinitiative.org/genotype/"
+  EOM: http://purl.obolibrary.org/obo/EOM_
+  dbSNP: "http://identifiers.org/dbSNP:" 
+  ClinVarVariant: "http://identifiers.org/ClinVarVariant:"  
+  GeneID: http://purl.obolibrary.org/obo/NCBIGene_
+  Gene: http://purl.obolibrary.org/obo/NCBIGene_
+  WBStrain: "http://identifiers.org/WormBase:"
+  ##
+  ## -- Schema classes --
+  ##
+  
+  # standard JSON-LD usages of id and label
+  id: "@id"
+  label: rdfs:label
+  comment: rdfs:comment
+  description: dc:description
+  source: dc:source
+  publisher: dc:publisher
+  
+  Class: owl:Class
+  Association: SIO:000897
+  Annotation: oa:Annotation
+  
+  created: 
+    "@id": dc:created
+    "@type": xsd:dateTime
+  creator: 
+    "@id": dc:creator
+    "@type": "@id"
+  depiction: 
+    "@id": foaf:depiction
+    "@type": "@id"
+  type: 
+    "@id": rdf:type
+    "@type": "@id"
 
-## Other general prefixes
+  reference: dc:publication
+  source: dc:source
+  subClassOf: owl:subClassOf
+  title: dc:title
+  keyword: dcat:keyword
+  homepage: 
+    "@id": foaf:homepage
+    "@type": "@id"
+  
+  disease: monarch:disease
+  frequency: monarch:frequency
+  
+  # GENO
+  
+  chromosomal_region: GENO:0000390
+  chromosome: GENO:0000323
+  effective_genotype: GENO:0000525
+  email: foaf:mbox
+  environment: GENO:0000099
+  evidence: monarch:evidence
+  extrinsic_genotype: GENO:0000524
+  gene_locus: GENO:0000014
+  genomic_background: GENO:0000010
+  genomic_variation_complement: GENO:0000009
+  genotype: GENO:0000000
+  genotype_associations: rdfs:seeAlso
+  has_background: GENO:0000010
+  has_genotype: GENO:0000222
+  has_part: BFO:0000051
+  has_phenotype: RO:0002200
+  inheritance: monarch:mode_of_inheritance
+  intrinsic_genotype: GENO:0000000
+  morpholino: GENO:0000417
+  onset: monarch:age_of_onset
+  pathway_associations: rdfs:seeAlso
+  phenotype: monarch:phenotype
+  phenotype_associations: rdfs:seeAlso
+  reference_locus: GENO:0000036
+  resource: monarch:nif-resource
+  sequence_alteration: SO:0001059
+  sequence_alteration_collection: GENO:0000025
+  variant_loci: GENO:0000027
+  variant_locus: GENO:0000481
+  zygosity: GENO:0000133
 
-obo: http://purl.obolibrary.org/obo/
-oboInOwl: http://www.geneontology.org/formats/oboInOwl#
-monarch: http://monarch-initiative.org/
-
-##
-## -- Bio ID Spaces --
-##
-
-# OBO ontologies
-
-BFO: http://purl.obolibrary.org/obo/BFO_
-DOID: http://purl.obolibrary.org/obo/DOID_
-ECO: http://purl.obolibrary.org/obo/ECO_
-GENO: http://purl.obolibrary.org/obo/GENO_
-HP: http://purl.obolibrary.org/obo/HP_
-DESCIPHER: http://purl.obolibrary.org/obo/DECIPHER_
-MESH: http://purl.obolibrary.org/obo/MESH_
-UMLS: http://purl.obolibrary.org/obo/UMLS_
-MP: http://purl.obolibrary.org/obo/MP_
-NCBIGene: http://purl.obolibrary.org/obo/NCBIGene_
-OMIM: http://purl.obolibrary.org/obo/OMIM_
-ORPHANET: http://purl.obolibrary.org/obo/ORPHANET_
-Orphanet: http://purl.obolibrary.org/obo/ORPHANET_
-SNOMED_CT: http://purl.obolibrary.org/obo/SNOMED_
-ClinVar: http://purl.obolibrary.org/obo/ClinVar_
-RO: http://purl.obolibrary.org/obo/RO_
-SO: http://purl.obolibrary.org/obo/SO_
-ZP: http://purl.obolibrary.org/obo/ZP_
-
-# Other ontologies
-SIO: http://semanticscience.org/resource/SIO_
-
-# Resources
-PMID: http://www.ncbi.nlm.nih.gov/pubmed/
-MedGen: http://purl.obolibrary.org/obo/MedGen_
-GeneReviews: http://www.ncbi.nlm.nih.gov/books/
-
-# MODs
-#
-# TODO: check these
-MGI: "http://identifiers.org/mgd/mgi:"
-ZFIN: "http://identifiers.org/zfin:"
-FlyBase: "http://identifiers.org/flybase:"
-dictyBase: "http://identifiers.org/dictyBase:"
-WormBase: "http://identifiers.org/WormBase:"
-WB: "http://identifiers.org/WormBase:"
-PomBase: "http://identifiers.org/PomBase:"
-Ensembl: "http://identifiers.org/ensembl:"
-ENSEMBL: "http://identifiers.org/ensembl:"
-GeneID: http://purl.obolibrary.org/obo/NCBIGene_
-
-##
-## -- Schema classes --
-##
-
-# standard JSON-LD usages of id and label
-id: "@id"
-label: rdfs:label
-comment: rdfs:comment
-description: dc:description
-
-Class: owl:Class
-Association: SIO:000897
-Annotation: oa:Annotation
-
-created: 
-  "@id": dc:created
-  "@type": xsd:dateTime
-creator: 
-  "@id": dc:creator
-  "@type": "@id"
-depiction: 
-  "@id": foaf:depiction
-  "@type": "@id"
-
-disease: monarch:disease
-frequency: monarch:frequency
-
-# GENO
-
-chromosomal_region: GENO:0000390
-chromosome: GENO:0000323
-effective_genotype: GENO:0000525
-email: foaf:mbox
-environment: GENO:0000099
-evidence: monarch:evidence
-extrinsic_genotype: GENO:0000524
-gene_locus: GENO:0000014
-genomic_background: GENO:0000010
-genomic_variation_complement: GENO:0000009
-genotype: GENO:0000000
-genotype_associations: rdfs:seeAlso
-has_background: GENO:0000010
-has_genotype: GENO:0000222
-has_part: BFO:0000051
-has_phenotype: RO:0002200
-inheritance: monarch:mode_of_inheritance
-intrinsic_genotype: GENO:0000000
-morpholino: GENO:0000417
-onset: monarch:age_of_onset
-pathway_associations: rdfs:seeAlso
-phenotype: monarch:phenotype
-phenotype_associations: rdfs:seeAlso
-reference: dc:publication
-reference_locus: GENO:0000036
-resource: monarch:nif-resource
-sequence_alteration: SO:0001059
-sequence_alteration_collection: GENO:0000025
-source: dc:source
-subClassOf: owl:subClassOf
-title: dc:title
-type: 
-  "@id": rdf:type
-  "@type": "@id"
-variant_loci: GENO:0000027
-variant_locus: GENO:0000481
-website: 
-  "@id": foaf:homepage
-  "@type": "@id"
-zygosity: GENO:0000133
+  

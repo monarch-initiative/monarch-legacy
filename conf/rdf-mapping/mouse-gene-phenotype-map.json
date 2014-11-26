@@ -1,59 +1,73 @@
 {
-    "status" : "alpha",
-    "graphs": [
-        {
-            "graph" : "mouse-gene-phenotype",
-            "view" : "nif-0000-00096-6",
-            "mapVersion" : "2014-04-26",
-            "columns" : [
-                {
-                    "name" : "v_uuid"
-                },
-                {
-                    "name" : "implicated_gene_ids",
-                    "list_delimiter" : ",",
-                    "prefix" : "http://purl.obolibrary.org/obo/"
-                },
-                {
-                    "name" : "phenotype_id"
-                },
-                {
-                    "name" : "publication_id",
-                    "list_delimiter" : ";"
-                }
-            ],
-            "mappings" : [
-
-                {"subject" : "implicated_gene_ids",
-                 "predicate" : "RO:0002200",
-                 "object" : "phenotype_id"
-                },
-                {"subject" : "v_uuid",
-                 "predicate" : "rdf:type",
-                 "object" : "SIO:association"
-                },
-                {"subject" : "v_uuid",
-                 "predicate" : "hasSubject",
-                 "object" : "gene_id"
-                },
-                {"subject" : "v_uuid",
-                 "predicate" : "hasObject",
-                 "object" : "phenotype_id"
-                },
-                {"subject" : "v_uuid",
-                 "predicate" : "dc:source",
-                 "object" : "publication_id"
-                },
-                {"subject" : "v_uuid",
-                 "predicate" : "dc:evidence",
-                 "notes" : "TODO",
-                 "object" : "evidence_code_id"
-                },
-                {"subject" : "v_uuid",
-                 "predicate" : "dc:description",
-                 "object" : "phenotype_description_free_text"
-                }
-            ]
-        }
-   ]
+   "filter" : {
+      "phenotype_modifier" : "abnormal"
+   },
+   "mappings" : [
+      {
+         "object" : "phenotype_id",
+         "predicate" : "RO:0002200",
+         "subject" : "implicated_gene_ids"
+      },
+      {
+         "object" : "Annotation",
+         "predicate" : "rdf:type",
+         "subject" : "v_uuid"
+      },
+      {
+         "object" : "gene_id",
+         "predicate" : "hasSubject",
+         "subject" : "v_uuid"
+      },
+      {
+         "object" : "phenotype_id",
+         "predicate" : "hasObject",
+         "subject" : "v_uuid"
+      },
+      {
+         "object" : "publication_id",
+         "predicate" : "dc:source",
+         "subject" : "v_uuid"
+      },
+      {
+         "object" : "evidence_code_id",
+         "predicate" : "dc:evidence",
+         "subject" : "v_uuid",
+         "notes" : "TODO"
+      },
+      {
+         "object" : "phenotype_description_free_text",
+         "predicate" : "dc:description",
+         "subject" : "v_uuid"
+      }
+   ],
+   "status" : "alpha",
+   "view" : "nif-0000-00096-6",
+   "columns" : [
+      {
+         "name" : "v_uuid"
+      },
+      {
+         "name" : "implicated_gene_ids",
+         "list_delimiter" : ","
+      },
+      {
+         "name" : "phenotype_id"
+      },
+      {
+         "name" : "phenotype_description_free_text",
+         "type" : "rdfs:Literal"
+      },
+      {
+         "name" : "evidence_code_id"
+      },
+      {
+         "name" : "publication_id",
+         "list_delimiter" : ";"
+      }
+   ],
+   "prefixes" : {
+      "J" : "http://www.informatics.jax.org/reference/J:"
+   },
+   "graph" : "mouse-gene-phenotype",
+   "mapVersion" : "2014-10-03"
 }

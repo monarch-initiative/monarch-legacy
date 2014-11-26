@@ -1,0 +1,44 @@
+graph: impc-gene-phenotype
+mapVersion: 2014-10-03
+view: nlx_151660-3
+status: alpha
+columns: 
+  - 
+    name: v_uuid
+  - 
+    name: implicated_gene_ids
+    list_delimiter: ","
+  - 
+    name: phenotype_description_free_text
+    type: rdfs:Literal
+  - 
+    name: evidence_code_id
+  - 
+    list_delimiter: ";"
+    name: publication_id
+mappings: 
+  - 
+    subject: implicated_gene_ids
+    predicate: RO:0002200
+    object: phenotype_id
+  - 
+    object: Annotation
+    predicate: rdf:type
+    subject: v_uuid
+  - 
+    object: gene_id
+    predicate: hasSubject
+    subject: v_uuid
+  - 
+    object: phenotype_id
+    predicate: hasObject
+    subject: v_uuid
+  - 
+    notes: TODO
+    object: evidence_code_id
+    predicate: dc:evidence
+    subject: v_uuid
+  - 
+    object: phenotype_description_free_text
+    predicate: dc:description
+    subject: v_uuid

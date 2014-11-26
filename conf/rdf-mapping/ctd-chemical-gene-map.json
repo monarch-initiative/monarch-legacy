@@ -1,63 +1,69 @@
 {
-    "status" : "alpha",
-    "graphs": [
-        {
-            "graph" : "ctd-chemical-gene-map",
-            "view" : "nif-0000-02683-1",
-            "mapVersion" : "2014-05-09",
-            "filter" : {
-                "direct_or_inferred" : "direct"
+   "graphs" : [
+      {
+         "view" : "nif-0000-02683-1",
+         "mappings" : [
+            {
+               "object" : "gene_id",
+               "predicate" : "RO:0002434",
+               "subject" : "chemcial_id"
             },
-            "columns" : [
-                {
-                    "name" : "v_uuid"
-                },
-                {
-                    "name" : "gene_id"
-                },
-                {
-                    "name" : "chemical_id"
-                },
-                {
-                    "name" : "chemical_label",
-                    "type" : "rdfs:Literal"
-                },
-                {
-                    "name" : "publication_ids",
-                    "list_delimiter" : ", "
-                }
-            ],
-            "mappings" : [
-                {"subject" : "chemcial_id",
-                 "predicate" : "RO:0002434",
-                 "object" : "gene_id"
-                },
-                {"subject" : "chemical_id",
-                 "predicate" : "rdfs:Label",
-                 "object" : "chemical_label"
-                },
-                {"subject" : "v_uuid",
-                 "predicate" : "rdf:type",
-                 "object" : "SIO:association"
-                },
-                {"subject" : "v_uuid",
-                 "predicate" : "hasSubject",
-                 "object" : "chemical_id"
-                },
-                {"subject" : "v_uuid",
-                 "predicate" : "hasObject",
-                 "object" : "gene_id"
-                },
-                {"subject" : "v_uuid",
-                 "predicate" : "dc:source",
-                 "object" : "publication_ids"
-                },
-                {"subject" : "v_uuid",
-                 "predicate" : "dc:description",
-                 "object" : "interaction_description"
-                }
-
-            ]
-        }
-   ]
+            {
+               "object" : "chemical_label",
+               "predicate" : "rdfs:label",
+               "subject" : "chemical_id"
+            },
+            {
+               "object" : "SIO:association",
+               "predicate" : "rdf:type",
+               "subject" : "v_uuid"
+            },
+            {
+               "object" : "chemical_id",
+               "predicate" : "hasSubject",
+               "subject" : "v_uuid"
+            },
+            {
+               "object" : "gene_id",
+               "predicate" : "hasObject",
+               "subject" : "v_uuid"
+            },
+            {
+               "object" : "publication_ids",
+               "predicate" : "dc:source",
+               "subject" : "v_uuid"
+            },
+            {
+               "object" : "interaction_description",
+               "predicate" : "dc:description",
+               "subject" : "v_uuid"
+            }
+         ],
+         "filter" : {
+            "direct_or_inferred" : "direct"
+         },
+         "columns" : [
+            {
+               "name" : "v_uuid"
+            },
+            {
+               "name" : "gene_id"
+            },
+            {
+               "name" : "chemical_id"
+            },
+            {
+               "name" : "chemical_label",
+               "type" : "rdfs:Literal"
+            },
+            {
+               "name" : "publication_ids",
+               "list_delimiter" : ", "
+            }
+         ],
+         "mapVersion" : "2014-05-09",
+         "graph" : "ctd-chemical-gene-map"
+      }
+   ],
+   "status" : "alpha"
 }

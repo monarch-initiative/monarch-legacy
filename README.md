@@ -43,11 +43,32 @@ Or a particular disease, e.g:
 
     ringo lib/monarch/web/webapp_launcher.js --port 8282
 
+## Widgets and sub-components
+
+Monarch-app includes a home-grown widget framework for including
+functionality components that are required for the operation of the
+monarch-app, but not included in the monarch-app distribution. 
+
+Currently, there is only one such widget - the [phenogrid
+browser](https://github.com/monarch-initiative/phenogrid). 
+
+Monarch-app will clone this repository into an appropriate location -
+./widgets/phenogrid - upon installation. The phenogrid code will be
+updated via a pull upon start of the process.  These steps will be
+managed via the update_dependencies.sh script. 
+
+Note that the .gitignore file explicitly ignores these components that
+are pulled in separately.
+
+Further components should be added in a similar manner.
+
+
 ## Documentation
 
 Open doc/index.html in a web browser.
 
 Alternative, connect to 127.0.0.1:8282 and select "documentation" from menubar.
+
 
 ## Making changes
 

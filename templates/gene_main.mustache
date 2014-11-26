@@ -1,52 +1,81 @@
-<!DOCTYPE html>
-<html>
-<head>
-    <title>Monarch Genes</title>
-    {{#scripts}}
-    <script type="text/javascript" src="{{url}}"></script>
-    {{/scripts}}
-    {{{includes.analytics}}}
-    {{#stylesheets}}
-    <link rel="stylesheet" type="text/css" href="{{url}}"></link>
-    {{/stylesheets}}
-    <link rel="stylesheet" type="text/css" href="../css/monarch-main.css"></link>
-    <link rel="icon" href="/image/favicon.ico" type="image/x-icon">
-    <meta charset=”utf-8”></meta>
-</head>
-<body>
-    {{{includes.navbar}}}
-    <div class="monarch-container">
-        <div class="content">
-            <div class="wrapperforfooter">
-            <div class="jumbotron monarch-gene-light">
-                <img id="monarch-logo" class="downloadline" src="/image/logo.png"/>
-                <h1 class="downloadline">Gene spotlight: Dystrophin, DMD</h1>
-                <a href="/gene/NCBIGene:1756" class="downloadline downloadline-left btn btn-large btn-default btn-monarch-main monarch-gene-dark">Find out more</a>
-                <a class="downloadline btn btn-large btn-default btn-monarch-main monarch-feedback-dark"
-                        href="mailto:info@monarchinitiative.org">Your feedback welcome!</a>
-                <div><p>DMD encodes dystrophin, which plays a vital role in striated
-                   muscle fiber and is part of the dystrophin-associated protein
-                  complex, also known as the costamere.</p></div>
-            </div>
-            <div class="col-lg-9">
-                <h1>Highlighted genes</h1>
-                <ul>
-                    <li><a href="/gene/NCBIGene:2048">EPHB2 (human)</a></li>
-                    <li><a href="/gene/NCBIGene:388552">BLOC1S3 (human)</a></li>
-                    <li><a href="/gene/NCBIGene:7291">TWIST1 (human)</a></li>
-                    <li><a href="/gene/NCBIGene:20423">Shh (mouse)</a></li>
-                </ul>
-                <h1>Gene set highlight: Genes involved in neural crest development</h1>
-                <ul>
-                    <li><a href="/gene/NCBIGene:20348">Sema3c (mouse)</a></li>
-                    <li><a href="/gene/NCBIGene:796461">nrg1 (zebrafish)</a></li>
-                    <li><a href="/gene/NCBIGene:12166">Bmpr1a (mouse)</a></li>
-                    <li><a href="/gene/NCBIGene:8854">RALDH2 (human)</a></li>
-                </ul>
-            </div>
-            </div> <!-- closes wrapperforfooter -->
-            {{{includes.footer}}}
-        </div>
-     </div>
+{{{includes.navbar}}}
+<div class="container-fluid" style="margin: 1em;">
+
+  <div class="text-center">
+    <h1>
+      Gene
+    </h1>
+  </div>
+
+  <!-- Open first row section. -->
+  <div class="row">
+
+    <!-- Blurb. -->
+    <div class="col-xs-12 col-sm-12 col-md-12 col-lg-3">
+      <div class="panel panel-default">
+	<p>
+	  Monarch <b>Gene</b> integrates information from a wide range
+	  of species and sources. Each specific page includes
+	  identifiers, nomenclature, genotypes, phenotypes,
+	  variations, pathways, aggregated literature, and external
+	  links to relevant resources. Here we summarizes the
+	  phenotypically-curated data in the system.
+	</p>
+      </div>
+    </div>
+
+    <!-- Annotation Graph-->
+    <div class="col-xs-12 col-sm-12 col-md-12 col-lg-9">
+      <div class="panel panel-default">
+        <div class="disease-gene-container"></div>
+	<p class="datagraph-caption">
+	  This <em>interactive graph</em> displays the number of
+	  disease-gene associations for human diseases per major
+	  disease category.  You can explore the distribution of
+	  disease subtypes by clicking on the wedge symbol, or visit
+	  the disease page itself by clicking on the disease name. You
+	  can navigate back to less-specific disease categories by
+	  clicking on the breadcrumbs listed in the top left-hand
+	  corner.
+	</p>
+      </div>
+    </div>
+
+    <!-- Disease spotlight -->
+    <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
+      <div class="panel panel-default">
+        <h4>Gene Spotlight: {{{spotlight.label}}}</h4>
+        <div>
+          <p>{{spotlight.description}}</p>
+          <ul>
+            <li>Name:  {{spotlight.name}}</li>
+            <li>Taxon: {{spotlight.taxon}} </li>
+            <li>Variant Genotypes: {{spotlight.genotype_count}} </li>
+            <li>Phenotypes: {{{spotlight.phenotypes}}}</li>
+            <li>Diseases: {{{spotlight.diseases}}}</li>
+            <li>Pathways: {{{spotlight.pathways}}}</li>
+            <li>Publications: {{spotlight.publication_count}}</li>
+          </ul>
+	</div>
+        <p class="text-right">{{{spotlight.link}}}</p>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- Footer. -->
+<hr>
+<footer>
+  <!-- <div id="footer"> -->
+  <div style="padding: 10px 40px 10px; text-align: center; font-weight: 200; font-size: 12px;">
+    The Monarch Initiative is a collaboration between Oregon Health & Science University,
+    University of California, San Diego, Lawrence Berkeley National Laboratory, the University of
+    Pittsburgh, Sanger Institute, and Charité - Universitätsmedizin Berlin
+    and is supported generously by a NIH Office of the Director Grant #5R24OD011883.
+    <br />
+    Except where otherwise noted, this work is licensed under a Creative Commons <a href="https://creativecommons.org/licenses/by/3.0/us/">Attribution 3.0</a> License.
+  </div>
+</footer>
+  
 </body>
 </html>

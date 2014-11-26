@@ -1,0 +1,62 @@
+{
+   "filter" : {
+      "environment_id" : "ZDB-EXP-041102-1",
+      "phenotype_modifier" : "abnormal"
+   },
+   "mappings" : [
+      {
+         "object" : "phenotype_id",
+         "predicate" : "RO:0002200",
+         "subject" : "implicated_gene_ids"
+      },
+      {
+         "object" : "Annotation",
+         "predicate" : "rdf:type",
+         "subject" : "v_uuid"
+      },
+      {
+         "object" : "implicated_gene_ids",
+         "predicate" : "hasSubject",
+         "subject" : "v_uuid"
+      },
+      {
+         "object" : "phenotype_id",
+         "predicate" : "hasObject",
+         "subject" : "v_uuid"
+      },
+      {
+         "object" : "publication_id",
+         "predicate" : "dc:source",
+         "subject" : "v_uuid"
+      },
+      {
+         "object" : "evidence_code_id",
+         "predicate" : "dc:evidence",
+         "subject" : "v_uuid"
+      }
+   ],
+   "status" : "alpha",
+   "view" : "nif-0000-21427-10",
+   "notes" : "w.t. environments and abnormal phenotypes only",
+   "columns" : [
+      {
+         "name" : "v_uuid"
+      },
+      {
+         "name" : "implicated_gene_ids",
+         "list_delimiter" : ","
+      },
+      {
+         "name" : "phenotype_id"
+      },
+      {
+         "name" : "evidence_code_id"
+      },
+      {
+         "name" : "publication_id",
+         "list_delimiter" : ";"
+      }
+   ],
+   "graph" : "zfin-gene-phenotype",
+   "mapVersion" : "2014-11-21"
+}

@@ -6,7 +6,7 @@ This folder contains YAML configurations for Monarch resources used by
 disco2turtle to extract triples from DISCO via Federation services.
 
 Each YAML configuration file describes how to generate a single
-particular named graph, in turtle format.
+particular Mamed Graph, in turtle format.
 
 ## Basic Concepts
 
@@ -120,7 +120,7 @@ Next up are the prefixes:
       LDX: http://purl.obolibrary.org/obo/RO_HOM0000018 ## in xenology relationship with
 
 To fully grok these you should have a basic understanding of how URI
-prefixing works. Note also that prefixes from the [monarch JSON LD context file](../../conf/monarch-context.json) are automatically used.
+prefixing works. Note also that prefixes from the [monarch JSON LD context file](../../conf/monarch-context.jsonld) are automatically used.
 
 These prefixes actually map abbreviations in the panther source to
 complete URIs. This is actually a common and convenient paradigm in
@@ -185,7 +185,7 @@ Note that all these should expand to valid IRIs. This can be done at
 different levels. First, this is a well behave view that uses valid
 CURIES. For example, every mouse gene ID is of the form
 MGI:3030900. As MGI is declared in the Monarch JSON LD context file
-(in conf/monarch-context.json) this will be correctly expanded.
+(in conf/monarch-context.jsonld) this will be correctly expanded.
 
 Note the value of the orthology_class field is single letter codes
 such as 'P' for paralogy. These are not valid URIs, but we include a
@@ -200,10 +200,36 @@ Further down we see
 This is the version number of the mapping (not the data). If this is
 increased it will force a re-dump.
 
+## Tips
+
 ### IRI abbreviations and curies
 
 The monarch JSON-LD context is always used for prefix abbreviations
 
+### Always set type for non-ID columns
+
+The default assumption is that a column contains an ID that cab be expanded to a URI.
+
+This means in the 'columns' section, you only need to specify column names.
+
+However, if the column contains a non-ID you should set the type. A
+good choice is rdfs:Literal. However, if you are sure that a column
+contains a numeric type, go ahead and use the xsd type
+
+## Modeling Patterns and Best Practice
+
+This will be defined in a separate document. Some rough guidelines for now:
+
+ * use standard vocabularies
+ * We try and follow a general Annotation model, similar to a reified triple
+    * exact vocabulary TBD
+ * stay normalized. If another NG provides labels for all genes, you don't need to redundantly include this in a gene-disease view
+
+## Pre- and Post-processing
+
+The assumption that is that any pre-processing is already done by the time the view is exposed (e.g. in DISCO/CM).
+
+SPARQL can be used for post-processing.
 
 ## Future plans
 

@@ -3,6 +3,8 @@
     
     "ontology_services_url" : "http://services.monarchinitiative.org/ontoquest/",
     
+    "scigraph_url" : "http://kato.crbs.ucsd.edu:9000/scigraph/",
+    
     "federation_services_url" : "http://neuinfo.org/servicesv1/v1/federation/",
 
     "annotate_services_url" : "http://neuinfo.org/services/v1/annotate/",

@@ -1,0 +1,25 @@
+body {
+  padding-top: 50px; /* Body padding for fixed navbar */
+}
+
+.graph-container{
+    position: relative;
+    border-style:solid;
+    border-width:1px;
+}
+.disease-gene-container{
+    position: relative;
+    border-style:solid;
+    border-width:1px;
+}
+.disease-pheno-container{
+    position: relative;
+    border-style:solid;
+    border-width:1px;
+}
+.pheno-geno-container{
+    position: relative;
+    border-style:solid;
+    border-width:1px;
+}
+

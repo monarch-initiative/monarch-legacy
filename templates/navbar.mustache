@@ -9,7 +9,7 @@
             </button>
             <a class="navbar-brand" href="/">Monarch</a>
         </div>
-	    <div id="collapsed-navbar" class="nav-collapse collapse">
+        <div id="collapsed-navbar" class="nav-collapse collapse">
             <ul class="nav navbar-nav">
                 <li class="dropdown">
                     <a href="#" class="dropdown-toggle" data-toggle="dropdown">
@@ -36,6 +36,7 @@
                         <i class="icon-th-large"></i>About <b class="caret"></b></a>
                     <ul class="dropdown-menu">
                         <li><a href="/page/about">About Monarch</a></li>
+                        <li><a href="/sources">Data Sources</a></li>
                         <li><a href="/page/releases">Releases</a></li>
                     </ul>
                 </li>
@@ -46,8 +47,9 @@
                         <li><a href="/page/software">Monarch Software</a></li>
                         <li><a href="/page/services">Monarch RESTful API</a></li>
                         <li><a href="/docs/index.html">Javascript API</a></li>
-						<li><a href="/page/phenogrid">Monarch Phenotype Grid Widget</a></li>
-						<li><a href="https://github.com/monarch-initiative/monarch-app">GitHub
+                        <li><a href="/page/phenogrid">Monarch Phenotype Grid Widget</a></li>
+                        <li><a href="https://github.com/monarch-initiative/monarch-app/blob/master/docs/guidelines/phenotype-curation-guidelines.md">Phenotype Curation Guidelines</a></li>
+                        <li><a href="https://github.com/monarch-initiative/monarch-app">GitHub
                         Project</a></li>
                         <li><a href="https://code.google.com/p/phenotype-ontologies/">Ontologies</a></li>
                         <li><a href="/page/pubs">Publications</a></li>
@@ -66,8 +68,11 @@
                 </li>
             </ul>
             <form id="search_form" class="navbar-form navbar-left searchspace" action="/search" role="search">
-                <div class="form-group">
+                <div class="input-group">
                 <input id="search" type="text" class="form-control search-box" placeholder="Search (e.g. Parkinson's)"/>
+                <span class="input-group-btn">
+                    <button class="btn btn-primary" type="submit">Go</button>
+                </span>
                 </div>
             </form>
         </div>

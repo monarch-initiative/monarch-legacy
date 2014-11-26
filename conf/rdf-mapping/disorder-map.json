@@ -1,40 +1,43 @@
 {
-    "@" : {
-
-    },
-    "graphs": [
-        {
-            "graph" : "disorders",
-            "view" : "nlx_151835-1",
-            "columns" : [
-                {
-                    "name" : "disorder_id",
-                    "type" : "owl:Class"
-                },
-                {
-                    "name" : "disorder_name",
-                    "type" : "rdfs:Literal"
-               },
-                {
-                    "name" : "synonyms",
-                    "type" : "rdfs:Literal",
-                    "list_delimiter" : ","
-                }
-            ],
-            "mappings" : [
-
-                {"subject" : "disorder_id",
-                 "predicate" : "rdfs:label",
-                 "object" : "disorder_name"},
-
-                {"subject" : "disorder_id",
-                 "predicate" : "rdfs:subClassOf",
-                 "object" : "DOID:630"},
-
-                {"subject" : "disorder_id",
-                 "predicate" : "oboInOwl:hasRelatedSynonym",
-                 "object" : "synonyms"}
-            ]
-        }
-   ]
+   "mappings" : [
+      {
+         "object" : "disorder_name",
+         "predicate" : "rdfs:label",
+         "subject" : "disorder_id"
+      },
+      {
+         "object" : "DOID:630",
+         "predicate" : "rdfs:subClassOf",
+         "subject" : "disorder_id"
+      },
+      {
+         "object" : "synonyms",
+         "predicate" : "oboInOwl:hasRelatedSynonym",
+         "subject" : "disorder_id"
+      }
+   ],
+   "view" : "nlx_151835-1",
+   "columns" : [
+      {
+         "name" : "disorder_id",
+         "type" : "owl:Class"
+      },
+      {
+         "name" : "disorder_name",
+         "type" : "rdfs:Literal"
+      },
+      {
+         "name" : "synonyms",
+         "type" : "rdfs:Literal",
+         "list_delimiter" : ","
+      }
+   ],
+   "metadata" : {
+      "title" : "Monarch Disorder Catalog",
+      "type" : "void:Dataset",
+      "description" : "Basic metadata on disorders, from OMIM, DECIPHER, etc",
+      "publisher" : "http://monarchinitiative.org"
+   },
+   "mapVersion" : "2014-08-06",
+   "graph" : "disorder"
 }

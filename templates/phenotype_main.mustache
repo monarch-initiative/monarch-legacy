@@ -1,58 +1,81 @@
-<!DOCTYPE html>
-<html>
-<head>
-    <title>Monarch Phenotypes</title>
-    {{#scripts}}
-    <script type="text/javascript" src="{{url}}"></script>
-    {{/scripts}}
-    {{{includes.analytics}}}
-    {{#stylesheets}}
-    <link rel="stylesheet" type="text/css" href="{{url}}"/>
-    {{/stylesheets}}
-    <link rel="stylesheet" type="text/css" href="/css/monarch-main.css"/>
-    <link rel="icon" href="/image/favicon.ico" type="image/x-icon">
-    <meta charset="utf-8"/>
-</head>
-<body>
-    {{{includes.navbar}}}
-    <div class="monarch-container">
-        <div class="content">
-            <div class="wrapperforfooter">
-            <div class="jumbotron monarch-phenotype-light">
-                <img id="monarch-logo" class="downloadline" src="/image/logo.png"/>
-                <h1 class="downloadline">Phenotype spotlight: Multicystic kidney dysplasia</h1>
-                <a href="/phenotype/HP_0000003" class="downloadline downloadline-left btn btn-large btn-default btn-monarch-main monarch-phenotype-dark">Find out more</a>
-                <a class="downloadline btn btn-large btn-default btn-monarch-main monarch-feedback-dark"
-                        href="mailto:info@monarchinitiative.org">Your feedback welcome!</a>
-                <p>Multicystic kidney dysplasia is the result of
-                abnormal fetal renal development in which the affected
-                kidney is replaced by multiple cysts and has little or
-                no residual function. The vast majority of multicystic
-                kidneys are unilateral. Multicystic kidney can be
-                  diagnosed on prenatal ultrasound.</p>
-            </div>
-            <div class="col-lg-9">
-                <h1>Highlighted phenotypes</h1>
-                <ul>
-                    <li><a href="/phenotype/MP_0000849">Abnormal cerebellum morphology</a></li>
-                    <li><a href="/phenotype/MP_0001504">Abnormal posture</a></li>
-                    <li><a href="/phenotype/HP_0000003">Multicystic kidney dysplasia</a></li>
-                    <li><a href="/phenotype/HP_0000104">Renal agenesis</a></li>
-                    <li><a href="/phenotype/HP_0002211">White forelock</a></li>
-                    <li><a href="/phenotype/MP_0004262">Abnormal physical strength</a></li>
-                </ul>
-            </div>
-            <div class="col-lg-9">
-                <a href="/analyze/phenotypes"><h1>Analyze Phenotypes Tool</h1></a>
-                <ul>
-                    <li>Learn which diseases and models are most similar to a set of
-                    phenotypic observations in humans, mice, or zebrafish.</li>
-                    <li><a href="/analyze/phenotypes/?target=ZFIN&input_items=MP%3A0000788%0D%0AMP%3A0000822%0D%0AMP%3A0000914%0D%0AMP%3A0000929%0D%0AMP%3A0000930%0D%0AMP%3A0001286%0D%0AMP%3A0001393%0D%0AMP%3A0001688%0D%0AMP%3A0001698%0D%0AMP%3A0001732%0D%0AMP%3A0001787%0D%0AMP%3A0002064%0D%0AMP%3A0002083%0D%0AMP%3A0002151%0D%0AMP%3A0002950%0D%0AMP%3A0003012%0D%0AMP%3A0003424%0D%0AMP%3A0003651%0D%0AMP%3A0004948%0D%0AMP%3A0005657&limit=100">Sample patient phenotype profile</a></li>
-                </ul>
-            </div>
-            </div> <!-- closes wrapperforfooter -->
-            {{{includes.footer}}}
-        </div>
+{{{includes.navbar}}}
+<div class="container-fluid" style="margin: 1em;">
+  
+  <div class="text-center">
+    <h1>
+      Phenotype
+    </h1>
+  </div>
+  
+  <!-- Open first row section. -->
+  <div class="row">
+    
+    <!-- Blurb. -->
+    <div class="col-xs-12 col-sm-12 col-md-12 col-lg-3">
+      <div class="panel panel-default">
+	<p>
+	  Monarch <b>Phenotype</b> integrates information from a
+	  variety of sources. Each specific page includes
+	  descriptions, diseases, curated and inferred genes whose
+	  mutations lead to the given phenotype, animal models,
+	  pathways, aggregated literature and external links to
+	  relevant resources. Here we summarizes the curated phenotype
+	  data in the system.
+	</p>
+      </div>
     </div>
+
+    <!-- Annotation Graph-->
+    <div class="col-xs-12 col-sm-12 col-md-12 col-lg-9">
+      <div class="panel panel-default">
+        <div class="graph-container"></div>
+	<p class="datagraph-caption">
+	  This <em>interactive graph</em> displays the number of
+	  phenotype associations for human (genes) and mouse
+	  (genotypes) per major phenotypic category. You can explore
+	  the distribution of more specific phenotypes by clicking on
+	  the wedge symbol, or visit the phenotype page itself by
+	  clicking on the phenotype name. You can navigate back to
+	  less-specific phenotypes by clicking on the breadcrumbs
+	  listed in the top left-hand corner.
+	</p>
+      </div>
+    </div>
+    
+    <!-- Spotlight -->
+    <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
+      <div class="panel panel-default">
+        <h4>Phenotype Spotlight: {{{spotlight.label}}}</h4>
+        <div>
+          <p>{{spotlight.description}}</p>
+          <ul>
+            <li>Genes: {{{spotlight.genes}}}</li>
+            <li>Diseases: {{{spotlight.diseases}}}</li>
+            <li>Models: {{spotlight.model_count}}
+              <!--({{spotlight.model_with_phenotype_count}} with phenotypes) -->
+            </li>
+            <li>Publications: {{spotlight.publication_count}}</li>
+          </ul>
+        </div>
+        <p class="text-right">{{{spotlight.link}}}</p>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- Footer. -->
+<hr>
+<footer>
+  <!-- <div id="footer"> -->
+  <div style="padding: 10px 40px 10px; text-align: center; font-weight: 200; font-size: 12px;">
+    The Monarch Initiative is a collaboration between Oregon Health & Science University,
+    University of California, San Diego, Lawrence Berkeley National Laboratory, the University of
+    Pittsburgh, Sanger Institute, and Charité - Universitätsmedizin Berlin
+    and is supported generously by a NIH Office of the Director Grant #5R24OD011883.
+    <br />
+    Except where otherwise noted, this work is licensed under a Creative Commons <a href="https://creativecommons.org/licenses/by/3.0/us/">Attribution 3.0</a> License.
+  </div>
+</footer>
+  
 </body>
 </html>
