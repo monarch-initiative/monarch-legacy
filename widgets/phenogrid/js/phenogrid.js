@@ -1426,7 +1426,7 @@ var url = document.URL;
 	    svgContainer.append("<svg id='svg_area'></svg>");		
 	    this.state.svg = d3.select("#svg_area");	 
 	    this._addGridTitle();	  
-	    this._configureFaqs();
+	 //   this._configureFaqs();
 	},
 
 	_createSvgContainer : function() {
@@ -1472,8 +1472,7 @@ var url = document.URL;
 		.attr("width", faqWidth)
 		.attr("height",faqHeight)		
 		.on("click", function(d) {
-		    var name = "faq";					
-		    self._showDialog(this.state.modelName);
+		    self._showDialog("faq");
 		});
     	    
     	    var title = document.getElementsByTagName("title")[0].innerHTML;
@@ -1489,76 +1488,25 @@ var url = document.URL;
 	},
 	
 	
-	
-	/**	_addGridTitle: function() {
-		var species = '';
-		
-		if (this.state.targetSpeciesName == "Overview") {
-		var mtitle = this.state.svg.append("svg:text")
-		.attr("id","toptitle")
-		.attr("transform","translate(" + (this.state.colStartingPos ) + "," + (this.yoffset- 60) + ")")
-		.attr("x", 0)
-		.attr("y", 0)
-		.text("Cross-options");
-		this.state.svg.append("svg:text")
-		.attr("id","bottitle")
-		.attr("transform","translate(" + (this.state.colStartingPos ) + "," + (this.yoffset-20) + ")")
-		.attr("x", 0)
-		.attr("y", 0)
-		.text("Overview");
-		} else {
-	    	species= this.state.targetSpeciesName;
-	    	var mtitle = this.state.svg.append("svg:text")
-		.attr("id","toptitle2")
-		.attr("transform","translate(" + (this.state.colStartingPos ) + "," + (this.yoffset- 80) + ")")
-		.attr("x", 0)
-		.attr("y", 10)
-		.text("Phenotype Comparison");
-	    	this.state.svg.append("svg:text")
-		.attr("id","bottitle2")
-		.attr("transform","translate(" + (this.state.colStartingPos ) + "," + (this.yoffset-50) + ")")
-		.attr("x", 0)
-		.attr("y", 0)
-		.text("grouped by");
-	    	this.state.svg.append("svg:text")
-		.attr("id","title2")
-		.attr("transform","translate(" + (this.state.colStartingPos ) + "," + (this.yoffset- 25 ) + ")")
-		.attr("x", 0)
-		.attr("y", 0)
-		.text(species);
-		}
-		
-    		var faq	= this.state.svg
-		.append("svg:image")				
-		.attr("xlink:href", this.state.scriptpath + "../image/greeninfo30.png")
-		.attr("transform","translate(" + (this.state.colStartingPos + 150) + "," + (this.yoffset- 35 ) + ")")
-		.attr("id","faqinfo")
-		.attr("x", 0)
-		.attr("y", 0)
-		.attr("width", 15)
-	    	.attr("height", 15)		
-		.on("click", function(d) {
-		var name = "faq";					
-		self._showDialog(name);
-		});	    
-		},
-		
-	*/	
-
 	_configureFaqs: function() {
 	    
-	    var faqs = d3.selectAll("#faq")
+	   /* var faqs = ("#faq")
 		.on("click", function(d) {
+		    console.log("trying to show dialog for ...faq");
 		    self._showDialog("faq");
-		});	
+		});	*/
 	    
-	    var sorts = d3.selectAll("#sorts")
+	    //var sorts = d3.selectAll("#sorts")
+	    var sorts = $("#sorts")
 		.on("click", function(d,i){
+		    console.log("trying to show dialog for ..sorts");
 		    self._showDialog( "sorts");
 		});
 	    
-	    var calcs = d3.selectAll("#calcs")
+	    //var calcs = d3.selectAll("#calcs")
+	    var calcs = $("#calcs")
 		.on("click", function(d){
+		    console.log("trying to show dialog for ..calcs");
 		    self._showDialog( "calcs");
 		});
 	},
@@ -2479,7 +2427,8 @@ var url = document.URL;
 	// we might want to modify this to do a dynamic http retrieval to grab the dialog components...
 	_showDialog : function(name){
 	    var self= this;
-	    var url = this._getResourceUrl(name,'html'); 
+	    var url = this._getResourceUrl(name,'html');
+	    console.log("looking for resource at ..."+url);
 	    if (typeof(self.state.tooltips[name]) === 'undefined') {
 		$.ajax( {url: url,
 			 dataType: 'html',
@@ -2826,6 +2775,8 @@ var url = document.URL;
         	self._processSelectedPhenotypeSort();
             });
 
+	    self._configureFaqs();
+
 
 	},
 	
@@ -2865,8 +2816,10 @@ var url = document.URL;
 
 	_createCalculationSelection: function () {
 	    
-	    var optionhtml = "<span id='calc_div'><span id='clabel'>Display<span id='calcs'><img class='calcimg' src='" +
-		this.state.scriptpath +  "../image/greeninfo30.png' height='15px'></span><span id='calc'></span></span><br />";
+	    var optionhtml = "<span id='calc_div'><span id='clabel'>Display"+
+		"<span id='calcs'><img class='calcimg' src='" +
+		this.state.scriptpath +  "../image/greeninfo30.png' height='15px'>"+
+		"</span></span><br />";
 
 	    optionhtml = optionhtml+"<span id=\'calc_sel\'><select id=\"calculation\">";
 	    for (var idx=0;idx<this.state.similarityCalculation.length;idx++) {
