@@ -55,3 +55,7 @@
     max-width: 150px;
     z-index: 10;
 }
+
+.datagraph-caption {
+    padding-top: 1em;
+}
