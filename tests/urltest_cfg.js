@@ -250,7 +250,7 @@
             notes : "Currently just checks for string matches in returned HTML",
             expects : {
                 format : "html",
-                raw_contains : "Enabling navigation",
+                raw_contains : "Disease",
             }
         },
 
@@ -264,7 +264,7 @@
                 format : "html",
                 raw_contains : 
                 [
-                    "DOID_14330",
+                    "14330",
                     "Parkinsonism", // HP term associated
                     "PINK1", // 
                     "Parkinson Disease 14", // OMIM subtype
@@ -296,25 +296,18 @@
         {
             component : "monarch",
             priority : 1,
-            url : "http://tartini.crbs.ucsd.edu/phenotype/NCBIGene:388552.json",
+            url : "http://tartini.crbs.ucsd.edu/gene/NCBIGene:388552.json",
             desc : "JSON for a gene",
             expects : {
                 format : "json",
                 must_contain : 
                     {
-                        "id": "NCBIGene_388552",
                         "label": "BLOC1S3",
-                        "has_exact_synonym": [],
-                        "relationships": {
-                            "subject": {
-                                "id": "NCBIGene_388552"
-                            },
-                            "property": {
-                                "id": "subClassOf",
-                                "label": "subClassOf"
-                            },
-                            "source": "OntoQuest"
+                        "type": "gene",
+                        "taxon": {
+                            "label": "Homo sapiens"
                         }
+
                         //object: {
                         //"id": "SO_0001217"
                         //}
