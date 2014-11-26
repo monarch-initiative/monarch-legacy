@@ -117,18 +117,33 @@ function makeResizableGraph(data,graphDiv,config){
     });
 }
 
-function setMinHeightWidth(graphObject,div){
-    
-    var minWidth = graphObject.config.width + graphObject.config.margin.left + graphObject.config.margin.right + 35;
-    var minHeight = graphObject.config.height + graphObject.config.margin.top + graphObject.config.margin.bottom;
+// Run all all landing pages.
+function setMinHeightWidth (graphObject, div){
 
-    if (_.isEqual($(div).parent(),$(div).parent('.panel.panel-default'))){
-        $(div).parent().parent()
-            .css( {"min-width" : minWidth+"px", "min-height" : minHeight+"px"});
-        $(div).parent()
-            .css( {"width" : minWidth+"px", "height" : minHeight+125+"px"});
-    } else {
-        $(div).parent()
-            .css( {"width" : minWidth+"px", "height" : minHeight+125+"px"});
+    var conf = graphObject.config
+
+    // Figure out what mins we want.
+    var minWidth = conf.width + conf.margin.left + conf.margin.right + 35;
+    //var minHeight = conf.height + conf.margin.top + conf.margin.bottom;
+    
+    if( _.isEqual(jQuery(div).parent(),
+    		  jQuery(div).parent('.panel.panel-default')) ){
+        jQuery(div).parent().parent().css({
+    	    "min-width": minWidth + "px"//,
+    	    //"min-height": minHeight + "px"
+    	});
+        jQuery(div).parent().css({
+    	    "min-width": minWidth + "px"//,
+    	    //"height": minHeight + 125 + "px"
+    	});
+    }else{
+        jQuery(div).parent().css({
+	    "min-width": minWidth + "px"//,
+	    //"height": minHeight + 125 + "px"
+	});
     }
+    jQuery(div).parent().parent().css({
+	"min-width": minWidth + "px"//,
+	//	"height": minHeight + 125 + "px"
+    });
 }

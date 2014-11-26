@@ -1,66 +1,78 @@
-  {{{includes.navbar}}}
-  <div class="container-fluid" style="margin: 1em;">
-    <!-- Open first row section. -->
-    <div class="row">
-     <!-- Annotation Graph-->
-     <div class="col-xs-12 col-sm-12 col-md-6 col-lg-6">
-       <div class="panel panel-default">
-         <div class="pheno-geno-container"></div>
-         </div>
+{{{includes.navbar}}}
+<div class="container-fluid" style="margin: 1em;">
+
+  <div class="text-center">
+    <h1>
+      Model
+    </h1>
+  </div>
+
+  <!-- Open first row section. -->
+  <div class="row">
+
+    <!-- Blurb. -->
+    <div class="col-xs-12 col-sm-12 col-md-12 col-lg-3">
+      <div class="panel panel-default">
+	<p>
+	  Monarch <b>Model</b> integrates information from a variety
+	  of sources. Each specific page includes the abnormal genes
+	  and variations, phenotypes, and aggregated literature, with
+	  external links to relevant resources. Here we summarizes
+	  the curated genotype-phenotype data in the system.
+	</p>
       </div>
-      <!-- Spotlight -->
-      <div class="col-xs-12 col-sm-12 col-md-6 col-lg-6">
-        <div class="panel panel-default">
-          <h4>Model Spotlight: {{{spotlight.label}}}</h4>
-          <div>
-        <p>{{spotlight.description}}</p>
-        <ul>
-          <li>Taxon: {{spotlight.taxon}} </li>
-          <li>Genes: {{{spotlight.genes}}} </li>
-          <li>Phenotypes: {{{spotlight.phenotypes}}}</li>
-          <li>Publications: {{spotlight.publication_count}}</li>
-        </ul>
-      </div>
-          <p class="text-right">{{{spotlight.link}}}</p>
-          </div>
-        </div>
-        <!-- Getting started area or disease browser -->
-        <div class="col-xs-12 col-sm-12 col-md-6 col-lg-6">
-          <div class="panel panel-default">
-            <p>Quick look:</p>
-            <ul>
-              <li>genes with phenotypes: 4,000 in 10 species</li>
-              <li>species with gene-associations: 15</li>
-              <li>human genes with direct phenotype association: 3,000</li>
-              <li>human genes with inferred phenotype association: 20,000</li>
-            </ul>
-          </div>
-        </div>
-      </div>
-      <!-- Close first row section. -->
-      <!-- Open second row section. -->
-      <div class="row">
-        <!-- Recent updates -->
-        <div class="col-xs-12 col-sm-12 col-md-6 col-lg-6">
-          <div class="panel panel-default">
-            <h4>Recent Updates</h4>
-            {{#blog_results}}
-            <ul>
-              <li>
-                <a href="{{link}}">{{title}}</a> <small>({{date}})</small>
-              </li>
-            </ul>
-            {{/blog_results}}
-            {{#blog_results.length}}
-            <p class="text-right"><a href="http://monarch-initiative.blogspot.com/search/label/test">More</a></p>
-            {{/blog_results.length}}
-            {{^blog_results}}
-            <p>No news is good news.</p>
-            {{/blog_results}}
-          </div>
-        </div>
-      </div>
-      <!-- Close second row section. -->
     </div>
-  </body>
+
+    <!-- Annotation Graph-->
+    <div class="col-xs-12 col-sm-12 col-md-12 col-lg-9">
+      <div class="panel panel-default">
+        <div class="pheno-geno-container"></div>
+	<p class="datagraph-caption">
+	  This <em>interactive graph</em> displays the number of
+	  phenotype associations for mouse (genotypes) per major
+	  phenotypic category. You can explore the distribution of
+	  more specific phenotypes by clicking on the wedge symbol, or
+	  visit the phenotype page itself by clicking on the phenotype
+	  name. You can navigate back to less-specific phenotypes by
+	  clicking on the breadcrumbs listed in the top left-hand
+	  corner.
+	</p>
+      </div>
+    </div>
+
+    <!-- Spotlight -->
+    <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
+      <div class="panel panel-default">
+        <h4>Model Spotlight: {{{spotlight.label}}}</h4>
+        <div>
+          <p>{{spotlight.description}}</p>
+          <ul>
+            <li>Taxon: {{spotlight.taxon}} </li>
+            <li>Genes: {{{spotlight.genes}}} </li>
+            <li>Phenotypes: {{{spotlight.phenotypes}}}</li>
+            <li>Publications: {{spotlight.publication_count}}</li>
+          </ul>
+	</div>
+        <p class="text-right">{{{spotlight.link}}}</p>
+      </div>
+    </div>
+
+  </div>
+</div>
+
+<!-- Footer. -->
+<hr>
+<footer>
+  <!-- <div id="footer"> -->
+  <div style="padding: 10px 40px 10px; text-align: center; font-weight: 200; font-size: 12px;">
+    The Monarch Initiative is a collaboration between Oregon Health & Science University,
+    University of California, San Diego, Lawrence Berkeley National Laboratory, the University of
+    Pittsburgh, Sanger Institute, and Charité - Universitätsmedizin Berlin
+    and is supported generously by a NIH Office of the Director Grant #5R24OD011883.
+    <br />
+    Except where otherwise noted, this work is licensed under a Creative Commons <a href="https://creativecommons.org/licenses/by/3.0/us/">Attribution 3.0</a> License.
+  </div>
+</footer>
+
+</body>
 </html>
