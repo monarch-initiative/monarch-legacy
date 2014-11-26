@@ -8,22 +8,32 @@
          <div class="pheno-geno-container"></div>
          </div>
       </div>
-      <!-- Disease spotlight -->
+      <!-- Spotlight -->
       <div class="col-xs-12 col-sm-12 col-md-6 col-lg-6">
         <div class="panel panel-default">
-          <h4>Model Spotlight: sed do eiusmod</h4>
-          <div>Bacon ipsum dolor sit amet ad exercitation leberkas et ground
-            round kielbasa. T-bone corned beef enim, in shankle laboris ut
-            ham biltong chicken jowl cow drumstick est shank. Biltong
-            brisket shank labore chicken ut. Nisi doner sint elit ea,
-            cow deserunt flank enim consequat. Meatball short ribs
-            laborum ball tip elit.</div>
+          <h4>Model Spotlight: {{{spotlight.label}}}</h4>
+          <div>
+        <p>{{spotlight.description}}</p>
+        <ul>
+          <li>Taxon: {{spotlight.taxon}} </li>
+          <li>Genes: {{{spotlight.genes}}} </li>
+          <li>Phenotypes: {{{spotlight.phenotypes}}}</li>
+          <li>Publications: {{spotlight.publication_count}}</li>
+        </ul>
+      </div>
+          <p class="text-right">{{{spotlight.link}}}</p>
           </div>
         </div>
         <!-- Getting started area or disease browser -->
         <div class="col-xs-12 col-sm-12 col-md-6 col-lg-6">
           <div class="panel panel-default">
-            <p>Some kind of getting started area? Or maybe disease browser</p>
+            <p>Quick look:</p>
+            <ul>
+              <li>genes with phenotypes: 4,000 in 10 species</li>
+              <li>species with gene-associations: 15</li>
+              <li>human genes with direct phenotype association: 3,000</li>
+              <li>human genes with inferred phenotype association: 20,000</li>
+            </ul>
           </div>
         </div>
       </div>
