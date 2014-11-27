@@ -76,7 +76,8 @@ var url = document.URL;
             detailRectHeight: 140,
             detailRectStrokeWidth: 3,
 	    globalViewSize : 110,
-	    reducedGlobalViewSize: 30,
+	    reducedGlobalViewSize: 50,
+	    minHeight: 225,
 	    h : 526,
 	    m :[ 30, 10, 10, 10 ],
 	    multiOrganismCt: 10,
@@ -112,8 +113,8 @@ var url = document.URL;
 	    nonOverviewGridTitleXOffset: 220,
 	    nonOverviewGridTitleFaqOffset: 570,
 	    gridTitleYOffset: 20,
-	    baseYOffset: 150
-	    
+	    baseYOffset: 150,
+	    dummyModelName: "dummy"
 	},
 
 
@@ -280,6 +281,7 @@ var url = document.URL;
 	    this.state.phenotypeData = this._filterPhenotypeResults(this.state.phenotypeData);
 	    this._loadData();
 
+
 	    // amont of extra space needed for overview
 	    if (this.state.targetSpeciesName == "Overview") {
 	    	this.state.yoffsetOver = this.state.overviewGap;
@@ -311,10 +313,10 @@ var url = document.URL;
 		this.state.svg
 		    .attr("width", "100%")
 		    .attr("height", this.state.phenotypeDisplayCount * 18);
-		this._createRectangularContainers();				
+		var rectHeight = this._createRectangularContainers();				
 		this._createColorScale();
 
-		var ymax  = this._createModelRegion();
+		this._createModelRegion();
 
 		this._updateAxes();
 		
@@ -323,13 +325,10 @@ var url = document.URL;
 		this._createRowLabels();
 		this._createOverviewSection();
 		
-	    	ymax = ymax + 60; //gap MAGIC NUBER ALERT. DOES THIS
-		//NEED TO BE CLEANED?
 		var height = this.state.phenotypeDisplayCount*18+this.state.yoffsetOver;
-		
-		if (height < ymax) {
-		    height = ymax+60;
-		}
+
+		height = rectHeight+40;
+
 		var containerHeight = height + 10; // MAGIC NUMBER? OR OVERVIEWW OFFSET?
 		$("#svg_area").css("height",height);
 		$("#svg_container").css("height",containerHeight);
@@ -601,19 +600,22 @@ var url = document.URL;
 		.attr("id", "globalview")
 		.attr("height", overviewBoxDim)
 		.attr("width", overviewBoxDim);
+
+	    var overviewInstructionHeightOffset  =50;
+	    var lineHeight =12;
 	    
-	    
+	    var  y = self.state.yModelRegion+overviewBoxDim+overviewInstructionHeightOffset;
 	    var rect_instructions = self.state.svg.append("text")		
 		.attr("x", self.state.axis_pos_list[2] + 10)
 	    //This changes for vertical positioning
-		.attr("y", (self.state.yoffset * 2) + 50)
+		.attr("y", y)
  		.attr("class", "instruct")
  		.text("Use the phenotype map above to");
  	    
  	    var rect_instructions = self.state.svg.append("text")
- 		.attr("x", self.state.axis_pos_list[2] + 10)
+ 		.attr("x", self.state.axis_pos_list[2] + lineHeight)
  	    //This changes for vertical positioning
-		.attr("y", (self.state.yoffset * 2) +  60) 
+		.attr("y", y+10) 
  		.attr("class", "instruct")
  		.text("navigate the model view on the left");
 	},
@@ -1070,8 +1072,35 @@ var url = document.URL;
 	    if (typeof(limit) !== 'undefined') {
 		url = url +"&limit="+limit;
 	    }
+
 	    var res = this._ajaxLoadData(speciesName,url);
+	    if (res !== null) {
+		if (typeof(limit) !== 'undefined' && typeof(res.b) !== 'undefined' && res.b !== null &&
+		    res.b.length < limit) {
+
+		    res = this._padSpeciesData(res,speciesName,limit);
+
+		}
+	    }
 	    this.state.data[speciesName]= res;
+	},
+
+	// make sure there are limit items in res --
+	// If we don't have enough, add some dummy items in. 
+	// This will space things out appropriately, having dummy models take 
+	// up some of the x axis space. Later, we will make sure not to show the 
+	// labels for these dummies.
+	_padSpeciesData: function(res,species,limit) {
+	    var toadd = limit-res.b.length;
+	    for (var i =0; i < toadd; i++) {
+		var dummyId = "dummy"+species+i;
+		var newItem = { id: dummyId,
+				label: this.state.dummyModelName,
+				score:  {score: 0, rank: Number.MAX_VALUE},
+				};
+		res.b.push(newItem);
+	    }
+	    return res;
 	},
 	
 	_loadOverviewData: function() {
@@ -1114,14 +1143,14 @@ var url = document.URL;
 		    var data = [];
 		    for (var idx= 0; idx <specData.b.length; idx++) {
 			var item = specData.b[idx];
-			data.push( 
+			var newItem = 
 			    {model_id: this._getConceptId(item.id),
 			     model_label: item.label,
 			     model_score: item.score.score,
 			     species: species,
-			     model_rank: item.score.rank}
-			);
-			this._loadDataForModel(item);
+			     model_rank: item.score.rank};
+			data.push(newItem);
+		    	this._loadDataForModel(item);
 		    }
 		    this.state.multiOrganismCt=specData.b.length;
 		    speciesList.push(species);
@@ -1132,7 +1161,7 @@ var url = document.URL;
 	    }
 	    
 	    for (var idx=0;idx<this.state.modelData.length;idx++) {
-	    	this.state.filteredModelData.push(this.state.modelData[idx]);
+		this.state.filteredModelData.push(this.state.modelData[idx]);
 	    }
 	    
 	    this.state.modelList = modList;
@@ -1144,7 +1173,7 @@ var url = document.URL;
 	    
 	    //initialize the filtered model list
 	    for (var idx=0;idx<this.state.modelDisplayCount;idx++) {
-	    	this.state.filteredModelList.push(this.state.modelList[idx]);
+		this.state.filteredModelList.push(this.state.modelList[idx]);
 	    }
 	},
 	
@@ -1258,7 +1287,6 @@ var url = document.URL;
 		if (this.state.modelList.length < this.state.modelDisplayCount) {
 		    this.state.currModelIdx = this.state.modelList.length-1;
 		    this.state.modelDisplayCount = this.state.modelList.length;
-		    this._fixForFewerModels(this.state.modelDisplayCount);
 		}
 		
 		this.state.filteredModelList=[];
@@ -1276,20 +1304,21 @@ var url = document.URL;
 	    //data is an array of all model matches	    
 	    data = newModelData.matches;
 	    
-	    var species = newModelData.taxon,
+	    if (typeof(data) !== 'undefined' &&  data.length > 0) {
+		var species = newModelData.taxon,
 	  	calculatedArray = [],
 	  	normalizedArray = [],
 	  	min,
 	  	max,
 	  	norm;
-    	    
-	    for (var idx=0;idx<data.length;idx++) {
-	    	calculatedArray.push(this._normalizeIC(data[idx]));
-	    }
-	    
-	    for (var idx=0;idx<data.length;idx++) {
     		
-		var curr_row = data[idx],		
+		for (var idx=0;idx<data.length;idx++) {
+	    	    calculatedArray.push(this._normalizeIC(data[idx]));
+		}
+		
+		for (var idx=0;idx<data.length;idx++) {
+    		    
+		    var curr_row = data[idx],		
 		    lcs = calculatedArray[idx],
 	    	    new_row = {"id": this._getConceptId(curr_row.a.id) + 
 			       "_" + this._getConceptId(curr_row.b.id) + 
@@ -1309,9 +1338,10 @@ var url = document.URL;
 			       "species": species.label,
 			       "taxon" : species.id,
 			      }; 
-		this.state.modelData.push(new_row); 
-		//this.state.modelList.push(new_row);
-    	    }
+		    this.state.modelData.push(new_row); 
+		    //this.state.modelList.push(new_row);
+    		}
+	    }
 	},
 	
 	//we may use this when normalization and ranking have been determined
@@ -1489,23 +1519,14 @@ var url = document.URL;
 	
 	_configureFaqs: function() {
 	    
-	   /* var faqs = ("#faq")
-		.on("click", function(d) {
-		    console.log("trying to show dialog for ...faq");
-		    self._showDialog("faq");
-		});	*/
-	    
-	    //var sorts = d3.selectAll("#sorts")
 	    var sorts = $("#sorts")
 		.on("click", function(d,i){
-		    console.log("trying to show dialog for ..sorts");
 		    self._showDialog( "sorts");
 		});
 	    
 	    //var calcs = d3.selectAll("#calcs")
 	    var calcs = $("#calcs")
 		.on("click", function(d){
-		    console.log("trying to show dialog for ..calcs");
 		    self._showDialog( "calcs");
 		});
 	},
@@ -1841,15 +1862,15 @@ var url = document.URL;
 	    }
 	},
 
-	_convertLabelHTML: function (t, label, data) {
+	_convertLabelHTML: function (self,t, label, data) {
     	    
 	    var self = this;
 	    var width = 100,
-		el = d3.select(t),
-		p = d3.select(t.parentNode),
-		x = +t.getAttribute("x"),
-		y = +t.getAttribute("y");
-
+	    el = d3.select(t),
+	    p = d3.select(t.parentNode),
+	    x = +t.getAttribute("x"),
+	    y = +t.getAttribute("y");
+		
 	    p.append("text")
 	       	.attr('x', x + 15)
 	        .attr('y', y)
@@ -1859,7 +1880,7 @@ var url = document.URL;
 	        .attr("model_id", data.model_id)
 	        .attr("height", 60)
 	        .attr("transform", function(d) {
-	            return "rotate(-45)" 
+		    return "rotate(-45)" 
 	        })
 		.on("click", function(d) {
 		    self._clickModel(data, self.document[0].location.origin);
@@ -1875,7 +1896,8 @@ var url = document.URL;
 		.attr("class", this._getConceptId(data.model_id) + " model_label")
 	    //.attr("class", data.model_id + " model_label")
 		.style("font-size", "12px")
-		.text( function(d) {if (label == "") return ""; else return label;});
+	        //don't show the label if it is a dummy.
+		.text( function(d) {if (label == self.state.dummyModelName) return ""; else return label;});
 	    
 	    el.remove();
 	},
@@ -2351,7 +2373,7 @@ var url = document.URL;
 	    //to rotate the text, I need to select it as it was added by the axis
 	  	.selectAll("text") 
 	  	.each(function(d,i) { 
-	  	    self._convertLabelHTML(this, self._getShortLabel(self.state.filteredModelList[i].model_label, 15),self.state.filteredModelList[i]);}); 
+	  	    self._convertLabelHTML(self,this, self._getShortLabel(self.state.filteredModelList[i].model_label, 15),self.state.filteredModelList[i]);}); 
 	},
 	
 
@@ -2390,7 +2412,10 @@ var url = document.URL;
 		.attr("width", 18)
     	        .attr("height", 10)
 		.attr("class", "scores")
-		.text(function (d){return d.model_score;})
+	    // don't show score if it is a dummy model.
+		.text(function (d){ if (d.model_label === self.state.dummyModelName) { 
+		    return "";
+		} else {return d.model_score;}})
 	        .style("font-weight","bold")
 	        .style("fill",function(d) { return self._getColorForModelValue(self,d.species,d.model_score);});
 	},
@@ -2427,7 +2452,6 @@ var url = document.URL;
 	_showDialog : function(name){
 	    var self= this;
 	    var url = this._getResourceUrl(name,'html');
-	    console.log("looking for resource at ..."+url);
 	    if (typeof(self.state.tooltips[name]) === 'undefined') {
 		$.ajax( {url: url,
 			 dataType: 'html',
@@ -2452,15 +2476,15 @@ var url = document.URL;
 		.dialog({
 		    modal: true,
 		    minHeight: 200,
-		    maxHeight: 400,
+		    height: 250,
+		    maxHeight: 300,
 		    minWidth: 400,
-		    resizable: true,
+		    resizable: false,
 		    draggable:true,
-		    position: ['center', 'center'],
+		    position: { my: "top", at: "top+25%",of: "#svg_area"},
 		    title: 'Phenogrid Notes'});
-	    
-	    $dialog.dialog('open');
 	    $dialog.html(text);	
+	    $dialog.dialog('open');
 	    self.state.tooltips[name]=text;
 	},
 	
@@ -2477,6 +2501,11 @@ var url = document.URL;
 	    //if (self.state.targetSpeciesName === "Overview") {self.state.yoffsetOver = 35;}
 	    //else {yoffsetOver = 0;}
 	    var gridHeight = self.state.phenotypeDisplayCount * 13 + 10;
+	    if (gridHeight < self.state.minHeight) {
+		gridHeight = self.state.minHeight;
+	    }
+
+	    
 	    var y = self.state.yModelRegion;
 	    //create accent boxes
 	    var rect_accents = this.state.svg.selectAll("#rect.accent")
@@ -2499,6 +2528,8 @@ var url = document.URL;
 	    //Is this ct necessary? What does it do?
 	    if (self.state.targetSpeciesName == "Overview") { var ct = 0;}
 	    else { var ct = -15;}
+
+	    return gridHeight+self.state.yModelRegion;
 	    
 	},
 
@@ -2535,7 +2566,7 @@ var url = document.URL;
 	},
 
 	
-	//this code creates the colored rectangles below the models
+	//this code creates the labels for the models, the lines, scores, etc..
 	_createModelRegion: function () {
 
 	    var self=this;
@@ -2568,8 +2599,6 @@ var url = document.URL;
 				       );
 	    var diff = d3.max(temp_data) - d3.min(temp_data);
 
-	    // indicator for bottom of gradients
-	    var ymax = 0;
 	    
 	    //only show the scale if there is more than one value represented
 	    //in the scale
@@ -2577,10 +2606,9 @@ var url = document.URL;
 		// baseline for gradient positioning
 		var y1 = 262;  
 		//more magic data
-		if (this.state.filteredPhenotypeData.length < 14) {
+		if (this.state.phenotypeData.length < this.state.defaultPhenotypeDisplayCount) {
 		    y1=172;  
 		} 
-
 		ymax = this._buildGradientDisplays(y1);
 		this._buildGradientTexts(y1);
 	    }					
@@ -2588,8 +2616,6 @@ var url = document.URL;
 	    var phenogridControls = $('<div id="phenogrid_controls"></div>');
 	    this.element.append(phenogridControls);
 	    this._createSelectionControls(phenogridControls); 
-
-	    return ymax;
 	},
 
 	/**
@@ -2699,7 +2725,7 @@ var url = document.URL;
 	    else if (calc == 3) {text1 = "Less Similar"; text2 = "Ratio (t)"; text3 = "More Similar";}
 	    else if (calc == 0) {text1 = "Min"; text2 = "Similarity"; text3 = "Max";}
 	    
-	    var ytext1 =  y1  + self.state.yoffset-5;
+	    var ytext1 =  y1  + self.state.yoffset;
 	    var xtext1= self.state.axis_pos_list[2] + 10;
 	    var div_text1 = self.state.svg.append("svg:text")
 		.attr("class", "detail_text")
@@ -2708,7 +2734,7 @@ var url = document.URL;
 		.style("font-size", "10px")
 		.text(text1);
 	    
-	    var ytext2 = y1-10  +  self.state.yoffset;
+	    var ytext2 = y1+  self.state.yoffset;
 	    var xtext2  = self.state.axis_pos_list[2] + 75;
 	    var div_text2 = self.state.svg.append("svg:text")
 		.attr("class", "detail_text")
@@ -2717,7 +2743,7 @@ var url = document.URL;
 		.style("font-size", "12px")
 		.text(text2);
 	    
-	    var ytext3 = y1 + self.state.yoffset-5;
+	    var ytext3 = y1 + self.state.yoffset;
 	    var xtext3 = self.state.axis_pos_list[2] + 125;
 	    var div_text3 = self.state.svg.append("svg:text")
 		.attr("class", "detail_text")
@@ -2838,9 +2864,9 @@ var url = document.URL;
 	_createSortPhenotypeSelection: function () {
 	    var optionhtml ="<span id='sort_div'>"+
 		"<span id='slabel' >Sort Phenotypes<span id=\"sorts\">"+
-		"<img class=\"sortimg\" src=\"" +this.state.scriptpath + 
+		"<img src=\"" +this.state.scriptpath + 
 		"../image/greeninfo30.png\" height=\"15px\"></span>"+
-		"<span id='sort'></span></span><br />"+
+		"</span>"+
 		"<span><select id=\'sortphenotypes\'>";
 	    
 	    for (var idx=0;idx<this.state.phenotypeSort.length;idx++) {

@@ -137,27 +137,25 @@
 }
 
 
-#org_div, #sort_div, #calc_div {
+#sort_div {
     float: left;
-    width:175px;
+    width:180px;
 }
-#calc_div {  
+#calc_div {
+        float: left;
 	width:120px;
 }
 
 #org_div{
+        float: left;
 	width:200px;
 }
-#org_div div, #calc_div div{
+#sort_div div #org_div div, #calc_div div{
 	font-weight:bold;
 }
 
-#org_div span, #calc_div span{
+#sort_div span, #org_div span, #calc_div span{
    font-size:14px;
-}
-
-#calc_div {
-	height:60px;
 }
 
 #calcs {
@@ -168,7 +166,7 @@
 }
 
 
-#clabel, #olabel{
+#clabel, #olabel, #slabel{
   font-weight:bold;
   margin-left:5px;
 }
@@ -178,9 +176,6 @@
    margin-left: 5px;
 }
 
-#org_div div, #calc_div div, #sort_div {
-	font-weight:bold;
-}
 
 #faq{
 	margin-left:14px;
@@ -193,10 +188,6 @@
   z-index:500;
 }
 
-#slabel{
-	font-size:14px;
-	font-weight:bold;
-}
 
 .faq{
 	margin-top:-5px;
@@ -204,8 +195,6 @@
 
 .sortimg{
 	margin-left:10px;
-	padding-bottom:5px;
-	height:20px;
 }
 
 
@@ -224,8 +213,9 @@
 	color:#000000;	
 }
 .ui-dialog-content a{
-	color: #253494;
+    color: #253494;
 }
+
 .ui-dialog-buttonpane{
 	background-color: #253494;
 }
@@ -280,7 +270,6 @@
 }
 
 #svg_container {
-   /*background-color: #FFCCFF;*/
    margin-top:40px;
 }
 
@@ -364,3 +353,7 @@ cube1, .cube2 {
    clear: both;
 }
 
+
+.faqdialog {
+    background: white;
+}
