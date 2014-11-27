@@ -750,22 +750,14 @@ bbop.monarch.datagraph.prototype.drawGraph = function (data,graphConfig,html_div
         function resizeChart(subGraph){
             
             var height = config.height;
-            if (subGraph.length < 10){
-                 height = subGraph.length*40;
-                 if (height > config.height){
-                     height = config.height;
-                 }
-            } else if (subGraph.length < 20){
-                 height = subGraph.length*30;
-                 if (height > config.height){
-                     height = config.height;
-                 }
-            } else if (subGraph.length < 25){
-                 height = subGraph.length*26;
+            if (subGraph.length < 25){
+                 height = subGraph.length*26; 
                  if (height > config.height){
                      height = config.height;
                  }
             }
+            
+            
             return height;
         }
         //TODO DRY - there is quite a bit of duplicated code

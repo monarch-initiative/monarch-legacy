@@ -127,23 +127,23 @@ function setMinHeightWidth (graphObject, div){
     //var minHeight = conf.height + conf.margin.top + conf.margin.bottom;
     
     if( _.isEqual(jQuery(div).parent(),
-    		  jQuery(div).parent('.panel.panel-default')) ){
+              jQuery(div).parent('.panel.panel-default')) ){
         jQuery(div).parent().parent().css({
-    	    "min-width": minWidth + "px"//,
-    	    //"min-height": minHeight + "px"
-    	});
+            "min-width": minWidth + "px"//,
+            //"min-height": minHeight + "px"
+        });
         jQuery(div).parent().css({
-    	    "min-width": minWidth + "px"//,
-    	    //"height": minHeight + 125 + "px"
-    	});
+            "min-width": minWidth + "px"//,
+            //"height": minHeight + 125 + "px"
+        });
     }else{
         jQuery(div).parent().css({
-	    "min-width": minWidth + "px"//,
-	    //"height": minHeight + 125 + "px"
-	});
+        "min-width": minWidth + "px"//,
+        //"height": minHeight + 125 + "px"
+    });
     }
     jQuery(div).parent().parent().css({
-	"min-width": minWidth + "px"//,
-	//	"height": minHeight + 125 + "px"
+    "min-width": minWidth + "px"//,
+    //"height": minHeight + 125 + "px"
     });
 }
