@@ -113,8 +113,8 @@ var url = document.URL;
 	    nonOverviewGridTitleXOffset: 220,
 	    nonOverviewGridTitleFaqOffset: 570,
 	    gridTitleYOffset: 20,
-	    baseYOffset: 150
-	    
+	    baseYOffset: 150,
+	    dummyModelName: "dummy"
 	},
 
 
@@ -280,10 +280,6 @@ var url = document.URL;
 	    this.state.phenotypeLabels = this._filterPhenotypeLabels(this.state.phenotypeData);
 	    this.state.phenotypeData = this._filterPhenotypeResults(this.state.phenotypeData);
 	    this._loadData();
-	    console.log("data loaded... # of models...");
-	    console.log("human... "+this.state.data["Homo sapiens"].b.length);
-	    console.log("mouse... "+this.state.data["Mus musculus"].b.length);
-	    console.log("fish... "+this.state.data["Danio rerio"].b.length);
 
 
 	    // amont of extra space needed for overview
@@ -330,8 +326,6 @@ var url = document.URL;
 		this._createOverviewSection();
 		
 		var height = this.state.phenotypeDisplayCount*18+this.state.yoffsetOver;
-		console.log("calculted height..."+height);
-		console.log("rect height is "+ rectHeight);
 
 		height = rectHeight+40;
 
@@ -1084,15 +1078,29 @@ var url = document.URL;
 		if (typeof(limit) !== 'undefined' && typeof(res.b) !== 'undefined' && res.b !== null &&
 		    res.b.length < limit) {
 
-		    console.log("need padding...");
-		    console.log("load data result for ..."+speciesName);
-		    console.log("# of results is "+res.b.length);
-		    
-		    console.log("result is .."+JSON.stringify(res));
-    		    /** add things to make up diff to limit.. */
+		    res = this._padSpeciesData(res,speciesName,limit);
+
 		}
 	    }
 	    this.state.data[speciesName]= res;
+	},
+
+	// make sure there are limit items in res --
+	// If we don't have enough, add some dummy items in. 
+	// This will space things out appropriately, having dummy models take 
+	// up some of the x axis space. Later, we will make sure not to show the 
+	// labels for these dummies.
+	_padSpeciesData: function(res,species,limit) {
+	    var toadd = limit-res.b.length;
+	    for (var i =0; i < toadd; i++) {
+		var dummyId = "dummy"+species+i;
+		var newItem = { id: dummyId,
+				label: this.state.dummyModelName,
+				score:  {score: 0, rank: Number.MAX_VALUE},
+				};
+		res.b.push(newItem);
+	    }
+	    return res;
 	},
 	
 	_loadOverviewData: function() {
@@ -1135,14 +1143,14 @@ var url = document.URL;
 		    var data = [];
 		    for (var idx= 0; idx <specData.b.length; idx++) {
 			var item = specData.b[idx];
-			data.push( 
+			var newItem = 
 			    {model_id: this._getConceptId(item.id),
 			     model_label: item.label,
 			     model_score: item.score.score,
 			     species: species,
-			     model_rank: item.score.rank}
-			);
-			this._loadDataForModel(item);
+			     model_rank: item.score.rank};
+			data.push(newItem);
+		    	this._loadDataForModel(item);
 		    }
 		    this.state.multiOrganismCt=specData.b.length;
 		    speciesList.push(species);
@@ -1153,7 +1161,7 @@ var url = document.URL;
 	    }
 	    
 	    for (var idx=0;idx<this.state.modelData.length;idx++) {
-	    	this.state.filteredModelData.push(this.state.modelData[idx]);
+		this.state.filteredModelData.push(this.state.modelData[idx]);
 	    }
 	    
 	    this.state.modelList = modList;
@@ -1165,7 +1173,7 @@ var url = document.URL;
 	    
 	    //initialize the filtered model list
 	    for (var idx=0;idx<this.state.modelDisplayCount;idx++) {
-	    	this.state.filteredModelList.push(this.state.modelList[idx]);
+		this.state.filteredModelList.push(this.state.modelList[idx]);
 	    }
 	},
 	
@@ -1279,7 +1287,6 @@ var url = document.URL;
 		if (this.state.modelList.length < this.state.modelDisplayCount) {
 		    this.state.currModelIdx = this.state.modelList.length-1;
 		    this.state.modelDisplayCount = this.state.modelList.length;
-		    this._fixForFewerModels(this.state.modelDisplayCount);
 		}
 		
 		this.state.filteredModelList=[];
@@ -1297,20 +1304,21 @@ var url = document.URL;
 	    //data is an array of all model matches	    
 	    data = newModelData.matches;
 	    
-	    var species = newModelData.taxon,
+	    if (typeof(data) !== 'undefined' &&  data.length > 0) {
+		var species = newModelData.taxon,
 	  	calculatedArray = [],
 	  	normalizedArray = [],
 	  	min,
 	  	max,
 	  	norm;
-    	    
-	    for (var idx=0;idx<data.length;idx++) {
-	    	calculatedArray.push(this._normalizeIC(data[idx]));
-	    }
-	    
-	    for (var idx=0;idx<data.length;idx++) {
     		
-		var curr_row = data[idx],		
+		for (var idx=0;idx<data.length;idx++) {
+	    	    calculatedArray.push(this._normalizeIC(data[idx]));
+		}
+		
+		for (var idx=0;idx<data.length;idx++) {
+    		    
+		    var curr_row = data[idx],		
 		    lcs = calculatedArray[idx],
 	    	    new_row = {"id": this._getConceptId(curr_row.a.id) + 
 			       "_" + this._getConceptId(curr_row.b.id) + 
@@ -1330,9 +1338,10 @@ var url = document.URL;
 			       "species": species.label,
 			       "taxon" : species.id,
 			      }; 
-		this.state.modelData.push(new_row); 
-		//this.state.modelList.push(new_row);
-    	    }
+		    this.state.modelData.push(new_row); 
+		    //this.state.modelList.push(new_row);
+    		}
+	    }
 	},
 	
 	//we may use this when normalization and ranking have been determined
@@ -1512,14 +1521,12 @@ var url = document.URL;
 	    
 	    var sorts = $("#sorts")
 		.on("click", function(d,i){
-		    console.log("trying to show dialog for ..sorts");
 		    self._showDialog( "sorts");
 		});
 	    
 	    //var calcs = d3.selectAll("#calcs")
 	    var calcs = $("#calcs")
 		.on("click", function(d){
-		    console.log("trying to show dialog for ..calcs");
 		    self._showDialog( "calcs");
 		});
 	},
@@ -1855,15 +1862,15 @@ var url = document.URL;
 	    }
 	},
 
-	_convertLabelHTML: function (t, label, data) {
+	_convertLabelHTML: function (self,t, label, data) {
     	    
 	    var self = this;
 	    var width = 100,
-		el = d3.select(t),
-		p = d3.select(t.parentNode),
-		x = +t.getAttribute("x"),
-		y = +t.getAttribute("y");
-
+	    el = d3.select(t),
+	    p = d3.select(t.parentNode),
+	    x = +t.getAttribute("x"),
+	    y = +t.getAttribute("y");
+		
 	    p.append("text")
 	       	.attr('x', x + 15)
 	        .attr('y', y)
@@ -1873,7 +1880,7 @@ var url = document.URL;
 	        .attr("model_id", data.model_id)
 	        .attr("height", 60)
 	        .attr("transform", function(d) {
-	            return "rotate(-45)" 
+		    return "rotate(-45)" 
 	        })
 		.on("click", function(d) {
 		    self._clickModel(data, self.document[0].location.origin);
@@ -1889,7 +1896,8 @@ var url = document.URL;
 		.attr("class", this._getConceptId(data.model_id) + " model_label")
 	    //.attr("class", data.model_id + " model_label")
 		.style("font-size", "12px")
-		.text( function(d) {if (label == "") return ""; else return label;});
+	        //don't show the label if it is a dummy.
+		.text( function(d) {if (label == self.state.dummyModelName) return ""; else return label;});
 	    
 	    el.remove();
 	},
@@ -2365,7 +2373,7 @@ var url = document.URL;
 	    //to rotate the text, I need to select it as it was added by the axis
 	  	.selectAll("text") 
 	  	.each(function(d,i) { 
-	  	    self._convertLabelHTML(this, self._getShortLabel(self.state.filteredModelList[i].model_label, 15),self.state.filteredModelList[i]);}); 
+	  	    self._convertLabelHTML(self,this, self._getShortLabel(self.state.filteredModelList[i].model_label, 15),self.state.filteredModelList[i]);}); 
 	},
 	
 
@@ -2404,7 +2412,10 @@ var url = document.URL;
 		.attr("width", 18)
     	        .attr("height", 10)
 		.attr("class", "scores")
-		.text(function (d){return d.model_score;})
+	    // don't show score if it is a dummy model.
+		.text(function (d){ if (d.model_label === self.state.dummyModelName) { 
+		    return "";
+		} else {return d.model_score;}})
 	        .style("font-weight","bold")
 	        .style("fill",function(d) { return self._getColorForModelValue(self,d.species,d.model_score);});
 	},
@@ -2441,7 +2452,6 @@ var url = document.URL;
 	_showDialog : function(name){
 	    var self= this;
 	    var url = this._getResourceUrl(name,'html');
-	    console.log("looking for resource at ..."+url);
 	    if (typeof(self.state.tooltips[name]) === 'undefined') {
 		$.ajax( {url: url,
 			 dataType: 'html',
@@ -2599,7 +2609,6 @@ var url = document.URL;
 		if (this.state.phenotypeData.length < this.state.defaultPhenotypeDisplayCount) {
 		    y1=172;  
 		} 
-		console.log("y for the gradient display is..."+y1);
 		ymax = this._buildGradientDisplays(y1);
 		this._buildGradientTexts(y1);
 	    }					
