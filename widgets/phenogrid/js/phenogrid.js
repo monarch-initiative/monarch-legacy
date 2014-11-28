@@ -870,7 +870,8 @@ var url = document.URL;
 	    // different targets, only keep one of them. 
 	    //Input: array of all data returned by query
 	    //Output: array of the unique phentypes for this disease
-	    //phenotypeArray: we should end up with an array with unique matched phenotypes
+	    //phenotypeArray: we should end up with an array with unique matched phenotypes, each with the highest value
+	    // seen for that phenotype 
     	    for (var idx=0;idx<fulldataset.length;idx++) {
 		var match =  null;
 		for (var pidx = 0; pidx < phenotypeArray.length; pidx++) {
@@ -885,32 +886,13 @@ var url = document.URL;
     		    phenotypeArray.push(fulldataset[idx]);
     		}
 		else {
-		    //		    var resultdup = $.grep(fulldataset, function(e){ return ( (e.label_a == fulldataset[idx].label_a)  &&  (e.model_id == fulldataset[idx].model_id) )});
-		    var resultdup = [];
-		    for (var i = 0; i < fulldataset.length; i++) {
-			if (fulldataset[i].label_a == fulldataset[idx].label_a && fulldataset[i].model_id == fulldataset[idx].model_id && i != idx) {
-			    resultdup.push(fulldataset[i]);
-			}
-		    }
-		    
-		    if (resultdup.length > 1) {
-			var max = 0;
-			for (var i = 0; i<resultdup.length; i++){
-			    if(resultdup[i].value > max) {
-				max = resultdup[i].value;
-			    }
-			}
-			//put this value back into the unique phenotype/model pair
-			//should only be one of this phenotype in the phenotype array
-			// do we need this check?
-			if (match.value < max) {  
-			    match.value = max;
-			}
+		    if (fulldataset[idx].value > match.value) {
+			match.value = fulldataset[idx].value;
 		    }
 		}
     	    }
+	    console.log("phenotype array is..."+JSON.stringify(phenotypeArray));
 	    return phenotypeArray;
-
 	},
 	
 	//1. Sort the array by source phenotype name
