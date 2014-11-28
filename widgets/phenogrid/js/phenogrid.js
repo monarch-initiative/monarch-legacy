@@ -135,17 +135,23 @@ var url = document.URL;
 	},
 	
 	//reset state values that must be cleared before reloading data
-	_reset: function() {
+	_reset: function(type) {
 
-	    this.state.modelData = [];
-	    this.state.modelList = [];
-	    this.state.filteredModelData = [];
-	    this.state.filteredModelList = [];
+	    if (type !== 'sortphenotypes') {
+		this.state.modelData = [];
+		this.state.modelList = [];
+		this.state.filteredModelData = [];
+		this.state.filteredModelList = [];
+	    }
 
 	    this.state.yAxisMax = 0;
 	    this.state.yoffset  = this.state.baseYOffset;
 	    //basic gap for a bit of space above modelregion
 	    this.state.yoffsetOver = this.state.nonOverviewGap;
+	    if (this.state.targetSpeciesName == "Overview") {
+	    	this.state.yoffsetOver = this.state.overviewGap;
+	    }
+
 	    this.state.modelName = "";
 
 	    //  this.state.yTranslation = 0;
@@ -282,17 +288,14 @@ var url = document.URL;
 	    this._loadData();
 
 
-	    // amont of extra space needed for overview
-	    if (this.state.targetSpeciesName == "Overview") {
-	    	this.state.yoffsetOver = this.state.overviewGap;
-	    }
 	    // shorthand for top of model region
 	    this.state.yModelRegion = this.state.yoffsetOver+this.state.yoffset;
-
+	    
 	    this._filterData(this.state.modelData);
 	    this.state.unmatchedPhenotypes = this._getUnmatchedPhenotypes();
 	    this.element.empty();
 	    this.reDraw();
+
 	},
 
 	_loadSpinner: function() {
@@ -305,7 +308,6 @@ var url = document.URL;
 	reDraw: function() {
 	    if (this.state.modelData.length != 0 && this.state.phenotypeData.length != 0
 		&& this.state.filteredPhenotypeData.length != 0){
-
 		this._setComparisonType();
 		this._initCanvas();
 		this._addLogoImage();
@@ -891,7 +893,6 @@ var url = document.URL;
 		    }
 		}
     	    }
-	    console.log("phenotype array is..."+JSON.stringify(phenotypeArray));
 	    return phenotypeArray;
 	},
 	
