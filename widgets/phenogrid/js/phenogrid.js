@@ -135,17 +135,23 @@ var url = document.URL;
 	},
 	
 	//reset state values that must be cleared before reloading data
-	_reset: function() {
+	_reset: function(type) {
 
-	    this.state.modelData = [];
-	    this.state.modelList = [];
-	    this.state.filteredModelData = [];
-	    this.state.filteredModelList = [];
+	    if (type !== 'sortphenotypes') {
+		this.state.modelData = [];
+		this.state.modelList = [];
+		this.state.filteredModelData = [];
+		this.state.filteredModelList = [];
+	    }
 
 	    this.state.yAxisMax = 0;
 	    this.state.yoffset  = this.state.baseYOffset;
 	    //basic gap for a bit of space above modelregion
 	    this.state.yoffsetOver = this.state.nonOverviewGap;
+	    if (this.state.targetSpeciesName == "Overview") {
+	    	this.state.yoffsetOver = this.state.overviewGap;
+	    }
+
 	    this.state.modelName = "";
 
 	    //  this.state.yTranslation = 0;
@@ -282,17 +288,14 @@ var url = document.URL;
 	    this._loadData();
 
 
-	    // amont of extra space needed for overview
-	    if (this.state.targetSpeciesName == "Overview") {
-	    	this.state.yoffsetOver = this.state.overviewGap;
-	    }
 	    // shorthand for top of model region
 	    this.state.yModelRegion = this.state.yoffsetOver+this.state.yoffset;
-
+	    
 	    this._filterData(this.state.modelData);
 	    this.state.unmatchedPhenotypes = this._getUnmatchedPhenotypes();
 	    this.element.empty();
 	    this.reDraw();
+
 	},
 
 	_loadSpinner: function() {
@@ -305,7 +308,6 @@ var url = document.URL;
 	reDraw: function() {
 	    if (this.state.modelData.length != 0 && this.state.phenotypeData.length != 0
 		&& this.state.filteredPhenotypeData.length != 0){
-
 		this._setComparisonType();
 		this._initCanvas();
 		this._addLogoImage();
@@ -870,7 +872,8 @@ var url = document.URL;
 	    // different targets, only keep one of them. 
 	    //Input: array of all data returned by query
 	    //Output: array of the unique phentypes for this disease
-	    //phenotypeArray: we should end up with an array with unique matched phenotypes
+	    //phenotypeArray: we should end up with an array with unique matched phenotypes, each with the highest value
+	    // seen for that phenotype 
     	    for (var idx=0;idx<fulldataset.length;idx++) {
 		var match =  null;
 		for (var pidx = 0; pidx < phenotypeArray.length; pidx++) {
@@ -885,32 +888,12 @@ var url = document.URL;
     		    phenotypeArray.push(fulldataset[idx]);
     		}
 		else {
-		    //		    var resultdup = $.grep(fulldataset, function(e){ return ( (e.label_a == fulldataset[idx].label_a)  &&  (e.model_id == fulldataset[idx].model_id) )});
-		    var resultdup = [];
-		    for (var i = 0; i < fulldataset.length; i++) {
-			if (fulldataset[i].label_a == fulldataset[idx].label_a && fulldataset[i].model_id == fulldataset[idx].model_id && i != idx) {
-			    resultdup.push(fulldataset[i]);
-			}
-		    }
-		    
-		    if (resultdup.length > 1) {
-			var max = 0;
-			for (var i = 0; i<resultdup.length; i++){
-			    if(resultdup[i].value > max) {
-				max = resultdup[i].value;
-			    }
-			}
-			//put this value back into the unique phenotype/model pair
-			//should only be one of this phenotype in the phenotype array
-			// do we need this check?
-			if (match.value < max) {  
-			    match.value = max;
-			}
+		    if (fulldataset[idx].value > match.value) {
+			match.value = fulldataset[idx].value;
 		    }
 		}
     	    }
 	    return phenotypeArray;
-
 	},
 	
 	//1. Sort the array by source phenotype name
