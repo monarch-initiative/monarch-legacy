@@ -1493,10 +1493,15 @@ var url = document.URL;
 
 	    // place it at yoffset - the top of the rectangles with the phenotypes
             var disease = dtitle.replace(/ *\([^)]*\) */g,"");
-    	    this.state.svg.append("svg:text")
+
+            //Use until SVG2. Word Wraps the Disease Title
+	    	this.state.svg.append("foreignObject")
+	    	.attr("width", 200)
+	    	.attr("height", 50)
 	    	.attr("id","diseasetitle")
 	    	.attr("y", this.state.yoffset)
-	    	.text(disease);
+	    	.append("xhtml:div")
+	    	.html(disease);
 	},
 	
 	
