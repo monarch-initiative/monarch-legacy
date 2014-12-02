@@ -100,6 +100,7 @@ var url = document.URL;
 			      { abbrev: "GO", label: "Gene Ontology"}],
 	    modelDisplayCount : 30,
 	    phenotypeDisplayCount : 26,
+	    labelCharDisplayCount : 20,
 	    defaultPhenotypeDisplayCount: 26,
 	    apiEntityMap: [ {prefix: "HP", apifragment: "disease"},
 			    {prefix: "OMIM", apifragment: "disease"}],
@@ -1585,7 +1586,7 @@ var url = document.URL;
 	    for (var i = 0; i < curr_data.length; i++){
 		var label = curr_data[i].model_label;
 		for (var j=0; j < alabels[0].length; j++){
-		    var shortTxt = self._getShortLabel(label,15);
+		    var shortTxt = self._getShortLabel(label,self.state.labelCharDisplayCount);
 		    if(alabels[0][j].innerHTML == shortTxt){
 		    	alabels[0][j].style.fill = "blue";
 		    	alabels[0][j].innerHTML = label;
@@ -1602,7 +1603,7 @@ var url = document.URL;
 	    for (var i = 0; i < curr_data.length; i++){
 		var label = curr_data[i].model_label;
 		for (var j=0; j < alabels[0].length; j++){
-		    var shortTxt = this._getShortLabel(label,15);
+		    var shortTxt = this._getShortLabel(label,self.state.labelCharDisplayCount);
 		    if(alabels[0][j].innerHTML == label){
 		    	alabels[0][j].style.fill = "black";
 		    	alabels[0][j].innerHTML = shortTxt;
@@ -1691,7 +1692,7 @@ var url = document.URL;
 		model_text.style("font-weight","normal");
 		model_text.style("text-decoration", "none");
 		model_text.style("fill", "black");
-		model_text.html(this._getShortLabel(modelData.model_label, 15));
+		model_text.html(this._getShortLabel(modelData.model_label,self.state.labelCharDisplayCount));
 	    }
 	},
 	
@@ -2361,7 +2362,7 @@ var url = document.URL;
 	    //to rotate the text, I need to select it as it was added by the axis
 	  	.selectAll("text") 
 	  	.each(function(d,i) { 
-	  	    self._convertLabelHTML(self,this, self._getShortLabel(self.state.filteredModelList[i].model_label, 15),self.state.filteredModelList[i]);}); 
+	  	    self._convertLabelHTML(self,this, self._getShortLabel(self.state.filteredModelList[i].model_label,self.state.labelCharDisplayCount),self.state.filteredModelList[i]);}); 
 	},
 	
 
