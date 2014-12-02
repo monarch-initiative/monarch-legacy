@@ -31,8 +31,7 @@ bbop.monarch.datagraph = function(config){
                     width: 10
                   },
                   stacked:{
-                    height: 80,
-                    //width: 10
+                    height: 80
                   }
     };
     
@@ -142,12 +141,24 @@ bbop.monarch.datagraph.prototype.makeGraphDOM = function(html_div,data){
                       " value=\"stacked\"> Stacked</label>" +
               "</form> ");
       }
+
+      //Update tooltip positioning
+      if (!config.useCrumb && groups.length>1){
+          config.arrowOffset.height = 12;
+          config.barOffset.grouped.height = 102;
+          config.barOffset.stacked.height = 81;
+      } else if (!config.useCrumb){
+          config.arrowOffset.height = -10;
+          config.barOffset.grouped.height = 71;
+          config.barOffset.stacked.height = 50;
+      }
 }
   
 bbop.monarch.datagraph.prototype.setD3Config = function (html_div,DATA){
       
       var d3Config = {};
-      var conf =  this.config;
+      var dataGraph = this;
+      var conf =  dataGraph.config;
 
       //Define scales
       d3Config.y0 = d3.scale.ordinal()
@@ -187,16 +198,254 @@ bbop.monarch.datagraph.prototype.setD3Config = function (html_div,DATA){
           .append("div")
           .attr("class", "tip");
       
+      d3Config.groups = dataGraph.getGroups(DATA);
+      //Variables to keep track of graph transitions
+      d3Config.level = 0;
+      d3Config.parents = [];
+      d3Config.html_div = html_div;
+      
       return d3Config;
 }
 
-bbop.monarch.datagraph.prototype.drawGraph = function (data,graphConfig,html_div) {
+
+bbop.monarch.datagraph.prototype.makeLegend = function (graphConfig){
+    var config = this.config;
+    var svg = graphConfig.svg;
+    var groups = graphConfig.groups;
+    var color = graphConfig.color;
+    //Set legend
+    var legend = svg.selectAll(".legend")
+       .data(groups.slice())
+       .enter().append("g")
+       .attr("class", "legend")
+       .attr("transform", function(d, i) { return "translate(0," + i * (config.legend.height+7) + ")"; });
+
+    legend.append("rect")
+       .attr("x", config.width+config.legend.width+37)//HARDCODE
+       .attr("y", 4)
+       .attr("width", config.legend.width)
+       .attr("height", config.legend.height)
+       .style("fill", color);
+
+    legend.append("text")
+       .attr("x", config.width+config.legend.width+32)
+       .attr("y", 12)
+       .attr("dy", config.legendText.height)
+       .attr("font-size",config.legendFontSize)
+       .style("text-anchor", "end")
+       .text(function(d) { return d; });
+}
+
+
+bbop.monarch.datagraph.prototype.makeNavArrow = function(data,navigate,triangleDim,barGroup,rect,graphConfig){
+    var dataGraph = this;
+    var config = dataGraph.config;
+    //boolean variable to check for subclasses that is returned
+    var isSubClass;
+    var tooltip = graphConfig.tooltip;
+    var svg = graphConfig.svg;
+    var html_div = graphConfig.html_div;
+    
+    var arrow = navigate.selectAll(".tick.major")
+        .data(data)
+        .append("svg:polygon")
+        .attr("points",triangleDim)
+        .attr("fill", config.color.arrow.fill)
+        .attr("display", function(d){
+            if (d.subGraph && d.subGraph[0]){
+                isSubClass=1; return "initial";
+            } else {
+                return "none";
+            }
+        })
+        .on("mouseover", function(d){
+               
+           if (d.subGraph && d.subGraph[0]){
+               dataGraph.displaySubClassTip(tooltip,this)
+           } 
+        })
+        .on("mouseout", function(){
+            d3.select(this)
+              .style("fill",config.color.arrow.fill);
+              tooltip.style("display", "none");
+        })
+        .on("click", function(d){
+            if (d.subGraph && d.subGraph[0]){  
+                dataGraph.transitionToNewGraph(tooltip,graphConfig,d,
+                        data,barGroup,rect);
+            }
+        });
+   return isSubClass;
+}
+
+bbop.monarch.datagraph.prototype.transitionToNewGraph = function(tooltip,graphConfig,d,data,barGroup,rect){
+    dataGraph = this;
+    config = dataGraph.config;
+    tooltip.style("display", "none");
+    graphConfig.svg.selectAll(".tick.major").remove();
+    graphConfig.level++;
+    dataGraph.transitionSubGraph(graphConfig,d.subGraph,data,graphConfig);
+   
+    //remove old bars
+    barGroup.transition()
+      .duration(750)
+      .attr("y", 60)
+      .style("fill-opacity", 1e-6)
+      .remove();
+   
+    rect.transition()
+      .duration(750)
+      .attr("y", 60)
+      .style("fill-opacity", 1e-6)
+      .remove();
+    
+    if (config.useCrumb){
+        dataGraph.makeBreadcrumb(graphConfig,d.label,graphConfig.groups,
+                rect,barGroup,d.fullLabel);
+    }
+
+}
+
+bbop.monarch.datagraph.prototype.displaySubClassTip = function(tooltip,d3Selection){
+    var dataGraph = this;
+    var config = dataGraph.config;
+    d3.select(d3Selection)
+      .style("fill", config.color.arrow.hover);
+
+    var coords = d3.transform(d3.select(d3Selection.parentNode)
+            .attr("transform")).translate;
+    var h = coords[1];
+    var w = coords[0];
+    
+    tooltip.style("display", "block")
+    .html("Click to see subclasses")
+    .style("top",h+config.margin.top+config.bread.height+
+            config.arrowOffset.height+"px")
+    .style("left",w+config.margin.left+config.arrowOffset.width+"px");
+}
+
+bbop.monarch.datagraph.prototype.getCountMessage = function(value,name){
+    return "Counts: "+"<span style='font-weight:bold'>"+value+"</span>"+"<br/>"
+            +"Organism: "+ "<span style='font-weight:bold'>"+name;
+}
+
+bbop.monarch.datagraph.prototype.displayCountTip = function(tooltip,value,name,d3Selection,barLayout){
+    var dataGraph = this;
+    var config = dataGraph.config;
+    var coords = d3.transform(d3.select(d3Selection.parentNode)
+            .attr("transform")).translate;
+    var w = coords[0];
+    var h = coords[1];
+    var heightOffset = d3Selection.getBBox().y;
+    var widthOffset = d3Selection.getBBox().width;
+    
+    tooltip.style("display", "block")
+    .html(dataGraph.getCountMessage(value,name));
+    if (barLayout == 'grouped'){
+        tooltip.style("top",h+heightOffset+config.barOffset.grouped.height+"px")
+        .style("left",w+config.barOffset.grouped.width+widthOffset+
+                config.margin.left+"px");
+    } else if (barLayout == 'stacked'){
+        tooltip.style("top",h+heightOffset+config.barOffset.stacked.height+"px")
+        .style("left",w+config.barOffset.grouped.width+widthOffset+
+                config.margin.left+"px");
+    }
+}
+bbop.monarch.datagraph.prototype.setGroupPositioning = function (graphConfig,graphData) {
+    var groupPos = graphConfig.svg.selectAll(".barGroup")
+       .data(graphData)
+       .enter().append("svg:g")
+       .attr("class", ("bar"+graphConfig.level))
+       .attr("transform", function(d) { return "translate(0," + graphConfig.y0(d.label) + ")"; });
+    return groupPos;
+}
+
+bbop.monarch.datagraph.prototype.setXYDomains = function (graphConfig,graphData,groups,barLayout) {
+    var dataGraph = this;
+    //Set y0 domain
+    graphConfig.y0.domain(graphData.map(function(d) { return d.label; }));
+    
+    if (barLayout == 'grouped'){
+        var xGroupMax = dataGraph.getGroupMax(graphData);
+        graphConfig.x.domain([0, xGroupMax]);
+        graphConfig.y1.domain(groups)
+        .rangeRoundBands([0, graphConfig.y0.rangeBand()]);
+    } else if (barLayout == 'stacked'){
+        var xStackMax = dataGraph.getStackMax(graphData);
+        graphConfig.x.domain([0, xStackMax]);
+        graphConfig.y1.domain(groups).rangeRoundBands([0,0]);
+    } else {
+        graphConfig.y1.domain(groups)
+        .rangeRoundBands([0, graphConfig.y0.rangeBand()]);
+    } 
+}
+
+bbop.monarch.datagraph.prototype.makeBar = function (barGroup,graphConfig,barLayout) {
+    var rect;
+    var dataGraph = this;
+    var config = dataGraph.config;
+    
+    //Create bars 
+    if (barLayout == 'grouped'){
+        rect = barGroup.selectAll("g")
+          .data(function(d) { return d.counts; })
+          .enter().append("rect")
+          .attr("class",("rect"+graphConfig.level))
+          .attr("height", graphConfig.y1.rangeBand())
+          .attr("y", function(d) { return graphConfig.y1(d.name); })
+          .attr("x", function(){if (config.isChrome || config.isSafari) {return 1;}else{ return 0;}})
+          .attr("width", function(d) { return graphConfig.x(d.value); })
+          .on("mouseover", function(d){
+            d3.select(this)
+              .style("fill", config.color.bar.fill);
+              dataGraph.displayCountTip(graphConfig.tooltip,d.value,d.name,this,'grouped');
+          })
+          .on("mouseout", function(){
+            d3.select(this)
+              .style("fill", function(d) { return graphConfig.color(d.name); });
+            graphConfig.tooltip.style("display", "none");
+          })
+          .style("fill", function(d) { return graphConfig.color(d.name); });
+        
+    } else if (barLayout == 'stacked') {
+        rect = barGroup.selectAll("g")
+          .data(function(d) { return d.counts; })
+          .enter().append("rect")
+          .attr("class",("rect"+graphConfig.level))
+          .attr("x", function(d){
+              if (d.x0 == 0){
+                  if (config.isChrome || config.isSafari){return 1;}
+                  else {return d.x0;}
+              } else { 
+                return graphConfig.x(d.x0);
+              } 
+          })
+          .attr("width", function(d) { 
+              return graphConfig.x(d.x1) - graphConfig.x(d.x0); 
+           })
+          .attr("height", graphConfig.y0.rangeBand())
+          .attr("y", function(d) { return graphConfig.y1(d.name); })
+          .on("mouseover", function(d){
+            d3.select(this)
+              .style("fill", config.color.bar.fill);
+            dataGraph.displayCountTip(graphConfig.tooltip,d.value,d.name,this,'stacked');
+
+          })
+          .on("mouseout", function(){
+            d3.select(this)
+              .style("fill", function(d) { return graphConfig.color(d.name); });
+            graphConfig.tooltip.style("display", "none");
+          })
+          .style("fill", function(d) { return graphConfig.color(d.name); });
+    }
+    return rect;
+}
+
+bbop.monarch.datagraph.prototype.drawGraph = function (data,graphConfig) {
         var dataGraph = this;
         var config = this.config;
-        var groups = dataGraph.getGroups(data);
-        data = dataGraph.getStackedStats(data,groups);
-        data = dataGraph.addEllipsisToLabel(data,config.maxLabelSize);
         
+        var html_div = graphConfig.html_div;
         var y0       = graphConfig.y0;
         var y1       = graphConfig.y1;
         var x        = graphConfig.x;
@@ -206,37 +455,20 @@ bbop.monarch.datagraph.prototype.drawGraph = function (data,graphConfig,html_div
         var svg      = graphConfig.svg;
         var crumbSVG = graphConfig.crumbSVG;
         var tooltip  = graphConfig.tooltip;
-            
-        //Update tooltip positioning
-        if (!config.useCrumb && groups.length>1){
-            config.arrowOffset.height = 12;
-            config.barOffset.grouped.height = 102;
-            config.barOffset.stacked.height = 81;
-        } else if (!config.useCrumb){
-            config.arrowOffset.height = -10;
-            config.barOffset.grouped.height = 71;
-            config.barOffset.stacked.height = 50;
-        }
+        var groups   = graphConfig.groups;
+        
+        data = dataGraph.getStackedStats(data,groups);
+        data = dataGraph.addEllipsisToLabel(data,config.maxLabelSize);
+        
+        dataGraph.setXYDomains(graphConfig,data,groups,'grouped');
         
         if (groups.length == 1){
             config.barOffset.grouped.height = config.barOffset.grouped.height+8;
             config.barOffset.stacked.height = config.barOffset.stacked.height+8;
         }
         
-        var parents = [];
-        var level = 0;  //breadcrumb counter
-        
-        y0.domain(data.map(function(d) { return d.label; }));
-        y1.domain(groups).rangeRoundBands([0, y0.rangeBand()]);
-        
-        var xGroupMax = dataGraph.getGroupMax(data);
-        var xStackMax = dataGraph.getStackMax(data);
-        var yMax = dataGraph.getYMax(data);
-        
-        x.domain([0, xGroupMax]);
-        
         //Dynamically decrease font size for large labels
-        var confList = dataGraph.adjustYAxisElements(yMax,data.length);
+        var confList = dataGraph.adjustYAxisElements(data.length);
         var yFont = confList[0];
         var yLabelPos = confList[1];
         var triangleDim = confList[2];
@@ -285,7 +517,7 @@ bbop.monarch.datagraph.prototype.drawGraph = function (data,graphConfig,html_div
             .on("click", function(d){
                 if (config.isYLabelURL){
                     d3.select(this).style("cursor", "pointer");
-                    var monarchID = getGroupID(d,data);
+                    var monarchID = dataGraph.getGroupID(d,data);
                     document.location.href = config.yLabelBaseURL + monarchID;
                 }
              })
@@ -293,150 +525,28 @@ bbop.monarch.datagraph.prototype.drawGraph = function (data,graphConfig,html_div
             .attr("dx", yLabelPos);
        
         //Create SVG:G element that holds groups
-        var barGroup = svg.selectAll(".barGroup")
-            .data(data)
-            .enter().append("svg:g")
-            .attr("class", ("bar"+level))
-              .attr("transform", function(d) { return "translate(0," + y0(d.label) + ")"; });
+        var barGroup = dataGraph.setGroupPositioning(graphConfig,data);
         
         //Create bars 
-        var rect = barGroup.selectAll("g")
-           .data(function(d) { return d.counts; })
-           .enter().append("rect")
-           .attr("class",("rect"+level))
-           .attr("height", y1.rangeBand())
-           .attr("y", function(d) { return y1(d.name); })
-           .attr("x", function(){if (config.isChrome || config.isSafari) {return 1;}else{ return 0;}})
-           .attr("width", function(d) { return x(d.value); })
-           .on("mouseover", function(d){
-               d3.select(this)
-               .style("fill", config.color.bar.fill);
-               
-               var coords = d3.transform(d3.select(this.parentNode).attr("transform")).translate;
-               var w = coords[0];
-               var h = coords[1];
-               var heightOffset = this.getBBox().y;
-               var widthOffset = this.getBBox().width;
-               
-               tooltip.style("display", "block")
-               .html("Counts: "+"<span style='font-weight:bold'>"+d.value+"</span>"+"<br/>"
-                    +"Organism: "+ "<span style='font-weight:bold'>"+d.name)
-               .style("top",h+heightOffset+config.barOffset.grouped.height+"px")
-               .style("left",w+config.barOffset.grouped.width+widthOffset+config.margin.left+"px");
+        var rect = dataGraph.makeBar(barGroup,graphConfig,'grouped');
 
-            })
-           .on("mouseout", function(){
-               d3.select(this)
-               .style("fill", function(d) { return color(d.name); });
-               
-               tooltip.style("display", "none");
-            })
-           .style("fill", function(d) { return color(d.name); });
         
         //Create navigation arrow
         var navigate = svg.selectAll(".y.axis");
-        makeNavArrow(data,navigate,triangleDim,barGroup,rect);
-        
+        dataGraph.makeNavArrow(data,navigate,triangleDim,
+                               barGroup,rect,graphConfig);
         //Create legend
         if (config.useLegend){
-            makeLegend();
+            dataGraph.makeLegend(graphConfig);
         }
         
         //Make first breadcrumb
         if (config.useCrumb){
-            makeBreadcrumb(level,config.firstCrumb,groups,rect,barGroup);
+            dataGraph.makeBreadcrumb(graphConfig,config.firstCrumb,
+                    groups,rect,barGroup);
         }
         
         d3.select(html_div).selectAll("input").on("change", change);
-        
-        function makeNavArrow(data,navigate,triangleDim,barGroup,rect){
-            var isSubClass;
-            var arrow = navigate.selectAll(".tick.major")
-            .data(data)
-            .append("svg:polygon")
-            .attr("points",triangleDim)
-            .attr("fill", config.color.arrow.fill)
-            .attr("display", function(d){
-                 if (d.subGraph && d.subGraph[0]){
-                     isSubClass=1; return "initial";
-                 } else {
-                     return "none";
-                 }
-            })
-            .on("mouseover", function(d){
-                       
-                   if (d.subGraph && d.subGraph[0]){
-                           
-                       d3.select(this)
-                       .style("fill", config.color.arrow.hover);
-
-                       var coords = d3.transform(d3.select(this.parentNode).attr("transform")).translate;
-                       var h = coords[1];
-                       var w = coords[0];
-                       
-                       tooltip.style("display", "block")
-                       .html("Click to see subclasses")
-                       .style("top",h+config.margin.top+config.bread.height+config.arrowOffset.height+"px")
-                       .style("left",w+config.margin.left+config.arrowOffset.width+"px");
-                       
-                   } 
-            })
-            .on("mouseout", function(){
-                d3.select(this)
-                    .style("fill",config.color.arrow.fill);
-                tooltip.style("display", "none");
-             })
-            .on("click", function(d){
-                   if (d.subGraph && d.subGraph[0]){
-                       
-                       tooltip.style("display", "none");
-                       svg.selectAll(".tick.major").remove();
-                       level++;
-                       transitionSubGraph(d.subGraph,data);
-                       
-                       //remove old bars
-                       barGroup.transition()
-                           .duration(750)
-                           .attr("y", 60)
-                           .style("fill-opacity", 1e-6)
-                           .remove();
-                       
-                       rect.transition()
-                           .duration(750)
-                           .attr("y", 60)
-                           .style("fill-opacity", 1e-6)
-                           .remove();
-                       if (config.useCrumb){
-                           makeBreadcrumb(level,d.label,groups,rect,barGroup,d.fullLabel);
-                       }
-                   }
-           });
-           return isSubClass;
-        }
-        
-        function makeLegend(){
-            //Set legend
-            var legend = svg.selectAll(".legend")
-               .data(groups.slice())
-               .enter().append("g")
-               .attr("class", "legend")
-               .attr("transform", function(d, i) { return "translate(0," + i * (config.legend.height+7) + ")"; });
-
-            legend.append("rect")
-               .attr("x", config.width+config.legend.width+37)//HARDCODE
-               .attr("y", 4)
-               .attr("width", config.legend.width)
-               .attr("height", config.legend.height)
-               .style("fill", color);
-
-            legend.append("text")
-               .attr("x", config.width+config.legend.width+32)
-               .attr("y", 12)
-               .attr("dy", config.legendText.height)
-               .attr("font-size",config.legendFontSize)
-               .style("text-anchor", "end")
-               .text(function(d) { return d; });
-        }
 
         function change() {
           if (this.value === "grouped"){
@@ -448,8 +558,7 @@ bbop.monarch.datagraph.prototype.drawGraph = function (data,graphConfig,html_div
         
         function transitionGrouped() {
             
-            x.domain([0, xGroupMax]);
-            y1.domain(groups).rangeRoundBands([0, y0.rangeBand()]);
+            dataGraph.setXYDomains(graphConfig,data,groups,'grouped');
                
             var xTransition = svg.transition().duration(750);
             xTransition.select(".x.axis").call(xAxis);   
@@ -467,18 +576,7 @@ bbop.monarch.datagraph.prototype.drawGraph = function (data,graphConfig,html_div
                 
                 d3.select(this)
                 .style("fill", config.color.bar.fill);
-                  
-                var coords = d3.transform(d3.select(this.parentNode).attr("transform")).translate;
-                var w = coords[0];
-                var h = coords[1];
-                var heightOffset = this.getBBox().y;
-                var widthOffset = this.getBBox().width;
-                   
-                tooltip.style("display", "block")
-                  .html("Counts: "+"<span style='font-weight:bold'>"+d.value+"</span>"+"<br/>"
-                        +"Organism: "+ "<span style='font-weight:bold'>"+d.name)
-                  .style("top",h+heightOffset+config.barOffset.grouped.height+"px")
-                  .style("left",w+config.barOffset.grouped.width+widthOffset+config.margin.left+"px");
+                dataGraph.displayCountTip(tooltip,d.value,d.name,this,'grouped');
             })
                 .on("mouseout", function(){
                   tooltip.style("display", "none")
@@ -489,8 +587,7 @@ bbop.monarch.datagraph.prototype.drawGraph = function (data,graphConfig,html_div
 
         function transitionStacked() {
             
-            x.domain([0, xStackMax]);
-            y1.domain(groups).rangeRoundBands([0,0]);
+            dataGraph.setXYDomains(graphConfig,data,groups,'stacked');
             
             var t = svg.transition().duration(750);
             t.select(".x.axis").call(xAxis);
@@ -515,18 +612,7 @@ bbop.monarch.datagraph.prototype.drawGraph = function (data,graphConfig,html_div
                 
                 d3.select(this)
                 .style("fill", config.color.bar.fill);
-                   
-                var coords = d3.transform(d3.select(this.parentNode).attr("transform")).translate;
-                var w = coords[0];
-                var h = coords[1];
-                var heightOffset = this.getBBox().y;
-                var widthOffset = this.getBBox().width;
-                   
-                tooltip.style("display", "block")
-                    .html("Counts: "+"<span style='font-weight:bold'>"+d.value+"</span>"+"<br/>"
-                         +"Organism: "+ "<span style='font-weight:bold'>"+d.name)
-                    .style("top",h+heightOffset+config.barOffset.stacked.height+"px")
-                    .style("left",w+config.barOffset.grouped.width+widthOffset+config.margin.left+"px");
+                dataGraph.displayCountTip(tooltip,d.value,d.name,this,'stacked');
             })
                .on("mouseout", function(){
                    tooltip.style("display", "none");
@@ -534,507 +620,420 @@ bbop.monarch.datagraph.prototype.drawGraph = function (data,graphConfig,html_div
                    .style("fill", function(d) { return color(d.name); });
             })
         }
-        
-        function getGroupID(d,data){
-            for (var i=0, len=data.length; i < len; i++){
-                if (data[i].label === d){
-                    monarchID = data[i].id;
-                    return monarchID;
-                    break;
-                }
-            }
-        }
-        
-        function pickUpBreadcrumb(index,groups,rect,barGroup) {
-            
-            lastIndex = level;
-            level = index;
-            superclass = parents[index];
-            svg.selectAll(".tick.major").remove();
-            var isFromCrumb = true;
-            var parent = undefined;
-            transitionSubGraph(superclass,parents,isFromCrumb);
-            
-            for (var i=(index+1); i <= parents.length; i++){
-                d3.select(html_div).select(".bread"+i).remove();
-            }
-   
-            svg.selectAll((".rect"+lastIndex)).transition()
-                   .duration(750)
-                   .attr("y", 60)
-                   .style("fill-opacity", 1e-6)
-                   .remove();
-            
-            svg.selectAll((".bar"+lastIndex)).transition()
-                .duration(750)
-                .attr("y", 60)
-                .style("fill-opacity", 1e-6)
-                .remove();
-            
-            parents.splice(index,(parents.length));        
-            
-            //Deactivate top level crumb
-            if (config.useCrumbShape){
-                d3.select(html_div).select(".poly"+index)
-                  .attr("fill", config.color.crumb.top)
-                  .on("mouseover", function(){})
-                  .on("mouseout", function(){
-                      d3.select(this)
-                        .attr("fill", config.color.crumb.top);
-                  })
-                  .on("click", function(){});
-                
-                d3.select(html_div).select(".text"+index)
-                .on("mouseover", function(){})
-                .on("mouseout", function(){
-                     d3.select(this.parentNode)
-                     .select("polygon")
-                     .attr("fill", config.color.crumb.top);
-                })
-                .on("click", function(){});
-            } else {
-                d3.select(html_div).select(".text"+index)
-                  .style("fill",config.color.crumbText)
-                  .on("mouseover", function(){})
-                  .on("mouseout", function(){})
-                  .on("click", function(){});
-            }
-        }
-        
-        function makeBreadcrumb(index,label,groups,rect,phenoDiv,fullLabel) {
-            
-            if (!label){
-                label = config.firstCrumb;
-            }
-            var lastIndex = (index-1);
-            var phenLen = label.length;
-            var fontSize = config.crumbFontSize;
-
-            //Change color of previous crumb
-            if (lastIndex > -1){
-                if (config.useCrumbShape){
-                    d3.select(html_div).select(".poly"+lastIndex)
-                        .attr("fill", config.color.crumb.bottom)
-                        .on("mouseover", function(){
-                        d3.select(this)
-                          .attr("fill", config.color.crumb.hover);
-                    })
-                    .on("mouseout", function(){
-                        d3.select(this)
-                       .attr("fill", config.color.crumb.bottom);
-                    })
-                    .on("click", function(){
-                        pickUpBreadcrumb(lastIndex,groups,rect,phenoDiv);
-                    });
-                }
-                
-                d3.select(html_div).select(".text"+lastIndex)
-                  .on("mouseover", function(){
-                      d3.select(this.parentNode)
-                       .select("polygon")
-                       .attr("fill", config.color.crumb.hover);
-                      
-                      if (!config.useCrumbShape){
-                          d3.select(this)
-                            .style("fill",config.color.crumb.hover);
-                      }
-                  })
-                  .on("mouseout", function(){
-                      d3.select(this.parentNode)
-                       .select("polygon")
-                       .attr("fill", config.color.crumb.bottom);
-                      if (!config.useCrumbShape){
-                          d3.select(this)
-                            .style("fill",config.color.crumbText);
-                      }
-                  })
-                  .on("click", function(){
-                        pickUpBreadcrumb(lastIndex,groups,rect,phenoDiv);
-                  });
-            }
-            
-            d3.select(html_div).select(".breadcrumbs")
-            .select("svg")
-            .append("g")  
-            .attr("class",("bread"+index))
-            .attr("transform", "translate(" + index*(config.bread.offset+config.bread.space) + ", 0)");
-            
-            if (config.useCrumbShape){
-                
-                d3.select(html_div).select((".bread"+index))
-                .append("svg:polygon")
-                .attr("class",("poly"+index))
-                .attr("points",index ? config.trailCrumbs : config.firstCr)
-                .attr("fill", config.color.crumb.top);
-                
-            } 
-            
-            //This creates the hover tooltip
-            if (fullLabel){
-                d3.select(html_div).select((".bread"+index))
-                    .append("svg:title")
-                    .text(fullLabel);
-            } else { 
-                d3.select(html_div).select((".bread"+index))
-                    .append("svg:title")
-                    .text(label);
-            }
-                   
-            d3.select(html_div).select((".bread"+index))
-                .append("text")
-                .style("fill",config.color.crumbText)
-                .attr("class",("text"+index))
-                .attr("font-size", fontSize)
-                .each(function () {
-                    var words = label.split(/\s|\/|\-/);
-                    var len = words.length;
-                    if (len > 2 && !label.match(/head and neck/i)){
-                        words.splice(2,len);
-                        words[1]=words[1]+"...";
-                    }
-                    len = words.length;
-                    for (i = 0;i < len; i++) {
-                        if (words[i].length > 12){
-                            fontSize = ((1/words[i].length)*150);
-                            var reg = new RegExp("(.{"+8+"})(.+)");
-                            words[i] = words[i].replace(reg,"$1...");
-                        }
-                    }
-                    //Check that we haven't increased over the default
-                    if (fontSize > config.crumbFontSize){
-                        fontSize = config.crumbFontSize;
-                    }
-                    for (i = 0;i < len; i++) {
-                        d3.select(this).append("tspan")
-                            .text(words[i])
-                            .attr("font-size",fontSize)
-                            .attr("x", (config.bread.width)*.45)
-                            .attr("y", (config.bread.height)*.42)
-                            .attr("dy", function(){
-                                if (i == 0 && len == 1){
-                                    return ".55em";
-                                } else if (i == 0){
-                                    return ".1em";
-                                } else if (i < 2 && len > 2 
-                                           && words[i].match(/and/i)){
-                                    return ".1em";;
-                                } else {
-                                    return "1.2em";
-                                }
-                            })
-                            .attr("dx", function(){
-                                if (index == 0){
-                                    return ".1em";
-                                }
-                                if (i == 0 && len == 1){
-                                    return ".8em";
-                                } else if (i == 0 && len >2
-                                           && words[1].match(/and/i)){
-                                    return "-1.2em";
-                                } else if (i == 0){
-                                    return ".3em";
-                                } else if (i == 1 && len > 2
-                                           && words[1].match(/and/i)){
-                                    return "1.2em";
-                                } else {
-                                    return ".25em";
-                                }
-                            })
-                            .attr("text-anchor", "middle")
-                            .attr("class", "tspan" + i);
-                    }
-                });
-        }
-
-        //Resize height of chart after transition
-        function resizeChart(subGraph){
-            
-            var height = config.height;
-            if (subGraph.length < 25){
-                 height = subGraph.length*26; 
-                 if (height > config.height){
-                     height = config.height;
-                 }
-            }
-            
-            
-            return height;
-        }
-        //TODO DRY - there is quite a bit of duplicated code
-        //     here from the parent drawGraph() function
-        //     NOTE - this will be refactored as AJAX calls
-        function transitionSubGraph(subGraph,parent,isFromCrumb) {
-            
-            var groups = dataGraph.getGroups(subGraph);
-            subGraph = dataGraph.getStackedStats(subGraph,groups);
-            if (!isFromCrumb){
-                subGraph = dataGraph.addEllipsisToLabel(subGraph,config.maxLabelSize);
-            }
-            var rect;
-            if (parent){
-                parents.push(parent);
-            }
-            
-            height = resizeChart(subGraph);
-            
-            y0 = d3.scale.ordinal()
-                .rangeRoundBands([0,height], .1);
-            
-            yAxis = d3.svg.axis()
-                .scale(y0)
-                .orient("left");
-
-            y0.domain(subGraph.map(function(d) { return d.label; }));
-            y1.domain(groups).rangeRoundBands([0, y0.rangeBand()]);
-            
-            var xGroupMax = dataGraph.getGroupMax(subGraph);
-            var xStackMax = dataGraph.getStackMax(subGraph);
-            var yMax = dataGraph.getYMax(subGraph);
-            
-            //Dynamically decrease font size for large labels
-            var confList = dataGraph.adjustYAxisElements(yMax,subGraph.length);
-            var yFont = confList[0];
-            var yLabelPos = confList[1];
-            var triangleDim = confList[2];
-
-            
-            var yTransition = svg.transition().duration(1000);
-            yTransition.select(".y.axis").call(yAxis);
-            
-            svg.select(".y.axis")
-                .selectAll("text")
-                .filter(function(d){ return typeof(d) == "string"; })
-                .attr("font-size", yFont)
-                .on("mouseover", function(d){
-                    if (config.isYLabelURL){
-                        d3.select(this).style("cursor", "pointer");
-                        d3.select(this).style("fill", config.color.yLabel.hover);
-                        d3.select(this).style("text-decoration", "underline");
-                    }
-                    if (/\.\.\./.test(d)){
-                        var fullLabel = dataGraph.getFullLabel(d,subGraph);
-                        d3.select(this).append("svg:title")
-                        .text(fullLabel);  
-                    } else if (yFont < 12) {//HARDCODE alert
-                    d3.select(this).append("svg:title")
-                    .text(d);
-                    }
-                })
-                .on("mouseout", function(){
-                    d3.select(this).style("fill", config.color.yLabel.fill );
-                    d3.select(this).style("text-decoration", "none");
-                })
-                .on("click", function(d){
-                    if (config.isYLabelURL){
-                        d3.select(this).style("cursor", "pointer");
-                        var monarchID = getGroupID(d,subGraph);
-                        document.location.href = config.yLabelBaseURL + monarchID;
-                    }
-                })
-                .style("text-anchor", "end")
-                .attr("dx", yLabelPos);
-            
-            var barGroup = svg.selectAll(".barGroup")
-                .data(subGraph)
-                .enter().append("svg:g")
-                .attr("class", ("bar"+level))
-                .attr("transform", function(d) { return "translate(0," + y0(d.label) + ")"; });
-
-            if ($('input[name=mode]:checked').val()=== 'grouped' || groups.length == 1) {
-                      
-                x.domain([0, xGroupMax]);
-            
-                var xTransition = svg.transition().duration(1000);
-                    xTransition.select(".x.axis")
-                    .call(xAxis);
-            
-                rect = barGroup.selectAll("g")
-                    .data(function(d) { return d.counts; })
-                    .enter().append("rect")
-                    .attr("class",("rect"+level))
-                    .attr("height", y1.rangeBand())
-                    .attr("y", function(d) { return y1(d.name); })
-                    .attr("x", function(){if (config.isChrome || config.isSafari) {return 1;}else{ return 0;}})
-                    .attr("width", function(d) { return x(d.value); })
-                    .on("mouseover", function(d){
-                         d3.select(this)
-                          .style("fill",config.color.bar.fill);
-                         
-                         var coords = d3.transform(d3.select(this.parentNode).attr("transform")).translate;
-                         var w = coords[0];
-                         var h = coords[1];
-                         var heightOffset = this.getBBox().y;
-                         var widthOffset = this.getBBox().width;
-                        
-                         tooltip.style("display", "block")
-                         .html("Counts: "+"<span style='font-weight:bold'>"+d.value+"</span>"+"<br/>"
-                              +"Organism: "+ "<span style='font-weight:bold'>"+d.name)
-                         .style("top",h+heightOffset+config.barOffset.grouped.height+"px")
-                         .style("left",w+config.barOffset.grouped.width+widthOffset+config.margin.left+"px");
-                    })
-                    .on("mouseout", function(){
-                        d3.select(this)
-                          .style("fill", function(d) { return color(d.name); });
-                        tooltip.style("display", "none")
-                    })
-                    .style("fill", function(d) { return color(d.name); });
-            } else {
-                
-                x.domain([0, xStackMax]);
-                y1.domain(groups).rangeRoundBands([0,0]);
-                    
-                var xTransition = svg.transition().duration(1000);
-                    xTransition.select(".x.axis")
-                    .call(xAxis);
-                    
-                rect = barGroup.selectAll("g")
-                    .data(function(d) { return d.counts; })
-                    .enter().append("rect")
-                    .attr("class",("rect"+level))
-                    .attr("x", function(d){
-                        if (d.x0 == 0){
-                            if (config.isChrome || config.isSafari){return 1;}
-                            else {return d.x0;}
-                        } else { 
-                            return x(d.x0);
-                        }
-                    })
-                    .attr("width", function(d) { return x(d.x1) - x(d.x0); })
-                    .attr("height", y0.rangeBand())
-                    .attr("y", function(d) { return y1(d.name); })
-                    .on("mouseover", function(d){
-                       d3.select(this)
-                       .style("fill", config.color.bar.fill);
-                   
-                       
-                        var coords = d3.transform(d3.select(this.parentNode).attr("transform")).translate;
-                        var w = coords[0];
-                        var h = coords[1];
-                        var heightOffset = this.getBBox().y;
-                        var widthOffset = this.getBBox().width;
-                           
-                        tooltip.style("display", "block")
-                            .html("Counts: "+"<span style='font-weight:bold'>"+d.value+"</span>"+"<br/>"
-                                 +"Organism: "+ "<span style='font-weight:bold'>"+d.name)
-                            .style("top",h+heightOffset+config.barOffset.stacked.height+"px")
-                            .style("left",w+config.barOffset.grouped.width+widthOffset+config.margin.left+"px");
-
-                 })
-                .on("mouseout", function(){
-                    d3.select(this)
-                    .style("fill", function(d) { return color(d.name); });
-                    tooltip.style("display", "none");
-                })
-                .style("fill", function(d) { return color(d.name); });
-            }
-            
-            var navigate = svg.selectAll(".y.axis");
-            var isSubClass = makeNavArrow(subGraph,navigate,triangleDim,barGroup,rect);
-               
-            if (!isSubClass){
-                svg.selectAll("polygon.arr").remove();
-                svg.select(".y.axis")
-                    .selectAll("text")
-                    .attr("dx","0")
-                    .on("mouseover", function(d){
-                           d3.select(this).style("cursor", "pointer");
-                           d3.select(this).style("fill",config.color.yLabel.hover);
-                           d3.select(this).style("text-decoration", "underline");                       
-                     });
-            }
-            
-            d3.select(html_div).selectAll("input").on("change", change);
-
-            function change() {
-              if (this.value === "grouped"){
-                    
-                  x.domain([0, xGroupMax]);
-                  y1.domain(groups).rangeRoundBands([0, y0.rangeBand()]);
-                       
-                  var xTransition = svg.transition().duration(750);
-                  xTransition.select(".x.axis").call(xAxis);
-                    
-                  rect.transition()
-                    .duration(500)
-                    .delay(function(d, i) { return i * 10; })
-                    .attr("height", y1.rangeBand())
-                    .attr("y", function(d) { return y1(d.name); })  
-                    .transition()
-                    .attr("x", function(){if (config.isChrome || config.isSafari) {return 1;}else{ return 0;}})
-                    .attr("width", function(d) { return x(d.value); })     
-                    
-                  rect.on("mouseover", function(d){
-                      
-                      d3.select(this)
-                      .style("fill", config.color.bar.fill);
-                         
-                      var coords = d3.transform(d3.select(this.parentNode).attr("transform")).translate;
-                      var w = coords[0];
-                      var h = coords[1];
-                      var heightOffset = this.getBBox().y;
-                      var widthOffset = this.getBBox().width;
-                       
-                      tooltip.style("display", "block")
-                          .html("Counts: "+"<span style='font-weight:bold'>"+d.value+"</span>"+"<br/>"
-                            +"Organism: "+ "<span style='font-weight:bold'>"+d.name)
-                          .style("top",h+heightOffset+config.barOffset.grouped.height+"px")
-                          .style("left",w+config.barOffset.grouped.width+widthOffset+config.margin.left+"px");
-                     })
-                     .on("mouseout", function(){
-                         tooltip.style("display", "none")
-                         d3.select(this)
-                         .style("fill", function(d) { return color(d.name); });
-                     })
-              } else {
-                  x.domain([0, xStackMax]);
-                  y1.domain(groups).rangeRoundBands([0,0]);
-                    
-                  var t = svg.transition().duration(750);
-                  t.select(".x.axis").call(xAxis);
-                    
-                  rect.transition()
-                    .duration(500)
-                    .delay(function(d, i) { return i * 10; })
-                    .attr("x", function(d){
-                        if (d.x0 == 0){
-                            if (config.isChrome || config.isSafari){return 1;}
-                            else {return d.x0;}
-                        } else { 
-                            return x(d.x0);
-                        }
-                    })
-                    .attr("width", function(d) { return x(d.x1) - x(d.x0); })
-                    .transition()
-                    .attr("height", y0.rangeBand())
-                    .attr("y", function(d) { return y1(d.name); })
-                    
-                   rect.on("mouseover", function(d){
-                       
-                       d3.select(this)
-                       .style("fill", config.color.bar.fill);
-              
-                       var coords = d3.transform(d3.select(this.parentNode).attr("transform")).translate;
-                       var w = coords[0];
-                       var h = coords[1];
-                       var heightOffset = this.getBBox().y;
-                       var widthOffset = this.getBBox().width;
-                          
-                       tooltip.style("display", "block")
-                           .html("Counts: "+"<span style='font-weight:bold'>"+d.value+"</span>"+"<br/>"
-                                +"Organism: "+ "<span style='font-weight:bold'>"+d.name)
-                           .style("top",h+heightOffset+config.barOffset.stacked.height+"px")
-                           .style("left",w+config.barOffset.grouped.width+widthOffset+config.margin.left+"px");
-                    })
-                   .on("mouseout", function(){
-                       tooltip.style("display", "none");
-                       d3.select(this)
-                       .style("fill", function(d) { return color(d.name); });
-                   })
-              }
-            }
-        }        
-    //});
 }
+
+//Resize height of chart after transition
+bbop.monarch.datagraph.prototype.resizeChart = function(subGraph){
+    
+    var config = this.config;
+    var height = config.height;
+    if (subGraph.length < 25){
+         height = subGraph.length*26; 
+         if (height > config.height){
+             height = config.height;
+         }
+    }
+    return height;
+}
+
+bbop.monarch.datagraph.prototype.pickUpBreadcrumb = function(graphConfig,index,groups,rect,barGroup) {
+    
+    var dataGraph = this;
+    var config = dataGraph.config;
+    var lastIndex = graphConfig.level;
+    var superclass = graphConfig.parents[index];
+    var isFromCrumb = true;
+    var parent;
+    //set global level
+    graphConfig.level = index;
+    
+    graphConfig.svg.selectAll(".tick.major").remove();
+    dataGraph.transitionSubGraph(graphConfig,superclass,graphConfig.parents,isFromCrumb);
+    
+    for (var i=(index+1); i <= graphConfig.parents.length; i++){
+        d3.select(graphConfig.html_div).select(".bread"+i).remove();
+    }
+
+    graphConfig.svg.selectAll((".rect"+lastIndex)).transition()
+           .duration(750)
+           .attr("y", 60)
+           .style("fill-opacity", 1e-6)
+           .remove();
+    
+    graphConfig.svg.selectAll((".bar"+lastIndex)).transition()
+        .duration(750)
+        .attr("y", 60)
+        .style("fill-opacity", 1e-6)
+        .remove();
+    
+    graphConfig.parents.splice(index,(graphConfig.parents.length));        
+    
+    //Deactivate top level crumb
+    if (config.useCrumbShape){
+        d3.select(graphConfig.html_div).select(".poly"+index)
+          .attr("fill", config.color.crumb.top)
+          .on("mouseover", function(){})
+          .on("mouseout", function(){
+              d3.select(this)
+                .attr("fill", config.color.crumb.top);
+          })
+          .on("click", function(){});
+        
+        d3.select(graphConfig.html_div).select(".text"+index)
+        .on("mouseover", function(){})
+        .on("mouseout", function(){
+             d3.select(this.parentNode)
+             .select("polygon")
+             .attr("fill", config.color.crumb.top);
+        })
+        .on("click", function(){});
+    } else {
+        d3.select(graphConfig.html_div).select(".text"+index)
+          .style("fill",config.color.crumbText)
+          .on("mouseover", function(){})
+          .on("mouseout", function(){})
+          .on("click", function(){});
+    }
+}
+
+bbop.monarch.datagraph.prototype.makeBreadcrumb = function(graphConfig,label,groups,rect,phenoDiv,fullLabel) {
+    var dataGraph = this;
+    var config = dataGraph.config;
+    var html_div = graphConfig.html_div;
+    var index = graphConfig.level;
+    
+    if (!label){
+        label = config.firstCrumb;
+    }
+    var lastIndex = (index-1);
+    var phenLen = label.length;
+    var fontSize = config.crumbFontSize;
+
+    //Change color of previous crumb
+    if (lastIndex > -1){
+        if (config.useCrumbShape){
+            d3.select(html_div).select(".poly"+lastIndex)
+                .attr("fill", config.color.crumb.bottom)
+                .on("mouseover", function(){
+                d3.select(this)
+                  .attr("fill", config.color.crumb.hover);
+            })
+            .on("mouseout", function(){
+                d3.select(this)
+               .attr("fill", config.color.crumb.bottom);
+            })
+            .on("click", function(){
+                dataGraph.pickUpBreadcrumb(graphConfig,lastIndex,groups,rect,phenoDiv);
+            });
+        }
+        
+        d3.select(html_div).select(".text"+lastIndex)
+          .on("mouseover", function(){
+              d3.select(this.parentNode)
+               .select("polygon")
+               .attr("fill", config.color.crumb.hover);
+              
+              if (!config.useCrumbShape){
+                  d3.select(this)
+                    .style("fill",config.color.crumb.hover);
+              }
+          })
+          .on("mouseout", function(){
+              d3.select(this.parentNode)
+               .select("polygon")
+               .attr("fill", config.color.crumb.bottom);
+              if (!config.useCrumbShape){
+                  d3.select(this)
+                    .style("fill",config.color.crumbText);
+              }
+          })
+          .on("click", function(){
+                dataGraph.pickUpBreadcrumb(graphConfig,lastIndex,groups,rect,phenoDiv);
+          });
+    }
+    
+    d3.select(html_div).select(".breadcrumbs")
+    .select("svg")
+    .append("g")  
+    .attr("class",("bread"+index))
+    .attr("transform", "translate(" + index*(config.bread.offset+config.bread.space) + ", 0)");
+    
+    if (config.useCrumbShape){
+        
+        d3.select(html_div).select((".bread"+index))
+        .append("svg:polygon")
+        .attr("class",("poly"+index))
+        .attr("points",index ? config.trailCrumbs : config.firstCr)
+        .attr("fill", config.color.crumb.top);
+        
+    } 
+    
+    //This creates the hover tooltip
+    if (fullLabel){
+        d3.select(html_div).select((".bread"+index))
+            .append("svg:title")
+            .text(fullLabel);
+    } else { 
+        d3.select(html_div).select((".bread"+index))
+            .append("svg:title")
+            .text(label);
+    }
+           
+    d3.select(html_div).select((".bread"+index))
+        .append("text")
+        .style("fill",config.color.crumbText)
+        .attr("class",("text"+index))
+        .attr("font-size", fontSize)
+        .each(function () {
+            var words = label.split(/\s|\/|\-/);
+            var len = words.length;
+            if (len > 2 && !label.match(/head and neck/i)){
+                words.splice(2,len);
+                words[1]=words[1]+"...";
+            }
+            len = words.length;
+            for (i = 0;i < len; i++) {
+                if (words[i].length > 12){
+                    fontSize = ((1/words[i].length)*150);
+                    var reg = new RegExp("(.{"+8+"})(.+)");
+                    words[i] = words[i].replace(reg,"$1...");
+                }
+            }
+            //Check that we haven't increased over the default
+            if (fontSize > config.crumbFontSize){
+                fontSize = config.crumbFontSize;
+            }
+            for (i = 0;i < len; i++) {
+                d3.select(this).append("tspan")
+                    .text(words[i])
+                    .attr("font-size",fontSize)
+                    .attr("x", (config.bread.width)*.45)
+                    .attr("y", (config.bread.height)*.42)
+                    .attr("dy", function(){
+                        if (i == 0 && len == 1){
+                            return ".55em";
+                        } else if (i == 0){
+                            return ".1em";
+                        } else if (i < 2 && len > 2 
+                                   && words[i].match(/and/i)){
+                            return ".1em";;
+                        } else {
+                            return "1.2em";
+                        }
+                    })
+                    .attr("dx", function(){
+                        if (index == 0){
+                            return ".1em";
+                        }
+                        if (i == 0 && len == 1){
+                            return ".8em";
+                        } else if (i == 0 && len >2
+                                   && words[1].match(/and/i)){
+                            return "-1.2em";
+                        } else if (i == 0){
+                            return ".3em";
+                        } else if (i == 1 && len > 2
+                                   && words[1].match(/and/i)){
+                            return "1.2em";
+                        } else {
+                            return ".25em";
+                        }
+                    })
+                    .attr("text-anchor", "middle")
+                    .attr("class", "tspan" + i);
+            }
+        });
+}
+
+//TODO DRY - there is quite a bit of duplicated code
+//     here from the parent drawGraph() function
+//     NOTE - this will be refactored as AJAX calls
+bbop.monarch.datagraph.prototype.transitionSubGraph = function(graphConfig,subGraph,parent,isFromCrumb) {
+    var dataGraph = this;
+    var config = dataGraph.config;
+
+    //Some variables we can create locally for readability
+    var html_div = graphConfig.html_div;
+    var x        = graphConfig.x;
+    var color    = graphConfig.color;
+    var xAxis    = graphConfig.xAxis;
+    var svg      = graphConfig.svg;
+    var crumbSVG = graphConfig.crumbSVG;
+
+    graphConfig.groups = dataGraph.getGroups(subGraph);
+    var groups = graphConfig.groups;
+  
+    subGraph = dataGraph.getStackedStats(subGraph,groups);
+    if (!isFromCrumb){
+        subGraph = dataGraph.addEllipsisToLabel(subGraph,config.maxLabelSize);
+    }
+    var rect;
+    if (parent){
+        graphConfig.parents.push(parent);
+    }
+        
+    var height = dataGraph.resizeChart(subGraph);
+    //reset d3 config after changing height
+    graphConfig.y0 = d3.scale.ordinal()
+      .rangeRoundBands([0,height], .1);
+            
+    graphConfig.yAxis = d3.svg.axis()
+      .scale(graphConfig.y0)
+      .orient("left");
+
+    dataGraph.setXYDomains(graphConfig,subGraph,groups);
+            
+    var xGroupMax = dataGraph.getGroupMax(subGraph);
+    var xStackMax = dataGraph.getStackMax(subGraph);
+        
+    //Dynamically decrease font size for large labels
+    var confList = dataGraph.adjustYAxisElements(subGraph.length);
+    var yFont = confList[0];
+    var yLabelPos = confList[1];
+    var triangleDim = confList[2];
+
+        
+    var yTransition = svg.transition().duration(1000);
+    yTransition.select(".y.axis").call(graphConfig.yAxis);
+
+    svg.select(".y.axis")
+      .selectAll("text")
+      .filter(function(d){ return typeof(d) == "string"; })
+      .attr("font-size", yFont)
+      .on("mouseover", function(d){
+          if (config.isYLabelURL){
+              d3.select(this).style("cursor", "pointer");
+              d3.select(this).style("fill", config.color.yLabel.hover);
+              d3.select(this).style("text-decoration", "underline");
+          }
+          if (/\.\.\./.test(d)){
+              var fullLabel = dataGraph.getFullLabel(d,subGraph);
+              d3.select(this).append("svg:title")
+                .text(fullLabel);  
+          } else if (yFont < 12) {//HARDCODE alert
+              d3.select(this).append("svg:title")
+                .text(d);
+          }
+      })
+      .on("mouseout", function(){
+          d3.select(this).style("fill", config.color.yLabel.fill );
+          d3.select(this).style("text-decoration", "none");
+      })
+      .on("click", function(d){
+          if (config.isYLabelURL){
+              d3.select(this).style("cursor", "pointer");
+              var monarchID = dataGraph.getGroupID(d,subGraph);
+              document.location.href = config.yLabelBaseURL + monarchID;
+          }
+      })
+      .style("text-anchor", "end")
+      .attr("dx", yLabelPos);
+
+      var barGroup = dataGraph.setGroupPositioning(graphConfig,subGraph);
+
+      if ($('input[name=mode]:checked').val()=== 'grouped' || groups.length == 1) {
+                      
+          dataGraph.setXYDomains(graphConfig,subGraph,groups,'grouped');
+            
+          var xTransition = svg.transition().duration(1000);
+          xTransition.select(".x.axis")
+            .call(xAxis);
+            
+          rect = dataGraph.makeBar(barGroup,graphConfig,'grouped');
+      } else {
+                
+          dataGraph.setXYDomains(graphConfig,subGraph,groups,'stacked');
+
+          var xTransition = svg.transition().duration(1000);
+          xTransition.select(".x.axis")
+          .call(xAxis);
+                    
+          rect = dataGraph.makeBar(barGroup,graphConfig,'stacked');
+      }
+            
+      var navigate = svg.selectAll(".y.axis");
+      var isSubClass = dataGraph.makeNavArrow(subGraph,navigate,
+              triangleDim,barGroup,rect,graphConfig);
+               
+      if (!isSubClass){
+          svg.selectAll("polygon.arr").remove();
+          svg.select(".y.axis")
+            .selectAll("text")
+            .attr("dx","0")
+            .on("mouseover", function(d){
+                d3.select(this).style("cursor", "pointer");
+                d3.select(this).style("fill",config.color.yLabel.hover);
+                d3.select(this).style("text-decoration", "underline");                       
+            });
+      }
+            
+      d3.select(html_div).selectAll("input").on("change", change);
+
+      function change() {
+          if (this.value === "grouped"){
+
+              dataGraph.setXYDomains(graphConfig,subGraph,groups,'grouped');
+                       
+              var xTransition = svg.transition().duration(750);
+              xTransition.select(".x.axis").call(xAxis);
+                    
+              rect.transition()
+                .duration(500)
+                .delay(function(d, i) { return i * 10; })
+                .attr("height", graphConfig.y1.rangeBand())
+                .attr("y", function(d) { return graphConfig.y1(d.name); })  
+                .transition()
+                .attr("x", function(){if (config.isChrome || config.isSafari) {return 1;}else{ return 0;}})
+                .attr("width", function(d) { return x(d.value); })     
+                    
+              rect.on("mouseover", function(d){
+                      
+                  d3.select(this)
+                  .style("fill", config.color.bar.fill);
+                  dataGraph.displayCountTip(graphConfig.tooltip,d.value,d.name,this,'grouped');
+              })
+              .on("mouseout", function(){
+                  graphConfig.tooltip.style("display", "none")
+                  d3.select(this)
+                  .style("fill", function(d) { return color(d.name); });
+              })
+           } else {
+               dataGraph.setXYDomains(graphConfig,subGraph,groups,'stacked');
+                    
+               var t = svg.transition().duration(750);
+               t.select(".x.axis").call(xAxis);
+                    
+               rect.transition()
+                 .duration(500)
+                 .delay(function(d, i) { return i * 10; })
+                 .attr("x", function(d){
+                     if (d.x0 == 0){
+                         if (config.isChrome || config.isSafari){return 1;}
+                         else {return d.x0;}
+                     } else { 
+                         return x(d.x0);
+                     }
+                 })
+                 .attr("width", function(d) { return x(d.x1) - x(d.x0); })
+                 .transition()
+                 .attr("height", graphConfig.y0.rangeBand())
+                 .attr("y", function(d) { return graphConfig.y1(d.name); })
+                 
+                 rect.on("mouseover", function(d){
+                       
+                     d3.select(this)
+                       .style("fill", config.color.bar.fill);
+                           dataGraph.displayCountTip(graphConfig.tooltip,d.value,d.name,this,'stacked');
+                        })
+                 .on("mouseout", function(){
+                            graphConfig.tooltip.style("display", "none");
+                            d3.select(this)
+                            .style("fill", function(d) { return color(d.name); });
+                 })
+           }
+    }
+}        
+
 ////////////////////////////////////////////////////////////////////
 //
 //Data object manipulation
@@ -1142,6 +1141,16 @@ bbop.monarch.datagraph.prototype.getFullLabel = function (d,data){
         }
     }
 }
+
+bbop.monarch.datagraph.prototype.getGroupID = function (d,data){
+    for (var i=0, len=data.length; i < len; i++){
+        if (data[i].label === d){
+            monarchID = data[i].id;
+            return monarchID;
+            break;
+        }
+    }
+}
 ////////////////////////////////////////////////////////////////////
 //End data object functions
 ////////////////////////////////////////////////////////////////////
@@ -1154,7 +1163,7 @@ function getBaseLog(x, y) {
 //Adjust Y label font, arrow size, and spacing
 //when transitioning
 //this is getting funky with graph resizing, maybe should do away
-bbop.monarch.datagraph.prototype.adjustYAxisElements = function(yMax,len){
+bbop.monarch.datagraph.prototype.adjustYAxisElements = function(len){
    
    var conf = this.config;
    var h = conf.height;
@@ -1164,25 +1173,6 @@ bbop.monarch.datagraph.prototype.adjustYAxisElements = function(yMax,len){
    yFont = conf.yFontSize;
    var yOffset = conf.yOffset;
    var arrowDim = conf.arrowDim;
-   
-   if (yMax > 31 && yMax < 41){
-   //    yFont = ((1/yMax)*450);
-       isUpdated = true;
-   }else if (yMax > 41 && yMax < 53){
-   //    yFont = ((1/yMax)*565);
-   //    arrowDim = "-20,-5, -9,1 -20,7";
-       isUpdated = true;
-   } else if (yMax >= 53 && yMax <66){
-   //    yFont = ((1/yMax)*615);
-   //    yOffset = "-1.45em";
-   //    arrowDim = "-20,-5, -9,1 -20,7";
-       isUpdated = true;
-   } else if (yMax >= 66){
-   //    yFont = ((1/yMax)*640);
-   //    yOffset = "-1.4em";
-   //    arrowDim = "-20,-5, -9,1 -20,7";
-       isUpdated = true;
-   }
    
    //Check for density BETA
    if (density < 15 && density < yFont ){
