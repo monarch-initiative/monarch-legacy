@@ -20,6 +20,7 @@ $(document).ready(function(){
     /* This changes the color and style of tabs upon click. */
     $('.contenttab').click(function() {
         $('.contenttab').css({'color': 'white', 'background-color': '#999', 'border-bottom': '1px solid black'});
+        console.log(this);
         $(this).css({'color': 'black', 'background-color': 'white', 'border-bottom': '1px solid white'});
     });
 
@@ -31,7 +32,19 @@ $(document).ready(function(){
         $('.category').hide();
         $(panel_id).show();
     });
-
+    
+    // Since we're a tabby version, we're going to try and open
+    // any tabs defined by fragments.
+    if ( window && window.location && window.location.hash &&
+        window.location.hash != "" && window.location.hash != "#" ){
+        var fragname = window.location.hash;
+        
+        $('.first.category').hide();
+        $(fragname).show();
+        
+        $('.contenttab').css({'color': 'white', 'background-color': '#999', 'border-bottom': '1px solid black'});
+        $('.tabcontainer a[href="' + fragname + '"]').children('.contenttab').css({'color': 'black', 'background-color': 'white', 'border-bottom': '1px solid white'}); 
+    }
 
     /* Literature Tab */
     

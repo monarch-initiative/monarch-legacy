@@ -66,11 +66,11 @@ function navbar_search_init(in_search_id, in_form_id){
 		    // namespace; otherwise, nothing.
 		    var appendee = '';
 		    if( item ){
-			if( item['category'] ){
-			    appendee = item['category'];
+			if( item['concept']['categories'][0] ){
+			    appendee = item['concept']['categories'][0];
 			}else if( item['id'] ){
 			    // Get first split on '_'.
-			    var fspl = first_split('_', item['id']);
+			    var fspl = first_split(/_|:/, item['id']);
 			    if( fspl[0] ){
 				appendee = fspl[0];
 			    }
@@ -78,9 +78,9 @@ function navbar_search_init(in_search_id, in_form_id){
 		    }
 
 		    return {
-			label: item.term,
+			label: item.completion,
 			id : item.id,
-			category : item.category,
+			category : item.concept.categories[0],
 			tag: appendee,
 			name: item.id
 		    };
