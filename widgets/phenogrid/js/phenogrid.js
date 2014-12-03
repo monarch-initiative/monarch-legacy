@@ -752,14 +752,14 @@ var url = document.URL;
 	    self.state.phenotypeSortData = [];
 	    
 	    switch(this.state.selectedSort) {
-	    case "Alphabetic":  this._alphabetizePhenotypes();
+	    case "Alphabetic":  this._sortingPhenotypes(3);
 		break;
-	    case "Frequency and Rarity":    this._rankPhenotypes();
+	    case "Frequency and Rarity":    this._sortingPhenotypes(2);
 		break;
-	    case "Frequency": this._sortByModelMatches();
+	    case "Frequency": this._sortingPhenotypes(1);
 		break;
-	    default:			this._alphabetizePhenotypes();
-	    }	    
+	    default:			this._sortingPhenotypes(1);
+	    }   
 	    
 	    //Step 2: Filter for the next n phenotypes based on phenotypeDisplayCount and update the y-axis
 	    this.state.filteredPhenotypeData = [];
@@ -772,30 +772,30 @@ var url = document.URL;
 	    //also update the modeldata
 	    var axis_idx = 0;
 	    var tempFilteredModelData = [];
-	    
 	    //get phenotype[startIdx] up to phenotype[currPhenotypeIdx] from the array of sorted phenotypes
 	    for (var i = startIdx;i <self.state.currPhenotypeIdx + 1;i++) {
-		//move the ranked phenotypes onto the filteredPhenotypeData array
-		self.state.filteredPhenotypeData.push(self.state.phenotypeSortData[i]);
-		//update the YAxis   	
-		//the height of each row
-		var size = 10;
-		//the spacing you want between rows
-		var gap = 3;
-		//push the rowid and ypos onto the yaxis array
-		//so now the yaxis will be in the order of the ranked phenotypes
-		var stuff = {"id": self.state.phenotypeSortData[i][0].id_a, "ypos" : ((axis_idx * (size+gap)) + self.state.yoffset)};
-		self.state.yAxis.push(stuff); 
-		axis_idx = axis_idx + 1;
-		//update the ModelData			
-		//find the rowid in the original ModelData (list of models and their matching phenotypes) and write it to tempdata if it matches this phenotypeSortData rowid.
-		//In this case, the rowid is just the id_a value in the model data
-		for (var midx = 0; midx < this.state.modelData.length; midx++) {
-		    var mod = this.state.modelData[midx];
-		    if (mod.id_a == self.state.phenotypeSortData[i][0].id_a) {
-			tempFilteredModelData.push(mod);
-		    }
-		}		
+			//move the ranked phenotypes onto the filteredPhenotypeData array
+			self.state.filteredPhenotypeData.push(self.state.phenotypeSortData[i]);
+			//update the YAxis   	
+			//the height of each row
+			var size = 10;
+			//the spacing you want between rows
+			var gap = 3;
+			//push the rowid and ypos onto the yaxis array
+			//so now the yaxis will be in the order of the ranked phenotypes
+			//console.log("I: "+i+" id_a: "+self.state.phenotypeSortData[i][0].id_a+" axis_idx: "+axis_idx+" size: "+size+" gap: "+gap+" yoffset: "+self.state.yoffset);
+			var stuff = {"id": self.state.phenotypeSortData[i][0].id_a, "ypos" : ((axis_idx * (size+gap)) + self.state.yoffset)};
+			self.state.yAxis.push(stuff); 
+			axis_idx = axis_idx + 1;
+			//update the ModelData			
+			//find the rowid in the original ModelData (list of models and their matching phenotypes) and write it to tempdata if it matches this phenotypeSortData rowid.
+			//In this case, the rowid is just the id_a value in the model data
+			for (var midx = 0; midx < this.state.modelData.length; midx++) {
+			    var mod = this.state.modelData[midx];
+			    if (mod.id_a == self.state.phenotypeSortData[i][0].id_a) {
+					tempFilteredModelData.push(mod);
+			    }
+			}		
 	    }
 	    
 	    for (var idx=0;idx<self.state.filteredModelList.length;idx++) {
@@ -822,7 +822,6 @@ var url = document.URL;
 	    //also update the modeldata
 	    var axis_idx = 0;
 	    var tempFilteredModelData = [];
-	    
 	    //get phenotype[startIdx] up to phenotype[currPhenotypeIdx] from the array of sorted phenotypes
 	    for (var i = startIdx;i <self.state.currPhenotypeIdx + 1;i++) {
 		//move the ranked phenotypes onto the filteredPhenotypeData array
@@ -896,141 +895,72 @@ var url = document.URL;
     	    }
 	    return phenotypeArray;
 	},
-	
-	//1. Sort the array by source phenotype name
-	//3. Get the number of model matches for this phenotype and add to array
-	//4. Sort the array by matches. descending
-	_sortByModelMatches: function() {
-	    
-	    var self = this;
-	    var modelDataForSorting = [];
-	    var modData =self.state.modelData;
-	    
-	    for (var idx=0;idx<self.state.phenotypeData.length;idx++) {			
-		var tempdata = [];
-		for (var midx = 0; midx < modData.length; midx++) {
-		    if (modData[midx].id_a == self.state.phenotypeData[idx].id_a) {
-			tempdata.push(modData[midx]);
-		    }
-		}
-		modelDataForSorting.push(tempdata);
-	    }
-	    //sort the model list by rank
-	    modelDataForSorting.sort(function(a,b) { 
-		return a.id_a - b.id_a; 
-	    });
-	    
-	    self.state.phenotypeData.sort(function(a,b) {
-		return a.id_a-b.id_a;
-	    });
-	    
-	    for (var k =0; k < modelDataForSorting.length;k++) {
-		var ct  = 0;
-		var d = modelDataForSorting[k];
-		if (d[0].id_a == self.state.phenotypeData[k].id_a){
-		    for (var i=0; i< d.length; i++)
-		    {
-			ct+= 1;
-		    }
-		    d["count"] = ct;
-		    self.state.phenotypeSortData.push(d);
-		}
-	    }	
 
-	    //sort the phenotype list by sum of LCS
-	    self.state.phenotypeSortData.sort(function(a,b) {
-		var diff = b.count -a.count;
-		if (diff ==0) {// counts are equal
-		    diff = a[0].id_a.localeCompare(b[0].id_a);
-		}
-		return diff;		    
+	//NEW CODE
+	_sortingPhenotypes: function(sortType) {
+		//1 -> ModelMatch, 2 -> RankPhenotype, 3 -> Alphabetize
 
-	    });	 	
-	},
-	
-	//`. Get all unique phenotypes in an array
-	//2. Sort the array by source phenotype name
-	//3. Get the sum of all of this phenotype's LCS scores and add to array
-	//4. Sort the array by sums. descending
-	_rankPhenotypes: function() {
-	    
-	    var self = this;
+		var self = this;
 	    var modelDataForSorting = [];
-	    
 	    var modData = self.state.modelData;
-	    
+	    //1. Get all unique phenotypes in an array
 	    for (var idx=0;idx<self.state.phenotypeData.length;idx++) {			
-		var tempdata = modData.filter(function(d) {
-    	    	    return d.id_a == self.state.phenotypeData[idx].id_a;
-    		});	
-		modelDataForSorting.push(tempdata);
+			var tempdata = [];
+			for (var midx = 0; midx < modData.length; midx++) {
+			    if (modData[midx].id_a == self.state.phenotypeData[idx].id_a) {
+					tempdata.push(modData[midx]);
+			    }
+			}
+			modelDataForSorting.push(tempdata);
 	    }
-	    //sort the model list by rank
-	    modelDataForSorting.sort(function(a,b) { 
-	    	return a.id - b.id; 
+
+		//2. Sort the array by source phenotype name 
+		modelDataForSorting.sort(function(a,b) { 
+			return a.id_a - b.id_a;
 	    });
 	    
 	    self.state.phenotypeData.sort(function(a,b) {
 	    	return a.id_a-b.id_a;
 	    });
-	    
-	    for (var k =0; k < modelDataForSorting.length;k++) {
-		var sum  = 0;
-		var d = modelDataForSorting[k];
-		if (d[0].id_a === self.state.phenotypeData[k].id_a){
-		    for (var i=0; i< d.length; i++)
-		    {
-			sum+= +d[i].subsumer_IC;
-		    }
-		    d["sum"] = sum;
-		    self.state.phenotypeSortData.push(d);
-		}
-	    }		
-	    //sort the phenotype list by sum of LCS
-	    self.state.phenotypeSortData.sort(function(a,b) { 
-	    	return b.sum - a.sum; 
-	    });
-	},
-	
-	//1. Get all unique phenotypes in an array
-	//2. Sort the array by source phenotype name
-	//3. Get the sum of all of this phenotype's LCS scores and add to array
-	//4. Sort the array by sums. descending
-	_alphabetizePhenotypes: function() {
-	    var self = this;
-	    var modelDataForSorting = [];
 
-	    var modData = self.state.modelData;
-	    
-	    for (var idx=0;idx<self.state.phenotypeData.length;idx++) {			
-		var tempdata = modData.filter(function(d) {
-    	    	    return d.id_a == self.state.phenotypeData[idx].id_a;
-    		});	
-		modelDataForSorting.push(tempdata);
-	    }
-	    //sort the model list by rank
-	    modelDataForSorting.sort(function(a,b) { 
-		return a.id_a - b.id_a; 
-	    });
-	    
-	    for (var k =0; k < modelDataForSorting.length;k++) {
-		var sum  = 0;
-		var d = modelDataForSorting[k];
-		if (d[0].id_a === self.state.phenotypeData[k].id_a){
-		    d["label"] = d[0].label_a;
-		    self.state.phenotypeSortData.push(d);
-		}
-	    }		
-	    
+	    //3. Get the sum of all of this phenotype's LCS scores and add to array
+		for (var k = 0; k < modelDataForSorting.length; k++) {
+			var num = 0;
+			var d = modelDataForSorting[k];
+			if (d[0].id_a === self.state.phenotypeData[k].id_a){
+				if (sortType == 1 || sortType == 2){
+				    for (var i = 0; i < d.length; i++)
+				    {
+				    	if (sortType == 1){num+= 1;}
+				    	else {num+= +d[i].subsumer_IC;}
+				    }
+				}
+				if (sortType == 1){d["count"] = num;}
+			    else if (sortType == 2){d["sum"] = num;}
+			    else if (sortType == 3){d["label"] = d[0].label_a;}
+				else{}
+			    self.state.phenotypeSortData.push(d);
+			}
+	    }	
+
+	    //4. Sort the array by sums. descending
 	    self.state.phenotypeSortData.sort(function(a,b) {
-		var labelA = a.label.toLowerCase(), 
-		    labelB = b.label.toLowerCase();
-		if (labelA < labelB) {return -1;}
-		if (labelA > labelB) {return 1;}
-		return 0;
-	    });		
-	    //Save this - it works
-	    //this.state.phenotypeSortData = d3.nest().key(function(d, i){return //d.label_a}).sortKeys(d3.ascending).entries(self.state.phenotypeData);	    
+		    if (sortType == 1){
+				var diff = b.count -a.count;
+				if (diff ==0) {// counts are equal
+				    diff = a[0].id_a.localeCompare(b[0].id_a);
+				}
+				return diff;
+		    }else if (sortType == 2){
+			    return b.sum - a.sum; 
+		    }else if (sortType == 3){
+				var labelA = a.label.toLowerCase(), 
+				    labelB = b.label.toLowerCase();
+				if (labelA < labelB) {return -1;}
+				if (labelA > labelB) {return 1;}
+				return 0;	
+		    }else{}
+	    });	
 	},
 	
 	//given a list of phenotypes, find the top n models
