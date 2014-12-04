@@ -276,6 +276,19 @@
         {
             component : "monarch",
             priority : 1,
+            url : "http://tartini.crbs.ucsd.edu/variant/dbSNP:121912582",
+            desc : "See https://github.com/monarch-initiative/monarch-app/issues/617",
+            expects : {
+                format : "html",
+                raw_contains : 
+                [
+                ]
+            }
+        },
+        // --html--
+        {
+            component : "monarch",
+            priority : 1,
             url : "http://tartini.crbs.ucsd.edu/phenotype/HP:0001337",
             desc : "A HPO phenotype disease page, Tremor",
             expects : {
