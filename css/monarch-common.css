@@ -56,6 +56,7 @@ p {
     }
     .input-group {
         margin-bottom: 0px;
+        float: right;
     }
     .form-control {
         padding: 0px 10px;
