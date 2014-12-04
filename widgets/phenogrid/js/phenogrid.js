@@ -476,7 +476,7 @@ var url = document.URL;
 	      	});
 	    overviewX++;	//Corrects the gapping on the sides
 	    overviewY++;
-	   	console.log("OSize: "+overviewRegionSize+" OCoords: ("+overviewX+","+overviewY+")");
+	   	//console.log("OSize: "+overviewRegionSize+" OCoords: ("+overviewX+","+overviewY+")");
 	    var modelRectTransform = "translate(" + overviewX +	"," + overviewY + ")"
 		    model_rects.enter()
 			.append("rect")
@@ -491,7 +491,7 @@ var url = document.URL;
 	    var lastId = self.state.phenotypeSortData[self.state.phenotypeDisplayCount-1][0].id_a; //rowid
 	    var selectRectHeight = self.state.smallYScale(lastId);
 	    var selectRectWidth = self.state.smallXScale(mods[self.state.modelDisplayCount-1].model_id);
-	    console.log("Height: "+selectRectHeight+" Width: "+selectRectWidth);
+	    //console.log("Height: "+selectRectHeight+" Width: "+selectRectWidth);
 	    self.state.highlightRect = self.state.svg.append("rect")
 		    .attr("x",overviewX)
 		    .attr("y",overviewY)				
@@ -519,11 +519,11 @@ var url = document.URL;
 					// Restrict Movement if no need to move map
 					if (selectRectHeight == overviewRegionSize) {
 						newY = overviewY;
-						console.log("Up/Down Blocked");
+						//console.log("Up/Down Blocked");
 					}
 					if (selectRectWidth == overviewRegionSize) {
 						newX = overviewX;
-						console.log("Left/Right Blocked");
+						//console.log("Left/Right Blocked");
 					}
 
 					// block from going out of bounds on left
@@ -543,7 +543,7 @@ var url = document.URL;
 					if (newY + selectRectHeight > overviewY+overviewBoxDim) {
 						newY = overviewY+overviewBoxDim-selectRectHeight;
 					}
-					console.log("NewCoords: ("+newX+","+newY+")");
+					//console.log("NewCoords: ("+newX+","+newY+")");
 					rect.attr("x", newX);
 					//This changes for vertical positioning
 					rect.attr("y", newY); //self.state.yoffset+yTranslation); 
@@ -551,7 +551,7 @@ var url = document.URL;
 					// adjust x back to have 0,0 as base instead of overviewX, overviewY
 					newX = newX- overviewX;
 					newY = newY -overviewY;
-					console.log("AdjustCoords: ("+newX+","+newY+")");
+					//console.log("AdjustCoords: ("+newX+","+newY+")");
 
 					// invert newX and newY into posiions in the model and phenotype lists.
 					var j = self._invertOverviewDragPosition(self.state.smallXScale,newX);
@@ -783,7 +783,7 @@ var url = document.URL;
 	    //also update the modeldata
 	    var axis_idx = 0;
 	    var tempFilteredModelData = [];
-	    console.log("CurrPhenoTypeIdx: "+self.state.currPhenotypeIdx);
+	    //console.log("CurrPhenoTypeIdx: "+self.state.currPhenotypeIdx);
 	    //get phenotype[startIdx] up to phenotype[currPhenotypeIdx] from the array of sorted phenotypes
 	    for (var i = startIdx;i <self.state.currPhenotypeIdx + 1;i++) {
 			//move the ranked phenotypes onto the filteredPhenotypeData array
@@ -1179,6 +1179,7 @@ var url = document.URL;
 	_finishLoad: function() {
 	    var species = this.state.targetSpeciesName;
 	    var retData  = this.state.data[species];
+	    console.log(retData);
 	 //   var retData = data;
 	    //extract the maxIC score
 	    if (typeof (retData.metadata) !== 'undefined') {
@@ -2960,22 +2961,21 @@ var url = document.URL;
 	    
 	    var prebl = $("#prebl");
 	    if (prebl.length == 0) {
-		var preblHtml ="<div id='prebl'></div>";
-		this.element.append(preblHtml);
-		prebl = $("#prebl");
+			var preblHtml ="<div id='prebl'></div>";
+			this.element.append(preblHtml);
+			prebl = $("#prebl");
 	    }
 	    prebl.empty();
 	    
 	    if (this.state.unmatchedPhenotypes != undefined && this.state.unmatchedPhenotypes.length > 0){
-	    	//var phenotypes = this._showUnmatchedPhenotypes();		
-		var optionhtml = "<div class='clearfix'><form id='matches'><input type='checkbox' name='unmatched' value='unmatched' >&nbsp;&nbsp;View Unmatched Phenotypes<br /><form><div id='clear'></div>";
-		var phenohtml = this._buildUnmatchedPhenotypeTable();
-		optionhtml = optionhtml + "<div id='unmatched' style='display:none;'>" + phenohtml + "</div></div>";
-		prebl.append(optionhtml);
-	    	
+		    //var phenotypes = this._showUnmatchedPhenotypes();		
+			var optionhtml = "<div class='clearfix'><form id='matches'><input type='checkbox' name='unmatched' value='unmatched' >&nbsp;&nbsp;View Unmatched Phenotypes<br /><form><div id='clear'></div>";
+			var phenohtml = this._buildUnmatchedPhenotypeTable();
+			optionhtml = optionhtml + "<div id='unmatched' style='display:none;'>" + phenohtml + "</div></div>";
+			prebl.append(optionhtml);	
 	    } else { // no unmatched phenotypes
-		var optionhtml = "<div id='unmatchedlabel' style='display:block;'>No Unmatched Phenotypes</div>";
-		prebl.append(optionhtml);
+			var optionhtml = "<div id='unmatchedlabel' style='display:block;'>No Unmatched Phenotypes</div>";
+			prebl.append(optionhtml);
 	    }
 	    
 	    $('#matches :checkbox').click(function() {
