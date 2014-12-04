@@ -17,11 +17,7 @@ bbop.monarch.datagraph = function(config){
         this.config = config;
     }
     this.setPolygonCoordinates();
-    
-    //Check browser
-    this.config.isOpera = (!!window.opera || navigator.userAgent.indexOf(' OPR/') >= 0);
-    this.config.isChrome = (!!window.chrome && !(!!window.opera || navigator.userAgent.indexOf(' OPR/') >= 0));
-    this.config.isSafari = Object.prototype.toString.call(window.HTMLElement).indexOf('Constructor') > 0;
+    this.config.xFirstIndex = this.getXFirstIndex();
     
     //Tooltip offsetting
     this.config.arrowOffset = {height: 21, width: -90};
@@ -206,7 +202,6 @@ bbop.monarch.datagraph.prototype.setD3Config = function (html_div,DATA){
       
       return d3Config;
 }
-
 
 bbop.monarch.datagraph.prototype.makeLegend = function (graphConfig){
     var config = this.config;
@@ -393,7 +388,7 @@ bbop.monarch.datagraph.prototype.makeBar = function (barGroup,graphConfig,barLay
           .attr("class",("rect"+graphConfig.level))
           .attr("height", graphConfig.y1.rangeBand())
           .attr("y", function(d) { return graphConfig.y1(d.name); })
-          .attr("x", function(){if (config.isChrome || config.isSafari) {return 1;}else{ return 0;}})
+          .attr("x", function(){return config.xFirstIndex;})
           .attr("width", function(d) { return graphConfig.x(d.value); })
           .on("mouseover", function(d){
             d3.select(this)
@@ -414,8 +409,7 @@ bbop.monarch.datagraph.prototype.makeBar = function (barGroup,graphConfig,barLay
           .attr("class",("rect"+graphConfig.level))
           .attr("x", function(d){
               if (d.x0 == 0){
-                  if (config.isChrome || config.isSafari){return 1;}
-                  else {return d.x0;}
+                  return config.xFirstIndex;
               } else { 
                 return graphConfig.x(d.x0);
               } 
@@ -1209,6 +1203,24 @@ bbop.monarch.datagraph.prototype.setXLabelFontSize = function(fSize){
 }
 bbop.monarch.datagraph.prototype.setXAxisPos = function(w,h){
     this.config.xAxisPos = {dx:w,y:h};
+}
+
+//The starting index (0 or 1) for the x axis seems to be
+//dependent on browser version, for now always return 1
+//Firefox <33 should be 0
+bbop.monarch.datagraph.prototype.getXFirstIndex = function (){
+ 
+ //Check browser
+ var isOpera = (!!window.opera || navigator.userAgent.indexOf(' OPR/') >= 0);
+ var isChrome = (!!window.chrome && !(!!window.opera || navigator.userAgent.indexOf(' OPR/') >= 0));
+ var isSafari = Object.prototype.toString.call(window.HTMLElement).indexOf('Constructor') > 0;
+ 
+ if (isChrome || isSafari){
+     return 1;
+ } else {
+     return 1;
+ }
+ 
 }
 
 
