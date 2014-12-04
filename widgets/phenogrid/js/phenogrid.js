@@ -433,8 +433,9 @@ var url = document.URL;
 	_createOverviewSection: function() {
 	    var self=this;
 	    
-	    // add-ons for stroke size on view box
-	    var strokePadding = 6;
+	    // add-ons for stroke size on view box. Preferably even numbers
+	    var linePad = 2;
+	    var viewPadding = linePad*2+2;
 
 	    // overview region is offset by xTranslation, yTranslation
 	    var xTranslation = 42;
@@ -448,7 +449,7 @@ var url = document.URL;
 	    // size of the entire region - it is a square
 	    var overviewRegionSize = self.state.globalViewSize;
 	    if (this.state.phenotypeData.length < this.state.defaultPhenotypeDisplayCount) {
-		overviewRegionSize = self.state.reducedGlobalViewSize;
+			overviewRegionSize = self.state.reducedGlobalViewSize;
 	    }
 
 	    // create the legend for the modelScores
@@ -456,7 +457,7 @@ var url = document.URL;
 
 	    // make it a bit bigger to ccont for widths
 	    // MAGIC NUMBER ALERT
-	    var overviewBoxDim = overviewRegionSize+strokePadding;
+	    var overviewBoxDim = overviewRegionSize+viewPadding;
 
 	    // create the main box and the instruction labels.
 	    self._initializeOverviewRegion(overviewBoxDim,overviewX,overviewY);
@@ -473,83 +474,93 @@ var url = document.URL;
 	      	.data(modData, function(d) {
 	      	    return d.id;
 	      	});
-
-
+	    overviewX++;	//Corrects the gapping on the sides
+	    overviewY++;
+	   	console.log("OSize: "+overviewRegionSize+" OCoords: ("+overviewX+","+overviewY+")");
 	    var modelRectTransform = "translate(" + overviewX +	"," + overviewY + ")"
-	    model_rects.enter()
-		.append("rect")
-		.attr("transform",modelRectTransform)
-		.attr("class",  "mini_model")
-		.attr("y", function(d, i) { return self.state.smallYScale(d.id_a);})
-		.attr("x", function(d) { return self.state.smallXScale(d.model_id);})
-		.attr("width", 2)
-		.attr("height", 2)
-		.attr("fill", function(d) { return self._getColorForModelValue(self,d.species,d.value)});
+		    model_rects.enter()
+			.append("rect")
+			.attr("transform",modelRectTransform)
+			.attr("class",  "mini_model")
+			.attr("y", function(d, i) { return self.state.smallYScale(d.id_a)+linePad/2;})
+			.attr("x", function(d) { return self.state.smallXScale(d.model_id)+linePad/2;})
+			.attr("width", linePad)
+			.attr("height", linePad)
+			.attr("fill", function(d) { return self._getColorForModelValue(self,d.species,d.value)});
 	    
 	    var lastId = self.state.phenotypeSortData[self.state.phenotypeDisplayCount-1][0].id_a; //rowid
 	    var selectRectHeight = self.state.smallYScale(lastId);
 	    var selectRectWidth = self.state.smallXScale(mods[self.state.modelDisplayCount-1].model_id);
-
+	    console.log("Height: "+selectRectHeight+" Width: "+selectRectWidth);
 	    self.state.highlightRect = self.state.svg.append("rect")
-	        .attr("x",overviewX)
-	        .attr("y",overviewY)
-		.attr("class", "draggable")					
-		.attr("id", "selectionrect")
-		.attr("height", selectRectHeight)
-		.attr("width", selectRectWidth)
-		.call(d3.behavior.drag()
-		      .on("drag", function(d) {
-            		  // drag the highlight in the overview window
-            		  //notes: account for the width of the rectangle in my x and y calculations
-            		  //do not use the event x and y, they will be out of range at times.  use the converted values instead.
+		    .attr("x",overviewX)
+		    .attr("y",overviewY)				
+			.attr("id", "selectionrect")
+			.attr("height", selectRectHeight+4)
+			.attr("width", selectRectWidth+4)
+			.attr("class", "draggable")	
+			.call(d3.behavior.drag()
+			    .on("drag", function(d) {
+					// drag the highlight in the overview window
+					//notes: account for the width of the rectangle in my x and y calculations
+					//do not use the event x and y, they will be out of range at times.  use the converted values instead.
 
-			  var current = d3.select(this);
-			  var curX = parseFloat(current.attr("x"));
-			  var curY = parseFloat(current.attr("y"));
-			 
-            		  var rect = self.state.svg.select("#selectionrect");
-			  rect.attr("transform","translate(0,0)");
+					var current = d3.select(this);
+					var curX = parseFloat(current.attr("x"));
+					var curY = parseFloat(current.attr("y"));
 
-        		  //limit the range of the x value
+					var rect = self.state.svg.select("#selectionrect");
+					rect.attr("transform","translate(0,0)");
 
- 			  var newX = curX+d3.event.dx;
-			  var newY = curY+d3.event.dy;
+					//limit the range of the x value
+					var newX = curX+d3.event.dx;
+					var newY = curY+d3.event.dy;
 
-			  // block from going out of bounds on left
-			  if (newX  <overviewX) {
-			      newX =overviewX;
-			  }
-			  //top
-			  if (newY < overviewY) {
-			      newY = overviewY;
-			  }
-			  // right
-			  if (newX +  selectRectWidth > overviewX+overviewBoxDim) {
-			      newX = overviewX+overviewBoxDim-selectRectWidth;
-			  }
+					// Restrict Movement if no need to move map
+					if (selectRectHeight == overviewRegionSize) {
+						newY = overviewY;
+						console.log("Up/Down Blocked");
+					}
+					if (selectRectWidth == overviewRegionSize) {
+						newX = overviewX;
+						console.log("Left/Right Blocked");
+					}
 
-			  // bottom
-			  if (newY + selectRectHeight > overviewY+overviewBoxDim) {
-			      newY = overviewY+overviewBoxDim-selectRectHeight;
-			  }
-			      
-			  rect.attr("x", newX);
-       			  //This changes for vertical positioning
-       			  rect.attr("y", newY); //self.state.yoffset+yTranslation); 
-			  
-			  // adjust x back to have 0,0 as base instead of overviewX, overviewY
-			  newX = newX- overviewX;
-			  newY = newY -overviewY;
+					// block from going out of bounds on left
+					if (newX < overviewX) {
+						newX = overviewX;
+					}
+					//top
+					if (newY < overviewY) {
+						newY = overviewY;
+					}
+					// right
+					if (newX + selectRectWidth > overviewX+overviewBoxDim) {
+						newX = overviewX+overviewBoxDim-selectRectWidth;
+					}
 
-			  // invert newX and newY into posiions in the model and phenotype lists.
-			  var j = self._invertOverviewDragPosition(self.state.smallXScale,newX);
-               		  var newModelPos = j+self.state.modelDisplayCount;
-			  
+					// bottom
+					if (newY + selectRectHeight > overviewY+overviewBoxDim) {
+						newY = overviewY+overviewBoxDim-selectRectHeight;
+					}
+					console.log("NewCoords: ("+newX+","+newY+")");
+					rect.attr("x", newX);
+					//This changes for vertical positioning
+					rect.attr("y", newY); //self.state.yoffset+yTranslation); 
 
-        		  var j = self._invertOverviewDragPosition(self.state.smallYScale,newY);
-               		  var newPhenotypePos = j+self.state.phenotypeDisplayCount;
-			  
-               		  self._updateModel(newModelPos, newPhenotypePos);
+					// adjust x back to have 0,0 as base instead of overviewX, overviewY
+					newX = newX- overviewX;
+					newY = newY -overviewY;
+					console.log("AdjustCoords: ("+newX+","+newY+")");
+
+					// invert newX and newY into posiions in the model and phenotype lists.
+					var j = self._invertOverviewDragPosition(self.state.smallXScale,newX);
+					var newModelPos = j+self.state.modelDisplayCount;
+
+					var j = self._invertOverviewDragPosition(self.state.smallYScale,newY);
+					var newPhenotypePos = j+self.state.phenotypeDisplayCount;
+
+					self._updateModel(newModelPos, newPhenotypePos);
 		      }));
 	    //set this back to 0 so it doesn't affect other rendering
 	},
@@ -583,7 +594,7 @@ var url = document.URL;
 		.attr("x", 0)
 		.attr("y", 0)
 		.attr("width", 15)
-    	        .attr("height", 15)		
+    	.attr("height", 15)		
 		.on("click", function(d) {
 		    var name = "modelscores";					
 		    self._showDialog(name);
@@ -624,23 +635,23 @@ var url = document.URL;
 	},
 
 	_createSmallScales: function(overviewRegionSize) {
-	    var  sortDataList = [];
-	    var self=this;
-	    for (i=0; i<self.state.phenotypeSortData.length; i++) {
-	    	sortDataList.push(self.state.phenotypeSortData[i][0].id_a);  //rowid
-	    }
-	    var mods = self.state.modelList;
-	    var modData = self.state.modelData;
-	    
-	    this.state.smallYScale = d3.scale.ordinal()
-		.domain(sortDataList.map(function (d) {return d; }))				    
-		.rangePoints([0,overviewRegionSize]);
+		var sortDataList = [];
+		var self=this;
+		for (i=0; i<self.state.phenotypeSortData.length; i++) {
+			sortDataList.push(self.state.phenotypeSortData[i][0].id_a);  //rowid
+		}
+		var mods = self.state.modelList;
+		var modData = self.state.modelData;
 
-	    var modids = mods.map(function (d) {return d.model_id; });
-	    this.state.smallXScale = d3.scale.ordinal()
-		//.domain(mods.map(function (d) {return d.model_id; }))
-		.domain(modids)
-		.rangePoints([0,overviewRegionSize]);
+		this.state.smallYScale = d3.scale.ordinal()
+			.domain(sortDataList.map(function (d) {return d; }))				    
+			.rangePoints([0,overviewRegionSize]);
+
+		var modids = mods.map(function (d) {return d.model_id; });
+		this.state.smallXScale = d3.scale.ordinal()
+			//.domain(mods.map(function (d) {return d.model_id; }))
+			.domain(modids)
+			.rangePoints([0,overviewRegionSize]);
 	},
 
 	_invertOverviewDragPosition: function(scale,value) {
@@ -772,6 +783,7 @@ var url = document.URL;
 	    //also update the modeldata
 	    var axis_idx = 0;
 	    var tempFilteredModelData = [];
+	    console.log("CurrPhenoTypeIdx: "+self.state.currPhenotypeIdx);
 	    //get phenotype[startIdx] up to phenotype[currPhenotypeIdx] from the array of sorted phenotypes
 	    for (var i = startIdx;i <self.state.currPhenotypeIdx + 1;i++) {
 			//move the ranked phenotypes onto the filteredPhenotypeData array
@@ -783,7 +795,7 @@ var url = document.URL;
 			var gap = 3;
 			//push the rowid and ypos onto the yaxis array
 			//so now the yaxis will be in the order of the ranked phenotypes
-			//console.log("I: "+i+" id_a: "+self.state.phenotypeSortData[i][0].id_a+" axis_idx: "+axis_idx+" size: "+size+" gap: "+gap+" yoffset: "+self.state.yoffset);
+			//console.log("I: "+i+" id_a: "+self.state.phenotypeSortData[i][0].id_a+" axis_idx: "+axis_idx+" yoffset: "+self.state.yoffset);
 			var stuff = {"id": self.state.phenotypeSortData[i][0].id_a, "ypos" : ((axis_idx * (size+gap)) + self.state.yoffset)};
 			self.state.yAxis.push(stuff); 
 			axis_idx = axis_idx + 1;
@@ -2177,19 +2189,19 @@ var url = document.URL;
 	    var fmd = self.state.filteredModelData;
 
 	    //This is for the new "Overview" target option 
-	    var modelData = [].
-		modelList = [];
+	    var modelData = [];
+		var modelList = [];
 	    modelData = this.state.modelData;
 	    modelList = this.state.modelList;
 
 	    //check to see if the phenotypeIdx is greater than the number of items in the list
 	    if (phenotypeIdx > this.state.phenotypeData.length) {
-		this.state.currPhenotypeIdx = this.state.phenotypeSortData.length;
+			this.state.currPhenotypeIdx = this.state.phenotypeSortData.length;
 	    } else if (phenotypeIdx - (this.state.phenotypeDisplayCount -1) < 0) {
-		//check to see if the min of the slider is less than the 0
-		this.state.currPhenotypeIdx = (this.state.phenotypeDisplayCount -1);
+			//check to see if the min of the slider is less than the 0
+			this.state.currPhenotypeIdx = (this.state.phenotypeDisplayCount -1);
 	    } else {
-		this.state.currPhenotypeIdx = phenotypeIdx;
+			this.state.currPhenotypeIdx = phenotypeIdx;
 	    }
 	    var startPhenotypeIdx = this.state.currPhenotypeIdx - this.state.phenotypeDisplayCount;
 	    
@@ -2199,26 +2211,26 @@ var url = document.URL;
 	    //fix model list
 	    //check to see if the max of the slider is greater than the number of items in the list
 	    if (modelIdx > modelList.length) {
-		this.state.currModelIdx = modelList.length;
+			this.state.currModelIdx = modelList.length;
 	    } else if (modelIdx - (this.state.modelDisplayCount -1) < 0) {
-		//check to see if the min of the slider is less than the 0
-		this.state.currModelIdx = (this.state.modelDisplayCount -1);
+			//check to see if the min of the slider is less than the 0
+			this.state.currModelIdx = (this.state.modelDisplayCount -1);
 	    } else {
-		this.state.currModelIdx = modelIdx;
+			this.state.currModelIdx = modelIdx;
 	    }
 	    var startModelIdx = this.state.currModelIdx - this.state.modelDisplayCount;
 
 	    this.state.filteredModelList = [];
 	    //if (this.state.targetSpeciesName !== "Overview") { this.state.filteredModelData = [];}
-	    this.state.filteredModelData=[];
+	    this.state.filteredModelData = [];
 	 	    
 	    //extract the new array of filtered Phentoypes
 	    //also update the axis
 	    //also update the modeldata
 	    var axis_idx = 0;
-    	    for (var idx=startModelIdx;idx<self.state.currModelIdx;idx++) {
+    	for (var idx=startModelIdx;idx<self.state.currModelIdx;idx++) {
     		self.state.filteredModelList.push(modelList[idx]);
-    	    }
+    	}
 	    
 	    //extract the new array of filtered Phentoypes
 	    //also update the axis
@@ -2226,7 +2238,7 @@ var url = document.URL;
 
 	    var tempFilteredModelData = [];
 	    var axis_idx = 0;
-    	    for (var idx=startPhenotypeIdx;idx<self.state.currPhenotypeIdx;idx++) {
+    	for (var idx=startPhenotypeIdx;idx<self.state.currPhenotypeIdx;idx++) {
     		self.state.filteredPhenotypeData.push(self.state.phenotypeSortData[idx]);
     		//update the YAxis   	    		
     		//the height of each row
@@ -2234,25 +2246,23 @@ var url = document.URL;
         	//the spacing you want between rows
         	var gap = 3;
 
-    		var stuff = {"id": self.state.phenotypeSortData[idx][0].id_a, 
-			     "ypos" : ((axis_idx * (size+gap)) + self.state.yoffset)};
+    		var stuff = {"id": self.state.phenotypeSortData[idx][0].id_a,"ypos" : ((axis_idx * (size+gap)) + self.state.yoffset)};
     		self.state.yAxis.push(stuff); 
     		axis_idx = axis_idx + 1;
     		//update the ModelData
     		var tempdata = modelData.filter(function(d) {
-    	    	    return d.id_a == self.state.phenotypeSortData[idx][0].id_a;
+    	    	return d.id_a == self.state.phenotypeSortData[idx][0].id_a;
     		});
     		tempFilteredModelData = tempFilteredModelData.concat(tempdata);
-    	    }
+    	}
 
-    	    self.state.svg.selectAll("g .x.axis")
-		.remove();
+    	self.state.svg.selectAll("g .x.axis")
+			.remove();
 	    self.state.svg.selectAll("g .tick.major")
-		.remove();
+			.remove();
 	    //update the x axis
 	    self.state.xScale = d3.scale.ordinal()
-		.domain(self.state.filteredModelList.map(function (d) {
-		    return d.model_id; }))
+			.domain(self.state.filteredModelList.map(function (d) {return d.model_id; }))
 	        .rangeRoundBands([0,self.state.modelWidth]);
 	    this._createModelLabels(self);
 	    
@@ -2267,10 +2277,10 @@ var url = document.URL;
 	 //  if (this.state.targetSpeciesName !== "Overview") {
 		//now, limit the data returned by models as well
 		for (var idx=0;idx<self.state.filteredModelList.length;idx++) {
-	    	    var tempdata = tempFilteredModelData.filter(function(d) {
-	    	    	return d.model_id == self.state.filteredModelList[idx].model_id;
-	    	    });
-	    	    self.state.filteredModelData = self.state.filteredModelData.concat(tempdata);   		
+			var tempdata = tempFilteredModelData.filter(function(d) {
+				return d.model_id == self.state.filteredModelList[idx].model_id;
+			});
+			self.state.filteredModelData = self.state.filteredModelData.concat(tempdata);   		
 		}	
 	   // }
 	    
