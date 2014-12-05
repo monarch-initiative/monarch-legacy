@@ -307,39 +307,44 @@ var url = document.URL;
 	},
 
 	reDraw: function() {
-	    if (this.state.modelData.length != 0 && this.state.phenotypeData.length != 0
-		&& this.state.filteredPhenotypeData.length != 0){
-		this._setComparisonType();
-		this._initCanvas();
-		this._addLogoImage();
-		
-		this.state.svg
-		    .attr("width", "100%")
-		    .attr("height", this.state.phenotypeDisplayCount * 18);
-		var rectHeight = this._createRectangularContainers();				
-		this._createColorScale();
+	    if (this.state.modelData.length != 0 && this.state.phenotypeData.length != 0 && this.state.filteredPhenotypeData.length != 0){
+			this._setComparisonType();
+			this._initCanvas();
+			this._addLogoImage();
+			
+			this.state.svg
+			    .attr("width", "100%")
+			    .attr("height", this.state.phenotypeDisplayCount * 18);
+			var rectHeight = this._createRectangularContainers();				
+			this._createColorScale();
 
-		this._createModelRegion();
+			this._createModelRegion();
 
-		this._updateAxes();
-		
-		this._createGridlines();
-		this._createModelRects();
-		this._createRowLabels();
-		this._createOverviewSection();
-		
-		var height = this.state.phenotypeDisplayCount*18+this.state.yoffsetOver;
+			this._updateAxes();
+			
+			this._createGridlines();
+			this._createModelRects();
+			this._createRowLabels();
+			this._createOverviewSection();
+			
+			var height = this.state.phenotypeDisplayCount*18+this.state.yoffsetOver;
 
-		height = rectHeight+40;
+			height = rectHeight+40;
 
-		var containerHeight = height + 10; // MAGIC NUMBER? OR OVERVIEWW OFFSET?
-		$("#svg_area").css("height",height);
-		$("#svg_container").css("height",containerHeight);
+			var containerHeight = height + 10; // MAGIC NUMBER? OR OVERVIEWW OFFSET?
+			$("#svg_area").css("height",height);
+			$("#svg_container").css("height",containerHeight);
 	    }
 	    else {
-		var msg = "There are no " + self.state.targetSpeciesName + " models for this disease." 
-		this._createSvgContainer();
-		this._createEmptyVisualization(msg);
+	    	if (this.state.targetSpeciesName == "Overview"){
+				var msg = "There are no models available.";
+				this._createSvgContainer();
+				this._createEmptyVisualization(msg);
+	    	}else{
+				var msg = "There are no " + this.state.targetSpeciesName + " models available." 
+				this._createSvgContainer();
+				this._createEmptyVisualization(msg);
+			}
 	    }
 	},
 	
@@ -353,46 +358,51 @@ var url = document.URL;
 	   likely to have some content added as we proceed
 	*/
 	_setOption: function( key, value ) {
-            this._super( key, value );
+        this._super( key, value );
 	},
 
 	_setOptions: function( options ) {
-            this._super( options );
+        this._super( options );
 	},
 
 	
 	//create this visualization if no phenotypes or models are returned
 	_createEmptyVisualization: function(msg) {
 
+		var self = this;
 	    d3.select("#svg_area").remove();
 	    this.state.svgContainer.append("<svg id='svg_area'></svg>");
-            this.state.svg = d3.select("#svg_area");
+        this.state.svg = d3.select("#svg_area");
             
-            var svgContainer = this.state.svgContainer;
+        var svgContainer = this.state.svgContainer;
 	    svgContainer.append("<svg id='svg_area'></svg>");		
 	    this.state.svg = d3.select("#svg_area")
-		.attr("width", 1100)
-		.attr("height", 70);	 
+			.attr("width", 1100)
+			.attr("height", 70);	 
             
 	    
 	    
 	    //var error = "<br /><div id='err'><h4>" + msg + "</h4></div><br /><div id='return'><button id='button' type='button'>Return</button></div>";
 	    //this.element.append(error);
-	    
-	    var html = "<h4 id='err'>" + msg + "</h4><br /><div id='return'><button id='button' type='button'>Return</button></div>";	    
-            this.element.append(html);
-	    
-	    var btn = d3.selectAll("#button")
-		.on("click", function(d,i){
-		    $("#return").remove();
-		    $("#errmsg").remove();
-		    d3.select("#svg_area").remove();
+	    if (this.state.targetSpeciesName != "Overview"){
+		    var html = "<h4 id='err'>" + msg + "</h4><br /><div id='return'><button id='button' type='button'>Return</button></div>";	    
+	        this.element.append(html);
+		    
+		    var btn = d3.selectAll("#button")
+				.on("click", function(d,i){
+				    $("#return").remove();
+				    $("#errmsg").remove();
+				    d3.select("#svg_area").remove();
 
-		    self.state.phenotypeData = self.state.origPhenotypeData.slice();
-		    self._reset();
-		    self.state.targetSpeciesName ="Overview";
-		    self._init();
-		});
+				    self.state.phenotypeData = self.state.origPhenotypeData.slice();
+				    self._reset();
+				    self.state.targetSpeciesName ="Overview";
+				    self._init();
+				});
+		}else{
+			var html = "<h4 id='err'>"+msg+"</h4><br />";
+			this.element.append(html);
+		}
 	},
 	
 	//adds light gray gridlines to make it easier to see which row/column selected matches occur
@@ -908,7 +918,6 @@ var url = document.URL;
 	    return phenotypeArray;
 	},
 
-	//NEW CODE
 	_sortingPhenotypes: function(sortType) {
 		//1 -> ModelMatch, 2 -> RankPhenotype, 3 -> Alphabetize
 
@@ -1031,19 +1040,23 @@ var url = document.URL;
 	
 	_loadOverviewData: function() {
 	    var limit = this.state.multiOrganismCt;
-	    
 	    for (i in this.state.targetSpeciesList) {
-		var species = this.state.targetSpeciesList[i].name;
-		this._loadSpeciesData(species,limit);
-		if (species === this.state.refSpecies && typeof([species]) !== 'undefined') { // if it's the one we're reffering to
-		    this.state.maxICScore = this.state.data[species].metadata.maxMaxIC;
-		}
-		else {
-		    var data = this.state.data[species];
-		    if(typeof(data) !== 'undefined' && data.length < limit) {
-			limit = (limit - data.length);
-		    }
-		}
+			var species = this.state.targetSpeciesList[i].name;
+			//console.log(this.state.refSpecies+" - "+species);
+			this._loadSpeciesData(species,limit);
+			if (species === this.state.refSpecies && typeof(species) !== 'undefined') { // if it's the one we're reffering to
+			    //console.log("Match Found");
+				//console.log(this.state.data[species].metadata);
+				if (typeof(this.state.data[species].metadata) !== 'undefined'){
+			   		this.state.maxICScore = this.state.data[species].metadata.maxMaxIC;
+				}
+			}
+			else {
+			    var data = this.state.data[species];
+			    if(typeof(data) !== 'undefined' && data.length < limit) {
+					limit = (limit - data.length);
+			    }
+			}
 	    }
 	    //Now we have top 10 model matches for Human data in humandata, 
 	    //Top n model matches for Mouse data in mousedata
@@ -1062,44 +1075,43 @@ var url = document.URL;
 		orgCtr = 0;
 
 	    for (i in this.state.targetSpeciesList) {
-		var species = this.state.targetSpeciesList[i].name;
-		var specData = this.state.data[species];
-		if (specData != null && typeof(specData.b) !== 'undefined' &&
-		    specData.b.length > 0) {
-		    var data = [];
-		    for (var idx= 0; idx <specData.b.length; idx++) {
-			var item = specData.b[idx];
-			var newItem = 
-			    {model_id: this._getConceptId(item.id),
-			     model_label: item.label,
-			     model_score: item.score.score,
-			     species: species,
-			     model_rank: item.score.rank};
-			data.push(newItem);
-		    	this._loadDataForModel(item);
-		    }
-		    this.state.multiOrganismCt=specData.b.length;
-		    speciesList.push(species);
-		    orgCtr++;
-		    data.sort(function(a,b) { return a.model_rank - b.model_rank;});
-		    modList =  modList.concat(data);
-		}
+			var species = this.state.targetSpeciesList[i].name;
+			var specData = this.state.data[species];
+			if (specData != null && typeof(specData.b) !== 'undefined' && specData.b.length > 0) {
+			    var data = [];
+			    for (var idx= 0; idx <specData.b.length; idx++) {
+					var item = specData.b[idx];
+					var newItem = 
+					    {model_id: this._getConceptId(item.id),
+					     model_label: item.label,
+					     model_score: item.score.score,
+					     species: species,
+					     model_rank: item.score.rank};
+					data.push(newItem);
+			    	this._loadDataForModel(item);
+				}
+			    this.state.multiOrganismCt=specData.b.length;
+			    speciesList.push(species);
+			    orgCtr++;
+			    data.sort(function(a,b) { return a.model_rank - b.model_rank;});
+			    modList =  modList.concat(data);
+			}
 	    }
 	    
 	    for (var idx=0;idx<this.state.modelData.length;idx++) {
-		this.state.filteredModelData.push(this.state.modelData[idx]);
+			this.state.filteredModelData.push(this.state.modelData[idx]);
 	    }
 	    
 	    this.state.modelList = modList;
 	    this.state.speciesList = speciesList;
 	    if (this.state.modelList.length < this.state.modelDisplayCount) {
-		this.state.currModelIdx = this.state.modelList.length-1;
-		this.state.modelDisplayCount = this.state.modelList.length;
+			this.state.currModelIdx = this.state.modelList.length-1;
+			this.state.modelDisplayCount = this.state.modelList.length;
 	    }
 	    
 	    //initialize the filtered model list
 	    for (var idx=0;idx<this.state.modelDisplayCount;idx++) {
-		this.state.filteredModelList.push(this.state.modelList[idx]);
+			this.state.filteredModelList.push(this.state.modelList[idx]);
 	    }
 	},
 	
@@ -1110,15 +1122,15 @@ var url = document.URL;
 	    var res;
 	    jQuery.ajax({
 
-		url: url, 
-		async : false,
-		dataType : 'json',
-		success : function(data) {
-		    res = data;
-		},
-		error: function ( xhr, errorType, exception ) { //Triggered if an error communicating with server  
-		    self._displayResult(xhr, errorType, exception);
-		},  
+			url: url, 
+			async : false,
+			dataType : 'json',
+			success : function(data) {
+			    res = data;
+			},
+			error: function ( xhr, errorType, exception ) { //Triggered if an error communicating with server  
+			    self._displayResult(xhr, errorType, exception);
+			},  
 	    });
 	    return res;
 	},
@@ -1128,20 +1140,20 @@ var url = document.URL;
 	    var msg = '';
 	    
 	    switch(xhr.status){
-	    case 404:
-	    case 500:
-	    case 501:
-	    case 502:
-	    case 503:
-	    case 504:
-	    case 505:
-	    default:
-	    	msg = "We're having some problems.  Please try again soon."
-	    	break;
-	    	
-	    case 0: msg = "Please check your network connection."
-	    	break;   
-		
+		    case 404:
+		    case 500:
+		    case 501:
+		    case 502:
+		    case 503:
+		    case 504:
+		    case 505:
+		    default:
+		    	msg = "We're having some problems.  Please try again soon."
+		    	break;
+		    	
+		    case 0: msg = "Please check your network connection."
+		    	break;   
+			
 	    }
 	    
 	    /**if (xhr.status === 0) {
@@ -1191,36 +1203,36 @@ var url = document.URL;
 
 	    if (typeof (retData.b)  !== 'undefined') {
 		
-		for (var idx=0;idx<retData.b.length;idx++) {
-		    this.state.modelList.push(
-			{model_id: self._getConceptId(retData.b[idx].id), 
-			 model_label: retData.b[idx].label, 
-			 model_score: retData.b[idx].score.score, 
-			 species: species,
-			 model_rank: retData.b[idx].score.rank}
-		    );
-		    this._loadDataForModel(retData.b[idx]);
-		}
-		//sort the model list by rank
-		this.state.modelList.sort(function(a,b) { 
-		    return a.model_rank - b.model_rank; 
-		});
-		
-		for (var idx=0;idx<this.state.modelData.length;idx++) {
-		    this.state.filteredModelData.push(this.state.modelData[idx]);
-		}
-		
-		//we need to adjust the display counts and indexing if there are fewer models
-		if (this.state.modelList.length < this.state.modelDisplayCount) {
-		    this.state.currModelIdx = this.state.modelList.length-1;
-		    this.state.modelDisplayCount = this.state.modelList.length;
-		}
-		
-		this.state.filteredModelList=[];
-		//initialize the filtered model list
-		for (var idx=0;idx<this.state.modelDisplayCount;idx++) {
-		    this.state.filteredModelList.push(this.state.modelList[idx]);
-		}
+			for (var idx=0;idx<retData.b.length;idx++) {
+			    this.state.modelList.push(
+				{model_id: self._getConceptId(retData.b[idx].id), 
+				 model_label: retData.b[idx].label, 
+				 model_score: retData.b[idx].score.score, 
+				 species: species,
+				 model_rank: retData.b[idx].score.rank}
+			    );
+			    this._loadDataForModel(retData.b[idx]);
+			}
+			//sort the model list by rank
+			this.state.modelList.sort(function(a,b) { 
+			    return a.model_rank - b.model_rank; 
+			});
+			
+			for (var idx=0;idx<this.state.modelData.length;idx++) {
+			    this.state.filteredModelData.push(this.state.modelData[idx]);
+			}
+			
+			//we need to adjust the display counts and indexing if there are fewer models
+			if (this.state.modelList.length < this.state.modelDisplayCount) {
+			    this.state.currModelIdx = this.state.modelList.length-1;
+			    this.state.modelDisplayCount = this.state.modelList.length;
+			}
+			
+			this.state.filteredModelList=[];
+			//initialize the filtered model list
+			for (var idx=0;idx<this.state.modelDisplayCount;idx++) {
+			    this.state.filteredModelList.push(this.state.modelList[idx]);
+			}
 	    }
 	},
 	
@@ -1232,42 +1244,42 @@ var url = document.URL;
 	    data = newModelData.matches;
 	    
 	    if (typeof(data) !== 'undefined' &&  data.length > 0) {
-		var species = newModelData.taxon,
-	  	calculatedArray = [],
-	  	normalizedArray = [],
-	  	min,
-	  	max,
-	  	norm;
-    		
-		for (var idx=0;idx<data.length;idx++) {
-	    	    calculatedArray.push(this._normalizeIC(data[idx]));
-		}
-		
-		for (var idx=0;idx<data.length;idx++) {
-    		    
-		    var curr_row = data[idx],		
-		    lcs = calculatedArray[idx],
-	    	    new_row = {"id": this._getConceptId(curr_row.a.id) + 
-			       "_" + this._getConceptId(curr_row.b.id) + 
-			       "_" + this._getConceptId(newModelData.id), 
-	   		       "label_a" : curr_row.a.label, 
-			       "id_a" : this._getConceptId(curr_row.a.id), 
-			       "IC_a" : parseFloat(curr_row.a.IC),
-			       "subsumer_label" : curr_row.lcs.label, 
-	    		       "subsumer_id" : this._getConceptId(curr_row.lcs.id), 
-			       "subsumer_IC" : parseFloat(curr_row.lcs.IC), 
-			       "value" : parseFloat(lcs),
-	    		       "label_b" : curr_row.b.label, 
-			       "id_b" : this._getConceptId(curr_row.b.id), 
-			       "IC_b" : parseFloat(curr_row.b.IC),
-			       "model_id" : this._getConceptId(newModelData.id),
-	    		       "model_label" : newModelData.label, 
-			       "species": species.label,
-			       "taxon" : species.id,
-			      }; 
-		    this.state.modelData.push(new_row); 
-		    //this.state.modelList.push(new_row);
-    		}
+			var species = newModelData.taxon,
+		  	calculatedArray = [],
+		  	normalizedArray = [],
+		  	min,
+		  	max,
+		  	norm;
+	    		
+			for (var idx=0;idx<data.length;idx++) {
+		    	calculatedArray.push(this._normalizeIC(data[idx]));
+			}
+			
+			for (var idx=0;idx<data.length;idx++) {
+	    		    
+			    var curr_row = data[idx],		
+			    lcs = calculatedArray[idx],
+		    	    new_row = {"id": this._getConceptId(curr_row.a.id) + 
+				       "_" + this._getConceptId(curr_row.b.id) + 
+				       "_" + this._getConceptId(newModelData.id), 
+		   		       "label_a" : curr_row.a.label, 
+				       "id_a" : this._getConceptId(curr_row.a.id), 
+				       "IC_a" : parseFloat(curr_row.a.IC),
+				       "subsumer_label" : curr_row.lcs.label, 
+		    		       "subsumer_id" : this._getConceptId(curr_row.lcs.id), 
+				       "subsumer_IC" : parseFloat(curr_row.lcs.IC), 
+				       "value" : parseFloat(lcs),
+		    		       "label_b" : curr_row.b.label, 
+				       "id_b" : this._getConceptId(curr_row.b.id), 
+				       "IC_b" : parseFloat(curr_row.b.IC),
+				       "model_id" : this._getConceptId(newModelData.id),
+		    		       "model_label" : newModelData.label, 
+				       "species": species.label,
+				       "taxon" : species.id,
+				      }; 
+			    this.state.modelData.push(new_row); 
+			    //this.state.modelList.push(new_row);
+	    	}
 	    }
 	},
 	
@@ -2740,7 +2752,7 @@ var url = document.URL;
 	 */
 	_createOrganismSelection: function(selClass) {
 	    var selectedItem="";
-	    var optionhtml = "<div id='org_div'><span id='olabel'>Species</span>"+
+	    var optionhtml = "<div id='org_div'><span id='olabel'>Species</span><br />"+
 		"<span id='org_sel'><select id=\'organism\'>";
 
 	    for (var idx=0;idx<this.state.targetSpeciesList.length;idx++) {
