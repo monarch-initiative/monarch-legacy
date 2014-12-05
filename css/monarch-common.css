@@ -56,12 +56,14 @@ p {
     }
     .input-group {
         margin-bottom: 0px;
-        float: right;
     }
     .form-control {
         padding: 0px 10px;
         height: 28px;
         border-radius: 2px;
+    }
+    .nav-search-btn{
+        width:auto;
     }
     .input-group-btn .btn {
         padding: 0px 10px;
