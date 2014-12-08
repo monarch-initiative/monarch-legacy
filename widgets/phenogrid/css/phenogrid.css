@@ -44,9 +44,8 @@
 }
 #prebl{
     clear:both;
-  /*  background-color: #9999FF;*/
+   /*background-color: #9999FF;*/
     float:left;
-
 }
 
 
@@ -265,6 +264,7 @@
 }
 
 #phenogrid_controls {
+	float:left;
     clear:both;
  	margin-top:-50px;
 }

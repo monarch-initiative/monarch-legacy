@@ -239,13 +239,13 @@ var url = document.URL;
 	_createTargetSpeciesIndices: function() {
 	    this.state.targetSpeciesByName={};
 	    for (var j = 0; j < this.state.targetSpeciesList.length; j++ ) {
-		// list starts as name, taxon pairs
-		var name = this.state.targetSpeciesList[j].name;
-		var taxon = this.state.targetSpeciesList[j].taxon;
-		var entry = {};
-		entry.index = j;
-		entry.taxon = taxon;
-		this.state.targetSpeciesByName[name]= entry;
+			// list starts as name, taxon pairs
+			var name = this.state.targetSpeciesList[j].name;
+			var taxon = this.state.targetSpeciesList[j].taxon;
+			var entry = {};
+			entry.index = j;
+			entry.taxon = taxon;
+			this.state.targetSpeciesByName[name]= entry;
 	    }
 	},
 
@@ -258,12 +258,12 @@ var url = document.URL;
 	// this should not impact any standalone uses of phenogrid, and will be removed once monarch-app is cleaned up.
 	_getResourceUrl: function(name,type) {
 	    var prefix;
-	    if (typeof(this.config.scriptpath) !== 'undefined' && this.config.scriptpath !== null && this.config.scrippath != ''
+	    if (typeof(this.config.scriptpath) !== 'undefined' && this.config.scriptpath !== null && this.config.scriptpath != ''
 	        && this.config.scriptpath !='/') {
-		prefix = this.config.scriptpath;
+			prefix = this.config.scriptpath;
 	    }
 	    else {
-		prefix ='/widgets/phenogrid/js/';
+			prefix ='/widgets/phenogrid/js/';
 	    }
 	    var res = prefix+'res/'+name+'.'+type;
 	    return prefix+'res/'+name+'.'+type;
@@ -307,39 +307,44 @@ var url = document.URL;
 	},
 
 	reDraw: function() {
-	    if (this.state.modelData.length != 0 && this.state.phenotypeData.length != 0
-		&& this.state.filteredPhenotypeData.length != 0){
-		this._setComparisonType();
-		this._initCanvas();
-		this._addLogoImage();
-		
-		this.state.svg
-		    .attr("width", "100%")
-		    .attr("height", this.state.phenotypeDisplayCount * 18);
-		var rectHeight = this._createRectangularContainers();				
-		this._createColorScale();
+	    if (this.state.modelData.length != 0 && this.state.phenotypeData.length != 0 && this.state.filteredPhenotypeData.length != 0){
+			this._setComparisonType();
+			this._initCanvas();
+			this._addLogoImage();
+			
+			this.state.svg
+			    .attr("width", "100%")
+			    .attr("height", this.state.phenotypeDisplayCount * 18);
+			var rectHeight = this._createRectangularContainers();				
+			this._createColorScale();
 
-		this._createModelRegion();
+			this._createModelRegion();
 
-		this._updateAxes();
-		
-		this._createGridlines();
-		this._createModelRects();
-		this._createRowLabels();
-		this._createOverviewSection();
-		
-		var height = this.state.phenotypeDisplayCount*18+this.state.yoffsetOver;
+			this._updateAxes();
+			
+			this._createGridlines();
+			this._createModelRects();
+			this._createRowLabels();
+			this._createOverviewSection();
+			
+			var height = this.state.phenotypeDisplayCount*18+this.state.yoffsetOver;
 
-		height = rectHeight+40;
+			height = rectHeight+40;
 
-		var containerHeight = height + 10; // MAGIC NUMBER? OR OVERVIEWW OFFSET?
-		$("#svg_area").css("height",height);
-		$("#svg_container").css("height",containerHeight);
+			var containerHeight = height + 10; // MAGIC NUMBER? OR OVERVIEW OFFSET?
+			$("#svg_area").css("height",height);
+			$("#svg_container").css("height",containerHeight);
 	    }
 	    else {
-		var msg = "There are no " + self.state.targetSpeciesName + " models for this disease." 
-		this._createSvgContainer();
-		this._createEmptyVisualization(msg);
+	    	if (this.state.targetSpeciesName == "Overview"){
+				var msg = "There are no models available.";
+				this._createSvgContainer();
+				this._createEmptyVisualization(msg);
+	    	}else{
+				var msg = "There are no " + this.state.targetSpeciesName + " models available." 
+				this._createSvgContainer();
+				this._createEmptyVisualization(msg);
+			}
 	    }
 	},
 	
@@ -353,46 +358,51 @@ var url = document.URL;
 	   likely to have some content added as we proceed
 	*/
 	_setOption: function( key, value ) {
-            this._super( key, value );
+        this._super( key, value );
 	},
 
 	_setOptions: function( options ) {
-            this._super( options );
+        this._super( options );
 	},
 
 	
 	//create this visualization if no phenotypes or models are returned
 	_createEmptyVisualization: function(msg) {
 
+		var self = this;
 	    d3.select("#svg_area").remove();
 	    this.state.svgContainer.append("<svg id='svg_area'></svg>");
-            this.state.svg = d3.select("#svg_area");
+        this.state.svg = d3.select("#svg_area");
             
-            var svgContainer = this.state.svgContainer;
+        var svgContainer = this.state.svgContainer;
 	    svgContainer.append("<svg id='svg_area'></svg>");		
 	    this.state.svg = d3.select("#svg_area")
-		.attr("width", 1100)
-		.attr("height", 70);	 
+			.attr("width", 1100)
+			.attr("height", 70);	 
             
 	    
 	    
 	    //var error = "<br /><div id='err'><h4>" + msg + "</h4></div><br /><div id='return'><button id='button' type='button'>Return</button></div>";
 	    //this.element.append(error);
-	    
-	    var html = "<h4 id='err'>" + msg + "</h4><br /><div id='return'><button id='button' type='button'>Return</button></div>";	    
-            this.element.append(html);
-	    
-	    var btn = d3.selectAll("#button")
-		.on("click", function(d,i){
-		    $("#return").remove();
-		    $("#errmsg").remove();
-		    d3.select("#svg_area").remove();
+	    if (this.state.targetSpeciesName != "Overview"){
+		    var html = "<h4 id='err'>" + msg + "</h4><br /><div id='return'><button id='button' type='button'>Return</button></div>";	    
+	        this.element.append(html);
+		    
+		    var btn = d3.selectAll("#button")
+				.on("click", function(d,i){
+				    $("#return").remove();
+				    $("#errmsg").remove();
+				    d3.select("#svg_area").remove();
 
-		    self.state.phenotypeData = self.state.origPhenotypeData.slice();
-		    self._reset();
-		    self.state.targetSpeciesName ="Overview";
-		    self._init();
-		});
+				    self.state.phenotypeData = self.state.origPhenotypeData.slice();
+				    self._reset();
+				    self.state.targetSpeciesName ="Overview";
+				    self._init();
+				});
+		}else{
+			var html = "<h4 id='err'>"+msg+"</h4><br />";
+			this.element.append(html);
+		}
 	},
 	
 	//adds light gray gridlines to make it easier to see which row/column selected matches occur
@@ -476,7 +486,7 @@ var url = document.URL;
 	      	});
 	    overviewX++;	//Corrects the gapping on the sides
 	    overviewY++;
-	   	console.log("OSize: "+overviewRegionSize+" OCoords: ("+overviewX+","+overviewY+")");
+	   	//console.log("OSize: "+overviewRegionSize+" OCoords: ("+overviewX+","+overviewY+")");
 	    var modelRectTransform = "translate(" + overviewX +	"," + overviewY + ")"
 		    model_rects.enter()
 			.append("rect")
@@ -491,7 +501,7 @@ var url = document.URL;
 	    var lastId = self.state.phenotypeSortData[self.state.phenotypeDisplayCount-1][0].id_a; //rowid
 	    var selectRectHeight = self.state.smallYScale(lastId);
 	    var selectRectWidth = self.state.smallXScale(mods[self.state.modelDisplayCount-1].model_id);
-	    console.log("Height: "+selectRectHeight+" Width: "+selectRectWidth);
+	    //console.log("Height: "+selectRectHeight+" Width: "+selectRectWidth);
 	    self.state.highlightRect = self.state.svg.append("rect")
 		    .attr("x",overviewX)
 		    .attr("y",overviewY)				
@@ -519,11 +529,11 @@ var url = document.URL;
 					// Restrict Movement if no need to move map
 					if (selectRectHeight == overviewRegionSize) {
 						newY = overviewY;
-						console.log("Up/Down Blocked");
+						//console.log("Up/Down Blocked");
 					}
 					if (selectRectWidth == overviewRegionSize) {
 						newX = overviewX;
-						console.log("Left/Right Blocked");
+						//console.log("Left/Right Blocked");
 					}
 
 					// block from going out of bounds on left
@@ -543,7 +553,7 @@ var url = document.URL;
 					if (newY + selectRectHeight > overviewY+overviewBoxDim) {
 						newY = overviewY+overviewBoxDim-selectRectHeight;
 					}
-					console.log("NewCoords: ("+newX+","+newY+")");
+					//console.log("NewCoords: ("+newX+","+newY+")");
 					rect.attr("x", newX);
 					//This changes for vertical positioning
 					rect.attr("y", newY); //self.state.yoffset+yTranslation); 
@@ -551,7 +561,7 @@ var url = document.URL;
 					// adjust x back to have 0,0 as base instead of overviewX, overviewY
 					newX = newX- overviewX;
 					newY = newY -overviewY;
-					console.log("AdjustCoords: ("+newX+","+newY+")");
+					//console.log("AdjustCoords: ("+newX+","+newY+")");
 
 					// invert newX and newY into posiions in the model and phenotype lists.
 					var j = self._invertOverviewDragPosition(self.state.smallXScale,newX);
@@ -783,7 +793,7 @@ var url = document.URL;
 	    //also update the modeldata
 	    var axis_idx = 0;
 	    var tempFilteredModelData = [];
-	    console.log("CurrPhenoTypeIdx: "+self.state.currPhenotypeIdx);
+	    //console.log("CurrPhenoTypeIdx: "+self.state.currPhenotypeIdx);
 	    //get phenotype[startIdx] up to phenotype[currPhenotypeIdx] from the array of sorted phenotypes
 	    for (var i = startIdx;i <self.state.currPhenotypeIdx + 1;i++) {
 			//move the ranked phenotypes onto the filteredPhenotypeData array
@@ -908,7 +918,6 @@ var url = document.URL;
 	    return phenotypeArray;
 	},
 
-	//NEW CODE
 	_sortingPhenotypes: function(sortType) {
 		//1 -> ModelMatch, 2 -> RankPhenotype, 3 -> Alphabetize
 
@@ -981,32 +990,27 @@ var url = document.URL;
 	    var url = '';
 	    var self=this;
 	    if (this.state.targetSpeciesName === "Overview") {
-		this._loadOverviewData();
+			this._loadOverviewData();
 	    }
 	    else {
-		this._loadSpeciesData(this.state.targetSpeciesName);
-		//this._finishLoad(this.state.data[this.state.targetSpeciesName]);
-		this._finishLoad();
+			this._loadSpeciesData(this.state.targetSpeciesName);
+			//this._finishLoad(this.state.data[this.state.targetSpeciesName]);
+			this._finishLoad();
 	    }
 	},
 
 	_loadSpeciesData: function(speciesName,limit) {
 	    var phenotypeList = this.state.phenotypeData;
-	    var url = this.state.serverURL+"/simsearch/phenotype?input_items="+
-		phenotypeList.join(",")+"&target_species="+
-		this._getTargetSpeciesTaxonByName(this,speciesName);
+	    var url = this.state.serverURL+"/simsearch/phenotype?input_items="+phenotypeList.join(",")+"&target_species="+this._getTargetSpeciesTaxonByName(this,speciesName);
 	    if (typeof(limit) !== 'undefined') {
-		url = url +"&limit="+limit;
+			url = url +"&limit="+limit;
 	    }
 
 	    var res = this._ajaxLoadData(speciesName,url);
 	    if (res !== null) {
-		if (typeof(limit) !== 'undefined' && typeof(res.b) !== 'undefined' && res.b !== null &&
-		    res.b.length < limit) {
-
-		    res = this._padSpeciesData(res,speciesName,limit);
-
-		}
+			if (typeof(limit) !== 'undefined' && typeof(res.b) !== 'undefined' && res.b !== null && res.b.length < limit) {
+			    res = this._padSpeciesData(res,speciesName,limit);
+			}
 	    }
 	    this.state.data[speciesName]= res;
 	},
@@ -1031,19 +1035,20 @@ var url = document.URL;
 	
 	_loadOverviewData: function() {
 	    var limit = this.state.multiOrganismCt;
-	    
 	    for (i in this.state.targetSpeciesList) {
-		var species = this.state.targetSpeciesList[i].name;
-		this._loadSpeciesData(species,limit);
-		if (species === this.state.refSpecies && typeof([species]) !== 'undefined') { // if it's the one we're reffering to
-		    this.state.maxICScore = this.state.data[species].metadata.maxMaxIC;
-		}
-		else {
-		    var data = this.state.data[species];
-		    if(typeof(data) !== 'undefined' && data.length < limit) {
-			limit = (limit - data.length);
-		    }
-		}
+			var species = this.state.targetSpeciesList[i].name;
+			this._loadSpeciesData(species,limit);
+			if (species === this.state.refSpecies && typeof(species) !== 'undefined') { // if it's the one we're reffering to
+				if (typeof(this.state.data[species].metadata) !== 'undefined'){
+			   		this.state.maxICScore = this.state.data[species].metadata.maxMaxIC;
+				}
+			}
+			else {
+			    var data = this.state.data[species];
+			    if(typeof(data) !== 'undefined' && data.length < limit) {
+					limit = (limit - data.length);
+			    }
+			}
 	    }
 	    //Now we have top 10 model matches for Human data in humandata, 
 	    //Top n model matches for Mouse data in mousedata
@@ -1062,44 +1067,43 @@ var url = document.URL;
 		orgCtr = 0;
 
 	    for (i in this.state.targetSpeciesList) {
-		var species = this.state.targetSpeciesList[i].name;
-		var specData = this.state.data[species];
-		if (specData != null && typeof(specData.b) !== 'undefined' &&
-		    specData.b.length > 0) {
-		    var data = [];
-		    for (var idx= 0; idx <specData.b.length; idx++) {
-			var item = specData.b[idx];
-			var newItem = 
-			    {model_id: this._getConceptId(item.id),
-			     model_label: item.label,
-			     model_score: item.score.score,
-			     species: species,
-			     model_rank: item.score.rank};
-			data.push(newItem);
-		    	this._loadDataForModel(item);
-		    }
-		    this.state.multiOrganismCt=specData.b.length;
-		    speciesList.push(species);
-		    orgCtr++;
-		    data.sort(function(a,b) { return a.model_rank - b.model_rank;});
-		    modList =  modList.concat(data);
-		}
+			var species = this.state.targetSpeciesList[i].name;
+			var specData = this.state.data[species];
+			if (specData != null && typeof(specData.b) !== 'undefined' && specData.b.length > 0) {
+			    var data = [];
+			    for (var idx= 0; idx <specData.b.length; idx++) {
+					var item = specData.b[idx];
+					var newItem = 
+					    {model_id: this._getConceptId(item.id),
+					     model_label: item.label,
+					     model_score: item.score.score,
+					     species: species,
+					     model_rank: item.score.rank};
+					data.push(newItem);
+			    	this._loadDataForModel(item);
+				}
+			    this.state.multiOrganismCt=specData.b.length;
+			    speciesList.push(species);
+			    orgCtr++;
+			    data.sort(function(a,b) { return a.model_rank - b.model_rank;});
+			    modList =  modList.concat(data);
+			}
 	    }
 	    
 	    for (var idx=0;idx<this.state.modelData.length;idx++) {
-		this.state.filteredModelData.push(this.state.modelData[idx]);
+			this.state.filteredModelData.push(this.state.modelData[idx]);
 	    }
 	    
 	    this.state.modelList = modList;
 	    this.state.speciesList = speciesList;
 	    if (this.state.modelList.length < this.state.modelDisplayCount) {
-		this.state.currModelIdx = this.state.modelList.length-1;
-		this.state.modelDisplayCount = this.state.modelList.length;
+			this.state.currModelIdx = this.state.modelList.length-1;
+			this.state.modelDisplayCount = this.state.modelList.length;
 	    }
 	    
 	    //initialize the filtered model list
 	    for (var idx=0;idx<this.state.modelDisplayCount;idx++) {
-		this.state.filteredModelList.push(this.state.modelList[idx]);
+			this.state.filteredModelList.push(this.state.modelList[idx]);
 	    }
 	},
 	
@@ -1110,15 +1114,15 @@ var url = document.URL;
 	    var res;
 	    jQuery.ajax({
 
-		url: url, 
-		async : false,
-		dataType : 'json',
-		success : function(data) {
-		    res = data;
-		},
-		error: function ( xhr, errorType, exception ) { //Triggered if an error communicating with server  
-		    self._displayResult(xhr, errorType, exception);
-		},  
+			url: url, 
+			async : false,
+			dataType : 'json',
+			success : function(data) {
+			    res = data;
+			},
+			error: function ( xhr, errorType, exception ) { //Triggered if an error communicating with server  
+			    self._displayResult(xhr, errorType, exception);
+			},  
 	    });
 	    return res;
 	},
@@ -1128,20 +1132,20 @@ var url = document.URL;
 	    var msg = '';
 	    
 	    switch(xhr.status){
-	    case 404:
-	    case 500:
-	    case 501:
-	    case 502:
-	    case 503:
-	    case 504:
-	    case 505:
-	    default:
-	    	msg = "We're having some problems.  Please try again soon."
-	    	break;
-	    	
-	    case 0: msg = "Please check your network connection."
-	    	break;   
-		
+		    case 404:
+		    case 500:
+		    case 501:
+		    case 502:
+		    case 503:
+		    case 504:
+		    case 505:
+		    default:
+		    	msg = "We're having some problems.  Please try again soon."
+		    	break;
+		    	
+		    case 0: msg = "Please check your network connection."
+		    	break;   
+			
 	    }
 	    
 	    /**if (xhr.status === 0) {
@@ -1190,36 +1194,36 @@ var url = document.URL;
 
 	    if (typeof (retData.b)  !== 'undefined') {
 		
-		for (var idx=0;idx<retData.b.length;idx++) {
-		    this.state.modelList.push(
-			{model_id: self._getConceptId(retData.b[idx].id), 
-			 model_label: retData.b[idx].label, 
-			 model_score: retData.b[idx].score.score, 
-			 species: species,
-			 model_rank: retData.b[idx].score.rank}
-		    );
-		    this._loadDataForModel(retData.b[idx]);
-		}
-		//sort the model list by rank
-		this.state.modelList.sort(function(a,b) { 
-		    return a.model_rank - b.model_rank; 
-		});
-		
-		for (var idx=0;idx<this.state.modelData.length;idx++) {
-		    this.state.filteredModelData.push(this.state.modelData[idx]);
-		}
-		
-		//we need to adjust the display counts and indexing if there are fewer models
-		if (this.state.modelList.length < this.state.modelDisplayCount) {
-		    this.state.currModelIdx = this.state.modelList.length-1;
-		    this.state.modelDisplayCount = this.state.modelList.length;
-		}
-		
-		this.state.filteredModelList=[];
-		//initialize the filtered model list
-		for (var idx=0;idx<this.state.modelDisplayCount;idx++) {
-		    this.state.filteredModelList.push(this.state.modelList[idx]);
-		}
+			for (var idx=0;idx<retData.b.length;idx++) {
+			    this.state.modelList.push(
+				{model_id: self._getConceptId(retData.b[idx].id), 
+				 model_label: retData.b[idx].label, 
+				 model_score: retData.b[idx].score.score, 
+				 species: species,
+				 model_rank: retData.b[idx].score.rank}
+			    );
+			    this._loadDataForModel(retData.b[idx]);
+			}
+			//sort the model list by rank
+			this.state.modelList.sort(function(a,b) { 
+			    return a.model_rank - b.model_rank; 
+			});
+			
+			for (var idx=0;idx<this.state.modelData.length;idx++) {
+			    this.state.filteredModelData.push(this.state.modelData[idx]);
+			}
+			
+			//we need to adjust the display counts and indexing if there are fewer models
+			if (this.state.modelList.length < this.state.modelDisplayCount) {
+			    this.state.currModelIdx = this.state.modelList.length-1;
+			    this.state.modelDisplayCount = this.state.modelList.length;
+			}
+			
+			this.state.filteredModelList=[];
+			//initialize the filtered model list
+			for (var idx=0;idx<this.state.modelDisplayCount;idx++) {
+			    this.state.filteredModelList.push(this.state.modelList[idx]);
+			}
 	    }
 	},
 	
@@ -1231,42 +1235,42 @@ var url = document.URL;
 	    data = newModelData.matches;
 	    
 	    if (typeof(data) !== 'undefined' &&  data.length > 0) {
-		var species = newModelData.taxon,
-	  	calculatedArray = [],
-	  	normalizedArray = [],
-	  	min,
-	  	max,
-	  	norm;
-    		
-		for (var idx=0;idx<data.length;idx++) {
-	    	    calculatedArray.push(this._normalizeIC(data[idx]));
-		}
-		
-		for (var idx=0;idx<data.length;idx++) {
-    		    
-		    var curr_row = data[idx],		
-		    lcs = calculatedArray[idx],
-	    	    new_row = {"id": this._getConceptId(curr_row.a.id) + 
-			       "_" + this._getConceptId(curr_row.b.id) + 
-			       "_" + this._getConceptId(newModelData.id), 
-	   		       "label_a" : curr_row.a.label, 
-			       "id_a" : this._getConceptId(curr_row.a.id), 
-			       "IC_a" : parseFloat(curr_row.a.IC),
-			       "subsumer_label" : curr_row.lcs.label, 
-	    		       "subsumer_id" : this._getConceptId(curr_row.lcs.id), 
-			       "subsumer_IC" : parseFloat(curr_row.lcs.IC), 
-			       "value" : parseFloat(lcs),
-	    		       "label_b" : curr_row.b.label, 
-			       "id_b" : this._getConceptId(curr_row.b.id), 
-			       "IC_b" : parseFloat(curr_row.b.IC),
-			       "model_id" : this._getConceptId(newModelData.id),
-	    		       "model_label" : newModelData.label, 
-			       "species": species.label,
-			       "taxon" : species.id,
-			      }; 
-		    this.state.modelData.push(new_row); 
-		    //this.state.modelList.push(new_row);
-    		}
+			var species = newModelData.taxon,
+		  	calculatedArray = [],
+		  	normalizedArray = [],
+		  	min,
+		  	max,
+		  	norm;
+	    		
+			for (var idx=0;idx<data.length;idx++) {
+		    	calculatedArray.push(this._normalizeIC(data[idx]));
+			}
+			
+			for (var idx=0;idx<data.length;idx++) {
+	    		    
+			    var curr_row = data[idx],		
+			    lcs = calculatedArray[idx],
+		    	    new_row = {"id": this._getConceptId(curr_row.a.id) + 
+				       "_" + this._getConceptId(curr_row.b.id) + 
+				       "_" + this._getConceptId(newModelData.id), 
+		   		       "label_a" : curr_row.a.label, 
+				       "id_a" : this._getConceptId(curr_row.a.id), 
+				       "IC_a" : parseFloat(curr_row.a.IC),
+				       "subsumer_label" : curr_row.lcs.label, 
+		    		       "subsumer_id" : this._getConceptId(curr_row.lcs.id), 
+				       "subsumer_IC" : parseFloat(curr_row.lcs.IC), 
+				       "value" : parseFloat(lcs),
+		    		       "label_b" : curr_row.b.label, 
+				       "id_b" : this._getConceptId(curr_row.b.id), 
+				       "IC_b" : parseFloat(curr_row.b.IC),
+				       "model_id" : this._getConceptId(newModelData.id),
+		    		       "model_label" : newModelData.label, 
+				       "species": species.label,
+				       "taxon" : species.id,
+				      }; 
+			    this.state.modelData.push(new_row); 
+			    //this.state.modelList.push(new_row);
+	    	}
 	    }
 	},
 	
@@ -1559,14 +1563,14 @@ var url = document.URL;
 	    
 	    //create the related model rectangles
 	    var highlight_rect = self.state.svg.append("svg:rect")
-		.attr("transform",
-		      "translate(" + (self.state.textWidth + 32) + "," + 
-		      self.state.yoffsetOver+ ")")
-		.attr("x", function(d) { return (self.state.xScale(modelData.model_id)-1);})
-		.attr("y", self.state.yoffset + 2)
-		.attr("class", "model_accent")
-		.attr("width", 14)
-		.attr("height", (self.state.phenotypeDisplayCount * 13));
+			.attr("transform",
+			      "translate(" + (self.state.textWidth + 32) + "," + 
+			      self.state.yoffsetOver+ ")")
+			.attr("x", function(d) { return (self.state.xScale(modelData.model_id)-1);})
+			.attr("y", self.state.yoffset + 2)
+			.attr("class", "model_accent")
+			.attr("width", 14)
+			.attr("height", (self.state.phenotypeDisplayCount * 13));
 
 	    //select the model label
 
@@ -1576,7 +1580,7 @@ var url = document.URL;
 	    //Show that model label is selected. Change styles to bold, blue and full-length label
 	    var model_label = self.state.svg.selectAll("text#" +this._getConceptId(modelData.model_id));
 
-    	    model_label.style("font-weight", "bold");
+    	model_label.style("font-weight", "bold");
 	    model_label.style("fill", "blue");
 	    model_label.html(modelData.model_label);	
 	    
@@ -1584,9 +1588,9 @@ var url = document.URL;
 		type = this.state.defaultApiEntity;
 	    
 	    for (var i =0; i < this.state.apiEntityMap.length; i++) {
-		if (concept.indexOf(this.state.apiEntityMap[i].prefix) ==0) {
-		    type = this.state.apiEntityMap[i].apifragment;
-		}
+			if (concept.indexOf(this.state.apiEntityMap[i].prefix) ==0) {
+			    type = this.state.apiEntityMap[i].apifragment;
+			}
 	    }
 	    
 	    var width = (type === this.state.defaultApiEntity)?80:200;
@@ -1601,15 +1605,15 @@ var url = document.URL;
 	    //getAttrbitues
 	    //just create a temporary object to pass to the next method...
 	    var obj = {				
-		attributes: [],
-		getAttribute: function(keystring) {
-		    var ret = self.state.xScale(modelData.model_id)+ 15;
-		    if (keystring == "y") {
-			ret = Number(self.state.yoffset -100);
-		    }
-		    return ret;
-		},
-            };		
+			attributes: [],
+			getAttribute: function(keystring) {
+			    var ret = self.state.xScale(modelData.model_id)+ 15;
+			    if (keystring == "y") {
+					ret = Number(self.state.yoffset -100);
+			    }
+			    return ret;
+			},
+        };		
 	    obj.attributes['transform'] = {value: highlight_rect.attr("transform")};		
 	    this._updateDetailSection(retData, this._getXYPos(obj), width, height);
 	    self._highlightMatchingPhenotypes(modelData);
@@ -1623,18 +1627,19 @@ var url = document.URL;
 	    var model_text = "",
 		mod_id = "";
 	    if (modelData != null && typeof modelData != 'object') {
-		mod_id = this._getConceptId(modelData);   
+			mod_id = this._getConceptId(modelData);   
 	    } else if (typeof (modelData.model_id) !== 'undefined') {
-		mod_id = this._getConceptId(modelData.model_id);
+			mod_id = this._getConceptId(modelData.model_id);
 	    }
 	    
 	    //Show that model label is no longer selected. Change styles to normal weight, black and short label
 	    if (mod_id !== "") {
-		model_text = this.state.svg.selectAll("text#" + mod_id);
-		model_text.style("font-weight","normal");
-		model_text.style("text-decoration", "none");
-		model_text.style("fill", "black");
-		model_text.html(this._getShortLabel(modelData.model_label,self.state.labelCharDisplayCount));
+			model_text = this.state.svg.selectAll("text#" + mod_id);
+			model_text.style("font-weight","normal");
+			model_text.style("text-decoration", "none");
+			model_text.style("fill", "black");
+			model_text.html(this._getShortLabel(modelData.model_label,self.state.labelCharDisplayCount));
+			this._deselectMatchingPhenotypes(modelData);
 	    }
 	},
 	
@@ -2739,17 +2744,17 @@ var url = document.URL;
 	 */
 	_createOrganismSelection: function(selClass) {
 	    var selectedItem="";
-	    var optionhtml = "<div id='org_div'><span id='olabel'>Species</span>"+
+	    var optionhtml = "<div id='org_div'><span id='olabel'>Species</span><br />"+
 		"<span id='org_sel'><select id=\'organism\'>";
 
 	    for (var idx=0;idx<this.state.targetSpeciesList.length;idx++) {
-		var selecteditem = "";
-		if (this.state.targetSpeciesList[idx].name === this.state.targetSpeciesName) {
-		    selecteditem = "selected";
-		}
-		optionhtml = optionhtml +
-		    "<option value=\""+this.state.targetSpeciesList[idx.name]+
-		    "\" " + selecteditem +">" + this.state.targetSpeciesList[idx].name +"</option>"
+			var selecteditem = "";
+			if (this.state.targetSpeciesList[idx].name === this.state.targetSpeciesName) {
+			    selecteditem = "selected";
+			}
+			optionhtml = optionhtml +
+			    "<option value=\""+this.state.targetSpeciesList[idx.name]+
+			    "\" " + selecteditem +">" + this.state.targetSpeciesList[idx].name +"</option>"
 	    }
 	    // add one for overview.
 	    if (this.state.targetSpeciesName === "Overview") {
@@ -2777,13 +2782,13 @@ var url = document.URL;
 
 	    optionhtml = optionhtml+"<span id=\'calc_sel\'><select id=\"calculation\">";
 	    for (var idx=0;idx<this.state.similarityCalculation.length;idx++) {
-		var selecteditem = "";
-		if (this.state.similarityCalculation[idx].calc === this.state.selectedCalculation) {
-		    selecteditem = "selected";
-		}
-		optionhtml = optionhtml + "<option value='" +
-		    this.state.similarityCalculation[idx].calc +"' "+ selecteditem +">" +
-		    this.state.similarityCalculation[idx].label +"</option>";
+			var selecteditem = "";
+			if (this.state.similarityCalculation[idx].calc === this.state.selectedCalculation) {
+			    selecteditem = "selected";
+			}
+			optionhtml = optionhtml + "<option value='" +
+			    this.state.similarityCalculation[idx].calc +"' "+ selecteditem +">" +
+			    this.state.similarityCalculation[idx].label +"</option>";
 	    }
 	    optionhtml = optionhtml + "</select></span></span>";
 	    return $(optionhtml);
@@ -2803,9 +2808,9 @@ var url = document.URL;
     		if (this.state.phenotypeSort[idx].type === this.state.selectedSort) {
     		    selecteditem = "selected";
     		}
-		optionhtml = optionhtml + "<option value='" + 
-		    this.state.phenotypeSort[idx].order +
-		    "' "+ selecteditem +">" + this.state.phenotypeSort[idx].type +"</option>";
+			optionhtml = optionhtml + "<option value='" + 
+			    this.state.phenotypeSort[idx].order +
+			    "' "+ selecteditem +">" + this.state.phenotypeSort[idx].type +"</option>";
 	    }
 	    optionhtml = optionhtml + "</select></span>";			
 	    return $(optionhtml);
@@ -2960,22 +2965,21 @@ var url = document.URL;
 	    
 	    var prebl = $("#prebl");
 	    if (prebl.length == 0) {
-		var preblHtml ="<div id='prebl'></div>";
-		this.element.append(preblHtml);
-		prebl = $("#prebl");
+			var preblHtml ="<div id='prebl'></div>";
+			this.element.append(preblHtml);
+			prebl = $("#prebl");
 	    }
 	    prebl.empty();
 	    
 	    if (this.state.unmatchedPhenotypes != undefined && this.state.unmatchedPhenotypes.length > 0){
-	    	//var phenotypes = this._showUnmatchedPhenotypes();		
-		var optionhtml = "<div class='clearfix'><form id='matches'><input type='checkbox' name='unmatched' value='unmatched' >&nbsp;&nbsp;View Unmatched Phenotypes<br /><form><div id='clear'></div>";
-		var phenohtml = this._buildUnmatchedPhenotypeTable();
-		optionhtml = optionhtml + "<div id='unmatched' style='display:none;'>" + phenohtml + "</div></div>";
-		prebl.append(optionhtml);
-	    	
+		    //var phenotypes = this._showUnmatchedPhenotypes();		
+			var optionhtml = "<div class='clearfix'><form id='matches'><input type='checkbox' name='unmatched' value='unmatched' >&nbsp;&nbsp;View Unmatched Phenotypes<br /><form><div id='clear'></div>";
+			var phenohtml = this._buildUnmatchedPhenotypeTable();
+			optionhtml = optionhtml + "<div id='unmatched' style='display:none;'>" + phenohtml + "</div></div>";
+			prebl.append(optionhtml);	
 	    } else { // no unmatched phenotypes
-		var optionhtml = "<div id='unmatchedlabel' style='display:block;'>No Unmatched Phenotypes</div>";
-		prebl.append(optionhtml);
+			var optionhtml = "<div id='unmatchedlabel' style='display:block;'>No Unmatched Phenotypes</div>";
+			prebl.append(optionhtml);
 	    }
 	    
 	    $('#matches :checkbox').click(function() {
