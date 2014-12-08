@@ -99,6 +99,7 @@
   FBInternalGT: "http://monarchinitiative.org/genotype/"
   EOM: http://purl.obolibrary.org/obo/EOM_
   dbSNP: "http://identifiers.org/dbSNP:" 
+  dbVar: "http://identifiers.org/dbVar:"
   ClinVarVariant: "http://identifiers.org/ClinVarVariant:"  
   GeneID: http://purl.obolibrary.org/obo/NCBIGene_
   Gene: http://purl.obolibrary.org/obo/NCBIGene_
