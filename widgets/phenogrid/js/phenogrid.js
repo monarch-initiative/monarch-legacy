@@ -1563,14 +1563,14 @@ var url = document.URL;
 	    
 	    //create the related model rectangles
 	    var highlight_rect = self.state.svg.append("svg:rect")
-		.attr("transform",
-		      "translate(" + (self.state.textWidth + 32) + "," + 
-		      self.state.yoffsetOver+ ")")
-		.attr("x", function(d) { return (self.state.xScale(modelData.model_id)-1);})
-		.attr("y", self.state.yoffset + 2)
-		.attr("class", "model_accent")
-		.attr("width", 14)
-		.attr("height", (self.state.phenotypeDisplayCount * 13));
+			.attr("transform",
+			      "translate(" + (self.state.textWidth + 32) + "," + 
+			      self.state.yoffsetOver+ ")")
+			.attr("x", function(d) { return (self.state.xScale(modelData.model_id)-1);})
+			.attr("y", self.state.yoffset + 2)
+			.attr("class", "model_accent")
+			.attr("width", 14)
+			.attr("height", (self.state.phenotypeDisplayCount * 13));
 
 	    //select the model label
 
@@ -1580,7 +1580,7 @@ var url = document.URL;
 	    //Show that model label is selected. Change styles to bold, blue and full-length label
 	    var model_label = self.state.svg.selectAll("text#" +this._getConceptId(modelData.model_id));
 
-    	    model_label.style("font-weight", "bold");
+    	model_label.style("font-weight", "bold");
 	    model_label.style("fill", "blue");
 	    model_label.html(modelData.model_label);	
 	    
@@ -1588,9 +1588,9 @@ var url = document.URL;
 		type = this.state.defaultApiEntity;
 	    
 	    for (var i =0; i < this.state.apiEntityMap.length; i++) {
-		if (concept.indexOf(this.state.apiEntityMap[i].prefix) ==0) {
-		    type = this.state.apiEntityMap[i].apifragment;
-		}
+			if (concept.indexOf(this.state.apiEntityMap[i].prefix) ==0) {
+			    type = this.state.apiEntityMap[i].apifragment;
+			}
 	    }
 	    
 	    var width = (type === this.state.defaultApiEntity)?80:200;
@@ -1605,15 +1605,15 @@ var url = document.URL;
 	    //getAttrbitues
 	    //just create a temporary object to pass to the next method...
 	    var obj = {				
-		attributes: [],
-		getAttribute: function(keystring) {
-		    var ret = self.state.xScale(modelData.model_id)+ 15;
-		    if (keystring == "y") {
-			ret = Number(self.state.yoffset -100);
-		    }
-		    return ret;
-		},
-            };		
+			attributes: [],
+			getAttribute: function(keystring) {
+			    var ret = self.state.xScale(modelData.model_id)+ 15;
+			    if (keystring == "y") {
+					ret = Number(self.state.yoffset -100);
+			    }
+			    return ret;
+			},
+        };		
 	    obj.attributes['transform'] = {value: highlight_rect.attr("transform")};		
 	    this._updateDetailSection(retData, this._getXYPos(obj), width, height);
 	    self._highlightMatchingPhenotypes(modelData);
@@ -1627,18 +1627,19 @@ var url = document.URL;
 	    var model_text = "",
 		mod_id = "";
 	    if (modelData != null && typeof modelData != 'object') {
-		mod_id = this._getConceptId(modelData);   
+			mod_id = this._getConceptId(modelData);   
 	    } else if (typeof (modelData.model_id) !== 'undefined') {
-		mod_id = this._getConceptId(modelData.model_id);
+			mod_id = this._getConceptId(modelData.model_id);
 	    }
 	    
 	    //Show that model label is no longer selected. Change styles to normal weight, black and short label
 	    if (mod_id !== "") {
-		model_text = this.state.svg.selectAll("text#" + mod_id);
-		model_text.style("font-weight","normal");
-		model_text.style("text-decoration", "none");
-		model_text.style("fill", "black");
-		model_text.html(this._getShortLabel(modelData.model_label,self.state.labelCharDisplayCount));
+			model_text = this.state.svg.selectAll("text#" + mod_id);
+			model_text.style("font-weight","normal");
+			model_text.style("text-decoration", "none");
+			model_text.style("fill", "black");
+			model_text.html(this._getShortLabel(modelData.model_label,self.state.labelCharDisplayCount));
+			this._deselectMatchingPhenotypes(modelData);
 	    }
 	},
 	
