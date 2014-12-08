@@ -239,13 +239,13 @@ var url = document.URL;
 	_createTargetSpeciesIndices: function() {
 	    this.state.targetSpeciesByName={};
 	    for (var j = 0; j < this.state.targetSpeciesList.length; j++ ) {
-		// list starts as name, taxon pairs
-		var name = this.state.targetSpeciesList[j].name;
-		var taxon = this.state.targetSpeciesList[j].taxon;
-		var entry = {};
-		entry.index = j;
-		entry.taxon = taxon;
-		this.state.targetSpeciesByName[name]= entry;
+			// list starts as name, taxon pairs
+			var name = this.state.targetSpeciesList[j].name;
+			var taxon = this.state.targetSpeciesList[j].taxon;
+			var entry = {};
+			entry.index = j;
+			entry.taxon = taxon;
+			this.state.targetSpeciesByName[name]= entry;
 	    }
 	},
 
@@ -258,12 +258,12 @@ var url = document.URL;
 	// this should not impact any standalone uses of phenogrid, and will be removed once monarch-app is cleaned up.
 	_getResourceUrl: function(name,type) {
 	    var prefix;
-	    if (typeof(this.config.scriptpath) !== 'undefined' && this.config.scriptpath !== null && this.config.scrippath != ''
+	    if (typeof(this.config.scriptpath) !== 'undefined' && this.config.scriptpath !== null && this.config.scriptpath != ''
 	        && this.config.scriptpath !='/') {
-		prefix = this.config.scriptpath;
+			prefix = this.config.scriptpath;
 	    }
 	    else {
-		prefix ='/widgets/phenogrid/js/';
+			prefix ='/widgets/phenogrid/js/';
 	    }
 	    var res = prefix+'res/'+name+'.'+type;
 	    return prefix+'res/'+name+'.'+type;
@@ -331,7 +331,7 @@ var url = document.URL;
 
 			height = rectHeight+40;
 
-			var containerHeight = height + 10; // MAGIC NUMBER? OR OVERVIEWW OFFSET?
+			var containerHeight = height + 10; // MAGIC NUMBER? OR OVERVIEW OFFSET?
 			$("#svg_area").css("height",height);
 			$("#svg_container").css("height",containerHeight);
 	    }
@@ -990,32 +990,27 @@ var url = document.URL;
 	    var url = '';
 	    var self=this;
 	    if (this.state.targetSpeciesName === "Overview") {
-		this._loadOverviewData();
+			this._loadOverviewData();
 	    }
 	    else {
-		this._loadSpeciesData(this.state.targetSpeciesName);
-		//this._finishLoad(this.state.data[this.state.targetSpeciesName]);
-		this._finishLoad();
+			this._loadSpeciesData(this.state.targetSpeciesName);
+			//this._finishLoad(this.state.data[this.state.targetSpeciesName]);
+			this._finishLoad();
 	    }
 	},
 
 	_loadSpeciesData: function(speciesName,limit) {
 	    var phenotypeList = this.state.phenotypeData;
-	    var url = this.state.serverURL+"/simsearch/phenotype?input_items="+
-		phenotypeList.join(",")+"&target_species="+
-		this._getTargetSpeciesTaxonByName(this,speciesName);
+	    var url = this.state.serverURL+"/simsearch/phenotype?input_items="+phenotypeList.join(",")+"&target_species="+this._getTargetSpeciesTaxonByName(this,speciesName);
 	    if (typeof(limit) !== 'undefined') {
-		url = url +"&limit="+limit;
+			url = url +"&limit="+limit;
 	    }
 
 	    var res = this._ajaxLoadData(speciesName,url);
 	    if (res !== null) {
-		if (typeof(limit) !== 'undefined' && typeof(res.b) !== 'undefined' && res.b !== null &&
-		    res.b.length < limit) {
-
-		    res = this._padSpeciesData(res,speciesName,limit);
-
-		}
+			if (typeof(limit) !== 'undefined' && typeof(res.b) !== 'undefined' && res.b !== null && res.b.length < limit) {
+			    res = this._padSpeciesData(res,speciesName,limit);
+			}
 	    }
 	    this.state.data[speciesName]= res;
 	},
@@ -1042,11 +1037,8 @@ var url = document.URL;
 	    var limit = this.state.multiOrganismCt;
 	    for (i in this.state.targetSpeciesList) {
 			var species = this.state.targetSpeciesList[i].name;
-			//console.log(this.state.refSpecies+" - "+species);
 			this._loadSpeciesData(species,limit);
 			if (species === this.state.refSpecies && typeof(species) !== 'undefined') { // if it's the one we're reffering to
-			    //console.log("Match Found");
-				//console.log(this.state.data[species].metadata);
 				if (typeof(this.state.data[species].metadata) !== 'undefined'){
 			   		this.state.maxICScore = this.state.data[species].metadata.maxMaxIC;
 				}
@@ -1191,7 +1183,6 @@ var url = document.URL;
 	_finishLoad: function() {
 	    var species = this.state.targetSpeciesName;
 	    var retData  = this.state.data[species];
-	    console.log(retData);
 	 //   var retData = data;
 	    //extract the maxIC score
 	    if (typeof (retData.metadata) !== 'undefined') {
@@ -2756,13 +2747,13 @@ var url = document.URL;
 		"<span id='org_sel'><select id=\'organism\'>";
 
 	    for (var idx=0;idx<this.state.targetSpeciesList.length;idx++) {
-		var selecteditem = "";
-		if (this.state.targetSpeciesList[idx].name === this.state.targetSpeciesName) {
-		    selecteditem = "selected";
-		}
-		optionhtml = optionhtml +
-		    "<option value=\""+this.state.targetSpeciesList[idx.name]+
-		    "\" " + selecteditem +">" + this.state.targetSpeciesList[idx].name +"</option>"
+			var selecteditem = "";
+			if (this.state.targetSpeciesList[idx].name === this.state.targetSpeciesName) {
+			    selecteditem = "selected";
+			}
+			optionhtml = optionhtml +
+			    "<option value=\""+this.state.targetSpeciesList[idx.name]+
+			    "\" " + selecteditem +">" + this.state.targetSpeciesList[idx].name +"</option>"
 	    }
 	    // add one for overview.
 	    if (this.state.targetSpeciesName === "Overview") {
@@ -2790,13 +2781,13 @@ var url = document.URL;
 
 	    optionhtml = optionhtml+"<span id=\'calc_sel\'><select id=\"calculation\">";
 	    for (var idx=0;idx<this.state.similarityCalculation.length;idx++) {
-		var selecteditem = "";
-		if (this.state.similarityCalculation[idx].calc === this.state.selectedCalculation) {
-		    selecteditem = "selected";
-		}
-		optionhtml = optionhtml + "<option value='" +
-		    this.state.similarityCalculation[idx].calc +"' "+ selecteditem +">" +
-		    this.state.similarityCalculation[idx].label +"</option>";
+			var selecteditem = "";
+			if (this.state.similarityCalculation[idx].calc === this.state.selectedCalculation) {
+			    selecteditem = "selected";
+			}
+			optionhtml = optionhtml + "<option value='" +
+			    this.state.similarityCalculation[idx].calc +"' "+ selecteditem +">" +
+			    this.state.similarityCalculation[idx].label +"</option>";
 	    }
 	    optionhtml = optionhtml + "</select></span></span>";
 	    return $(optionhtml);
@@ -2816,9 +2807,9 @@ var url = document.URL;
     		if (this.state.phenotypeSort[idx].type === this.state.selectedSort) {
     		    selecteditem = "selected";
     		}
-		optionhtml = optionhtml + "<option value='" + 
-		    this.state.phenotypeSort[idx].order +
-		    "' "+ selecteditem +">" + this.state.phenotypeSort[idx].type +"</option>";
+			optionhtml = optionhtml + "<option value='" + 
+			    this.state.phenotypeSort[idx].order +
+			    "' "+ selecteditem +">" + this.state.phenotypeSort[idx].type +"</option>";
 	    }
 	    optionhtml = optionhtml + "</select></span>";			
 	    return $(optionhtml);
