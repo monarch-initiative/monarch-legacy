@@ -43,6 +43,7 @@
       "has_phenotype" : "RO:0002200",
       "dictyBase" : "http://identifiers.org/dictyBase:",
       "reference_locus" : "GENO:0000036",
+      "dbVar" : "http://identifiers.org/dbVar:",
       "OMIA" : "http://purl.obolibrary.org/obo/OMIA_",
       "has_part" : "BFO:0000051",
       "gene_locus" : "GENO:0000014",
