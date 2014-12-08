@@ -97,6 +97,7 @@
       },
       {
          "name" : "sequence_alteration_id",
+         "list_delimiter" : ";",
          "type" : "SO:0001059"
       },
       {
