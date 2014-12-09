@@ -442,7 +442,7 @@ var url = document.URL;
 	//then redraw the bigger grid 
 	_createOverviewSection: function() {
 	    var self=this;
-	    
+	    //console.log("A:"+self.state.phenotypeDisplayCount);
 	    // add-ons for stroke size on view box. Preferably even numbers
 	    var linePad = 2;
 	    var viewPadding = linePad*2+2;
@@ -529,11 +529,9 @@ var url = document.URL;
 					// Restrict Movement if no need to move map
 					if (selectRectHeight == overviewRegionSize) {
 						newY = overviewY;
-						//console.log("Up/Down Blocked");
 					}
 					if (selectRectWidth == overviewRegionSize) {
 						newX = overviewX;
-						//console.log("Left/Right Blocked");
 					}
 
 					// block from going out of bounds on left
@@ -545,15 +543,14 @@ var url = document.URL;
 						newY = overviewY;
 					}
 					// right
-					if (newX + selectRectWidth > overviewX+overviewBoxDim) {
-						newX = overviewX+overviewBoxDim-selectRectWidth;
+					if (newX + selectRectWidth > overviewX+overviewRegionSize) {
+						newX = overviewX+overviewRegionSize-selectRectWidth;
 					}
 
 					// bottom
-					if (newY + selectRectHeight > overviewY+overviewBoxDim) {
-						newY = overviewY+overviewBoxDim-selectRectHeight;
+					if (newY + selectRectHeight > overviewY+overviewRegionSize) {
+						newY = overviewY+overviewRegionSize-selectRectHeight;
 					}
-					//console.log("NewCoords: ("+newX+","+newY+")");
 					rect.attr("x", newX);
 					//This changes for vertical positioning
 					rect.attr("y", newY); //self.state.yoffset+yTranslation); 
@@ -561,7 +558,6 @@ var url = document.URL;
 					// adjust x back to have 0,0 as base instead of overviewX, overviewY
 					newX = newX- overviewX;
 					newY = newY -overviewY;
-					//console.log("AdjustCoords: ("+newX+","+newY+")");
 
 					// invert newX and newY into posiions in the model and phenotype lists.
 					var j = self._invertOverviewDragPosition(self.state.smallXScale,newX);
@@ -569,7 +565,6 @@ var url = document.URL;
 
 					var j = self._invertOverviewDragPosition(self.state.smallYScale,newY);
 					var newPhenotypePos = j+self.state.phenotypeDisplayCount;
-
 					self._updateModel(newModelPos, newPhenotypePos);
 		      }));
 	    //set this back to 0 so it doesn't affect other rendering
@@ -590,25 +585,25 @@ var url = document.URL;
 	    var explYOffset=15;
 	    var explXOffset=10;
 	    var scoretip = self.state.svg.append("text")
-		.attr("transform","translate(" + (self.state.axis_pos_list[2] ) + "," + scoreTipY+ ")")
-    	        .attr("x", 0)
-		.attr("y", 0)
-		.attr("class", "tip")
-		.text("< Model Scores");			
+			.attr("transform","translate(" + (self.state.axis_pos_list[2] ) + "," + scoreTipY+ ")")
+	    	.attr("x", 0)
+			.attr("y", 0)
+			.attr("class", "tip")
+			.text("< Model Scores");			
 	    
 	    var tip	= self.state.svg
-		.append("svg:image")				
-		.attr("xlink:href", this.state.scriptpath + "../image/greeninfo30.png")
-		.attr("transform","translate(" + (self.state.axis_pos_list[2] +tipTextLength) + "," + faqY + ")")
-		.attr("id","modelscores")
-		.attr("x", 0)
-		.attr("y", 0)
-		.attr("width", 15)
-    	.attr("height", 15)		
-		.on("click", function(d) {
-		    var name = "modelscores";					
-		    self._showDialog(name);
-		});
+			.append("svg:image")				
+			.attr("xlink:href", this.state.scriptpath + "../image/greeninfo30.png")
+			.attr("transform","translate(" + (self.state.axis_pos_list[2] +tipTextLength) + "," + faqY + ")")
+			.attr("id","modelscores")
+			.attr("x", 0)
+			.attr("y", 0)
+			.attr("width", 15)
+	    	.attr("height", 15)		
+			.on("click", function(d) {
+			    var name = "modelscores";					
+			    self._showDialog(name);
+			});
 	    var expl = self.state.svg.append("text")
 	        .attr("x",self.state.axis_pos_list[2]+explXOffset)
 	        .attr("y",scoreTipY+explYOffset)
@@ -672,10 +667,6 @@ var url = document.URL;
 	    return j;
 	},
 		 
-
-
-	
-	
 	_getComparisonType : function(organism){
 	    var label = "";
 	    
