@@ -442,7 +442,6 @@ var url = document.URL;
 	//then redraw the bigger grid 
 	_createOverviewSection: function() {
 	    var self=this;
-	    //console.log("A:"+self.state.phenotypeDisplayCount);
 	    // add-ons for stroke size on view box. Preferably even numbers
 	    var linePad = 2;
 	    var viewPadding = linePad*2+2;
@@ -486,7 +485,6 @@ var url = document.URL;
 	      	});
 	    overviewX++;	//Corrects the gapping on the sides
 	    overviewY++;
-	   	//console.log("OSize: "+overviewRegionSize+" OCoords: ("+overviewX+","+overviewY+")");
 	    var modelRectTransform = "translate(" + overviewX +	"," + overviewY + ")"
 		    model_rects.enter()
 			.append("rect")
@@ -501,7 +499,6 @@ var url = document.URL;
 	    var lastId = self.state.phenotypeSortData[self.state.phenotypeDisplayCount-1][0].id_a; //rowid
 	    var selectRectHeight = self.state.smallYScale(lastId);
 	    var selectRectWidth = self.state.smallXScale(mods[self.state.modelDisplayCount-1].model_id);
-	    //console.log("Height: "+selectRectHeight+" Width: "+selectRectWidth);
 	    self.state.highlightRect = self.state.svg.append("rect")
 		    .attr("x",overviewX)
 		    .attr("y",overviewY)				
@@ -778,15 +775,21 @@ var url = document.URL;
 	    this.state.yAxis = [];
 	    this.state.filteredModelData = [];
 	    //begin to sort batches of phenotypes based on the phenotypeDisplayCount
-	    var startIdx = this.state.currPhenotypeIdx - (this.state.phenotypeDisplayCount -1);		
+	    var startIdx = this.state.currPhenotypeIdx - (this.state.phenotypeDisplayCount -1);
+	    var displayLimiter = self.state.currPhenotypeIdx;
+	    if (startIdx > 0){
+	    	startIdx--;
+	    }
+	    else{
+	    	displayLimiter++;
+	    }		
 	    //extract the new array of filtered Phentoypes
 	    //also update the axis
 	    //also update the modeldata
 	    var axis_idx = 0;
 	    var tempFilteredModelData = [];
-	    //console.log("CurrPhenoTypeIdx: "+self.state.currPhenotypeIdx);
 	    //get phenotype[startIdx] up to phenotype[currPhenotypeIdx] from the array of sorted phenotypes
-	    for (var i = startIdx;i <self.state.currPhenotypeIdx + 1;i++) {
+	    for (var i = startIdx;i < displayLimiter;i++) {
 			//move the ranked phenotypes onto the filteredPhenotypeData array
 			self.state.filteredPhenotypeData.push(self.state.phenotypeSortData[i]);
 			//update the YAxis   	
@@ -796,7 +799,6 @@ var url = document.URL;
 			var gap = 3;
 			//push the rowid and ypos onto the yaxis array
 			//so now the yaxis will be in the order of the ranked phenotypes
-			//console.log("I: "+i+" id_a: "+self.state.phenotypeSortData[i][0].id_a+" axis_idx: "+axis_idx+" yoffset: "+self.state.yoffset);
 			var stuff = {"id": self.state.phenotypeSortData[i][0].id_a, "ypos" : ((axis_idx * (size+gap)) + self.state.yoffset)};
 			self.state.yAxis.push(stuff); 
 			axis_idx = axis_idx + 1;
