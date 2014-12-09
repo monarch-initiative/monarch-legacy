@@ -4823,5 +4823,19 @@
       "url_syntax" : "http://www.ncbi.nlm.nih.gov/dbvar/variants/[example_id]",
       "datatype" : null
    },
+   "j" : {
+      "object" : "Identifier",
+      "uri_prefix" : null,
+      "name" : "MGI Reference",
+      "url_example" : "http://www.informatics.jax.org/reference/J:201866",
+      "database" : "MGI Reference",
+      "example_id" : "J:12345",
+      "generic_url" : "http://www.informatics.jax.org/reference/",
+      "fullname" : "MGI Reference",
+      "id" : null,
+      "abbreviation" : "J",
+      "url_syntax" : "http://www.informatics.jax.org/reference/[example_id]",
+      "datatype" : null
+   },
 
 }
