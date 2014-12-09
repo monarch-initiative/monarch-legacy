@@ -28,8 +28,9 @@
   
   obo: http://purl.obolibrary.org/obo/
   oboInOwl: http://www.geneontology.org/formats/oboInOwl#
-  monarch: http://monarch-initiative.org/
-  
+  monarch: http://monarchinitiative.org/
+  MONARCH: http://monarchinitiative.org/MONARCH_
+
   ##
   ## -- Bio ID Spaces --
   ##

@@ -46,7 +46,7 @@
          "@type" : "@id"
       },
       "ENSEMBL" : "http://identifiers.org/ensembl:",
-      "monarch" : "http://monarch-initiative.org/",
+      "monarch" : "http://monarchinitiative.org/",
       "ORPHANET" : "http://purl.obolibrary.org/obo/ORPHANET_",
       "owl" : "http://www.w3.org/2002/07/owl#",
       "GeneReviews" : "http://www.ncbi.nlm.nih.gov/books/",
@@ -113,6 +113,7 @@
       "OMIM" : "http://purl.obolibrary.org/obo/OMIM_",
       "MGI" : "http://identifiers.org/mgd/mgi:",
       "dc" : "http://purl.org/dc/terms/",
+      "MONARCH" : "http://monarchinitiative.org/MONARCH_",
       "ClinVarHaplotype" : "http://identifiers.org/ClinVarHaplotype_",
       "homepage" : {
          "@id" : "foaf:homepage",
@@ -136,8 +137,8 @@
       "extrinsic_genotype" : "GENO:0000524",
       "NCBITaxon" : "http://purl.obolibrary.org/obo/NCBITaxon_",
       "environment" : "GENO:0000099",
-      "comment" : "rdfs:comment",
       "variant_locus" : "GENO:0000481",
+      "comment" : "rdfs:comment",
       "SO" : "http://purl.obolibrary.org/obo/SO_",
       "phenotype" : "monarch:phenotype",
       "ZFIN" : "http://identifiers.org/zfin:",
