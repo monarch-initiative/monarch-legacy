@@ -26,10 +26,11 @@
             },
             {
                "name" : "mapped_id",
+               "type" : "owl:Class",
                "prefix" : "http://identifiers.org/mgd/"
             }
          ],
-         "mapVersion" : "2014-12-08",
+         "mapVersion" : "2014-12-09",
          "graph" : "mmus-equiv-id"
       }
    ],

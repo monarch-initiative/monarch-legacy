@@ -12,12 +12,13 @@ graphs:
       - 
         name: mapped_id
         prefix: http://identifiers.org/zfin/ZFIN_
+        type: owl:Class
     filter: 
       taxon_id: "NCBITaxon:7955"
       source: "NCBIGene"
       mapped_source: "ZFIN"
     graph: drer-equiv-id
-    mapVersion: 2014-12-08
+    mapVersion: 2014-12-09
     mappings: 
       - 
         object: mapped_id
