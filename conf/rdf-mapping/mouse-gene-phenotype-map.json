@@ -14,7 +14,7 @@
          "subject" : "v_uuid"
       },
       {
-         "object" : "gene_id",
+         "object" : "implicated_gene_ids",
          "predicate" : "hasSubject",
          "subject" : "v_uuid"
       },
@@ -48,17 +48,20 @@
       },
       {
          "name" : "implicated_gene_ids",
+         "type" : "owl:Class",
          "list_delimiter" : ","
       },
       {
-         "name" : "phenotype_id"
+         "name" : "phenotype_id",
+         "type" : "owl:Class"
       },
       {
          "name" : "phenotype_description_free_text",
          "type" : "rdfs:Literal"
       },
       {
-         "name" : "evidence_code_id"
+         "name" : "evidence_code_id",
+         "type" : "owl:Class"
       },
       {
          "name" : "publication_id",
@@ -69,5 +72,5 @@
       "J" : "http://www.informatics.jax.org/reference/J:"
    },
    "graph" : "mouse-gene-phenotype",
-   "mapVersion" : "2014-10-03"
+   "mapVersion" : "2014-12-10"
 }
