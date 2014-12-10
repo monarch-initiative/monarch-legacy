@@ -82,7 +82,7 @@ var url = document.URL;
 	    m :[ 30, 10, 10, 10 ],
 	    multiOrganismCt: 10,
 	    multiOrgModelLimit: 750,
-	    phenotypeSort: [{type: "Alphabetic", order: 0},{type: "Frequency and Rarity", order:1} ,{type: "Frequency", order:2} ],	    
+	    phenotypeSort: ["Alphabetic", "Frequency and Rarity", "Frequency" ],	    
 	    similarityCalculation: [{label: "Similarity", calc: 0}, {label: "Ratio (q)", calc: 1}, {label: "Ratio (t)", calc: 3} , {label: "Uniqueness", calc: 2}],
 	    smallestModelWidth: 400,
 	    textLength: 34,
@@ -284,7 +284,6 @@ var url = document.URL;
 
 	    this.state.currModelIdx = this.state.modelDisplayCount-1;
 	    this.state.currPhenotypeIdx = this.state.phenotypeDisplayCount-1;
-	    this.state.phenotypeLabels = this._filterPhenotypeLabels(this.state.phenotypeData);
 	    this.state.phenotypeData = this._filterPhenotypeResults(this.state.phenotypeData);
 	    this._loadData();
 
@@ -701,13 +700,9 @@ var url = document.URL;
 	},
 
 	_setSelectedSort: function(type) {
+	    console.log("calling selected sort on ..."+type);
 	    var self = this;
-	    
-	    var tempdata = self.state.phenotypeSort.filter(function(d) {
-	    	return d.type === type;
-	    });
-
-	    self.state.selectedSort = tempdata[0].type;
+	    self.state.selectedSort = type;
 	},
 	
 	_processSelectedPhenotypeSort: function(){
@@ -760,15 +755,8 @@ var url = document.URL;
     	    //"this.state.phenotypeSortData", is built in each sorting function
 	    self.state.phenotypeSortData = [];
 	    
-	    switch(this.state.selectedSort) {
-	    case "Alphabetic":  this._sortingPhenotypes(3);
-		break;
-	    case "Frequency and Rarity":    this._sortingPhenotypes(2);
-		break;
-	    case "Frequency": this._sortingPhenotypes(1);
-		break;
-	    default:			this._sortingPhenotypes(1);
-	    }   
+	    this._sortingPhenotypes(this.state.selectedSort);
+  
 	    
 	    //Step 2: Filter for the next n phenotypes based on phenotypeDisplayCount and update the y-axis
 	    this.state.filteredPhenotypeData = [];
@@ -821,6 +809,7 @@ var url = document.URL;
 		    }
 		}
 	    }
+	    console.log("at end of filter phenotypes..."+this.state.filteredModelData.length);
 	},
 
 	_filterCalculations: function(){
@@ -911,13 +900,42 @@ var url = document.URL;
 	    return phenotypeArray;
 	},
 
-	_sortingPhenotypes: function(sortType) {
-		//1 -> ModelMatch, 2 -> RankPhenotype, 3 -> Alphabetize
 
-		var self = this;
+	_sortPhenotypesModel: function(a,b) {
+	    var diff = b.count-a.count;
+		if (diff == 0) {
+		    diff = a[0].id_a.localeCompare(b[0].id_a);
+		}
+	    return diff
+	},
+
+	_sortPhenotypesRank: function(a,b) {
+	    return b.sum-a.sum;
+	},
+
+	_sortPhenotypesAlphabetic: function(a,b) {
+	    var labelA = a.label.toLowerCase(), 
+		labelB = b.label.toLowerCase();
+	    if (labelA < labelB) {return -1;}
+	    if (labelA > labelB) {return 1;}
+	    return 0;
+	},
+
+	_sortingPhenotypes: function(sortType) {
+
+	    var sortFunc;
+	    if (sortType == 'Frequency') {
+		sortFunc = this._sortPhenotypesModel;
+	    } else if (sortType == 'Frqeuency and Rarity') {
+		sortFunc == this._sortPhenotypesRank;
+	    } else if (sortType == 'Alphabetic') {
+		sortFunc = this._sortPhenotypesAlphabetic;
+	    }
+	    var self = this;
 	    var modelDataForSorting = [];
 	    var modData = self.state.modelData;
 	    //1. Get all unique phenotypes in an array
+	    console.log("at start of sorting models..."+self.state.modelData.length);
 	    for (var idx=0;idx<self.state.phenotypeData.length;idx++) {			
 			var tempdata = [];
 			for (var midx = 0; midx < modData.length; midx++) {
@@ -927,6 +945,8 @@ var url = document.URL;
 			}
 			modelDataForSorting.push(tempdata);
 	    }
+	    console.log("modelDataForSorting..."+modelDataForSorting.length);
+	    console.log("filtered model data..."+this.state.filteredModelData.length);
 
 		//2. Sort the array by source phenotype name 
 		modelDataForSorting.sort(function(a,b) { 
@@ -949,32 +969,17 @@ var url = document.URL;
 				    	else {num+= +d[i].subsumer_IC;}
 				    }
 				}
-				if (sortType == 1){d["count"] = num;}
-			    else if (sortType == 2){d["sum"] = num;}
-			    else if (sortType == 3){d["label"] = d[0].label_a;}
+				if (sortType == 'Frequency'){d["count"] = num;}
+			    else if (sortType == 'Frequency and Rarity'){d["sum"] = num;}
+			    else if (sortType == 'Alphabetic'){d["label"] = d[0].label_a;}
 				else{}
 			    self.state.phenotypeSortData.push(d);
 			}
-	    }	
+		}
 
-	    //4. Sort the array by sums. descending
-	    self.state.phenotypeSortData.sort(function(a,b) {
-		    if (sortType == 1){
-				var diff = b.count -a.count;
-				if (diff ==0) {// counts are equal
-				    diff = a[0].id_a.localeCompare(b[0].id_a);
-				}
-				return diff;
-		    }else if (sortType == 2){
-			    return b.sum - a.sum; 
-		    }else if (sortType == 3){
-				var labelA = a.label.toLowerCase(), 
-				    labelB = b.label.toLowerCase();
-				if (labelA < labelB) {return -1;}
-				if (labelA > labelB) {return 1;}
-				return 0;	
-		    }else{}
-	    });	
+		if (typeof(sortFunc) !== 'undefined') {
+		    self.state.phenotypeSortData.sort(sortFunc);
+		}
 	},
 	
 	//given a list of phenotypes, find the top n models
@@ -2722,7 +2727,7 @@ var url = document.URL;
 	    
 	    //add the handler for the select control
             $( "#sortphenotypes" ).change(function(d) {
-        	self.state.selectedSort = self.state.phenotypeSort[d.target.selectedIndex].type;
+        	self.state.selectedSort = self.state.phenotypeSort[d.target.selectedIndex];
         	self._resetSelections("sortphenotypes");
         	self._processSelectedPhenotypeSort();
             });
@@ -2798,12 +2803,12 @@ var url = document.URL;
 	    
 	    for (var idx=0;idx<this.state.phenotypeSort.length;idx++) {
     		var selecteditem = "";
-    		if (this.state.phenotypeSort[idx].type === this.state.selectedSort) {
+    		if (this.state.phenotypeSort[idx] === this.state.selectedSort) {
     		    selecteditem = "selected";
     		}
 			optionhtml = optionhtml + "<option value='" + 
-			    this.state.phenotypeSort[idx].order +
-			    "' "+ selecteditem +">" + this.state.phenotypeSort[idx].type +"</option>";
+		//	    this.state.phenotypeSort[idx].order +
+		    "' "+ selecteditem +">" + this.state.phenotypeSort[idx]+"</option>";
 	    }
 	    optionhtml = optionhtml + "</select></span>";			
 	    return $(optionhtml);
