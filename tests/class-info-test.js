@@ -13,7 +13,7 @@ exports.testClassInfo = function() {
         function(id) {
             var resObj = engine.fetchClassInfo(id);
             console.log(JSON.stringify(resObj,' ',1));
-            assert.isTrue(resObj.definition.length > 0);
+            assert.isTrue(resObj.definitions.length > 0);
             assert.isTrue(resObj.id.length > 0);
             assert.isTrue(resObj.label.length > 0);
             assert.isTrue(resObj.category == 'disease');
