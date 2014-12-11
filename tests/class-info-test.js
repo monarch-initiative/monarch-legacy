@@ -16,7 +16,7 @@ exports.testClassInfo = function() {
             assert.isTrue(resObj.definitions.length > 0);
             assert.isTrue(resObj.id.length > 0);
             assert.isTrue(resObj.label.length > 0);
-            assert.isTrue(resObj.category == 'disease');
+            assert.isTrue(resObj.categories.indexOf('disease') > -1);
             // todo - check json
             //assert.isTrue(resObj.resultCount > 100);
             //assert.isTrue(resObj.results.length > 100);
