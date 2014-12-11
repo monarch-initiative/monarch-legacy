@@ -700,64 +700,54 @@ var url = document.URL;
 	},
 
 	_setSelectedSort: function(type) {
-		console.log("calling selected sort on ..."+type);
+		//console.log("calling selected sort on ..."+type);
 		var self = this;
 		self.state.selectedSort = type;
 	},
 	
-	_processSelectedPhenotypeSort: function(){
+	_processSelected: function(processType){
 		var self = this;
 
-		//Select phenotype sort method based on options in #sortphenotypes dropdown
-		this._filterPhenotypes(); 
+		this._filterSelected(processType); 
 		this.state.unmatchedPhenotypes = this._getUnmatchedPhenotypes();
 		this.element.empty();
 		this.reDraw();
-	},
-	
-	_processSelectedCalculation: function(){
-		var self = this;
-
-		this._filterCalculations(); 
-		this.state.unmatchedPhenotypes = this._getUnmatchedPhenotypes();
-		this.element.empty();
-		this.reDraw();   
 	},
 
 	//given the full dataset, return a filtered dataset containing the
 	//subset of data bounded by the phenotype display count and the model display count
 	_filterData: function(fulldataset) {
-	    
-	    var phenotypeArray = this._uniquifyPhenotypes(fulldataset);
-	    //copy the phenotypeArray to phenotypeData array - now instead of ALL phenotypes, it will be limited to unique phenotypes for this disease
-	    //do not alter this array: this.state.phenotypeData
-	    this.state.phenotypeData = phenotypeArray;
+		var phenotypeArray = this._uniquifyPhenotypes(fulldataset);
+		//copy the phenotypeArray to phenotypeData array - now instead of ALL phenotypes, it will be limited to unique phenotypes for this disease
+		//do not alter this array: this.state.phenotypeData
+		this.state.phenotypeData = phenotypeArray;
 
-	    //we need to adjust the display counts and indexing if there are fewer phenotypes than the default phenotypeDisplayCount
-	    if (this.state.phenotypeData.length < this.state.phenotypeDisplayCount) {
-		this.state.currPhenotypeIdx = this.state.phenotypeData.length-1;
-		this.state.phenotypeDisplayCount = this.state.phenotypeData.length;
-	    }
-    	    
-    	    this._filterPhenotypes();
+		//we need to adjust the display counts and indexing if there are fewer phenotypes than the default phenotypeDisplayCount
+		if (this.state.phenotypeData.length < this.state.phenotypeDisplayCount) {
+			this.state.currPhenotypeIdx = this.state.phenotypeData.length-1;
+			this.state.phenotypeDisplayCount = this.state.phenotypeData.length;
+		}
+
+		this._filterSelected("sortphenotypes");
 	},
 	
-	_filterPhenotypes: function(){
+	_filterSelected: function(filterType){
 		var self = this;
-		//Step 1: Select phenotype sort method based on options in #sortphenotypes dropdown
-		//Alphabetic: sorted alphabetically
-		//Frequency and Rarity: sorted by the sum of each phenotype across all models
-		//Frequency: sorted by the count of number of model matches per phenotype
-		//"this.state.phenotypeSortData", is built in each sorting function
-		self.state.phenotypeSortData = [];
-
-		this._sortingPhenotypes(this.state.selectedSort);
-
+		if (filterType == "sortphenotypes"){
+			//Step 1: Select phenotype sort method based on options in #sortphenotypes dropdown
+			//Alphabetic: sorted alphabetically
+			//Frequency and Rarity: sorted by the sum of each phenotype across all models
+			//Frequency: sorted by the count of number of model matches per phenotype
+			//"this.state.phenotypeSortData", is built in each sorting function
+			self.state.phenotypeSortData = [];
+			this._sortingPhenotypes(this.state.selectedSort);
+		}
 
 		//Step 2: Filter for the next n phenotypes based on phenotypeDisplayCount and update the y-axis
 		this.state.filteredPhenotypeData = [];
-		this.state.yAxis = [];
 		this.state.filteredModelData = [];
+		this.state.yAxis = [];
+		
 		//begin to sort batches of phenotypes based on the phenotypeDisplayCount
 		var startIdx = this.state.currPhenotypeIdx - (this.state.phenotypeDisplayCount -1);
 		var displayLimiter = self.state.currPhenotypeIdx;
@@ -766,7 +756,7 @@ var url = document.URL;
 		}
 		else{
 			displayLimiter++;
-		}		
+		}
 		//extract the new array of filtered Phentoypes
 		//also update the axis
 		//also update the modeldata
@@ -785,11 +775,11 @@ var url = document.URL;
 			//so now the yaxis will be in the order of the ranked phenotypes
 			var stuff = {"id": self.state.phenotypeSortData[i][0].id_a, "ypos" : ((axis_idx * (size+gap)) + self.state.yoffset)};
 			self.state.yAxis.push(stuff); 
-			axis_idx = axis_idx + 1;
+			axis_idx++;
 			//update the ModelData			
 			//find the rowid in the original ModelData (list of models and their matching phenotypes) and write it to tempdata if it matches this phenotypeSortData rowid.
 			//In this case, the rowid is just the id_a value in the model data
-			for (var midx = 0; midx < this.state.modelData.length; midx++) {
+			for (midx in this.state.modelData) {
 				var mod = this.state.modelData[midx];
 				if (mod.id_a == self.state.phenotypeSortData[i][0].id_a) {
 					tempFilteredModelData.push(mod);
@@ -797,73 +787,21 @@ var url = document.URL;
 			}		
 		}
 
-		for (var idx=0;idx<self.state.filteredModelList.length;idx++) {
-			for (var tdx = 0; tdx < tempFilteredModelData.length;tdx++) {
-				if (tempFilteredModelData[tdx].model_id ==
-				self._getConceptId(self.state.filteredModelList[idx].model_id)) {
+		for (idx in self.state.filteredModelList) {
+			for (tdx in tempFilteredModelData) {
+				if (tempFilteredModelData[tdx].model_id == self._getConceptId(self.state.filteredModelList[idx].model_id)) {
 					self.state.filteredModelData.push(tempFilteredModelData[tdx]);
 				}
 			}
 		}
-		console.log("at end of filter phenotypes..."+this.state.filteredModelData.length);
-	},
-
-	_filterCalculations: function(){
-	    var self = this;
-	    
-	    this.state.filteredModelData = [];
-	    this.state.filteredPhenotypeData = [];
-	    this.state.yAxis = [];
-	    
-	    //begin to sort batches of phenotypes based on the phenotypeDisplayCount
-	    var startIdx = this.state.currPhenotypeIdx - (this.state.phenotypeDisplayCount -1);		
-	    //extract the new array of filtered Phentoypes
-	    //also update the axis
-	    //also update the modeldata
-	    var axis_idx = 0;
-	    var tempFilteredModelData = [];
-	    //get phenotype[startIdx] up to phenotype[currPhenotypeIdx] from the array of sorted phenotypes
-	    for (var i = startIdx;i <self.state.currPhenotypeIdx + 1;i++) {
-		//move the ranked phenotypes onto the filteredPhenotypeData array
-		self.state.filteredPhenotypeData.push(self.state.phenotypeSortData[i]);
-		//update the YAxis   	
-		//the height of each row
-		var size = 10;
-		//the spacing you want between rows
-		var gap = 3;
-		//push the rowid and ypos onto the yaxis array
-		//so now the yaxis will be in the order of the ranked phenotypes
-		var stuff = {"id": self.state.phenotypeSortData[i][0].id_a, "ypos" : ((axis_idx * (size+gap)) + self.state.yoffset)};
-		self.state.yAxis.push(stuff); 
-		axis_idx = axis_idx + 1;
-		//update the ModelData			
-		//find the rowid in the original ModelData (list of models and their matching phenotypes) and write it to tempdata if it matches this phenotypeSortData rowid.
-		//In this case, the rowid is just the id_a value in the model data
-		for (var midx = 0; midx < this.state.modelData.length; midx++) {
-		    var mod = this.state.modelData[midx];
-		    if (mod.id_a == self.state.phenotypeSortData[i][0].id_a) {
-			tempFilteredModelData.push(mod);
-		    }
-		}		
-	    }
-	    
-	    for (var idx=0;idx<self.state.filteredModelList.length;idx++) {
-		for (var tdx = 0; tdx < tempFilteredModelData.length;tdx++) {
-		    if (tempFilteredModelData[tdx].model_id ==
-			self._getConceptId(self.state.filteredModelList[idx].model_id)) {
-			self.state.filteredModelData.push(tempFilteredModelData[tdx]);
-		    }
+		if (filterType == "calculation"){
+			if (this.state.targetSpeciesName === "Overview") {
+				this._finishOverviewLoad();
+			}
+			else {
+				this._finishLoad();
+			}
 		}
-	    }
-	    
-	    if (this.state.targetSpeciesName === "Overview") {
-		this._finishOverviewLoad();
-	    }
-	    else {
-		//this._finishLoad(this.state.data[this.state.targetSpeciesName]);
-		this._finishLoad();
-	    }
-	    
 	},
 	
 	_uniquifyPhenotypes: function(fulldataset) {
@@ -917,36 +855,39 @@ var url = document.URL;
 		return 0;
 	},
 
-	_sortingPhenotypes: function(sortType) {
-		var sortFunc;
-		if (sortType == 'Frequency') {
-			sortFunc = this._sortPhenotypesModel;
-		} else if (sortType == 'Frequency and Rarity') {
-			sortFunc == this._sortPhenotypesRank;
-		} else if (sortType == 'Alphabetic') {
-			sortFunc = this._sortPhenotypesAlphabetic;
-		}
+	_sortingPhenotypes: function() {
 		var self = this;
+		var sortType = self.state.selectedSort;
 		var modelDataForSorting = [];
 		var modData = self.state.modelData;
+		if (sortType == 'Frequency') {
+			var sortFunc = self._sortPhenotypesModel;
+			var sortSet = "count";
+		} else if (sortType == 'Frequency and Rarity') {
+			var sortFunc = self._sortPhenotypesRank;
+			var sortSet = "sum";
+		} else if (sortType == 'Alphabetic') {
+			var sortFunc = self._sortPhenotypesAlphabetic;
+			var sortSet = "label";
+		}
 
 		//1. Get all unique phenotypes in an array
-		console.log("at start of sorting models..."+self.state.modelData.length);
-		for (var idx=0;idx<self.state.phenotypeData.length;idx++) {			
+		//console.log("at start of sorting models..."+self.state.modelData.length);
+		for (idx in self.state.phenotypeData) {			
 			var tempdata = [];
-			for (var midx = 0; midx < modData.length; midx++) {
+			for (midx in modData) {
 				if (modData[midx].id_a == self.state.phenotypeData[idx].id_a) {
 					tempdata.push(modData[midx]);
 				}
 			}
 			modelDataForSorting.push(tempdata);
 		}
-		console.log("modelDataForSorting..."+modelDataForSorting.length);
-		console.log("filtered model data..."+this.state.filteredModelData.length);
+		//console.log("modelDataForSorting..."+modelDataForSorting.length);
+		//console.log("filtered model data..."+this.state.filteredModelData.length);
 
 		//2. Sort the array by source phenotype name 
 		modelDataForSorting.sort(function(a,b) { 
-			return a.id_a - b.id_a;
+			return a.id_a-b.id_a;
 		});
 
 		self.state.phenotypeData.sort(function(a,b) {
@@ -954,21 +895,21 @@ var url = document.URL;
 		});
 
 		//3. Get the sum of all of this phenotype's LCS scores and add to array
-		for (var k = 0; k < modelDataForSorting.length; k++) {
+		for (k in modelDataForSorting) {
 			var num = 0;
 			var d = modelDataForSorting[k];
+			var sortVal;
 			if (d[0].id_a === self.state.phenotypeData[k].id_a){
-				if (sortType == 'Frequency' || sortType == 'Frequency and Rarity'){
-					for (var i = 0; i < d.length; i++)
-					{
+				if (sortType == 'Alphabetic'){
+					sortVal = d[0].label_a;
+				}else{
+					for (i in d){
 						if (sortType == 'Frequency'){num+= 1;}
 						else {num+= +d[i].subsumer_IC;}
 					}
+					sortVal = num;
 				}
-				if (sortType == 'Frequency'){d["count"] = num;}
-				else if (sortType == 'Frequency and Rarity'){d["sum"] = num;}
-				else if (sortType == 'Alphabetic'){d["label"] = d[0].label_a;}
-				else{}
+				d[sortSet] = sortVal;
 				self.state.phenotypeSortData.push(d);
 			}
 		}
@@ -2695,42 +2636,37 @@ var url = document.URL;
 	 * 
 	 */
 	_createSelectionControls: function(container) {
-	    
-	    var optionhtml ='<div id="selects"></div>';
-	    var options = $(optionhtml);
-	    var orgSel = this._createOrganismSelection();
-	    options.append(orgSel);
-	    var sortSel = this._createSortPhenotypeSelection();
-	    options.append(sortSel);
-	    var calcSel = this._createCalculationSelection();
-	    options.append(calcSel);
-	    container.append(options);
-	    //add the handler for the select control
-	    $( "#organism" ).change(function(d) {
-		//msg =  "Handler for .change()
-		//called." );
-		self.state.targetSpeciesName = 
-		    self._getTargetSpeciesNameByIndex(self,d.target.selectedIndex);
-		self._resetSelections("organism");
-	    });
-	    
-	    $( "#calculation" ).change(function(d) {
-	    	self.state.selectedCalculation = 
-	    	    self.state.similarityCalculation[d.target.selectedIndex].calc;
-	    	self._resetSelections("calculation");
-	    	self._processSelectedCalculation();
-	    });	
-	    
-	    //add the handler for the select control
-            $( "#sortphenotypes" ).change(function(d) {
-        	self.state.selectedSort = self.state.phenotypeSort[d.target.selectedIndex];
-        	self._resetSelections("sortphenotypes");
-        	self._processSelectedPhenotypeSort();
-            });
+		var optionhtml ='<div id="selects"></div>';
+		var options = $(optionhtml);
+		var orgSel = this._createOrganismSelection();
+		options.append(orgSel);
+		var sortSel = this._createSortPhenotypeSelection();
+		options.append(sortSel);
+		var calcSel = this._createCalculationSelection();
+		options.append(calcSel);
+		container.append(options);
+		//add the handler for the select control
+		$( "#organism" ).change(function(d) {
+			//msg =  "Handler for .change()
+			//called." );
+			self.state.targetSpeciesName = self._getTargetSpeciesNameByIndex(self,d.target.selectedIndex);
+			self._resetSelections("organism");
+		});
 
-	    self._configureFaqs();
+		$( "#calculation" ).change(function(d) {
+			self.state.selectedCalculation = self.state.similarityCalculation[d.target.selectedIndex].calc;
+			self._resetSelections("calculation");
+			self._processSelected("calculation");
+		});	
 
+		//add the handler for the select control
+		$( "#sortphenotypes" ).change(function(d) {
+			self.state.selectedSort = self.state.phenotypeSort[d.target.selectedIndex];
+			self._resetSelections("sortphenotypes");
+			self._processSelected("sortphenotypes");
+		});
 
+		self._configureFaqs();
 	},
 	
 	/**
