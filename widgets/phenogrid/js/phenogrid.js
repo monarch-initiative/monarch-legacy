@@ -921,7 +921,7 @@ var url = document.URL;
 		var sortFunc;
 		if (sortType == 'Frequency') {
 			sortFunc = this._sortPhenotypesModel;
-		} else if (sortType == 'Frqeuency and Rarity') {
+		} else if (sortType == 'Frequency and Rarity') {
 			sortFunc == this._sortPhenotypesRank;
 		} else if (sortType == 'Alphabetic') {
 			sortFunc = this._sortPhenotypesAlphabetic;
@@ -958,7 +958,7 @@ var url = document.URL;
 			var num = 0;
 			var d = modelDataForSorting[k];
 			if (d[0].id_a === self.state.phenotypeData[k].id_a){
-				if (sortType == 'Frequency' || sortType == 'Frqeuency and Rarity'){
+				if (sortType == 'Frequency' || sortType == 'Frequency and Rarity'){
 					for (var i = 0; i < d.length; i++)
 					{
 						if (sortType == 'Frequency'){num+= 1;}
