@@ -76,7 +76,7 @@
             },
             {
                "name" : "altids",
-               "type" : "owl:Class",
+               "type" : "rdfs:Literal",
                "list_delimiter" : ","
             }
          ],

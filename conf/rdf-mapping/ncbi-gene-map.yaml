@@ -33,7 +33,7 @@ graphs:
       -
         list_delimiter: ","
         name: altids
-        type: owl:Literal  #this is for now... we'll need to clean these up to fix the curies
+        type: rdfs:Literal  #this is for now... we'll need to clean these up to fix the curies
     filter: 
       tax_id: '9606'
     graph: human-genes
