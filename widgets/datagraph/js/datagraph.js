@@ -279,7 +279,7 @@ bbop.monarch.datagraph.prototype.transitionToNewGraph = function(tooltip,graphCo
     tooltip.style("display", "none");
     graphConfig.svg.selectAll(".tick.major").remove();
     graphConfig.level++;
-    dataGraph.transitionSubGraph(graphConfig,d.subGraph,data,graphConfig);
+    dataGraph.transitionSubGraph(graphConfig,d.subGraph,data);
    
     //remove old bars
     barGroup.transition()
@@ -435,6 +435,72 @@ bbop.monarch.datagraph.prototype.makeBar = function (barGroup,graphConfig,barLay
     return rect;
 }
 
+bbop.monarch.datagraph.prototype.transitionGrouped = function (graphConfig,data,groups,rect) {
+    var dataGraph = this;
+    var config = dataGraph.config;
+    dataGraph.setXYDomains(graphConfig,data,groups,'grouped');
+    
+    var xTransition = graphConfig.svg.transition().duration(750);
+    xTransition.select(".x.axis").call(graphConfig.xAxis);
+          
+    rect.transition()
+      .duration(500)
+      .delay(function(d, i) { return i * 10; })
+      .attr("height", graphConfig.y1.rangeBand())
+      .attr("y", function(d) { return graphConfig.y1(d.name); })  
+      .transition()
+      .attr("x", function(){return config.xFirstIndex;})
+      .attr("width", function(d) { return graphConfig.x(d.value); })     
+          
+    rect.on("mouseover", function(d){
+            
+        d3.select(this)
+        .style("fill", config.color.bar.fill);
+        dataGraph.displayCountTip(graphConfig.tooltip,d.value,d.name,this,'grouped');
+    })
+    .on("mouseout", function(){
+        graphConfig.tooltip.style("display", "none")
+        d3.select(this)
+        .style("fill", function(d) { return graphConfig.color(d.name); });
+    })
+}
+
+bbop.monarch.datagraph.prototype.transitionStacked = function (graphConfig,data,groups,rect) {
+    var dataGraph = this;
+    var config = dataGraph.config;
+    dataGraph.setXYDomains(graphConfig,data,groups,'stacked');
+    
+    var t = graphConfig.svg.transition().duration(750);
+    t.select(".x.axis").call(graphConfig.xAxis);
+         
+    rect.transition()
+      .duration(500)
+      .delay(function(d, i) { return i * 10; })
+      .attr("x", function(d){
+              if (d.x0 == 0){
+                  return config.xFirstIndex;
+              } else { 
+                return graphConfig.x(d.x0);
+              } 
+      })
+      .attr("width", function(d) { return graphConfig.x(d.x1) - graphConfig.x(d.x0); })
+      .transition()
+      .attr("height", graphConfig.y0.rangeBand())
+      .attr("y", function(d) { return graphConfig.y1(d.name); })
+      
+    rect.on("mouseover", function(d){
+            
+        d3.select(this)
+            .style("fill", config.color.bar.fill);
+                dataGraph.displayCountTip(graphConfig.tooltip,d.value,d.name,this,'stacked');
+    })
+    .on("mouseout", function(){
+        graphConfig.tooltip.style("display", "none");
+        d3.select(this)
+        .style("fill", function(d) { return graphConfig.color(d.name); });
+    })
+}
+
 bbop.monarch.datagraph.prototype.drawGraph = function (data,graphConfig) {
         var dataGraph = this;
         var config = this.config;
@@ -447,7 +513,6 @@ bbop.monarch.datagraph.prototype.drawGraph = function (data,graphConfig) {
         var xAxis    = graphConfig.xAxis;
         var yAxis    = graphConfig.yAxis;
         var svg      = graphConfig.svg;
-        var crumbSVG = graphConfig.crumbSVG;
         var tooltip  = graphConfig.tooltip;
         var groups   = graphConfig.groups;
         
@@ -462,10 +527,7 @@ bbop.monarch.datagraph.prototype.drawGraph = function (data,graphConfig) {
         }
         
         //Dynamically decrease font size for large labels
-        var confList = dataGraph.adjustYAxisElements(data.length);
-        var yFont = confList[0];
-        var yLabelPos = confList[1];
-        var triangleDim = confList[2];
+        var yFont = dataGraph.adjustYAxisElements(data.length);
         
         //Set x axis ticks
         var xTicks = svg.append("g")
@@ -516,7 +578,7 @@ bbop.monarch.datagraph.prototype.drawGraph = function (data,graphConfig) {
                 }
              })
             .style("text-anchor", "end")
-            .attr("dx", yLabelPos);
+            .attr("dx", config.yOffset);
        
         //Create SVG:G element that holds groups
         var barGroup = dataGraph.setGroupPositioning(graphConfig,data);
@@ -527,7 +589,7 @@ bbop.monarch.datagraph.prototype.drawGraph = function (data,graphConfig) {
         
         //Create navigation arrow
         var navigate = svg.selectAll(".y.axis");
-        dataGraph.makeNavArrow(data,navigate,triangleDim,
+        dataGraph.makeNavArrow(data,navigate,config.arrowDim,
                                barGroup,rect,graphConfig);
         //Create legend
         if (config.useLegend){
@@ -544,75 +606,10 @@ bbop.monarch.datagraph.prototype.drawGraph = function (data,graphConfig) {
 
         function change() {
           if (this.value === "grouped"){
-              transitionGrouped();      
+              dataGraph.transitionGrouped(graphConfig,data,groups,rect);
           } else {
-              transitionStacked();
+              dataGraph.transitionStacked(graphConfig,data,groups,rect);
           }
-        }
-        
-        function transitionGrouped() {
-            
-            dataGraph.setXYDomains(graphConfig,data,groups,'grouped');
-               
-            var xTransition = svg.transition().duration(750);
-            xTransition.select(".x.axis").call(xAxis);   
-
-            rect.transition()
-                .duration(500)
-                .delay(function(d, i) { return i * 10; })
-                .attr("height", y1.rangeBand())
-                .attr("y", function(d) { return y1(d.name); })  
-                .transition()
-                .attr("x", function(){if (config.isChrome || config.isSafari) {return 1;}else{ return 0;}})
-                .attr("width", function(d) { return x(d.value); })
-                
-            rect.on("mouseover", function(d){
-                
-                d3.select(this)
-                .style("fill", config.color.bar.fill);
-                dataGraph.displayCountTip(tooltip,d.value,d.name,this,'grouped');
-            })
-                .on("mouseout", function(){
-                  tooltip.style("display", "none")
-                  d3.select(this)
-                  .style("fill", function(d) { return color(d.name); });
-            })
-        }
-
-        function transitionStacked() {
-            
-            dataGraph.setXYDomains(graphConfig,data,groups,'stacked');
-            
-            var t = svg.transition().duration(750);
-            t.select(".x.axis").call(xAxis);
-
-            rect.transition()
-                .duration(500)
-                .delay(function(d, i) { return i * 10; })
-                .attr("x", function(d){
-                    if (d.x0 == 0){
-                        if (config.isChrome || config.isSafari){return 1;}
-                        else {return d.x0;}
-                    } else { 
-                        return x(d.x0);
-                    }
-                })
-                .attr("width", function(d) { return x(d.x1) - x(d.x0); })
-                .transition()
-                .attr("height", y0.rangeBand())
-                .attr("y", function(d) { return y1(d.name); })
-                
-            rect.on("mouseover", function(d){
-                
-                d3.select(this)
-                .style("fill", config.color.bar.fill);
-                dataGraph.displayCountTip(tooltip,d.value,d.name,this,'stacked');
-            })
-               .on("mouseout", function(){
-                   tooltip.style("display", "none");
-                   d3.select(this)
-                   .style("fill", function(d) { return color(d.name); });
-            })
         }
 }
 
@@ -846,14 +843,6 @@ bbop.monarch.datagraph.prototype.transitionSubGraph = function(graphConfig,subGr
     var dataGraph = this;
     var config = dataGraph.config;
 
-    //Some variables we can create locally for readability
-    var html_div = graphConfig.html_div;
-    var x        = graphConfig.x;
-    var color    = graphConfig.color;
-    var xAxis    = graphConfig.xAxis;
-    var svg      = graphConfig.svg;
-    var crumbSVG = graphConfig.crumbSVG;
-
     graphConfig.groups = dataGraph.getGroups(subGraph);
     var groups = graphConfig.groups;
   
@@ -881,16 +870,12 @@ bbop.monarch.datagraph.prototype.transitionSubGraph = function(graphConfig,subGr
     var xStackMax = dataGraph.getStackMax(subGraph);
         
     //Dynamically decrease font size for large labels
-    var confList = dataGraph.adjustYAxisElements(subGraph.length);
-    var yFont = confList[0];
-    var yLabelPos = confList[1];
-    var triangleDim = confList[2];
-
+    var yFont = dataGraph.adjustYAxisElements(subGraph.length);
         
-    var yTransition = svg.transition().duration(1000);
+    var yTransition = graphConfig.svg.transition().duration(1000);
     yTransition.select(".y.axis").call(graphConfig.yAxis);
 
-    svg.select(".y.axis")
+    graphConfig.svg.select(".y.axis")
       .selectAll("text")
       .filter(function(d){ return typeof(d) == "string"; })
       .attr("font-size", yFont)
@@ -921,7 +906,7 @@ bbop.monarch.datagraph.prototype.transitionSubGraph = function(graphConfig,subGr
           }
       })
       .style("text-anchor", "end")
-      .attr("dx", yLabelPos);
+      .attr("dx", config.yOffset);
 
       var barGroup = dataGraph.setGroupPositioning(graphConfig,subGraph);
 
@@ -929,29 +914,29 @@ bbop.monarch.datagraph.prototype.transitionSubGraph = function(graphConfig,subGr
                       
           dataGraph.setXYDomains(graphConfig,subGraph,groups,'grouped');
             
-          var xTransition = svg.transition().duration(1000);
+          var xTransition = graphConfig.svg.transition().duration(1000);
           xTransition.select(".x.axis")
-            .call(xAxis);
+            .call(graphConfig.xAxis);
             
           rect = dataGraph.makeBar(barGroup,graphConfig,'grouped');
       } else {
                 
           dataGraph.setXYDomains(graphConfig,subGraph,groups,'stacked');
 
-          var xTransition = svg.transition().duration(1000);
+          var xTransition = graphConfig.svg.transition().duration(1000);
           xTransition.select(".x.axis")
-          .call(xAxis);
+          .call(graphConfig.xAxis);
                     
           rect = dataGraph.makeBar(barGroup,graphConfig,'stacked');
       }
             
-      var navigate = svg.selectAll(".y.axis");
+      var navigate = graphConfig.svg.selectAll(".y.axis");
       var isSubClass = dataGraph.makeNavArrow(subGraph,navigate,
-              triangleDim,barGroup,rect,graphConfig);
+              config.arrowDim,barGroup,rect,graphConfig);
                
       if (!isSubClass){
-          svg.selectAll("polygon.arr").remove();
-          svg.select(".y.axis")
+          graphConfig.svg.selectAll("polygon.arr").remove();
+          graphConfig.svg.select(".y.axis")
             .selectAll("text")
             .attr("dx","0")
             .on("mouseover", function(d){
@@ -961,70 +946,14 @@ bbop.monarch.datagraph.prototype.transitionSubGraph = function(graphConfig,subGr
             });
       }
             
-      d3.select(html_div).selectAll("input").on("change", change);
+      d3.select(graphConfig.html_div).selectAll("input").on("change", change);
 
       function change() {
           if (this.value === "grouped"){
-
-              dataGraph.setXYDomains(graphConfig,subGraph,groups,'grouped');
-                       
-              var xTransition = svg.transition().duration(750);
-              xTransition.select(".x.axis").call(xAxis);
-                    
-              rect.transition()
-                .duration(500)
-                .delay(function(d, i) { return i * 10; })
-                .attr("height", graphConfig.y1.rangeBand())
-                .attr("y", function(d) { return graphConfig.y1(d.name); })  
-                .transition()
-                .attr("x", function(){if (config.isChrome || config.isSafari) {return 1;}else{ return 0;}})
-                .attr("width", function(d) { return x(d.value); })     
-                    
-              rect.on("mouseover", function(d){
-                      
-                  d3.select(this)
-                  .style("fill", config.color.bar.fill);
-                  dataGraph.displayCountTip(graphConfig.tooltip,d.value,d.name,this,'grouped');
-              })
-              .on("mouseout", function(){
-                  graphConfig.tooltip.style("display", "none")
-                  d3.select(this)
-                  .style("fill", function(d) { return color(d.name); });
-              })
+              dataGraph.transitionGrouped(graphConfig,subGraph,groups,rect);  
            } else {
-               dataGraph.setXYDomains(graphConfig,subGraph,groups,'stacked');
-                    
-               var t = svg.transition().duration(750);
-               t.select(".x.axis").call(xAxis);
-                    
-               rect.transition()
-                 .duration(500)
-                 .delay(function(d, i) { return i * 10; })
-                 .attr("x", function(d){
-                     if (d.x0 == 0){
-                         if (config.isChrome || config.isSafari){return 1;}
-                         else {return d.x0;}
-                     } else { 
-                         return x(d.x0);
-                     }
-                 })
-                 .attr("width", function(d) { return x(d.x1) - x(d.x0); })
-                 .transition()
-                 .attr("height", graphConfig.y0.rangeBand())
-                 .attr("y", function(d) { return graphConfig.y1(d.name); })
-                 
-                 rect.on("mouseover", function(d){
-                       
-                     d3.select(this)
-                       .style("fill", config.color.bar.fill);
-                           dataGraph.displayCountTip(graphConfig.tooltip,d.value,d.name,this,'stacked');
-                        })
-                 .on("mouseout", function(){
-                            graphConfig.tooltip.style("display", "none");
-                            d3.select(this)
-                            .style("fill", function(d) { return color(d.name); });
-                 })
-           }
+               dataGraph.transitionStacked(graphConfig,subGraph,groups,rect);
+           } 
     }
 }        
 
@@ -1179,9 +1108,7 @@ bbop.monarch.datagraph.prototype.adjustYAxisElements = function(len){
    if (isUpdated && yFont > conf.yFontSize){
        yFont = conf.yFontSize;
    }
-   
-   var retList = [yFont,yOffset,arrowDim];
-   return retList;
+   return yFont;
 }
 ///////////////////////////////////
 //Setters for sizing configurations
@@ -1210,17 +1137,16 @@ bbop.monarch.datagraph.prototype.setXAxisPos = function(w,h){
 //Firefox <33 should be 0
 bbop.monarch.datagraph.prototype.getXFirstIndex = function (){
  
- //Check browser
- var isOpera = (!!window.opera || navigator.userAgent.indexOf(' OPR/') >= 0);
- var isChrome = (!!window.chrome && !(!!window.opera || navigator.userAgent.indexOf(' OPR/') >= 0));
- var isSafari = Object.prototype.toString.call(window.HTMLElement).indexOf('Constructor') > 0;
+    //Check browser
+    var isOpera = (!!window.opera || navigator.userAgent.indexOf(' OPR/') >= 0);
+    var isChrome = (!!window.chrome && !(!!window.opera || navigator.userAgent.indexOf(' OPR/') >= 0));
+    var isSafari = Object.prototype.toString.call(window.HTMLElement).indexOf('Constructor') > 0;
  
- if (isChrome || isSafari){
-     return 1;
- } else {
-     return 1;
- }
- 
+    if (isChrome || isSafari){
+        return 1;
+    } else {
+        return 1;
+    }
 }
 
 

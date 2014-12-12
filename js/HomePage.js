@@ -11,8 +11,10 @@ function MonarchCarousel(carousel_elt, tabber_elt){
     var telt = tabber_elt;
 
     // The classes to switch on the tabber during cycling.
-    var on_class = 'btn-default';
-    var off_class = 'btn-primary';
+    var on_class = 'monarch-tabber-on-item';
+    var off_class = 'monarch-tabber-off-item';
+    // var on_class = 'btn-default';
+    // var off_class = 'btn-primary';
 
     var timing = 10000; // 10s
 
