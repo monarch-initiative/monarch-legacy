@@ -29,10 +29,15 @@
                "object" : "type_of_gene",
                "predicate" : "rdfs:subClassOf",
                "subject" : "geneid"
+            },
+            {
+               "object" : "altids",
+               "predicate" : "oboInOwl:hasRelatedSynonym",
+               "subject" : "geneid"
             }
          ],
          "filter" : {
-            "tax_id" : 9606
+            "tax_id" : "9606"
          },
          "columns" : [
             {
@@ -68,9 +73,14 @@
                "name" : "synonyms",
                "type" : "rdfs:Literal",
                "list_delimiter" : ","
+            },
+            {
+               "name" : "altids",
+               "type" : "owl:Class",
+               "list_delimiter" : ","
             }
          ],
-         "mapVersion" : "2014-04-18",
+         "mapVersion" : "2014-12-12",
          "graph" : "human-genes"
       }
    ]
