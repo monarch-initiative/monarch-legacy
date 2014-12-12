@@ -279,7 +279,7 @@ bbop.monarch.datagraph.prototype.transitionToNewGraph = function(tooltip,graphCo
     tooltip.style("display", "none");
     graphConfig.svg.selectAll(".tick.major").remove();
     graphConfig.level++;
-    dataGraph.transitionSubGraph(graphConfig,d.subGraph,data,graphConfig);
+    dataGraph.transitionSubGraph(graphConfig,d.subGraph,data);
    
     //remove old bars
     barGroup.transition()
