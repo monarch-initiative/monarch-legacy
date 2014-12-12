@@ -102,7 +102,7 @@
 }
 /* These are essentially overrides for btn-*. */
 .monarch-tabber-on-item {
-    background-color: #474949;
+    background-color: #555555;
     border-bottom-color: #474949;
     border-left-color-ltr-source: physical;
     border-left-color-rtl-source: physical;
