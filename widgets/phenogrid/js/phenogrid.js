@@ -137,30 +137,27 @@ var url = document.URL;
 	
 	//reset state values that must be cleared before reloading data
 	_reset: function(type) {
+		if (type !== 'sortphenotypes') {
+			this.state.modelData = [];
+			this.state.modelList = [];
+			this.state.filteredModelData = [];
+			this.state.filteredModelList = [];
+		}
 
-	    if (type !== 'sortphenotypes') {
-		this.state.modelData = [];
-		this.state.modelList = [];
-		this.state.filteredModelData = [];
-		this.state.filteredModelList = [];
-	    }
+		this.state.yAxisMax = 0;
+		this.state.yoffset  = this.state.baseYOffset;
+		//basic gap for a bit of space above modelregion
+		this.state.yoffsetOver = this.state.nonOverviewGap;
+		if (this.state.targetSpeciesName == "Overview") {
+			this.state.yoffsetOver = this.state.overviewGap;
+		}
 
-	    this.state.yAxisMax = 0;
-	    this.state.yoffset  = this.state.baseYOffset;
-	    //basic gap for a bit of space above modelregion
-	    this.state.yoffsetOver = this.state.nonOverviewGap;
-	    if (this.state.targetSpeciesName == "Overview") {
-	    	this.state.yoffsetOver = this.state.overviewGap;
-	    }
+		this.state.modelName = "";
+		//  this.state.yTranslation = 0;
+		// must reset height explicitly
+		this.state.h = this.config.h;
 
-	    this.state.modelName = "";
-
-	    //  this.state.yTranslation = 0;
-
-	    // must reset height explicitly
-	    this.state.h = this.config.h;
-
-	    this.data = {};
+		this.data = {};
 	},
 	
 	//this function will use the desired height to determine how many phenotype rows to display
@@ -216,21 +213,18 @@ var url = document.URL;
 	 * [ "HP:12345", "HP:23451", ...]
 	 */
 	_create: function() {
-
-
-	    // must be available from js loaded in a separate file...
-	    this.configoptions = configoptions;
-	    /** check these */
-	    // important that config options (from the file) and this. options (from
-	    // the initializer) come last
-	    this.state = $.extend({},this.internalOptions,this.config,
-				  this.configoptions,this.options);
-	    this.state.data = {}
-	    // will this work?
-	    this.configoptions = undefined;
-	    this._createTargetSpeciesIndices();
-	    // index species
-	    this._reset();
+		// must be available from js loaded in a separate file...
+		this.configoptions = configoptions;
+		/** check these */
+		// important that config options (from the file) and this. options (from
+		// the initializer) come last
+		this.state = $.extend({},this.internalOptions,this.config,this.configoptions,this.options);
+		this.state.data = {};
+		// will this work?
+		this.configoptions = undefined;
+		this._createTargetSpeciesIndices();
+		// index species
+		this._reset();
 	},
 
 
@@ -292,6 +286,7 @@ var url = document.URL;
 	    this.state.yModelRegion = this.state.yoffsetOver+this.state.yoffset;
 	    
 	    this._filterData(this.state.modelData);
+	    this._filterSelected("sortphenotypes");
 	    this.state.unmatchedPhenotypes = this._getUnmatchedPhenotypes();
 	    this.element.empty();
 	    this.reDraw();
@@ -690,13 +685,12 @@ var url = document.URL;
 	},
 
 	_setSelectedCalculation: function(calc) {
-	    var self = this;
+		var self = this;
 
-	    var tempdata = self.state.similarityCalculation.filter(function(d) {
-	    	return d.calc == calc;
-	    });
-	    //self.state.selectedLabel = tempdata[0].label;
-	    self.state.selectedCalculation = tempdata[0].calc;
+		var tempdata = self.state.similarityCalculation.filter(function(d) {
+			return d.calc == calc;
+		});
+		self.state.selectedCalculation = tempdata[0].calc;
 	},
 
 	_setSelectedSort: function(type) {
@@ -706,9 +700,8 @@ var url = document.URL;
 	},
 	
 	_processSelected: function(processType){
-		var self = this;
-
-		this._filterSelected(processType); 
+		this._filterSelected(processType);
+		this._filterData(this.state.modelData);
 		this.state.unmatchedPhenotypes = this._getUnmatchedPhenotypes();
 		this.element.empty();
 		this.reDraw();
@@ -727,20 +720,22 @@ var url = document.URL;
 			this.state.currPhenotypeIdx = this.state.phenotypeData.length-1;
 			this.state.phenotypeDisplayCount = this.state.phenotypeData.length;
 		}
-
-		this._filterSelected("sortphenotypes");
 	},
 	
 	_filterSelected: function(filterType){
 		var self = this;
 		if (filterType == "sortphenotypes"){
-			//Step 1: Select phenotype sort method based on options in #sortphenotypes dropdown
-			//Alphabetic: sorted alphabetically
-			//Frequency and Rarity: sorted by the sum of each phenotype across all models
-			//Frequency: sorted by the count of number of model matches per phenotype
-			//"this.state.phenotypeSortData", is built in each sorting function
+			//Sort the phenotypes based on what value is currently held in self.state.selectedSort
 			self.state.phenotypeSortData = [];
-			this._sortingPhenotypes(this.state.selectedSort);
+			this._sortingPhenotypes();
+		}else if (filterType == "calculation"){
+			//If not here, changing the calculations will remove everything from phenogrid.  Find a way to move or remove some point
+			if (this.state.targetSpeciesName === "Overview") {
+				this._finishOverviewLoad();
+			}
+			else {
+				this._finishLoad();
+			}
 		}
 
 		//Step 2: Filter for the next n phenotypes based on phenotypeDisplayCount and update the y-axis
@@ -752,9 +747,11 @@ var url = document.URL;
 		var startIdx = this.state.currPhenotypeIdx - (this.state.phenotypeDisplayCount -1);
 		var displayLimiter = self.state.currPhenotypeIdx;
 		if (startIdx > 0){
+			//Hack.  StartIDX at any point after init is 1 value too high and will show values 1 off.  Can crash as well
 			startIdx--;
 		}
 		else{
+			//Only on init or on the top, currPhenotypeIdx can be 1 short, so it wont display values on the last row
 			displayLimiter++;
 		}
 		//extract the new array of filtered Phentoypes
@@ -792,14 +789,6 @@ var url = document.URL;
 				if (tempFilteredModelData[tdx].model_id == self._getConceptId(self.state.filteredModelList[idx].model_id)) {
 					self.state.filteredModelData.push(tempFilteredModelData[tdx]);
 				}
-			}
-		}
-		if (filterType == "calculation"){
-			if (this.state.targetSpeciesName === "Overview") {
-				this._finishOverviewLoad();
-			}
-			else {
-				this._finishLoad();
 			}
 		}
 	},
@@ -922,32 +911,31 @@ var url = document.URL;
 	//given a list of phenotypes, find the top n models
 	//I may need to rename this method "getModelData".  It should extract the models and reformat the data 
 	_loadData: function() {
-	    var url = '';
-	    var self=this;
-	    if (this.state.targetSpeciesName === "Overview") {
+		var url = '';
+		var self=this;
+		if (this.state.targetSpeciesName === "Overview") {
 			this._loadOverviewData();
-	    }
-	    else {
+		}
+		else {
 			this._loadSpeciesData(this.state.targetSpeciesName);
-			//this._finishLoad(this.state.data[this.state.targetSpeciesName]);
 			this._finishLoad();
-	    }
+		}
 	},
 
 	_loadSpeciesData: function(speciesName,limit) {
-	    var phenotypeList = this.state.phenotypeData;
-	    var url = this.state.serverURL+"/simsearch/phenotype?input_items="+phenotypeList.join(",")+"&target_species="+this._getTargetSpeciesTaxonByName(this,speciesName);
-	    if (typeof(limit) !== 'undefined') {
+		var phenotypeList = this.state.phenotypeData;
+		var url = this.state.serverURL+"/simsearch/phenotype?input_items="+phenotypeList.join(",")+"&target_species="+this._getTargetSpeciesTaxonByName(this,speciesName);
+		if (typeof(limit) !== 'undefined') {
 			url = url +"&limit="+limit;
-	    }
+		}
 
-	    var res = this._ajaxLoadData(speciesName,url);
-	    if (res !== null) {
+		var res = this._ajaxLoadData(speciesName,url);
+		if (res !== null) {
 			if (typeof(limit) !== 'undefined' && typeof(res.b) !== 'undefined' && res.b !== null && res.b.length < limit) {
-			    res = this._padSpeciesData(res,speciesName,limit);
+				res = this._padSpeciesData(res,speciesName,limit);
 			}
-	    }
-	    this.state.data[speciesName]= res;
+		}
+		this.state.data[speciesName]= res;
 	},
 
 	// make sure there are limit items in res --
@@ -995,51 +983,48 @@ var url = document.URL;
 	},
 	
 	_finishOverviewLoad : function () {
-	    
-	    var speciesList = [];
-	    
-	    var modList = [],
+		var speciesList = [];
+		var modList = [],
 		orgCtr = 0;
 
-	    for (i in this.state.targetSpeciesList) {
+		for (i in this.state.targetSpeciesList) {
 			var species = this.state.targetSpeciesList[i].name;
 			var specData = this.state.data[species];
 			if (specData != null && typeof(specData.b) !== 'undefined' && specData.b.length > 0) {
-			    var data = [];
-			    for (var idx= 0; idx <specData.b.length; idx++) {
+				var data = [];
+				for (var idx= 0; idx <specData.b.length; idx++) {
 					var item = specData.b[idx];
-					var newItem = 
-					    {model_id: this._getConceptId(item.id),
-					     model_label: item.label,
-					     model_score: item.score.score,
-					     species: species,
-					     model_rank: item.score.rank};
+					var newItem = {model_id: this._getConceptId(item.id),
+						model_label: item.label,
+						model_score: item.score.score,
+						species: species,
+						model_rank: item.score.rank};
 					data.push(newItem);
-			    	this._loadDataForModel(item);
+					this._loadDataForModel(item);
 				}
-			    this.state.multiOrganismCt=specData.b.length;
-			    speciesList.push(species);
-			    orgCtr++;
-			    data.sort(function(a,b) { return a.model_rank - b.model_rank;});
-			    modList =  modList.concat(data);
+				this.state.multiOrganismCt=specData.b.length;
+				speciesList.push(species);
+				orgCtr++;
+				data.sort(function(a,b) { return a.model_rank - b.model_rank;});
+				modList =  modList.concat(data);
 			}
-	    }
-	    
-	    for (var idx=0;idx<this.state.modelData.length;idx++) {
+		}
+
+		for (var idx=0;idx<this.state.modelData.length;idx++) {
 			this.state.filteredModelData.push(this.state.modelData[idx]);
-	    }
-	    
-	    this.state.modelList = modList;
-	    this.state.speciesList = speciesList;
-	    if (this.state.modelList.length < this.state.modelDisplayCount) {
+		}
+
+		this.state.modelList = modList;
+		this.state.speciesList = speciesList;
+		if (this.state.modelList.length < this.state.modelDisplayCount) {
 			this.state.currModelIdx = this.state.modelList.length-1;
 			this.state.modelDisplayCount = this.state.modelList.length;
-	    }
-	    
-	    //initialize the filtered model list
-	    for (var idx=0;idx<this.state.modelDisplayCount;idx++) {
+		}
+
+		//initialize the filtered model list
+		for (var idx=0;idx<this.state.modelDisplayCount;idx++) {
 			this.state.filteredModelList.push(this.state.modelList[idx]);
-	    }
+		}
 	},
 	
 	
@@ -1116,50 +1101,49 @@ var url = document.URL;
 	//Create the modelList array: model_id, model_label, model_score, model_rank
 	//Call _loadDataForModel to put the matches in an array
 	_finishLoad: function() {
-	    var species = this.state.targetSpeciesName;
-	    var retData  = this.state.data[species];
-	 //   var retData = data;
-	    //extract the maxIC score
-	    if (typeof (retData.metadata) !== 'undefined') {
-	    	this.state.maxICScore = retData.metadata.maxMaxIC;
-	    }
-	    var self= this;
-	    
-	    this.state.modelList = [];
+		var species = this.state.targetSpeciesName;
+		var retData  = this.state.data[species];
+		//   var retData = data;
+		//extract the maxIC score
+		if (typeof (retData.metadata) !== 'undefined') {
+			this.state.maxICScore = retData.metadata.maxMaxIC;
+		}
+		var self= this;
 
-	    if (typeof (retData.b)  !== 'undefined') {
-		
+		this.state.modelList = [];
+
+		if (typeof (retData.b)  !== 'undefined') {
 			for (var idx=0;idx<retData.b.length;idx++) {
-			    this.state.modelList.push(
-				{model_id: self._getConceptId(retData.b[idx].id), 
-				 model_label: retData.b[idx].label, 
-				 model_score: retData.b[idx].score.score, 
-				 species: species,
-				 model_rank: retData.b[idx].score.rank}
-			    );
-			    this._loadDataForModel(retData.b[idx]);
+				this.state.modelList.push(
+					{model_id: self._getConceptId(retData.b[idx].id), 
+					model_label: retData.b[idx].label, 
+					model_score: retData.b[idx].score.score, 
+					species: species,
+					model_rank: retData.b[idx].score.rank}
+				);
+				this._loadDataForModel(retData.b[idx]);
 			}
 			//sort the model list by rank
 			this.state.modelList.sort(function(a,b) { 
-			    return a.model_rank - b.model_rank; 
+				return a.model_rank - b.model_rank; 
 			});
-			
+
 			for (var idx=0;idx<this.state.modelData.length;idx++) {
-			    this.state.filteredModelData.push(this.state.modelData[idx]);
+				this.state.filteredModelData.push(this.state.modelData[idx]);
 			}
-			
+
 			//we need to adjust the display counts and indexing if there are fewer models
 			if (this.state.modelList.length < this.state.modelDisplayCount) {
-			    this.state.currModelIdx = this.state.modelList.length-1;
-			    this.state.modelDisplayCount = this.state.modelList.length;
+				this.state.currModelIdx = this.state.modelList.length-1;
+				this.state.modelDisplayCount = this.state.modelList.length;
 			}
-			
+
 			this.state.filteredModelList=[];
 			//initialize the filtered model list
 			for (var idx=0;idx<this.state.modelDisplayCount;idx++) {
-			    this.state.filteredModelList.push(this.state.modelList[idx]);
+				this.state.filteredModelList.push(this.state.modelList[idx]);
 			}
-	    }
+		}
 	},
 	
 	//for a given model, extract the sim search data including IC scores and the triple:
@@ -1403,30 +1387,30 @@ var url = document.URL;
 
 
 	_resetSelections : function(type) {
-	    var self = this;
-	    $("#unmatchedlabel").remove();
-	    $("#unmatchedlabelhide").remove();
-	    $("#unmatched").remove();
-	    $("#selects").remove();
-	    $("#org_div").remove();
-	    $("#calc_div").remove();
-	    $("#sort_div").remove();
-	    $("#mtitle").remove();
-	    $("#header").remove();
-	    $("#svg_area").remove();
-	    
-	    if (type === "organism"){
-		self.state.phenotypeData = self.state.origPhenotypeData.slice();
-		self.state.phenotypeSortData = [];
-		self._reset("organism");
-		self._init();
-	    }
-	    else if (type === "calculation"){
-	    	self._reset("calculation");
-	    }	
-	    else if (type === "sortphenotypes"){
-		self._reset("sortphenotypes");
-	    }
+		var self = this;
+		$("#unmatchedlabel").remove();
+		$("#unmatchedlabelhide").remove();
+		$("#unmatched").remove();
+		$("#selects").remove();
+		$("#org_div").remove();
+		$("#calc_div").remove();
+		$("#sort_div").remove();
+		$("#mtitle").remove();
+		$("#header").remove();
+		$("#svg_area").remove();
+
+		if (type === "organism"){
+			self.state.phenotypeData = self.state.origPhenotypeData.slice();
+			self.state.phenotypeSortData = [];
+			self._reset("organism");
+			self._init();
+		}
+		else if (type === "calculation"){
+			self._reset("calculation");
+		}	
+		else if (type === "sortphenotypes"){
+			self._reset("sortphenotypes");
+		}
 	},
 	
  	_addLogoImage :	 function() { 
@@ -1808,38 +1792,42 @@ var url = document.URL;
 	},
 	
 	_showModelData: function(d, obj) {
-	    var retData;
-	    /* we aren't currently using these, but we might later.*/
-	    //var aSpecies = this._(d.id_a);
-            //var subSpecies = this._getSpeciesLabel(d.subsumer_id);
-	    //var bSpecies = this._(d.id_b);
-	    
-	    var species = d.species,
-		taxon =   d.taxon;
-	    
-	    var type = this._getComparisonType(species);
-	    
-	    if (taxon != undefined || taxon!= null || taxon != '' || isNaN(taxon));{
-		if (taxon.indexOf("NCBITaxon:") != -1) {taxon = taxon.slice(10);}
-	    }
-	    
-	    var calc = this.state.selectedCalculation;
-	    var suffix = "";
-	    var prefix = "";
-	    if (calc == 0 || calc == 1 || calc == 3) {suffix = '%';}
-	    if (calc == 0) {prefix = "Similarity";}
-	    else if (calc == 1) {prefix = "Ratio (q)";}
-	    else if (calc == 2) {prefix = "Uniqueness";}
-	    else if (calc == 3) {prefix = "Ratio (t)";}
-	    
-	    retData = "<strong>Query: </strong> " + d.label_a + " (IC: " + d.IC_a.toFixed(2) + ")"   
-		+ "<br/><strong>Match: </strong> " + d.label_b + " (IC: " + d.IC_b.toFixed(2) +")"
-		+ "<br/><strong>Common: </strong> " + d.subsumer_label + " (IC: " + d.subsumer_IC.toFixed(2) +")"
-     		+ "<br/><strong>" + this._toProperCase(type).substring(0, type.length-1)  +": </strong> " + d.model_label
-		+ "<br/><strong>" + prefix + ":</strong> " + d.value.toFixed(2) + suffix
-		+ "<br/><strong>Species: </strong> " + d.species + " (" + taxon + ")";
-	    this._updateDetailSection(retData, this._getXYPos(obj));
-	    
+		var retData;
+		/* we aren't currently using these, but we might later.*/
+		//var aSpecies = this._(d.id_a);
+		//var subSpecies = this._getSpeciesLabel(d.subsumer_id);
+		//var bSpecies = this._(d.id_b);
+
+		var species = d.species,
+		taxon = d.taxon;
+
+		var type = this._getComparisonType(species);
+
+		if (taxon != undefined || taxon!= null || taxon != '' || isNaN(taxon)) {
+			if (taxon.indexOf("NCBITaxon:") != -1) {
+				taxon = taxon.slice(10);
+			}
+		}
+
+		var prefix = "";
+		for (idx in this.state.similarityCalculation) {	
+			if (this.state.similarityCalculation[idx].calc === this.state.selectedCalculation) {
+				prefix = this.state.similarityCalculation[idx].label;
+				break;
+			}
+		}
+
+		var suffix = "";
+		//If the selected calculation isn't percentage based (aka similarity) make it a percentage
+		if (this.state.selectedCalculation != 2) {suffix = '%';}
+
+		retData = "<strong>Query: </strong> " + d.label_a + " (IC: " + d.IC_a.toFixed(2) + ")"   
+			+ "<br/><strong>Match: </strong> " + d.label_b + " (IC: " + d.IC_b.toFixed(2) +")"
+			+ "<br/><strong>Common: </strong> " + d.subsumer_label + " (IC: " + d.subsumer_IC.toFixed(2) +")"
+			+ "<br/><strong>" + this._toProperCase(type).substring(0, type.length-1)  +": </strong> " + d.model_label
+			+ "<br/><strong>" + prefix + ":</strong> " + d.value.toFixed(2) + suffix
+			+ "<br/><strong>Species: </strong> " + d.species + " (" + taxon + ")";
+		this._updateDetailSection(retData, this._getXYPos(obj));
 	},
 	
 	_showThrobber: function() {
@@ -2631,8 +2619,7 @@ var url = document.URL;
 	},
 
 	/**
-	 * build controls for selecting organism and
-	 comparison. Install handlers
+	 * build controls for selecting organism and comparison. Install handlers
 	 * 
 	 */
 	_createSelectionControls: function(container) {
@@ -2670,80 +2657,78 @@ var url = document.URL;
 	},
 	
 	/**
-	 * construct the HTML needed for selecting organism
-	 */
+	* construct the HTML needed for selecting organism
+	*/
 	_createOrganismSelection: function(selClass) {
-	    var selectedItem="";
-	    var optionhtml = "<div id='org_div'><span id='olabel'>Species</span><br />"+
-		"<span id='org_sel'><select id=\'organism\'>";
+		var selectedItem="";
+		var optionhtml = "<div id='org_div'><span id='olabel'>Species</span><br />"+"<span id='org_sel'><select id=\'organism\'>";
 
-	    for (var idx=0;idx<this.state.targetSpeciesList.length;idx++) {
+		for (var idx=0;idx<this.state.targetSpeciesList.length;idx++) {
 			var selecteditem = "";
 			if (this.state.targetSpeciesList[idx].name === this.state.targetSpeciesName) {
-			    selecteditem = "selected";
+				selecteditem = "selected";
 			}
 			optionhtml = optionhtml +
-			    "<option value=\""+this.state.targetSpeciesList[idx.name]+
-			    "\" " + selecteditem +">" + this.state.targetSpeciesList[idx].name +"</option>"
-	    }
-	    // add one for overview.
-	    if (this.state.targetSpeciesName === "Overview") {
-	    	selecteditem = "selected";
-	    } else {
-	    	selecteditem = "";
-	    }
-	    optionhtml = optionhtml + "<option value=\"Overview\" "+ selecteditem +">Overview</option>";
-	    
-	    optionhtml = optionhtml + "</select></span></div>";
-	    return $(optionhtml);
+			"<option value=\""+this.state.targetSpeciesList[idx.name]+
+			"\" " + selecteditem +">" + this.state.targetSpeciesList[idx].name +"</option>"
+		}
+		// add one for overview.
+		if (this.state.targetSpeciesName === "Overview") {
+			selecteditem = "selected";
+		} else {
+			selecteditem = "";
+		}
+		optionhtml = optionhtml + "<option value=\"Overview\" "+ selecteditem +">Overview</option>";
+
+		optionhtml = optionhtml + "</select></span></div>";
+		return $(optionhtml);
 	},
 
 
 	/** 
-	 * create the html necessary for selecting the calculation 
-	 */
+	* create the html necessary for selecting the calculation 
+	*/
 
 	_createCalculationSelection: function () {
-	    
-	    var optionhtml = "<span id='calc_div'><span id='clabel'>Display"+
-		"<span id='calcs'><img class='calcimg' src='" +
-		this.state.scriptpath +  "../image/greeninfo30.png' height='15px'>"+
-		"</span></span><br />";
+		var optionhtml = "<span id='calc_div'><span id='clabel'>Display"+
+			"<span id='calcs'><img class='calcimg' src='" +
+			this.state.scriptpath +  "../image/greeninfo30.png' height='15px'>"+
+			"</span></span><br />";
 
-	    optionhtml = optionhtml+"<span id=\'calc_sel\'><select id=\"calculation\">";
-	    for (var idx=0;idx<this.state.similarityCalculation.length;idx++) {
+		optionhtml = optionhtml+"<span id=\'calc_sel\'><select id=\"calculation\">";
+		for (var idx=0;idx<this.state.similarityCalculation.length;idx++) {
 			var selecteditem = "";
 			if (this.state.similarityCalculation[idx].calc === this.state.selectedCalculation) {
-			    selecteditem = "selected";
+				selecteditem = "selected";
 			}
 			optionhtml = optionhtml + "<option value='" +
-			    this.state.similarityCalculation[idx].calc +"' "+ selecteditem +">" +
-			    this.state.similarityCalculation[idx].label +"</option>";
-	    }
-	    optionhtml = optionhtml + "</select></span></span>";
-	    return $(optionhtml);
+				this.state.similarityCalculation[idx].calc +"' "+ selecteditem +">" +
+				this.state.similarityCalculation[idx].label +"</option>";
+		}
+		optionhtml = optionhtml + "</select></span></span>";
+		return $(optionhtml);
 	},
-	
-	//_buildSortSelector: function() {
+
+	/** 
+	* create the html necessary for selecting the sort
+	*/
+
 	_createSortPhenotypeSelection: function () {
-	    var optionhtml ="<span id='sort_div'>"+
-		"<span id='slabel' >Sort Phenotypes<span id=\"sorts\">"+
-		"<img src=\"" +this.state.scriptpath + 
-		"../image/greeninfo30.png\" height=\"15px\"></span>"+
-		"</span>"+
-		"<span><select id=\'sortphenotypes\'>";
-	    
-	    for (var idx=0;idx<this.state.phenotypeSort.length;idx++) {
-    		var selecteditem = "";
-    		if (this.state.phenotypeSort[idx] === this.state.selectedSort) {
-    		    selecteditem = "selected";
-    		}
-			optionhtml = optionhtml + "<option value='" + 
-		//	    this.state.phenotypeSort[idx].order +
-		    "' "+ selecteditem +">" + this.state.phenotypeSort[idx]+"</option>";
-	    }
-	    optionhtml = optionhtml + "</select></span>";			
-	    return $(optionhtml);
+		var optionhtml ="<span id='sort_div'>"+
+			"<span id='slabel' >Sort Phenotypes<span id=\"sorts\">"+
+			"<img src=\"" +this.state.scriptpath + "../image/greeninfo30.png\" height=\"15px\"></span>"+
+			"</span>"+
+			"<span><select id=\'sortphenotypes\'>";
+
+		for (var idx=0;idx<this.state.phenotypeSort.length;idx++) {
+			var selecteditem = "";
+			if (this.state.phenotypeSort[idx] === this.state.selectedSort) {
+				selecteditem = "selected";
+			}
+			optionhtml = optionhtml + "<option value='" +"' "+ selecteditem +">" + this.state.phenotypeSort[idx]+"</option>";
+		}
+		optionhtml = optionhtml + "</select></span>";			
+		return $(optionhtml);
 	},
 
 	//this code creates the text and rectangles containing the text 
