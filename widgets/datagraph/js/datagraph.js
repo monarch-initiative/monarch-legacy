@@ -488,17 +488,17 @@ bbop.monarch.datagraph.prototype.transitionStacked = function (graphConfig,data,
       .attr("height", graphConfig.y0.rangeBand())
       .attr("y", function(d) { return graphConfig.y1(d.name); })
       
-      rect.on("mouseover", function(d){
+    rect.on("mouseover", function(d){
             
-          d3.select(this)
+        d3.select(this)
             .style("fill", config.color.bar.fill);
                 dataGraph.displayCountTip(graphConfig.tooltip,d.value,d.name,this,'stacked');
-             })
-      .on("mouseout", function(){
-                 graphConfig.tooltip.style("display", "none");
-                 d3.select(this)
-                 .style("fill", function(d) { return graphConfig.color(d.name); });
-      })
+    })
+    .on("mouseout", function(){
+        graphConfig.tooltip.style("display", "none");
+        d3.select(this)
+        .style("fill", function(d) { return graphConfig.color(d.name); });
+    })
 }
 
 bbop.monarch.datagraph.prototype.drawGraph = function (data,graphConfig) {
@@ -527,10 +527,7 @@ bbop.monarch.datagraph.prototype.drawGraph = function (data,graphConfig) {
         }
         
         //Dynamically decrease font size for large labels
-        var confList = dataGraph.adjustYAxisElements(data.length);
-        var yFont = confList[0];
-        var yLabelPos = confList[1];
-        var triangleDim = confList[2];
+        var yFont = dataGraph.adjustYAxisElements(data.length);
         
         //Set x axis ticks
         var xTicks = svg.append("g")
@@ -581,7 +578,7 @@ bbop.monarch.datagraph.prototype.drawGraph = function (data,graphConfig) {
                 }
              })
             .style("text-anchor", "end")
-            .attr("dx", yLabelPos);
+            .attr("dx", config.yOffset);
        
         //Create SVG:G element that holds groups
         var barGroup = dataGraph.setGroupPositioning(graphConfig,data);
@@ -592,7 +589,7 @@ bbop.monarch.datagraph.prototype.drawGraph = function (data,graphConfig) {
         
         //Create navigation arrow
         var navigate = svg.selectAll(".y.axis");
-        dataGraph.makeNavArrow(data,navigate,triangleDim,
+        dataGraph.makeNavArrow(data,navigate,config.arrowDim,
                                barGroup,rect,graphConfig);
         //Create legend
         if (config.useLegend){
@@ -613,71 +610,6 @@ bbop.monarch.datagraph.prototype.drawGraph = function (data,graphConfig) {
           } else {
               dataGraph.transitionStacked(graphConfig,data,groups,rect);
           }
-        }
-        
-        function transitionGrouped() {
-            
-            dataGraph.setXYDomains(graphConfig,data,groups,'grouped');
-               
-            var xTransition = svg.transition().duration(750);
-            xTransition.select(".x.axis").call(xAxis);   
-
-            rect.transition()
-                .duration(500)
-                .delay(function(d, i) { return i * 10; })
-                .attr("height", y1.rangeBand())
-                .attr("y", function(d) { return y1(d.name); })  
-                .transition()
-                .attr("x", function(){if (config.isChrome || config.isSafari) {return 1;}else{ return 0;}})
-                .attr("width", function(d) { return x(d.value); })
-                
-            rect.on("mouseover", function(d){
-                
-                d3.select(this)
-                .style("fill", config.color.bar.fill);
-                dataGraph.displayCountTip(tooltip,d.value,d.name,this,'grouped');
-            })
-                .on("mouseout", function(){
-                  tooltip.style("display", "none")
-                  d3.select(this)
-                  .style("fill", function(d) { return color(d.name); });
-            })
-        }
-
-        function transitionStacked() {
-            
-            dataGraph.setXYDomains(graphConfig,data,groups,'stacked');
-            
-            var t = svg.transition().duration(750);
-            t.select(".x.axis").call(xAxis);
-
-            rect.transition()
-                .duration(500)
-                .delay(function(d, i) { return i * 10; })
-                .attr("x", function(d){
-                    if (d.x0 == 0){
-                        if (config.isChrome || config.isSafari){return 1;}
-                        else {return d.x0;}
-                    } else { 
-                        return x(d.x0);
-                    }
-                })
-                .attr("width", function(d) { return x(d.x1) - x(d.x0); })
-                .transition()
-                .attr("height", y0.rangeBand())
-                .attr("y", function(d) { return y1(d.name); })
-                
-            rect.on("mouseover", function(d){
-                
-                d3.select(this)
-                .style("fill", config.color.bar.fill);
-                dataGraph.displayCountTip(tooltip,d.value,d.name,this,'stacked');
-            })
-               .on("mouseout", function(){
-                   tooltip.style("display", "none");
-                   d3.select(this)
-                   .style("fill", function(d) { return color(d.name); });
-            })
         }
 }
 
@@ -938,11 +870,7 @@ bbop.monarch.datagraph.prototype.transitionSubGraph = function(graphConfig,subGr
     var xStackMax = dataGraph.getStackMax(subGraph);
         
     //Dynamically decrease font size for large labels
-    var confList = dataGraph.adjustYAxisElements(subGraph.length);
-    var yFont = confList[0];
-    var yLabelPos = confList[1];
-    var triangleDim = confList[2];
-
+    var yFont = dataGraph.adjustYAxisElements(subGraph.length);
         
     var yTransition = graphConfig.svg.transition().duration(1000);
     yTransition.select(".y.axis").call(graphConfig.yAxis);
@@ -978,7 +906,7 @@ bbop.monarch.datagraph.prototype.transitionSubGraph = function(graphConfig,subGr
           }
       })
       .style("text-anchor", "end")
-      .attr("dx", yLabelPos);
+      .attr("dx", config.yOffset);
 
       var barGroup = dataGraph.setGroupPositioning(graphConfig,subGraph);
 
@@ -1004,7 +932,7 @@ bbop.monarch.datagraph.prototype.transitionSubGraph = function(graphConfig,subGr
             
       var navigate = graphConfig.svg.selectAll(".y.axis");
       var isSubClass = dataGraph.makeNavArrow(subGraph,navigate,
-              triangleDim,barGroup,rect,graphConfig);
+              config.arrowDim,barGroup,rect,graphConfig);
                
       if (!isSubClass){
           graphConfig.svg.selectAll("polygon.arr").remove();
@@ -1180,9 +1108,7 @@ bbop.monarch.datagraph.prototype.adjustYAxisElements = function(len){
    if (isUpdated && yFont > conf.yFontSize){
        yFont = conf.yFontSize;
    }
-   
-   var retList = [yFont,yOffset,arrowDim];
-   return retList;
+   return yFont;
 }
 ///////////////////////////////////
 //Setters for sizing configurations
