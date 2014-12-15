@@ -42,19 +42,17 @@
 .scroll_text{
 	font-size: 9px;
 }
+
 #prebl{
     clear:both;
    /*background-color: #9999FF;*/
     float:left;
 }
 
-
-
 .a_text{
 	text-anchor:end;
 	opacity: 1.0;
 	font-size: 12px;
-
 }
 
 #scorelist{
@@ -68,7 +66,7 @@
 	/* background-color:#ea763b;*/
 	background-color: #A5D5D3;
 	border: 1px solid #858585;
-	 -webkit-border-radius: 8px;
+	-webkit-border-radius: 8px;
     border-radius: 8px; 
 	-moz-border-radius: 8px;
 }
@@ -113,7 +111,6 @@
    stroke:#25349A;
 }
 
-
 #diseasetitle{
 	font-weight:bold;
 	font-size: 0.8em;
@@ -134,7 +131,6 @@
 	margin-left:20px;
 	font-size:1.0em;
 }
-
 
 #sort_div {
     float: left;
@@ -164,7 +160,6 @@
   font-weight:bold;
 }
 
-
 #clabel, #olabel, #slabel{
   font-weight:bold;
   margin-left:5px;
@@ -174,7 +169,6 @@
    margin-top: 5px; 
    margin-left: 5px;
 }
-
 
 #faq{
 	margin-left:14px;
@@ -187,7 +181,6 @@
   z-index:500;
 }
 
-
 .faq{
 	margin-top:-5px;
 }
@@ -195,7 +188,6 @@
 .sortimg{
 	margin-left:10px;
 }
-
 
 #logo {
 	height:90px;
@@ -206,11 +198,13 @@
   background-color:#253494;
   color:#FFFFFF;
 }
+
 .ui-dialog-content{
 	font-size:11px;
 	font-family: arial;
 	color:#000000;	
 }
+
 .ui-dialog-content a{
     color: #253494;
 }
@@ -218,9 +212,11 @@
 .ui-dialog-buttonpane{
 	background-color: #253494;
 }
+
 .ui-dialog-buttonset{
 	background-color: #25349A;
 }
+
 .ui-dialog-osx {
     -webkit-border-radius: 0 0 8px 8px;
     border-radius: 0 0 8px 8px; 
@@ -246,6 +242,7 @@
 	margin-left: 10px;
 	margin-bottom:20px;
 }
+
 #unmatched a{
 	margin-left:19px;
 }
@@ -340,10 +337,10 @@ cube1, .cube2 {
 	color: #428bca;
 	vertical-align:middle;
 }
+
 #unmatchedimg{
 	font-size:1.4em;
 }
-
 
 .clearfix:after {
    content: " "; /* Older browser do not support empty content */
