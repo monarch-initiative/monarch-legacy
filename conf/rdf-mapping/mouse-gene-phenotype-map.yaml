@@ -1,5 +1,5 @@
 graph: mouse-gene-phenotype
-mapVersion: 2014-12-10
+mapVersion: 2014-12-15
 view: nif-0000-00096-6
 status: alpha
 prefixes:
