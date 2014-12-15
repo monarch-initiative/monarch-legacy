@@ -1380,21 +1380,22 @@ var url = document.URL;
 	},
 
 	_addLogoImage :	 function() { 
-	var start = 0;
-	if(this.state.filteredModelData.length < 30){
-		start = 680;
-	} else { 
-		start = 850;
-	}
-	//var imgs = this.state.svg.selectAll("image").data([0]);
-	//imgs.enter()
-	this.state.svg.append("svg:image")
-		.attr("xlink:href", this.state.scriptpath + "../image/logo.png")
-		.attr("x", start)
-		.attr("y",0)
-		.attr("id", "logo")
-		.attr("width", "60")
-		.attr("height", "90");
+		var start = 0;
+		if(this.state.filteredModelData.length < 30){
+			//Magic Nums
+			start = 680;
+		} else { 
+			start = 850;
+		}
+		//var imgs = this.state.svg.selectAll("image").data([0]);
+		//imgs.enter()
+		this.state.svg.append("svg:image")
+			.attr("xlink:href", this.state.scriptpath + "../image/logo.png")
+			.attr("x", start)
+			.attr("y",0)
+			.attr("id", "logo")
+			.attr("width", "60")
+			.attr("height", "90");
 	},
 
 	_resetLinks: function() {
@@ -1408,7 +1409,7 @@ var url = document.URL;
 		var link_labels = d3.selectAll(".model_label");
 			link_labels.style("font-weight", "normal");
 			link_labels.style("text-decoration", "none");
-			link_labels.attr("fill", "black");
+			link_labels.style("fill", "black");
 	},
 
 	_highlightMatchingModels : function(curr_data){
