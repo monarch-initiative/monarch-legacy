@@ -254,7 +254,7 @@ function AnalyzeInit(){
 					response(jQuery.map(data,
 							    function(item) {
 								return {
-								    'label': item.term,
+								    'label': item.label,
 								    'id': item.id
 								};
 							    }));

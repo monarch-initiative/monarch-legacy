@@ -39,13 +39,15 @@
          "name" : "v_uuid"
       },
       {
-         "name" : "gene_id"
+         "name" : "gene_id",
+         "type" : "owl:Class"
       },
       {
          "name" : "phenotype_inheritance"
       },
       {
-         "name" : "phenotype_id"
+         "name" : "phenotype_id",
+         "type" : "owl:Class"
       },
       {
          "name" : "publication_id",
@@ -60,5 +62,5 @@
       "publisher" : "http://monarchinitiative.org"
    },
    "graph" : "human-gene-disease",
-   "mapVersion" : "2014-08-19"
+   "mapVersion" : "2014-12-12"
 }

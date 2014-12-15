@@ -14,6 +14,7 @@ columns:
   - 
     name: sequence_alteration_id
     type: SO:0001059
+    list_delimiter: ";"
   - 
     name: sequence_alteration_label
     type: rdfs:Literal

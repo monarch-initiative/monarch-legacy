@@ -24,8 +24,14 @@ graphs:
       - 
         name: species_specific_phenotype_name
         type: rdfs:Literal
-    graph: animal-gene-disease
-    mapVersion: 2014-10-06
+      -
+        name: taxon_id
+        type: owl:Class
+      -
+        name: taxon_label
+        type: rdfs:Literal  
+    graph: omia-gene-disease
+    mapVersion: 2014-12-12b
     mappings: 
       - 
         object: phenotype_id
@@ -65,7 +71,20 @@ graphs:
         subject: taxon_id
       - 
         object: omim_id
-        predicate: putatively_homologous_to
+        predicate: RO:HOM00000008
         subject: phenotype_id
+      -
+        subject: phenotype_id
+        predicate: owl:subclassOf
+        object: DOID:4
+    objects:
+      -
+        id: RO:0002200
+        rdf:type: owl:ObjectProperty
+      -
+        id: RO:HOM0000008  #in biological homology relationship with
+        rdf:type: owl:ObjectProperty
+
     view: nif-0000-03215-1
 status: alpha
+

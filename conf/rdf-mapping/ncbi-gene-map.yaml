@@ -30,10 +30,14 @@ graphs:
         list_delimiter: ","
         name: synonyms
         type: rdfs:Literal
+      -
+        list_delimiter: ","
+        name: altids
+        type: rdfs:Literal  #this is for now... we'll need to clean these up to fix the curies
     filter: 
-      tax_id: 9606
+      tax_id: '9606'
     graph: human-genes
-    mapVersion: 2014-04-18
+    mapVersion: 2014-12-12
     mappings: 
       - 
         object: symbol
@@ -51,6 +55,10 @@ graphs:
       - 
         object: type_of_gene
         predicate: rdfs:subClassOf
+        subject: geneid
+      -
+        object: altids
+        predicate: oboInOwl:hasRelatedSynonym
         subject: geneid
     objects: 
       - 

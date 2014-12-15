@@ -1,0 +1,38 @@
+{
+   "graphs" : [
+      {
+         "view" : "nlx_152525-4",
+         "mappings" : [
+            {
+               "object" : "mapped_id",
+               "predicate" : "owl:equivalentClass",
+               "subject" : "id"
+            }
+         ],
+         "filter" : {
+            "source" : "NCBIGene",
+            "taxon_id" : "NCBITaxon:10090",
+            "mapping_resource" : "MGI",
+            "mapped_source" : "MGI"
+         },
+         "columns" : [
+            {
+               "name" : "id",
+               "type" : "owl:Class",
+               "prefix" : "http://purl.obolibrary.org/obo/NCBIGene_"
+            },
+            {
+               "name" : "taxon_id"
+            },
+            {
+               "name" : "mapped_id",
+               "type" : "owl:Class",
+               "prefix" : "http://identifiers.org/mgd/"
+            }
+         ],
+         "mapVersion" : "2014-12-09",
+         "graph" : "mmus-equiv-id"
+      }
+   ],
+   "isDisabled" : ""
+}

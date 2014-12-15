@@ -6,34 +6,50 @@
          "subject" : "genea"
       },
       {
-         "object" : "tax_id_a",
+         "object" : "taxon_id_a",
          "predicate" : "RO:0002162",
          "subject" : "genea"
       },
       {
-         "object" : "tax_id_b",
+         "object" : "taxon_id_b",
          "predicate" : "RO:0002162",
          "subject" : "geneb"
       }
    ],
    "filter" : {
-      "tax_id_a" : "NCBITaxon:9606"
+      "taxon_id_a" : "NCBITaxon:9606"
    },
    "status" : "alpha",
    "objects" : [
       {
          "rdf:type" : "owl:ObjectProperty",
          "id" : "RO:0002162"
+      },
+      {
+         "rdf:type" : "owl:ObjectProperty",
+         "id" : "RO:HOM0000011"
+      },
+      {
+         "rdf:type" : "owl:ObjectProperty",
+         "id" : "RO:HOM0000037"
+      },
+      {
+         "rdf:type" : "owl:ObjectProperty",
+         "id" : "RO:HOM0000019"
+      },
+      {
+         "rdf:type" : "owl:ObjectProperty",
+         "id" : "RO:HOM0000018"
       }
    ],
    "view" : "nlx_84521-1",
    "columns" : [
       {
-         "name" : "tax_id_a",
+         "name" : "taxon_id_a",
          "type" : "owl:Class"
       },
       {
-         "name" : "tax_id_b",
+         "name" : "taxon_id_b",
          "type" : "owl:Class"
       },
       {
@@ -45,6 +61,13 @@
          "type" : "owl:Class"
       },
       {
+         "@context" : {
+            "O" : "RO:HOM0000037",
+            "X" : "RO:HOM0000018",
+            "LDO" : "RO:HOM0000019",
+            "P" : "RO:HOM0000011",
+            "LDX" : "RO:HOM0000018"
+         },
          "name" : "orthology_class",
          "type" : "owl:ObjectProperty"
       }
@@ -62,12 +85,8 @@
       "description" : "Monarch ingest of Panther Orthologs"
    },
    "prefixes" : {
-      "O" : "http://purl.obolibrary.org/obo/RO_HOM0000037",
-      "EnsemblGenome" : "http://identifiers.org/ensembl:",
-      "X" : "http://purl.obolibrary.org/obo/RO_HOM0000018",
-      "LDO" : "http://purl.obolibrary.org/obo/RO_HOM0000019",
-      "P" : "http://purl.obolibrary.org/obo/RO_HOM0000011",
-      "LDX" : "http://purl.obolibrary.org/obo/RO_HOM0000018"
+      "EnsemblGenome" : "http://identifiers.org/ensembl:"
    },
-   "graph" : "panther-orthologs"
+   "graph" : "panther-orthologs",
+   "mapVersion" : "2014-12-12"
 }

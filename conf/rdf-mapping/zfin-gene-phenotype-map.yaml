@@ -1,5 +1,5 @@
 graph: zfin-gene-phenotype
-mapVersion: 2014-11-21
+mapVersion: 2014-12-10
 view: nif-0000-21427-10
 status: alpha
 notes: w.t. environments and abnormal phenotypes only
@@ -9,10 +9,13 @@ columns:
   - 
     name: implicated_gene_ids
     list_delimiter: ","
+    type: owl:Class
   - 
     name: phenotype_id
+    type: owl:Class
   - 
     name: evidence_code_id
+    type: owl:Class
   - 
     list_delimiter: ";"
     name: publication_id
