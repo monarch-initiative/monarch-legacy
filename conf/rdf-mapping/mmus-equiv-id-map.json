@@ -27,10 +27,10 @@
             {
                "name" : "mapped_id",
                "type" : "owl:Class",
-               "prefix" : "http://identifiers.org/mgd/mgi:"
+               "prefix" : "http://identifiers.org/mgd/"
             }
          ],
-         "mapVersion" : "2014-12-15",
+         "mapVersion" : "2014-12-15b",
          "graph" : "mmus-equiv-id"
       }
    ],

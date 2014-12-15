@@ -19,7 +19,7 @@ graphs:
       mapping_resource: "MGI"
       mapped_source: "MGI"
     graph: mmus-equiv-id
-    mapVersion: 2014-12-15
+    mapVersion: 2014-12-15b
     mappings: 
       - 
         object: mapped_id
