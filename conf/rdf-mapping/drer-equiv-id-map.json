@@ -26,10 +26,10 @@
             {
                "name" : "mapped_id",
                "type" : "owl:Class",
-               "prefix" : "http://identifiers.org/zfin/ZFIN_"
+               "prefix" : "http://identifiers.org/zfin:"
             }
          ],
-         "mapVersion" : "2014-12-09",
+         "mapVersion" : "2014-12-15",
          "graph" : "drer-equiv-id"
       }
    ],
