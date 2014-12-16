@@ -12,10 +12,10 @@ function getTableFromSolr(id){
     
     // Other widget tests; start with manager.
     var srch = new bbop.golr.manager.jquery(srv, gconf);
-    srch.set_id(id);
-    
-    //srch.set_personality('annotation');
-    //srch.add_query_filter('document_category', 'annotation', ['HP:0000001']);
+
+    srch.set_personality('annotation');
+    srch.add_query_filter('document_category', 'annotation', ['*']);
+    srch.add_query_filter('regulates_closure', id);
 
     // Attach pager.
     var pager_opts = {
@@ -53,4 +53,13 @@ function getOntologyBrowser(id){
     });
     b.draw_browser(id);
     
+}
+
+function LaunchEverything(){
+  
+    if( phenotypeID ){ // globally declared from webapp.js
+    
+     getTableFromSolr(phenotypeID);
+     getOntologyBrowser(phenotypeID);
+    }
 }
