@@ -13,13 +13,13 @@ jQuery(document).ready(function(){
     var linker = new amigo.linker();
     var confc = gconf.get_class('annotation');
 
-    // Search pane.
+    /* Search pane.
     var search = new bbop.widget.search_pane(srv, gconf, 'a2sp');
     search.include_highlighting(true);
     search.set_personality('annotation');
     search.add_query_filter('document_category', 'annotation', ['*']);
     search.establish_display();
-    search.reset();
+    search.reset();*/
     
     // Browser.
     var b = new bbop.widget.browse(srv, gconf, 'brw', {
@@ -41,15 +41,16 @@ jQuery(document).ready(function(){
 
     // Other widget tests; start with manager.
     var srch = new bbop.golr.manager.jquery(srv, gconf);
-    srch.set_personality('annotation');
-    srch.add_query_filter('document_category', 'annotation', ['*']);
+    srch.set_id('HP:0000001');
+    //srch.set_personality('annotation');
+    //srch.add_query_filter('document_category', 'annotation', ['*']);
     // Add filters.
-    var f_opts = {
+    /*var f_opts = {
 	'meta_label': 'Total:&nbsp;',
 	'display_free_text_p': true
-    };
-    var filters = new bbop.widget.live_filters('bs3filter', srch, gconf, f_opts);
-    filters.establish_display();
+    };*/
+    /*var filters = new bbop.widget.live_filters('bs3filter', srch, gconf, f_opts);
+    filters.establish_display();*/
     // Attach pager.
     var pager_opts = {
     };
@@ -62,13 +63,13 @@ jQuery(document).ready(function(){
     };
     var results = new bbop.widget.live_results('bs3results', srch, confc,
 					       handler, linker, results_opts);
-    // Add pre and post run spinner (borrow filter's for now).
+    /* Add pre and post run spinner (borrow filter's for now).
     srch.register('prerun', 'foo', function(){
 	filters.spin_up();
     });
     srch.register('postrun', 'foo', function(){
 	filters.spin_down();
-    });
+    });*/
     // Initial run.
     srch.search();
 });

@@ -239,19 +239,31 @@ bbop.monarch.datagraph.prototype.makeNavArrow = function(data,navigate,triangleD
     var arrow = navigate.selectAll(".tick.major")
         .data(data)
         .append("svg:polygon")
+        .attr("class", "wedge")
         .attr("points",triangleDim)
         .attr("fill", config.color.arrow.fill)
-        .on("mouseover", function(d){     
-            dataGraph.displaySubClassTip(graphConfig.tooltip,this)
+        .attr("display", function(d){
+            if (d.subGraph && d.subGraph[0]){
+                return "initial";
+            } else {
+                return "none";
+            }
+        })
+        .on("mouseover", function(d){        
+           if (d.subGraph && d.subGraph[0]){
+               dataGraph.displaySubClassTip(graphConfig.tooltip,this)
+           } 
         })
         .on("mouseout", function(){
             d3.select(this)
               .style("fill",config.color.arrow.fill);
-              graphConfig.tooltip.style("display", "none");
+            graphConfig.tooltip.style("display", "none");
         })
         .on("click", function(d){
-            dataGraph.transitionToNewGraph(graphConfig,d,
-                                           data,barGroup,rect);
+            if (d.subGraph && d.subGraph[0]){  
+                dataGraph.transitionToNewGraph(graphConfig,d,
+                        data,barGroup,rect);
+            }
         });
 }
 //Adjusts the y axis labels in relation to axis ticks
@@ -348,7 +360,7 @@ bbop.monarch.datagraph.prototype.setXYDomains = function (graphConfig,graphData,
     //Set y0 domain
     graphConfig.y0.domain(graphData.map(function(d) { return d.label; }));
     
-    if ($('input[name=mode]:checked').val()=== 'grouped'){
+    if ($('input[name=mode]:checked').val()=== 'grouped' || groups.length === 1){
         var xGroupMax = dataGraph.getGroupMax(graphData);
         graphConfig.x.domain([0, xGroupMax]);
         graphConfig.y1.domain(groups)
@@ -530,12 +542,13 @@ bbop.monarch.datagraph.prototype.drawGraph = function (data,graphConfig) {
         
     //Create navigation arrow
     var navigate = graphConfig.svg.selectAll(".y.axis");
-    if (dataGraph.checkForSubGraphs(data)){
-        dataGraph.makeNavArrow(data,navigate,config.arrowDim,
-                               barGroup,rect,graphConfig);
-    } else {
+    dataGraph.makeNavArrow(data,navigate,config.arrowDim,
+                           barGroup,rect,graphConfig);
+    if (!dataGraph.checkForSubGraphs(data)){
         dataGraph.setYAxisTextSpacing(0,graphConfig);
+        graphConfig.svg.selectAll("polygon.wedge").remove();
     }
+    
     //Create legend
     if (config.useLegend){
             dataGraph.makeLegend(graphConfig);
@@ -881,13 +894,14 @@ bbop.monarch.datagraph.prototype.drawSubGraph = function(graphConfig,subGraph,pa
 
     var barGroup = dataGraph.setGroupPositioning(graphConfig,subGraph);
     var rect = dataGraph.setBarConfigPerCheckBox(graphConfig,subGraph,groups,barGroup);
-            
+    
     var navigate = graphConfig.svg.selectAll(".y.axis");
-    if (dataGraph.checkForSubGraphs(subGraph)){
-        dataGraph.makeNavArrow(subGraph,navigate,config.arrowDim,
-                               barGroup,rect,graphConfig);
-    } else {
+    dataGraph.makeNavArrow(subGraph,navigate,config.arrowDim,
+                           barGroup,rect,graphConfig);
+
+    if (!dataGraph.checkForSubGraphs(subGraph)){
         dataGraph.setYAxisTextSpacing(0,graphConfig);
+        graphConfig.svg.selectAll("polygon.wedge").remove();
     }
 
     d3.select(graphConfig.html_div).selectAll('input')
