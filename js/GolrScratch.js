@@ -1,17 +1,18 @@
-jQuery(document).ready(function(){
-    
-    // Conf.
-    var gconf = new bbop.golr.conf(amigo.data.golr);
-    var srv = 'http://toaster.lbl.gov:9000/solr/';
-    var sd = new amigo.data.server();
-    var defs = new amigo.data.definitions();
-    var handler = new amigo.handler();
-    var linker = new amigo.linker();
-    var confc = gconf.get_class('annotation');
+// Conf.
+var gconf = new bbop.golr.conf(amigo.data.golr);
+var srv = 'http://toaster.lbl.gov:9000/solr/';
+var sd = new amigo.data.server();
+var defs = new amigo.data.definitions();
+var handler = new amigo.handler();
+var linker = new amigo.linker();
+var confc = gconf.get_class('annotation');
+
+//Some documentation here
+function getTableFromSolr(id){
     
     // Other widget tests; start with manager.
     var srch = new bbop.golr.manager.jquery(srv, gconf);
-    srch.set_id('HP:0001802');
+    srch.set_id(id);
     
     //srch.set_personality('annotation');
     //srch.add_query_filter('document_category', 'annotation', ['HP:0000001']);
@@ -30,6 +31,9 @@ jQuery(document).ready(function(){
                            handler, linker, results_opts);
     // Initial run.
     srch.search();
+}
+
+function getOntologyBrowser(id){
     
     // Browser.
     var b = new bbop.widget.browse(srv, gconf, 'brw', {
@@ -47,5 +51,6 @@ jQuery(document).ready(function(){
         //shield.draw(term_acc);
     }
     });
-    b.draw_browser('HP:0000001');
-});
+    b.draw_browser(id);
+    
+}
