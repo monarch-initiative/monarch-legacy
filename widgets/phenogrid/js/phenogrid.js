@@ -701,7 +701,6 @@ var url = document.URL;
 
 	_filterSelected: function(filterType){
 		var self = this;
-		var resetToOrigin = true;	//USE FOR NOW TO ALLOW SWITCHING BACK AND FORTH EASIER FOR FUTURE CHANGING
 		if (filterType == "sortphenotypes"){
 			//Sort the phenotypes based on what value is currently held in self.state.selectedSort
 			self.state.phenotypeSortData = [];
@@ -721,22 +720,21 @@ var url = document.URL;
 		this.state.filteredModelData = [];
 		this.state.yAxis = [];
 
-		//begin to sort batches of phenotypes based on the phenotypeDisplayCount
-		if (resetToOrigin){
-			var startIdx = 0;
-			var displayLimiter = this.state.phenotypeDisplayCount;
-		}else{	//This code down here needs fixing if navigation methods are changed in the future
-			var startIdx = this.state.currPhenotypeIdx - (this.state.phenotypeDisplayCount -1);
-			var displayLimiter = self.state.currPhenotypeIdx;
-			if (startIdx > 0){
-				//Hack.  StartIDX at any point after init is 1 value too high and will show values 1 off.  Can crash as well
-				startIdx--;
-			}
-			else{
-				//Only on init or on the top, currPhenotypeIdx can be 1 short, so it wont display values on the last row
-				displayLimiter++;
-			}
-		}
+		//Force Reset to Origin when changing Species, Sort or Display
+		var startIdx = 0;
+		var displayLimiter = this.state.phenotypeDisplayCount;
+
+		//This code down here needs fixing if navigation methods are changed in the future
+		//var startIdx = this.state.currPhenotypeIdx - (this.state.phenotypeDisplayCount -1);
+		//var displayLimiter = self.state.currPhenotypeIdx;
+		//if (startIdx > 0){
+			//Hack.  StartIDX at any point after init is 1 value too high and will show values 1 off.  Can crash as well
+			//startIdx--;
+		//} else{
+			//Only on init or on the top, currPhenotypeIdx can be 1 short, so it wont display values on the last row
+			//displayLimiter++;
+		//}
+
 		//extract the new array of filtered Phentoypes
 		//also update the axis
 		//also update the modeldata
@@ -894,11 +892,10 @@ var url = document.URL;
 	//I may need to rename this method "getModelData".  It should extract the models and reformat the data 
 	_loadData: function() {
 		var url = '';
-		var self=this;
+		var self = this;
 		if (this.state.targetSpeciesName === "Overview") {
 			this._loadOverviewData();
-		}
-		else {
+		} else {
 			this._loadSpeciesData(this.state.targetSpeciesName);
 			this._finishLoad();
 		}
@@ -965,8 +962,8 @@ var url = document.URL;
 
 	_finishOverviewLoad : function () {
 		var speciesList = [];
-		var modList = [],
-		orgCtr = 0;
+		var modList = [];
+		var orgCtr = 0;
 
 		for (i in this.state.targetSpeciesList) {
 			var species = this.state.targetSpeciesList[i].name;
@@ -1003,7 +1000,7 @@ var url = document.URL;
 		}
 
 		//initialize the filtered model list
-		for (var idx=0;idx<this.state.modelDisplayCount;idx++) {
+		for (var idx=0; idx<this.state.modelDisplayCount; idx++) {
 			this.state.filteredModelList.push(this.state.modelList[idx]);
 		}
 	},
@@ -1132,22 +1129,12 @@ var url = document.URL;
 		data = newModelData.matches;
 
 		if (typeof(data) !== 'undefined' &&  data.length > 0) {
-			var species = newModelData.taxon,
-			calculatedArray = [],
-			normalizedArray = [],
-			min,
-			max,
-			norm;
+			var species = newModelData.taxon;
 
 			for (idx in data) {
-				calculatedArray.push(this._normalizeIC(data[idx]));
-			}
-			for (idx in data) {
 				var curr_row = data[idx],
-				lcs = calculatedArray[idx],
-				new_row = {"id": this._getConceptId(curr_row.a.id) + 
-					"_" + this._getConceptId(curr_row.b.id) + 
-					"_" + this._getConceptId(newModelData.id), 
+				lcs = this._normalizeIC(curr_row),
+				new_row = {"id": this._getConceptId(curr_row.a.id) + "_" + this._getConceptId(curr_row.b.id) + "_" + this._getConceptId(newModelData.id), 
 					"label_a" : curr_row.a.label, 
 					"id_a" : this._getConceptId(curr_row.a.id), 
 					"IC_a" : parseFloat(curr_row.a.IC),
@@ -1161,10 +1148,9 @@ var url = document.URL;
 					"model_id" : this._getConceptId(newModelData.id),
 					"model_label" : newModelData.label, 
 					"species": species.label,
-					"taxon" : species.id,
+					"taxon" : species.id
 				}; 
 				this.state.modelData.push(new_row); 
-				//this.state.modelList.push(new_row);
 			}
 		}
 	},
@@ -1202,7 +1188,7 @@ var url = document.URL;
 	//for each item in the data model, push the rowid
 	//and calculate the y position
 	_createYAxis: function() {
-		var self=this;
+		var self = this;
 		//the height of each row
 		var size = 10;
 		//the spacing you want between rows
@@ -1211,7 +1197,7 @@ var url = document.URL;
 		//use the max phenotype size to limit the number of phenotypes shown 
 		var yLength = self.state.phenotypeSortData.length > this.state.phenotypeDisplayCount ?
 			this.state.phenotypeDisplayCount : self.state.phenotypeSortData.length;
-		for (var idx=0;idx<yLength;idx++) {
+		for (var idx = 0; idx < yLength; idx++) {
 			var stuff = {"id": self.state.phenotypeSortData[idx][0].id_a,
 				"ypos" : ((idx * (size+gap)) + this.state.yoffset + 10)};
 			this.state.yAxis.push(stuff);
@@ -2500,16 +2486,12 @@ var url = document.URL;
 		var div_text3 = self.state.svg.append("svg:text")
 			.attr("class", "detail_text")
 			.attr("y", yhighText)
-			.attr("x", xhighText)
 			.style("font-size", "10px")
 			.text(highText);
-
-		//Position the max more carefully
-		if (highText == "Max") {
-			div_text3.attr("x",self.state.axis_pos_list[2] + 150);
-		}
-		if (highText == "Highest") {
-			div_text3.attr("x",self.state.axis_pos_list[2] + 150);
+		if (highText == "Max" || highText == "Highest"){
+			div_text3.attr("x", xhighText + 25);
+		} else {
+			div_text3.attr("x", xhighText);
 		}
 	},
 

@@ -24,12 +24,13 @@
 	stroke: #000000;
 	stroke-width: 2;
 }
+
 #header{
 	margin-top:0px;
 	padding-bottom:0px;
 	margin-bottom: 0px;
 }
-    
+
 .row_accent,
 .model_accent{
 	/*stroke:#ea763b;*/
@@ -44,9 +45,9 @@
 }
 
 #prebl{
-    clear:both;
-   /*background-color: #9999FF;*/
-    float:left;
+	clear:both;
+	/*background-color: #9999FF;*/
+	float:left;
 }
 
 .a_text{
@@ -67,7 +68,7 @@
 	background-color: #A5D5D3;
 	border: 1px solid #858585;
 	-webkit-border-radius: 8px;
-    border-radius: 8px; 
+	border-radius: 8px; 
 	-moz-border-radius: 8px;
 }
 
@@ -104,11 +105,11 @@
 	font-weight:bold;
 }
 
-#tip{  
-   font-size: 10px;
-   margin-left:-20px;
-   stroke-width: 1px;
-   stroke:#25349A;
+#tip{
+	font-size: 10px;
+	margin-left:-20px;
+	stroke-width: 1px;
+	stroke:#25349A;
 }
 
 #diseasetitle{
@@ -121,6 +122,7 @@
 	font-size:1.8em;
 	font-weight:bold;
 }
+
 #toptitle2, #bottitle2, #title2 {
 	font-size:1.4em;
 	font-weight:bold;
@@ -133,41 +135,43 @@
 }
 
 #sort_div {
-    float: left;
-    width:180px;
+	float: left;
+	width:180px;
 }
+
 #calc_div {
-        float: left;
+	float: left;
 	width:120px;
 }
 
 #org_div{
-        float: left;
+	float: left;
 	width:200px;
 }
+
 #sort_div div #org_div div, #calc_div div{
 	font-weight:bold;
 }
 
 #sort_div span, #org_div span, #calc_div span{
-   font-size:14px;
+	font-size:14px;
 }
 
 #calcs {
-  margin-left:10px;
-  font-size: 22px;
-  color: #25349A;
-  font-weight:bold;
+	margin-left:10px;
+	font-size: 22px;
+	color: #25349A;
+	font-weight:bold;
 }
 
 #clabel, #olabel, #slabel{
-  font-weight:bold;
-  margin-left:5px;
+	font-weight:bold;
+	margin-left:5px;
 }
 
 #organism , #calculation, #sortphenotypes{
-   margin-top: 5px; 
-   margin-left: 5px;
+	margin-top: 5px; 
+	margin-left: 5px;
 }
 
 #faq{
@@ -178,7 +182,7 @@
 }
 
 #detail_content{
-  z-index:500;
+	z-index:500;
 }
 
 .faq{
@@ -195,18 +199,18 @@
 
 /** jQDialog styles */
 .ui-dialog-titlebar {
-  background-color:#253494;
-  color:#FFFFFF;
+	background-color:#253494;
+	color:#FFFFFF;
 }
 
 .ui-dialog-content{
 	font-size:11px;
 	font-family: arial;
-	color:#000000;	
+	color:#000000;
 }
 
 .ui-dialog-content a{
-    color: #253494;
+	color: #253494;
 }
 
 .ui-dialog-buttonpane{
@@ -218,8 +222,8 @@
 }
 
 .ui-dialog-osx {
-    -webkit-border-radius: 0 0 8px 8px;
-    border-radius: 0 0 8px 8px; 
+	-webkit-border-radius: 0 0 8px 8px;
+	border-radius: 0 0 8px 8px; 
 	border-width: 3px;
 	-moz-border-radius: 0 0 8px 8px;
 }
@@ -262,12 +266,12 @@
 
 #phenogrid_controls {
 	float:left;
-    clear:both;
- 	margin-top:-50px;
+	clear:both;
+	margin-top:-50px;
 }
 
 #svg_container {
-   margin-top:40px;
+	margin-top:40px;
 }
 
 #specieslist{
@@ -282,52 +286,52 @@
 
 /* spinner code from http://tobiasahlin.com/spinkit */
 #spinner {
-    margin: 30px  auto;
-    padding: 70px;
-    width: 100%;
+	margin: 30px  auto;
+	padding: 70px;
+	width: 100%;
 }
 
 cube1, .cube2 {
-  background-color: #333;
-  width: 10px;
-  height: 10px;
-  position: absolute;
-  top: 100;
-  left: 300;
-  
-  -webkit-animation: cubemove 1.8s infinite ease-in-out;
-  animation: cubemove 1.8s infinite ease-in-out;
+	background-color: #333;
+	width: 10px;
+	height: 10px;
+	position: absolute;
+	top: 100;
+	left: 300;
+
+	-webkit-animation: cubemove 1.8s infinite ease-in-out;
+	animation: cubemove 1.8s infinite ease-in-out;
 }
 
 .cube2 {
-  -webkit-animation-delay: -0.9s;
-  animation-delay: -0.9s;
+	-webkit-animation-delay: -0.9s;
+	animation-delay: -0.9s;
 }
 
 @-webkit-keyframes cubemove {
-  25% { -webkit-transform: translateX(42px) rotate(-90deg) scale(0.5) }
-  50% { -webkit-transform: translateX(42px) translateY(42px) rotate(-180deg) }
-  75% { -webkit-transform: translateX(0px) translateY(42px) rotate(-270deg) scale(0.5) }
-  100% { -webkit-transform: rotate(-360deg) }
+	25% { -webkit-transform: translateX(42px) rotate(-90deg) scale(0.5) }
+	50% { -webkit-transform: translateX(42px) translateY(42px) rotate(-180deg) }
+	75% { -webkit-transform: translateX(0px) translateY(42px) rotate(-270deg) scale(0.5) }
+	100% { -webkit-transform: rotate(-360deg) }
 }
 
 @keyframes cubemove {
-  25% { 
-    transform: translateX(42px) rotate(-90deg) scale(0.5);
-    -webkit-transform: translateX(42px) rotate(-90deg) scale(0.5);
-  } 50% { 
-    transform: translateX(42px) translateY(42px) rotate(-179deg);
-    -webkit-transform: translateX(42px) translateY(42px) rotate(-179deg);
-  } 50.1% { 
-    transform: translateX(42px) translateY(42px) rotate(-180deg);
-    -webkit-transform: translateX(42px) translateY(42px) rotate(-180deg);
-  } 75% { 
-    transform: translateX(0px) translateY(42px) rotate(-270deg) scale(0.5);
-    -webkit-transform: translateX(0px) translateY(42px) rotate(-270deg) scale(0.5);
-  } 100% { 
-    transform: rotate(-360deg);
-    -webkit-transform: rotate(-360deg);
-  }
+	25% { 
+		transform: translateX(42px) rotate(-90deg) scale(0.5);
+		-webkit-transform: translateX(42px) rotate(-90deg) scale(0.5);
+	} 50% { 
+		transform: translateX(42px) translateY(42px) rotate(-179deg);
+		-webkit-transform: translateX(42px) translateY(42px) rotate(-179deg);
+	} 50.1% { 
+		transform: translateX(42px) translateY(42px) rotate(-180deg);
+		-webkit-transform: translateX(42px) translateY(42px) rotate(-180deg);
+	} 75% { 
+		transform: translateX(0px) translateY(42px) rotate(-270deg) scale(0.5);
+		-webkit-transform: translateX(0px) translateY(42px) rotate(-270deg) scale(0.5);
+	} 100% { 
+		transform: rotate(-360deg);
+		-webkit-transform: rotate(-360deg);
+	}
 }
 
 #unmatchedimg,
@@ -343,14 +347,13 @@ cube1, .cube2 {
 }
 
 .clearfix:after {
-   content: " "; /* Older browser do not support empty content */
-   visibility: hidden;
-   display: block;
-   height: 0;
-   clear: both;
+	content: " "; /* Older browser do not support empty content */
+	visibility: hidden;
+	display: block;
+	height: 0;
+	clear: both;
 }
 
-
 .faqdialog {
-    background: white;
+	background: white;
 }
