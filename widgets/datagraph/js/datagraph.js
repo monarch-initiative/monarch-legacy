@@ -51,7 +51,7 @@ bbop.monarch.datagraph.prototype.init = function(html_div,DATA){
      
      if (config.isDynamicallyResized){
      
-         if ($(window).width() < (config.benchmarkWidth-100) || $(window).height() < (config.benchmarkHeight-100)){
+         if (jQuery(window).width() < (config.benchmarkWidth-100) || jQuery(window).height() < (config.benchmarkHeight-100)){
              dataGraph.setSizeConfiguration(config.graphSizingRatios);
              dataGraph.run(html_div,DATA);
          } else {
@@ -60,8 +60,8 @@ bbop.monarch.datagraph.prototype.init = function(html_div,DATA){
      
          window.addEventListener('resize', function(event){
   
-             if ($(window).width() < (config.benchmarkWidth-100) || $(window).height() < (config.benchmarkHeight-100)){
-                 $(html_div).children().remove();
+             if (jQuery(window).width() < (config.benchmarkWidth-100) || jQuery(window).height() < (config.benchmarkHeight-100)){
+                 jQuery(html_div).children().remove();
                  dataGraph.setSizeConfiguration(config.graphSizingRatios);
                  dataGraph.run(html_div,DATA);
              } 
@@ -73,8 +73,8 @@ bbop.monarch.datagraph.prototype.init = function(html_div,DATA){
 
 bbop.monarch.datagraph.prototype.setSizeConfiguration = function(graphRatio){
     var dataGraph = this;
-    var w = $(window).width();
-    var h = $(window).height();
+    var w = jQuery(window).width();
+    var h = jQuery(window).height();
     var total = w+h;
     
     dataGraph.setWidth( ((w*graphRatio.width) / getBaseLog(12,w)) * 3);
@@ -107,7 +107,7 @@ bbop.monarch.datagraph.prototype.makeGraphDOM = function(html_div,data){
       
       //Create html structure
       //Add graph title
-      $(html_div).append( "<div class=title"+
+      jQuery(html_div).append( "<div class=title"+
               " style=text-indent:" + config.title['text-indent'] +
               ";text-align:" + config.title['text-align'] +
               ";background-color:" + config.title['background-color'] +
@@ -115,21 +115,21 @@ bbop.monarch.datagraph.prototype.makeGraphDOM = function(html_div,data){
               ";font-size:" + config.title['font-size'] +
               ";font-weight:" + config.title['font-weight'] +
               "; >"+config.chartTitle+"</div>" );
-      $(html_div).append( "<div class=interaction></div>" );
-      $(html_div+" .interaction").append( "<li></li>" );
+      jQuery(html_div).append( "<div class=interaction></div>" );
+      jQuery(html_div+" .interaction").append( "<li></li>" );
          
       //Override breadcrumb config if subgraphs exist
       config.useCrumb = dataGraph.checkForSubGraphs(data);
       
       //remove breadcrumb div
       if (config.useCrumb){
-          $(html_div+" .interaction li").append("<div class=breadcrumbs></div>");
+          jQuery(html_div+" .interaction li").append("<div class=breadcrumbs></div>");
 
       }
       
       //Add stacked/grouped form if more than one group
       if (groups.length >1){
-          $(html_div+" .interaction li").append(" <form class=configure"+
+          jQuery(html_div+" .interaction li").append(" <form class=configure"+
                   " style=font-size:" + config.settingsFontSize + "; >" +
                   "<label><input id=\"group\" type=\"radio\" name=\"mode\"" +
                       " value=\"grouped\" checked> Grouped</label> " +
@@ -360,12 +360,12 @@ bbop.monarch.datagraph.prototype.setXYDomains = function (graphConfig,graphData,
     //Set y0 domain
     graphConfig.y0.domain(graphData.map(function(d) { return d.label; }));
     
-    if ($('input[name=mode]:checked').val()=== 'grouped' || groups.length === 1){
+    if (jQuery('input[name=mode]:checked').val()=== 'grouped' || groups.length === 1){
         var xGroupMax = dataGraph.getGroupMax(graphData);
         graphConfig.x.domain([0, xGroupMax]);
         graphConfig.y1.domain(groups)
         .rangeRoundBands([0, graphConfig.y0.rangeBand()]);
-    } else if ($('input[name=mode]:checked').val()=== 'stacked'){
+    } else if (jQuery('input[name=mode]:checked').val()=== 'stacked'){
         var xStackMax = dataGraph.getStackMax(graphData);
         graphConfig.x.domain([0, xStackMax]);
         graphConfig.y1.domain(groups).rangeRoundBands([0,0]);
@@ -566,9 +566,9 @@ bbop.monarch.datagraph.prototype.drawGraph = function (data,graphConfig) {
 }
 
 bbop.monarch.datagraph.prototype.changeBarConfig = function(graphConfig,data,groups,rect){
-    if ($('input[name=mode]:checked').val() === "grouped"){
+    if (jQuery('input[name=mode]:checked').val() === "grouped"){
         dataGraph.transitionGrouped(graphConfig,data,groups,rect);
-    } else if ($('input[name=mode]:checked').val() === 'stacked') {
+    } else if (jQuery('input[name=mode]:checked').val() === 'stacked') {
         dataGraph.transitionStacked(graphConfig,data,groups,rect);
     }
 }
@@ -808,7 +808,7 @@ bbop.monarch.datagraph.prototype.transitionXAxisToNewScale = function(graphConfi
 
 bbop.monarch.datagraph.prototype.setBarConfigPerCheckBox = function(graphConfig,graph,groups,barGroup) {
     dataGraph = this;
-    if ($('input[name=mode]:checked').val()=== 'grouped' || groups.length == 1) {
+    if (jQuery('input[name=mode]:checked').val()=== 'grouped' || groups.length == 1) {
         dataGraph.setXYDomains(graphConfig,graph,groups,'grouped');
         dataGraph.transitionXAxisToNewScale(graphConfig,1000);
         return dataGraph.makeBar(barGroup,graphConfig,'grouped');
