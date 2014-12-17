@@ -16,8 +16,14 @@ function getTableFromSolr(id){
     srch.set_personality('annotation');
     //srch.add_query_filter('document_category', 'annotation', ['*']);
     srch.add_query_filter('isa_partof_closure', id);
-    var foo = srch.get_query();
-    console.log(foo);
+    
+    // Add filters.
+    var f_opts = {
+    'meta_label': 'Total:&nbsp;',
+    'display_free_text_p': true
+    };
+    var filters = new bbop.widget.live_filters('bs3filter', srch, gconf, f_opts);
+    filters.establish_display();
 
     // Attach pager.
     var pager_opts = {
@@ -32,6 +38,15 @@ function getTableFromSolr(id){
     };
     var results = new bbop.widget.live_results('bs3results', srch, confc,
                            handler, linker, results_opts);
+    
+    // Add pre and post run spinner (borrow filter's for now).
+    srch.register('prerun', 'foo', function(){
+    filters.spin_up();
+    });
+    srch.register('postrun', 'foo', function(){
+    filters.spin_down();
+    });
+    
     // Initial run.
     srch.search();
 }

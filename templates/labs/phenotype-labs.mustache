@@ -32,9 +32,9 @@
                         {{/hasDiseases}}
                     </div>
                     <div class="tabcontainer">
-                        <div class="tabhover">View genes associated with this phenotype</div>
+                        <div class="tabhover">Diseases loaded from Golr</div>
                         {{#hasGenes}}
-                            <a href="#genes"><div class="tab contenttab">Genes ({{geneNum}})</div></a>
+                            <a href="#genes"><div class="tab contenttab">Disease-Golr</div></a>
                         {{/hasGenes}}
                         {{^hasGenes}}
                             <div class="tab greyed-out">Genes (0)</div>
@@ -118,6 +118,17 @@
                       <div class="panel-body">
 
                       <div id="results-area" class="row">
+                      
+                        <div class="col-xs-12 col-sm-12 col-md-4 col-lg-4">
+                          <div>
+                          <h4>Filter results</h4>
+        
+                         <div id="bs3filter">
+                           Loading...
+                         </div>
+        
+                         </div>      
+                      </div>
         
                       <div class="col-xs-12 col-sm-12 col-md-8 col-lg-8">
           
