@@ -260,7 +260,7 @@ bbop.monarch.datagraph.prototype.makeNavArrow = function(data,navigate,triangleD
             graphConfig.tooltip.style("display", "none");
         })
         .on("click", function(d){
-            if (d.subGraph && d.subGraph[0]){  
+            if (d.subGraph && d.subGraph[0]){
                 self.transitionToNewGraph(graphConfig,d,
                         data,barGroup,rect);
             }
@@ -351,14 +351,14 @@ bbop.monarch.datagraph.prototype.setGroupPositioning = function (graphConfig,gra
        .data(graphData)
        .enter().append("svg:g")
        .attr("class", ("bar"+graphConfig.level))
-       .attr("transform", function(d) { return "translate(0," + graphConfig.y0(d.label) + ")"; });
+       .attr("transform", function(d) { return "translate(0," + graphConfig.y0(d.id) + ")"; });
     return groupPos;
 }
 
 bbop.monarch.datagraph.prototype.setXYDomains = function (graphConfig,graphData,groups) {
     var self = this;
     //Set y0 domain
-    graphConfig.y0.domain(graphData.map(function(d) { return d.label; }));
+    graphConfig.y0.domain(graphData.map(function(d) { return d.id; }));
     
     if (jQuery('input[name=mode]:checked').val()=== 'grouped' || groups.length === 1){
         var xGroupMax = self.getGroupMax(graphData);
@@ -372,7 +372,7 @@ bbop.monarch.datagraph.prototype.setXYDomains = function (graphConfig,graphData,
     } else {
         graphConfig.y1.domain(groups)
         .rangeRoundBands([0, graphConfig.y0.rangeBand()]);
-    } 
+    }
 }
 
 bbop.monarch.datagraph.prototype.makeBar = function (barGroup,graphConfig,barLayout) {
@@ -499,7 +499,7 @@ bbop.monarch.datagraph.prototype.transitionStacked = function (graphConfig,data,
 
 bbop.monarch.datagraph.prototype.drawGraph = function (data,graphConfig) {
     var self = this;
-    var config = this.config;
+    var config = self.config;
     var groups = graphConfig.groups;
         
     data = self.getStackedStats(data,groups);
@@ -825,7 +825,7 @@ bbop.monarch.datagraph.prototype.setYAxisText = function(graphConfig,data){
     
     graphConfig.svg.select(".y.axis")
     .selectAll("text")
-    .filter(function(d){ return typeof(d) == "string"; })
+    .text(function(d){ return self.getIDLabel(d,data) })
     .attr("font-size", yFont)
     .on("mouseover", function(d){
         if (config.isYLabelURL){
@@ -833,13 +833,13 @@ bbop.monarch.datagraph.prototype.setYAxisText = function(graphConfig,data){
             d3.select(this).style("fill", config.color.yLabel.hover);
             d3.select(this).style("text-decoration", "underline");
         }
-        if (/\.\.\./.test(d)){
-            var fullLabel = self.getFullLabel(d,data);
+        if (/\.\.\./.test(self.getIDLabel(d,data))){
+            var fullLabel = self.getFullLabel(self.getIDLabel(d,data),data);
             d3.select(this).append("svg:title")
               .text(fullLabel);  
         } else if (yFont < 12) {//HARDCODE alert
             d3.select(this).append("svg:title")
-              .text(d);
+              .text(self.getIDLabel(d,data));
         }
     })
     .on("mouseout", function(){
@@ -849,8 +849,7 @@ bbop.monarch.datagraph.prototype.setYAxisText = function(graphConfig,data){
     .on("click", function(d){
         if (config.isYLabelURL){
             d3.select(this).style("cursor", "pointer");
-            var monarchID = self.getGroupID(d,data);
-            document.location.href = config.yLabelBaseURL + monarchID;
+            document.location.href = config.yLabelBaseURL + d;
         }
     })
     .style("text-anchor", "end")
@@ -939,8 +938,9 @@ bbop.monarch.datagraph.prototype.getYMax = function(data){
 }
   
 bbop.monarch.datagraph.prototype.checkForSubGraphs = function(data){
-      for (i = 0;i < data.length; i++) {
-          if (Object.keys(data[i]).indexOf('subGraph') >= 0) {
+     for (i = 0;i < data.length; i++) {
+          if ((Object.keys(data[i]).indexOf('subGraph') >= 0 ) &&
+             ( typeof data[i]['subGraph'][0] != 'undefined' )){
               return true;
           } 
      }
@@ -998,10 +998,13 @@ bbop.monarch.datagraph.prototype.removeZeroCounts = function(data){
  }
 bbop.monarch.datagraph.prototype.addEllipsisToLabel = function(data,max){
     var reg = new RegExp("(.{"+max+"})(.+)");
+    var ellipsis = new RegExp('\\.\\.\\.$');
     data.forEach(function (r){
-        if (r.label.length > max){
+        if ((r.label.length > max) && (!ellipsis.test(r.label))){
             r.fullLabel = r.label;
             r.label = r.label.replace(reg,"$1...");      
+        } else {
+            r.fullLabel = r.label;
         }
     });
     return data;
@@ -1022,6 +1025,16 @@ bbop.monarch.datagraph.prototype.getGroupID = function (d,data){
         if (data[i].label === d){
             monarchID = data[i].id;
             return monarchID;
+            break;
+        }
+    }
+}
+
+bbop.monarch.datagraph.prototype.getIDLabel = function (d,data){
+    for (var i=0, len=data.length; i < len; i++){
+        if (data[i].id === d){
+            label = data[i].label;
+            return label;
             break;
         }
     }

@@ -25,7 +25,8 @@ function getTableFromSolr(id){
     var results_opts = {
     //'callback_priority': -200,
     'user_buttons_div_id': pager.button_span_id(),
-    'user_buttons': []
+    'user_buttons': [],
+    'selectable_p' : false
     };
     var results = new bbop.widget.live_results('bs3results', srch, confc,
                            handler, linker, results_opts);
