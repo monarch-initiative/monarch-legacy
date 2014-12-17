@@ -15,7 +15,7 @@ function getTableFromSolr(id){
 
     srch.set_personality('annotation');
     //srch.add_query_filter('document_category', 'annotation', ['*']);
-    srch.add_query_filter('isa_partof_closure', id);
+    srch.add_query_filter('isa_partof_closure', id, ['*']);
     
     // Add filters.
     var f_opts = {
