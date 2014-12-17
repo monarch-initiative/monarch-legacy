@@ -102,7 +102,7 @@ function getConf(){
                 "document_category" : "annotation",
                 "schema_generating" : "true",
                 //"filter_weights" : "source^7.0 assigned_by^6.5 aspect^6.25 evidence_type_closure^6.0 panther_family_label^5.5 qualifier^5.25 taxon_closure_label^5.0 annotation_class_label^4.5 regulates_closure_label^3.0 annotation_extension_class_closure_label^2.0",
-                "filter_weights" : "bioentity^7.0 annotation_class^7.5 source^7.0",
+                "filter_weights" : "bioentity_label^7.0 annotation_class_label^7.5 source^7.0",
                 "fields_hash" : {
                    "bioentity_internal_id" : {
                       "type" : "string",
@@ -509,7 +509,7 @@ function getConf(){
                       "type" : "string",
                       "indexed" : "true",
                       "property" : [],
-                      "display_name" : "Gene/product",
+                      "display_name" : "Disease",
                       "cardinality" : "single"
                    },
                    "id" : {
@@ -568,7 +568,7 @@ function getConf(){
                       "transform" : [],
                       "type" : "string",
                       "property" : [],
-                      "display_name" : "Direct annotation",
+                      "display_name" : "Phenotype",
                       "cardinality" : "single",
                       "indexed" : "true"
                    },
@@ -871,7 +871,7 @@ function getConf(){
                       "type" : "string",
                       "indexed" : "true",
                       "property" : [],
-                      "display_name" : "Gene/product",
+                      "display_name" : "Disease",
                       "cardinality" : "single"
                    },
                    {
