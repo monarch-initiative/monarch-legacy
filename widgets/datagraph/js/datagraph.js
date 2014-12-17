@@ -151,56 +151,56 @@ bbop.monarch.datagraph.prototype.makeGraphDOM = function(html_div,data){
 }
   
 bbop.monarch.datagraph.prototype.setD3Config = function (html_div,DATA){
+    var self = this;
+    var conf =  self.config;
+    var d3Config = {};
+
+
+    //Define scales
+    d3Config.y0 = d3.scale.ordinal()
+        .rangeRoundBands([0,conf.height], .1);
+
+    d3Config.y1 = d3.scale.ordinal();
+
+    d3Config.x = d3.scale.linear()
+        .range([0, conf.width]);
       
-      var d3Config = {};
-      var self = this;
-      var conf =  self.config;
+    //Bar colors
+    d3Config.color = d3.scale.ordinal()
+        .range([conf.color.first,conf.color.second,conf.color.third,
+                conf.color.fourth,conf.color.fifth,conf.color.sixth]);
 
-      //Define scales
-      d3Config.y0 = d3.scale.ordinal()
-          .rangeRoundBands([0,conf.height], .1);
+    d3Config.xAxis = d3.svg.axis()
+        .scale(d3Config.x)
+        .orient("top")
+        .tickFormat(d3.format(".2s"));
 
-      d3Config.y1 = d3.scale.ordinal();
+    d3Config.yAxis = d3.svg.axis()
+        .scale(d3Config.y0)
+        .orient("left");
 
-      d3Config.x = d3.scale.linear()
-          .range([0, conf.width]);
+    d3Config.svg = d3.select(html_div).append("svg")
+        .attr("width", conf.width + conf.margin.left + conf.margin.right)
+        .attr("height", conf.height + conf.margin.top + conf.margin.bottom)
+        .append("g")
+        .attr("transform", "translate(" + conf.margin.left + "," + conf.margin.top + ")");
+
+    d3Config.crumbSVG = d3.select(html_div).select(".breadcrumbs")
+        .append("svg")
+        .attr("height",(conf.bread.height+2))
+        .attr("width",conf.bcWidth);
+
+    d3Config.tooltip = d3.select(html_div)
+        .append("div")
+        .attr("class", "tip");
+
+    d3Config.groups = self.getGroups(DATA);
+    //Variables to keep track of graph transitions
+    d3Config.level = 0;
+    d3Config.parents = [];
+    d3Config.html_div = html_div;
       
-      //Bar colors
-      d3Config.color = d3.scale.ordinal()
-          .range([conf.color.first,conf.color.second,conf.color.third,
-                  conf.color.fourth,conf.color.fifth,conf.color.sixth]);
-
-      d3Config.xAxis = d3.svg.axis()
-          .scale(d3Config.x)
-          .orient("top")
-          .tickFormat(d3.format(".2s"));
-
-      d3Config.yAxis = d3.svg.axis()
-          .scale(d3Config.y0)
-          .orient("left");
-
-      d3Config.svg = d3.select(html_div).append("svg")
-          .attr("width", conf.width + conf.margin.left + conf.margin.right)
-          .attr("height", conf.height + conf.margin.top + conf.margin.bottom)
-          .append("g")
-          .attr("transform", "translate(" + conf.margin.left + "," + conf.margin.top + ")");
-      
-      d3Config.crumbSVG = d3.select(html_div).select(".breadcrumbs")
-          .append("svg")
-          .attr("height",(conf.bread.height+2))
-          .attr("width",conf.bcWidth);
-
-      d3Config.tooltip = d3.select(html_div)
-          .append("div")
-          .attr("class", "tip");
-      
-      d3Config.groups = self.getGroups(DATA);
-      //Variables to keep track of graph transitions
-      d3Config.level = 0;
-      d3Config.parents = [];
-      d3Config.html_div = html_div;
-      
-      return d3Config;
+    return d3Config;
 }
 
 bbop.monarch.datagraph.prototype.makeLegend = function (graphConfig){
