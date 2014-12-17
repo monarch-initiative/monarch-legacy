@@ -67,7 +67,9 @@ var url = document.URL;
 		colorRanges: [['rgb(229,229,229)','rgb(164,214,212)','rgb(68,162,147)','rgb(97,142,153)','rgb(66,139,202)','rgb(25,59,143)'],
 			['rgb(252,248,227)','rgb(249,205,184)','rgb(234,118,59)','rgb(221,56,53)','rgb(181,92,85)','rgb(70,19,19)'],
 			['rgb(230,209,178)','rgb(210,173,116)','rgb(148,114,60)','rgb(68,162,147)','rgb(31,128,113)','rgb(3,82,70)'],
-			['rgb(229,229,229)','rgb(164,214,212)','rgb(68,162,147)','rgb(97,142,153)','rgb(66,139,202)','rgb(25,59,143)']], 
+			['rgb(229,229,229)','rgb(164,214,212)','rgb(68,162,147)','rgb(97,142,153)','rgb(66,139,202)','rgb(25,59,143)']],
+		emptySvgX: 1100,
+		emptySvgY: 70,
 		overviewCount: 3,
 		colStartingPos: 10,
 		detailRectWidth: 300,
@@ -107,6 +109,7 @@ var url = document.URL;
 		defaultApiEntity: "gene",
 		tooltips: {},
 		widthOfSingleModel: 18,
+		heightOfSingleModel: 13,
 		overviewGap: 30,
 		nonOverviewGap: 5,
 		overviewGridTitleXOffset: 340,
@@ -288,14 +291,14 @@ var url = document.URL;
 	},
 
 	reDraw: function() {
-		if (this.state.modelData.length != 0 && this.state.phenotypeData.length != 0 && this.state.filteredPhenotypeData.length != 0){
+		if (this.state.modelData.length != 0 && this.state.phenotypeData.length != 0 && this.state.phenotypeSortData.length != 0){
 			this._setComparisonType();
 			this._initCanvas();
 			this._addLogoImage();
 
 			this.state.svg
 				.attr("width", "100%")
-				.attr("height", this.state.phenotypeDisplayCount * 18);
+				.attr("height", this.state.phenotypeDisplayCount * this.state.widthOfSingleModel);
 			var rectHeight = this._createRectangularContainers();
 			this._createColorScale();
 
@@ -308,7 +311,6 @@ var url = document.URL;
 			this._createRowLabels();
 			this._createOverviewSection();
 
-			//var height = this.state.phenotypeDisplayCount*18+this.state.yoffsetOver;
 			var height = rectHeight + 40;
 
 			var containerHeight = height + 10; // MAGIC NUMBER? OR OVERVIEW OFFSET?
@@ -354,8 +356,8 @@ var url = document.URL;
 		var svgContainer = this.state.svgContainer;
 		svgContainer.append("<svg id='svg_area'></svg>");
 		this.state.svg = d3.select("#svg_area")
-			.attr("width", 1100)
-			.attr("height", 70);
+			.attr("width", this.state.emptySvgX)
+			.attr("height", this.state.emptySvgY);
 
 		//var error = "<br /><div id='err'><h4>" + msg + "</h4></div><br /><div id='return'><button id='button' type='button'>Return</button></div>";
 		//this.element.append(error);
@@ -382,7 +384,9 @@ var url = document.URL;
 
 	//adds light gray gridlines to make it easier to see which row/column selected matches occur
 	_createGridlines: function() { 
-		var self=this;
+		var self = this;
+		var mWidth = self.state.widthOfSingleModel;
+		var mHeight = self.state.heightOfSingleModel;
 		//create a blank grid to match the size of the phenogrid grid				
 		var data = new Array(),
 		modelCt = 0;
@@ -405,8 +409,8 @@ var url = document.URL;
 			.append("rect")
 			.attr("id","gridline")
 			.attr("transform","translate(232, " + (this.state.yModelRegion + 5) +")")
-			.attr("x", function(d,i) { return d[1] * 18 })
-			.attr("y", function(d,i) { return d[0] * 13 })  
+			.attr("x", function(d,i) { return d[1] * mWidth })
+			.attr("y", function(d,i) { return d[0] * mHeight })  
 			.attr("class", "hour bordered deselected")
 			.attr("width", 14)
 			.attr("height", 11.5);
@@ -549,9 +553,9 @@ var url = document.URL;
 		var faqOffset = 20;
 		var scoreTipY = self.state.yoffset;
 		var faqY = scoreTipY-faqOffset
-		var tipTextLength =92;
-		var explYOffset=15;
-		var explXOffset=10;
+		var tipTextLength = 92;
+		var explYOffset = 15;
+		var explXOffset = 10;
 		var scoretip = self.state.svg.append("text")
 			.attr("transform","translate(" + (self.state.axis_pos_list[2] ) + "," + scoreTipY+ ")")
 			.attr("x", 0)
@@ -589,8 +593,8 @@ var url = document.URL;
 			.attr("height", overviewBoxDim)
 			.attr("width", overviewBoxDim);
 
-		var overviewInstructionHeightOffset  =50;
-		var lineHeight =12;
+		var overviewInstructionHeightOffset = 50;
+		var lineHeight = 12;
 
 		var y = self.state.yModelRegion+overviewBoxDim+overviewInstructionHeightOffset;
 		var rect_instructions = self.state.svg.append("text")
@@ -716,7 +720,6 @@ var url = document.URL;
 		}
 
 		//Step 2: Filter for the next n phenotypes based on phenotypeDisplayCount and update the y-axis
-		this.state.filteredPhenotypeData = [];
 		this.state.filteredModelData = [];
 		this.state.yAxis = [];
 
@@ -741,9 +744,7 @@ var url = document.URL;
 		var axis_idx = 0;
 		var tempFilteredModelData = [];
 		//get phenotype[startIdx] up to phenotype[currPhenotypeIdx] from the array of sorted phenotypes
-		for (var i = startIdx;i < displayLimiter;i++) {
-			//move the ranked phenotypes onto the filteredPhenotypeData array
-			self.state.filteredPhenotypeData.push(self.state.phenotypeSortData[i]);
+		for (var i = startIdx; i < displayLimiter; i++) {
 			//update the YAxis
 			//the height of each row
 			var size = 10;
@@ -874,7 +875,7 @@ var url = document.URL;
 				}else{
 					for (i in d){
 						if (sortType == 'Frequency'){num+= 1;}
-						else {num+= +d[i].subsumer_IC;}
+						else {num+= d[i].subsumer_IC;}
 					}
 					sortVal = num;
 				}
@@ -1036,10 +1037,11 @@ var url = document.URL;
 			case 504:
 			case 505:
 			default:
-			msg = "We're having some problems.  Please try again soon."
+				msg = "We're having some problems.  Please try again soon."
 			break;
 
-			case 0: msg = "Please check your network connection."
+			case 0: 
+				msg = "Please check your network connection."
 			break;
 		}
 
@@ -1115,7 +1117,7 @@ var url = document.URL;
 
 			this.state.filteredModelList=[];
 			//initialize the filtered model list
-			for (var idx=0;idx<this.state.modelDisplayCount;idx++) {
+			for (var idx = 0; idx < this.state.modelDisplayCount; idx++) {
 				this.state.filteredModelList.push(this.state.modelList[idx]);
 			}
 		}
@@ -1171,14 +1173,14 @@ var url = document.URL;
 
 		switch(calcMethod){
 			case 2: nic = lIC;
-			break;
+				break;
 			case 1: nic = ((lIC/aIC) * 100);
-			break;
+				break;
 			case 0: nic = Math.sqrt((Math.pow(aIC-lIC,2)) + (Math.pow(bIC-lIC,2)));
-			nic = (1 - (nic/+this.state.maxICScore)) * 100;
-			break;
+				nic = (1 - (nic/+this.state.maxICScore)) * 100;
+				break;
 			case 3: nic = ((lIC/bIC) * 100);
-			break;
+				break;
 			default: nic = lIC;
 		}
 		return nic;
@@ -1440,7 +1442,7 @@ var url = document.URL;
 			.attr("y", self.state.yoffset + 2)
 			.attr("class", "model_accent")
 			.attr("width", 14)
-			.attr("height", (self.state.phenotypeDisplayCount * 13));
+			.attr("height", (self.state.phenotypeDisplayCount * self.state.heightOfSingleModel));
 
 		// I don't know why I'm still seeing the un-processed concept id
 		var classlabel = "text#" +this._getConceptId(modelData.model_id);
@@ -1474,9 +1476,9 @@ var url = document.URL;
 		var obj = {
 			attributes: [],
 			getAttribute: function(keystring) {
-				var ret = self.state.xScale(modelData.model_id)+ 15;
+				var ret = self.state.xScale(modelData.model_id) + 15;
 				if (keystring == "y") {
-					ret = Number(self.state.yoffset -100);
+					ret = Number(self.state.yoffset - 100);
 				}
 				return ret;
 			},
@@ -1903,8 +1905,8 @@ var url = document.URL;
 		var self = this;
 		var list = self.state.speciesList;
 		var ct = self.state.multiOrganismCt,
-		vwidthAndGap = 13,
-		hwidthAndGap = 18,
+		vwidthAndGap = self.state.heightOfSingleModel,
+		hwidthAndGap = self.state.widthOfSingleModel,
 		totCt = 0,
 		parCt = 0;
 
@@ -2003,7 +2005,7 @@ var url = document.URL;
 			.attr("y", self.state.yoffset + 2 )
 			.attr("class", "model_accent")
 			.attr("width", 12)
-			.attr("height", (self.state.phenotypeDisplayCount * 13));
+			.attr("height", (self.state.phenotypeDisplayCount * self.state.heightOfSingleModel));
 	},
 
 	_updateAxes: function() {
@@ -2033,7 +2035,6 @@ var url = document.URL;
 	//movecount is an integer and can be either positive or negative
 	_updateModel: function(modelIdx, phenotypeIdx) {
 		var self = this;
-		var fmd = self.state.filteredModelData;
 
 		//This is for the new "Overview" target option 
 		var modelData = this.state.modelData;
@@ -2050,7 +2051,6 @@ var url = document.URL;
 		}
 		var startPhenotypeIdx = this.state.currPhenotypeIdx - this.state.phenotypeDisplayCount;
 
-		this.state.filteredPhenotypeData = [];
 		this.state.yAxis = [];
 
 		//fix model list
@@ -2084,7 +2084,6 @@ var url = document.URL;
 		var tempFilteredModelData = [];
 		axis_idx = 0;
 		for (var idx=startPhenotypeIdx;idx<self.state.currPhenotypeIdx;idx++) {
-			self.state.filteredPhenotypeData.push(self.state.phenotypeSortData[idx]);
 			//update the YAxis
 			//the height of each row
 			var size = 10;
@@ -2165,7 +2164,8 @@ var url = document.URL;
 	},
 
 	_createTextScores: function(list) {
-		var self =this;
+		var self = this;
+		var xWidth = self.state.widthOfSingleModel;
 
 		var translation ="translate(" + (this.state.textWidth + 34) +"," + this.state.yoffset + ")"; // was yoffset -3
 		this.state.svg.selectAll("text.scores")
@@ -2174,9 +2174,9 @@ var url = document.URL;
 			.append("text")
 			.attr("transform",translation)
 			.attr("id", "scorelist")
-			.attr("x",function(d,i){return i*18})
+			.attr("x",function(d,i){return i * xWidth})
 			.attr("y", 0)
-			.attr("width", 18)
+			.attr("width", xWidth)
 			.attr("height", 10)
 			.attr("class", "scores")
 			// don't show score if it is a dummy model.
@@ -2265,7 +2265,7 @@ var url = document.URL;
 		var self=this;
 		this._buildAxisPositionList();
 
-		var gridHeight = self.state.phenotypeDisplayCount * 13 + 10;
+		var gridHeight = self.state.phenotypeDisplayCount * self.state.heightOfSingleModel + 10;
 		if (gridHeight < self.state.minHeight) {
 			gridHeight = self.state.minHeight;
 		}
@@ -2299,7 +2299,7 @@ var url = document.URL;
 	 */
 
 	_buildAxisPositionList: function() {
-		//For Overview of Organisms 0 width = ((multiOrganismCt*2)+2) *18	
+		//For Overview of Organisms 0 width = ((multiOrganismCt*2)+2) *this.state.widthOfSingleModel	
 		//Add two extra columns as separators
 		this.state.axis_pos_list = [];
 
@@ -2352,11 +2352,11 @@ var url = document.URL;
 		//in the scale
 		if (diff > 0) {
 			// baseline for gradient positioning
-			var y1 = 262;
-			//more magic data
 			if (this.state.phenotypeData.length < this.state.defaultPhenotypeDisplayCount) {
-				y1 = 172;
-			} 
+				var y1 = 172;
+			} else {
+				var y1 = 262;
+			}
 			ymax = this._buildGradientDisplays(y1);
 			this._buildGradientTexts(y1);
 		}
@@ -2619,7 +2619,7 @@ var url = document.URL;
 		var self=this;
 		var rect_text = this.state.svg
 			.selectAll(".a_text")
-			.data(self.state.filteredPhenotypeData, function(d, i) {  return d[0].id_a; });//rowid
+			.data(self.state.phenotypeSortData, function(d, i) {  return d[0].id_a; });//rowid
 		rect_text.enter()
 			.append("text")
 			.attr("class", function(d) {
