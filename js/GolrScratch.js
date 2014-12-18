@@ -91,6 +91,7 @@ function LaunchEverything(){
     }
 }
 //Just a something to mess with, this gets populated from the solr yaml
+// TODO: load this dynamically. See: https://github.com/monarch-initiative/monarch-app/issues/629
 function getConf(){
     return {
              "annotation" : {
