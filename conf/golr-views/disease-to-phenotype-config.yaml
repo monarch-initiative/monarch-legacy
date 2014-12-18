@@ -1,9 +1,9 @@
 ####
-#### The annotation description file for GOlr and AmiGO.
+#### The Golr config for the disease tab on the phenotype page
 ####
 id: annotation
 schema_generating: true
-description: Associations between GO terms and genes or gene products.
+description: Associations between diseases and phenotypes
 display_name: Annotations
 document_category: annotation
 weight: 20
@@ -158,7 +158,7 @@ fields:
 #     property: []
 #     searchable: true
   - id: synonym
-    description: "Gene or gene product synonyms."
+    description: "Disease synonyms."
     display_name: Synonym
     type: string
     cardinality: multi
@@ -212,19 +212,19 @@ fields:
 #     cardinality: multi
 #     property: []
   - id: bioentity
-    description: "Gene or gene product identifiers."
-    display_name: Gene/product
+    description: "Disease identifiers."
+    display_name: Disease
     type: string
     property: []
   - id: bioentity_label
-    description: "Gene or gene product identifiers."
-    display_name: Gene/product
+    description: "Disease identifiers."
+    display_name: Disease
     type: string
     property: []
     searchable: true
   - id: bioentity_name
-    description: "The full name of the gene or gene product."
-    display_name: Gene/product name
+    description: "The full name of the disease."
+    display_name: Disease full name
     type: string
     property: []
     searchable: true
@@ -253,12 +253,12 @@ fields:
     property: []
   - id: annotation_class
     description: "Direct annotations."
-    display_name: Direct annotation
+    display_name: Phenotype
     type: string
     property: []
   - id: annotation_class_label
     description: "Direct annotations."
-    display_name: Direct annotation
+    display_name: Phenotype
     type: string
     property: []
     searchable: true
