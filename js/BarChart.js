@@ -73,7 +73,7 @@ function makeTwoSizeGraph(data,graphDiv,largeConfig,smallConfig,width,height){
     var graphObject;
       
     //Check screen size on page load
-    if ($(window).width() > width && $(window).height() > height){
+    if (jQuery(window).width() > width && jQuery(window).height() > height){
         graphObject = 
             new bbop.monarch.datagraph(largeConfig);
         graphObject.init(graphDiv,data);
@@ -88,15 +88,15 @@ function makeTwoSizeGraph(data,graphDiv,largeConfig,smallConfig,width,height){
     
     window.addEventListener('resize', function(event){
  
-        if ($(window).width() > width && $(window).height() > height && sizeTracker != 'large'){
-            $(graphDiv).children().remove();
+        if (jQuery(window).width() > width && jQuery(window).height() > height && sizeTracker != 'large'){
+            jQuery(graphDiv).children().remove();
             graphObject = 
                 new bbop.monarch.datagraph(largeConfig);
             graphObject.init(graphDiv,data);
             this.setMinHeightWidth(graphObject,graphDiv);
             sizeTracker = 'large';
-        } else if ($(window).width() < width && $(window).height() < height && sizeTracker != 'small') {
-            $(graphDiv).children().remove();
+        } else if (jQuery(window).width() < width && jQuery(window).height() < height && sizeTracker != 'small') {
+            jQuery(graphDiv).children().remove();
             graphObject = 
                 new bbop.monarch.datagraph(smallConfig);
             graphObject.init(graphDiv,data);

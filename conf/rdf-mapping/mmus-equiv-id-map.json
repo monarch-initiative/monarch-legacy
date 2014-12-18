@@ -30,7 +30,7 @@
                "prefix" : "http://identifiers.org/mgd/"
             }
          ],
-         "mapVersion" : "2014-12-09",
+         "mapVersion" : "2014-12-15b",
          "graph" : "mmus-equiv-id"
       }
    ],

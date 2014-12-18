@@ -10,10 +10,10 @@
  * widgets.js. To make a table sortable, add the column name of the table to the
  * appropriate dictionary for sortable type. */
 
-$(document).ready(function(){
+jQuery(document).ready(function(){
 
     /* This provides functions for comparing elements by datatype. */
-    var table = $('.simpletable').stupidtable({
+    var table = jQuery('.simpletable').stupidtable({
         "string": function(a, b) {
             return string(a, b);
         },
@@ -67,8 +67,8 @@ $(document).ready(function(){
         // data.column - the index of the column sorted after a click
         // data.direction - the sorting direction (either asc or desc)
     
-        $('.arrow').html(' &#x2195;');
-        var th = $(this).find("th");
+        jQuery('.arrow').html(' &#x2195;');
+        var th = jQuery(this).find("th");
         var arrow = data.direction === "asc" ? "  ↑" : "  ↓";
         var type = th.eq(data.column).attr("data-sort");
         if (sort.indexOf(type) != -1) {

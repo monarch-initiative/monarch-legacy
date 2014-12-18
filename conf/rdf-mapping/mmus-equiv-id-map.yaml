@@ -11,7 +11,7 @@ graphs:
         name: taxon_id
       - 
         name: mapped_id
-        prefix: http://identifiers.org/mgd/
+        prefix: "http://identifiers.org/mgd/"
         type: owl:Class
     filter: 
       taxon_id: "NCBITaxon:10090"
@@ -19,7 +19,7 @@ graphs:
       mapping_resource: "MGI"
       mapped_source: "MGI"
     graph: mmus-equiv-id
-    mapVersion: 2014-12-09
+    mapVersion: 2014-12-15b
     mappings: 
       - 
         object: mapped_id

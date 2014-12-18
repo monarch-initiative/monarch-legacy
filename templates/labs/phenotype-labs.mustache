@@ -1,0 +1,167 @@
+    {{{includes.navbar}}}
+    <div class="monarch-container">
+        <div class="content">
+            <div class="wrapperforfooter">
+            <div class="jumbotron monarch-phenotype-light">
+                <div id="description">
+                    {{#alerts}}
+                    <div class="alert">
+                      {{{.}}}
+                    </div>
+                    {{/alerts}}
+                    <img id="monarch-logo" class="downloadline" src="/image/logo.png"/>
+                    <h1 class="downloadline">Phenotype: {{label}}</h1>
+                    <a href="{{{download.json}}}" class="btn btn-default downloadline downloadline-left monarch-phenotype-dark">JSON</a>
+                    <a class="downloadline btn btn-large btn-default btn-monarch-main monarch-feedback-dark"
+                            href="mailto:info@monarchinitiative.org">Your feedback welcome!</a>
+                    <p>
+                    {{#hasDef}}
+                    {{definitions}}<br/>
+                    {{/hasDef}}
+                    </p>
+                </div>
+                <div id="categories">
+                    <a href="#overview"><div id="initialtab" class="tab contenttab">Overview</div></a>
+                    <div class="tabcontainer">
+                        <div class="tabhover">View diseases with this phenotype</div>
+                        {{#hasDiseases}}
+                            <a href="#disease"><div class="tab contenttab">Disease ({{diseaseNum}})</div></a>
+                        {{/hasDiseases}}
+                        {{^hasDiseases}}
+                            <div class="tab greyed-out">Disease (0)</div>
+                        {{/hasDiseases}}
+                    </div>
+                    <div class="tabcontainer">
+                        <div class="tabhover">Diseases loaded from Golr</div>
+                        {{#hasGenes}}
+                            <a href="#genes"><div class="tab contenttab">Disease-Golr</div></a>
+                        {{/hasGenes}}
+                        {{^hasGenes}}
+                            <div class="tab greyed-out">Genes (0)</div>
+                        {{/hasGenes}}
+                    </div>
+                    <div class="tabcontainer">
+                        <div class="tabhover">View genotypes with this phenotype</div>
+                        {{#hasGenotypes}}
+                            <a href="#genotypes"><div class="tab contenttab">Models ({{genotypeNum}})</div></a>
+                        {{/hasGenotypes}}
+                        {{^hasGenotypes}}
+                            <div class="tab greyed-out">Models (0)</div>
+                        {{/hasGenotypes}}
+                    </div>
+                    <div class="tabcontainer">
+                        <div class="tabhover">View citations for the data on this page</div>
+                        {{#hasLiterature}}
+                            <a href="#literature"><div class="tab contenttab">Literature ({{literatureNum}})</div></a>
+                        {{/hasLiterature}}
+                        {{^hasLiterature}}
+                            <div class="tab greyed-out">Literature (0)</div>
+                        {{/hasLiterature}}
+                    </div>
+                </div>
+            </div>
+            <div id="complete-info">
+                <div id="overview" class="first category">
+                    <h3>IDs</h3>
+                        <div class="ids">
+                            <b>URI:</b> <a href="{{{url}}}">{{{url}}}</a>
+                        </div>
+                        {{#hasAka}}
+                            <div class="ids">
+                                <b>AKA:</b>
+                                {{aka}}
+                            </div>
+                        {{/hasAka}}
+                        {{#hasXrefs}}
+                            <div class="ids">
+                                <b>xref IDs:</b> {{{xrefs}}}
+                            </div>
+                        {{/hasXrefs}}
+                    <h3>Classification</h3>
+                    {{{includes.classificationComponent}}}
+                    <div id="r2" class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
+      
+                    <!-- Quiet rollover. -->
+                    <div class="panel panel-default">
+                      <div class="panel-heading">
+                      <h3 class="panel-title">Browser</h3>
+                    </div>
+                    <div class="panel-body">
+                      <div id="brw">
+                    </div>
+                    <div class="clearfix"></div>
+                    </div>
+                    <!-- <div class="panel-footer text-right">ooo</div> -->
+      </div>
+      
+    </div>
+                </div>
+                {{#hasDiseases}}
+                <div id="disease" class="category">
+                    <table class="{{css.table}}">
+                    {{{diseaseTable}}}
+                    </table>
+                </div>
+                {{/hasDiseases}}
+                {{#hasGenes}}
+                <div id="genes" class="category">
+                    <table class="{{css.table}}">
+                    {{{geneTable}}}
+                    </table>
+                    <div id="r3" class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
+      
+                      <!-- Quiet rollover. -->
+                      <div class="panel panel-default">
+                      <!-- <div class="panel-heading"> -->
+                      <!--   <h3 class="panel-title">BS3 Tests</h3> -->
+                      <!-- </div> -->
+                      <div class="panel-body">
+
+                      <div id="results-area" class="row">
+                      
+                        <div class="col-xs-12 col-sm-12 col-md-4 col-lg-4">
+                          <div>
+                          <h4>Filter results</h4>
+        
+                         <div id="bs3filter">
+                           Loading...
+                         </div>
+        
+                         </div>      
+                      </div>
+        
+                      <div class="col-xs-12 col-sm-12 col-md-8 col-lg-8">
+          
+                        <div id="bs3pager">
+                        </div>
+                        <div id="bs3results">
+                          pending...
+                        </div>
+                      </div>
+
+                     </div>
+
+                   <!-- <div class="clearfix"></div> -->
+                   </div>
+                 </div>
+                {{/hasGenes}}
+                {{#hasGenotypes}}
+                <div id="genotypes" class="category">
+                    <table class="{{css.table}}">
+                    {{{genotypeTable}}}
+                    </table>
+                </div>
+                {{/hasGenotypes}}
+                {{#hasLiterature}}
+                <div id="literature" class="category">
+                    <table class="{{css.table}}">
+                        {{{literatureTable}}}
+                    </table>
+                </div>
+                {{/hasLiterature}}
+            </div>
+        
+            </div> <!-- closes wrapperforfooter -->
+            {{{includes.footer}}}
+        </div>
+    </div>
