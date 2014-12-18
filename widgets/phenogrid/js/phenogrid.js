@@ -290,7 +290,7 @@ var url = document.URL;
 	},
 
 	reDraw: function() {
-		if (this.state.modelData.length !== 0 && this.state.phenotypeData.length !== 0 && this.state.phenotypeSortData.length !== 0){
+		if (this.state.modelData.length !== 0 && this.state.phenotypeData.length !== 0 && this.state.filteredPhenotypeData.length !== 0){
 			this._setComparisonType();
 			this._initCanvas();
 			this._addLogoImage();
@@ -720,6 +720,7 @@ var url = document.URL;
 
 		//Step 2: Filter for the next n phenotypes based on phenotypeDisplayCount and update the y-axis
 		this.state.filteredModelData = [];
+		this.state.filteredPhenotypeData = [];
 		this.state.yAxis = [];
 
 		//Force Reset to Origin when changing Species, Sort or Display
@@ -744,6 +745,7 @@ var url = document.URL;
 		var tempFilteredModelData = [];
 		//get phenotype[startIdx] up to phenotype[currPhenotypeIdx] from the array of sorted phenotypes
 		for (var i = startIdx; i < displayLimiter; i++) {
+			self.state.filteredPhenotypeData.push(self.state.phenotypeSortData[i]);
 			//update the YAxis
 			//the height of each row
 			var size = 10;
@@ -2040,6 +2042,7 @@ var url = document.URL;
 		}
 		var startPhenotypeIdx = this.state.currPhenotypeIdx - this.state.phenotypeDisplayCount;
 
+		this.state.filteredPhenotypeData = [];
 		this.state.yAxis = [];
 
 		//fix model list
@@ -2073,6 +2076,7 @@ var url = document.URL;
 		var tempFilteredModelData = [];
 		axis_idx = 0;
 		for (var dmx = startPhenotypeIdx; dmx < self.state.currPhenotypeIdx; dmx++) {
+			self.state.filteredPhenotypeData.push(self.state.phenotypeSortData[dmx]);
 			//update the YAxis
 			//the height of each row
 			var size = 10;
@@ -2611,7 +2615,7 @@ var url = document.URL;
 		var self=this;
 		var rect_text = this.state.svg
 			.selectAll(".a_text")
-			.data(self.state.phenotypeSortData, function(d, i) {  return d[0].id_a; });//rowid
+			.data(self.state.filteredPhenotypeData, function(d, i) {  return d[0].id_a; });//rowid
 		rect_text.enter()
 			.append("text")
 			.attr("class", function(d) {
