@@ -55,6 +55,7 @@ bbop.monarch.datagraph.prototype.run = function(html_div,DATA){
 bbop.monarch.datagraph.prototype.init = function(html_div,DATA){
      var self = this;
      var config = self.config;
+     self.checkData(DATA);
      
      if (config.isDynamicallyResized){
      
@@ -507,21 +508,21 @@ bbop.monarch.datagraph.prototype.drawGraph = function (data,graphConfig) {
     var self = this;
     var config = self.config;
     var groups = graphConfig.groups;
-        
+
     data = self.getStackedStats(data);
     data = self.sortDataByGroupCount(data,groups);
     data = self.addEllipsisToLabel(data,config.maxLabelSize);
-        
+    
     self.setXYDomains(graphConfig,data,groups);
     
     if (groups.length == 1){
         config.barOffset.grouped.height = config.barOffset.grouped.height+8;
         config.barOffset.stacked.height = config.barOffset.stacked.height+8;
     }
-        
+    
     //Dynamically decrease font size for large labels
     var yFont = self.adjustYAxisElements(data.length);
-        
+    
     //Set x axis ticks
     var xTicks = graphConfig.svg.append("g")
         .attr("class", "x axis")
@@ -535,18 +536,18 @@ bbop.monarch.datagraph.prototype.drawGraph = function (data,graphConfig) {
         .style("text-anchor", "end")
         .style("font-size",config.xLabelFontSize)
         .text(config.xAxisLabel);
-
+    
     //Set Y axis ticks and labels
     var yTicks = graphConfig.svg.append("g")
         .attr("class", "y axis")
         .call(graphConfig.yAxis);
         
     self.setYAxisText(graphConfig,data);
-        
+    
     //Create SVG:G element that holds groups
     var barGroup = self.setGroupPositioning(graphConfig,data);
     var rect = self.setBarConfigPerCheckBox(graphConfig,data,groups,barGroup);
-        
+    
     //Create navigation arrow
     var navigate = graphConfig.svg.selectAll(".y.axis");
     self.makeNavArrow(data,navigate,config.arrowDim,
@@ -560,13 +561,13 @@ bbop.monarch.datagraph.prototype.drawGraph = function (data,graphConfig) {
     if (config.useLegend){
             self.makeLegend(graphConfig);
     }
-        
+    
     //Make first breadcrumb
     if (config.useCrumb){
         self.makeBreadcrumb(graphConfig,config.firstCrumb,
                                  groups,rect,barGroup);
     }
-        
+    
     d3.select(graphConfig.html_div).selectAll('input')
       .on("change",function(){
           self.changeBarConfig(graphConfig,data,groups,rect);});
@@ -867,6 +868,7 @@ bbop.monarch.datagraph.prototype.setYAxisText = function(graphConfig,data){
 bbop.monarch.datagraph.prototype.drawSubGraph = function(graphConfig,subGraph,parent,isFromCrumb) {
     var self = this;
     var config = self.config;
+    self.checkData(subGraph);
 
     graphConfig.groups = self.getGroups(subGraph);
     var groups = graphConfig.groups;
@@ -963,7 +965,7 @@ bbop.monarch.datagraph.prototype.getStackedStats = function(data){
                i["x0"] = count;
                i["x1"] = i.value+count;
                if (i.value > 0){
-                   count = i.value;
+                   count = i["x1"];
                }
            });
       });
@@ -971,6 +973,12 @@ bbop.monarch.datagraph.prototype.getStackedStats = function(data){
 };
 
 bbop.monarch.datagraph.prototype.sortDataByGroupCount = function(data,groups){
+    var self = this;
+    //Check if total counts have been calculated via getStackedStats()
+    if (data[0].counts[0].x1 == null){
+        data = self.getStackedStats(data);
+    }
+    
     var lastElement = groups.length-1;
     data.sort(function(obj1, obj2) {
         if ((obj2.counts[lastElement])&&(obj1.counts[lastElement])){
@@ -993,8 +1001,30 @@ bbop.monarch.datagraph.prototype.getGroups = function(data) {
       groups = Object.keys(unique);
       return groups;
 };
+
+//TODO improve checking
+bbop.monarch.datagraph.prototype.checkData = function(data){
+    data.forEach(function (r){
+        //Check ID
+        if (r.id == null){
+            throw new Error ("ID is not defined in data object");
+        }
+        if (r.label == null){
+            r.label = r.id;
+        }
+        if (r.counts == null){
+            throw new Error ("No statistics for "+r.id+" in data object");
+        }
+        r.counts.forEach(function (i){
+            if (i.value == null){
+                r.value = 0;
+            }
+        });
+    });
+    return data;
+};
   
-//remove zero length bars
+//remove zero length bar
 bbop.monarch.datagraph.prototype.removeZeroCounts = function(data){
       trimmedGraph = [];
       data.forEach(function (r){
