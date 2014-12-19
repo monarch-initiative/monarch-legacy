@@ -57,9 +57,10 @@
       },
       {
          "name" : "publication_id",
+         "type" : "owl:NamedIndividual",
          "list_delimiter" : ";"
       }
    ],
    "graph" : "zfin-gene-phenotype",
-   "mapVersion" : "2014-12-10"
+   "mapVersion" : "2014-12-15"
 }

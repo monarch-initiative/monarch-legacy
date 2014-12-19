@@ -111,7 +111,7 @@
       "frequency" : "monarch:frequency",
       "ZP" : "http://purl.obolibrary.org/obo/ZP_",
       "OMIM" : "http://purl.obolibrary.org/obo/OMIM_",
-      "MGI" : "http://identifiers.org/mgd/mgi:",
+      "MGI" : "http://identifiers.org/mgd/MGI:",
       "dc" : "http://purl.org/dc/terms/",
       "MONARCH" : "http://monarchinitiative.org/MONARCH_",
       "ClinVarHaplotype" : "http://identifiers.org/ClinVarHaplotype_",

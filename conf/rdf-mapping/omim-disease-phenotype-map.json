@@ -75,6 +75,7 @@
       },
       {
          "name" : "publication_id",
+         "type" : "owl:NamedIndividual",
          "list_delimiter" : ";"
       },
       {
@@ -88,5 +89,5 @@
       "IM" : "http://purl.obolibrary.org/obo/OMIM_"
    },
    "graph" : "omim-disease-phenotype",
-   "mapVersion" : "2014-12-12"
+   "mapVersion" : "2014-12-15"
 }

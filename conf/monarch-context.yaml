@@ -84,7 +84,7 @@
   # MODs
   #
   # TODO: check these
-  MGI: "http://identifiers.org/mgd/mgi:"
+  MGI: "http://identifiers.org/mgd/MGI:"
   RGD: "http://identifiers.org/mgd/rgd:"
   TAIR: "http://identifiers.org/mgd/tair:"
   SGD: "http://identifiers.org/mgd/sgd:"

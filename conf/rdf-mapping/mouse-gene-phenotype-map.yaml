@@ -1,5 +1,5 @@
 graph: mouse-gene-phenotype
-mapVersion: 2014-12-10
+mapVersion: 2014-12-15b
 view: nif-0000-00096-6
 status: alpha
 prefixes:
@@ -23,6 +23,7 @@ columns:
   - 
     list_delimiter: ";"
     name: publication_id
+    type: owl:NamedIndividual
 mappings: 
   - 
     subject: implicated_gene_ids
