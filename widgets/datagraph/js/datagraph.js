@@ -1024,7 +1024,7 @@ bbop.monarch.datagraph.prototype.checkData = function(data){
     return data;
 };
   
-//remove zero length bar
+//remove zero length bars
 bbop.monarch.datagraph.prototype.removeZeroCounts = function(data){
       trimmedGraph = [];
       data.forEach(function (r){
