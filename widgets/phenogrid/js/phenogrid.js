@@ -194,12 +194,39 @@ var url = document.URL;
 	},
 
 	_getTargetSpeciesTaxonByName: function(self,name) {
-		var taxon;
-		if (typeof(self.state.targetSpeciesByName[name]) !== 'undefined') {
-			taxon  = self.state.targetSpeciesByName[name].taxon;
-		}
-		return taxon;
+	    var taxon;
+	    // first, find something that matches by name
+	    if (typeof(self.state.targetSpeciesByName[name]) !== 'undefined') {
+		taxon  = self.state.targetSpeciesByName[name].taxon;
+	    }
+	    //default to overview,  so as to always do somethign sensible
+	    if (typeof(taxon) === 'undefined') {
+		taxon ='Overview';
+	    }
+
+	    return taxon;
 	},
+
+	 /**
+          * some installations might send in a taxon - "10090" - as opposed to a name - "Mus musculus".
+	  * here, we make sure that we are dealing with names by translating back
+          * this might be somewhat inefficient, as we will later translate to taxon, but it will
+	  * make other calls easier to be consitently talking in terms of species name
+          */
+            _getTargetSpeciesNameByTaxon: function(self,name) {
+
+		/// default - it actually was a species name
+		var species = name;
+
+		// if, instead, it matches a taxon, grab the ppropriate species
+		for (sname in self.state.targetSpeciesByName) {
+		    if (name == self.state.targetSpeciesByName[sname].taxon) {
+			species = sname;
+			break;
+		    }
+		}
+		return species;
+	    },
 
 	//NOTE: I'm not too sure what the default init() method signature should be
 	//given an imageDiv and phenotype_data list
@@ -270,7 +297,13 @@ var url = document.URL;
 
 		this.state.currModelIdx = this.state.modelDisplayCount-1;
 		this.state.currPhenotypeIdx = this.state.phenotypeDisplayCount-1;
-		this.state.phenotypeData = this._filterPhenotypeResults(this.state.phenotypeData);
+	        this.state.phenotypeData = this._filterPhenotypeResults(this.state.phenotypeData);
+
+	    
+	    // target species name might be provided as a name or as taxon. Make sure that we translate to name
+	    this.state.targetSpeciesName = this._getTargetSpeciesNameByTaxon(this,this.state.targetSpeciesName);
+
+	    
 		this._loadData();
 
 		// shorthand for top of model region
@@ -545,7 +578,7 @@ var url = document.URL;
 
 	/* we only have 3 color,s but that will do for now */
 	_getColorForModelValue: function(self,species,score) {
-		//This is for the new "Overview" target option
+	    //This is for the new "Overview" target option
 		var selectedScale = self.state.colorScale[species];
 		return selectedScale(score);
 	},
@@ -674,7 +707,6 @@ var url = document.URL;
 	},
 
 	_setSelectedSort: function(type) {
-		//console.log("calling selected sort on ..."+type);
 		var self = this;
 		self.state.selectedSort = type;
 	},
@@ -893,7 +925,7 @@ var url = document.URL;
 
 	//given a list of phenotypes, find the top n models
 	//I may need to rename this method "getModelData".  It should extract the models and reformat the data 
-	_loadData: function() {
+	    _loadData: function() {
 		if (this.state.targetSpeciesName === "Overview") {
 			this._loadOverviewData();
 		} else {
@@ -903,8 +935,10 @@ var url = document.URL;
 	},
 
 	_loadSpeciesData: function(speciesName,limit) {
-		var phenotypeList = this.state.phenotypeData;
-		var url = this.state.serverURL+"/simsearch/phenotype?input_items="+phenotypeList.join(",")+"&target_species="+this._getTargetSpeciesTaxonByName(this,speciesName);
+	    var phenotypeList = this.state.phenotypeData;
+	    var taxon = this._getTargetSpeciesTaxonByName(this,speciesName);
+	    var url = this.state.serverURL+"/simsearch/phenotype?input_items="+phenotypeList.join(",")+
+		"&target_species="+taxon;
 		if (typeof(limit) !== 'undefined') {
 			url = url +"&limit="+limit;
 		}
@@ -936,7 +970,7 @@ var url = document.URL;
 		return res;
 	},
 
-	_loadOverviewData: function() {
+	    _loadOverviewData: function() {
 		var limit = this.state.multiOrganismCt;
 		for (var i in this.state.targetSpeciesList) {
 			var species = this.state.targetSpeciesList[i].name;
@@ -1239,7 +1273,7 @@ var url = document.URL;
 
 		for (var i in this.state.targetSpeciesList) {
 			if (typeof(this.state.colorRanges[i]) !== 'undefined') {
-				var species = this.state.targetSpeciesList[i].name;
+			    var species = this.state.targetSpeciesList[i].name;
 				this.state.colorScale[species] = this._getColorScale(i, maxScore);
 			}
 		}
