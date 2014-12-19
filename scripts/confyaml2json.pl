@@ -167,7 +167,7 @@ confyaml2json.pl
 
 =head1 SYNOPSIS
 
-confyaml2json.pl [-h] [-v] -i <input directory/name (full path)>
+confyaml2json.pl [-h] [-v] -i <input directory (full path)>
 
 =head1 DESCRIPTION
 
