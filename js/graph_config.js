@@ -13,7 +13,7 @@ bbop.monarch.homePageConfig = {
         bread : {width:60, height: 25, offset:50, space: 1},
         
         //Chart margins    
-        margin : {top: 35, right: 63, bottom: 5, left: 174},
+        margin : {top: 35, right: 63, bottom: 5, left: 175},
         
         width : 250,
         height : 300,
@@ -47,7 +47,7 @@ bbop.monarch.homePageConfig = {
         legendFontSize : 10,
         settingsFontSize : '11px',
         
-        maxLabelSize : 24,
+        maxLabelSize : 23,
         
         //Turn on/off legend
         useLegend : true,
@@ -121,7 +121,7 @@ bbop.monarch.phenotypeAnnotationConfig = {
   legendFontSize : 14,
   settingsFontSize : '14px',
   
-  maxLabelSize : 24,
+  maxLabelSize : 23,
   
   //Turn on/off legend
   useLegend : true,
@@ -195,7 +195,7 @@ bbop.monarch.diseaseGeneConfig = {
         legendFontSize : 14,
         settingsFontSize : '14px',
         
-        maxLabelSize : 24,
+        maxLabelSize : 23,
         
         //Turn on/off legend
         useLegend : false,
@@ -269,7 +269,7 @@ bbop.monarch.diseasePhenotypeConfig = {
         legendFontSize : 14,
         settingsFontSize : '14px',
         
-        maxLabelSize : 24,
+        maxLabelSize : 23,
         
         //Turn on/off legend
         useLegend : false,
@@ -343,7 +343,7 @@ bbop.monarch.genotypePhenotypeConfig = {
         legendFontSize : 14,
         settingsFontSize : '14px',
         
-        maxLabelSize : 24,
+        maxLabelSize : 23,
         
         //Turn on/off legend
         useLegend : true,
@@ -398,7 +398,7 @@ bbop.monarch.diseaseGeneConfigSmall = {
         bread : {width:60, height: 25, offset:50, space: 1},
         
         //Chart margins    
-        margin : {top: 35, right: 40, bottom: 5, left: 174},
+        margin : {top: 35, right: 40, bottom: 5, left: 175},
         
         width : 250,
         height : 240,
@@ -432,7 +432,7 @@ bbop.monarch.diseaseGeneConfigSmall = {
         legendFontSize : 10,
         settingsFontSize : '11px',
         
-        maxLabelSize : 24,
+        maxLabelSize : 23,
         
         //Turn on/off legend
         useLegend : false,
@@ -480,7 +480,7 @@ bbop.monarch.diseasePhenotypeConfigSmall = {
         bread : {width:60, height: 25, offset:50, space: 1},
         
         //Chart margins    
-        margin : {top: 35, right: 40, bottom: 5, left: 174},
+        margin : {top: 35, right: 40, bottom: 5, left: 175},
         
         width : 250,
         height : 240,
@@ -514,7 +514,7 @@ bbop.monarch.diseasePhenotypeConfigSmall = {
         legendFontSize : 14,
         settingsFontSize : '11px',
         
-        maxLabelSize : 24,
+        maxLabelSize : 23,
         
         //Turn on/off legend
         useLegend : false,
@@ -562,7 +562,7 @@ bbop.monarch.genotypePhenotypeConfigSmall = {
         bread : {width:60, height: 25, offset:50, space: 1},
         
         //Chart margins    
-        margin : {top: 35, right: 63, bottom: 5, left: 174},
+        margin : {top: 35, right: 63, bottom: 5, left: 175},
         
         width : 250,
         height : 340,
@@ -596,7 +596,7 @@ bbop.monarch.genotypePhenotypeConfigSmall = {
         legendFontSize : 10,
         settingsFontSize : '11px',
         
-        maxLabelSize : 24,
+        maxLabelSize : 23,
         
         //Turn on/off legend
         useLegend : true,
@@ -756,7 +756,7 @@ bbop.monarch.resizeConfig = {
         legendFontSize : 14,
         settingsFontSize : '14px',
         
-        maxLabelSize : 24,
+        maxLabelSize : 23,
         
         //Turn on/off legend
         useLegend : true,
