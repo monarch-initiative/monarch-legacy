@@ -13,19 +13,19 @@ bbop.monarch.homePageConfig = {
         bread : {width:60, height: 25, offset:50, space: 1},
         
         //Chart margins    
-        margin : {top: 35, right: 63, bottom: 5, left: 152},
+        margin : {top: 35, right: 63, bottom: 5, left: 174},
         
         width : 250,
         height : 300,
         
         //X Axis Label
-        xAxisLabel : "Number Of Annotations",
+        xAxisLabel : "",
         xAxisPos : {dx:"15em",y:"-22"},
         xLabelFontSize : "12px",
         xFontSize : "9px",
         
         //Chart title and first breadcrumb
-        chartTitle : "Phenotype Annotation Distribution",
+        chartTitle : "Number of Phenotype Annotations Per Species",
         firstCrumb : "Phenotypic Abnormality",
         
         //Title size/font settings
@@ -47,7 +47,7 @@ bbop.monarch.homePageConfig = {
         legendFontSize : 10,
         settingsFontSize : '11px',
         
-        maxLabelSize : 20,
+        maxLabelSize : 24,
         
         //Turn on/off legend
         useLegend : true,
@@ -93,13 +93,13 @@ bbop.monarch.phenotypeAnnotationConfig = {
   height : 400,
   
   //X Axis Label
-  xAxisLabel : "Number Of Annotations",
+  xAxisLabel : "",
   xAxisPos : {dx:"20em",y:"-29"},
   xLabelFontSize : "14px",
   xFontSize : "14px",
   
   //Chart title and first breadcrumb
-  chartTitle : "Phenotype Annotation Distribution",
+  chartTitle : "Number of Phenotype Annotations Per Species",
   firstCrumb : "Phenotypic Abnormality",
   
   //Title size/font settings
@@ -121,7 +121,7 @@ bbop.monarch.phenotypeAnnotationConfig = {
   legendFontSize : 14,
   settingsFontSize : '14px',
   
-  maxLabelSize : 31,
+  maxLabelSize : 24,
   
   //Turn on/off legend
   useLegend : true,
@@ -167,13 +167,13 @@ bbop.monarch.diseaseGeneConfig = {
         height : 240,
         
         //X Axis Label
-        xAxisLabel : "Number Of Associations",
+        xAxisLabel : "",
         xAxisPos : {dx:"20em",y:"-29"},
         xLabelFontSize : "14px",
         xFontSize : "14px",
         
         //Chart title and first breadcrumb
-        chartTitle : "Gene Disease Distribution",
+        chartTitle : "Number of Disease-Gene Associations",
         firstCrumb : "Anatomical Entity",
         
         //Title size/font settings
@@ -195,7 +195,7 @@ bbop.monarch.diseaseGeneConfig = {
         legendFontSize : 14,
         settingsFontSize : '14px',
         
-        maxLabelSize : 31,
+        maxLabelSize : 24,
         
         //Turn on/off legend
         useLegend : false,
@@ -241,13 +241,13 @@ bbop.monarch.diseasePhenotypeConfig = {
         height : 240,
         
         //X Axis Label
-        xAxisLabel : "Number Of Associations",
+        xAxisLabel : "",
         xAxisPos : {dx:"20em",y:"-29"},
         xLabelFontSize : "14px",
         xFontSize : "14px",
         
         //Chart title and first breadcrumb
-        chartTitle : "Disease Phenotype Distribution",
+        chartTitle : "Number of Disease-Phenotype Associations",
         firstCrumb : "Anatomical Entity",
         
         //Title size/font settings
@@ -269,7 +269,7 @@ bbop.monarch.diseasePhenotypeConfig = {
         legendFontSize : 14,
         settingsFontSize : '14px',
         
-        maxLabelSize : 31,
+        maxLabelSize : 24,
         
         //Turn on/off legend
         useLegend : false,
@@ -315,13 +315,13 @@ bbop.monarch.genotypePhenotypeConfig = {
         height : 340,
         
         //X Axis Label
-        xAxisLabel : "Number Of Associations",
+        xAxisLabel : "",
         xAxisPos : {dx:"20em",y:"-29"},
         xLabelFontSize : "14px",
         xFontSize : "14px",
         
         //Chart title and first breadcrumb
-        chartTitle : "Phenotype-Genotype Distribution",
+        chartTitle : "Number of Genotype-Phenotype Associations",
         firstCrumb : "Phenotypic Abnormality",
         
         //Title size/font settings
@@ -343,7 +343,7 @@ bbop.monarch.genotypePhenotypeConfig = {
         legendFontSize : 14,
         settingsFontSize : '14px',
         
-        maxLabelSize : 31,
+        maxLabelSize : 24,
         
         //Turn on/off legend
         useLegend : true,
@@ -398,19 +398,19 @@ bbop.monarch.diseaseGeneConfigSmall = {
         bread : {width:60, height: 25, offset:50, space: 1},
         
         //Chart margins    
-        margin : {top: 35, right: 40, bottom: 5, left: 152},
+        margin : {top: 35, right: 40, bottom: 5, left: 174},
         
         width : 250,
         height : 240,
         
         //X Axis Label
-        xAxisLabel : "Number Of Associations",
+        xAxisLabel : "",
         xAxisPos : {dx:"15em",y:"-22"},
         xLabelFontSize : "12px",
         xFontSize : "9px",
         
         //Chart title and first breadcrumb
-        chartTitle : "Gene Disease Distribution",
+        chartTitle : "Number of Disease-Gene Associations",
         firstCrumb : "Anatomical Entity",
         
         //Title size/font settings
@@ -432,7 +432,7 @@ bbop.monarch.diseaseGeneConfigSmall = {
         legendFontSize : 10,
         settingsFontSize : '11px',
         
-        maxLabelSize : 20,
+        maxLabelSize : 24,
         
         //Turn on/off legend
         useLegend : false,
@@ -480,19 +480,19 @@ bbop.monarch.diseasePhenotypeConfigSmall = {
         bread : {width:60, height: 25, offset:50, space: 1},
         
         //Chart margins    
-        margin : {top: 35, right: 40, bottom: 5, left: 152},
+        margin : {top: 35, right: 40, bottom: 5, left: 174},
         
         width : 250,
         height : 240,
         
         //X Axis Label
-        xAxisLabel : "Number Of Associations",
+        xAxisLabel : "",
         xAxisPos : {dx:"15em",y:"-22"},
         xLabelFontSize : "12px",
         xFontSize : "9px",
         
         //Chart title and first breadcrumb
-        chartTitle : "Disease Phenotype Distribution",
+        chartTitle : "Number of Disease-Phenotype Associations",
         firstCrumb : "Anatomical Entity",
         
         //Title size/font settings
@@ -514,7 +514,7 @@ bbop.monarch.diseasePhenotypeConfigSmall = {
         legendFontSize : 14,
         settingsFontSize : '11px',
         
-        maxLabelSize : 20,
+        maxLabelSize : 24,
         
         //Turn on/off legend
         useLegend : false,
@@ -562,19 +562,19 @@ bbop.monarch.genotypePhenotypeConfigSmall = {
         bread : {width:60, height: 25, offset:50, space: 1},
         
         //Chart margins    
-        margin : {top: 35, right: 63, bottom: 5, left: 152},
+        margin : {top: 35, right: 63, bottom: 5, left: 174},
         
         width : 250,
         height : 340,
         
         //X Axis Label
-        xAxisLabel : "Number Of Associations",
+        xAxisLabel : "",
         xAxisPos : {dx:"15em",y:"-22"},
         xLabelFontSize : "12px",
         xFontSize : "9px",
         
         //Chart title and first breadcrumb
-        chartTitle : "Phenotype-Genotype Distribution",
+        chartTitle : "Number of Genotype-Phenotype Associations",
         firstCrumb : "Phenotypic Abnormality",
         
         //Title size/font settings
@@ -596,7 +596,7 @@ bbop.monarch.genotypePhenotypeConfigSmall = {
         legendFontSize : 10,
         settingsFontSize : '11px',
         
-        maxLabelSize : 20,
+        maxLabelSize : 24,
         
         //Turn on/off legend
         useLegend : true,
@@ -644,19 +644,19 @@ bbop.monarch.homePageConfigSmall = {
         bread : {width:30, height: 22, offset:25, space: 0},
         
         //Chart margins    
-        margin : {top: 35, right: 55, bottom: 5, left: 97},
+        margin : {top: 35, right: 55, bottom: 5, left: 119},
         
         width : 130,
         height : 220,
         
         //X Axis Label
-        xAxisLabel : "Number Of Annotations",
+        xAxisLabel : "",
         xAxisPos : {dx:"12em",y:"-22"},
         xLabelFontSize : "9px",
         xFontSize : "8px",
         
         //Chart title and first breadcrumb
-        chartTitle : "Phenotype Annotation Distribution",
+        chartTitle : "Number of Phenotype Annotations Per Species",
         firstCrumb : "Phenotypic Abnormality",
         
         //Title size/font settings
@@ -728,13 +728,13 @@ bbop.monarch.resizeConfig = {
         height : 400,
         
         //X Axis Label
-        xAxisLabel : "Number Of Annotations",
+        xAxisLabel : "",
         xAxisPos : {dx:"20em",y:"-29"},
         xLabelFontSize : "14px",
         xFontSize : "14px",
         
         //Chart title and first breadcrumb
-        chartTitle : "Phenotype Annotation Distribution",
+        chartTitle : "Number of Phenotype Annotations Per Species",
         firstCrumb : "Phenotypic Abnormality",
         
         //Title size/font settings
@@ -756,7 +756,7 @@ bbop.monarch.resizeConfig = {
         legendFontSize : 14,
         settingsFontSize : '14px',
         
-        maxLabelSize : 31,
+        maxLabelSize : 24,
         
         //Turn on/off legend
         useLegend : true,
