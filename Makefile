@@ -6,6 +6,7 @@
 ### Environment variables.
 ###
 
+## Ringo
 RINGO_MODULE_PATH ?= ../stick/lib:./modules/
 ## TODO/BUG: highly non-canonical location--should be passed as
 ## variable, not hard-coded.
@@ -13,6 +14,10 @@ RINGO_BIN ?= ./ringojs/bin/ringo
 ## Workaround for the above.
 RINGO_CLI_BIN ?= /usr/bin/ringo
 RINGO_PORT ?= 8080
+
+## OWLTools.
+#OWLTOOLS_MAX_MEMORY ?= 1G
+OWLTOOLS_BIN ?= ~/local/src/svn/owltools/OWLTools-Runner/bin/owltools
 
 ###
 ### Tests
@@ -70,6 +75,19 @@ conf/rdf-mapping/%.json: conf/rdf-mapping/%.yaml
 
 conf/monarch-context.jsonld: conf/monarch-context.yaml
 	yaml2json.pl $< > $@.tmp && mv $@.tmp $@
+
+###
+### Compile the Solr schema and JSON config out of the YAML files.
+###
+
+solr-schema: ./conf/golr-views/*-config.yaml
+	$(OWLTOOLS_BIN) --solr-config $? --solr-schema-dump | ./scripts/remove-schema-cruft.pl > ./conf/schema.xml
+
+.PHONY: schema-as-json
+golr-conf-as-json:
+	./scripts/confyaml2json.pl -i ./conf/golr-views > ./conf/golr-conf.json
+
+reconfigure-golr: solr-schema golr-conf-as-json
 
 ###
 ### Documentation.

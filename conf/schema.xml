@@ -1,0 +1,213 @@
+<?xml version="1.0" ?>
+<schema name="golr" version="3.6">
+  <types>
+    <!--Unsplit string for when text needs to be dealt with atomically.-->
+    <!--For example, faceted querying.-->
+    <fieldType name="string" class="solr.StrField" sortMissingLast="true"></fieldType>
+    <!--Any string with spaces that needs to be treated for searching purposes.-->
+    <!--This will be automatically used in cases where "searchable: true" has been-->
+    <!--specified in the YAML.-->
+    <fieldType name="text_searchable" class="solr.TextField" positionIncrementGap="100" sortMissingLast="true">
+      <analyzer>
+        <tokenizer class="solr.StandardTokenizerFactory"></tokenizer>
+        <filter class="solr.LowerCaseFilterFactory"></filter>
+      </analyzer>
+    </fieldType>
+    <fieldType name="integer" class="solr.TrieIntField" precisionStep="0" positionIncrementGap="0" sortMissingLast="true"></fieldType>
+    <fieldType name="boolean" class="solr.BoolField" sortMissingLast="true"></fieldType>
+  </types>
+  <fields>
+    <!-- A special static/fixed (by YAML conf file) field all documents have. -->
+    <field name="document_category" type="string" required="false" multiValued="false" indexed="true" stored="true"></field>
+    <!-- annotation: Annotations for this term or its children (over regulates). -->
+    <!-- gene-to-phenotype: Annotations for this term or its children (over regulates). -->
+    <field name="regulates_closure" type="string" required="false" multiValued="true" indexed="true" stored="true"></field>
+    <!-- annotation: Taxonomic group and ancestral groups. -->
+    <!-- gene-to-phenotype: Taxonomic group and ancestral groups. -->
+    <field name="taxon_label" type="string" required="false" multiValued="false" indexed="true" stored="true"></field>
+    <!--An easily searchable (TextField tokenized) version of taxon_label.-->
+    <field name="taxon_label_searchable" type="text_searchable" required="false" multiValued="false" indexed="true" stored="true"></field>
+    <copyField source="taxon_label" dest="taxon_label_searchable"></copyField>
+    <!-- annotation: Disease synonyms. -->
+    <!-- gene-to-phenotype: Disease synonyms. -->
+    <field name="synonym" type="string" required="false" multiValued="true" indexed="true" stored="true"></field>
+    <!-- annotation: Disease identifiers. -->
+    <!-- gene-to-phenotype: Disease identifiers. -->
+    <field name="bioentity_label" type="string" required="false" multiValued="false" indexed="true" stored="true"></field>
+    <!--An easily searchable (TextField tokenized) version of bioentity_label.-->
+    <field name="bioentity_label_searchable" type="text_searchable" required="false" multiValued="false" indexed="true" stored="true"></field>
+    <copyField source="bioentity_label" dest="bioentity_label_searchable"></copyField>
+    <!-- annotation: Annotations for this term or its children (over is_a/part_of). -->
+    <!-- gene-to-phenotype: Annotations for this term or its children (over is_a/part_of). -->
+    <field name="isa_partof_closure" type="string" required="false" multiValued="true" indexed="true" stored="true"></field>
+    <!-- annotation: Closure of labels over has_participant. -->
+    <!-- gene-to-phenotype: Closure of labels over has_participant. -->
+    <field name="has_participant_closure_label" type="string" required="false" multiValued="true" indexed="true" stored="true"></field>
+    <!--An easily searchable (TextField tokenized) version of has_participant_closure_label.-->
+    <field name="has_participant_closure_label_searchable" type="text_searchable" required="false" multiValued="true" indexed="true" stored="true"></field>
+    <copyField source="has_participant_closure_label" dest="has_participant_closure_label_searchable"></copyField>
+    <!-- Automatically created to capture mapping information -->
+    <!-- between has_participant_(list|closure) and has_participant_closure_label.-->
+    <!-- It is not indexed for searching (JSON blob), but may be useful to the client. -->
+    <field name="has_participant_closure_map" type="string" required="false" multiValued="false" indexed="false" stored="true"></field>
+    <!-- annotation: Evidence type. -->
+    <!-- gene-to-phenotype: Evidence type. -->
+    <field name="evidence_type" type="string" required="false" multiValued="false" indexed="true" stored="true"></field>
+    <!-- annotation: Annotation qualifier. -->
+    <!-- gene-to-phenotype: Annotation qualifier. -->
+    <field name="qualifier" type="string" required="false" multiValued="true" indexed="true" stored="true"></field>
+    <!-- annotation: Rational for redundancy of annotation. -->
+    <!-- gene-to-phenotype: Rational for redundancy of annotation. -->
+    <field name="is_redundant_for" type="string" required="false" multiValued="false" indexed="true" stored="true"></field>
+    <!-- annotation: Direct annotations. -->
+    <!-- gene-to-phenotype: Direct annotations. -->
+    <field name="annotation_class" type="string" required="false" multiValued="false" indexed="true" stored="true"></field>
+    <!-- annotation: Extension class for the annotation. -->
+    <!-- gene-to-phenotype: Extension class for the annotation. -->
+    <field name="annotation_extension_class_closure" type="string" required="false" multiValued="true" indexed="true" stored="true"></field>
+    <!-- annotation: Biological isoform. -->
+    <!-- gene-to-phenotype: Biological isoform. -->
+    <field name="bioentity_isoform" type="string" required="false" multiValued="false" indexed="true" stored="true"></field>
+    <!-- annotation: Date of assignment. -->
+    <!-- gene-to-phenotype: Date of assignment. -->
+    <field name="date" type="string" required="false" multiValued="false" indexed="true" stored="true"></field>
+    <!-- annotation: Type class. -->
+    <!-- gene-to-phenotype: Type class. -->
+    <field name="type" type="string" required="false" multiValued="false" indexed="true" stored="true"></field>
+    <!-- annotation: Evidence with/from. -->
+    <!-- gene-to-phenotype: Evidence with/from. -->
+    <field name="evidence_with" type="string" required="false" multiValued="true" indexed="true" stored="true"></field>
+    <!-- annotation: Direct annotations. -->
+    <!-- gene-to-phenotype: Direct annotations. -->
+    <field name="annotation_class_label" type="string" required="false" multiValued="false" indexed="true" stored="true"></field>
+    <!--An easily searchable (TextField tokenized) version of annotation_class_label.-->
+    <field name="annotation_class_label_searchable" type="text_searchable" required="false" multiValued="false" indexed="true" stored="true"></field>
+    <copyField source="annotation_class_label" dest="annotation_class_label_searchable"></copyField>
+    <!-- annotation: A unique (and internal) combination of bioentity and ontology class. -->
+    <!-- gene-to-phenotype: A unique (and internal) combination of bioentity and ontology class. -->
+    <field name="id" type="string" required="true" multiValued="false" indexed="true" stored="true"></field>
+    <!-- annotation: Extension class for the annotation. -->
+    <!-- gene-to-phenotype: Extension class for the annotation. -->
+    <field name="annotation_extension_class_label" type="string" required="false" multiValued="true" indexed="true" stored="true"></field>
+    <!--An easily searchable (TextField tokenized) version of annotation_extension_class_label.-->
+    <field name="annotation_extension_class_label_searchable" type="text_searchable" required="false" multiValued="true" indexed="true" stored="true"></field>
+    <copyField source="annotation_extension_class_label" dest="annotation_extension_class_label_searchable"></copyField>
+    <!-- annotation: Annotations for this term or its children (over regulates). -->
+    <!-- gene-to-phenotype: Annotations for this term or its children (over regulates). -->
+    <field name="regulates_closure_label" type="string" required="false" multiValued="true" indexed="true" stored="true"></field>
+    <!--An easily searchable (TextField tokenized) version of regulates_closure_label.-->
+    <field name="regulates_closure_label_searchable" type="text_searchable" required="false" multiValued="true" indexed="true" stored="true"></field>
+    <copyField source="regulates_closure_label" dest="regulates_closure_label_searchable"></copyField>
+    <!-- Automatically created to capture mapping information -->
+    <!-- between regulates_(list|closure) and regulates_closure_label.-->
+    <!-- It is not indexed for searching (JSON blob), but may be useful to the client. -->
+    <field name="regulates_closure_map" type="string" required="false" multiValued="false" indexed="false" stored="true"></field>
+    <!-- annotation: Disease identifiers. -->
+    <!-- gene-to-phenotype: Disease identifiers. -->
+    <field name="bioentity" type="string" required="false" multiValued="false" indexed="true" stored="true"></field>
+    <!-- annotation: The bioentity ID used at the database of origin. -->
+    <!-- gene-to-phenotype: The bioentity ID used at the database of origin. -->
+    <field name="bioentity_internal_id" type="string" required="false" multiValued="false" indexed="false" stored="true"></field>
+    <!-- annotation: Annotations for this term or its children (over is_a/part_of). -->
+    <!-- gene-to-phenotype: Annotations for this term or its children (over is_a/part_of). -->
+    <field name="isa_partof_closure_label" type="string" required="false" multiValued="true" indexed="true" stored="true"></field>
+    <!--An easily searchable (TextField tokenized) version of isa_partof_closure_label.-->
+    <field name="isa_partof_closure_label_searchable" type="text_searchable" required="false" multiValued="true" indexed="true" stored="true"></field>
+    <copyField source="isa_partof_closure_label" dest="isa_partof_closure_label_searchable"></copyField>
+    <!-- Automatically created to capture mapping information -->
+    <!-- between isa_partof_(list|closure) and isa_partof_closure_label.-->
+    <!-- It is not indexed for searching (JSON blob), but may be useful to the client. -->
+    <field name="isa_partof_closure_map" type="string" required="false" multiValued="false" indexed="false" stored="true"></field>
+    <!-- annotation: Extension class for the annotation (JSON). -->
+    <!-- gene-to-phenotype: Extension class for the annotation (JSON). -->
+    <field name="annotation_extension_json" type="string" required="false" multiValued="true" indexed="true" stored="true"></field>
+    <!-- annotation: The full name of the disease. -->
+    <!-- gene-to-phenotype: The full name of the disease. -->
+    <field name="bioentity_name" type="string" required="false" multiValued="false" indexed="true" stored="true"></field>
+    <!--An easily searchable (TextField tokenized) version of bioentity_name.-->
+    <field name="bioentity_name_searchable" type="text_searchable" required="false" multiValued="false" indexed="true" stored="true"></field>
+    <copyField source="bioentity_name" dest="bioentity_name_searchable"></copyField>
+    <!-- annotation: Taxonomic group. -->
+    <!-- gene-to-phenotype: Taxonomic group. -->
+    <field name="taxon" type="string" required="false" multiValued="false" indexed="true" stored="true"></field>
+    <!-- annotation: Closure of ids/accs over has_participant. -->
+    <!-- gene-to-phenotype: Closure of ids/accs over has_participant. -->
+    <field name="has_participant_closure" type="string" required="false" multiValued="true" indexed="true" stored="true"></field>
+    <!-- annotation: Secondary taxon closure. -->
+    <!-- gene-to-phenotype: Secondary taxon closure. -->
+    <field name="secondary_taxon_closure_label" type="string" required="false" multiValued="true" indexed="true" stored="true"></field>
+    <!--An easily searchable (TextField tokenized) version of secondary_taxon_closure_label.-->
+    <field name="secondary_taxon_closure_label_searchable" type="text_searchable" required="false" multiValued="true" indexed="true" stored="true"></field>
+    <copyField source="secondary_taxon_closure_label" dest="secondary_taxon_closure_label_searchable"></copyField>
+    <!-- Automatically created to capture mapping information -->
+    <!-- between secondary_taxon_(list|closure) and secondary_taxon_closure_label.-->
+    <!-- It is not indexed for searching (JSON blob), but may be useful to the client. -->
+    <field name="secondary_taxon_closure_map" type="string" required="false" multiValued="false" indexed="false" stored="true"></field>
+    <!-- annotation: PANTHER families that are associated with this entity. -->
+    <!-- gene-to-phenotype: PANTHER families that are associated with this entity. -->
+    <field name="panther_family_label" type="string" required="false" multiValued="false" indexed="true" stored="true"></field>
+    <!--An easily searchable (TextField tokenized) version of panther_family_label.-->
+    <field name="panther_family_label_searchable" type="text_searchable" required="false" multiValued="false" indexed="true" stored="true"></field>
+    <copyField source="panther_family_label" dest="panther_family_label_searchable"></copyField>
+    <!-- annotation: Taxonomic group and ancestral groups. -->
+    <!-- gene-to-phenotype: Taxonomic group and ancestral groups. -->
+    <field name="taxon_closure_label" type="string" required="false" multiValued="true" indexed="true" stored="true"></field>
+    <!--An easily searchable (TextField tokenized) version of taxon_closure_label.-->
+    <field name="taxon_closure_label_searchable" type="text_searchable" required="false" multiValued="true" indexed="true" stored="true"></field>
+    <copyField source="taxon_closure_label" dest="taxon_closure_label_searchable"></copyField>
+    <!-- Automatically created to capture mapping information -->
+    <!-- between taxon_(list|closure) and taxon_closure_label.-->
+    <!-- It is not indexed for searching (JSON blob), but may be useful to the client. -->
+    <field name="taxon_closure_map" type="string" required="false" multiValued="false" indexed="false" stored="true"></field>
+    <!-- annotation: Extension class for the annotation. -->
+    <!-- gene-to-phenotype: Extension class for the annotation. -->
+    <field name="annotation_extension_class_closure_label" type="string" required="false" multiValued="true" indexed="true" stored="true"></field>
+    <!--An easily searchable (TextField tokenized) version of annotation_extension_class_closure_label.-->
+    <field name="annotation_extension_class_closure_label_searchable" type="text_searchable" required="false" multiValued="true" indexed="true" stored="true"></field>
+    <copyField source="annotation_extension_class_closure_label" dest="annotation_extension_class_closure_label_searchable"></copyField>
+    <!-- Automatically created to capture mapping information -->
+    <!-- between annotation_extension_class_(list|closure) and annotation_extension_class_closure_label.-->
+    <!-- It is not indexed for searching (JSON blob), but may be useful to the client. -->
+    <field name="annotation_extension_class_closure_map" type="string" required="false" multiValued="false" indexed="false" stored="true"></field>
+    <!-- annotation: Extension class for the annotation. -->
+    <!-- gene-to-phenotype: Extension class for the annotation. -->
+    <field name="annotation_extension_class" type="string" required="false" multiValued="true" indexed="true" stored="true"></field>
+    <!-- annotation: Taxonomic group and ancestral groups. -->
+    <!-- gene-to-phenotype: Taxonomic group and ancestral groups. -->
+    <field name="taxon_closure" type="string" required="false" multiValued="true" indexed="true" stored="true"></field>
+    <!-- annotation: Database reference. -->
+    <!-- gene-to-phenotype: Database reference. -->
+    <field name="reference" type="string" required="false" multiValued="true" indexed="true" stored="true"></field>
+    <!-- annotation: Ontology aspect. -->
+    <!-- gene-to-phenotype: Ontology aspect. -->
+    <field name="aspect" type="string" required="false" multiValued="false" indexed="true" stored="true"></field>
+    <!-- annotation: Database source. -->
+    <!-- gene-to-phenotype: Database source. -->
+    <field name="source" type="string" required="false" multiValued="false" indexed="true" stored="true"></field>
+    <!-- annotation: All evidence (evidence closure) for this annotation -->
+    <!-- gene-to-phenotype: All evidence (evidence closure) for this annotation -->
+    <field name="evidence_type_closure" type="string" required="false" multiValued="true" indexed="true" stored="true"></field>
+    <!-- annotation: PANTHER families that are associated with this entity. -->
+    <!-- gene-to-phenotype: PANTHER families that are associated with this entity. -->
+    <field name="panther_family" type="string" required="false" multiValued="false" indexed="true" stored="true"></field>
+    <!--An easily searchable (TextField tokenized) version of panther_family.-->
+    <field name="panther_family_searchable" type="text_searchable" required="false" multiValued="false" indexed="true" stored="true"></field>
+    <copyField source="panther_family" dest="panther_family_searchable"></copyField>
+    <!-- annotation: Secondary taxon closure. -->
+    <!-- gene-to-phenotype: Secondary taxon closure. -->
+    <field name="secondary_taxon_closure" type="string" required="false" multiValued="true" indexed="true" stored="true"></field>
+    <!-- annotation: Secondary taxon. -->
+    <!-- gene-to-phenotype: Secondary taxon. -->
+    <field name="secondary_taxon_label" type="string" required="false" multiValued="false" indexed="true" stored="true"></field>
+    <!--An easily searchable (TextField tokenized) version of secondary_taxon_label.-->
+    <field name="secondary_taxon_label_searchable" type="text_searchable" required="false" multiValued="false" indexed="true" stored="true"></field>
+    <copyField source="secondary_taxon_label" dest="secondary_taxon_label_searchable"></copyField>
+    <!-- annotation: Secondary taxon. -->
+    <!-- gene-to-phenotype: Secondary taxon. -->
+    <field name="secondary_taxon" type="string" required="false" multiValued="false" indexed="true" stored="true"></field>
+    <!-- annotation: Annotations assigned by group. -->
+    <!-- gene-to-phenotype: Annotations assigned by group. -->
+    <field name="assigned_by" type="string" required="false" multiValued="false" indexed="true" stored="true"></field>
+  </fields>
+  <uniqueKey>id</uniqueKey>
+</schema>
