@@ -1,0 +1,1326 @@
+{
+   "gene-to-phenotype" : {
+      "id" : "gene-to-phenotype",
+      "_outfile" : "/home/sjcarbon/local/src/git/monarch-app/./conf/golr-views/gene-to-phenotype-config.yaml",
+      "_strict" : 0,
+      "filter_weights" : "source^7.0 assigned_by^6.5 aspect^6.25 evidence_type_closure^6.0 panther_family_label^5.5 qualifier^5.25 taxon_closure_label^5.0 annotation_class_label^4.5 regulates_closure_label^3.0 annotation_extension_class_closure_label^2.0",
+      "display_name" : "Gene",
+      "result_weights" : "bioentity^7.0 bioentity_name^6.0 qualifier^5.0 annotation_class^4.7 annotation_extension_json^4.5 source^4.0 taxon^3.0 evidence_type^2.5 evidence_with^2.0 panther_family^1.5 bioentity_isoform^0.5 reference^0.25",
+      "boost_weights" : "annotation_class^2.0 annotation_class_label^1.0 bioentity^2.0 bioentity_label^1.0 bioentity_name^1.0 annotation_extension_class^2.0 annotation_extension_class_label^1.0 reference^1.0 panther_family^1.0 panther_family_label^1.0 bioentity_isoform^1.0 regulates_closure^1.0 regulates_closure_label^1.0",
+      "fields_hash" : {
+         "date" : {
+            "description" : "Date of assignment.",
+            "id" : "date",
+            "type" : "string",
+            "property" : [],
+            "display_name" : "Date"
+         },
+         "bioentity" : {
+            "type" : "string",
+            "property" : [],
+            "display_name" : "Disease",
+            "description" : "Disease identifiers.",
+            "id" : "bioentity"
+         },
+         "isa_partof_closure" : {
+            "type" : "string",
+            "property" : [],
+            "display_name" : "Involved in",
+            "description" : "Annotations for this term or its children (over is_a/part_of).",
+            "cardinality" : "multi",
+            "id" : "isa_partof_closure"
+         },
+         "bioentity_label" : {
+            "property" : [],
+            "type" : "string",
+            "searchable" : "true",
+            "display_name" : "Disease",
+            "description" : "Disease identifiers.",
+            "id" : "bioentity_label"
+         },
+         "is_redundant_for" : {
+            "display_name" : "Redundant for",
+            "property" : [],
+            "type" : "string",
+            "id" : "is_redundant_for",
+            "description" : "Rational for redundancy of annotation."
+         },
+         "annotation_extension_class_label" : {
+            "property" : [],
+            "type" : "string",
+            "searchable" : "true",
+            "display_name" : "Annotation extension",
+            "description" : "Extension class for the annotation.",
+            "id" : "annotation_extension_class_label",
+            "cardinality" : "multi"
+         },
+         "qualifier" : {
+            "id" : "qualifier",
+            "cardinality" : "multi",
+            "description" : "Annotation qualifier.",
+            "display_name" : "Qualifier",
+            "property" : [],
+            "type" : "string"
+         },
+         "isa_partof_closure_label" : {
+            "cardinality" : "multi",
+            "id" : "isa_partof_closure_label",
+            "description" : "Annotations for this term or its children (over is_a/part_of).",
+            "display_name" : "Involved in",
+            "searchable" : "true",
+            "type" : "string",
+            "property" : []
+         },
+         "has_participant_closure" : {
+            "description" : "Closure of ids/accs over has_participant.",
+            "cardinality" : "multi",
+            "id" : "has_participant_closure",
+            "type" : "string",
+            "property" : [],
+            "display_name" : "Has participant (IDs)"
+         },
+         "bioentity_internal_id" : {
+            "id" : "bioentity_internal_id",
+            "indexed" : "false",
+            "description" : "The bioentity ID used at the database of origin.",
+            "display_name" : "This should not be displayed",
+            "type" : "string",
+            "property" : []
+         },
+         "annotation_extension_json" : {
+            "id" : "annotation_extension_json",
+            "cardinality" : "multi",
+            "description" : "Extension class for the annotation (JSON).",
+            "display_name" : "Annotation extension",
+            "property" : [],
+            "type" : "string"
+         },
+         "annotation_extension_class" : {
+            "display_name" : "Annotation extension",
+            "property" : [],
+            "type" : "string",
+            "id" : "annotation_extension_class",
+            "cardinality" : "multi",
+            "description" : "Extension class for the annotation."
+         },
+         "regulates_closure" : {
+            "cardinality" : "multi",
+            "id" : "regulates_closure",
+            "description" : "Annotations for this term or its children (over regulates).",
+            "display_name" : "Inferred annotation",
+            "type" : "string",
+            "property" : []
+         },
+         "taxon_closure_label" : {
+            "type" : "string",
+            "property" : [],
+            "display_name" : "Taxon",
+            "searchable" : "true",
+            "description" : "Taxonomic group and ancestral groups.",
+            "cardinality" : "multi",
+            "id" : "taxon_closure_label"
+         },
+         "evidence_with" : {
+            "description" : "Evidence with/from.",
+            "cardinality" : "multi",
+            "id" : "evidence_with",
+            "type" : "string",
+            "property" : [],
+            "display_name" : "Evidence with"
+         },
+         "panther_family_label" : {
+            "description" : "PANTHER families that are associated with this entity.",
+            "id" : "panther_family_label",
+            "property" : [],
+            "type" : "string",
+            "searchable" : "true",
+            "display_name" : "PANTHER family"
+         },
+         "panther_family" : {
+            "display_name" : "PANTHER family",
+            "searchable" : "true",
+            "type" : "string",
+            "property" : [],
+            "id" : "panther_family",
+            "description" : "PANTHER families that are associated with this entity."
+         },
+         "secondary_taxon_closure_label" : {
+            "id" : "secondary_taxon_closure_label",
+            "cardinality" : "multi",
+            "description" : "Secondary taxon closure.",
+            "searchable" : "true",
+            "display_name" : "Secondary taxon",
+            "property" : [],
+            "type" : "string"
+         },
+         "annotation_extension_class_closure_label" : {
+            "description" : "Extension class for the annotation.",
+            "id" : "annotation_extension_class_closure_label",
+            "cardinality" : "multi",
+            "property" : [],
+            "type" : "string",
+            "searchable" : "true",
+            "display_name" : "Annotation extension"
+         },
+         "taxon_closure" : {
+            "display_name" : "Taxon",
+            "property" : [],
+            "type" : "string",
+            "id" : "taxon_closure",
+            "cardinality" : "multi",
+            "description" : "Taxonomic group and ancestral groups."
+         },
+         "bioentity_name" : {
+            "description" : "The full name of the disease.",
+            "id" : "bioentity_name",
+            "property" : [],
+            "type" : "string",
+            "searchable" : "true",
+            "display_name" : "Disease full name"
+         },
+         "synonym" : {
+            "description" : "Disease synonyms.",
+            "cardinality" : "multi",
+            "id" : "synonym",
+            "type" : "string",
+            "property" : [],
+            "display_name" : "Synonym"
+         },
+         "secondary_taxon_closure" : {
+            "type" : "string",
+            "property" : [],
+            "display_name" : "Secondary taxon",
+            "description" : "Secondary taxon closure.",
+            "cardinality" : "multi",
+            "id" : "secondary_taxon_closure"
+         },
+         "type" : {
+            "type" : "string",
+            "property" : [],
+            "display_name" : "Type class id",
+            "description" : "Type class.",
+            "id" : "type"
+         },
+         "annotation_extension_class_closure" : {
+            "description" : "Extension class for the annotation.",
+            "id" : "annotation_extension_class_closure",
+            "cardinality" : "multi",
+            "property" : [],
+            "type" : "string",
+            "display_name" : "Annotation extension"
+         },
+         "assigned_by" : {
+            "description" : "Annotations assigned by group.",
+            "id" : "assigned_by",
+            "type" : "string",
+            "property" : [],
+            "display_name" : "Assigned by"
+         },
+         "regulates_closure_label" : {
+            "cardinality" : "multi",
+            "id" : "regulates_closure_label",
+            "description" : "Annotations for this term or its children (over regulates).",
+            "display_name" : "Inferred annotation",
+            "searchable" : "true",
+            "type" : "string",
+            "property" : []
+         },
+         "has_participant_closure_label" : {
+            "display_name" : "Has participant",
+            "searchable" : "true",
+            "type" : "string",
+            "property" : [],
+            "cardinality" : "multi",
+            "id" : "has_participant_closure_label",
+            "description" : "Closure of labels over has_participant."
+         },
+         "taxon" : {
+            "id" : "taxon",
+            "description" : "Taxonomic group.",
+            "display_name" : "Taxon",
+            "property" : [],
+            "type" : "string"
+         },
+         "taxon_label" : {
+            "property" : [],
+            "type" : "string",
+            "searchable" : "true",
+            "display_name" : "Taxon",
+            "description" : "Taxonomic group and ancestral groups.",
+            "id" : "taxon_label"
+         },
+         "bioentity_isoform" : {
+            "property" : [],
+            "type" : "string",
+            "display_name" : "Isoform",
+            "description" : "Biological isoform.",
+            "id" : "bioentity_isoform"
+         },
+         "aspect" : {
+            "display_name" : "Ontology (aspect)",
+            "property" : [],
+            "type" : "string",
+            "id" : "aspect",
+            "description" : "Ontology aspect."
+         },
+         "evidence_type" : {
+            "id" : "evidence_type",
+            "description" : "Evidence type.",
+            "display_name" : "Evidence",
+            "property" : [],
+            "type" : "string"
+         },
+         "id" : {
+            "id" : "id",
+            "description" : "A unique (and internal) combination of bioentity and ontology class.",
+            "display_name" : "Acc",
+            "type" : "string",
+            "property" : []
+         },
+         "secondary_taxon" : {
+            "id" : "secondary_taxon",
+            "description" : "Secondary taxon.",
+            "display_name" : "Secondary taxon",
+            "property" : [],
+            "type" : "string"
+         },
+         "annotation_class" : {
+            "id" : "annotation_class",
+            "description" : "Direct annotations.",
+            "display_name" : "Phenotype",
+            "type" : "string",
+            "property" : []
+         },
+         "annotation_class_label" : {
+            "searchable" : "true",
+            "display_name" : "Phenotype",
+            "property" : [],
+            "type" : "string",
+            "id" : "annotation_class_label",
+            "description" : "Direct annotations."
+         },
+         "reference" : {
+            "cardinality" : "multi",
+            "id" : "reference",
+            "description" : "Database reference.",
+            "display_name" : "Reference",
+            "type" : "string",
+            "property" : []
+         },
+         "source" : {
+            "display_name" : "Source",
+            "type" : "string",
+            "property" : [],
+            "id" : "source",
+            "description" : "Database source."
+         },
+         "evidence_type_closure" : {
+            "description" : "All evidence (evidence closure) for this annotation",
+            "id" : "evidence_type_closure",
+            "cardinality" : "multi",
+            "property" : [],
+            "type" : "string",
+            "display_name" : "Evidence type"
+         },
+         "secondary_taxon_label" : {
+            "type" : "string",
+            "property" : [],
+            "display_name" : "Secondary taxon",
+            "searchable" : "true",
+            "description" : "Secondary taxon.",
+            "id" : "secondary_taxon_label"
+         }
+      },
+      "description" : "Associations between genes and phenotypes",
+      "document_category" : "gene_phenotype_annotation",
+      "weight" : "20",
+      "fields" : [
+         {
+            "id" : "id",
+            "description" : "A unique (and internal) combination of bioentity and ontology class.",
+            "display_name" : "Acc",
+            "type" : "string",
+            "property" : []
+         },
+         {
+            "display_name" : "Source",
+            "type" : "string",
+            "property" : [],
+            "id" : "source",
+            "description" : "Database source."
+         },
+         {
+            "type" : "string",
+            "property" : [],
+            "display_name" : "Type class id",
+            "description" : "Type class.",
+            "id" : "type"
+         },
+         {
+            "description" : "Date of assignment.",
+            "id" : "date",
+            "type" : "string",
+            "property" : [],
+            "display_name" : "Date"
+         },
+         {
+            "description" : "Annotations assigned by group.",
+            "id" : "assigned_by",
+            "type" : "string",
+            "property" : [],
+            "display_name" : "Assigned by"
+         },
+         {
+            "display_name" : "Redundant for",
+            "property" : [],
+            "type" : "string",
+            "id" : "is_redundant_for",
+            "description" : "Rational for redundancy of annotation."
+         },
+         {
+            "id" : "taxon",
+            "description" : "Taxonomic group.",
+            "display_name" : "Taxon",
+            "property" : [],
+            "type" : "string"
+         },
+         {
+            "property" : [],
+            "type" : "string",
+            "searchable" : "true",
+            "display_name" : "Taxon",
+            "description" : "Taxonomic group and ancestral groups.",
+            "id" : "taxon_label"
+         },
+         {
+            "display_name" : "Taxon",
+            "property" : [],
+            "type" : "string",
+            "id" : "taxon_closure",
+            "cardinality" : "multi",
+            "description" : "Taxonomic group and ancestral groups."
+         },
+         {
+            "type" : "string",
+            "property" : [],
+            "display_name" : "Taxon",
+            "searchable" : "true",
+            "description" : "Taxonomic group and ancestral groups.",
+            "cardinality" : "multi",
+            "id" : "taxon_closure_label"
+         },
+         {
+            "id" : "secondary_taxon",
+            "description" : "Secondary taxon.",
+            "display_name" : "Secondary taxon",
+            "property" : [],
+            "type" : "string"
+         },
+         {
+            "type" : "string",
+            "property" : [],
+            "display_name" : "Secondary taxon",
+            "searchable" : "true",
+            "description" : "Secondary taxon.",
+            "id" : "secondary_taxon_label"
+         },
+         {
+            "type" : "string",
+            "property" : [],
+            "display_name" : "Secondary taxon",
+            "description" : "Secondary taxon closure.",
+            "cardinality" : "multi",
+            "id" : "secondary_taxon_closure"
+         },
+         {
+            "id" : "secondary_taxon_closure_label",
+            "cardinality" : "multi",
+            "description" : "Secondary taxon closure.",
+            "searchable" : "true",
+            "display_name" : "Secondary taxon",
+            "property" : [],
+            "type" : "string"
+         },
+         {
+            "type" : "string",
+            "property" : [],
+            "display_name" : "Involved in",
+            "description" : "Annotations for this term or its children (over is_a/part_of).",
+            "cardinality" : "multi",
+            "id" : "isa_partof_closure"
+         },
+         {
+            "cardinality" : "multi",
+            "id" : "isa_partof_closure_label",
+            "description" : "Annotations for this term or its children (over is_a/part_of).",
+            "display_name" : "Involved in",
+            "searchable" : "true",
+            "type" : "string",
+            "property" : []
+         },
+         {
+            "cardinality" : "multi",
+            "id" : "regulates_closure",
+            "description" : "Annotations for this term or its children (over regulates).",
+            "display_name" : "Inferred annotation",
+            "type" : "string",
+            "property" : []
+         },
+         {
+            "cardinality" : "multi",
+            "id" : "regulates_closure_label",
+            "description" : "Annotations for this term or its children (over regulates).",
+            "display_name" : "Inferred annotation",
+            "searchable" : "true",
+            "type" : "string",
+            "property" : []
+         },
+         {
+            "description" : "Closure of ids/accs over has_participant.",
+            "cardinality" : "multi",
+            "id" : "has_participant_closure",
+            "type" : "string",
+            "property" : [],
+            "display_name" : "Has participant (IDs)"
+         },
+         {
+            "display_name" : "Has participant",
+            "searchable" : "true",
+            "type" : "string",
+            "property" : [],
+            "cardinality" : "multi",
+            "id" : "has_participant_closure_label",
+            "description" : "Closure of labels over has_participant."
+         },
+         {
+            "description" : "Disease synonyms.",
+            "cardinality" : "multi",
+            "id" : "synonym",
+            "type" : "string",
+            "property" : [],
+            "display_name" : "Synonym"
+         },
+         {
+            "type" : "string",
+            "property" : [],
+            "display_name" : "Disease",
+            "description" : "Disease identifiers.",
+            "id" : "bioentity"
+         },
+         {
+            "property" : [],
+            "type" : "string",
+            "searchable" : "true",
+            "display_name" : "Disease",
+            "description" : "Disease identifiers.",
+            "id" : "bioentity_label"
+         },
+         {
+            "description" : "The full name of the disease.",
+            "id" : "bioentity_name",
+            "property" : [],
+            "type" : "string",
+            "searchable" : "true",
+            "display_name" : "Disease full name"
+         },
+         {
+            "id" : "bioentity_internal_id",
+            "indexed" : "false",
+            "description" : "The bioentity ID used at the database of origin.",
+            "display_name" : "This should not be displayed",
+            "type" : "string",
+            "property" : []
+         },
+         {
+            "id" : "qualifier",
+            "cardinality" : "multi",
+            "description" : "Annotation qualifier.",
+            "display_name" : "Qualifier",
+            "property" : [],
+            "type" : "string"
+         },
+         {
+            "id" : "annotation_class",
+            "description" : "Direct annotations.",
+            "display_name" : "Phenotype",
+            "type" : "string",
+            "property" : []
+         },
+         {
+            "searchable" : "true",
+            "display_name" : "Phenotype",
+            "property" : [],
+            "type" : "string",
+            "id" : "annotation_class_label",
+            "description" : "Direct annotations."
+         },
+         {
+            "display_name" : "Ontology (aspect)",
+            "property" : [],
+            "type" : "string",
+            "id" : "aspect",
+            "description" : "Ontology aspect."
+         },
+         {
+            "property" : [],
+            "type" : "string",
+            "display_name" : "Isoform",
+            "description" : "Biological isoform.",
+            "id" : "bioentity_isoform"
+         },
+         {
+            "id" : "evidence_type",
+            "description" : "Evidence type.",
+            "display_name" : "Evidence",
+            "property" : [],
+            "type" : "string"
+         },
+         {
+            "description" : "All evidence (evidence closure) for this annotation",
+            "id" : "evidence_type_closure",
+            "cardinality" : "multi",
+            "property" : [],
+            "type" : "string",
+            "display_name" : "Evidence type"
+         },
+         {
+            "description" : "Evidence with/from.",
+            "cardinality" : "multi",
+            "id" : "evidence_with",
+            "type" : "string",
+            "property" : [],
+            "display_name" : "Evidence with"
+         },
+         {
+            "cardinality" : "multi",
+            "id" : "reference",
+            "description" : "Database reference.",
+            "display_name" : "Reference",
+            "type" : "string",
+            "property" : []
+         },
+         {
+            "display_name" : "Annotation extension",
+            "property" : [],
+            "type" : "string",
+            "id" : "annotation_extension_class",
+            "cardinality" : "multi",
+            "description" : "Extension class for the annotation."
+         },
+         {
+            "property" : [],
+            "type" : "string",
+            "searchable" : "true",
+            "display_name" : "Annotation extension",
+            "description" : "Extension class for the annotation.",
+            "id" : "annotation_extension_class_label",
+            "cardinality" : "multi"
+         },
+         {
+            "description" : "Extension class for the annotation.",
+            "id" : "annotation_extension_class_closure",
+            "cardinality" : "multi",
+            "property" : [],
+            "type" : "string",
+            "display_name" : "Annotation extension"
+         },
+         {
+            "description" : "Extension class for the annotation.",
+            "id" : "annotation_extension_class_closure_label",
+            "cardinality" : "multi",
+            "property" : [],
+            "type" : "string",
+            "searchable" : "true",
+            "display_name" : "Annotation extension"
+         },
+         {
+            "id" : "annotation_extension_json",
+            "cardinality" : "multi",
+            "description" : "Extension class for the annotation (JSON).",
+            "display_name" : "Annotation extension",
+            "property" : [],
+            "type" : "string"
+         },
+         {
+            "display_name" : "PANTHER family",
+            "searchable" : "true",
+            "type" : "string",
+            "property" : [],
+            "id" : "panther_family",
+            "description" : "PANTHER families that are associated with this entity."
+         },
+         {
+            "description" : "PANTHER families that are associated with this entity.",
+            "id" : "panther_family_label",
+            "property" : [],
+            "type" : "string",
+            "searchable" : "true",
+            "display_name" : "PANTHER family"
+         }
+      ],
+      "_infile" : "/home/sjcarbon/local/src/git/monarch-app/./conf/golr-views/gene-to-phenotype-config.yaml",
+      "schema_generating" : "true"
+   },
+   "annotation" : {
+      "display_name" : "Annotations",
+      "filter_weights" : "source^7.0 assigned_by^6.5 aspect^6.25 evidence_type_closure^6.0 panther_family_label^5.5 qualifier^5.25 taxon_closure_label^5.0 annotation_class_label^4.5 regulates_closure_label^3.0 annotation_extension_class_closure_label^2.0",
+      "_strict" : 0,
+      "_outfile" : "/home/sjcarbon/local/src/git/monarch-app/./conf/golr-views/disease-to-phenotype-config.yaml",
+      "id" : "annotation",
+      "fields" : [
+         {
+            "id" : "id",
+            "description" : "A unique (and internal) combination of bioentity and ontology class.",
+            "display_name" : "Acc",
+            "type" : "string",
+            "property" : []
+         },
+         {
+            "description" : "Database source.",
+            "id" : "source",
+            "type" : "string",
+            "property" : [],
+            "display_name" : "Source"
+         },
+         {
+            "type" : "string",
+            "property" : [],
+            "display_name" : "Type class id",
+            "description" : "Type class.",
+            "id" : "type"
+         },
+         {
+            "id" : "date",
+            "description" : "Date of assignment.",
+            "display_name" : "Date",
+            "type" : "string",
+            "property" : []
+         },
+         {
+            "type" : "string",
+            "property" : [],
+            "display_name" : "Assigned by",
+            "description" : "Annotations assigned by group.",
+            "id" : "assigned_by"
+         },
+         {
+            "property" : [],
+            "type" : "string",
+            "display_name" : "Redundant for",
+            "description" : "Rational for redundancy of annotation.",
+            "id" : "is_redundant_for"
+         },
+         {
+            "id" : "taxon",
+            "description" : "Taxonomic group.",
+            "display_name" : "Taxon",
+            "property" : [],
+            "type" : "string"
+         },
+         {
+            "description" : "Taxonomic group and ancestral groups.",
+            "id" : "taxon_label",
+            "property" : [],
+            "type" : "string",
+            "searchable" : "true",
+            "display_name" : "Taxon"
+         },
+         {
+            "description" : "Taxonomic group and ancestral groups.",
+            "cardinality" : "multi",
+            "id" : "taxon_closure",
+            "type" : "string",
+            "property" : [],
+            "display_name" : "Taxon"
+         },
+         {
+            "searchable" : "true",
+            "display_name" : "Taxon",
+            "property" : [],
+            "type" : "string",
+            "id" : "taxon_closure_label",
+            "cardinality" : "multi",
+            "description" : "Taxonomic group and ancestral groups."
+         },
+         {
+            "type" : "string",
+            "property" : [],
+            "display_name" : "Secondary taxon",
+            "description" : "Secondary taxon.",
+            "id" : "secondary_taxon"
+         },
+         {
+            "id" : "secondary_taxon_label",
+            "description" : "Secondary taxon.",
+            "display_name" : "Secondary taxon",
+            "searchable" : "true",
+            "type" : "string",
+            "property" : []
+         },
+         {
+            "cardinality" : "multi",
+            "id" : "secondary_taxon_closure",
+            "description" : "Secondary taxon closure.",
+            "display_name" : "Secondary taxon",
+            "type" : "string",
+            "property" : []
+         },
+         {
+            "description" : "Secondary taxon closure.",
+            "id" : "secondary_taxon_closure_label",
+            "cardinality" : "multi",
+            "property" : [],
+            "type" : "string",
+            "searchable" : "true",
+            "display_name" : "Secondary taxon"
+         },
+         {
+            "description" : "Annotations for this term or its children (over is_a/part_of).",
+            "id" : "isa_partof_closure",
+            "cardinality" : "multi",
+            "property" : [],
+            "type" : "string",
+            "display_name" : "Involved in"
+         },
+         {
+            "cardinality" : "multi",
+            "id" : "isa_partof_closure_label",
+            "description" : "Annotations for this term or its children (over is_a/part_of).",
+            "display_name" : "Involved in",
+            "searchable" : "true",
+            "type" : "string",
+            "property" : []
+         },
+         {
+            "id" : "regulates_closure",
+            "cardinality" : "multi",
+            "description" : "Annotations for this term or its children (over regulates).",
+            "display_name" : "Inferred annotation",
+            "property" : [],
+            "type" : "string"
+         },
+         {
+            "property" : [],
+            "type" : "string",
+            "searchable" : "true",
+            "display_name" : "Inferred annotation",
+            "description" : "Annotations for this term or its children (over regulates).",
+            "id" : "regulates_closure_label",
+            "cardinality" : "multi"
+         },
+         {
+            "type" : "string",
+            "property" : [],
+            "display_name" : "Has participant (IDs)",
+            "description" : "Closure of ids/accs over has_participant.",
+            "cardinality" : "multi",
+            "id" : "has_participant_closure"
+         },
+         {
+            "id" : "has_participant_closure_label",
+            "cardinality" : "multi",
+            "description" : "Closure of labels over has_participant.",
+            "searchable" : "true",
+            "display_name" : "Has participant",
+            "property" : [],
+            "type" : "string"
+         },
+         {
+            "cardinality" : "multi",
+            "id" : "synonym",
+            "description" : "Disease synonyms.",
+            "display_name" : "Synonym",
+            "type" : "string",
+            "property" : []
+         },
+         {
+            "display_name" : "Disease",
+            "type" : "string",
+            "property" : [],
+            "id" : "bioentity",
+            "description" : "Disease identifiers."
+         },
+         {
+            "property" : [],
+            "type" : "string",
+            "searchable" : "true",
+            "display_name" : "Disease",
+            "description" : "Disease identifiers.",
+            "id" : "bioentity_label"
+         },
+         {
+            "type" : "string",
+            "property" : [],
+            "display_name" : "Disease full name",
+            "searchable" : "true",
+            "description" : "The full name of the disease.",
+            "id" : "bioentity_name"
+         },
+         {
+            "id" : "bioentity_internal_id",
+            "description" : "The bioentity ID used at the database of origin.",
+            "indexed" : "false",
+            "display_name" : "This should not be displayed",
+            "property" : [],
+            "type" : "string"
+         },
+         {
+            "display_name" : "Qualifier",
+            "type" : "string",
+            "property" : [],
+            "cardinality" : "multi",
+            "id" : "qualifier",
+            "description" : "Annotation qualifier."
+         },
+         {
+            "property" : [],
+            "type" : "string",
+            "display_name" : "Phenotype",
+            "description" : "Direct annotations.",
+            "id" : "annotation_class"
+         },
+         {
+            "type" : "string",
+            "property" : [],
+            "display_name" : "Phenotype",
+            "searchable" : "true",
+            "description" : "Direct annotations.",
+            "id" : "annotation_class_label"
+         },
+         {
+            "id" : "aspect",
+            "description" : "Ontology aspect.",
+            "display_name" : "Ontology (aspect)",
+            "property" : [],
+            "type" : "string"
+         },
+         {
+            "property" : [],
+            "type" : "string",
+            "display_name" : "Isoform",
+            "description" : "Biological isoform.",
+            "id" : "bioentity_isoform"
+         },
+         {
+            "display_name" : "Evidence",
+            "property" : [],
+            "type" : "string",
+            "id" : "evidence_type",
+            "description" : "Evidence type."
+         },
+         {
+            "id" : "evidence_type_closure",
+            "cardinality" : "multi",
+            "description" : "All evidence (evidence closure) for this annotation",
+            "display_name" : "Evidence type",
+            "property" : [],
+            "type" : "string"
+         },
+         {
+            "type" : "string",
+            "property" : [],
+            "display_name" : "Evidence with",
+            "description" : "Evidence with/from.",
+            "cardinality" : "multi",
+            "id" : "evidence_with"
+         },
+         {
+            "description" : "Database reference.",
+            "cardinality" : "multi",
+            "id" : "reference",
+            "type" : "string",
+            "property" : [],
+            "display_name" : "Reference"
+         },
+         {
+            "id" : "annotation_extension_class",
+            "cardinality" : "multi",
+            "description" : "Extension class for the annotation.",
+            "display_name" : "Annotation extension",
+            "property" : [],
+            "type" : "string"
+         },
+         {
+            "cardinality" : "multi",
+            "id" : "annotation_extension_class_label",
+            "description" : "Extension class for the annotation.",
+            "display_name" : "Annotation extension",
+            "searchable" : "true",
+            "type" : "string",
+            "property" : []
+         },
+         {
+            "description" : "Extension class for the annotation.",
+            "id" : "annotation_extension_class_closure",
+            "cardinality" : "multi",
+            "property" : [],
+            "type" : "string",
+            "display_name" : "Annotation extension"
+         },
+         {
+            "id" : "annotation_extension_class_closure_label",
+            "cardinality" : "multi",
+            "description" : "Extension class for the annotation.",
+            "searchable" : "true",
+            "display_name" : "Annotation extension",
+            "property" : [],
+            "type" : "string"
+         },
+         {
+            "type" : "string",
+            "property" : [],
+            "display_name" : "Annotation extension",
+            "description" : "Extension class for the annotation (JSON).",
+            "cardinality" : "multi",
+            "id" : "annotation_extension_json"
+         },
+         {
+            "searchable" : "true",
+            "display_name" : "PANTHER family",
+            "property" : [],
+            "type" : "string",
+            "id" : "panther_family",
+            "description" : "PANTHER families that are associated with this entity."
+         },
+         {
+            "type" : "string",
+            "property" : [],
+            "display_name" : "PANTHER family",
+            "searchable" : "true",
+            "description" : "PANTHER families that are associated with this entity.",
+            "id" : "panther_family_label"
+         }
+      ],
+      "weight" : "20",
+      "schema_generating" : "true",
+      "_infile" : "/home/sjcarbon/local/src/git/monarch-app/./conf/golr-views/disease-to-phenotype-config.yaml",
+      "result_weights" : "bioentity^7.0 bioentity_name^6.0 qualifier^5.0 annotation_class^4.7 annotation_extension_json^4.5 source^4.0 taxon^3.0 evidence_type^2.5 evidence_with^2.0 panther_family^1.5 bioentity_isoform^0.5 reference^0.25",
+      "boost_weights" : "annotation_class^2.0 annotation_class_label^1.0 bioentity^2.0 bioentity_label^1.0 bioentity_name^1.0 annotation_extension_class^2.0 annotation_extension_class_label^1.0 reference^1.0 panther_family^1.0 panther_family_label^1.0 bioentity_isoform^1.0 regulates_closure^1.0 regulates_closure_label^1.0",
+      "fields_hash" : {
+         "bioentity_label" : {
+            "property" : [],
+            "type" : "string",
+            "searchable" : "true",
+            "display_name" : "Disease",
+            "description" : "Disease identifiers.",
+            "id" : "bioentity_label"
+         },
+         "is_redundant_for" : {
+            "property" : [],
+            "type" : "string",
+            "display_name" : "Redundant for",
+            "description" : "Rational for redundancy of annotation.",
+            "id" : "is_redundant_for"
+         },
+         "annotation_extension_class_label" : {
+            "cardinality" : "multi",
+            "id" : "annotation_extension_class_label",
+            "description" : "Extension class for the annotation.",
+            "display_name" : "Annotation extension",
+            "searchable" : "true",
+            "type" : "string",
+            "property" : []
+         },
+         "has_participant_closure" : {
+            "type" : "string",
+            "property" : [],
+            "display_name" : "Has participant (IDs)",
+            "description" : "Closure of ids/accs over has_participant.",
+            "cardinality" : "multi",
+            "id" : "has_participant_closure"
+         },
+         "isa_partof_closure_label" : {
+            "cardinality" : "multi",
+            "id" : "isa_partof_closure_label",
+            "description" : "Annotations for this term or its children (over is_a/part_of).",
+            "display_name" : "Involved in",
+            "searchable" : "true",
+            "type" : "string",
+            "property" : []
+         },
+         "qualifier" : {
+            "display_name" : "Qualifier",
+            "type" : "string",
+            "property" : [],
+            "cardinality" : "multi",
+            "id" : "qualifier",
+            "description" : "Annotation qualifier."
+         },
+         "date" : {
+            "id" : "date",
+            "description" : "Date of assignment.",
+            "display_name" : "Date",
+            "type" : "string",
+            "property" : []
+         },
+         "bioentity" : {
+            "display_name" : "Disease",
+            "type" : "string",
+            "property" : [],
+            "id" : "bioentity",
+            "description" : "Disease identifiers."
+         },
+         "isa_partof_closure" : {
+            "description" : "Annotations for this term or its children (over is_a/part_of).",
+            "id" : "isa_partof_closure",
+            "cardinality" : "multi",
+            "property" : [],
+            "type" : "string",
+            "display_name" : "Involved in"
+         },
+         "annotation_extension_class_closure_label" : {
+            "id" : "annotation_extension_class_closure_label",
+            "cardinality" : "multi",
+            "description" : "Extension class for the annotation.",
+            "searchable" : "true",
+            "display_name" : "Annotation extension",
+            "property" : [],
+            "type" : "string"
+         },
+         "secondary_taxon_closure_label" : {
+            "description" : "Secondary taxon closure.",
+            "id" : "secondary_taxon_closure_label",
+            "cardinality" : "multi",
+            "property" : [],
+            "type" : "string",
+            "searchable" : "true",
+            "display_name" : "Secondary taxon"
+         },
+         "taxon_closure" : {
+            "description" : "Taxonomic group and ancestral groups.",
+            "cardinality" : "multi",
+            "id" : "taxon_closure",
+            "type" : "string",
+            "property" : [],
+            "display_name" : "Taxon"
+         },
+         "annotation_extension_json" : {
+            "type" : "string",
+            "property" : [],
+            "display_name" : "Annotation extension",
+            "description" : "Extension class for the annotation (JSON).",
+            "cardinality" : "multi",
+            "id" : "annotation_extension_json"
+         },
+         "annotation_extension_class" : {
+            "id" : "annotation_extension_class",
+            "cardinality" : "multi",
+            "description" : "Extension class for the annotation.",
+            "display_name" : "Annotation extension",
+            "property" : [],
+            "type" : "string"
+         },
+         "regulates_closure" : {
+            "id" : "regulates_closure",
+            "cardinality" : "multi",
+            "description" : "Annotations for this term or its children (over regulates).",
+            "display_name" : "Inferred annotation",
+            "property" : [],
+            "type" : "string"
+         },
+         "taxon_closure_label" : {
+            "searchable" : "true",
+            "display_name" : "Taxon",
+            "property" : [],
+            "type" : "string",
+            "id" : "taxon_closure_label",
+            "cardinality" : "multi",
+            "description" : "Taxonomic group and ancestral groups."
+         },
+         "bioentity_internal_id" : {
+            "id" : "bioentity_internal_id",
+            "description" : "The bioentity ID used at the database of origin.",
+            "indexed" : "false",
+            "display_name" : "This should not be displayed",
+            "property" : [],
+            "type" : "string"
+         },
+         "panther_family_label" : {
+            "type" : "string",
+            "property" : [],
+            "display_name" : "PANTHER family",
+            "searchable" : "true",
+            "description" : "PANTHER families that are associated with this entity.",
+            "id" : "panther_family_label"
+         },
+         "panther_family" : {
+            "searchable" : "true",
+            "display_name" : "PANTHER family",
+            "property" : [],
+            "type" : "string",
+            "id" : "panther_family",
+            "description" : "PANTHER families that are associated with this entity."
+         },
+         "evidence_with" : {
+            "type" : "string",
+            "property" : [],
+            "display_name" : "Evidence with",
+            "description" : "Evidence with/from.",
+            "cardinality" : "multi",
+            "id" : "evidence_with"
+         },
+         "assigned_by" : {
+            "type" : "string",
+            "property" : [],
+            "display_name" : "Assigned by",
+            "description" : "Annotations assigned by group.",
+            "id" : "assigned_by"
+         },
+         "annotation_extension_class_closure" : {
+            "description" : "Extension class for the annotation.",
+            "id" : "annotation_extension_class_closure",
+            "cardinality" : "multi",
+            "property" : [],
+            "type" : "string",
+            "display_name" : "Annotation extension"
+         },
+         "has_participant_closure_label" : {
+            "id" : "has_participant_closure_label",
+            "cardinality" : "multi",
+            "description" : "Closure of labels over has_participant.",
+            "searchable" : "true",
+            "display_name" : "Has participant",
+            "property" : [],
+            "type" : "string"
+         },
+         "taxon_label" : {
+            "description" : "Taxonomic group and ancestral groups.",
+            "id" : "taxon_label",
+            "property" : [],
+            "type" : "string",
+            "searchable" : "true",
+            "display_name" : "Taxon"
+         },
+         "taxon" : {
+            "id" : "taxon",
+            "description" : "Taxonomic group.",
+            "display_name" : "Taxon",
+            "property" : [],
+            "type" : "string"
+         },
+         "regulates_closure_label" : {
+            "property" : [],
+            "type" : "string",
+            "searchable" : "true",
+            "display_name" : "Inferred annotation",
+            "description" : "Annotations for this term or its children (over regulates).",
+            "id" : "regulates_closure_label",
+            "cardinality" : "multi"
+         },
+         "type" : {
+            "type" : "string",
+            "property" : [],
+            "display_name" : "Type class id",
+            "description" : "Type class.",
+            "id" : "type"
+         },
+         "secondary_taxon_closure" : {
+            "cardinality" : "multi",
+            "id" : "secondary_taxon_closure",
+            "description" : "Secondary taxon closure.",
+            "display_name" : "Secondary taxon",
+            "type" : "string",
+            "property" : []
+         },
+         "synonym" : {
+            "cardinality" : "multi",
+            "id" : "synonym",
+            "description" : "Disease synonyms.",
+            "display_name" : "Synonym",
+            "type" : "string",
+            "property" : []
+         },
+         "bioentity_name" : {
+            "type" : "string",
+            "property" : [],
+            "display_name" : "Disease full name",
+            "searchable" : "true",
+            "description" : "The full name of the disease.",
+            "id" : "bioentity_name"
+         },
+         "evidence_type_closure" : {
+            "id" : "evidence_type_closure",
+            "cardinality" : "multi",
+            "description" : "All evidence (evidence closure) for this annotation",
+            "display_name" : "Evidence type",
+            "property" : [],
+            "type" : "string"
+         },
+         "secondary_taxon_label" : {
+            "id" : "secondary_taxon_label",
+            "description" : "Secondary taxon.",
+            "display_name" : "Secondary taxon",
+            "searchable" : "true",
+            "type" : "string",
+            "property" : []
+         },
+         "source" : {
+            "description" : "Database source.",
+            "id" : "source",
+            "type" : "string",
+            "property" : [],
+            "display_name" : "Source"
+         },
+         "reference" : {
+            "description" : "Database reference.",
+            "cardinality" : "multi",
+            "id" : "reference",
+            "type" : "string",
+            "property" : [],
+            "display_name" : "Reference"
+         },
+         "bioentity_isoform" : {
+            "property" : [],
+            "type" : "string",
+            "display_name" : "Isoform",
+            "description" : "Biological isoform.",
+            "id" : "bioentity_isoform"
+         },
+         "aspect" : {
+            "id" : "aspect",
+            "description" : "Ontology aspect.",
+            "display_name" : "Ontology (aspect)",
+            "property" : [],
+            "type" : "string"
+         },
+         "annotation_class" : {
+            "property" : [],
+            "type" : "string",
+            "display_name" : "Phenotype",
+            "description" : "Direct annotations.",
+            "id" : "annotation_class"
+         },
+         "annotation_class_label" : {
+            "type" : "string",
+            "property" : [],
+            "display_name" : "Phenotype",
+            "searchable" : "true",
+            "description" : "Direct annotations.",
+            "id" : "annotation_class_label"
+         },
+         "evidence_type" : {
+            "display_name" : "Evidence",
+            "property" : [],
+            "type" : "string",
+            "id" : "evidence_type",
+            "description" : "Evidence type."
+         },
+         "id" : {
+            "id" : "id",
+            "description" : "A unique (and internal) combination of bioentity and ontology class.",
+            "display_name" : "Acc",
+            "type" : "string",
+            "property" : []
+         },
+         "secondary_taxon" : {
+            "type" : "string",
+            "property" : [],
+            "display_name" : "Secondary taxon",
+            "description" : "Secondary taxon.",
+            "id" : "secondary_taxon"
+         }
+      },
+      "document_category" : "annotation",
+      "description" : "Associations between diseases and phenotypes"
+   }
+}
