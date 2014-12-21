@@ -10,10 +10,10 @@
  *
  *   #mydiv is the id of the div that will contain the phenogrid widget
  *   
- *   and phenotypeList takes one of two forms:
+ *   and phenotypeList takes one of two forms:o
  *
  *   1. a list of hashes of the form 
- * [ {"id": "HP:12345", "observed" :"positive"}, {"id: "HP:23451", "observed" : "negative"},]
+ * [ {"id": "HP:12345", "observed" :"positive"}, {"oid: "HP:23451", "observed" : "negative"},]
  *   2. a simple list of ids..
  *  [ "HP:12345", "HP:23451"], etc.
  *
@@ -143,6 +143,11 @@ var url = document.URL;
 			this.state.filteredModelList = [];
 		}
 
+	    
+	        // target species name might be provided as a name or as taxon. Make sure that we translate to name
+   	        this.state.targetSpeciesName = this._getTargetSpeciesNameByTaxon(this,this.state.targetSpeciesName);
+
+
 		this.state.yAxisMax = 0;
 		this.state.yoffset  = this.state.baseYOffset;
 		//basic gap for a bit of space above modelregion
@@ -217,13 +222,27 @@ var url = document.URL;
 
 		/// default - it actually was a species name
 		var species = name;
+		var found = false;
 
-		// if, instead, it matches a taxon, grab the ppropriate species
+		// check to see if the name exists.
+		// if it is found, then we say "true" and we're good.
+		// if, however, it matches the taxon, take the index in the array.
+		
 		for (sname in self.state.targetSpeciesByName) {
+		    // we've found a matching name.
+		    if (name == sname) {
+			found = true;
+		    }
+		    
 		    if (name == self.state.targetSpeciesByName[sname].taxon) {
+			found = true;
 			species = sname;
 			break;
 		    }
+		}
+		// if not found, it's overview.
+		if (found === false) {
+		    species = "Overview";
 		}
 		return species;
 	    },
@@ -298,10 +317,6 @@ var url = document.URL;
 		this.state.currModelIdx = this.state.modelDisplayCount-1;
 		this.state.currPhenotypeIdx = this.state.phenotypeDisplayCount-1;
 	        this.state.phenotypeData = this._filterPhenotypeResults(this.state.phenotypeData);
-
-	    
-	    // target species name might be provided as a name or as taxon. Make sure that we translate to name
-	    this.state.targetSpeciesName = this._getTargetSpeciesNameByTaxon(this,this.state.targetSpeciesName);
 
 	    
 		this._loadData();
@@ -926,6 +941,7 @@ var url = document.URL;
 	//given a list of phenotypes, find the top n models
 	//I may need to rename this method "getModelData".  It should extract the models and reformat the data 
 	    _loadData: function() {
+		console.log("target species name is..."+this.state.targetSpeciesName);
 		if (this.state.targetSpeciesName === "Overview") {
 			this._loadOverviewData();
 		} else {
@@ -1558,7 +1574,7 @@ var url = document.URL;
 			.style("font-weight", "bold")
 			.style("fill", "blue")
 			.on("click",function(d){
-				self._clickPhenotype(curr_data[0].id_a, self.document[0].location.origin);
+				self._clickPhenotype(self.state.serverURL,curr_data[0].id_a);
 			});
 
 		this._highlightMatchingModels(curr_data);
@@ -1610,12 +1626,12 @@ var url = document.URL;
 			.style("fill","black");
 	},
 
-	_clickPhenotype: function(data, url_origin) {
+	_clickPhenotype: function(url_origin,data) {
 		var url = url_origin + "/phenotype/" + data;
 		var win = window.open(url, '_blank');
 	},
 
-	_clickModel: function(data, url_origin) {
+	_clickModel: function(url_origin,data) {
 		var concept = self._getConceptId(data.model_id);
 		// hardwire check
 		var apientity = this.state.defaultApiEntity;
@@ -1701,7 +1717,7 @@ var url = document.URL;
 				return "rotate(-45)";
 			})
 			.on("click", function(d) {
-				self._clickModel(data, self.document[0].location.origin);
+				self._clickModel(self.state.serverURL,data);
 			})
 			.on("mouseover", function(d) {
 				self._selectModel(data, this);
@@ -2014,9 +2030,6 @@ var url = document.URL;
 		phen_label.text(txt)
 			.style("font-weight", "bold")
 			.style("fill", "blue");
-			//.on("click",function(d){
-			//self._clickPhenotype(curr_data.id_a, self.document.location.origin);
-			// });
 
 		//Highlight Column
 		var model_label = self.state.svg.selectAll("text#" + this._getConceptId(curr_data.model_id));
