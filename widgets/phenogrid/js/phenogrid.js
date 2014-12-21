@@ -293,13 +293,10 @@ var url = document.URL;
 	// thus, a workaround is included below to set the path correctly if it come up as '/'.
 	// this should not impact any standalone uses of phenogrid, and will be removed once monarch-app is cleaned up.
 	_getResourceUrl: function(name,type) {
-		var prefix;
-		if (typeof(this.config.scriptpath) !== 'undefined' && this.config.scriptpath !== null && this.config.scriptpath !== '' && this.config.scriptpath != '/') {
-			prefix = this.config.scriptpath;
-		} else {
-			prefix ='/widgets/phenogrid/js/';
-		}
-		return prefix+'res/'+name+'.'+type;
+	    var prefix;
+	    prefix =this.state.serverURL+'/widgets/phenogrid/js/';
+	    console.log("prefix is "+prefix);
+	    return prefix+'res/'+name+'.'+type;
 	},
 
 	_init: function() {
@@ -941,7 +938,6 @@ var url = document.URL;
 	//given a list of phenotypes, find the top n models
 	//I may need to rename this method "getModelData".  It should extract the models and reformat the data 
 	    _loadData: function() {
-		console.log("target species name is..."+this.state.targetSpeciesName);
 		if (this.state.targetSpeciesName === "Overview") {
 			this._loadOverviewData();
 		} else {
