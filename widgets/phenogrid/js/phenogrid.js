@@ -1558,7 +1558,7 @@ var url = document.URL;
 			.style("font-weight", "bold")
 			.style("fill", "blue")
 			.on("click",function(d){
-				self._clickPhenotype(curr_data[0].id_a, self.document[0].location.origin);
+				self._clickPhenotype(self.state.serverURL,curr_data[0].id_a);
 			});
 
 		this._highlightMatchingModels(curr_data);
@@ -1610,12 +1610,12 @@ var url = document.URL;
 			.style("fill","black");
 	},
 
-	_clickPhenotype: function(data, url_origin) {
+	_clickPhenotype: function(url_origin,data) {
 		var url = url_origin + "/phenotype/" + data;
 		var win = window.open(url, '_blank');
 	},
 
-	_clickModel: function(data, url_origin) {
+	_clickModel: function(url_origin,data) {
 		var concept = self._getConceptId(data.model_id);
 		// hardwire check
 		var apientity = this.state.defaultApiEntity;
@@ -1701,7 +1701,7 @@ var url = document.URL;
 				return "rotate(-45)";
 			})
 			.on("click", function(d) {
-				self._clickModel(data, self.document[0].location.origin);
+				self._clickModel(self.state.serverURL,data);
 			})
 			.on("mouseover", function(d) {
 				self._selectModel(data, this);
@@ -2014,9 +2014,6 @@ var url = document.URL;
 		phen_label.text(txt)
 			.style("font-weight", "bold")
 			.style("fill", "blue");
-			//.on("click",function(d){
-			//self._clickPhenotype(curr_data.id_a, self.document.location.origin);
-			// });
 
 		//Highlight Column
 		var model_label = self.state.svg.selectAll("text#" + this._getConceptId(curr_data.model_id));
