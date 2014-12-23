@@ -784,7 +784,7 @@ bbop.monarch.datagraph.prototype.makeBreadcrumb = function(graphConfig,label,gro
                             return ".1em";
                         }
                         if (i == 0 && len == 1){
-                            return ".8em";
+                            return ".2em";
                         } else if (i == 0 && len >2
                                    && words[1].match(/and/i)){
                             return "-1.2em";
@@ -840,14 +840,6 @@ bbop.monarch.datagraph.prototype.setYAxisText = function(graphConfig,data){
             d3.select(this).style("fill", config.color.yLabel.hover);
             d3.select(this).style("text-decoration", "underline");
         }
-        if (/\.\.\./.test(self.getIDLabel(d,data))){
-            var fullLabel = self.getFullLabel(self.getIDLabel(d,data),data);
-            d3.select(this).append("svg:title")
-              .text(fullLabel);  
-        } else if (yFont < 12) {//HARDCODE alert
-            d3.select(this).append("svg:title")
-              .text(self.getIDLabel(d,data));
-        }
     })
     .on("mouseout", function(){
         d3.select(this).style("fill", config.color.yLabel.fill );
@@ -860,7 +852,16 @@ bbop.monarch.datagraph.prototype.setYAxisText = function(graphConfig,data){
         }
     })
     .style("text-anchor", "end")
-    .attr("dx", config.yOffset);
+    .attr("dx", config.yOffset)
+    .append("svg:title")
+    .text(function(d){
+        if (/\.\.\./.test(self.getIDLabel(d,data))){
+            var fullLabel = self.getFullLabel(self.getIDLabel(d,data),data);
+              return (fullLabel);  
+        } else if (yFont < 12) {//HARDCODE alert
+              return (self.getIDLabel(d,data));
+        }
+    });
 };
 
 //  Transition to new graph
