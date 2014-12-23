@@ -25,7 +25,6 @@ bbop.monarch.datagraph = function(config){
     });
     
     self.setPolygonCoordinates();
-    self.config.xFirstIndex = self.getXFirstIndex();
     
     //Tooltip offsetting
     self.config.arrowOffset = {height: 21, width: -90};
@@ -395,7 +394,7 @@ bbop.monarch.datagraph.prototype.makeBar = function (barGroup,graphConfig,barLay
           .attr("class",("rect"+graphConfig.level))
           .attr("height", graphConfig.y1.rangeBand())
           .attr("y", function(d) { return graphConfig.y1(d.name); })
-          .attr("x", function(){return config.xFirstIndex;})
+          .attr("x", 1)
           .attr("width", function(d) { return graphConfig.x(d.value); })
           .on("mouseover", function(d){
             d3.select(this)
@@ -416,7 +415,7 @@ bbop.monarch.datagraph.prototype.makeBar = function (barGroup,graphConfig,barLay
           .attr("class",("rect"+graphConfig.level))
           .attr("x", function(d){
               if (d.x0 == 0){
-                  return config.xFirstIndex;
+                  return 1;
               } else { 
                 return graphConfig.x(d.x0);
               } 
@@ -454,7 +453,7 @@ bbop.monarch.datagraph.prototype.transitionGrouped = function (graphConfig,data,
       .attr("height", graphConfig.y1.rangeBand())
       .attr("y", function(d) { return graphConfig.y1(d.name); })  
       .transition()
-      .attr("x", function(){return config.xFirstIndex;})
+      .attr("x", 1)
       .attr("width", function(d) { return graphConfig.x(d.value); })     
           
     rect.on("mouseover", function(d){
@@ -481,7 +480,7 @@ bbop.monarch.datagraph.prototype.transitionStacked = function (graphConfig,data,
       .delay(function(d, i) { return i * 10; })
       .attr("x", function(d){
               if (d.x0 == 0){
-                  return config.xFirstIndex;
+                  return 1;
               } else { 
                 return graphConfig.x(d.x0);
               } 
@@ -1150,23 +1149,6 @@ bbop.monarch.datagraph.prototype.setXLabelFontSize = function(fSize){
 bbop.monarch.datagraph.prototype.setXAxisPos = function(w,h){
     this.config.xAxisPos = {dx:w,y:h};
     return this.config.xAxisPos;
-};
-
-//The starting index (0 or 1) for the x axis seems to be
-//dependent on browser version, for now always return 1
-//Firefox <33 should be 0
-bbop.monarch.datagraph.prototype.getXFirstIndex = function (){
- 
-    //Check browser
-    var isOpera = (!!window.opera || navigator.userAgent.indexOf(' OPR/') >= 0);
-    var isChrome = (!!window.chrome && !(!!window.opera || navigator.userAgent.indexOf(' OPR/') >= 0));
-    var isSafari = Object.prototype.toString.call(window.HTMLElement).indexOf('Constructor') > 0;
- 
-    if (isChrome || isSafari){
-        return 1;
-    } else {
-        return 1;
-    }
 };
 
 //datagraph default SVG Coordinates
