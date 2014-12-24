@@ -17,4 +17,18 @@ Requirements
 
 ## Prepopulating Monarch Cache
 
+first do this
+
+```
+export PH=$HOME/repos/phenotype-ontologies 
+```
+
+(or wherever you have phenotype-ontologies checked out)
+
+then do this:
+
+```
+cut -f2 $PH/data/Homo_sapiens/Hs-disease-to-phenotype-O.txt | sort -u  | perl -npe 's/\t.*//;s/:/_/;chomp;print `wget monarchinitiative.org/phenotype/$_ -O /tmp/z.html`' 
+```
+
 
