@@ -71,7 +71,7 @@ bbop.monarch.datagraph.prototype.init = function(html_div,DATA){
                  jQuery(html_div).children().remove();
                  self.setSizeConfiguration(config.graphSizingRatios);
                  self.run(html_div,DATA);
-             } 
+             }
          });
      } else {
          self.run(html_div,DATA);
@@ -84,8 +84,8 @@ bbop.monarch.datagraph.prototype.setSizeConfiguration = function(graphRatio){
     var h = jQuery(window).height();
     var total = w+h;
     
-    self.setWidth( ((w*graphRatio.width) / self.getBaseLog(12,w)) * 3);
-    self.setHeight( ((h*graphRatio.height) / self.getBaseLog(12,h)) *3.5);
+    self.setWidth( ((w*graphRatio.width) / getBaseLog(12,w)) * 3);
+    self.setHeight( ((h*graphRatio.height) / getBaseLog(12,h)) *3.5);
     self.setYFontSize( ((total*(graphRatio.yFontSize))/ getBaseLog(20,total)) * 3);
 };
 
@@ -487,9 +487,7 @@ bbop.monarch.datagraph.prototype.setLinearScale = function (graphConfig,data,gro
         .orient("top")
         .tickFormat(d3.format(".2s"));
     
-    self.setXYDomains(graphConfig,data,groups);
-    self.transitionXAxisToNewScale(graphConfig,750);
-          
+    return graphConfig;
 };
 
 bbop.monarch.datagraph.prototype.setLogScale = function (graphConfig,data,groups,rect) {
@@ -504,7 +502,8 @@ bbop.monarch.datagraph.prototype.setLogScale = function (graphConfig,data,groups
         .scale(graphConfig.x)
         .orient("top")
         .ticks(5);
-
+    
+    return graphConfig;
 };
 
 bbop.monarch.datagraph.prototype.transitionGrouped = function (graphConfig,data,groups,rect) {
@@ -649,25 +648,37 @@ bbop.monarch.datagraph.prototype.drawGraph = function (data,graphConfig) {
                                  groups,rect,barGroup);
     }
     
-    d3.select(graphConfig.html_div).selectAll('input')
+    d3.select(graphConfig.html_div).select('.configure')
       .on("change",function(){
           self.changeBarConfig(graphConfig,data,groups,rect);});
+    
+    d3.select(graphConfig.html_div).select('.scale')
+    .on("change",function(){
+        self.changeScale(graphConfig,data,groups,rect);});
 };
 
-bbop.monarch.datagraph.prototype.changeBarConfig = function(graphConfig,data,groups,rect){
-
+bbop.monarch.datagraph.prototype.changeScale = function(graphConfig,data,groups,rect){
+    var self = this;
     if (jQuery('input[name=scale]:checked').val() === 'log'){
         self.setLogScale(graphConfig,data,groups,rect);
     } else if (typeof jQuery('input[name=scale]:checked').val() == 'undefined'){
         self.setLinearScale(graphConfig,data,groups,rect);
     }
-    
+    if (groups.length > 1){
+        //reuse change bar config
+        self.changeBarConfig(graphConfig,data,groups,rect);
+    } else {
+        self.transitionGrouped(graphConfig,data,groups,rect);
+    }
+};
+
+bbop.monarch.datagraph.prototype.changeBarConfig = function(graphConfig,data,groups,rect){
+    var self = this;
     if (jQuery('input[name=mode]:checked').val() === "grouped"){
         self.transitionGrouped(graphConfig,data,groups,rect);
     } else if (jQuery('input[name=mode]:checked').val() === 'stacked') {
         self.transitionStacked(graphConfig,data,groups,rect);
     }
-
 };
 
 //Resize height of chart after transition
