@@ -140,6 +140,12 @@ bbop.monarch.datagraph.prototype.makeGraphDOM = function(html_div,data){
       }
       
       self.makeLogScaleCheckBox(html_div);
+      
+      jQuery(html_div+" .interaction li .settings").append(" <form class=scale"+
+              " style=font-size:" + config.settingsFontSize + "; >" +
+              "<label><input type=\"checkbox\" name=\"scale\"" +
+              " value=\"log\"> Remove Empty Groups</label> " +
+              "</form> ");
 
       //Update tooltip positioning
       if (!config.useCrumb && groups.length>1){
@@ -242,14 +248,14 @@ bbop.monarch.datagraph.prototype.makeLegend = function (graphConfig){
 
     legend.append("rect")
        .attr("x", config.width+config.legend.width+37)//HARDCODE
-       .attr("y", 4)
+       .attr("y", 6)
        .attr("width", config.legend.width)
        .attr("height", config.legend.height)
        .style("fill", color);
 
     legend.append("text")
        .attr("x", config.width+config.legend.width+32)
-       .attr("y", 12)
+       .attr("y", 14)
        .attr("dy", config.legendText.height)
        .attr("font-size",config.legendFontSize)
        .style("text-anchor", "end")
