@@ -84,8 +84,8 @@ bbop.monarch.datagraph.prototype.setSizeConfiguration = function(graphRatio){
     var h = jQuery(window).height();
     var total = w+h;
     
-    self.setWidth( ((w*graphRatio.width) / getBaseLog(12,w)) * 3);
-    self.setHeight( ((h*graphRatio.height) / getBaseLog(12,h)) *3.5);
+    self.setWidth( ((w*graphRatio.width) / self.getBaseLog(12,w)) * 3);
+    self.setHeight( ((h*graphRatio.height) / self.getBaseLog(12,h)) *3.5);
     self.setYFontSize( ((total*(graphRatio.yFontSize))/ getBaseLog(20,total)) * 3);
 };
 
@@ -414,7 +414,14 @@ bbop.monarch.datagraph.prototype.makeBar = function (barGroup,graphConfig,barLay
           .attr("height", graphConfig.y1.rangeBand())
           .attr("y", function(d) { return graphConfig.y1(d.name); })
           .attr("x", 1)
-          .attr("width", function(d) { return graphConfig.x(d.value); })
+          .attr("width", function(d) { 
+              if (( jQuery('input[name=scale]:checked').val() === 'log' )&&
+                  ( d.value == 0 )){
+                  return 1;
+              } else {
+                  return graphConfig.x(d.value); 
+              }
+           })
           .on("mouseover", function(d){
             d3.select(this)
               .style("fill", config.color.bar.fill);
@@ -440,8 +447,15 @@ bbop.monarch.datagraph.prototype.makeBar = function (barGroup,graphConfig,barLay
               } 
           })
           .attr("width", function(d) { 
-              return graphConfig.x(d.x1) - graphConfig.x(d.x0); 
-           })
+              if (d.x0 == 0 && d.x1 != 0){
+                  return graphConfig.x(d.x1); 
+              } else if (( jQuery('input[name=scale]:checked').val() === 'log' ) &&
+                         ( graphConfig.x(d.x1) - graphConfig.x(d.x0) == 0 )){
+                  return 1;  
+              } else {
+                  return graphConfig.x(d.x1) - graphConfig.x(d.x0); 
+              }
+          })
           .attr("height", graphConfig.y0.rangeBand())
           .attr("y", function(d) { return graphConfig.y1(d.name); })
           .on("mouseover", function(d){
@@ -506,7 +520,14 @@ bbop.monarch.datagraph.prototype.transitionGrouped = function (graphConfig,data,
       .attr("y", function(d) { return graphConfig.y1(d.name); })  
       .transition()
       .attr("x", 1)
-      .attr("width", function(d) { return graphConfig.x(d.value); })     
+      .attr("width", function(d) { 
+          if (( jQuery('input[name=scale]:checked').val() === 'log' ) &&
+              ( d.value == 0 )){
+              return 1;
+          } else {
+              return graphConfig.x(d.value); 
+          }
+      }); 
           
     rect.on("mouseover", function(d){
             
@@ -537,7 +558,16 @@ bbop.monarch.datagraph.prototype.transitionStacked = function (graphConfig,data,
                 return graphConfig.x(d.x0);
               } 
       })
-      .attr("width", function(d) { return graphConfig.x(d.x1) - graphConfig.x(d.x0); })
+      .attr("width", function(d) { 
+          if (d.x0 == 0 && d.x1 != 0){
+              return graphConfig.x(d.x1); 
+          } else if (( jQuery('input[name=scale]:checked').val() === 'log' ) &&
+                     ( graphConfig.x(d.x1) - graphConfig.x(d.x0) == 0 )){
+              return 1;  
+          } else {
+              return graphConfig.x(d.x1) - graphConfig.x(d.x0); 
+          }
+      })
       .transition()
       .attr("height", graphConfig.y0.rangeBand())
       .attr("y", function(d) { return graphConfig.y1(d.name); })
