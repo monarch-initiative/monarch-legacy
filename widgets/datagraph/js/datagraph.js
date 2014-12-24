@@ -132,7 +132,7 @@ bbop.monarch.datagraph.prototype.makeGraphDOM = function(html_div,data){
           jQuery(html_div+" .interaction li").append("<div class=breadcrumbs></div>");
       }
       
-      jQuery(html_div+" .interaction li").append("<div id=settings></div>");
+      jQuery(html_div+" .interaction li").append("<div class=settings></div>");
       
       //Add stacked/grouped form if more than one group
       if (groups.length >1){
@@ -155,7 +155,7 @@ bbop.monarch.datagraph.prototype.makeGraphDOM = function(html_div,data){
 
 bbop.monarch.datagraph.prototype.makeLogScaleCheckBox = function (html_div){
     var config = this.config;
-    jQuery("#settings").append(" <form class=scale"+
+    jQuery(html_div+" .interaction li .settings").append(" <form class=scale"+
         " style=font-size:" + config.settingsFontSize + "; >" +
         "<label><input type=\"checkbox\" name=\"scale\"" +
         " value=\"log\"> Log Scale</label> " +
@@ -164,7 +164,7 @@ bbop.monarch.datagraph.prototype.makeLogScaleCheckBox = function (html_div){
 
 bbop.monarch.datagraph.prototype.makeGroupedStackedForm = function (html_div){
     var config = this.config;
-    jQuery("#settings").append(" <form class=configure"+
+    jQuery(html_div+" .interaction li .settings").append(" <form class=configure"+
         " style=font-size:" + config.settingsFontSize + "; >" +
         "<label><input id=\"group\" type=\"radio\" name=\"mode\"" +
         " value=\"grouped\" checked> Grouped</label> " +
@@ -1014,9 +1014,13 @@ bbop.monarch.datagraph.prototype.drawSubGraph = function(graphConfig,subGraph,pa
         graphConfig.svg.selectAll("polygon.wedge").remove();
     }
 
-    d3.select(graphConfig.html_div).selectAll('input')
-      .on("change",function(){
-          self.changeBarConfig(graphConfig,subGraph,groups,rect);});
+    d3.select(graphConfig.html_div).select('.configure')
+        .on("change",function(){
+            self.changeBarConfig(graphConfig,subGraph,groups,rect);});
+  
+    d3.select(graphConfig.html_div).select('.scale')
+        .on("change",function(){
+            self.changeScale(graphConfig,subGraph,groups,rect);});
 };
 
 ////////////////////////////////////////////////////////////////////

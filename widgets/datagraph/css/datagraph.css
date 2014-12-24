@@ -30,7 +30,7 @@
    fill:white;
    cursor:default;
 }
-#settings{    
+.settings{    
    display: inline;
    right:0;
    margin-right: 5px;
