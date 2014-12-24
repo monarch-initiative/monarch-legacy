@@ -25,7 +25,6 @@ bbop.monarch.datagraph = function(config){
     });
     
     self.setPolygonCoordinates();
-    self.config.xFirstIndex = self.getXFirstIndex();
     
     //Tooltip offsetting
     self.config.arrowOffset = {height: 21, width: -90};
@@ -131,19 +130,16 @@ bbop.monarch.datagraph.prototype.makeGraphDOM = function(html_div,data){
       //remove breadcrumb div
       if (config.useCrumb){
           jQuery(html_div+" .interaction li").append("<div class=breadcrumbs></div>");
-
       }
+      
+      jQuery(html_div+" .interaction li").append("<div id=settings></div>");
       
       //Add stacked/grouped form if more than one group
       if (groups.length >1){
-          jQuery(html_div+" .interaction li").append(" <form class=configure"+
-                  " style=font-size:" + config.settingsFontSize + "; >" +
-                  "<label><input id=\"group\" type=\"radio\" name=\"mode\"" +
-                      " value=\"grouped\" checked> Grouped</label> " +
-                  "<label><input id=\"stack\" type=\"radio\" name=\"mode\"" +
-                      " value=\"stacked\"> Stacked</label>" +
-              "</form> ");
+          self.makeGroupedStackedForm(html_div);
       }
+      
+      self.makeLogScaleCheckBox(html_div);
 
       //Update tooltip positioning
       if (!config.useCrumb && groups.length>1){
@@ -156,21 +152,42 @@ bbop.monarch.datagraph.prototype.makeGraphDOM = function(html_div,data){
           config.barOffset.stacked.height = 50;
       }
 };
+
+bbop.monarch.datagraph.prototype.makeLogScaleCheckBox = function (html_div){
+    var config = this.config;
+    jQuery("#settings").append(" <form class=scale"+
+        " style=font-size:" + config.settingsFontSize + "; >" +
+        "<label><input type=\"checkbox\" name=\"scale\"" +
+        " value=\"log\"> Log Scale</label> " +
+        "</form> ");
+}
+
+bbop.monarch.datagraph.prototype.makeGroupedStackedForm = function (html_div){
+    var config = this.config;
+    jQuery("#settings").append(" <form class=configure"+
+        " style=font-size:" + config.settingsFontSize + "; >" +
+        "<label><input id=\"group\" type=\"radio\" name=\"mode\"" +
+        " value=\"grouped\" checked> Grouped</label> " +
+        "<label><input id=\"stack\" type=\"radio\" name=\"mode\"" +
+        " value=\"stacked\"> Stacked</label>" +
+        "</form>");
+}
   
 bbop.monarch.datagraph.prototype.setD3Config = function (html_div,DATA){
     var self = this;
     var conf =  self.config;
     var d3Config = {};
 
-
     //Define scales
     d3Config.y0 = d3.scale.ordinal()
         .rangeRoundBands([0,conf.height], .1);
 
     d3Config.y1 = d3.scale.ordinal();
+    
+    d3Config.xMin = 0;
 
     d3Config.x = d3.scale.linear()
-        .range([0, conf.width]);
+        .range([d3Config.xMin, conf.width]);
       
     //Bar colors
     d3Config.color = d3.scale.ordinal()
@@ -181,6 +198,7 @@ bbop.monarch.datagraph.prototype.setD3Config = function (html_div,DATA){
         .scale(d3Config.x)
         .orient("top")
         .tickFormat(d3.format(".2s"));
+        //.ticks(5);
 
     d3Config.yAxis = d3.svg.axis()
         .scale(d3Config.y0)
@@ -369,12 +387,12 @@ bbop.monarch.datagraph.prototype.setXYDomains = function (graphConfig,graphData,
     
     if (jQuery('input[name=mode]:checked').val()=== 'grouped' || groups.length === 1){
         var xGroupMax = self.getGroupMax(graphData);
-        graphConfig.x.domain([0, xGroupMax]);
+        graphConfig.x.domain([graphConfig.xMin, xGroupMax]);
         graphConfig.y1.domain(groups)
         .rangeRoundBands([0, graphConfig.y0.rangeBand()]);
     } else if (jQuery('input[name=mode]:checked').val()=== 'stacked'){
         var xStackMax = self.getStackMax(graphData);
-        graphConfig.x.domain([0, xStackMax]);
+        graphConfig.x.domain([graphConfig.xMin, xStackMax]);
         graphConfig.y1.domain(groups).rangeRoundBands([0,0]);
     } else {
         graphConfig.y1.domain(groups)
@@ -395,7 +413,7 @@ bbop.monarch.datagraph.prototype.makeBar = function (barGroup,graphConfig,barLay
           .attr("class",("rect"+graphConfig.level))
           .attr("height", graphConfig.y1.rangeBand())
           .attr("y", function(d) { return graphConfig.y1(d.name); })
-          .attr("x", function(){return config.xFirstIndex;})
+          .attr("x", 1)
           .attr("width", function(d) { return graphConfig.x(d.value); })
           .on("mouseover", function(d){
             d3.select(this)
@@ -416,7 +434,7 @@ bbop.monarch.datagraph.prototype.makeBar = function (barGroup,graphConfig,barLay
           .attr("class",("rect"+graphConfig.level))
           .attr("x", function(d){
               if (d.x0 == 0){
-                  return config.xFirstIndex;
+                  return 1;
               } else { 
                 return graphConfig.x(d.x0);
               } 
@@ -442,6 +460,39 @@ bbop.monarch.datagraph.prototype.makeBar = function (barGroup,graphConfig,barLay
     return rect;
 };
 
+bbop.monarch.datagraph.prototype.setLinearScale = function (graphConfig,data,groups,rect) {
+    var self = this;
+    var config = self.config;
+    graphConfig.xMin = 0;
+    
+    graphConfig.x = d3.scale.linear()
+        .range([graphConfig.xMin, config.width]);
+
+    graphConfig.xAxis = d3.svg.axis()
+        .scale(graphConfig.x)
+        .orient("top")
+        .tickFormat(d3.format(".2s"));
+    
+    self.setXYDomains(graphConfig,data,groups);
+    self.transitionXAxisToNewScale(graphConfig,750);
+          
+};
+
+bbop.monarch.datagraph.prototype.setLogScale = function (graphConfig,data,groups,rect) {
+    var self = this;
+    var config = self.config;
+    graphConfig.xMin = .1;
+    
+    graphConfig.x = d3.scale.log()
+        .range([graphConfig.xMin, config.width]);
+
+    graphConfig.xAxis = d3.svg.axis()
+        .scale(graphConfig.x)
+        .orient("top")
+        .ticks(5);
+
+};
+
 bbop.monarch.datagraph.prototype.transitionGrouped = function (graphConfig,data,groups,rect) {
     var self = this;
     var config = self.config;
@@ -454,7 +505,7 @@ bbop.monarch.datagraph.prototype.transitionGrouped = function (graphConfig,data,
       .attr("height", graphConfig.y1.rangeBand())
       .attr("y", function(d) { return graphConfig.y1(d.name); })  
       .transition()
-      .attr("x", function(){return config.xFirstIndex;})
+      .attr("x", 1)
       .attr("width", function(d) { return graphConfig.x(d.value); })     
           
     rect.on("mouseover", function(d){
@@ -481,7 +532,7 @@ bbop.monarch.datagraph.prototype.transitionStacked = function (graphConfig,data,
       .delay(function(d, i) { return i * 10; })
       .attr("x", function(d){
               if (d.x0 == 0){
-                  return config.xFirstIndex;
+                  return 1;
               } else { 
                 return graphConfig.x(d.x0);
               } 
@@ -574,11 +625,19 @@ bbop.monarch.datagraph.prototype.drawGraph = function (data,graphConfig) {
 };
 
 bbop.monarch.datagraph.prototype.changeBarConfig = function(graphConfig,data,groups,rect){
+
+    if (jQuery('input[name=scale]:checked').val() === 'log'){
+        self.setLogScale(graphConfig,data,groups,rect);
+    } else if (typeof jQuery('input[name=scale]:checked').val() == 'undefined'){
+        self.setLinearScale(graphConfig,data,groups,rect);
+    }
+    
     if (jQuery('input[name=mode]:checked').val() === "grouped"){
         self.transitionGrouped(graphConfig,data,groups,rect);
     } else if (jQuery('input[name=mode]:checked').val() === 'stacked') {
         self.transitionStacked(graphConfig,data,groups,rect);
     }
+
 };
 
 //Resize height of chart after transition
@@ -784,7 +843,7 @@ bbop.monarch.datagraph.prototype.makeBreadcrumb = function(graphConfig,label,gro
                             return ".1em";
                         }
                         if (i == 0 && len == 1){
-                            return ".8em";
+                            return ".2em";
                         } else if (i == 0 && len >2
                                    && words[1].match(/and/i)){
                             return "-1.2em";
@@ -808,9 +867,9 @@ bbop.monarch.datagraph.prototype.transitionYAxisToNewScale = function(graphConfi
       .select(".y.axis").call(graphConfig.yAxis);
 };
 
-bbop.monarch.datagraph.prototype.transitionXAxisToNewScale = function(graphConfig,time) {
+bbop.monarch.datagraph.prototype.transitionXAxisToNewScale = function(graphConfig,duration) {
     graphConfig.svg.transition()
-      .duration(time).select(".x.axis").call(graphConfig.xAxis);
+      .duration(duration).select(".x.axis").call(graphConfig.xAxis);
 };
 
 bbop.monarch.datagraph.prototype.setBarConfigPerCheckBox = function(graphConfig,graph,groups,barGroup) {
@@ -840,14 +899,6 @@ bbop.monarch.datagraph.prototype.setYAxisText = function(graphConfig,data){
             d3.select(this).style("fill", config.color.yLabel.hover);
             d3.select(this).style("text-decoration", "underline");
         }
-        if (/\.\.\./.test(self.getIDLabel(d,data))){
-            var fullLabel = self.getFullLabel(self.getIDLabel(d,data),data);
-            d3.select(this).append("svg:title")
-              .text(fullLabel);  
-        } else if (yFont < 12) {//HARDCODE alert
-            d3.select(this).append("svg:title")
-              .text(self.getIDLabel(d,data));
-        }
     })
     .on("mouseout", function(){
         d3.select(this).style("fill", config.color.yLabel.fill );
@@ -860,7 +911,16 @@ bbop.monarch.datagraph.prototype.setYAxisText = function(graphConfig,data){
         }
     })
     .style("text-anchor", "end")
-    .attr("dx", config.yOffset);
+    .attr("dx", config.yOffset)
+    .append("svg:title")
+    .text(function(d){
+        if (/\.\.\./.test(self.getIDLabel(d,data))){
+            var fullLabel = self.getFullLabel(self.getIDLabel(d,data),data);
+              return (fullLabel);  
+        } else if (yFont < 12) {//HARDCODE alert
+              return (self.getIDLabel(d,data));
+        }
+    });
 };
 
 //  Transition to new graph
@@ -1149,23 +1209,6 @@ bbop.monarch.datagraph.prototype.setXLabelFontSize = function(fSize){
 bbop.monarch.datagraph.prototype.setXAxisPos = function(w,h){
     this.config.xAxisPos = {dx:w,y:h};
     return this.config.xAxisPos;
-};
-
-//The starting index (0 or 1) for the x axis seems to be
-//dependent on browser version, for now always return 1
-//Firefox <33 should be 0
-bbop.monarch.datagraph.prototype.getXFirstIndex = function (){
- 
-    //Check browser
-    var isOpera = (!!window.opera || navigator.userAgent.indexOf(' OPR/') >= 0);
-    var isChrome = (!!window.chrome && !(!!window.opera || navigator.userAgent.indexOf(' OPR/') >= 0));
-    var isSafari = Object.prototype.toString.call(window.HTMLElement).indexOf('Constructor') > 0;
- 
-    if (isChrome || isSafari){
-        return 1;
-    } else {
-        return 1;
-    }
 };
 
 //datagraph default SVG Coordinates

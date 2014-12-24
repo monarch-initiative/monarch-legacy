@@ -30,16 +30,19 @@
    fill:white;
    cursor:default;
 }
-.configure {
+#settings{    
    display: inline;
-   float:right;
-   margin-top: 3px;
+   right:0;
    margin-right: 5px;
-   position:relative;
+   position:absolute;
 }
-.configure label{
+.configure {
+	padding-right:5px;
+	padding-left:2px;
 }
-.configure input{
+.scale {
+	padding-right:5px;
+    padding-left:2px;
 }
 .tip {
     position: absolute;
