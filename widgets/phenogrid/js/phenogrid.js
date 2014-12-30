@@ -762,31 +762,26 @@ var url = document.URL;
 		if (filterType == "sortphenotypes"){
 			//Sort the phenotypes based on what value is currently held in self.state.selectedSort
 			this._sortingPhenotypes();
-		}/*else if (filterType == "calculation"){
-			//If not here, changing the calculations will remove everything from phenogrid.  Find a way to move or remove some point
-			if (this.state.targetSpeciesName === "Overview") {
-				this._finishOverviewLoad();
-			}
-			else {
-				this._finishLoad();
-			}
-		}*/
+		}
 
 		//Step 2: Filter for the next n phenotypes based on phenotypeDisplayCount and update the y-axis
 		this.state.filteredModelData = [];
 		this.state.filteredPhenotypeData = [];
 		this.state.yAxis = [];
 
-		//Force Reset to Origin when changing Species, Sort or Display
-		var startIdx = 0;
-		var displayLimiter = this.state.phenotypeDisplayCount;
+	    //Force Reset to Origin when changing Species, Sort or Display
+	    var startIdx = 0;
+	    var displayLimiter = this.state.phenotypeDisplayCount;
+	    if (filterType =='updateModel') {
+		startIdx = this.state.currPhenotypeIdx - this.state.phenotypeDisplayCount;
+	    }
 
 
 		//extract the new array of filtered Phentoypes
 		//also update the axis
 		//also update the modeldata
 		var axis_idx = 0;
-		var tempFilteredModelData = [];
+	    var tempFilteredModelData = [];
 		//get phenotype[startIdx] up to phenotype[currPhenotypeIdx] from the array of sorted phenotypes
 		for (var i = startIdx; i < displayLimiter; i++) {
 			self.state.filteredPhenotypeData.push(self.state.phenotypeSortData[i]);
@@ -2095,8 +2090,8 @@ var url = document.URL;
 		}
 		var startPhenotypeIdx = this.state.currPhenotypeIdx - this.state.phenotypeDisplayCount;
 
-		this.state.filteredPhenotypeData = [];
-		this.state.yAxis = [];
+		//this.state.filteredPhenotypeData = [];
+		//this.state.yAxis = [];
 
 		//fix model list
 		//check to see if the max of the slider is greater than the number of items in the list
@@ -2110,19 +2105,25 @@ var url = document.URL;
 		}
 		var startModelIdx = this.state.currModelIdx - this.state.modelDisplayCount;
 
-		this.state.filteredModelList = [];
+	/*	this.state.filteredModelList = [];
 		//if (this.state.targetSpeciesName !== "Overview") { this.state.filteredModelData = [];}
-		this.state.filteredModelData = [];
+		this.state.filteredModelData = [];*/
 
 		//extract the new array of filtered Phentoypes
 		//also update the axis
 		//also update the modeldata
-		var axis_idx = 0;
+	    var axis_idx = 0;
+	    self.state.filteredModelList=[];
 		for (var idx=startModelIdx;idx<self.state.currModelIdx;idx++) {
 			self.state.filteredModelList.push(modelList[idx]);
 		}
 
-		//extract the new array of filtered Phentoypes
+	    self.state.xScale = d3.scale.ordinal()
+		.domain(self.state.filteredModelList.map(function (d) {return d.model_id; }))
+		.rangeRoundBands([0,self.state.modelWidth]);
+	    
+
+		/*//extract the new array of filtered Phentoypes
 		//also update the axis
 		//also update the modeldata
 
@@ -2171,10 +2172,13 @@ var url = document.URL;
 			});
 			self.state.filteredModelData = self.state.filteredModelData.concat(tempdata);
 		}
-		// }
 
 		this._createModelRects();
-		this._createRowLabels();
+	    this._createRowLabels();*/
+
+	    this._filterSelected('updateModel');
+	    this.element.empty();
+	    this.reDraw();
 	},
 
 	_createModelLabels: function(self) {
