@@ -49,6 +49,10 @@ form label{
 	padding-right:5px;
     padding-left:2px;
 }
+.zero {
+    padding-right:5px;
+    padding-left:2px;
+}
 .tip {
     position: absolute;
     font-size: 12px;
