@@ -308,9 +308,12 @@ bbop.monarch.datagraph.prototype.transitionToNewGraph = function(graphConfig,dat
     config = self.config;
     graphConfig.tooltip.style("display", "none");
     graphConfig.svg.selectAll(".tick.major").remove();
+    
     if (parents){
-        self.drawSubGraph(graphConfig,data.subGraph,parents);
         graphConfig.level++;
+        self.drawSubGraph(graphConfig,data.subGraph,parents);
+        self.removeSVGWithSelection(barGroup,650,60,1e-6);
+        self.removeSVGWithSelection(rect,650,60,1e-6);
     } else {
         self.redrawGraph(data,graphConfig);
         self.removeSVGWithSelection(barGroup,650,60,1e-6);
@@ -336,6 +339,7 @@ bbop.monarch.datagraph.prototype.removeSVGWithSelection = function(select,durati
 };
 
 bbop.monarch.datagraph.prototype.removeSVGWithClass = function(graphConfig,cs,duration,y,opacity){
+    console.log(cs);
     graphConfig.svg.selectAll(cs).transition()
         .duration(duration)
         .attr("y", y)
@@ -755,7 +759,8 @@ bbop.monarch.datagraph.prototype.changeDisplayOfEmptyGroups = function(data){
         var all = data;
         data = self.removeZeroCounts(data);
         data.all = all;
-    } else if (typeof jQuery('input[name=zero]:checked').val() === 'undefined'){
+    } else if ((typeof jQuery('input[name=zero]:checked').val() === 'undefined')&&
+              (data.all != null)){
         data = data.all;
     }
     return data;
@@ -800,6 +805,8 @@ bbop.monarch.datagraph.prototype.pickUpBreadcrumb = function(graphConfig,index,g
     var superclass = graphConfig.parents[index];
     var isFromCrumb = true;
     var parent;
+    var rectClass = ".rect"+lastIndex;
+    var barClass = ".bar"+lastIndex;
     //set global level
     graphConfig.level = index;
     
@@ -809,11 +816,9 @@ bbop.monarch.datagraph.prototype.pickUpBreadcrumb = function(graphConfig,index,g
     for (var i=(index+1); i <= graphConfig.parents.length; i++){
         d3.select(graphConfig.html_div).select(".bread"+i).remove();
     }
-    var rectClass = ".rect"+lastIndex;
-    var barClass = ".bar"+lastIndex;
-    self.removeSVGWithClass(graphConfig,rectClass,750,60,1e-6);
     self.removeSVGWithClass(graphConfig,barClass,750,60,1e-6);
-    
+    self.removeSVGWithClass(graphConfig,rectClass,750,60,1e-6);
+
     graphConfig.parents.splice(index,(graphConfig.parents.length));        
     
     //Deactivate top level crumb
@@ -1214,7 +1219,11 @@ bbop.monarch.datagraph.prototype.getGroups = function(data) {
 };
 
 //TODO improve checking
-bbop.monarch.datagraph.prototype.checkData = function(data){
+bbop.monarch.datagraph.prototype.checkData = function(data){  
+    if (typeof data === 'undefined'){
+        throw new Error ("Data object is undefined");
+    }
+    
     data.forEach(function (r){
         //Check ID
         if (r.id == null){
