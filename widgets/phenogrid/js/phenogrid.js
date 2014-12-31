@@ -342,7 +342,7 @@ var url = document.URL;
 	},
 
 	_loadSpinner: function() {
-		var element =$('<div id="spinner"><h3>Loading...</h3><div class="cube1"></div><div class="cube2"></div></div>');
+		var element =$('<div><h3>Loading...</h3><div class="cube1"></div><div class="cube2"></div></div>');
 		this._createSvgContainer();
 		element.appendTo(this.state.svgContainer);
 	},

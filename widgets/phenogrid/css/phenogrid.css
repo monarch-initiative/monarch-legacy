@@ -291,18 +291,11 @@ body{
 	float:left;
 }
 
-/* spinner code from http://tobiasahlin.com/spinkit */
-#spinner {
-	margin: 30px  auto;
-	padding: 70px;
-	width: 100%;
-}
 
 cube1, .cube2 {
 	background-color: #333;
 	width: 10px;
 	height: 10px;
-	position: absolute;
 	top: 100;
 	left: 300;
 
