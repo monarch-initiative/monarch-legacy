@@ -308,9 +308,12 @@ bbop.monarch.datagraph.prototype.transitionToNewGraph = function(graphConfig,dat
     config = self.config;
     graphConfig.tooltip.style("display", "none");
     graphConfig.svg.selectAll(".tick.major").remove();
+    
     if (parents){
-        self.drawSubGraph(graphConfig,data.subGraph,parents);
         graphConfig.level++;
+        self.drawSubGraph(graphConfig,data.subGraph,parents);
+        self.removeSVGWithSelection(barGroup,650,60,1e-6);
+        self.removeSVGWithSelection(rect,650,60,1e-6);
     } else {
         self.redrawGraph(data,graphConfig);
         self.removeSVGWithSelection(barGroup,650,60,1e-6);
@@ -336,6 +339,7 @@ bbop.monarch.datagraph.prototype.removeSVGWithSelection = function(select,durati
 };
 
 bbop.monarch.datagraph.prototype.removeSVGWithClass = function(graphConfig,cs,duration,y,opacity){
+    console.log(cs);
     graphConfig.svg.selectAll(cs).transition()
         .duration(duration)
         .attr("y", y)
@@ -390,26 +394,29 @@ bbop.monarch.datagraph.prototype.displayCountTip = function(tooltip,value,name,d
 };
 
 bbop.monarch.datagraph.prototype.setGroupPositioning = function (graphConfig,graphData) {
+    var self = this;
+    var data = self.setDataPerSettings(graphData);
     var groupPos = graphConfig.svg.selectAll()
-       .data(graphData)
+       .data(data)
        .enter().append("svg:g")
        .attr("class", ("bar"+graphConfig.level))
        .attr("transform", function(d) { return "translate(0," + graphConfig.y0(d.id) + ")"; });
     return groupPos;
 };
 
-bbop.monarch.datagraph.prototype.setXYDomains = function (graphConfig,graphData,groups) {
+bbop.monarch.datagraph.prototype.setXYDomains = function (graphConfig,data,groups) {
     var self = this;
     //Set y0 domain
-    graphConfig.y0.domain(graphData.map(function(d) { return d.id; }));
+    data = self.setDataPerSettings(data);
+    graphConfig.y0.domain(data.map(function(d) { return d.id; }));
     
     if (jQuery('input[name=mode]:checked').val()=== 'grouped' || groups.length === 1){
-        var xGroupMax = self.getGroupMax(graphData);
+        var xGroupMax = self.getGroupMax(data);
         graphConfig.x.domain([graphConfig.xMin, xGroupMax]);
         graphConfig.y1.domain(groups)
         .rangeRoundBands([0, graphConfig.y0.rangeBand()]);
     } else if (jQuery('input[name=mode]:checked').val()=== 'stacked'){
-        var xStackMax = self.getStackMax(graphData);
+        var xStackMax = self.getStackMax(data);
         graphConfig.x.domain([graphConfig.xMin, xStackMax]);
         graphConfig.y1.domain(groups).rangeRoundBands([0,0]);
     } else {
@@ -643,7 +650,8 @@ bbop.monarch.datagraph.prototype.redrawGraph = function (data,graphConfig) {
     
     d3.select(graphConfig.html_div).select('.configure')
     .on("change",function(){
-        self.changeBarConfig(graphConfig,data,groups,rect);});
+        self.changeBarConfig(graphConfig,data,groups,rect);
+    });
   
     d3.select(graphConfig.html_div).select('.scale')
     .on("change",function(){
@@ -658,7 +666,6 @@ bbop.monarch.datagraph.prototype.redrawGraph = function (data,graphConfig) {
   
     d3.select(graphConfig.html_div).select('.zero')
     .on("change",function(){
-        data = self.changeDisplayOfEmptyGroups(data);
         self.transitionToNewGraph(graphConfig,data,barGroup,rect);
     });
 };
@@ -744,48 +751,55 @@ bbop.monarch.datagraph.prototype.drawGraph = function (data,graphConfig) {
     
     d3.select(graphConfig.html_div).select('.zero')
     .on("change",function(){
-        data = self.changeDisplayOfEmptyGroups(data);
         self.transitionToNewGraph(graphConfig,data,barGroup,rect);
     });
 };
 
-bbop.monarch.datagraph.prototype.changeDisplayOfEmptyGroups = function(data){
+//
+bbop.monarch.datagraph.prototype.setDataPerSettings = function(data){
     var self = this;
-    if (jQuery('input[name=zero]:checked').val() === 'remove'){
-        var all = data;
+    if (self.getValueOfCheckbox('zero','remove')){
         data = self.removeZeroCounts(data);
-        data.all = all;
-    } else if (typeof jQuery('input[name=zero]:checked').val() === 'undefined'){
-        data = data.all;
     }
     return data;
+}
+// Generic function to check the value of a checkbox given it's name
+// and value
+bbop.monarch.datagraph.prototype.getValueOfCheckbox = function(name,value){
+    var self = this;
+    if (jQuery('input[name='+name+']:checked').val() === value){
+        return true;
+    } else if (typeof jQuery('input[name=zero]:checked').val() === 'undefined'){
+        return false;
+    }
 };
 
 bbop.monarch.datagraph.prototype.changeScale = function(graphConfig,data,groups,rect){
     var self = this;
-    if (jQuery('input[name=scale]:checked').val() === 'log'){
+    if (self.getValueOfCheckbox('scale','log')){
         self.setLogScale(graphConfig,data,groups,rect);
-    } else if (typeof jQuery('input[name=scale]:checked').val() === 'undefined'){
+    } else {
         self.setLinearScale(graphConfig,data,groups,rect);
     }
 };
 
 bbop.monarch.datagraph.prototype.changeBarConfig = function(graphConfig,data,groups,rect){
     var self = this;
-    if (jQuery('input[name=mode]:checked').val() === "grouped"){
+    if (self.getValueOfCheckbox('mode','grouped')){
         self.transitionGrouped(graphConfig,data,groups,rect);
-    } else if (jQuery('input[name=mode]:checked').val() === 'stacked') {
+    } else if (self.getValueOfCheckbox('mode','stacked')) {
         self.transitionStacked(graphConfig,data,groups,rect);
     }
 };
 
 //Resize height of chart after transition
-bbop.monarch.datagraph.prototype.resizeChart = function(subGraph){
+bbop.monarch.datagraph.prototype.resizeChart = function(data){
     var self = this;
     var config = self.config;
     var height = config.height;
-    if (subGraph.length < 25){
-         height = subGraph.length*26; 
+    data = self.setDataPerSettings(data);
+    if (data.length < 25){
+         height = data.length*26; 
          if (height > config.height){
              height = config.height;
          }
@@ -800,6 +814,8 @@ bbop.monarch.datagraph.prototype.pickUpBreadcrumb = function(graphConfig,index,g
     var superclass = graphConfig.parents[index];
     var isFromCrumb = true;
     var parent;
+    var rectClass = ".rect"+lastIndex;
+    var barClass = ".bar"+lastIndex;
     //set global level
     graphConfig.level = index;
     
@@ -809,11 +825,9 @@ bbop.monarch.datagraph.prototype.pickUpBreadcrumb = function(graphConfig,index,g
     for (var i=(index+1); i <= graphConfig.parents.length; i++){
         d3.select(graphConfig.html_div).select(".bread"+i).remove();
     }
-    var rectClass = ".rect"+lastIndex;
-    var barClass = ".bar"+lastIndex;
-    self.removeSVGWithClass(graphConfig,rectClass,750,60,1e-6);
     self.removeSVGWithClass(graphConfig,barClass,750,60,1e-6);
-    
+    self.removeSVGWithClass(graphConfig,rectClass,750,60,1e-6);
+
     graphConfig.parents.splice(index,(graphConfig.parents.length));        
     
     //Deactivate top level crumb
@@ -1003,14 +1017,15 @@ bbop.monarch.datagraph.prototype.transitionXAxisToNewScale = function(graphConfi
       .duration(duration).select(".x.axis").call(graphConfig.xAxis);
 };
 
-bbop.monarch.datagraph.prototype.setBarConfigPerCheckBox = function(graphConfig,graph,groups,barGroup) {
+bbop.monarch.datagraph.prototype.setBarConfigPerCheckBox = function(graphConfig,data,groups,barGroup) {
     self = this;
+    data = self.setDataPerSettings(data);
     if (jQuery('input[name=mode]:checked').val()=== 'grouped' || groups.length === 1) {
-        self.setXYDomains(graphConfig,graph,groups,'grouped');
+        self.setXYDomains(graphConfig,data,groups,'grouped');
         self.transitionXAxisToNewScale(graphConfig,1000);
         return self.makeBar(barGroup,graphConfig,'grouped');
     } else {     
-        self.setXYDomains(graphConfig,graph,groups,'stacked');
+        self.setXYDomains(graphConfig,data,groups,'stacked');
         self.transitionXAxisToNewScale(graphConfig,1000);
         return self.makeBar(barGroup,graphConfig,'stacked');
     }
@@ -1019,6 +1034,7 @@ bbop.monarch.datagraph.prototype.setBarConfigPerCheckBox = function(graphConfig,
 bbop.monarch.datagraph.prototype.setYAxisText = function(graphConfig,data){
     self = this;
     config = self.config;
+    data = self.setDataPerSettings(data);
     
     graphConfig.svg.select(".y.axis")
     .selectAll("text")
@@ -1059,8 +1075,6 @@ bbop.monarch.datagraph.prototype.setYAxisText = function(graphConfig,data){
 bbop.monarch.datagraph.prototype.drawSubGraph = function(graphConfig,subGraph,parent,isFromCrumb) {
     var self = this;
     var config = self.config;
-    
-    subGraph = self.changeDisplayOfEmptyGroups(subGraph);
     
     self.checkData(subGraph);
 
@@ -1124,7 +1138,6 @@ bbop.monarch.datagraph.prototype.drawSubGraph = function(graphConfig,subGraph,pa
   
     d3.select(graphConfig.html_div).select('.zero')
     .on("change",function(){
-        subGraph = self.changeDisplayOfEmptyGroups(subGraph);
         self.transitionToNewGraph(graphConfig,subGraph,barGroup,rect);
     });
 };
@@ -1214,7 +1227,11 @@ bbop.monarch.datagraph.prototype.getGroups = function(data) {
 };
 
 //TODO improve checking
-bbop.monarch.datagraph.prototype.checkData = function(data){
+bbop.monarch.datagraph.prototype.checkData = function(data){  
+    if (typeof data === 'undefined'){
+        throw new Error ("Data object is undefined");
+    }
+    
     data.forEach(function (r){
         //Check ID
         if (r.id == null){
