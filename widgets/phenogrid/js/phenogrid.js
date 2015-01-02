@@ -359,6 +359,9 @@ var url = document.URL;
 		    var rectHeight = this._createRectangularContainers();
 
 			this._createModelRegion();
+		        this._addGradients();
+
+		        this._addPhenogridControls();
 
 			this._updateAxes();
 
@@ -2364,7 +2367,20 @@ var url = document.URL;
 			this._createOverviewSpeciesLabels();
 		}
 
-		var modData = this.state.modelData;
+	
+	    
+	    },
+
+	    _addPhenogridControls: function() {
+		var phenogridControls = $('<div id="phenogrid_controls"></div>');
+		this.element.append(phenogridControls);
+		this._createSelectionControls(phenogridControls);
+	    },
+
+	    
+	_addGradients: function() {
+	    var self=this;
+	    var modData = this.state.modelData;
 		var temp_data = modData.map(function(d) { return d.value[self.state.selectedCalculation];} );
 		var diff = d3.max(temp_data) - d3.min(temp_data);
 
@@ -2380,12 +2396,7 @@ var url = document.URL;
 			ymax = this._buildGradientDisplays(y1);
 			this._buildGradientTexts(y1);
 		}
-
-		var phenogridControls = $('<div id="phenogrid_controls"></div>');
-		this.element.append(phenogridControls);
-		this._createSelectionControls(phenogridControls);
 	},
-
 	/**
 	 * build the gradient displays used to show the range of colors
 	 */
