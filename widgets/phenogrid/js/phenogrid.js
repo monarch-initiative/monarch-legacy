@@ -774,6 +774,7 @@ var url = document.URL;
 	    var displayLimiter = this.state.phenotypeDisplayCount;
 	    if (filterType =='updateModel') {
 		startIdx = this.state.currPhenotypeIdx - this.state.phenotypeDisplayCount;
+		displayLimiter = this.state.currPhenotypeIdx;
 	    }
 
 
@@ -783,6 +784,7 @@ var url = document.URL;
 		var axis_idx = 0;
 	    var tempFilteredModelData = [];
 		//get phenotype[startIdx] up to phenotype[currPhenotypeIdx] from the array of sorted phenotypes
+	    console.log("filter selected.. going from "+startIdx+", to "+displayLimiter);
 		for (var i = startIdx; i < displayLimiter; i++) {
 			self.state.filteredPhenotypeData.push(self.state.phenotypeSortData[i]);
 			//update the YAxis
@@ -2089,6 +2091,8 @@ var url = document.URL;
 			this.state.currPhenotypeIdx = phenotypeIdx;
 		}
 		var startPhenotypeIdx = this.state.currPhenotypeIdx - this.state.phenotypeDisplayCount;
+	       console.log("curr phenotype index is "+this.state.currPhenotypeIdx+", display is "+this.state.phenotypeDisplayCount);
+	       console.log("start phenotype index is..."+startPhenotypeIdx);
 
 		//this.state.filteredPhenotypeData = [];
 		//this.state.yAxis = [];
@@ -2103,11 +2107,10 @@ var url = document.URL;
 		} else {
 			this.state.currModelIdx = modelIdx;
 		}
+	      console.log("currmodel idx is .."+this.state.currModelIdx);
+	      console.log("model display count..."+this.state.modelDisplayCount);
 		var startModelIdx = this.state.currModelIdx - this.state.modelDisplayCount;
-
-	/*	this.state.filteredModelList = [];
-		//if (this.state.targetSpeciesName !== "Overview") { this.state.filteredModelData = [];}
-		this.state.filteredModelData = [];*/
+	      console.log("start model index is..."+startModelIdx);
 
 		//extract the new array of filtered Phentoypes
 		//also update the axis
@@ -2123,62 +2126,21 @@ var url = document.URL;
 		.rangeRoundBands([0,self.state.modelWidth]);
 	    
 
-		/*//extract the new array of filtered Phentoypes
-		//also update the axis
-		//also update the modeldata
-
-		var tempFilteredModelData = [];
-		axis_idx = 0;
-		for (var dmx = startPhenotypeIdx; dmx < self.state.currPhenotypeIdx; dmx++) {
-			self.state.filteredPhenotypeData.push(self.state.phenotypeSortData[dmx]);
-			//update the YAxis
-			//the height of each row
-			var size = 10;
-			//the spacing you want between rows
-			var gap = 3;
-			var stuff = {"id": self.state.phenotypeSortData[dmx][0].id_a,"ypos" : ((axis_idx * (size+gap)) + self.state.yoffset)};
-			self.state.yAxis.push(stuff); 
-			axis_idx++;
-			//update the ModelData
-			tempdata = modelData.filter(function(d) {
-				return d.id_a == self.state.phenotypeSortData[dmx][0].id_a;
-			});
-			tempFilteredModelData = tempFilteredModelData.concat(tempdata);
-		}
-
-		self.state.svg.selectAll("g .x.axis")
-			.remove();
-		self.state.svg.selectAll("g .tick.major")
-			.remove();
-		//update the x axis
-		self.state.xScale = d3.scale.ordinal()
-			.domain(self.state.filteredModelList.map(function (d) {return d.model_id; }))
-			.rangeRoundBands([0,self.state.modelWidth]);
-		this._createModelLabels(self);
-
-		//The pathline creates a line  below the labels. We don't want two lines to show up so fill=white hides the line.
-		this._createModelLines();
-		this._createTextScores(this.state.filteredModelList);
-
-		if (self.state.targetSpeciesName == "Overview") {
-			this._createOverviewSpeciesLabels();
-		}
-
-		//  if (this.state.targetSpeciesName !== "Overview") {
-		//now, limit the data returned by models as well
-		for (var edx in self.state.filteredModelList) {
-			tempdata = tempFilteredModelData.filter(function(d) {
-				return d.model_id == self.state.filteredModelList[edx].model_id;
-			});
-			self.state.filteredModelData = self.state.filteredModelData.concat(tempdata);
-		}
-
-		this._createModelRects();
-	    this._createRowLabels();*/
-
 	    this._filterSelected('updateModel');
-	    this.element.empty();
-	    this.reDraw();
+	    this._clearModelLabels();
+
+
+	    console.log("filter selected is done...");
+	    console.log("filteredModelData has..."+this.state.filteredModelData.length+" items");
+	    console.log("filtered model list has.."+this.state.filteredModelList.length+" items");
+	    this._createModelLabels(self);
+	    this._createModelLines();
+	    this._createTextScores(this.state.filteredModelList);
+	    if (self.state.targetSpeciesName == "Overview") {
+		this._createOverviewSpeciesLabels();
+	    }
+	    this._createModelRects();
+	    this._createRowLabels();
 	},
 
 	_createModelLabels: function(self) {
@@ -2194,6 +2156,11 @@ var url = document.URL;
 			.each(function(d,i) { 
 				self._convertLabelHTML(self, this, self._getShortLabel(self.state.filteredModelList[i].model_label,self.state.labelCharDisplayCount),self.state.filteredModelList[i]);
 			});
+	},
+
+        _clearModelLabels: function() {
+	    this.state.svg.selectAll("g .x.axis").remove();
+	    this.state.svg.selectAll("g .tick.major").remove();
 	},
 
 	_createModelLines: function() {
