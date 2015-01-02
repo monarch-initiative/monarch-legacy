@@ -787,7 +787,6 @@ var url = document.URL;
 		var axis_idx = 0;
 	    var tempFilteredModelData = [];
 		//get phenotype[startIdx] up to phenotype[currPhenotypeIdx] from the array of sorted phenotypes
-	    console.log("filter selected.. going from "+startIdx+", to "+displayLimiter);
 		for (var i = startIdx; i < displayLimiter; i++) {
 			self.state.filteredPhenotypeData.push(self.state.phenotypeSortData[i]);
 			//update the YAxis
@@ -2094,8 +2093,6 @@ var url = document.URL;
 			this.state.currPhenotypeIdx = phenotypeIdx;
 		}
 		var startPhenotypeIdx = this.state.currPhenotypeIdx - this.state.phenotypeDisplayCount;
-	       console.log("curr phenotype index is "+this.state.currPhenotypeIdx+", display is "+this.state.phenotypeDisplayCount);
-	       console.log("start phenotype index is..."+startPhenotypeIdx);
 
 		//this.state.filteredPhenotypeData = [];
 		//this.state.yAxis = [];
@@ -2110,10 +2107,7 @@ var url = document.URL;
 		} else {
 			this.state.currModelIdx = modelIdx;
 		}
-	      console.log("currmodel idx is .."+this.state.currModelIdx);
-	      console.log("model display count..."+this.state.modelDisplayCount);
 		var startModelIdx = this.state.currModelIdx - this.state.modelDisplayCount;
-	      console.log("start model index is..."+startModelIdx);
 
 		//extract the new array of filtered Phentoypes
 		//also update the axis
@@ -2124,24 +2118,11 @@ var url = document.URL;
 			self.state.filteredModelList.push(modelList[idx]);
 		}
 
-	    self.state.xScale = d3.scale.ordinal()
-		.domain(self.state.filteredModelList.map(function (d) {return d.model_id; }))
-		.rangeRoundBands([0,self.state.modelWidth]);
-	    
 
 	    this._filterSelected('updateModel');
 	    this._clearModelLabels();
 
-
-	    console.log("filter selected is done...");
-	    console.log("filteredModelData has..."+this.state.filteredModelData.length+" items");
-	    console.log("filtered model list has.."+this.state.filteredModelList.length+" items");
-	    this._createModelLabels(self);
-	    this._createModelLines();
-	    this._createTextScores(this.state.filteredModelList);
-	    if (self.state.targetSpeciesName == "Overview") {
-		this._createOverviewSpeciesLabels();
-	    }
+	    this._createModelRegion();
 	    this._createModelRects();
 	    this._createRowLabels();
 	},
