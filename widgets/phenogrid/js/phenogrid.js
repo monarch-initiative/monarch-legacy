@@ -1038,10 +1038,6 @@ var url = document.URL;
 		}
 	    
 	        this._getFilteredModelList(0,this.state.modelDisplayCount);
-		/*//initialize the filtered model list
-		for (var edx=0; edx<this.state.modelDisplayCount; edx++) {
-			this.state.filteredModelList.push(this.state.modelList[edx]);
-		}*/
 	},
 
 	_getFilteredModelList: function(start,max) {
@@ -1160,12 +1156,6 @@ var url = document.URL;
 			}
 		    
 		       this._getFilteredModelList(0,this.state.modelDisplayCount);
-
-			/*this.state.filteredModelList=[];
-			//initialize the filtered model list
-			for (var edx = 0; edx < this.state.modelDisplayCount; edx++) {
-				this.state.filteredModelList.push(this.state.modelList[edx]);
-			}*/
 		}
 	},
 
@@ -2125,11 +2115,6 @@ var url = document.URL;
 		//also update the modeldata
 	    var axis_idx = 0;
 	    this._getFilteredModelList(startModelIdx,self.state.currModelIdx);
-	    /*self.state.filteredModelList=[];
-		for (var idx=startModelIdx;idx<self.state.currModelIdx;idx++) {
-			self.state.filteredModelList.push(modelList[idx]);
-		}*/
-
 
 	    this._filterSelected('updateModel');
 	    this._clearModelLabels();
