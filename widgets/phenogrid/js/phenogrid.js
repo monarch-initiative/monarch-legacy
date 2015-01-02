@@ -1036,11 +1036,20 @@ var url = document.URL;
 			this.state.currModelIdx = this.state.modelList.length-1;
 			this.state.modelDisplayCount = this.state.modelList.length;
 		}
-
-		//initialize the filtered model list
+	    
+	        this._getFilteredModelList(0,this.state.modelDisplayCount);
+		/*//initialize the filtered model list
 		for (var edx=0; edx<this.state.modelDisplayCount; edx++) {
 			this.state.filteredModelList.push(this.state.modelList[edx]);
-		}
+		}*/
+	},
+
+	_getFilteredModelList: function(start,max) {
+	    this.state.filteredModelList=[];
+
+	    for (var i = start; i <max; i++) {
+		this.state.filteredModelList.push(this.state.modelList[i]);
+	    }
 	},
 
 	//generic ajax call for all queries
@@ -1149,12 +1158,14 @@ var url = document.URL;
 				this.state.currModelIdx = this.state.modelList.length-1;
 				this.state.modelDisplayCount = this.state.modelList.length;
 			}
+		    
+		       this._getFilteredModelList(0,this.state.modelDisplayCount);
 
-			this.state.filteredModelList=[];
+			/*this.state.filteredModelList=[];
 			//initialize the filtered model list
 			for (var edx = 0; edx < this.state.modelDisplayCount; edx++) {
 				this.state.filteredModelList.push(this.state.modelList[edx]);
-			}
+			}*/
 		}
 	},
 
@@ -2113,10 +2124,11 @@ var url = document.URL;
 		//also update the axis
 		//also update the modeldata
 	    var axis_idx = 0;
-	    self.state.filteredModelList=[];
+	    this._getFilteredModelList(startModelIdx,self.state.currModelIdx);
+	    /*self.state.filteredModelList=[];
 		for (var idx=startModelIdx;idx<self.state.currModelIdx;idx++) {
 			self.state.filteredModelList.push(modelList[idx]);
-		}
+		}*/
 
 
 	    this._filterSelected('updateModel');
