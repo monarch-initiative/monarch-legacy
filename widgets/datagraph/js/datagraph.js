@@ -339,7 +339,6 @@ bbop.monarch.datagraph.prototype.removeSVGWithSelection = function(select,durati
 };
 
 bbop.monarch.datagraph.prototype.removeSVGWithClass = function(graphConfig,cs,duration,y,opacity){
-    console.log(cs);
     graphConfig.svg.selectAll(cs).transition()
         .duration(duration)
         .attr("y", y)
