@@ -218,8 +218,7 @@ var url = document.URL;
           * this might be somewhat inefficient, as we will later translate to taxon, but it will
 	  * make other calls easier to be consitently talking in terms of species name
           */
-            _getTargetSpeciesNameByTaxon: function(self,name) {
-
+	_getTargetSpeciesNameByTaxon: function(self,name) {
 		/// default - it actually was a species name
 		var species = name;
 		var found = false;
@@ -227,25 +226,25 @@ var url = document.URL;
 		// check to see if the name exists.
 		// if it is found, then we say "true" and we're good.
 		// if, however, it matches the taxon, take the index in the array.
-		
+
 		for (sname in self.state.targetSpeciesByName) {
-		    // we've found a matching name.
-		    if (name == sname) {
-			found = true;
-		    }
-		    
-		    if (name == self.state.targetSpeciesByName[sname].taxon) {
-			found = true;
-			species = sname;
-			break;
-		    }
+			// we've found a matching name.
+			if (name == sname) {
+				found = true;
+			}
+
+			if (name == self.state.targetSpeciesByName[sname].taxon) {
+				found = true;
+				species = sname;
+				break;
+			}
 		}
 		// if not found, it's overview.
 		if (found === false) {
-		    species = "Overview";
+			species = "Overview";
 		}
 		return species;
-	    },
+	},
 
 	//NOTE: I'm not too sure what the default init() method signature should be
 	//given an imageDiv and phenotype_data list
@@ -312,31 +311,32 @@ var url = document.URL;
 
 		this.state.currModelIdx = this.state.modelDisplayCount-1;
 		this.state.currPhenotypeIdx = this.state.phenotypeDisplayCount-1;
-	        this.state.phenotypeData = this._filterPhenotypeResults(this.state.phenotypeData);
+		this.state.phenotypeData = this._filterPhenotypeResults(this.state.phenotypeData);
 
-	    
-	    // target species name might be provided as a name or as
-	    // taxon. Make sure that we translate to name  
-	    this.state.targetSpeciesName = 
+
+		// target species name might be provided as a name or as
+		// taxon. Make sure that we translate to name  
+		this.state.targetSpeciesName = 
 		this._getTargetSpeciesNameByTaxon(this,this.state.targetSpeciesName);
 
 		this._loadData();
 
 		// shorthand for top of model region
-	    this.state.yModelRegion =this.state.yoffsetOver+this.state.yoffset;
+		this.state.yModelRegion =this.state.yoffsetOver+this.state.yoffset;
 
 
 		var phenotypeArray = this._uniquifyPhenotypes(this.state.modelData);
 		//copy the phenotypeArray to phenotypeData array - now instead of ALL phenotypes, it will be limited to unique phenotypes for this disease
 		//do not alter this array: this.state.phenotypeData
 		this.state.phenotypeData = phenotypeArray;
-	    
-	    this._adjustPhenotypeCount(this.state.modelData);
-	    this._initializePhenotypeSortData();
+		this.state.phenoLength = this.state.phenotypeData.length;
+
+		this._adjustPhenotypeCount(this.state.modelData);
+		this._initializePhenotypeSortData();
 		this._filterSelected("sortphenotypes");
 		this.state.unmatchedPhenotypes = this._getUnmatchedPhenotypes();
 		this.element.empty();
-	    this._createColorScale();
+		this._createColorScale();
 
 		this.reDraw();
 	},
@@ -348,7 +348,7 @@ var url = document.URL;
 	},
 
 	reDraw: function() {
-		if (this.state.modelData.length !== 0 && this.state.phenotypeData.length !== 0 && this.state.filteredPhenotypeData.length !== 0){
+		if (this.state.modelData.length !== 0 && this.state.phenoLength !== 0 && this.state.filteredPhenotypeData.length !== 0){
 			this._setComparisonType();
 			this._initCanvas();
 			this._addLogoImage();
@@ -359,9 +359,9 @@ var url = document.URL;
 		    var rectHeight = this._createRectangularContainers();
 
 			this._createModelRegion();
-		        this._addGradients();
+			this._addGradients();
 
-		        this._addPhenogridControls();
+			this._addPhenogridControls();
 
 			this._updateAxes();
 
@@ -496,7 +496,7 @@ var url = document.URL;
 
 		// size of the entire region - it is a square
 		var overviewRegionSize = self.state.globalViewSize;
-		if (this.state.phenotypeData.length < this.state.defaultPhenotypeDisplayCount) {
+		if (this.state.phenoLength < this.state.defaultPhenotypeDisplayCount) {
 			overviewRegionSize = self.state.reducedGlobalViewSize;
 		}
 
@@ -754,9 +754,9 @@ var url = document.URL;
 
 	    //we need to adjust the display counts and indexing if there are fewer phenotypes than the
 	    // default phenotypeDisplayCount  
-		if (this.state.phenotypeData.length < this.state.phenotypeDisplayCount) {
-			this.state.currPhenotypeIdx = this.state.phenotypeData.length-1;
-			this.state.phenotypeDisplayCount = this.state.phenotypeData.length;
+		if (this.state.phenoLength < this.state.phenotypeDisplayCount) {
+			this.state.currPhenotypeIdx = this.state.phenoLength-1;
+			this.state.phenotypeDisplayCount = this.state.phenoLength;
 		}
 	},
 
@@ -809,6 +809,8 @@ var url = document.URL;
 				}
 			}		
 		}
+		//console.log(JSON.stringify(self.state.filteredPhenotypeData));
+
 
 		for (var idx in self.state.filteredModelList) {
 			for (var tdx in tempFilteredModelData) {
@@ -910,7 +912,7 @@ var url = document.URL;
 	},
 
 	_sortingPhenotypes: function() {
-	       var self = this;
+		var self = this;
 		var sortType = self.state.selectedSort;
 		var sortFunc;
 		if (sortType == 'Frequency') {
@@ -928,7 +930,7 @@ var url = document.URL;
 
 	//given a list of phenotypes, find the top n models
 	//I may need to rename this method "getModelData".  It should extract the models and reformat the data 
-	    _loadData: function() {
+	_loadData: function() {
 		if (this.state.targetSpeciesName === "Overview") {
 			this._loadOverviewData();
 		} else {
@@ -973,7 +975,7 @@ var url = document.URL;
 		return res;
 	},
 
-	    _loadOverviewData: function() {
+	_loadOverviewData: function() {
 		var limit = this.state.multiOrganismCt;
 		for (var i in this.state.targetSpeciesList) {
 			var species = this.state.targetSpeciesList[i].name;
@@ -2085,7 +2087,7 @@ var url = document.URL;
 		var modelList = this.state.modelList;
 
 		//check to see if the phenotypeIdx is greater than the number of items in the list
-		if (phenotypeIdx > this.state.phenotypeData.length) {
+		if (phenotypeIdx > this.state.phenoLength) {
 			this.state.currPhenotypeIdx = this.state.phenotypeSortData.length;
 		} else if (phenotypeIdx - (this.state.phenotypeDisplayCount -1) < 0) {
 			//check to see if the min of the slider is less than the 0
@@ -2095,7 +2097,6 @@ var url = document.URL;
 		}
 		var startPhenotypeIdx = this.state.currPhenotypeIdx - this.state.phenotypeDisplayCount;
 
-		//this.state.filteredPhenotypeData = [];
 		//this.state.yAxis = [];
 
 		//fix model list
@@ -2344,18 +2345,14 @@ var url = document.URL;
 		if (self.state.targetSpeciesName == "Overview") {
 			this._createOverviewSpeciesLabels();
 		}
+	},
 
-	
-	    
-	    },
-
-	    _addPhenogridControls: function() {
+	_addPhenogridControls: function() {
 		var phenogridControls = $('<div id="phenogrid_controls"></div>');
 		this.element.append(phenogridControls);
 		this._createSelectionControls(phenogridControls);
-	    },
-
-	    
+	},
+ 
 	_addGradients: function() {
 	    var self=this;
 	    var modData = this.state.modelData;
@@ -2366,7 +2363,7 @@ var url = document.URL;
 		//in the scale
 		if (diff > 0) {
 			// baseline for gradient positioning
-			if (this.state.phenotypeData.length < this.state.defaultPhenotypeDisplayCount) {
+			if (this.state.phenoLength < this.state.defaultPhenotypeDisplayCount) {
 				y1 = 172;
 			} else {
 				y1 = 262;
