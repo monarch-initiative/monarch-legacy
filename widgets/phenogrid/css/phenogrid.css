@@ -1,6 +1,4 @@
 body{
-	margin-left:25px;
-	width:100%;
 	font-family: Arial, Helvetica, sans-serif;
 	font-size: 14px;
 }
@@ -290,7 +288,6 @@ body{
 	margin-left:-1225px;
 	float:left;
 }
-
 
 cube1, .cube2 {
 	background-color: #333;
