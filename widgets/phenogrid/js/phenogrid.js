@@ -197,17 +197,17 @@ var url = document.URL;
 	},
 
 	_getTargetSpeciesTaxonByName: function(self,name) {
-	    var taxon;
-	    // first, find something that matches by name
-	    if (typeof(self.state.targetSpeciesByName[name]) !== 'undefined') {
-		taxon  = self.state.targetSpeciesByName[name].taxon;
-	    }
-	    //default to overview,  so as to always do somethign sensible
-	    if (typeof(taxon) === 'undefined') {
-		taxon ='Overview';
-	    }
+		var taxon;
+		// first, find something that matches by name
+		if (typeof(self.state.targetSpeciesByName[name]) !== 'undefined') {
+			taxon  = self.state.targetSpeciesByName[name].taxon;
+		}
+		//default to overview,  so as to always do somethign sensible
+		if (typeof(taxon) === 'undefined') {
+			taxon ='Overview';
+		}
 
-	    return taxon;
+		return taxon;
 	},
 
 	 /**
@@ -225,7 +225,7 @@ var url = document.URL;
 		// if it is found, then we say "true" and we're good.
 		// if, however, it matches the taxon, take the index in the array.
 
-		for (sname in self.state.targetSpeciesByName) {
+		for (var sname in self.state.targetSpeciesByName) {
 			// we've found a matching name.
 			if (name == sname) {
 				found = true;
@@ -321,7 +321,6 @@ var url = document.URL;
 
 		// shorthand for top of model region
 		this.state.yModelRegion =this.state.yoffsetOver+this.state.yoffset;
-
 
 		var phenotypeArray = this._uniquifyPhenotypes(this.state.modelData);
 		//copy the phenotypeArray to phenotypeData array - now instead of ALL phenotypes, it will be limited to unique phenotypes for this disease
@@ -891,7 +890,7 @@ var url = document.URL;
 			var sortVal;
 			// first alphabetic
 			sortVal = tempdata[0].label_a;
-			tempdata["label"]=sortVal;
+			tempdata.label = sortVal;
 
 			///then for frequency and freq/rarity, iterate over 
 			var freq=0;
@@ -900,8 +899,8 @@ var url = document.URL;
 				freq +=1;
 				num +=tempdata[i].subsumer_IC;
 			}
-			tempdata["count"] = freq;
-			tempdata["sum"]=num;
+			tempdata.count = freq;
+			tempdata.sum = num;
 
 			// finally, push onto phenotypeSortData
 			self.state.phenotypeSortData.push(tempdata);
@@ -1197,14 +1196,13 @@ var url = document.URL;
 
 	//Different methods of  based on the selectedCalculationMethod
 	_normalizeIC: function(datarow){
-		var aIC = datarow.a.IC,
-		bIC = datarow.b.IC,
-		lIC = datarow.lcs.IC,
-		nic;
+		var aIC = datarow.a.IC;
+		var bIC = datarow.b.IC;
+		var lIC = datarow.lcs.IC;
+		var nic;
 
 		var calcMethod = this.state.selectedCalculation;
 		var ics = new Array(3);
-		var nic;
 
 		// get 0: similarity
 		nic = Math.sqrt((Math.pow(aIC-lIC,2)) + (Math.pow(bIC-lIC,2)));
@@ -1285,7 +1283,7 @@ var url = document.URL;
 			var species = this.state.targetSpeciesList[i].name;
 			this.state.colorScale[species] = new Array(4);
 			for (var j = 0; j <4; j++) {
-				var maxScore = 100;
+				maxScore = 100;
 				if (j == 2) {
 					maxScore = this.state.maxICScore;
 				}
@@ -1508,9 +1506,7 @@ var url = document.URL;
 		var width = (type === this.state.defaultApiEntity)?80:200;
 		var height = (type === this.state.defaultApiEntity)?50:60;
 
-		var retData;
-		//initialize the model data based on the scores
-		retData = "<strong>" + self._toProperCase(type).substring(0, type.length) + ": </strong> " + modelData.model_label + "<br/><strong>Rank:</strong> " + (parseInt(modelData.model_rank) );
+		var retData = "<strong>" + self._toProperCase(type).substring(0, type.length) + ": </strong> " + modelData.model_label + "<br/><strong>Rank:</strong> " + (parseInt(modelData.model_rank) );
 
 		//obj is try creating an ojbect with an attributes array including "attributes", but I may need to define
 		//getAttrbitues
@@ -2319,7 +2315,6 @@ var url = document.URL;
 	_createModelRegion: function () {
 		var self = this;
 		var list = [];
-		var y1, ymax;
 
 		//This is for the new "Overview" target option 
 		if (this.state.targetSpeciesName == "Overview"){
@@ -2351,6 +2346,7 @@ var url = document.URL;
 		var modData = this.state.modelData;
 		var temp_data = modData.map(function(d) { return d.value[self.state.selectedCalculation];} );
 		var diff = d3.max(temp_data) - d3.min(temp_data);
+		var y1;
 
 		//only show the scale if there is more than one value represented
 		//in the scale
@@ -2361,7 +2357,7 @@ var url = document.URL;
 			} else {
 				y1 = 262;
 			}
-			ymax = this._buildGradientDisplays(y1);
+			this._buildGradientDisplays(y1);
 			this._buildGradientTexts(y1);
 		}
 	},
