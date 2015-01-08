@@ -1478,7 +1478,6 @@ var url = document.URL;
 
 	_selectModel: function(modelData, obj) {
 		var self = this;
-
 		//create the related model rectangles
 		var highlight_rect = self.state.svg.append("svg:rect")
 			.attr("transform","translate(" + (self.state.textWidth + 32) + "," + self.state.yoffsetOver+ ")")
@@ -1533,8 +1532,8 @@ var url = document.URL;
 	_clearModelData: function(modelData,obj) {
 		this.state.svg.selectAll("#detail_content").remove();
 		this.state.svg.selectAll(".model_accent").remove();
-		var model_text = "",
-		mod_id = "";
+		var model_text = "";
+		var mod_id = "";
 		if (modelData !== null && typeof modelData != 'object') {
 			mod_id = this._getConceptId(modelData);   
 		} else if (typeof (modelData.model_id) !== 'undefined') {
@@ -1565,7 +1564,7 @@ var url = document.URL;
 			.attr("height", 12);
 
 		this._resetLinks();
-		var alabels = this.state.svg.selectAll("text.a_text." + curr_data.id);//this._getConceptId(curr_data[0].id));
+		var alabels = this.state.svg.selectAll("text.a_text." + curr_data.id_a);//this._getConceptId(curr_data[0].id));
 		var txt = curr_data.label_a;
 		if (txt === undefined) {
 			txt = curr_data.id_a;
@@ -1595,8 +1594,7 @@ var url = document.URL;
 		if (curr_data === undefined) {row = curr_data;}
 		else {row = curr_data;}
 
-		//var alabels = this.state.svg.selectAll("text.a_text." + row.id); //this._getConceptId(row.id));
-		var alabels = this.state.svg.selectAll("text.a_text." + this._getConceptId(row.id));
+		var alabels = this.state.svg.selectAll("text.a_text." + row.id_a);
 		alabels.text(this._getShortLabel(row.label_a));
 		var data_text = this.state.svg.selectAll("text.a_text");
 		data_text.style("text-decoration", "none");
@@ -1923,7 +1921,7 @@ var url = document.URL;
 						// ???this.parentNode.appendChild(this);
 						self._enableRowColumnRects(this);
 						//set the current selected rectangle
-						self.state.currSelectedRect = this;  
+						self.state.currSelectedRect = this;
 					}
 				} else {
 					self._highlightIntersection(d, d3.mouse(this));
@@ -2040,8 +2038,8 @@ var url = document.URL;
 		// that is in the 0th position in the grid. No labels exist with the curr_data.id except for the first column
 		//For the overview, there will be a 0th position for each species so we need to get the right model_id
 
-		var mid = this._getFirstModelId(curr_data.id_a);
-		var phen_label = this.state.svg.selectAll("text.a_text." + this._getConceptId(mid));
+		//var mid = this._getFirstModelId(curr_data.id_a);
+		var phen_label = this.state.svg.selectAll("text.a_text." + curr_data.id_a);
 		var txt = curr_data.label_a;
 		if (txt === undefined) {
 			txt = curr_data.id_a;
@@ -2643,7 +2641,7 @@ var url = document.URL;
 		rect_text.enter()
 			.append("text")
 			.attr("class", function(d) {
-				return "a_text data_text " + d.id;
+				return "a_text data_text " + d.id_a;
 			})
 		//store the id for this item.  This will be used on click events
 			.attr("ontology_id", function(d) {
