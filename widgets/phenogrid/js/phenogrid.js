@@ -1451,9 +1451,10 @@ var url = document.URL;
 		var alabels = this.state.svg.selectAll("text");
 		for (var i in curr_data){
 			var label = curr_data[i].model_label;
+			var mod_id = curr_data[i].model_id;
 			for (var j in alabels[0]){
 				var shortTxt = self._getShortLabel(label,self.state.labelCharDisplayCount);
-				if(alabels[0][j].innerHTML == shortTxt){
+				if(alabels[0][j].id == mod_id){
 					alabels[0][j].style.fill = "blue";
 					alabels[0][j].innerHTML = label;
 				}
