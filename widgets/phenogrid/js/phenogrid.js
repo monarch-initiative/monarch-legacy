@@ -364,6 +364,7 @@ var url = document.URL;
 
 			this._createGridlines();
 			this._createModelRects();
+			this._highlightSpecies();
 			this._createRowLabels();
 			this._createOverviewSection();
 
@@ -1564,7 +1565,7 @@ var url = document.URL;
 			.attr("height", 12);
 
 		this._resetLinks();
-		var alabels = this.state.svg.selectAll("text.a_text." + curr_data.id_a);//this._getConceptId(curr_data[0].id));
+		var alabels = this.state.svg.selectAll("text.a_text." + curr_data.id_a);
 		var txt = curr_data.label_a;
 		if (txt === undefined) {
 			txt = curr_data.id_a;
@@ -1943,9 +1944,6 @@ var url = document.URL;
 		    return color;
 		});
 
-		if (self.state.targetSpeciesName == "Overview") {
-			this._highlightSpecies();
-		}
 		model_rects.transition()
 			.delay(20)
 			.style('opacity', '1.0')
@@ -1963,32 +1961,47 @@ var url = document.URL;
 	_highlightSpecies : function () {
 		//create the related model rectangles
 		var self = this;
-		var list = self.state.speciesList;
-		var ct = self.state.multiOrganismCt,
-		vwidthAndGap = self.state.heightOfSingleModel,
-		hwidthAndGap = self.state.widthOfSingleModel,
-		totCt = 0,
-		parCt = 0;
+		var list = [];
+		var ct;
+		if (self.state.targetSpeciesName == "Overview"){
+			list = self.state.speciesList;
+			ct = self.state.multiOrganismCt;
+		} else {
+			list.push(self.state.targetSpeciesName);
+			ct = self.state.modelDisplayCount;
+		}
 
-		var highlight_rect = self.state.svg.selectAll(".species_accent")
+		console.log (list +" "+ ct);
+		console.log (list.length);
+
+		var vwidthAndGap = self.state.heightOfSingleModel;
+		var hwidthAndGap = self.state.widthOfSingleModel;
+		var totCt = 0;
+		var parCt = 0;
+		var borderStroke = 3;
+
+		var border_rect = self.state.svg.selectAll(".species_accent")
 			.data(list)
 			.enter()
 			.append("rect")
 			.attr("transform","translate(" + (self.state.textWidth + 30) + "," +(self.state.yoffsetOver)+ ")")
-			//.attr("x", function(d,i) { return (i * (hwidthAndGap * ct));})
-			.attr("x", function(d,i) { totCt += self.state.multiOrganismCt; 
+			.attr("x", function(d,i) { 
+				totCt += ct;
 				if (i === 0) { return 0; }
 				else {
-					parCt = totCt - self.state.multiOrganismCt;  
+					parCt = totCt - ct;  
 					return hwidthAndGap * parCt;
 				}
 			})
-			.attr("y", self.state.yoffset)
+			.attr("y", self.state.yoffset+1)
 			.attr("class", "species_accent")
-			.attr("width",  function(d,i) { return (hwidthAndGap * self.state.multiOrganismCt);})
-			.attr("height", vwidthAndGap * self.state.phenotypeDisplayCount + 5)
+			.attr("width",  function(d,i) { 
+				console.log("here");
+				return hwidthAndGap * ct;
+			})
+			.attr("height", vwidthAndGap * self.state.phenotypeDisplayCount + borderStroke*2)
 			.attr("stroke", "black")
-			.attr("stroke-width", 3)
+			.attr("stroke-width", borderStroke)
 			.attr("fill", "none");
 	},
 
@@ -2131,6 +2144,7 @@ var url = document.URL;
 
 		this._createModelRegion();
 		this._createModelRects();
+		this._highlightSpecies();
 		this._createRowLabels();
 	},
 
