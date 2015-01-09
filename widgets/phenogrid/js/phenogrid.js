@@ -635,23 +635,25 @@ var url = document.URL;
 
 	_createDiseaseTitleBox: function() {
 		var self = this;
-		var dTitleOffset = self.state.yoffset - self.state.gridTitleYOffset/2;
+		var dTitleYOffset = self.state.yoffset - self.state.gridTitleYOffset/2;
+		var dTitleXOffset = self.state.colStartingPos;
 		var title = document.getElementsByTagName("title")[0].innerHTML;
 		var dtitle = title.replace("Monarch Disease:", "");
 
 		// place it at yoffset - the top of the rectangles with the phenotypes
 		var disease = dtitle.replace(/ *\([^)]*\) */g,"");
+		var shortDis = self._getShortLabel(disease,60);	//MAGIC NUM
 
 		//Use until SVG2. Word Wraps the Disease Title
 		this.state.svg.append("foreignObject")
-			.attr("width", 200)
+			.attr("width", 205)
 			.attr("height", 50)
 			.attr("id","diseasetitle")
-			.attr("transform","translate(0," + dTitleOffset + ")")
+			.attr("transform","translate(" + dTitleXOffset + "," + dTitleYOffset + ")")
 			.attr("x", 0)
 			.attr("y", 0)
 			.append("xhtml:div")
-			.html(disease);
+			.html(shortDis);
 	},
 
 	_initializeOverviewRegion: function(overviewBoxDim,overviewX,overviewY) {
@@ -1967,9 +1969,9 @@ var url = document.URL;
 
 		var vwidthAndGap = self.state.heightOfSingleModel;
 		var hwidthAndGap = self.state.widthOfSingleModel;
+		var borderStroke = self.state.detailRectStrokeWidth;
 		var totCt = 0;
 		var parCt = 0;
-		var borderStroke = 3;
 
 		var border_rect = self.state.svg.selectAll(".species_accent")
 			.data(list)
@@ -2365,7 +2367,7 @@ var url = document.URL;
 	},
  
 	_addGradients: function() {
-		var self=this;
+		var self = this;
 		var modData = this.state.modelData;
 		var temp_data = modData.map(function(d) { return d.value[self.state.selectedCalculation];} );
 		var diff = d3.max(temp_data) - d3.min(temp_data);
@@ -2422,7 +2424,6 @@ var url = document.URL;
 		self = this;
 		var y;
 		var gradientHeight = 20;
-
 		var gradient = this.state.svg.append("svg:linearGradient")
 			.attr("id", "gradient_" + i)
 			.attr("x1", "0")
@@ -2435,6 +2436,7 @@ var url = document.URL;
 				.style("stop-color", this.state.colorRanges[i][j])
 				.style("stop-opacity", 1);
 		}
+
 		/* gradient + gap is 20 pixels */
 		y = y1 + (gradientHeight * i) + self.state.yoffset;
 		var x = self.state.axis_pos_list[2] + 12;
@@ -2452,19 +2454,18 @@ var url = document.URL;
 			.attr("fill", "url(#gradient_" + i + ")");
 
 		/* text is 20 below gradient */
-		y = y1 + gradientHeight* (i + 1) + self.state.yoffset;
+		y = (gradientHeight * (i + 1)) + y1 + self.state.yoffset;
+		//BUG.  IF LOOKING AT ONLY 1 SPECIES, SOMEHOW Y IS EITHER ADDED BY 180 OR 360 AT THIS POINT. NOT OTHER VARS CHANGED
 		x = self.state.axis_pos_list[2] + 205;
 		var gclass = "grad_text_" + i;
 		var specName = this.state.targetSpeciesList[i].name;
-		var grad_text = self.state.svg.append("svg:text")
+		var grad_text = this.state.svg.append("svg:text")
 			.attr("class", gclass)
 			.attr("y", y)
 			.attr("x", x)
 			.style("font-size", "11px")
 			.text(specName);
-
 		y += gradientHeight;
-
 		return y;
 	},
 
