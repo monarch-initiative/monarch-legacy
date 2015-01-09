@@ -110,7 +110,7 @@ var url = document.URL;
 		tooltips: {},
 		widthOfSingleModel: 18,
 		heightOfSingleModel: 13,
-		overviewGap: 30,
+		yoffsetOver: 30,
 		overviewGridTitleXOffset: 340,
 		overviewGridTitleFaqOffset: 230,
 		nonOverviewGridTitleXOffset: 220,
@@ -147,15 +147,9 @@ var url = document.URL;
 
 		this.state.yAxisMax = 0;
 		this.state.yoffset  = this.state.baseYOffset;
-		//basic gap for a bit of space above modelregion
-		this.state.yoffsetOver = this.state.overviewGap;
 
 		this.state.modelName = "";
-		//  this.state.yTranslation = 0;
-		// must reset height explicitly
 		this.state.h = this.config.h;
-
-
 	},
 
 	//this function will use the desired height to determine how many phenotype rows to display
@@ -286,9 +280,8 @@ var url = document.URL;
 	// thus, a workaround is included below to set the path correctly if it come up as '/'.
 	// this should not impact any standalone uses of phenogrid, and will be removed once monarch-app is cleaned up.
 	_getResourceUrl: function(name,type) {
-		var prefix;
-		prefix =this.state.serverURL+'/widgets/phenogrid/js/';
-		return prefix+'res/'+name+'.'+type;
+		var prefix = this.state.serverURL+'/widgets/phenogrid/js/';
+		return prefix + 'res/' + name + '.' + type;
 	},
 
 	_init: function() {
@@ -306,7 +299,6 @@ var url = document.URL;
 		this.state.currModelIdx = this.state.modelDisplayCount-1;
 		this.state.currPhenotypeIdx = this.state.phenotypeDisplayCount-1;
 		this.state.phenotypeData = this._filterPhenotypeResults(this.state.phenotypeData);
-
 
 		// target species name might be provided as a name or as
 		// taxon. Make sure that we translate to name  
@@ -366,7 +358,7 @@ var url = document.URL;
 
 			var height = rectHeight + 40;
 
-			var containerHeight = height + 10; // MAGIC NUMBER? OR OVERVIEW OFFSET?
+			var containerHeight = height + 15; //15 prevents the control panel from overlapping the grid
 			$("#svg_area").css("height",height);
 			$("#svg_container").css("height",containerHeight);
 		} else {
@@ -608,9 +600,8 @@ var url = document.URL;
 	},
 
 	_createModelScoresLegend: function() {
-		var faqOffset = 20;
 		var scoreTipY = self.state.yoffset;
-		var faqY = scoreTipY - faqOffset;
+		var faqY = scoreTipY - self.state.gridTitleYOffset;
 		var tipTextLength = 92;
 		var explYOffset = 15;
 		var explXOffset = 10;
@@ -640,6 +631,27 @@ var url = document.URL;
 			.attr("y",scoreTipY + explYOffset)
 			.attr("class","tip")
 			.text("best matches left to right.");
+	},
+
+	_createDiseaseTitleBox: function() {
+		var self = this;
+		var dTitleOffset = self.state.yoffset - self.state.gridTitleYOffset/2;
+		var title = document.getElementsByTagName("title")[0].innerHTML;
+		var dtitle = title.replace("Monarch Disease:", "");
+
+		// place it at yoffset - the top of the rectangles with the phenotypes
+		var disease = dtitle.replace(/ *\([^)]*\) */g,"");
+
+		//Use until SVG2. Word Wraps the Disease Title
+		this.state.svg.append("foreignObject")
+			.attr("width", 200)
+			.attr("height", 50)
+			.attr("id","diseasetitle")
+			.attr("transform","translate(0," + dTitleOffset + ")")
+			.attr("x", 0)
+			.attr("y", 0)
+			.append("xhtml:div")
+			.html(disease);
 	},
 
 	_initializeOverviewRegion: function(overviewBoxDim,overviewX,overviewY) {
@@ -1307,6 +1319,7 @@ var url = document.URL;
 		svgContainer.append("<svg id='svg_area'></svg>");
 		this.state.svg = d3.select("#svg_area");
 		this._addGridTitle();
+		this._createDiseaseTitleBox();
 	},
 
 	_createSvgContainer : function() {
@@ -1324,20 +1337,6 @@ var url = document.URL;
 		var xoffset = this.state.overviewGridTitleXOffset;
 		var foffset = this.state.overviewGridTitleFaqOffset;
 		var titleText = "Cross-Species Overview";
-		var title = document.getElementsByTagName("title")[0].innerHTML;
-		var dtitle = title.replace("Monarch Disease:", "");
-
-		// place it at yoffset - the top of the rectangles with the phenotypes
-		var disease = dtitle.replace(/ *\([^)]*\) */g,"");
-
-		//Use until SVG2. Word Wraps the Disease Title
-		this.state.svg.append("foreignObject")
-			.attr("width", 200)
-			.attr("height", 50)
-			.attr("id","diseasetitle")
-			.attr("y", this.state.yoffset)
-			.append("xhtml:div")
-			.html(disease);
 
 		if (this.state.targetSpeciesName !== "Overview") {
 			species= this.state.targetSpeciesName;
@@ -2562,16 +2561,16 @@ var url = document.URL;
 	*/
 	_createOrganismSelection: function(selClass) {
 		var selectedItem;
-		var optionhtml = "<div id='org_div'><span id='olabel'>Species</span><br />"+"<span id='org_sel'><select id=\'organism\'>";
+		var optionhtml = "<div id='org_div'><span id='olabel'>Species</span><br />" +
+		"<span id='org_sel'><select id=\'organism\'>";
 
 		for (var idx in this.state.targetSpeciesList) {
 			selectedItem = "";
 			if (this.state.targetSpeciesList[idx].name === this.state.targetSpeciesName) {
 				selectedItem = "selected";
 			}
-			optionhtml = optionhtml +
-			"<option value=\""+this.state.targetSpeciesList[idx.name] +
-			"\" " + selectedItem +">" + this.state.targetSpeciesList[idx].name + "</option>";
+			optionhtml += "<option value=\"" + this.state.targetSpeciesList[idx.name] +
+			"\" " + selectedItem + ">" + this.state.targetSpeciesList[idx].name + "</option>";
 		}
 		// add one for overview.
 		if (this.state.targetSpeciesName === "Overview") {
@@ -2579,9 +2578,9 @@ var url = document.URL;
 		} else {
 			selectedItem = "";
 		}
-		optionhtml = optionhtml + "<option value=\"Overview\" "+ selectedItem +">Overview</option>";
+		optionhtml += "<option value=\"Overview\" " + selectedItem + ">Overview</option>";
 
-		optionhtml = optionhtml + "</select></span></div>";
+		optionhtml += "</select></span></div>";
 		return $(optionhtml);
 	},
 
@@ -2589,22 +2588,20 @@ var url = document.URL;
 	* create the html necessary for selecting the calculation 
 	*/
 	_createCalculationSelection: function () {
-		var optionhtml = "<span id='calc_div'><span id='clabel'>Display"+
-			"<span id='calcs'><img class='calcimg' src='" +
-			this.state.scriptpath +  "../image/greeninfo30.png' height='15px'>"+
-			"</span></span><br />";
+		var optionhtml = "<span id='calc_div'><span id='clabel'>Display" +
+			"<span id='calcs'><img class='calcimg' src='" + this.state.scriptpath + 
+			"../image/greeninfo30.png' height='15px'>" + "</span></span><br />";
 
-		optionhtml = optionhtml+"<span id=\'calc_sel\'><select id=\"calculation\">";
+		optionhtml += "<span id=\'calc_sel\'><select id=\"calculation\">";
 		for (var idx in this.state.similarityCalculation) {
 			var selecteditem = "";
 			if (this.state.similarityCalculation[idx].calc === this.state.selectedCalculation) {
 				selecteditem = "selected";
 			}
-			optionhtml = optionhtml + "<option value='" +
-				this.state.similarityCalculation[idx].calc +"' "+ selecteditem +">" +
-				this.state.similarityCalculation[idx].label +"</option>";
+			optionhtml += "<option value='" + this.state.similarityCalculation[idx].calc + "' " + selecteditem + ">" +
+				this.state.similarityCalculation[idx].label + "</option>";
 		}
-		optionhtml = optionhtml + "</select></span></span>";
+		optionhtml += "</select></span></span>";
 		return $(optionhtml);
 	},
 
@@ -2612,20 +2609,19 @@ var url = document.URL;
 	* create the html necessary for selecting the sort
 	*/
 	_createSortPhenotypeSelection: function () {
-		var optionhtml ="<span id='sort_div'>"+
-			"<span id='slabel' >Sort Phenotypes<span id=\"sorts\">"+
-			"<img src=\"" +this.state.scriptpath + "../image/greeninfo30.png\" height=\"15px\"></span>"+
-			"</span>"+
-			"<span><select id=\'sortphenotypes\'>";
+		var optionhtml ="<span id='sort_div'>" +
+			"<span id='slabel' >Sort Phenotypes<span id=\"sorts\">" +
+			"<img src=\"" + this.state.scriptpath + "../image/greeninfo30.png\" height=\"15px\"></span>" +
+			"</span>" + "<span><select id=\'sortphenotypes\'>";
 
 		for (var idx in this.state.phenotypeSort) {
 			var selecteditem = "";
 			if (this.state.phenotypeSort[idx] === this.state.selectedSort) {
 				selecteditem = "selected";
 			}
-			optionhtml = optionhtml + "<option value='" +"' "+ selecteditem +">" + this.state.phenotypeSort[idx]+"</option>";
+			optionhtml += "<option value='" + "' " + selecteditem + ">" + this.state.phenotypeSort[idx] + "</option>";
 		}
-		optionhtml = optionhtml + "</select></span>";
+		optionhtml += "</select></span>";
 		return $(optionhtml);
 	},
 
@@ -2640,7 +2636,7 @@ var url = document.URL;
 		//create a rectangle and text for it 4 times.  Therefore, I
 		//need to create a unique set of  
 		//labels per axis (because the labels can repeat across axes)
-		var self=this;
+		var self = this;
 		var rect_text = this.state.svg
 			.selectAll(".a_text")
 			.data(self.state.filteredPhenotypeData, function(d, i) {  return d.id_a; });//rowid
