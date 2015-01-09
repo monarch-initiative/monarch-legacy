@@ -79,12 +79,12 @@ body{
 
 #stitle{
 	margin-left:240px;
-	font-size:18px;	
+	font-size:18px;
 }
 
 #s2title{
 	margin-left:380px;
-	font-size:18px;	
+	font-size:18px;
 }
 
 #svg_area{
@@ -123,12 +123,15 @@ body{
 	margin-left:-20px;
 }
 
-#toptitle, #bottitle {
+#toptitle,
+#bottitle {
 	font-size:1.8em;
 	font-weight:bold;
 }
 
-#toptitle2, #bottitle2, #title2 {
+#toptitle2,
+#bottitle2,
+#title2 {
 	font-size:1.4em;
 	font-weight:bold;
 }
@@ -154,11 +157,15 @@ body{
 	width:200px;
 }
 
-#sort_div div #org_div div, #calc_div div{
+#sort_div div,
+#org_div div,
+#calc_div div{
 	font-weight:bold;
 }
 
-#sort_div span, #org_div span, #calc_div span{
+#sort_div span,
+#org_div span,
+#calc_div span{
 	font-size:14px;
 }
 
@@ -169,12 +176,16 @@ body{
 	font-weight:bold;
 }
 
-#clabel, #olabel, #slabel{
+#clabel,
+#olabel,
+#slabel{
 	font-weight:bold;
 	margin-left:5px;
 }
 
-#organism , #calculation, #sortphenotypes{
+#organism,
+#calculation,
+#sortphenotypes{
 	margin-top: 5px; 
 	margin-left: 5px;
 }
@@ -184,6 +195,11 @@ body{
 	font-weight:bold;
 	font-size:16px;
 	color:#FF9966;
+}
+
+.faq_img{
+	height:15px;
+	margin-left: 5px;
 }
 
 #detail_content{
@@ -196,6 +212,8 @@ body{
 
 .sortimg{
 	margin-left:10px;
+	margin-bottom:10px;
+	border:0;
 }
 
 #logo {
@@ -233,7 +251,9 @@ body{
 	-moz-border-radius: 0 0 8px 8px;
 }
 
-#redtext, #bluetext, #greentext{
+#redtext,
+#bluetext,
+#greentext{
 	fill: black;
 }
 
@@ -273,6 +293,7 @@ body{
 	float:left;
 	clear:both;
 	margin-top:-50px;
+	margin-left:10px;
 }
 
 #svg_container {
@@ -289,7 +310,8 @@ body{
 	float:left;
 }
 
-cube1, .cube2 {
+.cube1,
+.cube2 {
 	background-color: #333;
 	width: 10px;
 	height: 10px;
