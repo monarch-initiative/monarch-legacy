@@ -111,7 +111,6 @@ var url = document.URL;
 		widthOfSingleModel: 18,
 		heightOfSingleModel: 13,
 		overviewGap: 30,
-		nonOverviewGap: 5,
 		overviewGridTitleXOffset: 340,
 		overviewGridTitleFaqOffset: 230,
 		nonOverviewGridTitleXOffset: 220,
@@ -149,10 +148,7 @@ var url = document.URL;
 		this.state.yAxisMax = 0;
 		this.state.yoffset  = this.state.baseYOffset;
 		//basic gap for a bit of space above modelregion
-		this.state.yoffsetOver = this.state.nonOverviewGap;
-		if (this.state.targetSpeciesName == "Overview") {
-			this.state.yoffsetOver = this.state.overviewGap;
-		}
+		this.state.yoffsetOver = this.state.overviewGap;
 
 		this.state.modelName = "";
 		//  this.state.yTranslation = 0;
@@ -1328,6 +1324,20 @@ var url = document.URL;
 		var xoffset = this.state.overviewGridTitleXOffset;
 		var foffset = this.state.overviewGridTitleFaqOffset;
 		var titleText = "Cross-Species Overview";
+		var title = document.getElementsByTagName("title")[0].innerHTML;
+		var dtitle = title.replace("Monarch Disease:", "");
+
+		// place it at yoffset - the top of the rectangles with the phenotypes
+		var disease = dtitle.replace(/ *\([^)]*\) */g,"");
+
+		//Use until SVG2. Word Wraps the Disease Title
+		this.state.svg.append("foreignObject")
+			.attr("width", 200)
+			.attr("height", 50)
+			.attr("id","diseasetitle")
+			.attr("y", this.state.yoffset)
+			.append("xhtml:div")
+			.html(disease);
 
 		if (this.state.targetSpeciesName !== "Overview") {
 			species= this.state.targetSpeciesName;
@@ -1357,21 +1367,6 @@ var url = document.URL;
 			.on("click", function(d) {
 				self._showDialog("faq");
 			});
-
-		var title = document.getElementsByTagName("title")[0].innerHTML;
-		var dtitle = title.replace("Monarch Disease:", "");
-
-		// place it at yoffset - the top of the rectangles with the phenotypes
-		var disease = dtitle.replace(/ *\([^)]*\) */g,"");
-
-		//Use until SVG2. Word Wraps the Disease Title
-		this.state.svg.append("foreignObject")
-			.attr("width", 200)
-			.attr("height", 50)
-			.attr("id","diseasetitle")
-			.attr("y", this.state.yoffset)
-			.append("xhtml:div")
-			.html(disease);
 	},
 
 	_configureFaqs: function() {
@@ -1971,9 +1966,6 @@ var url = document.URL;
 			ct = self.state.modelDisplayCount;
 		}
 
-		console.log (list +" "+ ct);
-		console.log (list.length);
-
 		var vwidthAndGap = self.state.heightOfSingleModel;
 		var hwidthAndGap = self.state.widthOfSingleModel;
 		var totCt = 0;
@@ -1995,8 +1987,7 @@ var url = document.URL;
 			})
 			.attr("y", self.state.yoffset+1)
 			.attr("class", "species_accent")
-			.attr("width",  function(d,i) { 
-				console.log("here");
+			.attr("width",  function(d,i) {
 				return hwidthAndGap * ct;
 			})
 			.attr("height", vwidthAndGap * self.state.phenotypeDisplayCount + borderStroke*2)
@@ -2215,7 +2206,12 @@ var url = document.URL;
 	//Add species labels to top of Overview
 	_createOverviewSpeciesLabels: function () {
 		var self = this;
-		var speciesList = self.state.speciesList;
+		var speciesList = [];
+		if (self.state.targetSpeciesName == "Overview") {
+			speciesList = self.state.speciesList;
+		} else{
+			speciesList.push(self.state.targetSpeciesName);
+		}
 		var translation = "translate(" + (self.state.textWidth + 30) +"," + (self.state.yoffset + 10) + ")";
 
 		var xPerModel = self.state.modelWidth/speciesList.length;
@@ -2225,11 +2221,9 @@ var url = document.URL;
 			.append("text")
 			.attr("transform",translation)
 			.attr("x", function(d,i){ return (i+1/2)*xPerModel;})
-			// return ((i+1) * xPerModel ) - 
-			//(xPerModel/2);})
 			.attr("id", "specieslist")
 			.attr("y", 10)
-			.attr("width", xPerModel) // function(d,i){return xPerModel;})
+			.attr("width", xPerModel)
 			.attr("height", 10)
 			.attr("fill", "#0F473E")
 			.attr("stroke-width", 1)
@@ -2362,9 +2356,7 @@ var url = document.URL;
 		this._createModelLabels(self);
 		this._createModelLines();
 		this._createTextScores(list);
-		if (self.state.targetSpeciesName == "Overview") {
-			this._createOverviewSpeciesLabels();
-		}
+		this._createOverviewSpeciesLabels();
 	},
 
 	_addPhenogridControls: function() {
@@ -2684,8 +2676,6 @@ var url = document.URL;
 
 		this._buildUnmatchedPhenotypeDisplay();
 
-		//   if (this.state.targetSpeciesName == "Overview") {var pad = 14;}
-		// else { var pad = 10;}
 		var pad = 14;
 
 		rect_text.transition()
