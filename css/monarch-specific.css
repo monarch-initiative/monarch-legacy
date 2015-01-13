@@ -182,6 +182,10 @@ figure {
     padding: 15px;
 }
 
+.panel-body {
+    overflow: hidden;
+}
+
 .right {
   float:right;
 }
