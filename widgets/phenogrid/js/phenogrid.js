@@ -295,13 +295,12 @@ var url = document.URL;
 
 		// target species name might be provided as a name or as
 		// taxon. Make sure that we translate to name
-		this.state.targetSpeciesName = 
-		this._getTargetSpeciesNameByTaxon(this,this.state.targetSpeciesName);
+		this.state.targetSpeciesName = this._getTargetSpeciesNameByTaxon(this,this.state.targetSpeciesName);
 
 		this._loadData();
 
 		// shorthand for top of model region
-		this.state.yModelRegion =this.state.yoffsetOver+this.state.yoffset;
+		this.state.yModelRegion = this.state.yoffsetOver + this.state.yoffset;
 
 		var phenotypeArray = this._uniquifyPhenotypes(this.state.modelData);
 		//copy the phenotypeArray to phenotypeData array - now instead of ALL phenotypes, it will be limited to unique phenotypes for this disease
@@ -483,7 +482,6 @@ var url = document.URL;
 		self._createModelScoresLegend();
 
 		// make it a bit bigger to ccont for widths
-		// MAGIC NUMBER ALERT
 		var overviewBoxDim = overviewRegionSize+viewPadding;
 
 		// create the main box and the instruction labels.
@@ -912,6 +910,7 @@ var url = document.URL;
 			// finally, push onto phenotypeSortData
 			self.state.phenotypeSortData.push(tempdata);
 		}
+		console.log(JSON.stringify(self.state.phenotypeSortData));
 	},
 
 	_sortingPhenotypes: function() {
