@@ -910,7 +910,6 @@ var url = document.URL;
 			// finally, push onto phenotypeSortData
 			self.state.phenotypeSortData.push(tempdata);
 		}
-		console.log(JSON.stringify(self.state.phenotypeSortData));
 	},
 
 	_sortingPhenotypes: function() {
@@ -935,6 +934,7 @@ var url = document.URL;
 	_loadData: function() {
 		if (this.state.targetSpeciesName === "Overview") {
 			this._loadOverviewData();
+			this._finishOverviewLoad();
 		} else {
 			this._loadSpeciesData(this.state.targetSpeciesName);
 			this._finishLoad();
@@ -999,7 +999,6 @@ var url = document.URL;
 		//Top n model matches for zebrashish data in zfishdata
 		//Top n model matches for flies in flydata
 		//Concat all species data and process matches
-		this._finishOverviewLoad();
 	},
 
 	_finishOverviewLoad : function () {
@@ -2520,13 +2519,11 @@ var url = document.URL;
 		container.append(options);
 		//add the handler for the select control
 		$( "#organism" ).change(function(d) {
-			console.log("changed organism");
 			self.state.targetSpeciesName = self._getTargetSpeciesNameByIndex(self,d.target.selectedIndex);
 			self._resetSelections("organism");
 		});
 
 		$( "#calculation" ).change(function(d) {
-			console.log("changed calculation");
 			self.state.selectedCalculation = self.state.similarityCalculation[d.target.selectedIndex].calc;
 			self._resetSelections("calculation");
 			self._processSelected("calculation");
@@ -2534,7 +2531,6 @@ var url = document.URL;
 
 		//add the handler for the select control
 		$( "#sortphenotypes" ).change(function(d) {
-			console.log("changed sort");
 			self.state.selectedSort = self.state.phenotypeSort[d.target.selectedIndex];
 			self._resetSelections("sortphenotypes");
 			self._processSelected("sortphenotypes");
