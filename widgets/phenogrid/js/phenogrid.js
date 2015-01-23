@@ -703,7 +703,7 @@ var url = document.URL;
 		return j;
 	},
 
-	_getComparisonType : function(organism){
+	_getComparisonType: function(organism){
 		var label = "";
 
 		for (var i in this.state.comparisonTypes) {
@@ -717,7 +717,7 @@ var url = document.URL;
 		return label;
 	}, 
 
-	_setComparisonType : function(){
+	_setComparisonType: function(){
 		var comp = this.state.defaultComparisonType;
 		for (var i in this.state.comparisonTypes) {
 			if (this.state.targetSpeciesName === this.state.comparisonTypes[i].organism) {
@@ -1001,7 +1001,7 @@ var url = document.URL;
 		//Concat all species data and process matches
 	},
 
-	_finishOverviewLoad : function () {
+	_finishOverviewLoad: function () {
 		var speciesList = [];
 		var modList = [];
 		var orgCtr = 0;
@@ -1052,7 +1052,7 @@ var url = document.URL;
 	},
 
 	//generic ajax call for all queries
-	_ajaxLoadData : function (target, url) {
+	_ajaxLoadData: function (target, url) {
 		var self = this;
 		var res;
 		jQuery.ajax({
@@ -1069,7 +1069,7 @@ var url = document.URL;
 		return res;
 	},
 
-	_displayResult : function(xhr, errorType, exception){
+	_displayResult: function(xhr, errorType, exception){
 		var msg;
 
 		switch(xhr.status){
@@ -1194,10 +1194,6 @@ var url = document.URL;
 		}
 	},
 
-	//we may use this when normalization and ranking have been determined
-	_rankLCSScores : function () {
-	},
-
 	//Different methods of based on the selectedCalculationMethod
 	_normalizeIC: function(datarow){
 		var aIC = datarow.a.IC;
@@ -1306,7 +1302,7 @@ var url = document.URL;
 		return cs;
 	},
 
-	_initCanvas : function() {
+	_initCanvas: function() {
 		this._createSvgContainer();
 		var svgContainer = this.state.svgContainer;
 		svgContainer.append("<svg id='svg_area'></svg>");
@@ -1315,7 +1311,7 @@ var url = document.URL;
 		this._createDiseaseTitleBox();
 	},
 
-	_createSvgContainer : function() {
+	_createSvgContainer: function() {
 		var svgContainer = $('<div id="svg_container"></div>');
 		this.state.svgContainer = svgContainer;
 		this.element.append(svgContainer);
@@ -1373,7 +1369,7 @@ var url = document.URL;
 			});
 	},
 
-	_resetSelections : function(type) {
+	_resetSelections: function(type) {
 		var self = this;
 		$("#unmatchedlabel").remove();
 		$("#unmatchedlabelhide").remove();
@@ -1400,7 +1396,7 @@ var url = document.URL;
 		}
 	},
 
-	_addLogoImage :	 function() { 
+	_addLogoImage:	 function() { 
 		var start = 0;
 		if(this.state.filteredModelData.length < 30){
 			//Magic Nums
@@ -1433,7 +1429,7 @@ var url = document.URL;
 			link_labels.style("fill", "black");
 	},
 
-	_highlightMatchingModels : function(curr_data){
+	_highlightMatchingModels: function(curr_data){
 		var self = this;
 		var alabels = this.state.svg.selectAll("text");
 		for (var i in curr_data){
@@ -1449,7 +1445,7 @@ var url = document.URL;
 		}
 	},
 
-	_deselectMatchingModels : function(curr_data){
+	_deselectMatchingModels: function(curr_data){
 		var alabels = this.state.svg.selectAll("text");
 		for (var i in curr_data){
 			var label = curr_data[i].model_label;
@@ -1622,7 +1618,7 @@ var url = document.URL;
 		}
 	},
 
-	_deselectMatchingPhenotypes : function(curr_data){
+	_deselectMatchingPhenotypes: function(curr_data){
 		var self = this;
 		self.state.svg.selectAll("text.a_text")
 			.style("fill","black");
@@ -1661,15 +1657,6 @@ var url = document.URL;
 		}else {
 			return "Unknown";
 		}
-	},
-
-	//return a useful label to use for visualizing the rectangles
-	_getCleanLabel: function (uri, label) {
-		if (label && label !== "" && label != "null") {
-			return label;
-		} 
-		var temp = this._getConceptId(uri);
-		return temp;
 	},
 
 	//This method extracts the unique id from a given URI
@@ -1772,10 +1759,6 @@ var url = document.URL;
 
 	_showModelData: function(d, obj) {
 		var retData;
-		/* we aren't currently using these, but we might later.*/
-		//var aSpecies = this._(d.id_a);
-		//var subSpecies = this._getSpeciesLabel(d.subsumer_id);
-		//var bSpecies = this._(d.id_b);
 
 		var species = d.species;
 		var taxon = d.taxon;
@@ -1846,18 +1829,6 @@ var url = document.URL;
 			tform = this._extractTransform(transform_str);
 		}
 		return {x: Number(obj.getAttribute("x")) + tform.x, y: Number(obj.getAttribute("y")) + tform.y};
-	},
-
-	_getSpeciesLabel: function(idstring) {
-		var label;
-		for (var i in this.state.speciesLabels) {
-			var labinfo = this.state.speciesLabels[i];
-			if (idstring.indexOf(labinfo.abbrev) > -1) {
-				label = labinfo.label;
-				break;
-			}
-		}
-		return label;
 	},
 
 	//NOTE: I need to find a way to either add the model class to the phenotypes when they load OR
@@ -1944,7 +1915,7 @@ var url = document.URL;
 			.remove();
 	},
 
-	_highlightSpecies : function () {
+	_highlightSpecies: function () {
 		//create the related model rectangles
 		var self = this;
 		var list = [];
@@ -1987,7 +1958,7 @@ var url = document.URL;
 			.attr("fill", "none");
 	},
 
-	_enableRowColumnRects : function(curr_rect){
+	_enableRowColumnRects: function(curr_rect){
 		var self = this;
 
 		var model_rects = self.state.svg.selectAll("rect.models")
@@ -2002,18 +1973,7 @@ var url = document.URL;
 		}
 	},
 
-	_getFirstModelId : function(phenotype){
-		var firstModel=""; 
-		for (var i in this.state.filteredModelData){
-			if (this.state.filteredModelData[i].id_a === phenotype){
-				firstModel = this.state.filteredModelData[i].id;
-				break;
-			}
-		}
-		return firstModel;
-	},
-
-	_highlightIntersection : function(curr_data, obj){
+	_highlightIntersection: function(curr_data, obj){
 		var self=this;
 
 		//Highlight Row
@@ -2033,7 +1993,6 @@ var url = document.URL;
 		// that is in the 0th position in the grid. No labels exist with the curr_data.id except for the first column
 		//For the overview, there will be a 0th position for each species so we need to get the right model_id
 
-		//var mid = this._getFirstModelId(curr_data.id_a);
 		var phen_label = this.state.svg.selectAll("text.a_text." + curr_data.id_a);
 		var txt = curr_data.label_a;
 		if (txt === undefined) {
@@ -2093,9 +2052,9 @@ var url = document.URL;
 		//check to see if the phenotypeIdx is greater than the number of items in the list
 		if (phenotypeIdx > this.state.phenoLength) {
 			this.state.currPhenotypeIdx = this.state.phenotypeSortData.length;
-		} else if (phenotypeIdx - (this.state.phenotypeDisplayCount -1) < 0) {
+		} else if (phenotypeIdx - (this.state.phenotypeDisplayCount - 1) < 0) {
 			//check to see if the min of the slider is less than the 0
-			this.state.currPhenotypeIdx = (this.state.phenotypeDisplayCount -1);
+			this.state.currPhenotypeIdx = (this.state.phenotypeDisplayCount - 1);
 		} else {
 			this.state.currPhenotypeIdx = phenotypeIdx;
 		}
@@ -2107,7 +2066,7 @@ var url = document.URL;
 		//check to see if the max of the slider is greater than the number of items in the list
 		if (modelIdx > modelList.length) {
 			this.state.currModelIdx = modelList.length;
-		} else if (modelIdx - (this.state.modelDisplayCount -1) < 0) {
+		} else if (modelIdx - (this.state.modelDisplayCount - 1) < 0) {
 			//check to see if the min of the slider is less than the 0
 			this.state.currModelIdx = (this.state.modelDisplayCount -1);
 		} else {
@@ -2134,7 +2093,7 @@ var url = document.URL;
 		var model_x_axis = d3.svg.axis().scale(self.state.xScale).orient("top");
 
 		self.state.svg.append("g")
-			.attr("transform","translate(" + (self.state.textWidth +28) +"," + self.state.yoffset + ")")
+			.attr("transform","translate(" + (self.state.textWidth +28) + "," + self.state.yoffset + ")")
 			.attr("class", "x axis")
 			.call(model_x_axis)
 			//this be some voodoo...
@@ -2158,7 +2117,7 @@ var url = document.URL;
 		this.state.svg.selectAll("#specieslist").remove();
 
 		this.state.svg.append("line")
-			.attr("transform","translate(" + (this.state.textWidth + 30) +"," + lineY + ")")
+			.attr("transform","translate(" + (this.state.textWidth + 30) + "," + lineY + ")")
 			.attr("x1", 0)
 			.attr("y1", 0)
 			.attr("x2", this.state.modelWidth)
@@ -2171,7 +2130,7 @@ var url = document.URL;
 		var self = this;
 		var xWidth = self.state.widthOfSingleModel;
 
-		var translation ="translate(" + (this.state.textWidth + 34) +"," + this.state.yoffset + ")"; // was yoffset -3
+		var translation ="translate(" + (this.state.textWidth + 34) + "," + this.state.yoffset + ")"; // was yoffset -3
 		this.state.svg.selectAll("text.scores")
 			.data(list)
 			.enter()
@@ -2211,7 +2170,7 @@ var url = document.URL;
 			.enter()
 			.append("text")
 			.attr("transform",translation)
-			.attr("x", function(d,i){ return (i+1/2)*xPerModel;})
+			.attr("x", function(d,i){ return (i + 1 / 2 ) * xPerModel;})
 			.attr("id", "specieslist")
 			.attr("y", 10)
 			.attr("width", xPerModel)
@@ -2223,7 +2182,7 @@ var url = document.URL;
 	},
 
 	// we might want to modify this to do a dynamic http retrieval to grab the dialog components...
-	_showDialog : function(name){
+	_showDialog: function(name){
 		var self = this;
 		var url = this._getResourceUrl(name,'html');
 		if (typeof(self.state.tooltips[name]) === 'undefined') {
@@ -2286,7 +2245,7 @@ var url = document.URL;
 			.attr("class", "accent")
 			.attr("x", function(d, i) { return self.state.axis_pos_list[i];})
 			.attr("y", y)
-			.attr("width", self.state.textWidth+5)
+			.attr("width", self.state.textWidth + 5)
 			.attr("height", gridHeight)
 			.attr("id", function(d, i) {
 				if(i === 0) {return "leftrect";}
@@ -2298,7 +2257,7 @@ var url = document.URL;
 				return i != 1 ? d3.rgb("#e5e5e5") : "white";
 			});
 
-		return gridHeight+self.state.yModelRegion;
+		return gridHeight + self.state.yModelRegion;
 	},
 
 	/* Build out the positions of the 3 boxes */
@@ -2618,6 +2577,7 @@ var url = document.URL;
 		//need to create a unique set of
 		//labels per axis (because the labels can repeat across axes)
 		var self = this;
+		var pad = 14;
 		var rect_text = this.state.svg
 			.selectAll(".a_text")
 			.data(self.state.filteredPhenotypeData, function(d, i) { return d.id_a; });//rowid
@@ -2633,7 +2593,7 @@ var url = document.URL;
 			.attr("x", 208)
 			.attr("y", function(d,i) {
 			//return i;
-				return self._getYPosition(d.id_a)+10;
+				return self._getYPosition(d.id_a) + 10;
 			})
 			.on("mouseover", function(d) {
 				self._selectData(d, d3.mouse(this));
@@ -2653,8 +2613,6 @@ var url = document.URL;
 
 		this._buildUnmatchedPhenotypeDisplay();
 
-		var pad = 14;
-
 		rect_text.transition()
 			.style('opacity', '1.0')
 			.delay(5)
@@ -2671,7 +2629,7 @@ var url = document.URL;
 			.remove();
 	},
 
-	_getUnmatchedPhenotypes : function(){
+	_getUnmatchedPhenotypes: function(){
 		var fullset = this.state.origPhenotypeData,
 		partialset = this.state.phenotypeSortData,
 		full = [],
@@ -2729,19 +2687,6 @@ var url = document.URL;
 		}
 		return unmatchedLabels;
 	},
-
-	_getPhenotypeLabel : function(id){
-		var label = "";
-
-		for (var i in this.state.phenotypeSortData){
-			if(id == this.state.phenotypeSortData[i][0].id_a.replace("_",":"))
-			{ 
-				label = this.state.phenotypeSortData[i][0].label_a;
-				break;
-			}
-		}
-		return label;
-	}, 
 
 	_buildUnmatchedPhenotypeDisplay: function() {
 		var optionhtml;
@@ -2831,7 +2776,7 @@ var url = document.URL;
 		this._updateDetailSection(retData, this._getXYPos(data));
 	},
 
-	_toProperCase : function (oldstring) {
+	_toProperCase: function (oldstring) {
 		return oldstring.replace(/\w\S*/g, function(txt){return txt.charAt(0).toUpperCase() + txt.substr(1).toLowerCase();});
 	},
 
@@ -2841,7 +2786,7 @@ var url = document.URL;
 	// or they are objects of the form
 	// { "id": <id>, "observed": <obs>} .
 	// in that case take id if "observed" is "positive"
-	_filterPhenotypeResults : function(phenotypelist) {
+	_filterPhenotypeResults: function(phenotypelist) {
 		//this.state.phenotypeData = phenotypelist.slice();
 		var newlist = [];
 		var pheno;
@@ -2854,17 +2799,6 @@ var url = document.URL;
 				newlist.push(pheno.id);
 			}
 		}
-		return newlist;
-	},
-
-	//given an array of phenotype objects 
-	//Create a new array for only id and label 
-	_filterPhenotypeLabels : function(phenotypelist) {
-		var newlist = [];
-		for (var i in phenotypelist) {
-			newlist.push({ "id" : phenotypelist[i].id, "label" : phenotypelist[i].label});
-		}
-		//copy the list of ids and labels to phenotypeLabels array
 		return newlist;
 	}
 
