@@ -1,0 +1,28 @@
+--- 
+isDisabled: false
+graphs: 
+  - 
+    columns: 
+      - 
+        name: id
+        prefix: http://purl.obolibrary.org/obo/NCBIGene_
+        type: owl:Class
+      - 
+        name: taxon_id
+      - 
+        name: mapped_id
+        prefix: "http://identifiers.org/mgd/"
+        type: owl:Class
+    filter: 
+      taxon_id: "NCBITaxon:10090"
+      source: "NCBIGene"
+      mapping_resource: "MGI"
+      mapped_source: "MGI"
+    graph: mmus-equiv-id
+    mapVersion: 2014-12-15b
+    mappings: 
+      - 
+        object: mapped_id
+        predicate: owl:equivalentClass
+        subject: id
+    view: nlx_152525-4

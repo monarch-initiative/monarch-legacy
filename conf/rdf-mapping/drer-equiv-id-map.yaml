@@ -1,0 +1,27 @@
+--- 
+isDisabled: false
+graphs: 
+  - 
+    columns: 
+      - 
+        name: id
+        prefix: http://purl.obolibrary.org/obo/NCBIGene_
+        type: owl:Class
+      - 
+        name: taxon_id
+      - 
+        name: mapped_id
+        prefix: "http://identifiers.org/zfin:"
+        type: owl:Class
+    filter: 
+      taxon_id: "NCBITaxon:7955"
+      source: "NCBIGene"
+      mapped_source: "ZFIN"
+    graph: drer-equiv-id
+    mapVersion: 2014-12-15
+    mappings: 
+      - 
+        object: mapped_id
+        predicate: owl:equivalentClass
+        subject: id
+    view: nlx_152525-4

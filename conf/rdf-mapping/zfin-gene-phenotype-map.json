@@ -15,7 +15,7 @@
          "subject" : "v_uuid"
       },
       {
-         "object" : "gene_id",
+         "object" : "implicated_gene_ids",
          "predicate" : "hasSubject",
          "subject" : "v_uuid"
       },
@@ -33,11 +33,6 @@
          "object" : "evidence_code_id",
          "predicate" : "dc:evidence",
          "subject" : "v_uuid"
-      },
-      {
-         "object" : "phenotype_description_free_text",
-         "predicate" : "dc:description",
-         "subject" : "v_uuid"
       }
    ],
    "status" : "alpha",
@@ -49,19 +44,23 @@
       },
       {
          "name" : "implicated_gene_ids",
+         "type" : "owl:Class",
          "list_delimiter" : ","
       },
       {
-         "name" : "phenotype_id"
+         "name" : "phenotype_id",
+         "type" : "owl:Class"
       },
       {
-         "name" : "evidence_code_id"
+         "name" : "evidence_code_id",
+         "type" : "owl:Class"
       },
       {
          "name" : "publication_id",
+         "type" : "owl:NamedIndividual",
          "list_delimiter" : ";"
       }
    ],
    "graph" : "zfin-gene-phenotype",
-   "mapVersion" : "2014-10-03"
+   "mapVersion" : "2014-12-15"
 }

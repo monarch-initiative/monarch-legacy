@@ -54,10 +54,18 @@ p {
     .searchspace {
         float: right;
     }
-    .form-group {
+    .input-group {
         margin-bottom: 0px;
     }
     .form-control {
+        padding: 0px 10px;
+        height: 28px;
+        border-radius: 2px;
+    }
+    .nav-search-btn{
+        width:auto;
+    }
+    .input-group-btn .btn {
         padding: 0px 10px;
         height: 28px;
         border-radius: 2px;
@@ -94,10 +102,12 @@ p {
     .navbar-form {
         margin-top: 0px;
     }
-    #search {
+    #search_form{
         width: 90%;
+    }
+    #search { 
         margin: 0 20px;
-        font-size: 13px;
+        font-size: 13px;        
     }
 }
 
@@ -113,6 +123,12 @@ p {
     .monarch-container {
         padding: 50px 0px 0px;
         height: 100%;
+    }
+    
+    .input-group-btn .btn {
+        padding: 5px 10px;
+        line-height: 26px;
+        border-radius: 2px;
     }
 }
 .content {
@@ -297,6 +313,7 @@ p {
 .ui-autocomplete-loading {
     background: white url('/image/waiting_ac.gif') right center no-repeat;
 }
+
 .form-control {
     padding: 5px 10px;
     line-height: 13px;
@@ -327,4 +344,13 @@ p {
     border: 1px solid black;
     border-radius: 0px 0px 3px 3px;
     border-top: none;
+}
+
+/*
+ * This is a common setting for the new BS3 base attempt.
+ */
+
+.branding-logo {
+    max-height: 30px;
+    padding-bottom: 5px;
 }

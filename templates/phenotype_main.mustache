@@ -1,91 +1,80 @@
-<!DOCTYPE html>
-<html>
-<head>
-    <title>Monarch Phenotypes</title>
-
-    {{{includes.analytics}}}
-
-    <!-- CSS. -->
-    {{#pup_tent_css_libraries}}
-    <link rel="stylesheet" type="text/css" href="{{{.}}}">
-    {{/pup_tent_css_libraries}}
-
-    <!-- JS variables. -->
-    {{#pup_tent_js_variables}}
-    <script type="text/javascript">var {{name}} = {{{value}}};</script>
-    {{/pup_tent_js_variables}}
-
-    <!-- JS libraries. -->
-    {{#pup_tent_js_libraries}}
-    <script type="text/javascript" src="{{{.}}}"></script>
-    {{/pup_tent_js_libraries}}
+{{{includes.navbar}}}
+<div class="container-fluid" style="margin: 1em;">
+  
+  <div class="text-center">
+    <h1>
+      Explore Phenotypes
+    </h1>
+  </div>
+  
+  <!-- Open first row section. -->
+  <div class="row">
     
-    <!-- JS launcher. -->
-    <script type="text/javascript">
-    jQuery(document).ready(function(){
-    {{#monarch_launchable}}
-    {{.}};
-    {{/monarch_launchable}}
-    });
-    </script>
-
-    <link rel="icon" href="/image/favicon.ico" type="image/x-icon">
-    <meta charset="utf-8"/>
-</head>
-<body style="padding-top: 50px;">
-    {{{includes.navbar}}}
-    <div class="container-fluid" style="margin: 1em;">
-    <!-- Open first row section. -->
-    <div class="row">
-    <!-- Annotation Graph-->
-      <div class="col-xs-12 col-sm-12 col-md-6 col-lg-6">
-        <div class="panel panel-default">
-          <div class="graph-container"></div>
-          </div>
+    <!-- Blurb. -->
+    <div class="col-xs-12 col-sm-12 col-md-12 col-lg-3">
+      <div class="panel panel-default">
+	<p>
+	  Monarch <b>Phenotype</b> integrates information from a
+	  variety of sources. Each specific page includes
+	  descriptions, diseases, curated and inferred genes whose
+	  mutations lead to the given phenotype, animal models,
+	  pathways, aggregated literature and external links to
+	  relevant resources. Here we summarizes the curated phenotype
+	  data in the system.
+	</p>
       </div>
-      <!-- Disease spotlight -->
-      <div class="col-xs-12 col-sm-12 col-md-6 col-lg-6">
-        <div class="panel panel-default">
-          <h4>Phenotype Spotlight: sed do eiusmod</h4>
-          <div>Bacon ipsum dolor sit amet ad exercitation leberkas et ground
-            round kielbasa. T-bone corned beef enim, in shankle laboris ut
-            ham biltong chicken jowl cow drumstick est shank. Biltong
-            brisket shank labore chicken ut. Nisi doner sint elit ea,
-            cow deserunt flank enim consequat. Meatball short ribs
-            laborum ball tip elit.</div>
-          </div>
-        </div>
-        <!-- Getting started area or disease browser -->
-        <div class="col-xs-12 col-sm-12 col-md-6 col-lg-6">
-          <div class="panel panel-default">
-            <p>Some kind of getting started area? Or maybe disease browser</p>
-          </div>
-        </div>
-      </div>
-      <!-- Close first row section. -->
-      <!-- Open second row section. -->
-      <div class="row">
-        <!-- Recent updates -->
-        <div class="col-xs-12 col-sm-12 col-md-6 col-lg-6">
-          <div class="panel panel-default">
-            <h4>Recent Updates</h4>
-            {{#blog_results}}
-            <ul>
-              <li>
-                <a href="{{link}}">{{title}}</a> <small>({{date}})</small>
-              </li>
-            </ul>
-            {{/blog_results}}
-            {{#blog_results.length}}
-            <p class="text-right"><a href="http://monarch-initiative.blogspot.com/search/label/test">More</a></p>
-            {{/blog_results.length}}
-            {{^blog_results}}
-            <p>No news is good news.</p>
-            {{/blog_results}}
-          </div>
-        </div>
-      </div>
-      <!-- Close second row section. -->
     </div>
+
+    <!-- Annotation Graph-->
+    <div class="col-xs-12 col-sm-12 col-md-12 col-lg-9">
+      <div class="panel panel-default">
+        <div class="graph-container"></div>
+	<p class="datagraph-caption">
+	  This <em>interactive graph</em> displays the number of
+	  phenotype associations for human (genes) and mouse
+	  (genotypes) per major phenotypic category. You can explore
+	  the distribution of more specific phenotypes by clicking on
+	  the wedge symbol, or visit the phenotype page itself by
+	  clicking on the phenotype name. You can navigate back to
+	  less-specific phenotypes by clicking on the breadcrumbs
+	  listed in the top left-hand corner.
+	</p>
+      </div>
+    </div>
+    
+    <!-- Spotlight -->
+    <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
+      <div class="panel panel-default">
+        <h4>Phenotype Spotlight: {{{spotlight.link}}}</h4>
+        <div>
+          <p>{{spotlight.description}}</p>
+          <ul>
+            <li>Genes: {{{spotlight.genes}}}</li>
+            <li>Diseases: {{{spotlight.diseases}}}</li>
+            <li>Models: {{{spotlight.models}}}
+              <!--({{spotlight.model_with_phenotype_count}} with phenotypes) -->
+            </li>
+            <li>Publications: {{{spotlight.publications}}}</li>
+          </ul>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- Footer. -->
+<hr>
+<footer>
+  <!-- <div id="footer"> -->
+  <div style="padding: 10px 40px 10px; text-align: center; font-weight: 200; font-size: 12px;">
+    The Monarch Initiative is a collaboration between Oregon Health & Science University,
+    University of California, San Diego, Lawrence Berkeley National Laboratory, the University of
+    Pittsburgh, Sanger Institute, and Charité - Universitätsmedizin Berlin
+    and is supported generously by a NIH Office of the Director Grant #5R24OD011883.
+    <br />
+    Except where otherwise noted, this work is licensed under a Creative Commons <a href="https://creativecommons.org/licenses/by/3.0/us/">Attribution 3.0</a> License.
+  </div>
+</footer>
+  
 </body>
 </html>

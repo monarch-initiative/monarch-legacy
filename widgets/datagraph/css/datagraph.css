@@ -2,13 +2,15 @@
  * Data Graph
 **/
 
+form label{
+	margin-bottom:0;
+}
+
 .title{
-    text-align: center;
     line-height:37px;
     vertical-align: middle;
     border-bottom: solid;
     border-width: 1px;
-    background-color: #E8E8E8 ;
 }
 .axis path,
 .axis line {
@@ -17,7 +19,7 @@
   shape-rendering: crispEdges;
 }
 .interaction{
-   margin-left: 50px;
+   margin-left: 10px;
    margin-top: 6px;
    position: relative;
 }
@@ -32,12 +34,24 @@
    fill:white;
    cursor:default;
 }
-.configure {
+.settings{
+   border: 1px solid #ddd;
    display: inline;
-   float:right;
-   margin-top: 3px;
+   right:0;
    margin-right: 5px;
-   position:relative;
+   position:absolute;
+}
+.configure {
+	padding-right:5px;
+	padding-left:2px;
+}
+.scale {
+	padding-right:5px;
+    padding-left:2px;
+}
+.zero {
+    padding-right:5px;
+    padding-left:2px;
 }
 .tip {
     position: absolute;
@@ -52,4 +66,8 @@
     border-radius: 5px;
     max-width: 150px;
     z-index: 10;
+}
+
+.datagraph-caption {
+    padding-top: 1em;
 }

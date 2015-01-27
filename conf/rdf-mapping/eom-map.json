@@ -37,11 +37,12 @@
       }
    ],
    "status" : "alpha",
+   "isDisabled" : "1",
    "forceConfiguration" : {
       "federation_services_url" : "http://beta.neuinfo.org/services/v1/federation/"
    },
-   "view" : "nlx_157874-1",
    "notes" : "Additional columns available in view - terminology_category_label, subcategory, and morphology_term_url.",
+   "view" : "nlx_157874-1",
    "columns" : [
       {
          "name" : "v_uuid"
@@ -85,5 +86,5 @@
       }
    ],
    "graph" : "eom",
-   "mapVersion" : "2014-09-04"
+   "mapVersion" : "2014-11-17"
 }

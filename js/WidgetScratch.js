@@ -23,19 +23,19 @@ jQuery(document).ready(function(){
     
     // Browser.
     var b = new bbop.widget.browse(srv, gconf, 'brw', {
-	'transitivity_graph_field':
-	'regulates_transitivity_graph_json',
-	'base_icon_url': sd.image_base(),
-	'info_icon': 'info',
-	'current_icon': 'current_term',
-	'image_type': 'gif',
-	'info_button_callback':
-	function(term_acc, term_doc){
-	    // // Local form.
-	    // shield.draw(term_doc);
-	    // Remote form (works).
-	    //shield.draw(term_acc);
-	}
+    'transitivity_graph_field':
+    'regulates_transitivity_graph_json',
+    'base_icon_url': sd.image_base(),
+    'info_icon': 'info',
+    'current_icon': 'current_term',
+    'image_type': 'gif',
+    'info_button_callback':
+    function(term_acc, term_doc){
+        // // Local form.
+        // shield.draw(term_doc);
+        // Remote form (works).
+        //shield.draw(term_acc);
+    }
     });
     b.draw_browser('HP:0000001');
 
@@ -45,8 +45,8 @@ jQuery(document).ready(function(){
     srch.add_query_filter('document_category', 'annotation', ['*']);
     // Add filters.
     var f_opts = {
-	'meta_label': 'Total:&nbsp;',
-	'display_free_text_p': true
+    'meta_label': 'Total:&nbsp;',
+    'display_free_text_p': true
     };
     var filters = new bbop.widget.live_filters('bs3filter', srch, gconf, f_opts);
     filters.establish_display();
@@ -56,18 +56,18 @@ jQuery(document).ready(function(){
     var pager = new bbop.widget.live_pager('bs3pager', srch, pager_opts);
     // Add results.
     var results_opts = {
-	//'callback_priority': -200,
-	'user_buttons_div_id': pager.button_span_id(),
-	'user_buttons': []
+    //'callback_priority': -200,
+    'user_buttons_div_id': pager.button_span_id(),
+    'user_buttons': []
     };
     var results = new bbop.widget.live_results('bs3results', srch, confc,
-					       handler, linker, results_opts);
+                           handler, linker, results_opts);
     // Add pre and post run spinner (borrow filter's for now).
     srch.register('prerun', 'foo', function(){
-	filters.spin_up();
+    filters.spin_up();
     });
     srch.register('postrun', 'foo', function(){
-	filters.spin_down();
+    filters.spin_down();
     });
     // Initial run.
     srch.search();

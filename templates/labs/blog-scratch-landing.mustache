@@ -1,24 +1,31 @@
 <!-- Top-level internal container. -->
-<div class="container-fluid" style="margin: 1.001em;">
+<!-- <div class="container-fluid" class="conflict-top-container-margin"> -->
+<div class="container-fluid" style="margin: 1.1em;">
+
+  <div class="jumbotron monarch-home-splash">
+    <span class="monarch-home-splash-text">
+      <strong>The Monarch Initiative</strong>
+    </span>
+  </div>
 
   <!-- Open first row section. -->
   <div class="row">
     
-    <!-- Two-column layout, col. 1 -->
-    <div id="col-1" class="col-xs-12 col-sm-8 col-md-8 col-lg-8">
+    <div id="col-1" class="col-xs-12 col-sm-7 col-md-7 col-lg-7">
       
       <!-- Quiet rollover. -->
       <!-- WARNING: There is an HTML/CSS trick in here--the largest -->
       <!-- item is in "relative" position and the rest are in "absolute". -->
       <div class="panel panel-default">
-	<div class="panel-heading">
-	  <h3 class="panel-title">Welcome to Monarch</h3>
+	<div class="panel-heading clearfix">
+	  <h3 class="panel-title pull-left">Welcome to Monarch</h3>
 	</div>
 	<div class="panel-body">
-	  <div id="monarch-carousel" class="" style="position:relative;">
-	    <div class="monarch-carousel-item" style="opacity: 1.0; position: absolute; top: 0px; left: 0px;">
+
+	  <div id="monarch-carousel" class="monarch-carousel">
+	    <div class="monarch-carousel-item monarch-carousel-item-selected">
 	      <p>
-		<img src="/image/slide-1.png" style="max-height: 5em; width: auto; float: left; padding-right: 1em;" alt="Diseases" />
+		<img src="/image/carousel-diseases-0.5.jpg" class="monarch-carousel-embedded-image" alt="Diseases" />
 		<strong>Learn about Mendelian diseases</strong><br />
       		Diseases described by collections of phenotypes can be
       		compared to each other and to animal models to
@@ -26,9 +33,18 @@
 		<a href="/disease">More &raquo;</a>
 	      </p>
 	    </div>
-	    <div class="monarch-carousel-item" style="opacity: 0.0; position: relative; top: 0px; left: 0px;">
+	    <div class="monarch-carousel-item monarch-carousel-item-unselected">
 	      <p>
-		<img src="/image/slide-2.png" style="max-height: 5em; width: auto; float: left; padding-right: 1em;" alt="Models" />
+		<img src="/image/carousel-phenotypes-0.5.jpg" class="monarch-carousel-embedded-image" alt="Phenotypes" />
+      		<strong>Explore phenotypes</strong><br /> Similar
+      		phenotypes may be observed in various diseases and
+      		across species.
+		<a href="/phenotype">More &raquo;</a>
+	      </p>
+	    </div>
+	    <div class="monarch-carousel-item monarch-carousel-item-unselected monarch-carousel-item-largest">
+	      <p>
+		<img src="/image/carousel-models-0.5.jpg" class="monarch-carousel-embedded-image" alt="Models" />
       		<strong>Find models of disease</strong><br /> In vitro
       		and in vivo disease models can recapitulate some or
       		all phenotypes of human disease.  Comparison of animal
@@ -37,9 +53,9 @@
 		<a href="/model">More &raquo;</a>
 	      </p>
 	    </div>
-	    <div class="monarch-carousel-item" style="opacity: 0.0; position: absolute; top: 0px; left: 0px;">
+	    <div class="monarch-carousel-item monarch-carousel-item-unselected">
 	      <p>
-		<img src="/image/slide-3.png" style="max-height: 5em; width: auto; float: left; padding-right: 1em;" alt="Genes" />
+		<img src="/image/carousel-genes-0.5.jpg" class="monarch-carousel-embedded-image" alt="Genes" />
       		<strong>Understand the genetics</strong><br />
       		Variations in genes and other genomic features are
       		often associated with diseases and variant phenotypes.
@@ -48,55 +64,76 @@
 		<a href="/gene">More &raquo;</a>
 	      </p>
 	    </div>
-	    <div class="monarch-carousel-item" style="opacity: 0.0; position: absolute; top: 0px; left: 0px;">
-	      <p>
-		<img src="/image/slide-4.png" style="max-height: 5em; width: auto; float: left; padding-right: 1em;" alt="Phenotypes" />
-      		<strong>Explore phenotypes</strong><br /> Similar
-      		phenotypes may be observed in various diseases and
-      		across species.
-		<a href="/phenotype">More &raquo;</a>
-	      </p>
+	  </div>
+
+	  <!-- The weird tabber thing. -->
+	  <div class="clearfix"></div>
+	  <div id="monarch-tabber" class="container monarch-tabber">
+	    <div class="row monarch-tabber-controls">
+	      <div class="col-xs-12 col-sm-6 col-md-6 col-lg-3 monarch-tabber-control">
+		<button class="btn btn-default btn-block btn-sm monarch-tabber-control-btn">
+		  <img src="/image/carousel-diseases-0.5.jpg"
+		       class="monarch-nav-embedded-image" alt="Diseases" />
+		  <!-- Mendelian diseases -->
+		  Diseases
+		</button>
+	      </div>
+	      <div class="col-xs-12 col-sm-6 col-md-6 col-lg-3 monarch-tabber-control">
+		<button class="btn btn-primary btn-block btn-sm monarch-tabber-control-btn">
+		  <img src="/image/carousel-phenotypes-0.5.jpg"
+		       class="monarch-nav-embedded-image" alt="Phenotypes" />
+		  Phenotypes
+		</button>
+	      </div>
+	      <div class="col-xs-12 col-sm-6 col-md-6 col-lg-3 monarch-tabber-control">
+		<button class="btn btn-primary btn-block btn-sm monarch-tabber-control-btn">
+		  <img src="/image/carousel-models-0.5.jpg" class="monarch-nav-embedded-image" alt="Models" />
+		  <!-- Models of diseases -->
+		  Models
+		</button>
+	      </div>
+	      <div class="col-xs-12 col-sm-6 col-md-6 col-lg-3 monarch-tabber-control">
+		<button class="btn btn-primary btn-block btn-sm monarch-tabber-control-btn">
+		  <img src="/image/carousel-genes-0.5.jpg"
+		       class="monarch-nav-embedded-image" alt="Genetics" />
+		  <!-- Understand genetics -->
+		  Genetics
+		</button>
+	      </div>
 	    </div>
 	  </div>
-	</div>
-	<div class="panel-footer text-right">
-	  <span id="monarch-carousel-indicator">
-	    &FilledSmallSquare;&EmptySmallSquare;&EmptySmallSquare;&EmptySmallSquare;</span>
-	</div>
-      </div>
 
-      <!-- About. -->
-      <div>
-	<div class="panel panel-default">
-	  <div class="panel-heading">
-	    <h3 class="panel-title">About</h3>
-	  </div>
-	  <div class="panel-body">
-	    <p>
-              <i>Enabling navigation across a rich landscape of phenotypes,
-		diseases, models, and genes for translational research</i>
-	    </p>
-	    <ul>
-	      <li><a href="/page/about#goals">What is Monarch?</a></li>
-	      <li><a href="/page/about#background">Can Monarch help me investigate biology of disease?</a></li>
-	      <li><a href="/page/about#dataflow">How does Monarch integrate phenotype data?</a></li>
-	      <li><a href="/page/about#partners">Who are our partners?</a></li>
-	    </ul>
-	  </div>
+	  <hr />
+
+      	  <div class="">
+      	    <p>
+              <strong>Monarch enables navigation across a rich landscape of
+      		phenotypes, diseases, models, and genes for
+      		translational research.</strong>
+      	    </p>
+      	    <ul>
+      	      <li><a href="/page/about#goals">What is Monarch?</a></li>
+      	      <li><a href="/page/about#background">Can Monarch help me investigate biology of disease?</a></li>
+      	      <li><a href="/page/about#dataflow">How does Monarch integrate phenotype data?</a></li>
+      	      <li><a href="/page/about#partners">Who are our partners?</a></li>
+      	    </ul>
+      	  </div>
+
 	</div>
+
       </div>
 
       <!-- News and twitter combo. -->
       <div class="row">
 	<div id="blog" class="col-xs-12 col-sm-6 col-md-6 col-lg-6">
 
-	  <div class="panel panel-default news-panel">
+	  <div class="panel panel-default news-panel" style="border-radius:5px;border-color:#e8e8e8;padding-top:12px;">
 	    <!-- <div class="panel-heading"> -->
 	    <!--   <h3 class="panel-title">News and Events</h3> -->
 	    <!-- </div> -->
 	    <!-- <div class="panel-body"> -->
-	    <h4 class="panel-title">News and Events</h4>
-	    <hr />
+	    <h4 class="panel-title" style="font-weight:bold;">News and Events</h4>
+	    <hr  style="margin-top:11px;" />
 	    {{#blog_results}}
 	    <dl class="news-list">
 	      <dt>
@@ -132,127 +169,156 @@
     </div>
 
     <!-- Two-column layout, col. 2 -->
-    <div id="col-1" class="col-xs-12 col-sm-4 col-md-4 col-lg-4">
+    <div id="col-1" class="col-xs-12 col-sm-5 col-md-5 col-lg-5">
 
       <!-- Search. -->
       <div>
-	<div class="panel panel-default" style="padding-bottom: 0;">
+	<div class="panel panel-default"> <!-- style="padding-bottom: 0;"> -->
 	  <div class="panel-heading">
-	    <h3 class="panel-title">Search Monarch data</h3>
+	    <h3 class="panel-title">Search Monarch Data</h3>
 	  </div>
 	  <div class="panel-body">
+
 	    <!-- <p> -->
 	    <!--   Search Monarch data. -->
 	    <!-- </p> -->
-		  <!-- class="navbar-form" -->
-	    <form id="home_search_form"
-		  action="/search"
-		  role="form">
-	      <div class="form-group">
-		<input id="home-search"
-		       type="text"
-		       class="form-control"
-		       placeholder="Search (e.g. Parkinson's)" />
-		
-		<!-- <select class="form-control"> -->
-		<!--   <option>1</option> -->
-		<!--   <option>2</option> -->
-		<!--   <option>3</option> -->
-		<!--   <option>4</option> -->
-		<!--   <option>5</option> -->
-		<!-- </select> -->
-		
-		<div class="panel panel-default" style="padding-bottom: 0;">
-		  <div class="panel-heading" style="margin-bottom: 0;">
-		    <span><small><a data-toggle="collapse" data-target="#collapseOne" aria-expanded="true" aria-controls="collapseOne">Advanced options</a></small></span>
-		  </div>
-		  <div id="collapseOne" class="panel-collapse collapse">
-		    <div class="panel-body">
-		      
-		      <div class="radio">
-			<label>
-			  <input type="radio" name="optionsRadios" id="optionsRadios1" value="option1" checked>
-			  Option one
-			</label>
-		      </div>
-		      <div class="radio">
-			<label>
-			  <input type="radio" name="optionsRadios" id="optionsRadios2" value="option2">
-			  Option two
-			</label>
-		      </div>
-		      <div class="radio disabled">
-			<label>
-			  <input type="radio" name="optionsRadios" id="optionsRadios3" value="option3" disabled>
-			  Option three
-			</label>
-		      </div>
-		      
-		    </div>
-		  </div>
-		</div>
+	    <!-- class="navbar-form" -->
 
-	      </div>
-	    </form>
+	    <h5><strong>Basic Search</strong></h5>
+	    <p>
+	      Select from autocomplete and jump to relevant pages.
+	    </p>
+	    <p>
+	      <form id="home_search_form"
+		    action="/search"
+		    role="form">
+		<div class="form-group">
+		  
+		  <input id="home_search"
+			 type="text"
+			 class="form-control"
+			 placeholder="Search (e.g. Parkinson's)" />
+
+		  <!-- <select class="form-control"> -->
+		  <!--   <option>1</option> -->
+		  <!--   <option>2</option> -->
+		  <!--   <option>3</option> -->
+		  <!--   <option>4</option> -->
+		  <!--   <option>5</option> -->
+		  <!-- </select> -->
+		  
+		  <!-- <div class="panel panel-default" style="padding-bottom: 0;"> -->
+		  <!--   <div class="panel-heading" style="margin-bottom: 0;"> -->
+		  <!--     <span><small><a data-toggle="collapse" data-target="#collapseOne" aria-expanded="true" aria-controls="collapseOne">Advanced options</a></small></span> -->
+		  <!--   </div> -->
+		  <!--   <div id="collapseOne" class="panel-collapse collapse"> -->
+		  <!--     <div class="panel-body"> -->
+		  
+		  <!--       <div class="radio"> -->
+		  <!-- 	<label> -->
+		  <!-- 	  <input type="radio" name="optionsRadios" id="optionsRadios1" value="option1" checked> -->
+		  <!-- 	  Option one -->
+		  <!-- 	</label> -->
+		  <!--       </div> -->
+		  <!--       <div class="radio"> -->
+		  <!-- 	<label> -->
+		  <!-- 	  <input type="radio" name="optionsRadios" id="optionsRadios2" value="option2"> -->
+		  <!-- 	  Option two -->
+		  <!-- 	</label> -->
+		  <!--       </div> -->
+		  <!--       <div class="radio disabled"> -->
+		  <!-- 	<label> -->
+		  <!-- 	  <input type="radio" name="optionsRadios" id="optionsRadios3" value="option3" disabled> -->
+		  <!-- 	  Option three -->
+		  <!-- 	</label> -->
+		  <!--       </div> -->
+		  
+		  <!--     </div> -->
+		  <!--   </div> -->
+		  <!-- </div> -->
+		  
+		</div>
+	      </form>
+	    </p>
+
+	    <h5><strong>Advanced Phenotype Search</strong></h5>
+	    <p class="">
+	      Find models and phenotypes similar to a set of
+	      abnormal phenotypes of interest.
+	    </p>
+	    <p class="">
+	      <a class="btn btn-primary" href="/analyze/phenotypes">
+		Go to Advanced Search &raquo;
+	      </a>
+	    </p>	    
+
 	  </div>
 	</div>
       </div>
 
-      <!-- Explore. -->
-      <div>
-	<div class="panel panel-default">
-	  <div class="panel-heading">
-	    <h3 class="panel-title">Explore</h3>
-	  </div>
-	  <div class="panel-body">
+      <!-- Placeholder. -->
+      <!-- <div class="panel panel-default"> -->
+      <!-- 	<div class="panel-body"> -->
+      <!-- 	  <div style="height: 400px; background-color: #119911;">&nbsp;</div> -->
+      <!-- 	</div> -->
+      <!-- </div> -->
 
-	    <div class="list-group">
-	      <a href="/disease" class="list-group-item" style="">
-		<img src="/image/slide-1.png" style="max-height: 1.5em; width: auto; float: left; padding-right: 1em;" alt="Diseases" />
-		Mendelian diseases
-	      </a>
-	      <a href="/phenotype" class="list-group-item" style="">
-		<img src="/image/slide-4.png" style="max-height: 1.5em; width: auto; float: left; padding-right: 1em;" alt="Phenotypes" />
-		Phenotypes
-	      </a>
-	      <a href="/model" class="list-group-item" style="">
-		<img src="/image/slide-2.png" style="max-height: 1.5em; width: auto; float: left; padding-right: 1em;" alt="Models" />
-		Models of Disease
-	      </a>
-	      <a href="/gene" class="list-group-item" style="">
-		<img src="/image/slide-3.png" style="max-height: 1.5em; width: auto; float: left; padding-right: 1em;" alt="Genetics" />
-		Understand the genetics
+      <!-- Explore mk2. -->
+      <div class="panel panel-default">
+      	<div class="panel-body">
+	  <div class="row">
+	    <div class="col-xs-12 col-sm-12 col-md-6 col-lg-6">
+	      <a href="#"
+		 title="Explore"
+		 data-container="body"
+		 data-toggle="popover"
+		 data-placement="top"
+		 data-content="See awesome stuff.">
+		<img src="/image/explore-graph.png"
+		     class="img-responsive monarch-home-explore-img"
+		     alt="Explore." />
 	      </a>
 	    </div>
-
+	    <div class="col-xs-12 col-sm-12 col-md-6 col-lg-6">
+	      <a href="#"
+		 title="Explore"
+		 data-container="body"
+		 data-toggle="popover"
+		 data-placement="top"
+		 data-content="See awesome stuff.">
+		<img src="/image/explore-graph.png"
+		     class="img-responsive monarch-home-explore-img"
+		     alt="Explore." />
+	      </a>
+	    </div>
+	    <div class="col-xs-12 col-sm-12 col-md-6 col-lg-6">
+	      <a href="#"
+		 title="Explore"
+		 data-container="body"
+		 data-toggle="popover"
+		 data-placement="top"
+		 data-content="See awesome stuff.">
+		<img src="/image/explore-graph.png"
+		     class="img-responsive monarch-home-explore-img"
+		     alt="Explore." />
+	      </a>
+	    </div>
+	    <div class="col-xs-12 col-sm-12 col-md-6 col-lg-6">
+	      <a href="#"
+		 title="Explore"
+		 data-container="body"
+		 data-toggle="popover"
+		 data-placement="top"
+		 data-content="See awesome stuff.">
+		<img src="/image/explore-graph.png"
+		     class="img-responsive monarch-home-explore-img"
+		     alt="Explore." />
+	      </a>
+	    </div>
 	  </div>
 	</div>
       </div>
-
-      <!-- Pheno Search. -->
-      <div>
-	<div class="panel panel-default">
-	  <div class="panel-heading">
-	    <h3 class="panel-title">Pheno Search</h3>
-	  </div>
-	  <div class="panel-body">
-	    <p>
-	      Search phenotypes.
-	    </p>
-	    <form id="pheno_search_form"
-		  action="/search"
-		  role="form">
-	      <div class="form-group">
-		<input id="pheno-search"
-		       type="text"
-		       class="form-control"
-		       placeholder="Search (e.g. Parkinson's)" />
-	      </div>
-	    </form>
-	  </div>
-	</div>
       
-      </div>
     </div>
     
   </div>

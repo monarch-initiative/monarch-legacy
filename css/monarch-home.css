@@ -1,0 +1,167 @@
+/**
+ ** Additional CSS to make the home page specific things look nice.
+ **/
+
+/*
+ * Compact the news list just a little. Assumes dl.
+ */
+.news-list {
+    margin-bottom: 10px;
+    margin-top: 10px;
+}
+.news-more {
+}
+.news-panel {
+    padding-bottom: 3px;
+}
+
+/*
+ * Carousel and tabber.
+ */
+
+.monarch-carousel {
+    position: relative;
+}
+
+.monarch-carousel-item {
+    position: absolute;
+    top: 0px;
+    left: 0px;
+}
+
+/* Reserved for the largest item to get layout sizing correct. */
+.monarch-carousel-item-largest {
+    position: relative;
+}
+
+.monarch-carousel-item-selected {
+    opacity: 1.0;
+    z-index: 1;
+}
+
+.monarch-carousel-item-unselected {
+    opacity: 0.0;
+    z-index: 0;
+}
+
+.monarch-carousel-embedded-image {
+    max-height: 5em;
+    width: auto;
+    float: left;
+    padding-right: 1em;
+}
+
+.monarch-nav-embedded-image {
+    max-height: 1.5em;
+    width: auto;
+    float: left;
+    padding-right: 0.5em;
+}
+
+.monarch-home-splash {
+    background-image: url('/image/home-splash-0.5.jpg');
+    margin-bottom: 17.5px;
+    padding-top: 40px;
+    padding-bottom: 40px;
+    padding-left: 40px;
+    /* padding-right: 60px; */
+}
+.monarch-home-splash-text {
+    color: #ffffff;
+    font-size: 30px;
+    font-weight: 500;
+    /* Attempt at outline. */
+   /* -webkit-text-fill-color: white; */
+   /* -webkit-text-stroke-width: 1px; */
+   /* -webkit-text-stroke-color: black; */
+  text-shadow:
+   -1px -1px 0 #000,  
+    1px -1px 0 #000,
+    -1px 1px 0 #000,
+     1px 1px 0 #000;
+}
+
+.monarch-tabber {
+    margin-top: 0.5em;
+}
+.monarch-tabber-controls {
+    padding-left: 10px;
+    padding-right: 10px;
+}
+.monarch-tabber-control {
+    padding-top: 2.5px;
+    padding-bottom: 2.5px;
+    padding-left: 5px;
+    padding-right: 5px;
+}
+.monarch-tabber-control-btn {
+    padding-left: 10px;
+    padding-right: 10px;
+}
+.monarch-tabber-content {
+}
+/* These are essentially overrides for btn-*. */
+.monarch-tabber-on-item {
+    background-color: #555555;
+    border-bottom-color: #474949;
+    border-left-color-ltr-source: physical;
+    border-left-color-rtl-source: physical;
+    border-left-color-value: #474949;
+    border-right-color-ltr-source: physical;
+    border-right-color-rtl-source: physical;
+    border-right-color-value: #474949;
+    border-top-color: #474949;
+    color: #fff;
+}
+.monarch-tabber-off-item {
+    background-color: #f5f5f5;
+    color: #000;
+    border-bottom-color: #ddd;
+    border-left-color-ltr-source: physical;
+    border-left-color-rtl-source: physical;
+    border-left-color-value: #ddd;
+    border-right-color-ltr-source: physical;
+    border-right-color-rtl-source: physical;
+    border-right-color-value: #ddd;
+    border-top-color: #ddd;
+    border-left-color: #ddd;
+    border-right-color: #ddd;
+}
+.monarch-tabber-off-item:hover {
+    background-color: #ffffff;
+    color: #111;
+}
+
+/*
+ * Static exploration images (lower-right).
+ */
+
+.monarch-home-explore-img {
+    /* max-height: 300px; */
+}
+.monarch-home-explore-img .panel .panel-heading {
+    padding-bottom: 5px;
+    padding-left: 10px;
+    padding-right: 10px;
+    padding-top: 5px;
+}
+
+#home_search{
+    line-height:20px;
+}
+
+/* Datagraph */
+.graph-container{
+    position: relative;
+    border-style:solid;
+    border-width:1px;
+    border-radius:4px;
+    border-color:#ddd;    
+    -webkit-box-shadow:0 1px 1px rgba(0,0,0,0.05);
+    box-shadow:0 1px 1px rgba(0,0,0,0.05)
+}
+.configure input{
+    vertical-align: bottom;
+    position: relative;
+    top: -1px;
+}

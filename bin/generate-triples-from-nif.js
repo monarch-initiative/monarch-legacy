@@ -309,6 +309,8 @@ function generateNamedGraph(gconf) {
                 }
                 else {
                     emit(io, sv, pv, ov, mapping);
+                    emitType(io,sv,mapping.subject,cmap);
+                    emitType(io,ov,mapping.object,cmap);
                 }
                 
             }
@@ -543,6 +545,27 @@ function emit(io, sv, pv, ov, mapping) {
         }
     }
 }
+
+function emitType(io,sv,ix,cmap) {
+  var allowedTypes=['owl:Class','owl:NamedIndividual']
+  var obj = cmap[ix];
+  if (obj == null || typeof obj == 'undefined') {
+	return;
+  }
+
+  var type = obj.type;
+
+  if (type != null && typeof type != 'undefined' && (allowedTypes.indexOf(type) > -1)) {
+	if (sv.forEach != null) {
+		sv.forEach(function(x) { emitType(io,x,ix,cmap) });
+	} else {
+		io.print(sv + " rdf:type " + type + " .");
+		numTriplesDumped ++;  //TODO is this right to increment these?
+		numAxiomsDumped ++;
+	}
+  }
+}
+
 
 // TODO: we can reduce the size of the triple dump by making use of these
 function emitPrefixes(io, extraPrefixes) {

@@ -35,6 +35,7 @@ var diseaseIds =
 exports.testDiseaseBasic = function() {
     diseaseIds.forEach(
         function(id) {
+            console.log("Fetching:"+id);
             var json = engine.fetchDiseaseInfo(id);
             // todo - check json
         }
@@ -109,6 +110,7 @@ if (require.main == module) {
     bbop.monarch.defaultConfig = JSON.parse(fs.read(conf));
 
     engine = new bbop.monarch.Engine();
+    engine.isProduction = function() { return false }; // always log in test mode
 
     var rtn = require("test").run(exports);
     print("Return code="+rtn);

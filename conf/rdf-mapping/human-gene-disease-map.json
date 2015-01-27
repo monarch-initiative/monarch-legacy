@@ -1,11 +1,5 @@
 {
    "lengthOfCycleInDays" : 3,
-   "objects" : [
-      {
-         "rdf:type" : "owl:ObjectProperty",
-         "id" : "RO:0002162"
-      }
-   ],
    "mappings" : [
       {
          "object" : "phenotype_id",
@@ -33,19 +27,27 @@
          "subject" : "v_uuid"
       }
    ],
+   "objects" : [
+      {
+         "rdf:type" : "owl:ObjectProperty",
+         "id" : "RO:0002162"
+      }
+   ],
    "view" : "nif-0000-03216-9",
    "columns" : [
       {
          "name" : "v_uuid"
       },
       {
-         "name" : "gene_id"
+         "name" : "gene_id",
+         "type" : "owl:Class"
       },
       {
          "name" : "phenotype_inheritance"
       },
       {
-         "name" : "phenotype_id"
+         "name" : "phenotype_id",
+         "type" : "owl:Class"
       },
       {
          "name" : "publication_id",
@@ -59,6 +61,6 @@
       "type" : "void:Dataset",
       "publisher" : "http://monarchinitiative.org"
    },
-   "mapVersion" : "2014-08-19",
-   "graph" : "human-gene-disease"
+   "graph" : "human-gene-disease",
+   "mapVersion" : "2014-12-12"
 }

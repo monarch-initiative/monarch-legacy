@@ -1,11 +1,8 @@
 {
-   "filter" : {
-      "variant_locus_id" : "ClinVarVariant:54685"
-   },
    "mappings" : [
       {
          "object" : "variant_locus_label",
-         "predicate" : "rdfs:Label",
+         "predicate" : "rdfs:label",
          "subject" : "variant_locus_id"
       },
       {
@@ -30,7 +27,7 @@
       },
       {
          "object" : "sequence_alteration_label",
-         "predicate" : "rdfs:Label",
+         "predicate" : "rdfs:label",
          "subject" : "sequence_alteration_id"
       },
       {
@@ -100,6 +97,7 @@
       },
       {
          "name" : "sequence_alteration_id",
+         "list_delimiter" : ";",
          "type" : "SO:0001059"
       },
       {

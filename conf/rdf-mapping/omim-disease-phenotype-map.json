@@ -55,13 +55,15 @@
          "name" : "v_uuid"
       },
       {
-         "name" : "disorder_id"
+         "name" : "disorder_id",
+         "type" : "owl:Class"
       },
       {
          "name" : "disorder_qualifier"
       },
       {
-         "name" : "phenotype_id"
+         "name" : "phenotype_id",
+         "type" : "owl:Class"
       },
       {
          "name" : "onset",
@@ -73,10 +75,12 @@
       },
       {
          "name" : "publication_id",
+         "type" : "owl:NamedIndividual",
          "list_delimiter" : ";"
       },
       {
-         "name" : "evidence_code_id"
+         "name" : "evidence_code_id",
+         "type" : "owl:Class"
       }
    ],
    "prefixes" : {
@@ -85,5 +89,5 @@
       "IM" : "http://purl.obolibrary.org/obo/OMIM_"
    },
    "graph" : "omim-disease-phenotype",
-   "mapVersion" : "2014-10-07"
+   "mapVersion" : "2014-12-15"
 }

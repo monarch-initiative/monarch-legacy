@@ -1,0 +1,352 @@
+<!-- Top-level internal container. -->
+<!-- <div class="container-fluid" class="conflict-top-container-margin"> -->
+<div class="container-fluid" style="margin: 1.1em;">
+
+  {{#monarch_home_test_p}}
+  <div class="jumbotron monarch-home-splash">
+    <span class="monarch-home-splash-text">
+      <strong>The Monarch Initiative</strong>
+    </span>
+  </div>
+  {{/monarch_home_test_p}}
+  {{^monarch_home_test_p}}
+  {{/monarch_home_test_p}}
+
+  <!-- Open first row section. -->
+  <div class="row">
+    
+    <!-- Two-column layout, col. 1 -->
+    <div id="col-1" class="col-xs-12 col-sm-8 col-md-8 col-lg-8">
+      
+      <!-- Quiet rollover. -->
+      <!-- WARNING: There is an HTML/CSS trick in here--the largest -->
+      <!-- item is in "relative" position and the rest are in "absolute". -->
+      <div class="panel panel-default">
+	<div class="panel-heading clearfix">
+	  <h3 class="panel-title pull-left">Welcome to Monarch</h3>
+	  {{#monarch_home_test_p}}
+	  <span id="monarch-carousel-indicator" class="pull-right">
+	    &FilledSmallSquare;&EmptySmallSquare;&EmptySmallSquare;&EmptySmallSquare;
+	  </span>
+	  {{/monarch_home_test_p}}
+	  {{^monarch_home_test_p}}
+	  {{/monarch_home_test_p}}
+	</div>
+	<div class="panel-body">
+
+	  <!-- <div> -->
+	  <!--   <p> -->
+          <!--     <strong> -->
+	  <!-- 	Enabling navigation across a rich landscape of phenotypes, -->
+	  <!-- 	diseases, models, and genes for translational research. -->
+	  <!--     </strong> -->
+	  <!--   </p> -->
+	  <!--   <ul> -->
+	  <!--     <li><a href="/page/about#goals">What is Monarch?</a></li> -->
+	  <!--     <li><a href="/page/about#background">Can Monarch help me investigate biology of disease?</a></li> -->
+	  <!--     <li><a href="/page/about#dataflow">How does Monarch integrate phenotype data?</a></li> -->
+	  <!--     <li><a href="/page/about#partners">Who are our partners?</a></li> -->
+	  <!--   </ul> -->
+	  <!-- </div> -->
+	  
+	  <!-- <hr /> -->
+
+	  <div id="monarch-carousel" class="monarch-carousel">
+	    <div class="monarch-carousel-item monarch-carousel-item-selected">
+	      <p>
+		<img src="/image/carousel-diseases-0.5.jpg" class="monarch-carousel-embedded-image" alt="Diseases" />
+		<strong>Learn about Mendelian diseases</strong><br />
+      		Diseases described by collections of phenotypes can be
+      		compared to each other and to animal models to
+      		investigate genetic underpinnings.
+		<a href="/disease">More &raquo;</a>
+	      </p>
+	    </div>
+	    <div class="monarch-carousel-item monarch-carousel-item-unselected monarch-carousel-item-largest">
+	      <p>
+		<img src="/image/carousel-models-0.5.jpg" class="monarch-carousel-embedded-image" alt="Models" />
+      		<strong>Find models of disease</strong><br /> In vitro
+      		and in vivo disease models can recapitulate some or
+      		all phenotypes of human disease.  Comparison of animal
+      		model phenotypes with human disease can suggest
+      		candidate genes.
+		<a href="/model">More &raquo;</a>
+	      </p>
+	    </div>
+	    <div class="monarch-carousel-item monarch-carousel-item-unselected">
+	      <p>
+		<img src="/image/carousel-genes-0.5.jpg" class="monarch-carousel-embedded-image" alt="Genes" />
+      		<strong>Understand the genetics</strong><br />
+      		Variations in genes and other genomic features are
+      		often associated with diseases and variant phenotypes.
+      		Learn about the phenotypes associated with your
+      		favorite gene.
+		<a href="/gene">More &raquo;</a>
+	      </p>
+	    </div>
+	    <div class="monarch-carousel-item monarch-carousel-item-unselected">
+	      <p>
+		<img src="/image/carousel-phenotypes-0.5.jpg" class="monarch-carousel-embedded-image" alt="Phenotypes" />
+      		<strong>Explore phenotypes</strong><br /> Similar
+      		phenotypes may be observed in various diseases and
+      		across species.
+		<a href="/phenotype">More &raquo;</a>
+	      </p>
+	    </div>
+	  </div>
+
+	  {{#monarch_home_test_p}}
+	  <hr />
+
+      	  <div class="">
+      	    <p>
+              <strong>Monarch enables navigation across a rich landscape of
+      		phenotypes, diseases, models, and genes for
+      		translational research.</strong>
+      	    </p>
+      	    <ul>
+      	      <li><a href="/page/about#goals">What is Monarch?</a></li>
+      	      <li><a href="/page/about#background">Can Monarch help me investigate biology of disease?</a></li>
+      	      <li><a href="/page/about#dataflow">How does Monarch integrate phenotype data?</a></li>
+      	      <li><a href="/page/about#partners">Who are our partners?</a></li>
+      	    </ul>
+      	  </div>
+	  {{/monarch_home_test_p}}
+	  {{^monarch_home_test_p}}
+	  {{/monarch_home_test_p}}
+
+
+	</div>
+	{{#monarch_home_test_p}}
+	{{/monarch_home_test_p}}
+	{{^monarch_home_test_p}}
+	<div class="panel-footer text-right">
+	  <span id="monarch-carousel-indicator">
+	    &FilledSmallSquare;&EmptySmallSquare;&EmptySmallSquare;&EmptySmallSquare;</span>
+	</div>
+	{{/monarch_home_test_p}}
+      </div>
+
+      <!-- About. -->
+      {{#monarch_home_test_p}}
+      {{/monarch_home_test_p}}
+      {{^monarch_home_test_p}}
+      <div>
+      	<div class="panel panel-default">
+      	  <!-- <div class="panel-heading"> -->
+      	  <!--   <h3 class="panel-title">Welcome to Monarch</h3> -->
+      	  <!-- </div> -->
+      	  <div class="panel-body">
+      	    <p>
+              <strong>Monarch enables navigation across a rich landscape of
+      		phenotypes, diseases, models, and genes for
+      		translational research.</strong>
+      	    </p>
+      	    <ul>
+      	      <li><a href="/page/about#goals">What is Monarch?</a></li>
+      	      <li><a href="/page/about#background">Can Monarch help me investigate biology of disease?</a></li>
+      	      <li><a href="/page/about#dataflow">How does Monarch integrate phenotype data?</a></li>
+      	      <li><a href="/page/about#partners">Who are our partners?</a></li>
+      	    </ul>
+      	  </div>
+      	</div>
+      </div>
+      {{/monarch_home_test_p}}
+
+      <!-- News and twitter combo. -->
+      <div class="row">
+	<div id="blog" class="col-xs-12 col-sm-6 col-md-6 col-lg-6">
+
+	  <div class="panel panel-default news-panel">
+	    <!-- <div class="panel-heading"> -->
+	    <!--   <h3 class="panel-title">News and Events</h3> -->
+	    <!-- </div> -->
+	    <!-- <div class="panel-body"> -->
+	    <h4 class="panel-title">News and Events</h4>
+	    <hr />
+	    {{#blog_results}}
+	    <dl class="news-list">
+	      <dt>
+		<a href="{{link}}">{{title}}</a>
+		{{#category}}
+		<a href="{{link}}" class="label label-default">{{label}}</a>
+		{{/category}}
+	      </dt>
+	      <dd>
+		<strong>{{moddate}}</strong>
+		<!-- <strong>{{pubdate}}</strong> -->
+		<!-- {{{truncated}}} -->
+	      </dd>
+	    </dl>
+	    {{/blog_results}}
+	    <p class="news-more">
+	      <a href="http://monarch-initiative.blogspot.com/"
+		 alt="More posts"><strong>More...</strong></a>
+	    </p>
+	  </div>
+
+	</div>
+	<div id="twitter" class="col-xs-12 col-sm-6 col-md-6 col-lg-6">
+
+	  <p>
+	    <a class="twitter-timeline" href="https://twitter.com/search?q=%40MonarchInit+OR+%23raredisease+OR+%40GA4GH+OR+%40phenomecentral" data-widget-id="527567015918051328">Tweets about "@MonarchInit OR #raredisease OR @GA4GH OR @phenomecentral"</a>
+	    <script>!function(d,s,id){var js,fjs=d.getElementsByTagName(s)[0],p=/^http:/.test(d.location)?'http':'https';if(!d.getElementById(id)){js=d.createElement(s);js.id=id;js.src=p+"://platform.twitter.com/widgets.js";fjs.parentNode.insertBefore(js,fjs);}}(document,"script","twitter-wjs");</script>
+	  </p>
+
+	</div>
+      </div>
+
+    </div>
+
+    <!-- Two-column layout, col. 2 -->
+    <div id="col-1" class="col-xs-12 col-sm-4 col-md-4 col-lg-4">
+
+      <!-- Search. -->
+      <div>
+	<div class="panel panel-default"> <!-- style="padding-bottom: 0;"> -->
+	  <div class="panel-heading">
+	    <h3 class="panel-title">Search Monarch Data</h3>
+	  </div>
+	  <div class="panel-body">
+
+	    <!-- <p> -->
+	    <!--   Search Monarch data. -->
+	    <!-- </p> -->
+	    <!-- class="navbar-form" -->
+
+	    <h5><strong>Simple Search</strong></h5>
+	    <p>
+	      Select from autocomplete and jump to relevant pages.
+	    </p>
+	    <p>
+	      <form id="home_search_form"
+		    action="/search"
+		    role="form">
+		<div class="form-group">
+		  
+		<input id="home_search"
+		       type="text"
+		       class="form-control"
+		       placeholder="Search (e.g. Parkinson's)" />
+
+		<!-- <select class="form-control"> -->
+		<!--   <option>1</option> -->
+		<!--   <option>2</option> -->
+		<!--   <option>3</option> -->
+		<!--   <option>4</option> -->
+		<!--   <option>5</option> -->
+		<!-- </select> -->
+		
+		<!-- <div class="panel panel-default" style="padding-bottom: 0;"> -->
+		<!--   <div class="panel-heading" style="margin-bottom: 0;"> -->
+		<!--     <span><small><a data-toggle="collapse" data-target="#collapseOne" aria-expanded="true" aria-controls="collapseOne">Advanced options</a></small></span> -->
+		<!--   </div> -->
+		<!--   <div id="collapseOne" class="panel-collapse collapse"> -->
+		<!--     <div class="panel-body"> -->
+		      
+		<!--       <div class="radio"> -->
+		<!-- 	<label> -->
+		<!-- 	  <input type="radio" name="optionsRadios" id="optionsRadios1" value="option1" checked> -->
+		<!-- 	  Option one -->
+		<!-- 	</label> -->
+		<!--       </div> -->
+		<!--       <div class="radio"> -->
+		<!-- 	<label> -->
+		<!-- 	  <input type="radio" name="optionsRadios" id="optionsRadios2" value="option2"> -->
+		<!-- 	  Option two -->
+		<!-- 	</label> -->
+		<!--       </div> -->
+		<!--       <div class="radio disabled"> -->
+		<!-- 	<label> -->
+		<!-- 	  <input type="radio" name="optionsRadios" id="optionsRadios3" value="option3" disabled> -->
+		<!-- 	  Option three -->
+		<!-- 	</label> -->
+		<!--       </div> -->
+		      
+		<!--     </div> -->
+		<!--   </div> -->
+		<!-- </div> -->
+		
+		</div>
+	      </form>
+	    </p>
+
+	    <h5><strong>Advanced Phenotype Search</strong></h5>
+	    <p class="">
+	      Find models and phenotypes similar to a set of
+	      abnormal phenotypes of interest.
+	    </p>
+	    <p class="">
+	      <a class="btn btn-primary" href="/analyze/phenotypes">
+		Go to Advanced Search &raquo;
+	      </a>
+	    </p>	    
+
+	  </div>
+	</div>
+      </div>
+
+      <!-- Explore. -->
+      <!-- <div> -->
+      <!-- 	<div class="panel panel-default"> -->
+      <!-- 	  <div class="panel-heading"> -->
+      <!-- 	    <h3 class="panel-title">Explore</h3> -->
+      <!-- 	  </div> -->
+      <!-- 	  <div class="panel-body"> -->
+
+	    <div class="list-group">
+	      <span class="list-group-item panel-mimic-for-list-header">
+		Explore
+	      </span>
+	      <a href="/disease" class="list-group-item">
+		<img src="/image/carousel-diseases-0.5.jpg" class="monarch-nav-embedded-image" alt="Diseases" />
+		Mendelian diseases
+	      </a>
+	      <a href="/phenotype" class="list-group-item">
+		<img src="/image/carousel-phenotypes-0.5.jpg" class="monarch-nav-embedded-image" alt="Phenotypes" />
+		Phenotypes
+	      </a>
+	      <a href="/model" class="list-group-item">
+		<img src="/image/carousel-models-0.5.jpg" class="monarch-nav-embedded-image" alt="Models" />
+		Models of Disease
+	      </a>
+	      <a href="/gene" class="list-group-item">
+		<img src="/image/carousel-genes-0.5.jpg" class="monarch-nav-embedded-image" alt="Genetics" />
+		Understand the genetics
+	      </a>
+	    </div>
+
+      <!-- 	  </div> -->
+      <!-- 	</div> -->
+      <!-- </div> -->
+
+      <!-- Pheno Search. -->
+      <!-- <div> -->
+      <!-- 	<div class="panel panel-default"> -->
+      <!-- 	  <div class="panel-heading"> -->
+      <!-- 	    <h3 class="panel-title">Pheno Search</h3> -->
+      <!-- 	  </div> -->
+      <!-- 	  <div class="panel-body"> -->
+      <!-- 	    <p> -->
+      <!-- 	      Search phenotypes. -->
+      <!-- 	    </p> -->
+      <!-- 	    <form id="pheno_search_form" -->
+      <!-- 		  action="/search" -->
+      <!-- 		  role="form"> -->
+      <!-- 	      <div class="form-group"> -->
+      <!-- 		<input id="pheno-search" -->
+      <!-- 		       type="text" -->
+      <!-- 		       class="form-control" -->
+      <!-- 		       placeholder="Search (e.g. Parkinson's)" /> -->
+      <!-- 	      </div> -->
+      <!-- 	    </form> -->
+      <!-- 	  </div> -->
+      <!-- 	</div> -->      
+      <!-- </div> -->
+
+    </div>
+    
+  </div>
+  
+</div>
+<!-- Close top-level container. -->

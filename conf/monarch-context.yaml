@@ -28,8 +28,9 @@
   
   obo: http://purl.obolibrary.org/obo/
   oboInOwl: http://www.geneontology.org/formats/oboInOwl#
-  monarch: http://monarch-initiative.org/
-  
+  monarch: http://monarchinitiative.org/
+  MONARCH: http://monarchinitiative.org/MONARCH_
+
   ##
   ## -- Bio ID Spaces --
   ##
@@ -65,6 +66,7 @@
   FBcv: http://purl.obolibrary.org/obo/FBcv_
   VT: http://purl.obolibrary.org/obo/VT_
   AQTLTrait: http://purl.obolibrary.org/obo/AQTLTrait_
+  EFO: http://purl.obolibrary.org/obo/EFO_
 
   # Other ontologies
   SIO: http://semanticscience.org/resource/SIO_
@@ -82,7 +84,7 @@
   # MODs
   #
   # TODO: check these
-  MGI: "http://identifiers.org/mgd/mgi:"
+  MGI: "http://identifiers.org/mgd/MGI:"
   RGD: "http://identifiers.org/mgd/rgd:"
   TAIR: "http://identifiers.org/mgd/tair:"
   SGD: "http://identifiers.org/mgd/sgd:"
@@ -98,10 +100,13 @@
   KEGG: "http://identifiers.org/kegg:"
   FBInternalGT: "http://monarchinitiative.org/genotype/"
   EOM: http://purl.obolibrary.org/obo/EOM_
-  dbSNP: "http://identifiers.org/dbSNP:" 
-  ClinVarVariant: "http://identifiers.org/ClinVarVariant:"  
+  dbSNP: "http://identifiers.org/dbSNP_" 
+  dbVar: "http://identifiers.org/dbVar_"
+  ClinVarVariant: "http://identifiers.org/ClinVarVariant_"  
+  ClinVarHaplotype: "http://identifiers.org/ClinVarHaplotype_"
   GeneID: http://purl.obolibrary.org/obo/NCBIGene_
   Gene: http://purl.obolibrary.org/obo/NCBIGene_
+  WBStrain: "http://identifiers.org/WormBase:"
   ##
   ## -- Schema classes --
   ##
