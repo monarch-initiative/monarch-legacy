@@ -50,6 +50,19 @@
  */
 var url = document.URL;
 
+function modelDataPoint(x,y) {
+	this.model_id = x;
+	this.pheno_id = y;
+}
+
+function modelDataPointEquals(point1,point2) {
+	return point1.model_id === point2.model_id && point1.pheno_id === point2.pheno_id;
+}
+
+function modelDataPointPrint(point) {
+	return "Model:" + point.model_id + ", Pheno:" + point.pheno_id;
+}
+
 (function($) {
 	$.widget("ui.phenogrid", {
 		// core commit. Not changeable by options. 
@@ -853,7 +866,7 @@ var url = document.URL;
 	},
 
 	_sortPhenotypesModel: function(a,b) {
-		var diff = b.count-a.count;
+		var diff = b.count - a.count;
 		if (diff === 0) {
 			diff = a[0].id_a.localeCompare(b[0].id_a);
 		}
@@ -898,11 +911,11 @@ var url = document.URL;
 			tempdata.label = sortVal;
 
 			///then for frequency and freq/rarity, iterate over 
-			var freq=0;
-			var num =0;
+			var freq = 0;
+			var num = 0;
 			for (var i in tempdata) {
-				freq +=1;
-				num +=tempdata[i].subsumer_IC;
+				freq += 1;
+				num += tempdata[i].subsumer_IC;
 			}
 			tempdata.count = freq;
 			tempdata.sum = num;
@@ -939,15 +952,15 @@ var url = document.URL;
 			this._loadSpeciesData(this.state.targetSpeciesName);
 			this._finishLoad();
 		}
+		this._loadHashTables();
 	},
 
 	_loadSpeciesData: function(speciesName,limit) {
 		var phenotypeList = this.state.phenotypeData;
 		var taxon = this._getTargetSpeciesTaxonByName(this,speciesName);
-		var url = this.state.serverURL+"/simsearch/phenotype?input_items="+phenotypeList.join(",")+
-		"&target_species="+taxon;
+		var url = this.state.serverURL + "/simsearch/phenotype?input_items=" + phenotypeList.join(",") + "&target_species=" + taxon;
 		if (typeof(limit) !== 'undefined') {
-			url = url +"&limit="+limit;
+			url += "&limit=" + limit;
 		}
 
 		var res = this._ajaxLoadData(speciesName,url);
@@ -956,7 +969,7 @@ var url = document.URL;
 				res = this._padSpeciesData(res,speciesName,limit);
 			}
 		}
-		this.state.data[speciesName]= res;
+		this.state.data[speciesName] = res;
 	},
 
 	// make sure there are limit items in res --
@@ -965,9 +978,9 @@ var url = document.URL;
 	// up some of the x axis space. Later, we will make sure not to show the 
 	// labels for these dummies.
 	_padSpeciesData: function(res,species,limit) {
-		var toadd = limit-res.b.length;
+		var toadd = limit - res.b.length;
 		for (var i = 0; i < toadd; i++) {
-			var dummyId = "dummy"+species+i;
+			var dummyId = "dummy" + species + i;
 			var newItem = { id: dummyId,
 				label: this.state.dummyModelName,
 				score: {score: 0, rank: Number.MAX_VALUE},
@@ -1021,7 +1034,7 @@ var url = document.URL;
 					data.push(newItem);
 					this._loadDataForModel(item);
 				}
-				this.state.multiOrganismCt=specData.b.length;
+				this.state.multiOrganismCt = specData.b.length;
 				speciesList.push(species);
 				orgCtr++;
 				data.sort(function(a,b) { return a.model_rank - b.model_rank;});
@@ -1036,15 +1049,70 @@ var url = document.URL;
 		this.state.modelList = modList;
 		this.state.speciesList = speciesList;
 		if (this.state.modelList.length < this.state.modelDisplayCount) {
-			this.state.currModelIdx = this.state.modelList.length-1;
+			this.state.currModelIdx = this.state.modelList.length - 1;
 			this.state.modelDisplayCount = this.state.modelList.length;
 		}
 
 		this._getFilteredModelList(0,this.state.modelDisplayCount);
 	},
 
+	_getCellData: function(point) {
+		if (this.state.modelDataHash.containsKey(point)){
+			return this.state.modelDataHash.get(point);
+		} else {
+			return false;
+		}
+	},
+
+	_getAxisData: function(key) {
+		if (this.state.phenotypeListHash.containsKey(key)){
+			return this.state.phenotypeListHash.get(key);
+		}
+		else if (this.state.modelListHash.containsKey(key)){
+			return this.state.modelListHash.get(key);
+		}
+		else { return false; }
+	},
+
+	_loadHashTables: function() {
+		//CHANGE LATER TO CUT DOWN ON INFO FROM _finishLoad & _finishOverviewLoad
+		this.state.phenotypeListHash = new Hashtable();
+		this.state.modelListHash = new Hashtable();
+		this.state.modelDataHash = new Hashtable({hashCode: modelDataPointPrint, equals: modelDataPointEquals});
+		var modelPoint, hashData, concept, type;
+
+		for (var i in this.state.modelData)
+		{
+			//Setting phenotypeListHash
+			if (typeof(this.state.modelData[i].id_a) !== 'undefined' && this.state.phenotypeListHash.containsKey(this.state.modelData[i].id_a) == false){
+				hashData = {"label": this.state.modelData[i].label_a, "IC": this.state.modelData[i].IC_a};
+				this.state.phenotypeListHash.put(this.state.modelData[i].id_a, hashData);
+			}
+
+			type = this.state.defaultApiEntity;
+			//Setting modelListHash
+			if (typeof(this.state.modelData[i].model_id) !== 'undefined' && this.state.modelListHash.containsKey(this.state.modelData[i].model_id) == false){
+
+				concept = this._getConceptId(this.state.modelData[i].model_id);
+				for (var j in this.state.apiEntityMap) {
+					if (concept.indexOf(this.state.apiEntityMap[j].prefix) === 0) {
+						type = this.state.apiEntityMap[j].apifragment;
+					}
+				}
+				hashData = {"label": this.state.modelData[i].model_label, "species": this.state.modelData[i].species, "taxon": this.state.modelData[i].taxon, "type": type};
+				this.state.modelListHash.put(this.state.modelData[i].model_id, hashData);
+			}
+
+			//Setting modelDataHash
+			modelPoint = new modelDataPoint(this.state.modelData[i].model_id, this.state.modelData[i].id_a);
+			hashData = {"value": this.state.modelData[i].value, "subsumer_label": this.state.modelData[i].subsumer_label, "subsumer_id": this.state.modelData[i].subsumer_id, "subsumer_IC": this.state.modelData[i].subsumer_IC, "b_label": this.state.modelData[i].label_b, "b_id": this.state.modelData[i].id_b, "b_IC": this.state.modelData[i].IC_b};
+			this.state.modelDataHash.put(modelPoint, hashData);
+
+		}
+	},
+
 	_getFilteredModelList: function(start,max) {
-		this.state.filteredModelList=[];
+		this.state.filteredModelList = [];
 
 		for (var i = start; i <max; i++) {
 			this.state.filteredModelList.push(this.state.modelList[i]);
