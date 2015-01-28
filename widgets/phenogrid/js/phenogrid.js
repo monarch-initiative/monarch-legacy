@@ -953,6 +953,7 @@ function modelDataPointPrint(point) {
 			this._finishLoad();
 		}
 		this._loadHashTables();
+		this._filterHashTables();
 	},
 
 	_loadSpeciesData: function(speciesName,limit) {
@@ -1079,18 +1080,20 @@ function modelDataPointPrint(point) {
 		this.state.phenotypeListHash = new Hashtable();
 		this.state.modelListHash = new Hashtable();
 		this.state.modelDataHash = new Hashtable({hashCode: modelDataPointPrint, equals: modelDataPointEquals});
-		var modelPoint, hashData, concept, type;
+		var modelPoint, hashData, concept, type, score, x;
+		var y = 0;
 
 		for (var i in this.state.modelData)
 		{
 			//Setting phenotypeListHash
 			if (typeof(this.state.modelData[i].id_a) !== 'undefined' && this.state.phenotypeListHash.containsKey(this.state.modelData[i].id_a) == false){
-				hashData = {"label": this.state.modelData[i].label_a, "IC": this.state.modelData[i].IC_a};
+				hashData = {"label": this.state.modelData[i].label_a, "IC": this.state.modelData[i].IC_a, "pos": y, "count": 0, "sum": 0};
 				this.state.phenotypeListHash.put(this.state.modelData[i].id_a, hashData);
+				y++;
 			}
 
-			type = this.state.defaultApiEntity;
 			//Setting modelListHash
+			type = this.state.defaultApiEntity;
 			if (typeof(this.state.modelData[i].model_id) !== 'undefined' && this.state.modelListHash.containsKey(this.state.modelData[i].model_id) == false){
 
 				concept = this._getConceptId(this.state.modelData[i].model_id);
@@ -1099,16 +1102,90 @@ function modelDataPointPrint(point) {
 						type = this.state.apiEntityMap[j].apifragment;
 					}
 				}
-				hashData = {"label": this.state.modelData[i].model_label, "species": this.state.modelData[i].species, "taxon": this.state.modelData[i].taxon, "type": type};
+
+				for (var m in this.state.modelList){
+					if (this.state.modelList[m].model_id == this.state.modelData[i].model_id){
+						x = this.state.modelList[m].model_rank;
+						score = this.state.modelList[m].model_score;
+					}
+				}
+
+				hashData = {"label": this.state.modelData[i].model_label, "species": this.state.modelData[i].species, "taxon": this.state.modelData[i].taxon, "type": type, "pos": x, "score": score};
 				this.state.modelListHash.put(this.state.modelData[i].model_id, hashData);
 			}
 
 			//Setting modelDataHash
 			modelPoint = new modelDataPoint(this.state.modelData[i].model_id, this.state.modelData[i].id_a);
 			hashData = {"value": this.state.modelData[i].value, "subsumer_label": this.state.modelData[i].subsumer_label, "subsumer_id": this.state.modelData[i].subsumer_id, "subsumer_IC": this.state.modelData[i].subsumer_IC, "b_label": this.state.modelData[i].label_b, "b_id": this.state.modelData[i].id_b, "b_IC": this.state.modelData[i].IC_b};
+			this._updateSortVals(this.state.modelData[i].id_a, this.state.modelData[i].subsumer_IC);
 			this.state.modelDataHash.put(modelPoint, hashData);
 
 		}
+		//console.log(this.state.modelListHash.entries());
+		console.log(this.state.phenotypeListHash.entries());
+	},
+
+	_updatePhenoPos: function(key,rank) {
+		var values = this.state.phenotypeListHash.get(key);
+		values.pos = rank;
+		this.state.phenotypeListHash.put(key,values);
+	},
+
+	_updateSortVals: function(key,subIC) {
+		var values = this.state.phenotypeListHash.get(key);
+		values.count += 1;
+		values.sum += subIC;
+		this.state.phenotypeListHash.put(key,values);
+	},
+
+	_filterHashTables: function () {
+		this._sortPhenotypeHash();
+		console.log(this.state.phenotypeListHash.entries());
+	},
+
+	_sortPhenotypeHash: function () {
+		var self = this;
+		var sortType = self.state.selectedSort;
+		var sortFunc;
+		var newHash = [];
+		var origHash = self.state.phenotypeListHash.entries();
+		for (var i in origHash){
+			newHash.push({"id": origHash[i][0], "label": origHash[i][1].label.toLowerCase(), "count": origHash[i][1].count, "sum": origHash[i][1].sum});
+		}
+		if (sortType == 'Frequency') {
+			sortFunc = self._sortPhenotypesModelHash;
+		} else if (sortType == 'Frequency and Rarity') {
+			sortFunc = self._sortPhenotypesRankHash;
+		} else if (sortType == 'Alphabetic') {
+			sortFunc = self._sortPhenotypesAlphabeticHash;
+		}
+
+		if (typeof(sortFunc) !== 'undefined') {
+			newHash.sort(sortFunc);
+			for (var j in newHash){
+				self._updatePhenoPos(newHash[j].id,j);
+			}
+		}
+	},
+
+	_sortPhenotypesModelHash: function(a,b) {
+		var diff = b.count - a.count;
+		if (diff === 0) {
+			diff = a.id.localeCompare(b.id);
+		}
+		return diff;
+	},
+
+	_sortPhenotypesRankHash: function(a,b) {
+		return b.sum-a.sum;
+	},
+
+	_sortPhenotypesAlphabeticHash: function(a,b) {
+		var labelA = a.label, 
+		labelB = b.label;
+		if (labelA < labelB) {return -1;}
+		if (labelA > labelB) {return 1;}
+		return 0;
 	},
 
 	_getFilteredModelList: function(start,max) {
