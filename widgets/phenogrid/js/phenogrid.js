@@ -1122,7 +1122,7 @@ function modelDataPointPrint(point) {
 
 		}
 		//console.log(this.state.modelListHash.entries());
-		console.log(this.state.phenotypeListHash.entries());
+		//console.log(this.state.phenotypeListHash.entries());
 	},
 
 	_updatePhenoPos: function(key,rank) {
@@ -1140,7 +1140,35 @@ function modelDataPointPrint(point) {
 
 	_filterHashTables: function () {
 		this._sortPhenotypeHash();
-		console.log(this.state.phenotypeListHash.entries());
+		this._filterPhenotypeHash(0,19);
+		this._filterModelListHash(0,this.state.modelDisplayCount);
+		this.state.filteredModelDataHash = new Hashtable();
+		var currentModelData = this.state.modelDataHash.entries();
+		for (var i in currentModelData){
+			if (this.state.filteredModelListHash.containsKey(currentModelData[i][0].model_id) && this.state.filteredPhenotypeListHash.containsKey(currentModelData[i][0].pheno_id)){
+				this.state.filteredModelDataHash.put(currentModelData[i][0],currentModelData[i][1]);
+			}
+		}
+	},
+
+	_filterPhenotypeHash: function (start,end) {
+		this.state.filteredPhenotypeListHash = new Hashtable();
+		var oldHash = this.state.phenotypeListHash.entries();
+		for (var i in oldHash){
+			if (oldHash[i][1].pos >= start && oldHash[i][1].pos <= end){
+				this.state.filteredPhenotypeListHash.put(oldHash[i][0],oldHash[i][1]);
+			}
+		}
+	},
+
+	_filterModelListHash: function (start,end) {
+		this.state.filteredModelListHash = new Hashtable();
+		var oldHash = this.state.modelListHash.entries();
+		for (var i in oldHash){
+			if (oldHash[i][1].pos >= start && oldHash[i][1].pos <= end){
+				this.state.filteredModelListHash.put(oldHash[i][0],oldHash[i][1]);
+			}
+		}
 	},
 
 	_sortPhenotypeHash: function () {
