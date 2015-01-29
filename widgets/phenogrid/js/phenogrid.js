@@ -140,8 +140,9 @@ function modelDataPointPrint(point) {
 	},
 	
 	//reset state values that must be cleared before reloading data
+	//TO HASH
 	_reset: function(type) {
-		if (type == 'organism' || typeof(type) == 'undefined') { // was != sort_Phenotypes
+		if (type == 'organism' || typeof(type) == 'undefined') {
 			this.state.modelData = [];
 			this.state.modelList = [];
 			this.state.filteredModelData = [];
@@ -161,6 +162,7 @@ function modelDataPointPrint(point) {
 	//this function will use the desired height to determine how many phenotype rows to display
 	//the basic formula is: (height - headerAreaHeight)/14.
 	//return -1 if the available space is too small to properly display the grid
+	//IGNORE
 	_calcPhenotypeDisplayCount: function() {
 		var self = this;
 
@@ -173,6 +175,7 @@ function modelDataPointPrint(point) {
 
 	/** Several procedures for various aspects of filtering/identifying appropriate entries
 		in the target species list.. */
+	//IGNORE
 	_getTargetSpeciesIndexByName: function(self,name) {
 		var index = -1;
 		if (typeof(self.state.targetSpeciesByName[name]) !== 'undefined') {
@@ -181,6 +184,7 @@ function modelDataPointPrint(point) {
 		return index;
 	},
 
+	//IGNORE
 	_getTargetSpeciesNameByIndex: function(self,index) {
 		var species;
 		if (typeof(self.state.targetSpeciesList[index]) !== 'undefined') {
@@ -192,6 +196,7 @@ function modelDataPointPrint(point) {
 		return species;
 	},
 
+	//IGNORE
 	_getTargetSpeciesTaxonByName: function(self,name) {
 		var taxon;
 		// first, find something that matches by name
@@ -212,6 +217,7 @@ function modelDataPointPrint(point) {
 	* this might be somewhat inefficient, as we will later translate to taxon, but it will
 	* make other calls easier to be consitently talking in terms of species name
 	*/
+	//IGNORE
 	_getTargetSpeciesNameByTaxon: function(self,name) {
 		/// default - it actually was a species name
 		var species = name;
@@ -249,6 +255,7 @@ function modelDataPointPrint(point) {
 	 * or simply a list of IDs.
 	 * [ "HP:12345", "HP:23451", ...]
 	 */
+	 //IGNORE
 	_create: function() {
 		// must be available from js loaded in a separate file...
 		this.configoptions = configoptions;
@@ -266,6 +273,7 @@ function modelDataPointPrint(point) {
 
 	// create a shortcut index for quick access to target species by name - to get index (position) and
 	// taxon
+	//IGNORE
 	_createTargetSpeciesIndices: function() {
 		this.state.targetSpeciesByName={};
 		for (var j in this.state.targetSpeciesList) {
@@ -285,11 +293,13 @@ function modelDataPointPrint(point) {
 	// As of 9/26/2014, the puptent application used in monarch-app breaks this.
 	// thus, a workaround is included below to set the path correctly if it come up as '/'.
 	// this should not impact any standalone uses of phenogrid, and will be removed once monarch-app is cleaned up.
+	//IGNORE
 	_getResourceUrl: function(name,type) {
 		var prefix = this.state.serverURL+'/widgets/phenogrid/js/';
 		return prefix + 'res/' + name + '.' + type;
 	},
 
+	//TO HASH
 	_init: function() {
 		this.element.empty();
 		this._loadSpinner();
@@ -331,12 +341,14 @@ function modelDataPointPrint(point) {
 		this.reDraw();
 	},
 
+	//IGNORE
 	_loadSpinner: function() {
 		var element =$('<div><h3>Loading...</h3><div class="cube1"></div><div class="cube2"></div></div>');
 		this._createSvgContainer();
 		element.appendTo(this.state.svgContainer);
 	},
 
+	//TO HASH
 	reDraw: function() {
 		if (this.state.modelData.length !== 0 && this.state.phenoLength !== 0 && this.state.filteredPhenotypeData.length !== 0){
 			this._setComparisonType();
@@ -380,6 +392,7 @@ function modelDataPointPrint(point) {
 		}
 	},
 
+	//IGNORE
 	_resetIndicies: function() {
 		this.state.currModelIdx = this.state.modelDisplayCount-1;
 		this.state.currPhenotypeIdx = this.state.phenotypeDisplayCount-1;
@@ -389,15 +402,18 @@ function modelDataPointPrint(point) {
 	http://learn.jquery.com/jquery-ui/widget-factory/how-to-use-the-widget-factory/
 	likely to have some content added as we proceed
 	*/
+	//IGNORE
 	_setOption: function( key, value ) {
 		this._super( key, value );
 	},
 
+	//IGNORE
 	_setOptions: function( options ) {
 		this._super( options );
 	},
 
 	//create this visualization if no phenotypes or models are returned
+	//IGNORE
 	_createEmptyVisualization: function(msg) {
 		var self = this;
 		var html;
@@ -435,18 +451,15 @@ function modelDataPointPrint(point) {
 	},
 
 	//adds light gray gridlines to make it easier to see which row/column selected matches occur
+	//IGNORE
 	_createGridlines: function() {
 		var self = this;
 		var mWidth = self.state.widthOfSingleModel;
 		var mHeight = self.state.heightOfSingleModel;
 		//create a blank grid to match the size of the phenogrid grid
-		var data = [],
-		modelCt = 0;
-
-		//This is for the new "Overview" target option 		
-		//if (this.state.targetSpeciesName == "Overview"){ modelCt = self.state.multiOrganismCt * 3;}
-		//else { modelCt = self.state.modelDisplayCount;}
-		modelCt = self.state.modelDisplayCount;
+		var data = [];
+		var modelCt = self.state.modelDisplayCount;
+		
 		for (var k = 0; k < self.state.phenotypeDisplayCount; k++){
 			for (var l = 0; l < modelCt; l++) {
 				var r = [];
@@ -470,11 +483,12 @@ function modelDataPointPrint(point) {
 
 	//for the selection area, see if you can convert the selection to the idx of the x and y
 	//then redraw the bigger grid 
+	//TO HASH
 	_createOverviewSection: function() {
 		var self = this;
 		// add-ons for stroke size on view box. Preferably even numbers
 		var linePad = 2;
-		var viewPadding = linePad*2+2;
+		var viewPadding = linePad * 2 + 2;
 
 		// overview region is offset by xTranslation, yTranslation
 		var xTranslation = 42;
@@ -482,8 +496,8 @@ function modelDataPointPrint(point) {
 
 		// these translations from the top-left of the rectangular region give the
 		// absolute coordinates
-		var overviewX = self.state.axis_pos_list[2]+xTranslation;
-		var overviewY = self.state.yModelRegion+yTranslation;
+		var overviewX = self.state.axis_pos_list[2] + xTranslation;
+		var overviewY = self.state.yModelRegion + yTranslation;
 
 		// size of the entire region - it is a square
 		var overviewRegionSize = self.state.globalViewSize;
@@ -495,7 +509,7 @@ function modelDataPointPrint(point) {
 		self._createModelScoresLegend();
 
 		// make it a bit bigger to ccont for widths
-		var overviewBoxDim = overviewRegionSize+viewPadding;
+		var overviewBoxDim = overviewRegionSize + viewPadding;
 
 		// create the main box and the instruction labels.
 		self._initializeOverviewRegion(overviewBoxDim,overviewX,overviewY);
@@ -516,24 +530,23 @@ function modelDataPointPrint(point) {
 			.append("rect")
 			.attr("transform",modelRectTransform)
 			.attr("class", "mini_model")
-			.attr("y", function(d, i) { return self.state.smallYScale(d.id_a)+linePad/2;})
-			.attr("x", function(d) { return self.state.smallXScale(d.model_id)+linePad/2;})
+			.attr("y", function(d, i) { return self.state.smallYScale(d.id_a) + linePad / 2;})
+			.attr("x", function(d) { return self.state.smallXScale(d.model_id) + linePad / 2;})
 			.attr("width", linePad)
 			.attr("height", linePad)
 			.attr("fill", function(d) {
-				return self._getColorForModelValue(self,d.species,
-					d.value[self.state.selectedCalculation]);
+				return self._getColorForModelValue(self,d.species,d.value[self.state.selectedCalculation]);
 			});
 
-		var lastId = self.state.phenotypeSortData[self.state.phenotypeDisplayCount-1][0].id_a; //rowid
+		var lastId = self.state.phenotypeSortData[self.state.phenotypeDisplayCount - 1][0].id_a; //rowid
 		var selectRectHeight = self.state.smallYScale(lastId);
-		var selectRectWidth = self.state.smallXScale(mods[self.state.modelDisplayCount-1].model_id);
+		var selectRectWidth = self.state.smallXScale(mods[self.state.modelDisplayCount - 1].model_id);
 		self.state.highlightRect = self.state.svg.append("rect")
 			.attr("x",overviewX)
 			.attr("y",overviewY)
 			.attr("id", "selectionrect")
-			.attr("height", selectRectHeight+4)
-			.attr("width", selectRectWidth+4)
+			.attr("height", selectRectHeight + 4)
+			.attr("width", selectRectWidth + 4)
 			.attr("class", "draggable")
 			.call(d3.behavior.drag()
 				.on("drag", function(d) {
@@ -549,8 +562,8 @@ function modelDataPointPrint(point) {
 					rect.attr("transform","translate(0,0)");
 
 					//limit the range of the x value
-					var newX = curX+d3.event.dx;
-					var newY = curY+d3.event.dy;
+					var newX = curX + d3.event.dx;
+					var newY = curY + d3.event.dy;
 
 					// Restrict Movement if no need to move map
 					if (selectRectHeight == overviewRegionSize) {
@@ -569,13 +582,13 @@ function modelDataPointPrint(point) {
 						newY = overviewY;
 					}
 					// right
-					if (newX + selectRectWidth > overviewX+overviewRegionSize) {
-						newX = overviewX+overviewRegionSize-selectRectWidth;
+					if (newX + selectRectWidth > overviewX + overviewRegionSize) {
+						newX = overviewX + overviewRegionSize - selectRectWidth;
 					}
 
 					// bottom
-					if (newY + selectRectHeight > overviewY+overviewRegionSize) {
-						newY = overviewY+overviewRegionSize-selectRectHeight;
+					if (newY + selectRectHeight > overviewY + overviewRegionSize) {
+						newY = overviewY + overviewRegionSize - selectRectHeight;
 					}
 					rect.attr("x", newX);
 					//This changes for vertical positioning
@@ -597,12 +610,14 @@ function modelDataPointPrint(point) {
 	},
 
 	/* we only have 3 color,s but that will do for now */
+	//IGNORE
 	_getColorForModelValue: function(self,species,score) {
 		//This is for the new "Overview" target option
 		var selectedScale = self.state.colorScale[species][self.state.selectedCalculation];
 		return selectedScale(score);
 	},
 
+	//IGNORE
 	_createModelScoresLegend: function() {
 		var scoreTipY = self.state.yoffset;
 		var faqY = scoreTipY - self.state.gridTitleYOffset;
@@ -638,6 +653,7 @@ function modelDataPointPrint(point) {
 			.text("best matches left to right.");
 	},
 
+	//IGNORE
 	_createDiseaseTitleBox: function() {
 		var self = this;
 		var dTitleYOffset = self.state.yoffset - self.state.gridTitleYOffset/2;
@@ -661,6 +677,7 @@ function modelDataPointPrint(point) {
 			.html(shortDis);
 	},
 
+	//IGNORE
 	_initializeOverviewRegion: function(overviewBoxDim,overviewX,overviewY) {
 		//rectangular border for overview
 		var globalview = self.state.svg.append("rect")
@@ -689,25 +706,55 @@ function modelDataPointPrint(point) {
 			.text("navigate the model view on the left");
 	},
 
+	//IGNORE
 	_createSmallScales: function(overviewRegionSize) {
 		var sortDataList = [];
-		var self=this;
-		for (var i in self.state.phenotypeSortData) {
-			sortDataList.push(self.state.phenotypeSortData[i][0].id_a);	//rowid
+		var self = this;
+
+		//Pre-Hash Code
+		//for (var i in self.state.phenotypeSortData) {
+		//	sortDataList.push(self.state.phenotypeSortData[i][0].id_a);	//rowid
+		//}
+
+		var plHash = self.state.phenotypeListHash.entries();
+		for (var j in plHash) {
+			sortDataList[plHash[j][1].pos] = plHash[j][0];
 		}
-		var mods = self.state.modelList;
+		//var mods = self.state.modelList;
+		var mods = [];
+		var modsHash = self.state.modelListHash.entries();
+
+		if (this.state.targetSpeciesName === "Overview") {
+			self._updateOverviewPos(modsHash);
+		} 
+		for (var i in modsHash){
+			mods[modsHash[i][1].pos] = modsHash[i][0];
+		}
 
 		this.state.smallYScale = d3.scale.ordinal()
 			.domain(sortDataList.map(function (d) {return d; }))
 			.rangePoints([0,overviewRegionSize]);
 
-		var modids = mods.map(function (d) {return d.model_id; });
+		//var modids = mods.map(function (d) {return d.model_id; });
+		var modids = mods.map(function (d) {return d; });
 		this.state.smallXScale = d3.scale.ordinal()
-			//.domain(mods.map(function (d) {return d.model_id; }))
 			.domain(modids)
 			.rangePoints([0,overviewRegionSize]);
 	},
 
+	//NEW
+	_updateOverviewPos: function(dataArray){
+		for (var i in dataArray){
+			for (var j in this.state.targetSpeciesList){
+				if (dataArray[i][1].species == this.state.targetSpeciesList[j].name){
+					dataArray[i][1].pos += (j * this.state.multiOrganismCt);
+				}
+			}
+		}
+		return dataArray;
+	},
+
+	//IGNORE
 	_invertOverviewDragPosition: function(scale,value) {
 		var leftEdges = scale.range();
 		var size = scale.rangeBand();
@@ -716,6 +763,7 @@ function modelDataPointPrint(point) {
 		return j;
 	},
 
+	//IGNORE
 	_getComparisonType: function(organism){
 		var label = "";
 
@@ -730,6 +778,7 @@ function modelDataPointPrint(point) {
 		return label;
 	}, 
 
+	//IGNORE
 	_setComparisonType: function(){
 		var comp = this.state.defaultComparisonType;
 		for (var i in this.state.comparisonTypes) {
@@ -740,6 +789,7 @@ function modelDataPointPrint(point) {
 		this.state.comparisonType = comp;
 	},
 
+	//IGNORE
 	_setSelectedCalculation: function(calc) {
 		var self = this;
 
@@ -749,13 +799,15 @@ function modelDataPointPrint(point) {
 		self.state.selectedCalculation = tempdata[0].calc;
 	},
 
+	//IGNORE
 	_setSelectedSort: function(type) {
 		var self = this;
 		self.state.selectedSort = type;
 	},
 
+	//IGNORE
 	_processSelected: function(processType){
-		this._adjustPhenotypeCount(this.state.modelData);
+		this._adjustPhenotypeCount();
 		this._filterSelected(processType);
 		this.state.unmatchedPhenotypes = this._getUnmatchedPhenotypes();
 		this.element.empty();
@@ -764,7 +816,8 @@ function modelDataPointPrint(point) {
 
 	//given the full dataset, return a filtered dataset containing the
 	//subset of data bounded by the phenotype display count and the model display count
-	_adjustPhenotypeCount: function(fulldataset) {
+	//IGNORE
+	_adjustPhenotypeCount: function() {
 		//we need to adjust the display counts and indexing if there are fewer phenotypes than the
 		// default phenotypeDisplayCount
 		if (this.state.phenoLength < this.state.phenotypeDisplayCount) {
@@ -773,11 +826,13 @@ function modelDataPointPrint(point) {
 		}
 	},
 
+	//TO HASH
 	_filterSelected: function(filterType){
 		var self = this;
 		if (filterType == "sortphenotypes"){
 			//Sort the phenotypes based on what value is currently held in self.state.selectedSort
 			this._sortingPhenotypes();
+			this._sortPhenotypeHash();
 		}
 
 		//Step 2: Filter for the next n phenotypes based on phenotypeDisplayCount and update the y-axis
@@ -799,6 +854,8 @@ function modelDataPointPrint(point) {
 		var axis_idx = 0;
 		var tempFilteredModelData = [];
 		var filteredData;
+
+		this._filterPhenotypeHash(startIdx,displayLimiter);
 		//get phenotype[startIdx] up to phenotype[currPhenotypeIdx] from the array of sorted phenotypes
 		for (var i = startIdx; i < displayLimiter; i++) {
 			filteredData = {"id_a": self.state.phenotypeSortData[i][0].id_a,"id": self.state.phenotypeSortData[i][0].id,"label_a": self.state.phenotypeSortData[i][0].label_a};
@@ -823,8 +880,6 @@ function modelDataPointPrint(point) {
 				}
 			}
 		}
-		//console.log(JSON.stringify(self.state.filteredPhenotypeData));
-
 
 		for (var idx in self.state.filteredModelList) {
 			for (var tdx in tempFilteredModelData) {
@@ -835,6 +890,7 @@ function modelDataPointPrint(point) {
 		}
 	},
 
+	//DELETE
 	_uniquifyPhenotypes: function(fulldataset) {
 		var phenotypeArray = [];
 		//Step 1: Filter data so only unique phenotypes are represented (if a source phenotype matches two
@@ -865,6 +921,7 @@ function modelDataPointPrint(point) {
 		return phenotypeArray;
 	},
 
+	//DELETE
 	_sortPhenotypesModel: function(a,b) {
 		var diff = b.count - a.count;
 		if (diff === 0) {
@@ -873,10 +930,12 @@ function modelDataPointPrint(point) {
 		return diff;
 	},
 
+	//DELETE
 	_sortPhenotypesRank: function(a,b) {
 		return b.sum-a.sum;
 	},
 
+	//DELETE
 	_sortPhenotypesAlphabetic: function(a,b) {
 		var labelA = a.label.toLowerCase(), 
 		labelB = b.label.toLowerCase();
@@ -885,6 +944,7 @@ function modelDataPointPrint(point) {
 		return 0;
 	},
 
+	//DELETE
 	_initializePhenotypeSortData: function() {
 		var self = this;
 		self.state.phenotypeSortData = [];
@@ -925,6 +985,7 @@ function modelDataPointPrint(point) {
 		}
 	},
 
+	//DELETE
 	_sortingPhenotypes: function() {
 		var self = this;
 		var sortType = self.state.selectedSort;
@@ -944,6 +1005,7 @@ function modelDataPointPrint(point) {
 
 	//given a list of phenotypes, find the top n models
 	//I may need to rename this method "getModelData". It should extract the models and reformat the data 
+	//IGNORE
 	_loadData: function() {
 		if (this.state.targetSpeciesName === "Overview") {
 			this._loadOverviewData();
@@ -956,6 +1018,7 @@ function modelDataPointPrint(point) {
 		this._filterHashTables();
 	},
 
+	//IGNORE
 	_loadSpeciesData: function(speciesName,limit) {
 		var phenotypeList = this.state.phenotypeData;
 		var taxon = this._getTargetSpeciesTaxonByName(this,speciesName);
@@ -978,6 +1041,7 @@ function modelDataPointPrint(point) {
 	// This will space things out appropriately, having dummy models take 
 	// up some of the x axis space. Later, we will make sure not to show the 
 	// labels for these dummies.
+	//IGNORE
 	_padSpeciesData: function(res,species,limit) {
 		var toadd = limit - res.b.length;
 		for (var i = 0; i < toadd; i++) {
@@ -991,6 +1055,7 @@ function modelDataPointPrint(point) {
 		return res;
 	},
 
+	//IGNORE
 	_loadOverviewData: function() {
 		var limit = this.state.multiOrganismCt;
 		for (var i in this.state.targetSpeciesList) {
@@ -1015,6 +1080,7 @@ function modelDataPointPrint(point) {
 		//Concat all species data and process matches
 	},
 
+	//IGNORE
 	_finishOverviewLoad: function () {
 		var speciesList = [];
 		var modList = [];
@@ -1057,6 +1123,7 @@ function modelDataPointPrint(point) {
 		this._getFilteredModelList(0,this.state.modelDisplayCount);
 	},
 
+	//NEW
 	_getCellData: function(point) {
 		if (this.state.modelDataHash.containsKey(point)){
 			return this.state.modelDataHash.get(point);
@@ -1065,6 +1132,7 @@ function modelDataPointPrint(point) {
 		}
 	},
 
+	//NEW
 	_getAxisData: function(key) {
 		if (this.state.phenotypeListHash.containsKey(key)){
 			return this.state.phenotypeListHash.get(key);
@@ -1075,6 +1143,7 @@ function modelDataPointPrint(point) {
 		else { return false; }
 	},
 
+	//NEW
 	_loadHashTables: function() {
 		//CHANGE LATER TO CUT DOWN ON INFO FROM _finishLoad & _finishOverviewLoad
 		this.state.phenotypeListHash = new Hashtable();
@@ -1125,12 +1194,14 @@ function modelDataPointPrint(point) {
 		//console.log(this.state.phenotypeListHash.entries());
 	},
 
+	//NEW
 	_updatePhenoPos: function(key,rank) {
 		var values = this.state.phenotypeListHash.get(key);
 		values.pos = rank;
 		this.state.phenotypeListHash.put(key,values);
 	},
 
+	//NEW
 	_updateSortVals: function(key,subIC) {
 		var values = this.state.phenotypeListHash.get(key);
 		values.count += 1;
@@ -1138,9 +1209,10 @@ function modelDataPointPrint(point) {
 		this.state.phenotypeListHash.put(key,values);
 	},
 
+	//NEW
 	_filterHashTables: function () {
 		this._sortPhenotypeHash();
-		this._filterPhenotypeHash(0,19);
+		this._filterPhenotypeHash(0,29);
 		this._filterModelListHash(0,this.state.modelDisplayCount);
 		this.state.filteredModelDataHash = new Hashtable();
 		var currentModelData = this.state.modelDataHash.entries();
@@ -1151,6 +1223,7 @@ function modelDataPointPrint(point) {
 		}
 	},
 
+	//NEW
 	_filterPhenotypeHash: function (start,end) {
 		this.state.filteredPhenotypeListHash = new Hashtable();
 		var oldHash = this.state.phenotypeListHash.entries();
@@ -1161,6 +1234,7 @@ function modelDataPointPrint(point) {
 		}
 	},
 
+	//NEW
 	_filterModelListHash: function (start,end) {
 		this.state.filteredModelListHash = new Hashtable();
 		var oldHash = this.state.modelListHash.entries();
@@ -1171,6 +1245,7 @@ function modelDataPointPrint(point) {
 		}
 	},
 
+	//NEW
 	_sortPhenotypeHash: function () {
 		var self = this;
 		var sortType = self.state.selectedSort;
@@ -1196,6 +1271,7 @@ function modelDataPointPrint(point) {
 		}
 	},
 
+	//NEW
 	_sortPhenotypesModelHash: function(a,b) {
 		var diff = b.count - a.count;
 		if (diff === 0) {
@@ -1204,10 +1280,12 @@ function modelDataPointPrint(point) {
 		return diff;
 	},
 
+	//NEW
 	_sortPhenotypesRankHash: function(a,b) {
 		return b.sum-a.sum;
 	},
 
+	//NEW
 	_sortPhenotypesAlphabeticHash: function(a,b) {
 		var labelA = a.label, 
 		labelB = b.label;
@@ -1216,6 +1294,7 @@ function modelDataPointPrint(point) {
 		return 0;
 	},
 
+	//DELETE
 	_getFilteredModelList: function(start,max) {
 		this.state.filteredModelList = [];
 
@@ -1225,6 +1304,7 @@ function modelDataPointPrint(point) {
 	},
 
 	//generic ajax call for all queries
+	//IGNORE
 	_ajaxLoadData: function (target, url) {
 		var self = this;
 		var res;
@@ -1242,6 +1322,7 @@ function modelDataPointPrint(point) {
 		return res;
 	},
 
+	//IGNORE
 	_displayResult: function(xhr, errorType, exception){
 		var msg;
 
@@ -1293,6 +1374,7 @@ function modelDataPointPrint(point) {
 	//Finish the data load after the ajax request
 	//Create the modelList array: model_id, model_label, model_score, model_rank
 	//Call _loadDataForModel to put the matches in an array
+	//IGNORE
 	_finishLoad: function() {
 		var species = this.state.targetSpeciesName;
 		var retData = this.state.data[species];
@@ -1337,6 +1419,7 @@ function modelDataPointPrint(point) {
 	//for a given model, extract the sim search data including IC scores and the triple:
 	//the a column, b column, and lowest common subsumer
 	//for the triple's IC score, use the LCS score
+	//TO HASH
 	_loadDataForModel: function(newModelData) {
 		//data is an array of all model matches
 		var data = newModelData.matches;
@@ -1368,6 +1451,7 @@ function modelDataPointPrint(point) {
 	},
 
 	//Different methods of based on the selectedCalculationMethod
+	//IGNORE
 	_normalizeIC: function(datarow){
 		var aIC = datarow.a.IC;
 		var bIC = datarow.b.IC;
@@ -1397,30 +1481,8 @@ function modelDataPointPrint(point) {
 		return ics;
 	},
 
-	//create a y-axis from the model data
-	//for each item in the data model, push the rowid
-	//and calculate the y position
-	_createYAxis: function() {
-		var self = this;
-		//the height of each row
-		var size = 10;
-		//the spacing you want between rows
-		var gap = 3;
-
-		//use the max phenotype size to limit the number of phenotypes shown 
-		var yLength = self.state.phenotypeSortData.length > this.state.phenotypeDisplayCount ?
-			this.state.phenotypeDisplayCount : self.state.phenotypeSortData.length;
-		for (var idx = 0; idx < yLength; idx++) {
-			var stuff = {"id": self.state.phenotypeSortData[idx][0].id_a,
-				"ypos" : ((idx * (size+gap)) + this.state.yoffset + 10)};
-			this.state.yAxis.push(stuff);
-			if (((idx * (size+gap)) + this.state.yoffset) > this.state.yAxisMax) {
-				this.state.yAxisMax = (idx * (size+gap)) + this.state.yoffset;
-			}
-		}
-	},
-
 	//given a rowid, return the y-axis position
+	//DELETE
 	_getYPosition: function(newRowId) {
 		var retValue = this.state.yoffset;
 
@@ -1432,6 +1494,7 @@ function modelDataPointPrint(point) {
 		return retValue;
 	},
 
+	//IGNORE
 	_createColorScale: function() {
 		var maxScore = 0,
 		method = this.state.selectedCalculation;
@@ -1467,6 +1530,7 @@ function modelDataPointPrint(point) {
 		}
 	},
 
+	//IGNORE
 	_getColorScale: function(speciesIndex,maxScore) {
 		var cs = d3.scale.linear();
 		cs.domain([3, maxScore]);
@@ -1475,6 +1539,7 @@ function modelDataPointPrint(point) {
 		return cs;
 	},
 
+	//IGNORE
 	_initCanvas: function() {
 		this._createSvgContainer();
 		var svgContainer = this.state.svgContainer;
@@ -1484,12 +1549,14 @@ function modelDataPointPrint(point) {
 		this._createDiseaseTitleBox();
 	},
 
+	//IGNORE
 	_createSvgContainer: function() {
 		var svgContainer = $('<div id="svg_container"></div>');
 		this.state.svgContainer = svgContainer;
 		this.element.append(svgContainer);
 	},
 
+	//IGNORE
 	_addGridTitle: function() {
 		var species = '';
 
@@ -1529,6 +1596,7 @@ function modelDataPointPrint(point) {
 			});
 	},
 
+	//IGNORE
 	_configureFaqs: function() {
 		var sorts = $("#sorts")
 			.on("click", function(d,i){
@@ -1542,6 +1610,7 @@ function modelDataPointPrint(point) {
 			});
 	},
 
+	//TO HASH
 	_resetSelections: function(type) {
 		var self = this;
 		$("#unmatchedlabel").remove();
@@ -1569,6 +1638,7 @@ function modelDataPointPrint(point) {
 		}
 	},
 
+	//IGNORE
 	_addLogoImage:	 function() { 
 		var start = 0;
 		if(this.state.filteredModelData.length < 30){
@@ -1588,6 +1658,7 @@ function modelDataPointPrint(point) {
 			.attr("height", "90");
 	},
 
+	//IGNORE
 	_resetLinks: function() {
 		//don't put these styles in css file - these stuyles change depending on state
 		this.state.svg.selectAll("#detail_content").remove();
@@ -1602,6 +1673,7 @@ function modelDataPointPrint(point) {
 			link_labels.style("fill", "black");
 	},
 
+	//TO HASH
 	_highlightMatchingModels: function(curr_data){
 		var self = this;
 		var alabels = this.state.svg.selectAll("text");
@@ -1618,6 +1690,7 @@ function modelDataPointPrint(point) {
 		}
 	},
 
+	//TO HASH
 	_deselectMatchingModels: function(curr_data){
 		var alabels = this.state.svg.selectAll("text");
 		for (var i in curr_data){
@@ -1632,6 +1705,7 @@ function modelDataPointPrint(point) {
 		}
 	},
 
+	//TO HASH
 	_selectModel: function(modelData, obj) {
 		var self = this;
 		//create the related model rectangles
@@ -1684,6 +1758,7 @@ function modelDataPointPrint(point) {
 		self._highlightMatchingPhenotypes(modelData);
 	},
 
+	//TO HASH
 	//I need to check to see if the modelData is an object. If so, get the model_id
 	_clearModelData: function(modelData,obj) {
 		this.state.svg.selectAll("#detail_content").remove();
@@ -1707,6 +1782,7 @@ function modelDataPointPrint(point) {
 		}
 	},
 
+	//TO HASH
 	_selectData: function(curr_data, obj) {
 		//create a highlight row
 		var self = this;
@@ -1743,6 +1819,7 @@ function modelDataPointPrint(point) {
 		this._highlightMatchingModels(model_row);
 	},
 
+	//TO HASH
 	_deselectData: function (curr_data) {
 		this.state.svg.selectAll(".row_accent").remove();
 		this._resetLinks();
@@ -1768,6 +1845,7 @@ function modelDataPointPrint(point) {
 		this._deselectMatchingModels(model_row);
 	},
 
+	//TO HASH
 	_highlightMatchingPhenotypes: function(curr_data){
 		var self = this;
 		var models = self.state.modelData;
@@ -1791,17 +1869,20 @@ function modelDataPointPrint(point) {
 		}
 	},
 
+	//TO HASH
 	_deselectMatchingPhenotypes: function(curr_data){
 		var self = this;
 		self.state.svg.selectAll("text.a_text")
 			.style("fill","black");
 	},
 
+	//IGNORE
 	_clickPhenotype: function(url_origin,data) {
 		var url = url_origin + "/phenotype/" + data;
 		var win = window.open(url, '_blank');
 	},
 
+	//TO HASH
 	_clickModel: function(url_origin,data) {
 		var concept = self._getConceptId(data.model_id);
 		// hardwire check
@@ -1817,6 +1898,7 @@ function modelDataPointPrint(point) {
 
 	//return a label for use in the list. This label is shortened
 	//to fit within the space in the column
+	//IGNORE
 	_getShortLabel: function(label, newlength) {
 		if (label !== undefined){
 			var retLabel = label;
@@ -1837,6 +1919,7 @@ function modelDataPointPrint(point) {
 	//Why? Two reasons. First it's useful to note that d3.js doesn't like to use URI's as ids.
 	//Second, I like to use unique ids for CSS classes. This allows me to selectively manipulate related groups of items on the
 	//screen based their relationship to a common concept (ex: HP000123). However, I can't use a URI as a class.
+	//IGNORE
 	_getConceptId: function (uri) {
 		/*if (!uri) {
 		return "";
@@ -1859,6 +1942,7 @@ function modelDataPointPrint(point) {
 		} catch (exception) {}
 	},
 
+	//IGNORE
 	_convertLabelHTML: function (self, t, label, data) {
 		self = this;
 		var width = 100,
@@ -1897,6 +1981,7 @@ function modelDataPointPrint(point) {
 		el.remove();
 	},
 
+	//IGNORE
 	_updateDetailSection: function(htmltext, coords, width, height) {
 		this.state.svg.selectAll("#detail_content").remove();
 
@@ -1930,6 +2015,7 @@ function modelDataPointPrint(point) {
 			.html(htmltext);
 	},
 
+	//TO HASH
 	_showModelData: function(d, obj) {
 		var retData;
 
@@ -1964,6 +2050,7 @@ function modelDataPointPrint(point) {
 		this._updateDetailSection(retData, this._getXYPos(obj));
 	},
 
+	//IGNORE
 	_showThrobber: function() {
 		this.state.svg.selectAll("#detail_content").remove();
 		this.state.svg.append("svg:text")
@@ -1981,6 +2068,7 @@ function modelDataPointPrint(point) {
 			.attr("xlink:href","/widgets/phenogrid/image/throbber.gif");
 	},
 
+	//IGNORE
 	//extract the x,y values from a SVG transform string (ex: transform(200,20))
 	_extractTransform: function(dataString) {
 		var startIdx = dataString.indexOf("(");
@@ -1994,6 +2082,7 @@ function modelDataPointPrint(point) {
 	//The mouse position returned by d3.mouse returns the poistion within the page, not the SVG
 	//area. Therefore, this is a two step process: retreive any transform data and the (x,y) pair.
 	//Return the (x,y) coordinates with the transform applied
+	//IGNORE
 	_getXYPos: function(obj) {
 		var tform = { x: 0, y: 0};
 		//if a transform exisits, apply it
@@ -2007,6 +2096,7 @@ function modelDataPointPrint(point) {
 	//NOTE: I need to find a way to either add the model class to the phenotypes when they load OR
 	//select the rect objects related to the model and append the class to them.
 	//something like this: $( "p" ).addClass( "myClass yourClass" );
+	//TO HASH
 	_createModelRects: function() {
 		var self = this;
 		var data = this.state.filteredModelData;
@@ -2088,6 +2178,7 @@ function modelDataPointPrint(point) {
 			.remove();
 	},
 
+	//IGNORE
 	_highlightSpecies: function () {
 		//create the related model rectangles
 		var self = this;
@@ -2131,6 +2222,7 @@ function modelDataPointPrint(point) {
 			.attr("fill", "none");
 	},
 
+	//IGNORE
 	_enableRowColumnRects: function(curr_rect){
 		var self = this;
 
@@ -2146,6 +2238,7 @@ function modelDataPointPrint(point) {
 		}
 	},
 
+	//TO HASH
 	_highlightIntersection: function(curr_data, obj){
 		var self=this;
 
@@ -2190,6 +2283,7 @@ function modelDataPointPrint(point) {
 			.attr("height", (self.state.phenotypeDisplayCount * self.state.heightOfSingleModel));
 	},
 
+	//TO HASH
 	_updateAxes: function() {
 		var self = this;
 		var data = [];
@@ -2215,6 +2309,7 @@ function modelDataPointPrint(point) {
 
 	//change the list of phenotypes and filter the models accordingly. The 
 	//movecount is an integer and can be either positive or negative
+	//TO HASH
 	_updateModel: function(modelIdx, phenotypeIdx) {
 		var self = this;
 		var tempdata;
@@ -2262,6 +2357,7 @@ function modelDataPointPrint(point) {
 		this._createRowLabels();
 	},
 
+	//TO HASH
 	_createModelLabels: function(self) {
 		var model_x_axis = d3.svg.axis().scale(self.state.xScale).orient("top");
 
@@ -2277,11 +2373,13 @@ function modelDataPointPrint(point) {
 			});
 	},
 
+	//IGNORE
 	_clearModelLabels: function() {
 		this.state.svg.selectAll("g .x.axis").remove();
 		this.state.svg.selectAll("g .tick.major").remove();
 	},
 
+	//IGNORE
 	_createModelLines: function() {
 		var modelLineGap = 10;
 		var lineY = this.state.yoffset-modelLineGap;
@@ -2299,6 +2397,7 @@ function modelDataPointPrint(point) {
 			.attr("stroke-width", 1);
 	},
 
+	//TO HASH
 	_createTextScores: function(list) {
 		var self = this;
 		var xWidth = self.state.widthOfSingleModel;
@@ -2327,6 +2426,7 @@ function modelDataPointPrint(point) {
 	},
 
 	//Add species labels to top of Overview
+	//IGNORE
 	_createOverviewSpeciesLabels: function () {
 		var self = this;
 		var speciesList = [];
@@ -2355,6 +2455,7 @@ function modelDataPointPrint(point) {
 	},
 
 	// we might want to modify this to do a dynamic http retrieval to grab the dialog components...
+	//IGNORE
 	_showDialog: function(name){
 		var self = this;
 		var url = this._getResourceUrl(name,'html');
@@ -2375,6 +2476,7 @@ function modelDataPointPrint(point) {
 		}
 	},
 
+	//IGNORE
 	_populateDialog: function(self,name,text) {
 		var SplitText = "Title";
 		var $dialog = $('<div></div>')
@@ -2400,6 +2502,7 @@ function modelDataPointPrint(point) {
 	 * scales
 	 *
 	 */
+	 //IGNORE
 	_createRectangularContainers: function() {
 		var self=this;
 		this._buildAxisPositionList();
@@ -2434,7 +2537,7 @@ function modelDataPointPrint(point) {
 	},
 
 	/* Build out the positions of the 3 boxes */
-
+	//TO HASH
 	_buildAxisPositionList: function() {
 		//For Overview of Organisms 0 width = ((multiOrganismCt*2)+2) *this.state.widthOfSingleModel	
 		//Add two extra columns as separators
@@ -2459,6 +2562,7 @@ function modelDataPointPrint(point) {
 	},
 
 	//this code creates the labels for the models, the lines, scores, etc..
+	//TO HASH
 	_createModelRegion: function () {
 		var self = this;
 		var list = [];
@@ -2480,12 +2584,14 @@ function modelDataPointPrint(point) {
 		this._createOverviewSpeciesLabels();
 	},
 
+	//IGNORE
 	_addPhenogridControls: function() {
 		var phenogridControls = $('<div id="phenogrid_controls"></div>');
 		this.element.append(phenogridControls);
 		this._createSelectionControls(phenogridControls);
 	},
  
+ 	//TO HASH
 	_addGradients: function() {
 		var self = this;
 		var modData = this.state.modelData;
@@ -2509,6 +2615,7 @@ function modelDataPointPrint(point) {
 	/**
 	 * build the gradient displays used to show the range of colors
 	 */
+	//IGNORE
 	_buildGradientDisplays: function(y1) {
 		var ymax = 0;
 		var y;
@@ -2539,6 +2646,7 @@ function modelDataPointPrint(point) {
 	 *
 	 * y1 is the baseline for computing the y position of the gradient
 	 */
+	 //IGNORE
 	_createGradients: function(i, y1){
 		self = this;
 		var y;
@@ -2592,6 +2700,7 @@ function modelDataPointPrint(point) {
 	 * Show the labels next to the gradients, including descriptions of min and max sides 
 	 * y1 is the baseline to work from
 	 */
+	 //IGNORE
 	_buildGradientTexts: function(y1) {
 		var lowText, highText, labelText;
 		for (var idx in this.state.similarityCalculation) {	
@@ -2639,6 +2748,7 @@ function modelDataPointPrint(point) {
 	 * build controls for selecting organism and comparison. Install handlers
 	 * 
 	 */
+	 //IGNORE
 	_createSelectionControls: function(container) {
 		var optionhtml ='<div id="selects"></div>';
 		var options = $(optionhtml);
@@ -2674,6 +2784,7 @@ function modelDataPointPrint(point) {
 	/**
 	* construct the HTML needed for selecting organism
 	*/
+	//IGNORE
 	_createOrganismSelection: function(selClass) {
 		var selectedItem;
 		var optionhtml = "<div id='org_div'><span id='olabel'>Species</span><br>" +
@@ -2702,6 +2813,7 @@ function modelDataPointPrint(point) {
 	/** 
 	* create the html necessary for selecting the calculation 
 	*/
+	//IGNORE
 	_createCalculationSelection: function () {
 		var optionhtml = "<span id='calc_div'><span id='clabel'>Display</span>"+
 			"<span id='calcs'> <img class='faq_img' src='" + this.state.scriptpath + "../image/greeninfo30.png'></span>" + 
@@ -2722,6 +2834,7 @@ function modelDataPointPrint(point) {
 	/** 
 	* create the html necessary for selecting the sort
 	*/
+	//IGNORE
 	_createSortPhenotypeSelection: function () {
 		var optionhtml ="<span id='sort_div'> <span id='slabel' >Sort Phenotypes</span>" +
 			"<span id='sorts'> <img class='faq_img' src='" + this.state.scriptpath + "../image/greeninfo30.png'></span>" +
@@ -2740,6 +2853,7 @@ function modelDataPointPrint(point) {
 
 	//this code creates the text and rectangles containing the text 
 	//on either side of the model data
+	//TO HASH
 	_createRowLabels: function() {
 		// this takes some 'splaining
 		//the raw dataset contains repeats of data within the
@@ -2802,6 +2916,7 @@ function modelDataPointPrint(point) {
 			.remove();
 	},
 
+	//TO HASH
 	_getUnmatchedPhenotypes: function(){
 		var fullset = this.state.origPhenotypeData,
 		partialset = this.state.phenotypeSortData,
@@ -2843,6 +2958,7 @@ function modelDataPointPrint(point) {
 		return dupArray;
 	},
 
+	//TO HASH
 	_getUnmatchedLabels: function() {
 		var unmatchedLabels = [];
 		for (var i in this.state.unmatchedPhenotypes){
@@ -2861,6 +2977,7 @@ function modelDataPointPrint(point) {
 		return unmatchedLabels;
 	},
 
+	//TO HASH
 	_buildUnmatchedPhenotypeDisplay: function() {
 		var optionhtml;
 		var prebl = $("#prebl");
@@ -2895,6 +3012,7 @@ function modelDataPointPrint(point) {
 		});
 	},
 
+	//TO HASH
 	_buildUnmatchedPhenotypeTable: function(){
 		var self = this;
 		var columns = 4;
@@ -2922,6 +3040,7 @@ function modelDataPointPrint(point) {
 		return outer1 + inner + outer2;
 	},
 
+	//IGNORE
 	_matchedClick: function(checkboxEl) {
 		if (checkboxEl.checked) {
 			// Do something special
@@ -2932,6 +3051,7 @@ function modelDataPointPrint(point) {
 		}
 	},
 
+	//IGNORE
 	_rectClick: function(data) {
 		var retData;
 		this._showThrobber();
@@ -2949,6 +3069,7 @@ function modelDataPointPrint(point) {
 		this._updateDetailSection(retData, this._getXYPos(data));
 	},
 
+	//IGNORE
 	_toProperCase: function (oldstring) {
 		return oldstring.replace(/\w\S*/g, function(txt){return txt.charAt(0).toUpperCase() + txt.substr(1).toLowerCase();});
 	},
@@ -2959,6 +3080,7 @@ function modelDataPointPrint(point) {
 	// or they are objects of the form
 	// { "id": <id>, "observed": <obs>} .
 	// in that case take id if "observed" is "positive"
+	//IGNORE
 	_filterPhenotypeResults: function(phenotypelist) {
 		//this.state.phenotypeData = phenotypelist.slice();
 		var newlist = [];
