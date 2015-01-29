@@ -245,9 +245,8 @@
                 {{/hasLiterature}}
                 <div id="jbrowse" class="category">
                     <h1>JBrowse</h1>
-                    <div style="width: 1000px;">
-                        <iframe style="border: 1px solid black; " src="http://icebox.lbl.gov/WebApolloHuman/jbrowse/?loc={{label}}&tracklist=0" width="1000" height="400">
-                        </iframe>
+                    <div id="genomeBrowser" width="1000" >
+                        <iframe id="innerFrame" width="1000" height="400"></iframe>
                     </div>
                 </div>
             </div>
@@ -255,3 +254,11 @@
             {{{includes.footer}}}
         </div>
     </div>
+
+    <script>
+        $( document ).ready(function() {
+            $('#innerFrame').contents().find('html')
+                    .html("<iframe style='border: 1px solid black;' src='http://icebox.lbl.gov/WebApolloHuman/jbrowse/?tracklist=0&loc=SOX9' width='1000' height='400'></iframe>"
+            );
+        });
+    </script>
