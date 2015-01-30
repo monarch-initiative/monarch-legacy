@@ -257,8 +257,6 @@
 
     <script>
         function loadJBrowseFrame(){
-            $('#innerFrame').contents().find('html')
-                    .html("<iframe style='border: 1px solid black;' src='http://icebox.lbl.gov/WebApolloHuman/jbrowse/?tracklist=0&tracks=OGS-GRCh38&loc={{label}}' width='100%' height='380'></iframe>"
-            );
+            $('#innerFrame').attr('src','http://icebox.lbl.gov/WebApolloHuman/jbrowse/?tracklist=0&tracks=OGS-GRCh38&loc={{label}}');
         }
     </script>
