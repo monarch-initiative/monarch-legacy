@@ -483,7 +483,7 @@ function modelDataPointPrint(point) {
 
 	//for the selection area, see if you can convert the selection to the idx of the x and y
 	//then redraw the bigger grid 
-	//TO HASH
+	//IGNORE
 	_createOverviewSection: function() {
 		var self = this;
 		// add-ons for stroke size on view box. Preferably even numbers
@@ -518,12 +518,7 @@ function modelDataPointPrint(point) {
 		self._createSmallScales(overviewRegionSize);
 
 		//add the items using smaller rects
-		var mods = self.state.modelList;
-		var mods2 = self.state.modelListHash;
 		var modData = self._mergeHashEntries(self.state.modelDataHash);
-
-		console.log(mods);
-		console.log(mods2.entries());
 
 		var model_rects = this.state.svg.selectAll(".mini_models")
 			.data(modData, function(d) {return d.pheno_id + d.model_id;});
@@ -543,13 +538,11 @@ function modelDataPointPrint(point) {
 				return self._getColorForModelValue(self,fSpecies,d.value[self.state.selectedCalculation]);
 			});
 
-		var lastId = self.state.phenotypeSortData[self.state.phenotypeDisplayCount - 1][0].id_a; //rowid
-		var testLastId = self._returnPhenoID(self.state.phenotypeDisplayCount - 1);
-		console.log(lastId);
-		console.log(testLastId);
+		var lastId = self._returnPhenoID(self.state.phenotypeDisplayCount - 1);
 		var selectRectHeight = self.state.smallYScale(lastId);
 		var lastMId = self._returnModelID(self.state.modelDisplayCount - 1);
 		var selectRectWidth = self.state.smallXScale(lastMId);
+
 		self.state.highlightRect = self.state.svg.append("rect")
 			.attr("x",overviewX)
 			.attr("y",overviewY)
@@ -797,6 +790,21 @@ function modelDataPointPrint(point) {
 			.rangePoints([0,overviewRegionSize]);
 	},
 
+	_getSortedIDList: function(type){
+		var hashSource;
+		var resultArray = [];
+		if (type == "pheno"){
+			hashSource = this._updateOverviewPos(this.state.phenotypeListHash.entries());
+		}
+		if (type == "model"){
+			hashSource = this.state.modelListHash.entries();
+		}
+		for (var j in hashSource ) {
+			resultArray[hashSource[j][1].pos] = hashSource[j][0];
+		}
+		return resultArray;
+	},
+
 	//NEW
 	_updateOverviewPos: function(dataArray){
 		for (var i in dataArray){
@@ -922,8 +930,10 @@ function modelDataPointPrint(point) {
 			var gap = 3;
 			//push the rowid and ypos onto the yaxis array
 			//so now the yaxis will be in the order of the ranked phenotypes
-			var stuff = {"id": self.state.phenotypeSortData[i][0].id_a, "ypos" : ((axis_idx * (size+gap)) + self.state.yoffset)};
-			self.state.yAxis.push(stuff); 
+			var ypos = (axis_idx * (size + gap)) + self.state.yoffset;
+			var stuff = {"id": self.state.phenotypeSortData[i][0].id_a, "ypos" : ypos};
+			self.state.yAxis.push(stuff);
+			self._setYPosHash(self.state.phenotypeSortData[i][0].id_a, ypos); 
 			axis_idx++;
 			//update the ModelData			
 			//find the rowid in the original ModelData (list of models and their matching phenotypes) and write it to tempdata if it matches this phenotypeSortData rowid.
@@ -1257,6 +1267,13 @@ function modelDataPointPrint(point) {
 	},
 
 	//NEW
+	_setYPosHash: function(key,ypos) {
+		var values = this.state.phenotypeListHash.get(key);
+		values.ypos = ypos;
+		this.state.phenotypeListHash.put(key,values);
+	},
+
+	//NEW
 	_updateSortVals: function(key,subIC) {
 		var values = this.state.phenotypeListHash.get(key);
 		values.count += 1;
@@ -1269,11 +1286,15 @@ function modelDataPointPrint(point) {
 		this._sortPhenotypeHash();
 		this._filterPhenotypeHash(0,29);
 		this._filterModelListHash(0,this.state.modelDisplayCount);
-		this.state.filteredModelDataHash = new Hashtable();
+		this.state.filteredModelDataHash = [];
+		//NOT A HASH ACTUALLY.  RENAME AFTER ADOPTION
 		var currentModelData = this.state.modelDataHash.entries();
+		var filteredModel;
 		for (var i in currentModelData){
 			if (this.state.filteredModelListHash.containsKey(currentModelData[i][0].model_id) && this.state.filteredPhenotypeListHash.containsKey(currentModelData[i][0].pheno_id)){
-				this.state.filteredModelDataHash.put(currentModelData[i][0],currentModelData[i][1]);
+				currentModelData[i][1].pheno_id = currentModelData[i][0].pheno_id;
+				currentModelData[i][1].model_id = currentModelData[i][0].model_id
+				this.state.filteredModelDataHash.push(currentModelData[i][1]);
 			}
 		}
 	},
@@ -1539,6 +1560,7 @@ function modelDataPointPrint(point) {
 	//given a rowid, return the y-axis position
 	//DELETE
 	_getYPosition: function(newRowId) {
+		console.log(newRowId);
 		var retValue = this.state.yoffset;
 
 		for (var i in this.state.yAxis) {
@@ -2154,18 +2176,19 @@ function modelDataPointPrint(point) {
 	//TO HASH
 	_createModelRects: function() {
 		var self = this;
-		var data = this.state.filteredModelData;
+		var data = this.state.filteredModelDataHash;
 
 		var rectTranslation = "translate(" + ((this.state.textWidth + 30) + 4) + "," + (self.state.yoffsetOver + 15)+ ")";
 		var model_rects = this.state.svg.selectAll(".models")
 			.data( data, function(d) {
-				return d.id;
+				return d.model_id + d.pheno_id;
 			});
+			console.log(this.state.yAxis);
 		model_rects.enter()
 			.append("rect")
 			.attr("transform",rectTranslation)
 			.attr("class", function(d) { 
-				var dConcept = self._getConceptId(d.id);
+				var dConcept = (d.model_id + d.pheno_id);
 				var modelConcept = self._getConceptId(d.model_id);
 				//append the model id to all related items
 				if (d.value[self.state.selectedCalculation] > 0) {
@@ -2174,8 +2197,8 @@ function modelDataPointPrint(point) {
 				}
 				return "models " + " " + modelConcept + " " + dConcept;
 			})
-			.attr("y", function(d, i) { 
-				return self._getYPosition(d.id_a) + self.state.yoffsetOver;
+			.attr("y", function(d, i) {
+				return self._getAxisData(d.pheno_id).ypos + self.state.yoffsetOver;
 			})
 			.attr("x", function(d) { return self.state.xScale(d.model_id);})
 			.attr("width", 10)
@@ -2215,7 +2238,8 @@ function modelDataPointPrint(point) {
 			.style('opacity', '1.0')
 		.attr("fill", function(d) {
 			var score = d.value[self.state.selectedCalculation];
-			var color = self._getColorForModelValue(self,d.species,score);
+			var fSpecies = self._getAxisData(d.model_id).species;
+			var color = self._getColorForModelValue(self,fSpecies,score);
 			return color;
 		});
 
@@ -2223,7 +2247,7 @@ function modelDataPointPrint(point) {
 			.delay(20)
 			.style('opacity', '1.0')
 			.attr("y", function(d) {
-				return self._getYPosition(d.id_a)-10; //rowid
+				return self._getAxisData(d.pheno_id).ypos - 10; //rowid
 			})
 			.attr("x", function(d) { 
 				return self.state.xScale(d.model_id);
@@ -2383,8 +2407,6 @@ function modelDataPointPrint(point) {
 		}
 		var startPhenotypeIdx = this.state.currPhenotypeIdx - this.state.phenotypeDisplayCount;
 
-		//this.state.yAxis = [];
-
 		//fix model list
 		//check to see if the max of the slider is greater than the number of items in the list
 		if (modelIdx > modelList.length) {
@@ -2471,13 +2493,18 @@ function modelDataPointPrint(point) {
 			.attr("class", "scores")
 			// don't show score if it is a dummy model.
 			.text(function (d){ 
-				if (d.model_label === self.state.dummyModelName) {
+				if (d === self.state.dummyModelName) {
 					return "";
 				} else {
+					var score = self._getAxisData(d).score;
 					return d.model_score;
 				}})
 			.style("font-weight","bold")
-			.style("fill",function(d) { return self._getColorForModelValue(self,d.species,d.model_score);});
+			.style("fill",function(d) {
+				var score = self._getAxisData(d).score;
+				var species = self._getAxisData(d).species;
+				return self._getColorForModelValue(self,species,score);
+			});
 	},
 
 	//Add species labels to top of Overview
@@ -2624,13 +2651,12 @@ function modelDataPointPrint(point) {
 
 		//This is for the new "Overview" target option 
 		if (this.state.targetSpeciesName == "Overview"){
-			list = this.state.modelList;
+			list = this.state.modelListHash.keys();
 		} else {
-			list = this.state.filteredModelList;
+			list = this.state.filteredModelListHash.keys();
 		}
-
 		this.state.xScale = d3.scale.ordinal()
-			.domain(list.map(function (d) {return d.model_id; }))
+			.domain(list.map(function (d) {return d; }))
 			.rangeRoundBands([0,this.state.modelWidth]);
 
 		this._createModelLabels(self);
