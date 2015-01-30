@@ -519,10 +519,14 @@ function modelDataPointPrint(point) {
 
 		//add the items using smaller rects
 		var mods = self.state.modelList;
-		var modData = self.state.modelData;
+		var mods2 = self.state.modelListHash;
+		var modData = self._mergeHashEntries(self.state.modelDataHash);
+
+		console.log(mods);
+		console.log(mods2.entries());
 
 		var model_rects = this.state.svg.selectAll(".mini_models")
-			.data(modData, function(d) {return d.id;});
+			.data(modData, function(d) {return d.pheno_id + d.model_id;});
 		overviewX++;	//Corrects the gapping on the sides
 		overviewY++;
 		var modelRectTransform = "translate(" + overviewX +	"," + overviewY + ")";
@@ -530,17 +534,22 @@ function modelDataPointPrint(point) {
 			.append("rect")
 			.attr("transform",modelRectTransform)
 			.attr("class", "mini_model")
-			.attr("y", function(d, i) { return self.state.smallYScale(d.id_a) + linePad / 2;})
+			.attr("y", function(d, i) { return self.state.smallYScale(d.pheno_id) + linePad / 2;})
 			.attr("x", function(d) { return self.state.smallXScale(d.model_id) + linePad / 2;})
 			.attr("width", linePad)
 			.attr("height", linePad)
 			.attr("fill", function(d) {
-				return self._getColorForModelValue(self,d.species,d.value[self.state.selectedCalculation]);
+				var fSpecies = self._getAxisData(d.model_id).species;
+				return self._getColorForModelValue(self,fSpecies,d.value[self.state.selectedCalculation]);
 			});
 
 		var lastId = self.state.phenotypeSortData[self.state.phenotypeDisplayCount - 1][0].id_a; //rowid
+		var testLastId = self._returnPhenoID(self.state.phenotypeDisplayCount - 1);
+		console.log(lastId);
+		console.log(testLastId);
 		var selectRectHeight = self.state.smallYScale(lastId);
-		var selectRectWidth = self.state.smallXScale(mods[self.state.modelDisplayCount - 1].model_id);
+		var lastMId = self._returnModelID(self.state.modelDisplayCount - 1);
+		var selectRectWidth = self.state.smallXScale(lastMId);
 		self.state.highlightRect = self.state.svg.append("rect")
 			.attr("x",overviewX)
 			.attr("y",overviewY)
@@ -607,6 +616,52 @@ function modelDataPointPrint(point) {
 					self._updateModel(newModelPos, newPhenotypePos);
 		}));
 		//set this back to 0 so it doesn't affect other rendering
+	},
+
+	//NEW
+	_returnPhenoID: function(id){
+		var searchArray = this.state.phenotypeListHash.entries();
+		if (this.state.targetSpeciesName === "Overview") {
+			searchArray = this._updateOverviewPos(searchArray);
+		} 
+		var results = false;
+		for (var i in searchArray){
+			if (searchArray[i][1].pos == id){
+				results = searchArray[i][0];
+				break;
+			}
+		}
+		return results;
+	},
+
+	//NEW
+	_returnModelID: function(id){
+		var searchArray = this.state.modelListHash.entries();
+		var results = false;
+		for (var i in searchArray){
+			if (searchArray[i][1].pos == id){
+				results = searchArray[i][0];
+				break;
+			}
+		}
+		return results;
+	},
+
+	//NEW
+	_mergeHashEntries: function(hashT){
+		var premerged = hashT.entries();
+		var merged = [];
+		var key, value;
+		for (var i in premerged){
+			if (typeof(premerged[i][0].pheno_id) !== 'undefined'){
+				premerged[i][1].pheno_id = premerged[i][0].pheno_id;
+				premerged[i][1].model_id = premerged[i][0].model_id;
+			} else {
+				premerged[i][1].id = premerged[i][0];
+			}
+			merged[i] = premerged[i][1];
+		}
+		return merged;
 	},
 
 	/* we only have 3 color,s but that will do for now */
