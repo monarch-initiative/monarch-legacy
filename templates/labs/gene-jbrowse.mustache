@@ -246,7 +246,7 @@
                 <div id="jbrowse" class="category">
                     <h1>JBrowse</h1>
                     <div id="genomeBrowser" width="1000" >
-                        <iframe id="innerFrame" width="1000" height="400"></iframe>
+                        <iframe id="innerFrame" width="900" height="400"></iframe>
                     </div>
                 </div>
             </div>
@@ -257,8 +257,23 @@
 
     <script>
         $( document ).ready(function() {
-            $('#innerFrame').contents().find('html')
-                    .html("<iframe style='border: 1px solid black;' src='http://icebox.lbl.gov/WebApolloHuman/jbrowse/?tracklist=0&loc={{label}}' width='1000' height='400'></iframe>"
-            );
+
+            function loadFrame(){
+                $('#innerFrame').contents().find('html')
+                        .html("<iframe style='border: 1px solid black;' src='http://icebox.lbl.gov/WebApolloHuman/jbrowse/?tracklist=0&loc={{label}}' width='1000' height='400'></iframe>"
+                );
+            }
+
+//            $('#jbrowse').on('show', function() {
+//                alert('jbrowse ouch!');
+                loadFrame();
+//            }).on('hide',function(){
+//                alert('boo');
+//            });
+
+//            $('#jbrowse').onshow(function(){
+//                alert('ouch!');
+//               loadFrame();
+//            });
         });
     </script>
