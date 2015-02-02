@@ -898,7 +898,7 @@ function modelDataPointPrint(point) {
 		var tempFilteredModelData = [];
 		var filteredData;
 
-		this._filterPhenotypeHash(startIdx,displayLimiter);
+		this._filterPhenotypeHash(startIdx,displayLimiter-1);
 		//get phenotype[startIdx] up to phenotype[currPhenotypeIdx] from the array of sorted phenotypes
 		for (var i = startIdx; i < displayLimiter; i++) {
 			filteredData = {"id_a": self.state.phenotypeSortData[i][0].id_a,"id": self.state.phenotypeSortData[i][0].id,"label_a": self.state.phenotypeSortData[i][0].label_a};
@@ -996,7 +996,6 @@ function modelDataPointPrint(point) {
 		var modData = self.state.modelData;
 
 		//1. Get all unique phenotypes in an array
-		//console.log("at start of sorting models..."+self.state.modelData.length);
 		for (var idx in self.state.phenotypeData) {
 			var tempdata = [];
 			for (var midx in modData) {
@@ -1235,8 +1234,6 @@ function modelDataPointPrint(point) {
 			this.state.modelDataHash.put(modelPoint, hashData);
 
 		}
-		//console.log(this.state.modelListHash.entries());
-		//console.log(this.state.phenotypeListHash.entries());
 	},
 
 	//NEW
@@ -1264,7 +1261,7 @@ function modelDataPointPrint(point) {
 	//NEW
 	_filterHashTables: function () {
 		this._sortPhenotypeHash();
-		this._filterPhenotypeHash(0,29);
+		this._filterPhenotypeHash(0,25);
 		this._filterModelListHash(0,this.state.modelDisplayCount);
 		this.state.filteredModelDataHash = [];
 		//NOT A HASH ACTUALLY.  RENAME AFTER ADOPTION
@@ -1535,19 +1532,6 @@ function modelDataPointPrint(point) {
 		ics[3] = nic;
 
 		return ics;
-	},
-
-	//given a rowid, return the y-axis position
-	//DELETE
-	_getYPosition: function(newRowId) {
-		var retValue = this.state.yoffset;
-
-		for (var i in this.state.yAxis) {
-			if (this.state.yAxis[i].id == newRowId) {
-				retValue = this.state.yAxis[i].ypos;
-			}
-		}
-		return retValue;
 	},
 
 	//IGNORE
@@ -1844,61 +1828,41 @@ function modelDataPointPrint(point) {
 		var self = this;
 		//create the related row rectangle
 		var highlight_rect = self.state.svg.append("svg:rect")
-			.attr("transform","translate(" + (self.state.axis_pos_list[1]) +"," + (self.state.yoffsetOver + 4) + ")")
+			.attr("transform","translate(" + (self.state.axis_pos_list[1]) + "," + (self.state.yoffsetOver + 4) + ")")
 			.attr("x", 12)
-			.attr("y", function(d) {return self._getYPosition(curr_data.id_a) ;}) //rowid
+			.attr("y", function(d) {return self._getAxisData(curr_data.pheno_id).ypos; }) //rowid
 			.attr("class", "row_accent")
 			.attr("width", this.state.modelWidth - 4)
 			.attr("height", 12);
 
 		this._resetLinks();
-		var alabels = this.state.svg.selectAll("text.a_text." + curr_data.id_a);
-		var txt = curr_data.label_a;
+		var alabels = this.state.svg.selectAll("text.a_text." + curr_data.pheno_id);
+		var txt = this._getAxisData(curr_data.pheno_id).label;
 		if (txt === undefined) {
-			txt = curr_data.id_a;
+			txt = curr_data.pheno_id;
 		}
 		alabels.text(txt)
 			.style("font-weight", "bold")
 			.style("fill", "blue")
 			.on("click",function(d){
-				self._clickPhenotype(self.state.serverURL,curr_data.id_a);
+				self._clickPhenotype(self.state.serverURL,curr_data.pheno_id);
 			});
-		var model_row;
-		for (var phenotypeRow in self.state.phenotypeSortData)
-		{
-			if (self.state.phenotypeSortData[phenotypeRow][0].id_a == curr_data.id_a)
-			{
-				model_row = self.state.phenotypeSortData[phenotypeRow];
-				break;
-			}
-		}
-		this._highlightMatchingModels(model_row);
+
+		this._highlightMatchingModels(curr_data.model_id);
 	},
 
 	//TO HASH
 	_deselectData: function (curr_data) {
 		this.state.svg.selectAll(".row_accent").remove();
 		this._resetLinks();
-		var row;
-		if (curr_data === undefined) {row = curr_data;}
-		else {row = curr_data;}
-
-		var alabels = this.state.svg.selectAll("text.a_text." + row.id_a);
-		alabels.text(this._getShortLabel(row.label_a));
+		var axisLabel = this._getAxisData(curr_data.pheno_id).label;
+		var alabels = this.state.svg.selectAll("text.a_text." + curr_data.pheno_id);
+		alabels.text(this._getShortLabel(axisLabel));
 		var data_text = this.state.svg.selectAll("text.a_text");
 		data_text.style("text-decoration", "none");
 		data_text.style("fill", "black");
 
-		var model_row;
-		for (var phenotypeRow in self.state.phenotypeSortData)
-		{
-			if (self.state.phenotypeSortData[phenotypeRow][0].id_a == curr_data.id_a)
-			{
-				model_row = self.state.phenotypeSortData[phenotypeRow];
-				break;
-			}
-		}
-		this._deselectMatchingModels(model_row);
+		this._deselectMatchingModels(curr_data.model_id);
 	},
 
 	//TO HASH
@@ -2162,7 +2126,6 @@ function modelDataPointPrint(point) {
 			.data( data, function(d) {
 				return d.model_id + d.pheno_id;
 			});
-			console.log(this.state.yAxis);
 		model_rects.enter()
 			.append("rect")
 			.attr("transform",rectTranslation)
@@ -2296,16 +2259,15 @@ function modelDataPointPrint(point) {
 		}
 	},
 
-	//TO HASH
+	//IGNORE
 	_highlightIntersection: function(curr_data, obj){
-		console.log("OBJ " + obj);
 		var self = this;
 
 		//Highlight Row
 		var highlight_rect = self.state.svg.append("svg:rect")
 			.attr("transform","translate(" + self.state.axis_pos_list[1] + ","+ (self.state.yoffsetOver + 4 ) + ")")
 			.attr("x", 12)
-			.attr("y", function(d) {return self._getYPosition(curr_data.pheno_id) ;}) //rowid
+			.attr("y", function(d) {return self._getAxisData(curr_data.pheno_id).ypos; }) //rowid
 			.attr("class", "row_accent")
 			.attr("width", this.state.modelWidth - 4)
 			.attr("height", 12);
@@ -2320,7 +2282,6 @@ function modelDataPointPrint(point) {
 
 		var phen_label = this.state.svg.selectAll("text.a_text." + curr_data.pheno_id);
 		var txt = self._getAxisData(curr_data.pheno_id).label;
-		console.log(txt);
 		if (txt === undefined) {
 			txt = curr_data.pheno_id;
 		}
@@ -2354,12 +2315,12 @@ function modelDataPointPrint(point) {
 		} else {
 			data = self.state.filteredModelData;
 		}
-		this.state.h = (data.length*2.5);
+		this.state.h = (data.length * 2.5);
 
 		self.state.yScale = d3.scale.ordinal()
 			.domain(data.map(function (d) {return d.id_a; }))
 			.range([0,data.length])
-			.rangePoints([ self.state.yModelRegion,self.state.yModelRegion +this.state.h ]);
+			.rangePoints([self.state.yModelRegion,self.state.yModelRegion + this.state.h]);
 
 		//update accent boxes
 		self.state.svg.selectAll("#rect.accent").attr("height", self.state.h);
@@ -2418,9 +2379,8 @@ function modelDataPointPrint(point) {
 	//TO HASH
 	_createModelLabels: function(self) {
 		var model_x_axis = d3.svg.axis().scale(self.state.xScale).orient("top");
-
 		self.state.svg.append("g")
-			.attr("transform","translate(" + (self.state.textWidth +28) + "," + self.state.yoffset + ")")
+			.attr("transform","translate(" + (self.state.textWidth + 28) + "," + self.state.yoffset + ")")
 			.attr("class", "x axis")
 			.call(model_x_axis)
 			//this be some voodoo...
@@ -2622,7 +2582,7 @@ function modelDataPointPrint(point) {
 	},
 
 	//this code creates the labels for the models, the lines, scores, etc..
-	//TO HASH
+	//IGNORE
 	_createModelRegion: function () {
 		var self = this;
 		var modsHash = [];
@@ -2914,7 +2874,7 @@ function modelDataPointPrint(point) {
 
 	//this code creates the text and rectangles containing the text 
 	//on either side of the model data
-	//TO HASH
+	//IGNORE
 	_createRowLabels: function() {
 		// this takes some 'splaining
 		//the raw dataset contains repeats of data within the
@@ -2926,22 +2886,24 @@ function modelDataPointPrint(point) {
 		//labels per axis (because the labels can repeat across axes)
 		var self = this;
 		var pad = 14;
+
+		var list = self._getSortedIDList(self.state.filteredPhenotypeListHash.entries());
+
 		var rect_text = this.state.svg
 			.selectAll(".a_text")
-			.data(self.state.filteredPhenotypeData, function(d, i) { return d.id_a; });//rowid
+			.data(list, function(d) { return d; });
 		rect_text.enter()
 			.append("text")
 			.attr("class", function(d) {
-				return "a_text data_text " + d.id_a;
+				return "a_text data_text " + d;
 			})
 		//store the id for this item. This will be used on click events
 			.attr("ontology_id", function(d) {
-				return d.id_a;
+				return d;
 			})
 			.attr("x", 208)
-			.attr("y", function(d,i) {
-			//return i;
-				return self._getYPosition(d.id_a) + 10;
+			.attr("y", function(d) {
+				return self._getAxisData(d).ypos + 10;
 			})
 			.on("mouseover", function(d) {
 				self._selectData(d, d3.mouse(this));
@@ -2952,9 +2914,9 @@ function modelDataPointPrint(point) {
 			.attr("width", self.state.textWidth)
 			.attr("height", 50)
 			.text(function(d) {
-				var txt = d.label_a;
+				var txt = self._getAxisData(d).label;
 				if (txt === undefined) {
-					txt = d.id_a;
+					txt = d;
 				}
 				return self._getShortLabel(txt);
 			});
@@ -2965,10 +2927,7 @@ function modelDataPointPrint(point) {
 			.style('opacity', '1.0')
 			.delay(5)
 			.attr("y", function(d) {
-				var newy;
-				//controls position of phenotype list
-				newy = self._getYPosition(d.id_a) + (self.state.yoffsetOver) + pad;
-				return newy;
+				return self._getAxisData(d).ypos + self.state.yoffsetOver + pad;
 			});
 		rect_text.exit()
 			.transition()
