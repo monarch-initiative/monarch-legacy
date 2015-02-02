@@ -534,8 +534,8 @@ function modelDataPointPrint(point) {
 			.attr("width", linePad)
 			.attr("height", linePad)
 			.attr("fill", function(d) {
-				var fSpecies = self._getAxisData(d.model_id).species;
-				return self._getColorForModelValue(self,fSpecies,d.value[self.state.selectedCalculation]);
+				//console.log("_createOverviewSection: " + d + ", " + self._getAxisData(d.model_id).species + ", " + d.value[self.state.selectedCalculation]);
+				return self._getColorForModelValue(self,self._getAxisData(d.model_id).species,d.value[self.state.selectedCalculation]);
 			});
 
 		var lastId = self._returnPhenoID(self.state.phenotypeDisplayCount - 1);
@@ -790,7 +790,7 @@ function modelDataPointPrint(point) {
 		for (var i in hashArray){
 			for (var j in this.state.targetSpeciesList){
 				if (hashArray[i][1].species == this.state.targetSpeciesList[j].name){
-					hashArray[i][1].pos += (j * this.state.multiOrganismCt);
+					hashArray[i][1].pos += (j * 10);
 				}
 			}
 		}
@@ -1178,6 +1178,11 @@ function modelDataPointPrint(point) {
 
 	//NEW
 	_getAxisData: function(key) {
+		if (typeof(key) === 'undefined'){
+			console.log("UNDEFINED AXIS CALL");
+			return false;
+		}
+
 		if (this.state.phenotypeListHash.containsKey(key)){
 			return this.state.phenotypeListHash.get(key);
 		}
@@ -1715,17 +1720,13 @@ function modelDataPointPrint(point) {
 
 	//TO HASH
 	_highlightMatchingModels: function(curr_data){
-		var self = this;
+		var label = this._getAxisData(curr_data).label;
 		var alabels = this.state.svg.selectAll("text");
-		for (var i in curr_data){
-			var label = curr_data[i].model_label;
-			var mod_id = curr_data[i].model_id;
-			for (var j in alabels[0]){
-				var shortTxt = self._getShortLabel(label,self.state.labelCharDisplayCount);
-				if(alabels[0][j].id == mod_id){
-					alabels[0][j].style.fill = "blue";
-					alabels[0][j].innerHTML = label;
-				}
+		for (var j in alabels[0]){
+			var shortTxt = self._getShortLabel(label,self.state.labelCharDisplayCount);
+			if(alabels[0][j].id == curr_data){
+				alabels[0][j].style.fill = "blue";
+				alabels[0][j].innerHTML = label;
 			}
 		}
 	},
@@ -1733,25 +1734,24 @@ function modelDataPointPrint(point) {
 	//TO HASH
 	_deselectMatchingModels: function(curr_data){
 		var alabels = this.state.svg.selectAll("text");
-		for (var i in curr_data){
-			var label = curr_data[i].model_label;
-			for (var j in alabels[0]){
-				var shortTxt = this._getShortLabel(label,self.state.labelCharDisplayCount);
-				if(alabels[0][j].innerHTML == label){
-					alabels[0][j].style.fill = "black";
-					alabels[0][j].innerHTML = shortTxt;
-				}
+		var label = this._getAxisData(curr_data).label;
+		for (var j in alabels[0]){
+			var shortTxt = this._getShortLabel(label,self.state.labelCharDisplayCount);
+			if(alabels[0][j].innerHTML == label){
+				alabels[0][j].style.fill = "black";
+				alabels[0][j].innerHTML = shortTxt;
 			}
 		}
 	},
 
-	//TO HASH
+	//IGNORE
 	_selectModel: function(modelData, obj) {
 		var self = this;
+		var modelInfo = self._getAxisData(modelData);
 		//create the related model rectangles
 		var highlight_rect = self.state.svg.append("svg:rect")
-			.attr("transform","translate(" + (self.state.textWidth + 32) + "," + self.state.yoffsetOver+ ")")
-			.attr("x", function(d) { return (self.state.xScale(modelData.model_id)-1);})
+			.attr("transform","translate(" + (self.state.textWidth + 32) + "," + self.state.yoffsetOver + ")")
+			.attr("x", function(d) { return (self.state.xScale(modelData) - 1);})
 			.attr("y", self.state.yoffset + 2)
 			.attr("class", "model_accent")
 			.attr("width", 14)
@@ -1761,12 +1761,12 @@ function modelDataPointPrint(point) {
 		// var classlabel = "text#" +this._getConceptId(modelData.model_id);
 
 		//Show that model label is selected. Change styles to bold, blue and full-length label
-		var model_label = self.state.svg.selectAll("text#" + this._getConceptId(modelData.model_id))
+		var model_label = self.state.svg.selectAll("text#" + this._getConceptId(modelData))
 			.style("font-weight", "bold")
 			.style("fill", "blue")
-			.html(modelData.model_label);
+			.html(modelInfo.label);
 
-		var concept = self._getConceptId(modelData.model_id),
+		var concept = self._getConceptId(modelData),
 		type = this.state.defaultApiEntity;
 
 		for (var i in this.state.apiEntityMap) {
@@ -1778,7 +1778,7 @@ function modelDataPointPrint(point) {
 		var width = (type === this.state.defaultApiEntity)?80:200;
 		var height = (type === this.state.defaultApiEntity)?50:60;
 
-		var retData = "<strong>" + self._toProperCase(type).substring(0, type.length) + ": </strong> " + modelData.model_label + "<br/><strong>Rank:</strong> " + (parseInt(modelData.model_rank) );
+		var retData = "<strong>" + modelInfo.type + ": </strong> " + modelInfo.label + "<br/><strong>Rank:</strong> " + modelInfo.rank;
 
 		//obj is try creating an ojbect with an attributes array including "attributes", but I may need to define
 		//getAttrbitues
@@ -1786,7 +1786,7 @@ function modelDataPointPrint(point) {
 		obj = {
 			attributes: [],
 			getAttribute: function(keystring) {
-				var ret = self.state.xScale(modelData.model_id) + 15;
+				var ret = self.state.xScale(modelData) + 15;
 				if (keystring == "y") {
 					ret = Number(self.state.yoffset - 100);
 				}
@@ -1798,18 +1798,14 @@ function modelDataPointPrint(point) {
 		self._highlightMatchingPhenotypes(modelData);
 	},
 
-	//TO HASH
+	//IGNORE
 	//I need to check to see if the modelData is an object. If so, get the model_id
 	_clearModelData: function(modelData,obj) {
 		this.state.svg.selectAll("#detail_content").remove();
 		this.state.svg.selectAll(".model_accent").remove();
 		var model_text = "";
-		var mod_id = "";
-		if (modelData !== null && typeof modelData != 'object') {
-			mod_id = this._getConceptId(modelData);
-		} else if (typeof (modelData.model_id) !== 'undefined') {
-			mod_id = this._getConceptId(modelData.model_id);
-		}
+		var mod_id = this._getConceptId(modelData);
+		var modelLabel = self._getAxisData(modelData).label;
 
 		//Show that model label is no longer selected. Change styles to normal weight, black and short label
 		if (mod_id !== "") {
@@ -1817,12 +1813,13 @@ function modelDataPointPrint(point) {
 			model_text.style("font-weight","normal");
 			model_text.style("text-decoration", "none");
 			model_text.style("fill", "black");
-			model_text.html(this._getShortLabel(modelData.model_label,self.state.labelCharDisplayCount));
+
+			model_text.html(this._getShortLabel(modelLabel,self.state.labelCharDisplayCount));
 			this._deselectMatchingPhenotypes(modelData);
 		}
 	},
 
-	//TO HASH
+	//IGNORE
 	_selectData: function(curr_data, obj) {
 		//create a highlight row
 		var self = this;
@@ -1830,46 +1827,46 @@ function modelDataPointPrint(point) {
 		var highlight_rect = self.state.svg.append("svg:rect")
 			.attr("transform","translate(" + (self.state.axis_pos_list[1]) + "," + (self.state.yoffsetOver + 4) + ")")
 			.attr("x", 12)
-			.attr("y", function(d) {return self._getAxisData(curr_data.pheno_id).ypos; }) //rowid
+			.attr("y", function(d) {return self._getAxisData(curr_data).ypos; }) //rowid
 			.attr("class", "row_accent")
 			.attr("width", this.state.modelWidth - 4)
 			.attr("height", 12);
 
 		this._resetLinks();
-		var alabels = this.state.svg.selectAll("text.a_text." + curr_data.pheno_id);
-		var txt = this._getAxisData(curr_data.pheno_id).label;
+		var alabels = this.state.svg.selectAll("text.a_text." + curr_data);
+		var txt = this._getAxisData(curr_data).label;
 		if (txt === undefined) {
-			txt = curr_data.pheno_id;
+			txt = curr_data;
 		}
 		alabels.text(txt)
 			.style("font-weight", "bold")
 			.style("fill", "blue")
 			.on("click",function(d){
-				self._clickPhenotype(self.state.serverURL,curr_data.pheno_id);
+				self._clickPhenotype(self.state.serverURL,curr_data);
 			});
-
-		this._highlightMatchingModels(curr_data.model_id);
+		this._highlightMatchingModels(curr_data);
 	},
 
-	//TO HASH
+	//IGNORE
 	_deselectData: function (curr_data) {
 		this.state.svg.selectAll(".row_accent").remove();
 		this._resetLinks();
-		var axisLabel = this._getAxisData(curr_data.pheno_id).label;
-		var alabels = this.state.svg.selectAll("text.a_text." + curr_data.pheno_id);
+		var axisLabel = this._getAxisData(curr_data).label;
+		var alabels = this.state.svg.selectAll("text.a_text." + curr_data);
 		alabels.text(this._getShortLabel(axisLabel));
 		var data_text = this.state.svg.selectAll("text.a_text");
 		data_text.style("text-decoration", "none");
 		data_text.style("fill", "black");
 
-		this._deselectMatchingModels(curr_data.model_id);
+		this._deselectMatchingModels(curr_data);
 	},
 
 	//TO HASH
 	_highlightMatchingPhenotypes: function(curr_data){
+		console.log(curr_data);
 		var self = this;
-		var models = self.state.modelData;
-		var curModel = this._getConceptId(curr_data.model_id);
+		var models = self.state.modelDataHash;
+		var curModel = this._getConceptId(curr_data);
 		for (var i in models){
 			//models[i] is the matching model that contains all phenotypes
 			if (models[i].model_id == curModel){
@@ -1902,9 +1899,9 @@ function modelDataPointPrint(point) {
 		var win = window.open(url, '_blank');
 	},
 
-	//TO HASH
+	//IGNORE
 	_clickModel: function(url_origin,data) {
-		var concept = self._getConceptId(data.model_id);
+		var concept = self._getConceptId(data);
 		// hardwire check
 		var apientity = this.state.defaultApiEntity;
 		for (var i in this.state.apiEntityMap) {
@@ -1975,8 +1972,8 @@ function modelDataPointPrint(point) {
 			.attr('x', x + 15)
 			.attr('y', y)
 			.attr("width", width)
-			.attr("id", this._getConceptId(data.model_id))
-			.attr("model_id", data.model_id)
+			.attr("id", this._getConceptId(data))
+			.attr("model_id", data)
 			.attr("height", 60)
 			.attr("transform", function(d) {
 				return "rotate(-45)";
@@ -1993,7 +1990,7 @@ function modelDataPointPrint(point) {
 					self._deselectData(self.state.selectedRow);
 				}
 			})
-			.attr("class", this._getConceptId(data.model_id) + " model_label")
+			.attr("class", this._getConceptId(data) + " model_label")
 			.style("font-size", "12px")
 			//don't show the label if it is a dummy.
 			.text( function(d) {if (label == self.state.dummyModelName) return ""; else return label;});
@@ -2035,12 +2032,13 @@ function modelDataPointPrint(point) {
 			.html(htmltext);
 	},
 
-	//TO HASH
+	//IGNORE
 	_showModelData: function(d, obj) {
 		var retData;
-
-		var species = d.species;
-		var taxon = d.taxon;
+		var modelInfo = this._getAxisData(d.model_id);
+		var phenoInfo = this._getAxisData(d.pheno_id);
+		var species = modelInfo.species;
+		var taxon = modelInfo.taxon;
 		var prefix;
 		var type = this._getComparisonType(species);
 
@@ -2061,12 +2059,12 @@ function modelDataPointPrint(point) {
 		//If the selected calculation isn't percentage based (aka similarity) make it a percentage
 		if (this.state.selectedCalculation != 2) {suffix = '%';}
 
-		retData = "<strong>Query: </strong> " + d.label_a + " (IC: " + d.IC_a.toFixed(2) + ")" +
-			"<br/><strong>Match: </strong> " + d.label_b + " (IC: " + d.IC_b.toFixed(2) +")" +
+		retData = "<strong>Query: </strong> " + phenoInfo.label + " (IC: " + phenoInfo.IC.toFixed(2) + ")" +
+			"<br/><strong>Match: </strong> " + d.b_label + " (IC: " + d.b_IC.toFixed(2) +")" +
 			"<br/><strong>Common: </strong> " + d.subsumer_label + " (IC: " + d.subsumer_IC.toFixed(2) +")" +
-			"<br/><strong>" + this._toProperCase(type).substring(0, type.length-1) +": </strong> " + d.model_label +
+			"<br/><strong>" + modelInfo.type +": </strong> " + modelInfo.label +
 			"<br/><strong>" + prefix + ":</strong> " + d.value[this.state.selectedCalculation].toFixed(2) + suffix +
-			"<br/><strong>Species: </strong> " + d.species + " (" + taxon + ")";
+			"<br/><strong>Species: </strong> " + species + " (" + taxon + ")";
 		this._updateDetailSection(retData, this._getXYPos(obj));
 	},
 
@@ -2179,10 +2177,7 @@ function modelDataPointPrint(point) {
 			})
 			.style('opacity', '1.0')
 		.attr("fill", function(d) {
-			var score = d.value[self.state.selectedCalculation];
-			var fSpecies = self._getAxisData(d.model_id).species;
-			var color = self._getColorForModelValue(self,fSpecies,score);
-			return color;
+			return self._getColorForModelValue(self,self._getAxisData(d.model_id).species,d.value[self.state.selectedCalculation]);
 		});
 
 		model_rects.transition()
@@ -2376,9 +2371,11 @@ function modelDataPointPrint(point) {
 		this._createRowLabels();
 	},
 
-	//TO HASH
+	//IGNORE
 	_createModelLabels: function(self) {
 		var model_x_axis = d3.svg.axis().scale(self.state.xScale).orient("top");
+		var mods = self._getSortedIDList(self.state.filteredModelListHash.entries());
+
 		self.state.svg.append("g")
 			.attr("transform","translate(" + (self.state.textWidth + 28) + "," + self.state.yoffset + ")")
 			.attr("class", "x axis")
@@ -2387,7 +2384,8 @@ function modelDataPointPrint(point) {
 			//to rotate the text, I need to select it as it was added by the axis
 			.selectAll("text") 
 			.each(function(d,i) { 
-				self._convertLabelHTML(self, this, self._getShortLabel(self.state.filteredModelList[i].model_label,self.state.labelCharDisplayCount),self.state.filteredModelList[i]);
+				var labelM = self._getAxisData(mods[i]).label;
+				self._convertLabelHTML(self, this, self._getShortLabel(labelM,self.state.labelCharDisplayCount),mods[i]);
 			});
 	},
 
@@ -2441,6 +2439,7 @@ function modelDataPointPrint(point) {
 				}})
 			.style("font-weight","bold")
 			.style("fill",function(d) {
+				//console.log("_createTextScores: " + d + ", " + self._getAxisData(d).species + ", " + self._getAxisData(d).score);
 				return self._getColorForModelValue(self,self._getAxisData(d).species,self._getAxisData(d).score);
 			});
 	},
