@@ -756,65 +756,45 @@ function modelDataPointPrint(point) {
 
 	//IGNORE
 	_createSmallScales: function(overviewRegionSize) {
-		var sortDataList = [];
 		var self = this;
-
-		//Pre-Hash Code
-		//for (var i in self.state.phenotypeSortData) {
-		//	sortDataList.push(self.state.phenotypeSortData[i][0].id_a);	//rowid
-		//}
-
-		var plHash = self.state.phenotypeListHash.entries();
-		for (var j in plHash) {
-			sortDataList[plHash[j][1].pos] = plHash[j][0];
-		}
-		//var mods = self.state.modelList;
-		var mods = [];
+		var sortDataList = self._getSortedIDList(self.state.phenotypeListHash.entries());
 		var modsHash = self.state.modelListHash.entries();
 
 		if (this.state.targetSpeciesName === "Overview") {
 			self._updateOverviewPos(modsHash);
-		} 
-		for (var i in modsHash){
-			mods[modsHash[i][1].pos] = modsHash[i][0];
 		}
+
+		var mods = self._getSortedIDList(modsHash);
 
 		this.state.smallYScale = d3.scale.ordinal()
 			.domain(sortDataList.map(function (d) {return d; }))
 			.rangePoints([0,overviewRegionSize]);
 
-		//var modids = mods.map(function (d) {return d.model_id; });
 		var modids = mods.map(function (d) {return d; });
 		this.state.smallXScale = d3.scale.ordinal()
 			.domain(modids)
 			.rangePoints([0,overviewRegionSize]);
 	},
 
-	_getSortedIDList: function(type){
-		var hashSource;
+	//NEW
+	_getSortedIDList: function(hashArray){
 		var resultArray = [];
-		if (type == "pheno"){
-			hashSource = this._updateOverviewPos(this.state.phenotypeListHash.entries());
-		}
-		if (type == "model"){
-			hashSource = this.state.modelListHash.entries();
-		}
-		for (var j in hashSource ) {
-			resultArray[hashSource[j][1].pos] = hashSource[j][0];
+		for (var j in hashArray) {
+			resultArray[hashArray[j][1].pos] = hashArray[j][0];
 		}
 		return resultArray;
 	},
 
 	//NEW
-	_updateOverviewPos: function(dataArray){
-		for (var i in dataArray){
+	_updateOverviewPos: function(hashArray){
+		for (var i in hashArray){
 			for (var j in this.state.targetSpeciesList){
-				if (dataArray[i][1].species == this.state.targetSpeciesList[j].name){
-					dataArray[i][1].pos += (j * this.state.multiOrganismCt);
+				if (hashArray[i][1].species == this.state.targetSpeciesList[j].name){
+					hashArray[i][1].pos += (j * this.state.multiOrganismCt);
 				}
 			}
 		}
-		return dataArray;
+		return hashArray;
 	},
 
 	//IGNORE
@@ -1560,7 +1540,6 @@ function modelDataPointPrint(point) {
 	//given a rowid, return the y-axis position
 	//DELETE
 	_getYPosition: function(newRowId) {
-		console.log(newRowId);
 		var retValue = this.state.yoffset;
 
 		for (var i in this.state.yAxis) {
@@ -2319,13 +2298,14 @@ function modelDataPointPrint(point) {
 
 	//TO HASH
 	_highlightIntersection: function(curr_data, obj){
-		var self=this;
+		console.log("OBJ " + obj);
+		var self = this;
 
 		//Highlight Row
 		var highlight_rect = self.state.svg.append("svg:rect")
 			.attr("transform","translate(" + self.state.axis_pos_list[1] + ","+ (self.state.yoffsetOver + 4 ) + ")")
 			.attr("x", 12)
-			.attr("y", function(d) {return self._getYPosition(curr_data.id_a) ;}) //rowid
+			.attr("y", function(d) {return self._getYPosition(curr_data.pheno_id) ;}) //rowid
 			.attr("class", "row_accent")
 			.attr("width", this.state.modelWidth - 4)
 			.attr("height", 12);
@@ -2338,10 +2318,11 @@ function modelDataPointPrint(point) {
 		// that is in the 0th position in the grid. No labels exist with the curr_data.id except for the first column
 		//For the overview, there will be a 0th position for each species so we need to get the right model_id
 
-		var phen_label = this.state.svg.selectAll("text.a_text." + curr_data.id_a);
-		var txt = curr_data.label_a;
+		var phen_label = this.state.svg.selectAll("text.a_text." + curr_data.pheno_id);
+		var txt = self._getAxisData(curr_data.pheno_id).label;
+		console.log(txt);
 		if (txt === undefined) {
-			txt = curr_data.id_a;
+			txt = curr_data.pheno_id;
 		}
 		phen_label.text(txt)
 			.style("font-weight", "bold")
@@ -2474,7 +2455,7 @@ function modelDataPointPrint(point) {
 			.attr("stroke-width", 1);
 	},
 
-	//TO HASH
+	//IGNORE
 	_createTextScores: function(list) {
 		var self = this;
 		var xWidth = self.state.widthOfSingleModel;
@@ -2496,14 +2477,11 @@ function modelDataPointPrint(point) {
 				if (d === self.state.dummyModelName) {
 					return "";
 				} else {
-					var score = self._getAxisData(d).score;
-					return d.model_score;
+					return self._getAxisData(d).score;
 				}})
 			.style("font-weight","bold")
 			.style("fill",function(d) {
-				var score = self._getAxisData(d).score;
-				var species = self._getAxisData(d).species;
-				return self._getColorForModelValue(self,species,score);
+				return self._getColorForModelValue(self,self._getAxisData(d).species,self._getAxisData(d).score);
 			});
 	},
 
@@ -2647,21 +2625,23 @@ function modelDataPointPrint(point) {
 	//TO HASH
 	_createModelRegion: function () {
 		var self = this;
-		var list = [];
+		var modsHash = [];
 
 		//This is for the new "Overview" target option 
 		if (this.state.targetSpeciesName == "Overview"){
-			list = this.state.modelListHash.keys();
+			modsHash = this._updateOverviewPos(this.state.modelListHash.entries());
 		} else {
-			list = this.state.filteredModelListHash.keys();
+			modsHash = this.state.filteredModelListHash.entries();
 		}
+		var mods = self._getSortedIDList(modsHash);
+
 		this.state.xScale = d3.scale.ordinal()
-			.domain(list.map(function (d) {return d; }))
+			.domain(mods.map(function (d) {return d; }))
 			.rangeRoundBands([0,this.state.modelWidth]);
 
 		this._createModelLabels(self);
 		this._createModelLines();
-		this._createTextScores(list);
+		this._createTextScores(mods);
 		this._createOverviewSpeciesLabels();
 	},
 
