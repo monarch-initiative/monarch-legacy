@@ -1834,6 +1834,7 @@ function modelDataPointPrint(point) {
 
 		this._resetLinks();
 		var alabels = this.state.svg.selectAll("text.a_text." + curr_data);
+
 		var txt = this._getAxisData(curr_data).label;
 		if (txt === undefined) {
 			txt = curr_data;
@@ -1861,32 +1862,42 @@ function modelDataPointPrint(point) {
 		this._deselectMatchingModels(curr_data);
 	},
 
-	//TO HASH
+	//NEW
+	_getMatchingModels: function (key) {
+		var modelKeys = this.state.modelDataHash.keys();
+		var matchingKeys = [];
+		//console.log(key);
+		for (var i in modelKeys){
+			if (key == modelKeys[i].pheno_id || key == modelKeys[i].model_id){
+				matchingKeys.push(modelKeys[i]);
+			}
+		}
+		return matchingKeys;
+	},
+
+	//IGNORE
 	_highlightMatchingPhenotypes: function(curr_data){
-		console.log(curr_data);
 		var self = this;
-		var models = self.state.modelDataHash;
+		var models = self._getMatchingModels(curr_data);
 		var curModel = this._getConceptId(curr_data);
+		var alabels = this.state.svg.selectAll("text.a_text");
+
 		for (var i in models){
-			//models[i] is the matching model that contains all phenotypes
-			if (models[i].model_id == curModel){
-				var alabels = this.state.svg.selectAll("text.a_text");
-				var mtxt = models[i].label_a;
-				if (mtxt === undefined) {
-					mtxt = models[i].id_a;
-				}
-				var shortTxt = self._getShortLabel(mtxt);
-				for (var j in alabels[0]){
-					if (alabels[0][j].innerHTML == shortTxt){
-						alabels[0][j].style.fill = "blue";
-						break;
-					}
+			var mtxt = self._getAxisData(models[i].pheno_id).label;
+			if (mtxt === undefined) {
+				mtxt = models[i].pheno_id;
+			}
+			var shortTxt = self._getShortLabel(mtxt);
+			for (var j in alabels[0]){
+				if (alabels[0][j].innerHTML == shortTxt){
+					alabels[0][j].style.fill = "blue";
+					break;
 				}
 			}
 		}
 	},
 
-	//TO HASH
+	//IGNORE
 	_deselectMatchingPhenotypes: function(curr_data){
 		var self = this;
 		self.state.svg.selectAll("text.a_text")
@@ -2114,7 +2125,7 @@ function modelDataPointPrint(point) {
 	//NOTE: I need to find a way to either add the model class to the phenotypes when they load OR
 	//select the rect objects related to the model and append the class to them.
 	//something like this: $( "p" ).addClass( "myClass yourClass" );
-	//TO HASH
+	//IGNORE
 	_createModelRects: function() {
 		var self = this;
 		var data = this.state.filteredModelDataHash;
@@ -2267,8 +2278,8 @@ function modelDataPointPrint(point) {
 			.attr("width", this.state.modelWidth - 4)
 			.attr("height", 12);
 
-		this.state.selectedRow = curr_data;
-		this.state.selectedColumn = curr_data;
+		this.state.selectedRow = curr_data.pheno_id;
+		this.state.selectedColumn = curr_data.model_id;
 		this._resetLinks();
 
 		//To get the phenotype label from the selected rect data, we need to concat the phenotype ids to the model id 
@@ -2521,7 +2532,7 @@ function modelDataPointPrint(point) {
 	 * scales
 	 *
 	 */
-	 //IGNORE
+	//IGNORE
 	_createRectangularContainers: function() {
 		var self=this;
 		this._buildAxisPositionList();
@@ -2575,7 +2586,7 @@ function modelDataPointPrint(point) {
 				}
 				this.state.axis_pos_list.push((this.state.textWidth + 30) + this.state.colStartingPos + w);
 			} else {
-				this.state.axis_pos_list.push((i*(this.state.textWidth + 10)) + this.state.colStartingPos);
+				this.state.axis_pos_list.push((i * (this.state.textWidth + 10)) + this.state.colStartingPos);
 			}
 		}	
 	},
