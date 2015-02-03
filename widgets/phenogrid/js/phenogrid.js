@@ -348,9 +348,9 @@ function modelDataPointPrint(point) {
 		element.appendTo(this.state.svgContainer);
 	},
 
-	//TO HASH
+	//IGNORE
 	reDraw: function() {
-		if (this.state.modelData.length !== 0 && this.state.phenoLength !== 0 && this.state.filteredPhenotypeData.length !== 0){
+		if (this.state.phenoLength !== 0 && this.state.filteredModelDataHash.length !== 0){
 			this._setComparisonType();
 			this._initCanvas();
 			this._addLogoImage();
@@ -1228,7 +1228,7 @@ function modelDataPointPrint(point) {
 					}
 				}
 
-				hashData = {"label": this.state.modelData[i].model_label, "species": this.state.modelData[i].species, "taxon": this.state.modelData[i].taxon, "type": type, "pos": x, "score": score};
+				hashData = {"label": this.state.modelData[i].model_label, "species": this.state.modelData[i].species, "taxon": this.state.modelData[i].taxon, "type": type, "pos": x, "rank": x, "score": score};
 				this.state.modelListHash.put(this.state.modelData[i].model_id, hashData);
 			}
 
@@ -1266,7 +1266,7 @@ function modelDataPointPrint(point) {
 	//NEW
 	_filterHashTables: function () {
 		this._sortPhenotypeHash();
-		this._filterPhenotypeHash(0,25);
+		this._filterPhenotypeHash(0,29);
 		this._filterModelListHash(0,this.state.modelDisplayCount);
 		this.state.filteredModelDataHash = [];
 		//NOT A HASH ACTUALLY.  RENAME AFTER ADOPTION
@@ -1477,7 +1477,7 @@ function modelDataPointPrint(point) {
 	//for a given model, extract the sim search data including IC scores and the triple:
 	//the a column, b column, and lowest common subsumer
 	//for the triple's IC score, use the LCS score
-	//TO HASH
+	//IGNORE
 	_loadDataForModel: function(newModelData) {
 		//data is an array of all model matches
 		var data = newModelData.matches;
@@ -1655,7 +1655,7 @@ function modelDataPointPrint(point) {
 			});
 	},
 
-	//TO HASH
+	//IGNORE
 	_resetSelections: function(type) {
 		var self = this;
 		$("#unmatchedlabel").remove();
@@ -1671,7 +1671,6 @@ function modelDataPointPrint(point) {
 
 		if (type === "organism"){
 			self.state.phenotypeData = self.state.origPhenotypeData.slice();
-			self.state.phenotypeSortData = [];
 			self._reset("organism");
 			self._init();
 		}
@@ -1718,24 +1717,31 @@ function modelDataPointPrint(point) {
 			link_labels.style("fill", "black");
 	},
 
-	//TO HASH
+	//IGNORE
 	_highlightMatchingModels: function(curr_data){
-		var label = this._getAxisData(curr_data).label;
-		var alabels = this.state.svg.selectAll("text");
-		for (var j in alabels[0]){
-			var shortTxt = self._getShortLabel(label,self.state.labelCharDisplayCount);
-			if(alabels[0][j].id == curr_data){
-				alabels[0][j].style.fill = "blue";
-				alabels[0][j].innerHTML = label;
+		var self = this;
+		var models = self._getMatchingModels(curr_data);
+		var alabels = this.state.svg.selectAll("text.model_label");
+		for (var i in models){
+			var label = self._getAxisData(models[i].model_id).label;
+			if (label === undefined) {
+				label = models[i].model_id;
+			}
+			for (var j in alabels[0]){
+				if(alabels[0][j].id == models[i].model_id){
+					alabels[0][j].style.fill = "blue";
+					alabels[0][j].innerHTML = label;
+				}
 			}
 		}
 	},
 
-	//TO HASH
+	//IGNORE
 	_deselectMatchingModels: function(curr_data){
-		var alabels = this.state.svg.selectAll("text");
-		var label = this._getAxisData(curr_data).label;
+		var self = this;
+		var alabels = this.state.svg.selectAll("text.model_label");
 		for (var j in alabels[0]){
+			var label = this._getAxisData(alabels[0][j].id).label;
 			var shortTxt = this._getShortLabel(label,self.state.labelCharDisplayCount);
 			if(alabels[0][j].innerHTML == label){
 				alabels[0][j].style.fill = "black";
@@ -1775,9 +1781,8 @@ function modelDataPointPrint(point) {
 			}
 		}
 
-		var width = (type === this.state.defaultApiEntity)?80:200;
-		var height = (type === this.state.defaultApiEntity)?50:60;
-
+		var width = (type === this.state.defaultApiEntity) ? 80 : 200;
+		var height = (type === this.state.defaultApiEntity) ? 50 : 60;
 		var retData = "<strong>" + modelInfo.type + ": </strong> " + modelInfo.label + "<br/><strong>Rank:</strong> " + modelInfo.rank;
 
 		//obj is try creating an ojbect with an attributes array including "attributes", but I may need to define
@@ -1879,7 +1884,6 @@ function modelDataPointPrint(point) {
 	_highlightMatchingPhenotypes: function(curr_data){
 		var self = this;
 		var models = self._getMatchingModels(curr_data);
-		var curModel = this._getConceptId(curr_data);
 		var alabels = this.state.svg.selectAll("text.a_text");
 
 		for (var i in models){
@@ -2567,14 +2571,13 @@ function modelDataPointPrint(point) {
 	},
 
 	/* Build out the positions of the 3 boxes */
-	//TO HASH
+	//IGNORE
 	_buildAxisPositionList: function() {
 		//For Overview of Organisms 0 width = ((multiOrganismCt*2)+2) *this.state.widthOfSingleModel	
 		//Add two extra columns as separators
 		this.state.axis_pos_list = [];
-
 		//calculate width of model section
-		this.state.modelWidth = this.state.filteredModelList.length * this.state.widthOfSingleModel;
+		this.state.modelWidth = this.state.filteredModelListHash.size() * this.state.widthOfSingleModel;
 		//add an axis for each ordinal scale found in the data
 		for (var i = 0; i < 3; i++) {
 			//move the last accent over a bit for the scrollbar
@@ -2622,10 +2625,10 @@ function modelDataPointPrint(point) {
 		this._createSelectionControls(phenogridControls);
 	},
  
- 	//TO HASH
+ 	//IGNORE
 	_addGradients: function() {
 		var self = this;
-		var modData = this.state.modelData;
+		var modData = this.state.modelDataHash.values();
 		var temp_data = modData.map(function(d) { return d.value[self.state.selectedCalculation];} );
 		var diff = d3.max(temp_data) - d3.min(temp_data);
 		var y1;
@@ -2946,20 +2949,22 @@ function modelDataPointPrint(point) {
 			.remove();
 	},
 
-	//TO HASH
+	//IGNORE
 	_getUnmatchedPhenotypes: function(){
-		var fullset = this.state.origPhenotypeData,
-		partialset = this.state.phenotypeSortData,
-		full = [],
-		partial = [],
-		unmatchedset = [];
+		var fullset = this.state.origPhenotypeData;
+		var partialset = this.state.phenotypeListHash.keys();
+		var full = [];
+		var partial = [];
+		var unmatchedset = [];
 
 		for (var i in fullset) {
 			full.push(fullset[i]);
 		}
-		for (var j in partialset) {
-			partial.push((partialset[j][0].id_a).replace("_", ":"));
+
+		for (var j in partialset){
+			partial.push(partialset[j].replace("_", ":"));
 		}
+
 		for (var k in full) {
 			//if no match in fullset
 			if (partial.indexOf(full[k].id) < 0) {
@@ -2988,7 +2993,7 @@ function modelDataPointPrint(point) {
 		return dupArray;
 	},
 
-	//TO HASH
+	//IGNORE
 	_getUnmatchedLabels: function() {
 		var unmatchedLabels = [];
 		for (var i in this.state.unmatchedPhenotypes){
@@ -3007,7 +3012,7 @@ function modelDataPointPrint(point) {
 		return unmatchedLabels;
 	},
 
-	//TO HASH
+	//IGNORE
 	_buildUnmatchedPhenotypeDisplay: function() {
 		var optionhtml;
 		var prebl = $("#prebl");
@@ -3042,7 +3047,7 @@ function modelDataPointPrint(point) {
 		});
 	},
 
-	//TO HASH
+	//IGNORE
 	_buildUnmatchedPhenotypeTable: function(){
 		var self = this;
 		var columns = 4;
