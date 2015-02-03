@@ -594,9 +594,6 @@ function modelDataPointPrint(point) {
 	//NEW
 	_returnPhenoID: function(id){
 		var searchArray = this.state.phenotypeListHash.entries();
-		if (this.state.targetSpeciesName === "Overview") {
-			searchArray = this._updateOverviewPos(searchArray);
-		} 
 		var results = false;
 		for (var i in searchArray){
 			if (searchArray[i][1].pos == id){
@@ -733,13 +730,13 @@ function modelDataPointPrint(point) {
 	_createSmallScales: function(overviewRegionSize) {
 		var self = this;
 		var sortDataList = self._getSortedIDList(self.state.phenotypeListHash.entries());
-		var modsHash = self.state.modelListHash.entries();
+		var mods = [];
 
 		if (this.state.targetSpeciesName === "Overview") {
-			self._updateOverviewPos(modsHash);
+			mods = self._getSortedOverviewIDList(self.state.modelListHash.entries());
+		} else {
+			mods = self._getSortedIDList(self.state.modelListHash.entries());
 		}
-
-		var mods = self._getSortedIDList(modsHash);
 
 		this.state.smallYScale = d3.scale.ordinal()
 			.domain(sortDataList.map(function (d) {return d; }))
@@ -752,24 +749,23 @@ function modelDataPointPrint(point) {
 	},
 
 	//NEW
+	_getSortedOverviewIDList: function(hashArray){
+		var resultArray = [];
+		var position;
+		for (var j in hashArray) {
+			position = hashArray[j][1].opos;
+			resultArray[hashArray[j][1].opos] = hashArray[j][0];
+		}
+		return resultArray;
+	},
+
+	//NEW
 	_getSortedIDList: function(hashArray){
 		var resultArray = [];
 		for (var j in hashArray) {
 			resultArray[hashArray[j][1].pos] = hashArray[j][0];
 		}
 		return resultArray;
-	},
-
-	//NEW
-	_updateOverviewPos: function(hashArray){
-		for (var i in hashArray){
-			for (var j in this.state.targetSpeciesList){
-				if (hashArray[i][1].species == this.state.targetSpeciesList[j].name){
-					hashArray[i][1].pos += (j * 10);
-				}
-			}
-		}
-		return hashArray;
 	},
 
 	_invertOverviewDragPosition: function(scale,value) {
@@ -1022,7 +1018,7 @@ function modelDataPointPrint(point) {
 		this.state.phenotypeListHash = new Hashtable();
 		this.state.modelListHash = new Hashtable();
 		this.state.modelDataHash = new Hashtable({hashCode: modelDataPointPrint, equals: modelDataPointEquals});
-		var modelPoint, hashData, concept, type, score, x;
+		var modelPoint, hashData, concept, type, score, x, z;
 		var y = 0;
 
 		for (var i in this.state.modelData)
@@ -1047,12 +1043,19 @@ function modelDataPointPrint(point) {
 
 				for (var m in this.state.modelList){
 					if (this.state.modelList[m].model_id == this.state.modelData[i].model_id){
-						x = this.state.modelList[m].model_rank;
+						x = parseInt(this.state.modelList[m].model_rank);
 						score = this.state.modelList[m].model_score;
 					}
 				}
 
-				hashData = {"label": this.state.modelData[i].model_label, "species": this.state.modelData[i].species, "taxon": this.state.modelData[i].taxon, "type": type, "pos": x, "rank": x, "score": score};
+				z = x;
+				for (var k in this.state.targetSpeciesList){
+					if (this.state.modelData[i].species == this.state.targetSpeciesList[k].name){
+						z = x + (k * 10);
+					}
+				}
+
+				hashData = {"label": this.state.modelData[i].model_label, "species": this.state.modelData[i].species, "taxon": this.state.modelData[i].taxon, "type": type, "pos": x, "opos": z, "rank": x, "score": score};
 				this.state.modelListHash.put(this.state.modelData[i].model_id, hashData);
 			}
 
@@ -1061,7 +1064,6 @@ function modelDataPointPrint(point) {
 			hashData = {"value": this.state.modelData[i].value, "subsumer_label": this.state.modelData[i].subsumer_label, "subsumer_id": this.state.modelData[i].subsumer_id, "subsumer_IC": this.state.modelData[i].subsumer_IC, "b_label": this.state.modelData[i].label_b, "b_id": this.state.modelData[i].id_b, "b_IC": this.state.modelData[i].IC_b};
 			this._updateSortVals(this.state.modelData[i].id_a, this.state.modelData[i].subsumer_IC);
 			this.state.modelDataHash.put(modelPoint, hashData);
-
 		}
 	},
 
@@ -1118,7 +1120,7 @@ function modelDataPointPrint(point) {
 		this.state.filteredModelListHash = new Hashtable();
 		var oldHash = this.state.modelListHash.entries();
 		for (var i in oldHash){
-			if (oldHash[i][1].pos >= start && oldHash[i][1].pos <= end){
+			if (oldHash[i][1].pos >= start && oldHash[i][1].pos < end){
 				this.state.filteredModelListHash.put(oldHash[i][0],oldHash[i][1]);
 			}
 		}
@@ -2158,9 +2160,8 @@ function modelDataPointPrint(point) {
 		this._createRowLabels();
 	},
 
-	_createModelLabels: function(self) {
+	_createModelLabels: function(self, models) {
 		var model_x_axis = d3.svg.axis().scale(self.state.xScale).orient("top");
-		var mods = self._getSortedIDList(self.state.filteredModelListHash.entries());
 
 		self.state.svg.append("g")
 			.attr("transform","translate(" + (self.state.textWidth + 28) + "," + self.state.yoffset + ")")
@@ -2170,8 +2171,8 @@ function modelDataPointPrint(point) {
 			//to rotate the text, I need to select it as it was added by the axis
 			.selectAll("text") 
 			.each(function(d,i) { 
-				var labelM = self._getAxisData(mods[i]).label;
-				self._convertLabelHTML(self, this, self._getShortLabel(labelM,self.state.labelCharDisplayCount),mods[i]);
+				var labelM = self._getAxisData(models[i]).label;
+				self._convertLabelHTML(self, this, self._getShortLabel(labelM,self.state.labelCharDisplayCount),models[i]);
 			});
 	},
 
@@ -2360,21 +2361,19 @@ function modelDataPointPrint(point) {
 	//this code creates the labels for the models, the lines, scores, etc..
 	_createModelRegion: function () {
 		var self = this;
-		var modsHash = [];
+		var mods = [];
 
-		//This is for the new "Overview" target option 
-		if (this.state.targetSpeciesName == "Overview"){
-			modsHash = this._updateOverviewPos(this.state.modelListHash.entries());
+		if (this.state.targetSpeciesName === "Overview") {
+			mods = self._getSortedOverviewIDList(this.state.modelListHash.entries());
 		} else {
-			modsHash = this.state.filteredModelListHash.entries();
+			mods = self._getSortedIDList(this.state.filteredModelListHash.entries());
 		}
-		var mods = self._getSortedIDList(modsHash);
 
 		this.state.xScale = d3.scale.ordinal()
 			.domain(mods.map(function (d) {return d; }))
 			.rangeRoundBands([0,this.state.modelWidth]);
 
-		this._createModelLabels(self);
+		this._createModelLabels(self,mods);
 		this._createModelLines();
 		this._createTextScores(mods);
 		this._createOverviewSpeciesLabels();
