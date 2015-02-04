@@ -124,7 +124,8 @@ function modelDataPointPrint(point) {
 		baseYOffset: 150,
 		faqImgSize: 15,
 		dummyModelName: "dummy",
-		invertAxis: false
+		invertAxis: false,
+		getAxisError: false
 	},
 
 	internalOptions: {
@@ -798,6 +799,15 @@ function modelDataPointPrint(point) {
 		return resultArray;
 	},
 
+	_getSortedIDListStrict: function (hashArray){
+		var firstSort = this._getSortedIDList(hashArray);
+		var resultArray = [];
+		for (var j in firstSort) {
+			resultArray.push(firstSort[j]);
+		}
+		return resultArray;
+	},
+
 	_invertOverviewDragPosition: function(scale,value) {
 		var leftEdges = scale.range();
 		var size = scale.rangeBand();
@@ -1028,7 +1038,7 @@ function modelDataPointPrint(point) {
 
 	//NEW
 	_getAxisData: function(key) {
-		if (typeof(key) === 'undefined'){
+		if (typeof(key) === 'undefined'  && this.state.getAxisError){
 			console.log("UNDEFINED AXIS CALL");
 			return false;
 		}
@@ -2222,7 +2232,6 @@ function modelDataPointPrint(point) {
 
 	_createModelLabels: function(self, models) {
 		var model_x_axis = d3.svg.axis().scale(self.state.xScale).orient("top");
-
 		self.state.svg.append("g")
 			.attr("transform","translate(" + (self.state.textWidth + 28) + "," + self.state.yoffset + ")")
 			.attr("class", "x axis")
@@ -2231,8 +2240,8 @@ function modelDataPointPrint(point) {
 			//to rotate the text, I need to select it as it was added by the axis
 			.selectAll("text") 
 			.each(function(d,i) { 
-				var labelM = self._getAxisData(models[i]).label;
-				self._convertLabelHTML(self, this, self._getShortLabel(labelM,self.state.labelCharDisplayCount),models[i]);
+				var labelM = self._getAxisData(d).label;
+				self._convertLabelHTML(self, this, self._getShortLabel(labelM,self.state.labelCharDisplayCount),d);
 			});
 	},
 
@@ -2425,7 +2434,7 @@ function modelDataPointPrint(point) {
 		if (this.state.targetSpeciesName === "Overview") {
 			mods = self._getSortedOverviewIDList(this.state.xAxis.entries());
 		} else {
-			mods = self._getSortedIDList(this.state.filteredXAxis.entries());
+			mods = self._getSortedIDListStrict(this.state.filteredXAxis.entries());
 		}
 
 		this.state.xScale = d3.scale.ordinal()
@@ -2713,8 +2722,7 @@ function modelDataPointPrint(point) {
 		var self = this;
 		var pad = 14;
 
-		var list = self._getSortedIDList(self.state.filteredYAxis.entries());
-
+		var list = self._getSortedIDListStrict(self.state.filteredYAxis.entries());
 		var rect_text = this.state.svg
 			.selectAll(".a_text")
 			.data(list, function(d) { return d; });
