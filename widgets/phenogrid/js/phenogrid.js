@@ -106,8 +106,6 @@ function modelDataPointPrint(point) {
 			{ abbrev: "FB", label: "Fly"},
 			{ abbrev: "GO", label: "Gene Ontology"}],
 		dataDisplayCount: 30,
-		defaultdataDisplayCount: 30,
-		dataDisplayCount: 30,
 		labelCharDisplayCount : 20,
 		apiEntityMap: [ {prefix: "HP", apifragment: "disease"},
 			{prefix: "OMIM", apifragment: "disease"}],
@@ -382,8 +380,8 @@ function modelDataPointPrint(point) {
 	},
 
 	_resetIndicies: function() {
-		this.state.currModelIdx = this.state.dataDisplayCount-1;
-		this.state.currPhenotypeIdx = this.state.dataDisplayCount-1;
+		this.state.currModelIdx = this.state.dataDisplayCount - 1;
+		this.state.currPhenotypeIdx = this.state.dataDisplayCount - 1;
 	},
 
 	/* dummy option procedures as per 
@@ -472,11 +470,13 @@ function modelDataPointPrint(point) {
 		if (this.state.invertAxis){
 			this.state.xAxis = this.state.phenotypeListHash;
 			this.state.yAxis = this.state.modelListHash;
-			//this.state.targetSpeciesName = "Danio rerio";
 		} else {
 			this.state.xAxis = this.state.modelListHash;
 			this.state.yAxis = this.state.phenotypeListHash;
 		}
+		//Maybe put these elsewhere later
+		this.state.phenoDisplayCount = this.state.dataDisplayCount;
+		this.state.modelDisplayCount = this.state.dataDisplayCount;
 	},
 
 	//for the selection area, see if you can convert the selection to the idx of the x and y
@@ -499,7 +499,7 @@ function modelDataPointPrint(point) {
 
 		// size of the entire region - it is a square
 		var overviewRegionSize = self.state.globalViewSize;
-		if (this.state.phenoLength < this.state.defaultPhenotypeDisplayCount) {
+		if (this.state.phenoLength < this.state.dataDisplayCount) {
 			overviewRegionSize = self.state.reducedGlobalViewSize;
 		}
 
@@ -1647,6 +1647,11 @@ function modelDataPointPrint(point) {
 		}
 	},
 
+	//NEW
+	_capitalizeString: function(word){
+		return word.charAt(0).toUpperCase() + word.slice(1);
+	},
+
 	_selectModel: function(modelData, obj) {
 		var self = this;
 		var modelInfo = self._getAxisData(modelData);
@@ -1679,7 +1684,7 @@ function modelDataPointPrint(point) {
 
 		var width = (type === this.state.defaultApiEntity) ? 80 : 200;
 		var height = (type === this.state.defaultApiEntity) ? 50 : 60;
-		var retData = "<strong>" + modelInfo.type + ": </strong> " + modelInfo.label + "<br/><strong>Rank:</strong> " + modelInfo.rank;
+		var retData = "<strong>" + self._capitalizeString(modelInfo.type) + ": </strong> " + modelInfo.label + "<br/><strong>Rank:</strong> " + modelInfo.rank;
 
 		//obj is try creating an ojbect with an attributes array including "attributes", but I may need to define
 		//getAttrbitues
@@ -1803,14 +1808,14 @@ function modelDataPointPrint(point) {
 		var concept = self._getConceptId(data);
 		var apientity = this.state.defaultApiEntity;
 		if (this._getIDType(data) == "Phenotype"){
-			url = url_origin + "/phenotype/" + data;
+			url = url_origin + "/phenotype/" + (data.replace("_", ":"));
 		} else if (this._getIDType(data) == "Model"){
 			for (var i in this.state.apiEntityMap) {
 				if (concept.indexOf(this.state.apiEntityMap[i].prefix) === 0) {
 					apientity = this.state.apiEntityMap[i].apifragment;
 				}
 			}
-			url = url_origin + "/" + apientity + "/" + concept;
+			url = url_origin + "/" + apientity + "/" + (concept.replace("_", ":"));
 		} else {
 			console.log ("URL CLICK ERROR");
 		}
@@ -1965,7 +1970,7 @@ function modelDataPointPrint(point) {
 		retData = "<strong>Query: </strong> " + phenoInfo.label + " (IC: " + phenoInfo.IC.toFixed(2) + ")" +
 			"<br/><strong>Match: </strong> " + d.b_label + " (IC: " + d.b_IC.toFixed(2) +")" +
 			"<br/><strong>Common: </strong> " + d.subsumer_label + " (IC: " + d.subsumer_IC.toFixed(2) +")" +
-			"<br/><strong>" + modelInfo.type +": </strong> " + modelInfo.label +
+			"<br/><strong>" + this._capitalizeString(modelInfo.type)+": </strong> " + modelInfo.label +
 			"<br/><strong>" + prefix + ":</strong> " + d.value[this.state.selectedCalculation].toFixed(2) + suffix +
 			"<br/><strong>Species: </strong> " + species + " (" + taxon + ")";
 		this._updateDetailSection(retData, this._getXYPos(obj));
@@ -2104,44 +2109,68 @@ function modelDataPointPrint(point) {
 		//create the related model rectangles
 		var self = this;
 		var list = [];
-		var ct;
+		var ct, width, height, borderStroke;
+		var vwidthAndGap = self.state.heightOfSingleModel;
+		var hwidthAndGap = self.state.widthOfSingleModel;
+		var totCt = 0;
+		var parCt = 0;
+
 		//Have temporarly until fix for below during Axis Flip
-		if (!this.state.invertAxis && self.state.targetSpeciesName == "Overview"){
-			list = self.state.speciesList;
-			ct = self.state.multiOrganismCt;
+		if (self.state.targetSpeciesName == "Overview"){
+			if (this.state.invertAxis) {
+				list = self.state.speciesList;
+				ct = self.state.multiOrganismCt;
+				borderStroke = self.state.detailRectStrokeWidth / 2;
+				width = hwidthAndGap * self.state.dataDisplayCount;
+				height = vwidthAndGap * ct + borderStroke;
+			} else {
+				list = self.state.speciesList;
+				ct = self.state.multiOrganismCt;
+				borderStroke = self.state.detailRectStrokeWidth;
+				width = hwidthAndGap * ct;
+				height = vwidthAndGap * self.state.dataDisplayCount + borderStroke * 2;
+			}
 		} else {
 			list.push(self.state.targetSpeciesName);
 			ct = self.state.dataDisplayCount;
+			borderStroke = self.state.detailRectStrokeWidth;
+			width = hwidthAndGap * ct;
+			height = vwidthAndGap * self.state.dataDisplayCount + borderStroke * 2;
 		}
-
-		var vwidthAndGap = self.state.heightOfSingleModel;
-		var hwidthAndGap = self.state.widthOfSingleModel;
-		var borderStroke = self.state.detailRectStrokeWidth;
-		var totCt = 0;
-		var parCt = 0;
 
 		var border_rect = self.state.svg.selectAll(".species_accent")
 			.data(list)
 			.enter()
 			.append("rect")
-			.attr("transform","translate(" + (self.state.textWidth + 30) + "," +(self.state.yoffsetOver)+ ")")
-			.attr("x", function(d,i) { 
-				totCt += ct;
-				if (i === 0) { return 0; }
-				else {
-					parCt = totCt - ct;
-					return hwidthAndGap * parCt;
-				}
-			})
-			.attr("y", self.state.yoffset+1)
+			.attr("transform","translate(" + (self.state.textWidth + 30) + "," + (self.state.yoffsetOver) + ")")
 			.attr("class", "species_accent")
-			.attr("width", function(d,i) {
-				return hwidthAndGap * ct;
-			})
-			.attr("height", vwidthAndGap * self.state.dataDisplayCount + borderStroke*2)
+			.attr("width", width)
+			.attr("height", height)
 			.attr("stroke", "black")
 			.attr("stroke-width", borderStroke)
 			.attr("fill", "none");
+
+			if (self.state.targetSpeciesName == "Overview" && this.state.invertAxis){
+				border_rect.attr("x", 0);
+				border_rect.attr("y", function(d,i) { 
+					totCt += ct;
+					if (i === 0) { return (self.state.yoffset + borderStroke); }
+					else {
+						parCt = totCt - ct;
+						return (self.state.yoffset + borderStroke) + ((vwidthAndGap) * parCt + i);
+					}
+				});
+			} else {
+				border_rect.attr("x", function(d,i) { 
+					totCt += ct;
+					if (i === 0) { return 0; }
+					else {
+						parCt = totCt - ct;
+						return hwidthAndGap * parCt;
+					}
+				});
+				border_rect.attr("y", self.state.yoffset + 1);
+			}
 	},
 
 	_enableRowColumnRects: function(curr_rect){
@@ -2510,7 +2539,7 @@ function modelDataPointPrint(point) {
 		//in the scale
 		if (diff > 0) {
 			// baseline for gradient positioning
-			if (this.state.phenoLength < this.state.defaultPhenotypeDisplayCount) {
+			if (this.state.phenoLength < this.state.dataDisplayCount) {
 				y1 = 172;
 			} else {
 				y1 = 262;
@@ -2772,7 +2801,7 @@ function modelDataPointPrint(point) {
 		} else {
 			list = self._getSortedIDListStrict(self.state.filteredYAxis.entries());
 		}
-		
+
 		var rect_text = this.state.svg
 			.selectAll(".a_text")
 			.data(list, function(d) { return d; });
@@ -2932,7 +2961,7 @@ function modelDataPointPrint(point) {
 				var label = unmatched[i].label;
 				var id = self._getConceptId(unmatched[i++].id);
 				var url_origin = self.document[0].location.origin;
-				text += "<td><a href='" + url_origin + "/phenotype/" + id + "' target='_blank'>" + label + "</a></td>";
+				text += "<td><a href='" + url_origin + "/phenotype/" + (id.replace("_", ":")) + "' target='_blank'>" + label + "</a></td>";
 				if (i == unmatched.length) {
 					break;
 				}
