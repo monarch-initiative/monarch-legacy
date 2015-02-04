@@ -124,7 +124,7 @@ function modelDataPointPrint(point) {
 		baseYOffset: 150,
 		faqImgSize: 15,
 		dummyModelName: "dummy",
-		invertAxis: true,
+		invertAxis: false,
 		getAxisError: false
 	},
 
@@ -546,7 +546,7 @@ function modelDataPointPrint(point) {
 
 		var lastId = self._returnYID(self.state.dataDisplayCount - 1);
 		var lastMId = self._returnXID(self.state.dataDisplayCount - 1);
-		console.log(lastId + ", " + lastMId);
+
 		var selectRectHeight = self.state.smallYScale(lastId);
 		var selectRectWidth = self.state.smallXScale(lastMId);
 
@@ -609,12 +609,16 @@ function modelDataPointPrint(point) {
 
 					// invert newX and newY into posiions in the model and phenotype lists.
 					var j = self._invertOverviewDragPosition(self.state.smallXScale,newX);
-					var newModelPos = j + self.state.dataDisplayCount;
+					var newXPos = j + self.state.dataDisplayCount;
 
 					var jj = self._invertOverviewDragPosition(self.state.smallYScale,newY);
-					var newPhenotypePos = jj + self.state.dataDisplayCount;
-					console.log(newModelPos, newPhenotypePos);
-					self._updateModel(newModelPos, newPhenotypePos);
+					var newYPos = jj + self.state.dataDisplayCount;
+
+					if (axisStatus){
+						self._updateModel(newYPos, newXPos);
+					} else {
+						self._updateModel(newXPos, newYPos);
+					}
 		}));
 		//set this back to 0 so it doesn't affect other rendering
 	},
@@ -1135,11 +1139,12 @@ function modelDataPointPrint(point) {
 			//Setting modelDataHash
 			if (this.state.invertAxis){
 				modelPoint = new modelDataPoint(this.state.modelData[i].id_a, this.state.modelData[i].model_id);
+				this._updateSortVals(this.state.modelData[i].model_id, this.state.modelData[i].subsumer_IC);
 			} else {
 				modelPoint = new modelDataPoint(this.state.modelData[i].model_id, this.state.modelData[i].id_a);
+				this._updateSortVals(this.state.modelData[i].id_a, this.state.modelData[i].subsumer_IC);
 			}
 			hashData = {"value": this.state.modelData[i].value, "subsumer_label": this.state.modelData[i].subsumer_label, "subsumer_id": this.state.modelData[i].subsumer_id, "subsumer_IC": this.state.modelData[i].subsumer_IC, "b_label": this.state.modelData[i].label_b, "b_id": this.state.modelData[i].id_b, "b_IC": this.state.modelData[i].IC_b};
-			this._updateSortVals(this.state.modelData[i].id_a, this.state.modelData[i].subsumer_IC);
 			this.state.modelDataHash.put(modelPoint, hashData);
 		}
 	},
@@ -1160,10 +1165,18 @@ function modelDataPointPrint(point) {
 
 	//NEW
 	_updateSortVals: function(key,subIC) {
-		var values = this.state.phenotypeListHash.get(key);
-		values.count += 1;
-		values.sum += subIC;
-		this.state.phenotypeListHash.put(key,values);
+		var values;
+		if (this.state.invertAxis){
+			values = this.state.modelListHash.get(key);
+			values.count += 1;
+			values.sum += subIC;
+			this.state.modelListHash.put(key,values);
+		} else {
+			values = this.state.phenotypeListHash.get(key);
+			values.count += 1;
+			values.sum += subIC;
+			this.state.phenotypeListHash.put(key,values);
+		}
 	},
 
 	//NEW
@@ -1751,7 +1764,6 @@ function modelDataPointPrint(point) {
 	_getMatchingModels: function (key) {
 		var modelKeys = this.state.modelDataHash.keys();
 		var matchingKeys = [];
-		//console.log(key);
 		for (var i in modelKeys){
 			if (key == modelKeys[i].yID || key == modelKeys[i].xID){
 				matchingKeys.push(modelKeys[i]);
@@ -2216,33 +2228,32 @@ function modelDataPointPrint(point) {
 
 	//change the list of phenotypes and filter the models accordingly. The 
 	//movecount is an integer and can be either positive or negative
-	_updateModel: function(modelIdx, phenotypeIdx) {
+	_updateModel: function(modelPos, phenoPos) {	
 		var self = this;
 		var tempdata;
-
 		//This is for the new "Overview" target option 
-		var modelListLength = this.state.xAxis.keys().length;
+		var modelListLength = this.state.modelListHash.size();
 
 		//check to see if the phenotypeIdx is greater than the number of items in the list
-		if (phenotypeIdx > this.state.phenoLength) {
-			this.state.currPhenotypeIdx = this.state.yAxis.size();
-		} else if (phenotypeIdx - (this.state.dataDisplayCount - 1) < 0) {
+		if (phenoPos > this.state.phenoLength) {
+			this.state.currPhenotypeIdx = this.state.phenotypeListHash.size();
+		} else if (phenoPos - (this.state.dataDisplayCount - 1) < 0) {
 			//check to see if the min of the slider is less than the 0
 			this.state.currPhenotypeIdx = (this.state.dataDisplayCount - 1);
 		} else {
-			this.state.currPhenotypeIdx = phenotypeIdx;
+			this.state.currPhenotypeIdx = phenoPos;
 		}
 		var startPhenotypeIdx = this.state.currPhenotypeIdx - this.state.dataDisplayCount;
 
 		//fix model list
 		//check to see if the max of the slider is greater than the number of items in the list
-		if (modelIdx > modelListLength) {
+		if (modelPos > modelListLength) {
 			this.state.currModelIdx = modelListLength;
-		} else if (modelIdx - (this.state.dataDisplayCount - 1) < 0) {
+		} else if (modelPos - (this.state.dataDisplayCount - 1) < 0) {
 			//check to see if the min of the slider is less than the 0
 			this.state.currModelIdx = (this.state.dataDisplayCount -1);
 		} else {
-			this.state.currModelIdx = modelIdx;
+			this.state.currModelIdx = modelPos;
 		}
 		var startModelIdx = this.state.currModelIdx - this.state.dataDisplayCount;
 
@@ -2251,10 +2262,7 @@ function modelDataPointPrint(point) {
 		//also update the modeldata
 		var axis_idx = 0;
 
-		//console.log (startModelIdx + ", " + self.state.currModelIdx);
-		//console.log(self.state.filteredXAxis.entries());
 		this._filterModelListHash(startModelIdx, self.state.currModelIdx);
-		//console.log(this.state.filteredXAxis.entries());
 
 		this._filterSelected('updateModel');
 		this._clearModelLabels();
@@ -2764,7 +2772,7 @@ function modelDataPointPrint(point) {
 		} else {
 			list = self._getSortedIDListStrict(self.state.filteredYAxis.entries());
 		}
-		console.log(list);
+		
 		var rect_text = this.state.svg
 			.selectAll(".a_text")
 			.data(list, function(d) { return d; });
