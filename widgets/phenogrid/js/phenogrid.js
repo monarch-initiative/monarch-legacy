@@ -123,7 +123,8 @@ function modelDataPointPrint(point) {
 		gridTitleYOffset: 20,
 		baseYOffset: 150,
 		faqImgSize: 15,
-		dummyModelName: "dummy"
+		dummyModelName: "dummy",
+		invertAxis: true
 	},
 
 	internalOptions: {
@@ -521,6 +522,8 @@ function modelDataPointPrint(point) {
 		var lastId = self._returnPhenoID(self.state.phenotypeDisplayCount - 1);
 		var selectRectHeight = self.state.smallYScale(lastId);
 		var lastMId = self._returnModelID(self.state.modelDisplayCount - 1);
+		//console.log(self.state.modelDisplayCount - 1);
+		//console.log(lastMId);
 		var selectRectWidth = self.state.smallXScale(lastMId);
 
 		self.state.highlightRect = self.state.svg.append("rect")
@@ -586,6 +589,9 @@ function modelDataPointPrint(point) {
 
 					var jj = self._invertOverviewDragPosition(self.state.smallYScale,newY);
 					var newPhenotypePos = jj + self.state.phenotypeDisplayCount;
+
+					//console.log (j + ", " + jj);
+					//console.log (newModelPos + ", " + jj);
 					self._updateModel(newModelPos, newPhenotypePos);
 		}));
 		//set this back to 0 so it doesn't affect other rendering
@@ -609,9 +615,16 @@ function modelDataPointPrint(point) {
 		var searchArray = this.state.modelListHash.entries();
 		var results = false;
 		for (var i in searchArray){
-			if (searchArray[i][1].pos == id){
-				results = searchArray[i][0];
-				break;
+			if (this.state.targetSpeciesName === "Overview") {
+				if (searchArray[i][1].opos == id){
+					results = searchArray[i][0];
+					break;
+				}
+			} else {
+				if (searchArray[i][1].pos == id){
+					results = searchArray[i][0];
+					break;
+				}
 			}
 		}
 		return results;
@@ -856,7 +869,7 @@ function modelDataPointPrint(point) {
 		var tempFilteredModelData = [];
 		var filteredData;
 
-		this._filterPhenotypeHash(startIdx,displayLimiter - 1);
+		this._filterPhenotypeHash(startIdx,displayLimiter);
 		var sortedPhenoArray = this._getSortedIDList(this.state.filteredPhenotypeListHash.entries());
 		//get phenotype[startIdx] up to phenotype[currPhenotypeIdx] from the array of sorted phenotypes
 		for (var i in sortedPhenoArray) {
@@ -1091,7 +1104,7 @@ function modelDataPointPrint(point) {
 
 	//NEW
 	_filterHashTables: function () {
-		this.state.filteredModelDataHash = [];
+		var newFilteredModel = [];
 		//NOT A HASH ACTUALLY.  RENAME AFTER ADOPTION
 		var currentModelData = this.state.modelDataHash.entries();
 		var filteredModel;
@@ -1099,9 +1112,10 @@ function modelDataPointPrint(point) {
 			if (this.state.filteredModelListHash.containsKey(currentModelData[i][0].model_id) && this.state.filteredPhenotypeListHash.containsKey(currentModelData[i][0].pheno_id)){
 				currentModelData[i][1].pheno_id = currentModelData[i][0].pheno_id;
 				currentModelData[i][1].model_id = currentModelData[i][0].model_id
-				this.state.filteredModelDataHash.push(currentModelData[i][1]);
+				newFilteredModel.push(currentModelData[i][1]);
 			}
 		}
+		this.state.filteredModelDataHash = newFilteredModel;
 	},
 
 	//NEW
@@ -1109,7 +1123,7 @@ function modelDataPointPrint(point) {
 		this.state.filteredPhenotypeListHash = new Hashtable();
 		var oldHash = this.state.phenotypeListHash.entries();
 		for (var i in oldHash){
-			if (oldHash[i][1].pos >= start && oldHash[i][1].pos <= end){
+			if (oldHash[i][1].pos >= start && oldHash[i][1].pos < end){
 				this.state.filteredPhenotypeListHash.put(oldHash[i][0],oldHash[i][1]);
 			}
 		}
@@ -2149,7 +2163,11 @@ function modelDataPointPrint(point) {
 		//also update the axis
 		//also update the modeldata
 		var axis_idx = 0;
-		this._filterModelListHash(startModelIdx,self.state.currModelIdx);
+
+		//console.log (startModelIdx + ", " + self.state.currModelIdx);
+		//console.log(self.state.filteredModelListHash.entries());
+		this._filterModelListHash(startModelIdx, self.state.currModelIdx);
+		//console.log(this.state.filteredModelListHash.entries());
 
 		this._filterSelected('updateModel');
 		this._clearModelLabels();
