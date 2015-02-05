@@ -2,6 +2,10 @@
  * Data Graph
 **/
 
+form label{
+	margin-bottom:0;
+}
+
 .title{
     line-height:37px;
     vertical-align: middle;
@@ -30,7 +34,8 @@
    fill:white;
    cursor:default;
 }
-#settings{    
+.settings{
+   border: 1px solid #ddd;
    display: inline;
    right:0;
    margin-right: 5px;
@@ -42,6 +47,10 @@
 }
 .scale {
 	padding-right:5px;
+    padding-left:2px;
+}
+.zero {
+    padding-right:5px;
     padding-left:2px;
 }
 .tip {

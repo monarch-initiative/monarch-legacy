@@ -71,7 +71,7 @@ bbop.monarch.datagraph.prototype.init = function(html_div,DATA){
                  jQuery(html_div).children().remove();
                  self.setSizeConfiguration(config.graphSizingRatios);
                  self.run(html_div,DATA);
-             } 
+             }
          });
      } else {
          self.run(html_div,DATA);
@@ -132,7 +132,7 @@ bbop.monarch.datagraph.prototype.makeGraphDOM = function(html_div,data){
           jQuery(html_div+" .interaction li").append("<div class=breadcrumbs></div>");
       }
       
-      jQuery(html_div+" .interaction li").append("<div id=settings></div>");
+      jQuery(html_div+" .interaction li").append("<div class=settings></div>");
       
       //Add stacked/grouped form if more than one group
       if (groups.length >1){
@@ -140,6 +140,12 @@ bbop.monarch.datagraph.prototype.makeGraphDOM = function(html_div,data){
       }
       
       self.makeLogScaleCheckBox(html_div);
+      
+      jQuery(html_div+" .interaction li .settings").append(" <form class=zero"+
+              " style=font-size:" + config.settingsFontSize + "; >" +
+              "<label><input type=\"checkbox\" name=\"zero\"" +
+              " value=\"remove\"> Remove Empty Groups</label> " +
+              "</form> ");
 
       //Update tooltip positioning
       if (!config.useCrumb && groups.length>1){
@@ -155,7 +161,7 @@ bbop.monarch.datagraph.prototype.makeGraphDOM = function(html_div,data){
 
 bbop.monarch.datagraph.prototype.makeLogScaleCheckBox = function (html_div){
     var config = this.config;
-    jQuery("#settings").append(" <form class=scale"+
+    jQuery(html_div+" .interaction li .settings").append(" <form class=scale"+
         " style=font-size:" + config.settingsFontSize + "; >" +
         "<label><input type=\"checkbox\" name=\"scale\"" +
         " value=\"log\"> Log Scale</label> " +
@@ -164,7 +170,7 @@ bbop.monarch.datagraph.prototype.makeLogScaleCheckBox = function (html_div){
 
 bbop.monarch.datagraph.prototype.makeGroupedStackedForm = function (html_div){
     var config = this.config;
-    jQuery("#settings").append(" <form class=configure"+
+    jQuery(html_div+" .interaction li .settings").append(" <form class=configure"+
         " style=font-size:" + config.settingsFontSize + "; >" +
         "<label><input id=\"group\" type=\"radio\" name=\"mode\"" +
         " value=\"grouped\" checked> Grouped</label> " +
@@ -242,14 +248,14 @@ bbop.monarch.datagraph.prototype.makeLegend = function (graphConfig){
 
     legend.append("rect")
        .attr("x", config.width+config.legend.width+37)//HARDCODE
-       .attr("y", 4)
+       .attr("y", 6)
        .attr("width", config.legend.width)
        .attr("height", config.legend.height)
        .style("fill", color);
 
     legend.append("text")
        .attr("x", config.width+config.legend.width+32)
-       .attr("y", 12)
+       .attr("y", 14)
        .attr("dy", config.legendText.height)
        .attr("font-size",config.legendFontSize)
        .style("text-anchor", "end")
@@ -286,7 +292,7 @@ bbop.monarch.datagraph.prototype.makeNavArrow = function(data,navigate,triangleD
         .on("click", function(d){
             if (d.subGraph && d.subGraph[0]){
                 self.transitionToNewGraph(graphConfig,d,
-                        data,barGroup,rect);
+                        barGroup,rect,data);
             }
         });
 };
@@ -297,32 +303,47 @@ bbop.monarch.datagraph.prototype.setYAxisTextSpacing = function(dx,graphConfig){
       .attr("dx", dx);
 };
 
-bbop.monarch.datagraph.prototype.transitionToNewGraph = function(graphConfig,d,data,barGroup,rect){
+bbop.monarch.datagraph.prototype.transitionToNewGraph = function(graphConfig,data,barGroup,rect,parents){
     self = this;
     config = self.config;
     graphConfig.tooltip.style("display", "none");
     graphConfig.svg.selectAll(".tick.major").remove();
-    graphConfig.level++;
-    self.drawSubGraph(graphConfig,d.subGraph,data);
-   
+    
+    if (parents){
+        graphConfig.level++;
+        self.drawSubGraph(graphConfig,data.subGraph,parents);
+        self.removeSVGWithSelection(barGroup,650,60,1e-6);
+        self.removeSVGWithSelection(rect,650,60,1e-6);
+    } else {
+        self.redrawGraph(data,graphConfig);
+        self.removeSVGWithSelection(barGroup,650,60,1e-6);
+        self.removeSVGWithSelection(rect,650,60,1e-6);
+        return;
+    }
     //remove old bars
-    barGroup.transition()
-      .duration(750)
-      .attr("y", 60)
-      .style("fill-opacity", 1e-6)
-      .remove();
-   
-    rect.transition()
-      .duration(750)
-      .attr("y", 60)
-      .style("fill-opacity", 1e-6)
-      .remove();
+    self.removeSVGWithSelection(barGroup,650,60,1e-6);
+    self.removeSVGWithSelection(rect,650,60,1e-6);
     
     if (config.useCrumb){
-        self.makeBreadcrumb(graphConfig,d.label,graphConfig.groups,
-                rect,barGroup,d.fullLabel);
+        self.makeBreadcrumb(graphConfig,data.label,graphConfig.groups,
+                rect,barGroup,data.fullLabel);
     }
+};
 
+bbop.monarch.datagraph.prototype.removeSVGWithSelection = function(select,duration,y,opacity){
+    select.transition()
+        .duration(duration)
+        .attr("y", y)
+        .style("fill-opacity", opacity)
+        .remove();
+};
+
+bbop.monarch.datagraph.prototype.removeSVGWithClass = function(graphConfig,cs,duration,y,opacity){
+    graphConfig.svg.selectAll(cs).transition()
+        .duration(duration)
+        .attr("y", y)
+        .style("fill-opacity", opacity)
+        .remove();
 };
 
 bbop.monarch.datagraph.prototype.displaySubClassTip = function(tooltip,d3Selection){
@@ -372,26 +393,29 @@ bbop.monarch.datagraph.prototype.displayCountTip = function(tooltip,value,name,d
 };
 
 bbop.monarch.datagraph.prototype.setGroupPositioning = function (graphConfig,graphData) {
-    var groupPos = graphConfig.svg.selectAll(".barGroup")
-       .data(graphData)
+    var self = this;
+    var data = self.setDataPerSettings(graphData);
+    var groupPos = graphConfig.svg.selectAll()
+       .data(data)
        .enter().append("svg:g")
        .attr("class", ("bar"+graphConfig.level))
        .attr("transform", function(d) { return "translate(0," + graphConfig.y0(d.id) + ")"; });
     return groupPos;
 };
 
-bbop.monarch.datagraph.prototype.setXYDomains = function (graphConfig,graphData,groups) {
+bbop.monarch.datagraph.prototype.setXYDomains = function (graphConfig,data,groups) {
     var self = this;
     //Set y0 domain
-    graphConfig.y0.domain(graphData.map(function(d) { return d.id; }));
+    data = self.setDataPerSettings(data);
+    graphConfig.y0.domain(data.map(function(d) { return d.id; }));
     
     if (jQuery('input[name=mode]:checked').val()=== 'grouped' || groups.length === 1){
-        var xGroupMax = self.getGroupMax(graphData);
+        var xGroupMax = self.getGroupMax(data);
         graphConfig.x.domain([graphConfig.xMin, xGroupMax]);
         graphConfig.y1.domain(groups)
         .rangeRoundBands([0, graphConfig.y0.rangeBand()]);
     } else if (jQuery('input[name=mode]:checked').val()=== 'stacked'){
-        var xStackMax = self.getStackMax(graphData);
+        var xStackMax = self.getStackMax(data);
         graphConfig.x.domain([graphConfig.xMin, xStackMax]);
         graphConfig.y1.domain(groups).rangeRoundBands([0,0]);
     } else {
@@ -414,7 +438,14 @@ bbop.monarch.datagraph.prototype.makeBar = function (barGroup,graphConfig,barLay
           .attr("height", graphConfig.y1.rangeBand())
           .attr("y", function(d) { return graphConfig.y1(d.name); })
           .attr("x", 1)
-          .attr("width", function(d) { return graphConfig.x(d.value); })
+          .attr("width", function(d) { 
+              if (( jQuery('input[name=scale]:checked').val() === 'log' )&&
+                  ( d.value == 0 )){
+                  return 1;
+              } else {
+                  return graphConfig.x(d.value); 
+              }
+           })
           .on("mouseover", function(d){
             d3.select(this)
               .style("fill", config.color.bar.fill);
@@ -440,8 +471,15 @@ bbop.monarch.datagraph.prototype.makeBar = function (barGroup,graphConfig,barLay
               } 
           })
           .attr("width", function(d) { 
-              return graphConfig.x(d.x1) - graphConfig.x(d.x0); 
-           })
+              if (d.x0 == 0 && d.x1 != 0){
+                  return graphConfig.x(d.x1); 
+              } else if (( jQuery('input[name=scale]:checked').val() === 'log' ) &&
+                         ( graphConfig.x(d.x1) - graphConfig.x(d.x0) == 0 )){
+                  return 1;  
+              } else {
+                  return graphConfig.x(d.x1) - graphConfig.x(d.x0); 
+              }
+          })
           .attr("height", graphConfig.y0.rangeBand())
           .attr("y", function(d) { return graphConfig.y1(d.name); })
           .on("mouseover", function(d){
@@ -473,9 +511,7 @@ bbop.monarch.datagraph.prototype.setLinearScale = function (graphConfig,data,gro
         .orient("top")
         .tickFormat(d3.format(".2s"));
     
-    self.setXYDomains(graphConfig,data,groups);
-    self.transitionXAxisToNewScale(graphConfig,750);
-          
+    return graphConfig;
 };
 
 bbop.monarch.datagraph.prototype.setLogScale = function (graphConfig,data,groups,rect) {
@@ -490,7 +526,8 @@ bbop.monarch.datagraph.prototype.setLogScale = function (graphConfig,data,groups
         .scale(graphConfig.x)
         .orient("top")
         .ticks(5);
-
+    
+    return graphConfig;
 };
 
 bbop.monarch.datagraph.prototype.transitionGrouped = function (graphConfig,data,groups,rect) {
@@ -506,7 +543,14 @@ bbop.monarch.datagraph.prototype.transitionGrouped = function (graphConfig,data,
       .attr("y", function(d) { return graphConfig.y1(d.name); })  
       .transition()
       .attr("x", 1)
-      .attr("width", function(d) { return graphConfig.x(d.value); })     
+      .attr("width", function(d) { 
+          if (( jQuery('input[name=scale]:checked').val() === 'log' ) &&
+              ( d.value == 0 )){
+              return 1;
+          } else {
+              return graphConfig.x(d.value); 
+          }
+      }); 
           
     rect.on("mouseover", function(d){
             
@@ -537,7 +581,16 @@ bbop.monarch.datagraph.prototype.transitionStacked = function (graphConfig,data,
                 return graphConfig.x(d.x0);
               } 
       })
-      .attr("width", function(d) { return graphConfig.x(d.x1) - graphConfig.x(d.x0); })
+      .attr("width", function(d) { 
+          if (d.x0 == 0 && d.x1 != 0){
+              return graphConfig.x(d.x1); 
+          } else if (( jQuery('input[name=scale]:checked').val() === 'log' ) &&
+                     ( graphConfig.x(d.x1) - graphConfig.x(d.x0) == 0 )){
+              return 1;  
+          } else {
+              return graphConfig.x(d.x1) - graphConfig.x(d.x0); 
+          }
+      })
       .transition()
       .attr("height", graphConfig.y0.rangeBand())
       .attr("y", function(d) { return graphConfig.y1(d.name); })
@@ -553,6 +606,67 @@ bbop.monarch.datagraph.prototype.transitionStacked = function (graphConfig,data,
         d3.select(this)
         .style("fill", function(d) { return graphConfig.color(d.name); });
     })
+};
+
+//HACK, need to refactor all draw functions into one
+bbop.monarch.datagraph.prototype.redrawGraph = function (data,graphConfig) {
+    var self = this;
+    var config = self.config;
+    var groups = graphConfig.groups;
+
+    data = self.getStackedStats(data);
+    data = self.sortDataByGroupCount(data,groups);
+    data = self.addEllipsisToLabel(data,config.maxLabelSize);
+    
+    var height = self.resizeChart(data);
+    //reset d3 config after changing height
+    graphConfig.y0 = d3.scale.ordinal()
+      .rangeRoundBands([0,height], .1);
+            
+    graphConfig.yAxis = d3.svg.axis()
+      .scale(graphConfig.y0)
+      .orient("left");
+
+    self.setXYDomains(graphConfig,data,groups);
+        
+    //Dynamically decrease font size for large labels
+    var yFont = self.adjustYAxisElements(data.length);
+    self.transitionYAxisToNewScale(graphConfig,1000);
+    
+    self.setYAxisText(graphConfig,data);
+
+    var barGroup = self.setGroupPositioning(graphConfig,data);
+    var rect = self.setBarConfigPerCheckBox(graphConfig,data,groups,barGroup);
+    
+    var navigate = graphConfig.svg.selectAll(".y.axis");
+    self.makeNavArrow(data,navigate,config.arrowDim,
+                           barGroup,rect,graphConfig);
+
+    if (!self.checkForSubGraphs(data)){
+        self.setYAxisTextSpacing(0,graphConfig);
+        graphConfig.svg.selectAll("polygon.wedge").remove();
+    }
+    
+    d3.select(graphConfig.html_div).select('.configure')
+    .on("change",function(){
+        self.changeBarConfig(graphConfig,data,groups,rect);
+    });
+  
+    d3.select(graphConfig.html_div).select('.scale')
+    .on("change",function(){
+        self.changeScale(graphConfig,data,groups,rect);
+        if (groups.length > 1){
+            //reuse change bar config
+            self.changeBarConfig(graphConfig,data,groups,rect);
+        } else {
+            self.transitionGrouped(graphConfig,data,groups,rect);
+        }
+    });
+  
+    d3.select(graphConfig.html_div).select('.zero')
+    .on("change",function(){
+        self.transitionToNewGraph(graphConfig,data,barGroup,rect);
+    });
 };
 
 bbop.monarch.datagraph.prototype.drawGraph = function (data,graphConfig) {
@@ -619,34 +733,72 @@ bbop.monarch.datagraph.prototype.drawGraph = function (data,graphConfig) {
                                  groups,rect,barGroup);
     }
     
-    d3.select(graphConfig.html_div).selectAll('input')
+    d3.select(graphConfig.html_div).select('.configure')
       .on("change",function(){
           self.changeBarConfig(graphConfig,data,groups,rect);});
+    
+    d3.select(graphConfig.html_div).select('.scale')
+    .on("change",function(){
+        self.changeScale(graphConfig,data,groups,rect);
+        if (groups.length > 1){
+            //reuse change bar config
+            self.changeBarConfig(graphConfig,data,groups,rect);
+        } else {
+            self.transitionGrouped(graphConfig,data,groups,rect);
+        }
+    });
+    
+    d3.select(graphConfig.html_div).select('.zero')
+    .on("change",function(){
+        self.transitionToNewGraph(graphConfig,data,barGroup,rect);
+    });
+};
+
+//
+bbop.monarch.datagraph.prototype.setDataPerSettings = function(data){
+    var self = this;
+    if (self.getValueOfCheckbox('zero','remove')){
+        data = self.removeZeroCounts(data);
+    }
+    return data;
+}
+// Generic function to check the value of a checkbox given it's name
+// and value
+bbop.monarch.datagraph.prototype.getValueOfCheckbox = function(name,value){
+    var self = this;
+    if (jQuery('input[name='+name+']:checked').val() === value){
+        return true;
+    } else if (typeof jQuery('input[name=zero]:checked').val() === 'undefined'){
+        return false;
+    }
+};
+
+bbop.monarch.datagraph.prototype.changeScale = function(graphConfig,data,groups,rect){
+    var self = this;
+    if (self.getValueOfCheckbox('scale','log')){
+        self.setLogScale(graphConfig,data,groups,rect);
+    } else {
+        self.setLinearScale(graphConfig,data,groups,rect);
+    }
 };
 
 bbop.monarch.datagraph.prototype.changeBarConfig = function(graphConfig,data,groups,rect){
-
-    if (jQuery('input[name=scale]:checked').val() === 'log'){
-        self.setLogScale(graphConfig,data,groups,rect);
-    } else if (typeof jQuery('input[name=scale]:checked').val() == 'undefined'){
-        self.setLinearScale(graphConfig,data,groups,rect);
-    }
-    
-    if (jQuery('input[name=mode]:checked').val() === "grouped"){
+    var self = this;
+    if (self.getValueOfCheckbox('mode','grouped')){
         self.transitionGrouped(graphConfig,data,groups,rect);
-    } else if (jQuery('input[name=mode]:checked').val() === 'stacked') {
+    } else if (self.getValueOfCheckbox('mode','stacked')) {
         self.transitionStacked(graphConfig,data,groups,rect);
     }
-
 };
 
 //Resize height of chart after transition
-bbop.monarch.datagraph.prototype.resizeChart = function(subGraph){
-    
-    var config = this.config;
+bbop.monarch.datagraph.prototype.resizeChart = function(data){
+    var self = this;
+    var config = self.config;
     var height = config.height;
-    if (subGraph.length < 25){
-         height = subGraph.length*26; 
+    data = self.setDataPerSettings(data);
+    if (data.length < 25){
+         height = data.length*26; 
          if (height > config.height){
              height = config.height;
          }
@@ -661,6 +813,8 @@ bbop.monarch.datagraph.prototype.pickUpBreadcrumb = function(graphConfig,index,g
     var superclass = graphConfig.parents[index];
     var isFromCrumb = true;
     var parent;
+    var rectClass = ".rect"+lastIndex;
+    var barClass = ".bar"+lastIndex;
     //set global level
     graphConfig.level = index;
     
@@ -670,19 +824,9 @@ bbop.monarch.datagraph.prototype.pickUpBreadcrumb = function(graphConfig,index,g
     for (var i=(index+1); i <= graphConfig.parents.length; i++){
         d3.select(graphConfig.html_div).select(".bread"+i).remove();
     }
+    self.removeSVGWithClass(graphConfig,barClass,750,60,1e-6);
+    self.removeSVGWithClass(graphConfig,rectClass,750,60,1e-6);
 
-    graphConfig.svg.selectAll((".rect"+lastIndex)).transition()
-           .duration(750)
-           .attr("y", 60)
-           .style("fill-opacity", 1e-6)
-           .remove();
-    
-    graphConfig.svg.selectAll((".bar"+lastIndex)).transition()
-        .duration(750)
-        .attr("y", 60)
-        .style("fill-opacity", 1e-6)
-        .remove();
-    
     graphConfig.parents.splice(index,(graphConfig.parents.length));        
     
     //Deactivate top level crumb
@@ -827,9 +971,9 @@ bbop.monarch.datagraph.prototype.makeBreadcrumb = function(graphConfig,label,gro
                     .attr("x", (config.bread.width)*.45)
                     .attr("y", (config.bread.height)*.42)
                     .attr("dy", function(){
-                        if (i == 0 && len == 1){
+                        if (i === 0 && len === 1){
                             return ".55em";
-                        } else if (i == 0){
+                        } else if (i === 0){
                             return ".1em";
                         } else if (i < 2 && len > 2 
                                    && words[i].match(/and/i)){
@@ -839,17 +983,17 @@ bbop.monarch.datagraph.prototype.makeBreadcrumb = function(graphConfig,label,gro
                         }
                     })
                     .attr("dx", function(){
-                        if (index == 0){
+                        if (index === 0){
                             return ".1em";
                         }
-                        if (i == 0 && len == 1){
+                        if (i === 0 && len === 1){
                             return ".2em";
                         } else if (i == 0 && len >2
                                    && words[1].match(/and/i)){
                             return "-1.2em";
-                        } else if (i == 0){
+                        } else if (i === 0){
                             return ".3em";
-                        } else if (i == 1 && len > 2
+                        } else if (i === 1 && len > 2
                                    && words[1].match(/and/i)){
                             return "1.2em";
                         } else {
@@ -872,14 +1016,15 @@ bbop.monarch.datagraph.prototype.transitionXAxisToNewScale = function(graphConfi
       .duration(duration).select(".x.axis").call(graphConfig.xAxis);
 };
 
-bbop.monarch.datagraph.prototype.setBarConfigPerCheckBox = function(graphConfig,graph,groups,barGroup) {
+bbop.monarch.datagraph.prototype.setBarConfigPerCheckBox = function(graphConfig,data,groups,barGroup) {
     self = this;
-    if (jQuery('input[name=mode]:checked').val()=== 'grouped' || groups.length == 1) {
-        self.setXYDomains(graphConfig,graph,groups,'grouped');
+    data = self.setDataPerSettings(data);
+    if (jQuery('input[name=mode]:checked').val()=== 'grouped' || groups.length === 1) {
+        self.setXYDomains(graphConfig,data,groups,'grouped');
         self.transitionXAxisToNewScale(graphConfig,1000);
         return self.makeBar(barGroup,graphConfig,'grouped');
     } else {     
-        self.setXYDomains(graphConfig,graph,groups,'stacked');
+        self.setXYDomains(graphConfig,data,groups,'stacked');
         self.transitionXAxisToNewScale(graphConfig,1000);
         return self.makeBar(barGroup,graphConfig,'stacked');
     }
@@ -888,6 +1033,7 @@ bbop.monarch.datagraph.prototype.setBarConfigPerCheckBox = function(graphConfig,
 bbop.monarch.datagraph.prototype.setYAxisText = function(graphConfig,data){
     self = this;
     config = self.config;
+    data = self.setDataPerSettings(data);
     
     graphConfig.svg.select(".y.axis")
     .selectAll("text")
@@ -928,6 +1074,7 @@ bbop.monarch.datagraph.prototype.setYAxisText = function(graphConfig,data){
 bbop.monarch.datagraph.prototype.drawSubGraph = function(graphConfig,subGraph,parent,isFromCrumb) {
     var self = this;
     var config = self.config;
+    
     self.checkData(subGraph);
 
     graphConfig.groups = self.getGroups(subGraph);
@@ -973,9 +1120,25 @@ bbop.monarch.datagraph.prototype.drawSubGraph = function(graphConfig,subGraph,pa
         graphConfig.svg.selectAll("polygon.wedge").remove();
     }
 
-    d3.select(graphConfig.html_div).selectAll('input')
-      .on("change",function(){
-          self.changeBarConfig(graphConfig,subGraph,groups,rect);});
+    d3.select(graphConfig.html_div).select('.configure')
+    .on("change",function(){
+        self.changeBarConfig(graphConfig,subGraph,groups,rect);});
+  
+    d3.select(graphConfig.html_div).select('.scale')
+    .on("change",function(){
+        self.changeScale(graphConfig,subGraph,groups,rect);
+        if (groups.length > 1){
+            //reuse change bar config
+            self.changeBarConfig(graphConfig,subGraph,groups,rect);
+        } else {
+            self.transitionGrouped(graphConfig,subGraph,groups,rect);
+        }
+    });
+  
+    d3.select(graphConfig.html_div).select('.zero')
+    .on("change",function(){
+        self.transitionToNewGraph(graphConfig,subGraph,barGroup,rect);
+    });
 };
 
 ////////////////////////////////////////////////////////////////////
@@ -1063,7 +1226,11 @@ bbop.monarch.datagraph.prototype.getGroups = function(data) {
 };
 
 //TODO improve checking
-bbop.monarch.datagraph.prototype.checkData = function(data){
+bbop.monarch.datagraph.prototype.checkData = function(data){  
+    if (typeof data === 'undefined'){
+        throw new Error ("Data object is undefined");
+    }
+    
     data.forEach(function (r){
         //Check ID
         if (r.id == null){
