@@ -299,15 +299,14 @@ function modelDataPointPrint(point) {
 
 		this._setSelectedCalculation(this.state.selectedCalculation);
 		this._setSelectedSort(this.state.selectedSort);
-		//this.state.yTranslation = 0;
-		this.state.w = this.state.m[1]-this.state.m[3];
 
-		this.state.currModelIdx = this.state.dataDisplayCount-1;
-		this.state.currPhenotypeIdx = this.state.dataDisplayCount-1;
+		this.state.w = this.state.m[1] - this.state.m[3];
+
+		this.state.currModelIdx = this.state.dataDisplayCount - 1;
+		this.state.currPhenotypeIdx = this.state.dataDisplayCount - 1;
 		this.state.phenotypeData = this._filterPhenotypeResults(this.state.phenotypeData);
 
-		// target species name might be provided as a name or as
-		// taxon. Make sure that we translate to name
+		// target species name might be provided as a name or as taxon. Make sure that we translate to name
 		this.state.targetSpeciesName = this._getTargetSpeciesNameByTaxon(this,this.state.targetSpeciesName);
 
 		this._loadData();
@@ -320,6 +319,7 @@ function modelDataPointPrint(point) {
 		//do not alter this array: this.state.phenotypeData
 
 		this.state.phenoLength = this.state.phenotypeListHash.size();
+		this.state.modelLength = this.state.modelListHash.size();
 
 		this._adjustPhenotypeCount();
 		this._filterSelected("sortphenotypes");
@@ -667,7 +667,6 @@ function modelDataPointPrint(point) {
 	_mergeHashEntries: function(hashT){
 		var premerged = hashT.entries();
 		var merged = [];
-		var key, value;
 		for (var i in premerged){
 			if (typeof(premerged[i][0].yID) !== 'undefined'){
 				premerged[i][1].yID = premerged[i][0].yID;
@@ -913,9 +912,7 @@ function modelDataPointPrint(point) {
 		//also update the axis
 		//also update the modeldata
 		var axis_idx = 0;
-		var tempFilteredModelData = [];
 		var sortedYArray = [];
-		var filteredData;
 
 		this._filterPhenotypeHash(startIdx,displayLimiter);
 		
@@ -1101,7 +1098,7 @@ function modelDataPointPrint(point) {
 		for (var i in this.state.modelData)
 		{
 			//Setting phenotypeListHash
-			if (typeof(this.state.modelData[i].id_a) !== 'undefined' && this.state.phenotypeListHash.containsKey(this.state.modelData[i].id_a) == false){
+			if (typeof(this.state.modelData[i].id_a) !== 'undefined' && !this.state.phenotypeListHash.containsKey(this.state.modelData[i].id_a)){
 				hashData = {"label": this.state.modelData[i].label_a, "IC": this.state.modelData[i].IC_a, "pos": y, "count": 0, "sum": 0};
 				this.state.phenotypeListHash.put(this.state.modelData[i].id_a, hashData);
 				y++;
@@ -1109,7 +1106,7 @@ function modelDataPointPrint(point) {
 
 			//Setting modelListHash
 			type = this.state.defaultApiEntity;
-			if (typeof(this.state.modelData[i].model_id) !== 'undefined' && this.state.modelListHash.containsKey(this.state.modelData[i].model_id) == false){
+			if (typeof(this.state.modelData[i].model_id) !== 'undefined' && !this.state.modelListHash.containsKey(this.state.modelData[i].model_id)){
 
 				concept = this._getConceptId(this.state.modelData[i].model_id);
 				for (var j in this.state.apiEntityMap) {
@@ -1184,11 +1181,10 @@ function modelDataPointPrint(point) {
 		var newFilteredModel = [];
 		//NOT A HASH ACTUALLY.  RENAME AFTER ADOPTION
 		var currentModelData = this.state.modelDataHash.entries();
-		var filteredModel;
 		for (var i in currentModelData){
 			if (this.state.filteredXAxis.containsKey(currentModelData[i][0].xID) && this.state.filteredYAxis.containsKey(currentModelData[i][0].yID)){
 				currentModelData[i][1].yID = currentModelData[i][0].yID;
-				currentModelData[i][1].xID = currentModelData[i][0].xID
+				currentModelData[i][1].xID = currentModelData[i][0].xID;
 				newFilteredModel.push(currentModelData[i][1]);
 			}
 		}
@@ -1424,16 +1420,15 @@ function modelDataPointPrint(point) {
 		var lIC = datarow.lcs.IC;
 		var nic;
 
-		var calcMethod = this.state.selectedCalculation;
 		var ics = new Array(3);
 
 		// get 0: similarity
-		nic = Math.sqrt((Math.pow(aIC-lIC,2)) + (Math.pow(bIC-lIC,2)));
-		nic = (1 - (nic/+this.state.maxICScore)) * 100;
+		nic = Math.sqrt((Math.pow(aIC - lIC, 2)) + (Math.pow(bIC - lIC, 2)));
+		nic = (1 - (nic / + this.state.maxICScore)) * 100;
 		ics[0] = nic;
 
 		// 1 - ratio(q)
-		nic = ((lIC/aIC) * 100);
+		nic = ((lIC / aIC) * 100);
 		ics[1] = nic;
 
 		// 2 - uniquenss
@@ -1441,7 +1436,7 @@ function modelDataPointPrint(point) {
 		ics[2] = nic;
 
 		// 3: ratio(t)
-		nic = ((lIC/bIC) * 100);
+		nic = ((lIC / bIC) * 100);
 		ics[3] = nic;
 
 		return ics;
@@ -1616,17 +1611,56 @@ function modelDataPointPrint(point) {
 			link_labels.style("fill", "black");
 	},
 
-	_highlightMatchingModels: function(curr_data){
-		var self = this;
-		var models = self._getMatchingModels(curr_data);
-		var alabels = this.state.svg.selectAll("text.model_label");
-		for (var i in models){
-			var label = self._getAxisData(models[i].xID).label;
-			if (label === undefined) {
-				label = models[i].xID;
+	//NEW
+	_getMatchingModels: function (key) {
+		var modelKeys = this.state.modelDataHash.keys();
+		var matchingKeys = [];
+		for (var i in modelKeys){
+			if (key == modelKeys[i].yID || key == modelKeys[i].xID){
+				matchingKeys.push(modelKeys[i]);
 			}
+		}
+		return matchingKeys;
+	},
+
+	//NEW
+	_highlightMatching: function(curr_data){
+		var self = this;
+		var alabels, label, ID;
+		var dataType = self._getIDType(curr_data);
+		var models = self._getMatchingModels(curr_data);
+		var highlightX = false;
+
+		if (dataType === "Phenotype"){
+			if (this.state.invertAxis){
+				alabels = this.state.svg.selectAll("text.a_text");
+				highlightX = true;
+			} else {
+				alabels = this.state.svg.selectAll("text.model_label");
+			}
+		} else if (dataType === "Model"){
+			if (this.state.invertAxis){
+				alabels = this.state.svg.selectAll("text.model_label");
+			} else {
+				alabels = this.state.svg.selectAll("text.a_text");
+				highlightX = true;
+			}
+		}
+
+		for (var i in models){
+			if (highlightX){
+				ID = models[i].yID;
+			} else {
+				ID = models[i].xID;
+			}
+
+			label = self._getAxisData(ID).label;
+			if (label === undefined){
+				label = ID;
+			}
+
 			for (var j in alabels[0]){
-				if(alabels[0][j].id == models[i].xID){
+				if (alabels[0][j].id == ID){
 					alabels[0][j].style.fill = "blue";
 					alabels[0][j].innerHTML = label;
 				}
@@ -1634,13 +1668,34 @@ function modelDataPointPrint(point) {
 		}
 	},
 
-	_deselectMatchingModels: function(curr_data){
+	//NEW
+	_deselectMatching: function(curr_data){
 		var self = this;
-		var alabels = this.state.svg.selectAll("text.model_label");
+		var dataType = self._getIDType(curr_data);
+		var label, shortTxt, shrinkSize;
+
+		if (dataType === "Phenotype"){
+			if (this.state.invertAxis){
+				alabels = this.state.svg.selectAll("text.a_text");
+				shrinkSize = self.state.textLength;
+			} else {
+				alabels = this.state.svg.selectAll("text.model_label");
+				shrinkSize = self.state.labelCharDisplayCount;
+			}
+		} else if (dataType === "Model"){
+			if (this.state.invertAxis){
+				alabels = this.state.svg.selectAll("text.model_label");
+				shrinkSize = self.state.labelCharDisplayCount;
+			} else {
+				alabels = this.state.svg.selectAll("text.a_text");
+				shrinkSize = self.state.textLength;
+			}
+		}
+
 		for (var j in alabels[0]){
-			var label = this._getAxisData(alabels[0][j].id).label;
-			var shortTxt = this._getShortLabel(label,self.state.labelCharDisplayCount);
-			if(alabels[0][j].innerHTML == label){
+			label = this._getAxisData(alabels[0][j].id).label;
+			shortTxt = this._getShortLabel(label,shrinkSize);
+			if (alabels[0][j].innerHTML == label){
 				alabels[0][j].style.fill = "black";
 				alabels[0][j].innerHTML = shortTxt;
 			}
@@ -1649,7 +1704,11 @@ function modelDataPointPrint(point) {
 
 	//NEW
 	_capitalizeString: function(word){
-		return word.charAt(0).toUpperCase() + word.slice(1);
+		if (word === undefined) {
+			return "Undefined";
+		} else {
+			return word.charAt(0).toUpperCase() + word.slice(1);
+		}
 	},
 
 	_selectModel: function(modelData, obj) {
@@ -1701,7 +1760,7 @@ function modelDataPointPrint(point) {
 		};
 		obj.attributes.transform = {value: highlight_rect.attr("transform")};
 		this._updateDetailSection(retData, this._getXYPos(obj), width, height);
-		self._highlightMatchingPhenotypes(modelData);
+		self._highlightMatching(modelData);
 	},
 
 	//I need to check to see if the modelData is an object. If so, get the model_id
@@ -1720,7 +1779,7 @@ function modelDataPointPrint(point) {
 			model_text.style("fill", "black");
 
 			model_text.html(this._getShortLabel(modelLabel,self.state.labelCharDisplayCount));
-			this._deselectMatchingPhenotypes(modelData);
+			this._deselectMatching(modelData);
 		}
 	},
 
@@ -1749,7 +1808,7 @@ function modelDataPointPrint(point) {
 			.on("click",function(d){
 				self._clickItem(self.state.serverURL,curr_data);
 			});
-		this._highlightMatchingModels(curr_data);
+		this._highlightMatching(curr_data);
 	},
 
 	_deselectData: function (curr_data) {
@@ -1762,46 +1821,9 @@ function modelDataPointPrint(point) {
 		data_text.style("text-decoration", "none");
 		data_text.style("fill", "black");
 
-		this._deselectMatchingModels(curr_data);
+		this._deselectMatching(curr_data);
 	},
 
-	//NEW
-	_getMatchingModels: function (key) {
-		var modelKeys = this.state.modelDataHash.keys();
-		var matchingKeys = [];
-		for (var i in modelKeys){
-			if (key == modelKeys[i].yID || key == modelKeys[i].xID){
-				matchingKeys.push(modelKeys[i]);
-			}
-		}
-		return matchingKeys;
-	},
-
-	_highlightMatchingPhenotypes: function(curr_data){
-		var self = this;
-		var models = self._getMatchingModels(curr_data);
-		var alabels = this.state.svg.selectAll("text.a_text");
-
-		for (var i in models){
-			var mtxt = self._getAxisData(models[i].yID).label;
-			if (mtxt === undefined) {
-				mtxt = models[i].yID;
-			}
-			var shortTxt = self._getShortLabel(mtxt);
-			for (var j in alabels[0]){
-				if (alabels[0][j].innerHTML == shortTxt){
-					alabels[0][j].style.fill = "blue";
-					break;
-				}
-			}
-		}
-	},
-
-	_deselectMatchingPhenotypes: function(curr_data){
-		var self = this;
-		self.state.svg.selectAll("text.a_text")
-			.style("fill","black");
-	},
 
 	_clickItem: function(url_origin,data) {
 		var url;
@@ -1940,15 +1962,14 @@ function modelDataPointPrint(point) {
 	_showModelData: function(d, obj) {
 		var retData, modelInfo, phenoInfo, prefix;
 		if (this.state.invertAxis){
-			var modelInfo = this._getAxisData(d.yID);
-			var phenoInfo = this._getAxisData(d.xID);
+			modelInfo = this._getAxisData(d.yID);
+			phenoInfo = this._getAxisData(d.xID);
 		} else {
-			var modelInfo = this._getAxisData(d.xID);
-			var phenoInfo = this._getAxisData(d.yID);
+			modelInfo = this._getAxisData(d.xID);
+			phenoInfo = this._getAxisData(d.yID);
 		}
 		var species = modelInfo.species;
 		var taxon = modelInfo.taxon;
-		var type = this._getComparisonType(species);
 
 		if (taxon !== undefined || taxon !== null || taxon !== '' || isNaN(taxon)) {
 			if (taxon.indexOf("NCBITaxon:") != -1) {
@@ -2245,7 +2266,7 @@ function modelDataPointPrint(point) {
 		this.state.h = (data.length * 2.5);
 
 		self.state.yScale = d3.scale.ordinal()
-			.domain(data.map(function (d) { d.yID; }))
+			.domain(data.map(function (d) { return d.yID; }))
 			.range([0,data.length])
 			.rangePoints([self.state.yModelRegion,self.state.yModelRegion + this.state.h]);
 
@@ -2259,7 +2280,7 @@ function modelDataPointPrint(point) {
 	//movecount is an integer and can be either positive or negative
 	_updateModel: function(modelPos, phenoPos) {	
 		var self = this;
-		var tempdata;
+
 		//This is for the new "Overview" target option 
 		var modelListLength = this.state.modelListHash.size();
 
@@ -2272,7 +2293,6 @@ function modelDataPointPrint(point) {
 		} else {
 			this.state.currPhenotypeIdx = phenoPos;
 		}
-		var startPhenotypeIdx = this.state.currPhenotypeIdx - this.state.dataDisplayCount;
 
 		//fix model list
 		//check to see if the max of the slider is greater than the number of items in the list
@@ -2289,7 +2309,6 @@ function modelDataPointPrint(point) {
 		//extract the new array of filtered Phentoypes
 		//also update the axis
 		//also update the modeldata
-		var axis_idx = 0;
 
 		this._filterModelListHash(startModelIdx, self.state.currModelIdx);
 
@@ -2812,6 +2831,9 @@ function modelDataPointPrint(point) {
 			})
 		//store the id for this item. This will be used on click events
 			.attr("ontology_id", function(d) {
+				return d;
+			})
+			.attr("id", function(d) {
 				return d;
 			})
 			.attr("x", 208)
