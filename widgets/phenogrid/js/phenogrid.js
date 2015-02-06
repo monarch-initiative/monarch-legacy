@@ -1092,6 +1092,7 @@ function modelDataPointPrint(point) {
 	//NEW
 	_loadHashTables: function() {
 		//CHANGE LATER TO CUT DOWN ON INFO FROM _finishLoad & _finishOverviewLoad
+		this.state.loadedGenoTypesHash = new Hashtable();  // for cache of genotypes
 		this.state.phenotypeListHash = new Hashtable();
 		this.state.modelListHash = new Hashtable();
 		this.state.modelDataHash = new Hashtable({hashCode: modelDataPointPrint, equals: modelDataPointEquals});
@@ -1810,12 +1811,30 @@ function modelDataPointPrint(point) {
 		if (this._getIDType(data) == "Phenotype"){
 			url = url_origin + "/phenotype/" + (data.replace("_", ":"));
 		} else if (this._getIDType(data) == "Model"){
-			for (var i in this.state.apiEntityMap) {
-				if (concept.indexOf(this.state.apiEntityMap[i].prefix) === 0) {
-					apientity = this.state.apiEntityMap[i].apifragment;
+			// MKD, expand out genotypes
+			var showModelInfoOnClick = true ;
+
+			// if it's overview, then just allow view of the model clicked
+			if (this.state.targetSpeciesName != "Overview") {
+
+				// bring back the scores
+				var success = this._expandGenotypes(data);
+
+				if (success) {
+					this.element.empty();
+					this.reDraw();
 				}
+				showModelInfoOnClick = false;
 			}
-			url = url_origin + "/" + apientity + "/" + (concept.replace("_", ":"));
+			// default action is to show the model, unless we found genotypes of in 'Overview'
+			if (showModelInfoOnClick) {
+				for (var i in this.state.apiEntityMap) {
+					if (concept.indexOf(this.state.apiEntityMap[i].prefix) === 0) {
+					apientity = this.state.apiEntityMap[i].apifragment;
+					}
+				}
+				url = url_origin + "/" + apientity + "/" + (concept.replace("_", ":"));
+			}  
 		} else {
 			console.log ("URL CLICK ERROR");
 		}
@@ -3021,6 +3040,143 @@ function modelDataPointPrint(point) {
 			}
 		}
 		return newlist;
+	}, 
+	
+	// MKD begin-------------------------------------------------------------------------------
+	// expand the model with the associated genotypes
+	_expandGenotypes: function(curModel) {
+		var _genotypeIds = "", phenotypeIds = "", genoTypeAssociations;
+		var genotypeLabelHashtable = new Hashtable();
+		var success = false;
+		var genoTypeList = [];
+		
+		var modelInfo = {id: curModel, d: this.state.modelListHash.get(curModel)};
+		
+		// check cached hashtable first 
+		var gtscores = this.state.loadedGenoTypesHash.get(modelInfo.id);
+		
+		//if found just return genotypes scores
+		if (gtscores != null) return gtscores;
+		
+		console.log("Getting Gene " + modelInfo.id);
+		// go get the assocated genotypes	
+		var url = this.state.serverURL+"/gene/"+ modelInfo.id + ".json";		
+			
+		var res = this._ajaxLoadData(modelInfo.d.species,url);
+			
+		if (typeof (res)  !== 'undefined') {
+			genoTypeAssociations = res.genotype_associations;
+		
+			var assocPhenotypes = this._getMatchingPhenotypes(modelInfo.id);
+
+			var ctr = 0;
+			// assemble the phenotype ids 
+			for (var p in assocPhenotypes) {
+				phenotypeIds = phenotypeIds + assocPhenotypes[p].id + "+";		
+				
+				ctr++;
+				
+				if (ctr > 2) break;  //TEMP CODE TO ONLY DO THE FIRST 2
+			}
+			// truncate the last + off, if there
+			if (phenotypeIds.slice(-1) == '+') {
+				phenotypeIds = phenotypeIds.slice(0, -1);	
+			}
+			
+			ctr = 0;
+			// assemble a list of genotypes
+			for (var g in genoTypeAssociations) {
+				_genotypeIds = _genotypeIds + genoTypeAssociations[g].genotype.id + "+";	
+				// fill a hashtable with the labels so we can quickly get back to them later
+				var tmpLabel = "*" + genoTypeAssociations[g].genotype.label;   //TEMP CODE TO FIND THE GENOTYPE ON DISPLAY
+				genotypeLabelHashtable.put(genoTypeAssociations[g].genotype.id, tmpLabel);
+				
+				ctr++;
+				
+				if (ctr > 2) break;  //TEMP CODE TO ONLY DO THE FIRST 2 GENOTYPES
+			}
+			
+			// truncate the last + off, if there
+			if (_genotypeIds.slice(-1) == '+') {
+				_genotypeIds = _genotypeIds.slice(0, -1);	
+			}
+			
+			// call compare
+			var url = this.state.serverURL+"/compare/"+ phenotypeIds + "/" + _genotypeIds;
+			console.log("Comparing " + url);	
+			var retData = this._ajaxLoadData(modelInfo.d.species,url);
+			if (typeof (retData)  !== 'undefined') {					
+				var iPosition = 1;
+				for (var idx in retData.b) {
+					genoTypeList.push(
+						{parent: modelInfo,    //TEMP add prefix to denote it as a Genotype "GT:" + 
+						label: genotypeLabelHashtable.get(retData.b[idx].id),  //retData.b[idx].label, 
+						score: retData.b[idx].score.score, 
+						species: modelInfo.d.species,
+						rank: retData.b[idx].score.rank,
+						type: "genotype",
+						opos: (modelInfo.d.opos + iPosition),  // bump up by one
+						pos: (modelInfo.d.pos + iPosition)}
+					);
+					iPosition++;
+				}
+			success = true;
+			} else {
+				//  HACK:if we return a null just create a zero-length array for now to add it to hashtable
+				// this is for later so we don't have to lookup concept again			
+				genoTypeAssociations = {};
+				
+			}
+				
+			// save the genotypes in hastable for later
+			this.state.loadedGenoTypesHash.put(modelInfo.id, genoTypeList);
+			
+			console.log("Starting Insertion...");
+			this._insertionModelList(modelInfo.d.pos+1, genoTypeList);
+		}		
+	
+		return success; 
+	},
+	
+	// get all matching phenotypes for a model
+	_getMatchingPhenotypes: function(curModelId) {
+		var self = this;
+		var models = self.state.modelData;
+		var phenoTypes = [];
+		for (var i in models){
+			//models[i] is the matching model that contains all phenotypes
+			if (models[i].model_id == curModelId){
+				phenoTypes.push({id: models[i].id_a, label: models[i].label_a});
+			}
+		}
+		return phenoTypes;
+	}, 
+	
+	_insertionModelList: function (insertPoint, insertions) {
+		var newFilteredModel = [];
+		var sortedModelList= self._getSortedIDList(this.state.modelListHash.entries());
+		var filteredModel;
+		var reorderPointOffset = insertions.length+1,
+			oReorderPoint = insertions[insertions.length-1].opos+1;
+		var insertionOccurred = false;
+		
+		for (var i in sortedModelList){
+			var entry = this.state.modelListHash.get(sortedModelList[i]);
+			if (entry.pos == insertPoint) {
+				// begin insertion
+				for(var j in insertions) {					
+					newFilteredModel.push(insertions[j]);
+				}				
+				insertionOccurred = true;
+			}
+			if (insertionOccurred) {
+				entry.opos = entry.opos + reorderPointOffset;		
+				entry.pos = entry.pos + reorderPointOffset;						
+			} 
+			newFilteredModel.push(entry);				
+		}
+		var tmp = newFilteredModel;
+		//this.state.filteredModelDataHash = newFilteredModel;
 	}
 
 	}); //end of widget code
