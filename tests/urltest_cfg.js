@@ -138,6 +138,31 @@
                 must_contain : {
                     query: "Hippocampus"
                 },   
+                
+                /*must_contain : [
+                [
+                    {
+                        category: null,
+                        property: null,
+                        query: "Hippocampus",
+                        expansion: [
+                        "ammon's horn",
+                        "ammon gyrus",
+                        "hippocampus major",
+                        "ammon horn",
+                        "hippocampus proper",
+                        "cornu ammonis",
+                        "hippocampus proprius"
+                        ],
+                        id: "birnlex_721",
+                        quoted: false,
+                        require: false,
+                        forbid: false
+                    }
+                ]
+                ]
+            },
+            */
                 raw_contains: 
                    ["ammon\'s horn",
                     "ammon gyrus",
@@ -146,7 +171,7 @@
                     "hippocampus proper",
                     "cornu ammonis",
                     "hippocampus proprius"]
-            }
+                }
         },
 
         // ORPHANET
@@ -183,6 +208,27 @@
                 },
             }
         },
+
+        // ========================
+        // NIFSTD SCIGRAPH QUERIES
+        // ========================
+        {
+            component : "scigraph",
+            subcomponent : "vocabulary-autocomplete",
+            priority : 1,
+            url : "http://matrix.neuinfo.org:9000/scigraph/vocabulary/autocomplete/brain.json?limit=4&searchSynonyms=true&includeDeprecated=false",
+            desc : "SciGraph autocomplete service call",
+            notes : "Check for concept brain from Uberon",
+            maxTimeMilliseconds : 400,
+            expects : {
+                format : "json",
+                min_results : 1,
+                must_contain : {
+                    completion: "brain"
+                },
+            }
+        },
+
 
         // ====================
         // ONTOQUEST QUERIES
