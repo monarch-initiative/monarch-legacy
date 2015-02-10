@@ -1696,7 +1696,7 @@ function modelDataPointPrint(point) {
 	_deselectMatching: function(curr_data){
 		var self = this;
 		var dataType = self._getIDType(curr_data);
-		var label, shortTxt, shrinkSize;
+		var alabels, label, shortTxt, shrinkSize;
 
 		if (dataType === "Phenotype"){
 			if (this.state.invertAxis){
@@ -1713,6 +1713,20 @@ function modelDataPointPrint(point) {
 			} else {
 				alabels = this.state.svg.selectAll("text.a_text");
 				shrinkSize = self.state.textLength;
+			}
+		} else {
+			alabels = this.state.svg.selectAll("text.a_text");
+			shrinkSize = self.state.textLength;
+
+			//Clear both axis.  One here, one below
+			var blabels = this.state.svg.selectAll("text.model_label");
+			for (var j in blabels[0]){
+				label = this._getAxisData(blabels[0][j].id).label;
+				shortTxt = this._getShortLabel(label,self.state.labelCharDisplayCount);
+				if (blabels[0][j].innerHTML == label){
+					blabels[0][j].style.fill = "black";
+					blabels[0][j].innerHTML = shortTxt;
+				}
 			}
 		}
 
