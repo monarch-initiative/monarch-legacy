@@ -112,12 +112,16 @@
                     </table>
                 </div>
                 {{/hasLiterature}}
+
                 <div id="jbrowse" class="category">
                     <h1>JBrowse</h1>
+                    <table class="{{css.table}}">
+                    {{{jbrowse_table}}}
+                    </table>
                     <a target="_blank" href="http://icebox.lbl.gov/WebApolloHuman/jbrowse/?tracks=OGS-GRCh38&loc={{label}}&selected={{label}}">View in Separate window</a>
-                    <div id="genomeBrowser" width="100%" >
-                        <iframe id="innerFrame" width="99%" height="400"></iframe>
-                    </div>
+                    <!--<div id="genomeBrowser" width="100%" >-->
+                        <!--<iframe id="innerFrame" width="99%" height="400"></iframe>-->
+                    <!--</div>-->
                 </div>
             </div>
         
@@ -126,8 +130,8 @@
         </div>
     </div>
 
-    <script>
-        function loadJBrowseFrame(){
-            $('#innerFrame').attr('src','http://icebox.lbl.gov/WebApolloHuman/jbrowse/?tracklist=0&tracks=OGS-GRCh38&loc={{label}}&selected={{label}}');
-        }
-    </script>
+    <!--<script>-->
+        <!--function loadJBrowseFrame(){-->
+            <!--$('#innerFrame').attr('src','http://icebox.lbl.gov/WebApolloHuman/jbrowse/?tracklist=0&tracks=OGS-GRCh38&loc={{label}}&selected={{label}}');-->
+        <!--}-->
+    <!--</script>-->
