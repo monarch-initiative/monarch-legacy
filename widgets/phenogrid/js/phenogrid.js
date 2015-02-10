@@ -122,7 +122,7 @@ function modelDataPointPrint(point) {
 		baseYOffset: 150,
 		faqImgSize: 15,
 		dummyModelName: "dummy",
-		invertAxis: false,
+		invertAxis: true,
 		getAxisError: false
 	},
 
@@ -3111,7 +3111,7 @@ function modelDataPointPrint(point) {
 			genoTypeAssociations = res.genotype_associations;
 			
 			if (genoTypeAssociations != null && genoTypeAssociations.length > 5) {
-				alert("There are " + genoTypeAssociations.length +  " associated genotypes, only 4 will be displayed")
+				alert("There are " + genoTypeAssociations.length +  " associated genotypes, only 5 will be displayed")
 			}
 		
 			var assocPhenotypes = this._getMatchingPhenotypes(modelInfo.id);
