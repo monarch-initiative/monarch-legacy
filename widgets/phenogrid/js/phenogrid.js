@@ -302,8 +302,8 @@ function modelDataPointPrint(point) {
 
 		this.state.w = this.state.m[1] - this.state.m[3];
 
-		this.state.currXIdx = this.state.dataDisplayCount - 1;
-		this.state.currYIdx = this.state.dataDisplayCount - 1;
+		this.state.currXIdx = this.state.dataDisplayCount;
+		this.state.currYIdx = this.state.dataDisplayCount;
 		this.state.modelDisplayCount = this.state.dataDisplayCount;
 		this.state.phenoDisplayCount = this.state.dataDisplayCount;
 		this.state.phenotypeData = this._filterPhenotypeResults(this.state.phenotypeData);
@@ -312,6 +312,7 @@ function modelDataPointPrint(point) {
 		this.state.targetSpeciesName = this._getTargetSpeciesNameByTaxon(this,this.state.targetSpeciesName);
 
 		this._loadData();
+
 		this.state.phenoLength = this.state.phenotypeListHash.size();
 		this.state.modelLength = this.state.modelListHash.size();
 
@@ -325,6 +326,8 @@ function modelDataPointPrint(point) {
 
 		this._adjustPhenotypeCount();
 		this._adjustModelCount();
+		this.state.currXIdx = this._getXLimit();
+		this.state.currYIdx = this._getYLimit();
 		this._filterSelected("sortphenotypes");
 		this.state.unmatchedPhenotypes = this._getUnmatchedPhenotypes();
 		this.element.empty();
@@ -340,6 +343,7 @@ function modelDataPointPrint(point) {
 	},
 
 	reDraw: function() {
+
 		if (this.state.phenoLength !== 0 && this.state.filteredModelDataHash.length !== 0){
 			var displayCount = this._getYLimit();
 			this._setComparisonType();
@@ -397,11 +401,6 @@ function modelDataPointPrint(point) {
 		} else {
 			return this.state.phenoDisplayCount;
 		}
-	},
-
-	_resetIndicies: function() {
-		this.state.currXIdx = this.state.dataDisplayCount - 1;
-		this.state.currYIdx = this.state.dataDisplayCount - 1;
 	},
 
 	/* dummy option procedures as per 
@@ -506,6 +505,9 @@ function modelDataPointPrint(point) {
 		var yCount = self._getYLimit();
 		var xCount = self._getXLimit();
 
+		var startYIdx = this.state.currYIdx - yCount;
+		var startXIdx = this.state.currXIdx - xCount;
+
 		// add-ons for stroke size on view box. Preferably even numbers
 		var linePad = 2;
 		var viewPadding = linePad * 2 + 2;
@@ -568,13 +570,17 @@ function modelDataPointPrint(point) {
 
 		var lastYId = self._returnYID(yCount - 1);
 		var lastXId = self._returnXID(xCount - 1);
+		var startYId = self._returnYID(startYIdx);
+		var startXId = self._returnXID(startXIdx);
 
+		var selectRectX = self.state.smallXScale(startXId);
+		var selectRectY = self.state.smallYScale(startYId);
 		var selectRectHeight = self.state.smallYScale(lastYId);
 		var selectRectWidth = self.state.smallXScale(lastXId);
 
 		self.state.highlightRect = self.state.svg.append("rect")
-			.attr("x",overviewX)
-			.attr("y",overviewY)
+			.attr("x",overviewX + selectRectX)
+			.attr("y",overviewY + selectRectY)
 			.attr("id", "selectionrect")
 			.attr("height", selectRectHeight + 4)
 			.attr("width", selectRectWidth + 4)
@@ -892,8 +898,6 @@ function modelDataPointPrint(point) {
 	},
 
 	_processSelected: function(processType){
-		this._adjustPhenotypeCount();
-		this._adjustModelCount();
 		this._filterSelected(processType);
 		this.state.unmatchedPhenotypes = this._getUnmatchedPhenotypes();
 		this.element.empty();
@@ -924,28 +928,22 @@ function modelDataPointPrint(point) {
 		}
 
 		//Force Reset to Origin when changing Species, Sort or Display
-		var startXIdx = 0;
-		var startYIdx = 0;
 		var axis_idx = 0;
 		var sortedYArray = [];
-		var displayXLimiter = this._getXLimit();
-		var displayYLimiter = this._getYLimit();
-		if (filterType == 'updateModel') {
-			startYIdx = this.state.currYIdx - displayYLimiter;
-			displayYLimiter = this.state.currYIdx;
 
-			startXIdx = this.state.currXIdx - displayXLimiter;
-			displayXLimiter = this.state.currXIdx;
-		}
+		var	startYIdx = this.state.currYIdx - this._getYLimit();
+		var	displayYLimiter = this.state.currYIdx;
+		var	startXIdx = this.state.currXIdx - this._getXLimit();
+		var	displayXLimiter = this.state.currXIdx;
 
 		if (this.state.invertAxis){
-			this._filterPhenotypeHash(startXIdx,displayXLimiter);
-			this._filterModelListHash(startYIdx,displayYLimiter);
+			self._filterPhenotypeHash(startXIdx,displayXLimiter);
+			self._filterModelListHash(startYIdx,displayYLimiter);
 		} else {
-			this._filterPhenotypeHash(startYIdx,displayYLimiter);
-			this._filterModelListHash(startXIdx,displayXLimiter);
+			self._filterPhenotypeHash(startYIdx,displayYLimiter);
+			self._filterModelListHash(startXIdx,displayXLimiter);
 		}
-		
+
 		if (this.state.invertAxis && this.state.targetSpeciesName === "Overview") {
 			sortedYArray = self._getSortedOverviewIDList(self.state.filteredYAxis.entries());
 		} else {
@@ -1133,7 +1131,7 @@ function modelDataPointPrint(point) {
 		{
 			//Setting phenotypeListHash
 			if (typeof(this.state.modelData[i].id_a) !== 'undefined' && !this.state.phenotypeListHash.containsKey(this.state.modelData[i].id_a)){
-				hashData = {"label": this.state.modelData[i].label_a, "IC": this.state.modelData[i].IC_a, "pos": y, "count": 0, "sum": 0};
+				hashData = {"label": this.state.modelData[i].label_a, "IC": this.state.modelData[i].IC_a, "pos": parseInt(y), "count": 0, "sum": 0};
 				this.state.phenotypeListHash.put(this.state.modelData[i].id_a, hashData);
 				y++;
 			}
@@ -1220,6 +1218,7 @@ function modelDataPointPrint(point) {
 		var newFilteredModel = [];
 		//NOT A HASH ACTUALLY.  RENAME AFTER ADOPTION
 		var currentModelData = this.state.modelDataHash.entries();
+
 		for (var i in currentModelData){
 			if (this.state.filteredXAxis.containsKey(currentModelData[i][0].xID) && this.state.filteredYAxis.containsKey(currentModelData[i][0].yID)){
 				currentModelData[i][1].yID = currentModelData[i][0].yID;
@@ -1234,11 +1233,13 @@ function modelDataPointPrint(point) {
 	_filterPhenotypeHash: function (start,end) {
 		this.state.filteredPhenotypeListHash = new Hashtable();
 		var oldHash = this.state.phenotypeListHash.entries();
+
 		for (var i in oldHash){
 			if (oldHash[i][1].pos >= start && oldHash[i][1].pos < end){
 				this.state.filteredPhenotypeListHash.put(oldHash[i][0],oldHash[i][1]);
 			}
 		}
+
 		if (this.state.invertAxis){
 			this.state.filteredXAxis = this.state.filteredPhenotypeListHash;
 		} else {
@@ -1250,11 +1251,13 @@ function modelDataPointPrint(point) {
 	_filterModelListHash: function (start,end) {
 		this.state.filteredModelListHash = new Hashtable();
 		var oldHash = this.state.modelListHash.entries();
+
 		for (var i in oldHash){
 			if (oldHash[i][1].pos >= start && oldHash[i][1].pos < end){
 				this.state.filteredModelListHash.put(oldHash[i][0],oldHash[i][1]);
 			}
 		}
+
 		if (this.state.invertAxis){
 			this.state.filteredYAxis = this.state.filteredModelListHash;
 		} else {
