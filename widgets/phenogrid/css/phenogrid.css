@@ -376,3 +376,9 @@ body{
 .faqdialog {
 	background: white;
 }
+
+.genotype {
+   /*text-shadow: 2px 2px 4px #000;*/
+   font-size: 10px;
+   color: #428bca;
+}

@@ -122,7 +122,7 @@ function modelDataPointPrint(point) {
 		baseYOffset: 150,
 		faqImgSize: 15,
 		dummyModelName: "dummy",
-		invertAxis: true,
+		invertAxis: false,
 		getAxisError: false
 	},
 
@@ -3125,7 +3125,7 @@ function modelDataPointPrint(point) {
 			genoTypeAssociations = res.genotype_associations;
 			
 			if (genoTypeAssociations != null && genoTypeAssociations.length > 5) {
-				alert("There are " + genoTypeAssociations.length +  " associated genotypes, only 5 will be displayed")
+				console.log("There are " + genoTypeAssociations.length +  " associated genotypes");
 			}
 		
 			var assocPhenotypes = this._getMatchingPhenotypes(modelInfo.id);
@@ -3149,7 +3149,7 @@ function modelDataPointPrint(point) {
 			for (var g in genoTypeAssociations) {
 				_genotypeIds = _genotypeIds + genoTypeAssociations[g].genotype.id + "+";	
 				// fill a hashtable with the labels so we can quickly get back to them later
-				var tmpLabel = "*" + genoTypeAssociations[g].genotype.label;   //TEMP CODE TO FIND THE GENOTYPE ON DISPLAY
+				var tmpLabel = "+" + this._encodeHtmlEntity(genoTypeAssociations[g].genotype.label);   //TEMP CODE TO FIND THE GENOTYPE ON DISPLAY
 				genotypeLabelHashtable.put(genoTypeAssociations[g].genotype.id, tmpLabel);
 				
 				ctr++;
@@ -3170,6 +3170,7 @@ function modelDataPointPrint(point) {
 				var iPosition = 1;
 				for (var idx in retData.b) {
 					var gt = {
+							parent: modelInfo.id,
 							label: genotypeLabelHashtable.get(retData.b[idx].id),  // fix label as readable not ID
 							score: retData.b[idx].score.score, 
 							species: modelInfo.d.species,
@@ -3227,119 +3228,119 @@ function modelDataPointPrint(point) {
 		return success; 
 	},
 	
-	_expandGenotypes2: function(curModel) {
-		var _genotypeIds = "", phenotypeIds = "", genoTypeAssociations;
-		var genotypeLabelHashtable = new Hashtable();
-		var tempHashtable = new Hashtable();
-		var success = false;
-		var genoTypeList = new Hashtable();
-
-		var modelInfo = {id: curModel, d: this.state.modelListHash.get(curModel)};
-
-		// check cached hashtable first 
-		var gtscores = this.state.loadedGenoTypesHash.get(modelInfo.id);
-
-		//if found just return genotypes scores
-		if (gtscores != null) return gtscores;
-
-		console.log("Getting Gene " + modelInfo.id);
-		// go get the assocated genotypes	
-		var url = this.state.serverURL+"/gene/"+ modelInfo.id + ".json";		
-
-		var res = this._ajaxLoadData(modelInfo.d.species,url);
-
-		if (typeof (res)  !== 'undefined') {
-			genoTypeAssociations = res.genotype_associations;
-
-			if (genoTypeAssociations != null && genoTypeAssociations.length > 5) {
-				alert("There are " + genoTypeAssociations.length +  " associated genotypes, only 3 will be displayed")
-			}
-
-			var assocPhenotypes = this._getMatchingPhenotypes(modelInfo.id);
-
-			var ctr = 0;
-
-			// assemble a list of genotypes
-			for (var g in genoTypeAssociations) {
-				_genotypeIds = _genotypeIds + genoTypeAssociations[g].genotype.id + "+";	
-				// fill a hashtable with the labels so we can quickly get back to them later
-				var tmpLabel = "*" + genoTypeAssociations[g].genotype.label;   //TEMP CODE TO FIND THE GENOTYPE ON DISPLAY
-				genotypeLabelHashtable.put(genoTypeAssociations[g].genotype.id, tmpLabel);
-
-				ctr++;
-
-				if (ctr > 2) break;  //TEMP CODE TO ONLY DO THE FIRST 2 GENOTYPES
-			}
-
-			// truncate the last + off, if there
-			if (_genotypeIds.slice(-1) == '+') {
-				_genotypeIds = _genotypeIds.slice(0, -1);	
-			}
-
-			var iPosition = 1;
-			// loop through comparing all the pheno with genotypes
-			for (var p in assocPhenotypes) {
-
-				// call compare
-				var url = this.state.serverURL+"/compare/"+ assocPhenotypes[p].id  + "/" + _genotypeIds;
-				console.log("Comparing " + url);	
-				var retData = this._ajaxLoadData(modelInfo.d.species,url);
-				if (typeof (retData)  !== 'undefined') {					
-
-					for (var idx in retData.b) {
-						
-						var gtData = genoTypeList.get(retData.b[idx].id);
-						if (gtData == null || typeof(gtData) == 'undefined') {
-							var gt = {
-									label: genotypeLabelHashtable.get(retData.b[idx].id),  // fix label as readable not ID
-									score: retData.b[idx].score.score, 
-									species: modelInfo.d.species,
-									rank: retData.b[idx].score.rank,
-									type: "genotype",
-									taxon: retData.b[idx].taxon.id,
-									opos: (modelInfo.d.opos + iPosition),  // bump up by one
-									pos: (modelInfo.d.pos + iPosition),
-									count: modelInfo.d.count,
-									sum: modelInfo.d.sum
-							};
-
-							genoTypeList.put( this._getConceptId(retData.b[idx].id), gt);
-						}
-
-						// Hack: need to fix the label because genotypes have IDs as labels
-						retData.b[idx].label = genotypeLabelHashtable.get(retData.b[idx].id);
-
-						// load these into model data
-						this._loadDataForModel(retData.b[idx])
-						iPosition++;
-					}
-				}
-			}
-
-			console.log("Starting Insertion...");
-			var tempgt = genoTypeList.entries();
-			this.state.modelListHash = this._insertionModelList(modelInfo.d.pos+1, genoTypeList);
-			this.state.modelLength = this.state.modelListHash.size();
-			
-			this._rebuildModelHash();
-
-			this._setAxisValues();
-
-			this._processSelected('sortphenotypes'); //'updateModel');
-
-			success = true;
-
-		} else {
-			//  HACK:if we return a null just create a zero-length array for now to add it to hashtable
-			// this is for later so we don't have to lookup concept again			
-			genoTypeAssociations = {};				
-		}
-
-		// save the genotypes in hastable for later
-		this.state.loadedGenoTypesHash.put(modelInfo.id, genoTypeList);			
-
-		return success; 
-	},	
+//	_expandGenotypes2: function(curModel) {
+//		var _genotypeIds = "", phenotypeIds = "", genoTypeAssociations;
+//		var genotypeLabelHashtable = new Hashtable();
+//		var tempHashtable = new Hashtable();
+//		var success = false;
+//		var genoTypeList = new Hashtable();
+//
+//		var modelInfo = {id: curModel, d: this.state.modelListHash.get(curModel)};
+//
+//		// check cached hashtable first 
+//		var gtscores = this.state.loadedGenoTypesHash.get(modelInfo.id);
+//
+//		//if found just return genotypes scores
+//		if (gtscores != null) return gtscores;
+//
+//		console.log("Getting Gene " + modelInfo.id);
+//		// go get the assocated genotypes	
+//		var url = this.state.serverURL+"/gene/"+ modelInfo.id + ".json";		
+//
+//		var res = this._ajaxLoadData(modelInfo.d.species,url);
+//
+//		if (typeof (res)  !== 'undefined') {
+//			genoTypeAssociations = res.genotype_associations;
+//
+//			if (genoTypeAssociations != null && genoTypeAssociations.length > 5) {
+//				alert("There are " + genoTypeAssociations.length +  " associated genotypes, only 3 will be displayed")
+//			}
+//
+//			var assocPhenotypes = this._getMatchingPhenotypes(modelInfo.id);
+//
+//			var ctr = 0;
+//
+//			// assemble a list of genotypes
+//			for (var g in genoTypeAssociations) {
+//				_genotypeIds = _genotypeIds + genoTypeAssociations[g].genotype.id + "+";	
+//				// fill a hashtable with the labels so we can quickly get back to them later
+//				var tmpLabel = "+" + this._toUnicode(genoTypeAssociations[g].genotype.label);   //TEMP CODE TO FIND THE GENOTYPE ON DISPLAY
+//				genotypeLabelHashtable.put(genoTypeAssociations[g].genotype.id, tmpLabel);
+//
+//				ctr++;
+//
+//				if (ctr > 2) break;  //TEMP CODE TO ONLY DO THE FIRST 2 GENOTYPES
+//			}
+//
+//			// truncate the last + off, if there
+//			if (_genotypeIds.slice(-1) == '+') {
+//				_genotypeIds = _genotypeIds.slice(0, -1);	
+//			}
+//
+//			var iPosition = 1;
+//			// loop through comparing all the pheno with genotypes
+//			for (var p in assocPhenotypes) {
+//
+//				// call compare
+//				var url = this.state.serverURL+"/compare/"+ assocPhenotypes[p].id  + "/" + _genotypeIds;
+//				console.log("Comparing " + url);	
+//				var retData = this._ajaxLoadData(modelInfo.d.species,url);
+//				if (typeof (retData)  !== 'undefined') {					
+//
+//					for (var idx in retData.b) {
+//						
+//						var gtData = genoTypeList.get(retData.b[idx].id);
+//						if (gtData == null || typeof(gtData) == 'undefined') {
+//							var gt = {
+//									label: genotypeLabelHashtable.get(retData.b[idx].id),  // fix label as readable not ID
+//									score: retData.b[idx].score.score, 
+//									species: modelInfo.d.species,
+//									rank: retData.b[idx].score.rank,
+//									type: "genotype",
+//									taxon: retData.b[idx].taxon.id,
+//									opos: (modelInfo.d.opos + iPosition),  // bump up by one
+//									pos: (modelInfo.d.pos + iPosition),
+//									count: modelInfo.d.count,
+//									sum: modelInfo.d.sum
+//							};
+//
+//							genoTypeList.put( this._getConceptId(retData.b[idx].id), gt);
+//						}
+//
+//						// Hack: need to fix the label because genotypes have IDs as labels
+//						retData.b[idx].label = genotypeLabelHashtable.get(retData.b[idx].id);
+//
+//						// load these into model data
+//						this._loadDataForModel(retData.b[idx])
+//						iPosition++;
+//					}
+//				}
+//			}
+//
+//			console.log("Starting Insertion...");
+//			var tempgt = genoTypeList.entries();
+//			this.state.modelListHash = this._insertionModelList(modelInfo.d.pos+1, genoTypeList);
+//			this.state.modelLength = this.state.modelListHash.size();
+//			
+//			this._rebuildModelHash();
+//
+//			this._setAxisValues();
+//
+//			this._processSelected('sortphenotypes'); //'updateModel');
+//
+//			success = true;
+//
+//		} else {
+//			//  HACK:if we return a null just create a zero-length array for now to add it to hashtable
+//			// this is for later so we don't have to lookup concept again			
+//			genoTypeAssociations = {};				
+//		}
+//
+//		// save the genotypes in hastable for later
+//		this.state.loadedGenoTypesHash.put(modelInfo.id, genoTypeList);			
+//
+//		return success; 
+//	},	
 	// get all matching phenotypes for a model
 	_getMatchingPhenotypes: function(curModelId) {
 		var self = this;
@@ -3415,7 +3416,13 @@ function modelDataPointPrint(point) {
 		}
 	},
 
-	
+	_encodeHtmlEntity: function(str) {
+		var buf = [];
+		for (var i=str.length-1;i>=0;i--) {
+			buf.unshift(['&#', str[i].charCodeAt(), ';'].join(''));
+		}
+		return buf.join('');
+	}
 
 	}); //end of widget code
 })(jQuery);
