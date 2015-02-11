@@ -1,11 +1,12 @@
 
     <meta charset="UTF-8">
+    <!--<link type="text/css" rel="stylesheet" href="https://raw.githubusercontent.com/4ndr01d3/js-components/master/biojs-vis-chromosome/css/chromosome.css">-->
     <link type="text/css" rel="stylesheet" href="https://cdn.rawgit.com/4ndr01d3/biojs-vis-chromosome/master/css/chromosome.css">
     <link type="text/css" rel="stylesheet" href="https://raw.githubusercontent.com/4ndr01d3/js-components/master/util-area_selector/css/area_selector.css">
     <link type="text/css" rel="stylesheet" href="https://code.jquery.com/ui/1.11.0/themes/smoothness/jquery-ui.css">
 
 
-    <script src="http://code.jquery.com/jquery-1.11.1.min.js"></script>
+    <!--<script src="http://code.jquery.com/jquery-1.11.1.min.js"></script>-->
     <!--<script src="https://wzrd.in/bundle/biojs-vis-chromosome@0.0.2"></script>-->
     <script src="http://wzrd.in/bundle/biojs-vis-chromosome@latest"></script>
 
@@ -169,11 +170,9 @@
                 });
                 inst[i].on("onModelLoaded",modelEvent);
             }
+//            $("#holder_5").click(alert('boom')) ;
+//            $("#5_q35.3").click(alert('bang')) ;
         });
-
-        function modelEvent(objEvent) {				$("#holder_"+objEvent.model.id).data("size",1*objEvent.model.stop);
-            adjustSizes(1*objEvent.model.stop);
-        }
 
         var maxSize=0;
         var adjustSizes= function(size){
@@ -187,4 +186,11 @@
                 }
             }
         };
+
+        function modelEvent(objEvent) {
+            $("#holder_"+objEvent.model.id).data("size",1*objEvent.model.stop);
+            adjustSizes(1*objEvent.model.stop);
+        }
+
+
     </script>
