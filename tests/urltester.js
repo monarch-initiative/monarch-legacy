@@ -146,9 +146,12 @@ var testUrl = function(urlinfo) {
             //console.log("RESULTS "+results);
         }
         else if (component == 'federation-search') {
-            //results = resultObj.query.clauses;
+            //results = resultObj;
             results = [resultObj.query.clauses];
             //console.log("RESULTS "+ results);
+        }
+        else if (component == 'scigraph') {
+            results = [resultObj.list];
         }
         else if (component == 'ontoquest') {
             // TODO - OQ XML layered on JSON is complex - best just do raw checks for now
@@ -190,7 +193,7 @@ var testResults = function(urlinfo, results) {
             function(matchObj) { 
                 var matches = results.filter(function(r) { return matchesQuery(r, matchObj) });
                 if (matches.length == 0) {
-                    console.error("ACTUAL="+JSON.stringify(results, null, ' '));
+                    console.error("ACTUAL = "+JSON.stringify(results, null, ' '));
                 }
                 assert.notEqual(matches.length, 0);
             });
