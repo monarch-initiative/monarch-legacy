@@ -119,6 +119,7 @@ function modelDataPointPrint(point) {
 		nonOverviewGridTitleXOffset: 220,
 		nonOverviewGridTitleFaqOffset: 570,
 		gridTitleYOffset: 20,
+		xOffsetOver: 20,
 		baseYOffset: 150,
 		faqImgSize: 15,
 		dummyModelName: "dummy",
@@ -343,7 +344,6 @@ function modelDataPointPrint(point) {
 	},
 
 	reDraw: function() {
-
 		if (this.state.phenoLength !== 0 && this.state.filteredModelDataHash.length !== 0){
 			var displayCount = this._getYLimit();
 			this._setComparisonType();
@@ -355,7 +355,7 @@ function modelDataPointPrint(point) {
 				.attr("height", displayCount * this.state.widthOfSingleModel);
 			var rectHeight = this._createRectangularContainers();
 
-			this._createModelRegion();
+			this._createXRegion();
 			this._addGradients();
 
 			this._addPhenogridControls();
@@ -365,7 +365,7 @@ function modelDataPointPrint(point) {
 			this._createGridlines();
 			this._createModelRects();
 			this._highlightSpecies();
-			this._createRowLabels();
+			this._createYRegion();
 			this._createOverviewSection();
 
 			var height = rectHeight + 40;
@@ -475,7 +475,7 @@ function modelDataPointPrint(point) {
 			.enter()
 			.append("rect")
 			.attr("id","gridline")
-			.attr("transform","translate(232, " + (this.state.yModelRegion + 5) +")")
+			.attr("transform","translate(252, " + (this.state.yModelRegion + 5) +")")
 			.attr("x", function(d,i) { return d[1] * mWidth;})
 			.attr("y", function(d,i) { return d[0] * mHeight;})
 			.attr("class", "hour bordered deselected")
@@ -1752,7 +1752,7 @@ function modelDataPointPrint(point) {
 		var displayCount = self._getYLimit();
 		//create the related model rectangles
 		var highlight_rect = self.state.svg.append("svg:rect")
-			.attr("transform","translate(" + (self.state.textWidth + 32) + "," + self.state.yoffsetOver + ")")
+			.attr("transform","translate(" + (self.state.textWidth + self.state.xOffsetOver + 32) + "," + self.state.yoffsetOver + ")")
 			.attr("x", function(d) { return (self.state.xScale(modelData) - 1);})
 			.attr("y", self.state.yoffset + 2)
 			.attr("class", "model_accent")
@@ -2082,7 +2082,7 @@ function modelDataPointPrint(point) {
 		var data = this.state.filteredModelDataHash;
 		var axisStatus = this.state.invertAxis;
 
-		var rectTranslation = "translate(" + ((this.state.textWidth + 30) + 4) + "," + (self.state.yoffsetOver + 15)+ ")";
+		var rectTranslation = "translate(" + ((this.state.textWidth + this.state.xOffsetOver + 30) + 4) + "," + (self.state.yoffsetOver + 15)+ ")";
 		var model_rects = this.state.svg.selectAll(".models")
 			.data( data, function(d) {
 				return d.xID + d.yID;
@@ -2202,7 +2202,7 @@ function modelDataPointPrint(point) {
 			.data(list)
 			.enter()
 			.append("rect")
-			.attr("transform","translate(" + (self.state.textWidth + 30) + "," + (self.state.yoffsetOver) + ")")
+			.attr("transform","translate(" + (self.state.textWidth + self.state.xOffsetOver + 30) + "," + (self.state.yoffsetOver) + ")")
 			.attr("class", "species_accent")
 			.attr("width", width)
 			.attr("height", height)
@@ -2253,7 +2253,7 @@ function modelDataPointPrint(point) {
 		var displayCount = self._getYLimit();
 		//Highlight Row
 		var highlight_rect = self.state.svg.append("svg:rect")
-			.attr("transform","translate(" + self.state.axis_pos_list[1] + ","+ (self.state.yoffsetOver + 4 ) + ")")
+			.attr("transform","translate(" + (self.state.axis_pos_list[1]) + ","+ (self.state.yoffsetOver + 4 ) + ")")
 			.attr("x", 12)
 			.attr("y", function(d) {return self._getAxisData(curr_data.yID).ypos; }) //rowid
 			.attr("class", "row_accent")
@@ -2284,7 +2284,7 @@ function modelDataPointPrint(point) {
 
 		//create the related model rectangles
 		var highlight_rect2 = self.state.svg.append("svg:rect")
-			.attr("transform","translate(" + (self.state.textWidth + 34) + "," +self.state.yoffsetOver+ ")")
+			.attr("transform","translate(" + (self.state.textWidth + self.state.xOffsetOver + 34) + "," +self.state.yoffsetOver+ ")")
 			.attr("x", function(d) { return (self.state.xScale(curr_data.xID) - 1);})
 			.attr("y", self.state.yoffset + 2 )
 			.attr("class", "model_accent")
@@ -2333,18 +2333,18 @@ function modelDataPointPrint(point) {
 		}
 
 		this._filterDisplay();
-		this._clearModelLabels();
+		this._clearXLabels();
 
-		this._createModelRegion();
+		this._createXRegion();
 		this._createModelRects();
 		this._highlightSpecies();
-		this._createRowLabels();
+		this._createYRegion();
 	},
 
-	_createModelLabels: function(self, models) {
+	_createXLabels: function(self, models) {
 		var model_x_axis = d3.svg.axis().scale(self.state.xScale).orient("top");
 		self.state.svg.append("g")
-			.attr("transform","translate(" + (self.state.textWidth + 28) + "," + self.state.yoffset + ")")
+			.attr("transform","translate(" + (self.state.textWidth + self.state.xOffsetOver + 28) + "," + self.state.yoffset + ")")
 			.attr("class", "x axis")
 			.call(model_x_axis)
 			//this be some voodoo...
@@ -2356,12 +2356,12 @@ function modelDataPointPrint(point) {
 			});
 	},
 
-	_clearModelLabels: function() {
+	_clearXLabels: function() {
 		this.state.svg.selectAll("g .x.axis").remove();
 		this.state.svg.selectAll("g .tick.major").remove();
 	},
 
-	_createModelLines: function() {
+	_createXLines: function() {
 		var modelLineGap = 10;
 		var lineY = this.state.yoffset - modelLineGap;
 		this.state.svg.selectAll("path.domain").remove();
@@ -2369,7 +2369,7 @@ function modelDataPointPrint(point) {
 		this.state.svg.selectAll("#specieslist").remove();
 
 		this.state.svg.append("line")
-			.attr("transform","translate(" + (this.state.textWidth + 30) + "," + lineY + ")")
+			.attr("transform","translate(" + (this.state.textWidth + this.state.xOffsetOver + 30) + "," + lineY + ")")
 			.attr("x1", 0)
 			.attr("y1", 0)
 			.attr("x2", this.state.modelWidth)
@@ -2378,21 +2378,51 @@ function modelDataPointPrint(point) {
 			.attr("stroke-width", 1);
 	},
 
-	_createTextScores: function(list) {
+	_createYLines: function() {
+		var modelLineGap = 30;
+		var lineY = this.state.yoffset + modelLineGap;
+		var displayCount = self._getYLimit();
+		//this.state.svg.selectAll("path.domain").remove();
+		//this.state.svg.selectAll("text.scores").remove();
+		//this.state.svg.selectAll("#specieslist").remove();
+
+		var gridHeight = displayCount * self.state.heightOfSingleModel + 10;
+		if (gridHeight < self.state.minHeight) {
+			gridHeight = self.state.minHeight;
+		}
+
+		this.state.svg.append("line")
+			.attr("transform","translate(" + (this.state.textWidth + 15) + "," + lineY + ")")
+			.attr("x1", 0)
+			.attr("y1", 0)
+			.attr("x2", 0)
+			.attr("y2", gridHeight)
+			.attr("stroke", "#0F473E")
+			.attr("stroke-width", 1);
+	},
+
+	_createTextScores: function() {
 		var self = this;
+		var list = [];
 		var xWidth = self.state.widthOfSingleModel;
 
-		var translation ="translate(" + (this.state.textWidth + 34) + "," + this.state.yoffset + ")"; // was yoffset -3
+		if (!this.state.invertAxis && this.state.targetSpeciesName === "Overview") {
+			list = self._getSortedOverviewIDList(this.state.xAxis.entries());
+		} else if (!this.state.invertAxis && this.state.targetSpeciesName !== "Overview") {
+			list = self._getSortedIDListStrict(this.state.filteredXAxis.entries());
+		} else if (this.state.invertAxis && this.state.targetSpeciesName === "Overview") {
+			list = self._getSortedOverviewIDList(this.state.yAxis.entries());
+		} else if (this.state.invertAxis && this.state.targetSpeciesName !== "Overview") {
+			list = self._getSortedIDListStrict(this.state.filteredYAxis.entries());
+		}
+		
 		this.state.svg.selectAll("text.scores")
 			.data(list)
 			.enter()
 			.append("text")
-			.attr("transform",translation)
-			.attr("id", "scorelist")
-			.attr("x",function(d,i){return i * xWidth;})
-			.attr("y", 0)
-			.attr("width", xWidth)
 			.attr("height", 10)
+			.attr("id", "scorelist")
+			.attr("width", xWidth)
 			.attr("class", "scores")
 			// don't show score if it is a dummy model.
 			.text(function (d){ 
@@ -2405,6 +2435,18 @@ function modelDataPointPrint(point) {
 			.style("fill",function(d) {
 				return self._getColorForModelValue(self,self._getAxisData(d).species,self._getAxisData(d).score);
 			});
+
+			if (this.state.invertAxis){
+				this.state.svg.selectAll("text.scores").attr("y", function(d) {
+					return self._getAxisData(d).ypos + 5;
+				});
+				this.state.svg.selectAll("text.scores").attr("x", 0);
+				this.state.svg.selectAll("text.scores").attr("transform", "translate(" + (this.state.textWidth + 20) + "," + 40 + ")");
+			} else {
+				this.state.svg.selectAll("text.scores").attr("x",function(d,i){return i * xWidth;});
+				this.state.svg.selectAll("text.scores").attr("y", 0);
+				this.state.svg.selectAll("text.scores").attr("transform", "translate(" + (this.state.textWidth + 54) + "," + this.state.yoffset + ")");
+			}
 	},
 
 	//Add species labels to top of Overview
@@ -2417,7 +2459,7 @@ function modelDataPointPrint(point) {
 		} else{
 			speciesList.push(self.state.targetSpeciesName);
 		}
-		var translation = "translate(" + (self.state.textWidth + 30) +"," + (self.state.yoffset + 10) + ")";
+		var translation = "translate(" + (self.state.textWidth + self.state.xOffsetOver + 30) +"," + (self.state.yoffset + 10) + ")";
 
 		var xPerModel = self.state.modelWidth/speciesList.length;
 		var species = self.state.svg.selectAll("#specieslist")
@@ -2532,15 +2574,17 @@ function modelDataPointPrint(point) {
 				if(w < this.state.smallestModelWidth) {
 					w = this.state.smallestModelWidth;
 				}
-				this.state.axis_pos_list.push((this.state.textWidth + 30) + this.state.colStartingPos + w);
+				this.state.axis_pos_list.push((this.state.textWidth + 50) + this.state.colStartingPos + w);
+			} else if (i == 1 ){
+				this.state.axis_pos_list.push((i * (this.state.textWidth + this.state.xOffsetOver + 10)) + this.state.colStartingPos);
 			} else {
 				this.state.axis_pos_list.push((i * (this.state.textWidth + 10)) + this.state.colStartingPos);
 			}
 		}	
 	},
 
-	//this code creates the labels for the models, the lines, scores, etc..
-	_createModelRegion: function () {
+	//this code creates the labels for the x-axis, the lines, scores, etc..
+	_createXRegion: function () {
 		var self = this;
 		var mods = [];
 
@@ -2554,12 +2598,22 @@ function modelDataPointPrint(point) {
 			.domain(mods.map(function (d) {return d; }))
 			.rangeRoundBands([0,this.state.modelWidth]);
 
-		this._createModelLabels(self,mods);
-		this._createModelLines();
+		this._createXLabels(self,mods);
+		this._createXLines();
 		if (!this.state.invertAxis) {
-			this._createTextScores(mods);
+			this._createTextScores();
 		}
 		this._createOverviewSpeciesLabels();
+	},
+
+	//this code creates the labels for the y-axis, the lines, scores, etc..
+	_createYRegion: function () {
+		this._createYLabels();
+
+		this._createYLines();
+		if (this.state.invertAxis) {
+			this._createTextScores();
+		}
 	},
 
 	_addPhenogridControls: function() {
@@ -2841,7 +2895,7 @@ function modelDataPointPrint(point) {
 
 	//this code creates the text and rectangles containing the text 
 	//on either side of the model data
-	_createRowLabels: function() {
+	_createYLabels: function() {
 		// this takes some 'splaining
 		//the raw dataset contains repeats of data within the
 		//A,subsumer, and B columns.
