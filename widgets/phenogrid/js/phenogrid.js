@@ -122,7 +122,6 @@ function modelDataPointPrint(point) {
 		baseYOffset: 150,
 		faqImgSize: 15,
 		dummyModelName: "dummy",
-		invertAxis: false,
 		getAxisError: false
 	},
 
@@ -130,6 +129,7 @@ function modelDataPointPrint(point) {
 		/// good - legit options
 		serverURL: "",
 		selectedCalculation: 0,
+		invertAxis: false,
 		selectedSort: "Frequency",
 		targetSpeciesName : "Overview",
 		refSpecies: "Homo sapiens",
@@ -142,7 +142,7 @@ function modelDataPointPrint(point) {
 	//reset state values that must be cleared before reloading data
 	_reset: function(type) {
 		//LEAVE UNTIL OR MOVING HASH CONSTRUCTION EARLIER
-		if (type == 'organism' || typeof(type) == 'undefined') {
+		if (type == 'organism' || type == 'axisflip' || typeof(type) == 'undefined') {
 			this.state.modelData = [];
 			this.state.modelList = [];
 			this.state.filteredModelData = [];
@@ -315,7 +315,6 @@ function modelDataPointPrint(point) {
 
 		this.state.phenoLength = this.state.phenotypeListHash.size();
 		this.state.modelLength = this.state.modelListHash.size();
-
 		this._setAxisValues();
 
 		// shorthand for top of model region
@@ -328,7 +327,8 @@ function modelDataPointPrint(point) {
 		this._adjustModelCount();
 		this.state.currXIdx = this._getXLimit();
 		this.state.currYIdx = this._getYLimit();
-		this._filterSelected("sortphenotypes");
+		this._sortPhenotypeHash();
+		this._filterDisplay();
 		this.state.unmatchedPhenotypes = this._getUnmatchedPhenotypes();
 		this.element.empty();
 		this._createColorScale();
@@ -897,8 +897,9 @@ function modelDataPointPrint(point) {
 		self.state.selectedSort = type;
 	},
 
-	_processSelected: function(processType){
-		this._filterSelected(processType);
+	_processDisplay: function(){
+		this._sortPhenotypeHash();
+		this._filterDisplay();
 		this.state.unmatchedPhenotypes = this._getUnmatchedPhenotypes();
 		this.element.empty();
 		this.reDraw();
@@ -920,14 +921,8 @@ function modelDataPointPrint(point) {
 		}
 	},
 
-	_filterSelected: function(filterType){
+	_filterDisplay: function(){
 		var self = this;
-		if (filterType == "sortphenotypes"){
-			//Sort the phenotypes based on what value is currently held in self.state.selectedSort
-			this._sortPhenotypeHash();
-		}
-
-		//Force Reset to Origin when changing Species, Sort or Display
 		var axis_idx = 0;
 		var sortedYArray = [];
 
@@ -1592,12 +1587,14 @@ function modelDataPointPrint(point) {
 			self.state.phenotypeData = self.state.origPhenotypeData.slice();
 			self._reset("organism");
 			self._init();
-		}
-		else if (type === "calculation"){
+		} else if (type === "calculation"){
 			self._reset("calculation");
-		}
-		else if (type === "sortphenotypes"){
+		} else if (type === "sortphenotypes"){
 			self._reset("sortphenotypes");
+		} else if (type === "axisflip"){
+			self.state.phenotypeData = self.state.origPhenotypeData.slice();
+			self._reset("axisflip");
+			self._init();
 		}
 	},
 
@@ -2335,7 +2332,7 @@ function modelDataPointPrint(point) {
 			this.state.currYIdx = newYPos;
 		}
 
-		this._filterSelected('updateModel');
+		this._filterDisplay();
 		this._clearModelLabels();
 
 		this._createModelRegion();
@@ -2366,7 +2363,7 @@ function modelDataPointPrint(point) {
 
 	_createModelLines: function() {
 		var modelLineGap = 10;
-		var lineY = this.state.yoffset-modelLineGap;
+		var lineY = this.state.yoffset - modelLineGap;
 		this.state.svg.selectAll("path.domain").remove();
 		this.state.svg.selectAll("text.scores").remove();
 		this.state.svg.selectAll("#specieslist").remove();
@@ -2734,6 +2731,9 @@ function modelDataPointPrint(point) {
 		options.append(sortSel);
 		var calcSel = this._createCalculationSelection();
 		options.append(calcSel);
+		var axisSel = this._createAxisSelection();
+		options.append(axisSel);
+
 		container.append(options);
 		//add the handler for the select control
 		$( "#organism" ).change(function(d) {
@@ -2744,14 +2744,19 @@ function modelDataPointPrint(point) {
 		$( "#calculation" ).change(function(d) {
 			self.state.selectedCalculation = self.state.similarityCalculation[d.target.selectedIndex].calc;
 			self._resetSelections("calculation");
-			self._processSelected("calculation");
+			self._processDisplay();
 		});
 
 		//add the handler for the select control
 		$( "#sortphenotypes" ).change(function(d) {
 			self.state.selectedSort = self.state.phenotypeSort[d.target.selectedIndex];
 			self._resetSelections("sortphenotypes");
-			self._processSelected("sortphenotypes");
+			self._processDisplay();
+		});
+
+		$( "#axisflip" ).click(function(d) {
+			self.state.invertAxis = !self.state.invertAxis;
+			self._resetSelections("axisflip");
 		});
 
 		self._configureFaqs();
@@ -2821,6 +2826,16 @@ function modelDataPointPrint(point) {
 			optionhtml += "<option value='" + "' " + selecteditem + ">" + this.state.phenotypeSort[idx] + "</option>";
 		}
 		optionhtml += "</select></span>";
+		return $(optionhtml);
+	},
+
+	/** 
+	* create the html necessary for selecting the axis flip
+	*/
+	_createAxisSelection: function () {
+		var selectedItem;
+		var optionhtml = "<div id='axis_div'><span id='axlabel'>Axis Flip</span><br>" +
+		"<span id='org_sel'><button type='button' id='axisflip'>Flip Axis</button></span></div>";
 		return $(optionhtml);
 	},
 
