@@ -50,17 +50,20 @@
  */
 var url = document.URL;
 
+//Creation of modelDataPoint object
 function modelDataPoint(x,y) {
 	this.xID = x;
 	this.yID = y;
 }
 
+//Makes sure that matches are when both the X & Y values are the same
 function modelDataPointEquals(point1,point2) {
 	return point1.xID === point2.xID && point1.yID === point2.yID;
 }
 
+//Prints the point in a easy to understand way
 function modelDataPointPrint(point) {
-	return "Model:" + point.xID + ", Pheno:" + point.yID;
+	return "X:" + point.xID + ", Y:" + point.yID;
 }
 
 (function($) {
@@ -82,7 +85,7 @@ function modelDataPointPrint(point) {
 		detailRectStrokeWidth: 3,
 		globalViewSize : 110,
 		reducedGlobalViewSize: 50,
-		minHeight: 225,
+		minHeight: 310,
 		h : 578,
 		m :[ 30, 10, 10, 10 ],
 		multiOrganismCt: 10,
@@ -387,6 +390,7 @@ function modelDataPointPrint(point) {
 		}
 	},
 
+	//Returns the correct limit amount for the X axis based on axis position
 	_getXLimit: function () {
 		if (this.state.invertAxis){
 			return this.state.phenoDisplayCount;
@@ -395,6 +399,7 @@ function modelDataPointPrint(point) {
 		}
 	},
 
+	//Returns the correct limit amount for the Y axis based on axis position
 	_getYLimit: function () {
 		if (this.state.invertAxis){
 			return this.state.modelDisplayCount;
@@ -483,7 +488,7 @@ function modelDataPointPrint(point) {
 			.attr("height", 11.5);
 	},
 
-	//NEW
+	//Sets the X & Y axis hash datastructures correctly based on axis position
 	_setAxisValues: function() {
 		//By default, X = Models and Y = Phenotypes.  Same goes for xID and yID in the modelData structures
 		//This is reversed for when invertAxis is true
@@ -647,18 +652,18 @@ function modelDataPointPrint(point) {
 		//set this back to 0 so it doesn't affect other rendering
 	},
 
-	//NEW
-	_returnYID: function(id){
+	//Returns the ID of the value on the Y Axis based on current position provided
+	_returnYID: function(position){
 		var searchArray = this.state.yAxis.entries();
 		var results = false;
 		for (var i in searchArray){
 			if (this.state.invertAxis && this.state.targetSpeciesName === "Overview") {
-				if (searchArray[i][1].opos == id){
+				if (searchArray[i][1].opos == position){
 					results = searchArray[i][0];
 					break;
 				}
 			} else {
-				if (searchArray[i][1].pos == id){
+				if (searchArray[i][1].pos == position){
 					results = searchArray[i][0];
 					break;
 				}
@@ -667,18 +672,18 @@ function modelDataPointPrint(point) {
 		return results;
 	},
 
-	//NEW
-	_returnXID: function(id){
+	//Returns the ID of the value on the X Axis based on current position provided
+	_returnXID: function(position){
 		var searchArray = this.state.xAxis.entries();
 		var results = false;
 		for (var i in searchArray){
 			if (!this.state.invertAxis && this.state.targetSpeciesName === "Overview") {
-				if (searchArray[i][1].opos == id){
+				if (searchArray[i][1].opos == position){
 					results = searchArray[i][0];
 					break;
 				}
 			} else {
-				if (searchArray[i][1].pos == id){
+				if (searchArray[i][1].pos == position){
 					results = searchArray[i][0];
 					break;
 				}
@@ -687,7 +692,8 @@ function modelDataPointPrint(point) {
 		return results;
 	},
 
-	//NEW
+	//When a hashtable is pass through, it will merge the key into the values and return an array with all needed info.
+	//Mainly used for D3 and it's unabilty to read non-native data structures
 	_mergeHashEntries: function(hashT){
 		var premerged = hashT.entries();
 		var merged = [];
@@ -822,7 +828,7 @@ function modelDataPointPrint(point) {
 			.rangePoints([0,overviewRegionSize]);
 	},
 
-	//NEW
+	//Returns an sorted array of IDs from an arrayed Hashtable, but meant for overview display based off opos
 	_getSortedOverviewIDList: function(hashArray){
 		var resultArray = [];
 		var position;
@@ -833,7 +839,7 @@ function modelDataPointPrint(point) {
 		return resultArray;
 	},
 
-	//NEW
+	//Returns an sorted array of IDs from an arrayed Hashtable, but meant for non-overview display based off pos
 	_getSortedIDList: function(hashArray){
 		var resultArray = [];
 		for (var j in hashArray) {
@@ -842,6 +848,8 @@ function modelDataPointPrint(point) {
 		return resultArray;
 	},
 
+	//Returns an sorted array of IDs from an arrayed Hashtable, but meant for non-overview display based off an previous sort
+	//Best for filtered display, as it sets the lowest value to 0 and increases from there
 	_getSortedIDListStrict: function (hashArray){
 		var firstSort = this._getSortedIDList(hashArray);
 		var resultArray = [];
@@ -897,6 +905,7 @@ function modelDataPointPrint(point) {
 		self.state.selectedSort = type;
 	},
 
+	//Previously processSelected
 	_processDisplay: function(){
 		this._sortPhenotypeHash();
 		this._filterDisplay();
@@ -921,6 +930,7 @@ function modelDataPointPrint(point) {
 		}
 	},
 
+	//Previously filterSelected
 	_filterDisplay: function(){
 		var self = this;
 		var axis_idx = 0;
@@ -1026,11 +1036,6 @@ function modelDataPointPrint(point) {
 				}
 			}
 		}
-		//Now we have top 10 model matches for Human data in humandata, 
-		//Top n model matches for Mouse data in mousedata
-		//Top n model matches for zebrashish data in zfishdata
-		//Top n model matches for flies in flydata
-		//Concat all species data and process matches
 	},
 
 	_finishOverviewLoad: function () {
@@ -1069,7 +1074,7 @@ function modelDataPointPrint(point) {
 		this.state.speciesList = speciesList;
 	},
 
-	//NEW
+	//Returns values from a point on the grid
 	_getCellData: function(point) {
 		if (this.state.modelDataHash.containsKey(point)){
 			return this.state.modelDataHash.get(point);
@@ -1078,7 +1083,7 @@ function modelDataPointPrint(point) {
 		}
 	},
 
-	//NEW
+	//Returns axis data from a ID of models or phenotypes
 	_getAxisData: function(key) {
 		if (typeof(key) === 'undefined'  && this.state.getAxisError){
 			console.log("UNDEFINED AXIS CALL");
@@ -1094,7 +1099,7 @@ function modelDataPointPrint(point) {
 		else { return false; }
 	},
 
-	//NEW
+	//Determines if an ID belongs to the Model or Phenotype hashtable
 	_getIDType: function(key) {
 		if (this.state.modelListHash.containsKey(key)){
 			return "Model";
@@ -1105,7 +1110,7 @@ function modelDataPointPrint(point) {
 		else { return false; }
 	},
 
-	//NEW
+	//Creates the Hashtables used by the whole program
 	_loadHashTables: function() {
 		//CHANGE LATER TO CUT DOWN ON INFO FROM _finishLoad & _finishOverviewLoad
 		this.state.phenotypeListHash = new Hashtable();
@@ -1165,21 +1170,21 @@ function modelDataPointPrint(point) {
 		}
 	},
 
-	//NEW
+	//Will update the position of the phenotype based on sort
 	_updatePhenoPos: function(key,rank) {
 		var values = this.state.phenotypeListHash.get(key);
 		values.pos = rank;
 		this.state.phenotypeListHash.put(key,values);
 	},
 
-	//NEW
+	//Sets the correct position for the value on the yAxis on where it belongs in the grid/axis
 	_setYPosHash: function(key,ypos) {
 		var values = this.state.yAxis.get(key);
 		values.ypos = ypos;
 		this.state.yAxis.put(key,values);
 	},
 
-	//NEW
+	//Updates the count & sum values used for sorting
 	_updateSortVals: function(key,subIC) {
 		var values;
 		if (this.state.invertAxis){
@@ -1195,7 +1200,7 @@ function modelDataPointPrint(point) {
 		}
 	},
 
-	//NEW
+	//Creates the filterModelDataHash data structure
 	_filterHashTables: function () {
 		var newFilteredModel = [];
 		//NOT A HASH ACTUALLY.  RENAME AFTER ADOPTION
@@ -1211,7 +1216,7 @@ function modelDataPointPrint(point) {
 		this.state.filteredModelDataHash = newFilteredModel;
 	},
 
-	//NEW
+	//Filters the phenotype datastructure based on start & end points provided
 	_filterPhenotypeHash: function (start,end) {
 		this.state.filteredPhenotypeListHash = new Hashtable();
 		var oldHash = this.state.phenotypeListHash.entries();
@@ -1229,7 +1234,7 @@ function modelDataPointPrint(point) {
 		}
 	},
 
-	//NEW
+	//Filters the model datastructure based on start & end points provided
 	_filterModelListHash: function (start,end) {
 		this.state.filteredModelListHash = new Hashtable();
 		var oldHash = this.state.modelListHash.entries();
@@ -1247,7 +1252,7 @@ function modelDataPointPrint(point) {
 		}
 	},
 
-	//NEW
+	//Sorts the phenotypes
 	_sortPhenotypeHash: function () {
 		var self = this;
 		var sortType = self.state.selectedSort;
@@ -1273,7 +1278,6 @@ function modelDataPointPrint(point) {
 		}
 	},
 
-	//NEW
 	_sortPhenotypesModelHash: function(a,b) {
 		var diff = b.count - a.count;
 		if (diff === 0) {
@@ -1282,12 +1286,10 @@ function modelDataPointPrint(point) {
 		return diff;
 	},
 
-	//NEW
 	_sortPhenotypesRankHash: function(a,b) {
 		return b.sum-a.sum;
 	},
 
-	//NEW
 	_sortPhenotypesAlphabeticHash: function(a,b) {
 		var labelA = a.label, 
 		labelB = b.label;
@@ -1632,7 +1634,7 @@ function modelDataPointPrint(point) {
 			link_labels.style("fill", "black");
 	},
 
-	//NEW
+	//Will return all partial matches in the modelDataHash structure.  Good for finding rows/columns of data
 	_getMatchingModels: function (key) {
 		var modelKeys = this.state.modelDataHash.keys();
 		var matchingKeys = [];
@@ -1644,7 +1646,7 @@ function modelDataPointPrint(point) {
 		return matchingKeys;
 	},
 
-	//NEW
+	//Merging of both Highlight model and phenotype functions
 	_highlightMatching: function(curr_data){
 		var self = this;
 		var alabels, label, ID;
@@ -1689,7 +1691,7 @@ function modelDataPointPrint(point) {
 		}
 	},
 
-	//NEW
+	//Merging of both deselect model and phenotype functions
 	_deselectMatching: function(curr_data){
 		var self = this;
 		var dataType = self._getIDType(curr_data);
@@ -1737,7 +1739,7 @@ function modelDataPointPrint(point) {
 		}
 	},
 
-	//NEW
+	//Will capitalize words passed or send back undefined incase error
 	_capitalizeString: function(word){
 		if (word === undefined) {
 			return "Undefined";
@@ -1746,14 +1748,14 @@ function modelDataPointPrint(point) {
 		}
 	},
 
-	_selectModel: function(modelData, obj) {
+	_selectXItem: function(data, obj) {
 		var self = this;
-		var modelInfo = self._getAxisData(modelData);
+		var info = self._getAxisData(data);
 		var displayCount = self._getYLimit();
 		//create the related model rectangles
 		var highlight_rect = self.state.svg.append("svg:rect")
 			.attr("transform","translate(" + (self.state.textWidth + self.state.xOffsetOver + 32) + "," + self.state.yoffsetOver + ")")
-			.attr("x", function(d) { return (self.state.xScale(modelData) - 1);})
+			.attr("x", function(d) { return (self.state.xScale(data) - 1);})
 			.attr("y", self.state.yoffset + 2)
 			.attr("class", "model_accent")
 			.attr("width", 14)
@@ -1763,12 +1765,12 @@ function modelDataPointPrint(point) {
 		// var classlabel = "text#" +this._getConceptId(modelData.model_id);
 
 		//Show that model label is selected. Change styles to bold, blue and full-length label
-		var model_label = self.state.svg.selectAll("text#" + this._getConceptId(modelData))
+		var model_label = self.state.svg.selectAll("text#" + this._getConceptId(data))
 			.style("font-weight", "bold")
 			.style("fill", "blue")
-			.html(modelInfo.label);
+			.html(info.label);
 
-		var concept = self._getConceptId(modelData),
+		var concept = self._getConceptId(data),
 		type = this.state.defaultApiEntity;
 
 		for (var i in this.state.apiEntityMap) {
@@ -1779,7 +1781,12 @@ function modelDataPointPrint(point) {
 
 		var width = (type === this.state.defaultApiEntity) ? 80 : 200;
 		var height = (type === this.state.defaultApiEntity) ? 50 : 60;
-		var retData = "<strong>" + self._capitalizeString(modelInfo.type) + ": </strong> " + modelInfo.label + "<br/><strong>Rank:</strong> " + modelInfo.rank;
+		var retData;
+		if (this.state.invertAxis){
+			retData = "<strong> Phenotype: </strong> " + info.label + "<br/><strong>IC:</strong> " + info.IC.toFixed(2);
+		} else {
+			retData = "<strong>" + self._capitalizeString(info.type) + ": </strong> " + info.label + "<br/><strong>Rank:</strong> " + info.rank;
+		}
 
 		//obj is try creating an ojbect with an attributes array including "attributes", but I may need to define
 		//getAttrbitues
@@ -1787,7 +1794,7 @@ function modelDataPointPrint(point) {
 		obj = {
 			attributes: [],
 			getAttribute: function(keystring) {
-				var ret = self.state.xScale(modelData) + 15;
+				var ret = self.state.xScale(data) + 15;
 				if (keystring == "y") {
 					ret = Number(self.state.yoffset - 100);
 				}
@@ -1796,26 +1803,26 @@ function modelDataPointPrint(point) {
 		};
 		obj.attributes.transform = {value: highlight_rect.attr("transform")};
 		this._updateDetailSection(retData, this._getXYPos(obj), width, height);
-		self._highlightMatching(modelData);
+		self._highlightMatching(data);
 	},
 
 	//I need to check to see if the modelData is an object. If so, get the model_id
-	_clearModelData: function(modelData,obj) {
+	_clearModelData: function(data,obj) {
 		this.state.svg.selectAll("#detail_content").remove();
 		this.state.svg.selectAll(".model_accent").remove();
-		var model_text = "";
-		var mod_id = this._getConceptId(modelData);
-		var modelLabel = self._getAxisData(modelData).label;
+		var text = "";
+		var id = this._getConceptId(data);
+		var label = self._getAxisData(data).label;
 
 		//Show that model label is no longer selected. Change styles to normal weight, black and short label
-		if (mod_id !== "") {
-			model_text = this.state.svg.selectAll("text#" + mod_id);
-			model_text.style("font-weight","normal");
-			model_text.style("text-decoration", "none");
-			model_text.style("fill", "black");
+		if (id !== "") {
+			text = this.state.svg.selectAll("text#" + id);
+			text.style("font-weight","normal");
+			text.style("text-decoration", "none");
+			text.style("fill", "black");
 
-			model_text.html(this._getShortLabel(modelLabel,self.state.labelCharDisplayCount));
-			this._deselectMatching(modelData);
+			text.html(this._getShortLabel(label,self.state.labelCharDisplayCount));
+			this._deselectMatching(data);
 		}
 	},
 
@@ -1946,7 +1953,7 @@ function modelDataPointPrint(point) {
 				self._clickItem(self.state.serverURL,data);
 			})
 			.on("mouseover", function(d) {
-				self._selectModel(data, this);
+				self._selectXItem(data, this);
 			})
 			.on("mouseout", function(d) {
 				self._clearModelData(data, d3.mouse(this));
@@ -2341,6 +2348,7 @@ function modelDataPointPrint(point) {
 		this._createYRegion();
 	},
 
+	//Previously _createModelLabels
 	_createXLabels: function(self, models) {
 		var model_x_axis = d3.svg.axis().scale(self.state.xScale).orient("top");
 		self.state.svg.append("g")
@@ -2356,11 +2364,13 @@ function modelDataPointPrint(point) {
 			});
 	},
 
+	//Previously _clearModelLabels
 	_clearXLabels: function() {
 		this.state.svg.selectAll("g .x.axis").remove();
 		this.state.svg.selectAll("g .tick.major").remove();
 	},
 
+	//Previously _createModelLines
 	_createXLines: function() {
 		var modelLineGap = 10;
 		var lineY = this.state.yoffset - modelLineGap;
@@ -2584,6 +2594,7 @@ function modelDataPointPrint(point) {
 	},
 
 	//this code creates the labels for the x-axis, the lines, scores, etc..
+	//Previously _createModelRegion
 	_createXRegion: function () {
 		var self = this;
 		var mods = [];
@@ -2893,17 +2904,9 @@ function modelDataPointPrint(point) {
 		return $(optionhtml);
 	},
 
-	//this code creates the text and rectangles containing the text 
-	//on either side of the model data
+	//this code creates the text and rectangles containing the text on either side of the y-axis data
+	//Previously _createRowLabels
 	_createYLabels: function() {
-		// this takes some 'splaining
-		//the raw dataset contains repeats of data within the
-		//A,subsumer, and B columns.
-		//If d3 sees the same label 4 times (ex: Abnormality of the
-		//pharynx) then it will 
-		//create a rectangle and text for it 4 times. Therefore, I
-		//need to create a unique set of
-		//labels per axis (because the labels can repeat across axes)
 		var self = this;
 		var pad = 14;
 		var list = [];
