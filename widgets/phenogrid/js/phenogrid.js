@@ -133,6 +133,8 @@ function modelDataPointPrint(point) {
 		selectedSort: "Frequency",
 		targetSpeciesName : "Overview",
 		refSpecies: "Homo sapiens",
+		genotypeExpandLimit: 5, // sets the limit for the number of genotype expanded on grid
+		phenoCompareLimit: 5, // sets the limit for the number of phenotypes used for genotype expansion
 		targetSpeciesList : [{ name: "Homo sapiens", taxon: "9606"},
 			{ name: "Mus musculus", taxon: "10090" },
 			{ name: "Danio rerio", taxon: "7955"},
@@ -1131,7 +1133,7 @@ function modelDataPointPrint(point) {
 		if (info != null) return info.type;
 		return "unknown";
 	},
-
+	
 	//NEW
 	_loadHashTables: function() {
 		//CHANGE LATER TO CUT DOWN ON INFO FROM _finishLoad & _finishOverviewLoad
@@ -1212,11 +1214,6 @@ function modelDataPointPrint(point) {
 		var values;
 		if (this.state.invertAxis){
 			values = this.state.modelListHash.get(key);
-//			console.log(key);
-//			// MKD temp
-//			if (values == null) {
-//				var modhash = this.state.modelListHash.entries();
-//				console.log(values);}
 			values.count += 1;
 			values.sum += subIC;
 			this.state.modelListHash.put(key,values);
@@ -1391,8 +1388,8 @@ function modelDataPointPrint(point) {
 		} else {
 		msg = 'Uncaught Error.\n' + xhr.responseText;
 		} */
-
-		this._createEmptyVisualization(msg);
+// We need a better shared error handling here instead of displaying empty vis
+//		this._createEmptyVisualization(msg);
 	},
 
 	//Finish the data load after the ajax request
@@ -1837,15 +1834,37 @@ function modelDataPointPrint(point) {
 		var width = (type === this.state.defaultApiEntity) ? 80 : 200;
 		var height = (type === this.state.defaultApiEntity) ? 50 : 60;
 		
-		var hrefLink = "<a href=\"" + this.state.serverURL+"/" + modelInfo.type +"/"+ this._getConceptId(modelData) + "\" target=\"_blank\">" +
+		var hrefLink = "<a href=\"" + this.state.serverURL+"/" + modelInfo.type +"/"+ concept + "\" target=\"_blank\">" +   //this._getConceptId(modelData)
 						modelInfo.label + "</a>"; 
 		
 		var retData = "<strong>" + self._capitalizeString(modelInfo.type) + ": </strong> " + hrefLink + "<br/><strong>Rank:</strong> " + modelInfo.rank;
-					
-		if (modelInfo.type == 'gene' && this.state.targetSpeciesName != "Overview") {
-			retData = retData + "<br/><br/>Click button to show associated genotypes comparisons &nbsp;&nbsp;&nbsp;" +
-			 "<button class=\"expandbtn\" type=\"button\" onClick=\"self._expandGenotypes('" + this._getConceptId(modelData) + "')\"><img src=\"" + 
-			 			this.state.scriptpath + "../image/expandIcon.png\"/></button>";
+		
+		// for genotypes show the parent
+		if (modelInfo.type == 'genotype') {
+			if (typeof(modelInfo.parent) !== 'undefined' && modelInfo.parent != null) {
+				var parentInfo = this.state.modelListHash.get(modelInfo.parent);
+				if (parentInfo != null) {
+					var genehrefLink = "<a href=\"" + this.state.serverURL+"/" + parentInfo.type +"/"+ modelInfo.parent + "\" target=\"_blank\">" +  
+					parentInfo.label + "</a>";					
+					retData = retData + "<br/><strong>Gene:</strong> " + genehrefLink;
+				}
+			}			
+		}
+		
+		// for gene and species mode only, show genotype link
+		if (modelInfo.type == 'gene' && this.state.targetSpeciesName != "Overview") {	
+			
+			// check the hashtable to see if we've loaded this
+			var gtscores = this.state.loadedGenoTypesHash.get(concept);
+			
+			//if found just return genotypes scores
+			if (gtscores != null) {
+				retData = retData + "<br/><strong># of associated genotypes:</strong> &nbsp;" + gtscores.size();				
+			} else {
+				retData = retData + "<br/><br/>Click button to show associated genotypes &nbsp;&nbsp;" +
+				"<button class=\"expandbtn\" type=\"button\" onClick=\"self._expandGenotypes('" + concept + "')\"><img src=\"" + 
+				this.state.scriptpath + "../image/expandIcon.png\"/></button>";				
+			}
 		}
 		
 		// update the stub stickytool div dynamically to display
@@ -2020,6 +2039,9 @@ function modelDataPointPrint(point) {
 		x = +t.getAttribute("x"),
 		y = +t.getAttribute("y");
 
+		// this fixes the labels that are html encoded 
+		label = this._decodeHtmlEntity(label);
+		
 		p.append("text")
 			.attr('x', x + 15)
 			.attr('y', y)
@@ -2047,7 +2069,9 @@ function modelDataPointPrint(point) {
 //			.attr("class", this._getIDTypeDetail(data))
 			.style("font-size", "12px")
 			//don't show the label if it is a dummy.
-			.text( function(d) {if (label == self.state.dummyModelName) return ""; else return label;});
+			.text( function(d) {if (label == self.state.dummyModelName) 
+										return ""; 
+								else return label;});
 
 		el.remove();
 	},
@@ -3194,7 +3218,8 @@ function modelDataPointPrint(point) {
 				
 				ctr++;
 				
-				if (ctr > 2) break;  //TEMP CODE TO ONLY DO THE FIRST 2
+				// limit number of genotypes do display based on internalOptions
+				if (ctr > this.state.phenoCompareLimit && ctr < assocPhenotypes.length) break;  
 			}
 			// truncate the last + off, if there
 			if (phenotypeIds.slice(-1) == '+') {
@@ -3206,12 +3231,13 @@ function modelDataPointPrint(point) {
 			for (var g in genoTypeAssociations) {
 				_genotypeIds = _genotypeIds + genoTypeAssociations[g].genotype.id + "+";	
 				// fill a hashtable with the labels so we can quickly get back to them later
-				var tmpLabel = "+" + this._encodeHtmlEntity(genoTypeAssociations[g].genotype.label);   //TEMP CODE TO FIND THE GENOTYPE ON DISPLAY
+				var tmpLabel = "&#187" + this._encodeHtmlEntity(genoTypeAssociations[g].genotype.label);   //TEMP CODE TO FIND THE GENOTYPE ON DISPLAY
 				genotypeLabelHashtable.put(genoTypeAssociations[g].genotype.id, tmpLabel);
 				
 				ctr++;
 				
-				if (ctr > 5) break;  //TEMP CODE TO ONLY DO THE FIRST 2 GENOTYPES
+				// limit number of genotypes do display based on internalOptions 
+				if (ctr > this.state.genotypeExpandLimit && ctr < genoTypeAssociations.length) break;  
 			}
 			
 			// truncate the last + off, if there
@@ -3358,6 +3384,32 @@ function modelDataPointPrint(point) {
 		}
 	},
 
+	_getAssociatedGenotypes: function(curModel) {
+	    
+		// check cached hashtable first 
+		var gta = this.state.loadedGenoTypesHash.get(curModel.model_id);
+		
+		//if null then go find genotypes
+		if (gta == null) { 
+			var url = this.state.serverURL+"/gene/"+ curModel.model_id + ".json";		
+			//var url = "http://stage-monarch.monarchinitiative.org/gene/"+ gene + ".json";
+			
+			var res = this._ajaxLoadData(curModel.species,url);
+			
+			if (typeof (res)  !== 'undefined') {
+				gta = res.genotype_associations;
+			}
+	
+			//  HACK:if we return a null just create a zero-length array for now to add it to hashtable
+			// this is for later so we don't have to lookup concept again
+			if (gta == null) {gta = {};}
+				
+			// save the genotypes in hastable for later
+			this.state.loadedGenoTypesHash.put(curModel.model_id, gta);					
+		}
+		
+		return gta;
+	},
 	// encode any special chars 
 	_encodeHtmlEntity: function(str) {
 	
@@ -3371,6 +3423,10 @@ function modelDataPointPrint(point) {
 		}
 		
 		return str;
+	},
+	
+	_decodeHtmlEntity: function(str) {
+		return $('<div></div>').html(str).text();
 	}
 
 	

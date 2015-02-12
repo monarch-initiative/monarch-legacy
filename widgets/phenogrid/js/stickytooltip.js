@@ -6,7 +6,7 @@
 
 
 var stickytooltip={
-	tooltipoffsets: [20, -30], //additional x and y offset from mouse cursor for tooltips
+	tooltipoffsets: [10, -10], //additional x and y offset from mouse cursor for tooltips 20,-30
 	fadeinspeed: 200, //duration of fade effect in milliseconds
 	rightclickstick: true, //sticky tooltip when user right clicks over the triggering element (apart from pressing "s" key) ?
 	stickybordercolors: ["black", "darkred"], //border color of tooltip depending on sticky state
