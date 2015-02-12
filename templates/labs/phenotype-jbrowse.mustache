@@ -1,11 +1,17 @@
-    {{{includes.navbar}}}
+
     <meta charset="UTF-8">
+    <!--<link type="text/css" rel="stylesheet" href="https://raw.githubusercontent.com/4ndr01d3/js-components/master/biojs-vis-chromosome/css/chromosome.css">-->
+    <link type="text/css" rel="stylesheet" href="https://cdn.rawgit.com/4ndr01d3/biojs-vis-chromosome/master/css/chromosome.css">
+    <link type="text/css" rel="stylesheet" href="https://raw.githubusercontent.com/4ndr01d3/js-components/master/util-area_selector/css/area_selector.css">
+    <link type="text/css" rel="stylesheet" href="https://code.jquery.com/ui/1.11.0/themes/smoothness/jquery-ui.css">
+
+
+    <!--<script src="http://code.jquery.com/jquery-1.11.1.min.js"></script>-->
+    <!--<script src="https://wzrd.in/bundle/biojs-vis-chromosome@0.0.2"></script>-->
     <script src="http://wzrd.in/bundle/biojs-vis-chromosome@latest"></script>
 
 
-    <link rel="stylesheet" href="https://raw.githubusercontent.com/4ndr01d3/js-components/master/util-area_selector/css/area_selector.css">
-    <link rel="stylesheet" href="https://raw.githubusercontent.com/4ndr01d3/js-components/master/biojs-vis-chromosome/css/chromosome.css">
-    <link rel="stylesheet" href="https://code.jquery.com/ui/1.11.0/themes/smoothness/jquery-ui.css">
+
 
 
     <!--<script src='main.js'></script>-->
@@ -141,42 +147,50 @@
     </div>
 
     <script>
-        var yourDiv = document.getElementById('snippetDiv');
-        var app = new require("biojs-vis-chromosome");
-//
+        function loadJBrowseFrame(){
+            console.log('lading jbrowse frame ');
+        }
+
+        var visChromosome = require("biojs-vis-chromosome");
+        var selector = "#snippetDiv";
+        var chromosomes = ["1","2","3","4","5","6","7","8","9","10","11","12","13","14","15","16","17","18","19","20","21","22","X","Y"];
+
         jQuery( document ).ready(function( $ ) {
-            // Handler for .ready() called.
-            var chromosomes = ["1","2","3","4","5","6","7","8","9","10","11","12","13","14","15","16","17","18","19","20","21","22","X","Y"];
             inst=[];
             for (var i in chromosomes){
                 var chr=chromosomes[i];
-                $(yourDiv).append("<h3>Chromosome "+chr+"</h3><div id='holder_"+chr+"' style=''></div><br/>");
+                $(selector).append("<h3>Chromosome "+chr+"</h3><div id='holder_"+chr+"' style=''></div><br/>");
                 //var instance1 =
 
-                var chromosome = new app();
-
+                var chromosome = new visChromosome();
                 inst[i]= chromosome.init({
                     target: "holder_"+chr,
                     dasSource: "http://www.ensembl.org/das/Homo_sapiens.GRCh38.karyotype",
                     dasSegment: chr
                 });
-                inst[i].on("onModelLoaded",function( objEvent ) {
-                    $("#holder_"+objEvent.model.id).data("size",1*objEvent.model.stop);
-                    adjustSizes(1*objEvent.model.stop);
-                });
+                inst[i].on("onModelLoaded",modelEvent);
             }
-            var maxSize=0;
-            var adjustSizes= function(size){
-                if (maxSize<size)
-                    maxSize=size;
-                for (var i in chromosomes){
-                    var chr=chromosomes[i];
-                    if($("#holder_"+chr).data("size")!=undefined){
-                        var size=$("#holder_"+chr).data("size");
-                        $("#holder_"+chr).width((size/maxSize)*100 +"%");
-                    }
+//            $("#holder_5").click(alert('boom')) ;
+//            $("#5_q35.3").click(alert('bang')) ;
+        });
+
+        var maxSize=0;
+        var adjustSizes= function(size){
+            if (maxSize<size)
+                maxSize=size;
+            for (var i in chromosomes){
+                var chr=chromosomes[i];
+                if($("#holder_"+chr).data("size")!== undefined){
+                    var chrSize=$("#holder_"+chr).data("size");
+                    $("#holder_"+chr).width((chrSize/maxSize)*100 +"%");
                 }
             }
-        });
+        };
+
+        function modelEvent(objEvent) {
+            $("#holder_"+objEvent.model.id).data("size",1*objEvent.model.stop);
+            adjustSizes(1*objEvent.model.stop);
+        }
+
 
     </script>
