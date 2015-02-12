@@ -382,3 +382,12 @@ body{
    font-size: 10px;
    color: #428bca;
 }
+
+.expandbtn {
+    padding: 0;
+    border: none;
+    background: none;
+//    background: transparent url(http://dev.vaadin.com/chrome/site/vaadin-trac.png) no-repeat;
+    width: 19px;
+    height: 19px;
+}
