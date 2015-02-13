@@ -1,7 +1,7 @@
 var configoptions = {
     "serverURL": "",
     "selectedCalculation": "0",
-    "invertAxis": "false",
+    "invertAxis": false,
     "selectedSort": "Frequency",
     "targetSpeciesName" : "Overview",			   
     "refSpecies": "Homo sapiens",
