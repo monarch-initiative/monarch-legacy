@@ -337,7 +337,7 @@ function modelDataPointPrint(point) {
 		this.element.empty();
 		this._createColorScale();
 
-		this.reDraw();
+		this._reDraw();
 	},
 
 	_loadSpinner: function() {
@@ -346,7 +346,7 @@ function modelDataPointPrint(point) {
 		element.appendTo(this.state.svgContainer);
 	},
 
-	reDraw: function() {
+	_reDraw: function() {
 		if (this.state.phenoLength !== 0 && this.state.filteredModelDataHash.length !== 0){
 			var displayCount = this._getYLimit();
 			this._setComparisonType();
@@ -911,7 +911,7 @@ function modelDataPointPrint(point) {
 		this._filterDisplay();
 		this.state.unmatchedPhenotypes = this._getUnmatchedPhenotypes();
 		this.element.empty();
-		this.reDraw();
+		this._reDraw();
 	},
 
 	//given the full dataset, return a filtered dataset containing the
@@ -2521,7 +2521,8 @@ function modelDataPointPrint(point) {
 				maxHeight: 300,
 				minWidth: 400,
 				resizable: false,
-				draggable:true,
+				draggable: true,
+				dialogClass: "dialogBG",
 				position: { my: "top", at: "top+25%",of: "#svg_area"},
 				title: 'Phenogrid Notes'});
 		$dialog.html(text);

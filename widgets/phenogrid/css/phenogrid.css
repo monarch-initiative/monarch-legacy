@@ -238,6 +238,7 @@ body {
 .ui-dialog-content {
 	font-size:11px;
 	font-family: arial;
+	background-color:#253494;
 	color:#000000;
 }
 
@@ -383,5 +384,9 @@ body {
 }
 
 .faqdialog {
-	background: white;
+	background-color: white;
+}
+
+.dialogBG {
+	background-color: white;
 }
