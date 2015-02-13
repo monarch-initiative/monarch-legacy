@@ -1,43 +1,43 @@
-body{
+body {
 	font-family: Arial, Helvetica, sans-serif;
 	font-size: 14px;
 }
 
-#svgempty{
+#svgempty {
 	font-size:1.2em;
 	font-weight:bold;
 	height: 60;
 	width: 200;
 }
 
-#errmsg{
+#errmsg {
 	padding-top: 30px;
 	font-size:1.2em;
 	/**font-weight:bold;*/
 	stroke:#ea763b;
 }
 
-#gridline{
+#gridline {
 	fill: #ffffff;
 	fill-opacity: 0;
 	stroke: #e5e5e5;
 	stroke-width: 1;
 }
 
-#globalview{
+#globalview {
 	fill: #ffffff;
 	stroke: #000000;
 	stroke-width: 2;
 }
 
-#header{
+#header {
 	margin-top:0px;
 	padding-bottom:0px;
 	margin-bottom: 0px;
 }
 
 .row_accent,
-.model_accent{
+.model_accent {
 	/*stroke:#ea763b;*/
 	stroke:#4CA092;
 	stroke-width: 2;
@@ -45,28 +45,28 @@ body{
 	fill-opacity: 0.05;
 }
 
-.scroll_text{
+.scroll_text {
 	font-size: 9px;
 }
 
-#prebl{
+#prebl {
 	clear:both;
 	/*background-color: #9999FF;*/
 	float:left;
 }
 
-.a_text{
+.a_text {
 	text-anchor:end;
 	opacity: 1.0;
 	font-size: 12px;
 }
 
-#scorelist{
+#scorelist {
 	font-size:10px;
 	fill: #0F473E;
 }
 
-#detail_text{
+#detail_text {
 	font-size: 10px;
 	padding: 8px;
 	/* background-color:#ea763b;*/
@@ -77,47 +77,47 @@ body{
 	-moz-border-radius: 8px;
 }
 
-#stitle{
+#stitle {
 	margin-left:240px;
 	font-size:18px;
 }
 
-#s2title{
+#s2title {
 	margin-left:380px;
 	font-size:18px;
 }
 
-#svg_area{
+#svg_area {
 	float:left;
 	margin-top: -35px;
 	padding-top: 35px;
 	/*height:500px;  !important;*/
 }
 
-#selectionrect{
+#selectionrect {
 	fill: grey;
 	opacity: 0.5
 }
 
-.instruct{
+.instruct {
 	font-size:12px;
 }
 
-.tip{
+.tip {
 	width: 80px;
 	height:10px;
 	font-size:10px;
 	font-weight:bold;
 }
 
-#tip{
+#tip {
 	font-size: 10px;
 	margin-left:-20px;
 	stroke-width: 1px;
 	stroke:#25349A;
 }
 
-#diseasetitle{
+#diseasetitle {
 	font-weight:bold;
 	font-size: 0.8em;
 	margin-left:-20px;
@@ -152,20 +152,27 @@ body{
 	width:120px;
 }
 
-#org_div{
+#org_div {
 	float: left;
 	width:200px;
 }
 
+#axis_div {
+	float: left;
+	width: 120px;
+}
+
 #sort_div div,
 #org_div div,
-#calc_div div{
+#calc_div div,
+#axis_div div {
 	font-weight:bold;
 }
 
 #sort_div span,
 #org_div span,
-#calc_div span{
+#calc_div span,
+#axis_div span {
 	font-size:14px;
 }
 
@@ -178,39 +185,41 @@ body{
 
 #clabel,
 #olabel,
-#slabel{
+#slabel,
+#axlabel {
 	font-weight:bold;
 	margin-left:5px;
 }
 
 #organism,
 #calculation,
-#sortphenotypes{
+#sortphenotypes,
+#axisflip {
 	margin-top: 5px; 
 	margin-left: 5px;
 }
 
-#faq{
+#faq {
 	margin-left:14px;
 	font-weight:bold;
 	font-size:16px;
 	color:#FF9966;
 }
 
-.faq_img{
+.faq_img {
 	height:15px;
 	margin-left: 5px;
 }
 
-#detail_content{
+#detail_content {
 	z-index:500;
 }
 
-.faq{
+.faq {
 	margin-top:-5px;
 }
 
-.sortimg{
+.sortimg {
 	margin-left:10px;
 	margin-bottom:10px;
 	border:0;
@@ -226,21 +235,21 @@ body{
 	color:#FFFFFF;
 }
 
-.ui-dialog-content{
+.ui-dialog-content {
 	font-size:11px;
 	font-family: arial;
 	color:#000000;
 }
 
-.ui-dialog-content a{
+.ui-dialog-content a {
 	color: #253494;
 }
 
-.ui-dialog-buttonpane{
+.ui-dialog-buttonpane {
 	background-color: #253494;
 }
 
-.ui-dialog-buttonset{
+.ui-dialog-buttonset {
 	background-color: #25349A;
 }
 
@@ -253,17 +262,17 @@ body{
 
 #redtext,
 #bluetext,
-#greentext{
+#greentext {
 	fill: black;
 }
 
-#matches input{
+#matches input {
 	padding-top:5px;
 }
 
 #matches,
 #unmatchedlabel,
-#unmatchedlabelhide{
+#unmatchedlabelhide {
 	clear:both;
 	font-weight: bold;
 	color: rgb(68,162,147);
@@ -272,7 +281,7 @@ body{
 	margin-bottom:20px;
 }
 
-#unmatched a{
+#unmatched a {
 	margin-left:19px;
 }
 
@@ -300,7 +309,7 @@ body{
 	margin-top:40px;
 }
 
-#specieslist{
+#specieslist {
 	font-weight:bold;
 	font-size:1.2em;
 }
@@ -354,14 +363,14 @@ body{
 }
 
 #unmatchedimg,
-#unmatchedhideimg{
+#unmatchedhideimg {
 	font-size:1.1em;
 	font-weight:bold;
 	color: #428bca;
 	vertical-align:middle;
 }
 
-#unmatchedimg{
+#unmatchedimg {
 	font-size:1.4em;
 }
 

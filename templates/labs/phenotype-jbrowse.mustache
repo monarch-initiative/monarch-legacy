@@ -1,0 +1,201 @@
+
+    <meta charset="UTF-8">
+
+    <!--NOTE: from http://biojs.io/d/biojs-vis-chromosome -->
+    <!--NOTE: Had to hide navbar, another working example is here:  http://jsbin.com/takixe/1/ (with select css)  -->
+    <!--NOTE: There are some issues with the jquery interaction I think.  -->
+
+    <!--<link type="text/css" rel="stylesheet" href="https://raw.githubusercontent.com/4ndr01d3/js-components/master/biojs-vis-chromosome/css/chromosome.css">-->
+    <link type="text/css" rel="stylesheet" href="https://cdn.rawgit.com/4ndr01d3/biojs-vis-chromosome/master/css/chromosome.css">
+    <link type="text/css" rel="stylesheet" href="https://raw.githubusercontent.com/4ndr01d3/js-components/master/util-area_selector/css/area_selector.css">
+    <link type="text/css" rel="stylesheet" href="https://code.jquery.com/ui/1.11.0/themes/smoothness/jquery-ui.css">
+
+
+    <!--<script src="http://code.jquery.com/jquery-1.11.1.min.js"></script>-->
+    <!--<script src="https://wzrd.in/bundle/biojs-vis-chromosome@0.0.2"></script>-->
+    <script src="http://wzrd.in/bundle/biojs-vis-chromosome@latest"></script>
+
+
+
+
+
+    <!--<script src='main.js'></script>-->
+
+    <div class="monarch-container">
+        <div class="content">
+            <div class="wrapperforfooter">
+            <div class="jumbotron monarch-phenotype-light">
+                <div id="description">
+                    {{#alerts}}
+                    <div class="alert">
+                      {{{.}}}
+                    </div>
+                    {{/alerts}}
+                    <img id="monarch-logo" class="downloadline" src="/image/logo.png"/>
+                    <h1 class="downloadline">Phenotype: {{label}}</h1>
+                    <a href="{{{download.json}}}" class="btn btn-default downloadline downloadline-left monarch-phenotype-dark">JSON</a>
+                    <a class="downloadline btn btn-large btn-default btn-monarch-main monarch-feedback-dark"
+                            href="mailto:info@monarchinitiative.org">Your feedback welcome!</a>
+                    <p>
+                    {{#hasDef}}
+                    {{definitions}}<br/>
+                    {{/hasDef}}
+                    </p>
+                </div>
+                <div id="categories">
+                    <a href="#overview"><div id="initialtab" class="tab contenttab">Overview</div></a>
+                    <div class="tabcontainer">
+                        <div class="tabhover">View diseases with this phenotype</div>
+                        {{#hasDiseases}}
+                            <a href="#disease"><div class="tab contenttab">Disease ({{diseaseNum}})</div></a>
+                        {{/hasDiseases}}
+                        {{^hasDiseases}}
+                            <div class="tab greyed-out">Disease (0)</div>
+                        {{/hasDiseases}}
+                    </div>
+                    <div class="tabcontainer">
+                        <div class="tabhover">View genes associated with this phenotype</div>
+                        {{#hasGenes}}
+                            <a href="#genes"><div class="tab contenttab">Genes ({{geneNum}})</div></a>
+                        {{/hasGenes}}
+                        {{^hasGenes}}
+                            <div class="tab greyed-out">Genes (0)</div>
+                        {{/hasGenes}}
+                    </div>
+                    <div class="tabcontainer">
+                        <div class="tabhover">View genotypes with this phenotype</div>
+                        {{#hasGenotypes}}
+                            <a href="#genotypes"><div class="tab contenttab">Models ({{genotypeNum}})</div></a>
+                        {{/hasGenotypes}}
+                        {{^hasGenotypes}}
+                            <div class="tab greyed-out">Models (0)</div>
+                        {{/hasGenotypes}}
+                    </div>
+                    <div class="tabcontainer">
+                        <div class="tabhover">View citations for the data on this page</div>
+                        {{#hasLiterature}}
+                            <a href="#literature"><div class="tab contenttab">Literature ({{literatureNum}})</div></a>
+                        {{/hasLiterature}}
+                        {{^hasLiterature}}
+                            <div class="tab greyed-out">Literature (0)</div>
+                        {{/hasLiterature}}
+                    </div>
+                    <div class="tabcontainer">
+                        <div class="tabhover">Genome browser</div>
+                        <a href="#jbrowse"><div class="tab contenttab">Browse</div></a>
+                    </div>
+                </div>
+            </div>
+            <div id="complete-info">
+                <div id="overview" class="first category">
+                    <h3>IDs</h3>
+                        <div class="ids">
+                            <b>URI:</b> <a href="{{{uri}}}">{{{uri}}}</a>
+                        </div>
+                        {{#hasAka}}
+                            <div class="ids">
+                                <b>AKA:</b>
+                                {{aka}}
+                            </div>
+                        {{/hasAka}}
+                        {{#hasXrefs}}
+                            <div class="ids">
+                                <b>xref IDs:</b> {{{xrefs}}}
+                            </div>
+                        {{/hasXrefs}}
+                    <h3>Classification</h3>
+                    {{{includes.classificationComponent}}}
+                </div>
+                {{#hasDiseases}}
+                <div id="disease" class="category">
+                    <table class="{{css.table}}">
+                    {{{diseaseTable}}}
+                    </table>
+                </div>
+                {{/hasDiseases}}
+                {{#hasGenes}}
+                <div id="genes" class="category">
+                    <table class="{{css.table}}">
+                    {{{geneTable}}}
+                    </table>
+                </div>
+                {{/hasGenes}}
+                {{#hasGenotypes}}
+                <div id="genotypes" class="category">
+                    <table class="{{css.table}}">
+                    {{{genotypeTable}}}
+                    </table>
+                </div>
+                {{/hasGenotypes}}
+                {{#hasLiterature}}
+                <div id="literature" class="category">
+                    <table class="{{css.table}}">
+                        {{{literatureTable}}}
+                    </table>
+                </div>
+                {{/hasLiterature}}
+
+                <div id="jbrowse" class="category">
+                    <h1>JBrowse</h1>
+                    <table width="100%" class="{{css.table}}">
+                    {{{jbrowse_table}}}
+                    </table>
+
+                    <div id='snippetDiv'></div>
+
+                </div>
+            </div>
+        
+            </div> <!-- closes wrapperforfooter -->
+            {{{includes.footer}}}
+        </div>
+    </div>
+
+    <script>
+        function loadJBrowseFrame(){
+            console.log('lading jbrowse frame ');
+        }
+
+        var visChromosome = require("biojs-vis-chromosome");
+        var selector = "#snippetDiv";
+        var chromosomes = ["1","2","3","4","5","6","7","8","9","10","11","12","13","14","15","16","17","18","19","20","21","22","X","Y"];
+
+        jQuery( document ).ready(function( $ ) {
+            inst=[];
+            for (var i in chromosomes){
+                var chr=chromosomes[i];
+                $(selector).append("<h3>Chromosome "+chr+"</h3><div id='holder_"+chr+"' style=''></div><br/>");
+                //var instance1 =
+
+                var chromosome = new visChromosome();
+                inst[i]= chromosome.init({
+                    target: "holder_"+chr,
+                    dasSource: "http://www.ensembl.org/das/Homo_sapiens.GRCh38.karyotype",
+                    dasSegment: chr
+                });
+                inst[i].on("onModelLoaded",modelEvent);
+            }
+//            $("#holder_5").click(alert('boom')) ;
+//            $("#5_q35.3").click(alert('bang')) ;
+        });
+
+        var maxSize=0;
+        var adjustSizes= function(size){
+            if (maxSize<size)
+                maxSize=size;
+            for (var i in chromosomes){
+                var chr=chromosomes[i];
+                if($("#holder_"+chr).data("size")!== undefined){
+                    var chrSize=$("#holder_"+chr).data("size");
+                    $("#holder_"+chr).width((chrSize/maxSize)*100 +"%");
+                }
+            }
+        };
+
+        function modelEvent(objEvent) {
+            $("#holder_"+objEvent.model.id).data("size",1*objEvent.model.stop);
+            adjustSizes(1*objEvent.model.stop);
+        }
+
+
+    </script>
