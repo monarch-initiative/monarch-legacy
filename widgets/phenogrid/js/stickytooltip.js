@@ -6,7 +6,7 @@
 
 
 var stickytooltip={
-	tooltipoffsets: [10, -10], //additional x and y offset from mouse cursor for tooltips 20,-30
+	tooltipoffsets: [10, -15], //additional x and y offset from mouse cursor for tooltips 20,-30
 	fadeinspeed: 200, //duration of fade effect in milliseconds
 	rightclickstick: true, //sticky tooltip when user right clicks over the triggering element (apart from pressing "s" key) ?
 	stickybordercolors: ["black", "darkred"], //border color of tooltip depending on sticky state
@@ -46,54 +46,52 @@ var stickytooltip={
 	init:function(targetselector, tipid){
 		jQuery(document).ready(function($){
 			var self = this;
-			var $targets=$(targetselector)
-			var $tooltip=$('#'+tipid).appendTo(document.body)
+			var $targets=$(targetselector);
+			var $tooltip=$('#'+tipid).appendTo(document.body);
 			if ($targets.length==0)
-				return
-			var $alltips=$tooltip.find('div.atip')
+				return;
+			var $alltips=$tooltip.find('div.atip');
 			if (!stickytooltip.rightclickstick)
-				stickytooltip.stickynotice1[1]=''
+				stickytooltip.stickynotice1[1]='';
 //			stickytooltip.stickynotice1=stickytooltip.stickynotice1.join(' ')
 //			self.stickynotice1=self.stickynotice1.join(' ')
-			stickytooltip.hidebox($, $tooltip)
+			stickytooltip.hidebox($, $tooltip);
 			$targets.bind('mouseenter', function(e){
-				console.log('mouseenter')
-				$alltips.hide().filter('#'+$(this).attr('data-tooltip')).show()
-				stickytooltip.showbox($, $tooltip, e)
+				if (!stickytooltip.isdocked){   // MKD mod
+					$alltips.hide().filter('#'+$(this).attr('data-tooltip')).show();
+					stickytooltip.showbox($, $tooltip, e);
+			    }
 			})
 			$targets.bind('mouseleave', function(e){
-				console.log('mouseleave')
-				stickytooltip.hidebox($, $tooltip)
+				stickytooltip.hidebox($, $tooltip);
 			})
 			$targets.bind('mousemove', function(e){
-				console.log('mousemove')
 				if (!stickytooltip.isdocked){
-					stickytooltip.positiontooltip($, $tooltip, e)
+					stickytooltip.positiontooltip($, $tooltip, e);
 				}
 			})
 			$tooltip.bind("mouseenter", function(){
-				console.log('mouseenter2-unknown function')
-				stickytooltip.hidebox($, $tooltip)
+				stickytooltip.hidebox($, $tooltip);
 			})
 			$tooltip.bind("click", function(e){
-				e.stopPropagation()
+				e.stopPropagation();
 			})
 			$(this).bind("click", function(e){
 				if (e.button==0){
-					stickytooltip.isdocked=false
-					stickytooltip.hidebox($, $tooltip)
+					stickytooltip.isdocked=false;
+					stickytooltip.hidebox($, $tooltip);
 				}
 			})
 			$(this).bind("contextmenu", function(e){
 				if (stickytooltip.rightclickstick && $(e.target).parents().andSelf().filter(targetselector).length==1){ //if oncontextmenu over a target element
-					stickytooltip.docktooltip($, $tooltip, e)
-					return false
+					stickytooltip.docktooltip($, $tooltip, e);
+					return false;
 				}
 			})
 			$(this).bind('keypress', function(e){
-				var keyunicode=e.charCode || e.keyCode
+				var keyunicode=e.charCode || e.keyCode;
 				if (keyunicode==115){ //if "s" key was pressed
-					stickytooltip.docktooltip($, $tooltip, e)
+					stickytooltip.docktooltip($, $tooltip, e);
 				}
 			})
 		}) //end dom ready

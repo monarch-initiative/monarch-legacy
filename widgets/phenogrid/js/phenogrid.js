@@ -137,8 +137,8 @@ function modelDataPointPrint(point) {
 		selectedSort: "Frequency",
 		targetSpeciesName : "Overview",
 		refSpecies: "Homo sapiens",
-		genotypeExpandLimit: 5, // sets the limit for the number of genotype expanded on grid
-		phenoCompareLimit: 5, // sets the limit for the number of phenotypes used for genotype expansion
+		genotypeExpandLimit: 10, // sets the limit for the number of genotype expanded on grid
+		phenoCompareLimit: 10, // sets the limit for the number of phenotypes used for genotype expansion
 		targetSpeciesList : [{ name: "Homo sapiens", taxon: "9606"},
 			{ name: "Mus musculus", taxon: "10090" },
 			{ name: "Danio rerio", taxon: "7955"},
@@ -1800,6 +1800,9 @@ function modelDataPointPrint(point) {
 	},
 
 	_selectXItem: function(data, obj) {
+
+		if (stickytooltip.isdocked){ return; }
+		
 		var self = this;
 		var info = self._getAxisData(data);
 		var displayCount = self._getYLimit();
@@ -1833,17 +1836,17 @@ function modelDataPointPrint(point) {
 		var width = (type === this.state.defaultApiEntity) ? 80 : 200;
 		var height = (type === this.state.defaultApiEntity) ? 50 : 60;
 		
-		var hrefLink = "<a href=\"" + this.state.serverURL+"/" + modelInfo.type +"/"+ concept + "\" target=\"_blank\">" +   //this._getConceptId(modelData)
-						modelInfo.label + "</a>"; 
+		var hrefLink = "<a href=\"" + this.state.serverURL+"/" + info.type +"/"+ concept + "\" target=\"_blank\">" +   //this._getConceptId(modelData)
+						info.label + "</a>"; 
 		
-		var retData = "<strong>" + self._capitalizeString(modelInfo.type) + ": </strong> " + hrefLink + "<br/><strong>Rank:</strong> " + modelInfo.rank;
+		var retData = "<strong>" + self._capitalizeString(info.type) + ": </strong> " + hrefLink + "<br/><strong>Rank:</strong> " + info.rank;
 		
 		// for genotypes show the parent
-		if (modelInfo.type == 'genotype') {
-			if (typeof(modelInfo.parent) !== 'undefined' && modelInfo.parent != null) {
-				var parentInfo = this.state.modelListHash.get(modelInfo.parent);
+		if (info.type == 'genotype') {
+			if (typeof(info.parent) !== 'undefined' && info.parent != null) {
+				var parentInfo = this.state.modelListHash.get(info.parent);
 				if (parentInfo != null) {
-					var genehrefLink = "<a href=\"" + this.state.serverURL+"/" + parentInfo.type +"/"+ modelInfo.parent + "\" target=\"_blank\">" +  
+					var genehrefLink = "<a href=\"" + this.state.serverURL+"/" + parentInfo.type +"/"+ info.parent + "\" target=\"_blank\">" +  
 					parentInfo.label + "</a>";					
 					retData = retData + "<br/><strong>Gene:</strong> " + genehrefLink;
 				}
@@ -1851,7 +1854,7 @@ function modelDataPointPrint(point) {
 		}
 		
 		// for gene and species mode only, show genotype link
-		if (modelInfo.type == 'gene' && this.state.targetSpeciesName != "Overview") {	
+		if (info.type == 'gene' && this.state.targetSpeciesName != "Overview") {	
 			
 			// check the hashtable to see if we've loaded this
 			var gtscores = this.state.loadedGenoTypesHash.get(concept);
@@ -1968,13 +1971,7 @@ function modelDataPointPrint(point) {
 				expand = this._expandGenotypes(data);
 			}
 			// if you can't exapand, then just show the model info
-			if (expand == false) {
-				
-//				for (var i in this.state.apiEntityMap) {
-//					if (concept.indexOf(this.state.apiEntityMap[i].prefix) === 0) {
-//					apientity = this.state.apiEntityMap[i].apifragment;
-//					}
-//				}
+			if (expand == false) {				
 				apientity = this._getIDTypeDetail(data);
 				if (apientity != null) {
 					url = url_origin + "/" + apientity + "/" + (concept.replace("_", ":"));
@@ -3372,7 +3369,7 @@ function modelDataPointPrint(point) {
 				this.state.modelLength = this.state.modelListHash.size();
 				this._setAxisValues();
 
-				this._processSelected('sortphenotypes'); //'updateModel');
+				this._processDisplay(); //'updateModel');
 
 				success = true;
 				
