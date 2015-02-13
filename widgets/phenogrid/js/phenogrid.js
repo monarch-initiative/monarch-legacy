@@ -271,7 +271,7 @@ function modelDataPointPrint(point) {
 	// create a shortcut index for quick access to target species by name - to get index (position) and
 	// taxon
 	_createTargetSpeciesIndices: function() {
-		this.state.targetSpeciesByName={};
+		this.state.targetSpeciesByName = {};
 		for (var j in this.state.targetSpeciesList) {
 			// list starts as name, taxon pairs
 			var name = this.state.targetSpeciesList[j].name;
@@ -279,7 +279,7 @@ function modelDataPointPrint(point) {
 			var entry = {};
 			entry.index = j;
 			entry.taxon = taxon;
-			this.state.targetSpeciesByName[name]= entry;
+			this.state.targetSpeciesByName[name] = entry;
 		}
 	},
 
@@ -2974,9 +2974,15 @@ function modelDataPointPrint(point) {
 		var full = [];
 		var partial = [];
 		var unmatchedset = [];
+		var tempObject = {"id": 0, "observed": "positive"};
 
 		for (var i in fullset) {
-			full.push(fullset[i]);
+			if (typeof(fullset[i].id) === 'undefined'){
+				tempObject.id = fullset[i];
+				full.push(tempObject);
+			} else {
+				full.push(fullset[i]);
+			}
 		}
 
 		for (var j in partialset){
@@ -2990,6 +2996,7 @@ function modelDataPointPrint(point) {
 				unmatchedset.push(full[k]);
 			}
 		}
+
 		var dupArray = [];
 		dupArray.push(unmatchedset[0]);	
 		//check for dups
@@ -3007,15 +3014,16 @@ function modelDataPointPrint(point) {
 		if (dupArray[0] === undefined) {
 			dupArray = [];
 		}
-
 		return dupArray;
 	},
 
+	//TOO SLOW TO USE
 	_getUnmatchedLabels: function() {
 		var unmatchedLabels = [];
 		for (var i in this.state.unmatchedPhenotypes){
+			console.log(this.state.unmatchedPhenotypes[i].id);
 			jQuery.ajax({
-				url : this.state.serverURL + "/phenotype/" + this.state.unmatchedPhenotypes[i] + ".json",
+				url : this.state.serverURL + "/phenotype/" + this.state.unmatchedPhenotypes[i].id + ".json",
 				async : false,
 				dataType : 'json',
 				success : function(data) {
@@ -3029,6 +3037,7 @@ function modelDataPointPrint(point) {
 		return unmatchedLabels;
 	},
 
+
 	_buildUnmatchedPhenotypeDisplay: function() {
 		var optionhtml;
 		var prebl = $("#prebl");
@@ -3039,8 +3048,7 @@ function modelDataPointPrint(point) {
 		}
 		prebl.empty();
 
-		if (this.state.unmatchedPhenotypes !== undefined && this.state.unmatchedPhenotypes.length > 0){
-			//var phenotypes = this._showUnmatchedPhenotypes();		
+		if (this.state.unmatchedPhenotypes !== undefined && this.state.unmatchedPhenotypes.length > 0){	
 			optionhtml = "<div class='clearfix'><form id='matches'><input type='checkbox' name='unmatched' value='unmatched' >&nbsp;&nbsp;View Unmatched Phenotypes<br /><form><div id='clear'></div>";
 			var phenohtml = this._buildUnmatchedPhenotypeTable();
 			optionhtml = optionhtml + "<div id='unmatched' style='display:none;'>" + phenohtml + "</div></div>";
@@ -3066,20 +3074,25 @@ function modelDataPointPrint(point) {
 	_buildUnmatchedPhenotypeTable: function(){
 		var self = this;
 		var columns = 4;
-		var outer1 = "<table id='phentable'>",
-		outer2 = "</table>",
-		inner = "";
+		var outer1 = "<table id='phentable'>";
+		var outer2 = "</table>";
+		var inner = "";
 
 		var unmatched = self.state.unmatchedPhenotypes;
 		var text = "";
 		var i = 0;
+		var label, id, url_origin;
 		while (i < unmatched.length) {
 			inner += "<tr>"; 
 			text = "";
 			for (var j = 0; j < columns; j++){
-				var label = unmatched[i].label;
-				var id = self._getConceptId(unmatched[i++].id);
-				var url_origin = self.document[0].location.origin;
+				id = self._getConceptId(unmatched[i++].id);
+				if (unmatched[i-1].label !== undefined){
+					label = unmatched[i-1].label;
+				} else {
+					label = unmatched[i-1].id;
+				}
+				url_origin = self.document[0].location.origin;
 				text += "<td><a href='" + url_origin + "/phenotype/" + id + "' target='_blank'>" + label + "</a></td>";
 				if (i == unmatched.length) {
 					break;
