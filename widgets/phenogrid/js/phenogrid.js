@@ -1406,12 +1406,13 @@ function modelDataPointPrint(point) {
 	_loadDataForModel: function(newModelData) {
 		//data is an array of all model matches
 		var data = newModelData.matches;
+		var curr_row, lcs, new_row, species;
 		if (typeof(data) !== 'undefined' && data.length > 0) {
-			var species = newModelData.taxon;
+			species = newModelData.taxon;
 
 			for (var idx in data) {
-				var curr_row = data[idx],
-				lcs = this._normalizeIC(curr_row),
+				curr_row = data[idx];
+				lcs = this._normalizeIC(curr_row);
 				new_row = {"id": this._getConceptId(curr_row.a.id) + "_" + this._getConceptId(curr_row.b.id) + "_" + this._getConceptId(newModelData.id), 
 					"label_a" : curr_row.a.label, 
 					"id_a" : this._getConceptId(curr_row.a.id), 
