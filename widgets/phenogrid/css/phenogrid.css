@@ -396,7 +396,12 @@ body {
     padding: 0;
     border: none;
     background: none;
-//    background: transparent url(http://dev.vaadin.com/chrome/site/vaadin-trac.png) no-repeat;
+//  background: transparent url(http://dev.vaadin.com/chrome/site/vaadin-trac.png) no-repeat;
     width: 13px;
     height: 13px;
+	background-color: white;
+}
+
+.dialogBG {
+	background-color: white;
 }
