@@ -448,11 +448,11 @@ function modelDataPointPrint(point) {
 
 					self.state.phenotypeData = self.state.origPhenotypeData.slice();
 					self._reset();
-					self.state.targetSpeciesName ="Overview";
+					self.state.targetSpeciesName = "Overview";
 					self._init();
 				});
 		}else{
-			html = "<h4 id='err'>"+msg+"</h4><br />";
+			html = "<h4 id='err'>" + msg + "</h4><br />";
 			this.element.append(html);
 		}
 	},
@@ -480,7 +480,7 @@ function modelDataPointPrint(point) {
 			.enter()
 			.append("rect")
 			.attr("id","gridline")
-			.attr("transform","translate(252, " + (this.state.yModelRegion + 5) +")")
+			.attr("transform","translate(252, " + (this.state.yModelRegion + 5) + ")")
 			.attr("x", function(d,i) { return d[1] * mWidth;})
 			.attr("y", function(d,i) { return d[0] * mHeight;})
 			.attr("class", "hour bordered deselected")
@@ -2470,7 +2470,7 @@ function modelDataPointPrint(point) {
 		} else{
 			speciesList.push(self.state.targetSpeciesName);
 		}
-		var translation = "translate(" + (self.state.textWidth + self.state.xOffsetOver + 30) +"," + (self.state.yoffset + 10) + ")";
+		var translation = "translate(" + (self.state.textWidth + self.state.xOffsetOver + 30) + "," + (self.state.yoffset + 10) + ")";
 
 		var xPerModel = self.state.modelWidth/speciesList.length;
 		var species = self.state.svg.selectAll("#specieslist")
@@ -2527,7 +2527,7 @@ function modelDataPointPrint(point) {
 				title: 'Phenogrid Notes'});
 		$dialog.html(text);
 		$dialog.dialog('open');
-		self.state.tooltips[name]=text;
+		self.state.tooltips[name] = text;
 	},
 
 	/**
@@ -3088,10 +3088,10 @@ function modelDataPointPrint(point) {
 			text = "";
 			for (var j = 0; j < columns; j++){
 				id = self._getConceptId(unmatched[i++].id);
-				if (unmatched[i-1].label !== undefined){
-					label = unmatched[i-1].label;
+				if (unmatched[i - 1].label !== undefined){
+					label = unmatched[i - 1].label;
 				} else {
-					label = unmatched[i-1].id;
+					label = unmatched[i - 1].id;
 				}
 				url_origin = self.document[0].location.origin;
 				text += "<td><a href='" + url_origin + "/phenotype/" + id + "' target='_blank'>" + label + "</a></td>";
@@ -3146,10 +3146,10 @@ function modelDataPointPrint(point) {
 		var pheno;
 		for (var i in phenotypelist) {
 			pheno = phenotypelist[i];
-			if (typeof pheno ==='string') {
+			if (typeof pheno === 'string') {
 				newlist.push(pheno);
 			}
-			if (pheno.observed==="positive") {
+			if (pheno.observed === "positive") {
 				newlist.push(pheno.id);
 			}
 		}
