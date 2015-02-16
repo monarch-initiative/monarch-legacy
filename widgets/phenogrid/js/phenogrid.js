@@ -1330,8 +1330,14 @@ function modelDataPointPrint(point) {
 			url: url, 
 			async : false,
 			dataType : 'json',
+			beforeSend: function() {
+				$('#ajax-loader').show();
+			},
 			success : function(data) {
 				res = data;
+			},
+			complete: function() {
+				$('#ajax-loader').hide();
 			},
 			error: function (xhr, errorType, exception) { //Triggered if an error communicating with server
 				self._displayResult(xhr, errorType, exception);
@@ -1564,8 +1570,13 @@ function modelDataPointPrint(point) {
 		var status = $("<div></div>")
 			.attr("class", "stickystatus");
 		
+		var wait = $("<div></div>")
+			.attr("id", "ajax-loader")
+			.text("Loading...");
+
 		sticky.append(inner1)
-				.append(status);
+				.append(status)
+				.append(wait);
 		
 		// always append to body
 		sticky.appendTo('body');		
@@ -1801,8 +1812,10 @@ function modelDataPointPrint(point) {
 
 	_selectXItem: function(data, obj) {
 
+		// HACK: this temporarily 'disables' the mouseover when the stickytooltip is docked
+		// that way the user doesn't accidently hover another label which caused tooltip to be refreshed
 		if (stickytooltip.isdocked){ return; }
-		
+
 		var self = this;
 		var info = self._getAxisData(data);
 		var displayCount = self._getYLimit();
@@ -3274,6 +3287,7 @@ function modelDataPointPrint(point) {
 		if (gtscores != null) return gtscores;
 		
 		console.log("Getting Gene " + modelInfo.id);
+
 		// go get the assocated genotypes	
 		var url = this.state.serverURL+"/gene/"+ modelInfo.id + ".json";		
 			
@@ -3372,6 +3386,8 @@ function modelDataPointPrint(point) {
 				this._processDisplay(); //'updateModel');
 
 				success = true;
+
+				stickytooltip.closetooltip();
 				
 			} else {
 				//  HACK:if we return a null just create a zero-length array for now to add it to hashtable

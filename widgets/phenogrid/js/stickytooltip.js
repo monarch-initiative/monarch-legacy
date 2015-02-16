@@ -42,6 +42,11 @@ var stickytooltip={
 		$tooltip.css({borderColor:'darkred'}).find('.stickystatus:eq(0)').css({background:this.stickybordercolors[1]}).html(this.stickynotice2)
 	},
 
+	closetooltip:function() {		
+		var $tooltip=$('#mystickytooltip');
+		stickytooltip.isdocked = false;
+		stickytooltip.hidebox($, $tooltip);
+	},
 
 	init:function(targetselector, tipid){
 		jQuery(document).ready(function($){
