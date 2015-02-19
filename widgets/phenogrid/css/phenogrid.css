@@ -395,13 +395,31 @@ body {
 .expandbtn {
     padding: 0;
     border: none;
-    background: none;
-//  background: transparent url(http://dev.vaadin.com/chrome/site/vaadin-trac.png) no-repeat;
-    width: 13px;
-    height: 13px;
+//    background: none;
+    background: transparent url('/widgets/phenogrid/image/ExpandAllIcon.png') no-repeat;
+    width: 18px;
+    height: 17px;
+	background-color: white;
+}
+
+.colapsebtn {
+    padding: 0;
+    border: none;
+//    background: none;
+    background: transparent url('/widgets/phenogrid/image/CollapseAllIcon.png') no-repeat;
+    width: 18px;
+    height: 17px;
 	background-color: white;
 }
 
 .dialogBG {
 	background-color: white;
+}
+
+#ajax-loader {
+	display: none;
+	background: url('/widgets/phenogrid/image/throbber.gif'); no-repeat 50% transparent;
+	top: 0;
+	left: 0;
+	position: absolute;
 }

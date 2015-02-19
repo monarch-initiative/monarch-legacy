@@ -137,8 +137,8 @@ function modelDataPointPrint(point) {
 		selectedSort: "Frequency",
 		targetSpeciesName : "Overview",
 		refSpecies: "Homo sapiens",
-		genotypeExpandLimit: 10, // sets the limit for the number of genotype expanded on grid
-		phenoCompareLimit: 10, // sets the limit for the number of phenotypes used for genotype expansion
+		genotypeExpandLimit: 5, // sets the limit for the number of genotype expanded on grid
+		phenoCompareLimit: 5, // sets the limit for the number of phenotypes used for genotype expansion
 		targetSpeciesList : [{ name: "Homo sapiens", taxon: "9606"},
 			{ name: "Mus musculus", taxon: "10090" },
 			{ name: "Danio rerio", taxon: "7955"},
@@ -1571,12 +1571,12 @@ function modelDataPointPrint(point) {
 			.attr("class", "stickystatus");
 		
 		var wait = $("<div></div>")
-			.attr("id", "ajax-loader")
-			.text("Loading...");
+			.attr("id", "ajax-loader");
 
 		sticky.append(inner1)
-				.append(status)
-				.append(wait);
+				.append(wait)
+				.append(status);
+				
 		
 		// always append to body
 		sticky.appendTo('body');		
@@ -1819,14 +1819,7 @@ function modelDataPointPrint(point) {
 		var self = this;
 		var info = self._getAxisData(data);
 		var displayCount = self._getYLimit();
-		//create the related model rectangles
-		var highlight_rect = self.state.svg.append("svg:rect")
-			.attr("transform","translate(" + (self.state.textWidth + self.state.xOffsetOver + 32) + "," + self.state.yoffsetOver + ")")
-			.attr("x", function(d) { return (self.state.xScale(data) - 1);})
-			.attr("y", self.state.yoffset + 2)
-			.attr("class", "model_accent")
-			.attr("width", 14)
-			.attr("height", (displayCount * self.state.heightOfSingleModel));
+		var highlightOffset = 1;
 
 		// I don't know why I'm still seeing the un-processed concept id
 		// var classlabel = "text#" +this._getConceptId(modelData.model_id);
@@ -1870,21 +1863,36 @@ function modelDataPointPrint(point) {
 		if (info.type == 'gene' && this.state.targetSpeciesName != "Overview") {	
 			
 			// check the hashtable to see if we've loaded this
-			var gtscores = this.state.loadedGenoTypesHash.get(concept);
-			
-			//if found just return genotypes scores
-			if (gtscores != null) {
-				retData = retData + "<br/><strong># of associated genotypes:</strong> &nbsp;" + gtscores.size();				
+			var isExpanded = false;
+			var gtCached = this.state.loadedGenoTypesHash.get(concept);
+			if (gtCached != null) { isExpanded = gtCached.expanded;}
+
+			//if found just return genotypes scores		
+			if (isExpanded) {
+//				retData = retData + "<br/><strong># of associated genotypes:</strong> &nbsp;" + gtscores.size();				
+				//highlightOffset = (gtCached.genoTypes.length + (gtCached.genoTypes.length *.20)+1);   // magic numbers for extending the highlight
+				retData = retData + "<br/><br/>Click button to <b>collapse</b> associated genotypes &nbsp;&nbsp;" +
+				"<button class=\"colapsebtn\" type=\"button\" onClick=\"self._collapseGenoTypes('" + concept + "')\">" +
+				"</button>";								
 			} else {
-				retData = retData + "<br/><br/>Click button to show associated genotypes &nbsp;&nbsp;" +
-				"<button class=\"expandbtn\" type=\"button\" onClick=\"self._expandGenotypes('" + concept + "')\"><img src=\"" + 
-				this.state.scriptpath + "../image/expandIcon.png\"/></button>";				
+				retData = retData + "<br/><br/>Click button to <b>expand</b> associated genotypes &nbsp;&nbsp;" +
+				"<button class=\"expandbtn\" type=\"button\" onClick=\"self._expandGenotypes('" + concept + "')\">" +
+				"</button>";				
 			}
 		}
 		
 		// update the stub stickytool div dynamically to display
 		$( "#sticky1" )
 		.html(retData);
+
+		//create the related model rectangles
+		var highlight_rect = self.state.svg.append("svg:rect")
+			.attr("transform","translate(" + (self.state.textWidth + self.state.xOffsetOver + 32) + "," + self.state.yoffsetOver + ")")
+			.attr("x", function(d) { return (self.state.xScale(data) - 1);})
+			.attr("y", self.state.yoffset + 2)
+			.attr("class", "model_accent")
+			.attr("width", 14) // * highlightOffset)
+			.attr("height", (displayCount * self.state.heightOfSingleModel));
 	
 		
 		//obj is try creating an ojbect with an attributes array including "attributes", but I may need to define
@@ -1973,24 +1981,21 @@ function modelDataPointPrint(point) {
 		var apientity = this.state.defaultApiEntity;
 		if (this._getIDType(data) == "Phenotype"){
 			url = url_origin + "/phenotype/" + (data.replace("_", ":"));
+			var win = window.open(url, '_blank');
+
 		} else if (this._getIDType(data) == "Model"){
 			// MKD, expand out genotypes
 			var expand = false ;
+			apientity = this._getIDTypeDetail(data);
 
 			// if it's overview, then just allow view of the model clicked
-			if (this.state.targetSpeciesName != "Overview") {
+			if (this.state.targetSpeciesName != "Overview" && apientity == 'gene') {
+
+				this._collapseGenoTypes(data);
 
 				// expand genotypes
-				expand = this._expandGenotypes(data);
+				//expand = this._expandGenotypes(data);
 			}
-			// if you can't exapand, then just show the model info
-			if (expand == false) {				
-				apientity = this._getIDTypeDetail(data);
-				if (apientity != null) {
-					url = url_origin + "/" + apientity + "/" + (concept.replace("_", ":"));
-					var win = window.open(url, '_blank');
-				}
-			}  
 		} else {
 			console.log ("URL CLICK ERROR");
 		}
@@ -2269,6 +2274,8 @@ function modelDataPointPrint(point) {
 			} else {
 				colorID = d.xID;
 			} 
+			// console.log('color id: ' + colorID);
+			// console.log(d);
 			return self._getColorForModelValue(self,self._getAxisData(colorID).species,d.value[self.state.selectedCalculation]);
 		});
 
@@ -3277,24 +3284,29 @@ function modelDataPointPrint(point) {
 		var _genotypeIds = "", phenotypeIds = "", genoTypeAssociations;
 		var genotypeLabelHashtable = new Hashtable();
 		var success = false;
-		var genoTypeList = new Hashtable();
-		
+		var genoTypeList = new Hashtable();		
 		var modelInfo = {id: curModel, d: this.state.modelListHash.get(curModel)};
-		
-		// check cached hashtable first 
-		var gtscores = this.state.loadedGenoTypesHash.get(modelInfo.id);
-		
-		//if found just return genotypes scores
-		if (gtscores != null) return gtscores;
-		
-		console.log("Getting Gene " + modelInfo.id);
+		var compareScores;
 
-		// go get the assocated genotypes	
-		var url = this.state.serverURL+"/gene/"+ modelInfo.id + ".json";		
+		// check cached hashtable first 
+		var cache = this.state.loadedGenoTypesHash.get(modelInfo.id);
+		
+		//if cached info not found need to try and get genotypes and scores
+		if (cache == null) {
+		
+			console.log("Getting Gene " + modelInfo.id);
+
+			// go get the assocated genotypes	
+			var url = this.state.serverURL+"/gene/"+ modelInfo.id + ".json";		
 			
-		var res = this._ajaxLoadData(modelInfo.d.species,url);
+			var res = this._ajaxLoadData(modelInfo.d.species,url);
 			
-		if (typeof (res)  !== 'undefined') {
+			if (typeof (res) == 'undefined') { 
+				stickytooltip.closetooltip();		
+				alert("No gene info found");
+				return success; 
+			}
+			
 			genoTypeAssociations = res.genotype_associations;
 			
 			if (genoTypeAssociations != null && genoTypeAssociations.length > 5) {
@@ -3307,9 +3319,9 @@ function modelDataPointPrint(point) {
 			// assemble the phenotype ids 
 			for (var p in assocPhenotypes) {
 				phenotypeIds = phenotypeIds + assocPhenotypes[p].id + "+";		
-				
+			
 				ctr++;
-				
+			
 				// limit number of genotypes do display based on internalOptions
 				if (ctr > this.state.phenoCompareLimit && ctr < assocPhenotypes.length) break;  
 			}
@@ -3317,7 +3329,7 @@ function modelDataPointPrint(point) {
 			if (phenotypeIds.slice(-1) == '+') {
 				phenotypeIds = phenotypeIds.slice(0, -1);	
 			}
-			
+		
 			ctr = 0;
 			// assemble a list of genotypes
 			for (var g in genoTypeAssociations) {
@@ -3325,13 +3337,13 @@ function modelDataPointPrint(point) {
 				// fill a hashtable with the labels so we can quickly get back to them later
 				var tmpLabel = "&#187" + this._encodeHtmlEntity(genoTypeAssociations[g].genotype.label);   //TEMP CODE TO FIND THE GENOTYPE ON DISPLAY
 				genotypeLabelHashtable.put(genoTypeAssociations[g].genotype.id, tmpLabel);
-				
+			
 				ctr++;
-				
+			
 				// limit number of genotypes do display based on internalOptions 
 				if (ctr > this.state.genotypeExpandLimit && ctr < genoTypeAssociations.length) break;  
 			}
-			
+		
 			// truncate the last + off, if there
 			if (_genotypeIds.slice(-1) == '+') {
 				_genotypeIds = _genotypeIds.slice(0, -1);	
@@ -3340,45 +3352,55 @@ function modelDataPointPrint(point) {
 			// call compare
 			var url = this.state.serverURL+"/compare/"+ phenotypeIds + "/" + _genotypeIds;
 			console.log("Comparing " + url);	
-			var retData = this._ajaxLoadData(modelInfo.d.species,url);
-			if (typeof (retData)  !== 'undefined') {					
-				var iPosition = 1;
-				for (var idx in retData.b) {
-					var gt = {
-							parent: modelInfo.id,
-							label: genotypeLabelHashtable.get(retData.b[idx].id),  // fix label as readable not ID
-							score: retData.b[idx].score.score, 
-							species: modelInfo.d.species,
-							rank: retData.b[idx].score.rank,
-							type: "genotype",
-							taxon: retData.b[idx].taxon.id,
-							opos: (modelInfo.d.opos + iPosition),  // bump up by one
-							pos: (modelInfo.d.pos + iPosition),
-							count: modelInfo.d.count,
-							sum: modelInfo.d.sum
-							};
+			compareScores = this._ajaxLoadData(modelInfo.d.species,url);
 
-					genoTypeList.put( this._getConceptId(retData.b[idx].id), gt);
-					
-					// Hack: need to fix the label because genotypes have IDs as labels
-					retData.b[idx].label = genotypeLabelHashtable.get(retData.b[idx].id);
-					
-					// load these into model data
-					this._loadDataForModel(retData.b[idx])
-					iPosition++;
+			// if (typeof (compareScores)  !== 'undefined') {
+			// 	// save the genotypes in hastable for later, store both the associated genotypes and raw data
+			// 	var savedScores = {b: compareScores.b, genoTypeCount: genoTypeAssociations.length, expanded: true};
+			// 	this.state.loadedGenoTypesHash.put(modelInfo.id, savedScores);		
+			// }
+
+		} else {
+			compareScores = cache.b;
+		} // cache == null
+
+		if (typeof (compareScores)  !== 'undefined') {					
+			var iPosition = 1;
+			for (var idx in compareScores.b) {
+					var gt = {
+						parent: modelInfo.id,
+						label: genotypeLabelHashtable.get(compareScores.b[idx].id),  // fix label as readable not ID
+						score: compareScores.b[idx].score.score, 
+						species: modelInfo.d.species,
+						rank: compareScores.b[idx].score.rank,
+						type: "genotype",
+						taxon: compareScores.b[idx].taxon.id,
+						opos: (modelInfo.d.opos + iPosition),  // bump up by one
+						pos: (modelInfo.d.pos + iPosition),
+						count: modelInfo.d.count,
+						sum: modelInfo.d.sum
+						};
+
+				genoTypeList.put( this._getConceptId(compareScores.b[idx].id), gt);
+				
+				// Hack: need to fix the label because genotypes have IDs as labels
+				compareScores.b[idx].label = genotypeLabelHashtable.get(compareScores.b[idx].id);
+				
+				// load these into model data
+				this._loadDataForModel(compareScores.b[idx])
+				iPosition++;
+				}
+
+				// if the cache was originally null, then add 
+				// save the genotypes in hastable for later, store both the associated genotypes and raw data
+				if (cache == null) {					
+					var savedScores = {b: compareScores.b, genoTypes: genoTypeList, expanded: true};
+					this.state.loadedGenoTypesHash.put(modelInfo.id, savedScores);							
 				}
 
 				console.log("Starting Insertion...");
 								
 				this.state.modelListHash = this._insertionModelList(modelInfo.d.pos+1, genoTypeList);
-				
-//				var temp2 = this.state.modelListHash.entries();
-//				for(var m in temp2) {
-//					if (temp2[m].type == 'genotype') {
-//						console.log(temp2[m]);
-//					}
-//				}
-				
 				this._rebuildModelHash();
 				
 				this.state.modelLength = this.state.modelListHash.size();
@@ -3388,19 +3410,38 @@ function modelDataPointPrint(point) {
 
 				success = true;
 
-				stickytooltip.closetooltip();
 				
 			} else {
-				//  HACK:if we return a null just create a zero-length array for now to add it to hashtable
-				// this is for later so we don't have to lookup concept again			
-				genoTypeAssociations = {};				
+				console.log('No compare scores found')
 			}
-				
-			// save the genotypes in hastable for later
-			this.state.loadedGenoTypesHash.put(modelInfo.id, genoTypeList);			
-		}		
-	
+					
+		stickytooltip.closetooltip();		
 		return success; 
+	},
+
+	_collapseGenoTypes: function(curModel) {
+		var modelInfo = {id: curModel, d: this.state.modelListHash.get(curModel)};
+		console.log(this.state.modelListHash.size());
+		// check cached hashtable first 
+		var cachedScores = this.state.loadedGenoTypesHash.get(modelInfo.id);
+		
+		//if found just return genotypes scores
+		if (cachedScores != null) {
+			console.log('bef modeListHash: ' +this.state.modelListHash.size());
+			this.state.modelListHash = this._removalFromModelList(curModel, cachedScores);
+
+			this._rebuildModelHash();				
+			this.state.modelLength = this.state.modelListHash.size();
+			console.log('modeListHash (aft): ' +this.state.modelListHash.size());
+			this._setAxisValues();
+			this._processDisplay();
+
+			// update the expanded flag
+			cachedScores.expanded = false;
+			this.state.loadedGenoTypesHash.remove(modelInfo.id);
+			this.state.loadedGenoTypesHash.put(modelInfo.id, cachedScores);
+		}
+		stickytooltip.closetooltip();
 	},
 	
 	// get all matching phenotypes for a model
@@ -3427,7 +3468,6 @@ function modelDataPointPrint(point) {
 		for (var i in sortedModelList){
 			var entry = this.state.modelListHash.get(sortedModelList[i]);
 			if (entry.pos == insertPoint) {
-				//this._mergeHashEntries(insertions);
 				var insertsKeys = insertions.keys();
 				// begin insertion
 				for(var j in insertsKeys) {					
@@ -3446,6 +3486,84 @@ function modelDataPointPrint(point) {
 		return newModelList;
 	},
 	
+	// remove from the model list
+	// _removalFromModelList: function (removalList) {
+	// 	var removalKeys = removalList.keys();
+
+	// 	if (removalKeys != null) {
+	// 		for (var i in removalKeys){
+	// 			this.state.modelListHash.remove(removalKeys[i]);
+
+	// 			//this.state.modelData[i].model_id
+	// 		}
+	// 	}
+	// },
+
+	// remove a models children from the model list
+	_removalFromModelList: function (curModel, removalList) {
+		var newModelList = new Hashtable();
+		var newModelData = [];
+		var removalKeys = removalList.genoTypes.keys();
+		var sortedModelList= self._getSortedIDList(this.state.modelListHash.entries());
+		var removeEntries = removalList.genoTypes.entries();				
+
+		var currentModelInfo = this.state.modelListHash.get(curModel);
+
+		console.log('modelList (bef): ' + this.state.modelListHash.size());
+
+		var maxInsertedPosition = 0;
+		for (var x in removeEntries){
+			var obj = removeEntries[x][1];
+			if (obj.pos < maxInsertedPosition) {
+				maxInsertedPosition = obj.pos;
+			}			
+		}
+//		maxInsertedPosition = maxInsertedPosition-1;  // zero-based
+
+		console.log(removalKeys);
+		var oPos = currentModelInfo.opos+1, pos = currentModelInfo.pos+1;
+
+		for (var i in sortedModelList){
+			var entry = this.state.modelListHash.get(sortedModelList[i]);
+			var found = false, cnt = 0;
+
+			// check list to make sure it needs removed
+			while (cnt < removalKeys.length && !found) {
+				if (removalKeys[cnt] == sortedModelList[i]) {
+					found = true;
+				}
+				cnt++;
+			}
+			if (found == false) {
+				// need to reorder it back to original position
+				if (entry.pos > maxInsertedPosition) {
+					entry.opos = oPos++;  //entry.opos - maxInsertedPosition;		
+					entry.pos = pos++;  //entry.pos - maxInsertedPosition;						
+				} 
+				newModelList.put(sortedModelList[i], entry);					
+			}
+		}
+
+		console.log('modelData (bef): ' + this.state.modelData.length);
+
+		// loop through to rebuild model data and remove any removals
+		for (var x=0; x < this.state.modelData.length; x++) {
+			var id = this.state.modelData[x].model_id;
+			var ret = removalKeys.indexOf(id);
+			if (ret <  0) {
+				newModelData.push(this.state.modelData[x]);
+			}
+		}
+
+		console.log('removed ' + removalKeys.length);
+
+		this.state.modelData = newModelData;
+
+		console.log('modelData (aft): ' + this.state.modelData.length);
+		console.log('modelList (aft): ' + newModelList.size());
+		return newModelList;
+	},
+
 	_rebuildModelHash: function() {
 		//CHANGE LATER TO CUT DOWN ON INFO FROM _finishLoad & _finishOverviewLoad
 		this.state.phenotypeListHash = new Hashtable();
