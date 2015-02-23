@@ -1820,32 +1820,79 @@ function modelDataPointPrint(point) {
 		var info = self._getAxisData(data);
 		var displayCount = self._getYLimit();
 		var highlightOffset = 1;
-
-		// I don't know why I'm still seeing the un-processed concept id
-		// var classlabel = "text#" +this._getConceptId(modelData.model_id);
+		var concept = self._getConceptId(data);
 
 		//Show that model label is selected. Change styles to bold, blue and full-length label
-		var model_label = self.state.svg.selectAll("text#" + this._getConceptId(data))
+		var model_label = self.state.svg.selectAll("text#" + concept)
+			.style("font-weight", "bold")
+			.style("fill", "blue")
+			.html(info.label);
+		
+		self._createHoverBox(data);
+
+		//create the related model rectangles
+		var highlight_rect = self.state.svg.append("svg:rect")
+			.attr("transform","translate(" + (self.state.textWidth + self.state.xOffsetOver + 32) + "," + self.state.yoffsetOver + ")")
+			.attr("x", function(d) { return (self.state.xScale(data) - 1);})
+			.attr("y", self.state.yoffset + 2)
+			.attr("class", "model_accent")
+			.attr("width", 14) // * highlightOffset)
+			.attr("height", (displayCount * self.state.heightOfSingleModel));
+	
+		
+		//obj is try creating an ojbect with an attributes array including "attributes", but I may need to define
+		//getAttrbitues
+		//just create a temporary object to pass to the next method...
+		obj = {
+			attributes: [],
+			getAttribute: function(keystring) {
+				var ret = self.state.xScale(data) + 15;
+				if (keystring == "y") {
+					ret = Number(self.state.yoffset - 100);
+				}
+				return ret;
+			},
+		};
+		obj.attributes.transform = {value: highlight_rect.attr("transform")};
+		self._highlightMatching(data);
+	},
+
+	_selectYItem: function(curr_data, obj) {
+		//create a highlight row
+		if (stickytooltip.isdocked){ return; }
+
+		var self = this;
+		var info = self._getAxisData(curr_data);
+		var alabels = this.state.svg.selectAll("text.a_text." + curr_data);
+
+		var txt = info.label;
+		if (txt === undefined) {
+			txt = curr_data;
+		}
+		alabels.text(txt)
 			.style("font-weight", "bold")
 			.style("fill", "blue")
 			.html(info.label);
 
-		var concept = self._getConceptId(data),
-		type = this.state.defaultApiEntity;
+		self._createHoverBox(curr_data);
 
-		for (var i in this.state.apiEntityMap) {
-			if (concept.indexOf(this.state.apiEntityMap[i].prefix) === 0) {
-				type = this.state.apiEntityMap[i].apifragment;
-			}
-		}
+		//create the related row rectangle
+		var highlight_rect = self.state.svg.append("svg:rect")
+			.attr("transform","translate(" + (self.state.axis_pos_list[1]) + "," + (self.state.yoffsetOver + 4) + ")")
+			.attr("x", 12)
+			.attr("y", function(d) {return info.ypos; }) //rowid
+			.attr("class", "row_accent")
+			.attr("width", this.state.modelWidth - 4)
+			.attr("height", 12);
 
-		var width = (type === this.state.defaultApiEntity) ? 80 : 200;
-		var height = (type === this.state.defaultApiEntity) ? 50 : 60;
-		
-		var hrefLink = "<a href=\"" + this.state.serverURL+"/" + info.type +"/"+ concept + "\" target=\"_blank\">" +   //this._getConceptId(modelData)
-						info.label + "</a>"; 
-		
-		var retData = "<strong>" + self._capitalizeString(info.type) + ": </strong> " + hrefLink + "<br/><strong>Rank:</strong> " + info.rank;
+		this._highlightMatching(curr_data);
+	},
+
+	_createHoverBox: function(data){
+		var info = this._getAxisData(data);
+		var concept = this._getConceptId(data);
+		var hrefLink = "<a href=\"" + this.state.serverURL+"/" + info.type +"/"+ concept + "\" target=\"_blank\">" + info.label + "</a>";
+		var retData = "<strong>" + this._capitalizeString(info.type) + ": </strong> " + hrefLink + "<br/><strong>Rank:</strong> " + info.rank;
 		
 		// for genotypes show the parent
 		if (info.type == 'genotype') {
@@ -1880,37 +1927,8 @@ function modelDataPointPrint(point) {
 				"</button>";				
 			}
 		}
-		
 		// update the stub stickytool div dynamically to display
-		$( "#sticky1" )
-		.html(retData);
-
-		//create the related model rectangles
-		var highlight_rect = self.state.svg.append("svg:rect")
-			.attr("transform","translate(" + (self.state.textWidth + self.state.xOffsetOver + 32) + "," + self.state.yoffsetOver + ")")
-			.attr("x", function(d) { return (self.state.xScale(data) - 1);})
-			.attr("y", self.state.yoffset + 2)
-			.attr("class", "model_accent")
-			.attr("width", 14) // * highlightOffset)
-			.attr("height", (displayCount * self.state.heightOfSingleModel));
-	
-		
-		//obj is try creating an ojbect with an attributes array including "attributes", but I may need to define
-		//getAttrbitues
-		//just create a temporary object to pass to the next method...
-		obj = {
-			attributes: [],
-			getAttribute: function(keystring) {
-				var ret = self.state.xScale(data) + 15;
-				if (keystring == "y") {
-					ret = Number(self.state.yoffset - 100);
-				}
-				return ret;
-			},
-		};
-		obj.attributes.transform = {value: highlight_rect.attr("transform")};
-//		this._updateDetailSection(retData, this._getXYPos(obj), width, height);    //THE STICKYTOOL TIP TAKES THE PLACE OF THIS
-		self._highlightMatching(data);
+		$("#sticky1").html(retData);
 	},
 
 	//I need to check to see if the modelData is an object. If so, get the model_id
@@ -1931,34 +1949,6 @@ function modelDataPointPrint(point) {
 			text.html(this._getShortLabel(label,self.state.labelCharDisplayCount));
 			this._deselectMatching(data);
 		}
-	},
-
-	_selectData: function(curr_data, obj) {
-		//create a highlight row
-		var self = this;
-		//create the related row rectangle
-		var highlight_rect = self.state.svg.append("svg:rect")
-			.attr("transform","translate(" + (self.state.axis_pos_list[1]) + "," + (self.state.yoffsetOver + 4) + ")")
-			.attr("x", 12)
-			.attr("y", function(d) {return self._getAxisData(curr_data).ypos; }) //rowid
-			.attr("class", "row_accent")
-			.attr("width", this.state.modelWidth - 4)
-			.attr("height", 12);
-
-		this._resetLinks();
-		var alabels = this.state.svg.selectAll("text.a_text." + curr_data);
-
-		var txt = this._getAxisData(curr_data).label;
-		if (txt === undefined) {
-			txt = curr_data;
-		}
-		alabels.text(txt)
-			.style("font-weight", "bold")
-			.style("fill", "blue")
-			.on("click",function(d){
-				self._clickItem(self.state.serverURL,curr_data);
-			});
-		this._highlightMatching(curr_data);
 	},
 
 	_deselectData: function (curr_data) {
@@ -3061,15 +3051,17 @@ function modelDataPointPrint(point) {
 				return self._getAxisData(d).ypos + 10;
 			})
 			.on("mouseover", function(d) {
-				self._selectData(d, d3.mouse(this));
+				self._selectYItem(d, d3.mouse(this));
 			})
 			.on("mouseout", function(d) {
 				self._deselectData(d, d3.mouse(this));
 			})
 			.attr("width", self.state.textWidth)
 			.attr("height", 50)
+			.attr("data-tooltip", "sticky1")
 			.text(function(d) {
 				var txt = self._getAxisData(d).label;
+				txt = self._decodeHtmlEntity(txt);
 				if (txt === undefined) {
 					txt = d;
 				}
