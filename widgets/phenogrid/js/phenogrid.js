@@ -1130,7 +1130,7 @@ function modelDataPointPrint(point) {
 	_getIDTypeDetail: function(key) {
 		var info = this.state.modelListHash.get(key);
 		
-		if (info != null) return info.type;
+		if (info !== null) return info.type;
 		return "unknown";
 	},
 	
@@ -1757,7 +1757,7 @@ function modelDataPointPrint(point) {
 	_deselectMatching: function(curr_data){
 		var self = this;
 		var dataType = self._getIDType(curr_data);
-		var label, aLabels, shortTxt, shrinkSize;
+		var label, alabels, shortTxt, shrinkSize;
 
 		if (dataType === "Phenotype"){
 			if (this.state.invertAxis){
@@ -1781,12 +1781,12 @@ function modelDataPointPrint(point) {
 
 			//Clear both axis.  One here, one below
 			var blabels = this.state.svg.selectAll("text.model_label");
-			for (var j in blabels[0]){
-				label = this._getAxisData(blabels[0][j].id).label;
+			for (var i in blabels[0]){
+				label = this._getAxisData(blabels[0][i].id).label;
 				shortTxt = this._getShortLabel(label,self.state.labelCharDisplayCount);
-				if (blabels[0][j].innerHTML == label){
-					blabels[0][j].style.fill = "black";
-					blabels[0][j].innerHTML = shortTxt;
+				if (blabels[0][i].innerHTML == label){
+					blabels[0][i].style.fill = "black";
+					blabels[0][i].innerHTML = shortTxt;
 				}
 			}
 		}
@@ -1849,12 +1849,12 @@ function modelDataPointPrint(point) {
 		
 		// for genotypes show the parent
 		if (info.type == 'genotype') {
-			if (typeof(info.parent) !== 'undefined' && info.parent != null) {
+			if (typeof(info.parent) !== 'undefined' && info.parent !== null) {
 				var parentInfo = this.state.modelListHash.get(info.parent);
-				if (parentInfo != null) {
+				if (parentInfo !== null) {
 					var genehrefLink = "<a href=\"" + this.state.serverURL+"/" + parentInfo.type +"/"+ info.parent + "\" target=\"_blank\">" +  
 					parentInfo.label + "</a>";					
-					retData = retData + "<br/><strong>Gene:</strong> " + genehrefLink;
+					retData += "<br/><strong>Gene:</strong> " + genehrefLink;
 				}
 			}			
 		}
@@ -1865,7 +1865,7 @@ function modelDataPointPrint(point) {
 			// check the hashtable to see if we've loaded this
 			var isExpanded = false;
 			var gtCached = this.state.loadedGenoTypesHash.get(concept);
-			if (gtCached != null) { isExpanded = gtCached.expanded;}
+			if (gtCached !== null) { isExpanded = gtCached.expanded;}
 
 			//if found just return genotypes scores		
 			if (isExpanded) {
@@ -3292,7 +3292,7 @@ function modelDataPointPrint(point) {
 		var cache = this.state.loadedGenoTypesHash.get(modelInfo.id);
 		
 		//if cached info not found need to try and get genotypes and scores
-		if (cache == null) {
+		if (cache === null) {
 		
 			console.log("Getting Gene " + modelInfo.id);
 
@@ -3309,7 +3309,7 @@ function modelDataPointPrint(point) {
 			
 			genoTypeAssociations = res.genotype_associations;
 			
-			if (genoTypeAssociations != null && genoTypeAssociations.length > 5) {
+			if (genoTypeAssociations !== null && genoTypeAssociations.length > 5) {
 				console.log("There are " + genoTypeAssociations.length +  " associated genotypes");
 			}
 		
@@ -3318,7 +3318,7 @@ function modelDataPointPrint(point) {
 			var ctr = 0;
 			// assemble the phenotype ids 
 			for (var p in assocPhenotypes) {
-				phenotypeIds = phenotypeIds + assocPhenotypes[p].id + "+";		
+				phenotypeIds += assocPhenotypes[p].id + "+";		
 			
 				ctr++;
 			
@@ -3350,9 +3350,9 @@ function modelDataPointPrint(point) {
 			}
 			
 			// call compare
-			var url = this.state.serverURL+"/compare/"+ phenotypeIds + "/" + _genotypeIds;
-			console.log("Comparing " + url);	
-			compareScores = this._ajaxLoadData(modelInfo.d.species,url);
+			var url2 = this.state.serverURL+"/compare/"+ phenotypeIds + "/" + _genotypeIds;
+			console.log("Comparing " + url2);	
+			compareScores = this._ajaxLoadData(modelInfo.d.species,url2);
 
 			// if (typeof (compareScores)  !== 'undefined') {
 			// 	// save the genotypes in hastable for later, store both the associated genotypes and raw data
@@ -3387,13 +3387,13 @@ function modelDataPointPrint(point) {
 				compareScores.b[idx].label = genotypeLabelHashtable.get(compareScores.b[idx].id);
 				
 				// load these into model data
-				this._loadDataForModel(compareScores.b[idx])
+				this._loadDataForModel(compareScores.b[idx]);
 				iPosition++;
 				}
 
 				// if the cache was originally null, then add 
 				// save the genotypes in hastable for later, store both the associated genotypes and raw data
-				if (cache == null) {					
+				if (cache === null) {					
 					var savedScores = {b: compareScores.b, genoTypes: genoTypeList, expanded: true};
 					this.state.loadedGenoTypesHash.put(modelInfo.id, savedScores);							
 				}
@@ -3412,7 +3412,7 @@ function modelDataPointPrint(point) {
 
 				
 			} else {
-				console.log('No compare scores found')
+				console.log('No compare scores found');
 			}
 					
 		stickytooltip.closetooltip();		
@@ -3426,7 +3426,7 @@ function modelDataPointPrint(point) {
 		var cachedScores = this.state.loadedGenoTypesHash.get(modelInfo.id);
 		
 		//if found just return genotypes scores
-		if (cachedScores != null) {
+		if (cachedScores !== null) {
 			console.log('bef modeListHash: ' +this.state.modelListHash.size());
 			this.state.modelListHash = this._removalFromModelList(curModel, cachedScores);
 
@@ -3534,7 +3534,7 @@ function modelDataPointPrint(point) {
 				}
 				cnt++;
 			}
-			if (found == false) {
+			if (found === false) {
 				// need to reorder it back to original position
 				if (entry.pos > maxInsertedPosition) {
 					entry.opos = oPos++;  //entry.opos - maxInsertedPosition;		
@@ -3547,11 +3547,11 @@ function modelDataPointPrint(point) {
 		console.log('modelData (bef): ' + this.state.modelData.length);
 
 		// loop through to rebuild model data and remove any removals
-		for (var x=0; x < this.state.modelData.length; x++) {
-			var id = this.state.modelData[x].model_id;
+		for (var y = 0; y < this.state.modelData.length; y++) {
+			var id = this.state.modelData[y].model_id;
 			var ret = removalKeys.indexOf(id);
 			if (ret <  0) {
-				newModelData.push(this.state.modelData[x]);
+				newModelData.push(this.state.modelData[y]);
 			}
 		}
 
@@ -3602,7 +3602,7 @@ function modelDataPointPrint(point) {
 		var gta = this.state.loadedGenoTypesHash.get(curModel.model_id);
 		
 		//if null then go find genotypes
-		if (gta == null) { 
+		if (gta === null) { 
 			var url = this.state.serverURL+"/gene/"+ curModel.model_id + ".json";		
 			//var url = "http://stage-monarch.monarchinitiative.org/gene/"+ gene + ".json";
 			
@@ -3614,7 +3614,7 @@ function modelDataPointPrint(point) {
 	
 			//  HACK:if we return a null just create a zero-length array for now to add it to hashtable
 			// this is for later so we don't have to lookup concept again
-			if (gta == null) {gta = {};}
+			if (gta === null) {gta = {};}
 				
 			// save the genotypes in hastable for later
 			this.state.loadedGenoTypesHash.put(curModel.model_id, gta);					
@@ -3625,7 +3625,7 @@ function modelDataPointPrint(point) {
 	// encode any special chars 
 	_encodeHtmlEntity: function(str) {
 	
-		if (str != null) {
+		if (str !== null) {
 		return str
 		.replace(/&/g, "&amp;")		
 		.replace(/</g, "&lt;")			
