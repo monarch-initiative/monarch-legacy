@@ -10,7 +10,7 @@ var stickytooltip={
 	fadeinspeed: 200, //duration of fade effect in milliseconds
 	rightclickstick: true, //sticky tooltip when user right clicks over the triggering element (apart from pressing "s" key) ?
 	stickybordercolors: ["black", "darkred"], //border color of tooltip depending on sticky state
-	stickynotice1: ["Press \"s\" or right click to sticky box"], //, "or right click", "to sticky box"], //customize tooltip status message
+	stickynotice1: ["Press \"s\" or right click to activate sticky box"], //, "or right click", "to sticky box"], //customize tooltip status message
 	stickynotice2: "Click outside this box to hide it", //customize tooltip status message
 
 	//***** NO NEED TO EDIT BEYOND HERE

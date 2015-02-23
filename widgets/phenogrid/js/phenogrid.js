@@ -1842,7 +1842,7 @@ function modelDataPointPrint(point) {
 		var width = (type === this.state.defaultApiEntity) ? 80 : 200;
 		var height = (type === this.state.defaultApiEntity) ? 50 : 60;
 		
-		var hrefLink = "<a href=\"" + this.state.serverURL+"/" + info.type +"/"+ concept + "\" target=\"_blank\">" +   //this._getConceptId(modelData)
+		var hrefLink = "<a href=\"" + this.state.serverURL+"/" + info.type +"/"+ concept.replace("_", ":") + "\" target=\"_blank\">" +   //this._getConceptId(modelData)
 						info.label + "</a>"; 
 		
 		var retData = "<strong>" + self._capitalizeString(info.type) + ": </strong> " + hrefLink + "<br/><strong>Rank:</strong> " + info.rank;
@@ -1869,15 +1869,17 @@ function modelDataPointPrint(point) {
 
 			//if found just return genotypes scores		
 			if (isExpanded) {
-//				retData = retData + "<br/><strong># of associated genotypes:</strong> &nbsp;" + gtscores.size();				
-				//highlightOffset = (gtCached.genoTypes.length + (gtCached.genoTypes.length *.20)+1);   // magic numbers for extending the highlight
+				highlightOffset = (gtCached.genoTypes.size() + (gtCached.genoTypes.size() *.25)+1);   // magic numbers for extending the highlight
 				retData = retData + "<br/><br/>Click button to <b>collapse</b> associated genotypes &nbsp;&nbsp;" +
 				"<button class=\"colapsebtn\" type=\"button\" onClick=\"self._collapseGenoTypes('" + concept + "')\">" +
 				"</button>";								
 			} else {
-				retData = retData + "<br/><br/>Click button to <b>expand</b> associated genotypes &nbsp;&nbsp;" +
-				"<button class=\"expandbtn\" type=\"button\" onClick=\"self._expandGenotypes('" + concept + "')\">" +
-				"</button>";				
+				if (gtCached != null) {
+					retData = retData + "<br/><br/>Click button to <b>expand</b> <u>" + gtCached.genoTypes.size() + "</u> associated genotypes &nbsp;&nbsp;";
+				} else {
+					retData = retData + "<br/><br/>Click button to <b>expand</b> associated genotypes &nbsp;&nbsp;";
+				}
+				retData = retData + "<button class=\"expandbtn\" type=\"button\" onClick=\"self._expandGenotypes('" + concept + "')\"></button>";				
 			}
 		}
 		
@@ -1891,7 +1893,7 @@ function modelDataPointPrint(point) {
 			.attr("x", function(d) { return (self.state.xScale(data) - 1);})
 			.attr("y", self.state.yoffset + 2)
 			.attr("class", "model_accent")
-			.attr("width", 14) // * highlightOffset)
+			.attr("width", 14 * highlightOffset)
 			.attr("height", (displayCount * self.state.heightOfSingleModel));
 	
 		
@@ -2469,6 +2471,11 @@ function modelDataPointPrint(point) {
 		this._createModelRects();
 		this._highlightSpecies();
 		this._createYRegion();
+
+		// this must be initialized here after the _createModelLabels, or the mouse events don't get
+		// initialized properly and tooltips won't work with the mouseover defined in _convertLableHTML
+		stickytooltip.init("*[data-tooltip]", "mystickytooltip");
+						
 	},
 
 	//Previously _createModelLabels
@@ -3353,7 +3360,7 @@ function modelDataPointPrint(point) {
 			var url = this.state.serverURL+"/compare/"+ phenotypeIds + "/" + _genotypeIds;
 			console.log("Comparing " + url);	
 			compareScores = this._ajaxLoadData(modelInfo.d.species,url);
-
+			console.log("Done with ajaxLoadData...");	
 			// if (typeof (compareScores)  !== 'undefined') {
 			// 	// save the genotypes in hastable for later, store both the associated genotypes and raw data
 			// 	var savedScores = {b: compareScores.b, genoTypeCount: genoTypeAssociations.length, expanded: true};
@@ -3361,15 +3368,18 @@ function modelDataPointPrint(point) {
 			// }
 
 		} else {
-			compareScores = cache.b;
+			compareScores = cache;
 		} // cache == null
 
-		if (typeof (compareScores)  !== 'undefined') {					
+		if (typeof (compareScores)  !== 'undefined') {		
+			console.log('exp: modelData (bef): ' + this.state.modelData.length);			
 			var iPosition = 1;
 			for (var idx in compareScores.b) {
+					var newGtLabel = genotypeLabelHashtable.get(compareScores.b[idx].id); 
+
 					var gt = {
 						parent: modelInfo.id,
-						label: genotypeLabelHashtable.get(compareScores.b[idx].id),  // fix label as readable not ID
+						label: (newGtLabel != null?newGtLabel:compareScores.b[idx].label), // if label was null, then use previous fixed label
 						score: compareScores.b[idx].score.score, 
 						species: modelInfo.d.species,
 						rank: compareScores.b[idx].score.rank,
@@ -3391,21 +3401,30 @@ function modelDataPointPrint(point) {
 				iPosition++;
 				}
 
+				console.log('exp: modelData (aft): ' + this.state.modelData.length);
 				// if the cache was originally null, then add 
 				// save the genotypes in hastable for later, store both the associated genotypes and raw data
 				if (cache == null) {					
 					var savedScores = {b: compareScores.b, genoTypes: genoTypeList, expanded: true};
 					this.state.loadedGenoTypesHash.put(modelInfo.id, savedScores);							
+				} else {
+					// update the expanded flag
+					cache.expanded = true;
+					this.state.loadedGenoTypesHash.remove(modelInfo.id);
+					this.state.loadedGenoTypesHash.put(modelInfo.id, cache);
 				}
 
 				console.log("Starting Insertion...");
 								
 				this.state.modelListHash = this._insertionModelList(modelInfo.d.pos+1, genoTypeList);
+
+				console.log("Rebuilding hashtables...");
 				this._rebuildModelHash();
 				
 				this.state.modelLength = this.state.modelListHash.size();
 				this._setAxisValues();
 
+				console.log("updating display...");
 				this._processDisplay(); //'updateModel');
 
 				success = true;
@@ -3419,6 +3438,7 @@ function modelDataPointPrint(point) {
 		return success; 
 	},
 
+	// collapse the expanded genotypes for the current selected model
 	_collapseGenoTypes: function(curModel) {
 		var modelInfo = {id: curModel, d: this.state.modelListHash.get(curModel)};
 		console.log(this.state.modelListHash.size());
@@ -3426,8 +3446,8 @@ function modelDataPointPrint(point) {
 		var cachedScores = this.state.loadedGenoTypesHash.get(modelInfo.id);
 		
 		//if found just return genotypes scores
-		if (cachedScores != null) {
-			console.log('bef modeListHash: ' +this.state.modelListHash.size());
+		if (cachedScores != null && cachedScores.expanded) {
+			console.log('modeListHash (bef): ' +this.state.modelListHash.size());
 			this.state.modelListHash = this._removalFromModelList(curModel, cachedScores);
 
 			this._rebuildModelHash();				
@@ -3486,19 +3506,6 @@ function modelDataPointPrint(point) {
 		return newModelList;
 	},
 	
-	// remove from the model list
-	// _removalFromModelList: function (removalList) {
-	// 	var removalKeys = removalList.keys();
-
-	// 	if (removalKeys != null) {
-	// 		for (var i in removalKeys){
-	// 			this.state.modelListHash.remove(removalKeys[i]);
-
-	// 			//this.state.modelData[i].model_id
-	// 		}
-	// 	}
-	// },
-
 	// remove a models children from the model list
 	_removalFromModelList: function (curModel, removalList) {
 		var newModelList = new Hashtable();
@@ -3514,11 +3521,10 @@ function modelDataPointPrint(point) {
 		var maxInsertedPosition = 0;
 		for (var x in removeEntries){
 			var obj = removeEntries[x][1];
-			if (obj.pos < maxInsertedPosition) {
+			if (obj.pos > maxInsertedPosition) {
 				maxInsertedPosition = obj.pos;
 			}			
 		}
-//		maxInsertedPosition = maxInsertedPosition-1;  // zero-based
 
 		console.log(removalKeys);
 		var oPos = currentModelInfo.opos+1, pos = currentModelInfo.pos+1;
@@ -3537,8 +3543,8 @@ function modelDataPointPrint(point) {
 			if (found == false) {
 				// need to reorder it back to original position
 				if (entry.pos > maxInsertedPosition) {
-					entry.opos = oPos++;  //entry.opos - maxInsertedPosition;		
-					entry.pos = pos++;  //entry.pos - maxInsertedPosition;						
+					entry.opos = entry.opos - removalKeys.length;				//oPos++;  //entry.opos - maxInsertedPosition;		
+					entry.pos =  entry.pos - removalKeys.length;				//pos++;  //entry.pos - maxInsertedPosition;						
 				} 
 				newModelList.put(sortedModelList[i], entry);					
 			}

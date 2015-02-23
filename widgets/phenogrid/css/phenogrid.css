@@ -395,7 +395,6 @@ body {
 .expandbtn {
     padding: 0;
     border: none;
-//    background: none;
     background: transparent url('/widgets/phenogrid/image/ExpandAllIcon.png') no-repeat;
     width: 18px;
     height: 17px;
@@ -405,7 +404,6 @@ body {
 .colapsebtn {
     padding: 0;
     border: none;
-//    background: none;
     background: transparent url('/widgets/phenogrid/image/CollapseAllIcon.png') no-repeat;
     width: 18px;
     height: 17px;
