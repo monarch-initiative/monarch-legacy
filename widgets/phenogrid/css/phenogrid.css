@@ -41,8 +41,8 @@ body {
 	/*stroke:#ea763b;*/
 	stroke:#4CA092;
 	stroke-width: 2;
-	fill: #ffffff;
-	fill-opacity: 0.05;
+	fill: #4CA092;   //#ffffff;
+	fill-opacity: 0.1;    //0.05;
 }
 
 .gene_accent {

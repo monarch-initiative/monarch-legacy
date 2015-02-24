@@ -1758,7 +1758,6 @@ function modelDataPointPrint(point) {
 		var self = this;
 		var dataType = self._getIDType(curr_data);
 		var label, alabels, shortTxt, shrinkSize;
-
 		if (dataType === "Phenotype"){
 			if (this.state.invertAxis){
 				alabels = this.state.svg.selectAll("text.a_text");
@@ -1794,7 +1793,7 @@ function modelDataPointPrint(point) {
 		for (var j in alabels[0]){
 			label = this._getAxisData(alabels[0][j].id).label;
 			shortTxt = this._getShortLabel(label,shrinkSize);
-			if (alabels[0][j].innerHTML == label){
+			if (alabels[0][j].innerHTML == label){	
 				alabels[0][j].style.fill = "black";
 				alabels[0][j].innerHTML = shortTxt;
 			}
@@ -1811,7 +1810,6 @@ function modelDataPointPrint(point) {
 	},
 
 	_selectXItem: function(data, obj) {
-
 		// HACK: this temporarily 'disables' the mouseover when the stickytooltip is docked
 		// that way the user doesn't accidently hover another label which caused tooltip to be refreshed
 		if (stickytooltip.isdocked){ return; }
@@ -1820,82 +1818,24 @@ function modelDataPointPrint(point) {
 		var info = self._getAxisData(data);
 		var displayCount = self._getYLimit();
 		var highlightOffset = 1;
-		var classStyle = "model_accent";  // default
-
-		// I don't know why I'm still seeing the un-processed concept id
-		// var classlabel = "text#" +this._getConceptId(modelData.model_id);
+		var concept = self._getConceptId(data);
+		var appearanceOverrides;   
 
 		//Show that model label is selected. Change styles to bold, blue and full-length label
-		var model_label = self.state.svg.selectAll("text#" + this._getConceptId(data))
+		var model_label = self.state.svg.selectAll("text#" + concept)
 			.style("font-weight", "bold")
 			.style("fill", "blue")
 			.html(info.label);
-
-		var concept = self._getConceptId(data),
-		type = this.state.defaultApiEntity;
-
-		for (var i in this.state.apiEntityMap) {
-			if (concept.indexOf(this.state.apiEntityMap[i].prefix) === 0) {
-				type = this.state.apiEntityMap[i].apifragment;
-			}
-		}
-
-		var width = (type === this.state.defaultApiEntity) ? 80 : 200;
-		var height = (type === this.state.defaultApiEntity) ? 50 : 60;
 		
-		var hrefLink = "<a href=\"" + this.state.serverURL+"/" + info.type +"/"+ concept.replace("_", ":") + "\" target=\"_blank\">" +   //this._getConceptId(modelData)
-						info.label + "</a>"; 
-		
-		var retData = "<strong>" + self._capitalizeString(info.type) + ": </strong> " + hrefLink + "<br/><strong>Rank:</strong> " + info.rank;
-		
-		// for genotypes show the parent
-		if (info.type == 'genotype') {
-			if (typeof(info.parent) !== 'undefined' && info.parent !== null) {
-				var parentInfo = this.state.modelListHash.get(info.parent);
-				if (parentInfo !== null) {
-					var genehrefLink = "<a href=\"" + this.state.serverURL+"/" + parentInfo.type +"/"+ info.parent + "\" target=\"_blank\">" +  
-					parentInfo.label + "</a>";					
-					retData += "<br/><strong>Gene:</strong> " + genehrefLink;
-				}
-			}			
-		}
-		
-		// for gene and species mode only, show genotype link
-		if (info.type == 'gene' && this.state.targetSpeciesName != "Overview") {	
-			
-			// check the hashtable to see if we've loaded this
-			var isExpanded = false;
-			var gtCached = this.state.loadedGenoTypesHash.get(concept);
-			if (gtCached !== null) { isExpanded = gtCached.expanded;}
-
-			//if found just return genotypes scores		
-			if (isExpanded) {
-				highlightOffset = (gtCached.genoTypes.size() + (gtCached.genoTypes.size() *.27)+1);   // magic numbers for extending the highlight
-				classStyle = "gene_accent";
-				retData = retData + "<br/><br/>Click button to <b>collapse</b> associated genotypes &nbsp;&nbsp;" +
-				"<button class=\"colapsebtn\" type=\"button\" onClick=\"self._collapseGenoTypes('" + concept + "')\">" +
-				"</button>";								
-			} else {
-				if (gtCached != null) {
-					retData = retData + "<br/><br/>Click button to <b>expand</b> <u>" + gtCached.genoTypes.size() + "</u> associated genotypes &nbsp;&nbsp;";
-				} else {
-					retData = retData + "<br/><br/>Click button to <b>expand</b> associated genotypes &nbsp;&nbsp;";
-				}
-				retData = retData + "<button class=\"expandbtn\" type=\"button\" onClick=\"self._expandGenotypes('" + concept + "')\"></button>";				
-			}
-		}
-		
-		// update the stub stickytool div dynamically to display
-		$( "#sticky1" )
-		.html(retData);
+		appearanceOverrides = self._createHoverBox(data);   // TODO:we may want to rethink using this return value override
 
 		//create the related model rectangles
 		var highlight_rect = self.state.svg.append("svg:rect")
 			.attr("transform","translate(" + (self.state.textWidth + self.state.xOffsetOver + 32) + "," + self.state.yoffsetOver + ")")
 			.attr("x", function(d) { return (self.state.xScale(data) - 1);})
 			.attr("y", self.state.yoffset + 2)
-			.attr("class", classStyle)		// "model_accent"
-			.attr("width", 15 * highlightOffset)
+			.attr("class", "model_accent")
+			.attr("width", 15 * appearanceOverrides.offset)
 			.attr("height", (displayCount * self.state.heightOfSingleModel));
 	
 		
@@ -1913,68 +1853,130 @@ function modelDataPointPrint(point) {
 			},
 		};
 		obj.attributes.transform = {value: highlight_rect.attr("transform")};
-//		this._updateDetailSection(retData, this._getXYPos(obj), width, height);    //THE STICKYTOOL TIP TAKES THE PLACE OF THIS
 		self._highlightMatching(data);
 	},
 
-	//I need to check to see if the modelData is an object. If so, get the model_id
-	_clearModelData: function(data,obj) {
-		this.state.svg.selectAll("#detail_content").remove();
-		this.state.svg.selectAll(".model_accent").remove();
-		this.state.svg.selectAll(".gene_accent").remove();		
-		var text = "";
-		var id = this._getConceptId(data);
-		var label = self._getAxisData(data).label;
-
-		//Show that model label is no longer selected. Change styles to normal weight, black and short label
-		if (id !== "") {
-			text = this.state.svg.selectAll("text#" + id);
-			text.style("font-weight","normal");
-			text.style("text-decoration", "none");
-			text.style("fill", "black");
-
-			text.html(this._getShortLabel(label,self.state.labelCharDisplayCount));
-			this._deselectMatching(data);
-		}
-	},
-
-	_selectData: function(curr_data, obj) {
+	//Previously _selectData
+	_selectYItem: function(curr_data, obj) {
+		var appearanceOverrides;
 		//create a highlight row
-		var self = this;
-		//create the related row rectangle
-		var highlight_rect = self.state.svg.append("svg:rect")
-			.attr("transform","translate(" + (self.state.axis_pos_list[1]) + "," + (self.state.yoffsetOver + 4) + ")")
-			.attr("x", 12)
-			.attr("y", function(d) {return self._getAxisData(curr_data).ypos; }) //rowid
-			.attr("class", "row_accent")
-			.attr("width", this.state.modelWidth - 4)
-			.attr("height", 12);
+		if (stickytooltip.isdocked){ return; }
 
-		this._resetLinks();
+		var self = this;
+		var info = self._getAxisData(curr_data);
 		var alabels = this.state.svg.selectAll("text.a_text." + curr_data);
 
-		var txt = this._getAxisData(curr_data).label;
+		var txt = info.label;
 		if (txt === undefined) {
 			txt = curr_data;
 		}
 		alabels.text(txt)
 			.style("font-weight", "bold")
 			.style("fill", "blue")
-			.on("click",function(d){
-				self._clickItem(self.state.serverURL,curr_data);
-			});
+			.html(info.label);
+
+		appearanceOverrides = self._createHoverBox(curr_data);
+
+		//create the related row rectangle
+		var highlight_rect = self.state.svg.append("svg:rect")
+			.attr("transform","translate(" + (self.state.axis_pos_list[1]) + "," + (self.state.yoffsetOver + 4) + ")")
+			.attr("x", 12)
+			.attr("y", function(d) {return info.ypos; }) //rowid
+			.attr("class", "row_accent")  
+			.attr("width", this.state.modelWidth - 4)
+			.attr("height", 11 * appearanceOverrides.offset);
+
 		this._highlightMatching(curr_data);
+	},
+
+	_createHoverBox: function(data){
+		var appearanceOverrides = {offset: 1, style: "model_accent"}; // may use this structure later
+		var info = this._getAxisData(data);
+		var type = info.type;
+		if (type === undefined){
+			type = this._getIDType(data);
+		}
+		var concept = this._getConceptId(data);
+		var hrefLink = "<a href=\"" + this.state.serverURL+"/" + type +"/"+ concept + "\" target=\"_blank\">" + info.label + "</a>";
+		var retData = "<strong>" + this._capitalizeString(type) + ": </strong> " + hrefLink + "<br/>";
+		
+		// for genotypes show the parent
+		if (type == 'genotype') {
+			retData += "<strong>Rank:</strong> " + info.rank;
+			if (typeof(info.parent) !== 'undefined' && info.parent !== null) {
+				var parentInfo = this.state.modelListHash.get(info.parent);
+				if (parentInfo !== null) {
+					var genehrefLink = "<a href=\"" + this.state.serverURL+"/" + parentInfo.type +"/"+ info.parent + "\" target=\"_blank\">" +  
+					parentInfo.label + "</a>";					
+					retData += "<br/><strong>Gene:</strong> " + genehrefLink;
+				}
+			}			
+		} else if (type == 'Phenotype'){
+			retData += "<strong>IC:</strong> " + info.IC.toFixed(2);
+		} else if (type == 'gene'){
+			retData += "<strong>Rank:</strong> " + info.rank;
+			// for gene and species mode only, show genotype link
+			if (this.state.targetSpeciesName != "Overview"){
+				var isExpanded = false;
+				var gtCached = this.state.loadedGenoTypesHash.get(concept);
+				if (gtCached !== null) { isExpanded = gtCached.expanded;}
+
+				//if found just return genotypes scores		
+				if (isExpanded) {
+					appearanceOverrides.offset = (gtCached.genoTypes.size() + (gtCached.genoTypes.size() *.26)+1);   // magic numbers for extending the highlight
+					//appearanceOverrides.style = "gene_accent";
+					retData = retData + "<br/><br/>Click button to <b>collapse</b> associated genotypes &nbsp;&nbsp;" +
+						"<button class=\"colapsebtn\" type=\"button\" onClick=\"self._collapseGenoTypes('" + concept + "')\">" +
+						"</button>";								
+				} else {
+				if (gtCached != null) {
+					retData = retData + "<br/><br/>Click button to <b>expand</b> <u>" + gtCached.genoTypes.size() + "</u> associated genotypes &nbsp;&nbsp;";
+				} else {
+					retData = retData + "<br/><br/>Click button to <b>expand</b> associated genotypes &nbsp;&nbsp;";
+				}
+				retData = retData + "<button class=\"expandbtn\" type=\"button\" onClick=\"self._expandGenotypes('" + concept + "')\"></button>";				
+				}
+			}
+		} else if (type == 'disease'){
+			retData += "<strong>Rank:</strong> " + info.rank;
+		}
+
+		// update the stub stickytool div dynamically to display
+		$("#sticky1").html(retData);
+
+		// not really good to do this but, we need to be able to override some appearance attributes		
+		return appearanceOverrides;
+	},
+
+	//I need to check to see if the modelData is an object. If so, get the model_id
+	_clearModelData: function(data,obj) {
+		this.state.svg.selectAll("#detail_content").remove();
+		this.state.svg.selectAll(".model_accent").remove();
+//		this.state.svg.selectAll(".gene_accent").remove();		
+		var text = "";
+		var id = this._getConceptId(data);
+		var label = self._getAxisData(data).label;
+		//Show that model label is no longer selected. Change styles to normal weight, black and short label
+		if (id !== "") {
+			text = this.state.svg.selectAll("text#" + id);
+			text.style("font-weight","normal");
+			text.style("text-decoration", "none");
+			text.style("fill", "black");
+			text.html(this._getShortLabel(label,self.state.labelCharDisplayCount));
+
+			this._deselectMatching(data);
+		}
 	},
 
 	_deselectData: function (curr_data) {
 		this.state.svg.selectAll(".row_accent").remove();
+//		this.state.svg.selectAll(".gene_accent").remove();		
 		this._resetLinks();
-		var axisLabel = this._getAxisData(curr_data).label;
+		var label = self._getAxisData(curr_data).label;
 		var alabels = this.state.svg.selectAll("text.a_text." + curr_data);
-		alabels.text(this._getShortLabel(axisLabel));
-		var data_text = this.state.svg.selectAll("text.a_text");
-		data_text.style("text-decoration", "none");
-		data_text.style("fill", "black");
+		alabels.style("text-decoration", "none");
+		alabels.style("fill", "black");
+		alabels.html(this._getShortLabel(label));
 
 		this._deselectMatching(curr_data);
 	},
@@ -2279,8 +2281,6 @@ function modelDataPointPrint(point) {
 			} else {
 				colorID = d.xID;
 			} 
-			// console.log('color id: ' + colorID);
-			// console.log(d);
 			return self._getColorForModelValue(self,self._getAxisData(colorID).species,d.value[self.state.selectedCalculation]);
 		});
 
@@ -3071,19 +3071,21 @@ function modelDataPointPrint(point) {
 				return self._getAxisData(d).ypos + 10;
 			})
 			.on("mouseover", function(d) {
-				self._selectData(d, d3.mouse(this));
+				self._selectYItem(d, d3.mouse(this));
 			})
 			.on("mouseout", function(d) {
 				self._deselectData(d, d3.mouse(this));
 			})
 			.attr("width", self.state.textWidth)
 			.attr("height", 50)
+			.attr("data-tooltip", "sticky1")
 			.text(function(d) {
 				var txt = self._getAxisData(d).label;
 				if (txt === undefined) {
 					txt = d;
 				}
-				return self._getShortLabel(txt);
+				txt = self._getShortLabel(txt);
+				return self._decodeHtmlEntity(txt);
 			});
 
 		this._buildUnmatchedPhenotypeDisplay();
@@ -3345,7 +3347,7 @@ function modelDataPointPrint(point) {
 			for (var g in genoTypeAssociations) {
 				_genotypeIds = _genotypeIds + genoTypeAssociations[g].genotype.id + "+";	
 				// fill a hashtable with the labels so we can quickly get back to them later
-				var tmpLabel = "&#187" + this._encodeHtmlEntity(genoTypeAssociations[g].genotype.label);   //TEMP CODE TO FIND THE GENOTYPE ON DISPLAY
+				var tmpLabel = "»" + this._encodeHtmlEntity(genoTypeAssociations[g].genotype.label);   //TEMP CODE TO FIND THE GENOTYPE ON DISPLAY
 				genotypeLabelHashtable.put(genoTypeAssociations[g].genotype.id, tmpLabel);
 			
 				ctr++;
@@ -3389,6 +3391,8 @@ function modelDataPointPrint(point) {
 						taxon: compareScores.b[idx].taxon.id,
 						opos: (modelInfo.d.opos + iPosition),  // bump up by one
 						pos: (modelInfo.d.pos + iPosition),
+						count: modelInfo.d.count,
+						sum: modelInfo.d.sum						
 						};
 
 				genoTypeList.put( this._getConceptId(compareScores.b[idx].id), gt);
@@ -3621,6 +3625,7 @@ function modelDataPointPrint(point) {
 	
 		if (str !== null) {
 		return str
+		.replace(/»/g, "&#187;")
 		.replace(/&/g, "&amp;")		
 		.replace(/</g, "&lt;")			
 		.replace(/>/g, "&gt;")			
