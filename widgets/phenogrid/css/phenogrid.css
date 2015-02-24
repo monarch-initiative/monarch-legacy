@@ -45,6 +45,14 @@ body {
 	fill-opacity: 0.05;
 }
 
+.gene_accent {
+	/*stroke:#ea763b;*/
+	stroke:#4CA092;
+	stroke-width: 2;
+	fill: #4CA092;
+	fill-opacity: 0.1;
+}
+
 .scroll_text {
 	font-size: 9px;
 }

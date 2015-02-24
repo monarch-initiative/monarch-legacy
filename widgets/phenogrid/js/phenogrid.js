@@ -1820,6 +1820,7 @@ function modelDataPointPrint(point) {
 		var info = self._getAxisData(data);
 		var displayCount = self._getYLimit();
 		var highlightOffset = 1;
+		var classStyle = "model_accent";  // default
 
 		// I don't know why I'm still seeing the un-processed concept id
 		// var classlabel = "text#" +this._getConceptId(modelData.model_id);
@@ -1869,7 +1870,8 @@ function modelDataPointPrint(point) {
 
 			//if found just return genotypes scores		
 			if (isExpanded) {
-				highlightOffset = (gtCached.genoTypes.size() + (gtCached.genoTypes.size() *.25)+1);   // magic numbers for extending the highlight
+				highlightOffset = (gtCached.genoTypes.size() + (gtCached.genoTypes.size() *.27)+1);   // magic numbers for extending the highlight
+				classStyle = "gene_accent";
 				retData = retData + "<br/><br/>Click button to <b>collapse</b> associated genotypes &nbsp;&nbsp;" +
 				"<button class=\"colapsebtn\" type=\"button\" onClick=\"self._collapseGenoTypes('" + concept + "')\">" +
 				"</button>";								
@@ -1892,8 +1894,8 @@ function modelDataPointPrint(point) {
 			.attr("transform","translate(" + (self.state.textWidth + self.state.xOffsetOver + 32) + "," + self.state.yoffsetOver + ")")
 			.attr("x", function(d) { return (self.state.xScale(data) - 1);})
 			.attr("y", self.state.yoffset + 2)
-			.attr("class", "model_accent")
-			.attr("width", 14 * highlightOffset)
+			.attr("class", classStyle)		// "model_accent"
+			.attr("width", 15 * highlightOffset)
 			.attr("height", (displayCount * self.state.heightOfSingleModel));
 	
 		
@@ -1919,6 +1921,7 @@ function modelDataPointPrint(point) {
 	_clearModelData: function(data,obj) {
 		this.state.svg.selectAll("#detail_content").remove();
 		this.state.svg.selectAll(".model_accent").remove();
+		this.state.svg.selectAll(".gene_accent").remove();		
 		var text = "";
 		var id = this._getConceptId(data);
 		var label = self._getAxisData(data).label;
@@ -3285,7 +3288,7 @@ function modelDataPointPrint(point) {
 		return newlist;
 	}, 
 	
-	// MKD begin-------------------------------------------------------------------------------
+
 	// expand the model with the associated genotypes
 	_expandGenotypes: function(curModel) {
 		var _genotypeIds = "", phenotypeIds = "", genoTypeAssociations;
@@ -3299,7 +3302,7 @@ function modelDataPointPrint(point) {
 		var cache = this.state.loadedGenoTypesHash.get(modelInfo.id);
 		
 		//if cached info not found need to try and get genotypes and scores
-		if (cache === null) {
+		if (cache == null) {
 		
 			console.log("Getting Gene " + modelInfo.id);
 
@@ -3372,11 +3375,10 @@ function modelDataPointPrint(point) {
 		} // cache == null
 
 		if (typeof (compareScores)  !== 'undefined') {		
-			console.log('exp: modelData (bef): ' + this.state.modelData.length);			
 			var iPosition = 1;
+			// rebuild the model list
 			for (var idx in compareScores.b) {
 					var newGtLabel = genotypeLabelHashtable.get(compareScores.b[idx].id); 
-
 					var gt = {
 						parent: modelInfo.id,
 						label: (newGtLabel != null?newGtLabel:compareScores.b[idx].label), // if label was null, then use previous fixed label
@@ -3387,8 +3389,6 @@ function modelDataPointPrint(point) {
 						taxon: compareScores.b[idx].taxon.id,
 						opos: (modelInfo.d.opos + iPosition),  // bump up by one
 						pos: (modelInfo.d.pos + iPosition),
-						count: modelInfo.d.count,
-						sum: modelInfo.d.sum
 						};
 
 				genoTypeList.put( this._getConceptId(compareScores.b[idx].id), gt);
@@ -3401,21 +3401,20 @@ function modelDataPointPrint(point) {
 				iPosition++;
 				}
 
-				console.log('exp: modelData (aft): ' + this.state.modelData.length);
 				// if the cache was originally null, then add 
 				// save the genotypes in hastable for later, store both the associated genotypes and raw data
-				if (cache === null) {					
+				if (cache == null) {					
 					var savedScores = {b: compareScores.b, genoTypes: genoTypeList, expanded: true};
 					this.state.loadedGenoTypesHash.put(modelInfo.id, savedScores);							
 				} else {
 					// update the expanded flag
-					cache.expanded = true;
-					this.state.loadedGenoTypesHash.remove(modelInfo.id);
-					this.state.loadedGenoTypesHash.put(modelInfo.id, cache);
+					var vals = this.state.loadedGenoTypesHash.get(modelInfo.id);
+					vals.expanded = true;	
+					vals.genoTypes = genoTypeList;				
+					this.state.loadedGenoTypesHash.put(modelInfo.id, vals);
 				}
 
 				console.log("Starting Insertion...");
-								
 				this.state.modelListHash = this._insertionModelList(modelInfo.d.pos+1, genoTypeList);
 
 				console.log("Rebuilding hashtables...");
@@ -3438,31 +3437,32 @@ function modelDataPointPrint(point) {
 		return success; 
 	},
 
+
 	// collapse the expanded genotypes for the current selected model
 	_collapseGenoTypes: function(curModel) {
 		var modelInfo = {id: curModel, d: this.state.modelListHash.get(curModel)};
-		console.log(this.state.modelListHash.size());
+
 		// check cached hashtable first 
 		var cachedScores = this.state.loadedGenoTypesHash.get(modelInfo.id);
 		
 		//if found just return genotypes scores
 
 		if (cachedScores != null && cachedScores.expanded) {
-			console.log('modeListHash (bef): ' +this.state.modelListHash.size());
-			this.state.modelListHash = this._removalFromModelList(curModel, cachedScores);
+
+			this.state.modelListHash = this._removalFromModelList(cachedScores);
 
 			this._rebuildModelHash();				
 			this.state.modelLength = this.state.modelListHash.size();
-			console.log('modeListHash (aft): ' +this.state.modelListHash.size());
+
 			this._setAxisValues();
 			this._processDisplay();
 
 			// update the expanded flag
-			cachedScores.expanded = false;
-			this.state.loadedGenoTypesHash.remove(modelInfo.id);
-			this.state.loadedGenoTypesHash.put(modelInfo.id, cachedScores);
+			var vals = this.state.loadedGenoTypesHash.get(modelInfo.id);
+			vals.expanded = false;
+			this.state.loadedGenoTypesHash.put(modelInfo.id, vals);
+			stickytooltip.closetooltip();
 		}
-		stickytooltip.closetooltip();
 	},
 	
 	// get all matching phenotypes for a model
@@ -3508,17 +3508,14 @@ function modelDataPointPrint(point) {
 	},
 	
 	// remove a models children from the model list
-	_removalFromModelList: function (curModel, removalList) {
+	_removalFromModelList: function (removalList) {
 		var newModelList = new Hashtable();
 		var newModelData = [];
 		var removalKeys = removalList.genoTypes.keys();
 		var sortedModelList= self._getSortedIDList(this.state.modelListHash.entries());
 		var removeEntries = removalList.genoTypes.entries();				
 
-		var currentModelInfo = this.state.modelListHash.get(curModel);
-
-		console.log('modelList (bef): ' + this.state.modelListHash.size());
-
+		// get the max position that was inserted
 		var maxInsertedPosition = 0;
 		for (var x in removeEntries){
 			var obj = removeEntries[x][1];
@@ -3526,9 +3523,6 @@ function modelDataPointPrint(point) {
 				maxInsertedPosition = obj.pos;
 			}			
 		}
-
-		console.log(removalKeys);
-		var oPos = currentModelInfo.opos+1, pos = currentModelInfo.pos+1;
 
 		for (var i in sortedModelList){
 			var entry = this.state.modelListHash.get(sortedModelList[i]);
@@ -3544,14 +3538,11 @@ function modelDataPointPrint(point) {
 			if (found === false) {
 				// need to reorder it back to original position
 				if (entry.pos > maxInsertedPosition) {
-					entry.opos = entry.opos - removalKeys.length;				//oPos++;  //entry.opos - maxInsertedPosition;		
 					entry.pos =  entry.pos - removalKeys.length;				//pos++;  //entry.pos - maxInsertedPosition;						
 				} 
 				newModelList.put(sortedModelList[i], entry);					
 			}
 		}
-
-		console.log('modelData (bef): ' + this.state.modelData.length);
 
 		// loop through to rebuild model data and remove any removals
 		for (var y = 0; y < this.state.modelData.length; y++) {
@@ -3562,12 +3553,8 @@ function modelDataPointPrint(point) {
 			}
 		}
 
-		console.log('removed ' + removalKeys.length);
-
 		this.state.modelData = newModelData;
 
-		console.log('modelData (aft): ' + this.state.modelData.length);
-		console.log('modelList (aft): ' + newModelList.size());
 		return newModelList;
 	},
 
