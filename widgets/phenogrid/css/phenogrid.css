@@ -383,5 +383,9 @@ body {
 }
 
 .faqdialog {
-	background: white;
+	background-color: white;
+}
+
+.dialogBG {
+	background-color: white;
 }

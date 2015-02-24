@@ -271,7 +271,7 @@ function modelDataPointPrint(point) {
 	// create a shortcut index for quick access to target species by name - to get index (position) and
 	// taxon
 	_createTargetSpeciesIndices: function() {
-		this.state.targetSpeciesByName={};
+		this.state.targetSpeciesByName = {};
 		for (var j in this.state.targetSpeciesList) {
 			// list starts as name, taxon pairs
 			var name = this.state.targetSpeciesList[j].name;
@@ -279,7 +279,7 @@ function modelDataPointPrint(point) {
 			var entry = {};
 			entry.index = j;
 			entry.taxon = taxon;
-			this.state.targetSpeciesByName[name]= entry;
+			this.state.targetSpeciesByName[name] = entry;
 		}
 	},
 
@@ -337,7 +337,7 @@ function modelDataPointPrint(point) {
 		this.element.empty();
 		this._createColorScale();
 
-		this.reDraw();
+		this._reDraw();
 	},
 
 	_loadSpinner: function() {
@@ -346,7 +346,7 @@ function modelDataPointPrint(point) {
 		element.appendTo(this.state.svgContainer);
 	},
 
-	reDraw: function() {
+	_reDraw: function() {
 		if (this.state.phenoLength !== 0 && this.state.filteredModelDataHash.length !== 0){
 			var displayCount = this._getYLimit();
 			this._setComparisonType();
@@ -448,11 +448,11 @@ function modelDataPointPrint(point) {
 
 					self.state.phenotypeData = self.state.origPhenotypeData.slice();
 					self._reset();
-					self.state.targetSpeciesName ="Overview";
+					self.state.targetSpeciesName = "Overview";
 					self._init();
 				});
 		}else{
-			html = "<h4 id='err'>"+msg+"</h4><br />";
+			html = "<h4 id='err'>" + msg + "</h4><br />";
 			this.element.append(html);
 		}
 	},
@@ -480,7 +480,7 @@ function modelDataPointPrint(point) {
 			.enter()
 			.append("rect")
 			.attr("id","gridline")
-			.attr("transform","translate(252, " + (this.state.yModelRegion + 5) +")")
+			.attr("transform","translate(252, " + (this.state.yModelRegion + 5) + ")")
 			.attr("x", function(d,i) { return d[1] * mWidth;})
 			.attr("y", function(d,i) { return d[0] * mHeight;})
 			.attr("class", "hour bordered deselected")
@@ -911,7 +911,7 @@ function modelDataPointPrint(point) {
 		this._filterDisplay();
 		this.state.unmatchedPhenotypes = this._getUnmatchedPhenotypes();
 		this.element.empty();
-		this.reDraw();
+		this._reDraw();
 	},
 
 	//given the full dataset, return a filtered dataset containing the
@@ -1406,12 +1406,13 @@ function modelDataPointPrint(point) {
 	_loadDataForModel: function(newModelData) {
 		//data is an array of all model matches
 		var data = newModelData.matches;
+		var curr_row, lcs, new_row, species;
 		if (typeof(data) !== 'undefined' && data.length > 0) {
-			var species = newModelData.taxon;
+			species = newModelData.taxon;
 
 			for (var idx in data) {
-				var curr_row = data[idx],
-				lcs = this._normalizeIC(curr_row),
+				curr_row = data[idx];
+				lcs = this._normalizeIC(curr_row);
 				new_row = {"id": this._getConceptId(curr_row.a.id) + "_" + this._getConceptId(curr_row.b.id) + "_" + this._getConceptId(newModelData.id), 
 					"label_a" : curr_row.a.label, 
 					"id_a" : this._getConceptId(curr_row.a.id), 
@@ -2469,7 +2470,7 @@ function modelDataPointPrint(point) {
 		} else{
 			speciesList.push(self.state.targetSpeciesName);
 		}
-		var translation = "translate(" + (self.state.textWidth + self.state.xOffsetOver + 30) +"," + (self.state.yoffset + 10) + ")";
+		var translation = "translate(" + (self.state.textWidth + self.state.xOffsetOver + 30) + "," + (self.state.yoffset + 10) + ")";
 
 		var xPerModel = self.state.modelWidth/speciesList.length;
 		var species = self.state.svg.selectAll("#specieslist")
@@ -2520,12 +2521,13 @@ function modelDataPointPrint(point) {
 				maxHeight: 300,
 				minWidth: 400,
 				resizable: false,
-				draggable:true,
+				draggable: true,
+				dialogClass: "dialogBG",
 				position: { my: "top", at: "top+25%",of: "#svg_area"},
 				title: 'Phenogrid Notes'});
 		$dialog.html(text);
 		$dialog.dialog('open');
-		self.state.tooltips[name]=text;
+		self.state.tooltips[name] = text;
 	},
 
 	/**
@@ -2973,9 +2975,15 @@ function modelDataPointPrint(point) {
 		var full = [];
 		var partial = [];
 		var unmatchedset = [];
+		var tempObject = {"id": 0, "observed": "positive"};
 
 		for (var i in fullset) {
-			full.push(fullset[i]);
+			if (typeof(fullset[i].id) === 'undefined'){
+				tempObject.id = fullset[i];
+				full.push(tempObject);
+			} else {
+				full.push(fullset[i]);
+			}
 		}
 
 		for (var j in partialset){
@@ -2989,6 +2997,7 @@ function modelDataPointPrint(point) {
 				unmatchedset.push(full[k]);
 			}
 		}
+
 		var dupArray = [];
 		dupArray.push(unmatchedset[0]);	
 		//check for dups
@@ -3006,15 +3015,16 @@ function modelDataPointPrint(point) {
 		if (dupArray[0] === undefined) {
 			dupArray = [];
 		}
-
 		return dupArray;
 	},
 
+	//TOO SLOW TO USE
 	_getUnmatchedLabels: function() {
 		var unmatchedLabels = [];
 		for (var i in this.state.unmatchedPhenotypes){
+			console.log(this.state.unmatchedPhenotypes[i].id);
 			jQuery.ajax({
-				url : this.state.serverURL + "/phenotype/" + this.state.unmatchedPhenotypes[i] + ".json",
+				url : this.state.serverURL + "/phenotype/" + this.state.unmatchedPhenotypes[i].id + ".json",
 				async : false,
 				dataType : 'json',
 				success : function(data) {
@@ -3028,6 +3038,7 @@ function modelDataPointPrint(point) {
 		return unmatchedLabels;
 	},
 
+
 	_buildUnmatchedPhenotypeDisplay: function() {
 		var optionhtml;
 		var prebl = $("#prebl");
@@ -3038,8 +3049,7 @@ function modelDataPointPrint(point) {
 		}
 		prebl.empty();
 
-		if (this.state.unmatchedPhenotypes !== undefined && this.state.unmatchedPhenotypes.length > 0){
-			//var phenotypes = this._showUnmatchedPhenotypes();		
+		if (this.state.unmatchedPhenotypes !== undefined && this.state.unmatchedPhenotypes.length > 0){	
 			optionhtml = "<div class='clearfix'><form id='matches'><input type='checkbox' name='unmatched' value='unmatched' >&nbsp;&nbsp;View Unmatched Phenotypes<br /><form><div id='clear'></div>";
 			var phenohtml = this._buildUnmatchedPhenotypeTable();
 			optionhtml = optionhtml + "<div id='unmatched' style='display:none;'>" + phenohtml + "</div></div>";
@@ -3065,20 +3075,25 @@ function modelDataPointPrint(point) {
 	_buildUnmatchedPhenotypeTable: function(){
 		var self = this;
 		var columns = 4;
-		var outer1 = "<table id='phentable'>",
-		outer2 = "</table>",
-		inner = "";
+		var outer1 = "<table id='phentable'>";
+		var outer2 = "</table>";
+		var inner = "";
 
 		var unmatched = self.state.unmatchedPhenotypes;
 		var text = "";
 		var i = 0;
+		var label, id, url_origin;
 		while (i < unmatched.length) {
 			inner += "<tr>"; 
 			text = "";
 			for (var j = 0; j < columns; j++){
-				var label = unmatched[i].label;
-				var id = self._getConceptId(unmatched[i++].id);
-				var url_origin = self.document[0].location.origin;
+				id = self._getConceptId(unmatched[i++].id);
+				if (unmatched[i - 1].label !== undefined){
+					label = unmatched[i - 1].label;
+				} else {
+					label = unmatched[i - 1].id;
+				}
+				url_origin = self.document[0].location.origin;
 				text += "<td><a href='" + url_origin + "/phenotype/" + id + "' target='_blank'>" + label + "</a></td>";
 				if (i == unmatched.length) {
 					break;
@@ -3131,10 +3146,10 @@ function modelDataPointPrint(point) {
 		var pheno;
 		for (var i in phenotypelist) {
 			pheno = phenotypelist[i];
-			if (typeof pheno ==='string') {
+			if (typeof pheno === 'string') {
 				newlist.push(pheno);
 			}
-			if (pheno.observed==="positive") {
+			if (pheno.observed === "positive") {
 				newlist.push(pheno.id);
 			}
 		}
