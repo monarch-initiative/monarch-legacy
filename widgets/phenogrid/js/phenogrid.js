@@ -1758,7 +1758,6 @@ function modelDataPointPrint(point) {
 		var self = this;
 		var dataType = self._getIDType(curr_data);
 		var label, alabels, shortTxt, shrinkSize;
-
 		if (dataType === "Phenotype"){
 			if (this.state.invertAxis){
 				alabels = this.state.svg.selectAll("text.a_text");
@@ -1794,7 +1793,7 @@ function modelDataPointPrint(point) {
 		for (var j in alabels[0]){
 			label = this._getAxisData(alabels[0][j].id).label;
 			shortTxt = this._getShortLabel(label,shrinkSize);
-			if (alabels[0][j].innerHTML == label){
+			if (alabels[0][j].innerHTML == label){	
 				alabels[0][j].style.fill = "black";
 				alabels[0][j].innerHTML = shortTxt;
 			}
@@ -1811,7 +1810,6 @@ function modelDataPointPrint(point) {
 	},
 
 	_selectXItem: function(data, obj) {
-
 		// HACK: this temporarily 'disables' the mouseover when the stickytooltip is docked
 		// that way the user doesn't accidently hover another label which caused tooltip to be refreshed
 		if (stickytooltip.isdocked){ return; }
@@ -1857,6 +1855,7 @@ function modelDataPointPrint(point) {
 		self._highlightMatching(data);
 	},
 
+	//Previously _selectData
 	_selectYItem: function(curr_data, obj) {
 		//create a highlight row
 		if (stickytooltip.isdocked){ return; }
@@ -1890,12 +1889,17 @@ function modelDataPointPrint(point) {
 
 	_createHoverBox: function(data){
 		var info = this._getAxisData(data);
+		var type = info.type;
+		if (type === undefined){
+			type = this._getIDType(data);
+		}
 		var concept = this._getConceptId(data);
-		var hrefLink = "<a href=\"" + this.state.serverURL+"/" + info.type +"/"+ concept + "\" target=\"_blank\">" + info.label + "</a>";
-		var retData = "<strong>" + this._capitalizeString(info.type) + ": </strong> " + hrefLink + "<br/><strong>Rank:</strong> " + info.rank;
+		var hrefLink = "<a href=\"" + this.state.serverURL+"/" + type +"/"+ concept + "\" target=\"_blank\">" + info.label + "</a>";
+		var retData = "<strong>" + this._capitalizeString(type) + ": </strong> " + hrefLink + "<br/>";
 		
 		// for genotypes show the parent
-		if (info.type == 'genotype') {
+		if (type == 'genotype') {
+			retData += "<strong>Rank:</strong> " + info.rank;
 			if (typeof(info.parent) !== 'undefined' && info.parent !== null) {
 				var parentInfo = this.state.modelListHash.get(info.parent);
 				if (parentInfo !== null) {
@@ -1904,29 +1908,33 @@ function modelDataPointPrint(point) {
 					retData += "<br/><strong>Gene:</strong> " + genehrefLink;
 				}
 			}			
-		}
-		
-		// for gene and species mode only, show genotype link
-		if (info.type == 'gene' && this.state.targetSpeciesName != "Overview") {	
-			
-			// check the hashtable to see if we've loaded this
-			var isExpanded = false;
-			var gtCached = this.state.loadedGenoTypesHash.get(concept);
-			if (gtCached !== null) { isExpanded = gtCached.expanded;}
+		}else if (type == 'Phenotype'){
+			retData += "<strong>IC:</strong> " + info.IC.toFixed(2);
+		}else if (type == 'gene'){
+			retData += "<strong>Rank:</strong> " + info.rank;
+			// for gene and species mode only, show genotype link
+			if (this.state.targetSpeciesName != "Overview"){
+				var isExpanded = false;
+				var gtCached = this.state.loadedGenoTypesHash.get(concept);
+				if (gtCached !== null) { isExpanded = gtCached.expanded;}
 
-			//if found just return genotypes scores		
-			if (isExpanded) {
-//				retData = retData + "<br/><strong># of associated genotypes:</strong> &nbsp;" + gtscores.size();				
-				//highlightOffset = (gtCached.genoTypes.length + (gtCached.genoTypes.length *.20)+1);   // magic numbers for extending the highlight
-				retData = retData + "<br/><br/>Click button to <b>collapse</b> associated genotypes &nbsp;&nbsp;" +
-				"<button class=\"colapsebtn\" type=\"button\" onClick=\"self._collapseGenoTypes('" + concept + "')\">" +
-				"</button>";								
-			} else {
-				retData = retData + "<br/><br/>Click button to <b>expand</b> associated genotypes &nbsp;&nbsp;" +
-				"<button class=\"expandbtn\" type=\"button\" onClick=\"self._expandGenotypes('" + concept + "')\">" +
-				"</button>";				
+				//if found just return genotypes scores		
+				if (isExpanded) {
+	//				retData = retData + "<br/><strong># of associated genotypes:</strong> &nbsp;" + gtscores.size();				
+					//highlightOffset = (gtCached.genoTypes.length + (gtCached.genoTypes.length *.20)+1);   // magic numbers for extending the highlight
+					retData = retData + "<br/><br/>Click button to <b>collapse</b> associated genotypes &nbsp;&nbsp;" +
+					"<button class=\"colapsebtn\" type=\"button\" onClick=\"self._collapseGenoTypes('" + concept + "')\">" +
+					"</button>";								
+				} else {
+					retData = retData + "<br/><br/>Click button to <b>expand</b> associated genotypes &nbsp;&nbsp;" +
+					"<button class=\"expandbtn\" type=\"button\" onClick=\"self._expandGenotypes('" + concept + "')\">" +
+					"</button>";				
+				}
 			}
+		}else if (type == 'disease'){
+			retData += "<strong>Rank:</strong> " + info.rank;
 		}
+
 		// update the stub stickytool div dynamically to display
 		$("#sticky1").html(retData);
 	},
@@ -1938,15 +1946,14 @@ function modelDataPointPrint(point) {
 		var text = "";
 		var id = this._getConceptId(data);
 		var label = self._getAxisData(data).label;
-
 		//Show that model label is no longer selected. Change styles to normal weight, black and short label
 		if (id !== "") {
 			text = this.state.svg.selectAll("text#" + id);
 			text.style("font-weight","normal");
 			text.style("text-decoration", "none");
 			text.style("fill", "black");
-
 			text.html(this._getShortLabel(label,self.state.labelCharDisplayCount));
+
 			this._deselectMatching(data);
 		}
 	},
@@ -1954,12 +1961,11 @@ function modelDataPointPrint(point) {
 	_deselectData: function (curr_data) {
 		this.state.svg.selectAll(".row_accent").remove();
 		this._resetLinks();
-		var axisLabel = this._getAxisData(curr_data).label;
+		var label = self._getAxisData(curr_data).label;
 		var alabels = this.state.svg.selectAll("text.a_text." + curr_data);
-		alabels.text(this._getShortLabel(axisLabel));
-		var data_text = this.state.svg.selectAll("text.a_text");
-		data_text.style("text-decoration", "none");
-		data_text.style("fill", "black");
+		alabels.style("text-decoration", "none");
+		alabels.style("fill", "black");
+		alabels.html(this._getShortLabel(label));
 
 		this._deselectMatching(curr_data);
 	},
@@ -2264,8 +2270,6 @@ function modelDataPointPrint(point) {
 			} else {
 				colorID = d.xID;
 			} 
-			// console.log('color id: ' + colorID);
-			// console.log(d);
 			return self._getColorForModelValue(self,self._getAxisData(colorID).species,d.value[self.state.selectedCalculation]);
 		});
 
@@ -3061,11 +3065,11 @@ function modelDataPointPrint(point) {
 			.attr("data-tooltip", "sticky1")
 			.text(function(d) {
 				var txt = self._getAxisData(d).label;
-				txt = self._decodeHtmlEntity(txt);
 				if (txt === undefined) {
 					txt = d;
 				}
-				return self._getShortLabel(txt);
+				txt = self._getShortLabel(txt);
+				return self._decodeHtmlEntity(txt);
 			});
 
 		this._buildUnmatchedPhenotypeDisplay();
@@ -3327,7 +3331,7 @@ function modelDataPointPrint(point) {
 			for (var g in genoTypeAssociations) {
 				_genotypeIds = _genotypeIds + genoTypeAssociations[g].genotype.id + "+";	
 				// fill a hashtable with the labels so we can quickly get back to them later
-				var tmpLabel = "&#187" + this._encodeHtmlEntity(genoTypeAssociations[g].genotype.label);   //TEMP CODE TO FIND THE GENOTYPE ON DISPLAY
+				var tmpLabel = "»" + this._encodeHtmlEntity(genoTypeAssociations[g].genotype.label);   //TEMP CODE TO FIND THE GENOTYPE ON DISPLAY
 				genotypeLabelHashtable.put(genoTypeAssociations[g].genotype.id, tmpLabel);
 			
 				ctr++;
@@ -3619,6 +3623,7 @@ function modelDataPointPrint(point) {
 	
 		if (str !== null) {
 		return str
+		.replace(/»/g, "&#187;")
 		.replace(/&/g, "&amp;")		
 		.replace(/</g, "&lt;")			
 		.replace(/>/g, "&gt;")			
