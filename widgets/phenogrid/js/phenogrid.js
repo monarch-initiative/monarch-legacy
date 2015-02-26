@@ -1959,6 +1959,7 @@ function modelDataPointPrint(point) {
 		return appearanceOverrides;
 	},
 
+	//Previously _deselectData + _clearModelData
 	_deselectData: function (data) {
 		this.state.svg.selectAll(".row_accent").remove();
 		this.state.svg.selectAll("#detail_content").remove();
@@ -3090,6 +3091,9 @@ function modelDataPointPrint(point) {
 			.attr("width", self.state.textWidth)
 			.attr("height", 50)
 			.attr("data-tooltip", "sticky1")
+			.style("fill", function(d){
+				return self._getExpandStyling(d);
+			})
 			.text(function(d) {
 				var txt = self._getAxisData(d).label;
 				if (txt === undefined) {
