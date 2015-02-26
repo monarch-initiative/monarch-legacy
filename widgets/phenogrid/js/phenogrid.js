@@ -1918,6 +1918,20 @@ function modelDataPointPrint(point) {
 			}			
 		} else if (type == 'Phenotype'){
 			retData += "<strong>IC:</strong> " + info.IC.toFixed(2);
+			var hpoExpand = false;
+			//var hpoCached = this.state.hpoCacheHash.get(concept);
+			var hpoCached = null;
+			if (hpoCached !== null){
+				hpoExpand = true;
+			}
+			if (hpoExpand){
+				retData += "<br/><br/>Click button to <b>collapse</b> HPO info &nbsp;&nbsp;";
+				retData += "<button class=\"collapsebtn\" type=\"button\" onClick=\"self._collapseHPO('" + concept + "')\"></button>";
+
+			} else {
+				retData += "<br/><br/>Click button to <b>expand</b> HPO info &nbsp;&nbsp;";
+				retData += "<button class=\"expandbtn\" type=\"button\" onClick=\"self._expandHPO('" + concept + "')\"></button>";
+			}
 		} else if (type == 'gene'){
 			retData += "<strong>Rank:</strong> " + info.rank;
 			// for gene and species mode only, show genotype link
@@ -1936,16 +1950,15 @@ function modelDataPointPrint(point) {
 					 	"<br/>Overall total associated genotypes: " + href + 
 					 	"<br>Number of expanded genotypes: " + gtCached.genoTypes.size() +
 						"<br/><br/>Click button to <b>collapse</b> associated genotypes &nbsp;&nbsp;" +
-						"<button class=\"colapsebtn\" type=\"button\" onClick=\"self._collapseGenoTypes('" + concept + "')\">" +
-						"</button>";								
+						"<button class=\"collapsebtn\" type=\"button\" onClick=\"self._collapseGenoTypes('" + concept + "')\">" +
+						"</button>";
 				} else {
-				if (gtCached !== null) {
-					retData += "<br/><br/>Click button to <b>expand</b> <u>" + gtCached.genoTypes.size() +
-					 		   "</u> associated genotypes &nbsp;&nbsp;";
-				} else {
-					retData += "<br/><br/>Click button to <b>expand</b> associated genotypes &nbsp;&nbsp;";
-				}
-				retData += "<button class=\"expandbtn\" type=\"button\" onClick=\"self._expandGenotypes('" + concept + "')\"></button>";				
+					if (gtCached !== null) {
+						retData += "<br/><br/>Click button to <b>expand</b> <u>" + gtCached.genoTypes.size() + "</u> associated genotypes &nbsp;&nbsp;";
+					} else {
+						retData += "<br/><br/>Click button to <b>expand</b> associated genotypes &nbsp;&nbsp;";
+					}
+					retData += "<button class=\"expandbtn\" type=\"button\" onClick=\"self._expandGenotypes('" + concept + "')\"></button>";				
 				}
 			}
 		} else if (type == 'disease'){
@@ -3305,157 +3318,150 @@ function modelDataPointPrint(point) {
 		return newlist;
 	}, 
 	
+	_expandHPO: function(id){
+
+	},
+
+	_collapseHPO: function(id){
+
+	},
 
 	// expand the model with the associated genotypes
 	_expandGenotypes: function(curModel) {
-		var _genotypeIds = "", phenotypeIds = "", genoTypeAssociations;
+		var genotypeIds = "", phenotypeIds = "", genoTypeAssociations;
 		var genotypeLabelHashtable = new Hashtable();
 		var success = false;
-		var genoTypeList = new Hashtable();		
+		var genoTypeList = new Hashtable();
 		var modelInfo = {id: curModel, d: this.state.modelListHash.get(curModel)};
 		var compareScores;
 
 		// check cached hashtable first 
 		var cache = this.state.loadedGenoTypesHash.get(modelInfo.id);
-		
+
 		//if cached info not found need to try and get genotypes and scores
 		if (cache === null) {
-		
 			console.log("Getting Gene " + modelInfo.id);
 
 			// go get the assocated genotypes	
-			var url = this.state.serverURL+"/gene/"+ modelInfo.id + ".json";		
-			
-//			console.profile("gene call");
+			var url = this.state.serverURL + "/gene/ "+ modelInfo.id + ".json";
 			var res = this._ajaxLoadData(modelInfo.d.species,url);
-//			console.profileEnd();
 
 			if (typeof (res) == 'undefined') { 
-				stickytooltip.closetooltip();		
+				stickytooltip.closetooltip();
 				alert("No gene info found");
 				return success; 
 			}
-			
-			genoTypeAssociations = res.genotype_associations;
-			
-			if (genoTypeAssociations !== null && genoTypeAssociations.length > 5) {
-				console.log("There are " + genoTypeAssociations.length +  " associated genotypes");
-			}
-		
-			var assocPhenotypes = this._getMatchingPhenotypes(modelInfo.id);
 
+			genoTypeAssociations = res.genotype_associations;
+
+			if (genoTypeAssociations !== null && genoTypeAssociations.length > 5) {
+				console.log("There are " + genoTypeAssociations.length + " associated genotypes");
+			}
+
+			var assocPhenotypes = this._getMatchingPhenotypes(modelInfo.id);
 			var ctr = 0;
+
 			// assemble the phenotype ids 
 			for (var p in assocPhenotypes) {
-				phenotypeIds += assocPhenotypes[p].id + "+";		
-			
+				phenotypeIds += assocPhenotypes[p].id + "+";
 				ctr++;
-			
+
 				// limit number of genotypes do display based on internalOptions
 				if (ctr > this.state.phenoCompareLimit && ctr < assocPhenotypes.length) break;  
 			}
 			// truncate the last + off, if there
 			if (phenotypeIds.slice(-1) == '+') {
-				phenotypeIds = phenotypeIds.slice(0, -1);	
+				phenotypeIds = phenotypeIds.slice(0, -1);
 			}
-		
+
 			ctr = 0;
 			// assemble a list of genotypes
 			for (var g in genoTypeAssociations) {
-				_genotypeIds = _genotypeIds + genoTypeAssociations[g].genotype.id + "+";	
+				genotypeIds = genotypeIds + genoTypeAssociations[g].genotype.id + "+";
 				// fill a hashtable with the labels so we can quickly get back to them later
 				var tmpLabel = this._encodeHtmlEntity(genoTypeAssociations[g].genotype.label);   // "»" + TEMP CODE TO FIND THE GENOTYPE ON DISPLAY
 				genotypeLabelHashtable.put(genoTypeAssociations[g].genotype.id, tmpLabel);
-			
 				ctr++;
-			
+
 				// limit number of genotypes do display based on internalOptions 
 				if (ctr > this.state.genotypeExpandLimit && ctr < genoTypeAssociations.length) break;  
 			}
-		
-			// truncate the last + off, if there
-			if (_genotypeIds.slice(-1) == '+') {
-				_genotypeIds = _genotypeIds.slice(0, -1);	
-			}
-			
-			// call compare
-			url = this.state.serverURL + "/compare/" + phenotypeIds + "/" + _genotypeIds;
-//			console.log("Comparing " + url);	
-			console.profile("compare call");
-			compareScores = this._ajaxLoadData(modelInfo.d.species,url);
-//			console.profileEnd();
-			console.log("Done with ajaxLoadData...");	
 
+			// truncate the last + off, if there
+			if (genotypeIds.slice(-1) == '+') {
+				genotypeIds = genotypeIds.slice(0, -1);
+			}
+
+			// call compare
+			url = this.state.serverURL + "/compare/" + phenotypeIds + "/" + genotypeIds;;
+			compareScores = this._ajaxLoadData(modelInfo.d.species,url);
 		} else {
 			compareScores = cache;
 		} // cache == null
 
-		if (typeof (compareScores)  !== 'undefined') {		
+		if (typeof (compareScores)  !== 'undefined') {
 			var iPosition = 1;
 			// rebuild the model list with genotypes
 			for (var idx in compareScores.b) {
-					var newGtLabel = genotypeLabelHashtable.get(compareScores.b[idx].id); 
-					var gt = {
-						parent: modelInfo.id,
-						label: (newGtLabel !== null?newGtLabel:compareScores.b[idx].label), // if label was null, then use previous fixed label
-						score: compareScores.b[idx].score.score, 
-						species: modelInfo.d.species,
-						rank: compareScores.b[idx].score.rank,
-						type: "genotype",
-						taxon: compareScores.b[idx].taxon.id,
-						opos: (modelInfo.d.opos + iPosition),  // bump up by one
-						pos: (modelInfo.d.pos + iPosition),
-						count: modelInfo.d.count,
-						sum: modelInfo.d.sum						
-						};
+			var newGtLabel = genotypeLabelHashtable.get(compareScores.b[idx].id); 
+			var gt = {
+			parent: modelInfo.id,
+			label: (newGtLabel !== null?newGtLabel:compareScores.b[idx].label), // if label was null, then use previous fixed label
+			score: compareScores.b[idx].score.score, 
+			species: modelInfo.d.species,
+			rank: compareScores.b[idx].score.rank,
+			type: "genotype",
+			taxon: compareScores.b[idx].taxon.id,
+			opos: (modelInfo.d.opos + iPosition),  // bump up by one
+			pos: (modelInfo.d.pos + iPosition),
+			count: modelInfo.d.count,
+			sum: modelInfo.d.sum
+			};
 
-				genoTypeList.put( this._getConceptId(compareScores.b[idx].id), gt);
-				
-				// Hack: need to fix the label because genotypes have IDs as labels
-				compareScores.b[idx].label = genotypeLabelHashtable.get(compareScores.b[idx].id);
-				
-				// load these into model data
-				this._loadDataForModel(compareScores.b[idx]);
-				iPosition++;
-				}
+			genoTypeList.put( this._getConceptId(compareScores.b[idx].id), gt);
 
-				// if the cache was originally null, then add 
-				// save the genotypes in hastable for later, store both the associated genotypes and raw data
-				if (cache === null) {					
-					var savedScores = {b: compareScores.b, genoTypes: genoTypeList, expanded: true, 
-										totalAssocCount: genoTypeAssociations.length};
-					this.state.loadedGenoTypesHash.put(modelInfo.id, savedScores);							
-				} else {
-					// update the expanded flag
-					var vals = this.state.loadedGenoTypesHash.get(modelInfo.id);
-					vals.expanded = true;	
-					vals.genoTypes = genoTypeList;				
-					this.state.loadedGenoTypesHash.put(modelInfo.id, vals);
-				}
+			// Hack: need to fix the label because genotypes have IDs as labels
+			compareScores.b[idx].label = genotypeLabelHashtable.get(compareScores.b[idx].id);
 
-				console.log("Starting Insertion...");
-				this.state.modelListHash = this._insertionModelList(modelInfo.d.pos, genoTypeList);
-
-				console.log("Rebuilding hashtables...");
-				this._rebuildModelHash();
-				
-				this.state.modelLength = this.state.modelListHash.size();
-				this._setAxisValues();
-
-				console.log("updating display...");
-				this._processDisplay(); //'updateModel');
-
-				success = true;
-
-				
-			} else {
-				console.log('No compare scores found');
+			// load these into model data
+			this._loadDataForModel(compareScores.b[idx]);
+			iPosition++;
 			}
-					
-		stickytooltip.closetooltip();		
+
+			// if the cache was originally null, then add 
+			// save the genotypes in hastable for later, store both the associated genotypes and raw data
+			if (cache === null) {
+				var savedScores = {b: compareScores.b, genoTypes: genoTypeList, expanded: true, 
+				totalAssocCount: genoTypeAssociations.length};
+				this.state.loadedGenoTypesHash.put(modelInfo.id, savedScores);
+			} else {
+				// update the expanded flag
+				var vals = this.state.loadedGenoTypesHash.get(modelInfo.id);
+				vals.expanded = true;
+				vals.genoTypes = genoTypeList;
+				this.state.loadedGenoTypesHash.put(modelInfo.id, vals);
+			}
+
+			console.log("Starting Insertion...");
+			this.state.modelListHash = this._insertionModelList(modelInfo.d.pos, genoTypeList);
+
+			console.log("Rebuilding hashtables...");
+			this._rebuildModelHash();
+
+			this.state.modelLength = this.state.modelListHash.size();
+			this._setAxisValues();
+
+			console.log("updating display...");
+			this._processDisplay(); //'updateModel');
+
+			success = true;
+		} else {
+			console.log('No compare scores found');
+		}
+
+		stickytooltip.closetooltip();
 		return success; 
 	},
-
 
 	// collapse the expanded genotypes for the current selected model
 	_collapseGenoTypes: function(curModel) {
@@ -3463,14 +3469,12 @@ function modelDataPointPrint(point) {
 
 		// check cached hashtable first 
 		var cachedScores = this.state.loadedGenoTypesHash.get(modelInfo.id);
-		
+
 		//if found just return genotypes scores
-
 		if (cachedScores !== null && cachedScores.expanded) {
-
 			this.state.modelListHash = this._removalFromModelList(cachedScores);
 
-			this._rebuildModelHash();				
+			this._rebuildModelHash();
 			this.state.modelLength = this.state.modelListHash.size();
 
 			this._setAxisValues();

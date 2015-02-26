@@ -403,7 +403,7 @@ body {
 	background-color: white;
 }
 
-.colapsebtn {
+.collapsebtn {
     padding: 0;
     border: none;
     background: transparent url('/widgets/phenogrid/image/CollapseAllIcon.png') no-repeat;
