@@ -137,8 +137,8 @@ function modelDataPointPrint(point) {
 		selectedSort: "Frequency",
 		targetSpeciesName : "Overview",
 		refSpecies: "Homo sapiens",
-		genotypeExpandLimit: 5, // sets the limit for the number of genotype expanded on grid
-		phenoCompareLimit: 5, // sets the limit for the number of phenotypes used for genotype expansion
+		genotypeExpandLimit: 10, // sets the limit for the number of genotype expanded on grid
+		phenoCompareLimit: 10, // sets the limit for the number of phenotypes used for genotype expansion
 		targetSpeciesList : [{ name: "Homo sapiens", taxon: "9606"},
 			{ name: "Mus musculus", taxon: "10090" },
 			{ name: "Danio rerio", taxon: "7955"},
@@ -1784,7 +1784,7 @@ function modelDataPointPrint(point) {
 				label = this._getAxisData(blabels[0][i].id).label;
 				shortTxt = this._getShortLabel(label,self.state.labelCharDisplayCount);
 				if (blabels[0][i].innerHTML == label){
-					blabels[0][i].style.fill = "black";
+					blabels[0][i].style.fill = this._getExpandStyling(curr_data); //"black";
 					blabels[0][i].innerHTML = shortTxt;
 				}
 			}
@@ -1794,7 +1794,7 @@ function modelDataPointPrint(point) {
 			label = this._getAxisData(alabels[0][j].id).label;
 			shortTxt = this._getShortLabel(label,shrinkSize);
 			if (alabels[0][j].innerHTML == label){	
-				alabels[0][j].style.fill = "black";
+				alabels[0][j].style.fill = this._getExpandStyling(curr_data); //"black";
 				alabels[0][j].innerHTML = shortTxt;
 			}
 		}
@@ -1833,7 +1833,7 @@ function modelDataPointPrint(point) {
 		var highlight_rect = self.state.svg.append("svg:rect")
 			.attr("transform","translate(" + (self.state.textWidth + self.state.xOffsetOver + 32) + "," + self.state.yoffsetOver + ")")
 			.attr("x", function(d) { return (self.state.xScale(data) - 1);})
-			.attr("y", self.state.yoffset + 2)
+			.attr("y", self.state.yoffset +2) 
 			.attr("class", "model_accent")
 			.attr("width", 15 * appearanceOverrides.offset)
 			.attr("height", (displayCount * self.state.heightOfSingleModel));
@@ -1890,14 +1890,14 @@ function modelDataPointPrint(point) {
 	},
 
 	_createHoverBox: function(data){
-		var appearanceOverrides = {offset: 1, style: "model_accent"}; // may use this structure later
+		var appearanceOverrides = {offset: 1, style: "model_accent"}; // may use this structure later, offset is only used now
 		var info = this._getAxisData(data);
 		var type = info.type;
 		if (type === undefined){
 			type = this._getIDType(data);
 		}
 		var concept = this._getConceptId(data);
-		var hrefLink = "<a href=\"" + this.state.serverURL+"/" + type +"/"+ concept + "\" target=\"_blank\">" + info.label + "</a>";
+		var hrefLink = "<a href=\"" + this.state.serverURL+"/" + type +"/"+ concept.replace("_", ":") + "\" target=\"_blank\">" + info.label + "</a>";
 		var retData = "<strong>" + this._capitalizeString(type) + ": </strong> " + hrefLink + "<br/>";
 		
 		// for genotypes show the parent
@@ -1906,7 +1906,7 @@ function modelDataPointPrint(point) {
 			if (typeof(info.parent) !== 'undefined' && info.parent !== null) {
 				var parentInfo = this.state.modelListHash.get(info.parent);
 				if (parentInfo !== null) {
-					var genehrefLink = "<a href=\"" + this.state.serverURL+"/" + parentInfo.type +"/"+ info.parent + "\" target=\"_blank\">" +  
+					var genehrefLink = "<a href=\"" + this.state.serverURL+"/" + parentInfo.type +"/"+ info.parent.replace("_", ":")+ "\" target=\"_blank\">" +  
 					parentInfo.label + "</a>";					
 					retData += "<br/><strong>Gene:</strong> " + genehrefLink;
 				}
@@ -1923,18 +1923,24 @@ function modelDataPointPrint(point) {
 
 				//if found just return genotypes scores		
 				if (isExpanded) {
-					appearanceOverrides.offset = (gtCached.genoTypes.size() + (gtCached.genoTypes.size() *.26)+1);   // magic numbers for extending the highlight
+					appearanceOverrides.offset = (gtCached.genoTypes.size() + (gtCached.genoTypes.size() *.30));   // magic numbers for extending the highlight
 					//appearanceOverrides.style = "gene_accent";
-					retData = retData + "<br/><br/>Click button to <b>collapse</b> associated genotypes &nbsp;&nbsp;" +
+					var href = "<a href=\"" + this.state.serverURL+"/gene/" + concept + "\" target=\"_blank\">" +  
+					gtCached.totalAssocCount + "</a>";
+					retData +=  
+					 	"<br/>Overall total associated genotypes: " + href + 
+					 	"<br>Number of expanded genotypes: " + gtCached.genoTypes.size() +
+						"<br/><br/>Click button to <b>collapse</b> associated genotypes &nbsp;&nbsp;" +
 						"<button class=\"colapsebtn\" type=\"button\" onClick=\"self._collapseGenoTypes('" + concept + "')\">" +
 						"</button>";								
 				} else {
 				if (gtCached != null) {
-					retData = retData + "<br/><br/>Click button to <b>expand</b> <u>" + gtCached.genoTypes.size() + "</u> associated genotypes &nbsp;&nbsp;";
+					retData += "<br/><br/>Click button to <b>expand</b> <u>" + gtCached.genoTypes.size() +
+					 		   "</u> associated genotypes &nbsp;&nbsp;";
 				} else {
-					retData = retData + "<br/><br/>Click button to <b>expand</b> associated genotypes &nbsp;&nbsp;";
+					retData += "<br/><br/>Click button to <b>expand</b> associated genotypes &nbsp;&nbsp;";
 				}
-				retData = retData + "<button class=\"expandbtn\" type=\"button\" onClick=\"self._expandGenotypes('" + concept + "')\"></button>";				
+				retData += "<button class=\"expandbtn\" type=\"button\" onClick=\"self._expandGenotypes('" + concept + "')\"></button>";				
 				}
 			}
 		} else if (type == 'disease'){
@@ -1952,7 +1958,6 @@ function modelDataPointPrint(point) {
 	_clearModelData: function(data,obj) {
 		this.state.svg.selectAll("#detail_content").remove();
 		this.state.svg.selectAll(".model_accent").remove();
-//		this.state.svg.selectAll(".gene_accent").remove();		
 		var text = "";
 		var id = this._getConceptId(data);
 		var label = self._getAxisData(data).label;
@@ -1961,7 +1966,8 @@ function modelDataPointPrint(point) {
 			text = this.state.svg.selectAll("text#" + id);
 			text.style("font-weight","normal");
 			text.style("text-decoration", "none");
-			text.style("fill", "black");
+			text.style("fill", this._getExpandStyling(data));
+//			text.style("fill", "black");
 			text.html(this._getShortLabel(label,self.state.labelCharDisplayCount));
 
 			this._deselectMatching(data);
@@ -1970,12 +1976,12 @@ function modelDataPointPrint(point) {
 
 	_deselectData: function (curr_data) {
 		this.state.svg.selectAll(".row_accent").remove();
-//		this.state.svg.selectAll(".gene_accent").remove();		
 		this._resetLinks();
 		var label = self._getAxisData(curr_data).label;
 		var alabels = this.state.svg.selectAll("text.a_text." + curr_data);
 		alabels.style("text-decoration", "none");
-		alabels.style("fill", "black");
+//		alabels.style("fill", "black");		
+		alabels.style("fill", this._getExpandStyling(curr_data))
 		alabels.html(this._getShortLabel(label));
 
 		this._deselectMatching(curr_data);
@@ -1991,7 +1997,7 @@ function modelDataPointPrint(point) {
 			var win = window.open(url, '_blank');
 
 		} else if (this._getIDType(data) == "Model"){
-			// MKD, expand out genotypes
+
 			var expand = false ;
 			apientity = this._getIDTypeDetail(data);
 
@@ -2087,12 +2093,30 @@ function modelDataPointPrint(point) {
 			})
 			.attr("class", this._getConceptId(data) + " model_label")
 			.attr("data-tooltip", "sticky1")   //this activates the stickytool tip
-//			.attr("class", this._getIDTypeDetail(data))
 			.style("font-size", "12px")
+//			.style("font-weight", "bold")
+			.style("fill", this._getExpandStyling(data))
 			//don't show the label if it is a dummy.
 			.text( function(d) {if (label == self.state.dummyModelName) 
 										return ""; 
 								else return label;});
+
+		// put a little icon indicator in front of the gene if it is expanded
+		if (this._isGeneExpanded(data)) {
+			p.append("image")
+			.attr('x', x-3)
+			.attr('y', y-10)
+			.attr('width', 9)
+			.attr('height', 9)
+			.attr('xlink:href', '/widgets/phenogrid/image/downarrow.png');  //downarrow.png');
+		} else if (this._isGenoType(data) ){
+			p.append("image")
+			.attr('x', x-3)
+			.attr('y', y-10)
+			.attr('width', 9)
+			.attr('height', 9)
+			.attr('xlink:href', '/widgets/phenogrid/image/small-bracket.png');
+		}
 
 		el.remove();
 	},
@@ -3311,8 +3335,10 @@ function modelDataPointPrint(point) {
 			// go get the assocated genotypes	
 			var url = this.state.serverURL+"/gene/"+ modelInfo.id + ".json";		
 			
+//			console.profile("gene call");
 			var res = this._ajaxLoadData(modelInfo.d.species,url);
-			
+//			console.profileEnd();
+
 			if (typeof (res) == 'undefined') { 
 				stickytooltip.closetooltip();		
 				alert("No gene info found");
@@ -3347,7 +3373,7 @@ function modelDataPointPrint(point) {
 			for (var g in genoTypeAssociations) {
 				_genotypeIds = _genotypeIds + genoTypeAssociations[g].genotype.id + "+";	
 				// fill a hashtable with the labels so we can quickly get back to them later
-				var tmpLabel = "»" + this._encodeHtmlEntity(genoTypeAssociations[g].genotype.label);   //TEMP CODE TO FIND THE GENOTYPE ON DISPLAY
+				var tmpLabel = this._encodeHtmlEntity(genoTypeAssociations[g].genotype.label);   // "»" + TEMP CODE TO FIND THE GENOTYPE ON DISPLAY
 				genotypeLabelHashtable.put(genoTypeAssociations[g].genotype.id, tmpLabel);
 			
 				ctr++;
@@ -3363,14 +3389,11 @@ function modelDataPointPrint(point) {
 			
 			// call compare
 			var url = this.state.serverURL+"/compare/"+ phenotypeIds + "/" + _genotypeIds;
-			console.log("Comparing " + url);	
+//			console.log("Comparing " + url);	
+			console.profile("compare call");
 			compareScores = this._ajaxLoadData(modelInfo.d.species,url);
+//			console.profileEnd();
 			console.log("Done with ajaxLoadData...");	
-			// if (typeof (compareScores)  !== 'undefined') {
-			// 	// save the genotypes in hastable for later, store both the associated genotypes and raw data
-			// 	var savedScores = {b: compareScores.b, genoTypeCount: genoTypeAssociations.length, expanded: true};
-			// 	this.state.loadedGenoTypesHash.put(modelInfo.id, savedScores);		
-			// }
 
 		} else {
 			compareScores = cache;
@@ -3378,7 +3401,7 @@ function modelDataPointPrint(point) {
 
 		if (typeof (compareScores)  !== 'undefined') {		
 			var iPosition = 1;
-			// rebuild the model list
+			// rebuild the model list with genotypes
 			for (var idx in compareScores.b) {
 					var newGtLabel = genotypeLabelHashtable.get(compareScores.b[idx].id); 
 					var gt = {
@@ -3408,7 +3431,8 @@ function modelDataPointPrint(point) {
 				// if the cache was originally null, then add 
 				// save the genotypes in hastable for later, store both the associated genotypes and raw data
 				if (cache == null) {					
-					var savedScores = {b: compareScores.b, genoTypes: genoTypeList, expanded: true};
+					var savedScores = {b: compareScores.b, genoTypes: genoTypeList, expanded: true, 
+										totalAssocCount: genoTypeAssociations.length};
 					this.state.loadedGenoTypesHash.put(modelInfo.id, savedScores);							
 				} else {
 					// update the expanded flag
@@ -3419,7 +3443,7 @@ function modelDataPointPrint(point) {
 				}
 
 				console.log("Starting Insertion...");
-				this.state.modelListHash = this._insertionModelList(modelInfo.d.pos+1, genoTypeList);
+				this.state.modelListHash = this._insertionModelList(modelInfo.d.pos, genoTypeList);
 
 				console.log("Rebuilding hashtables...");
 				this._rebuildModelHash();
@@ -3493,19 +3517,24 @@ function modelDataPointPrint(point) {
 		for (var i in sortedModelList){
 			var entry = this.state.modelListHash.get(sortedModelList[i]);
 			if (entry.pos == insertPoint) {
+				// add the entry, or gene in this case	
+				newModelList.put(sortedModelList[i], entry);				
+
 				var insertsKeys = insertions.keys();
-				// begin insertion
+				// begin insertions, they already have correct positions applied
 				for(var j in insertsKeys) {					
 					var id = insertsKeys[j];
 					newModelList.put(id, insertions.get(id));
 				}				
 				insertionOccurred = true;
-			}
-			if (insertionOccurred) {
+			} else if (insertionOccurred) {
 				entry.opos = entry.opos + reorderPointOffset;		
-				entry.pos = entry.pos + reorderPointOffset;						
-			} 
-			newModelList.put(sortedModelList[i], entry);				
+				entry.pos = entry.pos + reorderPointOffset;					
+
+				newModelList.put(sortedModelList[i], entry);				
+			} else {
+				newModelList.put(sortedModelList[i], entry);				
+			}
 		}
 		var tmp = newModelList.entries();
 		return newModelList;
@@ -3638,8 +3667,54 @@ function modelDataPointPrint(point) {
 	
 	_decodeHtmlEntity: function(str) {
 		return $('<div></div>').html(str).text();
-	}
+	},
 
+	// get the css styling for expanded gene/genotype
+	_getExpandStyling: function(data) {
+
+		var concept = this._getConceptId(data);
+
+		if(typeof(concept) === 'undefined' ) return "#000000";
+		
+		var info = this._getIDTypeDetail(concept);
+
+		if (info == 'gene') {
+			var g = this.state.loadedGenoTypesHash.get(concept);
+			if (g != null && g.expanded) {
+				return "#428076";
+			}
+
+		} 
+		else if (info == 'genotype') {
+		 		return "#488B80"; //"#0F473E";
+		}
+		return "#000000";
+	},
+
+	// check to see object is a gene and whether it's expanded
+	_isGeneExpanded: function(data) {
+		var concept = this._getConceptId(data);
+		var info = this._getIDTypeDetail(concept);
+
+		if (info == 'gene') {
+			var g = this.state.loadedGenoTypesHash.get(concept);
+			if (g != null && g.expanded) {
+				return true;
+			}
+		}
+		return false;
+	}, 
+
+	_isGenoType: function(data) {
+		var concept = this._getConceptId(data);		
+		var info = this._getIDTypeDetail(concept);
+
+		if (info == 'genotype') {
+				return true;
+			}
+		return false;
+	}
+	
 	
 	}); //end of widget code
 })(jQuery);
