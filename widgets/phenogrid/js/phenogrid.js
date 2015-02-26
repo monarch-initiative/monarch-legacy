@@ -137,8 +137,8 @@ function modelDataPointPrint(point) {
 		selectedSort: "Frequency",
 		targetSpeciesName : "Overview",
 		refSpecies: "Homo sapiens",
-		genotypeExpandLimit: 10, // sets the limit for the number of genotype expanded on grid
-		phenoCompareLimit: 10, // sets the limit for the number of phenotypes used for genotype expansion
+		genotypeExpandLimit: 5, // sets the limit for the number of genotype expanded on grid
+		phenoCompareLimit: 5, // sets the limit for the number of phenotypes used for genotype expansion
 		targetSpeciesList : [{ name: "Homo sapiens", taxon: "9606"},
 			{ name: "Mus musculus", taxon: "10090" },
 			{ name: "Danio rerio", taxon: "7955"},
@@ -1923,7 +1923,7 @@ function modelDataPointPrint(point) {
 
 				//if found just return genotypes scores		
 				if (isExpanded) {
-					appearanceOverrides.offset = (gtCached.genoTypes.size() + (gtCached.genoTypes.size() *.30));   // magic numbers for extending the highlight
+					appearanceOverrides.offset = (gtCached.genoTypes.size() + (gtCached.genoTypes.size() *.40));   // magic numbers for extending the highlight
 					//appearanceOverrides.style = "gene_accent";
 					var href = "<a href=\"" + this.state.serverURL+"/gene/" + concept + "\" target=\"_blank\">" +  
 					gtCached.totalAssocCount + "</a>";
@@ -3330,14 +3330,13 @@ function modelDataPointPrint(point) {
 		//if cached info not found need to try and get genotypes and scores
 		if (cache == null) {
 		
-			console.log("Getting Gene " + modelInfo.id);
-
 			// go get the assocated genotypes	
-			var url = this.state.serverURL+"/gene/"+ modelInfo.id + ".json";		
+			var url = this.state.serverURL+"/gene/"+ modelInfo.id.replace('_', ':') + ".json";		
 			
-//			console.profile("gene call");
+			console.log("Getting Gene " + url);
+			console.profile("gene call");
 			var res = this._ajaxLoadData(modelInfo.d.species,url);
-//			console.profileEnd();
+			console.profileEnd();
 
 			if (typeof (res) == 'undefined') { 
 				stickytooltip.closetooltip();		
@@ -3389,10 +3388,10 @@ function modelDataPointPrint(point) {
 			
 			// call compare
 			var url = this.state.serverURL+"/compare/"+ phenotypeIds + "/" + _genotypeIds;
-//			console.log("Comparing " + url);	
+			console.log("Comparing " + url);	
 			console.profile("compare call");
 			compareScores = this._ajaxLoadData(modelInfo.d.species,url);
-//			console.profileEnd();
+			console.profileEnd();
 			console.log("Done with ajaxLoadData...");	
 
 		} else {
