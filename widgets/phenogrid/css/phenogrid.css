@@ -398,18 +398,24 @@ body {
     padding: 0;
     border: none;
     background: transparent url('/widgets/phenogrid/image/ExpandAllIcon.png') no-repeat;
+    margin-left: auto;
+    margin-right: auto;
     width: 18px;
     height: 17px;
 	background-color: white;
+	box-shadow: 1px 1px 1px #888888;
 }
 
 .colapsebtn {
     padding: 0;
     border: none;
     background: transparent url('/widgets/phenogrid/image/CollapseAllIcon.png') no-repeat;
+    margin-left: auto;
+    margin-right: auto;    
     width: 18px;
     height: 17px;
 	background-color: white;
+	box-shadow: 1px 1px 1px #888888;	
 }
 
 .dialogBG {
@@ -417,7 +423,7 @@ body {
 }
 
 #ajax-loader {
-	display: none;
+//	display: none;
 	background: url('/widgets/phenogrid/image/throbber.gif'); no-repeat 50% transparent;
 	top: 0;
 	left: 0;
