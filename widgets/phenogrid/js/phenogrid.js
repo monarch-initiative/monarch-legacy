@@ -3318,7 +3318,8 @@ function modelDataPointPrint(point) {
 	}, 
 	
 	_expandHPO: function(id){
-
+		var results = self._getHPO(id);
+		console.log(results);
 	},
 
 	_collapseHPO: function(id){
@@ -3338,7 +3339,7 @@ function modelDataPointPrint(point) {
 			var taxon = this._getTargetSpeciesTaxonByName(this,this.state.targetSpeciesName);
 			var results = this._ajaxLoadData(taxon,url);
 			if (typeof (results)  !== 'undefined') {
-				HPOInfo = res.HPO_associations;
+				HPOInfo = results;
 			}
 
 			//  HACK:if we return a null just create a zero-length array for now to add it to hashtable
@@ -3346,7 +3347,7 @@ function modelDataPointPrint(point) {
 			if (HPOInfo === null) {HPOInfo = {};}
 
 			// save the genotypes in hastable for later
-			this.state.hpoCacheHash.get(id,data);
+			this.state.hpoCacheHash.get(id,results);
 		}
 		return HPOInfo;
 	},
