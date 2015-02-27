@@ -328,6 +328,7 @@ function modelDataPointPrint(point) {
 		this.state.targetSpeciesName = this._getTargetSpeciesNameByTaxon(this,this.state.targetSpeciesName);
 
 		this._loadData();
+		this.state.hpoCacheHash = new Hashtable();
 
 		this.state.phenoLength = this.state.phenotypeListHash.size();
 		this.state.modelLength = this.state.modelListHash.size();
@@ -1919,8 +1920,7 @@ function modelDataPointPrint(point) {
 		} else if (type == 'Phenotype'){
 			retData += "<strong>IC:</strong> " + info.IC.toFixed(2);
 			var hpoExpand = false;
-			//var hpoCached = this.state.hpoCacheHash.get(concept);
-			var hpoCached = null;
+			var hpoCached = this.state.hpoCacheHash.get(concept);
 			if (hpoCached !== null){
 				hpoExpand = true;
 			}
@@ -1943,7 +1943,6 @@ function modelDataPointPrint(point) {
 				//if found just return genotypes scores		
 				if (isExpanded) {
 					appearanceOverrides.offset = (gtCached.genoTypes.size() + (gtCached.genoTypes.size() * 0.30));   // magic numbers for extending the highlight
-					//appearanceOverrides.style = "gene_accent";
 					var href = "<a href=\"" + this.state.serverURL+"/gene/" + concept + "\" target=\"_blank\">" +  
 					gtCached.totalAssocCount + "</a>";
 					retData +=  
@@ -2435,7 +2434,7 @@ function modelDataPointPrint(point) {
 		//For the overview, there will be a 0th position for each species so we need to get the right model_id
 
 		var phen_label = this.state.svg.selectAll("text.a_text." + this._getConceptId(curr_data.yID));
-		phen_label.style("font-weight", "bold")
+		phen_label.style("font-weight", "bold");
 		phen_label.style("fill", "blue");
 
 		//Highlight Column
@@ -3326,6 +3325,32 @@ function modelDataPointPrint(point) {
 
 	},
 
+	_getHPO: function(id) {
+		// check cached hashtable first 
+		var HPOInfo = this.state.hpoCacheHash.get(id);
+		var direction = "out";
+		var relationship = "subClassOf";
+		var depth = 2;
+		///phenoHPO/HP_0003273/2/out/subClassOf.json
+		//if null then go find genotypes
+		if (HPOInfo === null) {
+			var url = this.state.serverURL + "/phenoHPO/" + id + "/" + depth + "/" + direction + "/" + relationship + ".json";
+			var taxon = this._getTargetSpeciesTaxonByName(this,this.state.targetSpeciesName);
+			var results = this._ajaxLoadData(taxon,url);
+			if (typeof (results)  !== 'undefined') {
+				HPOInfo = res.HPO_associations;
+			}
+
+			//  HACK:if we return a null just create a zero-length array for now to add it to hashtable
+			// this is for later so we don't have to lookup concept again
+			if (HPOInfo === null) {HPOInfo = {};}
+
+			// save the genotypes in hastable for later
+			this.state.hpoCacheHash.get(id,data);
+		}
+		return HPOInfo;
+	},
+
 	// expand the model with the associated genotypes
 	_expandGenotypes: function(curModel) {
 		var genotypeIds = "", phenotypeIds = "", genoTypeAssociations;
@@ -3393,7 +3418,7 @@ function modelDataPointPrint(point) {
 			}
 
 			// call compare
-			url = this.state.serverURL + "/compare/" + phenotypeIds + "/" + genotypeIds;;
+			url = this.state.serverURL + "/compare/" + phenotypeIds + "/" + genotypeIds;
 			compareScores = this._ajaxLoadData(modelInfo.d.species,url);
 		} else {
 			compareScores = cache;
@@ -3487,7 +3512,7 @@ function modelDataPointPrint(point) {
 			stickytooltip.closetooltip();
 		}
 	},
-	
+
 	// get all matching phenotypes for a model
 	_getMatchingPhenotypes: function(curModelId) {
 		var self = this;
@@ -3501,47 +3526,45 @@ function modelDataPointPrint(point) {
 		}
 		return phenoTypes;
 	}, 
-	
+
 	// insert into the model list
 	_insertionModelList: function (insertPoint, insertions) {
 		var newModelList = new Hashtable();
 		var sortedModelList= self._getSortedIDList(this.state.modelListHash.entries());
 		var reorderPointOffset = insertions.size();
 		var insertionOccurred = false;
-				
+
 		for (var i in sortedModelList){
 			var entry = this.state.modelListHash.get(sortedModelList[i]);
 			if (entry.pos == insertPoint) {
 				// add the entry, or gene in this case	
-				newModelList.put(sortedModelList[i], entry);				
-
+				newModelList.put(sortedModelList[i], entry);
 				var insertsKeys = insertions.keys();
 				// begin insertions, they already have correct positions applied
-				for(var j in insertsKeys) {					
+				for(var j in insertsKeys) {
 					var id = insertsKeys[j];
 					newModelList.put(id, insertions.get(id));
-				}				
+				}
 				insertionOccurred = true;
 			} else if (insertionOccurred) {
-				entry.opos = entry.opos + reorderPointOffset;		
-				entry.pos = entry.pos + reorderPointOffset;					
-
-				newModelList.put(sortedModelList[i], entry);				
+				entry.opos = entry.opos + reorderPointOffset;
+				entry.pos = entry.pos + reorderPointOffset;
+				newModelList.put(sortedModelList[i], entry);
 			} else {
-				newModelList.put(sortedModelList[i], entry);				
+				newModelList.put(sortedModelList[i], entry);
 			}
 		}
 		//var tmp = newModelList.entries();
 		return newModelList;
 	},
-	
+
 	// remove a models children from the model list
 	_removalFromModelList: function (removalList) {
 		var newModelList = new Hashtable();
 		var newModelData = [];
 		var removalKeys = removalList.genoTypes.keys();
 		var sortedModelList= self._getSortedIDList(this.state.modelListHash.entries());
-		var removeEntries = removalList.genoTypes.entries();				
+		var removeEntries = removalList.genoTypes.entries();
 
 		// get the max position that was inserted
 		var maxInsertedPosition = 0;
@@ -3549,7 +3572,7 @@ function modelDataPointPrint(point) {
 			var obj = removeEntries[x][1];
 			if (obj.pos > maxInsertedPosition) {
 				maxInsertedPosition = obj.pos;
-			}			
+			}
 		}
 
 		for (var i in sortedModelList){
@@ -3566,9 +3589,11 @@ function modelDataPointPrint(point) {
 			if (found === false) {
 				// need to reorder it back to original position
 				if (entry.pos > maxInsertedPosition) {
-					entry.pos =  entry.pos - removalKeys.length;				//pos++;  //entry.pos - maxInsertedPosition;						
-				} 
-				newModelList.put(sortedModelList[i], entry);					
+					entry.pos =  entry.pos - removalKeys.length;
+					//pos++;  
+					//entry.pos - maxInsertedPosition;
+				}
+				newModelList.put(sortedModelList[i], entry);
 			}
 		}
 
@@ -3582,7 +3607,6 @@ function modelDataPointPrint(point) {
 		}
 
 		this.state.modelData = newModelData;
-
 		return newModelList;
 	},
 
@@ -3592,17 +3616,16 @@ function modelDataPointPrint(point) {
 		this.state.modelDataHash = new Hashtable({hashCode: modelDataPointPrint, equals: modelDataPointEquals});
 		var modelPoint, hashData;
 		var y = 0;
-		
+
 		// need to rebuild the pheno hash and the modelData hash
-		for (var i in this.state.modelData)
-		{
+		for (var i in this.state.modelData) {
 			//Setting phenotypeListHash
 			if (typeof(this.state.modelData[i].id_a) !== 'undefined' && !this.state.phenotypeListHash.containsKey(this.state.modelData[i].id_a)){
 				hashData = {"label": this.state.modelData[i].label_a, "IC": this.state.modelData[i].IC_a, "pos": y, "count": 0, "sum": 0};
 				this.state.phenotypeListHash.put(this.state.modelData[i].id_a, hashData);
 				y++;
 			}
-			
+
 			//Setting modelDataHash
 			if (this.state.invertAxis){
 				modelPoint = new modelDataPoint(this.state.modelData[i].id_a, this.state.modelData[i].model_id);
@@ -3611,66 +3634,58 @@ function modelDataPointPrint(point) {
 				modelPoint = new modelDataPoint(this.state.modelData[i].model_id, this.state.modelData[i].id_a);
 				this._updateSortVals(this.state.modelData[i].id_a, this.state.modelData[i].subsumer_IC);
 			}
-			hashData = {"value": this.state.modelData[i].value, "subsumer_label": this.state.modelData[i].subsumer_label, 
-					"subsumer_id": this.state.modelData[i].subsumer_id, "subsumer_IC": this.state.modelData[i].subsumer_IC, 
-					"b_label": this.state.modelData[i].label_b, "b_id": this.state.modelData[i].id_b, "b_IC": this.state.modelData[i].IC_b};
+			hashData = {"value": this.state.modelData[i].value, "subsumer_label": this.state.modelData[i].subsumer_label, "subsumer_id": this.state.modelData[i].subsumer_id, "subsumer_IC": this.state.modelData[i].subsumer_IC, "b_label": this.state.modelData[i].label_b, "b_id": this.state.modelData[i].id_b, "b_IC": this.state.modelData[i].IC_b};
 			this.state.modelDataHash.put(modelPoint, hashData);
 		}
 	},
 
 	_getAssociatedGenotypes: function(curModel) {
-	    
 		// check cached hashtable first 
 		var gta = this.state.loadedGenoTypesHash.get(curModel.model_id);
-		
+
 		//if null then go find genotypes
-		if (gta === null) { 
-			var url = this.state.serverURL+"/gene/"+ curModel.model_id + ".json";		
+		if (gta === null) {
+			var url = this.state.serverURL+"/gene/"+ curModel.model_id + ".json";
 			//var url = "http://stage-monarch.monarchinitiative.org/gene/"+ gene + ".json";
-			
+
 			var res = this._ajaxLoadData(curModel.species,url);
-			
 			if (typeof (res)  !== 'undefined') {
 				gta = res.genotype_associations;
 			}
-	
+
 			//  HACK:if we return a null just create a zero-length array for now to add it to hashtable
 			// this is for later so we don't have to lookup concept again
 			if (gta === null) {gta = {};}
-				
+
 			// save the genotypes in hastable for later
-			this.state.loadedGenoTypesHash.put(curModel.model_id, gta);					
+			this.state.loadedGenoTypesHash.put(curModel.model_id, gta);
 		}
-		
 		return gta;
 	},
+
 	// encode any special chars 
 	_encodeHtmlEntity: function(str) {
-	
 		if (str !== null) {
-		return str
-		.replace(/»/g, "&#187;")
-		.replace(/&/g, "&amp;")		
-		.replace(/</g, "&lt;")			
-		.replace(/>/g, "&gt;")			
-		.replace(/"/g, "&quot;")			
-		.replace(/'/g, "&#039;");
+			return str
+			.replace(/»/g, "&#187;")
+			.replace(/&/g, "&amp;")
+			.replace(/</g, "&lt;")
+			.replace(/>/g, "&gt;")
+			.replace(/"/g, "&quot;")
+			.replace(/'/g, "&#039;");
 		}
-		
 		return str;
 	},
-	
+
 	_decodeHtmlEntity: function(str) {
 		return $('<div></div>').html(str).text();
 	},
 
 	// get the css styling for expanded gene/genotype
 	_getExpandStyling: function(data) {
-
 		var concept = this._getConceptId(data);
 
 		if(typeof(concept) === 'undefined' ) return "#000000";
-		
 		var info = this._getIDTypeDetail(concept);
 
 		if (info == 'gene') {
@@ -3678,10 +3693,9 @@ function modelDataPointPrint(point) {
 			if (g !== null && g.expanded) {
 				return "#428076";
 			}
-
-		} 
+		}
 		else if (info == 'genotype') {
-		 		return "#488B80"; //"#0F473E";
+			return "#488B80"; //"#0F473E";
 		}
 		return "#000000";
 	},
@@ -3698,18 +3712,17 @@ function modelDataPointPrint(point) {
 			}
 		}
 		return false;
-	}, 
+	},
 
 	_isGenoType: function(data) {
-		var concept = this._getConceptId(data);		
+		var concept = this._getConceptId(data);
 		var info = this._getIDTypeDetail(concept);
 
 		if (info == 'genotype') {
-				return true;
-			}
+			return true;
+		}
 		return false;
 	}
-	
-	
+
 	}); //end of widget code
 })(jQuery);
