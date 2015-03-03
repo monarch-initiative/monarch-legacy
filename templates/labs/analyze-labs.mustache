@@ -59,11 +59,6 @@
                             <li id="analyze-empty-item" class="list-group-item">Empty: Add items using the input above.</li>
                             </ul>
                         </div>
-                        <div id="analyze-limit" class="form-group">
-                            <label for="analyze_limit_input"><h4>Maximum number of results</h4></label>
-                            <input id="analyze_limit_input" name="limit" type="text"
-                            class="form-control" value="{{limit}}"></input>
-                        </div>
                         <button type="submit" class="btn btn-info">Search</button>  
                     </form>
                   </div>
@@ -71,7 +66,7 @@
                   
                     <div id="analyze-search" class="col-xs-3 col-sm-3 col-md-3 col-lg-3">
                         <div id="analyze-target" class="form-group">
-                            <label for="target"><h4>Target Species</h4></label>
+                            <label for="target"><span class="dropdown-label">Target Species:</span></label>
                             <select id="target" name="target_species">
                             <option value="" selected="selected" >All</option>
                             <option value="10090">Mouse (genes)</option>
@@ -80,7 +75,7 @@
                             </select>
                         </div>
                         <div id="analyze-type" class="form-group">
-                            <label for="type"><h4>Target Type</h4></label>
+                            <label for="type"><span class="dropdown-label">Target Type:</span></label>
                             <select id="type" name="target_type">
                             <option value="" selected="selected" >All</option>
                             <option value="10090">Disease</option>
@@ -88,6 +83,13 @@
                             <option value="9606">Genotype</option>
                             </select>
                         </div>
+                        
+                        <div id="analyze-limit" class="form-group">
+                            <label for="analyze_limit_input"><h4>Maximum number of results</h4></label>
+                            <input id="analyze_limit_input" name="limit" type="text"
+                            class="form-control" value="{{limit}}"></input>
+                        </div>
+                        
                     </div>
                     
                     <div class="col-xs-3 col-sm-3 col-md-3 col-lg-3">
