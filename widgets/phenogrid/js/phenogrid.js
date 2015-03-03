@@ -329,6 +329,7 @@ function modelDataPointPrint(point) {
 
 		this._loadData();
 		this.state.hpoCacheHash = new Hashtable();
+		this.state.hpoCacheLabels = new Hashtable();
 
 		this.state.phenoLength = this.state.phenotypeListHash.size();
 		this.state.modelLength = this.state.modelListHash.size();
@@ -1925,11 +1926,15 @@ function modelDataPointPrint(point) {
 			var hpoCached = this.state.hpoCacheHash.get(concept);
 			if (hpoCached !== null){
 				hpoExpand = true;
+				hpoData = "<br/><br/><strong>HPO Structure:</strong>";
+				//for (var j in hpoCached){
+					//hpoData += "<br>" + hpoCached[j][1].
+				//}
 			}
 			if (hpoExpand){
 				retData += "<br/><br/>Click button to <b>collapse</b> HPO info &nbsp;&nbsp;";
 				retData += "<button class=\"collapsebtn\" type=\"button\" onClick=\"self._collapseHPO('" + concept + "')\"></button>";
-
+				retData += hpoData;
 			} else {
 				retData += "<br/><br/>Click button to <b>expand</b> HPO info &nbsp;&nbsp;";
 				retData += "<button class=\"expandbtn\" type=\"button\" onClick=\"self._expandHPO('" + concept + "')\"></button>";
@@ -3321,11 +3326,13 @@ function modelDataPointPrint(point) {
 	
 	_expandHPO: function(id){
 		var results = self._getHPO(id);
-		console.log(results);
+		console.log("Recieved HPO Info for " + id);
 	},
 
 	_collapseHPO: function(id){
-
+		this.state.hpoCacheHash.remove(id);
+		stickytooltip.closetooltip();
+		console.log("Deleted HPO Info for " + id);
 	},
 
 	_getHPO: function(id) {
@@ -3334,14 +3341,21 @@ function modelDataPointPrint(point) {
 		var direction = "out";
 		var relationship = "subClassOf";
 		var depth = 2;
-		///phenoHPO/HP_0003273/2/out/subClassOf.json
+		var nodes;
+		///neighborhood/HP_0003273/2/out/subClassOf.json
 		//if null then go find genotypes
 		if (HPOInfo === null) {
-			var url = this.state.serverURL + "/phenoHPO/" + id + "/" + depth + "/" + direction + "/" + relationship + ".json";
+			var url = this.state.serverURL + "/neighborhood/" + id + "/" + depth + "/" + direction + "/" + relationship + ".json";
 			var taxon = this._getTargetSpeciesTaxonByName(this,this.state.targetSpeciesName);
 			var results = this._ajaxLoadData(taxon,url);
 			if (typeof (results)  !== 'undefined') {
-				HPOInfo = results;
+				HPOInfo = results.edges;
+				nodes = results.nodes;
+				for (var i in nodes){
+					if (!this.state.hpoCacheLabels.containsKey(nodes[i].id)){
+						this.state.hpoCacheLabels.put(nodes[i].id,nodes[i].lbl);
+					}
+				}
 			}
 
 			//  HACK:if we return a null just create a zero-length array for now to add it to hashtable
@@ -3349,8 +3363,11 @@ function modelDataPointPrint(point) {
 			if (HPOInfo === null) {HPOInfo = {};}
 
 			// save the genotypes in hastable for later
-			this.state.hpoCacheHash.get(id,results);
+			this.state.hpoCacheHash.put(id,HPOInfo);
 		}
+		stickytooltip.closetooltip();
+		console.log(this.state.hpoCacheHash.entries());
+		console.log(this.state.hpoCacheLabels.entries());
 		return HPOInfo;
 	},
 
