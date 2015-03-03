@@ -241,16 +241,43 @@ figcaption {
 }
 
 /* Analyze */
-#settings {
+#settings-header {
     text-align: center;
 }
+/*
+#foo{
+   width:25%;
+   display: inline-block;
+   text-align: center;
+}
+#bar{
+   width: 20%;
+   display: inline-block;
+   text-align: center;
+}
+*/
 #analyze-search {
     border-right: 1px solid #e8e8e8;
 }
-.dropdown-label {
+.search-label {
 	font-weight: normal;
     font-size: 16px;
+    text-align:right;
+    padding-top:3px;
 }
+
+#analyze-target{
+	padding-bottom: 25px;
+}
+#analyze-type{
+    padding-bottom: 25px;
+}
+
+/*
+#settings .controls {
+	display: inline-block;
+}*/
+
 /* Global Ajax */
 
 /* spinner code from http://tobiasahlin.com/spinkit */

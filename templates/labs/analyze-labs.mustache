@@ -36,8 +36,8 @@
                 <div id="query" class="category">
                 {{/hasInputItems}}
                 <div class="row-fluid">
+                 <form role="form" action="/labs/analyze/{{datatype}}/" method="GET">
                   <div class="col-xs-6 col-sm-6 col-md-6 col-lg-6">
-                    <form role="form" action="/labs/analyze/{{datatype}}/" method="GET">
                         <input id="analyze_auto_target" name="input_items" value="{{input_items}}" type="hidden"/>
                         <div id="analyze-searchlist" class="form-group">
                           <label for="analyze_auto_input"><h4>Add to search list</h4>
@@ -60,51 +60,50 @@
                             </ul>
                         </div>
                         <button type="submit" class="btn btn-info">Search</button>  
-                    </form>
                   </div>
-                  <h3 id=settings>Settings</h3>
+                  <h3 id="settings-header">Settings</h3>
                   
                     <div id="analyze-search" class="col-xs-3 col-sm-3 col-md-3 col-lg-3">
-                        <div id="analyze-target" class="form-group">
-                            <label for="target"><span class="dropdown-label">Target Species:</span></label>
-                            <select id="target" name="target_species">
-                            <option value="" selected="selected" >All</option>
-                            <option value="10090">Mouse (genes)</option>
-                            <option value="7955">Zebrafish (genes)</option>
-                            <option value="9606">Human (diseases)</option>
-                            </select>
+                        <div class="form-group" id="analyze-target">
+                            <label for="target" class="col-sm-6 control-label search-label">Target Species:</label>
+                            <div class="col-sm-6">
+                              <select class="form-control" id="target" name="target_species">
+                                <option value="" selected="selected" >All</option>
+                                <option value="10090">Mouse (genes)</option>
+                                <option value="7955">Zebrafish (genes)</option>
+                                <option value="9606">Human (diseases)</option>
+                              </select>
+                            </div>
                         </div>
-                        <div id="analyze-type" class="form-group">
-                            <label for="type"><span class="dropdown-label">Target Type:</span></label>
-                            <select id="type" name="target_type">
-                            <option value="" selected="selected" >All</option>
-                            <option value="10090">Disease</option>
-                            <option value="7955">Gene</option>
-                            <option value="9606">Genotype</option>
-                            </select>
+                        <div class="form-group" id="analyze-type">
+                            <label for="type" class="col-sm-6 control-label search-label">Target Type:</label>
+                            <div class="col-sm-6">
+                              <select class="form-control" id="type" name="target_type" >
+                                <option value="" selected="selected" >All</option>
+                                <option value="disease">Disease</option>
+                                <option value="gene">Gene</option>
+                                <option value="genotype">Genotype</option>
+                              </select>
+                            </div>
                         </div>
                         
                         <div id="analyze-limit" class="form-group">
-                            <label for="analyze_limit_input"><h4>Maximum number of results</h4></label>
-                            <input id="analyze_limit_input" name="limit" type="text"
-                            class="form-control" value="{{limit}}"></input>
-                        </div>
-                        
+                            <label for="analyze_limit_input" class="col-sm-6 control-label search-label">Maximum number of results:</label>
+                            <div class="col-sm-6">
+                              <input class="form-control" id="analyze_limit_input" name="limit" type="text"
+                               value="{{limit}}"></input>
+                            </div>
+                        </div> 
                     </div>
                     
                     <div class="col-xs-3 col-sm-3 col-md-3 col-lg-3">
-                        <div id="analyze-target" class="form-group">
-                            <label for="target"><h4>Target species</h4></label>
-                            <select id="target" name="target_species">
-                            <option value="" selected="selected" >All</option>
-                            <option value="10090">Mouse (genes)</option>
-                            <option value="7955">Zebrafish (genes)</option>
-                            <option value="9606">Human (diseases)</option>
-                            </select>
+                        <div> placeholder text
                         </div>
                     </div>
-                  
+                
+                </form>
                 </div>
+               
                 {{#hasInputItems}}
                 </div>
                 <div id="result" class="first category">
@@ -114,6 +113,8 @@
                     {{#singleSpecies}}
                         <p>Species: {{{speciesHref}}}</p>
                     {{/singleSpecies}}
+                    <input id="analyze_auto_species" name="current_target_species" value="{{target_filter.species}}" type="hidden"/>
+                    <div id ="phen_vis"></div>
                     {{{resultsTable}}}
                     </table>
                     {{/hasResults}}
