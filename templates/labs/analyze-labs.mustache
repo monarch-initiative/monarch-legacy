@@ -1,0 +1,128 @@
+    {{{includes.navbar}}}
+    <div class="monarch-container">
+        <div class="content">
+            <div class="wrapperforfooter">
+            <div class="jumbotron">
+                <div id="description">
+                    {{#alerts}}
+                    <div class="alert">
+                        {{{.}}}
+                    </div>
+                    {{/alerts}}
+                    <img id="monarch-logo" class="downloadline" src="/image/logo.png"/>
+                    <h1 class="downloadline">Monarch Phenotype Profile Analysis</h1>
+                    <a class="downloadline downloadline-left btn btn-large btn-default btn-monarch-main monarch-feedback-dark"
+                            href="mailto:info@monarchinitiative.org">Your feedback welcome!</a>
+                    {{#isPhenotype}}
+                    <p>Find models and phenotypes similar to a set of abnormal phenotypes of interest.</p>
+                    {{/isPhenotype}}
+                </div>
+                <div id="categories">
+                    {{^hasInputItems}}
+                    <a href="#query"><div id="initialtab" class="tab contenttab second">Search</div></a>
+                    <div class="tab greyed-out">Results</div>
+                    {{/hasInputItems}}
+                    {{#hasInputItems}}
+                    <a href="#query"><div class="tab contenttab second">Search</div></a>
+                    <a href="#result"><div id="initialtab" class="tab contenttab">Results</div></a>
+                    {{/hasInputItems}}
+                </div>
+            </div>
+            <div id="complete-info">
+                {{^hasInputItems}}
+                <div id="query" class="first category">
+                {{/hasInputItems}}
+                {{#hasInputItems}}
+                <div id="query" class="category">
+                {{/hasInputItems}}
+                <div class="row-fluid">
+                  <div class="col-xs-6 col-sm-6 col-md-6 col-lg-6">
+                    <form role="form" action="/labs/analyze/{{datatype}}/" method="GET">
+                        <input id="analyze_auto_target" name="input_items" value="{{input_items}}" type="hidden"/>
+                        <div id="analyze-searchlist" class="form-group">
+                          <label for="analyze_auto_input"><h4>Add to search list</h4>
+                            {{#isPhenotype}}
+                            <p class="example">Type phenotype name for autocomplete (e.g.
+                            Renal agenesis, Multicystic kidney dysplasia, etc.)</p>
+                            {{/isPhenotype}}
+                          </label>
+                          <input id="analyze_auto_input" type="text" class="form-control"
+                          placeholder="Enter {{datatype}} here"/>
+                        </div>
+                        <div id="analyze-profile" class="form-group">
+                            <label for="analyze_auto_list"><h4>Search list / {{datatype}} profile</h4>
+                            {{#isPhenotype}}
+                            <p class="example">Search for profiles similar to this list of phenotypes.</p>
+                            {{/isPhenotype}}
+                            </label>
+                            <ul id="analyze_auto_list" class="list-group">
+                            <li id="analyze-empty-item" class="list-group-item">Empty: Add items using the input above.</li>
+                            </ul>
+                        </div>
+                        <div id="analyze-limit" class="form-group">
+                            <label for="analyze_limit_input"><h4>Maximum number of results</h4></label>
+                            <input id="analyze_limit_input" name="limit" type="text"
+                            class="form-control" value="{{limit}}"></input>
+                        </div>
+                        <button type="submit" class="btn btn-info">Search</button>  
+                    </form>
+                  </div>
+                  <h3 id=settings>Settings</h3>
+                  
+                    <div id="analyze-search" class="col-xs-3 col-sm-3 col-md-3 col-lg-3">
+                        <div id="analyze-target" class="form-group">
+                            <label for="target"><h4>Target Species</h4></label>
+                            <select id="target" name="target_species">
+                            <option value="" selected="selected" >All</option>
+                            <option value="10090">Mouse (genes)</option>
+                            <option value="7955">Zebrafish (genes)</option>
+                            <option value="9606">Human (diseases)</option>
+                            </select>
+                        </div>
+                        <div id="analyze-type" class="form-group">
+                            <label for="type"><h4>Target Type</h4></label>
+                            <select id="type" name="target_type">
+                            <option value="" selected="selected" >All</option>
+                            <option value="10090">Disease</option>
+                            <option value="7955">Gene</option>
+                            <option value="9606">Genotype</option>
+                            </select>
+                        </div>
+                    </div>
+                    
+                    <div class="col-xs-3 col-sm-3 col-md-3 col-lg-3">
+                        <div id="analyze-target" class="form-group">
+                            <label for="target"><h4>Target species</h4></label>
+                            <select id="target" name="target_species">
+                            <option value="" selected="selected" >All</option>
+                            <option value="10090">Mouse (genes)</option>
+                            <option value="7955">Zebrafish (genes)</option>
+                            <option value="9606">Human (diseases)</option>
+                            </select>
+                        </div>
+                    </div>
+                  
+                </div>
+                {{#hasInputItems}}
+                </div>
+                <div id="result" class="first category">
+                    <h3 class="downloadline">Results</h3>
+                    <a href="{{{downloadURL}}}" class="btn btn-default downloadline downloadline-left monarch-blue">JSON</a>
+                    {{#hasResults}}
+                    {{#singleSpecies}}
+                        <p>Species: {{{speciesHref}}}</p>
+                    {{/singleSpecies}}
+                    {{{resultsTable}}}
+                    </table>
+                    {{/hasResults}}
+                    {{^hasResults}}
+                    <div class="text">Unfortunately, your search produced no results.</div>
+                    {{/hasResults}}
+                </div>
+                <div id="splitLabels" style="display:none">{{splitLabels}}</div>
+                {{/hasInputItems}}
+            </div>
+            </div> <!-- closes wrapperforfooter -->
+            {{{includes.footer}}}
+        </div>
+    </div>

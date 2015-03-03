@@ -240,6 +240,14 @@ figcaption {
 	font-size:16px;
 }
 
+/* Analyze */
+#settings {
+    text-align: center;
+}
+#analyze-search {
+    border-right: 1px solid #e8e8e8;
+}
+
 /* Global Ajax */
 
 /* spinner code from http://tobiasahlin.com/spinkit */
