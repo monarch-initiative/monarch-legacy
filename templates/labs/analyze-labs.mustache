@@ -108,8 +108,14 @@
                           <label id="pheno-compare">
                             <input id="compare" type="radio" value="compare" name="mode"> Compare</label>
                         </div>
-                        <div> placeholder text
+                        <div id="explain">
+                            Compare agaisnt one or more genes<br>
+                            Genes must correspond to Entrez gene ids and be in the format
+                            NCBIGene:12345<br><br>
+                            Gene IDs:
+
                         </div>
+                        <textarea id="gene-list" class="form-control" rows="3" placeholder="" disabled="true"></textarea>
                     </div>
                 
                 </form>
