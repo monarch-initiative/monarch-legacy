@@ -137,7 +137,7 @@ function modelDataPointPrint(point) {
 		selectedSort: "Frequency",
 		targetSpeciesName : "Overview",
 		refSpecies: "Homo sapiens",
-		genotypeExpandLimit: 10, // sets the limit for the number of genotype expanded on grid
+		genotypeExpandLimit: 20, // sets the limit for the number of genotype expanded on grid
 		phenoCompareLimit: 10, // sets the limit for the number of phenotypes used for genotype expansion
 		targetSpeciesList : [{ name: "Homo sapiens", taxon: "9606"},
 			{ name: "Mus musculus", taxon: "10090" },
@@ -1949,14 +1949,14 @@ function modelDataPointPrint(point) {
 
 				//if found just return genotypes scores		
 				if (isExpanded) {
-					appearanceOverrides.offset = (gtCached.genoTypes.size() + (gtCached.genoTypes.size() * 0.30));   // magic numbers for extending the highlight
+					appearanceOverrides.offset = (gtCached.genoTypes.size() + (gtCached.genoTypes.size() * 0.40));   // magic numbers for extending the highlight
 					var href = "<a href=\"" + this.state.serverURL+"/gene/" + concept + "\" target=\"_blank\">" +  
 					gtCached.totalAssocCount + "</a>";
 					retData +=  
 					 	"<br/>Overall total associated genotypes: " + href + 
 					 	"<br>Number of expanded genotypes: " + gtCached.genoTypes.size() +
 						"<br/><br/>Click button to <b>collapse</b> associated genotypes &nbsp;&nbsp;" +
-						"<button class=\"collapsebtn\" type=\"button\" onClick=\"self._collapseGenoTypes('" + concept + "')\">" +
+						"<button class=\"collapsebtn\" type=\"button\" onClick=\"self._collapseGenotypes('" + concept + "')\">" +
 						"</button>";
 				} else {
 					if (gtCached !== null) {
@@ -1964,7 +1964,7 @@ function modelDataPointPrint(point) {
 					} else {
 						retData += "<br/><br/>Click button to <b>expand</b> associated genotypes &nbsp;&nbsp;";
 					}
-					retData += "<button class=\"expandbtn\" type=\"button\" onClick=\"self._expandGenotypes('" + concept + "')\"></button>";				
+					retData += "<button class=\"expandbtn\" type=\"button\" onClick=\"self._expandGenotypes('" + concept + "')\"></button>";
 				}
 			}
 		} else if (type == 'disease'){
@@ -2023,11 +2023,12 @@ function modelDataPointPrint(point) {
 
 			// if it's overview, then just allow view of the model clicked
 			if (this.state.targetSpeciesName != "Overview" && apientity == 'gene') {
-
-				this._collapseGenoTypes(data);
-
-				// expand genotypes
-				//expand = this._expandGenotypes(data);
+				var expanded = this._isExpanded(data);
+				if (expanded != null && expanded) {
+					this._collapseGenotypes(data);
+				} else if (expanded != null && !expanded){
+					this._expandGenotypes(data);
+				}
 			}
 		} else {
 			console.log ("URL CLICK ERROR");
@@ -2118,21 +2119,21 @@ function modelDataPointPrint(point) {
 										return ""; 
 								else return label;});
 
-		// put a little icon indicator in front of the gene if it is expanded
-		if (this._isGeneExpanded(data)) {
+		// put a little icon indicator in front of the label
+		if (this._hasChildrenForExpansion(data)) {
 			p.append("image")
 			.attr('x', x-3)
 			.attr('y', y-10)
 			.attr('width', 9)
 			.attr('height', 9)
-			.attr('xlink:href', '/widgets/phenogrid/image/downarrow.png');  //downarrow.png');
+			.attr('xlink:href', '/widgets/phenogrid/image/downarrow.png');  
 		} else if (this._isGenoType(data) ){
 			p.append("image")
 			.attr('x', x-3)
 			.attr('y', y-10)
 			.attr('width', 9)
 			.attr('height', 9)
-			.attr('xlink:href', '/widgets/phenogrid/image/small-bracket.png');
+			.attr('xlink:href', '/widgets/phenogrid/image/checkmark-drk.png'); //small-bracket.png');
 		}
 
 		el.remove();
@@ -3385,11 +3386,13 @@ function modelDataPointPrint(point) {
 
 		//if cached info not found need to try and get genotypes and scores
 		if (cache === null) {
-			console.log("Getting Gene " + modelInfo.id);
-
 			// go get the assocated genotypes	
-			var url = this.state.serverURL + "/gene/ "+ modelInfo.id + ".json";
+			var url = this.state.serverURL+"/gene/"+ modelInfo.id.replace('_', ':') + ".json";		
+			
+			console.log("Getting Gene " + url);
+			console.profile("gene call");
 			var res = this._ajaxLoadData(modelInfo.d.species,url);
+			console.profileEnd();
 
 			if (typeof (res) == 'undefined') { 
 				stickytooltip.closetooltip();
@@ -3439,7 +3442,11 @@ function modelDataPointPrint(point) {
 
 			// call compare
 			url = this.state.serverURL + "/compare/" + phenotypeIds + "/" + genotypeIds;
+			console.log("Comparing " + url);
+			console.profile("compare call");
 			compareScores = this._ajaxLoadData(modelInfo.d.species,url);
+			console.profileEnd();
+			console.log("Done with ajaxLoadData...");
 		} else {
 			compareScores = cache;
 		} // cache == null
@@ -3509,7 +3516,7 @@ function modelDataPointPrint(point) {
 	},
 
 	// collapse the expanded genotypes for the current selected model
-	_collapseGenoTypes: function(curModel) {
+	_collapseGenotypes: function(curModel) {
 		var modelInfo = {id: curModel, d: this.state.modelListHash.get(curModel)};
 
 		// check cached hashtable first 
@@ -3711,7 +3718,7 @@ function modelDataPointPrint(point) {
 		if (info == 'gene') {
 			var g = this.state.loadedGenoTypesHash.get(concept);
 			if (g !== null && g.expanded) {
-				return "#428076";
+				return "#08594B";
 			}
 		}
 		else if (info == 'genotype') {
@@ -3720,15 +3727,31 @@ function modelDataPointPrint(point) {
 		return "#000000";
 	},
 
-	// check to see object is a gene and whether it's expanded
-	_isGeneExpanded: function(data) {
+	// check to see object is expanded
+	_isExpanded: function(data) {
 		var concept = this._getConceptId(data);
 		var info = this._getIDTypeDetail(concept);
 
 		if (info == 'gene') {
 			var g = this.state.loadedGenoTypesHash.get(concept);
-			if (g !== null && g.expanded) {
-				return true;
+			// if it was ever expanded
+			if (g != null){
+				return g.expanded;  
+			}
+		}
+		return null;
+	}, 
+
+	// check to see object has children
+	_hasChildrenForExpansion: function(data) {
+		var concept = this._getConceptId(data);
+		var info = this._getIDTypeDetail(concept);
+
+		if (info == 'gene') {
+			var g = this.state.loadedGenoTypesHash.get(concept);
+			// if it was ever expanded it will have children
+			if (g != null) {
+				return true;  
 			}
 		}
 		return false;

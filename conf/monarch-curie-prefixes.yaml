@@ -10,11 +10,11 @@ curies:
   http://purl.obolibrary.org/obo/ECO_ : ECO
   http://purl.obolibrary.org/obo/RO_ : RO
   http://purl.obolibrary.org/obo/BFO_ : BFO
-  http://monarch-initiative.org/data/MGI_ : MGI
+#  http://monarch-initiative.org/data/MGI_ : MGI
   http://semanticscience.org/resource/SIO_ : SIO
   http://purl.obolibrary.org/obo/Ensembl_ : ENSEMBL
   http://purl.obolibrary.org/obo/ENSEMBL_ : ENSEMBL
-  http://purl.obolibrary.org/obo/MGI_ : MGI
+#  http://purl.obolibrary.org/obo/MGI_ : MGI
   http://purl.obolibrary.org/obo/ZFIN_ : ZFIN
   http://purl.obolibrary.org/obo/UniProtKB_ : UNIPROT
   http://purl.obolibrary.org/obo/MESH_ : MESH
