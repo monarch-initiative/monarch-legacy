@@ -330,9 +330,10 @@ function modelDataPointPrint(point) {
 		this.state.targetSpeciesName = this._getTargetSpeciesNameByTaxon(this,this.state.targetSpeciesName);
 
 		//TEMP UNTIL _loadData is refactored
-		if (!this.state.hpoCacheHash){
+		if (!this.state.hpoCacheBuilt){
 			this.state.hpoCacheHash = new Hashtable();
 			this.state.hpoCacheLabels = new Hashtable();
+			console.log("HPOCache Built");
 		}
 
 		this._loadData();
@@ -1007,6 +1008,8 @@ function modelDataPointPrint(point) {
 			this._finishLoad();
 		}
 		this._loadHashTables();
+
+		this.state.hpoCacheBuilt = true;
 	},
 
 	_loadSpeciesData: function(speciesName,limit) {
@@ -1158,7 +1161,7 @@ function modelDataPointPrint(point) {
 			if (typeof(this.state.modelData[i].id_a) !== 'undefined' && !this.state.phenotypeListHash.containsKey(this.state.modelData[i].id_a)){
 				hashData = {"label": this.state.modelData[i].label_a, "IC": this.state.modelData[i].IC_a, "pos": parseInt(y), "count": 0, "sum": 0};
 				this.state.phenotypeListHash.put(this.state.modelData[i].id_a, hashData);
-				if (this.state.preloadHPO){
+				if (!this.state.hpoCacheBuilt && this.state.preloadHPO){
 					this._getHPO(this.state.modelData[i].id_a);
 				}
 				y++;
@@ -1935,10 +1938,10 @@ function modelDataPointPrint(point) {
 			retData += "<strong>IC:</strong> " + info.IC.toFixed(2);
 			var hpoExpand = false;
 			var hpoCached = this.state.hpoCacheHash.get(concept.replace("_", ":"));
-			if (hpoCached !== null){
+			if (hpoCached !== null && hpoCached.active == 1){
 				hpoExpand = true;
 				hpoData = "<br/><br/><strong>HPO Structure:</strong>";
-				hpoData += this._buildHPOTree(concept.replace("_", ":"), hpoCached, 0);
+				hpoData += this._buildHPOTree(concept.replace("_", ":"), hpoCached.edges, 0);
 			}
 			if (!this.state.preloadHPO){
 				if (hpoExpand){
@@ -3372,19 +3375,22 @@ function modelDataPointPrint(point) {
 	_expandHPO: function(id){
 		self._getHPO(id);
 		stickytooltip.closetooltip();
-		console.log("Recieved HPO Info for " + id);
+		console.log("Loaded HPO Info for " + id);
 	},
 
 	_collapseHPO: function(id){
-		this.state.hpoCacheHash.remove(id.replace("_", ":"));
+		var idClean = id.replace("_", ":");
+		var HPOInfo = this.state.hpoCacheHash.get(idClean);
+		HPOInfo.active = 0;
+		this.state.hpoCacheHash.put(idClean,HPOInfo);
 		stickytooltip.closetooltip();
-		console.log("Deleted HPO Info for " + id);
+		console.log("Hid HPO Info for " + id);
 	},
 
 	_getHPO: function(id) {
 		// check cached hashtable first 
-		var HPOInfo = this.state.hpoCacheHash.get(id);
 		var idClean = id.replace("_", ":");
+		var HPOInfo = this.state.hpoCacheHash.get(idClean);
 		var direction = "out";
 		var relationship = "subClassOf";
 		var depth = this.state.hpoDepth;
@@ -3418,6 +3424,10 @@ function modelDataPointPrint(point) {
 			if (HPOInfo === null) {HPOInfo = {};}
 
 			// save the genotypes in hastable for later
+			var hashData = {"edges": HPOInfo, "active": 1};
+			this.state.hpoCacheHash.put(idClean,hashData);
+		} else {
+			HPOInfo.active = 1;
 			this.state.hpoCacheHash.put(idClean,HPOInfo);
 		}
 	},
