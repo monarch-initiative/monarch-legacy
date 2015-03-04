@@ -147,6 +147,21 @@ function AnalyzeInit(){
     	term_list += (value.textContent.substring(0,value.textContent.length-1) + ', ');
     });
     result_list.prepend('<h3>Search Terms</h3> ' + term_list.substring(0, term_list.length-2) + '<br/>');
+    
+    
+    //Disable search form when compare radio button selected
+    $('#pheno-compare input[type=radio]').click(function(){
+        $("#search-form-group input").attr("disabled", 'true');
+        $("#search-form-group select").attr("disabled", 'true');
+    });
+    
+    //Disable compare form when compare radio button selected
+    //Re-enable search form
+    $('#pheno-search input[type=radio]').click(function(){
+        $("#search-form-group input").removeAttr('disabled');
+        $("#search-form-group select").removeAttr('disabled');
+    });
+
 
 
     function update_form_value(){

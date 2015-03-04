@@ -64,7 +64,12 @@
                   <h3 id="settings-header">Settings</h3>
                   
                     <div id="analyze-search" class="col-xs-3 col-sm-3 col-md-3 col-lg-3">
-                        <div class="form-group" id="analyze-target">
+                        <div class="pheno-radio-button"
+                        <label id="pheno-search">
+                         <input id="srch" type="radio" checked="true" value="srch" name="mode"> Search</label>
+                        </div>
+                        <div id="search-form-group">
+                          <div class="form-group" id="analyze-target">
                             <label for="target" class="col-sm-6 control-label search-label">Target Species:</label>
                             <div class="col-sm-6">
                               <select class="form-control" id="target" name="target_species">
@@ -74,8 +79,8 @@
                                 <option value="9606">Human (diseases)</option>
                               </select>
                             </div>
-                        </div>
-                        <div class="form-group" id="analyze-type">
+                          </div>
+                          <div class="form-group" id="analyze-type">
                             <label for="type" class="col-sm-6 control-label search-label">Target Type:</label>
                             <div class="col-sm-6">
                               <select class="form-control" id="type" name="target_type" >
@@ -85,18 +90,24 @@
                                 <option value="genotype">Genotype</option>
                               </select>
                             </div>
-                        </div>
+                          </div>
                         
-                        <div id="analyze-limit" class="form-group">
+                          <div id="analyze-limit" class="form-group">
                             <label for="analyze_limit_input" class="col-sm-6 control-label search-label">Maximum number of results:</label>
                             <div class="col-sm-6">
                               <input class="form-control" id="analyze_limit_input" name="limit" type="text"
                                value="{{limit}}"></input>
                             </div>
-                        </div> 
+                          </div> 
+                        </div>
                     </div>
                     
+                    
                     <div class="col-xs-3 col-sm-3 col-md-3 col-lg-3">
+                        <div class="pheno-radio-button"
+                          <label id="pheno-compare">
+                            <input id="compare" type="radio" value="compare" name="mode"> Compare</label>
+                        </div>
                         <div> placeholder text
                         </div>
                     </div>
