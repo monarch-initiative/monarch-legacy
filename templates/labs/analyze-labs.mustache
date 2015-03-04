@@ -76,36 +76,41 @@
                             Search for model genes, genotypes, and semantically similar diseases
                           </div>
                           <div id="search-form-group">
-                            <div class="form-group" id="analyze-target">
-                              <label for="target" class="col-sm-6 control-label search-label">Target Species:</label>
-                              <div class="col-sm-6">
-                                <select class="form-control" id="target" name="target_species">
-                                  <option value="all" selected="selected" >All</option>
-                                  <option value="10090">Mouse (genes)</option>
-                                  <option value="7955">Zebrafish (genes)</option>
-                                  <option value="9606">Human (diseases)</option>
-                                </select>
+                            <div class="row">
+                              <div class="form-group" id="analyze-target">
+                                <label for="target" class="col-6 control-label search-label">Target Species:</label>
+                                <div class="col-6">
+                                  <select class="form-control" id="target" name="target_species">
+                                    <option value="all" selected="selected" >All</option>
+                                    <option value="10090">Mouse (genes)</option>
+                                    <option value="7955">Zebrafish (genes)</option>
+                                    <option value="9606">Human (diseases)</option>
+                                  </select>
+                                </div>
                               </div>
                             </div>
                             <div class="form-group" id="analyze-type">
-                              <label for="type" class="col-sm-6 control-label search-label">Target Type:</label>
-                              <div class="col-sm-6">
-                                <select class="form-control" id="type" name="target_type" >
-                                  <option value="all" selected="selected" >All</option>
-                                  <option value="disease">Disease</option>
-                                  <option value="gene">Gene</option>
-                                  <option value="genotype" disabled>Genotype</option>
-                                </select>
+                              <div class="row">
+                                <label for="type" class="col-6 control-label search-label">Target Type:</label>
+                                <div class="col-6">
+                                  <select class="form-control" id="type" name="target_type" >
+                                    <option value="all" selected="selected" >All</option>
+                                    <option value="disease">Disease</option>
+                                    <option value="gene">Gene</option>
+                                    <option value="genotype" disabled>Genotype</option>
+                                  </select>
+                                </div>
                               </div>
                             </div>
-                        
                             <div id="analyze-limit" class="form-group">
-                              <label for="analyze_limit_input" class="col-sm-6 control-label search-label">Maximum number of results:</label>
-                              <div class="col-sm-6">
-                                <input class="form-control" id="analyze_limit_input" name="limit" type="text"
-                                    value="{{limit}}"></input>
-                              </div>
-                            </div> 
+                              <div class="row">
+                                <label for="analyze_limit_input" class="col-6 control-label search-label">Maximum number of results:</label>
+                                <div class="col-6">
+                                  <input class="form-control" id="analyze_limit_input" name="limit" type="text"
+                                      value="{{limit}}"></input>
+                                </div>
+                              </div> 
+                            </div>
                           </div>
                       </div>
                     

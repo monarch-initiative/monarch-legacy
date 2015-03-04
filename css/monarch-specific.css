@@ -250,17 +250,15 @@ figcaption {
 }
 .search-label {
 	font-weight: normal;
-    font-size: 16px;
+    font-size: 15px;
     text-align:right;
-    padding-top:2px;
+    padding-top:3px;
 }
 
 #analyze-target {
-	padding-bottom: 25px;
+	padding-bottom: 30px;
 }
-#analyze-type {
-    padding-bottom: 25px;
-}
+
 .pheno-radio-button {
 	width: 20%;
     margin: 0 auto;
@@ -273,7 +271,7 @@ figcaption {
     white-space: nowrap;
 }
 #gene-text-area {
-    font-size: 16px;
+    font-size: 15px;
 }
 .explain {
     font-size: 14px;
