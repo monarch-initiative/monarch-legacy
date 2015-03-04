@@ -153,7 +153,10 @@ function AnalyzeInit(){
     // and enable compare
     $('#pheno-compare input[type=radio]').click(function(){
         
-        $("#gene-list").removeAttr('disabled');    
+        $("#gene-list").removeAttr('disabled');
+        $("#homolog").removeAttr('disabled');    
+        $("#paralog").removeAttr('disabled');    
+        
         $("#search-form-group input").attr("disabled", 'true');
         $("#search-form-group select").attr("disabled", 'true');
     });
@@ -161,7 +164,11 @@ function AnalyzeInit(){
     // Disable compare form when compare radio button selected
     // Re-enable search form
     $('#pheno-search input[type=radio]').click(function(){
+        
         $("#gene-list").attr("disabled", 'true');
+        $("#homolog").attr("disabled", 'true');
+        $("#paralog").attr("disabled", 'true');
+        
         $("#search-form-group input").removeAttr('disabled');
         $("#search-form-group select").removeAttr('disabled');
     });
@@ -185,7 +192,27 @@ function AnalyzeInit(){
             $("#type option[value=all]").removeAttr('disabled');
         }
     });
-
+    
+    $('#homolog').click(function(){
+        parse_text_area();  
+    });
+    
+    $('#paralog').click(function(){
+        parse_text_area();  
+    });
+    
+    /*
+     * Function: parse_text_area
+     * 
+     * Returns: list of value from text area 
+     * split by comma, comma\s, or \n
+     */
+    function parse_text_area(){
+        var genes = document.getElementById('gene-list').value;
+        var gene_list = genes.split(/,\s|,|\n/);
+        console.log(gene_list);
+        return gene_list;
+    }
 
     function update_form_value(){
 		jQuery(analyze_auto_target_elt).val('');

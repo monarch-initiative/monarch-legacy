@@ -245,8 +245,8 @@ figcaption {
 #settings-header {
     text-align: center;
 }
-#analyze-search {
-    border-right: 1px solid #e8e8e8;
+#analyze-compare {
+    border-left: 1px solid #e8e8e8;
 }
 .search-label {
 	font-weight: normal;
@@ -271,6 +271,10 @@ figcaption {
     white-space: nowrap;
 }
 #gene-text-area {
+    font-size: 15px;
+}
+#gene-shortcuts {
+	padding: 5px 0 5px 0;
     font-size: 15px;
 }
 .explain {

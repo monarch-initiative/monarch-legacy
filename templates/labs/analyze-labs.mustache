@@ -63,8 +63,8 @@
                   </div>
                   <div class="col-xs-6 col-sm-6 col-md-6 col-lg-6">
                     <div class="panel panel-default">
-                      <div class="panel-heading text-center"  style="padding: 1px 0 0 0;">
-                        <h4>Settings</h4>
+                      <div class="panel-heading">
+                        <h4 class="panel-title text-center">Settings</h4>
                       </div>
                       <div class="row">
                         <div id="analyze-search" class="col-xs-6 col-sm-6 col-md-6 col-lg-6">
@@ -115,13 +115,13 @@
                       </div>
                     
                     
-                      <div class="col-xs-6 col-sm-6 col-md-6 col-lg-6">
+                      <div id= "analyze-compare" class="col-xs-6 col-sm-6 col-md-6 col-lg-6">
                         <div class="pheno-radio-button">
                           <label id="pheno-compare">
                             <input id="compare" type="radio" value="compare" name="mode"> Compare</label>
                         </div>
                         <div class="explain">
-                            Compare phenotypes agaisnt a set of genes<br><br>
+                            Compare phenotypes against a set of genes<br><br>
                         </div>
                         <div id="gene-text-area">Gene IDs:<br>
                             <span class="small">
@@ -132,6 +132,14 @@
                         </div>
                        
                         <textarea id="gene-list" class="form-control" rows="4" placeholder="" disabled="true"></textarea>
+                        <div id="gene-shortcuts">Add to list:<br>
+                            <span class="small">
+                                Given the above list of genes, add genes
+                                based on relationship:
+                            </span>
+                        </div>
+                        <button id="homolog" type="button" class="btn btn-primary" disabled>Homologs</button>
+                        <button id="paralog" type="button" class="btn btn-primary" disabled>Paralogs</button>
                       </div>
                      </div>
                    </div>
