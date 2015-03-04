@@ -165,6 +165,26 @@ function AnalyzeInit(){
         $("#search-form-group input").removeAttr('disabled');
         $("#search-form-group select").removeAttr('disabled');
     });
+    
+    $('#target').on('change', function() {
+        if (this.value === '9606'){
+            $("#type option[value=gene]").attr('disabled','true');
+            $("#type option[value=all]").attr('disabled','true');
+            $('#type').val('disease');
+        } else if (this.value === '10090'){
+            $("#type option[value=disease]").attr('disabled','true');
+            $("#type option[value=all]").attr('disabled','true');
+            $('#type').val('gene');
+        } else if (this.value === '7955'){
+            $("#type option[value=disease]").attr('disabled','true');
+            $("#type option[value=all]").attr('disabled','true');
+            $('#type').val('gene');
+        } else if (this.value === 'all'){
+            $("#type option[value=disease]").removeAttr('disabled');
+            $("#type option[value=gene]").removeAttr('disabled');
+            $("#type option[value=all]").removeAttr('disabled');
+        }
+    });
 
 
     function update_form_value(){

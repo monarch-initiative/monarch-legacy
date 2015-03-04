@@ -272,12 +272,15 @@ figcaption {
 #analyze-type {
     padding-bottom: 25px;
 }
-.pheno-radio-button{
-	font-weight: normal;
-    font-size: 16px;
+.pheno-radio-button {
 	width: 20%;
     margin: 0 auto;
-    padding-bottom: 20px;
+    padding-bottom: 15px;
+}
+
+.pheno-radio-button label {
+    font-weight: normal;
+    font-size: 16px;
     white-space: nowrap;
 }
 
