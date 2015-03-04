@@ -240,6 +240,48 @@ figcaption {
 	font-size:16px;
 }
 
+/* Analyze */
+
+#settings-header {
+    text-align: center;
+}
+#analyze-search {
+    border-right: 1px solid #e8e8e8;
+}
+.search-label {
+	font-weight: normal;
+    font-size: 15px;
+    text-align:right;
+    padding-top:3px;
+}
+
+#analyze-target {
+	padding-bottom: 30px;
+}
+
+.pheno-radio-button {
+	width: 20%;
+    margin: 0 auto;
+    padding-bottom: 10px;
+}
+
+.pheno-radio-button label {
+    font-weight: normal;
+    font-size: 16px;
+    white-space: nowrap;
+}
+#gene-text-area {
+    font-size: 15px;
+}
+.explain {
+    font-size: 14px;
+    padding-bottom: 20px;
+}
+.small {
+    font-weight: normal;
+    font-size: 12px;
+}
+
 /* Global Ajax */
 
 /* spinner code from http://tobiasahlin.com/spinkit */
