@@ -61,62 +61,76 @@
                         </div>
                         <button type="submit" class="btn btn-info">Search</button>  
                   </div>
-                  <h3 id="settings-header">Settings</h3>
-                  
-                    <div id="analyze-search" class="col-xs-3 col-sm-3 col-md-3 col-lg-3">
-                        <div class="pheno-radio-button">
-                        <label id="pheno-search">
-                         <input id="srch" type="radio" checked="true" value="srch" name="mode"> Search</label>
-                        </div>
-                        <div id="search-form-group">
-                          <div class="form-group" id="analyze-target">
-                            <label for="target" class="col-sm-6 control-label search-label">Target Species:</label>
-                            <div class="col-sm-6">
-                              <select class="form-control" id="target" name="target_species">
-                                <option value="all" selected="selected" >All</option>
-                                <option value="10090">Mouse (genes)</option>
-                                <option value="7955">Zebrafish (genes)</option>
-                                <option value="9606">Human (diseases)</option>
-                              </select>
-                            </div>
+                  <div class="col-xs-6 col-sm-6 col-md-6 col-lg-6">
+                    <div class="panel panel-default">
+                      <div class="panel-heading text-center"  style="padding: 1px 0 0 0;">
+                        <h4>Settings</h4>
+                      </div>
+                      <div class="row">
+                        <div id="analyze-search" class="col-xs-6 col-sm-6 col-md-6 col-lg-6">
+                          <div class="pheno-radio-button">
+                            <label id="pheno-search">
+                              <input id="srch" type="radio" checked="true" value="srch" name="mode"> Search</label>
                           </div>
-                          <div class="form-group" id="analyze-type">
-                            <label for="type" class="col-sm-6 control-label search-label">Target Type:</label>
-                            <div class="col-sm-6">
-                              <select class="form-control" id="type" name="target_type" >
-                                <option value="all" selected="selected" >All</option>
-                                <option value="disease">Disease</option>
-                                <option value="gene">Gene</option>
-                                <option value="genotype" disabled>Genotype</option>
-                              </select>
-                            </div>
+                          <div class="explain">
+                            Search for model genes, genotypes, and semantically similar diseases
                           </div>
+                          <div id="search-form-group">
+                            <div class="form-group" id="analyze-target">
+                              <label for="target" class="col-sm-6 control-label search-label">Target Species:</label>
+                              <div class="col-sm-6">
+                                <select class="form-control" id="target" name="target_species">
+                                  <option value="all" selected="selected" >All</option>
+                                  <option value="10090">Mouse (genes)</option>
+                                  <option value="7955">Zebrafish (genes)</option>
+                                  <option value="9606">Human (diseases)</option>
+                                </select>
+                              </div>
+                            </div>
+                            <div class="form-group" id="analyze-type">
+                              <label for="type" class="col-sm-6 control-label search-label">Target Type:</label>
+                              <div class="col-sm-6">
+                                <select class="form-control" id="type" name="target_type" >
+                                  <option value="all" selected="selected" >All</option>
+                                  <option value="disease">Disease</option>
+                                  <option value="gene">Gene</option>
+                                  <option value="genotype" disabled>Genotype</option>
+                                </select>
+                              </div>
+                            </div>
                         
-                          <div id="analyze-limit" class="form-group">
-                            <label for="analyze_limit_input" class="col-sm-6 control-label search-label">Maximum number of results:</label>
-                            <div class="col-sm-6">
-                              <input class="form-control" id="analyze_limit_input" name="limit" type="text"
-                               value="{{limit}}"></input>
-                            </div>
-                          </div> 
-                        </div>
-                    </div>
+                            <div id="analyze-limit" class="form-group">
+                              <label for="analyze_limit_input" class="col-sm-6 control-label search-label">Maximum number of results:</label>
+                              <div class="col-sm-6">
+                                <input class="form-control" id="analyze_limit_input" name="limit" type="text"
+                                    value="{{limit}}"></input>
+                              </div>
+                            </div> 
+                          </div>
+                      </div>
                     
                     
-                    <div class="col-xs-3 col-sm-3 col-md-3 col-lg-3">
+                      <div class="col-xs-6 col-sm-6 col-md-6 col-lg-6">
                         <div class="pheno-radio-button">
                           <label id="pheno-compare">
                             <input id="compare" type="radio" value="compare" name="mode"> Compare</label>
                         </div>
-                        <div id="explain">
-                            Compare agaisnt one or more genes<br>
-                            Genes must correspond to Entrez gene ids and be in the format
-                            NCBIGene:12345<br><br>
-                            Gene IDs:
-
+                        <div class="explain">
+                            Compare phenotypes agaisnt a set of genes<br><br>
                         </div>
-                        <textarea id="gene-list" class="form-control" rows="3" placeholder="" disabled="true"></textarea>
-                    </div>
+                        <div id="gene-text-area">Gene IDs:<br>
+                            <span class="small">
+                                (Gene IDs must correspond to Entrez 
+                                gene IDs in the format NCBIGene:12345
+                                and can be newline or comma separated)
+                            </span>
+                        </div>
+                       
+                        <textarea id="gene-list" class="form-control" rows="4" placeholder="" disabled="true"></textarea>
+                      </div>
+                     </div>
+                   </div>
+                  </div>
                 
                 </form>
                 </div>

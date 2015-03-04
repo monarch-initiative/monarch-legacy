@@ -241,21 +241,10 @@ figcaption {
 }
 
 /* Analyze */
+
 #settings-header {
     text-align: center;
 }
-/*
-#foo{
-   width:25%;
-   display: inline-block;
-   text-align: center;
-}
-#bar{
-   width: 20%;
-   display: inline-block;
-   text-align: center;
-}
-*/
 #analyze-search {
     border-right: 1px solid #e8e8e8;
 }
@@ -263,7 +252,7 @@ figcaption {
 	font-weight: normal;
     font-size: 16px;
     text-align:right;
-    padding-top:3px;
+    padding-top:2px;
 }
 
 #analyze-target {
@@ -275,7 +264,7 @@ figcaption {
 .pheno-radio-button {
 	width: 20%;
     margin: 0 auto;
-    padding-bottom: 15px;
+    padding-bottom: 10px;
 }
 
 .pheno-radio-button label {
@@ -283,11 +272,17 @@ figcaption {
     font-size: 16px;
     white-space: nowrap;
 }
-
-/*
-#settings .controls {
-	display: inline-block;
-}*/
+#gene-text-area {
+    font-size: 16px;
+}
+.explain {
+    font-size: 14px;
+    padding-bottom: 20px;
+}
+.small {
+    font-weight: normal;
+    font-size: 12px;
+}
 
 /* Global Ajax */
 
