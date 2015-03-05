@@ -292,6 +292,10 @@ figcaption {
 	font-size: 14px;
 	line-height: 40px;
 }
+#error-msg {
+    display:none;
+    line-height: 40px;
+}
 
 /* Global Ajax */
 

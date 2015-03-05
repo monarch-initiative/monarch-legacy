@@ -228,7 +228,14 @@ function AnalyzeInit(){
             var input = data.input;
             var results = (input.concat(orthologs)).join(', ');
             $("#gene-list").val(results);
-            isGeneListChanged = false;         
+            isGeneListChanged = false;
+            $("#ortholog").attr("disabled", 'true');
+        })
+        .error(function() { 
+            $("#ajax-spinner").hide();
+            $("#compare-form-group button").removeAttr('disabled');
+            $("#compare-form-group textarea").removeAttr('disabled');
+            $("#error-msg").show().delay(3000).fadeOut();
         });
         
         
@@ -262,8 +269,16 @@ function AnalyzeInit(){
             var input = data.input;
             var results = (input.concat(paralogs)).join(', ');
             $("#gene-list").val(results);
-            isGeneListChanged = false;         
+            isGeneListChanged = false;     
+            $("#paralog").attr("disabled", 'true');
+        })   
+        .error(function() { 
+            $("#ajax-spinner").hide();
+            $("#compare-form-group button").removeAttr('disabled');
+            $("#compare-form-group textarea").removeAttr('disabled');
+            $("#error-msg").show().delay(3000).fadeOut();
         });
+;
     });
     
     /*
