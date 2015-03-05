@@ -149,6 +149,13 @@ function AnalyzeInit(){
     result_list.prepend('<h3>Search Terms</h3> ' + term_list.substring(0, term_list.length-2) + '<br/>');
     
     
+    var isGeneListChanged = false;
+    
+    jQuery('#gene-list').on('input', function() {
+        isGeneListChanged = true;
+        console.log('foo');
+    });
+    
     // Disable search form when compare radio button selected
     // and enable compare
     $('#pheno-compare input[type=radio]').click(function(){
@@ -193,7 +200,7 @@ function AnalyzeInit(){
         }
     });
     
-    $('#homolog').click(function(){
+    $('#ortholog').click(function(){
         parse_text_area();  
     });
     
