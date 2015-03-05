@@ -150,19 +150,19 @@ function AnalyzeInit(){
     
     
     var isGeneListChanged = false;
+    var homologs;
     
     jQuery('#gene-list').on('input', function() {
         isGeneListChanged = true;
-        console.log('foo');
+        $("#compare-form-group button").removeAttr('disabled');
     });
     
     // Disable search form when compare radio button selected
     // and enable compare
     $('#pheno-compare input[type=radio]').click(function(){
         
-        $("#gene-list").removeAttr('disabled');
-        $("#homolog").removeAttr('disabled');    
-        $("#paralog").removeAttr('disabled');    
+        $("#compare-form-group button").removeAttr('disabled');
+        $("#compare-form-group textarea").removeAttr('disabled');   
         
         $("#search-form-group input").attr("disabled", 'true');
         $("#search-form-group select").attr("disabled", 'true');
@@ -172,9 +172,8 @@ function AnalyzeInit(){
     // Re-enable search form
     $('#pheno-search input[type=radio]').click(function(){
         
-        $("#gene-list").attr("disabled", 'true');
-        $("#homolog").attr("disabled", 'true');
-        $("#paralog").attr("disabled", 'true');
+        $("#compare-form-group button").attr("disabled", 'true');
+        $("#compare-form-group textarea").attr("disabled", 'true');
         
         $("#search-form-group input").removeAttr('disabled');
         $("#search-form-group select").removeAttr('disabled');
@@ -201,11 +200,70 @@ function AnalyzeInit(){
     });
     
     $('#ortholog').click(function(){
-        parse_text_area();  
+        if ((isGeneListChanged === false) && (typeof homologs !== undefined)){
+            var input = homologs.input.concat(homologs.orthologs);
+            var test_list = input.join(', ');
+            if ($("#gene-list").val() != test_list){
+                var current_list = homologs.input.concat(homologs.paralogs);
+                var results = (current_list.concat(homologs.orthologs)).join(', ');
+                $("#gene-list").val(results);
+                $("#compare-form-group button").attr("disabled", 'true');
+            }
+            return
+        }
+        var gene_list = parse_text_area();
+        var genes = gene_list.join('+');
+        var query = '/query/orthologs/'+genes+'.json'
+        $("#ajax-spinner").show();
+        $("#compare-form-group button").attr("disabled", 'true');
+        $("#compare-form-group textarea").attr("disabled", 'true');
+        
+        jQuery.getJSON(query, function(data) {
+            $("#ajax-spinner").hide();
+            $("#compare-form-group button").removeAttr('disabled');
+            $("#compare-form-group textarea").removeAttr('disabled');
+            //Set global homologs to reuse if needed
+            homologs = data;
+            var orthologs = data.orthologs;
+            var input = data.input;
+            var results = (input.concat(orthologs)).join(', ');
+            $("#gene-list").val(results);
+            isGeneListChanged = false;         
+        });
+        
+        
     });
     
     $('#paralog').click(function(){
-        parse_text_area();  
+        if ((isGeneListChanged === false) && (typeof homologs !== undefined)){
+            var input = homologs.input.concat(homologs.paralogs);
+            var test_list = input.join(', ');
+            if ($("#gene-list").val() != test_list){
+                var results = (input.concat(homologs.orthologs)).join(', ');
+                $("#gene-list").val(results);
+                $("#compare-form-group button").attr("disabled", 'true');
+            }
+            return
+        }
+        var gene_list = parse_text_area();
+        var genes = gene_list.join('+');
+        var query = '/query/orthologs/'+genes+'.json'
+        $("#ajax-spinner").show();
+        $("#compare-form-group button").attr("disabled", 'true');
+        $("#compare-form-group textarea").attr("disabled", 'true');
+        
+        jQuery.getJSON(query, function(data) {
+            $("#ajax-spinner").hide();
+            $("#compare-form-group button").removeAttr('disabled');
+            $("#compare-form-group textarea").removeAttr('disabled');
+            //Set global homologs to reuse if needed
+            homologs = data;
+            var paralogs = data.paralogs;
+            var input = data.input;
+            var results = (input.concat(paralogs)).join(', ');
+            $("#gene-list").val(results);
+            isGeneListChanged = false;         
+        });
     });
     
     /*
@@ -217,7 +275,6 @@ function AnalyzeInit(){
     function parse_text_area(){
         var genes = document.getElementById('gene-list').value;
         var gene_list = genes.split(/,\s|,|\n/);
-        console.log(gene_list);
         return gene_list;
     }
 
