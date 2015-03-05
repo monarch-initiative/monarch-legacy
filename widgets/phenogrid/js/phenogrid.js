@@ -125,8 +125,7 @@ function modelDataPointPrint(point) {
 		xOffsetOver: 20,
 		baseYOffset: 150,
 		faqImgSize: 15,
-		dummyModelName: "dummy",
-		getAxisError: false
+		dummyModelName: "dummy"
 	},
 
 	internalOptions: {
@@ -135,7 +134,8 @@ function modelDataPointPrint(point) {
 		selectedCalculation: 0,
 		invertAxis: false,
 		preloadHPO: true,
-		hpoDepth: 2,
+		hpoDepth: 4,
+		hpoDirection: "out",
 		selectedSort: "Frequency",
 		targetSpeciesName : "Overview",
 		refSpecies: "Homo sapiens",
@@ -1114,11 +1114,6 @@ function modelDataPointPrint(point) {
 
 	//Returns axis data from a ID of models or phenotypes
 	_getAxisData: function(key) {
-		if (typeof(key) === 'undefined'  && this.state.getAxisError){
-			console.log("UNDEFINED AXIS CALL");
-			return false;
-		}
-
 		if (this.state.yAxis.containsKey(key)){
 			return this.state.yAxis.get(key);
 		}
@@ -1838,7 +1833,6 @@ function modelDataPointPrint(point) {
 		var self = this;
 		var info = self._getAxisData(data);
 		var displayCount = self._getYLimit();
-		var highlightOffset = 1;
 		var concept = self._getConceptId(data);
 		var appearanceOverrides;   
 
@@ -1929,19 +1923,23 @@ function modelDataPointPrint(point) {
 			if (typeof(info.parent) !== 'undefined' && info.parent !== null) {
 				var parentInfo = this.state.modelListHash.get(info.parent);
 				if (parentInfo !== null) {
-					var genehrefLink = "<a href=\"" + this.state.serverURL+"/" + parentInfo.type +"/"+ info.parent.replace("_", ":")+ "\" target=\"_blank\">" +  
-					parentInfo.label + "</a>";					
+					var genehrefLink = "<a href=\"" + this.state.serverURL + "/" + parentInfo.type + "/" + info.parent.replace("_", ":") + "\" target=\"_blank\">" + parentInfo.label + "</a>";
 					retData += "<br/><strong>Gene:</strong> " + genehrefLink;
 				}
-			}			
+			}
 		} else if (type == 'Phenotype'){
 			retData += "<strong>IC:</strong> " + info.IC.toFixed(2);
 			var hpoExpand = false;
+			var hpoData = "<br/><br/>";
 			var hpoCached = this.state.hpoCacheHash.get(concept.replace("_", ":"));
 			if (hpoCached !== null && hpoCached.active == 1){
 				hpoExpand = true;
-				hpoData = "<br/><br/><strong>HPO Structure:</strong>";
-				hpoData += this._buildHPOTree(concept.replace("_", ":"), hpoCached.edges, 0);
+				var hpoTree = this._buildHPOTree(concept.replace("_", ":"), hpoCached.edges, 0);
+				if (hpoTree == "<br/><br/>null" || hpoTree === null){
+					hpoData += "<em>No HPO Data Found</em>";
+				} else {
+					hpoData += "<strong>HPO Structure:</strong>" + hpoTree;
+				}
 			}
 			if (!this.state.preloadHPO){
 				if (hpoExpand){
@@ -1964,7 +1962,7 @@ function modelDataPointPrint(point) {
 				var gtCached = this.state.loadedGenoTypesHash.get(concept);
 				if (gtCached !== null) { isExpanded = gtCached.expanded;}
 
-				//if found just return genotypes scores		
+				//if found just return genotypes scores
 				if (isExpanded) {
 					appearanceOverrides.offset = (gtCached.genoTypes.size() + (gtCached.genoTypes.size() * 0.40));   // magic numbers for extending the highlight
 					var href = "<a href=\"" + this.state.serverURL+"/gene/" + concept + "\" target=\"_blank\">" + gtCached.totalAssocCount + "</a>";
@@ -1997,7 +1995,7 @@ function modelDataPointPrint(point) {
 	_buildHPOTree: function(id, edges, level) {
 		var mark = "";
 		var results = "";
-		if (level == 0){
+		if (level === 0){
 			results += "<br/><br/>" + this.state.hpoCacheLabels.get(id);
 		}
 
@@ -2016,7 +2014,7 @@ function modelDataPointPrint(point) {
 				}
 			}
 		}
-		return results;			
+		return results;
 	},
 
 	_buildHPOHyperLink: function(id){
@@ -2048,7 +2046,7 @@ function modelDataPointPrint(point) {
 
 				alabels.style("font-weight","normal");
 				alabels.style("text-decoration", "none");
-				//alabels.style("fill", "black");		
+				//alabels.style("fill", "black");
 				alabels.style("fill", this._getExpandStyling(data));
 				
 				this._deselectMatching(data);
@@ -2064,16 +2062,14 @@ function modelDataPointPrint(point) {
 			var win = window.open(url, '_blank');
 
 		} else if (this._getIDType(data) == "Model"){
-
-			var expand = false ;
 			apientity = this._getIDTypeDetail(data);
 
 			// if it's overview, then just allow view of the model clicked
 			if (this.state.targetSpeciesName != "Overview" && apientity == 'gene') {
 				var expanded = this._isExpanded(data);
-				if (expanded != null && expanded) {
+				if (expanded !== null && expanded) {
 					this._collapseGenotypes(data);
-				} else if (expanded != null && !expanded){
+				} else if (expanded !== null && !expanded){
 					this._expandGenotypes(data);
 				}
 			}
@@ -2159,12 +2155,15 @@ function modelDataPointPrint(point) {
 			.attr("class", this._getConceptId(data) + " model_label")
 			.attr("data-tooltip", "sticky1")   //this activates the stickytool tip
 			.style("font-size", "12px")
-//			.style("font-weight", "bold")
+			//.style("font-weight", "bold")
 			.style("fill", this._getExpandStyling(data))
 			//don't show the label if it is a dummy.
-			.text( function(d) {if (label == self.state.dummyModelName) 
-										return ""; 
-								else return label;});
+			.text( function(d) {
+				if (label == self.state.dummyModelName){
+					return ""; 
+				} else {
+					return label;
+				}});
 
 		// put a little icon indicator in front of the label
 		if (this._hasChildrenForExpansion(data)) {
@@ -2531,7 +2530,6 @@ function modelDataPointPrint(point) {
 	//change the list of phenotypes and filter the models accordingly. The 
 	//movecount is an integer and can be either positive or negative
 	_updateModel: function(newXPos, newYPos){
-		var self = this;
 		var xSize = this.state.xAxis.size();
 		var ySize = this.state.yAxis.size();
 
@@ -2540,7 +2538,7 @@ function modelDataPointPrint(point) {
 		} else {
 			this.state.currXIdx = newXPos;
 		}
-		
+
 		if (newYPos > ySize){
 			this.state.currYIdx = ySize;
 		} else {
@@ -2558,7 +2556,6 @@ function modelDataPointPrint(point) {
 		// this must be initialized here after the _createModelLabels, or the mouse events don't get
 		// initialized properly and tooltips won't work with the mouseover defined in _convertLableHTML
 		stickytooltip.init("*[data-tooltip]", "mystickytooltip");
-						
 	},
 
 	//Previously _createModelLabels
@@ -2638,7 +2635,7 @@ function modelDataPointPrint(point) {
 		} else if (this.state.invertAxis && this.state.targetSpeciesName !== "Overview") {
 			list = self._getSortedIDListStrict(this.state.filteredYAxis.entries());
 		}
-		
+
 		this.state.svg.selectAll("text.scores")
 			.data(list)
 			.enter()
@@ -3254,7 +3251,6 @@ function modelDataPointPrint(point) {
 		return unmatchedLabels;
 	},
 
-
 	_buildUnmatchedPhenotypeDisplay: function() {
 		var optionhtml;
 		var prebl = $("#prebl");
@@ -3265,11 +3261,11 @@ function modelDataPointPrint(point) {
 		}
 		prebl.empty();
 
-		if (this.state.unmatchedPhenotypes !== undefined && this.state.unmatchedPhenotypes.length > 0){	
+		if (this.state.unmatchedPhenotypes !== undefined && this.state.unmatchedPhenotypes.length > 0){
 			optionhtml = "<div class='clearfix'><form id='matches'><input type='checkbox' name='unmatched' value='unmatched' >&nbsp;&nbsp;View Unmatched Phenotypes<br /><form><div id='clear'></div>";
 			var phenohtml = this._buildUnmatchedPhenotypeTable();
 			optionhtml = optionhtml + "<div id='unmatched' style='display:none;'>" + phenohtml + "</div></div>";
-			prebl.append(optionhtml);	
+			prebl.append(optionhtml);
 		} else { // no unmatched phenotypes
 			optionhtml = "<div id='unmatchedlabel' style='display:block;'>No Unmatched Phenotypes</div>";
 			prebl.append(optionhtml);
@@ -3370,8 +3366,8 @@ function modelDataPointPrint(point) {
 			}
 		}
 		return newlist;
-	}, 
-	
+	},
+
 	_expandHPO: function(id){
 		self._getHPO(id);
 		stickytooltip.closetooltip();
@@ -3391,7 +3387,7 @@ function modelDataPointPrint(point) {
 		// check cached hashtable first 
 		var idClean = id.replace("_", ":");
 		var HPOInfo = this.state.hpoCacheHash.get(idClean);
-		var direction = "out";
+		var direction = this.state.hpoDirection;
 		var relationship = "subClassOf";
 		var depth = this.state.hpoDepth;
 		var nodes, edges;
@@ -3406,14 +3402,14 @@ function modelDataPointPrint(point) {
 				edges = results.edges;
 				nodes = results.nodes;
 				for (var i in nodes){
-					if (!this.state.hpoCacheLabels.containsKey(nodes[i].id)){
+					if (!this.state.hpoCacheLabels.containsKey(nodes[i].id) && (nodes[i].id != "UPHENO_0001001" && nodes[i].id != "UPHENO_0001002" && nodes[i].id != "HP:0000118" && nodes[i].id != "HP:0000001")){
 						this.state.hpoCacheLabels.put(nodes[i].id,this._capitalizeString(nodes[i].lbl));
 					}
 				}
 
 				//Used to prevent breaking objects
 				for (var j in edges){
-					if (edges[j].obj != "UPHENO_0001001"){
+					if (edges[j].obj != "UPHENO_0001001" && edges[j].obj != "UPHENO_0001002" && edges[j].obj != "HP:0000118" && edges[j].obj != "HP:0000001"){
 						HPOInfo.push(edges[j]);
 					}
 				}
@@ -3446,8 +3442,8 @@ function modelDataPointPrint(point) {
 
 		//if cached info not found need to try and get genotypes and scores
 		if (cache === null) {
-			// go get the assocated genotypes	
-			var url = this.state.serverURL+"/gene/"+ modelInfo.id.replace('_', ':') + ".json";		
+			// go get the assocated genotypes
+			var url = this.state.serverURL+"/gene/"+ modelInfo.id.replace('_', ':') + ".json";
 			
 			console.log("Getting Gene " + url);
 			console.profile("gene call");
@@ -3795,7 +3791,7 @@ function modelDataPointPrint(point) {
 		if (info == 'gene') {
 			var g = this.state.loadedGenoTypesHash.get(concept);
 			// if it was ever expanded
-			if (g != null){
+			if (g !== null){
 				return g.expanded;  
 			}
 		}
@@ -3810,7 +3806,7 @@ function modelDataPointPrint(point) {
 		if (info == 'gene') {
 			var g = this.state.loadedGenoTypesHash.get(concept);
 			// if it was ever expanded it will have children
-			if (g != null) {
+			if (g !== null) {
 				return true;  
 			}
 		}
