@@ -3,6 +3,8 @@ function AnalyzeInit(){
     
     var DEBUG = false;
     //var DEBUG = true;
+    
+    var urlParams = {};
 
     ///
     /// HTML connctions.
@@ -134,8 +136,17 @@ function AnalyzeInit(){
     				search_set[url_phenotypes[urn]] = "Phenotype_"+(urn+1);
     			}
     		}
-        } 
+        } else if (parameterName[0] == "mode"){
+            urlParams.mode = parameterName[1];
+        } else if (parameterName[0] == "gene-list"){
+            urlParams.geneList = parameterName[1];
+        }
     }
+
+    if (typeof urlParams.geneList !== 'undefined'){
+        var decode = decodeURIComponent(urlParams.geneList.replace(/\+/g, ' '))
+        urlParams.geneList = parse_text_area(decode);
+    }  
     
     redraw_form_list();
     
@@ -148,6 +159,8 @@ function AnalyzeInit(){
     });
     result_list.prepend('<h3>Search Terms</h3> ' + term_list.substring(0, term_list.length-2) + '<br/>');
     
+    
+    //Settings
     
     var isGeneListChanged = false;
     var homologs;
@@ -200,7 +213,7 @@ function AnalyzeInit(){
     });
     
     $('#ortholog').click(function(){
-        if ((isGeneListChanged === false) && (typeof homologs !== undefined)){
+        if ((isGeneListChanged === false) && (typeof homologs !== 'undefined')){
             var input = homologs.input.concat(homologs.orthologs);
             var test_list = input.join(', ');
             if ($("#gene-list").val() != test_list){
@@ -211,7 +224,7 @@ function AnalyzeInit(){
             }
             return
         }
-        var gene_list = parse_text_area();
+        var gene_list = parse_text_area(document.getElementById('gene-list').value);
         var genes = gene_list.join('+');
         var query = '/query/orthologs/'+genes+'.json'
         $("#ajax-spinner").show();
@@ -242,7 +255,7 @@ function AnalyzeInit(){
     });
     
     $('#paralog').click(function(){
-        if ((isGeneListChanged === false) && (typeof homologs !== undefined)){
+        if ((isGeneListChanged === false) && (typeof homologs !== 'undefined')){
             var input = homologs.input.concat(homologs.paralogs);
             var test_list = input.join(', ');
             if ($("#gene-list").val() != test_list){
@@ -252,7 +265,7 @@ function AnalyzeInit(){
             }
             return
         }
-        var gene_list = parse_text_area();
+        var gene_list = parse_text_area(document.getElementById('gene-list').value);
         var genes = gene_list.join('+');
         var query = '/query/orthologs/'+genes+'.json'
         $("#ajax-spinner").show();
@@ -287,9 +300,8 @@ function AnalyzeInit(){
      * Returns: list of value from text area 
      * split by comma, comma\s, or \n
      */
-    function parse_text_area(){
-        var genes = document.getElementById('gene-list').value;
-        var gene_list = genes.split(/,\s|,|\n/);
+    function parse_text_area(text){
+        var gene_list = text.split(/,\s|,|\s\n|\n/);
         return gene_list;
     }
 
@@ -426,18 +438,25 @@ function AnalyzeInit(){
     jQuery(analyze_auto_input_elt).autocomplete(auto_args);
 
     ll('Done ready!');
+    return urlParams;
 };
 
 // jQuery gets to bootstrap everything.
 jQuery(document).ready(
     function(){
-	AnalyzeInit();
+	var params = AnalyzeInit();
 
 	if ($("#analyze_auto_target").val() !== null) {
 	    var text = $("#analyze_auto_target").val();
 	    var species = $("#analyze_auto_species").val();
+	    if (typeof species === 'undefined'){
+	        species = 'all';
+	    }
 	    var phenotypes  = text.split(/[\s,]+/);
 	    $("#phen_vis").phenogrid({phenotypeData: phenotypes,
-				      targetSpecies: species });
+				      targetSpecies: species,
+				      owlSimFunction: params.mode,
+				      geneList: params.geneList });
 	}
-    });
+	
+});
