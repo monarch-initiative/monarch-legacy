@@ -133,9 +133,9 @@ function modelDataPointPrint(point) {
 		serverURL: "",
 		selectedCalculation: 0,
 		invertAxis: false,
-		preloadHPO: true,
-		hpoDepth: 4,
-		hpoDirection: "out",
+		preloadHPO: true,	//Boolean value that allows for preloading of all HPO data at start.  If false, the user will have to manually select what HPO relations to load via hoverbox.
+		hpoDepth: 6,	//Numerical value that determines how far to go up the tree in relations.
+		hpoDirection: "out",	//String that determines what direction to go in relations.  Default is "out".
 		selectedSort: "Frequency",
 		targetSpeciesName : "Overview",
 		refSpecies: "Homo sapiens",
@@ -1101,6 +1101,7 @@ function modelDataPointPrint(point) {
 
 		this.state.modelList = modList;
 		this.state.speciesList = speciesList;
+
 	},
 
 	//Returns values from a point on the grid
@@ -1934,7 +1935,10 @@ function modelDataPointPrint(point) {
 			var hpoCached = this.state.hpoCacheHash.get(concept.replace("_", ":"));
 			if (hpoCached !== null && hpoCached.active == 1){
 				hpoExpand = true;
-				var hpoTree = this._buildHPOTree(concept.replace("_", ":"), hpoCached.edges, 0);
+				//var hpoTree = "<pre>" + this._buildHPOTree(concept.replace("_", ":"), hpoCached.edges, 0) + "</pre>";
+				//Alternative style which needs some CSS work, but works with tabs
+				var hpoTree = "<br/>" + this._buildHPOTree(concept.replace("_", ":"), hpoCached.edges, 0);
+				
 				if (hpoTree == "<br/><br/>null" || hpoTree === null){
 					hpoData += "<em>No HPO Data Found</em>";
 				} else {
@@ -1992,31 +1996,38 @@ function modelDataPointPrint(point) {
 		return appearanceOverrides;
 	},
 
+	//This builds the string to show the relations of the HPO nodes.  It recursively cycles through the edges and in the end returns the full visual structure displayed in the phenotype hover
 	_buildHPOTree: function(id, edges, level) {
 		var mark = "";
 		var results = "";
-		if (level === 0){
-			results += "<br/><br/>" + this.state.hpoCacheLabels.get(id);
-		}
-
-		level++;
-		for (var i = 0; i < level; i++){
+		var nextResult;
+		var nextLevel = level + 1;
+		for (var i = 0; i < nextLevel; i++){
+			//mark += "&#9;";
+			//To use this alternative, must make sure the <pre> hpoTree alternative above is enabled
 			mark += "----";
 		}
 		for (var j in edges){
+			//Currently only allows subClassOf relations.  When new relations are introducted, it should be simple to implement
 			if (edges[j].pred == "subClassOf"){
-				//console.log(id);
-				//console.log(edges[j].sub);
 				if (edges[j].sub == id){
-					results += "<br/>" + mark + this._buildHPOHyperLink(edges[j].obj);
-					//console.log(edges[j].sub);
-					results += this._buildHPOTree(edges[j].obj, edges, level);
+					nextResult = this._buildHPOTree(edges[j].obj, edges, nextLevel);
+					if (nextResult == ""){
+						//Bolds the 'top of the line' to see what is the root or closet to the root.  It will hit this point either when it reaches the hpoDepth or there is no parents
+						results += "<br/>" + mark + "<strong>" + this._buildHPOHyperLink(edges[j].obj) + "</strong>";
+					} else {
+						results += nextResult + "<br/>" + mark + this._buildHPOHyperLink(edges[j].obj);
+					}
+					if (level === 0){
+						results += "<br/>" + this.state.hpoCacheLabels.get(id) + "<br/>";
+					}
 				}
 			}
 		}
 		return results;
 	},
 
+	//Based on the ID, it pulls the label from hpoCacheLabels and creates a hyperlink that allows the user to go to the respective phenotype page
 	_buildHPOHyperLink: function(id){
 		var label = this.state.hpoCacheLabels.get(id);
 		var link = "<a href=\"" + this.state.serverURL + "/Phenotype/" + id + "\" target=\"_blank\">" + label + "</a>";
@@ -3368,12 +3379,14 @@ function modelDataPointPrint(point) {
 		return newlist;
 	},
 
+	//Will call the getHPO function to either load the HPO info or to make it visible if it was previously hidden.  Not available if preloading
 	_expandHPO: function(id){
 		self._getHPO(id);
 		stickytooltip.closetooltip();
 		console.log("Loaded HPO Info for " + id);
 	},
 
+	//Will hide the hpo info, not delete it.  This allows for reloading to be done faster and avoid unneeded server calls.  Not available if preloading
 	_collapseHPO: function(id){
 		var idClean = id.replace("_", ":");
 		var HPOInfo = this.state.hpoCacheHash.get(idClean);
@@ -3383,6 +3396,7 @@ function modelDataPointPrint(point) {
 		console.log("Hid HPO Info for " + id);
 	},
 
+	//When provided with an ID, it will first check hpoCacheHash if currently has the HPO data stored, and if it does it will set it to be visible.  If it does not have that information in the hpoCacheHash, it will make a server call to get the information and if successful will parse the information into hpoCacheHash and hpoCacheLabels
 	_getHPO: function(id) {
 		// check cached hashtable first 
 		var idClean = id.replace("_", ":");
@@ -3392,7 +3406,6 @@ function modelDataPointPrint(point) {
 		var depth = this.state.hpoDepth;
 		var nodes, edges;
 		///neighborhood/HP_0003273/2/out/subClassOf.json
-		//if null then go find genotypes
 		if (HPOInfo === null) {
 			HPOInfo = [];
 			var url = this.state.serverURL + "/neighborhood/" + id + "/" + depth + "/" + direction + "/" + relationship + ".json";
@@ -3401,6 +3414,7 @@ function modelDataPointPrint(point) {
 			if (typeof (results) !== 'undefined') {
 				edges = results.edges;
 				nodes = results.nodes;
+				//Labels/Nodes are done seperately to reduce redunancy as there might be multiple phenotypes with the same related nodes
 				for (var i in nodes){
 					if (!this.state.hpoCacheLabels.containsKey(nodes[i].id) && (nodes[i].id != "UPHENO_0001001" && nodes[i].id != "UPHENO_0001002" && nodes[i].id != "HP:0000118" && nodes[i].id != "HP:0000001")){
 						this.state.hpoCacheLabels.put(nodes[i].id,this._capitalizeString(nodes[i].lbl));
@@ -3419,10 +3433,11 @@ function modelDataPointPrint(point) {
 			// this is for later so we don't have to lookup concept again
 			if (HPOInfo === null) {HPOInfo = {};}
 
-			// save the genotypes in hastable for later
+			// save the HPO in cache for later
 			var hashData = {"edges": HPOInfo, "active": 1};
 			this.state.hpoCacheHash.put(idClean,hashData);
 		} else {
+			//If it does exist, make sure its set to visible
 			HPOInfo.active = 1;
 			this.state.hpoCacheHash.put(idClean,HPOInfo);
 		}
