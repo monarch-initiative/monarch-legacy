@@ -6,7 +6,7 @@
 
 
 var stickytooltip={
-	tooltipoffsets: [10, -60], //additional x and y offset from mouse cursor for tooltips 20,-30  [10, -15]
+	tooltipoffsets: [0, -3], //additional x and y offset from mouse cursor for tooltips 0,-3  [10, 10]
 	fadeinspeed: 200, //duration of fade effect in milliseconds
 	rightclickstick: true, //sticky tooltip when user right clicks over the triggering element (apart from pressing "s" key) ?
 	stickybordercolors: ["black", "darkred"], //border color of tooltip depending on sticky state
@@ -15,10 +15,11 @@ var stickytooltip={
 
 	//***** NO NEED TO EDIT BEYOND HERE
 
-	isdocked: false,
+	isdocked: false,  // force sticky mode
 
 	positiontooltip:function($, $tooltip, e){
 		var x=e.pageX+this.tooltipoffsets[0], y=e.pageY+this.tooltipoffsets[1]
+		//var x=e.pageX, y=e.pageY;
 		var tipw=$tooltip.outerWidth(), tiph=$tooltip.outerHeight(), 
 		x=(x+tipw>$(document).scrollLeft()+$(window).width())? x-tipw-(stickytooltip.tooltipoffsets[0]*2) : x
 		y=(y+tiph>$(document).scrollTop()+$(window).height())? $(document).scrollTop()+$(window).height()-tiph-10 : y
@@ -26,22 +27,30 @@ var stickytooltip={
 	},
 	
 	showbox:function($, $tooltip, e){
-		$tooltip.fadeIn(this.fadeinspeed)
-		this.positiontooltip($, $tooltip, e)
+		$tooltip.fadeIn(this.fadeinspeed);
+		this.positiontooltip($, $tooltip, e);
+	},
+
+	// wrapper function
+	show:function(e) {
+		var $tooltip=$('#mystickytooltip');
+		stickytooltip.isdocked = true;
+		stickytooltip.showbox($, $tooltip, e);
 	},
 
 	hidebox:function($, $tooltip){
 		if (!this.isdocked){
-			$tooltip.stop(false, true).hide()
-			$tooltip.css({borderColor:'black'}).find('.stickystatus:eq(0)').css({background:this.stickybordercolors[0]}).html(this.stickynotice1)
+			$tooltip.stop(false, true).hide();
+//			$tooltip.css({borderColor:'black'}).find('.stickystatus:eq(0)').css({background:this.stickybordercolors[0]}).html(this.stickynotice1)
 		}
 	},
 
 	docktooltip:function($, $tooltip, e){
 		this.isdocked=true
-		$tooltip.css({borderColor:'darkred'}).find('.stickystatus:eq(0)').css({background:this.stickybordercolors[1]}).html(this.stickynotice2)
+		//$tooltip.css({borderColor:'darkred'}).find('.stickystatus:eq(0)').css({background:this.stickybordercolors[1]}).html(this.stickynotice2)
 	},
 
+	// wrapper function
 	closetooltip:function() {		
 		var $tooltip=$('#mystickytooltip');
 		stickytooltip.isdocked = false;
@@ -50,7 +59,7 @@ var stickytooltip={
 
 	init:function(targetselector, tipid){
 		jQuery(document).ready(function($){
-			var self = this;
+			var self = this;			
 			var $targets=$(targetselector);
 			var $tooltip=$('#'+tipid).appendTo(document.body);
 			if ($targets.length==0)
@@ -61,23 +70,32 @@ var stickytooltip={
 //			stickytooltip.stickynotice1=stickytooltip.stickynotice1.join(' ')
 //			self.stickynotice1=self.stickynotice1.join(' ')
 			stickytooltip.hidebox($, $tooltip);
-			$targets.bind('mouseenter', function(e){
-				if (!stickytooltip.isdocked){   // MKD mod
-					$alltips.hide().filter('#'+$(this).attr('data-tooltip')).show();
-					stickytooltip.showbox($, $tooltip, e);
-			    }
-			})
-			$targets.bind('mouseleave', function(e){
-				stickytooltip.hidebox($, $tooltip);
-			})
-			$targets.bind('mousemove', function(e){
-				if (!stickytooltip.isdocked){
-					stickytooltip.positiontooltip($, $tooltip, e);
+			$targets.bind('mouseenter', function(e){  // mouseenter
+			// 	if (!stickytooltip.isdocked){   
+			 		//$alltips.hide().filter('#'+$(this).attr('data-tooltip')).show();
+			 		stickytooltip.showbox($, $tooltip, e);
+			// 	}
+			//     //console.log('mouseenter');
+		    })
+			 $targets.bind('mouseout', function(e){  // mouseleave
+				var elem = e.relatedTarget ||  e.toElement || e.fromElement;
+//				console.log("stky mouseleave: " + elem);	
+
+				if (elem.id != 'mystickytooltip') {
+					stickytooltip.isdocked = false;
+			 		stickytooltip.hidebox($, $tooltip);
 				}
-			})
-			$tooltip.bind("mouseenter", function(){
-				stickytooltip.hidebox($, $tooltip);
-			})
+			 })
+			// $targets.bind('mousemove', function(e){
+			// 	if (!stickytooltip.isdocked){
+			// 		stickytooltip.positiontooltip($, $tooltip, e);
+			// 	}				
+			// 	//console.log('mousemove');
+			// })
+			// $tooltip.bind("mouseenter", function(){
+			// 	stickytooltip.hidebox($, $tooltip);
+			// 	//console.log('mouseenter2');
+			// })
 			$tooltip.bind("click", function(e){
 				e.stopPropagation();
 			})
