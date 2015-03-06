@@ -136,6 +136,8 @@ function modelDataPointPrint(point) {
 		preloadHPO: true,	//Boolean value that allows for preloading of all HPO data at start.  If false, the user will have to manually select what HPO relations to load via hoverbox.
 		hpoDepth: 10,	//Numerical value that determines how far to go up the tree in relations.
 		hpoDirection: "out",	//String that determines what direction to go in relations.  Default is "out".
+		hpoTreeAmounts: 1,	//Allows you to decide how many HPO Trees to render.  Once a tree hits the high-level parent, it will count it as a complete tree.  Additional branchs or seperate trees count as seperate items
+							//DO NOT CHANGE UNTIL THE DISPLAY HPOTREE FUNCTIONS HAVE BEEN CHANGED. WILL WORK ON SEPERATE TREES, BUT BRANCHES MAY BE INACCURATE
 		selectedSort: "Frequency",
 		targetSpeciesName : "Overview",
 		refSpecies: "Homo sapiens",
@@ -1936,9 +1938,11 @@ function modelDataPointPrint(point) {
 			var hpoCached = this.state.hpoCacheHash.get(concept.replace("_", ":"));
 			if (hpoCached !== null && hpoCached.active == 1){
 				hpoExpand = true;
-				//var hpoTree = "<pre>" + this._buildHPOTree(concept.replace("_", ":"), hpoCached.edges, 0) + "</pre>";
-				//Alternative style which needs some CSS work, but works with tabs
-				var hpoTree = "<br/>" + this._buildHPOTree(concept.replace("_", ":"), hpoCached.edges, 0);
+
+				//HACKISH, BUT WORKS FOR NOW.  LIMITERS THAT ALLOW FOR TREE CONSTRUCTION BUT DONT NEED TO BE PASSED BETWEEN RECURSIONS
+				this.state.hpoTreesDone = 0;
+				this.state.hpoTreeHeight = 0;
+				var hpoTree = "<div id='hpoDiv'>" + this._buildHPOTree(concept.replace("_", ":"), hpoCached.edges, 0) + "</div>";
 				if (hpoTree == "<br/>"){
 					hpoData += "<em>No HPO Data Found</em>";
 				} else {
@@ -2002,29 +2006,39 @@ function modelDataPointPrint(point) {
 		var results = "";
 		var nextResult;
 		var nextLevel = level + 1;
-		for (var i = 0; i < nextLevel; i++){
-			//mark += "&#9;";
-			//To use this alternative, must make sure the <pre> hpoTree alternative above is enabled
-			mark += "----";
-		}
+
 		for (var j in edges){
 			//Currently only allows subClassOf relations.  When new relations are introducted, it should be simple to implement
-			if (edges[j].pred == "subClassOf"){
+			if (edges[j].pred == "subClassOf" && this.state.hpoTreesDone != this.state.hpoTreeAmounts){
 				if (edges[j].sub == id){
+					if (this.state.hpoTreeHeight < nextLevel){
+						this.state.hpoTreeHeight++;
+					}
 					nextResult = this._buildHPOTree(edges[j].obj, edges, nextLevel);
 					if (nextResult == ""){
 						//Bolds the 'top of the line' to see what is the root or closet to the root.  It will hit this point either when it reaches the hpoDepth or there is no parents
-						results += "<br/>" + mark + "<strong>" + this._buildHPOHyperLink(edges[j].obj) + "</strong>";
+						results += "<br/>" + this._buildIndentMark(this.state.hpoTreeHeight - nextLevel) + "<strong>" + this._buildHPOHyperLink(edges[j].obj) + "</strong>";
+						this.state.hpoTreesDone++;
 					} else {
-						results += nextResult + "<br/>" + mark + this._buildHPOHyperLink(edges[j].obj);
+						results += nextResult + "<br/>" + this._buildIndentMark(this.state.hpoTreeHeight - nextLevel) + this._buildHPOHyperLink(edges[j].obj);
 					}
+					
 					if (level === 0){
-						results += "<br/>" + this.state.hpoCacheLabels.get(id) + "<br/>";
+						results += "<br/>" + this._buildIndentMark(this.state.hpoTreeHeight) + this.state.hpoCacheLabels.get(id) + "<br/>";
+						this.state.hpoTreeHeight = 0;
 					}
 				}
 			}
 		}
 		return results;
+	},
+
+	_buildIndentMark: function (times){
+		var mark = "";
+		for (var i = 0; i < times; i++){
+			mark += "----";
+		}
+		return mark;
 	},
 
 	//Based on the ID, it pulls the label from hpoCacheLabels and creates a hyperlink that allows the user to go to the respective phenotype page
@@ -3416,14 +3430,14 @@ function modelDataPointPrint(point) {
 				nodes = results.nodes;
 				//Labels/Nodes are done seperately to reduce redunancy as there might be multiple phenotypes with the same related nodes
 				for (var i in nodes){
-					if (!this.state.hpoCacheLabels.containsKey(nodes[i].id) && (nodes[i].id != "UPHENO_0001001" && nodes[i].id != "UPHENO_0001002" && nodes[i].id != "HP:0000118" && nodes[i].id != "HP:0000001")){
+					if (!this.state.hpoCacheLabels.containsKey(nodes[i].id) && (nodes[i].id != "MP:0000001" && nodes[i].id != "UPHENO_0001001" && nodes[i].id != "UPHENO_0001002" && nodes[i].id != "HP:0000118" && nodes[i].id != "HP:0000001")){
 						this.state.hpoCacheLabels.put(nodes[i].id,this._capitalizeString(nodes[i].lbl));
 					}
 				}
 
 				//Used to prevent breaking objects
 				for (var j in edges){
-					if (edges[j].obj != "UPHENO_0001001" && edges[j].obj != "UPHENO_0001002" && edges[j].obj != "HP:0000118" && edges[j].obj != "HP:0000001"){
+					if (edges[j].obj != "MP:0000001" && edges[j].obj != "UPHENO_0001001" && edges[j].obj != "UPHENO_0001002" && edges[j].obj != "HP:0000118" && edges[j].obj != "HP:0000001"){
 						HPOInfo.push(edges[j]);
 					}
 				}

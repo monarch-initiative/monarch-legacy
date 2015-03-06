@@ -85,6 +85,10 @@ body {
 	-moz-border-radius: 8px;
 }
 
+#hpoDiv {
+	text-align:left;
+}
+
 #stitle {
 	margin-left:240px;
 	font-size:18px;
