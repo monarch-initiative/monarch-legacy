@@ -1071,7 +1071,8 @@ function modelDataPointPrint(point) {
 						model_label: item.label,
 						model_score: item.score.score,
 						species: species,
-						model_rank: item.score.rank};
+						model_rank: idx,
+						score_rank: item.score.rank};
 					data.push(newItem);
 					this._loadDataForModel(item);
 				}
@@ -1409,7 +1410,8 @@ function modelDataPointPrint(point) {
 					model_label: retData.b[idx].label, 
 					model_score: retData.b[idx].score.score, 
 					species: species,
-					model_rank: retData.b[idx].score.rank}
+					model_rank: idx,
+					score_rank: retData.b[idx].score.rank}
 				);
 				this._loadDataForModel(retData.b[idx]);
 			}
