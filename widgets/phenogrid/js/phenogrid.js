@@ -134,7 +134,7 @@ function modelDataPointPrint(point) {
 		selectedCalculation: 0,
 		invertAxis: false,
 		preloadHPO: true,	//Boolean value that allows for preloading of all HPO data at start.  If false, the user will have to manually select what HPO relations to load via hoverbox.
-		hpoDepth: 6,	//Numerical value that determines how far to go up the tree in relations.
+		hpoDepth: 10,	//Numerical value that determines how far to go up the tree in relations.
 		hpoDirection: "out",	//String that determines what direction to go in relations.  Default is "out".
 		selectedSort: "Frequency",
 		targetSpeciesName : "Overview",
@@ -1181,6 +1181,7 @@ function modelDataPointPrint(point) {
 					}
 				}
 
+				//OPOS is used for overview positioning.  Z is mapped to this
 				z = x;
 				for (var k in this.state.targetSpeciesList){
 					if (this.state.modelData[i].species == this.state.targetSpeciesList[k].name){
@@ -1938,8 +1939,7 @@ function modelDataPointPrint(point) {
 				//var hpoTree = "<pre>" + this._buildHPOTree(concept.replace("_", ":"), hpoCached.edges, 0) + "</pre>";
 				//Alternative style which needs some CSS work, but works with tabs
 				var hpoTree = "<br/>" + this._buildHPOTree(concept.replace("_", ":"), hpoCached.edges, 0);
-				
-				if (hpoTree == "<br/><br/>null" || hpoTree === null){
+				if (hpoTree == "<br/>"){
 					hpoData += "<em>No HPO Data Found</em>";
 				} else {
 					hpoData += "<strong>HPO Structure:</strong>" + hpoTree;
