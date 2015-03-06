@@ -449,9 +449,7 @@ jQuery(document).ready(
 	if ($("#analyze_auto_target").val() !== null) {
 	    var text = $("#analyze_auto_target").val();
 	    var species = $("#analyze_auto_species").val();
-	    if (typeof species === 'undefined'){
-	        species = 'all';
-	    }
+
 	    var phenotypes  = text.split(/[\s,]+/);
 	    $("#phen_vis").phenogrid({phenotypeData: phenotypes,
 				      targetSpecies: species,
