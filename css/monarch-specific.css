@@ -296,6 +296,12 @@ figcaption {
     display:none;
     line-height: 40px;
 }
+#result-table{
+	position:relative;
+	float:left;
+	padding-top:35px;
+	width:100%
+}
 
 /* Global Ajax */
 

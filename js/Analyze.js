@@ -151,7 +151,7 @@ function AnalyzeInit(){
     redraw_form_list();
     
     //add these items to the list on the "Table View" tab
-    var result_list = jQuery('#result');
+    var result_list = jQuery('#result-table');
     var term_list = '';
     var select_terms = jQuery('.list-group-item');
     jQuery.each(select_terms, function(key, value) {

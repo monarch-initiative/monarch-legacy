@@ -177,20 +177,24 @@
                 {{#hasInputItems}}
                 </div>
                 <div id="result" class="first category">
-                    <h3 class="downloadline">Results</h3>
-                    <a href="{{{downloadURL}}}" class="btn btn-default downloadline downloadline-left monarch-blue">JSON</a>
-                    {{#hasResults}}
-                    {{#singleSpecies}}
-                        <p>Species: {{{speciesHref}}}</p>
-                    {{/singleSpecies}}
-                    <input id="analyze_auto_species" name="current_target_species" value="{{target_filter.species}}" type="hidden"/>
                     <div id ="phen_vis"></div>
-                    {{{resultsTable}}}
-                    </table>
-                    {{/hasResults}}
-                    {{^hasResults}}
-                    <div class="text">Unfortunately, your search produced no results.</div>
-                    {{/hasResults}}
+                    <div id="result-table">
+                      {{#hasTable}}
+                        <h3 class="downloadline">Results</h3>
+                        <a href="{{{downloadURL}}}" class="btn btn-default downloadline downloadline-left monarch-blue">JSON</a>
+                        {{#hasResults}}
+                          {{#singleSpecies}}
+                            <p>Species: {{{speciesHref}}}</p>
+                          {{/singleSpecies}}
+                          <input id="analyze_auto_species" name="current_target_species" value="{{target_filter.species}}" type="hidden"/>
+                          {{{resultsTable}}}
+                          </table>
+                        {{/hasResults}}
+                        {{^hasResults}}
+                        <div class="text">Unfortunately, your search produced no results.</div>
+                        {{/hasResults}}
+                      {{/hasTable}}
+                    </div>
                 </div>
                 <div id="splitLabels" style="display:none">{{splitLabels}}</div>
                 {{/hasInputItems}}
