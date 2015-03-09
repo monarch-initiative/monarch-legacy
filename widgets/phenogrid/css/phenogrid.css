@@ -303,13 +303,6 @@ body {
 	margin-top:10px;
 }
 
-#return,
-#button {
-	float:left;
-	margin-top:15px;
-	margin-left: -495px;
-}
-
 #phenogrid_controls {
 	float:left;
 	clear:both;
@@ -327,8 +320,7 @@ body {
 }
 
 #err {
-	margin-left:-1225px;
-	float:left;
+    /margin-left:-1225px;
 }
 
 .cube1,
@@ -428,7 +420,7 @@ body {
 
 #ajax-loader {
 //	display: none;
-	background: url('/widgets/phenogrid/image/throbber.gif'); no-repeat 50% transparent;
+	background: url('/widgets/phenogrid/image/throbber.gif'); no-repeat transparent;
 	top: 0;
 	left: 0;
 	position: absolute;

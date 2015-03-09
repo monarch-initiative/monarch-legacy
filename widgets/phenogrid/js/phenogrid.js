@@ -77,7 +77,7 @@ function modelDataPointPrint(point) {
 			['rgb(230,209,178)','rgb(210,173,116)','rgb(148,114,60)','rgb(68,162,147)','rgb(31,128,113)','rgb(3,82,70)'],
 			['rgb(229,229,229)','rgb(164,214,212)','rgb(68,162,147)','rgb(97,142,153)','rgb(66,139,202)','rgb(25,59,143)']],
 		emptySvgX: 1100,
-		emptySvgY: 70,
+		emptySvgY: 200,
 		overviewCount: 3,
 		colStartingPos: 10,
 		detailRectWidth: 300,
@@ -107,7 +107,8 @@ function modelDataPointPrint(point) {
 			{ abbrev: "ZFIN", label: "Zebrafish"},
 			{ abbrev: "ZP", label: "Zebrafish"},
 			{ abbrev: "FB", label: "Fly"},
-			{ abbrev: "GO", label: "Gene Ontology"}],
+			{ abbrev: "GO", label: "Gene Ontology"},
+			{ abbrev: "UDPICS", label: "UDP Patients"}],
 		dataDisplayCount: 30,
 		labelCharDisplayCount : 20,
 		apiEntityMap: [ {prefix: "HP", apifragment: "disease"},
@@ -125,15 +126,18 @@ function modelDataPointPrint(point) {
 		xOffsetOver: 20,
 		baseYOffset: 150,
 		faqImgSize: 15,
-		dummyModelName: "dummy"
+		dummyModelName: "dummy",
+	        simServerURL: "",  // URL of the server for similarity searches
+		preloadHPO: false	//Boolean value that allows for preloading of all HPO data at start.  If false, the user will have to manually select what HPO relations to load via hoverbox.
 	},
 
 	internalOptions: {
 		/// good - legit options
 		serverURL: "",
+	        simServerURL: "",  // URL of the server for similarity searches
+	        simSearchQuery: "/simsearch/phenotype",
 		selectedCalculation: 0,
 		invertAxis: false,
-		preloadHPO: true,	//Boolean value that allows for preloading of all HPO data at start.  If false, the user will have to manually select what HPO relations to load via hoverbox.
 		hpoDepth: 10,	//Numerical value that determines how far to go up the tree in relations.
 		hpoDirection: "out",	//String that determines what direction to go in relations.  Default is "out".
 		hpoTreeAmounts: 1,	//Allows you to decide how many HPO Trees to render.  Once a tree hits the high-level parent, it will count it as a complete tree.  Additional branchs or seperate trees count as seperate items
@@ -146,7 +150,8 @@ function modelDataPointPrint(point) {
 		targetSpeciesList : [{ name: "Homo sapiens", taxon: "9606"},
 			{ name: "Mus musculus", taxon: "10090" },
 			{ name: "Danio rerio", taxon: "7955"},
-			{ name: "Drosophila melanogaster", taxon: "7227"}]
+			{ name: "Drosophila melanogaster", taxon: "7227"},
+	                { name: "UDPICS", taxon: "UDPICS"}]
 	},
 	
 	//reset state values that must be cleared before reloading data
@@ -267,6 +272,11 @@ function modelDataPointPrint(point) {
 		// important that config options (from the file) and this. options (from
 		// the initializer) come last
 		this.state = $.extend({},this.internalOptions,this.config,this.configoptions,this.options);
+	        // default simServerURL value..
+	        if (typeof(this.state.simServerURL) == 'undefined' ||
+		    this.state.simServerURL ==="") {
+		    this.state.simServerURL=this.state.serverURL;
+		}
 		this.state.data = {};
 		// will this work?
 		this.configoptions = undefined;
@@ -453,21 +463,21 @@ function modelDataPointPrint(point) {
 		var self = this;
 		var html;
 		d3.select("#svg_area").remove();
-		this.state.svgContainer.append("<svg id='svg_area'></svg>");
-		this.state.svg = d3.select("#svg_area");
+		//this.state.svgContainer.append("<svg id='svg_area'></svg>");
+		//this.state.svg = d3.select("#svg_area");
 
 		var svgContainer = this.state.svgContainer;
-		svgContainer.append("<svg id='svg_area'></svg>");
+		/*svgContainer.append("<svg id='svg_area'></svg>");
 		this.state.svg = d3.select("#svg_area")
 			.attr("width", this.state.emptySvgX)
-			.attr("height", this.state.emptySvgY);
+			.attr("height", this.state.emptySvgY);*/
 
 		//var error = "<br /><div id='err'><h4>" + msg + "</h4></div><br /><div id='return'><button id='button' type='button'>Return</button></div>";
 		//this.element.append(error);
 		if (this.state.targetSpeciesName != "Overview"){
-			html = "<h4 id='err'>" + msg + "</h4><br /><div id='return'><button id='button' type='button'>Return</button></div>";
-			this.element.append(html);
-
+			html = "<h4 id='err'>" + msg + "</h4><br /><div id='return'><p><button id='button' type='button'>Return</button></p><br/></div>";
+			//this.element.append(html);
+		        this.state.svgContainer.append(html);
 			var btn = d3.selectAll("#button")
 				.on("click", function(d,i){
 					$("#return").remove();
@@ -481,7 +491,8 @@ function modelDataPointPrint(point) {
 				});
 		}else{
 			html = "<h4 id='err'>" + msg + "</h4><br />";
-			this.element.append(html);
+			//this.element.append(html);
+		        this.state.svgContainer.append(html);
 		}
 	},
 
@@ -1017,13 +1028,14 @@ function modelDataPointPrint(point) {
 	_loadSpeciesData: function(speciesName,limit) {
 		var phenotypeList = this.state.phenotypeData;
 		var taxon = this._getTargetSpeciesTaxonByName(this,speciesName);
-		var url = this.state.serverURL + "/simsearch/phenotype?input_items=" + phenotypeList.join(",") + "&target_species=" + taxon;
+	    console.log("this.state.simServerURL is..."+this.state.simServerURL);
+	//	var url = this.state.serverURL + "/simsearch/phenotype?input_items=" + phenotypeList.join(",") + "&target_species=" + taxon;
+	        var url = this.state.simServerURL + this.state.simSearchQuery +"?input_items=" + phenotypeList.join(",") + "&target_species=" + taxon;
 		if (typeof(limit) !== 'undefined') {
 			url += "&limit=" + limit;
 		}
-
 		var res = this._ajaxLoadData(speciesName,url);
-		if (res !== null) {
+		if (typeof (res) !=='undefined' && res !== null) {
 			if (typeof(limit) !== 'undefined' && typeof(res.b) !== 'undefined' && res.b !== null && res.b.length < limit) {
 				res = this._padSpeciesData(res,speciesName,limit);
 			}
@@ -1414,6 +1426,9 @@ function modelDataPointPrint(point) {
 	_finishLoad: function() {
 		var species = this.state.targetSpeciesName;
 		var retData = this.state.data[species];
+	        if (typeof(retData) ==='undefined'  || retData === null) {
+		    return;
+		}
 		//extract the maxIC score
 		if (typeof (retData.metadata) !== 'undefined') {
 			this.state.maxICScore = retData.metadata.maxMaxIC;
@@ -3423,6 +3438,7 @@ function modelDataPointPrint(point) {
 		if (HPOInfo === null) {
 			HPOInfo = [];
 			var url = this.state.serverURL + "/neighborhood/" + id + "/" + depth + "/" + direction + "/" + relationship + ".json";
+		        console.log("getting hpo data .. url is ..."+url);
 			var taxon = this._getTargetSpeciesTaxonByName(this,this.state.targetSpeciesName);
 			var results = this._ajaxLoadData(taxon,url);
 			if (typeof (results) !== 'undefined') {
