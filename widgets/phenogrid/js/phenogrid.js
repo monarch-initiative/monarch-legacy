@@ -1,6 +1,5 @@
 /*
  *
-
  *	Phenogrid - the Phenogrid widget.
  * 
  *	implemented as a jQuery UI (jqueryui.com) widget, this can be instantiated on a jquery-enabled web page
@@ -298,7 +297,6 @@ function modelDataPointPrint(point) {
 	_init: function() {
 		this.element.empty();
 		this._loadSpinner();
-		
 		this.state.phenoDisplayCount = this._calcPhenotypeDisplayCount();
 		//save a copy of the original phenotype data
 		this.state.origPhenotypeData = this.state.phenotypeData.slice();
@@ -313,15 +311,9 @@ function modelDataPointPrint(point) {
 		this.state.modelDisplayCount = this.state.dataDisplayCount;
 		this.state.phenoDisplayCount = this.state.dataDisplayCount;
 		this.state.phenotypeData = this._filterPhenotypeResults(this.state.phenotypeData);
-		
+
 		// target species name might be provided as a name or as taxon. Make sure that we translate to name
 		this.state.targetSpeciesName = this._getTargetSpeciesNameByTaxon(this,this.state.targetSpeciesName);
-		
-        if (typeof this.state.owlSimFunction === 'undefined'){
-            this.state.owlSimFunction = 'search';
-        } else if (this.state.owlSimFunction === 'compare'){
-            this.state.targetSpeciesName = "Homo sapiens";
-        }
 
 		this._loadData();
 
@@ -395,11 +387,6 @@ function modelDataPointPrint(point) {
 				this._createSvgContainer();
 				this._createEmptyVisualization(msg);
 			}
-		}
-		
-		if (this.state.owlSimFunction === 'compare'){
-		    this.state.svg.select("#specieslist").remove();
-		    $("#org_div").remove();
 		}
 	},
 
@@ -730,7 +717,6 @@ function modelDataPointPrint(point) {
 	},
 
 	_createModelScoresLegend: function() {
-	    var self = this;
 		var scoreTipY = self.state.yoffset;
 		var faqY = scoreTipY - self.state.gridTitleYOffset;
 		var tipTextLength = 92;
@@ -789,7 +775,6 @@ function modelDataPointPrint(point) {
 	},
 
 	_initializeOverviewRegion: function(overviewBoxDim,overviewX,overviewY) {
-	    var self = this;
 		//rectangular border for overview
 		var globalview = self.state.svg.append("rect")
 			.attr("x", overviewX)
@@ -999,38 +984,22 @@ function modelDataPointPrint(point) {
 		this._loadHashTables();
 	},
 
-    _loadSpeciesData: function(speciesName,limit) {
-        var self = this;
-        var phenotypeList = self.state.phenotypeData;
-        var taxon = this._getTargetSpeciesTaxonByName(this,speciesName);
-        var url;
-        switch(self.state.owlSimFunction) {
-            case ('search'):
-                url = self.state.serverURL + "/simsearch/phenotype?input_items=" + phenotypeList.join(",") + "&target_species=" + taxon;
-                if (typeof(limit) !== 'undefined') {
-                    url += "&limit=" + limit;
-                }
-                break;
-                
-            case ('compare'):
-                url = self.state.serverURL + "/compare/" + phenotypeList.join(",") + "/" + self.state.geneList.join('+');
-                break;
-            
-            default:
-                url = self.state.serverURL + "/simsearch/phenotype?input_items=" + phenotypeList.join(",") + "&target_species=" + taxon;
-                if (typeof(limit) !== 'undefined') {
-                    url += "&limit=" + limit;
-                }
-        }    
+	_loadSpeciesData: function(speciesName,limit) {
+		var phenotypeList = this.state.phenotypeData;
+		var taxon = this._getTargetSpeciesTaxonByName(this,speciesName);
+		var url = this.state.serverURL + "/simsearch/phenotype?input_items=" + phenotypeList.join(",") + "&target_species=" + taxon;
+		if (typeof(limit) !== 'undefined') {
+			url += "&limit=" + limit;
+		}
 
-        var res = self._ajaxLoadData(speciesName,url);
-        if (res !== null) {
-            if (typeof(limit) !== 'undefined' && typeof(res.b) !== 'undefined' && res.b !== null && res.b.length < limit) {
-                res = self._padSpeciesData(res,speciesName,limit);
-            }
-        }
-        this.state.data[speciesName] = res;
-    },
+		var res = this._ajaxLoadData(speciesName,url);
+		if (res !== null) {
+			if (typeof(limit) !== 'undefined' && typeof(res.b) !== 'undefined' && res.b !== null && res.b.length < limit) {
+				res = this._padSpeciesData(res,speciesName,limit);
+			}
+		}
+		this.state.data[speciesName] = res;
+	},
 
 	// make sure there are limit items in res --
 	// If we don't have enough, add some dummy items in. 
@@ -1117,7 +1086,6 @@ function modelDataPointPrint(point) {
 
 	//Returns axis data from a ID of models or phenotypes
 	_getAxisData: function(key) {
-
 		if (typeof(key) === 'undefined'  && this.state.getAxisError){
 			console.log("UNDEFINED AXIS CALL");
 			return false;
@@ -1570,9 +1538,6 @@ function modelDataPointPrint(point) {
 			var comp = this._getComparisonType(species);
 			titleText = "Phenotype Comparison (grouped by " + species + " " + comp + ")";
 		}
-		if (this.state.owlSimFunction === 'compare'){
-		    titleText = "Phenotype Comparison";
-		}
 
 		var mtitle = this.state.svg.append("svg:text")
 			.attr("class","gridtitle")
@@ -1846,7 +1811,6 @@ function modelDataPointPrint(point) {
 
 	//I need to check to see if the modelData is an object. If so, get the model_id
 	_clearModelData: function(data,obj) {
-	    var self = this;
 		this.state.svg.selectAll("#detail_content").remove();
 		this.state.svg.selectAll(".model_accent").remove();
 		var text = "";
@@ -2389,7 +2353,6 @@ function modelDataPointPrint(point) {
 
 	//Previously _createModelLabels
 	_createXLabels: function(self, models) {
-        var self = this;
 		var model_x_axis = d3.svg.axis().scale(self.state.xScale).orient("top");
 		self.state.svg.append("g")
 			.attr("transform","translate(" + (self.state.textWidth + self.state.xOffsetOver + 28) + "," + self.state.yoffset + ")")
@@ -2399,7 +2362,6 @@ function modelDataPointPrint(point) {
 			//to rotate the text, I need to select it as it was added by the axis
 			.selectAll("text") 
 			.each(function(d,i) { 
-			    
 				var labelM = self._getAxisData(d).label;
 				self._convertLabelHTML(self, this, self._getShortLabel(labelM,self.state.labelCharDisplayCount),d);
 			});
@@ -2430,7 +2392,6 @@ function modelDataPointPrint(point) {
 	},
 
 	_createYLines: function() {
-	    var self = this;
 		var modelLineGap = 30;
 		var lineY = this.state.yoffset + modelLineGap;
 		var displayCount = self._getYLimit();
@@ -2831,7 +2792,6 @@ function modelDataPointPrint(point) {
 	 * 
 	 */
 	_createSelectionControls: function(container) {
-	    var self = this;
 		var optionhtml ='<div id="selects"></div>';
 		var options = $(optionhtml);
 		var orgSel = this._createOrganismSelection();
