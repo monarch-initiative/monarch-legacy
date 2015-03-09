@@ -151,7 +151,8 @@ function modelDataPointPrint(point) {
 			{ name: "Mus musculus", taxon: "10090" },
 			{ name: "Danio rerio", taxon: "7955"},
 			{ name: "Drosophila melanogaster", taxon: "7227"},
-	                { name: "UDPICS", taxon: "UDPICS"}]
+			{ name: "UDPICS", taxon: "UDPICS"}],
+		providedData: {}
 	},
 	
 	//reset state values that must be cleared before reloading data
@@ -1052,7 +1053,12 @@ function modelDataPointPrint(point) {
 
 	    var url = this._getLoadDataURL(phenotypeList,taxon,limit);
 	    
-	    var res = this._ajaxLoadData(speciesName,url);
+	    if(jQuery.isEmptyObject(this.state.providedData)) {
+	    	var res = this._ajaxLoadData(speciesName,url);
+		} else {
+			var res = this.state.providedData;
+		}
+
 	    if (typeof (res) !=='undefined' && res !== null) {
 		if (typeof(limit) !== 'undefined' && typeof(res.b) !== 'undefined' && res.b !== null && res.b.length < limit) {
 		    res = this._padSpeciesData(res,speciesName,limit);
