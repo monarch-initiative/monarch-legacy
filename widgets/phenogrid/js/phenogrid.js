@@ -135,7 +135,7 @@ function modelDataPointPrint(point) {
 		/// good - legit options
 		serverURL: "",
 	        simServerURL: "",  // URL of the server for similarity searches
-	        simSearchQuery: "/simsearch/phenotype",
+	        simSearchQuery: "/simsearch/phenotype?input_items=",
 		selectedCalculation: 0,
 		invertAxis: false,
 		hpoDepth: 10,	//Numerical value that determines how far to go up the tree in relations.
@@ -341,6 +341,18 @@ function modelDataPointPrint(point) {
 		// target species name might be provided as a name or as taxon. Make sure that we translate to name
 		this.state.targetSpeciesName = this._getTargetSpeciesNameByTaxon(this,this.state.targetSpeciesName);
 
+
+	    // set the owlsimFunction
+	    // there are three possibilities
+	    // 'undefined' is the basic, traditional simsearch
+	    // 'compare' goes against specific subsets genes/genoetypes
+	    // 'exomiser' calls the exomiser for the input data.
+            if (typeof this.state.owlSimFunction === 'undefined'){
+		this.state.owlSimFunction = 'search';
+            } else if (this.state.owlSimFunction === 'compare' && this.state.owlSimFunction == 'exomiser'){
+		this.state.targetSpeciesName = "Homo sapiens";
+            }
+
 		//TEMP UNTIL _loadData is refactored
 		if (!this.state.hpoCacheBuilt){
 			this.state.hpoCacheHash = new Hashtable();
@@ -426,6 +438,12 @@ function modelDataPointPrint(point) {
 				this._createEmptyVisualization(msg);
 			}
 		}
+
+	    // no organism selector if we are doing the 'compare' function
+	    if (this.state.owlSimFunction === 'compare'){
+		this.state.svg.select("#specieslist").remove();
+		$("#org_div").remove();
+	    }
 	},
 
 	//Returns the correct limit amount for the X axis based on axis position
@@ -1029,18 +1047,34 @@ function modelDataPointPrint(point) {
 		var phenotypeList = this.state.phenotypeData;
 		var taxon = this._getTargetSpeciesTaxonByName(this,speciesName);
 	    console.log("this.state.simServerURL is..."+this.state.simServerURL);
-	//	var url = this.state.serverURL + "/simsearch/phenotype?input_items=" + phenotypeList.join(",") + "&target_species=" + taxon;
-	        var url = this.state.simServerURL + this.state.simSearchQuery +"?input_items=" + phenotypeList.join(",") + "&target_species=" + taxon;
+
+	    var url = this._getLoadDataURL(phenotypeList,taxon,limit);
+	    
+	    var res = this._ajaxLoadData(speciesName,url);
+	    if (typeof (res) !=='undefined' && res !== null) {
+		if (typeof(limit) !== 'undefined' && typeof(res.b) !== 'undefined' && res.b !== null && res.b.length < limit) {
+		    res = this._padSpeciesData(res,speciesName,limit);
+		}
+	    }
+	    this.state.data[speciesName] = res;
+	},
+
+
+	_getLoadDataURL : function(phenotypeList,taxon,limit) {
+
+	    var url = this.state.simServerURL;
+	    switch(this.state.owlSimFunction) {
+		case ('compare'):
+		   url = url+'/compare/'+ phenotypeList.join(",") + "/" + this.state.geneList.join('+');
+		   break;
+               default:
+		url = url+ this.state.simSearchQuery + phenotypeList.join(",") + "&target_species=" + taxon;
 		if (typeof(limit) !== 'undefined') {
-			url += "&limit=" + limit;
+		    url += "&limit=" + limit;
 		}
-		var res = this._ajaxLoadData(speciesName,url);
-		if (typeof (res) !=='undefined' && res !== null) {
-			if (typeof(limit) !== 'undefined' && typeof(res.b) !== 'undefined' && res.b !== null && res.b.length < limit) {
-				res = this._padSpeciesData(res,speciesName,limit);
-			}
-		}
-		this.state.data[speciesName] = res;
+		break;
+	    }
+	    return url;
 	},
 
 	// make sure there are limit items in res --
@@ -1989,19 +2023,19 @@ function modelDataPointPrint(point) {
 				if (isExpanded) {
 					appearanceOverrides.offset = (gtCached.genoTypes.size() + (gtCached.genoTypes.size() * 0.40));   // magic numbers for extending the highlight
 					var href = "<a href=\"" + this.state.serverURL+"/gene/" + concept + "\" target=\"_blank\">" + gtCached.totalAssocCount + "</a>";
-					retData +=  
+					/*retData +=  
 					 	"<br/>Overall total associated genotypes: " + href + 
 					 	"<br>Number of expanded genotypes: " + gtCached.genoTypes.size() +
 						"<br/><br/>Click button to <b>collapse</b> associated genotypes &nbsp;&nbsp;" +
 						"<button class=\"collapsebtn\" type=\"button\" onClick=\"self._collapseGenotypes('" + concept + "')\">" +
-						"</button>";
+						"</button>";*/
 				} else {
 					if (gtCached !== null) {
-						retData += "<br/><br/>Click button to <b>expand</b> <u>" + gtCached.genoTypes.size() + "</u> associated genotypes &nbsp;&nbsp;";
+						//retData += "<br/><br/>Click button to <b>expand</b> <u>" + gtCached.genoTypes.size() + "</u> associated genotypes &nbsp;&nbsp;";
 					} else {
-						retData += "<br/><br/>Click button to <b>expand</b> associated genotypes &nbsp;&nbsp;";
+						//retData += "<br/><br/>Click button to <b>expand</b> associated genotypes &nbsp;&nbsp;";
 					}
-					retData += "<button class=\"expandbtn\" type=\"button\" onClick=\"self._expandGenotypes('" + concept + "')\"></button>";
+					//retData += "<button class=\"expandbtn\" type=\"button\" onClick=\"self._expandGenotypes('" + concept + "')\"></button>";
 				}
 			}
 		} else if (type == 'disease'){
