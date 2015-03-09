@@ -347,11 +347,11 @@ function modelDataPointPrint(point) {
 	    // 'undefined' is the basic, traditional simsearch
 	    // 'compare' goes against specific subsets genes/genoetypes
 	    // 'exomiser' calls the exomiser for the input data.
-            if (typeof this.state.owlSimFunction === 'undefined'){
-		this.state.owlSimFunction = 'search';
-            } else if (this.state.owlSimFunction === 'compare' && this.state.owlSimFunction == 'exomiser'){
-		this.state.targetSpeciesName = "Homo sapiens";
-            }
+        if (typeof this.state.owlSimFunction === 'undefined'){
+            this.state.owlSimFunction = 'search';
+        } else if (this.state.owlSimFunction === 'compare' || this.state.owlSimFunction == 'exomiser'){
+            this.state.targetSpeciesName = "Homo sapiens";
+        }
 
 		//TEMP UNTIL _loadData is refactored
 		if (!this.state.hpoCacheBuilt){
@@ -439,11 +439,11 @@ function modelDataPointPrint(point) {
 			}
 		}
 
-	    // no organism selector if we are doing the 'compare' function
-	    if (this.state.owlSimFunction === 'compare'){
-		this.state.svg.select("#specieslist").remove();
-		$("#org_div").remove();
-	    }
+        // no organism selector if we are doing the 'compare' function
+        if (this.state.owlSimFunction === 'compare'){
+            this.state.svg.select("#specieslist").remove();
+            $("#org_div").remove();
+        }
 	},
 
 	//Returns the correct limit amount for the X axis based on axis position
@@ -774,6 +774,7 @@ function modelDataPointPrint(point) {
 	},
 
 	_createModelScoresLegend: function() {
+	    var self = this;
 		var scoreTipY = self.state.yoffset;
 		var faqY = scoreTipY - self.state.gridTitleYOffset;
 		var tipTextLength = 92;
@@ -832,6 +833,7 @@ function modelDataPointPrint(point) {
 	},
 
 	_initializeOverviewRegion: function(overviewBoxDim,overviewX,overviewY) {
+	    var self = this;
 		//rectangular border for overview
 		var globalview = self.state.svg.append("rect")
 			.attr("x", overviewX)
@@ -1063,18 +1065,18 @@ function modelDataPointPrint(point) {
 	_getLoadDataURL : function(phenotypeList,taxon,limit) {
 
 	    var url = this.state.simServerURL;
-	    switch(this.state.owlSimFunction) {
-		case ('compare'):
-		   url = url+'/compare/'+ phenotypeList.join(",") + "/" + this.state.geneList.join('+');
-		   break;
-               default:
-		url = url+ this.state.simSearchQuery + phenotypeList.join(",") + "&target_species=" + taxon;
-		if (typeof(limit) !== 'undefined') {
-		    url += "&limit=" + limit;
-		}
-		break;
-	    }
-	    return url;
+        switch(this.state.owlSimFunction) {
+            case ('compare'):
+                url = url+'/compare/'+ phenotypeList.join(",") + "/" + this.state.geneList.join('+');
+                break;
+            default:
+                url = url+ this.state.simSearchQuery + phenotypeList.join(",") + "&target_species=" + taxon;
+                if (typeof(limit) !== 'undefined') {
+                    url += "&limit=" + limit;
+                }
+                break;
+        }
+        return url;
 	},
 
 	// make sure there are limit items in res --
@@ -1661,6 +1663,10 @@ function modelDataPointPrint(point) {
 			var comp = this._getComparisonType(species);
 			titleText = "Phenotype Comparison (grouped by " + species + " " + comp + ")";
 		}
+		
+        if (this.state.owlSimFunction === 'compare'){
+            titleText = "Phenotype Comparison";
+        }
 
 		var mtitle = this.state.svg.append("svg:text")
 			.attr("class","gridtitle")
@@ -2099,6 +2105,7 @@ function modelDataPointPrint(point) {
 
 	//Previously _deselectData + _clearModelData
 	_deselectData: function (data) {
+	    var self = this;
 		this.state.svg.selectAll(".row_accent").remove();
 		this.state.svg.selectAll("#detail_content").remove();
 		this.state.svg.selectAll(".model_accent").remove();
@@ -2673,6 +2680,7 @@ function modelDataPointPrint(point) {
 	},
 
 	_createYLines: function() {
+	    var self = this;
 		var modelLineGap = 30;
 		var lineY = this.state.yoffset + modelLineGap;
 		var displayCount = self._getYLimit();
@@ -3073,6 +3081,7 @@ function modelDataPointPrint(point) {
 	 * 
 	 */
 	_createSelectionControls: function(container) {
+	    var self = this;
 		var optionhtml ='<div id="selects"></div>';
 		var options = $(optionhtml);
 		var orgSel = this._createOrganismSelection();
