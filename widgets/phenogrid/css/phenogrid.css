@@ -41,8 +41,16 @@ body {
 	/*stroke:#ea763b;*/
 	stroke:#4CA092;
 	stroke-width: 2;
-	fill: #ffffff;
-	fill-opacity: 0.05;
+	fill: #4CA092;   //#ffffff;
+	fill-opacity: 0.1;    //0.05;
+}
+
+.gene_accent {
+	/*stroke:#ea763b;*/
+	stroke:#4CA092;
+	stroke-width: 2;
+	fill: #4CA092;
+	fill-opacity: 0.1;
 }
 
 .scroll_text {
@@ -75,6 +83,10 @@ body {
 	-webkit-border-radius: 8px;
 	border-radius: 8px; 
 	-moz-border-radius: 8px;
+}
+
+#hpoDiv {
+	text-align:left;
 }
 
 #stitle {
@@ -291,13 +303,6 @@ body {
 	margin-top:10px;
 }
 
-#return,
-#button {
-	float:left;
-	margin-top:15px;
-	margin-left: -495px;
-}
-
 #phenogrid_controls {
 	float:left;
 	clear:both;
@@ -315,8 +320,7 @@ body {
 }
 
 #err {
-	margin-left:-1225px;
-	float:left;
+    /margin-left:-1225px;
 }
 
 .cube1,
@@ -383,9 +387,41 @@ body {
 }
 
 .faqdialog {
+	background: white;
+}
+
+.expandbtn {
+    padding: 0;
+    border: none;
+    background: transparent url('/widgets/phenogrid/image/ExpandAllIcon.png') no-repeat;
+    margin-left: auto;
+    margin-right: auto;
+    width: 18px;
+    height: 17px;
 	background-color: white;
+	box-shadow: 1px 1px 1px #888888;
+}
+
+.collapsebtn {
+    padding: 0;
+    border: none;
+    background: transparent url('/widgets/phenogrid/image/CollapseAllIcon.png') no-repeat;
+    margin-left: auto;
+    margin-right: auto;    
+    width: 18px;
+    height: 17px;
+	background-color: white;
+	box-shadow: 1px 1px 1px #888888;	
 }
 
 .dialogBG {
 	background-color: white;
+}
+
+#ajax-loader {
+//	display: none;
+	background: url('/widgets/phenogrid/image/throbber.gif'); no-repeat transparent;
+	top: 0;
+	left: 0;
+	position: absolute;
 }

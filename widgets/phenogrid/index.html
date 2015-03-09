@@ -21,12 +21,13 @@
     <script src="js/jquery-ui-1.10.3.custom.min.js"></script>
     <script src="js/d3.min.js"></script>
     <script src="js/jshashtable.js"></script>
+    <script src="js/stickytooltip.js"></script>
     <script src="js/phenogrid_config.js"></script>
     <script src="js/phenogrid.js"></script>
     <link rel="stylesheet" type="text/css" href="css/jquery-ui.css"/>
 	<link rel="stylesheet" type="text/css" href="css/instructions.css"/>
-	<link rel="stylesheet" type="text/css"
-	      href="css/phenogrid.css"/>
+	<link rel="stylesheet" type="text/css" href="css/phenogrid.css"/>
+	<link rel="stylesheet" type="text/css" href="css/stickytooltip.css"/>
 
     <script>
 	var phenotypes = [
@@ -89,6 +90,7 @@ A quick guide to installing and configuring the widget on your site:
   page:</LI>
 <OL>
   <LI> ./js/jshashtable.js</LI>
+  <LI> ./js/stickytooltip.js</LI>
   <LI> ./js/phenogrid_config.js</LI>
   <LI> ./js/phenogrid.js</LI>
   </OL>
@@ -124,6 +126,7 @@ A quick guide to installing and configuring the widget on your site:
 										<li>Name: Drosophila melanogaster  Taxon: 7227</li>
 									</ul>
 									</li>
+									<li><b><em>simServerURL</em></b> [optional] - the URL of the server running the similarity comparison. Usually default to being the same as <em>serverURL</em> - use the default (do not specify a value) unless you have an expliciit reason for doing otherwise.</LI>
 								</ul>
 							</li>
 						</ul>
