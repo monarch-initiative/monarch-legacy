@@ -428,7 +428,7 @@ function modelDataPointPrint(point) {
 						
 		} else {
 			var msg;
-			if (this.state.targetSpeciesName == "Overview"){
+			if (this.state.targetSpeciesName == "Overview" || this.state.owlSimFunction === 'compare'){
 				msg = "There are no models available.";
 				this._createSvgContainer();
 				this._createEmptyVisualization(msg);
