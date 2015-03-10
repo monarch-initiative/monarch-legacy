@@ -173,43 +173,17 @@ function AnalyzeInit(){
     // Disable search form when compare radio button selected
     // and enable compare
     $('#pheno-compare input[type=radio]').click(function(){
-        
-        $("#compare-form-group button").removeAttr('disabled');
-        $("#compare-form-group textarea").removeAttr('disabled');   
-        
-        $("#search-form-group input").attr("disabled", 'true');
-        $("#search-form-group select").attr("disabled", 'true');
+        disable_search_form();
     });
     
     // Disable compare form when compare radio button selected
     // Re-enable search form
-    $('#pheno-search input[type=radio]').click(function(){
-        
-        $("#compare-form-group button").attr("disabled", 'true');
-        $("#compare-form-group textarea").attr("disabled", 'true');
-        
-        $("#search-form-group input").removeAttr('disabled');
-        $("#search-form-group select").removeAttr('disabled');
+    $('#pheno-search input[type=radio]').click(function(){   
+        disable_compare_form();
     });
     
     $('#target').on('change', function() {
-        if (this.value === '9606'){
-            $("#type option[value=gene]").attr('disabled','true');
-            $("#type option[value=all]").attr('disabled','true');
-            $('#type').val('disease');
-        } else if (this.value === '10090'){
-            $("#type option[value=disease]").attr('disabled','true');
-            $("#type option[value=all]").attr('disabled','true');
-            $('#type').val('gene');
-        } else if (this.value === '7955'){
-            $("#type option[value=disease]").attr('disabled','true');
-            $("#type option[value=all]").attr('disabled','true');
-            $('#type').val('gene');
-        } else if (this.value === 'all'){
-            $("#type option[value=disease]").removeAttr('disabled');
-            $("#type option[value=gene]").removeAttr('disabled');
-            $("#type option[value=all]").removeAttr('disabled');
-        }
+        set_target_type(this.value);
     });
     
     $('#ortholog').click(function(){
@@ -304,6 +278,45 @@ function AnalyzeInit(){
         var gene_list = text.split(/,\s|,|\s\n|\n/);
         return gene_list;
     }
+    
+    function disable_search_form(){
+        $("#compare-form-group button").removeAttr('disabled');
+        $("#compare-form-group textarea").removeAttr('disabled');   
+        
+        $("#search-form-group input").attr("disabled", 'true');
+        $("#search-form-group select").attr("disabled", 'true');
+    }
+    
+    function disable_compare_form(){
+        $("#compare-form-group button").attr("disabled", 'true');
+        $("#compare-form-group textarea").attr("disabled", 'true');
+        
+        $("#search-form-group input").removeAttr('disabled');
+        $("#search-form-group select").removeAttr('disabled');
+    }
+    
+    function set_target_type(value){
+        
+        if (value === '9606'){
+            $("#type option[value=gene]").attr('disabled','true');
+            $("#type option[value=all]").attr('disabled','true');
+            $('#type').val('disease');
+        } else if (value === '10090'){
+            $("#type option[value=disease]").attr('disabled','true');
+            $("#type option[value=all]").attr('disabled','true');
+            $('#type').val('gene');
+        } else if (value === '7955'){
+            $("#type option[value=disease]").attr('disabled','true');
+            $("#type option[value=all]").attr('disabled','true');
+            $('#type').val('gene');
+        } else if (value === 'all'){
+            $("#type option[value=gene]").attr('disabled','true');
+            $("#type option[value=disease]").attr('disabled','true');
+            $("#type option[value=all]").removeAttr('disabled');
+            $('#type').val('all');
+        }
+    }
+    
 
     function update_form_value(){
 		jQuery(analyze_auto_target_elt).val('');
