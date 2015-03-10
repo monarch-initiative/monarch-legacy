@@ -3344,10 +3344,14 @@ function modelDataPointPrint(point) {
 
 			// go get the assocated genotypes	
 			//var url = this.state.serverURL+"/gene/"+ modelInfo.id.replace('_', ':') + ".json";		
-			var url = this.state.serverURL+"/genotypes/"+ modelInfo.id.replace('_', ':');
+			//var url = this.state.serverURL+"/genotypes/"+ modelInfo.id.replace('_', ':');
+			var url = "http://tartini.crbs.ucsd.edu/dynamic/gene/" + modelInfo.id.replace('_', ':') +
+						"/genotype/nodes.json";
 			console.log("Getting Gene " + url);
 			console.profile("genotypes call");
 			var res = this._ajaxLoadData(modelInfo.d.species,url);
+
+			res = this._filterGenotypeGraphList(res);
 			console.profileEnd();
 
 			if (typeof (res) == 'undefined' || res.length == 0) { 
@@ -3389,7 +3393,7 @@ function modelDataPointPrint(point) {
 				// fill a hashtable with the labels so we can quickly get back to them later
 				//var tmpLabel = this._encodeHtmlEntity(genoTypeAssociations[g].genotype.label); 
 				//genotypeLabelHashtable.put(genoTypeAssociations[g].genotype.id, tmpLabel);
-				var tmpLabel = this._encodeHtmlEntity(genoTypeAssociations[g].label);  
+				var tmpLabel = this._encodeHtmlEntity(genoTypeAssociations[g].lbl);  
 				tmpLabel = (tmpLabel==null?"undefined":tmpLabel);
 				genotypeLabelHashtable.put(genoTypeAssociations[g].id, tmpLabel);
 			
@@ -3746,6 +3750,21 @@ function modelDataPointPrint(point) {
 				return true;
 			}
 		return false;
+	},
+
+	_filterGenotypeGraphList: function(res) {
+
+		if (typeof(res) === 'undefined') return res;
+
+		var nodes = res.nodes;
+		var filteredList = [];
+
+		for (var n in nodes) {
+			if (nodes[n].id.substring(0, 5) != 'genid' ) {
+				filteredList.push(nodes[n]);
+			}
+		}
+		return filteredList;
 	}
 	
 	
