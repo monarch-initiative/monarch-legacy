@@ -111,15 +111,15 @@ var stickytooltip={
 					return false;
 				}
 			})
-			$(this).bind('keypress', function(e){
-				var keyunicode=e.charCode || e.keyCode;
-				if (keyunicode==115){ //if "s" key was pressed
-					stickytooltip.docktooltip($, $tooltip, e);
-				} else if (keyunicode==104){ //if "h" key was pressed
-					stickytooltip.isdocked=false;
-					stickytooltip.hidebox($, $tooltip);
-				}
-			})
+			// $(this).bind('keypress', function(e){
+			// 	var keyunicode=e.charCode || e.keyCode;
+			// 	if (keyunicode==115){ //if "s" key was pressed
+			// 		stickytooltip.docktooltip($, $tooltip, e);
+			// 	} else if (keyunicode==104){ //if "h" key was pressed
+			// 		stickytooltip.isdocked=false;
+			// 		stickytooltip.hidebox($, $tooltip);
+			// 	}
+			// })
 		}) //end dom ready
 	}
 }
