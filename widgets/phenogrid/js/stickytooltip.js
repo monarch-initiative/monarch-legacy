@@ -12,10 +12,12 @@ var stickytooltip={
 	stickybordercolors: ["black", "darkred"], //border color of tooltip depending on sticky state
 	stickynotice1: ["Press \"s\" or right click to activate sticky box. \"h\" to hide"], //, "or right click", "to sticky box"], //customize tooltip status message
 	stickynotice2: "Click outside this box to hide it", //customize tooltip status message
+	lastEvent: null,  // saves last mouseevent
 
 	//***** NO NEED TO EDIT BEYOND HERE
 
 	isdocked: false,  // force sticky mode
+
 
 	positiontooltip:function($, $tooltip, e){
 		var x=e.pageX+this.tooltipoffsets[0], y=e.pageY+this.tooltipoffsets[1]
@@ -33,6 +35,7 @@ var stickytooltip={
 
 	// wrapper function
 	show:function(e) {
+		if (e == null) e = stickytooltip.lastEvent;
 		var $tooltip=$('#mystickytooltip');
 		stickytooltip.isdocked = true;
 		stickytooltip.showbox($, $tooltip, e);
@@ -74,6 +77,7 @@ var stickytooltip={
 			// 	if (!stickytooltip.isdocked){   
 			 		//$alltips.hide().filter('#'+$(this).attr('data-tooltip')).show();
 			 		stickytooltip.showbox($, $tooltip, e);
+			 		stickytooltip.lastEvent = e;
 			// 	}
 			//     //console.log('mouseenter');
 		    })
