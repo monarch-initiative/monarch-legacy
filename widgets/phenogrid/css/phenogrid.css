@@ -399,7 +399,7 @@ body {
     width: 18px;
     height: 17px;
 	background-color: white;
-	box-shadow: 1px 1px 1px #888888;
+	//box-shadow: 1px 1px 1px #888888;
 }
 
 .collapsebtn {
@@ -411,17 +411,16 @@ body {
     width: 18px;
     height: 17px;
 	background-color: white;
-	box-shadow: 1px 1px 1px #888888;	
+	//box-shadow: 1px 1px 1px #888888;	
 }
 
 .dialogBG {
 	background-color: white;
 }
 
-#ajax-loader {
-//	display: none;
-	background: url('/widgets/phenogrid/image/throbber.gif'); no-repeat transparent;
-	top: 0;
-	left: 0;
+/*.spinner {
+	background: url('/widgets/phenogrid/image/throbber.gif') no-repeat;
+	top: 10px;
+	left: 100px;
 	position: absolute;
-}
+}*/
