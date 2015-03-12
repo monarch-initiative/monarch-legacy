@@ -5,7 +5,7 @@
     
     "scigraph_url" : "http://geoffrey.crbs.ucsd.edu:9000/scigraph/",
     
-	"scigraph_data_url" : "http://rosie.crbs.ucsd.edu:9000/scigraph/",
+    "scigraph_data_url" : "http://rosie.crbs.ucsd.edu:9000/scigraph/",
 
     "federation_services_url" : "http://beta.neuinfo.org/services/v1/federation/",
 
