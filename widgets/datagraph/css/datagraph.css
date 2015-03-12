@@ -2,8 +2,14 @@
  * Data Graph
 **/
 
-form label{
+.configure label{
 	margin-bottom:0;
+}
+.scale label{
+    margin-bottom:0;
+}
+.zero label{
+    margin-bottom:0;
 }
 
 .title{

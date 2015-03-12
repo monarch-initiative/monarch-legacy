@@ -245,6 +245,7 @@
                 {{/hasLiterature}}
                 <div id="jbrowse" class="category">
                     <h1>JBrowse</h1>
+                    <a target="_blank" href="http://icebox.lbl.gov/WebApolloHuman/jbrowse/?tracks=OGS-GRCh38&selected={{label}}">View in Separate window</a>
                     <div id="genomeBrowser" width="100%" >
                         <iframe id="innerFrame" width="99%" height="400"></iframe>
                     </div>
@@ -257,6 +258,6 @@
 
     <script>
         function loadJBrowseFrame(){
-            $('#innerFrame').attr('src','http://icebox.lbl.gov/WebApolloHuman/jbrowse/?tracklist=0&tracks=OGS-GRCh38&loc={{label}}');
+            $('#innerFrame').removeAttr('src').attr('src','http://icebox.lbl.gov/WebApolloHuman/jbrowse/?tracklist=0&tracks=OGS-GRCh38&selected={{label}}&menu=0');
         }
     </script>
