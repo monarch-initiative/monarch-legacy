@@ -2151,12 +2151,13 @@ function modelDataPointPrint(point) {
 
 			// if it's overview, then just allow view of the model clicked
 			if (this.state.targetSpeciesName != "Overview" && apientity == 'gene') {
-				var expanded = this._isExpanded(data);
-				if (expanded !== null && expanded) {
-					this._collapseGenotypes(data);
-				} else if (expanded !== null && !expanded){
-					this._expandGenotypes(data);
-				}
+				// TEMP: THIS HIDES THE GENOTYPE EXPANSION STUFF FOR NOW
+				// var expanded = this._isExpanded(data);
+				// if (expanded !== null && expanded) {
+				// 	this._collapseGenotypes(data);
+				// } else if (expanded !== null && !expanded){
+				// 	this._expandGenotypes(data);
+				// }
 			}
 		} else {
 			console.log ("URL CLICK ERROR");
@@ -3459,7 +3460,28 @@ function modelDataPointPrint(point) {
 	//Will call the getHPO function to either load the HPO info or to make it visible if it was previously hidden.  Not available if preloading
 	_expandHPO: function(id){
 		self._getHPO(id);
-		stickytooltip.closetooltip();
+
+		// this code refreshes the stickytooltip so that tree appears instantly
+		var hpoCached = this.state.hpoCacheHash.get(id.replace("_", ":"));
+		if (hpoCached !== null){
+			this.state.hpoTreesDone = 0;
+			this.state.hpoTreeHeight = 0;
+			var info = this._getAxisData(id);
+			var type = this._getIDType(id);
+			var hrefLink = "<a href=\"" + this.state.serverURL+"/phenotype" + type +"/"+ id.replace("_", ":") + "\" target=\"_blank\">" + info.label + "</a>";
+			var hpoData = "<strong>" + this._capitalizeString(type) + ": </strong> " + hrefLink + "<br/>";
+			hpoData += "<strong>IC:</strong> " + info.IC.toFixed(2) + "<br/><br/>";
+			var hpoTree = "<div id='hpoDiv'>" + this._buildHPOTree(id.replace("_", ":"), hpoCached.edges, 0) + "</div>";
+			if (hpoTree == "<br/>"){
+				hpoData += "<em>No HPO Data Found</em>";
+			} else {
+				hpoData += "<strong>HPO Structure:</strong>" + hpoTree;
+			}
+			$("#sticky1").html(hpoData);
+
+			// reshow the sticky with updated info
+			stickytooltip.show(null);
+		}
 		console.log("Loaded HPO Info for " + id);
 	},
 
@@ -3944,6 +3966,11 @@ function modelDataPointPrint(point) {
 			}
 		}
 		return filteredList;
+	},
+
+	_refreshSticky: function() {
+		var div=$('#mystickytooltip').html();
+		$('#mystickytooltip').html(div);
 	}
 
 	}); //end of widget code
