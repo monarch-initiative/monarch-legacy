@@ -3348,11 +3348,11 @@ function modelDataPointPrint(point) {
 			var url = "http://tartini.crbs.ucsd.edu/dynamic/gene/" + modelInfo.id.replace('_', ':') +
 						"/genotype/nodes.json";
 			console.log("Getting Gene " + url);
-			console.profile("genotypes call");
+			//console.profile("genotypes call");
 			var res = this._ajaxLoadData(modelInfo.d.species,url);
 
 			res = this._filterGenotypeGraphList(res);
-			console.profileEnd();
+			//console.profileEnd();
 
 			if (typeof (res) == 'undefined' || res.length == 0) { 
 				$('#wait').hide();	
@@ -3411,9 +3411,9 @@ function modelDataPointPrint(point) {
 			// call compare
 			url = this.state.serverURL + "/compare/" + phenotypeIds + "/" + _genotypeIds;
 			console.log("Comparing " + url);	
-			console.profile("compare call");
+			//console.profile("compare call");
 			compareScores = this._ajaxLoadData(modelInfo.d.species,url);
-			console.profileEnd();
+			//console.profileEnd();
 			console.log("Done with ajaxLoadData...");	
 
 		} else {
