@@ -36,3 +36,8 @@ ringo -m ./modules/pup-tent/ -m ./modules/underscore/ -m ./modules/mustache/ tes
 Or,
 
 ./ringojs/bin/ringo -m ./modules/pup-tent/ -m ./modules/underscore/ -m ./modules/mustache/ tests/full-tmpl.js.tests
+
+## Also see
+
+A different set of unit tests are also being developed in tests/behave.
+There are centered around the behave testing framework.
