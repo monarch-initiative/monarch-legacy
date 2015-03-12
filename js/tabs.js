@@ -28,6 +28,10 @@ jQuery(document).ready(function(){
      * genotype pages upon clicking the various tabs. */
     jQuery('#categories a').click(function(event) {
         var panel_id = jQuery(this).attr('href');
+        // TODO: there has to be something better than this
+        if(panel_id=='#jbrowse'){
+            loadJBrowseFrame();
+        }
         event.preventDefault();
         jQuery('.category').hide();
         jQuery(panel_id).show();

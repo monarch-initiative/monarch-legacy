@@ -42,6 +42,9 @@ nif-production-url-test:
 nif-production-federation-tests:
 	$(RINGO_BIN) tests/urltester.js -s production -c federation
 
+nif-production-scigraph-tests:
+	$(RINGO_BIN) tests/urltester.js -s production -c scigraph
+
 nif-production-federation-search-tests:
 	$(RINGO_BIN) tests/urltester.js -s production -c federation-search
 

@@ -2,6 +2,16 @@
  * Data Graph
 **/
 
+.configure label{
+	margin-bottom:0;
+}
+.scale label{
+    margin-bottom:0;
+}
+.zero label{
+    margin-bottom:0;
+}
+
 .title{
     line-height:37px;
     vertical-align: middle;
@@ -30,16 +40,24 @@
    fill:white;
    cursor:default;
 }
-.configure {
+.settings{
+   border: 1px solid #ddd;
    display: inline;
-   float:right;
-   margin-top: 3px;
+   right:0;
    margin-right: 5px;
-   position:relative;
+   position:absolute;
 }
-.configure label{
+.configure {
+	padding-right:5px;
+	padding-left:2px;
 }
-.configure input{
+.scale {
+	padding-right:5px;
+    padding-left:2px;
+}
+.zero {
+    padding-right:5px;
+    padding-left:2px;
 }
 .tip {
     position: absolute;
