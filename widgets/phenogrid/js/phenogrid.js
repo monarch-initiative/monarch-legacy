@@ -1050,10 +1050,9 @@ function modelDataPointPrint(point) {
 		var phenotypeList = this.state.phenotypeData;
 		var taxon = this._getTargetSpeciesTaxonByName(this,speciesName);
 	    console.log("this.state.simServerURL is..."+this.state.simServerURL);
-
-	    var url = this._getLoadDataURL(phenotypeList,taxon,limit);
-	    
+ 
 	    if(jQuery.isEmptyObject(this.state.providedData)) {
+	        var url = this._getLoadDataURL(phenotypeList,taxon,limit);
 	    	var res = this._ajaxLoadData(speciesName,url);
 		} else {
 			var res = this.state.providedData;

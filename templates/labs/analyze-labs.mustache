@@ -20,10 +20,12 @@
                 <div id="categories">
                     {{^hasInputItems}}
                     <a href="#query"><div id="initialtab" class="tab contenttab second">Search</div></a>
+                    <a href="#upload"><div class="tab contenttab second">Upload</div></a>
                     <div class="tab greyed-out">Results</div>
                     {{/hasInputItems}}
                     {{#hasInputItems}}
                     <a href="#query"><div class="tab contenttab second">Search</div></a>
+                    <a href="#upload"><div class="tab contenttab second">Upload</div></a>
                     <a href="#result"><div id="initialtab" class="tab contenttab">Results</div></a>
                     {{/hasInputItems}}
                 </div>
@@ -132,7 +134,7 @@
                             </span>
                           </div>
                        
-                          <textarea id="gene-list" class="form-control" rows="4" placeholder="" name="gene-list" disabled="true"></textarea>
+                          <textarea id="gene-list" class="form-control" rows="4" placeholder="" name="gene_list" disabled="true"></textarea>
                           <div id="gene-shortcuts">Add to list:<br>
                               <span class="small">
                                 Given the above list of genes, add genes
@@ -173,9 +175,25 @@
                 
                 </form>
                 </div>
-               
-                {{#hasInputItems}}
                 </div>
+                <div id="upload" class="category">
+                  <div class="row-fluid">
+                    <div class="col-xs-6 col-sm-6 col-md-6 col-lg-6">
+                      <h4>Upload Results</h4>
+                      <div class="explain">
+                        Paste results from Exomiser:
+                      </div>
+                      <form role="form" action="/labs/analyze/{{datatype}}/" method="GET">
+                        <div class="form-group">
+                          <textarea id="user-results" class="form-control" rows="14" placeholder="" name="user_results"></textarea>
+                        </div>
+                        <button type="submit" class="btn btn-info">Upload</button>
+                      </form>
+                    </div>
+                  </div>
+                
+                </div>
+                {{#hasInputItems}}
                 <div id="result" class="first category">
                     <div id ="phen_vis"></div>
                     <div id="result-table">
