@@ -133,16 +133,16 @@
                         <div id="compare-form-group">
                           <div id="gene-text-area">Gene IDs:<br>
                             <span class="small">
-                                (Gene IDs must correspond to Entrez 
-                                gene IDs in the format NCBIGene:12345
-                                and can be newline or comma separated)
+                                Gene IDs must correspond to Entrez 
+                                gene IDs in the format NCBIGene:1234
+                                and can be newline or comma separated
                             </span>
                           </div>
                        
                           <textarea id="gene-list" class="form-control" rows="4" placeholder="" name="gene_list" disabled="true"></textarea>
-                          <div id="gene-shortcuts">Add to list:<br>
+                          <div id="gene-shortcuts">Add Genes:<br>
                               <span class="small">
-                                Given the above list of genes, add genes
+                                Given the above list of genes,<br>add genes
                                 based on relationship:
                               </span>
                           </div>
@@ -173,6 +173,12 @@
                           <div id='fetching'>Fetching Genes...</div>
                         </div>
                         <div id='error-msg'>Error Fetching Genes</div>
+                        <div id="ortholog-text-area">Orthologs:<br>
+                            <textarea id="ortholog-list" class="form-control" rows="2" placeholder="" name="ortholog_list" disabled="true"></textarea>
+                        </div>
+                        <div id="paralog-text-area">Paralogs:<br>
+                            <textarea id="paralog-list" class="form-control" rows="2" placeholder="" name="paralog_list" disabled="true"></textarea>
+                        </div>
                       </div>
                      </div>
                    </div>
@@ -186,7 +192,7 @@
                     <div class="col-xs-6 col-sm-6 col-md-6 col-lg-6">
                       <h4>Upload Results</h4>
                       <div class="explain">
-                        Paste results from Exomiser:
+                        Paste similarity data from external source:
                       </div>
                       <form role="form" action="/labs/analyze/{{datatype}}/" method="GET">
                         <div class="form-group">

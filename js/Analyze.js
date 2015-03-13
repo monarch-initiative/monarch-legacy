@@ -139,7 +139,14 @@ function AnalyzeInit(){
         } else if (parameterName[0] == "mode"){
             urlParams.mode = parameterName[1];
         } else if (parameterName[0] == "gene_list"){
-            urlParams.geneList = parameterName[1];
+            urlParams.geneList = 
+                add_gene_list_as_string(urlParams.geneList, parameterName[1]);
+        } else if (parameterName[0] == "ortholog_list"){
+            urlParams.geneList = 
+                add_gene_list_as_string(urlParams.geneList, parameterName[1]);
+        } else if (parameterName[0] == "paralog_list"){
+            urlParams.geneList = 
+                add_gene_list_as_string(urlParams.geneList, parameterName[1]);
         } else if (parameterName[0] == "user_results"){
             var usrResults = decodeURIComponent(parameterName[1]).replace(/\+/g, ' ');
             
@@ -156,12 +163,11 @@ function AnalyzeInit(){
     if (typeof urlParams.userResults == 'undefined'){   
         urlParams.userResults = {};
     }
-    console.log(JSON.stringify(urlParams.userResults));
     
     if (typeof urlParams.geneList !== 'undefined'){
         var decode = decodeURIComponent(urlParams.geneList.replace(/\+/g, ' '));
         urlParams.geneList = parse_text_area(decode);
-    }  
+    }
     
     redraw_form_list();
     
@@ -203,14 +209,11 @@ function AnalyzeInit(){
     
     $('#ortholog').click(function(){
         if ((isGeneListChanged === false) && (typeof homologs !== 'undefined')){
-            var input = homologs.input.concat(homologs.orthologs);
-            var test_list = input.join(', ');
-            if ($("#gene-list").val() != test_list){
-                var current_list = homologs.input.concat(homologs.paralogs);
-                var results = (current_list.concat(homologs.orthologs)).join(', ');
-                $("#gene-list").val(results);
-                $("#compare-form-group button").attr("disabled", 'true');
-            }
+            $("#gene-list").val(homologs.input.join(', '));
+            $("#ortholog-list").val(homologs.orthologs.join(', '));
+            $("#ortholog-text-area").show();
+            $("#ortholog-list").removeAttr('disabled');
+            $("#compare-form-group button").attr("disabled", 'true');
             return
         }
         var gene_list = parse_text_area(document.getElementById('gene-list').value);
@@ -226,12 +229,12 @@ function AnalyzeInit(){
             $("#compare-form-group textarea").removeAttr('disabled');
             //Set global homologs to reuse if needed
             homologs = data;
-            var orthologs = data.orthologs;
-            var input = data.input;
-            var results = (input.concat(orthologs)).join(', ');
-            $("#gene-list").val(results);
+            $("#gene-list").val(homologs.input.join(', '));
+            $("#ortholog-list").val(homologs.orthologs.join(', '));
+            $("#ortholog-text-area").show();
             isGeneListChanged = false;
             $("#ortholog").attr("disabled", 'true');
+            $("#ortholog-list").removeAttr('disabled');
         })
         .error(function() { 
             $("#ajax-spinner").hide();
@@ -245,13 +248,11 @@ function AnalyzeInit(){
     
     $('#paralog').click(function(){
         if ((isGeneListChanged === false) && (typeof homologs !== 'undefined')){
-            var input = homologs.input.concat(homologs.paralogs);
-            var test_list = input.join(', ');
-            if ($("#gene-list").val() != test_list){
-                var results = (input.concat(homologs.orthologs)).join(', ');
-                $("#gene-list").val(results);
-                $("#compare-form-group button").attr("disabled", 'true');
-            }
+            $("#gene-list").val(homologs.input.join(', '));
+            $("#paralog-list").val(homologs.paralogs.join(', '));
+            $("#paralog-text-area").show();
+            $("#paralog-list").removeAttr('disabled');
+            $("#compare-form-group button").attr("disabled", 'true');
             return
         }
         var gene_list = parse_text_area(document.getElementById('gene-list').value);
@@ -267,12 +268,12 @@ function AnalyzeInit(){
             $("#compare-form-group textarea").removeAttr('disabled');
             //Set global homologs to reuse if needed
             homologs = data;
-            var paralogs = data.paralogs;
-            var input = data.input;
-            var results = (input.concat(paralogs)).join(', ');
-            $("#gene-list").val(results);
-            isGeneListChanged = false;     
+            $("#gene-list").val(homologs.input.join(', '));
+            $("#paralog-list").val(homologs.paralogs.join(', '));
+            $("#paralog-text-area").show();
+            isGeneListChanged = false;
             $("#paralog").attr("disabled", 'true');
+            $("#paralog-list").removeAttr('disabled');
         })   
         .error(function() { 
             $("#ajax-spinner").hide();
@@ -359,6 +360,14 @@ function AnalyzeInit(){
 		var vals_str = vals.join(' ');
 		ll("Vals_Str: "+vals_str);
 		jQuery(analyze_auto_target_elt).val(vals_str);
+    }
+    
+    function add_gene_list_as_string(geneList, newGenes){
+        if (typeof geneList == 'undefined'){
+            return newGenes;
+        } else {
+            return (geneList + ',' + newGenes);
+        }
     }
 
     function redraw_form_list(){

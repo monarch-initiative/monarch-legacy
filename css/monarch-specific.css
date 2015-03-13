@@ -275,6 +275,17 @@ figcaption {
     font-size: 15px;
     line-height: 100%;
 }
+#ortholog-text-area {
+	display: none;
+    padding-top: 10px;
+    font-size: 15px;
+}
+#paralog-text-area {
+	display: none;
+    padding-top: 10px;
+    font-size: 15px;
+    
+}
 #gene-shortcuts {
 	padding: 10px 0 5px 0;
     font-size: 15px;
@@ -308,6 +319,7 @@ figcaption {
 #search-phenotypes{
     padding-bottom:59px;
 }
+
 
 /* Global Ajax */
 
