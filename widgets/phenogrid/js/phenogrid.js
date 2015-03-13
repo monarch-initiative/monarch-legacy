@@ -443,6 +443,7 @@ function modelDataPointPrint(point) {
         // no organism selector if we are doing the 'compare' function
         if (this.state.owlSimFunction === 'compare'){
             this.state.svg.select("#specieslist").remove();
+            this.state.svg.select("#faqinfo").remove();
             $("#org_div").remove();
         }
 	},
