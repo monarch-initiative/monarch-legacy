@@ -40,11 +40,15 @@
                 <div class="row-fluid">
                  <form role="form" action="/labs/analyze/{{datatype}}/" method="GET">
                   <div class="col-xs-6 col-sm-6 col-md-6 col-lg-6">
+                    <div id="search-phenotypes" class="panel panel-default">
+                      <div class="panel-heading">
+                        <h4 class="panel-title text-center">Phenotypes</h4>
+                      </div>
                         <input id="analyze_auto_target" name="input_items" value="{{input_items}}" type="hidden"/>
                         <div id="analyze-searchlist" class="form-group">
                           <label for="analyze_auto_input"><h4>Add to search list</h4>
                             {{#isPhenotype}}
-                            <p class="example">Type phenotype name for autocomplete (e.g.
+                            <p class="example small">Type phenotype name for autocomplete (e.g.
                             Renal agenesis, Multicystic kidney dysplasia, etc.)</p>
                             {{/isPhenotype}}
                           </label>
@@ -54,14 +58,15 @@
                         <div id="analyze-profile" class="form-group">
                             <label for="analyze_auto_list"><h4>Search list / {{datatype}} profile</h4>
                             {{#isPhenotype}}
-                            <p class="example">Search for profiles similar to this list of phenotypes.</p>
+                            <p class="example small">Search for profiles similar to this list of phenotypes.</p>
                             {{/isPhenotype}}
                             </label>
                             <ul id="analyze_auto_list" class="list-group">
                             <li id="analyze-empty-item" class="list-group-item">Empty: Add items using the input above.</li>
                             </ul>
                         </div>
-                        <button type="submit" class="btn btn-info">Search</button>  
+                        <button type="submit" class="btn btn-info">Search</button>
+                    </div>
                   </div>
                   <div class="col-xs-6 col-sm-6 col-md-6 col-lg-6">
                     <div class="panel panel-default">

@@ -271,11 +271,14 @@ figcaption {
     white-space: nowrap;
 }
 #gene-text-area {
+	padding-bottom: 5px;
     font-size: 15px;
+    line-height: 100%;
 }
 #gene-shortcuts {
-	padding: 5px 0 5px 0;
+	padding: 10px 0 5px 0;
     font-size: 15px;
+    line-height: 100%;
 }
 .explain {
     font-size: 14px;
@@ -301,6 +304,9 @@ figcaption {
 	float:left;
 	padding-top:35px;
 	width:100%
+}
+#search-phenotypes{
+    padding-bottom:59px;
 }
 
 /* Global Ajax */
