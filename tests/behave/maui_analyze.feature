@@ -1,11 +1,11 @@
 
-Feature: Term enrichment engines basically respond
- Upstream and embedded term enrichment enghines behave as expected.
+Feature: Analyze phenotypes is usable by the expected user interfaces
+ The tools behaves as expected given typical user input.
  
  ## No Background necessary.
 
  @data
- Scenario: useXCVXCV
+ Scenario: adding "allergy" and "asthma" to analyze phenotype results in "Ichthyosis Vulgaris"
     Given I go to page "/analyze/phenotype"
      and I type "aller" into the phenotype analyze search
      and I wait until "Allergy" appears in the autocomplete
