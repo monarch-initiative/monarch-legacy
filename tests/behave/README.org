@@ -5,6 +5,8 @@
   their results; separately, there is code that maps these statements
   to python selenium code and assertions (steps).
 
+  More information here: http://pythonhosted.org/behave/index.html
+
   What this gets you is a pretty nice separation between the tests and
   the code. The test language is simple and can be built up in such a
   way that a complete non-programmer can easily write unit tests,
@@ -49,4 +51,4 @@
 
   Or against the UI/server target of your choice:
 
-  : UI_TARGET=http://localhost:8989 behave
+  : TARGET=http://localhost:8989 behave

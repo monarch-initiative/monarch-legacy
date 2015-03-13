@@ -5,14 +5,14 @@ Feature: Basic autocomplete works
  
  ## No Background necessary.
 
- # @ui
- # Scenario: "food" in the home search with submit goes to a search page
- #    Given I go to page "/"
- #     and I type "food" into the home search
- #     and I submit the home search
- #     then the title should be "Search Results: food"
- #     and the document should contain "food allergy"
- #     and the document should contain "botulism"
+ @ui
+ Scenario: "food" in the home search with submit goes to a search page
+    Given I go to page "/"
+     and I type "food" into the home search
+     and I submit home search
+     then the title should be "Search Results: food"
+     and the document should contain "food allergy"
+     and the document should contain "botulism"
 
  @ui
  Scenario: "food" in the home search with a click goes to a details page

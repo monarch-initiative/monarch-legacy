@@ -10,21 +10,26 @@ from selenium.webdriver.common.by import By
 from selenium.webdriver.support.ui import WebDriverWait
 from selenium.webdriver.support import expected_conditions as EC
 
-@given('I type "{text}" into the home search')
-def step_impl(context, text):
+###
+### Helper functions.
+###
+
+def text_to_input(context, elt_id, text):
     #print(context.browser.title)
-    webelt = context.browser.find_element_by_id('home_search')
+    webelt = context.browser.find_element_by_id(elt_id)
     webelt.send_keys(text)
 
-@given('I submit the home search')
-def step_impl(context):
-    #print(context.browser.title)
-    webelt = context.browser.find_element_by_id('home_search_form')
-    webelt.submit()
+###
+### Definitions.
+###
 
-# @given('I wait "{seconds}" seconds')
-# def step_impl(context, seconds):        
-#         context.browser.implicitly_wait(int(seconds))
+@given('I type "{text}" into the home search')
+def step_impl(context, text):
+    text_to_input(context, 'home_search', text)
+
+@given('I type "{text}" into the phenotype analyze search')
+def step_impl(context, text):
+    text_to_input(context, 'analyze_auto_input', text)
 
 ## TODO/BUG: Make use of the explicit waits instead of the (rather
 ## lame) implicit waits:
