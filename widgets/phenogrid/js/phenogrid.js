@@ -2959,7 +2959,9 @@ function modelDataPointPrint(point) {
 		var ymax = 0;
 		var y;
 		//If this is the Overview, get gradients for all species with an index
-		if (this.state.targetSpeciesName == "Overview" || this.state.targetSpeciesName == "All") {
+		if ((this.state.targetSpeciesName == "Overview" || this.state.targetSpeciesName == "All")
+		        || (this.state.targetSpeciesName == "Homo sapiens" 
+		                && this.state.owlSimFunction == "compare")) {
 			//this.state.overviewCount tells us how many fit in the overview
 			for (var i = 0; i < this.state.overviewCount; i++) {
 				y = this._createGradients(i,y1);
