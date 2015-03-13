@@ -220,7 +220,9 @@ function AnalyzeInit(){
     jQuery.each(select_terms, function(key, value) {
     	term_list += (value.textContent.substring(0,value.textContent.length-1) + ', ');
     });
-    result_list.prepend('<h3>Search Terms</h3> ' + term_list.substring(0, term_list.length-2) + '<br/>');
+    if (typeof urlParams.userResults == 'undefined'){
+        result_list.prepend('<h3>Search Terms</h3> ' + term_list.substring(0, term_list.length-2) + '<br/>');
+    }
     
     
     //Settings
