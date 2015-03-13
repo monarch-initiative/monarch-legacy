@@ -23,3 +23,30 @@
 
   - ui: tests written for the Monarch-app UI, likely Selenium
   - data: tests specific to testing the sanity of Monarch data
+
+* Running (as a user)
+
+** Ubuntu 14.04 LTS
+
+  Starting from the monarch-app root directory, using Ubuntu 12.04.
+
+  Setup the python environment in the right place.
+
+  : sudo apt-get -u install python-virtualenv
+  : cd tests/behave
+  : virtenv `pwd`
+  : source bin/activate
+  : pip install selenium
+  : pip install behave
+  : pip install jsonpath-rw
+
+  The products of these steps should all be hidden by the .gitirnore
+  file.
+
+  Running all tests (the *.feature files) should be as simple as:
+
+  : behave
+
+  Or against the UI/server target of your choice:
+
+  : UI_TARGET=http://localhost:8989 behave
