@@ -23,6 +23,14 @@ def step_impl(context, title):
 def step_impl(context):
     assert( context.browser.title == "" or context.browser.title == None )
 
+## The document body should contain a certain piece of text.
+@then('the document should contain "{text}"')
+def step_impl(context, text):
+    #print(context.browser.title)
+    #print(title)
+    webelt = context.browser.find_element_by_tag_name('html')
+    assert webelt.text.rfind(text) != -1
+
 ## A given class should contain a given piece of text/content. Not
 ## generably usable by non-dev test writers.
 @then('the class "{clss}" should contain "{text}"')
@@ -31,3 +39,4 @@ def step_impl(context, clss, text):
     #print(title)
     webelt = context.browser.find_element_by_class_name(clss)
     assert webelt.text.rfind(text) != -1
+

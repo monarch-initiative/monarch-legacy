@@ -3,6 +3,7 @@ Feature: Monarch-app UI basic pages display okay
 
  ## No Background necessary.
 
+ @ui
  Scenario Outline: the core landing pages exist
    Given I go to page "<page>"
     then the title should be "<title>"
