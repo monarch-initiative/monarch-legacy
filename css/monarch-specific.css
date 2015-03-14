@@ -252,7 +252,10 @@ figcaption {
 	font-weight: normal;
     font-size: 15px;
     text-align:right;
-    padding-top:3px;
+    padding-top:1px;
+}
+#type,#target {
+    width:100%;
 }
 
 #analyze-target {

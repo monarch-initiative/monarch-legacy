@@ -568,7 +568,7 @@ jQuery(document).ready(
 
 	    var phenotypes  = text.split(/[\s,]+/);
 	    jQuery("#phen_vis").phenogrid({phenotypeData: phenotypes,
-				      targetSpecies: species,
+				      targetSpeciesName: species,
 				      owlSimFunction: params.mode,
 				      geneList: params.geneList,
                       providedData: params.userResults
