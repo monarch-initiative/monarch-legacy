@@ -131,15 +131,18 @@
                             Compare phenotypes against a set of genes<br><br>
                         </div>
                         <div id="compare-form-group">
+                          <div>Enter Gene Symbol:<br></div>
+                          <input id="auto_gene_input" type="text" class="form-control"
+                          placeholder="SHH" disabled="true">
                           <div id="gene-text-area">Gene IDs:<br>
                             <span class="small">
-                                Gene IDs must correspond to Entrez 
-                                gene IDs in the format NCBIGene:1234
+                                Gene IDs must correspond to Entrez or Ensembl
+                                gene IDs in the format NCBIGene:1234 or ENSEMBL:ENSG1234
                                 and can be newline or comma separated
                             </span>
                           </div>
                        
-                          <textarea id="gene-list" class="form-control" rows="4" placeholder="" name="gene_list" disabled="true"></textarea>
+                          <textarea id="gene-list" class="form-control" rows="3" placeholder="" name="gene_list" disabled="true"></textarea>
                           <div id="gene-shortcuts">Add Genes:<br>
                               <span class="small">
                                 Given the above list of genes,<br>add genes

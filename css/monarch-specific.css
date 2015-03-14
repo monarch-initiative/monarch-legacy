@@ -274,7 +274,7 @@ figcaption {
     white-space: nowrap;
 }
 #gene-text-area {
-	padding-bottom: 5px;
+	padding: 10px 0 5px 0;
     font-size: 15px;
     line-height: 100%;
 }
@@ -320,7 +320,7 @@ figcaption {
 	width:100%
 }
 #search-phenotypes{
-    padding-bottom:59px;
+    padding-bottom:15px;
 }
 
 
