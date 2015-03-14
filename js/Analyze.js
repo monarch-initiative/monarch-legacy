@@ -402,12 +402,14 @@ function AnalyzeInit(){
     function add_gene_from_autocomplete(id){
         var current_list = jQuery("#gene-list").val();
         var new_list;
-        if (/(\,\s?)|\n/.test(current_list)){
-            new_list = current_list + id + ', ';
+        if (/\,\s?$/.test(current_list)){
+            new_list = current_list + id;
+        } else if (/\n$/.test(current_list)){
+            new_list = current_list + ', ' + id;
         } else if (current_list == ''){
             new_list = id;
         } else {
-            new_list = current_list + ', ' + id + ', ';
+            new_list = current_list + ', ' + id;
         }
         jQuery("#gene-list").val(new_list);
     }
