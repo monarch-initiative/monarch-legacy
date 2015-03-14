@@ -425,6 +425,9 @@ function modelDataPointPrint(point) {
 			// this must be initialized here after the _createModelLabels, or the mouse events don't get
 			// initialized properly and tooltips won't work with the mouseover defined in _convertLableHTML
 			stickytooltip.init("*[data-tooltip]", "mystickytooltip");
+		        this.state.svg.on("mouseover",function(d) {
+			    console.log("entering svg area..");
+			});
 						
 		} else {
 			var msg;
@@ -1646,9 +1649,13 @@ function modelDataPointPrint(point) {
 				//.append(wait);
 				//.append(status);
 				
-		
+
 		// always append to body
-		sticky.appendTo('body');	
+		sticky.appendTo('body');
+	        sticky.mouseleave("mouseout",function(e) {
+		    console.log("sticky mouse out. of sticky.");
+		    sticky.hide();
+		});
 				
 	},
 	
@@ -1885,6 +1892,7 @@ function modelDataPointPrint(point) {
 	},
 
 	_selectXItem: function(data, obj) {
+	    
 		// HACK: this temporarily 'disables' the mouseover when the stickytooltip is docked
 		// that way the user doesn't accidently hover another label which caused tooltip to be refreshed
 		if (stickytooltip.isdocked){ return; }
@@ -1893,6 +1901,7 @@ function modelDataPointPrint(point) {
 		var info = self._getAxisData(data);
 		var displayCount = self._getYLimit();
 		var concept = self._getConceptId(data);
+	        console.log("selecting x item.."+concept);
 		var appearanceOverrides;   
 
 		//Show that model label is selected. Change styles to bold, blue and full-length label
@@ -1942,10 +1951,14 @@ function modelDataPointPrint(point) {
 		var info = self._getAxisData(curr_data);
 		var alabels = this.state.svg.selectAll("text.a_text." + curr_data);
 
+
 		var txt = info.label;
 		if (txt === undefined) {
 			txt = curr_data;
 		}
+
+	    console.log("select y item.. "+txt);
+
 		alabels.text(txt)
 			.style("font-weight", "bold")
 			.style("fill", "blue")
@@ -3236,9 +3249,11 @@ function modelDataPointPrint(point) {
 				return self._getAxisData(d).ypos + 10;
 			})
 			.on("mouseover", function(d) {
+			        console.log("mouse over with the text....");
 				self._selectYItem(d, d3.mouse(this));
 			})
 			.on("mouseout", function(d) {
+			        console.log("mouse out of the text...");
 				self._deselectData(d, d3.mouse(this));
 			})
 			.attr("width", self.state.textWidth)

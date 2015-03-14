@@ -82,10 +82,12 @@ var stickytooltip={
 			//     //console.log('mouseenter');
 		    })
 			 $targets.bind('mouseout', function(e){  // mouseleave
+			        console.log("related..."+JSON.stringify(e.relatedTarget)+"...to.."+JSON.stringify(e.toElement)+"..from..."+JSON.stringify(e.fromElement));
 				var elem = e.relatedTarget ||  e.toElement || e.fromElement;
-//				console.log("stky mouseleave: " + elem);	
+				console.log("sticky mouseleave: " + JSON.stringify(elem.id));	
 
 				if (elem.id != 'mystickytooltip') {
+				        console.log("hiding...");
 					stickytooltip.isdocked = false;
 			 		stickytooltip.hidebox($, $tooltip);
 				}
