@@ -186,10 +186,6 @@ function AnalyzeInit(){
                 break;
         }
     }
-
-    if (typeof urlParams.userResults == 'undefined'){   
-        urlParams.userResults = {};
-    }
     
     if (typeof urlParams.geneList !== 'undefined'){
         var decode = decodeURIComponent(urlParams.geneList.replace(/\+/g, ' '));
@@ -615,6 +611,10 @@ function AnalyzeInit(){
 jQuery(document).ready(
     function(){
 	var params = AnalyzeInit();
+	
+	if (typeof params.userResults == 'undefined'){   
+	    params.userResults = {};
+    }
 
 	if (jQuery("#analyze_auto_target").val() !== null) {
 	    var text = jQuery("#analyze_auto_target").val();
