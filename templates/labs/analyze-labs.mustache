@@ -133,16 +133,15 @@
                         <div id="compare-form-group">
                           <div>Enter Gene Symbol:<br></div>
                           <input id="auto_gene_input" type="text" class="form-control"
-                          placeholder="SHH" disabled="true">
+                          placeholder="e.g. LHX1" disabled="true">
                           <div id="gene-text-area">Gene IDs:<br>
                             <span class="small">
-                                Gene IDs must correspond to Entrez or Ensembl
-                                gene IDs in the format NCBIGene:1234 or ENSEMBL:ENSG1234
-                                and can be newline or comma separated
+                                Gene IDs can be newline or comma separated
                             </span>
                           </div>
                        
-                          <textarea id="gene-list" class="form-control" rows="3" placeholder="" name="gene_list" disabled="true"></textarea>
+                          <textarea id="gene-list" class="form-control" rows="3" placeholder="e.g. NCBIGene:3975, ENSEMBL:ENSG00000108753 " 
+                                    name="gene_list" disabled="true"></textarea>
                           <div id="gene-shortcuts">Add Genes:<br>
                               <span class="small">
                                 Given the above list of genes,<br>add genes

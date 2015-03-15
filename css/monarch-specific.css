@@ -278,6 +278,9 @@ figcaption {
     font-size: 15px;
     line-height: 100%;
 }
+#gene-list {
+    line-height: 110%;
+}
 #ortholog-text-area {
 	display: none;
     padding-top: 10px;
