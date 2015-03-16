@@ -20,8 +20,8 @@ var stickytooltip={
 
 
 	positiontooltip:function($, $tooltip, e){
-		var x=e.pageX+this.tooltipoffsets[0], y=e.pageY+this.tooltipoffsets[1]
-		//var x=e.pageX, y=e.pageY;
+		//var x=e.pageX+this.tooltipoffsets[0], y=e.pageY+this.tooltipoffsets[1]
+	    var x=e.pageX-3, y=e.pageY-1;
 		var tipw=$tooltip.outerWidth(), tiph=$tooltip.outerHeight(), 
 		x=(x+tipw>$(document).scrollLeft()+$(window).width())? x-tipw-(stickytooltip.tooltipoffsets[0]*2) : x
 		y=(y+tiph>$(document).scrollTop()+$(window).height())? $(document).scrollTop()+$(window).height()-tiph-10 : y

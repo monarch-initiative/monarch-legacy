@@ -425,9 +425,6 @@ function modelDataPointPrint(point) {
 			// this must be initialized here after the _createModelLabels, or the mouse events don't get
 			// initialized properly and tooltips won't work with the mouseover defined in _convertLableHTML
 			stickytooltip.init("*[data-tooltip]", "mystickytooltip");
-		        this.state.svg.on("mouseover",function(d) {
-			    console.log("entering svg area..");
-			});
 						
 		} else {
 			var msg;
