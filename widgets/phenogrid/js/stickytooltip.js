@@ -70,17 +70,14 @@ var stickytooltip={
 			var $alltips=$tooltip.find('div.atip');
 			if (!stickytooltip.rightclickstick)
 				stickytooltip.stickynotice1[1]='';
-//			stickytooltip.stickynotice1=stickytooltip.stickynotice1.join(' ')
-//			self.stickynotice1=self.stickynotice1.join(' ')
+
 			stickytooltip.hidebox($, $tooltip);
-			$targets.bind('mouseenter', function(e){  // mouseenter
-			// 	if (!stickytooltip.isdocked){   
-			 		//$alltips.hide().filter('#'+$(this).attr('data-tooltip')).show();
-			 		stickytooltip.showbox($, $tooltip, e);
-			 		stickytooltip.lastEvent = e;
-			// 	}
-			//     //console.log('mouseenter');
-		    })
+			
+			$targets.bind('mouseenter', function(e){  
+				// this forces the tooltip to be shown
+		  		stickytooltip.showbox($, $tooltip, e);
+		  		stickytooltip.lastEvent = e;  
+		     });
 			 $targets.bind('mouseout', function(e){  // mouseleave
 			        console.log("related..."+JSON.stringify(e.relatedTarget)+"...to.."+JSON.stringify(e.toElement)+"..from..."+JSON.stringify(e.fromElement));
 				var elem = e.relatedTarget ||  e.toElement || e.fromElement;
@@ -91,7 +88,7 @@ var stickytooltip={
 					stickytooltip.isdocked = false;
 			 		stickytooltip.hidebox($, $tooltip);
 				}
-			 })
+			 });
 			// $targets.bind('mousemove', function(e){
 			// 	if (!stickytooltip.isdocked){
 			// 		stickytooltip.positiontooltip($, $tooltip, e);
@@ -102,21 +99,21 @@ var stickytooltip={
 			// 	stickytooltip.hidebox($, $tooltip);
 			// 	//console.log('mouseenter2');
 			// })
-			$tooltip.bind("click", function(e){
-				e.stopPropagation();
-			})
-			$(this).bind("click", function(e){
-				if (e.button==0){
-					stickytooltip.isdocked=false;
-					stickytooltip.hidebox($, $tooltip);
-				}
-			})
-			$(this).bind("contextmenu", function(e){
-				if (stickytooltip.rightclickstick && $(e.target).parents().andSelf().filter(targetselector).length==1){ //if oncontextmenu over a target element
-					stickytooltip.docktooltip($, $tooltip, e);
-					return false;
-				}
-			})
+			// $tooltip.bind("click", function(e){
+			// 	e.stopPropagation();
+			// })
+			// $(this).bind("click", function(e){
+			// 	if (e.button==0){
+			// 		stickytooltip.isdocked=false;
+			// 		stickytooltip.hidebox($, $tooltip);
+			// 	}
+			// })
+			// $(this).bind("contextmenu", function(e){
+			// 	if (stickytooltip.rightclickstick && $(e.target).parents().andSelf().filter(targetselector).length==1){ //if oncontextmenu over a target element
+			// 		stickytooltip.docktooltip($, $tooltip, e);
+			// 		return false;
+			// 	}
+			// })
 			// $(this).bind('keypress', function(e){
 			// 	var keyunicode=e.charCode || e.keyCode;
 			// 	if (keyunicode==115){ //if "s" key was pressed

@@ -1891,7 +1891,7 @@ function modelDataPointPrint(point) {
 		}
 	},
 
-	_selectXItem: function(data, obj) {
+	_selectXItem: function(data, obj, evt) {
 	    
 		// HACK: this temporarily 'disables' the mouseover when the stickytooltip is docked
 		// that way the user doesn't accidently hover another label which caused tooltip to be refreshed
@@ -1937,8 +1937,6 @@ function modelDataPointPrint(point) {
 		};
 		obj.attributes.transform = {value: highlight_rect.attr("transform")};
 		self._highlightMatching(data);
-
-		//stickytooltip.show(evt);
 	},
 
 	//Previously _selectData
@@ -2245,11 +2243,10 @@ function modelDataPointPrint(point) {
 			.on("click", function(d) {
 				self._clickItem(self.state.serverURL,data);
 			})
-			.on("mouseover", function(d) {  
-				//var evt = event || window.event;
-				console.log(x);
-				//var elem = e.relatedTarget ||  e.toElement || e.fromElement;
-				self._selectXItem(data, this);
+			.on("mouseover", function(d, event) {  
+				var evt = event || window.event;
+				console.log(evt);
+				self._selectXItem(data, this, evt);
 			})
 			.on("mouseout", function(d) {
 				self._deselectData(data);
@@ -3249,11 +3246,9 @@ function modelDataPointPrint(point) {
 				return self._getAxisData(d).ypos + 10;
 			})
 			.on("mouseover", function(d) {
-			        console.log("mouse over with the text....");
 				self._selectYItem(d, d3.mouse(this));
 			})
 			.on("mouseout", function(d) {
-			        console.log("mouse out of the text...");
 				self._deselectData(d, d3.mouse(this));
 			})
 			.attr("width", self.state.textWidth)
