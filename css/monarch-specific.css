@@ -273,6 +273,11 @@ figcaption {
     font-size: 16px;
     white-space: nowrap;
 }
+#gene-autocomplete {
+    padding-bottom: 5px;
+    font-size: 15px;
+    line-height: 100%;
+}
 #gene-text-area {
 	padding: 10px 0 5px 0;
     font-size: 15px;
@@ -322,15 +327,14 @@ figcaption {
 	padding-top:35px;
 	width:100%
 }
-#search-phenotypes{
-    padding-bottom:95px;
+#example-similarity{
+	margin: 0 0 1px 30px;
 }
-
-@media (max-width: 1366px) {
-	
-  #search-phenotypes{
-    padding-bottom:15px;
-  }
+#analyze-submit{
+	margin: 40px 0 10px 0;
+}
+#reset{
+    padding: 5px 18px 5px 18px;
 }
 
 @media (max-width: 840px) {
@@ -346,6 +350,9 @@ figcaption {
   }
   .explain {
     text-align: center;
+  }
+  #analyze-submit{
+    margin: 0 5px 0 0;
   }
 }
 
