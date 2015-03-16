@@ -252,7 +252,10 @@ figcaption {
 	font-weight: normal;
     font-size: 15px;
     text-align:right;
-    padding-top:3px;
+    padding-top:1px;
+}
+#type,#target {
+    width:100%;
 }
 
 #analyze-target {
@@ -260,7 +263,7 @@ figcaption {
 }
 
 .pheno-radio-button {
-	width: 20%;
+	width: 14%;
     margin: 0 auto;
     padding-bottom: 10px;
 }
@@ -271,11 +274,28 @@ figcaption {
     white-space: nowrap;
 }
 #gene-text-area {
+	padding: 10px 0 5px 0;
+    font-size: 15px;
+    line-height: 100%;
+}
+#gene-list {
+    line-height: 110%;
+}
+#ortholog-text-area {
+	display: none;
+    padding-top: 10px;
     font-size: 15px;
 }
-#gene-shortcuts {
-	padding: 5px 0 5px 0;
+#paralog-text-area {
+	display: none;
+    padding-top: 10px;
     font-size: 15px;
+    
+}
+#gene-shortcuts {
+	padding: 10px 0 5px 0;
+    font-size: 15px;
+    line-height: 100%;
 }
 .explain {
     font-size: 14px;
@@ -302,6 +322,33 @@ figcaption {
 	padding-top:35px;
 	width:100%
 }
+#search-phenotypes{
+    padding-bottom:95px;
+}
+
+@media (max-width: 1366px) {
+	
+  #search-phenotypes{
+    padding-bottom:15px;
+  }
+}
+
+@media (max-width: 840px) {
+
+  #analyze-compare {
+      border-left: none; 
+  }
+  .search-label {
+    font-weight: normal;
+    font-size: 15px;
+    text-align:left;
+    padding-top:1px;
+  }
+  .explain {
+    text-align: center;
+  }
+}
+
 
 /* Global Ajax */
 

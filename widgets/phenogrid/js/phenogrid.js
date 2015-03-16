@@ -152,6 +152,7 @@ function modelDataPointPrint(point) {
 			{ name: "Danio rerio", taxon: "7955"},
 			{ name: "Drosophila melanogaster", taxon: "7227"},
 			{ name: "UDPICS", taxon: "UDPICS"}],
+        //COMPARE CALL HACK - REFACTOR OUT
 		providedData: {}
 	},
 	
@@ -348,6 +349,7 @@ function modelDataPointPrint(point) {
 	    // 'undefined' is the basic, traditional simsearch
 	    // 'compare' goes against specific subsets genes/genoetypes
 	    // 'exomiser' calls the exomiser for the input data.
+		//COMPARE CALL HACK - REFACTOR OUT
         if (typeof this.state.owlSimFunction === 'undefined'){
             this.state.owlSimFunction = 'search';
         } else if (this.state.owlSimFunction === 'compare' || this.state.owlSimFunction == 'exomiser'){
@@ -429,6 +431,7 @@ function modelDataPointPrint(point) {
 						
 		} else {
 			var msg;
+			//COMPARE CALL HACK - REFACTOR OUT
 			if (this.state.targetSpeciesName == "Overview" || this.state.owlSimFunction === 'compare'){
 				msg = "There are no models available.";
 				this._createSvgContainer();
@@ -439,10 +442,11 @@ function modelDataPointPrint(point) {
 				this._createEmptyVisualization(msg);
 			}
 		}
-
+		//COMPARE CALL HACK - REFACTOR OUT
         // no organism selector if we are doing the 'compare' function
         if (this.state.owlSimFunction === 'compare'){
             this.state.svg.select("#specieslist").remove();
+            this.state.svg.select("#faqinfo").remove();
             $("#org_div").remove();
         }
 	},
@@ -1050,10 +1054,9 @@ function modelDataPointPrint(point) {
 		var phenotypeList = this.state.phenotypeData;
 		var taxon = this._getTargetSpeciesTaxonByName(this,speciesName);
 	    console.log("this.state.simServerURL is..."+this.state.simServerURL);
-
-	    var url = this._getLoadDataURL(phenotypeList,taxon,limit);
-	    
+	    //COMPARE CALL HACK - REFACTOR OUT
 	    if(jQuery.isEmptyObject(this.state.providedData)) {
+	        var url = this._getLoadDataURL(phenotypeList,taxon,limit);
 	    	var res = this._ajaxLoadData(speciesName,url);
 		} else {
 			var res = this.state.providedData;
@@ -1071,6 +1074,7 @@ function modelDataPointPrint(point) {
 	_getLoadDataURL : function(phenotypeList,taxon,limit) {
 
 	    var url = this.state.simServerURL;
+	    //COMPARE CALL HACK - REFACTOR OUT
         switch(this.state.owlSimFunction) {
             case ('compare'):
                 url = url+'/compare/'+ phenotypeList.join(",") + "/" + this.state.geneList.join('+');
@@ -1669,7 +1673,7 @@ function modelDataPointPrint(point) {
 			var comp = this._getComparisonType(species);
 			titleText = "Phenotype Comparison (grouped by " + species + " " + comp + ")";
 		}
-		
+		//COMPARE CALL HACK - REFACTOR OUT
         if (this.state.owlSimFunction === 'compare'){
             titleText = "Phenotype Comparison";
         }
@@ -2960,7 +2964,10 @@ function modelDataPointPrint(point) {
 		var ymax = 0;
 		var y;
 		//If this is the Overview, get gradients for all species with an index
-		if (this.state.targetSpeciesName == "Overview" || this.state.targetSpeciesName == "All") {
+		//COMPARE CALL HACK - REFACTOR OUT
+		if ((this.state.targetSpeciesName == "Overview" || this.state.targetSpeciesName == "All")
+		        || (this.state.targetSpeciesName == "Homo sapiens" 
+		                && this.state.owlSimFunction == "compare")) {
 			//this.state.overviewCount tells us how many fit in the overview
 			for (var i = 0; i < this.state.overviewCount; i++) {
 				y = this._createGradients(i,y1);
