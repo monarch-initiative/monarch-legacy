@@ -1077,10 +1077,10 @@ function modelDataPointPrint(point) {
 	    //COMPARE CALL HACK - REFACTOR OUT
         switch(this.state.owlSimFunction) {
             case ('compare'):
-                url = url+'/compare/'+ phenotypeList.join(",") + "/" + this.state.geneList.join('+');
+                url = url+'/compare/'+ phenotypeList.join("+") + "/" + this.state.geneList.join(',');
                 break;
             default:
-                url = url+ this.state.simSearchQuery + phenotypeList.join(",") + "&target_species=" + taxon;
+                url = url+ this.state.simSearchQuery + phenotypeList.join("+") + "&target_species=" + taxon;
                 if (typeof(limit) !== 'undefined') {
                     url += "&limit=" + limit;
                 }
