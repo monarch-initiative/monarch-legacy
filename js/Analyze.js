@@ -1,11 +1,24 @@
 
-function AnalyzeInit(){
+function AnalyzeInit(uploaded_data){
     
     var DEFAULT_LIMIT = 100;
     var DEBUG = false;
     //var DEBUG = true;
     
     var urlParams = {};
+    
+    //Check if we're coming from a POST with user entered data
+    if (typeof uploaded_data != 'undefined'){
+        try {
+            urlParams.user_input = add_metadata(JSON.parse(uploaded_data));
+        } catch (err){
+            console.log(err);
+        }
+        //HARDCODE COMPARE
+        urlParams.mode = 'compare';
+        jQuery('#user-results').val(uploaded_data);
+    }
+    
 
     ///
     /// HTML connctions.
@@ -169,18 +182,6 @@ function AnalyzeInit(){
                 break;
             case 'limit':
                 jQuery('#analyze_limit_input').val(parameterName[1]);
-                break;
-            case 'user_results':
-                var usrResults = decodeURIComponent(parameterName[1]).replace(/\+/g, ' ');
-                
-                try {
-                    urlParams.userResults = add_metadata(JSON.parse(usrResults));
-                } catch (err){
-                    console.log(err);
-                }
-                //HARDCODE COMPARE
-                urlParams.mode = 'compare';
-                jQuery('#user-results').val(usrResults);
                 break;
             default:
                 break;
@@ -651,34 +652,22 @@ function AnalyzeInit(){
     '"a":{"id":"HP_0000238","label":"Hydrocephalus","type":"phenotype","taxon":{"id":"","label":"Not Specified"},"id_list":["HP:0000238"]}}'].join('\n');
     
     jQuery('#example-similarity').click(function(){
-        console.log('foo');
         jQuery('#user-results').val(example_json);
     });
 
     ll('Done ready!');
-    return urlParams;
-};
 
-// jQuery gets to bootstrap everything.
-jQuery(document).ready(
-    function(){
-	var params = AnalyzeInit();
-	
-	if (typeof params.userResults == 'undefined'){   
-	    params.userResults = {};
-    }
+    if (jQuery("#analyze_auto_target").val() !== null) {
+        var text = jQuery("#analyze_auto_target").val();
+        var species = jQuery("#analyze_auto_species").val();
+        
 
-	if (jQuery("#analyze_auto_target").val() !== null) {
-	    var text = jQuery("#analyze_auto_target").val();
-	    var species = jQuery("#analyze_auto_species").val();
-
-	    var phenotypes  = text.split(/[\s,]+/);
-	    jQuery("#phen_vis").phenogrid({phenotypeData: phenotypes,
-				                       targetSpeciesName: species,
-				                       owlSimFunction: params.mode,
-				                       geneList: params.geneList,
-                                       providedData: params.userResults
+        var phenotypes  = text.split(/[\s,]+/);
+        jQuery("#phen_vis").phenogrid({phenotypeData: phenotypes,
+                                       targetSpeciesName: species,
+                                       owlSimFunction: urlParams.mode,
+                                       geneList: urlParams.geneList,
+                                       providedData: urlParams.user_input
                                       });
-	}
-	
-});
+    }
+}
