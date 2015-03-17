@@ -7,7 +7,7 @@
 
 var stickytooltip={
 	tooltipoffsets: [1, -1], //additional x and y offset from mouse cursor for tooltips 0,-3  [10, 10]
-	fadeinspeed: 200, //duration of fade effect in milliseconds
+	fadeinspeed: 0, //duration of fade effect in milliseconds
 	rightclickstick: true, //sticky tooltip when user right clicks over the triggering element (apart from pressing "s" key) ?
 	stickybordercolors: ["black", "darkred"], //border color of tooltip depending on sticky state
 	stickynotice1: ["Press \"s\" or right click to activate sticky box. \"h\" to hide"], //, "or right click", "to sticky box"], //customize tooltip status message
@@ -21,16 +21,17 @@ var stickytooltip={
 
 	positiontooltip:function($, $tooltip, e){
 		//var x=e.pageX+this.tooltipoffsets[0], y=e.pageY+this.tooltipoffsets[1]
-	    var x=e.pageX-3, y=e.pageY-1;
+	    var x=e.pageX+1, y=e.pageY-1;
 		var tipw=$tooltip.outerWidth(), tiph=$tooltip.outerHeight(), 
 		x=(x+tipw>$(document).scrollLeft()+$(window).width())? x-tipw-(stickytooltip.tooltipoffsets[0]*2) : x
 		y=(y+tiph>$(document).scrollTop()+$(window).height())? $(document).scrollTop()+$(window).height()-tiph-10 : y
-		$tooltip.css({left:x, top:y})
+		$tooltip.css({left:x, top:y});
 	},
 	
 	showbox:function($, $tooltip, e){
 		$tooltip.fadeIn(this.fadeinspeed);
 		this.positiontooltip($, $tooltip, e);
+		stickytooltip.isdocked = true;
 	},
 
 	// wrapper function
@@ -44,6 +45,7 @@ var stickytooltip={
 	hidebox:function($, $tooltip){
 		if (!this.isdocked){
 			$tooltip.stop(false, true).hide();
+			stickytooltip.isdocked = false;
 //			$tooltip.css({borderColor:'black'}).find('.stickystatus:eq(0)').css({background:this.stickybordercolors[0]}).html(this.stickynotice1)
 		}
 	},
@@ -74,17 +76,19 @@ var stickytooltip={
 			stickytooltip.hidebox($, $tooltip);
 			
 			$targets.bind('mouseenter', function(e){  
-				// this forces the tooltip to be shown
-		  		stickytooltip.showbox($, $tooltip, e);
-		  		stickytooltip.lastEvent = e;  
+				// var elem = e.relatedTarget ||  e.toElement || e.fromElement;
+				//console.log("sticky:mouseenter: docked=" +stickytooltip.isdocked + " elemid: " + JSON.stringify(elem.id));
+				if  (!stickytooltip.isdocked) {
+					// this forces the tooltip to be shown
+		  			stickytooltip.showbox($, $tooltip, e);
+		  			stickytooltip.lastEvent = e;  
+		  		}
 		     });
 			 $targets.bind('mouseout', function(e){  // mouseleave
-			        console.log("related..."+JSON.stringify(e.relatedTarget)+"...to.."+JSON.stringify(e.toElement)+"..from..."+JSON.stringify(e.fromElement));
 				var elem = e.relatedTarget ||  e.toElement || e.fromElement;
-				console.log("sticky mouseleave: " + JSON.stringify(elem.id));	
-
-				if (elem.id != 'mystickytooltip') {
-				        console.log("hiding...");
+				//console.log("sticky:mouseout: docked=" +stickytooltip.isdocked + " elemid: " + JSON.stringify(elem.id));
+				if (elem.id != 'mystickytooltip' && elem.id != "") {
+				    //console.log("hiding...");
 					stickytooltip.isdocked = false;
 			 		stickytooltip.hidebox($, $tooltip);
 				}

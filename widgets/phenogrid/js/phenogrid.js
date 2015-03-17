@@ -1650,8 +1650,8 @@ function modelDataPointPrint(point) {
 		// always append to body
 		sticky.appendTo('body');
 	        sticky.mouseleave("mouseout",function(e) {
-		    console.log("sticky mouse out. of sticky.");
-		    sticky.hide();
+		    //console.log("sticky mouse out. of sticky.");
+		    stickytooltip.closetooltip();
 		});
 				
 	},
@@ -2061,6 +2061,7 @@ function modelDataPointPrint(point) {
 		}
 
 		// update the stub stickytool div dynamically to display
+		$("#sticky1").empty();
 		$("#sticky1").html(retData);
 
 		// not really good to do this but, we need to be able to override some appearance attributes		
