@@ -172,11 +172,11 @@
                         matching an input set of attributes. For example, find all
                         animal models matching a disease phenotype profile.
                         <pre>
-                        /analyze/phenotypes.json?input=items=a1+a2+...+an
+                        /analyze/phenotypes.json?input_items=a1+a2+...+an
                         </pre>
                         For example: 
                         <pre>
-                        /analyze/phenotypes.json?input=items=/analyze/phenotypes.json/?input_items=MP:0000788+MP:0000914
+                        /analyze/phenotypes.json?input_items=/analyze/phenotypes.json/?input_items=MP:0000788+MP:0000914
                         </pre>
                         This wraps a call
                         to <a href="http://owltools.googlecode.com/svn/trunk/docs/api/owltools/sim2/OwlSim.html#findMatches(java.util.Set,
@@ -189,15 +189,38 @@
                 <div class="block">
                     <div class="text">
 					<h3>Compare</h3>
-						We use <a href="http://owlsim.org">OwlSim</a> for semantic matching when comparing two entities with sets of attributes.
-                        Currently services are only supported for a subset of entities in the system - those with phenotypes.
-                    <h4>Comparing two entities</h4>URLs are of the form                        
+						We use <a href="http://owlsim.org">OwlSim</a> for semantic matching when comparing two entities (such as genes, diseases, or genotypes) with sets of attributes (phenotypes).
+                    URLs are of the form                        
 						<pre>
                         /compare/:x/:y.json
-                        </pre>
+                        </pre> 
+						where x can be either an entity or a list of phenotypes
+						and y can be a list of entities and/or sets of phenotypes.
+						<p>
                         This wraps a call to <a href="http://owltools.googlecode.com/svn/trunk/docs/api/owltools/sim2/OwlSim.html#getGroupwiseSimilarity(org.semanticweb.owlapi.model.OWLNamedIndividual, org.semanticweb.owlapi.model.OWLNamedIndividual)">getGroupwiseSimilarity(x,y)</a> in OwlSim.
-					<h4>Comparing two sets of attributes</h4>
-					Coming soon.
+                        This works such that given a query id (such as a gene, genotype, disease), and one or more target identifiers, it will map
+						each to it's respective phenotypes, and perform an OwlSim comparison of the query to each target.
+						You are permitted to mix query and target types.  For example, your query can be a disease, and the target(s)
+						be a list of gene(s), disease(s), phenotype(s), and/or genotype(s).
+						You can indicate to union the phenotypes of either the query or the target with a plus "+".  Only one
+						entity may be supplied for the query, whereas multiple target entities are allowed (delimited by a comma).
+						</p>
+						<p>For details on owlsim, see http://owlsim.org</p>
+
+						Paths:
+						<ul>
+						<li>/compare/:id1/:id2</li>
+						<li>/compare/:id1/:id2,id3,...idN </li>
+						<li>/compare/:id1+:id2/:id3,:id4,...idN </li>
+						<li>/compare/:id1/:id2+:id3,:id4,:id5+:id6,...,:idN </li>
+						</ul>
+						Examples:
+						<ul>
+							<li><i>query with a disease</i> <a href='/disease/OMIM:270400'>Smith-Lemli-Opitz syndrome</a> <i>and compare to</i> <a href="/gene/NCBIGene:5156">PDGFRA</a>, <a href="/disease/OMIM:249000">Meckel Syndrome</a>, and <a href="/disease/OMIM:194050">Williams-beuren Syndrome</a>: <br /><a href="/compare/OMIM:270400/NCBIGene:5156,OMIM:249000,OMIM:194050.json">/compare/OMIM:270400/NCBIGene:5156+OMIM:249000,OMIM:194050.json</a></li>
+							<li><i>query with a phenotype profile</i> of <a href="/phenotype/HP:0000707">abnormality of the nervous system</a>, <a href="/phenotype/HP:0001045">Vitiligo</a>, <a href="/phenotype/HP:0006693">Myocardial steatosis</a> <i>and compare to</i> <a href="/gene/NCBIGene:5156">PDGFRA</a>, <a href="/disease/OMIM:612528">Diamond-blackfan Anemia 5</a> disease, <a href="/gene/NCBIGene:3257">HPS1</a>: <br /><a href="compare/HP:0000707+HP:0001045+HP:0006693/NCBIGene:5156,OMIM:612528,NCBIGene:3257.json">compare/HP:0000707+HP:0001045+HP:0006693/NCBIGene:5156,OMIM:612528,NCBIGene:3257.json</a></li>
+							<li><i>query with a phenotype profile</i> of <a href="/phenotype/HP:0000206">Glossitis</a>, <a href="/phenotype/HP:0000709">Psychosis</a>, and <a href="/phenotype/HP:0000126">Hydronephrosis</a> <i>and compare to another phenotype profile of</i> <a href="/phenotype/HP:0001917">Renal amyloidosis</a>, <a href="/phenotype/HP:0000200">Short lingual frenulum</a>, and <a href="/phenotype/HP:0000722">obsessive-compulsive behavior</a>: <br /><a href="/compare/HP:0000206+HP:0000709+HP:0000126/HP:0001917+HP:0000722+HP:0000200+.json">/compare/HP:0000206+HP:0000709+HP:0000126/HP:0001917+HP:000722+HP:0000200.json</a></li>
+                        </ul>
+
 					<h3>Profile Information</h3>
 					<p>We use Information Content (IC)-based algorithms to compute similarity scores in the Monarch system.  
 					You can retrieve the computed <a href="http://owltools.googlecode.com/svn/trunk/docs/api/owltools/sim2/OwlSim.html#getInformationContentForAttribute(org.semanticweb.owlapi.model.OWLClass)">IC scores</a> 
