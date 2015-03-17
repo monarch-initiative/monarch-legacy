@@ -268,10 +268,12 @@ function AnalyzeInit(uploaded_data){
         var query = '/query/orthologs/'+genes+'.json'
         jQuery("#ajax-spinner").show();
         disable_compare_form();
+        jQuery("#reset").prop('disabled', true);
         
         jQuery.getJSON(query, function(data) {
             jQuery("#ajax-spinner").hide();
             enable_compare_form();
+            jQuery("#reset").prop('disabled', false);
             //Set global homologs to reuse if needed
             homologs = data;
             jQuery("#gene-list").val(homologs.input.join(', '));
@@ -304,10 +306,12 @@ function AnalyzeInit(uploaded_data){
         var query = '/query/orthologs/'+genes+'.json'
         jQuery("#ajax-spinner").show();
         disable_compare_form();
+        jQuery("#reset").prop('disabled', true);
         
         jQuery.getJSON(query, function(data) {
             jQuery("#ajax-spinner").hide();
             enable_compare_form();
+            jQuery("#reset").prop('disabled', false);
             //Set global homologs to reuse if needed
             homologs = data;
             jQuery("#gene-list").val(homologs.input.join(', '));
