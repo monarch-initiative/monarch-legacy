@@ -44,6 +44,7 @@
                       <div class="panel-heading">
                         <h4 class="panel-title text-center">Phenotypes</h4>
                       </div>
+                      <div class="arrow-right"></div>
                         <input id="analyze_auto_target" name="input_items" value="{{input_items}}" type="hidden"/>
                         <div id="analyze-searchlist" class="form-group">
                           <label for="analyze_auto_input"><h4>Add to search list</h4>
@@ -152,8 +153,8 @@
                                 based on relationship:
                               </span>
                           </div>
-                          <button id="ortholog" type="button" class="btn btn-primary" disabled>Orthologs</button>
-                          <button id="paralog" type="button" class="btn btn-primary" disabled>Paralogs</button>
+                          <button id="ortholog" type="button" class="btn monarch-btn" disabled>Orthologs</button>
+                          <button id="paralog" type="button" class="btn monarch-btn" disabled>Paralogs</button>
                         </div>
                         <div id="ajax-spinner">
                           <div class="spinner" >
@@ -202,7 +203,7 @@
                       <h4>Upload Results</h4>
                       <div class="explain">
                         Paste similarity data from external source:
-                        <button id="example-similarity" type="button" class="btn btn-success">Example</button>
+                        <button id="example-similarity" type="button" class="btn monarch-btn">Example</button>
                       </div>
                       <form role="form" action="/labs/analyze/{{datatype}}/" method="GET">
                         <div class="form-group">
