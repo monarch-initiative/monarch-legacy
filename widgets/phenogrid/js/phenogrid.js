@@ -145,7 +145,7 @@ function modelDataPointPrint(point) {
 		selectedSort: "Frequency",
 		targetSpeciesName : "Overview",
 		refSpecies: "Homo sapiens",
-		genotypeExpandLimit: 20, // sets the limit for the number of genotype expanded on grid
+		genotypeExpandLimit: 5, // sets the limit for the number of genotype expanded on grid
 		phenoCompareLimit: 10, // sets the limit for the number of phenotypes used for genotype expansion
 		targetSpeciesList : [{ name: "Homo sapiens", taxon: "9606"},
 			{ name: "Mus musculus", taxon: "10090" },
@@ -163,7 +163,7 @@ function modelDataPointPrint(point) {
 			this.state.modelData = [];
 			this.state.modelList = [];
 			this.state.filteredModelData = [];
-			this.state.loadedGenoTypesHash = new Hashtable();
+			this.state.expandedHash = new Hashtable();
 		}
 
 		// target species name might be provided as a name or as taxon. Make sure that we translate to name
@@ -1204,7 +1204,7 @@ function modelDataPointPrint(point) {
 	
 	_loadHashTables: function() {
 		//CHANGE LATER TO CUT DOWN ON INFO FROM _finishLoad & _finishOverviewLoad
-		this.state.loadedGenoTypesHash = new Hashtable();  // for cache of genotypes
+		this.state.expandedHash = new Hashtable();  // for cache of genotypes
 		this.state.phenotypeListHash = new Hashtable();
 		this.state.modelListHash = new Hashtable();
 		this.state.modelDataHash = new Hashtable({hashCode: modelDataPointPrint, equals: modelDataPointEquals});
@@ -1402,14 +1402,8 @@ function modelDataPointPrint(point) {
 			url: url, 
 			async : false,
 			dataType : 'json',
-			beforeSend: function() {
-				$('#ajax-loader').show();
-			},
 			success : function(data) {
 				res = data;
-			},
-			complete: function() {
-				$('#ajax-loader').hide();
 			},
 			error: function (xhr, errorType, exception) { //Triggered if an error communicating with server
 				self._displayResult(xhr, errorType, exception);
@@ -1641,21 +1635,37 @@ function modelDataPointPrint(point) {
 		var atip =  $("<div></div>")
 						.attr("id", "sticky1")
 						.attr("class", "atip");
-		inner1.append(atip);
-				
+		
+		var img = $("<img></img>")
+				.attr("id", "img-spinner")
+				.attr("src", this.state.scriptpath + "../image/waiting_ac.gif")
+				.attr("alt", "Loading, please wait...")
+
+		var wait = $("<div></div>")
+			.attr("id", "wait")
+			//.attr("class", "spinner")
+			.attr("style", "display:none")
+			.text("Searching for data...");
+
+			wait.append(img);
 		var status = $("<div></div>")
 			.attr("class", "stickystatus");
-		
-		var wait = $("<div></div>")
-			.attr("id", "ajax-loader");
 
-		sticky.append(inner1)
-				.append(wait)
-				.append(status);
-				
+		inner1.append(wait).append(atip);
 		
+
+		sticky.append(inner1);
+				//.append(wait);
+				//.append(status);
+				
+
 		// always append to body
-		sticky.appendTo('body');		
+		sticky.appendTo('body');
+	        sticky.mouseleave("mouseout",function(e) {
+		    //console.log("sticky mouse out. of sticky.");
+		    stickytooltip.closetooltip();
+		});
+				
 	},
 	
 	_addGridTitle: function() {
@@ -1894,7 +1904,8 @@ function modelDataPointPrint(point) {
 		}
 	},
 
-	_selectXItem: function(data, obj) {
+	_selectXItem: function(data, obj, evt) {
+	    
 		// HACK: this temporarily 'disables' the mouseover when the stickytooltip is docked
 		// that way the user doesn't accidently hover another label which caused tooltip to be refreshed
 		if (stickytooltip.isdocked){ return; }
@@ -1903,6 +1914,7 @@ function modelDataPointPrint(point) {
 		var info = self._getAxisData(data);
 		var displayCount = self._getYLimit();
 		var concept = self._getConceptId(data);
+	        console.log("selecting x item.."+concept);
 		var appearanceOverrides;   
 
 		//Show that model label is selected. Change styles to bold, blue and full-length label
@@ -1950,10 +1962,14 @@ function modelDataPointPrint(point) {
 		var info = self._getAxisData(curr_data);
 		var alabels = this.state.svg.selectAll("text.a_text." + curr_data);
 
+
 		var txt = info.label;
 		if (txt === undefined) {
 			txt = curr_data;
 		}
+
+	    console.log("select y item.. "+txt);
+
 		alabels.text(txt)
 			.style("font-weight", "bold")
 			.style("fill", "blue")
@@ -1971,6 +1987,8 @@ function modelDataPointPrint(point) {
 			.attr("height", 11 * appearanceOverrides.offset);
 
 		this._highlightMatching(curr_data);
+
+		//stickytooltip.show(evt);
 	},
 
 	_createHoverBox: function(data){
@@ -2032,7 +2050,7 @@ function modelDataPointPrint(point) {
 			// for gene and species mode only, show genotype link
 			if (this.state.targetSpeciesName != "Overview"){
 				var isExpanded = false;
-				var gtCached = this.state.loadedGenoTypesHash.get(concept);
+				var gtCached = this.state.expandedHash.get(concept);
 				if (gtCached !== null) { isExpanded = gtCached.expanded;}
 
 				//if found just return genotypes scores
@@ -2040,7 +2058,7 @@ function modelDataPointPrint(point) {
 					appearanceOverrides.offset = (gtCached.genoTypes.size() + (gtCached.genoTypes.size() * 0.40));   // magic numbers for extending the highlight
 					var href = "<a href=\"" + this.state.serverURL+"/gene/" + concept + "\" target=\"_blank\">" + gtCached.totalAssocCount + "</a>";
 					/*retData +=  
-					 	"<br/>Overall total associated genotypes: " + href + 
+					 //	"<br/>Overall total associated genotypes: " + href + 
 					 	"<br>Number of expanded genotypes: " + gtCached.genoTypes.size() +
 						"<br/><br/>Click button to <b>collapse</b> associated genotypes &nbsp;&nbsp;" +
 						"<button class=\"collapsebtn\" type=\"button\" onClick=\"self._collapseGenotypes('" + concept + "')\">" +
@@ -2059,6 +2077,7 @@ function modelDataPointPrint(point) {
 		}
 
 		// update the stub stickytool div dynamically to display
+		$("#sticky1").empty();
 		$("#sticky1").html(retData);
 
 		// not really good to do this but, we need to be able to override some appearance attributes		
@@ -2143,6 +2162,7 @@ function modelDataPointPrint(point) {
 				this._deselectMatching(data);
 			}
 		}
+		//stickytooltip.closetooltip();
 	},
 
 	_clickItem: function(url_origin,data) {
@@ -2157,12 +2177,13 @@ function modelDataPointPrint(point) {
 
 			// if it's overview, then just allow view of the model clicked
 			if (this.state.targetSpeciesName != "Overview" && apientity == 'gene') {
-				var expanded = this._isExpanded(data);
-				if (expanded !== null && expanded) {
-					this._collapseGenotypes(data);
-				} else if (expanded !== null && !expanded){
-					this._expandGenotypes(data);
-				}
+				// TEMP: THIS HIDES THE GENOTYPE EXPANSION STUFF FOR NOW
+				// var expanded = this._isExpanded(data);
+				// if (expanded !== null && expanded) {
+				// 	this._collapseGenotypes(data);
+				// } else if (expanded !== null && !expanded){
+				// 	this._expandGenotypes(data);
+				// }
 			}
 		} else {
 			console.log ("URL CLICK ERROR");
@@ -2237,8 +2258,10 @@ function modelDataPointPrint(point) {
 			.on("click", function(d) {
 				self._clickItem(self.state.serverURL,data);
 			})
-			.on("mouseover", function(d) {
-				self._selectXItem(data, this);
+			.on("mouseover", function(d, event) {  
+				var evt = event || window.event;
+				console.log(evt);
+				self._selectXItem(data, this, evt);
 			})
 			.on("mouseout", function(d) {
 				self._deselectData(data);
@@ -3467,7 +3490,28 @@ function modelDataPointPrint(point) {
 	//Will call the getHPO function to either load the HPO info or to make it visible if it was previously hidden.  Not available if preloading
 	_expandHPO: function(id){
 		self._getHPO(id);
-		stickytooltip.closetooltip();
+
+		// this code refreshes the stickytooltip so that tree appears instantly
+		var hpoCached = this.state.hpoCacheHash.get(id.replace("_", ":"));
+		if (hpoCached !== null){
+			this.state.hpoTreesDone = 0;
+			this.state.hpoTreeHeight = 0;
+			var info = this._getAxisData(id);
+			var type = this._getIDType(id);
+			var hrefLink = "<a href=\"" + this.state.serverURL+"/phenotype" + type +"/"+ id.replace("_", ":") + "\" target=\"_blank\">" + info.label + "</a>";
+			var hpoData = "<strong>" + this._capitalizeString(type) + ": </strong> " + hrefLink + "<br/>";
+			hpoData += "<strong>IC:</strong> " + info.IC.toFixed(2) + "<br/><br/>";
+			var hpoTree = "<div id='hpoDiv'>" + this._buildHPOTree(id.replace("_", ":"), hpoCached.edges, 0) + "</div>";
+			if (hpoTree == "<br/>"){
+				hpoData += "<em>No HPO Data Found</em>";
+			} else {
+				hpoData += "<strong>HPO Structure:</strong>" + hpoTree;
+			}
+			$("#sticky1").html(hpoData);
+
+			// reshow the sticky with updated info
+			stickytooltip.show(null);
+		}
 		console.log("Loaded HPO Info for " + id);
 	},
 
@@ -3531,7 +3575,11 @@ function modelDataPointPrint(point) {
 
 	// expand the model with the associated genotypes
 	_expandGenotypes: function(curModel) {
-		var genotypeIds = "", phenotypeIds = "", genoTypeAssociations;
+		$('#wait').show();
+		var div=$('#mystickytooltip').html();
+		$('#mystickytooltip').html(div);
+
+		var _genotypeIds = "", phenotypeIds = "", genoTypeAssociations;
 		var genotypeLabelHashtable = new Hashtable();
 		var success = false;
 		var genoTypeList = new Hashtable();
@@ -3539,25 +3587,32 @@ function modelDataPointPrint(point) {
 		var compareScores;
 
 		// check cached hashtable first 
-		var cache = this.state.loadedGenoTypesHash.get(modelInfo.id);
+		var cache = this.state.expandedHash.get(modelInfo.id);
 
 		//if cached info not found need to try and get genotypes and scores
-		if (cache === null) {
-			// go get the assocated genotypes
-			var url = this.state.serverURL+"/gene/"+ modelInfo.id.replace('_', ':') + ".json";
-			
-			console.log("Getting Gene " + url);
-			console.profile("gene call");
-			var res = this._ajaxLoadData(modelInfo.d.species,url);
-			console.profileEnd();
+		if (cache === null) {		
 
-			if (typeof (res) == 'undefined') { 
+			// go get the assocated genotypes
+			//var url = this.state.serverURL+"/gene/"+ modelInfo.id.replace('_', ':') + ".json";		
+			//var url = this.state.serverURL+"/genotypes/"+ modelInfo.id.replace('_', ':');
+			var url = "http://tartini.crbs.ucsd.edu/dynamic/gene/" + modelInfo.id.replace('_', ':') +
+						"/genotype/nodes.json";
+			console.log("Getting Gene " + url);
+			//console.profile("genotypes call");
+			var res = this._ajaxLoadData(modelInfo.d.species,url);
+
+			res = this._filterGenotypeGraphList(res);
+			//console.profileEnd();
+
+			if (typeof (res) == 'undefined' || res.length == 0) { 
+				$('#wait').hide();	
 				stickytooltip.closetooltip();
 				alert("No gene info found");
 				return success; 
 			}
 
-			genoTypeAssociations = res.genotype_associations;
+			//genoTypeAssociations = res.genotype_associations;
+			genoTypeAssociations = res;
 
 			if (genoTypeAssociations !== null && genoTypeAssociations.length > 5) {
 				console.log("There are " + genoTypeAssociations.length + " associated genotypes");
@@ -3582,10 +3637,14 @@ function modelDataPointPrint(point) {
 			ctr = 0;
 			// assemble a list of genotypes
 			for (var g in genoTypeAssociations) {
-				genotypeIds = genotypeIds + genoTypeAssociations[g].genotype.id + "+";
+			//	_genotypeIds = _genotypeIds + genoTypeAssociations[g].genotype.id + "+";
+			_genotypeIds = _genotypeIds + genoTypeAssociations[g].id + "+";	
 				// fill a hashtable with the labels so we can quickly get back to them later
-				var tmpLabel = this._encodeHtmlEntity(genoTypeAssociations[g].genotype.label);   // "»" + TEMP CODE TO FIND THE GENOTYPE ON DISPLAY
-				genotypeLabelHashtable.put(genoTypeAssociations[g].genotype.id, tmpLabel);
+				//var tmpLabel = this._encodeHtmlEntity(genoTypeAssociations[g].genotype.label); 
+				//genotypeLabelHashtable.put(genoTypeAssociations[g].genotype.id, tmpLabel);
+				var tmpLabel = this._encodeHtmlEntity(genoTypeAssociations[g].lbl);  
+				tmpLabel = (tmpLabel==null?"undefined":tmpLabel);
+				genotypeLabelHashtable.put(genoTypeAssociations[g].id, tmpLabel);
 				ctr++;
 
 				// limit number of genotypes do display based on internalOptions 
@@ -3600,9 +3659,9 @@ function modelDataPointPrint(point) {
 			// call compare
 			url = this.state.serverURL + "/compare/" + phenotypeIds + "/" + genotypeIds;
 			console.log("Comparing " + url);
-			console.profile("compare call");
+			//console.profile("compare call");
 			compareScores = this._ajaxLoadData(modelInfo.d.species,url);
-			console.profileEnd();
+			//console.profileEnd();
 			console.log("Done with ajaxLoadData...");
 		} else {
 			compareScores = cache;
@@ -3642,13 +3701,13 @@ function modelDataPointPrint(point) {
 			if (cache === null) {
 				var savedScores = {b: compareScores.b, genoTypes: genoTypeList, expanded: true, 
 				totalAssocCount: genoTypeAssociations.length};
-				this.state.loadedGenoTypesHash.put(modelInfo.id, savedScores);
+					this.state.expandedHash.put(modelInfo.id, savedScores);							
 			} else {
 				// update the expanded flag
-				var vals = this.state.loadedGenoTypesHash.get(modelInfo.id);
+					var vals = this.state.expandedHash.get(modelInfo.id);
 				vals.expanded = true;
 				vals.genoTypes = genoTypeList;
-				this.state.loadedGenoTypesHash.put(modelInfo.id, vals);
+					this.state.expandedHash.put(modelInfo.id, vals);
 			}
 
 			console.log("Starting Insertion...");
@@ -3665,19 +3724,19 @@ function modelDataPointPrint(point) {
 
 			success = true;
 		} else {
-			console.log('No compare scores found');
+				alert('No compare scores found');
 		}
-
+		$('#wait').hide();			
 		stickytooltip.closetooltip();
 		return success; 
 	},
 
-	// collapse the expanded genotypes for the current selected model
+	// collapse the expanded items for the current selected model
 	_collapseGenotypes: function(curModel) {
 		var modelInfo = {id: curModel, d: this.state.modelListHash.get(curModel)};
 
 		// check cached hashtable first 
-		var cachedScores = this.state.loadedGenoTypesHash.get(modelInfo.id);
+		var cachedScores = this.state.expandedHash.get(modelInfo.id);
 
 		//if found just return genotypes scores
 		if (cachedScores !== null && cachedScores.expanded) {
@@ -3690,9 +3749,9 @@ function modelDataPointPrint(point) {
 			this._processDisplay();
 
 			// update the expanded flag
-			var vals = this.state.loadedGenoTypesHash.get(modelInfo.id);
+			var vals = this.state.expandedHash.get(modelInfo.id);
 			vals.expanded = false;
-			this.state.loadedGenoTypesHash.put(modelInfo.id, vals);
+			this.state.expandedHash.put(modelInfo.id, vals);
 			stickytooltip.closetooltip();
 		}
 	},
@@ -3825,7 +3884,7 @@ function modelDataPointPrint(point) {
 
 	_getAssociatedGenotypes: function(curModel) {
 		// check cached hashtable first 
-		var gta = this.state.loadedGenoTypesHash.get(curModel.model_id);
+		var gta = this.state.expandedHash.get(curModel.model_id);
 
 		//if null then go find genotypes
 		if (gta === null) {
@@ -3842,7 +3901,7 @@ function modelDataPointPrint(point) {
 			if (gta === null) {gta = {};}
 
 			// save the genotypes in hastable for later
-			this.state.loadedGenoTypesHash.put(curModel.model_id, gta);
+			this.state.expandedHash.put(curModel.model_id, gta);					
 		}
 		return gta;
 	},
@@ -3873,7 +3932,7 @@ function modelDataPointPrint(point) {
 		var info = this._getIDTypeDetail(concept);
 
 		if (info == 'gene') {
-			var g = this.state.loadedGenoTypesHash.get(concept);
+			var g = this.state.expandedHash.get(concept);
 			if (g !== null && g.expanded) {
 				return "#08594B";
 			}
@@ -3890,7 +3949,7 @@ function modelDataPointPrint(point) {
 		var info = this._getIDTypeDetail(concept);
 
 		if (info == 'gene') {
-			var g = this.state.loadedGenoTypesHash.get(concept);
+			var g = this.state.expandedHash.get(concept);
 			// if it was ever expanded
 			if (g !== null){
 				return g.expanded;  
@@ -3905,7 +3964,7 @@ function modelDataPointPrint(point) {
 		var info = this._getIDTypeDetail(concept);
 
 		if (info == 'gene') {
-			var g = this.state.loadedGenoTypesHash.get(concept);
+			var g = this.state.expandedHash.get(concept);
 			// if it was ever expanded it will have children
 			if (g !== null) {
 				return true;  
@@ -3922,6 +3981,26 @@ function modelDataPointPrint(point) {
 			return true;
 		}
 		return false;
+	},
+
+	_filterGenotypeGraphList: function(res) {
+
+		if (typeof(res) === 'undefined') return res;
+
+		var nodes = res.nodes;
+		var filteredList = [];
+
+		for (var n in nodes) {
+			if (nodes[n].id.substring(0, 5) != 'genid' ) {
+				filteredList.push(nodes[n]);
+			}
+		}
+		return filteredList;
+	},
+
+	_refreshSticky: function() {
+		var div=$('#mystickytooltip').html();
+		$('#mystickytooltip').html(div);
 	}
 
 	}); //end of widget code
