@@ -36,7 +36,7 @@
 
   : sudo apt-get -u install python-virtualenv
   : cd tests/behave
-  : virtenv `pwd`
+  : virtualenv `pwd`
   : source bin/activate
   : pip install selenium
   : pip install behave
