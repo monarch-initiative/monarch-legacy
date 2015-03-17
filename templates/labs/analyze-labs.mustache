@@ -201,12 +201,13 @@
                   <div class="row-fluid">
                     <div class="col-xs-6 col-sm-6 col-md-6 col-lg-6">
                       <h4>Upload Results</h4>
-                      <div class="explain">
-                        Paste similarity data from external source:
-                        <button id="example-similarity" type="button" class="btn monarch-btn">Example</button>
-                      </div>
                       <form role="form" action="/labs/analyze/{{datatype}}/" method="POST">
                         <div class="form-group">
+                          <div class="explain">
+                            Paste similarity data from external source:
+                            <button id="example-similarity" type="button" class="btn monarch-btn">Example</button>
+                            <button id="upload-reset" class="btn btn-warning" type="reset">Reset</button>
+                          </div>
                           <textarea id="user-results" class="form-control" rows="14" placeholder="" name="user_results"></textarea>
                         </div>
                         <button type="submit" class="btn btn-primary">Upload</button>

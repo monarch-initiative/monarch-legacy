@@ -337,6 +337,9 @@ figcaption {
 #reset{
     padding: 5px 18px 5px 18px;
 }
+#upload-reset{
+    margin: 0 0 1px 5px;
+}
 .monarch-btn{
 	background-color: #44A293;
 	color : white;
