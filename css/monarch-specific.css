@@ -345,7 +345,9 @@ figcaption {
 @media (max-width: 840px) {
 
   #analyze-compare {
-      border-left: none; 
+      border-left: none;
+      border-top: 1px solid #e8e8e8;
+      padding-top: 10px;
   }
   .search-label {
     font-weight: normal;
@@ -360,6 +362,20 @@ figcaption {
     margin: 0 5px 0 0;
   }
 }
+
+@media (max-width: 400px) {
+  .pheno-radio-button {
+    width: 40%;
+  }
+  #ortholog {
+    margin-bottom: 5px;
+  }
+  #paralog {
+    padding-right: 20px;
+  }
+
+}
+
 @media (min-width: 840px) {
   #complete-info .panel { 
     border-top-left-radius: 0px;
