@@ -664,6 +664,12 @@ function AnalyzeInit(uploaded_data){
     if (jQuery("#analyze_auto_target").val() !== null) {
         var text = jQuery("#analyze_auto_target").val();
         var species = jQuery("#analyze_auto_species").val();
+
+        var flatten_user_input = flatten_json(urlParams.user_input);
+
+        console.log(urlParams.user_input);
+        console.log("flat")
+        console.log(flatten_user_input)
         
 
         var phenotypes  = text.split(/[\s,]+/);
@@ -671,7 +677,23 @@ function AnalyzeInit(uploaded_data){
                                        targetSpeciesName: species,
                                        owlSimFunction: urlParams.mode,
                                        geneList: urlParams.geneList,
-                                       providedData: urlParams.user_input
+                                       //providedData: urlParams.user_input
+                                       providedData: flatten_user_input
                                       });
+    }
+
+    // Flatten JSON output from Exomiser
+    function flatten_json(json) {
+         var toFlatten = json.matches
+         if(toFlatten != undefined && toFlatten.length != 0) {
+            var ref = _.head(toFlatten) // Takes the first as template
+            var onlyBs = _.map(_.tail(toFlatten), function(el){  // collect the rest of the Bs
+                return el.b; 
+            });
+            ref.b = _.flatten(ref.b.concat(onlyBs)); // injecting the Bs in the reference
+            return ref;
+         } else {
+            return {};
+         }
     }
 }
