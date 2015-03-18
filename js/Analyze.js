@@ -665,12 +665,15 @@ function AnalyzeInit(uploaded_data){
         var text = jQuery("#analyze_auto_target").val();
         var species = jQuery("#analyze_auto_species").val();
 
+        console.log(urlParams.user_input);
+
         var flatten_user_input = flatten_json(urlParams.user_input);
 
-        console.log(urlParams.user_input);
         console.log("flat")
         console.log(flatten_user_input)
-        
+        console.log(JSON.stringify(flatten_user_input))
+
+        //flatten_user_input = JSON.parse(example_json)
 
         var phenotypes  = text.split(/[\s,]+/);
         jQuery("#phen_vis").phenogrid({phenotypeData: phenotypes,
@@ -691,6 +694,7 @@ function AnalyzeInit(uploaded_data){
                 return el.b; 
             });
             ref.b = _.flatten(ref.b.concat(onlyBs)); // injecting the Bs in the reference
+            ref.metadata = json.metadata;
             return ref;
          } else {
             return {};
