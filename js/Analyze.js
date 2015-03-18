@@ -673,7 +673,7 @@ function AnalyzeInit(uploaded_data){
             flattened_user_input = flatten_json(urlParams.user_input);
 
             console.log("flat");
-            console.log(flatten_user_input);
+            console.log(flattened_user_input);
             console.log(JSON.stringify(flattened_user_input));
         }
 
