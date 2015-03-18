@@ -665,13 +665,17 @@ function AnalyzeInit(uploaded_data){
         var text = jQuery("#analyze_auto_target").val();
         var species = jQuery("#analyze_auto_species").val();
 
-        console.log(urlParams.user_input);
+        var flattened_user_input = {};
+        if (typeof urlParams.user_input != 'undefined'){
+        
+            console.log(urlParams.user_input);
 
-        var flatten_user_input = flatten_json(urlParams.user_input);
+            flattened_user_input = flatten_json(urlParams.user_input);
 
-        console.log("flat")
-        console.log(flatten_user_input)
-        console.log(JSON.stringify(flatten_user_input))
+            console.log("flat");
+            console.log(flatten_user_input);
+            console.log(JSON.stringify(flattened_user_input));
+        }
 
         //flatten_user_input = JSON.parse(example_json)
 
@@ -680,8 +684,7 @@ function AnalyzeInit(uploaded_data){
                                        targetSpeciesName: species,
                                        owlSimFunction: urlParams.mode,
                                        geneList: urlParams.geneList,
-                                       //providedData: urlParams.user_input
-                                       providedData: flatten_user_input
+                                       providedData: flattened_user_input
                                       });
     }
 
