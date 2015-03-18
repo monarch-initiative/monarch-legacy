@@ -679,9 +679,12 @@ function AnalyzeInit(uploaded_data){
             
             // HACK to add gene ID prefixes, will make
             // it work but will forward people to the wrong gene!!
-            flattened_user_input.b.forEach(function(gene,index){
-                if (/^\d+$/.test(gene.id)){
-                    flattened_user_input.b[index].id = "NCBIGene:"+gene.id;
+            flattened_user_input.b.forEach(function(attribute,index){
+                if (/^\d+$/.test(attribute.id)){
+                    flattened_user_input.b[index].id = "NCBIGene:"+attribute.id;
+                }
+                if (/^OMIM|ORPHANET/.test(attribute.id)){
+                    flattened_user_input.b[index].type = "disease";
                 }
             });
             
