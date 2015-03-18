@@ -675,9 +675,16 @@ function AnalyzeInit(uploaded_data){
             console.log("flat");
             console.log(flattened_user_input);
             console.log(JSON.stringify(flattened_user_input));
+            
+            // HACK to add gene ID prefixes, will make
+            // it work but will forward people to the wrong gene!!
+            flattened_user_input.b.forEach(function(gene,index){
+                if (/^\d+$/.test(gene.id)){
+                    flattened_user_input.b[index].id = "NCBIGene:"+gene.id;
+                }
+            });
+            
         }
-
-        //flatten_user_input = JSON.parse(example_json)
 
         var phenotypes  = text.split(/[\s,]+/);
         jQuery("#phen_vis").phenogrid({phenotypeData: phenotypes,
