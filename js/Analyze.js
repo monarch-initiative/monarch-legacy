@@ -665,8 +665,9 @@ function AnalyzeInit(uploaded_data){
         var text = jQuery("#analyze_auto_target").val();
         var species = jQuery("#analyze_auto_species").val();
 
-        var flattened_user_input = {};
-        if (typeof urlParams.user_input != 'undefined'){
+        
+        if (typeof urlParams.user_input != 'undefined' 
+                && typeof urlParams.user_input.matches != 'undefined'){
         
             console.log(urlParams.user_input);
 
@@ -684,14 +685,16 @@ function AnalyzeInit(uploaded_data){
                 }
             });
             
+            urlParams.user_input = flattened_user_input        
         }
+        
 
         var phenotypes  = text.split(/[\s,]+/);
         jQuery("#phen_vis").phenogrid({phenotypeData: phenotypes,
                                        targetSpeciesName: species,
                                        owlSimFunction: urlParams.mode,
                                        geneList: urlParams.geneList,
-                                       providedData: flattened_user_input
+                                       providedData: urlParams.user_input
                                       });
     }
 
