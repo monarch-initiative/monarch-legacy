@@ -6,19 +6,6 @@ function AnalyzeInit(uploaded_data){
     //var DEBUG = true;
     
     var urlParams = {};
-    
-    //Check if we're coming from a POST with user entered data
-    if (typeof uploaded_data != 'undefined'){
-        try {
-            urlParams.user_input = add_metadata(JSON.parse(uploaded_data));
-        } catch (err){
-            console.log(err);
-        }
-        //HARDCODE COMPARE
-        urlParams.mode = 'compare';
-        jQuery('#user-results').val(uploaded_data);
-    }
-    
 
     ///
     /// HTML connctions.
@@ -206,6 +193,18 @@ function AnalyzeInit(uploaded_data){
         jQuery('#srch').prop('checked',true);
         disable_compare_form();
         enable_search_form();
+    }
+    
+    //Check if we're coming from a POST with user entered data
+    if (typeof uploaded_data != 'undefined'){
+        try {
+            urlParams.user_input = add_metadata(JSON.parse(uploaded_data));
+        } catch (err){
+            console.log(err);
+        }
+        //HARDCODE COMPARE
+        urlParams.mode = 'compare';
+        jQuery('#user-results').val(uploaded_data);
     }
     
     redraw_form_list();
@@ -445,6 +444,12 @@ function AnalyzeInit(uploaded_data){
         };
 		return obj;
     }
+    
+    //Upload file
+    jQuery('#upload-file').on('change', function() {
+        var file_name = jQuery(this).val();
+        jQuery('#file-names').text("file: "+file_name);
+    });
 
     function update_form_value(){
 		jQuery(analyze_auto_target_elt).val('');

@@ -307,6 +307,11 @@ figcaption {
     font-size: 14px;
     padding-bottom: 20px;
 }
+.example-desc {
+	margin-top: 10px;
+    font-size: 14px;
+    padding-bottom: 20px;
+}
 .small {
     font-weight: normal;
     font-size: 12px;
@@ -343,7 +348,18 @@ figcaption {
 .monarch-btn{
 	background-color: #44A293;
 	color : white;
+	
 }
+.monarch-btn:hover{
+	background-color: #3A9889;
+}
+#browse{
+    margin-bottom: 10px;
+}
+#file-names{
+    margin-top: 10px;
+}
+
 
 @media (max-width: 840px) {
 
@@ -414,6 +430,27 @@ figcaption {
 	margin-top: -21px;
 	-moz-transform: scale(.9999);
   }
+}
+
+/* File upload credit http://www.abeautifulsite.net/whipping-file-inputs-into-shape-with-bootstrap-3/ */
+.btn-file {
+    position: relative;
+    overflow: hidden;
+}
+.btn-file input[type=file] {
+    position: absolute;
+    top: 0;
+    right: 0;
+    min-width: 100%;
+    min-height: 100%;
+    font-size: 100px;
+    text-align: right;
+    filter: alpha(opacity=0);
+    opacity: 0;
+    outline: none;
+    background: white;
+    cursor: inherit;
+    display: block;
 }
 
 /* Global Ajax */
