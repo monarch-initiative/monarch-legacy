@@ -18,25 +18,37 @@
                     {{/isPhenotype}}
                 </div>
                 <div id="categories">
-                    {{^hasInputItems}}
-                    <a href="#query"><div id="initialtab" class="tab contenttab second">Search</div></a>
-                    <a href="#upload"><div class="tab contenttab second">Upload</div></a>
+                    {{#doesFileExceedMax}}
+                    <a href="#query"><div  class="tab contenttab second">Search</div></a>
+                    <a href="#upload"><div id="initialtab" class="tab contenttab second">Upload</div></a>
                     <div class="tab greyed-out">Results</div>
-                    {{/hasInputItems}}
-                    {{#hasInputItems}}
-                    <a href="#query"><div class="tab contenttab second">Search</div></a>
-                    <a href="#upload"><div class="tab contenttab second">Upload</div></a>
-                    <a href="#result"><div id="initialtab" class="tab contenttab">Results</div></a>
-                    {{/hasInputItems}}
+                    {{/doesFileExceedMax}}
+                    {{^doesFileExceedMax}}
+                      {{^hasInputItems}}
+                      <a href="#query"><div id="initialtab" class="tab contenttab second">Search</div></a>
+                      <a href="#upload"><div class="tab contenttab second">Upload</div></a>
+                      <div class="tab greyed-out">Results</div>
+                      {{/hasInputItems}}
+                      {{#hasInputItems}}
+                      <a href="#query"><div class="tab contenttab second">Search</div></a>
+                      <a href="#upload"><div class="tab contenttab second">Upload</div></a>
+                      <a href="#result"><div id="initialtab" class="tab contenttab">Results</div></a>
+                      {{/hasInputItems}}
+                    {{/doesFileExceedMax}}
                 </div>
             </div>
             <div id="complete-info">
+              {{#doesFileExceedMax}}
+                <div id="query" class="category">
+              {{/doesFileExceedMax}}
+              {{^doesFileExceedMax}}
                 {{^hasInputItems}}
                 <div id="query" class="first category">
                 {{/hasInputItems}}
                 {{#hasInputItems}}
                 <div id="query" class="category">
                 {{/hasInputItems}}
+              {{/doesFileExceedMax}}
                 <div class="row-fluid">
                  <form role="form" action="/labs/analyze/{{datatype}}/" method="GET">
                   <div class="col-xs-5 col-sm-5 col-md-5 col-lg-5">
@@ -197,7 +209,12 @@
                 </form>
                 </div>
                 </div>
+                {{#doesFileExceedMax}}
+                <div id="upload" class="first category">
+                {{/doesFileExceedMax}}
+                {{^doesFileExceedMax}}
                 <div id="upload" class="category">
+                {{/doesFileExceedMax}}
                   <div class="row-fluid">
                     <div class="col-xs-6 col-sm-6 col-md-6 col-lg-6">
                       <h4>Upload Results</h4>
@@ -206,7 +223,11 @@
                           <span class="btn btn-file monarch-btn">
                             Browse...<input id="upload-file" type="file" name="upload_file">
                           </span>
-                          <div id="file-names"></div>
+                          <div id="file-names">
+                            {{#doesFileExceedMax}}
+                            File size exceeds limit of 50 Mb
+                            {{/doesFileExceedMax}}
+                          </div>
                         </div>
                         <button type="submit" class="btn btn-primary">Upload</button>
                       </form>

@@ -448,7 +448,7 @@ function AnalyzeInit(uploaded_data){
     //Upload file
     jQuery('#upload-file').on('change', function() {
         var file_name = jQuery(this).val();
-        jQuery('#file-names').text("file: "+file_name);
+        jQuery('#file-names').text("File: "+file_name);
     });
 
     function update_form_value(){
@@ -686,7 +686,7 @@ function AnalyzeInit(uploaded_data){
             // it work but will forward people to the wrong gene!!
             flattened_user_input.b.forEach(function(attribute,index){
                 if (/^\d+$/.test(attribute.id)){
-                    flattened_user_input.b[index].id = "NCBIGene:"+attribute.id;
+                    flattened_user_input.b[index].id = "Exomiser:"+attribute.id;
                 }
                 if (/^OMIM|ORPHANET/.test(attribute.id)){
                     flattened_user_input.b[index].type = "disease";
