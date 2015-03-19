@@ -693,7 +693,10 @@ function AnalyzeInit(uploaded_data){
                 }
             });
             
-            urlParams.user_input = flattened_user_input        
+            // Obviously an Exomiser call
+            urlParams.mode = "exomiser"
+
+            urlParams.user_input = flattened_user_input
         }
         
 

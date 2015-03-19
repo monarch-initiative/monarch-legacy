@@ -328,6 +328,10 @@ function modelDataPointPrint(point) {
 		//save a copy of the original phenotype data
 		this.state.origPhenotypeData = this.state.phenotypeData.slice();
 
+		if (this.state.owlSimFunction == 'exomiser') {
+			this.state.selectedCalculation = 2; // Force the color to Uniqueness
+		}
+
 		this._setSelectedCalculation(this.state.selectedCalculation);
 		this._setSelectedSort(this.state.selectedSort);
 
@@ -352,7 +356,7 @@ function modelDataPointPrint(point) {
 			this.state.owlSimFunction = 'search';
 		} else if (this.state.owlSimFunction === 'compare' || this.state.owlSimFunction == 'exomiser'){
 			this.state.targetSpeciesName = "Homo sapiens";
-		}
+		} 
 
 		//TEMP UNTIL _loadData is refactored
 		if (!this.state.hpoCacheBuilt){
