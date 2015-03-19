@@ -358,7 +358,6 @@ function modelDataPointPrint(point) {
 		if (!this.state.hpoCacheBuilt){
 			this.state.hpoCacheHash = new Hashtable();
 			this.state.hpoCacheLabels = new Hashtable();
-			console.log("HPOCache Built");
 		}
 
 		this._loadData();
@@ -1052,7 +1051,7 @@ function modelDataPointPrint(point) {
 		var phenotypeList = this.state.phenotypeData;
 		var taxon = this._getTargetSpeciesTaxonByName(this,speciesName);
 		var res;
-		console.log("this.state.simServerURL is..."+this.state.simServerURL);
+		//console.log("this.state.simServerURL is..."+this.state.simServerURL);
 		//COMPARE CALL HACK - REFACTOR OUT
 		if(jQuery.isEmptyObject(this.state.providedData)) {
 			var url = this._getLoadDataURL(phenotypeList,taxon,limit);
@@ -1837,7 +1836,6 @@ function modelDataPointPrint(point) {
 			for (var j in alabels[0]){
 				if (alabels[0][j].id == ID){
 					alabels[0][j].style.fill = "blue";
-					alabels[0][j].innerHTML = label;
 				}
 			}
 		}
@@ -1873,9 +1871,8 @@ function modelDataPointPrint(point) {
 			for (var i in blabels[0]){
 				label = this._getAxisData(blabels[0][i].id).label;
 				shortTxt = this._getShortLabel(label,self.state.labelCharDisplayCount);
-				if (blabels[0][i].innerHTML == label){
+				if (blabels[0][i].innerHTML == shortTxt){
 					blabels[0][i].style.fill = this._getExpandStyling(blabels[0][i].id); //"black";
-					blabels[0][i].innerHTML = shortTxt;
 				}
 			}
 		}
@@ -1883,9 +1880,8 @@ function modelDataPointPrint(point) {
 		for (var j in alabels[0]){
 			label = this._getAxisData(alabels[0][j].id).label;
 			shortTxt = this._getShortLabel(label,shrinkSize);
-			if (alabels[0][j].innerHTML == label){	
+			if (alabels[0][j].innerHTML == shortTxt){	
 				alabels[0][j].style.fill = this._getExpandStyling(alabels[0][j].id); //"black";
-				alabels[0][j].innerHTML = shortTxt;
 			}
 		}
 	},
@@ -1908,14 +1904,13 @@ function modelDataPointPrint(point) {
 		var info = self._getAxisData(data);
 		var displayCount = self._getYLimit();
 		var concept = self._getConceptId(data);
-		console.log("selecting x item.."+concept);
+		//console.log("selecting x item.."+concept);
 		var appearanceOverrides;
 
 		//Show that model label is selected. Change styles to bold, blue and full-length label
 		var model_label = self.state.svg.selectAll("text#" + concept)
 			.style("font-weight", "bold")
-			.style("fill", "blue")
-			.html(info.label);
+			.style("fill", "blue");
 
 		appearanceOverrides = self._createHoverBox(data);   // TODO:we may want to rethink using this return value override
 
@@ -1953,20 +1948,12 @@ function modelDataPointPrint(point) {
 
 		var self = this;
 		var info = self._getAxisData(curr_data);
-		var alabels = this.state.svg.selectAll("text.a_text." + curr_data);
+		
+		//console.log("select y item.. "+txt);
 
-
-		var txt = info.label;
-		if (txt === undefined) {
-			txt = curr_data;
-		}
-
-		console.log("select y item.. "+txt);
-
-		alabels.text(txt)
+		var alabels = this.state.svg.selectAll("text.a_text." + curr_data)
 			.style("font-weight", "bold")
-			.style("fill", "blue")
-			.html(info.label);
+			.style("fill", "blue");
 
 		appearanceOverrides = self._createHoverBox(curr_data);
 
@@ -2252,7 +2239,7 @@ function modelDataPointPrint(point) {
 			})
 			.on("mouseover", function(d, event) {  
 				var evt = event || window.event;
-				console.log(evt);
+				//console.log(evt);
 				self._selectXItem(data, this, evt);
 			})
 			.on("mouseout", function(d) {
@@ -3344,7 +3331,6 @@ function modelDataPointPrint(point) {
 	_getUnmatchedLabels: function() {
 		var unmatchedLabels = [];
 		for (var i in this.state.unmatchedPhenotypes){
-			console.log(this.state.unmatchedPhenotypes[i].id);
 			jQuery.ajax({
 				url : this.state.serverURL + "/phenotype/" + this.state.unmatchedPhenotypes[i].id + ".json",
 				async : false,
@@ -3502,7 +3488,6 @@ function modelDataPointPrint(point) {
 			// reshow the sticky with updated info
 			stickytooltip.show(null);
 		}
-		console.log("Loaded HPO Info for " + id);
 	},
 
 	//Will hide the hpo info, not delete it.  This allows for reloading to be done faster and avoid unneeded server calls.  Not available if preloading
@@ -3512,7 +3497,6 @@ function modelDataPointPrint(point) {
 		HPOInfo.active = 0;
 		this.state.hpoCacheHash.put(idClean,HPOInfo);
 		stickytooltip.closetooltip();
-		console.log("Hid HPO Info for " + id);
 	},
 
 	//When provided with an ID, it will first check hpoCacheHash if currently has the HPO data stored, and if it does it will set it to be visible.  If it does not have that information in the hpoCacheHash, it will make a server call to get the information and if successful will parse the information into hpoCacheHash and hpoCacheLabels
@@ -3528,7 +3512,7 @@ function modelDataPointPrint(point) {
 		if (HPOInfo === null) {
 			HPOInfo = [];
 			var url = this.state.serverURL + "/neighborhood/" + id + "/" + depth + "/" + direction + "/" + relationship + ".json";
-		        console.log("getting hpo data .. url is ..."+url);
+		        //console.log("getting hpo data .. url is ..."+url);
 			var taxon = this._getTargetSpeciesTaxonByName(this,this.state.targetSpeciesName);
 			var results = this._ajaxLoadData(taxon,url);
 			if (typeof (results) !== 'undefined') {
