@@ -185,7 +185,7 @@
                 format : "json",
                 min_results : 3,
                 must_contain : {
-                    disease_id: "ORPHANET:399", // ID for Huntington's disease
+                    disease_id: "Orphanet:399", // ID for Huntington's disease
                 }
             }
         },
