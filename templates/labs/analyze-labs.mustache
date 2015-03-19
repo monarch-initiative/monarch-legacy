@@ -215,8 +215,9 @@
                 {{^doesFileExceedMax}}
                 <div id="upload" class="category">
                 {{/doesFileExceedMax}}
-                  <div class="row-fluid">
-                    <div class="col-xs-6 col-sm-6 col-md-6 col-lg-6">
+                  <div class="col-xs-6 col-sm-6 col-md-6 col-lg-6">
+                    <div class="row-fluid">
+                    <div class="panel panel-default">
                       <h4>Upload Results</h4>
                       <form role="form" enctype="multipart/form-data" action="/labs/analyze/{{datatype}}/" method="POST">
                         <div id="browse">
@@ -231,20 +232,23 @@
                         </div>
                         <button type="submit" class="btn btn-primary">Upload</button>
                       </form>
-                      <form role="form" action="/labs/analyze/{{datatype}}/" method="POST">
-                        <div class="form-group">
-                          <div class="example-desc">
-                            Or paste similarity data from external source:
-                            <button id="example-similarity" type="button" class="btn monarch-btn">Example</button>
-                            <button id="upload-reset" class="btn btn-warning" type="reset">Reset</button>
-                          </div>
-                          <textarea id="user-results" class="form-control" rows="14" placeholder="" name="user_results"></textarea>
-                        </div>
-                        <button type="submit" class="btn btn-primary">Submit</button>
-                      </form>
-                    </div>
-                  </div>
-                
+                      </div>
+                      </div>
+                      <div class="row-fluid">
+                          <form role="form" action="/labs/analyze/{{datatype}}/" method="POST">
+                            <div class="form-group">
+                              <div class="past-data">
+                                <h4>Or paste similarity data below:</h4>
+                                <div id="paste-buttons">
+                                  <button id="example-similarity" type="button" class="btn monarch-btn">Example</button>
+                                  <button id="upload-reset" class="btn btn-warning" type="reset">Reset</button>
+                                </div>
+                              </div>
+                              <textarea id="user-results" class="form-control" rows="14" placeholder="" name="user_results"></textarea>
+                            </div>
+                            <button type="submit" class="btn btn-primary">Submit</button>
+                          </form>
+                      </div> 
                 </div>
                 {{#hasInputItems}}
                 <div id="result" class="first category">
