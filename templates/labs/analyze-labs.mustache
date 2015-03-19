@@ -237,7 +237,7 @@
                       <div class="row-fluid">
                           <form role="form" action="/labs/analyze/{{datatype}}/" method="POST">
                             <div class="form-group">
-                              <div class="past-data">
+                              <div id="paste-data">
                                 <h4>Or paste similarity data below:</h4>
                                 <div id="paste-buttons">
                                   <button id="example-similarity" type="button" class="btn monarch-btn">Example</button>
@@ -248,7 +248,8 @@
                             </div>
                             <button type="submit" class="btn btn-primary">Submit</button>
                           </form>
-                      </div> 
+                      </div>
+                    </div>
                 </div>
                 {{#hasInputItems}}
                 <div id="result" class="first category">
