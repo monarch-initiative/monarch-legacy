@@ -6,19 +6,6 @@ function AnalyzeInit(uploaded_data){
     //var DEBUG = true;
     
     var urlParams = {};
-    
-    //Check if we're coming from a POST with user entered data
-    if (typeof uploaded_data != 'undefined'){
-        try {
-            urlParams.user_input = add_metadata(JSON.parse(uploaded_data));
-        } catch (err){
-            console.log(err);
-        }
-        //HARDCODE COMPARE
-        urlParams.mode = 'compare';
-        jQuery('#user-results').val(uploaded_data);
-    }
-    
 
     ///
     /// HTML connctions.
@@ -208,6 +195,18 @@ function AnalyzeInit(uploaded_data){
         enable_search_form();
     }
     
+    //Check if we're coming from a POST with user entered data
+    if (typeof uploaded_data != 'undefined'){
+        try {
+            urlParams.user_input = add_metadata(JSON.parse(uploaded_data));
+        } catch (err){
+            console.log(err);
+        }
+        //HARDCODE COMPARE
+        urlParams.mode = 'compare';
+        jQuery('#user-results').val(uploaded_data);
+    }
+    
     redraw_form_list();
     
     //add these items to the list on the "Table View" tab
@@ -268,10 +267,12 @@ function AnalyzeInit(uploaded_data){
         var query = '/query/orthologs/'+genes+'.json'
         jQuery("#ajax-spinner").show();
         disable_compare_form();
+        jQuery("#reset").prop('disabled', true);
         
         jQuery.getJSON(query, function(data) {
             jQuery("#ajax-spinner").hide();
             enable_compare_form();
+            jQuery("#reset").prop('disabled', false);
             //Set global homologs to reuse if needed
             homologs = data;
             jQuery("#gene-list").val(homologs.input.join(', '));
@@ -304,10 +305,12 @@ function AnalyzeInit(uploaded_data){
         var query = '/query/orthologs/'+genes+'.json'
         jQuery("#ajax-spinner").show();
         disable_compare_form();
+        jQuery("#reset").prop('disabled', true);
         
         jQuery.getJSON(query, function(data) {
             jQuery("#ajax-spinner").hide();
             enable_compare_form();
+            jQuery("#reset").prop('disabled', false);
             //Set global homologs to reuse if needed
             homologs = data;
             jQuery("#gene-list").val(homologs.input.join(', '));
@@ -441,6 +444,12 @@ function AnalyzeInit(uploaded_data){
         };
 		return obj;
     }
+    
+    //Upload file
+    jQuery('#upload-file').on('change', function() {
+        var file_name = jQuery(this).val();
+        jQuery('#file-names').text("File: "+file_name);
+    });
 
     function update_form_value(){
 		jQuery(analyze_auto_target_elt).val('');
@@ -661,11 +670,31 @@ function AnalyzeInit(uploaded_data){
         var text = jQuery("#analyze_auto_target").val();
         var species = jQuery("#analyze_auto_species").val();
 
-        var flatten_user_input = flatten_json(urlParams.user_input);
+        
+        if (typeof urlParams.user_input != 'undefined' 
+                && typeof urlParams.user_input.matches != 'undefined'){
+        
+            console.log(urlParams.user_input);
 
-        console.log(urlParams.user_input);
-        console.log("flat")
-        console.log(flatten_user_input)
+            flattened_user_input = flatten_json(urlParams.user_input);
+
+            console.log("flat");
+            console.log(flattened_user_input);
+            console.log(JSON.stringify(flattened_user_input));
+            
+            // HACK to add gene ID prefixes, will make
+            // it work but will forward people to the wrong gene!!
+            flattened_user_input.b.forEach(function(attribute,index){
+                if (/^\d+$/.test(attribute.id)){
+                    flattened_user_input.b[index].id = "Exomiser:"+attribute.id;
+                }
+                if (/^OMIM|ORPHANET/.test(attribute.id)){
+                    flattened_user_input.b[index].type = "disease";
+                }
+            });
+            
+            urlParams.user_input = flattened_user_input        
+        }
         
 
         var phenotypes  = text.split(/[\s,]+/);
@@ -673,8 +702,7 @@ function AnalyzeInit(uploaded_data){
                                        targetSpeciesName: species,
                                        owlSimFunction: urlParams.mode,
                                        geneList: urlParams.geneList,
-                                       //providedData: urlParams.user_input
-                                       providedData: flatten_user_input
+                                       providedData: urlParams.user_input
                                       });
     }
 
@@ -687,6 +715,7 @@ function AnalyzeInit(uploaded_data){
                 return el.b; 
             });
             ref.b = _.flatten(ref.b.concat(onlyBs)); // injecting the Bs in the reference
+            ref.metadata = json.metadata;
             return ref;
          } else {
             return {};
