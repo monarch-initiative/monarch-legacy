@@ -2934,7 +2934,9 @@ function modelDataPointPrint(point) {
 		if (!this.state.invertAxis) {
 			this._createTextScores();
 		}
-		this._createOverviewSpeciesLabels();
+		if (this.state.owlSimFunction != 'compare' && this.state.owlSimFunction != 'exomiser'){
+			this._createOverviewSpeciesLabels();
+		}
 	},
 
 	//this code creates the labels for the y-axis, the lines, scores, etc..
