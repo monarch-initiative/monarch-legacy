@@ -2341,13 +2341,24 @@ function modelDataPointPrint(point) {
 			}
 		}
 
+
+
+		// Hiding scores which are equal to 0
+		var formatScore =  function(score) {
+			if(score == 0) {
+				return "";
+			} else {
+				return " (IC: " + score + ")";
+			}
+		}
+
 		var suffix = "";
 		//If the selected calculation isn't percentage based (aka similarity) make it a percentage
 		if (this.state.selectedCalculation != 2) {suffix = '%';}
 
-		retData = "<strong>Query: </strong> " + phenoInfo.label + " (IC: " + phenoInfo.IC.toFixed(2) + ")" +
-			"<br/><strong>Match: </strong> " + d.b_label + " (IC: " + d.b_IC.toFixed(2) +")" +
-			"<br/><strong>Common: </strong> " + d.subsumer_label + " (IC: " + d.subsumer_IC.toFixed(2) +")" +
+		retData = "<strong>Query: </strong> " + phenoInfo.label + formatScore(phenoInfo.IC.toFixed(2)) +
+			"<br/><strong>Match: </strong> " + d.b_label + formatScore(d.b_IC.toFixed(2)) +
+			"<br/><strong>Common: </strong> " + d.subsumer_label + formatScore(d.subsumer_IC.toFixed(2)) +
 			"<br/><strong>" + this._capitalizeString(modelInfo.type)+": </strong> " + modelInfo.label +
 			"<br/><strong>" + prefix + ":</strong> " + d.value[this.state.selectedCalculation].toFixed(2) + suffix +
 			"<br/><strong>Species: </strong> " + species + " (" + taxon + ")";
