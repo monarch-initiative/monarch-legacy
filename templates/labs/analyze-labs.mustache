@@ -221,10 +221,15 @@
                       <h4>Upload Results</h4>
                       <form role="form" enctype="multipart/form-data" action="/labs/analyze/{{datatype}}/" method="POST">
                         <div id="browse">
-                          <span class="btn btn-file monarch-btn">
-                            Browse...<input id="upload-file" type="file" name="upload_file">
-                          </span>
-                          <div id="file-names">
+                          <div id="choose-file">
+                           Choose File: <span id="file-name"></span>
+                          </div>
+                          <div id="upload-btn">
+                            <span class="btn btn-file monarch-btn">
+                              Browse...<input id="upload-file" type="file" name="upload_file">
+                            </span>
+                          </div>
+                          <div id="file-exceed">
                             {{#doesFileExceedMax}}
                             File size exceeds limit of 50 Mb
                             {{/doesFileExceedMax}}
@@ -234,15 +239,17 @@
                       </form>
                       </div>
                       </div>
+                      <div id="separator">
+                        <span id="separator-text">&nbsp;&nbsp;Or&nbsp;&nbsp;</span>
+                      </div>
+                      <hr></hr>
                       <div class="row-fluid">
                           <form role="form" action="/labs/analyze/{{datatype}}/" method="POST">
                             <div class="form-group">
-                              <div id="paste-data">
-                                <h4>Or paste similarity data below:</h4>
-                                <div id="paste-buttons">
-                                  <button id="example-similarity" type="button" class="btn monarch-btn">Example</button>
-                                  <button id="upload-reset" class="btn btn-warning" type="reset">Reset</button>
-                                </div>
+                              <h4>Paste similarity data below:</h4>
+                              <div id="paste-buttons">
+                              <button id="example-similarity" type="button" class="btn monarch-btn">Example</button>
+                              <button id="upload-reset" class="btn btn-warning" type="reset">Reset</button>
                               </div>
                               <textarea id="user-results" class="form-control" rows="14" placeholder="" name="user_results"></textarea>
                             </div>

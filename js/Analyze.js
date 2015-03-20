@@ -448,7 +448,8 @@ function AnalyzeInit(uploaded_data){
     //Upload file
     jQuery('#upload-file').on('change', function() {
         var file_name = jQuery(this).val();
-        jQuery('#file-names').text("File: "+file_name);
+        jQuery('#file-name').text(" "+file_name);
+        jQuery('#file-exceed').empty();
     });
 
     function update_form_value(){

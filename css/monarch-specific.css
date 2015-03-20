@@ -307,6 +307,18 @@ figcaption {
     font-size: 14px;
     padding-bottom: 20px;
 }
+#separator{
+	position:absolute;
+	line-height:1px;
+	width: 100%;
+	text-align: center;
+}
+#separator-text{
+	position:relative;
+    font-style: italic;
+    font-weight: bold;
+    background-color:white;
+}
 #paste-buttons {
     padding-bottom: 10px;
 }
@@ -346,7 +358,14 @@ figcaption {
 .monarch-btn{
 	background-color: #44A293;
 	color : white;
-	
+}
+#upload-btn{
+    margin: 0 0 10px 10px;
+    display: inline-block;
+}
+#choose-file{
+	display: inline-block;
+	font-weight: bold;
 }
 .monarch-btn:hover{
 	background-color: #3A9889;
@@ -354,10 +373,14 @@ figcaption {
 #browse{
     margin-bottom: 10px;
 }
-#file-names{
-    margin-top: 10px;
+#file-exceed {
+    margin: 10px 0 20px 0;
     font-weight: bold;
 }
+#file-name {
+    font-weight: normal;
+}
+
 
 
 @media (max-width: 840px) {
