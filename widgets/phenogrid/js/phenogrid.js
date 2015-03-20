@@ -1206,14 +1206,35 @@ function modelDataPointPrint(point) {
 	_loadHashTables: function() {
 		//CHANGE LATER TO CUT DOWN ON INFO FROM _finishLoad & _finishOverviewLoad
 		this.state.expandedHash = new Hashtable();  // for cache of genotypes
+		tempModelList = new Hashtable();
 		this.state.phenotypeListHash = new Hashtable();
 		this.state.modelListHash = new Hashtable();
 		this.state.modelDataHash = new Hashtable({hashCode: modelDataPointPrint, equals: modelDataPointEquals});
 		var modelPoint, hashData, concept, type, score, x, z;
 		var y = 0;
+		var q = 0;
+		var variantNum = 0;
+		var modelStage = true;
+		var variantChange = true;
 
+		//HACKISH.  IMPLEMENT EARLIER WHEN REFACTORING LOADDATA
+		for (var b in this.state.modelList){
+			if (tempModelList.containsKey(this.state.modelList[b].model_id)){
+				this.state.modelList[b].model_id = this.state.modelList[b].model_id + "_" + variantNum;
+				variantNum++;
+			}
+			hashData = {"model_rank": this.state.modelList[b].model_rank, "model_score": this.state.modelList[b].model_score};
+			tempModelList.put(this.state.modelList[b].model_id, hashData)
+		}
+		
+		variantNum = 0;
 		for (var i in this.state.modelData)
 		{
+			var parsedI = parseInt(i);
+			var next = parsedI + 1;
+			if (next >= this.state.modelData.length){
+				next = parsedI;
+			}
 			//Setting phenotypeListHash
 			if (typeof(this.state.modelData[i].id_a) !== 'undefined' && !this.state.phenotypeListHash.containsKey(this.state.modelData[i].id_a)){
 				hashData = {"label": this.state.modelData[i].label_a, "IC": this.state.modelData[i].IC_a, "pos": parseInt(y), "count": 0, "sum": 0};
@@ -1226,32 +1247,53 @@ function modelDataPointPrint(point) {
 
 			//Setting modelListHash
 			type = this.state.defaultApiEntity;
-			if (typeof(this.state.modelData[i].model_id) !== 'undefined' && !this.state.modelListHash.containsKey(this.state.modelData[i].model_id)){
-
-				concept = this._getConceptId(this.state.modelData[i].model_id);
-				for (var j in this.state.apiEntityMap) {
-					if (concept.indexOf(this.state.apiEntityMap[j].prefix) === 0) {
-						type = this.state.apiEntityMap[j].apifragment;
+			if (typeof(this.state.modelData[i].model_id) !== 'undefined'){
+				if (modelStage == true){
+					if (this.state.modelListHash.containsKey(this.state.modelData[i].model_id)){
+						var newModelID = this.state.modelData[i].model_id + "_" + variantNum;
+						//HACKISH.  IMPLEMENT EARLIER WHEN REFACTORING LOADDATA
+						while (variantChange){
+							q++;
+							if (this.state.modelData[parsedI].model_id == this.state.modelData[parsedI+q].model_id){
+								this.state.modelData[parsedI+q].model_id = newModelID;
+							} else {
+								variantChange = false;
+							}
+						}
+						q = 0;
+						variantChange = true;
+						this.state.modelData[i].model_id = newModelID;
+						variantNum++;
 					}
+					concept = this._getConceptId(this.state.modelData[i].model_id);
+					for (var j in this.state.apiEntityMap) {
+						if (concept.indexOf(this.state.apiEntityMap[j].prefix) === 0) {
+							type = this.state.apiEntityMap[j].apifragment;
+						}
+					}
+
+					var modelListInfo = tempModelList.get(this.state.modelData[i].model_id);
+					x = parseInt(modelListInfo.model_rank);
+					score = modelListInfo.model_score;
+
+					//OPOS is used for overview positioning.  Z is mapped to this
+					z = x;
+					for (var k in this.state.targetSpeciesList){
+						if (this.state.modelData[i].species == this.state.targetSpeciesList[k].name){
+							z = x + (k * 10);
+						}
+					}
+
+					hashData = {"label": this.state.modelData[i].model_label, "species": this.state.modelData[i].species, "taxon": this.state.modelData[i].taxon, "type": type, "pos": x, "opos": z, "rank": x, "score": score};
+					this.state.modelListHash.put(this.state.modelData[i].model_id, hashData);
 				}
 
-				for (var m in this.state.modelList){
-					if (this.state.modelList[m].model_id == this.state.modelData[i].model_id){
-						x = parseInt(this.state.modelList[m].model_rank);
-						score = this.state.modelList[m].model_score;
-					}
+				//HACKISH.  IMPLEMENT EARLIER WHEN REFACTORING LOADDATA
+				if (this.state.modelData[i].model_id == this.state.modelData[next].model_id){
+					modelStage = false;
+				} else {
+					modelStage = true;
 				}
-
-				//OPOS is used for overview positioning.  Z is mapped to this
-				z = x;
-				for (var k in this.state.targetSpeciesList){
-					if (this.state.modelData[i].species == this.state.targetSpeciesList[k].name){
-						z = x + (k * 10);
-					}
-				}
-
-				hashData = {"label": this.state.modelData[i].model_label, "species": this.state.modelData[i].species, "taxon": this.state.modelData[i].taxon, "type": type, "pos": x, "opos": z, "rank": x, "score": score};
-				this.state.modelListHash.put(this.state.modelData[i].model_id, hashData);
 			}
 
 			//Setting modelDataHash
