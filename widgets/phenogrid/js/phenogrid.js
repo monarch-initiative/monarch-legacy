@@ -433,7 +433,9 @@ function modelDataPointPrint(point) {
 		} else {
 			var msg;
 			//COMPARE CALL HACK - REFACTOR OUT
-			if (this.state.targetSpeciesName == "Overview" || this.state.owlSimFunction === 'compare'){
+			if (this.state.targetSpeciesName == "Overview" 
+			        || this.state.owlSimFunction === 'compare'
+			        || this.state.owlSimFunction === 'exomiser'){
 				msg = "There are no models available.";
 				this._createSvgContainer();
 				this._createEmptyVisualization(msg);
@@ -445,7 +447,8 @@ function modelDataPointPrint(point) {
 		}
 		//COMPARE CALL HACK - REFACTOR OUT
 		// no organism selector if we are doing the 'compare' function
-		if (this.state.owlSimFunction === 'compare'){
+		if (this.state.owlSimFunction === 'compare' 
+		        || this.state.owlSimFunction === 'exomiser'){
 			this.state.svg.select("#specieslist").remove();
 			this.state.svg.select("#faqinfo").remove();
 			$("#org_div").remove();
@@ -1682,7 +1685,8 @@ function modelDataPointPrint(point) {
 			titleText = "Phenotype Comparison (grouped by " + species + " " + comp + ")";
 		}
 		//COMPARE CALL HACK - REFACTOR OUT
-		if (this.state.owlSimFunction === 'compare'){
+		if (this.state.owlSimFunction === 'compare'
+		        || this.state.owlSimFunction === 'exomiser'){
 			titleText = "Phenotype Comparison";
 		}
 
@@ -2984,7 +2988,8 @@ function modelDataPointPrint(point) {
 		var y;
 		//If this is the Overview, get gradients for all species with an index
 		//COMPARE CALL HACK - REFACTOR OUT
-		if ((this.state.targetSpeciesName == "Overview" || this.state.targetSpeciesName == "All") || (this.state.targetSpeciesName == "Homo sapiens" && this.state.owlSimFunction == "compare")) {
+		if ((this.state.targetSpeciesName == "Overview" || this.state.targetSpeciesName == "All") || (this.state.targetSpeciesName == "Homo sapiens" 
+		         && (this.state.owlSimFunction == "compare" || this.state.owlSimFunction == "exomiser"))) {
 			//this.state.overviewCount tells us how many fit in the overview
 			for (var i = 0; i < this.state.overviewCount; i++) {
 				y = this._createGradients(i,y1);
