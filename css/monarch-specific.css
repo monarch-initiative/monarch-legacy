@@ -322,9 +322,17 @@ figcaption {
 #paste-buttons {
     padding-bottom: 10px;
 }
-.small {
+.compare-instructions {
+	padding-bottom: 10px;
+}
+.autocomplete-message{
+	margin-top: 4px;
+}
+.small {  
+    font-family: Helvetica, Arial, sans-serif;
     font-weight: normal;
     font-size: 12px;
+    line-height:130%;
 }
 #ajax-spinner {
     display:none;
@@ -373,7 +381,7 @@ figcaption {
 #browse{
     margin-bottom: 10px;
 }
-#file-exceed {
+#file-error {
     margin: 10px 0 20px 0;
     font-weight: bold;
 }
@@ -476,6 +484,13 @@ figcaption {
     background: white;
     cursor: inherit;
     display: block;
+}
+#file-desc{
+	margin-bottom: 10px;
+	width: 72%;
+}
+.phenotype-auto-desc{
+	padding-bottom: 8px;
 }
 
 /* Global Ajax */

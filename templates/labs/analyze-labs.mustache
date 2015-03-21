@@ -14,41 +14,43 @@
                     <a class="downloadline downloadline-left btn btn-large btn-default btn-monarch-main monarch-feedback-dark"
                             href="mailto:info@monarchinitiative.org">Your feedback welcome!</a>
                     {{#isPhenotype}}
-                    <p>Find models and phenotypes similar to a set of abnormal phenotypes of interest.</p>
+                    <p style="font-size:15px">The Phenotype Analysis tool enables you search our database for human diseases and/or animal model genes
+                       for those with similar phenotype profiles, or <a href="#upload">visualize</a> phenotypic comparison output from  
+                           <a href="http://www.sanger.ac.uk/resources/software/exomiser/submit/">Exomiser</a>.</p>
                     {{/isPhenotype}}
                 </div>
                 <div id="categories">
-                    {{#doesFileExceedMax}}
-                    <a href="#query"><div  class="tab contenttab second">Search</div></a>
-                    <a href="#upload"><div id="initialtab" class="tab contenttab second">Upload</div></a>
+                    {{#isFileError}}
+                    <a href="#query"><div  class="tab contenttab second query-tab">Search</div></a>
+                    <a href="#upload"><div id="initialtab" class="tab contenttab second upload-tab">Upload</div></a>
                     <div class="tab greyed-out">Results</div>
-                    {{/doesFileExceedMax}}
-                    {{^doesFileExceedMax}}
+                    {{/isFileError}}
+                    {{^isFileError}}
                       {{^hasInputItems}}
-                      <a href="#query"><div id="initialtab" class="tab contenttab second">Search</div></a>
-                      <a href="#upload"><div class="tab contenttab second">Upload</div></a>
+                      <a href="#query"><div id="initialtab" class="tab contenttab second query-tab">Search</div></a>
+                      <a href="#upload"><div class="tab contenttab second upload-tab">Upload</div></a>
                       <div class="tab greyed-out">Results</div>
                       {{/hasInputItems}}
                       {{#hasInputItems}}
-                      <a href="#query"><div class="tab contenttab second">Search</div></a>
-                      <a href="#upload"><div class="tab contenttab second">Upload</div></a>
+                      <a href="#query"><div class="tab contenttab second query-tab">Search</div></a>
+                      <a href="#upload"><div class="tab contenttab second upload-tab">Upload</div></a>
                       <a href="#result"><div id="initialtab" class="tab contenttab">Results</div></a>
                       {{/hasInputItems}}
-                    {{/doesFileExceedMax}}
+                    {{/isFileError}}
                 </div>
             </div>
             <div id="complete-info">
-              {{#doesFileExceedMax}}
+              {{#isFileError}}
                 <div id="query" class="category">
-              {{/doesFileExceedMax}}
-              {{^doesFileExceedMax}}
+              {{/isFileError}}
+              {{^isFileError}}
                 {{^hasInputItems}}
                 <div id="query" class="first category">
                 {{/hasInputItems}}
                 {{#hasInputItems}}
                 <div id="query" class="category">
                 {{/hasInputItems}}
-              {{/doesFileExceedMax}}
+              {{/isFileError}}
                 <div class="row-fluid">
                  <form role="form" action="/labs/analyze/{{datatype}}/" method="GET">
                   <div class="col-xs-5 col-sm-5 col-md-5 col-lg-5">
@@ -59,21 +61,19 @@
                       <div class="arrow-right"></div>
                         <input id="analyze_auto_target" name="input_items" value="{{input_items}}" type="hidden"/>
                         <div id="analyze-searchlist" class="form-group">
-                          <label for="analyze_auto_input"><h4>Add to search list</h4>
-                            {{#isPhenotype}}
-                            <p class="example small">Type phenotype name for autocomplete (e.g.
-                            Renal agenesis, Multicystic kidney dysplasia, etc.)</p>
-                            {{/isPhenotype}}
-                          </label>
+                          <label for="analyze_auto_input"><h4>Step 1. Create a phenotype profile:</h4></label>
+                          {{#isPhenotype}}
+                          <div class="small phenotype-auto-desc">Select one or more phenotypes by using the autocomplete. 
+                              Each will get added to a list at the bottom of the section.</div>
+                          {{/isPhenotype}}
                           <input id="analyze_auto_input" type="text" class="form-control"
                           placeholder="Enter {{datatype}} here"/>
                         </div>
                         <div id="analyze-profile" class="form-group">
-                            <label for="analyze_auto_list"><h4>Search list / {{datatype}} profile</h4>
+                            <label for="analyze_auto_list"><h4>Search list / {{datatype}} profile</h4></label>
                             {{#isPhenotype}}
-                            <p class="example small">Search for profiles similar to this list of phenotypes.</p>
+                            <div class="small phenotype-auto-desc">Search for profiles similar to this list of phenotypes.</div>
                             {{/isPhenotype}}
-                            </label>
                             <ul id="analyze_auto_list" class="list-group">
                             <li id="analyze-empty-item" class="list-group-item">Empty: Add items using the input above.</li>
                             </ul>
@@ -92,7 +92,7 @@
                               <input id="srch" type="radio" checked="true" value="search" name="mode"> Search</label>
                           </div>
                           <div class="explain">
-                            Search for model genes, genotypes, and semantically similar diseases
+                            Refine your search space by taxon or target type (disease or gene)
                           </div>
                           <div id="search-form-group">
                             <div class="row">
@@ -140,21 +140,20 @@
                             <input id="compare" type="radio" value="compare" name="mode"> Compare</label>
                         </div>
                         <div class="explain">
-                            Compare phenotypes against a set of genes<br><br>
+                            Enter a specific set of genes to compare their phenotypes against your query.
                         </div>
+                        <p class="small example compare-instructions">
+                         Select genes using either the autocomplete, or enter IDs directly using the text box (or a combination of both).
+                          You can expand your list of genes using the convenience buttons at the bottom. </p>
                         <div id="compare-form-group">
-                          <div id="gene-autocomplete">Enter Gene Symbol:<br>
-                            <span class="small">
+                          <div id="gene-autocomplete">Enter Gene Symbol:
+                            <div class="small autocomplete-message">
                               Autocomplete currently only supports human genes
-                            </span>
+                            </div>
                           </div>
                           <input id="auto_gene_input" type="text" class="form-control"
                           placeholder="e.g. LHX1" disabled>
-                          <div id="gene-text-area">Gene IDs:<br>
-                            <span class="small">
-                                Enter genes with autocomplete above and/or direcly paste to the box below.
-                                Gene IDs can be newline or comma separated
-                            </span>
+                          <div id="gene-text-area">Gene IDs:
                           </div>
                        
                           <textarea id="gene-list" class="form-control" rows="3" placeholder="e.g. NCBIGene:3975, ENSEMBL:ENSG00000108753 " 
@@ -209,18 +208,23 @@
                 </form>
                 </div>
                 </div>
-                {{#doesFileExceedMax}}
+                {{#isFileError}}
                 <div id="upload" class="first category">
-                {{/doesFileExceedMax}}
-                {{^doesFileExceedMax}}
+                {{/isFileError}}
+                {{^isFileError}}
                 <div id="upload" class="category">
-                {{/doesFileExceedMax}}
+                {{/isFileError}}
                   <div class="col-xs-6 col-sm-6 col-md-6 col-lg-6">
                     <div class="row-fluid">
                     <div class="panel panel-default">
                       <h4>Upload Results</h4>
                       <form role="form" enctype="multipart/form-data" action="/labs/analyze/{{datatype}}/" method="POST">
                         <div id="browse">
+                          <div id="file-desc" class="small">
+                             If you have a phenotype-comparison formatted JSON file, you can visualize it with
+                             our grid by uploading or pasting the contents below. 
+                             We provide several examples for you to play with. 
+                          </div>
                           <div id="choose-file">
                            Choose File: <span id="file-name"></span>
                           </div>
@@ -229,10 +233,13 @@
                               Browse...<input id="upload-file" type="file" name="upload_file">
                             </span>
                           </div>
-                          <div id="file-exceed">
+                          <div id="file-error">
                             {{#doesFileExceedMax}}
                             File size exceeds limit of 50 Mb
                             {{/doesFileExceedMax}}
+                            {{#isJSONIllegal}}
+                            File size exceeds limit of 50 Mb
+                            {{/isJSONIllegal}}
                           </div>
                         </div>
                         <button type="submit" class="btn btn-primary">Upload</button>

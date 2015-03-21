@@ -36,6 +36,15 @@ jQuery(document).ready(function(){
         jQuery('.category').hide();
         jQuery(panel_id).show();
     });
+    //HACK TO GET THE ANALYZE PAGE TO WORK, REFACTOR OUT
+    jQuery('#description a').click(function(event) {
+        var panel_id = jQuery(this).attr('href');
+        event.preventDefault();
+        jQuery('.category').hide();
+        jQuery(panel_id).show();
+        jQuery(".query-tab").css({'color': 'white', 'background-color': '#999', 'border-bottom': '1px solid black'});
+        jQuery(".upload-tab").css({'color': 'black', 'background-color': 'white', 'border-bottom': '1px solid white'});
+    });
     
     // Since we're a tabby version, we're going to try and open
     // any tabs defined by fragments.
