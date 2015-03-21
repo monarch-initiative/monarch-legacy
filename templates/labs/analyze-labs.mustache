@@ -34,7 +34,7 @@
                       {{#hasInputItems}}
                       <a href="#query"><div class="tab contenttab second query-tab">Search</div></a>
                       <a href="#upload"><div class="tab contenttab second upload-tab">Upload</div></a>
-                      <a href="#result"><div id="initialtab" class="tab contenttab">Results</div></a>
+                      <a href="#result"><div id="initialtab" class="tab contenttab results-tab">Results</div></a>
                       {{/hasInputItems}}
                     {{/isFileError}}
                 </div>
@@ -238,7 +238,7 @@
                             File size exceeds limit of 50 Mb
                             {{/doesFileExceedMax}}
                             {{#isJSONIllegal}}
-                            File size exceeds limit of 50 Mb
+                            JSON {{jsonError}}
                             {{/isJSONIllegal}}
                           </div>
                         </div>

@@ -196,7 +196,7 @@ function AnalyzeInit(uploaded_data){
     }
     
     //Check if we're coming from a POST with user entered data
-    if (typeof uploaded_data != 'undefined'){
+    if (uploaded_data != null){
         try {
             urlParams.user_input = add_metadata(JSON.parse(uploaded_data));
         } catch (err){
