@@ -37,7 +37,7 @@ jQuery(document).ready(function(){
         jQuery(panel_id).show();
     });
     //HACK TO GET THE ANALYZE PAGE TO WORK, REFACTOR OUT
-    jQuery('#description a').click(function(event) {
+    jQuery('#internal-link').click(function(event) {
         var panel_id = jQuery(this).attr('href');
         event.preventDefault();
         jQuery('.category').hide();
