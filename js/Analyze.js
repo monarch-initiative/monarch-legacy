@@ -284,6 +284,7 @@ function AnalyzeInit(uploaded_data){
         .error(function() { 
             jQuery("#ajax-spinner").hide();
             enable_compare_form();
+            jQuery("#reset").prop('disabled', false);
             jQuery("#error-msg").show().delay(3000).fadeOut();
         });
         
@@ -322,6 +323,7 @@ function AnalyzeInit(uploaded_data){
         .error(function() { 
             jQuery("#ajax-spinner").hide();
             enable_compare_form();
+            jQuery("#reset").prop('disabled', false);
             jQuery("#error-msg").show().delay(3000).fadeOut();
         });
 ;
