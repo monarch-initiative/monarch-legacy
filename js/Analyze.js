@@ -129,7 +129,7 @@ function AnalyzeInit(uploaded_data){
     for (var irn = 0; irn < URLVariables.length; irn++) {
         var parameterName = URLVariables[irn].split('=');
         if (parameterName[0] == "input_items" && splittedLabels) {
-             var url_phenotypes = parameterName[1].split("+");
+             var url_phenotypes = decodeURIComponent(parameterName[1]).split("+");
              for (var urn = 0; urn < url_phenotypes.length; urn++){
              	if (splittedLabels[urn]){
              		search_set[url_phenotypes[urn]] = splittedLabels[urn];
@@ -216,7 +216,7 @@ function AnalyzeInit(uploaded_data){
     jQuery.each(select_terms, function(key, value) {
     	term_list += (value.textContent.substring(0,value.textContent.length-1) + ', ');
     });
-    if (typeof urlParams.userResults == 'undefined'){
+    if (typeof urlParams.user_input == 'undefined'){
         result_list.prepend('<h3>Search Terms</h3> ' + term_list.substring(0, term_list.length-2) + '<br/>');
     }
     
