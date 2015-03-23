@@ -1077,21 +1077,21 @@ function modelDataPointPrint(point) {
 
 
 	_getLoadDataURL : function(phenotypeList,taxon,limit) {
-		var url = this.state.simServerURL;
-		//COMPARE CALL HACK - REFACTOR OUT
-		switch(this.state.owlSimFunction) {
-			case ('compare'):
-			url += '/compare/' + phenotypeList.join(",") + "/" + this.state.geneList.join('+');
-			break;
-			default:
-			url += this.state.simSearchQuery + phenotypeList.join(",") + "&target_species=" + taxon;
-			if (typeof(limit) !== 'undefined') {
-				url += "&limit=" + limit;
-			}
-			break;
-		}
-		return url;
-	},
+        var url = this.state.simServerURL;
+        //COMPARE CALL HACK - REFACTOR OUT
+        switch(this.state.owlSimFunction) {
+            case ('compare'):
+                url = url+'/compare/'+ phenotypeList.join("+") + "/" + this.state.geneList.join(',');
+                break;
+            default:
+                url = url+ this.state.simSearchQuery + phenotypeList.join("+") + "&target_species=" + taxon;
+                if (typeof(limit) !== 'undefined') {
+                    url += "&limit=" + limit;
+                }
+                break;
+        }
+        return url;
+    },
 
 	// make sure there are limit items in res --
 	// If we don't have enough, add some dummy items in. 
