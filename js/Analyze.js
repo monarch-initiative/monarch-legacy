@@ -109,7 +109,7 @@ function AnalyzeInit(uploaded_data){
 
 //Attempt to fix input_items listing
 	jQuery("#analyze_auto_target").val(function(index,text){
-		var textFix = text.replace(/:/g ,'_').trim();
+		var textFix = text.trim();
 		if (textFix.charAt(0) == ','){
 			textFix = textFix.substring(1);
 		}
