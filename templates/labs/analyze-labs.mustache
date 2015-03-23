@@ -14,9 +14,34 @@
                     <a class="downloadline downloadline-left btn btn-large btn-default btn-monarch-main monarch-feedback-dark"
                             href="mailto:info@monarchinitiative.org">Your feedback welcome!</a>
                     {{#isPhenotype}}
-                    <p style="font-size:15px">The Phenotype Analysis tool enables you search our database for human diseases and/or animal model genes
-                       for those with similar phenotype profiles, or <a id="internal-link" href="#upload">visualize</a> phenotypic comparison output from  
-                           <a href="http://www.sanger.ac.uk/resources/software/exomiser/submit/">Exomiser</a>.</p>
+                    <p style="font-size:15px">
+					The Phenotype Analysis Tool enables you search our database using the <a href="http://owlsim.org">
+					OwlSim</a> Semantic Similarity analysis engine to find phenotypically similar diseases or        
+                    genes in a variety of organisms, then visualize their overlap. 
+					(<a href="/page/about">Read more</a> if you want to understand how this works.)
+					</p>
+
+					<p style="font-size:15px">
+					<b>Instructions:</b>
+					<ul style="font-size:15px; line-height:110%">
+					<li><i>Search</i></li>
+					<ul>
+                    <li><b>Step 1</b>: create a Phenotype Profile by entering a set of phenotypes.</li>
+                    <li><b>Step 2</b>: modify the settings for how to perform the comparison: <i>search</i> against the entire database
+                    or <i>compare</i> against a selected set of genes.</li>
+                    <li><b>Step 3</b>: Submit and view your results in the Results tab.
+                    (If you want to visualize preformatted <a href="https://www.sanger.ac.uk/resources/software/exomiser/">Exomiser</a> output,
+                    jump over to the <a id="internal-link" href="#upload">upload tab</a>.)</li>
+                    <li><b>Step 4</b>: Repeat.  The list of phenotypes and genes stay
+                    populated enabling you to iterate and refine your lists. You can start over by
+                    hitting Reset.</li>
+					</ul>
+					<li><i>Upload</i></li>
+					<ul>
+					<li>Upload or Paste your preformatted phenotype-comparison output to visualize in the Phenogrid.</li>
+					</ul>
+					</ul>
+						
                     {{/isPhenotype}}
                 </div>
                 <div id="categories">
@@ -61,7 +86,7 @@
                       <div class="arrow-right"></div>
                         <input id="analyze_auto_target" name="input_items" value="{{input_items}}" type="hidden"/>
                         <div id="analyze-searchlist" class="form-group">
-                          <label for="analyze_auto_input"><h4>Step 1. Create a phenotype profile:</h4></label>
+                          <label for="analyze_auto_input"><h4>Create a phenotype profile:</h4></label>
                           {{#isPhenotype}}
                           <div class="small phenotype-auto-desc">Select one or more phenotypes by using the autocomplete. 
                               Each will get added to a list at the bottom of the section.</div>
@@ -71,9 +96,6 @@
                         </div>
                         <div id="analyze-profile" class="form-group">
                             <label for="analyze_auto_list"><h4>Search list / {{datatype}} profile</h4></label>
-                            {{#isPhenotype}}
-                            <div class="small phenotype-auto-desc">Search for profiles similar to this list of phenotypes.</div>
-                            {{/isPhenotype}}
                             <ul id="analyze_auto_list" class="list-group">
                             <li id="analyze-empty-item" class="list-group-item">Empty: Add items using the input above.</li>
                             </ul>
@@ -140,15 +162,15 @@
                             <input id="compare" type="radio" value="compare" name="mode"> Compare</label>
                         </div>
                         <div class="explain">
-                            Enter a specific set of genes to compare their phenotypes against your query.
+                            Enter a specific set of genes to compare against your query.
                         </div>
                         <p class="small example compare-instructions">
-                         Select genes using either the autocomplete, or enter IDs directly using the text box (or a combination of both).
-                          You can expand your list of genes using the convenience buttons at the bottom. </p>
+                         Select genes using either the autocomplete and/or enter gene IDs directly using the text box.
+                          Expand your list of genes using the convenience buttons at the bottom. </p>
                         <div id="compare-form-group">
                           <div id="gene-autocomplete">Enter Gene Symbol:
                             <div class="small autocomplete-message">
-                              Autocomplete currently only supports human genes
+                              Note: Autocomplete currently only supports human genes
                             </div>
                           </div>
                           <input id="auto_gene_input" type="text" class="form-control"
@@ -158,9 +180,9 @@
                        
                           <textarea id="gene-list" class="form-control" rows="3" placeholder="e.g. NCBIGene:3975, ENSEMBL:ENSG00000108753 " 
                                     name="gene_list" disabled></textarea>
-                          <div id="gene-shortcuts">Add Genes:<br>
+                          <div id="gene-shortcuts">Add More Genes:<br>
                               <span class="small">
-                                Given the above list of genes, add additional genes to query
+                                Given the above list of genes, include additional genes
                                 based on relationship:
                               </span>
                           </div>
@@ -215,16 +237,28 @@
                 <div id="upload" class="category">
                 {{/isFileError}}
                   <div class="col-xs-6 col-sm-6 col-md-6 col-lg-6">
+					<p>
+						If you have a phenotype-comparison formatted JSON file (such as from Exomiser), 
+						you can visualize it with
+                        our Phenogrid by uploading or pasting the contents into the form.
+                        We also provide several examples for you to play with.
+					</p>
+					<br />
+					<p style="font-size:13px; line-height: 100%">
+					The <a href="https://www.sanger.ac.uk/resources/software/exomiser/">Exomiser</a> is a Java program 
+					that functionally annotates variants from whole-exome sequencing data starting 
+					from a VCF file, and leverages variant frequency, pathogenicity, quality, 
+					inheritance pattern, and phenotype data for prioritization. <i>Coming soon in 
+					Exomiser 7.0</i>, you will be able to export a phenogrid-ready file to 
+					visualize the phenotypic evidence for candidate variants. 
+					Use the examples at the right to test this feature.</p> 
+				  </div>
+                  <div class="col-xs-6 col-sm-6 col-md-6 col-lg-6">
                     <div class="row-fluid">
                     <div class="panel panel-default">
                       <h4>Upload Results</h4>
                       <form role="form" enctype="multipart/form-data" action="/labs/analyze/{{datatype}}/" method="POST">
                         <div id="browse">
-                          <div id="file-desc" class="small">
-                             If you have a phenotype-comparison formatted JSON file, you can visualize it with
-                             our grid by uploading or pasting the contents below. 
-                             We provide several examples for you to play with. 
-                          </div>
                           <div id="choose-file">
                            Choose File: <span id="file-name"></span>
                           </div>
@@ -241,8 +275,8 @@
                             JSON {{jsonError}}
                             {{/isJSONIllegal}}
                           </div>
-                        </div>
                         <button type="submit" class="btn btn-primary">Upload</button>
+                        </div>
                       </form>
                       </div>
                       </div>
@@ -261,7 +295,7 @@
                               </div>
                               <textarea id="user-results" class="form-control" rows="14" placeholder="" name="user_results"></textarea>
                             </div>
-                            <button type="submit" class="btn btn-primary">Submit</button>
+                            <button type="submit" class="btn btn-primary">Visualize</button>
                           </form>
                       </div>
                     </div>
