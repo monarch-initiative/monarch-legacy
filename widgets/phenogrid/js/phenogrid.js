@@ -436,11 +436,11 @@ function modelDataPointPrint(point) {
 			if (this.state.targetSpeciesName == "Overview" 
 			        || this.state.owlSimFunction === 'compare'
 			        || this.state.owlSimFunction === 'exomiser'){
-				msg = "There are no models available.";
+				msg = "There are no results available.";
 				this._createSvgContainer();
 				this._createEmptyVisualization(msg);
 			}else{
-				msg = "There are no " + this.state.targetSpeciesName + " models available.";
+				msg = "There are no " + this.state.targetSpeciesName + " results available.";
 				this._createSvgContainer();
 				this._createEmptyVisualization(msg);
 			}
