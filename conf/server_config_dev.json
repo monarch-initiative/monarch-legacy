@@ -3,7 +3,7 @@
     
     "ontology_services_url" : "http://nif-services-stage.neuinfo.org/ontoquest-lamhdi/",
     
-    "scigraph_url" : "http://kato.crbs.ucsd.edu:9000/scigraph/",
+    "scigraph_url" : "http://geoffrey.crbs.ucsd.edu:9000/scigraph/",
     
     "scigraph_data_url" : "http://rosie.crbs.ucsd.edu:9000/scigraph/",
 
