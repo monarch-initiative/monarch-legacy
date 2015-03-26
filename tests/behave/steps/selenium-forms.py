@@ -11,8 +11,7 @@ from behave import *
 ## Submit analyze phenotype.
 @when('I submit analyze phenotype')
 def step_impl(context):
-    xpath = "/html/body/div[2]/div/div[1]/div[2]/div/form/button"
-    webelt = context.browser.find_element_by_xpath(xpath)
+    webelt = context.browser.find_element_by_id('analyze-submit')
     webelt.click()
 
 ## Submit home search.
