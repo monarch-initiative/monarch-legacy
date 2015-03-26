@@ -113,13 +113,13 @@
                             <label id="pheno-search">
                               <input id="srch" type="radio" checked="true" value="search" name="mode"> Search</label>
                           </div>
-                          <div class="explain">
+                          <div class="explain search-text">
                             Refine your search space by taxon or target type (disease or gene)
                           </div>
                           <div id="search-form-group">
                             <div class="row">
                               <div class="form-group" id="analyze-target">
-                                <label for="target" class="col-6 control-label search-label">Target Species:</label>
+                                <label for="target" class="col-6 control-label search-label search-text">Target Species:</label>
                                 <div class="col-6">
                                   <select id="target" name="target_species">
                                     <option value="all" selected="selected" >All</option>
@@ -132,7 +132,7 @@
                             </div>
                             <div class="form-group" id="analyze-type">
                               <div class="row">
-                                <label for="type" class="col-6 control-label search-label">Target Type:</label>
+                                <label for="type" class="col-6 control-label search-label search-text">Target Type:</label>
                                 <div class="col-6">
                                   <select id="type" name="target_type" disabled>
                                     <option value="all" selected="selected" disabled>All</option>
@@ -145,7 +145,7 @@
                             </div>
                             <div id="analyze-limit" class="form-group">
                               <div class="row">
-                                <label for="analyze_limit_input" class="col-6 control-label search-label">Maximum number of results:</label>
+                                <label for="analyze_limit_input" class="col-6 control-label search-label search-text">Maximum number of results:</label>
                                 <div class="col-6">
                                   <input class="form-control" id="analyze_limit_input" name="limit" type="text"
                                       value="{{limit}}"></input>
@@ -161,27 +161,27 @@
                           <label id="pheno-compare">
                             <input id="compare" type="radio" value="compare" name="mode"> Compare</label>
                         </div>
-                        <div class="explain">
+                        <div class="explain compare-text">
                             Enter a specific set of genes to compare against your query.
                         </div>
-                        <p class="small example compare-instructions">
+                        <p class="small example compare-instructions compare-text">
                          Select genes using either the autocomplete and/or enter gene IDs directly using the text box.
                           Expand your list of genes using the convenience buttons at the bottom. </p>
                         <div id="compare-form-group">
-                          <div id="gene-autocomplete">Enter Gene Symbol:
-                            <div class="small autocomplete-message">
+                          <div id="gene-autocomplete" class="compare-text">Enter Gene Symbol:
+                            <div class="small autocomplete-message compare-text">
                               Note: Autocomplete currently only supports human genes
                             </div>
                           </div>
                           <input id="auto_gene_input" type="text" class="form-control"
                           placeholder="e.g. LHX1" disabled>
-                          <div id="gene-text-area">Gene IDs:
+                          <div id="gene-text-area" class="compare-text">Gene IDs:
                           </div>
                        
                           <textarea id="gene-list" class="form-control" rows="3" placeholder="e.g. NCBIGene:3975, ENSEMBL:ENSG00000108753 " 
                                     name="gene_list" disabled></textarea>
-                          <div id="gene-shortcuts">Add More Genes:<br>
-                              <span class="small">
+                          <div id="gene-shortcuts" class="compare-text">Add More Genes:<br>
+                              <span class="small compare-text">
                                 Given the above list of genes, include additional genes
                                 based on relationship:
                               </span>
@@ -213,10 +213,10 @@
                           <div id='fetching'>Fetching Genes...</div>
                         </div>
                         <div id='error-msg'>Error Fetching Genes</div>
-                        <div id="ortholog-text-area">Orthologs:<br>
+                        <div id="ortholog-text-area" class="compare-text">Orthologs:<br>
                             <textarea id="ortholog-list" class="form-control" rows="2" placeholder="" name="ortholog_list" disabled></textarea>
                         </div>
-                        <div id="paralog-text-area">Paralogs:<br>
+                        <div id="paralog-text-area" class="compare-text">Paralogs:<br>
                             <textarea id="paralog-list" class="form-control" rows="2" placeholder="" name="paralog_list" disabled></textarea>
                         </div>
                       </div>
