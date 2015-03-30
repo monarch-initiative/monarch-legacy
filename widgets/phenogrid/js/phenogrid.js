@@ -722,16 +722,9 @@ function modelDataPointPrint(point) {
 		var searchArray = this.state.yAxis.entries();
 		var results = false;
 		for (var i in searchArray){
-			if (this.state.invertAxis && this.state.targetSpeciesName === "Overview") {
-				if (searchArray[i][1].opos == position){
-					results = searchArray[i][0];
-					break;
-				}
-			} else {
-				if (searchArray[i][1].pos == position){
-					results = searchArray[i][0];
-					break;
-				}
+			if (searchArray[i][1].pos == position){
+				results = searchArray[i][0];
+				break;
 			}
 		}
 		return results;
@@ -742,16 +735,9 @@ function modelDataPointPrint(point) {
 		var searchArray = this.state.xAxis.entries();
 		var results = false;
 		for (var i in searchArray){
-			if (!this.state.invertAxis && this.state.targetSpeciesName === "Overview") {
-				if (searchArray[i][1].opos == position){
-					results = searchArray[i][0];
-					break;
-				}
-			} else {
-				if (searchArray[i][1].pos == position){
-					results = searchArray[i][0];
-					break;
-				}
+			if (searchArray[i][1].pos == position){
+				results = searchArray[i][0];
+				break;
 			}
 		}
 		return results;
@@ -873,17 +859,9 @@ function modelDataPointPrint(point) {
 		var self = this;
 		var sortDataList = [];
 		var mods = [];
-		if (this.state.invertAxis && this.state.targetSpeciesName === "Overview") {
-			sortDataList = self._getSortedOverviewIDList(self.state.yAxis.entries());
-		} else {
-			sortDataList = self._getSortedIDList(self.state.yAxis.entries());
-		}
+		sortDataList = self._getSortedIDList(self.state.yAxis.entries());
 
-		if (!this.state.invertAxis && this.state.targetSpeciesName === "Overview") {
-			mods = self._getSortedOverviewIDList(self.state.xAxis.entries());
-		} else {
-			mods = self._getSortedIDList(self.state.xAxis.entries());
-		}
+		mods = self._getSortedIDList(self.state.xAxis.entries());
 
 		this.state.smallYScale = d3.scale.ordinal()
 			.domain(sortDataList.map(function (d) {return d; }))
@@ -893,17 +871,6 @@ function modelDataPointPrint(point) {
 		this.state.smallXScale = d3.scale.ordinal()
 			.domain(modids)
 			.rangePoints([0,overviewRegionSize]);
-	},
-
-	//Returns an sorted array of IDs from an arrayed Hashtable, but meant for overview display based off opos
-	_getSortedOverviewIDList: function(hashArray){
-		var resultArray = [];
-		var position;
-		for (var j in hashArray) {
-			position = hashArray[j][1].opos;
-			resultArray[hashArray[j][1].opos] = hashArray[j][0];
-		}
-		return resultArray;
 	},
 
 	//Returns an sorted array of IDs from an arrayed Hashtable, but meant for non-overview display based off pos
@@ -1016,11 +983,7 @@ function modelDataPointPrint(point) {
 			self._filterModelListHash(startXIdx,displayXLimiter);
 		}
 
-		if (this.state.invertAxis && this.state.targetSpeciesName === "Overview") {
-			sortedYArray = self._getSortedOverviewIDList(self.state.filteredYAxis.entries());
-		} else {
-			sortedYArray = self._getSortedIDListStrict(self.state.filteredYAxis.entries());
-		}
+		sortedYArray = self._getSortedIDListStrict(self.state.filteredYAxis.entries());
 
 		for (var i in sortedYArray) {
 			//update the YAxis
@@ -1136,7 +1099,7 @@ function modelDataPointPrint(point) {
 	_finishOverviewLoad: function () {
 		var speciesList = [];
 		var orgCtr = 0;
-		var opos = 0;
+		var posID = 0;
 		var type, ID, hashData;
 
 		for (var i in this.state.targetSpeciesList) {
@@ -1155,10 +1118,10 @@ function modelDataPointPrint(point) {
 						}
 					}
 
-					hashData = {"label": item.label, "species": species, "taxon": item.taxon.id, "type": type, "pos": parseInt(idx), "opos": parseInt(opos), "rank": parseInt(idx), "score": item.score.score};
+					hashData = {"label": item.label, "species": species, "taxon": item.taxon.id, "type": type, "pos": parseInt(posID), "rank": parseInt(idx), "score": item.score.score};
 					this.state.modelListHash.put(ID, hashData);
 					this._loadDataForModel(item);
-					opos++;
+					posID++;
 				}
 				this.state.multiOrganismCt = specData.b.length;
 				speciesList.push(species);
@@ -1186,7 +1149,7 @@ function modelDataPointPrint(point) {
 		var self = this;
 
 		var hashData, ID, type, z;
-		var variantNum = 0;
+		//var variantNum = 0;
 		if (typeof (retData.b) !== 'undefined') {
 			for (var idx in retData.b) {
 				var item = retData.b[idx];
@@ -1205,7 +1168,7 @@ function modelDataPointPrint(point) {
 					}
 				}
 				
-				hashData = {"label": item.label, "species": species, "taxon": item.taxon.id, "type": type, "pos": parseInt(idx), "opos": parseInt(idx), "rank": parseInt(idx), "score": item.score.score};
+				hashData = {"label": item.label, "species": species, "taxon": item.taxon.id, "type": type, "pos": parseInt(idx), "rank": parseInt(idx), "score": item.score.score};
 				this.state.modelListHash.put(ID, hashData);
 				this._loadDataForModel(item);
 			}
@@ -1218,7 +1181,7 @@ function modelDataPointPrint(point) {
 	_loadDataForModel: function(newModelData) {
 		//data is an array of all model matches
 		var data = newModelData.matches;
-		var curr_row, lcs, new_row, species, modelPoint, hashData;
+		var curr_row, lcs, species, modelPoint, hashData;
 		if (typeof(data) !== 'undefined' && data.length > 0) {
 			species = newModelData.taxon;
 
@@ -2679,13 +2642,9 @@ function modelDataPointPrint(point) {
 		var list = [];
 		var xWidth = self.state.widthOfSingleModel;
 
-		if (!this.state.invertAxis && this.state.targetSpeciesName === "Overview") {
-			list = self._getSortedOverviewIDList(this.state.xAxis.entries());
-		} else if (!this.state.invertAxis && this.state.targetSpeciesName !== "Overview") {
+		if (!this.state.invertAxis) {
 			list = self._getSortedIDListStrict(this.state.filteredXAxis.entries());
-		} else if (this.state.invertAxis && this.state.targetSpeciesName === "Overview") {
-			list = self._getSortedOverviewIDList(this.state.yAxis.entries());
-		} else if (this.state.invertAxis && this.state.targetSpeciesName !== "Overview") {
+		} else {
 			list = self._getSortedIDListStrict(this.state.filteredYAxis.entries());
 		}
 
@@ -2863,11 +2822,7 @@ function modelDataPointPrint(point) {
 		var self = this;
 		var mods = [];
 
-		if (!this.state.invertAxis && this.state.targetSpeciesName === "Overview") {
-			mods = self._getSortedOverviewIDList(this.state.xAxis.entries());
-		} else {
-			mods = self._getSortedIDListStrict(this.state.filteredXAxis.entries());
-		}
+		mods = self._getSortedIDListStrict(this.state.filteredXAxis.entries());
 
 		this.state.xScale = d3.scale.ordinal()
 			.domain(mods.map(function (d) {return d; }))
@@ -3179,11 +3134,7 @@ function modelDataPointPrint(point) {
 		var pad = 14;
 		var list = [];
 
-		if (this.state.invertAxis && this.state.targetSpeciesName === "Overview") {
-			list = self._getSortedOverviewIDList(self.state.filteredYAxis.entries());
-		} else {
-			list = self._getSortedIDListStrict(self.state.filteredYAxis.entries());
-		}
+		list = self._getSortedIDListStrict(self.state.filteredYAxis.entries());
 
 		var rect_text = this.state.svg
 			.selectAll(".a_text")
@@ -3597,7 +3548,6 @@ function modelDataPointPrint(point) {
 			rank: compareScores.b[idx].score.rank,
 			type: "genotype",
 			taxon: compareScores.b[idx].taxon.id,
-			opos: (modelInfo.d.opos + iPosition),  // bump up by one
 			pos: (modelInfo.d.pos + iPosition),
 			count: modelInfo.d.count,
 			sum: modelInfo.d.sum
@@ -3707,7 +3657,6 @@ function modelDataPointPrint(point) {
 				}
 				insertionOccurred = true;
 			} else if (insertionOccurred) {
-				entry.opos = entry.opos + reorderPointOffset;
 				entry.pos = entry.pos + reorderPointOffset;
 				newModelList.put(sortedModelList[i], entry);
 			} else {
