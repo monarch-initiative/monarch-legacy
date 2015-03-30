@@ -162,7 +162,6 @@ function modelDataPointPrint(point) {
 		if (type == 'organism' || type == 'axisflip' || typeof(type) == 'undefined') {
 			this.state.modelData = [];
 			this.state.modelList = [];
-			this.state.filteredModelData = [];
 			this.state.expandedHash = new Hashtable();
 		}
 
@@ -723,16 +722,9 @@ function modelDataPointPrint(point) {
 		var searchArray = this.state.yAxis.entries();
 		var results = false;
 		for (var i in searchArray){
-			if (this.state.invertAxis && this.state.targetSpeciesName === "Overview") {
-				if (searchArray[i][1].opos == position){
-					results = searchArray[i][0];
-					break;
-				}
-			} else {
-				if (searchArray[i][1].pos == position){
-					results = searchArray[i][0];
-					break;
-				}
+			if (searchArray[i][1].pos == position){
+				results = searchArray[i][0];
+				break;
 			}
 		}
 		return results;
@@ -743,16 +735,9 @@ function modelDataPointPrint(point) {
 		var searchArray = this.state.xAxis.entries();
 		var results = false;
 		for (var i in searchArray){
-			if (!this.state.invertAxis && this.state.targetSpeciesName === "Overview") {
-				if (searchArray[i][1].opos == position){
-					results = searchArray[i][0];
-					break;
-				}
-			} else {
-				if (searchArray[i][1].pos == position){
-					results = searchArray[i][0];
-					break;
-				}
+			if (searchArray[i][1].pos == position){
+				results = searchArray[i][0];
+				break;
 			}
 		}
 		return results;
@@ -874,17 +859,9 @@ function modelDataPointPrint(point) {
 		var self = this;
 		var sortDataList = [];
 		var mods = [];
-		if (this.state.invertAxis && this.state.targetSpeciesName === "Overview") {
-			sortDataList = self._getSortedOverviewIDList(self.state.yAxis.entries());
-		} else {
-			sortDataList = self._getSortedIDList(self.state.yAxis.entries());
-		}
+		sortDataList = self._getSortedIDList(self.state.yAxis.entries());
 
-		if (!this.state.invertAxis && this.state.targetSpeciesName === "Overview") {
-			mods = self._getSortedOverviewIDList(self.state.xAxis.entries());
-		} else {
-			mods = self._getSortedIDList(self.state.xAxis.entries());
-		}
+		mods = self._getSortedIDList(self.state.xAxis.entries());
 
 		this.state.smallYScale = d3.scale.ordinal()
 			.domain(sortDataList.map(function (d) {return d; }))
@@ -894,17 +871,6 @@ function modelDataPointPrint(point) {
 		this.state.smallXScale = d3.scale.ordinal()
 			.domain(modids)
 			.rangePoints([0,overviewRegionSize]);
-	},
-
-	//Returns an sorted array of IDs from an arrayed Hashtable, but meant for overview display based off opos
-	_getSortedOverviewIDList: function(hashArray){
-		var resultArray = [];
-		var position;
-		for (var j in hashArray) {
-			position = hashArray[j][1].opos;
-			resultArray[hashArray[j][1].opos] = hashArray[j][0];
-		}
-		return resultArray;
 	},
 
 	//Returns an sorted array of IDs from an arrayed Hashtable, but meant for non-overview display based off pos
@@ -1017,11 +983,7 @@ function modelDataPointPrint(point) {
 			self._filterModelListHash(startXIdx,displayXLimiter);
 		}
 
-		if (this.state.invertAxis && this.state.targetSpeciesName === "Overview") {
-			sortedYArray = self._getSortedOverviewIDList(self.state.filteredYAxis.entries());
-		} else {
-			sortedYArray = self._getSortedIDListStrict(self.state.filteredYAxis.entries());
-		}
+		sortedYArray = self._getSortedIDListStrict(self.state.filteredYAxis.entries());
 
 		for (var i in sortedYArray) {
 			//update the YAxis
@@ -1042,6 +1004,11 @@ function modelDataPointPrint(point) {
 	//given a list of phenotypes, find the top n models
 	//I may need to rename this method "getModelData". It should extract the models and reformat the data 
 	_loadData: function() {
+		this.state.expandedHash = new Hashtable();  // for cache of genotypes
+		this.state.phenotypeListHash = new Hashtable();
+		this.state.modelListHash = new Hashtable();
+		this.state.modelDataHash = new Hashtable({hashCode: modelDataPointPrint, equals: modelDataPointEquals});
+
 		if (this.state.targetSpeciesName === "Overview") {
 			this._loadOverviewData();
 			this._finishOverviewLoad();
@@ -1049,7 +1016,6 @@ function modelDataPointPrint(point) {
 			this._loadSpeciesData(this.state.targetSpeciesName);
 			this._finishLoad();
 		}
-		this._loadHashTables();
 
 		this.state.hpoCacheBuilt = true;
 	},
@@ -1132,40 +1098,176 @@ function modelDataPointPrint(point) {
 
 	_finishOverviewLoad: function () {
 		var speciesList = [];
-		var modList = [];
 		var orgCtr = 0;
+		var posID = 0;
+		var type, ID, hashData;
 
 		for (var i in this.state.targetSpeciesList) {
 			var species = this.state.targetSpeciesList[i].name;
 			var specData = this.state.data[species];
 			if (specData !== null && typeof(specData.b) !== 'undefined' && specData.b.length > 0) {
-				var data = [];
 				for (var idx in specData.b) {
 					var item = specData.b[idx];
-					var newItem = {model_id: this._getConceptId(item.id),
-						model_label: item.label,
-						model_score: item.score.score,
-						species: species,
-						model_rank: idx,
-						score_rank: item.score.rank};
-					data.push(newItem);
+
+					ID = this._getConceptId(item.id);
+
+					type = this.state.defaultApiEntity;
+					for (var j in this.state.apiEntityMap) {
+						if (ID.indexOf(this.state.apiEntityMap[j].prefix) === 0) {
+							type = this.state.apiEntityMap[j].apifragment;
+						}
+					}
+
+					hashData = {"label": item.label, "species": species, "taxon": item.taxon.id, "type": type, "pos": parseInt(posID), "rank": parseInt(idx), "score": item.score.score};
+					this.state.modelListHash.put(ID, hashData);
 					this._loadDataForModel(item);
+					posID++;
 				}
 				this.state.multiOrganismCt = specData.b.length;
 				speciesList.push(species);
 				orgCtr++;
-				data.sort(function(a,b) { return a.model_rank - b.model_rank;});
-				modList = modList.concat(data);
 			}
 		}
 
-		for (var dmx in this.state.modelData) {
-			this.state.filteredModelData.push(this.state.modelData[dmx]);
+		this.state.speciesList = speciesList;
+	},
+
+	//Finish the data load after the ajax request
+	//Create the modelList array: model_id, model_label, model_score, model_rank
+	//Call _loadDataForModel to put the matches in an array
+	_finishLoad: function() {
+		var species = this.state.targetSpeciesName;
+		var retData = this.state.data[species];
+		if (typeof(retData) ==='undefined'  || retData === null) {
+			return;
+		}
+		//extract the maxIC score
+		if (typeof (retData.metadata) !== 'undefined') {
+			this.state.maxICScore = retData.metadata.maxMaxIC;
 		}
 
-		this.state.modelList = modList;
-		this.state.speciesList = speciesList;
+		var self = this;
 
+		var hashData, ID, type, z;
+		//var variantNum = 0;
+		if (typeof (retData.b) !== 'undefined') {
+			for (var idx in retData.b) {
+				var item = retData.b[idx];
+				ID = self._getConceptId(item.id);
+
+				type = this.state.defaultApiEntity;
+
+				//if (this.state.modelListHash.containsKey(ID)){
+				//	ID += "_" + variantNum;
+				//	variantNum++;
+				//}
+
+				for (var j in this.state.apiEntityMap) {
+					if (ID.indexOf(this.state.apiEntityMap[j].prefix) === 0) {
+						type = this.state.apiEntityMap[j].apifragment;
+					}
+				}
+				
+				hashData = {"label": item.label, "species": species, "taxon": item.taxon.id, "type": type, "pos": parseInt(idx), "rank": parseInt(idx), "score": item.score.score};
+				this.state.modelListHash.put(ID, hashData);
+				this._loadDataForModel(item);
+			}
+		}
+	},
+
+	//for a given model, extract the sim search data including IC scores and the triple:
+	//the a column, b column, and lowest common subsumer
+	//for the triple's IC score, use the LCS score
+	_loadDataForModel: function(newModelData) {
+		//data is an array of all model matches
+		var data = newModelData.matches;
+		var curr_row, lcs, species, modelPoint, hashData;
+		if (typeof(data) !== 'undefined' && data.length > 0) {
+			species = newModelData.taxon;
+
+			for (var idx in data) {
+				curr_row = data[idx];
+				lcs = this._normalizeIC(curr_row);
+
+				if (!this.state.phenotypeListHash.containsKey(this._getConceptId(curr_row.a.id))){
+					hashData = {"label": curr_row.a.label, "IC": parseFloat(curr_row.a.IC), "pos": 0, "count": 0, "sum": 0};
+					this.state.phenotypeListHash.put(this._getConceptId(curr_row.a.id), hashData);
+					if (!this.state.hpoCacheBuilt && this.state.preloadHPO){
+						this._getHPO(this._getConceptId(curr_row.a.id));
+					}
+				}
+
+				//Setting modelDataHash
+				if (this.state.invertAxis){
+					modelPoint = new modelDataPoint(this._getConceptId(curr_row.a.id), this._getConceptId(newModelData.id));
+					this._updateSortVals(this._getConceptId(newModelData.id), parseFloat(curr_row.lcs.IC));
+				} else {
+					modelPoint = new modelDataPoint(this._getConceptId(newModelData.id), this._getConceptId(curr_row.a.id));
+					this._updateSortVals(this._getConceptId(curr_row.a.id), parseFloat(curr_row.lcs.IC));
+				}
+				hashData = {"value": lcs, "subsumer_label": curr_row.lcs.label, "subsumer_id": this._getConceptId(curr_row.lcs.id), "subsumer_IC": parseFloat(curr_row.lcs.IC), "b_label": curr_row.b.label, "b_id": this._getConceptId(curr_row.b.id), "b_IC": parseFloat(curr_row.b.IC)};
+				this.state.modelDataHash.put(modelPoint, hashData);
+			}
+		}
+	},
+
+	//Different methods of based on the selectedCalculationMethod
+	_normalizeIC: function(datarow){
+		var aIC = datarow.a.IC;
+		var bIC = datarow.b.IC;
+		var lIC = datarow.lcs.IC;
+		var nic;
+
+		var ics = new Array(3);
+
+		// get 0: similarity
+		nic = Math.sqrt((Math.pow(aIC - lIC, 2)) + (Math.pow(bIC - lIC, 2)));
+		nic = (1 - (nic / + this.state.maxICScore)) * 100;
+		ics[0] = nic;
+
+		// 1 - ratio(q)
+		nic = ((lIC / aIC) * 100);
+		ics[1] = nic;
+
+		// 2 - uniquenss
+		nic = lIC;
+		ics[2] = nic;
+
+		// 3: ratio(t)
+		nic = ((lIC / bIC) * 100);
+		ics[3] = nic;
+
+		return ics;
+	},
+
+	//Will update the position of the phenotype based on sort
+	_updatePhenoPos: function(key,rank) {
+		var values = this.state.phenotypeListHash.get(key);
+		values.pos = rank;
+		this.state.phenotypeListHash.put(key,values);
+	},
+
+	//Sets the correct position for the value on the yAxis on where it belongs in the grid/axis
+	_setYPosHash: function(key,ypos) {
+		var values = this.state.yAxis.get(key);
+		values.ypos = ypos;
+		this.state.yAxis.put(key,values);
+	},
+
+	//Updates the count & sum values used for sorting
+	_updateSortVals: function(key,subIC) {
+		var values;
+		if (this.state.invertAxis){
+			values = this.state.modelListHash.get(key);
+			values.count += 1;
+			values.sum += subIC;
+			this.state.modelListHash.put(key,values);
+		} else {
+			values = this.state.phenotypeListHash.get(key);
+			values.count += 1;
+			values.sum += subIC;
+			this.state.phenotypeListHash.put(key,values);
+		}
 	},
 
 	//Returns values from a point on the grid
@@ -1204,142 +1306,6 @@ function modelDataPointPrint(point) {
 		
 		if (info !== null) return info.type;
 		return "unknown";
-	},
-	
-	_loadHashTables: function() {
-		//CHANGE LATER TO CUT DOWN ON INFO FROM _finishLoad & _finishOverviewLoad
-		this.state.expandedHash = new Hashtable();  // for cache of genotypes
-		tempModelList = new Hashtable();
-		this.state.phenotypeListHash = new Hashtable();
-		this.state.modelListHash = new Hashtable();
-		this.state.modelDataHash = new Hashtable({hashCode: modelDataPointPrint, equals: modelDataPointEquals});
-		var modelPoint, hashData, concept, type, score, x, z;
-		var y = 0;
-		var q = 0;
-		var variantNum = 0;
-		var modelStage = true;
-		var variantChange = true;
-
-		//HACKISH.  IMPLEMENT EARLIER WHEN REFACTORING LOADDATA
-		for (var b in this.state.modelList){
-			if (tempModelList.containsKey(this.state.modelList[b].model_id)){
-				this.state.modelList[b].model_id = this.state.modelList[b].model_id + "_" + variantNum;
-				variantNum++;
-			}
-			hashData = {"model_rank": this.state.modelList[b].model_rank, "model_score": this.state.modelList[b].model_score};
-			tempModelList.put(this.state.modelList[b].model_id, hashData)
-		}
-		
-		variantNum = 0;
-		for (var i in this.state.modelData)
-		{
-			var parsedI = parseInt(i);
-			var next = parsedI + 1;
-			if (next >= this.state.modelData.length){
-				next = parsedI;
-			}
-			//Setting phenotypeListHash
-			if (typeof(this.state.modelData[i].id_a) !== 'undefined' && !this.state.phenotypeListHash.containsKey(this.state.modelData[i].id_a)){
-				hashData = {"label": this.state.modelData[i].label_a, "IC": this.state.modelData[i].IC_a, "pos": parseInt(y), "count": 0, "sum": 0};
-				this.state.phenotypeListHash.put(this.state.modelData[i].id_a, hashData);
-				if (!this.state.hpoCacheBuilt && this.state.preloadHPO){
-					this._getHPO(this.state.modelData[i].id_a);
-				}
-				y++;
-			}
-
-			//Setting modelListHash
-			type = this.state.defaultApiEntity;
-			if (typeof(this.state.modelData[i].model_id) !== 'undefined'){
-				if (modelStage == true){
-					if (this.state.modelListHash.containsKey(this.state.modelData[i].model_id)){
-						var newModelID = this.state.modelData[i].model_id + "_" + variantNum;
-						//HACKISH.  IMPLEMENT EARLIER WHEN REFACTORING LOADDATA
-						while (variantChange){
-							q++;
-							if (this.state.modelData[parsedI].model_id == this.state.modelData[parsedI+q].model_id){
-								this.state.modelData[parsedI+q].model_id = newModelID;
-							} else {
-								variantChange = false;
-							}
-						}
-						q = 0;
-						variantChange = true;
-						this.state.modelData[i].model_id = newModelID;
-						variantNum++;
-					}
-					concept = this._getConceptId(this.state.modelData[i].model_id);
-					for (var j in this.state.apiEntityMap) {
-						if (concept.indexOf(this.state.apiEntityMap[j].prefix) === 0) {
-							type = this.state.apiEntityMap[j].apifragment;
-						}
-					}
-
-					var modelListInfo = tempModelList.get(this.state.modelData[i].model_id);
-					x = parseInt(modelListInfo.model_rank);
-					score = modelListInfo.model_score;
-
-					//OPOS is used for overview positioning.  Z is mapped to this
-					z = x;
-					for (var k in this.state.targetSpeciesList){
-						if (this.state.modelData[i].species == this.state.targetSpeciesList[k].name){
-							z = x + (k * 10);
-						}
-					}
-
-					hashData = {"label": this.state.modelData[i].model_label, "species": this.state.modelData[i].species, "taxon": this.state.modelData[i].taxon, "type": type, "pos": x, "opos": z, "rank": x, "score": score};
-					this.state.modelListHash.put(this.state.modelData[i].model_id, hashData);
-				}
-
-				//HACKISH.  IMPLEMENT EARLIER WHEN REFACTORING LOADDATA
-				if (this.state.modelData[i].model_id == this.state.modelData[next].model_id){
-					modelStage = false;
-				} else {
-					modelStage = true;
-				}
-			}
-
-			//Setting modelDataHash
-			if (this.state.invertAxis){
-				modelPoint = new modelDataPoint(this.state.modelData[i].id_a, this.state.modelData[i].model_id);
-				this._updateSortVals(this.state.modelData[i].model_id, this.state.modelData[i].subsumer_IC);
-			} else {
-				modelPoint = new modelDataPoint(this.state.modelData[i].model_id, this.state.modelData[i].id_a);
-				this._updateSortVals(this.state.modelData[i].id_a, this.state.modelData[i].subsumer_IC);
-			}
-			hashData = {"value": this.state.modelData[i].value, "subsumer_label": this.state.modelData[i].subsumer_label, "subsumer_id": this.state.modelData[i].subsumer_id, "subsumer_IC": this.state.modelData[i].subsumer_IC, "b_label": this.state.modelData[i].label_b, "b_id": this.state.modelData[i].id_b, "b_IC": this.state.modelData[i].IC_b};
-			this.state.modelDataHash.put(modelPoint, hashData);
-		}
-	},
-
-	//Will update the position of the phenotype based on sort
-	_updatePhenoPos: function(key,rank) {
-		var values = this.state.phenotypeListHash.get(key);
-		values.pos = rank;
-		this.state.phenotypeListHash.put(key,values);
-	},
-
-	//Sets the correct position for the value on the yAxis on where it belongs in the grid/axis
-	_setYPosHash: function(key,ypos) {
-		var values = this.state.yAxis.get(key);
-		values.ypos = ypos;
-		this.state.yAxis.put(key,values);
-	},
-
-	//Updates the count & sum values used for sorting
-	_updateSortVals: function(key,subIC) {
-		var values;
-		if (this.state.invertAxis){
-			values = this.state.modelListHash.get(key);
-			values.count += 1;
-			values.sum += subIC;
-			this.state.modelListHash.put(key,values);
-		} else {
-			values = this.state.phenotypeListHash.get(key);
-			values.count += 1;
-			values.sum += subIC;
-			this.state.phenotypeListHash.put(key,values);
-		}
 	},
 
 	//Creates the filterModelDataHash data structure
@@ -1504,109 +1470,6 @@ function modelDataPointPrint(point) {
 		} */
 // We need a better shared error handling here instead of displaying empty vis
 //		this._createEmptyVisualization(msg);
-	},
-
-	//Finish the data load after the ajax request
-	//Create the modelList array: model_id, model_label, model_score, model_rank
-	//Call _loadDataForModel to put the matches in an array
-	_finishLoad: function() {
-		var species = this.state.targetSpeciesName;
-		var retData = this.state.data[species];
-		if (typeof(retData) ==='undefined'  || retData === null) {
-			return;
-		}
-		//extract the maxIC score
-		if (typeof (retData.metadata) !== 'undefined') {
-			this.state.maxICScore = retData.metadata.maxMaxIC;
-		}
-		var self = this;
-
-		this.state.modelList = [];
-
-		if (typeof (retData.b) !== 'undefined') {
-			for (var idx in retData.b) {
-				this.state.modelList.push(
-					{model_id: self._getConceptId(retData.b[idx].id), 
-					model_label: retData.b[idx].label, 
-					model_score: retData.b[idx].score.score, 
-					species: species,
-					model_rank: idx,
-					score_rank: retData.b[idx].score.rank}
-				);
-				this._loadDataForModel(retData.b[idx]);
-			}
-			//sort the model list by rank
-			this.state.modelList.sort(function(a,b) { 
-				return a.model_rank - b.model_rank; 
-			});
-
-			for (var dmx in this.state.modelData) {
-				this.state.filteredModelData.push(this.state.modelData[dmx]);
-			}
-		}
-	},
-
-	//for a given model, extract the sim search data including IC scores and the triple:
-	//the a column, b column, and lowest common subsumer
-	//for the triple's IC score, use the LCS score
-	_loadDataForModel: function(newModelData) {
-		//data is an array of all model matches
-		var data = newModelData.matches;
-		var curr_row, lcs, new_row, species;
-		if (typeof(data) !== 'undefined' && data.length > 0) {
-			species = newModelData.taxon;
-
-			for (var idx in data) {
-				curr_row = data[idx];
-				lcs = this._normalizeIC(curr_row);
-				new_row = {"id": this._getConceptId(curr_row.a.id) + "_" + this._getConceptId(curr_row.b.id) + "_" + this._getConceptId(newModelData.id), 
-					"label_a" : curr_row.a.label, 
-					"id_a" : this._getConceptId(curr_row.a.id), 
-					"IC_a" : parseFloat(curr_row.a.IC),
-					"subsumer_label" : curr_row.lcs.label, 
-					"subsumer_id" : this._getConceptId(curr_row.lcs.id), 
-					"subsumer_IC" : parseFloat(curr_row.lcs.IC), 
-					"value" : lcs,
-					"label_b" : curr_row.b.label, 
-					"id_b" : this._getConceptId(curr_row.b.id), 
-					"IC_b" : parseFloat(curr_row.b.IC),
-					"model_id" : this._getConceptId(newModelData.id),
-					"model_label" : newModelData.label, 
-					"species": species.label,
-					"taxon" : species.id
-				}; 
-				this.state.modelData.push(new_row); 
-			}
-		}
-	},
-
-	//Different methods of based on the selectedCalculationMethod
-	_normalizeIC: function(datarow){
-		var aIC = datarow.a.IC;
-		var bIC = datarow.b.IC;
-		var lIC = datarow.lcs.IC;
-		var nic;
-
-		var ics = new Array(3);
-
-		// get 0: similarity
-		nic = Math.sqrt((Math.pow(aIC - lIC, 2)) + (Math.pow(bIC - lIC, 2)));
-		nic = (1 - (nic / + this.state.maxICScore)) * 100;
-		ics[0] = nic;
-
-		// 1 - ratio(q)
-		nic = ((lIC / aIC) * 100);
-		ics[1] = nic;
-
-		// 2 - uniquenss
-		nic = lIC;
-		ics[2] = nic;
-
-		// 3: ratio(t)
-		nic = ((lIC / bIC) * 100);
-		ics[3] = nic;
-
-		return ics;
 	},
 
 	_createColorScale: function() {
@@ -1798,7 +1661,7 @@ function modelDataPointPrint(point) {
 
 	_addLogoImage:	 function() { 
 		var start = 0;
-		if(this.state.filteredModelData.length < 30){
+		if(this.state.filteredModelDataHash.length < 30){
 			//Magic Nums
 			start = 680;
 		} else { 
@@ -2387,8 +2250,6 @@ function modelDataPointPrint(point) {
 			}
 		}
 
-
-
 		// Hiding scores which are equal to 0
 		var formatScore =  function(score) {
 			if(score == 0) {
@@ -2781,13 +2642,9 @@ function modelDataPointPrint(point) {
 		var list = [];
 		var xWidth = self.state.widthOfSingleModel;
 
-		if (!this.state.invertAxis && this.state.targetSpeciesName === "Overview") {
-			list = self._getSortedOverviewIDList(this.state.xAxis.entries());
-		} else if (!this.state.invertAxis && this.state.targetSpeciesName !== "Overview") {
+		if (!this.state.invertAxis) {
 			list = self._getSortedIDListStrict(this.state.filteredXAxis.entries());
-		} else if (this.state.invertAxis && this.state.targetSpeciesName === "Overview") {
-			list = self._getSortedOverviewIDList(this.state.yAxis.entries());
-		} else if (this.state.invertAxis && this.state.targetSpeciesName !== "Overview") {
+		} else {
 			list = self._getSortedIDListStrict(this.state.filteredYAxis.entries());
 		}
 
@@ -2828,7 +2685,7 @@ function modelDataPointPrint(point) {
 	_createOverviewSpeciesLabels: function () {
 		var self = this;
 		var speciesList = [];
-		//Temporarly until fix for positioning on Axis Flip
+
 		if (!this.state.invertAxis && self.state.targetSpeciesName == "Overview") {
 			speciesList = self.state.speciesList;
 		} else{
@@ -2965,11 +2822,7 @@ function modelDataPointPrint(point) {
 		var self = this;
 		var mods = [];
 
-		if (!this.state.invertAxis && this.state.targetSpeciesName === "Overview") {
-			mods = self._getSortedOverviewIDList(this.state.xAxis.entries());
-		} else {
-			mods = self._getSortedIDListStrict(this.state.filteredXAxis.entries());
-		}
+		mods = self._getSortedIDListStrict(this.state.filteredXAxis.entries());
 
 		this.state.xScale = d3.scale.ordinal()
 			.domain(mods.map(function (d) {return d; }))
@@ -3281,11 +3134,7 @@ function modelDataPointPrint(point) {
 		var pad = 14;
 		var list = [];
 
-		if (this.state.invertAxis && this.state.targetSpeciesName === "Overview") {
-			list = self._getSortedOverviewIDList(self.state.filteredYAxis.entries());
-		} else {
-			list = self._getSortedIDListStrict(self.state.filteredYAxis.entries());
-		}
+		list = self._getSortedIDListStrict(self.state.filteredYAxis.entries());
 
 		var rect_text = this.state.svg
 			.selectAll(".a_text")
@@ -3389,25 +3238,6 @@ function modelDataPointPrint(point) {
 			dupArray = [];
 		}
 		return dupArray;
-	},
-
-	//TOO SLOW TO USE
-	_getUnmatchedLabels: function() {
-		var unmatchedLabels = [];
-		for (var i in this.state.unmatchedPhenotypes){
-			jQuery.ajax({
-				url : this.state.serverURL + "/phenotype/" + this.state.unmatchedPhenotypes[i].id + ".json",
-				async : false,
-				dataType : 'json',
-				success : function(data) {
-					unmatchedLabels.push(data.label);
-				},
-				error: function ( xhr, errorType, exception ) { //Triggered if an error communicating with server
-					self._populateDialog(self,"Error", "We are having problems with the server. Please try again soon. Error:" + xhr.status);
-				}
-			});
-		}
-		return unmatchedLabels;
 	},
 
 	_buildUnmatchedPhenotypeDisplay: function() {
@@ -3718,7 +3548,6 @@ function modelDataPointPrint(point) {
 			rank: compareScores.b[idx].score.rank,
 			type: "genotype",
 			taxon: compareScores.b[idx].taxon.id,
-			opos: (modelInfo.d.opos + iPosition),  // bump up by one
 			pos: (modelInfo.d.pos + iPosition),
 			count: modelInfo.d.count,
 			sum: modelInfo.d.sum
@@ -3828,7 +3657,6 @@ function modelDataPointPrint(point) {
 				}
 				insertionOccurred = true;
 			} else if (insertionOccurred) {
-				entry.opos = entry.opos + reorderPointOffset;
 				entry.pos = entry.pos + reorderPointOffset;
 				newModelList.put(sortedModelList[i], entry);
 			} else {
