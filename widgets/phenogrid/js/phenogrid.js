@@ -162,7 +162,6 @@ function modelDataPointPrint(point) {
 		if (type == 'organism' || type == 'axisflip' || typeof(type) == 'undefined') {
 			this.state.modelData = [];
 			this.state.modelList = [];
-			this.state.filteredModelData = [];
 			this.state.expandedHash = new Hashtable();
 		}
 
@@ -1042,6 +1041,11 @@ function modelDataPointPrint(point) {
 	//given a list of phenotypes, find the top n models
 	//I may need to rename this method "getModelData". It should extract the models and reformat the data 
 	_loadData: function() {
+		this.state.expandedHash = new Hashtable();  // for cache of genotypes
+		this.state.phenotypeListHash = new Hashtable();
+		this.state.modelListHash = new Hashtable();
+		this.state.modelDataHash = new Hashtable({hashCode: modelDataPointPrint, equals: modelDataPointEquals});
+
 		if (this.state.targetSpeciesName === "Overview") {
 			this._loadOverviewData();
 			this._finishOverviewLoad();
@@ -1049,6 +1053,8 @@ function modelDataPointPrint(point) {
 			this._loadSpeciesData(this.state.targetSpeciesName);
 			this._finishLoad();
 		}
+
+		//console.log(this.state.modelListHash.entries());
 		this._loadHashTables();
 
 		this.state.hpoCacheBuilt = true;
@@ -1132,87 +1138,144 @@ function modelDataPointPrint(point) {
 
 	_finishOverviewLoad: function () {
 		var speciesList = [];
-		var modList = [];
 		var orgCtr = 0;
+		var opos = 0;
+		var type, ID, hashData;
 
 		for (var i in this.state.targetSpeciesList) {
 			var species = this.state.targetSpeciesList[i].name;
 			var specData = this.state.data[species];
 			if (specData !== null && typeof(specData.b) !== 'undefined' && specData.b.length > 0) {
-				var data = [];
 				for (var idx in specData.b) {
 					var item = specData.b[idx];
-					var newItem = {model_id: this._getConceptId(item.id),
-						model_label: item.label,
-						model_score: item.score.score,
-						species: species,
-						model_rank: idx,
-						score_rank: item.score.rank};
-					data.push(newItem);
+
+					ID = this._getConceptId(item.id);
+
+					type = this.state.defaultApiEntity;
+					for (var j in this.state.apiEntityMap) {
+						if (ID.indexOf(this.state.apiEntityMap[j].prefix) === 0) {
+							type = this.state.apiEntityMap[j].apifragment;
+						}
+					}
+
+					hashData = {"label": item.label, "species": species, "taxon": item.taxon.id, "type": type, "pos": parseInt(idx), "opos": parseInt(opos), "rank": parseInt(idx), "score": item.score.score};
+					this.state.modelListHash.put(ID, hashData);
 					this._loadDataForModel(item);
+					opos++;
 				}
 				this.state.multiOrganismCt = specData.b.length;
 				speciesList.push(species);
 				orgCtr++;
-				data.sort(function(a,b) { return a.model_rank - b.model_rank;});
-				modList = modList.concat(data);
 			}
 		}
 
-		for (var dmx in this.state.modelData) {
-			this.state.filteredModelData.push(this.state.modelData[dmx]);
-		}
-
-		this.state.modelList = modList;
 		this.state.speciesList = speciesList;
-
 	},
 
-	//Returns values from a point on the grid
-	_getCellData: function(point) {
-		if (this.state.modelDataHash.containsKey(point)){
-			return this.state.modelDataHash.get(point);
-		} else {
-			return false;
+	//Finish the data load after the ajax request
+	//Create the modelList array: model_id, model_label, model_score, model_rank
+	//Call _loadDataForModel to put the matches in an array
+	_finishLoad: function() {
+		var species = this.state.targetSpeciesName;
+		var retData = this.state.data[species];
+		if (typeof(retData) ==='undefined'  || retData === null) {
+			return;
+		}
+		//extract the maxIC score
+		if (typeof (retData.metadata) !== 'undefined') {
+			this.state.maxICScore = retData.metadata.maxMaxIC;
+		}
+
+		var self = this;
+
+		var hashData, ID, type, z;
+		var variantNum = 0;
+		if (typeof (retData.b) !== 'undefined') {
+			for (var idx in retData.b) {
+				var item = retData.b[idx];
+				ID = self._getConceptId(item.id);
+
+				type = this.state.defaultApiEntity;
+				for (var j in this.state.apiEntityMap) {
+					if (ID.indexOf(this.state.apiEntityMap[j].prefix) === 0) {
+						type = this.state.apiEntityMap[j].apifragment;
+					}
+				}
+				
+				hashData = {"label": item.label, "species": species, "taxon": item.taxon.id, "type": type, "pos": parseInt(idx), "opos": parseInt(idx), "rank": parseInt(idx), "score": item.score.score};
+				this.state.modelListHash.put(ID, hashData);
+				this._loadDataForModel(item);
+			}
 		}
 	},
 
-	//Returns axis data from a ID of models or phenotypes
-	_getAxisData: function(key) {
-		if (this.state.yAxis.containsKey(key)){
-			return this.state.yAxis.get(key);
+	//for a given model, extract the sim search data including IC scores and the triple:
+	//the a column, b column, and lowest common subsumer
+	//for the triple's IC score, use the LCS score
+	_loadDataForModel: function(newModelData) {
+		//data is an array of all model matches
+		var data = newModelData.matches;
+		var curr_row, lcs, new_row, species;
+		if (typeof(data) !== 'undefined' && data.length > 0) {
+			species = newModelData.taxon;
+
+			for (var idx in data) {
+				curr_row = data[idx];
+				lcs = this._normalizeIC(curr_row);
+				new_row = {"id": this._getConceptId(curr_row.a.id) + "_" + this._getConceptId(curr_row.b.id) + "_" + this._getConceptId(newModelData.id), 
+					"label_a" : curr_row.a.label, 
+					"id_a" : this._getConceptId(curr_row.a.id), 
+					"IC_a" : parseFloat(curr_row.a.IC),
+					"subsumer_label" : curr_row.lcs.label, 
+					"subsumer_id" : this._getConceptId(curr_row.lcs.id), 
+					"subsumer_IC" : parseFloat(curr_row.lcs.IC), 
+					"value" : lcs,
+					"label_b" : curr_row.b.label, 
+					"id_b" : this._getConceptId(curr_row.b.id), 
+					"IC_b" : parseFloat(curr_row.b.IC),
+					"model_id" : this._getConceptId(newModelData.id),
+					"model_label" : newModelData.label, 
+					"species": species.label,
+					"taxon" : species.id
+				}; 
+				this.state.modelData.push(new_row); 
+			}
 		}
-		else if (this.state.xAxis.containsKey(key)){
-			return this.state.xAxis.get(key);
-		}
-		else { return false; }
 	},
 
-	//Determines if an ID belongs to the Model or Phenotype hashtable
-	_getIDType: function(key) {
-		if (this.state.modelListHash.containsKey(key)){
-			return "Model";
-		}
-		else if (this.state.phenotypeListHash.containsKey(key)){
-			return "Phenotype";
-		}
-		else { return false; }
-	},
+	//Different methods of based on the selectedCalculationMethod
+	_normalizeIC: function(datarow){
+		var aIC = datarow.a.IC;
+		var bIC = datarow.b.IC;
+		var lIC = datarow.lcs.IC;
+		var nic;
 
-	_getIDTypeDetail: function(key) {
-		var info = this.state.modelListHash.get(key);
-		
-		if (info !== null) return info.type;
-		return "unknown";
+		var ics = new Array(3);
+
+		// get 0: similarity
+		nic = Math.sqrt((Math.pow(aIC - lIC, 2)) + (Math.pow(bIC - lIC, 2)));
+		nic = (1 - (nic / + this.state.maxICScore)) * 100;
+		ics[0] = nic;
+
+		// 1 - ratio(q)
+		nic = ((lIC / aIC) * 100);
+		ics[1] = nic;
+
+		// 2 - uniquenss
+		nic = lIC;
+		ics[2] = nic;
+
+		// 3: ratio(t)
+		nic = ((lIC / bIC) * 100);
+		ics[3] = nic;
+
+		return ics;
 	},
 	
 	_loadHashTables: function() {
 		//CHANGE LATER TO CUT DOWN ON INFO FROM _finishLoad & _finishOverviewLoad
-		this.state.expandedHash = new Hashtable();  // for cache of genotypes
 		tempModelList = new Hashtable();
-		this.state.phenotypeListHash = new Hashtable();
-		this.state.modelListHash = new Hashtable();
-		this.state.modelDataHash = new Hashtable({hashCode: modelDataPointPrint, equals: modelDataPointEquals});
+
 		var modelPoint, hashData, concept, type, score, x, z;
 		var y = 0;
 		var q = 0;
@@ -1220,24 +1283,8 @@ function modelDataPointPrint(point) {
 		var modelStage = true;
 		var variantChange = true;
 
-		//HACKISH.  IMPLEMENT EARLIER WHEN REFACTORING LOADDATA
-		for (var b in this.state.modelList){
-			if (tempModelList.containsKey(this.state.modelList[b].model_id)){
-				this.state.modelList[b].model_id = this.state.modelList[b].model_id + "_" + variantNum;
-				variantNum++;
-			}
-			hashData = {"model_rank": this.state.modelList[b].model_rank, "model_score": this.state.modelList[b].model_score};
-			tempModelList.put(this.state.modelList[b].model_id, hashData)
-		}
-		
-		variantNum = 0;
 		for (var i in this.state.modelData)
 		{
-			var parsedI = parseInt(i);
-			var next = parsedI + 1;
-			if (next >= this.state.modelData.length){
-				next = parsedI;
-			}
 			//Setting phenotypeListHash
 			if (typeof(this.state.modelData[i].id_a) !== 'undefined' && !this.state.phenotypeListHash.containsKey(this.state.modelData[i].id_a)){
 				hashData = {"label": this.state.modelData[i].label_a, "IC": this.state.modelData[i].IC_a, "pos": parseInt(y), "count": 0, "sum": 0};
@@ -1246,57 +1293,6 @@ function modelDataPointPrint(point) {
 					this._getHPO(this.state.modelData[i].id_a);
 				}
 				y++;
-			}
-
-			//Setting modelListHash
-			type = this.state.defaultApiEntity;
-			if (typeof(this.state.modelData[i].model_id) !== 'undefined'){
-				if (modelStage == true){
-					if (this.state.modelListHash.containsKey(this.state.modelData[i].model_id)){
-						var newModelID = this.state.modelData[i].model_id + "_" + variantNum;
-						//HACKISH.  IMPLEMENT EARLIER WHEN REFACTORING LOADDATA
-						while (variantChange){
-							q++;
-							if (this.state.modelData[parsedI].model_id == this.state.modelData[parsedI+q].model_id){
-								this.state.modelData[parsedI+q].model_id = newModelID;
-							} else {
-								variantChange = false;
-							}
-						}
-						q = 0;
-						variantChange = true;
-						this.state.modelData[i].model_id = newModelID;
-						variantNum++;
-					}
-					concept = this._getConceptId(this.state.modelData[i].model_id);
-					for (var j in this.state.apiEntityMap) {
-						if (concept.indexOf(this.state.apiEntityMap[j].prefix) === 0) {
-							type = this.state.apiEntityMap[j].apifragment;
-						}
-					}
-
-					var modelListInfo = tempModelList.get(this.state.modelData[i].model_id);
-					x = parseInt(modelListInfo.model_rank);
-					score = modelListInfo.model_score;
-
-					//OPOS is used for overview positioning.  Z is mapped to this
-					z = x;
-					for (var k in this.state.targetSpeciesList){
-						if (this.state.modelData[i].species == this.state.targetSpeciesList[k].name){
-							z = x + (k * 10);
-						}
-					}
-
-					hashData = {"label": this.state.modelData[i].model_label, "species": this.state.modelData[i].species, "taxon": this.state.modelData[i].taxon, "type": type, "pos": x, "opos": z, "rank": x, "score": score};
-					this.state.modelListHash.put(this.state.modelData[i].model_id, hashData);
-				}
-
-				//HACKISH.  IMPLEMENT EARLIER WHEN REFACTORING LOADDATA
-				if (this.state.modelData[i].model_id == this.state.modelData[next].model_id){
-					modelStage = false;
-				} else {
-					modelStage = true;
-				}
 			}
 
 			//Setting modelDataHash
@@ -1340,6 +1336,44 @@ function modelDataPointPrint(point) {
 			values.sum += subIC;
 			this.state.phenotypeListHash.put(key,values);
 		}
+	},
+
+	//Returns values from a point on the grid
+	_getCellData: function(point) {
+		if (this.state.modelDataHash.containsKey(point)){
+			return this.state.modelDataHash.get(point);
+		} else {
+			return false;
+		}
+	},
+
+	//Returns axis data from a ID of models or phenotypes
+	_getAxisData: function(key) {
+		if (this.state.yAxis.containsKey(key)){
+			return this.state.yAxis.get(key);
+		}
+		else if (this.state.xAxis.containsKey(key)){
+			return this.state.xAxis.get(key);
+		}
+		else { return false; }
+	},
+
+	//Determines if an ID belongs to the Model or Phenotype hashtable
+	_getIDType: function(key) {
+		if (this.state.modelListHash.containsKey(key)){
+			return "Model";
+		}
+		else if (this.state.phenotypeListHash.containsKey(key)){
+			return "Phenotype";
+		}
+		else { return false; }
+	},
+
+	_getIDTypeDetail: function(key) {
+		var info = this.state.modelListHash.get(key);
+		
+		if (info !== null) return info.type;
+		return "unknown";
 	},
 
 	//Creates the filterModelDataHash data structure
@@ -1504,109 +1538,6 @@ function modelDataPointPrint(point) {
 		} */
 // We need a better shared error handling here instead of displaying empty vis
 //		this._createEmptyVisualization(msg);
-	},
-
-	//Finish the data load after the ajax request
-	//Create the modelList array: model_id, model_label, model_score, model_rank
-	//Call _loadDataForModel to put the matches in an array
-	_finishLoad: function() {
-		var species = this.state.targetSpeciesName;
-		var retData = this.state.data[species];
-		if (typeof(retData) ==='undefined'  || retData === null) {
-			return;
-		}
-		//extract the maxIC score
-		if (typeof (retData.metadata) !== 'undefined') {
-			this.state.maxICScore = retData.metadata.maxMaxIC;
-		}
-		var self = this;
-
-		this.state.modelList = [];
-
-		if (typeof (retData.b) !== 'undefined') {
-			for (var idx in retData.b) {
-				this.state.modelList.push(
-					{model_id: self._getConceptId(retData.b[idx].id), 
-					model_label: retData.b[idx].label, 
-					model_score: retData.b[idx].score.score, 
-					species: species,
-					model_rank: idx,
-					score_rank: retData.b[idx].score.rank}
-				);
-				this._loadDataForModel(retData.b[idx]);
-			}
-			//sort the model list by rank
-			this.state.modelList.sort(function(a,b) { 
-				return a.model_rank - b.model_rank; 
-			});
-
-			for (var dmx in this.state.modelData) {
-				this.state.filteredModelData.push(this.state.modelData[dmx]);
-			}
-		}
-	},
-
-	//for a given model, extract the sim search data including IC scores and the triple:
-	//the a column, b column, and lowest common subsumer
-	//for the triple's IC score, use the LCS score
-	_loadDataForModel: function(newModelData) {
-		//data is an array of all model matches
-		var data = newModelData.matches;
-		var curr_row, lcs, new_row, species;
-		if (typeof(data) !== 'undefined' && data.length > 0) {
-			species = newModelData.taxon;
-
-			for (var idx in data) {
-				curr_row = data[idx];
-				lcs = this._normalizeIC(curr_row);
-				new_row = {"id": this._getConceptId(curr_row.a.id) + "_" + this._getConceptId(curr_row.b.id) + "_" + this._getConceptId(newModelData.id), 
-					"label_a" : curr_row.a.label, 
-					"id_a" : this._getConceptId(curr_row.a.id), 
-					"IC_a" : parseFloat(curr_row.a.IC),
-					"subsumer_label" : curr_row.lcs.label, 
-					"subsumer_id" : this._getConceptId(curr_row.lcs.id), 
-					"subsumer_IC" : parseFloat(curr_row.lcs.IC), 
-					"value" : lcs,
-					"label_b" : curr_row.b.label, 
-					"id_b" : this._getConceptId(curr_row.b.id), 
-					"IC_b" : parseFloat(curr_row.b.IC),
-					"model_id" : this._getConceptId(newModelData.id),
-					"model_label" : newModelData.label, 
-					"species": species.label,
-					"taxon" : species.id
-				}; 
-				this.state.modelData.push(new_row); 
-			}
-		}
-	},
-
-	//Different methods of based on the selectedCalculationMethod
-	_normalizeIC: function(datarow){
-		var aIC = datarow.a.IC;
-		var bIC = datarow.b.IC;
-		var lIC = datarow.lcs.IC;
-		var nic;
-
-		var ics = new Array(3);
-
-		// get 0: similarity
-		nic = Math.sqrt((Math.pow(aIC - lIC, 2)) + (Math.pow(bIC - lIC, 2)));
-		nic = (1 - (nic / + this.state.maxICScore)) * 100;
-		ics[0] = nic;
-
-		// 1 - ratio(q)
-		nic = ((lIC / aIC) * 100);
-		ics[1] = nic;
-
-		// 2 - uniquenss
-		nic = lIC;
-		ics[2] = nic;
-
-		// 3: ratio(t)
-		nic = ((lIC / bIC) * 100);
-		ics[3] = nic;
-
-		return ics;
 	},
 
 	_createColorScale: function() {
@@ -1798,7 +1729,7 @@ function modelDataPointPrint(point) {
 
 	_addLogoImage:	 function() { 
 		var start = 0;
-		if(this.state.filteredModelData.length < 30){
+		if(this.state.filteredModelDataHash.length < 30){
 			//Magic Nums
 			start = 680;
 		} else { 
@@ -2387,8 +2318,6 @@ function modelDataPointPrint(point) {
 			}
 		}
 
-
-
 		// Hiding scores which are equal to 0
 		var formatScore =  function(score) {
 			if(score == 0) {
@@ -2828,7 +2757,7 @@ function modelDataPointPrint(point) {
 	_createOverviewSpeciesLabels: function () {
 		var self = this;
 		var speciesList = [];
-		//Temporarly until fix for positioning on Axis Flip
+
 		if (!this.state.invertAxis && self.state.targetSpeciesName == "Overview") {
 			speciesList = self.state.speciesList;
 		} else{
@@ -3391,25 +3320,6 @@ function modelDataPointPrint(point) {
 		return dupArray;
 	},
 
-	//TOO SLOW TO USE
-	_getUnmatchedLabels: function() {
-		var unmatchedLabels = [];
-		for (var i in this.state.unmatchedPhenotypes){
-			jQuery.ajax({
-				url : this.state.serverURL + "/phenotype/" + this.state.unmatchedPhenotypes[i].id + ".json",
-				async : false,
-				dataType : 'json',
-				success : function(data) {
-					unmatchedLabels.push(data.label);
-				},
-				error: function ( xhr, errorType, exception ) { //Triggered if an error communicating with server
-					self._populateDialog(self,"Error", "We are having problems with the server. Please try again soon. Error:" + xhr.status);
-				}
-			});
-		}
-		return unmatchedLabels;
-	},
-
 	_buildUnmatchedPhenotypeDisplay: function() {
 		var optionhtml;
 		var prebl = $("#prebl");
@@ -3579,6 +3489,8 @@ function modelDataPointPrint(point) {
 		        //console.log("getting hpo data .. url is ..."+url);
 			var taxon = this._getTargetSpeciesTaxonByName(this,this.state.targetSpeciesName);
 			var results = this._ajaxLoadData(taxon,url);
+			console.log(url);
+			console.log(results);
 			if (typeof (results) !== 'undefined') {
 				edges = results.edges;
 				nodes = results.nodes;
