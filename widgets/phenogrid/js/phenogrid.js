@@ -1054,9 +1054,6 @@ function modelDataPointPrint(point) {
 			this._finishLoad();
 		}
 
-		//console.log(this.state.modelListHash.entries());
-		this._loadHashTables();
-
 		this.state.hpoCacheBuilt = true;
 	},
 
@@ -1196,6 +1193,12 @@ function modelDataPointPrint(point) {
 				ID = self._getConceptId(item.id);
 
 				type = this.state.defaultApiEntity;
+
+				//if (this.state.modelListHash.containsKey(ID)){
+				//	ID += "_" + variantNum;
+				//	variantNum++;
+				//}
+
 				for (var j in this.state.apiEntityMap) {
 					if (ID.indexOf(this.state.apiEntityMap[j].prefix) === 0) {
 						type = this.state.apiEntityMap[j].apifragment;
@@ -1215,30 +1218,32 @@ function modelDataPointPrint(point) {
 	_loadDataForModel: function(newModelData) {
 		//data is an array of all model matches
 		var data = newModelData.matches;
-		var curr_row, lcs, new_row, species;
+		var curr_row, lcs, new_row, species, modelPoint, hashData;
 		if (typeof(data) !== 'undefined' && data.length > 0) {
 			species = newModelData.taxon;
 
 			for (var idx in data) {
 				curr_row = data[idx];
 				lcs = this._normalizeIC(curr_row);
-				new_row = {"id": this._getConceptId(curr_row.a.id) + "_" + this._getConceptId(curr_row.b.id) + "_" + this._getConceptId(newModelData.id), 
-					"label_a" : curr_row.a.label, 
-					"id_a" : this._getConceptId(curr_row.a.id), 
-					"IC_a" : parseFloat(curr_row.a.IC),
-					"subsumer_label" : curr_row.lcs.label, 
-					"subsumer_id" : this._getConceptId(curr_row.lcs.id), 
-					"subsumer_IC" : parseFloat(curr_row.lcs.IC), 
-					"value" : lcs,
-					"label_b" : curr_row.b.label, 
-					"id_b" : this._getConceptId(curr_row.b.id), 
-					"IC_b" : parseFloat(curr_row.b.IC),
-					"model_id" : this._getConceptId(newModelData.id),
-					"model_label" : newModelData.label, 
-					"species": species.label,
-					"taxon" : species.id
-				}; 
-				this.state.modelData.push(new_row); 
+
+				if (!this.state.phenotypeListHash.containsKey(this._getConceptId(curr_row.a.id))){
+					hashData = {"label": curr_row.a.label, "IC": parseFloat(curr_row.a.IC), "pos": 0, "count": 0, "sum": 0};
+					this.state.phenotypeListHash.put(this._getConceptId(curr_row.a.id), hashData);
+					if (!this.state.hpoCacheBuilt && this.state.preloadHPO){
+						this._getHPO(this._getConceptId(curr_row.a.id));
+					}
+				}
+
+				//Setting modelDataHash
+				if (this.state.invertAxis){
+					modelPoint = new modelDataPoint(this._getConceptId(curr_row.a.id), this._getConceptId(newModelData.id));
+					this._updateSortVals(this._getConceptId(newModelData.id), parseFloat(curr_row.lcs.IC));
+				} else {
+					modelPoint = new modelDataPoint(this._getConceptId(newModelData.id), this._getConceptId(curr_row.a.id));
+					this._updateSortVals(this._getConceptId(curr_row.a.id), parseFloat(curr_row.lcs.IC));
+				}
+				hashData = {"value": lcs, "subsumer_label": curr_row.lcs.label, "subsumer_id": this._getConceptId(curr_row.lcs.id), "subsumer_IC": parseFloat(curr_row.lcs.IC), "b_label": curr_row.b.label, "b_id": this._getConceptId(curr_row.b.id), "b_IC": parseFloat(curr_row.b.IC)};
+				this.state.modelDataHash.put(modelPoint, hashData);
 			}
 		}
 	},
@@ -1270,42 +1275,6 @@ function modelDataPointPrint(point) {
 		ics[3] = nic;
 
 		return ics;
-	},
-	
-	_loadHashTables: function() {
-		//CHANGE LATER TO CUT DOWN ON INFO FROM _finishLoad & _finishOverviewLoad
-		tempModelList = new Hashtable();
-
-		var modelPoint, hashData, concept, type, score, x, z;
-		var y = 0;
-		var q = 0;
-		var variantNum = 0;
-		var modelStage = true;
-		var variantChange = true;
-
-		for (var i in this.state.modelData)
-		{
-			//Setting phenotypeListHash
-			if (typeof(this.state.modelData[i].id_a) !== 'undefined' && !this.state.phenotypeListHash.containsKey(this.state.modelData[i].id_a)){
-				hashData = {"label": this.state.modelData[i].label_a, "IC": this.state.modelData[i].IC_a, "pos": parseInt(y), "count": 0, "sum": 0};
-				this.state.phenotypeListHash.put(this.state.modelData[i].id_a, hashData);
-				if (!this.state.hpoCacheBuilt && this.state.preloadHPO){
-					this._getHPO(this.state.modelData[i].id_a);
-				}
-				y++;
-			}
-
-			//Setting modelDataHash
-			if (this.state.invertAxis){
-				modelPoint = new modelDataPoint(this.state.modelData[i].id_a, this.state.modelData[i].model_id);
-				this._updateSortVals(this.state.modelData[i].model_id, this.state.modelData[i].subsumer_IC);
-			} else {
-				modelPoint = new modelDataPoint(this.state.modelData[i].model_id, this.state.modelData[i].id_a);
-				this._updateSortVals(this.state.modelData[i].id_a, this.state.modelData[i].subsumer_IC);
-			}
-			hashData = {"value": this.state.modelData[i].value, "subsumer_label": this.state.modelData[i].subsumer_label, "subsumer_id": this.state.modelData[i].subsumer_id, "subsumer_IC": this.state.modelData[i].subsumer_IC, "b_label": this.state.modelData[i].label_b, "b_id": this.state.modelData[i].id_b, "b_IC": this.state.modelData[i].IC_b};
-			this.state.modelDataHash.put(modelPoint, hashData);
-		}
 	},
 
 	//Will update the position of the phenotype based on sort
@@ -3489,8 +3458,6 @@ function modelDataPointPrint(point) {
 		        //console.log("getting hpo data .. url is ..."+url);
 			var taxon = this._getTargetSpeciesTaxonByName(this,this.state.targetSpeciesName);
 			var results = this._ajaxLoadData(taxon,url);
-			console.log(url);
-			console.log(results);
 			if (typeof (results) !== 'undefined') {
 				edges = results.edges;
 				nodes = results.nodes;
