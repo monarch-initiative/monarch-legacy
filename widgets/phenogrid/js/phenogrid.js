@@ -357,12 +357,6 @@ function modelDataPointPrint(point) {
 			this.state.targetSpeciesName = "Homo sapiens";
 		} 
 
-		//TEMP UNTIL _loadData is refactored
-		if (!this.state.hpoCacheBuilt){
-			this.state.hpoCacheHash = new Hashtable();
-			this.state.hpoCacheLabels = new Hashtable();
-		}
-
 		this._loadData();
 
 		this.state.phenoLength = this.state.phenotypeListHash.size();
@@ -1004,6 +998,11 @@ function modelDataPointPrint(point) {
 	//given a list of phenotypes, find the top n models
 	//I may need to rename this method "getModelData". It should extract the models and reformat the data 
 	_loadData: function() {
+		if (!this.state.hpoCacheBuilt){
+			this.state.hpoCacheHash = new Hashtable();
+			this.state.hpoCacheLabels = new Hashtable();
+		}
+
 		this.state.expandedHash = new Hashtable();  // for cache of genotypes
 		this.state.phenotypeListHash = new Hashtable();
 		this.state.modelListHash = new Hashtable();
@@ -1098,7 +1097,6 @@ function modelDataPointPrint(point) {
 
 	_finishOverviewLoad: function () {
 		var speciesList = [];
-		var orgCtr = 0;
 		var posID = 0;
 		var type, ID, hashData;
 
@@ -1108,7 +1106,6 @@ function modelDataPointPrint(point) {
 			if (specData !== null && typeof(specData.b) !== 'undefined' && specData.b.length > 0) {
 				for (var idx in specData.b) {
 					var item = specData.b[idx];
-
 					ID = this._getConceptId(item.id);
 
 					type = this.state.defaultApiEntity;
@@ -1125,7 +1122,6 @@ function modelDataPointPrint(point) {
 				}
 				this.state.multiOrganismCt = specData.b.length;
 				speciesList.push(species);
-				orgCtr++;
 			}
 		}
 
@@ -1138,6 +1134,9 @@ function modelDataPointPrint(point) {
 	_finishLoad: function() {
 		var species = this.state.targetSpeciesName;
 		var retData = this.state.data[species];
+		var hashData, ID, type, z;
+		//var variantNum = 0;
+
 		if (typeof(retData) ==='undefined'  || retData === null) {
 			return;
 		}
@@ -1146,22 +1145,17 @@ function modelDataPointPrint(point) {
 			this.state.maxICScore = retData.metadata.maxMaxIC;
 		}
 
-		var self = this;
-
-		var hashData, ID, type, z;
-		//var variantNum = 0;
 		if (typeof (retData.b) !== 'undefined') {
 			for (var idx in retData.b) {
 				var item = retData.b[idx];
-				ID = self._getConceptId(item.id);
-
-				type = this.state.defaultApiEntity;
+				ID = this._getConceptId(item.id);
 
 				//if (this.state.modelListHash.containsKey(ID)){
 				//	ID += "_" + variantNum;
 				//	variantNum++;
 				//}
 
+				type = this.state.defaultApiEntity;
 				for (var j in this.state.apiEntityMap) {
 					if (ID.indexOf(this.state.apiEntityMap[j].prefix) === 0) {
 						type = this.state.apiEntityMap[j].apifragment;
@@ -1181,9 +1175,8 @@ function modelDataPointPrint(point) {
 	_loadDataForModel: function(newModelData) {
 		//data is an array of all model matches
 		var data = newModelData.matches;
-		var curr_row, lcs, species, modelPoint, hashData;
+		var curr_row, lcs, modelPoint, hashData;
 		if (typeof(data) !== 'undefined' && data.length > 0) {
-			species = newModelData.taxon;
 
 			for (var idx in data) {
 				curr_row = data[idx];
@@ -3409,6 +3402,7 @@ function modelDataPointPrint(point) {
 		        //console.log("getting hpo data .. url is ..."+url);
 			var taxon = this._getTargetSpeciesTaxonByName(this,this.state.targetSpeciesName);
 			var results = this._ajaxLoadData(taxon,url);
+			console.log(results);
 			if (typeof (results) !== 'undefined') {
 				edges = results.edges;
 				nodes = results.nodes;
