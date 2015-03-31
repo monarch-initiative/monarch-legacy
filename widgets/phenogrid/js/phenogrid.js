@@ -1094,6 +1094,7 @@ function modelDataPointPrint(point) {
 		var speciesList = [];
 		var posID = 0;
 		var type, ID, hashData;
+		var variantNum = 0;
 
 		for (var i in this.state.targetSpeciesList) {
 			var species = this.state.targetSpeciesList[i].name;
@@ -1102,6 +1103,13 @@ function modelDataPointPrint(point) {
 				for (var idx in specData.b) {
 					var item = specData.b[idx];
 					ID = this._getConceptId(item.id);
+
+					//HACK.  NEEDED FOR ALLOWING MODELS OF THE SAME ID AKA VARIANTS TO BE DISPLAYED W/O OVERLAP
+					//SEEN MOST WITH COMPARE AND/OR EXOMISER DATA
+					if (this.state.modelListHash.containsKey(ID)){
+						ID += "_" + variantNum;
+						variantNum++;
+					}
 
 					type = this.state.defaultApiEntity;
 					for (var j in this.state.apiEntityMap) {
@@ -1112,7 +1120,7 @@ function modelDataPointPrint(point) {
 
 					hashData = {"label": item.label, "species": species, "taxon": item.taxon.id, "type": type, "pos": parseInt(posID), "rank": parseInt(idx), "score": item.score.score};
 					this.state.modelListHash.put(ID, hashData);
-					this._loadDataForModel(item);
+					this._loadDataForModel(ID, item);
 					posID++;
 				}
 				this.state.multiOrganismCt = specData.b.length;
@@ -1130,7 +1138,7 @@ function modelDataPointPrint(point) {
 		var species = this.state.targetSpeciesName;
 		var retData = this.state.data[species];
 		var hashData, ID, type, z;
-		//var variantNum = 0;
+		var variantNum = 0;
 
 		if (typeof(retData) ==='undefined'  || retData === null) {
 			return;
@@ -1145,10 +1153,12 @@ function modelDataPointPrint(point) {
 				var item = retData.b[idx];
 				ID = this._getConceptId(item.id);
 
-				//if (this.state.modelListHash.containsKey(ID)){
-				//	ID += "_" + variantNum;
-				//	variantNum++;
-				//}
+				//HACK.  NEEDED FOR ALLOWING MODELS OF THE SAME ID AKA VARIANTS TO BE DISPLAYED W/O OVERLAP
+				//SEEN MOST WITH COMPARE AND/OR EXOMISER DATA
+				if (this.state.modelListHash.containsKey(ID)){
+					ID += "_" + variantNum;
+					variantNum++;
+				}
 
 				type = this.state.defaultApiEntity;
 				for (var j in this.state.apiEntityMap) {
@@ -1159,7 +1169,7 @@ function modelDataPointPrint(point) {
 				
 				hashData = {"label": item.label, "species": species, "taxon": item.taxon.id, "type": type, "pos": parseInt(idx), "rank": parseInt(idx), "score": item.score.score};
 				this.state.modelListHash.put(ID, hashData);
-				this._loadDataForModel(item);
+				this._loadDataForModel(ID, item);
 			}
 		}
 	},
@@ -1167,7 +1177,7 @@ function modelDataPointPrint(point) {
 	//for a given model, extract the sim search data including IC scores and the triple:
 	//the a column, b column, and lowest common subsumer
 	//for the triple's IC score, use the LCS score
-	_loadDataForModel: function(newModelData) {
+	_loadDataForModel: function(modelID, newModelData) {
 		//data is an array of all model matches
 		var data = newModelData.matches;
 		var curr_row, lcs, modelPoint, hashData;
@@ -1187,9 +1197,9 @@ function modelDataPointPrint(point) {
 
 				//Setting modelDataHash
 				if (this.state.invertAxis){
-					modelPoint = new modelDataPoint(this._getConceptId(curr_row.a.id), this._getConceptId(newModelData.id));
+					modelPoint = new modelDataPoint(this._getConceptId(curr_row.a.id), this._getConceptId(modelID));
 				} else {
-					modelPoint = new modelDataPoint(this._getConceptId(newModelData.id), this._getConceptId(curr_row.a.id));
+					modelPoint = new modelDataPoint(this._getConceptId(modelID), this._getConceptId(curr_row.a.id));
 				}
 				this._updateSortVals(this._getConceptId(curr_row.a.id), parseFloat(curr_row.lcs.IC));
 				hashData = {"value": lcs, "subsumer_label": curr_row.lcs.label, "subsumer_id": this._getConceptId(curr_row.lcs.id), "subsumer_IC": parseFloat(curr_row.lcs.IC), "b_label": curr_row.b.label, "b_id": this._getConceptId(curr_row.b.id), "b_IC": parseFloat(curr_row.b.IC)};
