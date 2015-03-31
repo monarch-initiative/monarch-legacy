@@ -969,13 +969,8 @@ function modelDataPointPrint(point) {
 		var	startXIdx = this.state.currXIdx - this._getXLimit();
 		var	displayXLimiter = this.state.currXIdx;
 
-		if (this.state.invertAxis){
-			self._filterPhenotypeHash(startXIdx,displayXLimiter);
-			self._filterModelListHash(startYIdx,displayYLimiter);
-		} else {
-			self._filterPhenotypeHash(startYIdx,displayYLimiter);
-			self._filterModelListHash(startXIdx,displayXLimiter);
-		}
+		this.state.filteredYAxis = self._filterListHash(this.state.yAxis,startYIdx,displayYLimiter);
+		this.state.filteredXAxis = self._filterListHash(this.state.xAxis,startXIdx,displayXLimiter);
 
 		sortedYArray = self._getSortedIDListStrict(self.state.filteredYAxis.entries());
 
@@ -1317,40 +1312,17 @@ function modelDataPointPrint(point) {
 		this.state.filteredModelDataHash = newFilteredModel;
 	},
 
-	//Filters the phenotype datastructure based on start & end points provided
-	_filterPhenotypeHash: function (start,end) {
-		this.state.filteredPhenotypeListHash = new Hashtable();
-		var oldHash = this.state.phenotypeListHash.entries();
+	_filterListHash: function (hash,start,end) {
+		var filteredHash = new Hashtable();
+		var oldHash = hash.entries();
 
 		for (var i in oldHash){
 			if (oldHash[i][1].pos >= start && oldHash[i][1].pos < end){
-				this.state.filteredPhenotypeListHash.put(oldHash[i][0],oldHash[i][1]);
+				filteredHash.put(oldHash[i][0],oldHash[i][1]);
 			}
 		}
 
-		if (this.state.invertAxis){
-			this.state.filteredXAxis = this.state.filteredPhenotypeListHash;
-		} else {
-			this.state.filteredYAxis = this.state.filteredPhenotypeListHash;
-		}
-	},
-
-	//Filters the model datastructure based on start & end points provided
-	_filterModelListHash: function (start,end) {
-		this.state.filteredModelListHash = new Hashtable();
-		var oldHash = this.state.modelListHash.entries();
-
-		for (var i in oldHash){
-			if (oldHash[i][1].pos >= start && oldHash[i][1].pos < end){
-				this.state.filteredModelListHash.put(oldHash[i][0],oldHash[i][1]);
-			}
-		}
-
-		if (this.state.invertAxis){
-			this.state.filteredYAxis = this.state.filteredModelListHash;
-		} else {
-			this.state.filteredXAxis = this.state.filteredModelListHash;
-		}
+		return filteredHash;
 	},
 
 	//Sorts the phenotypes
@@ -3402,7 +3374,6 @@ function modelDataPointPrint(point) {
 		        //console.log("getting hpo data .. url is ..."+url);
 			var taxon = this._getTargetSpeciesTaxonByName(this,this.state.targetSpeciesName);
 			var results = this._ajaxLoadData(taxon,url);
-			console.log(results);
 			if (typeof (results) !== 'undefined') {
 				edges = results.edges;
 				nodes = results.nodes;
