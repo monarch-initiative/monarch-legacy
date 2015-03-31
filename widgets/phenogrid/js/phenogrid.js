@@ -3695,11 +3695,10 @@ function modelDataPointPrint(point) {
 			//Setting modelDataHash
 			if (this.state.invertAxis){
 				modelPoint = new modelDataPoint(this.state.modelData[i].id_a, this.state.modelData[i].model_id);
-				this._updateSortVals(this.state.modelData[i].model_id, this.state.modelData[i].subsumer_IC);
 			} else {
 				modelPoint = new modelDataPoint(this.state.modelData[i].model_id, this.state.modelData[i].id_a);
-				this._updateSortVals(this.state.modelData[i].id_a, this.state.modelData[i].subsumer_IC);
 			}
+			this._updateSortVals(this.state.modelData[i].id_a, this.state.modelData[i].subsumer_IC);
 			hashData = {"value": this.state.modelData[i].value, "subsumer_label": this.state.modelData[i].subsumer_label, "subsumer_id": this.state.modelData[i].subsumer_id, "subsumer_IC": this.state.modelData[i].subsumer_IC, "b_label": this.state.modelData[i].label_b, "b_id": this.state.modelData[i].id_b, "b_IC": this.state.modelData[i].IC_b};
 			this.state.modelDataHash.put(modelPoint, hashData);
 		}
