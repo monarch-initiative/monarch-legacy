@@ -6,10 +6,10 @@
 function search_results_init(term){
     var query = "/neurosearch/"+term+".json";
 
-    $("#spinner").show();
+    $("#ajax-cube").show();
     jQuery.getJSON(query, function(data) {
         var results = data;
-        $("#spinner").hide();
+        $("#ajax-cube").hide();
         
         if (results.otherResults.length > 0){
             var genResultsTable = function() {return genTableOfSearchDataResults(results.otherResults) };

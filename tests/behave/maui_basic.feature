@@ -10,10 +10,10 @@ Feature: Monarch-app UI basic pages display okay
    Examples: core pages
     | page                | title                         |
     | /                   | Welcome to Monarch            |
-    | /disease            |                               |
-    | /phenotype          |                               |
-    | /gene               |                               |
-    | /model              |                               |
+    | /disease            | Monarch Diseases              |
+    | /phenotype          | Monarch Phenotypes            |
+    | /gene               | Monarch Genes                 |
+    | /model              | Monarch Models                |
     | /analyze/phenotypes | Monarch Analysis              |
     | /annotate/text      | Annotation                    |
     | /page/exomes        | Monarch Exomes                |

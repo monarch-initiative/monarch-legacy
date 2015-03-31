@@ -243,6 +243,13 @@ figcaption {
 
 /* Analyze */
 
+.compare-text{
+	opacity: .5;
+}
+.search-text{
+	opacity: 1.0;
+}
+
 #settings-header {
     text-align: center;
 }

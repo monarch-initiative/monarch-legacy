@@ -109,7 +109,7 @@ function AnalyzeInit(uploaded_data){
 
 //Attempt to fix input_items listing
 	jQuery("#analyze_auto_target").val(function(index,text){
-		var textFix = text.replace(/:/g ,'_').trim();
+		var textFix = text.trim();
 		if (textFix.charAt(0) == ','){
 			textFix = textFix.substring(1);
 		}
@@ -129,7 +129,7 @@ function AnalyzeInit(uploaded_data){
     for (var irn = 0; irn < URLVariables.length; irn++) {
         var parameterName = URLVariables[irn].split('=');
         if (parameterName[0] == "input_items" && splittedLabels) {
-             var url_phenotypes = parameterName[1].split("+");
+             var url_phenotypes = decodeURIComponent(parameterName[1]).split("+");
              for (var urn = 0; urn < url_phenotypes.length; urn++){
              	if (splittedLabels[urn]){
              		search_set[url_phenotypes[urn]] = splittedLabels[urn];
@@ -216,7 +216,7 @@ function AnalyzeInit(uploaded_data){
     jQuery.each(select_terms, function(key, value) {
     	term_list += (value.textContent.substring(0,value.textContent.length-1) + ', ');
     });
-    if (typeof urlParams.userResults == 'undefined'){
+    if (typeof urlParams.user_input == 'undefined'){
         result_list.prepend('<h3>Search Terms</h3> ' + term_list.substring(0, term_list.length-2) + '<br/>');
     }
     
@@ -268,6 +268,7 @@ function AnalyzeInit(uploaded_data){
         jQuery("#ajax-spinner").show();
         disable_compare_form();
         jQuery("#reset").prop('disabled', true);
+        jQuery("#srch").prop("disabled", true);
         
         jQuery.getJSON(query, function(data) {
             jQuery("#ajax-spinner").hide();
@@ -279,12 +280,14 @@ function AnalyzeInit(uploaded_data){
             jQuery("#ortholog-list").val(homologs.orthologs.join(', '));
             jQuery("#ortholog-text-area").show();
             jQuery("#ortholog-list").prop('disabled', false);
+            jQuery("#srch").prop("disabled", false);
             scroll_to_bottom('ortholog-list');
         })
         .error(function() { 
             jQuery("#ajax-spinner").hide();
             enable_compare_form();
             jQuery("#reset").prop('disabled', false);
+            jQuery("#srch").prop("disabled", false);
             jQuery("#error-msg").show().delay(3000).fadeOut();
         });
         
@@ -307,6 +310,7 @@ function AnalyzeInit(uploaded_data){
         jQuery("#ajax-spinner").show();
         disable_compare_form();
         jQuery("#reset").prop('disabled', true);
+        jQuery("#srch").prop("disabled", true);
         
         jQuery.getJSON(query, function(data) {
             jQuery("#ajax-spinner").hide();
@@ -318,12 +322,14 @@ function AnalyzeInit(uploaded_data){
             jQuery("#paralog-list").val(homologs.paralogs.join(', '));
             jQuery("#paralog-text-area").show();
             jQuery("#paralog-list").prop("disabled", false);
+            jQuery("#srch").prop("disabled", false);
             scroll_to_bottom('paralog-list');
         })   
         .error(function() { 
             jQuery("#ajax-spinner").hide();
             enable_compare_form();
             jQuery("#reset").prop('disabled', false);
+            jQuery("#srch").prop("disabled", false);
             jQuery("#error-msg").show().delay(3000).fadeOut();
         });
 ;
@@ -348,6 +354,7 @@ function AnalyzeInit(uploaded_data){
     function disable_search_form(){       
         jQuery("#search-form-group input").prop("disabled", true);
         jQuery("#search-form-group select").prop("disabled", true);
+        jQuery(".search-text").css("opacity", ".5");
     }
     
     function disable_compare_form(){
@@ -357,6 +364,9 @@ function AnalyzeInit(uploaded_data){
         //Not sure why the above does not work for the following
         jQuery("#ortholog-list").prop("disabled", true);
         jQuery("#paralog-list").prop("disabled", true);
+        
+        //Dim text
+        jQuery(".compare-text").css("opacity", ".5");
     }
     
     function enable_compare_form(){
@@ -365,6 +375,7 @@ function AnalyzeInit(uploaded_data){
         jQuery("#compare-form-group input").prop("disabled", false);
         jQuery("#ortholog-list").prop("disabled", false);
         jQuery("#paralog-list").prop("disabled", false);
+        jQuery(".compare-text").css("opacity", "1.0");
     }
     
     function enable_search_form(){
@@ -372,6 +383,7 @@ function AnalyzeInit(uploaded_data){
         jQuery("#search-form-group select").prop('disabled', false);
         //Not yet implemented
         jQuery("#type").prop('disabled', true);
+        jQuery(".search-text").css("opacity", "1.0");
     }
     
     function set_target_type(value){
