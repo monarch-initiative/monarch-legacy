@@ -1188,11 +1188,10 @@ function modelDataPointPrint(point) {
 				//Setting modelDataHash
 				if (this.state.invertAxis){
 					modelPoint = new modelDataPoint(this._getConceptId(curr_row.a.id), this._getConceptId(newModelData.id));
-					this._updateSortVals(this._getConceptId(newModelData.id), parseFloat(curr_row.lcs.IC));
 				} else {
 					modelPoint = new modelDataPoint(this._getConceptId(newModelData.id), this._getConceptId(curr_row.a.id));
-					this._updateSortVals(this._getConceptId(curr_row.a.id), parseFloat(curr_row.lcs.IC));
 				}
+				this._updateSortVals(this._getConceptId(curr_row.a.id), parseFloat(curr_row.lcs.IC));
 				hashData = {"value": lcs, "subsumer_label": curr_row.lcs.label, "subsumer_id": this._getConceptId(curr_row.lcs.id), "subsumer_IC": parseFloat(curr_row.lcs.IC), "b_label": curr_row.b.label, "b_id": this._getConceptId(curr_row.b.id), "b_IC": parseFloat(curr_row.b.IC)};
 				this.state.modelDataHash.put(modelPoint, hashData);
 			}
@@ -1245,17 +1244,10 @@ function modelDataPointPrint(point) {
 	//Updates the count & sum values used for sorting
 	_updateSortVals: function(key,subIC) {
 		var values;
-		if (this.state.invertAxis){
-			values = this.state.modelListHash.get(key);
-			values.count += 1;
-			values.sum += subIC;
-			this.state.modelListHash.put(key,values);
-		} else {
-			values = this.state.phenotypeListHash.get(key);
-			values.count += 1;
-			values.sum += subIC;
-			this.state.phenotypeListHash.put(key,values);
-		}
+		values = this.state.phenotypeListHash.get(key);
+		values.count += 1;
+		values.sum += subIC;
+		this.state.phenotypeListHash.put(key,values);
 	},
 
 	//Returns values from a point on the grid
@@ -1296,10 +1288,9 @@ function modelDataPointPrint(point) {
 		return "unknown";
 	},
 
-	//Creates the filterModelDataHash data structure
+	//Creates the currentModelData data structure
 	_filterHashTables: function () {
 		var newFilteredModel = [];
-		//NOT A HASH ACTUALLY.  RENAME AFTER ADOPTION
 		var currentModelData = this.state.modelDataHash.entries();
 
 		for (var i in currentModelData){
@@ -1312,6 +1303,7 @@ function modelDataPointPrint(point) {
 		this.state.filteredModelDataHash = newFilteredModel;
 	},
 
+	//Filters down the axis hashtables based on what the limits are
 	_filterListHash: function (hash,start,end) {
 		var filteredHash = new Hashtable();
 		var oldHash = hash.entries();
