@@ -315,25 +315,15 @@ function modelDataPointPrint(point) {
 		this.element.empty();
 		this._loadSpinner();
 
-
 	    // original spot for init of tooltip
-
 		this.state.phenoDisplayCount = this._calcPhenotypeDisplayCount();
 		//save a copy of the original phenotype data
 		this.state.origPhenotypeData = this.state.phenotypeData.slice();
-
-
 
 		// target species name might be provided as a name or as taxon. Make sure that we translate to name
 		this.state.targetSpeciesName = this._getTargetSpeciesNameByTaxon(this,this.state.targetSpeciesName);
 		this.state.phenotypeData = this._filterPhenotypeResults(this.state.phenotypeData);
 
-		//TEMP UNTIL _loadData is refactored
-		if (!this.state.hpoCacheBuilt){
-			this.state.hpoCacheHash = new Hashtable();
-			this.state.hpoCacheLabels = new Hashtable();
-		
-		}
 		this._loadData();
 
 		// must init the stickytooltip here initially, but then don't reinit later until in the redraw
@@ -343,7 +333,6 @@ function modelDataPointPrint(point) {
 			this.state.stickyInitialized = true;
 			stickytooltip.init("*[data-tooltip]", "mystickytooltip");
 		}
-
 
 		if (this.state.owlSimFunction == 'exomiser') {
 			this.state.selectedCalculation = 2; // Force the color to Uniqueness
@@ -356,11 +345,8 @@ function modelDataPointPrint(point) {
 		this.state.w = this.state.m[1] - this.state.m[3];
 		this.state.currXIdx = this.state.dataDisplayCount;
 		this.state.currYIdx = this.state.dataDisplayCount;	
-	        this.state.modelDisplayCount = this.state.dataDisplayCount;
+	    this.state.modelDisplayCount = this.state.dataDisplayCount;
 		this.state.phenoDisplayCount = this.state.dataDisplayCount;
-
-
-
 
 		// set the owlsimFunction
 		// there are three possibilities
@@ -374,11 +360,7 @@ function modelDataPointPrint(point) {
 			this.state.targetSpeciesName = "Homo sapiens";
 		} 
 
-<<<<<<< HEAD
-		this._loadData();
-=======
 	    /** original position of hpo cache and load data*/
->>>>>>> 34f0d445dbb0158ae9e2f55f2f2c859ddfb7b9a1
 
 		this.state.phenoLength = this.state.phenotypeListHash.size();
 		this.state.modelLength = this.state.modelListHash.size();
