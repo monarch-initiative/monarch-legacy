@@ -1,11 +1,12 @@
 /* 
-	TooltipRender
+	TooltipRender - Render the content of a tooltip.
 
-	Pseudo Decorator/Builder-like object to render the content of a tooltip.
 	The tooltip consist of two 'areas', 1.) basic info area, which provides general info
 	such as id, label, rank, score, etc. Most object will have these attribute. it accounts 
 	for absent attributes. 2.) the action or extended info area, which render content specific to 
-	performing actions such as displaying expand buttons and other specialized info.	
+	performing actions such as displaying expand buttons and other specialized info. For new types,
+	just add a specialized method, making sure the the name matches the data.type 
+	(e.g, function phenotype => data.type='phenotype').
 */
 var TooltipRender = function(url) {  //parms
 	 this.url = url;
@@ -28,14 +29,12 @@ TooltipRender.prototype = {
 		var inf =  "<strong>" + this._capitalizeString(this.data.type) + ": </strong> " + this.entityHreflink() + "<br/>" +
 				   this._rank() + this._score() + this._ic();
 
-		// depending on the type add extension info
-		if (this.data.type =='phenotype'){
-			inf += pheno(this);			
-		} else if (this.data.type =='gene'){
-			inf += gene(this);			
-		} else if (this.data.type =='genotype'){
-			inf += genotype(this);						
-		}
+		// try to dynamically invoke the function that matches the data.type
+		try {
+			var func = this.data.type;			
+			inf += this[func](this);
+		} catch(err) { console.log("searching for " + func);}
+
 		return inf;
 	},
 	_rank: function() {
@@ -57,10 +56,9 @@ TooltipRender.prototype = {
 		} else {
 			return word.charAt(0).toUpperCase() + word.slice(1);
 		}
-	}
-};
+	}, 
 
-function pheno(tooltip) {
+phenotype: function(tooltip) {
 	
 	var returnHtml = "";
 	var hpoExpand = false;
@@ -94,9 +92,9 @@ function pheno(tooltip) {
 	}
 return returnHtml;		
 
-}
+},
 
-function gene(tooltip) {
+gene: function(tooltip) {
 	var returnHtml = "";	
 	// var instructions = "<br/><br/>Click button to <b>collapse</b> associated genotypes &nbsp;&nbsp;";
 	// var button = $("<button>")
@@ -128,9 +126,9 @@ function gene(tooltip) {
 		}
 	}
 	return returnHtml;	
-}
+},
 
-function genotype(tooltip) {
+genotype: function(tooltip) {
 	var returnHtml = "";
 	if (typeof(info.parent) !== 'undefined' && info.parent !== null) {
 		var parentInfo = tooltip.parent.state.modelListHash.get(info.parent);
@@ -148,3 +146,5 @@ function genotype(tooltip) {
 	}
 	return returnHtml;	
 }
+
+};
