@@ -314,6 +314,7 @@ function modelDataPointPrint(point) {
 		return prefix + 'res/' + name + '.' + type;
 	},
 
+	//init is now reduced down completely to loading
 	_init: function() {
 		this.element.empty();
 		this._loadSpinner();
@@ -329,6 +330,13 @@ function modelDataPointPrint(point) {
 
 		this._loadData();
 
+		this._setLoadedValues();
+
+		this._processDisplay();
+	},
+
+	//Originally part of _init
+	_setLoadedValues: function() {
 		// must init the stickytooltip here initially, but then don't reinit later until in the redraw
 		// this is weird behavior, but need to figure out why later
 		if (typeof(this.state.stickyInitialized) == 'undefined') {
@@ -382,13 +390,7 @@ function modelDataPointPrint(point) {
 		this._adjustModelCount();
 		this.state.currXIdx = this._getXLimit();
 		this.state.currYIdx = this._getYLimit();
-		this._sortPhenotypeHash();
-		this._filterDisplay();
-		this.state.unmatchedPhenotypes = this._getUnmatchedPhenotypes();
-		this.element.empty();
 		this._createColorScale();
-
-		this._reDraw();
 	},
 
 	_loadSpinner: function() {
