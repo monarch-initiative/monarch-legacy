@@ -1,11 +1,24 @@
-####
-#### The Golr config for the disease tab on the phenotype page
-####
-#### Note: initial implementation - fields will change in future
-####
+##
+## The Golr config that will be used for the majority of associations in Monarch
+##
+## The model is roughly OBAN: https://github.com/jamesmalone/OBAN
+##
+## Note: initial implementation - fields will change in future
+## 
+## This schema is a generalization of the one used for GO/AmiGO 2. See: https://github.com/geneontology/amigo/blob/master/metadata/ann-config.yaml
+## A few points are worth bearing in mind when aligning the schema:
+##
+##  * GO sometimes uses standard terms like 'source' a little differently than standards like DC
+##  * The OBAN 'subject' is always a bioentity (e.g. gene/product, complex, phylo tree node) in GO
+##  * The OBAN 'object' is always a class in GO
+##  * GO uses various ad-hoc fields such as 'secondary taxon' that would not be applicable here
+##
+##
+##
+##
 id: annotation
 schema_generating: true
-description: Associations between diseases and phenotypes
+description: Associations following OBAN model
 display_name: Annotations
 document_category: annotation
 weight: 20
@@ -13,16 +26,19 @@ boost_weights: annotation_class^2.0 annotation_class_label^1.0 bioentity^2.0 bio
 result_weights: bioentity^7.0 bioentity_name^6.0 qualifier^5.0 annotation_class^4.7 annotation_extension_json^4.5 source^4.0 taxon^3.0 evidence_type^2.5 evidence_with^2.0 panther_family^1.5 bioentity_isoform^0.5 reference^0.25
 filter_weights: source^7.0 assigned_by^6.5 aspect^6.25 evidence_type_closure^6.0 panther_family_label^5.5 qualifier^5.25 taxon_closure_label^5.0 annotation_class_label^4.5 regulates_closure_label^3.0 annotation_extension_class_closure_label^2.0
 fields:
+
   - id: id
-    description: A unique (and internal) combination of bioentity and ontology class.
-    display_name: Acc
+    description: "A unique identifier (CURIE) for the association. Optional."
+    display_name: Association id
     type: string
     property: []
+
   - id: source
-    description: "Database source."
+    description: "TBD: ALIGN GO AND DC TERMINOLOGY. Source of association. The association may be derived from multiple source, but this should be the 'outer' source, if applicable"
     display_name: Source
     type: string
     property: []
+
   - id: type
     description: "Type class."
     display_name: Type class id
@@ -33,21 +49,25 @@ fields:
 #     display_name: Type class label
 #     type: string
 #     property: []
+
   - id: date
-    description: "Date of assignment."
+    description: "Date of assignment. The association may be derived from multiple source, but this should be the 'outer' source, if applicable."
     display_name: Date
     type: string
     property: []
+
   - id: assigned_by
-    description: "Annotations assigned by group."
+    description: "TBD: ALIGN GO AND DC TERMINOLOGY. Source of association. The association may be derived from multiple source, but this should be the 'outer' source, if applicable"
     display_name: Assigned by
     type: string
     property: []
+
   - id: is_redundant_for
     description: "Rational for redundancy of annotation."
     display_name: Redundant for
     type: string
     property: []
+
 #   - id: type_closure
 #     description: "Derived from c12 + SO."
 #     display_name: Type closure
@@ -60,310 +80,205 @@ fields:
 #     type: string
 #     cardinality: multi
 #     property: []
+
   - id: taxon
-    description: "Taxonomic group."
+    description: "Taxonomic class of the subject. This is typically a CURIE of the form NCBITaxon:nnnn."
     display_name: Taxon
     type: string
     property: []
+
   - id: taxon_label
-    description: "Taxonomic group and ancestral groups."
+    description: "Label of taxon."
     display_name: Taxon
     type: string
     property: []
     searchable: true
+
   - id: taxon_closure
-    description: "Taxonomic group and ancestral groups."
+    description: "Reflexive closure of taxon. ALWAYS up SubClassOf."
     display_name: Taxon
     type: string
     cardinality: multi
     property: []
+
   - id: taxon_closure_label
-    description: "Taxonomic group and ancestral groups."
+    description: "Labels for taxon_closure."
     display_name: Taxon
     type: string
     cardinality: multi
     property: []
     searchable: true
-  - id: secondary_taxon
-    description: "Secondary taxon."
-    display_name: Secondary taxon
-    type: string
-    property: []
-  - id: secondary_taxon_label
-    description: "Secondary taxon."
-    display_name: Secondary taxon
-    type: string
-    property: []
-    searchable: true
-  - id: secondary_taxon_closure
-    description: "Secondary taxon closure."
-    display_name: Secondary taxon
+
+  - id: object_class_closure
+    description: "Reflexive closure of association_has_object. A list of CURIEs. If an individual, first traverse rdf:tpye. The default closure is subclass, but other may optionally be added depending on what type of association this is and what the class is. E.g. for expression associations, the object is an anatomy class, and the closure will include part_of"
+    display_name: Inferred object
     type: string
     cardinality: multi
     property: []
-  - id: secondary_taxon_closure_label
-    description: "Secondary taxon closure."
-    display_name: Secondary taxon
-    type: string
-    cardinality: multi
-    property: []
-    searchable: true
-  - id: isa_partof_closure
-    description: "Annotations for this term or its children (over is_a/part_of)."
+
+  - id: object_class_closure_label
+    description: "Labels for object_class_closure."
     display_name: Involved in
     type: string
     cardinality: multi
     property: []
-  - id: isa_partof_closure_label
-    description: "Annotations for this term or its children (over is_a/part_of)."
+    searchable: tru
+
+  - id: object_class_secondary_closure
+    description: "Optional. This is similar to object_class_closure, but allows for the scenario whereby a different (more inclusive, or exclusive) closure is used. The exact OPs used will depend on the association type. This would ideally be communicating from loader conf through to the client somehow"
+    display_name: Inferred object
+    type: string
+    cardinality: multi
+    property: []
+
+  - id: object_class_secondary_closure_label
+    description: "Labels for object_class_secondary_closure."
     display_name: Involved in
     type: string
     cardinality: multi
     property: []
     searchable: true
-  - id: regulates_closure
-    description: "Annotations for this term or its children (over regulates)."
-    display_name: Inferred annotation
-    type: string
-    cardinality: multi
-    property: []
-  - id: regulates_closure_label
-    description: "Annotations for this term or its children (over regulates)."
-    display_name: Inferred annotation
-    type: string
-    cardinality: multi
-    property: []
-    searchable: true
-  - id: has_participant_closure
-    description: "Closure of ids/accs over has_participant."
-    display_name: Has participant (IDs)
-    type: string
-    cardinality: multi
-    property: []
-  - id: has_participant_closure_label
-    description: "Closure of labels over has_participant."
-    display_name: Has participant
-    type: string
-    cardinality: multi
-    property: []
-    searchable: true
-#   - id: label
-#     description: Symbol or name.
-#     display_name: Label
-#     type: string
-#     property: []
-#     searchable: true
-#   - id: descriptive_name
-#     description: Full name or name.
-#     display_name: Full name
-#     type: string
-#     property: []
-#     searchable: true
-  - id: synonym
-    description: "Disease synonyms."
+
+  - id: subject_synonym
+    description: "synonyms for the entity in the association.subject field."
     display_name: Synonym
     type: string
     cardinality: multi
     property: []
-#   - id: alternate_id
-#     description: Any alternaitve id.
-#     display_name: Alt id
-#     type: string
-#     cardinality: multi
-#     property: []
-#   - id: description
-#     description: Definition.
-#     display_name: Definition
-#     type: string
-#     property: []
-#     searchable: true
-#   - id: subset
-#     description: Member of these named subsets.
-#     display_name: Subset
-#     type: string
-#     cardinality: multi
-#     property: []
-#   - id: is_obsolete
-#     description: Is this obsolete?
-#     display_name: Obsolete
-#     type: integer
-#     property: []
-#   - id: comment
-#     description: Comment.
-#     display_name: comment
-#     type: string
-# #    cardinality: multi
-#     property: []
-#     searchable: true
-#   - id: definition_xref
-#     description: DBXref for definitions.
-#     display_name: Def dbxref
-#     type: string
-#     cardinality: multi
-#     property: []
-#   - id: annotation_closure
-#     description: All terms associatied with GP.
-#     display_name: All annotations
-#     type: string
-#     cardinality: multi
-#     property: []
-#   - id: axiom
-#     description: "Each ontology entity (class or property) can be associated with multiple OWL axioms. We cache them in the index so that advanced OWL-aware clients can pull relevant information quickly. Axioms are stored in functional syntax."
-#     display_name: Axiom
-#     type: string
-#     cardinality: multi
-#     property: []
-  - id: bioentity
-    description: "Disease identifiers."
-    display_name: Disease
+
+  - id: association_subject
+    description: "The CURIE for oban:association_has_subject. May be disease, variant, gene, person, ...."
+    display_name: Assoc subject
     type: string
     property: []
-  - id: bioentity_label
-    description: "Disease identifiers."
-    display_name: Disease
+
+  - id: association_subject_label
+    description: "Label for association_subject. This will always be rdfs:label. Conventions may vary as to what goes in the label. For genes will be symbol, but we may choose to uniquify by prefixing with species"
+    display_name: Assoc subject
     type: string
     property: []
     searchable: true
-  - id: bioentity_name
-    description: "The full name of the disease."
-    display_name: Disease full name
+
+  - id: association_subject_description
+    description: "A more descriptive label or full name for association_subject. For a gene this may be the full name (as opposed to symbol)."
+    display_name: Subject description
     type: string
     property: []
     searchable: true
-  - id: bioentity_internal_id
-    description: "The bioentity ID used at the database of origin."
-    display_name: This should not be displayed
-    type: string
-    property: []
-    indexed: false
-#   - id: bioentity_alternate_label
-#     description: Alternate label.
-#     display_name: Alternate label
-#     type: string
-#     cardinality: multi
-#     property: []
-#   - id: is_negated
-#     description: Derived from column 4.
-#     display_name: Is not
-#     type: string
-#     property: []
+
   - id: qualifier
-    description: "Annotation qualifier."
+    description: "Association qualifier. TBD: NEGATION should probably be handled differently somehow"
     display_name: Qualifier
     type: string
     cardinality: multi
     property: []
-  - id: annotation_class
-    description: "Direct annotations."
-    display_name: Phenotype
+
+  - id: association_object
+    description: "The CURIE for oban:association_has_object. This is often, but not always an ontology class. E.g. for a gene-gene interaction it is an (arbitrary) member of the pair."
+    display_name: Assoc object
     type: string
     property: []
-  - id: annotation_class_label
-    description: "Direct annotations."
-    display_name: Phenotype
+
+  - id: association_object_label
+    description: "Label for association_object."
+    display_name: Assoc object
     type: string
     property: []
     searchable: true
+
   - id: aspect
     description: "Ontology aspect."
     display_name: Ontology (aspect)
     type: string
     property: []
-  - id: bioentity_isoform
-    description: "Biological isoform."
+
+  - id: association_object_isoform
+    description: "Assoc object alternate form. E.g. for a canonical protein may be isoforms. Can we generalize this? May be deleted"
     display_name: Isoform
     type: string
     property: []
+
 #   - id: bioentity_isoform_label
 #     description: ???
 #     display_name: Bioentity isoform label
 #     type: string
 #     cardinality: multi
 #     property: []
+
   - id: evidence_type
-    description: "Evidence type."
-    display_name: Evidence
+    description: "Evidence type. In Monarch we may have a graph/chain. This is always the 'outer' evidence OR a list of all evidence types used?"
+    display_name: Evidence type
     type: string
     property: []
+
   - id: evidence_type_closure
-    description: "All evidence (evidence closure) for this annotation"
+    description: "Closure for evidence_type. Always SubClassof"
     display_name: Evidence type
     type: string
     cardinality: multi
     property: []
-  - id: evidence_with
-    description: "Evidence with/from."
-    display_name: Evidence with
+
+  - id: evidence_object
+    description: "List of CURIES of all entities that form part of the evidence graph."
+    display_name: Evidence from
     type: string
     cardinality: multi
     property: []
-  - id: reference
-    description: "Database reference."
+
+  - id: citation
+    description: "citation."
     display_name: Reference
     type: string
     cardinality: multi
     property: []
-  - id: annotation_extension_class
+
+  - id: association_object_extension
     description: "Extension class for the annotation."
     display_name: Annotation extension
     type: string
     cardinality: multi
     property: []
-  - id: annotation_extension_class_label
-    description: "Extension class for the annotation."
-    display_name: Annotation extension
-    type: string
-    cardinality: multi
-    property: []
-    searchable: true
-  - id: annotation_extension_class_closure
-    description: "Extension class for the annotation."
-    display_name: Annotation extension
-    type: string
-    cardinality: multi
-    property: []
-  - id: annotation_extension_class_closure_label
+
+  - id: association_object_extension_label
     description: "Extension class for the annotation."
     display_name: Annotation extension
     type: string
     cardinality: multi
     property: []
     searchable: true
-  - id: annotation_extension_json
+
+  - id: association_object_extension_closure
+    description: "Extension class for the annotation."
+    display_name: Annotation extension
+    type: string
+    cardinality: multi
+    property: []
+
+  - id: association_object_extension_closure_label
+    description: "Extension class for the annotation."
+    display_name: Annotation extension
+    type: string
+    cardinality: multi
+    property: []
+    searchable: true
+
+  - id: association_object_extension_json
     description: "Extension class for the annotation (JSON)."
     display_name: Annotation extension
     type: string
     cardinality: multi
     property: []
-  - id: panther_family
+
+  - id: association_subject_family
     description: PANTHER families that are associated with this entity.
     display_name: PANTHER family
     type: string
     searchable: true
     property: []
-  - id: panther_family_label
+
+  - id: association_subject_family_label
     description: PANTHER families that are associated with this entity.
     display_name: PANTHER family
     type: string
     searchable: true
     property: []
-  # - id: phylo_graph
-  #   description: JSON blob form of the phylogenic tree.
-  #   display_name: This should not be displayed
-  #   type: string
-  #   property: []
-  #   indexed: false
-  ## TODO: Sleeping for now, but will re-add when the right
-  ## experimental GAFs start getting loaded as well.
-  # - id: phylo_ancestor_closure
-  #   description: All ancestors of this entity.
-  #   display_name: Phylogenic ancestors
-  #   type: string
-  #   cardinality: multi
-  #   property: []
-  # - id: phylo_descendant_closure
-  #   description: All descendants of this entity.
-  #   display_name: Phylogenic descendants
-  #   type: string
-  #   cardinality: multi
-  #   property: []
