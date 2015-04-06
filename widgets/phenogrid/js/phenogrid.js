@@ -86,7 +86,7 @@ function modelDataPointPrint(point) {
 		globalViewSize : 110,
 		reducedGlobalViewSize: 50,
 		minHeight: 310,
-		h : 578,
+		h : 578,	// [vaa12] this number could/should be eliminated.  updateAxis sets it dynamically as it should be
 		m :[ 30, 10, 10, 10 ],
 		multiOrganismCt: 10,
 		multiOrgModelLimit: 750,
@@ -141,7 +141,7 @@ function modelDataPointPrint(point) {
 		hpoDepth: 10,	// Numerical value that determines how far to go up the tree in relations.
 		hpoDirection: "out",	// String that determines what direction to go in relations.  Default is "out".
 		hpoTreeAmounts: 1,	// Allows you to decide how many HPO Trees to render.  Once a tree hits the high-level parent, it will count it as a complete tree.  Additional branchs or seperate trees count as seperate items
-							// DO NOT CHANGE UNTIL THE DISPLAY HPOTREE FUNCTIONS HAVE BEEN CHANGED. WILL WORK ON SEPERATE TREES, BUT BRANCHES MAY BE INACCURATE
+							// [vaa12] DO NOT CHANGE UNTIL THE DISPLAY HPOTREE FUNCTIONS HAVE BEEN CHANGED. WILL WORK ON SEPERATE TREES, BUT BRANCHES MAY BE INACCURATE
 		selectedSort: "Frequency",
 		targetSpeciesName : "Overview",
 		refSpecies: "Homo sapiens",
@@ -271,7 +271,7 @@ function modelDataPointPrint(point) {
 	_create: function() {
 		// must be available from js loaded in a separate file...
 		this.configoptions = configoptions;
-		/** check these */
+		// check these 
 		// important that config options (from the file) and this. options (from
 		// the initializer) come last
 		this.state = $.extend({},this.internalOptions,this.config,this.configoptions,this.options);
@@ -398,7 +398,7 @@ function modelDataPointPrint(point) {
 	},
 
 	_reDraw: function() {
-		if (this.state.phenoLength !== 0 && this.state.filteredModelDataHash.length !== 0){
+		if (this.state.phenoLength !== 0 && this.state.filteredModelData.length !== 0){
 			var displayCount = this._getYLimit();
 			this._setComparisonType();
 			this._initCanvas();
@@ -639,10 +639,10 @@ function modelDataPointPrint(point) {
 				return self._getColorForModelValue(self,self._getAxisData(colorID).species,d.value[self.state.selectedCalculation]);
 			});
 
-		var lastYId = self._returnYID(yCount - 1);
-		var lastXId = self._returnXID(xCount - 1);
-		var startYId = self._returnYID(startYIdx);
-		var startXId = self._returnXID(startXIdx);
+		var lastYId = self._returnID(this.state.yAxis,yCount - 1);
+		var lastXId = self._returnID(this.state.xAxis,xCount - 1);
+		var startYId = self._returnID(this.state.yAxis,startYIdx);
+		var startXId = self._returnID(this.state.xAxis,startXIdx);
 
 		var selectRectX = self.state.smallXScale(startXId);
 		var selectRectY = self.state.smallYScale(startYId);
@@ -721,21 +721,8 @@ function modelDataPointPrint(point) {
 	},
 
 	// Returns the ID of the value on the Y Axis based on current position provided
-	_returnYID: function(position){
-		var searchArray = this.state.yAxis.entries();
-		var results = false;
-		for (var i in searchArray){
-			if (searchArray[i][1].pos == position){
-				results = searchArray[i][0];
-				break;
-			}
-		}
-		return results;
-	},
-
-	// Returns the ID of the value on the X Axis based on current position provided
-	_returnXID: function(position){
-		var searchArray = this.state.xAxis.entries();
+	_returnID: function(hashtable,position){
+		var searchArray = hashtable.entries();
 		var results = false;
 		for (var i in searchArray){
 			if (searchArray[i][1].pos == position){
@@ -900,7 +887,8 @@ function modelDataPointPrint(point) {
 		var leftEdges = scale.range();
 		var size = scale.rangeBand();
 		var j;
-		for (j = 0; value > (leftEdges[j] + size); j++) {} // iterate until leftEdges[j]+size is past value
+		for (j = 0; value > (leftEdges[j] + size); j++) {} 
+		// iterate until leftEdges[j]+size is past value
 		return j;
 	},
 
@@ -954,7 +942,7 @@ function modelDataPointPrint(point) {
 	// given the full dataset, return a filtered dataset containing the
 	// subset of data bounded by the phenotype display count and the model display count
 	_adjustPhenotypeCount: function() {
-		//we need to adjust the display counts and indexing if there are fewer phenotypes than the default
+		// we need to adjust the display counts and indexing if there are fewer phenotypes than the default
 		if (this.state.phenoLength < this.state.phenoDisplayCount) {
 			this.state.phenoDisplayCount = this.state.phenoLength;
 		}
@@ -1012,6 +1000,10 @@ function modelDataPointPrint(point) {
 		this.state.modelListHash = new Hashtable();
 		this.state.modelDataHash = new Hashtable({hashCode: modelDataPointPrint, equals: modelDataPointEquals});
 
+		// [vaa12] determine if is wise to preload datasets for the three species and then build overview from this
+		// At time being, overview is made up of three calls, which it repeats these calls with a larger limit if you decided to view single species
+		// Might be more efficent to load those three, cache them and then make an overview dataset and cache that as well.
+		// This is also called when axis is flipped, so might need to create those cached as well (which would be very simple)
 		if (this.state.targetSpeciesName === "Overview") {
 			this._loadOverviewData();
 			this._finishOverviewLoad();
@@ -1312,7 +1304,7 @@ function modelDataPointPrint(point) {
 		return "unknown";
 	},
 
-	// Creates the currentModelData data structure
+	// Creates the filteredModelData data structure
 	_filterHashTables: function () {
 		var newFilteredModel = [];
 		var currentModelData = this.state.modelDataHash.entries();
@@ -1324,7 +1316,7 @@ function modelDataPointPrint(point) {
 				newFilteredModel.push(currentModelData[i][1]);
 			}
 		}
-		this.state.filteredModelDataHash = newFilteredModel;
+		this.state.filteredModelData = newFilteredModel;
 	},
 
 	// Filters down the axis hashtables based on what the limits are
@@ -1642,7 +1634,7 @@ function modelDataPointPrint(point) {
 
 	_addLogoImage:	 function() { 
 		var start = 0;
-		if(this.state.filteredModelDataHash.length < 30){
+		if(this.state.filteredModelData.length < 30){
 			// Magic Nums
 			start = 680;
 		} else { 
@@ -2304,7 +2296,7 @@ function modelDataPointPrint(point) {
 	 */
 	_createModelRects: function() {
 		var self = this;
-		var data = this.state.filteredModelDataHash;
+		var data = this.state.filteredModelData;
 		var axisStatus = this.state.invertAxis;
 
 		var rectTranslation = "translate(" + ((this.state.textWidth + this.state.xOffsetOver + 30) + 4) + "," + (self.state.yoffsetOver + 15)+ ")";
@@ -2518,7 +2510,7 @@ function modelDataPointPrint(point) {
 		if (this.state.targetSpeciesName == "Overview"){
 			data = this.state.modelDataHash.keys();
 		} else {
-			data = self.state.filteredModelDataHash;
+			data = self.state.filteredModelData;
 		}
 		this.state.h = (data.length * 2.5);
 
