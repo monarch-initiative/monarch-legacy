@@ -359,21 +359,6 @@ function modelDataPointPrint(point) {
 		this.state.modelDisplayCount = this.state.dataDisplayCount;
 		this.state.phenoDisplayCount = this.state.dataDisplayCount;
 
-		/*
-		 * set the owlsimFunction
-		 * there are three possibilities
-		 * 'undefined' is the basic, traditional simsearch
-		 * 'compare' goes against specific subsets genes/genoetypes
-		 * 'exomiser' calls the exomiser for the input data.
-		 * COMPARE CALL HACK - REFACTOR OUT
-		 */
-
-		if (typeof this.state.owlSimFunction === 'undefined'){
-			this.state.owlSimFunction = 'search';
-		} else if (this.state.owlSimFunction === 'compare' || this.state.owlSimFunction == 'exomiser'){
-			this.state.targetSpeciesName = "Homo sapiens";
-		} 
-
 		// original position of hpo cache and load data
 
 		this.state.phenoLength = this.state.phenotypeListHash.size();
@@ -992,6 +977,21 @@ function modelDataPointPrint(point) {
 	// given a list of phenotypes, find the top n models
 	// I may need to rename this method "getModelData". It should extract the models and reformat the data 
 	_loadData: function() {
+		/*
+		 * set the owlsimFunction
+		 * there are three possibilities
+		 * 'undefined' is the basic, traditional simsearch
+		 * 'compare' goes against specific subsets genes/genoetypes
+		 * 'exomiser' calls the exomiser for the input data.
+		 * COMPARE CALL HACK - REFACTOR OUT
+		 */
+
+		if (typeof this.state.owlSimFunction === 'undefined'){
+			this.state.owlSimFunction = 'search';
+		} else if (this.state.owlSimFunction === 'compare' || this.state.owlSimFunction == 'exomiser'){
+			this.state.targetSpeciesName = "Homo sapiens";
+		} 
+		
 		if (!this.state.hpoCacheBuilt){
 			this.state.hpoCacheHash = new Hashtable();
 			this.state.hpoCacheLabels = new Hashtable();
@@ -1011,6 +1011,7 @@ function modelDataPointPrint(point) {
 			this._finishOverviewLoad();
 		} else {
 			this._loadSpeciesData(this.state.targetSpeciesName);
+			//this._loadSpeciesData(this.state.targetSpeciesName,150);
 			this._finishLoad();
 		}
 
@@ -2204,7 +2205,7 @@ function modelDataPointPrint(point) {
 
 	_showModelData: function(d, obj) {
 		var retData, modelInfo, phenoInfo, prefix, modelLabel, phenoLabel;
-		
+
 		var yInfo = this._getAxisData(d.yID); 
 		var xInfo = this._getAxisData(d.xID);
 		var fullInfo = $.extend({},xInfo,yInfo);
