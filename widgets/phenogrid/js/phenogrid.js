@@ -2203,16 +2203,29 @@ function modelDataPointPrint(point) {
 	},
 
 	_showModelData: function(d, obj) {
-		var retData, modelInfo, phenoInfo, prefix;
-		if (this.state.invertAxis){
-			modelInfo = this._getAxisData(d.yID);
-			phenoInfo = this._getAxisData(d.xID);
+		var retData, modelInfo, phenoInfo, prefix, modelLabel, phenoLabel;
+		
+		var yInfo = this._getAxisData(d.yID); 
+		var xInfo = this._getAxisData(d.xID);
+		var fullInfo = $.extend({},xInfo,yInfo);
+		var species = fullInfo.species;
+		var taxon = fullInfo.taxon;
+
+		//[vaa12] Could be done in a more sophisticated function, but this works and removed dependancy on invertAxis
+		if (this.state.phenotypeListHash.containsKey(d.xID)){
+			phenoLabel = this.state.phenotypeListHash.get(d.xID).label;
+		} else if (this.state.phenotypeListHash.containsKey(d.yID)){
+			phenoLabel = this.state.phenotypeListHash.get(d.yID).label;
 		} else {
-			modelInfo = this._getAxisData(d.xID);
-			phenoInfo = this._getAxisData(d.yID);
+			phenoLabel = null;
 		}
-		var species = modelInfo.species;
-		var taxon = modelInfo.taxon;
+		if (this.state.modelListHash.containsKey(d.xID)){
+			modelLabel = this.state.modelListHash.get(d.xID).label;
+		} else if (this.state.modelListHash.containsKey(d.yID)){
+			modelLabel = this.state.modelListHash.get(d.yID).label;
+		} else {
+			modelLabel = null;
+		}
 
 		if (taxon !== undefined || taxon !== null || taxon !== '' || isNaN(taxon)) {
 			if (taxon.indexOf("NCBITaxon:") != -1) {
@@ -2240,10 +2253,10 @@ function modelDataPointPrint(point) {
 		// If the selected calculation isn't percentage based (aka similarity) make it a percentage
 		if (this.state.selectedCalculation != 2) {suffix = '%';}
 
-		retData = "<strong>Query: </strong> " + phenoInfo.label + formatScore(phenoInfo.IC.toFixed(2)) +
+		retData = "<strong>Query: </strong> " + phenoLabel + formatScore(fullInfo.IC.toFixed(2)) +
 			"<br/><strong>Match: </strong> " + d.b_label + formatScore(d.b_IC.toFixed(2)) +
 			"<br/><strong>Common: </strong> " + d.subsumer_label + formatScore(d.subsumer_IC.toFixed(2)) +
-			"<br/><strong>" + this._capitalizeString(modelInfo.type)+": </strong> " + modelInfo.label +
+			"<br/><strong>" + this._capitalizeString(fullInfo.type)+": </strong> " + modelLabel +
 			"<br/><strong>" + prefix + ":</strong> " + d.value[this.state.selectedCalculation].toFixed(2) + suffix +
 			"<br/><strong>Species: </strong> " + species + " (" + taxon + ")";
 		this._updateDetailSection(retData, this._getXYPos(obj));
