@@ -187,9 +187,15 @@ fields:
     property: []
     searchable: true
 
-  - id: aspect
-    description: "Ontology aspect."
-    display_name: Ontology (aspect)
+  - id: association_object_category
+    description: "Category of association.object. Examples: phenotype, function, process, location, tissue, gene. In GO this is called aspect"
+    display_name: Object type
+    type: string
+    property: []
+
+  - id: association_object_category_label
+    description: "Label for association_object_category"
+    display_name: Object type
     type: string
     property: []
 
