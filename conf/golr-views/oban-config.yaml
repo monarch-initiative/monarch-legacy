@@ -39,16 +39,17 @@ fields:
     type: string
     property: []
 
-  - id: type
-    description: "Type class."
-    display_name: Type class id
+  - id: association_subject_category
+    description: "Category of association.subject. Examples: gene, protein, disease, variant"
+    display_name: Subject type
     type: string
     property: []
-#   - id: type_label
-#     description: "GAF column 12 (type class label)"
-#     display_name: Type class label
-#     type: string
-#     property: []
+
+  - id: association_subject_category_label
+    description: "Label for association_subject_category"
+    display_name: Subject type
+    type: string
+    property: []
 
   - id: date
     description: "Date of assignment. The association may be derived from multiple source, but this should be the 'outer' source, if applicable."
