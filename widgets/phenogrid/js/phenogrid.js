@@ -550,7 +550,6 @@ function modelDataPointPrint(point) {
 		if (this.state.invertAxis){
 			this.state.xAxis = this.state.phenotypeListHash;
 			this.state.yAxis = this.state.modelListHash;
-
 		} else {
 			this.state.xAxis = this.state.modelListHash;
 			this.state.yAxis = this.state.phenotypeListHash;
@@ -583,12 +582,6 @@ function modelDataPointPrint(point) {
 		var overviewRegionSize = self.state.globalViewSize;
 		if (this.state.yAxis.size() < yCount) {
 			overviewRegionSize = self.state.reducedGlobalViewSize;
-		}
-
-		// create the legend for the modelScores
-		// [vaa12] This should be tried to move out.  No real need for it to be in this function
-		if (!this.state.invertAxis){
-			self._createModelScoresLegend();
 		}
 
 		// make it a bit bigger to ccont for widths
@@ -1012,8 +1005,8 @@ function modelDataPointPrint(point) {
 			this._loadOverviewData();
 			this._finishOverviewLoad();
 		} else {
-			//this._loadSpeciesData(this.state.targetSpeciesName);
-			this._loadSpeciesData(this.state.targetSpeciesName,20);
+			this._loadSpeciesData(this.state.targetSpeciesName);
+			//this._loadSpeciesData(this.state.targetSpeciesName,20);
 			this._finishLoad();
 		}
 
@@ -2134,7 +2127,7 @@ function modelDataPointPrint(point) {
 	},
 
 	_showModelData: function(d, obj) {
-		var retData, modelInfo, phenoInfo, prefix, modelLabel, phenoLabel;
+		var retData, prefix, modelLabel, phenoLabel;
 
 		var yInfo = this._getAxisData(d.yID); 
 		var xInfo = this._getAxisData(d.xID);
@@ -2760,8 +2753,10 @@ function modelDataPointPrint(point) {
 
 		this._createXLabels(self,mods);
 		this._createXLines();
+		//[vaa12] These now darken when mini-map is moved
 		if (!this.state.invertAxis) {
 			this._createTextScores();
+			this._createModelScoresLegend();
 		}
 		if (this.state.owlSimFunction != 'compare' && this.state.owlSimFunction != 'exomiser'){
 			this._createOverviewSpeciesLabels();
