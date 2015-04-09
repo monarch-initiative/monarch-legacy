@@ -163,7 +163,6 @@ function modelDataPointPrint(point) {
 			this.state.modelData = [];
 			this.state.modelList = [];
 			this.state.expandedHash = new Hashtable();
-			this.state.renderedEntities = new Hashtable();   // MKD
 		}
 
 		// target species name might be provided as a name or as taxon. Make sure that we translate to name
@@ -979,7 +978,8 @@ function modelDataPointPrint(point) {
 	// given a list of phenotypes, find the top n models
 	// I may need to rename this method "getModelData". It should extract the models and reformat the data 
 	_loadData: function() {
-		this.state.renderedEntities = new Hashtable();  //MKD
+
+		/*
 		 * set the owlsimFunction
 		 * there are three possibilities
 		 * 'undefined' is the basic, traditional simsearch
@@ -2043,15 +2043,6 @@ function modelDataPointPrint(point) {
 
 		// this fixes the labels that are html encoded 
 		label = this._decodeHtmlEntity(label);
-
-		// //MKD: TESTING RENDER COMPONENT		
-		// var children = self._hasChildrenForExpansion(data);
-		// var id = self._getConceptId(data);
-		// var currentData = this._getAxisData(data);
-		// var rent = new RenderEntity(id, currentData, children);
-		// rent.setUrl(this.state.serverURL);  // need to figure out a way to do this better
-
-		// this.state.renderedEntities.put(id, rent);
 
 		p.append("text")
 			.attr('x', x + 15)
