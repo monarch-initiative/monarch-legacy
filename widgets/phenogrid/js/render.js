@@ -26,9 +26,12 @@ TooltipRender.prototype = {
 		this.parent = parms.parent;
 		this.data = parms.data;
 		this.id = parms.id;
+
+		// this creates the standard information portion of the tooltip, 
 		var inf =  "<strong>" + this._capitalizeString(this.data.type) + ": </strong> " + this.entityHreflink() + "<br/>" +
 				   this._rank() + this._score() + this._ic();
 
+		// this creates the extended information for specialized tooltip info and functionality
 		// try to dynamically invoke the function that matches the data.type
 		try {
 			var func = this.data.type;			
@@ -96,13 +99,7 @@ return returnHtml;
 
 gene: function(tooltip) {
 	var returnHtml = "";	
-	// var instructions = "<br/><br/>Click button to <b>collapse</b> associated genotypes &nbsp;&nbsp;";
-	// var button = $("<button>")
-	// 				.attr("id", "thebutton")
-	// 				.attr("class", "collapsebtn")
-	// 				.attr("type", "button")
-	// 				.attr("onClick", "self._collapseGenotypes('" + this.id + "')");
-	// var h = $('<div>').append($('#thebutton').clone()).html();
+/* DISABLE THIS FOR NOW UNTIL SCIGRAPH CALL IS WORKING
 	// for gene and species mode only, show genotype link
 	if (tooltip.parent.state.targetSpeciesName != "Overview"){
 		var isExpanded = false;
@@ -125,6 +122,7 @@ gene: function(tooltip) {
 			returnHtml += "<button class=\"expandbtn\" type=\"button\" onClick=\"self._expandGenotypes('" + tooltip.id + "')\"></button>";
 		}
 	}
+*/	
 	return returnHtml;	
 },
 
