@@ -991,7 +991,7 @@ function modelDataPointPrint(point) {
 		} else if (this.state.owlSimFunction === 'compare' || this.state.owlSimFunction == 'exomiser'){
 			this.state.targetSpeciesName = "Homo sapiens";
 		} 
-		
+
 		if (!this.state.hpoCacheBuilt){
 			this.state.hpoCacheHash = new Hashtable();
 			this.state.hpoCacheLabels = new Hashtable();
@@ -1010,8 +1010,8 @@ function modelDataPointPrint(point) {
 			this._loadOverviewData();
 			this._finishOverviewLoad();
 		} else {
-			this._loadSpeciesData(this.state.targetSpeciesName);
-			//this._loadSpeciesData(this.state.targetSpeciesName,150);
+			//this._loadSpeciesData(this.state.targetSpeciesName);
+			this._loadSpeciesData(this.state.targetSpeciesName,20);
 			this._finishLoad();
 		}
 
