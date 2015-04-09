@@ -3479,28 +3479,28 @@ function modelDataPointPrint(point) {
 			var iPosition = 1;
 			// rebuild the model list with genotypes
 			for (var idx in compareScores.b) {
-			var newGtLabel = genotypeLabelHashtable.get(compareScores.b[idx].id); 
-			var gt = {
-			parent: modelInfo.id,
-			label: (newGtLabel !== null?newGtLabel:compareScores.b[idx].label), // if label was null, then use previous fixed label
-			score: compareScores.b[idx].score.score, 
-			species: modelInfo.d.species,
-			rank: compareScores.b[idx].score.rank,
-			type: "genotype",
-			taxon: compareScores.b[idx].taxon.id,
-			pos: (modelInfo.d.pos + iPosition),
-			count: modelInfo.d.count,
-			sum: modelInfo.d.sum
+				var newGtLabel = genotypeLabelHashtable.get(compareScores.b[idx].id); 
+				var gt = {
+				parent: modelInfo.id,
+				label: (newGtLabel !== null?newGtLabel:compareScores.b[idx].label), // if label was null, then use previous fixed label
+				score: compareScores.b[idx].score.score, 
+				species: modelInfo.d.species,
+				rank: compareScores.b[idx].score.rank,
+				type: "genotype",
+				taxon: compareScores.b[idx].taxon.id,
+				pos: (modelInfo.d.pos + iPosition),
+				count: modelInfo.d.count,
+				sum: modelInfo.d.sum
 			};
 
-			genoTypeList.put( this._getConceptId(compareScores.b[idx].id), gt);
+				genoTypeList.put( this._getConceptId(compareScores.b[idx].id), gt);
 
-			// Hack: need to fix the label because genotypes have IDs as labels
-			compareScores.b[idx].label = genotypeLabelHashtable.get(compareScores.b[idx].id);
+				// Hack: need to fix the label because genotypes have IDs as labels
+				compareScores.b[idx].label = genotypeLabelHashtable.get(compareScores.b[idx].id);
 
-			// load these into model data
-			this._loadDataForModel(compareScores.b[idx]);
-			iPosition++;
+				// load these into model data
+				this._loadDataForModel(compareScores.b[idx]);
+				iPosition++;
 			}
 
 			// if the cache was originally null, then add 
