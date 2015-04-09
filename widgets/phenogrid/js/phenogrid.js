@@ -1925,7 +1925,7 @@ function modelDataPointPrint(point) {
 	// Based on the ID, it pulls the label from hpoCacheLabels and creates a hyperlink that allows the user to go to the respective phenotype page
 	_buildHPOHyperLink: function(id){
 		var label = this.state.hpoCacheLabels.get(id);
-		var link = "<a href=\"" + this.state.serverURL + "/Phenotype/" + id + "\" target=\"_blank\">" + label + "</a>";
+		var link = "<a href=\"" + this.state.serverURL + "/phenotype/" + id + "\" target=\"_blank\">" + label + "</a>";
 		return link;
 	},
 
