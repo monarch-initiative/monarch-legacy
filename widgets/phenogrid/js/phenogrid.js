@@ -397,13 +397,14 @@ function modelDataPointPrint(point) {
 				.attr("height", displayCount * this.state.widthOfSingleModel);
 			var rectHeight = this._createRectangularContainers();
 
+			this._addPhenogridControls();
+
 			this._createXRegion();
 			this._createYRegion();
 			this._updateAxes();
 
 			this._addGradients();
-			this._addPhenogridControls();
-
+			
 			this._createGridlines();
 			this._createModelRects();
 			this._highlightSpecies();	
@@ -1008,6 +1009,8 @@ function modelDataPointPrint(point) {
 			this._finishOverviewLoad();
 		} else {
 			this._loadSpeciesData(this.state.targetSpeciesName);
+			// [vaa12] line below can be used to force a different limit.  It can be loaded above the API default (100) but has a
+			// noticable time delay when trying to load.  There may be a conflict at the API level when trying to go higher than default
 			//this._loadSpeciesData(this.state.targetSpeciesName,20);
 			this._finishLoad();
 		}
