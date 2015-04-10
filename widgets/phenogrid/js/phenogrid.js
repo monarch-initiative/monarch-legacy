@@ -398,16 +398,16 @@ function modelDataPointPrint(point) {
 			var rectHeight = this._createRectangularContainers();
 
 			this._createXRegion();
-			this._addGradients();
-
-			this._addPhenogridControls();
-
+			this._createYRegion();
 			this._updateAxes();
+
+			this._addGradients();
+			this._addPhenogridControls();
 
 			this._createGridlines();
 			this._createModelRects();
-			this._highlightSpecies();
-			this._createYRegion();
+			this._highlightSpecies();	
+			
 			this._createOverviewSection();
 
 			var height = rectHeight + 40;
@@ -845,6 +845,8 @@ function modelDataPointPrint(point) {
 	},
 
 	// Returns an sorted array of IDs from an arrayed Hashtable, but meant for non-overview display based off pos
+	// [vaa12] the reason there are two different ones is how phenogrid prefers displays. _getSortedID can display items that have a pos
+	// between 7-37 and keep them numbered as such, where in strict, it will reset 7 to 0, so they will be numbered 0-30
 	_getSortedIDList: function(hashArray){
 		var resultArray = [];
 		for (var j in hashArray) {
@@ -2486,9 +2488,9 @@ function modelDataPointPrint(point) {
 		this._clearXLabels();
 
 		this._createXRegion();
-		this._createModelRects();
-		this._highlightSpecies();
 		this._createYRegion();
+		this._highlightSpecies();
+		this._createModelRects();
 
 		/*
 		 * this must be initialized here after the _createModelLabels, or the mouse events don't get
