@@ -51,6 +51,30 @@ fields:
     type: string
     property: []
 
+  - id: association_relation
+    description: "A relationship type that connects the subject with object. TODO: check for correspondence in OBAN"
+    display_name: Relationship
+    type: string
+    property: []
+
+  - id: association_relation_label
+    description: "Label for association_relation"
+    display_name: Relationship
+    type: string
+    property: []
+
+  - id: association_relation_closure
+    description: "SubPropertyOf reflexive closure for association_relation"
+    display_name: Inferred relationship
+    type: string
+    property: []
+
+  - id: association_relation_closure_label
+    description: "labels for association_relation_closure"
+    display_name: Inferred relationship
+    type: string
+    property: []
+
   - id: date
     description: "Date of assignment. The association may be derived from multiple source, but this should be the 'outer' source, if applicable."
     display_name: Date
