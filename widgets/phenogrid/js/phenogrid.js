@@ -397,17 +397,18 @@ function modelDataPointPrint(point) {
 				.attr("height", displayCount * this.state.widthOfSingleModel);
 			var rectHeight = this._createRectangularContainers();
 
-			this._createXRegion();
-			this._addGradients();
-
 			this._addPhenogridControls();
 
+			this._createXRegion();
+			this._createYRegion();
 			this._updateAxes();
 
+			this._addGradients();
+			
 			this._createGridlines();
 			this._createModelRects();
-			this._highlightSpecies();
-			this._createYRegion();
+			this._highlightSpecies();	
+			
 			this._createOverviewSection();
 
 			var height = rectHeight + 40;
@@ -845,6 +846,8 @@ function modelDataPointPrint(point) {
 	},
 
 	// Returns an sorted array of IDs from an arrayed Hashtable, but meant for non-overview display based off pos
+	// [vaa12] the reason there are two different ones is how phenogrid prefers displays. _getSortedID can display items that have a pos
+	// between 7-37 and keep them numbered as such, where in strict, it will reset 7 to 0, so they will be numbered 0-30
 	_getSortedIDList: function(hashArray){
 		var resultArray = [];
 		for (var j in hashArray) {
@@ -1006,6 +1009,8 @@ function modelDataPointPrint(point) {
 			this._finishOverviewLoad();
 		} else {
 			this._loadSpeciesData(this.state.targetSpeciesName);
+			// [vaa12] line below can be used to force a different limit.  It can be loaded above the API default (100) but has a
+			// noticable time delay when trying to load.  There may be a conflict at the API level when trying to go higher than default
 			//this._loadSpeciesData(this.state.targetSpeciesName,20);
 			this._finishLoad();
 		}
@@ -2486,9 +2491,9 @@ function modelDataPointPrint(point) {
 		this._clearXLabels();
 
 		this._createXRegion();
-		this._createModelRects();
-		this._highlightSpecies();
 		this._createYRegion();
+		this._highlightSpecies();
+		this._createModelRects();
 
 		/*
 		 * this must be initialized here after the _createModelLabels, or the mouse events don't get
