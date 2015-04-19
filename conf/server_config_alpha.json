@@ -1,0 +1,16 @@
+{
+    "type" : "alpha",
+    
+    "scigraph_url" : "http://geoffrey.crbs.ucsd.edu:9000/scigraph/",
+    
+    "scigraph_data_url" : "http://duckworth.crbs.ucsd.edu:9000/scigraph/",
+
+    "annotate_services_url" : "http://beta.neuinfo.org/services/v1/annotate/",
+    
+    "autocomplete_url" : "http://beta.neuinfo.org/services/v1/vocabulary.json",
+
+    "owlsim_services_url" : "http://owlsim.crbs.ucsd.edu/",
+    
+    "analytics_id" : ""
+    
+}
