@@ -86,7 +86,7 @@ conf/monarch-context.jsonld: conf/monarch-context.yaml
 solr-schema: ./conf/golr-views/*-config.yaml
 	$(OWLTOOLS_BIN) --solr-config $? --solr-schema-dump | ./scripts/remove-schema-cruft.pl > ./conf/schema.xml
 
-.PHONY: schema-as-json
+.PHONY: golr-conf-as-json
 golr-conf-as-json:
 	./scripts/confyaml2json.pl -i ./conf/golr-views > ./conf/golr-conf.json
 
