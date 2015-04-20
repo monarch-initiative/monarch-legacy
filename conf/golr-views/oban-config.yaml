@@ -16,11 +16,11 @@
 ##
 ##
 ##
-id: annotation
+id: generic_association
 schema_generating: true
 description: Associations following OBAN model
 display_name: Annotations
-document_category: annotation
+document_category: generic_association
 weight: 20
 
 ## For search
@@ -40,43 +40,87 @@ fields:
     type: string
     property: []
 
+  - id: subject_synonym
+    description: "synonyms for the entity in the association.subject field."
+    display_name: Synonym
+    type: string
+    cardinality: multi
+    property: []
+
+  - id: subject
+    description: "The CURIE for oban:association_has_subject. May be disease, variant, gene, person, ...."
+    display_name: Assoc subject
+    type: string
+    property: []
+
+  - id: subject_label
+    description: "Label for association_subject. This will always be rdfs:label. Conventions may vary as to what goes in the label. For genes will be symbol, but we may choose to uniquify by prefixing with species"
+    display_name: Assoc subject
+    type: string
+    property: []
+    searchable: true
+
+  - id: subject_closure
+    description: "Reflexive closure of association_has_subject. A list of CURIEs. If an individual, first traverse rdf:tpye. The default closure is subclass, but other may optionally be added depending on what type of association this is and what the class is. E.g. for expression associations, the object is an anatomy class, and the closure will include part_of"
+    display_name: Inferred subject
+    type: string
+    cardinality: multi
+    property: []
+
+  - id: subject_closure_label
+    description: "Labels for subject_closure."
+    display_name: Involved in
+    type: string
+    cardinality: multi
+    property: []
+    searchable: true
+
+  - id: subject_category
+    description: "Category of association.subject. Examples: gene, protein, disease, variant"
+    display_name: Subject type
+    type: string
+    property: []
+
+  - id: subject_category_label
+    description: "Label for association_subject_category"
+    display_name: Subject type
+    type: string
+    property: []
+
+
+  - id: subject_description
+    description: "A more descriptive label or full name for association_subject. For a gene this may be the full name (as opposed to symbol)."
+    display_name: Subject description
+    type: string
+    property: []
+    searchable: true
+
   - id: source
     description: "TBD: ALIGN GO AND DC TERMINOLOGY. Source of association. The association may be derived from multiple source, but this should be the 'outer' source, if applicable"
     display_name: Source
     type: string
     property: []
 
-  - id: association_subject_category
-    description: "Category of association.subject. Examples: gene, protein, disease, variant"
-    display_name: Subject type
-    type: string
-    property: []
 
-  - id: association_subject_category_label
-    description: "Label for association_subject_category"
-    display_name: Subject type
-    type: string
-    property: []
-
-  - id: association_relation
+  - id: relation
     description: "A relationship type that connects the subject with object. TODO: check for correspondence in OBAN"
     display_name: Relationship
     type: string
     property: []
 
-  - id: association_relation_label
+  - id: relation_label
     description: "Label for association_relation"
     display_name: Relationship
     type: string
     property: []
 
-  - id: association_relation_closure
+  - id: relation_closure
     description: "SubPropertyOf reflexive closure for association_relation"
     display_name: Inferred relationship
     type: string
     property: []
 
-  - id: association_relation_closure_label
+  - id: relation_closure_label
     description: "labels for association_relation_closure"
     display_name: Inferred relationship
     type: string
@@ -171,47 +215,6 @@ fields:
     property: []
     searchable: true
 
-  - id: subject_synonym
-    description: "synonyms for the entity in the association.subject field."
-    display_name: Synonym
-    type: string
-    cardinality: multi
-    property: []
-
-  - id: subject
-    description: "The CURIE for oban:association_has_subject. May be disease, variant, gene, person, ...."
-    display_name: Assoc subject
-    type: string
-    property: []
-
-  - id: subject_label
-    description: "Label for association_subject. This will always be rdfs:label. Conventions may vary as to what goes in the label. For genes will be symbol, but we may choose to uniquify by prefixing with species"
-    display_name: Assoc subject
-    type: string
-    property: []
-    searchable: true
-
-  - id: subject_closure
-    description: "Reflexive closure of association_has_subject. A list of CURIEs. If an individual, first traverse rdf:tpye. The default closure is subclass, but other may optionally be added depending on what type of association this is and what the class is. E.g. for expression associations, the object is an anatomy class, and the closure will include part_of"
-    display_name: Inferred subject
-    type: string
-    cardinality: multi
-    property: []
-
-  - id: subject_closure_label
-    description: "Labels for subject_closure."
-    display_name: Involved in
-    type: string
-    cardinality: multi
-    property: []
-    searchable: true
-
-  - id: association_subject_description
-    description: "A more descriptive label or full name for association_subject. For a gene this may be the full name (as opposed to symbol)."
-    display_name: Subject description
-    type: string
-    property: []
-    searchable: true
 
   - id: qualifier
     description: "Association qualifier. TBD: NEGATION should probably be handled differently somehow"
@@ -248,19 +251,19 @@ fields:
     property: []
     searchable: true
 
-  - id: association_object_category
+  - id: object_category
     description: "Category of association.object. Examples: phenotype, function, process, location, tissue, gene. In GO this is called aspect"
     display_name: Object type
     type: string
     property: []
 
-  - id: association_object_category_label
+  - id: object_category_label
     description: "Label for association_object_category"
     display_name: Object type
     type: string
     property: []
 
-  - id: association_object_isoform
+  - id: object_isoform
     description: "Assoc object alternate form. E.g. for a canonical protein may be isoforms. Can we generalize this? May be deleted"
     display_name: Isoform
     type: string
@@ -321,29 +324,14 @@ fields:
     cardinality: multi
     property: []
 
-  - id: association_object_extension
+  - id: object_extension
     description: "Extension class for the annotation."
     display_name: Annotation extension
     type: string
     cardinality: multi
     property: []
 
-  - id: association_object_extension_label
-    description: "Extension class for the annotation."
-    display_name: Annotation extension
-    type: string
-    cardinality: multi
-    property: []
-    searchable: true
-
-  - id: association_object_extension_closure
-    description: "Extension class for the annotation."
-    display_name: Annotation extension
-    type: string
-    cardinality: multi
-    property: []
-
-  - id: association_object_extension_closure_label
+  - id: object_extension_label
     description: "Extension class for the annotation."
     display_name: Annotation extension
     type: string
@@ -351,21 +339,36 @@ fields:
     property: []
     searchable: true
 
-  - id: association_object_extension_json
+  - id: object_extension_closure
+    description: "Extension class for the annotation."
+    display_name: Annotation extension
+    type: string
+    cardinality: multi
+    property: []
+
+  - id: object_extension_closure_label
+    description: "Extension class for the annotation."
+    display_name: Annotation extension
+    type: string
+    cardinality: multi
+    property: []
+    searchable: true
+
+  - id: object_extension_json
     description: "Extension class for the annotation (JSON)."
     display_name: Annotation extension
     type: string
     cardinality: multi
     property: []
 
-  - id: association_subject_family
+  - id: subject_family
     description: PANTHER families that are associated with this entity.
     display_name: PANTHER family
     type: string
     searchable: true
     property: []
 
-  - id: association_subject_family_label
+  - id: subject_family_label
     description: PANTHER families that are associated with this entity.
     display_name: PANTHER family
     type: string
