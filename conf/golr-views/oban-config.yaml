@@ -32,6 +32,8 @@ result_weights: subject^7.0 evidence^6.0 object^4.7
 ## Ordering of facets, vertical
 filter_weights: subject_closure_label^7.0 evidence_closure_label^6.0 object_closure_label^4.5
 
+## SOLR FIELD DEFINITIONS
+
 fields:
 
   - id: id
@@ -40,12 +42,7 @@ fields:
     type: string
     property: []
 
-  - id: subject_synonym
-    description: "synonyms for the entity in the association.subject field."
-    display_name: Synonym
-    type: string
-    cardinality: multi
-    property: []
+## SUBJECT
 
   - id: subject
     description: "The CURIE for oban:association_has_subject. May be disease, variant, gene, person, ...."
@@ -95,12 +92,57 @@ fields:
     property: []
     searchable: true
 
-  - id: source
-    description: "TBD: ALIGN GO AND DC TERMINOLOGY. Source of association. The association may be derived from multiple source, but this should be the 'outer' source, if applicable"
-    display_name: Source
+  - id: subject_synonym
+    description: "synonyms for the entity in the association.subject field."
+    display_name: Synonym
+    type: string
+    cardinality: multi
+    property: []
+
+  - id: subject_taxon
+    description: "Taxonomic class of the subject. This is typically a CURIE of the form NCBITaxon:nnnn."
+    display_name: Taxon
     type: string
     property: []
 
+  - id: subject_taxon_label
+    description: "Label of taxon."
+    display_name: Taxon
+    type: string
+    property: []
+    searchable: true
+
+  - id: subject_taxon_closure
+    description: "Reflexive closure of taxon. ALWAYS up SubClassOf."
+    display_name: Taxon
+    type: string
+    cardinality: multi
+    property: []
+
+  - id: subject_taxon_closure_label
+    description: "Labels for taxon_closure."
+    display_name: Taxon
+    type: string
+    cardinality: multi
+    property: []
+    searchable: true
+
+
+  - id: subject_family
+    description: PANTHER families that are associated with this entity.
+    display_name: PANTHER family
+    type: string
+    searchable: true
+    property: []
+
+  - id: subject_family_label
+    description: PANTHER families that are associated with this entity.
+    display_name: PANTHER family
+    type: string
+    searchable: true
+    property: []
+
+## RELATIONSHIP BETWEEN SUBJECT AND OBJECT
 
   - id: relation
     description: "A relationship type that connects the subject with object. TODO: check for correspondence in OBAN"
@@ -126,102 +168,14 @@ fields:
     type: string
     property: []
 
-  - id: date
-    description: "Date of assignment. The association may be derived from multiple source, but this should be the 'outer' source, if applicable."
-    display_name: Date
-    type: string
-    property: []
-
-  - id: assigned_by
-    description: "TBD: ALIGN GO AND DC TERMINOLOGY. Source of association. The association may be derived from multiple source, but this should be the 'outer' source, if applicable"
-    display_name: Assigned by
-    type: string
-    property: []
-
-  - id: is_redundant_for
-    description: "Rational for redundancy of annotation."
-    display_name: Redundant for
-    type: string
-    property: []
-
-#   - id: type_closure
-#     description: "Derived from c12 + SO."
-#     display_name: Type closure
-#     type: string
-#     cardinality: multi
-#     property: []
-#   - id: type_closure_label
-#     description: "Derived from c12 + SO."
-#     display_name: Type label closure
-#     type: string
-#     cardinality: multi
-#     property: []
-
-  - id: taxon
-    description: "Taxonomic class of the subject. This is typically a CURIE of the form NCBITaxon:nnnn."
-    display_name: Taxon
-    type: string
-    property: []
-
-  - id: taxon_label
-    description: "Label of taxon."
-    display_name: Taxon
-    type: string
-    property: []
-    searchable: true
-
-  - id: taxon_closure
-    description: "Reflexive closure of taxon. ALWAYS up SubClassOf."
-    display_name: Taxon
-    type: string
-    cardinality: multi
-    property: []
-
-  - id: taxon_closure_label
-    description: "Labels for taxon_closure."
-    display_name: Taxon
-    type: string
-    cardinality: multi
-    property: []
-    searchable: true
-
-  - id: object_class_closure
-    description: "Reflexive closure of association_has_object. A list of CURIEs. If an individual, first traverse rdf:tpye. The default closure is subclass, but other may optionally be added depending on what type of association this is and what the class is. E.g. for expression associations, the object is an anatomy class, and the closure will include part_of"
-    display_name: Inferred object
-    type: string
-    cardinality: multi
-    property: []
-
-  - id: object_class_closure_label
-    description: "Labels for object_class_closure."
-    display_name: Involved in
-    type: string
-    cardinality: multi
-    property: []
-    searchable: tru
-
-  - id: object_class_secondary_closure
-    description: "Optional. This is similar to object_class_closure, but allows for the scenario whereby a different (more inclusive, or exclusive) closure is used. The exact OPs used will depend on the association type. This would ideally be communicating from loader conf through to the client somehow"
-    display_name: Inferred object
-    type: string
-    cardinality: multi
-    property: []
-
-  - id: object_class_secondary_closure_label
-    description: "Labels for object_class_secondary_closure."
-    display_name: Involved in
-    type: string
-    cardinality: multi
-    property: []
-    searchable: true
-
-
   - id: qualifier
     description: "Association qualifier. TBD: NEGATION should probably be handled differently somehow"
     display_name: Qualifier
     type: string
     cardinality: multi
     property: []
+
+## OBJECT
 
   - id: object
     description: "The CURIE for oban:association_has_object. This is often, but not always an ontology class. E.g. for a gene-gene interaction it is an (arbitrary) member of the pair."
@@ -268,6 +222,117 @@ fields:
     display_name: Isoform
     type: string
     property: []
+
+  - id: object_class_closure
+    description: "Reflexive closure of association_has_object. A list of CURIEs. If an individual, first traverse rdf:tpye. The default closure is subclass, but other may optionally be added depending on what type of association this is and what the class is. E.g. for expression associations, the object is an anatomy class, and the closure will include part_of"
+    display_name: Inferred object
+    type: string
+    cardinality: multi
+    property: []
+
+  - id: object_class_closure_label
+    description: "Labels for object_class_closure."
+    display_name: Involved in
+    type: string
+    cardinality: multi
+    property: []
+    searchable: tru
+
+  - id: object_class_secondary_closure
+    description: "Optional. This is similar to object_class_closure, but allows for the scenario whereby a different (more inclusive, or exclusive) closure is used. The exact OPs used will depend on the association type. This would ideally be communicating from loader conf through to the client somehow"
+    display_name: Inferred object
+    type: string
+    cardinality: multi
+    property: []
+
+  - id: object_class_secondary_closure_label
+    description: "Labels for object_class_secondary_closure."
+    display_name: Involved in
+    type: string
+    cardinality: multi
+    property: []
+    searchable: true
+
+  - id: object_extension
+    description: "Extension class for the annotation."
+    display_name: Annotation extension
+    type: string
+    cardinality: multi
+    property: []
+
+  - id: object_extension_label
+    description: "Extension class for the annotation."
+    display_name: Annotation extension
+    type: string
+    cardinality: multi
+    property: []
+    searchable: true
+
+  - id: object_extension_closure
+    description: "Extension class for the annotation."
+    display_name: Annotation extension
+    type: string
+    cardinality: multi
+    property: []
+
+  - id: object_extension_closure_label
+    description: "Extension class for the annotation."
+    display_name: Annotation extension
+    type: string
+    cardinality: multi
+    property: []
+    searchable: true
+
+  - id: object_extension_json
+    description: "Extension class for the annotation (JSON)."
+    display_name: Annotation extension
+    type: string
+    cardinality: multi
+    property: []
+
+## ASSOCIATION-LEVEL INFORMATION
+
+
+  - id: source
+    description: "TBD: ALIGN GO AND DC TERMINOLOGY. Source of association. The association may be derived from multiple source, but this should be the 'outer' source, if applicable"
+    display_name: Source
+    type: string
+    property: []
+
+  - id: date
+    description: "Date of assignment. The association may be derived from multiple source, but this should be the 'outer' source, if applicable."
+    display_name: Date
+    type: string
+    property: []
+
+  - id: assigned_by
+    description: "TBD: ALIGN GO AND DC TERMINOLOGY. Source of association. The association may be derived from multiple source, but this should be the 'outer' source, if applicable"
+    display_name: Assigned by
+    type: string
+    property: []
+
+  - id: is_redundant_for
+    description: "Rational for redundancy of annotation."
+    display_name: Redundant for
+    type: string
+    property: []
+
+#   - id: type_closure
+#     description: "Derived from c12 + SO."
+#     display_name: Type closure
+#     type: string
+#     cardinality: multi
+#     property: []
+#   - id: type_closure_label
+#     description: "Derived from c12 + SO."
+#     display_name: Type label closure
+#     type: string
+#     cardinality: multi
+#     property: []
+
+
+
+
 
 #   - id: bioentity_isoform_label
 #     description: ???
@@ -324,53 +389,3 @@ fields:
     cardinality: multi
     property: []
 
-  - id: object_extension
-    description: "Extension class for the annotation."
-    display_name: Annotation extension
-    type: string
-    cardinality: multi
-    property: []
-
-  - id: object_extension_label
-    description: "Extension class for the annotation."
-    display_name: Annotation extension
-    type: string
-    cardinality: multi
-    property: []
-    searchable: true
-
-  - id: object_extension_closure
-    description: "Extension class for the annotation."
-    display_name: Annotation extension
-    type: string
-    cardinality: multi
-    property: []
-
-  - id: object_extension_closure_label
-    description: "Extension class for the annotation."
-    display_name: Annotation extension
-    type: string
-    cardinality: multi
-    property: []
-    searchable: true
-
-  - id: object_extension_json
-    description: "Extension class for the annotation (JSON)."
-    display_name: Annotation extension
-    type: string
-    cardinality: multi
-    property: []
-
-  - id: subject_family
-    description: PANTHER families that are associated with this entity.
-    display_name: PANTHER family
-    type: string
-    searchable: true
-    property: []
-
-  - id: subject_family_label
-    description: PANTHER families that are associated with this entity.
-    display_name: PANTHER family
-    type: string
-    searchable: true
-    property: []
