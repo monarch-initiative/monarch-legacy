@@ -3,7 +3,7 @@ function getTableFromSolr(id){
     id = id.replace(":","_");
     // Conf.
     var gconf = new bbop.golr.conf(getConf());
-    var srv = 'http://geoffrey.crbs.ucsd.edu:8080/solr/golr/';
+    var srv = global_solr_url;
     var sd = new amigo.data.server();
     var defs = new amigo.data.definitions();
     var handler = new amigo.handler();
