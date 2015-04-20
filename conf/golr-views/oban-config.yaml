@@ -16,11 +16,11 @@
 ##
 ##
 ##
-id: annotation
+id: generic_association
 schema_generating: true
 description: Associations following OBAN model
 display_name: Annotations
-document_category: annotation
+document_category: generic_association
 weight: 20
 
 ## For search
