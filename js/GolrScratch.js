@@ -1,6 +1,5 @@
 //Some documentation here
 function getTableFromSolr(id){
-    id = id.replace(":","_");
     // Conf.
     var gconf = new bbop.golr.conf(global_golr_conf);
     var srv = global_solr_url;
