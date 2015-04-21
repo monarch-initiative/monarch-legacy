@@ -24,10 +24,10 @@ document_category: generic_association
 weight: 20
 
 ## For search
-boost_weights: subject_class^2.0 subject_class_label^1.0 object^2.0 object_label^1.0
+boost_weights: subject^2.0 subject_label^1.0 object^2.0 object_label^1.0
 
 ## Results table, horizontal
-result_weights: subject^7.0 evidence^6.0 object^4.7
+result_weights: subject^7.0 evidence^6.0 object^4.0
 
 ## Ordering of facets, vertical
 filter_weights: subject_closure_label^7.0 evidence_closure_label^6.0 object_closure_label^4.5
@@ -46,27 +46,27 @@ fields:
 
   - id: subject
     description: "The CURIE for oban:association_has_subject. May be disease, variant, gene, person, ...."
-    display_name: Assoc subject
+    display_name: Subject
     type: string
     property: []
 
   - id: subject_label
     description: "Label for association_subject. This will always be rdfs:label. Conventions may vary as to what goes in the label. For genes will be symbol, but we may choose to uniquify by prefixing with species"
-    display_name: Assoc subject
+    display_name: Subject
     type: string
     property: []
     searchable: true
 
   - id: subject_closure
     description: "Reflexive closure of association_has_subject. A list of CURIEs. If an individual, first traverse rdf:tpye. The default closure is subclass, but other may optionally be added depending on what type of association this is and what the class is. E.g. for expression associations, the object is an anatomy class, and the closure will include part_of"
-    display_name: Inferred subject
+    display_name: Subject (Inferred)
     type: string
     cardinality: multi
     property: []
 
   - id: subject_closure_label
     description: "Labels for subject_closure."
-    display_name: Involved in
+    display_name: Subject (Inferred)
     type: string
     cardinality: multi
     property: []
@@ -74,13 +74,13 @@ fields:
 
   - id: subject_category
     description: "Category of association.subject. Examples: gene, protein, disease, variant"
-    display_name: Subject type
+    display_name: Subject category
     type: string
     property: []
 
   - id: subject_category_label
     description: "Label for association_subject_category"
-    display_name: Subject type
+    display_name: Subject category
     type: string
     property: []
 
@@ -179,27 +179,27 @@ fields:
 
   - id: object
     description: "The CURIE for oban:association_has_object. This is often, but not always an ontology class. E.g. for a gene-gene interaction it is an (arbitrary) member of the pair."
-    display_name: Assoc object
+    display_name: Object
     type: string
     property: []
 
   - id: object_label
     description: "Label for association_object."
-    display_name: Assoc object
+    display_name: Object
     type: string
     property: []
     searchable: true
 
   - id: object_closure
     description: "Reflexive closure of association_has_object. A list of CURIEs. If an individual, first traverse rdf:tpye. The default closure is subclass, but other may optionally be added depending on what type of association this is and what the class is. E.g. for expression associations, the object is an anatomy class, and the closure will include part_of"
-    display_name: Inferred object
+    display_name: Object (Inferred)
     type: string
     cardinality: multi
     property: []
 
   - id: object_closure_label
     description: "Labels for object_class_closure."
-    display_name: Involved in
+    display_name: Object (Inferred)
     type: string
     cardinality: multi
     property: []
