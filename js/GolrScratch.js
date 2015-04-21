@@ -1,5 +1,10 @@
 //Some documentation here
-function getTableFromSolr(id){
+function getTableFromSolr(id, golr_field){
+
+    if (golr_field == null) {
+        golr_field = 'object_closure';
+    }
+
     // Conf.
     var gconf = new bbop.golr.conf(global_golr_conf);
     var srv = global_solr_url;
@@ -14,7 +19,7 @@ function getTableFromSolr(id){
 
     srch.set_personality('generic_association');
     //srch.add_query_filter('document_category', 'annotation', ['*']);
-    srch.add_query_filter('object_closure', id, ['*']);
+    srch.add_query_filter(golr_field, id, ['*']);
     
     // Add filters.
     var f_opts = {
@@ -83,9 +88,9 @@ function getOntologyBrowser(id){
 
 function LaunchEverything(){
   
-    if( phenotypeID ){ // globally declared from webapp.js
+    if( queryID ){ // globally declared from webapp.js
     
-     getTableFromSolr(phenotypeID);
-     getOntologyBrowser(phenotypeID);
+     getTableFromSolr(queryID);
+     getOntologyBrowser(queryID);
     }
 }
