@@ -39,7 +39,7 @@ fields:
   - id: id
     description: "A unique identifier (CURIE) for the association. Optional."
     display_name: Association id
-    type: string
+    type: uuid 
     property: []
 
 ## SUBJECT
