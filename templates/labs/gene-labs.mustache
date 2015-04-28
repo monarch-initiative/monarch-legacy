@@ -1,0 +1,112 @@
+    {{{includes.navbar}}}
+    <div class="monarch-container">
+        <div class="content">
+            <div class="wrapperforfooter">
+            <div class="jumbotron monarch-phenotype-light">
+                <div id="description">
+                    {{#alerts}}
+                    <div class="alert">
+                      {{{.}}}
+                    </div>
+                    {{/alerts}}
+                    <img id="monarch-logo" class="downloadline" src="/image/logo.png"/>
+                    <h1 class="downloadline">Gene: {{label}}</h1>
+                    <a href="{{{download.json}}}" class="btn btn-default downloadline downloadline-left monarch-phenotype-dark">JSON</a>
+                    <a class="downloadline btn btn-large btn-default btn-monarch-main monarch-feedback-dark"
+                            href="mailto:info@monarchinitiative.org">Your feedback welcome!</a>
+                    <p>
+                    {{#hasDef}}
+                    {{definitions}}<br/>
+                    {{/hasDef}}
+                    </p>
+                </div>
+                <div id="categories">
+                    <a href="#overview"><div id="initialtab" class="tab contenttab">Overview</div></a>
+                    <div class="tabcontainer">
+                        <div class="tabhover">Stuff loaded from Golr</div>
+                        <a href="#mainTable"><div class="tab contenttab">Gene-Golr</div></a>
+                    </div>
+                </div>
+            </div>
+            <div id="complete-info">
+                <div id="overview" class="first category">
+                    <h3>IDs</h3>
+                        <div class="ids">
+                            <b>URI:</b> <a href="{{{url}}}">{{{url}}}</a>
+                        </div>
+                        {{#hasAka}}
+                            <div class="ids">
+                                <b>AKA:</b>
+                                {{aka}}
+                            </div>
+                        {{/hasAka}}
+                        {{#hasXrefs}}
+                            <div class="ids">
+                                <b>xref IDs:</b> {{{xrefs}}}
+                            </div>
+                        {{/hasXrefs}}
+                    <h3>Classification</h3>
+                    {{{includes.classificationComponent}}}
+                    <div id="r2" class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
+      
+                    <!-- Quiet rollover. -->
+                    <div class="panel panel-default">
+                      <div class="panel-heading">
+                      <h3 class="panel-title">Browser</h3>
+                    </div>
+                    <div class="panel-body">
+                      <div id="brw">
+                    </div>
+                    <div class="clearfix"></div>
+                    </div>
+                    <!-- <div class="panel-footer text-right">ooo</div> -->
+                    </div>
+      
+                    </div>
+                </div>
+                <div id="mainTable" class="category">
+                    <table class="{{css.table}}">
+                    {{{geneTable}}}
+                    </table>
+                    <div id="r3" class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
+      
+                      <!-- Quiet rollover. -->
+                      <div class="panel panel-default">
+                      <!-- <div class="panel-heading"> -->
+                      <!--   <h3 class="panel-title">BS3 Tests</h3> -->
+                      <!-- </div> -->
+                      <div class="panel-body">
+
+                      <div id="results-area" class="row">
+                      
+                        <div class="col-xs-12 col-sm-12 col-md-2 col-lg-2">
+                          <div>
+                          <h4>Filter results</h4>
+        
+                         <div id="bs3filter">
+                           Loading...
+                         </div>
+        
+                         </div>      
+                      </div>
+        
+                      <div class="col-xs-12 col-sm-12 col-md-10 col-lg-10">
+          
+                        <div id="bs3pager">
+                        </div>
+                        <div id="bs3results">
+                          pending...
+                        </div>
+                      </div>
+
+                     </div>
+
+                   <!-- <div class="clearfix"></div> -->
+                   </div>
+                 </div>
+            </div>
+        
+            </div> <!-- closes wrapperforfooter -->
+            {{{includes.footer}}}
+        </div>
+    </div>
