@@ -87,7 +87,8 @@ solr-schema: ./conf/golr-views/*-config.yaml
 	$(OWLTOOLS_BIN) --solr-config $? --solr-schema-dump | ./scripts/remove-schema-cruft.pl > ./conf/schema.xml
 
 .PHONY: golr-conf-as-json
-golr-conf-as-json:
+golr-conf-as-json: ./conf/golr-conf.json
+./conf/golr-conf.json:
 	./scripts/confyaml2json.pl -i ./conf/golr-views > ./conf/golr-conf.json
 
 reconfigure-golr: solr-schema golr-conf-as-json
