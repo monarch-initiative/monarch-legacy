@@ -88,8 +88,8 @@ solr-schema: ./conf/golr-views/*-config.yaml
 
 .PHONY: golr-conf-as-json
 golr-conf-as-json: ./conf/golr-conf.json
-./conf/golr-conf.json:
-	./scripts/confyaml2json.pl -i ./conf/golr-views > ./conf/golr-conf.json
+./conf/golr-conf.json: ./conf/golr-views
+	./scripts/confyaml2json.pl -i $< > $@.tmp && mv $@.tmp $@
 
 reconfigure-golr: solr-schema golr-conf-as-json
 
