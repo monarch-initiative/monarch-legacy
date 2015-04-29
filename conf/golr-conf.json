@@ -1,8 +1,8 @@
 {
    "generic_association" : {
-      "result_weights" : "subject^7.0 evidence^6.0 object^4.0",
-      "filter_weights" : "subject_closure_label^7.0 evidence_closure_label^6.0 object_closure_label^4.5",
-      "_infile" : "/Users/cjm/repos/monarch-app/./conf/golr-views/oban-config.yaml",
+      "result_weights" : "subject^7.0 subject_taxon^6.5 evidence^6.0 object^4.0",
+      "filter_weights" : "subject_category^8.0 subject_taxon^7.5 subject_closure_label^7.0 evidence_closure_label^6.0 object_closure_label^4.5",
+      "_infile" : "/Users/cjm/repos/monarch-app/conf/golr-views/oban-config.yaml",
       "display_name" : "Annotations",
       "description" : "Associations following OBAN model",
       "schema_generating" : "true",
@@ -745,6 +745,6 @@
       "weight" : "20",
       "_strict" : 0,
       "id" : "generic_association",
-      "_outfile" : "/Users/cjm/repos/monarch-app/./conf/golr-views/oban-config.yaml"
+      "_outfile" : "/Users/cjm/repos/monarch-app/conf/golr-views/oban-config.yaml"
    }
 }
