@@ -108,7 +108,7 @@ function modelDataPointPrint(point) {
 			{ abbrev: "ZP", label: "Zebrafish"},
 			{ abbrev: "FB", label: "Fly"},
 			{ abbrev: "GO", label: "Gene Ontology"},
-			{ abbrev: "UDPICS", label: "UDP Patients"}],
+				 { abbrev: "UDP", label: "UDP Patients"}],
 		dataDisplayCount: 30,
 		labelCharDisplayCount : 20,
 		apiEntityMap: [ {prefix: "HP", apifragment: "disease"},
@@ -144,14 +144,15 @@ function modelDataPointPrint(point) {
 							// [vaa12] DO NOT CHANGE UNTIL THE DISPLAY HPOTREE FUNCTIONS HAVE BEEN CHANGED. WILL WORK ON SEPERATE TREES, BUT BRANCHES MAY BE INACCURATE
 		selectedSort: "Frequency",
 		targetSpeciesName : "Overview",
-		refSpecies: "Homo sapiens",
+	    refSpecies: "Homo sapiens",
+	    	    targetSpeciesList : [{ name: "Homo sapiens", taxon: "9606"},
+					 { name: "Mus musculus", taxon: "10090" },
+					 { name: "Danio rerio", taxon: "7955"},
+					 { name: "Drosophila melanogaster", taxon: "7227"},
+				 { name: "UDP", taxon: "UDP"}],
+	    
 		genotypeExpandLimit: 5, // sets the limit for the number of genotype expanded on grid
 		phenoCompareLimit: 10, // sets the limit for the number of phenotypes used for genotype expansion
-		targetSpeciesList : [{ name: "Homo sapiens", taxon: "9606"},
-			{ name: "Mus musculus", taxon: "10090" },
-			{ name: "Danio rerio", taxon: "7955"},
-			{ name: "Drosophila melanogaster", taxon: "7227"},
-			{ name: "UDPICS", taxon: "UDPICS"}],
 		// COMPARE CALL HACK - REFACTOR OUT
 		providedData: {}
 	},
@@ -324,8 +325,8 @@ function modelDataPointPrint(point) {
 		// save a copy of the original phenotype data
 		this.state.origPhenotypeData = this.state.phenotypeData.slice();
 
-		// target species name might be provided as a name or as taxon. Make sure that we translate to name
-		this.state.targetSpeciesName = this._getTargetSpeciesNameByTaxon(this,this.state.targetSpeciesName);
+	    // target species name might be provided as a name or as taxon. Make sure that we translate to name
+	    this.state.targetSpeciesName = this._getTargetSpeciesNameByTaxon(this,this.state.targetSpeciesName);
 		this.state.phenotypeData = this._filterPhenotypeResults(this.state.phenotypeData);
 
 		this._loadData();
