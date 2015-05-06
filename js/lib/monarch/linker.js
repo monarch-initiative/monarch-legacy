@@ -46,16 +46,16 @@ bbop.monarch.linker = function (){
 
     // Categories for different special cases (internal links).
     this.ont_category = {
-    'term': true,
-    'ontology_class': true,
-    'annotation_class': true,
-    'annotation_class_closure': true,
-    'annotation_class_list': true
+        'term': true,
+        'ontology_class': true,
+        'annotation_class': true,
+        'annotation_class_closure': true,
+        'annotation_class_list': true
     };
     this.bio_category = {
         'gp': true,
-    'gene_product': true,
-    'bioentity': true
+        'gene_product': true,
+        'bioentity': true
     };
     this.complex_annotation_category = {
         //'complex_annotation': true,
@@ -64,30 +64,30 @@ bbop.monarch.linker = function (){
     };
     this.search_category = { // not including the trivial medial_search below
         'search': true,
-    'live_search': true
+        'live_search': true
     };
     this.search_modifier = {
-    // Possibly "dynamic".
-    'gene_product': '/bioentity',
-    'bioentity': '/bioentity',
-    'ontology': '/ontology',
-    'annotation': '/annotation',
-    'complex_annotation': '/complex_annotation',
-    'family': '/family',
-    'lego_unit': '/lego_unit',
-    'general': '/general'
+        // Possibly "dynamic".
+        'gene_product': '/bioentity',
+        'bioentity': '/bioentity',
+        'ontology': '/ontology',
+        'annotation': '/annotation',
+        'complex_annotation': '/complex_annotation',
+        'family': '/family',
+        'lego_unit': '/lego_unit',
+        'general': '/general'
     };
     this.other_interlinks = {
-    'medial_search': '/amigo/medial_search',
-    'landing': '/amigo/landing',
-    'tools': '/amigo/software_list',
-    'schema_details': '/amigo/schema_details',
-    'load_details': '/amigo/load_details',
-    'browse': '/amigo/browse',
-    'goose': '/goose',
-    'grebe': '/grebe',
-    'gannet': '/gannet',
-    'repl': '/repl' 
+        'medial_search': '/amigo/medial_search',
+        'landing': '/amigo/landing',
+        'tools': '/amigo/software_list',
+        'schema_details': '/amigo/schema_details',
+        'load_details': '/amigo/load_details',
+        'browse': '/amigo/browse',
+        'goose': '/goose',
+        'grebe': '/grebe',
+        'gannet': '/gannet',
+        'repl': '/repl' 
     };
 };
 
@@ -120,14 +120,14 @@ bbop.monarch.linker.prototype.url = function (id, xid, modifier){
     // function--either data urls or searches.
     if( id && id != '' ){
         if( this.ont_category[xid] ){
-        retval = this.app_base + '/amigo/term/' + id;
-        //retval = _add_restmark_modifier(retval, modifier);
-            }else if( this.bio_category[xid] ){
-        retval = this.app_base + '/amigo/gene_product/' + id;
-        //retval = _add_restmark_modifier(retval, modifier);
-            }else if( this.complex_annotation_category[xid] ){
-        retval = this.app_base + '/amigo/complex_annotation/'+ id;
-            }else if( this.search_category[xid] ){
+            retval = this.app_base + '/amigo/term/' + id;
+            //retval = _add_restmark_modifier(retval, modifier);
+        }else if( this.bio_category[xid] ){
+            retval = this.app_base + '/amigo/gene_product/' + id;
+            //retval = _add_restmark_modifier(retval, modifier);
+        }else if( this.complex_annotation_category[xid] ){
+            retval = this.app_base + '/amigo/complex_annotation/'+ id;
+        }else if( this.search_category[xid] ){
 
         // First, try and get the proper path out. Will
         // hardcode for now since some paths don't map
@@ -182,7 +182,7 @@ bbop.monarch.linker.prototype.url = function (id, xid, modifier){
     // transformation set, drop into the great abyss of the xref data.
     if( ! retval && id && id != '' ){ // not internal, but still has an id
         if( ! global_xrefs_conf ){
-            throw new Error('amigo.data.xrefs is missing!');
+            throw new Error('global_xrefs_conf is missing!');
         }
     
         // First, extract the probable source and break it into parts.
