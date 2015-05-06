@@ -1,6 +1,8 @@
 {
     "type" : "dev",
     
+    "app_base" : "http://localhost:8080",
+    
     "ontology_services_url" : "http://nif-services-stage.neuinfo.org/ontoquest-lamhdi/",
     
     "scigraph_url" : "http://geoffrey.crbs.ucsd.edu:9000/scigraph/",
