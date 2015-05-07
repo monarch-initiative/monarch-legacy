@@ -160,12 +160,14 @@ fields:
     description: "SubPropertyOf reflexive closure for association_relation"
     display_name: Inferred relationship
     type: string
+    cardinality: multi
     property: []
 
   - id: relation_closure_label
     description: "labels for association_relation_closure"
     display_name: Inferred relationship
     type: string
+    cardinality: multi
     property: []
 
   - id: qualifier
