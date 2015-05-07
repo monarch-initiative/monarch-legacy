@@ -416,8 +416,8 @@ function modelDataPointPrint(point) {
 
 			// [vaa12] 15 prevents the control panel from overlapping the grid. Find way to remove magic num
 			var containerHeight = height + 15;
-			$("#svg_area").css("height",height);
-			$("#svg_container").css("height",containerHeight);
+			$("#pg_svg_area").css("height",height);
+			$("#pg_svg_container").css("height",containerHeight);
 			
 			// this must be initialized here after the _createModelLabels, or the mouse events don't get
 			// initialized properly and tooltips won't work with the mouseover defined in _convertLableHTML
@@ -439,9 +439,9 @@ function modelDataPointPrint(point) {
 		// COMPARE CALL HACK - REFACTOR OUT
 		// no organism selector if we are doing the 'compare' function
 		if (this.state.owlSimFunction === 'compare' || this.state.owlSimFunction === 'exomiser'){
-			this.state.svg.select("#specieslist").remove();
+			this.state.svg.select("#pg_specieslist").remove();
 			this.state.svg.select("#faqinfo").remove();
-			$("#org_div").remove();
+			$("#pg_org_div").remove();
 		}
 	},
 
@@ -480,13 +480,13 @@ function modelDataPointPrint(point) {
 	_createEmptyVisualization: function(msg) {
 		var self = this;
 		var html;
-		d3.select("#svg_area").remove();
-		//this.state.svgContainer.append("<svg id='svg_area'></svg>");
-		//this.state.svg = d3.select("#svg_area");
+		d3.select("#pg_svg_area").remove();
+		//this.state.svgContainer.append("<svg id='pg_svg_area'></svg>");
+		//this.state.svg = d3.select("#pg_svg_area");
 
 		var svgContainer = this.state.svgContainer;
-		//svgContainer.append("<svg id='svg_area'></svg>");
-		//this.state.svg = d3.select("#svg_area")
+		//svgContainer.append("<svg id='pg_svg_area'></svg>");
+		//this.state.svg = d3.select("#pg_svg_area")
 		//	.attr("width", this.state.emptySvgX)
 		//	.attr("height", this.state.emptySvgY);
 
@@ -499,8 +499,8 @@ function modelDataPointPrint(point) {
 			var btn = d3.selectAll("#button")
 				.on("click", function(d,i){
 					$("#return").remove();
-					$("#errmsg").remove();
-					d3.select("#svg_area").remove();
+					$("#pg_errmsg").remove();
+					d3.select("#pg_svg_area").remove();
 
 					self.state.phenotypeData = self.state.origPhenotypeData.slice();
 					self._reset();
@@ -536,7 +536,7 @@ function modelDataPointPrint(point) {
 			.data(data)
 			.enter()
 			.append("rect")
-			.attr("id","gridline")
+			.attr("id","pg_gridline")
 			.attr("transform","translate(252, " + (this.state.yModelRegion + 5) + ")")
 			.attr("x", function(d,i) { return d[1] * mWidth;})
 			.attr("y", function(d,i) { return d[0] * mHeight;})
@@ -635,7 +635,7 @@ function modelDataPointPrint(point) {
 		self.state.highlightRect = self.state.svg.append("rect")
 			.attr("x",overviewX + selectRectX)
 			.attr("y",overviewY + selectRectY)
-			.attr("id", "selectionrect")
+			.attr("id", "pg_selectionrect")
 			.attr("height", selectRectHeight + 4)
 			.attr("width", selectRectWidth + 4)
 			.attr("class", "draggable")
@@ -651,7 +651,7 @@ function modelDataPointPrint(point) {
 					var curX = parseFloat(current.attr("x"));
 					var curY = parseFloat(current.attr("y"));
 
-					var rect = self.state.svg.select("#selectionrect");
+					var rect = self.state.svg.select("#pg_selectionrect");
 					rect.attr("transform","translate(0,0)");
 
 					// limit the range of the x value
@@ -751,7 +751,7 @@ function modelDataPointPrint(point) {
 			.attr("transform","translate(" + (self.state.axis_pos_list[2] ) + "," + scoreTipY + ")")
 			.attr("x", 0)
 			.attr("y", 0)
-			.attr("class", "tip")
+			.attr("class", "pg_tip")
 			.text("< Model Scores");
 
 		var tip	= self.state.svg
@@ -763,7 +763,7 @@ function modelDataPointPrint(point) {
 			.attr("y", 0)
 			.attr("width", self.state.faqImgSize)
 			.attr("height", self.state.faqImgSize)
-			.attr("class", "faq_img")
+			.attr("class", "pg_faq_img")
 			.on("click", function(d) {
 				var name = "modelscores";
 				self._showDialog(name);
@@ -772,7 +772,7 @@ function modelDataPointPrint(point) {
 		var expl = self.state.svg.append("text")
 			.attr("x",self.state.axis_pos_list[2] + explXOffset)
 			.attr("y",scoreTipY + explYOffset)
-			.attr("class","tip")
+			.attr("class","pg_tip")
 			.text("best matches left to right.");
 	},
 
@@ -791,7 +791,7 @@ function modelDataPointPrint(point) {
 		this.state.svg.append("foreignObject")
 			.attr("width", 205)
 			.attr("height", 50)
-			.attr("id","diseasetitle")
+			.attr("id","pg_diseasetitle")
 			.attr("transform","translate(" + dTitleXOffset + "," + dTitleYOffset + ")")
 			.attr("x", 0)
 			.attr("y", 0)
@@ -805,7 +805,7 @@ function modelDataPointPrint(point) {
 		var globalview = self.state.svg.append("rect")
 			.attr("x", overviewX)
 			.attr("y", overviewY)
-			.attr("id", "globalview")
+			.attr("id", "pg_globalview")
 			.attr("height", overviewBoxDim)
 			.attr("width", overviewBoxDim);
 
@@ -817,14 +817,14 @@ function modelDataPointPrint(point) {
 			.attr("x", self.state.axis_pos_list[2] + 10)
 			// This changes for vertical positioning
 			.attr("y", y)
-			.attr("class", "instruct")
+			.attr("class", "pg_instruct")
 			.text("Use the phenotype map above to");
 
 		rect_instructions = self.state.svg.append("text")
 			.attr("x", self.state.axis_pos_list[2] + lineHeight)
 			// This changes for vertical positioning
 			.attr("y", y + 10) 
-			.attr("class", "instruct")
+			.attr("class", "pg_instruct")
 			.text("navigate the model view on the left");
 	},
 
@@ -1495,15 +1495,15 @@ function modelDataPointPrint(point) {
 	_initCanvas: function() {
 		this._createSvgContainer();
 		var svgContainer = this.state.svgContainer;
-		svgContainer.append("<svg id='svg_area'></svg>");
-		this.state.svg = d3.select("#svg_area");
+		svgContainer.append("<svg id='pg_svg_area'></svg>");
+		this.state.svg = d3.select("#pg_svg_area");
 		this._addGridTitle();
 		this._createDiseaseTitleBox();
 		
 	},
 
 	_createSvgContainer: function() {
-		var svgContainer = $('<div id="svg_container"></div>');
+		var svgContainer = $('<div id="pg_svg_container"></div>');
 		this.state.svgContainer = svgContainer;
 		this.element.append(svgContainer);
 	},
@@ -1572,7 +1572,7 @@ function modelDataPointPrint(point) {
 
 		var mtitle = this.state.svg.append("svg:text")
 			.attr("class","gridtitle")
-			.attr("id","toptitle2")
+			.attr("id","pg_toptitle")
 			.attr("x",xoffset)
 			.attr("y",this.state.gridTitleYOffset)
 			.text(titleText);
@@ -1586,23 +1586,23 @@ function modelDataPointPrint(point) {
 			.append("svg:image")
 			.attr("xlink:href", this.state.scriptpath + "../image/greeninfo30.png")
 			.attr("x",xoffset+foffset)
-			.attr("id","faqinfo")
+			.attr("id","pg_faqinfo")
 			.attr("width", this.state.faqImgSize)
 			.attr("height",this.state.faqImgSize)
-			.attr("class","faq_img")
+			.attr("class","pg_faq_img")
 			.on("click", function(d) {
 				self._showDialog("faq");
 			});
 	},
 
 	_configureFaqs: function() {
-		var sorts = $("#sorts")
+		var sorts = $("#pg_sorts")
 			.on("click", function(d,i){
 				self._showDialog( "sorts");
 			});
 
 		//var calcs = d3.selectAll("#calcs")
-		var calcs = $("#calcs")
+		var calcs = $("#pg_calcs")
 			.on("click", function(d){
 				self._showDialog( "calcs");
 			});
@@ -1610,16 +1610,16 @@ function modelDataPointPrint(point) {
 
 	_resetSelections: function(type) {
 		var self = this;
-		$("#unmatchedlabel").remove();
-		$("#unmatchedlabelhide").remove();
+		$("#pg_unmatched_label").remove();
+		$("#pg_unmatched_labelhide").remove();
 		$("#unmatched").remove();
 		$("#selects").remove();
-		$("#org_div").remove();
-		$("#calc_div").remove();
-		$("#sort_div").remove();
+		$("#pg_org_div").remove();
+		$("#pg_calc_div").remove();
+		$("#pg_sort_div").remove();
+	        $("#pg_axis_div").remove();
 		$("#mtitle").remove();
-		$("#header").remove();
-		$("#svg_area").remove();
+		$("#pg_svg_area").remove();
 
 		if (type === "organism"){
 			self.state.phenotypeData = self.state.origPhenotypeData.slice();
@@ -1650,14 +1650,14 @@ function modelDataPointPrint(point) {
 			.attr("xlink:href", this.state.scriptpath + "../image/logo.png")
 			.attr("x", start)
 			.attr("y",0)
-			.attr("id", "logo")
+			.attr("id", "pg_logo")
 			.attr("width", "60")
 			.attr("height", "90");
 	},
 
 	_resetLinks: function() {
 		// don't put these styles in css file - these styles change depending on state
-		this.state.svg.selectAll("#detail_content").remove();
+		this.state.svg.selectAll("#pg_detail_content").remove();
 
 		var link_lines = d3.selectAll(".data_text");
 		for (var i in link_lines[0]){
@@ -1809,7 +1809,7 @@ function modelDataPointPrint(point) {
 			.attr("transform","translate(" + (self.state.textWidth + self.state.xOffsetOver + 32) + "," + self.state.yoffsetOver + ")")
 			.attr("x", function(d) { return (self.state.xScale(data) - 1);})
 			.attr("y", self.state.yoffset +2) 
-			.attr("class", "model_accent")
+			.attr("class", "pg_col_accent")
 			.attr("width", 15 * appearanceOverrides.offset)
 			.attr("height", (displayCount * self.state.heightOfSingleModel));
 
@@ -1851,7 +1851,7 @@ function modelDataPointPrint(point) {
 			.attr("transform","translate(" + (self.state.axis_pos_list[1]) + "," + (self.state.yoffsetOver + 4) + ")")
 			.attr("x", 12)
 			.attr("y", function(d) {return info.ypos; }) //rowid
-			.attr("class", "row_accent")  
+			.attr("class", "pg_row_accent")  
 			.attr("width", this.state.modelWidth - 4)
 			.attr("height", 11 * appearanceOverrides.offset);
 
@@ -1861,7 +1861,7 @@ function modelDataPointPrint(point) {
 	},
 
 	_createHoverBox: function(data){
-		var appearanceOverrides = {offset: 1, style: "model_accent"}; // may use this structure later, offset is only used now
+		var appearanceOverrides = {offset: 1, style: "pg_col_accent"}; // may use this structure later, offset is only used now
 		var info = this._getAxisData(data);
 		var type = info.type;
 		if (type === undefined){
@@ -1931,9 +1931,9 @@ function modelDataPointPrint(point) {
 	// Previously _deselectData + _clearModelData
 	_deselectData: function (data) {
 		var self = this;
-		this.state.svg.selectAll(".row_accent").remove();
-		this.state.svg.selectAll("#detail_content").remove();
-		this.state.svg.selectAll(".model_accent").remove();
+		this.state.svg.selectAll(".pg_row_accent").remove();
+		this.state.svg.selectAll("#pg_detail_content").remove();
+		this.state.svg.selectAll(".pg_col_accent").remove();
 		this._resetLinks();
 		if (data !== undefined){
 			var IDType = this._getIDType(data);
@@ -2099,7 +2099,7 @@ function modelDataPointPrint(point) {
 	},
 
 	_updateDetailSection: function(htmltext, coords, width, height) {
-		this.state.svg.selectAll("#detail_content").remove();
+		this.state.svg.selectAll("#pg_detail_content").remove();
 
 		var w = this.state.detailRectWidth - (this.state.detailRectStrokeWidth * 2);
 		var h = this.state.detailRectHeight - (this.state.detailRectStrokeWidth * 2);
@@ -2123,12 +2123,12 @@ function modelDataPointPrint(point) {
 		this.state.svg.append("foreignObject")
 			.attr("width", w)
 			.attr("height", h)
-			.attr("id", "detail_content")
+			.attr("id", "pg_detail_content")
 			// add an offset. Otherwise, the tooltip turns off the mouse event
 			.attr("y", yv)
 			.attr("x", wv) 
 			.append("xhtml:body")
-			.attr("id", "detail_text")
+			.attr("id", "pg_detail_text")
 			.html(htmltext);
 	},
 
@@ -2193,9 +2193,9 @@ function modelDataPointPrint(point) {
 	},
 
 	_showThrobber: function() {
-		this.state.svg.selectAll("#detail_content").remove();
+		this.state.svg.selectAll("#pg_detail_content").remove();
 		this.state.svg.append("svg:text")
-			.attr("id", "detail_content")
+			.attr("id", "pg_detail_content")
 			.attr("y", (26 + this.state.detailRectStrokeWidth))
 			.attr("x", (440+this.state.detailRectStrokeWidth))
 			.style("font-size", "12px")
@@ -2203,7 +2203,7 @@ function modelDataPointPrint(point) {
 		this.state.svg.append("svg:image")
 			.attr("width", 16)
 			.attr("height", 16)
-			.attr("id", "detail_content")
+			.attr("id", "pg_detail_content")
 			.attr("y", (16 + this.state.detailRectStrokeWidth))
 			.attr("x", (545 + this.state.detailRectStrokeWidth))
 			.attr("xlink:href","/widgets/phenogrid/image/throbber.gif");
@@ -2414,7 +2414,7 @@ function modelDataPointPrint(point) {
 			.attr("transform","translate(" + (self.state.axis_pos_list[1]) + ","+ (self.state.yoffsetOver + 4 ) + ")")
 			.attr("x", 12)
 			.attr("y", function(d) {return self._getAxisData(curr_data.yID).ypos; }) //rowid
-			.attr("class", "row_accent")
+			.attr("class", "pg_row_accent")
 			.attr("width", this.state.modelWidth - 4)
 			.attr("height", 12);
 
@@ -2442,7 +2442,7 @@ function modelDataPointPrint(point) {
 			.attr("transform","translate(" + (self.state.textWidth + self.state.xOffsetOver + 34) + "," +self.state.yoffsetOver+ ")")
 			.attr("x", function(d) { return (self.state.xScale(curr_data.xID) - 1);})
 			.attr("y", self.state.yoffset + 2 )
-			.attr("class", "model_accent")
+			.attr("class", "pg_col_accent")
 			.attr("width", 12)
 			.attr("height", (displayCount * self.state.heightOfSingleModel));
 	},
@@ -2531,7 +2531,7 @@ function modelDataPointPrint(point) {
 		var lineY = this.state.yoffset - modelLineGap;
 		this.state.svg.selectAll("path.domain").remove();
 		this.state.svg.selectAll("text.scores").remove();
-		this.state.svg.selectAll("#specieslist").remove();
+		this.state.svg.selectAll("#pg_specieslist").remove();
 
 		this.state.svg.append("line")
 			.attr("transform","translate(" + (this.state.textWidth + this.state.xOffsetOver + 30) + "," + lineY + ")")
@@ -2550,7 +2550,7 @@ function modelDataPointPrint(point) {
 		var displayCount = self._getYLimit();
 		//this.state.svg.selectAll("path.domain").remove();
 		//this.state.svg.selectAll("text.scores").remove();
-		//this.state.svg.selectAll("#specieslist").remove();
+		//this.state.svg.selectAll("#pg_specieslist").remove();
 
 		var gridHeight = displayCount * self.state.heightOfSingleModel + 10;
 		if (gridHeight < self.state.minHeight) {
@@ -2583,7 +2583,7 @@ function modelDataPointPrint(point) {
 			.enter()
 			.append("text")
 			.attr("height", 10)
-			.attr("id", "scorelist")
+			.attr("id", "pg_scorelist")
 			.attr("width", xWidth)
 			.attr("class", "scores")
 			// don't show score if it is a dummy model.
@@ -2624,13 +2624,13 @@ function modelDataPointPrint(point) {
 		var translation = "translate(" + (self.state.textWidth + self.state.xOffsetOver + 30) + "," + (self.state.yoffset + 10) + ")";
 
 		var xPerModel = self.state.modelWidth/speciesList.length;
-		var species = self.state.svg.selectAll("#specieslist")
+		var species = self.state.svg.selectAll("#pg_specieslist")
 			.data(speciesList)
 			.enter()
 			.append("text")
 			.attr("transform",translation)
 			.attr("x", function(d,i){ return (i + 1 / 2 ) * xPerModel;})
-			.attr("id", "specieslist")
+			.attr("id", "pg_specieslist")
 			.attr("y", 10)
 			.attr("width", xPerModel)
 			.attr("height", 10)
@@ -2675,7 +2675,7 @@ function modelDataPointPrint(point) {
 				resizable: false,
 				draggable: true,
 				dialogClass: "dialogBG",
-				position: { my: "top", at: "top+25%",of: "#svg_area"},
+				position: { my: "top", at: "top+25%",of: "#pg_svg_area"},
 				title: 'Phenogrid Notes'});
 		$dialog.html(text);
 		$dialog.dialog('open');
@@ -2905,7 +2905,7 @@ function modelDataPointPrint(point) {
 		var ylowText = y1 + self.state.yoffset;
 		var xlowText = self.state.axis_pos_list[2] + 10;
 		var div_text1 = self.state.svg.append("svg:text")
-			.attr("class", "detail_text")
+			.attr("class", "pg_detail_text")
 			.attr("y", ylowText)
 			.attr("x", xlowText)
 			.style("font-size", "10px")
@@ -2914,7 +2914,7 @@ function modelDataPointPrint(point) {
 		var ylabelText = y1 + self.state.yoffset;
 		var xlabelText = self.state.axis_pos_list[2] + 75;
 		var div_text2 = self.state.svg.append("svg:text")
-			.attr("class", "detail_text")
+			.attr("class", "pg_detail_text")
 			.attr("y", ylabelText)
 			.attr("x", xlabelText)
 			.style("font-size", "12px")
@@ -2923,7 +2923,7 @@ function modelDataPointPrint(point) {
 		var yhighText = y1 + self.state.yoffset;
 		var xhighText = self.state.axis_pos_list[2] + 125;
 		var div_text3 = self.state.svg.append("svg:text")
-			.attr("class", "detail_text")
+			.attr("class", "pg_detail_text")
 			.attr("y", yhighText)
 			.style("font-size", "10px")
 			.text(highText);
@@ -2950,25 +2950,25 @@ function modelDataPointPrint(point) {
 
 		container.append(options);
 		// add the handler for the select control
-		$( "#organism" ).change(function(d) {
+		$( "#pg_organism" ).change(function(d) {
 			self.state.targetSpeciesName = self._getTargetSpeciesNameByIndex(self,d.target.selectedIndex);
 			self._resetSelections("organism");
 		});
 
-		$( "#calculation" ).change(function(d) {
+		$( "#pg_calculation" ).change(function(d) {
 			self.state.selectedCalculation = self.state.similarityCalculation[d.target.selectedIndex].calc;
 			self._resetSelections("calculation");
 			self._processDisplay();
 		});
 
 		// add the handler for the select control
-		$( "#sortphenotypes" ).change(function(d) {
+		$( "#pg_sortphenotypes" ).change(function(d) {
 			self.state.selectedSort = self.state.phenotypeSort[d.target.selectedIndex];
 			self._resetSelections("sortphenotypes");
 			self._processDisplay();
 		});
 
-		$( "#axisflip" ).click(function(d) {
+		$( "#pg_axisflip" ).click(function(d) {
 			self.state.invertAxis = !self.state.invertAxis;
 			self._resetSelections("axisflip");
 		});
@@ -2979,8 +2979,8 @@ function modelDataPointPrint(point) {
 	// construct the HTML needed for selecting organism
 	_createOrganismSelection: function() {
 		var selectedItem;
-		var optionhtml = "<div id='org_div'><span id='olabel'>Species</span><br>" +
-		"<span id='org_sel'><select id='organism'>";
+		var optionhtml = "<div id='pg_org_div'>Species<br>" +
+		"<span id='org_sel'><select id='pg_organism'>";
 
 		for (var idx in this.state.targetSpeciesList) {
 			selectedItem = "";
@@ -3004,9 +3004,9 @@ function modelDataPointPrint(point) {
 
 	// create the html necessary for selecting the calculation
 	_createCalculationSelection: function () {
-		var optionhtml = "<span id='calc_div'><span id='clabel'>Display</span>"+
-			"<span id='calcs'> <img class='faq_img' src='" + this.state.scriptpath + "../image/greeninfo30.png'></span>" + 
-			"<span id='calc_sel'><select id='calculation'>";
+		var optionhtml = "<span id='pg_calc_div'>Display"+
+			"<span id='pg_calcs'> <img class='pg_faq_img' src='" + this.state.scriptpath + "../image/greeninfo30.png'></span>" + 
+			"<span id='calc_sel'><select id='pg_calculation'>";
 
 		for (var idx in this.state.similarityCalculation) {
 			var selecteditem = "";
@@ -3022,9 +3022,9 @@ function modelDataPointPrint(point) {
 
 	// create the html necessary for selecting the sort
 	_createSortPhenotypeSelection: function () {
-		var optionhtml ="<span id='sort_div'> <span id='slabel' >Sort Phenotypes</span>" +
-			"<span id='sorts'> <img class='faq_img' src='" + this.state.scriptpath + "../image/greeninfo30.png'></span>" +
-			"<span><select id='sortphenotypes'>";
+		var optionhtml ="<span id='pg_sort_div'>Sort Phenotypes" +
+			"<span id='pg_sorts'> <img class='pg_faq_img' src='" + this.state.scriptpath + "../image/greeninfo30.png'></span>" +
+			"<span><select id='pg_sortphenotypes'>";
 
 		for (var idx in this.state.phenotypeSort) {
 			var selecteditem = "";
@@ -3039,8 +3039,8 @@ function modelDataPointPrint(point) {
 
 	// create the html necessary for selecting the axis flip
 	_createAxisSelection: function () {
-		var optionhtml = "<div id='axis_div'><span id='axlabel'>Axis Flip</span><br>" +
-		"<span id='org_sel'><button type='button' id='axisflip'>Flip Axis</button></span></div>";
+		var optionhtml = "<div id='pg_axis_div'>Axis Flip" +
+		"<span id='org_sel'><button type='button' id='pg_axisflip'>Flip Axis</button></span></div>";
 		return $(optionhtml);
 	},
 
@@ -3159,34 +3159,34 @@ function modelDataPointPrint(point) {
 
 	_buildUnmatchedPhenotypeDisplay: function() {
 		var optionhtml;
-		var prebl = $("#prebl");
+		var prebl = $("#pg_prebl");
 		if (prebl.length === 0) {
-			var preblHtml ="<div id='prebl'></div>";
+			var preblHtml ="<div id='pg_prebl'></div>";
 			this.element.append(preblHtml);
-			prebl = $("#prebl");
+			prebl = $("#pg_prebl");
 		}
 		prebl.empty();
 
 		if (this.state.unmatchedPhenotypes !== undefined && this.state.unmatchedPhenotypes.length > 0){
-			optionhtml = "<div class='clearfix'><form id='matches'><input type='checkbox' name='unmatched' value='unmatched' >&nbsp;&nbsp;View Unmatched Phenotypes<br /><form><div id='clear'></div>";
+			optionhtml = "<div class='clearfix'><form id='pg_matches'><input type='checkbox' name='unmatched' value='unmatched' >&nbsp;&nbsp;View Unmatched Phenotypes<br /><form><div id='clear'></div>";
 			var phenohtml = this._buildUnmatchedPhenotypeTable();
-			optionhtml = optionhtml + "<div id='unmatched' style='display:none;'>" + phenohtml + "</div></div>";
+			optionhtml = optionhtml + "<div id='pg_unmatched' style='display:none;'>" + phenohtml + "</div></div>";
 			prebl.append(optionhtml);
 		} else { 
 			// no unmatched phenotypes
-			optionhtml = "<div id='unmatchedlabel' style='display:block;'>No Unmatched Phenotypes</div>";
+			optionhtml = "<div id='pg_unmatched_label' style='display:block;'>No Unmatched Phenotypes</div>";
 			prebl.append(optionhtml);
 		}
 
-		$('#matches :checkbox').click(function() {
+		$('#pg_matches :checkbox').click(function() {
 			var $this = $(this);
 			// $this will contain a reference to the checkbox 
 			if ($this.is(':checked')) {
 				// the checkbox was checked 
-				$("#unmatched").show();
+				$("#pg_unmatched").show();
 			} else {
 				// the checkbox was unchecked
-				$("#unmatched").hide();
+				$("#pg_unmatched").hide();
 			}
 		});
 	},
@@ -3226,10 +3226,10 @@ function modelDataPointPrint(point) {
 	_matchedClick: function(checkboxEl) {
 		if (checkboxEl.checked) {
 			// Do something special
-			$("#unmatched").show();
+			$("#pg_unmatched").show();
 		} else {
 			// Do something else
-			$("#unmatched").hide();
+			$("#pg_unmatched").hide();
 		}
 	},
 
@@ -3290,7 +3290,7 @@ function modelDataPointPrint(point) {
 			var hrefLink = "<a href=\"" + this.state.serverURL+"/phenotype" + type +"/"+ id.replace("_", ":") + "\" target=\"_blank\">" + info.label + "</a>";
 			var hpoData = "<strong>" + this._capitalizeString(type) + ": </strong> " + hrefLink + "<br/>";
 			hpoData += "<strong>IC:</strong> " + info.IC.toFixed(2) + "<br/><br/>";
-			var hpoTree = "<div id='hpoDiv'>" + this.buildHPOTree(id.replace("_", ":"), hpoCached.edges, 0) + "</div>";
+			var hpoTree = "<div id='pg_hpoDiv'>" + this.buildHPOTree(id.replace("_", ":"), hpoCached.edges, 0) + "</div>";
 			if (hpoTree == "<br/>"){
 				hpoData += "<em>No HPO Data Found</em>";
 			} else {

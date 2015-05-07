@@ -8,10 +8,9 @@ function getTableFromSolr(id, golr_field){
     // Conf.
     var gconf = new bbop.golr.conf(global_golr_conf);
     var srv = global_solr_url;
-    var sd = new amigo.data.server();
     var defs = new amigo.data.definitions();
     var handler = new amigo.handler();
-    var linker = new amigo.linker();
+    var linker = new bbop.monarch.linker();
     var confc = gconf.get_class('generic_association');
     
     // Other widget tests; start with manager.

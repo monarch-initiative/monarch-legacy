@@ -12,18 +12,12 @@ ol.li, .title, .sectiontitle, h1, .subsectiontitle, .header{
 } 
 
 .header{
-	font-size:2.0em;
-	margin-left:15px;
-	margin-bottom:15px;
-}
-
-#phenogrid.header{
 	border-top: 0px solid black;
 	
 	padding-bottom:15px;
 }
 
-#phenogrid .title{
+.title{
 	font-size: 1.8em;
 	font-weight:bold;
 }
@@ -34,7 +28,7 @@ ol.li, .title, .sectiontitle, h1, .subsectiontitle, .header{
     top: 450px;
 }
 
-#phenogrid .shortselects {
+.shortselects {
     top: 360x;
 }
 
