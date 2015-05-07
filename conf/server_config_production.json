@@ -1,6 +1,8 @@
 {
     "type" : "production",
     
+    "app_base" : "http://http://monarchinitiative.org",
+    
     "ontology_services_url" : "http://services.monarchinitiative.org/ontoquest/",
     
     "scigraph_url" : "http://kato.crbs.ucsd.edu:9000/scigraph/",

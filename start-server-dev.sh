@@ -2,6 +2,8 @@
 
 sh ./update_dependencies.sh
 
+find ./js/lib -name '*.js' -exec cat {} \; > ./js/monarch.js
+
 PATH_TO_ME=`which $0`
 cd `dirname $PATH_TO_ME`
 if [ $PORT ]
