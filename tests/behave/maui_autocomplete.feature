@@ -21,3 +21,11 @@ Feature: Basic autocomplete works
      and I wait until "food allergy" appears in the autocomplete 
      and I click the autocomplete item "food allergy"
      then the title should be "Monarch Disease: food allergy (DOID:3044)"
+
+ @ui
+ Scenario: "ZRS" in the home search with a click goes to a gene page
+    Given I go to page "/"
+     and I type "ZRS" into the home search
+     and I wait until "ZRS" appears in the autocomplete 
+     and I click the autocomplete item "ZRS"
+     then the title should be "Monarch Gene: LMBR1"
