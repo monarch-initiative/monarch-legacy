@@ -119,7 +119,6 @@ bbop.monarch.linker.prototype.url = function (id, xid, modifier){
     // First let's do the ones that need an associated id to
     // function--either data urls or searches.
     if( id && id != '' ){
-        console.log(id);
         if( this.ont_category[xid] ){
             retval = this.app_base + '/amigo/term/' + id;
             //retval = _add_restmark_modifier(retval, modifier);
