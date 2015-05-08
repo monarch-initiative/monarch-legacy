@@ -1,7 +1,7 @@
 {
    "generic_association" : {
-      "result_weights" : "subject^7.0 subject_category^6.2 subject_taxon^6.5 evidence^6.0 object^4.0",
-      "filter_weights" : "subject_category^8.0 subject_taxon^7.5 subject_closure_label^7.0 evidence_closure_label^6.0 object_closure_label^4.5",
+      "result_weights" : "subject^7.0 subject_category^6.2 subject_taxon^6.5 relation^6.0  object^5.0 evidence^4.0",
+      "filter_weights" : "subject_category^8.0 subject_taxon^7.5 subject_closure_label^7.0 relation_closure_label^6.5 evidence_closure_label^6.0 object_category^5.0 object_closure_label^4.5",
       "_infile" : "/Users/cjm/repos/monarch-app/conf/golr-views/oban-config.yaml",
       "display_name" : "Annotations",
       "description" : "Associations following OBAN model",
@@ -140,6 +140,7 @@
             "property" : []
          },
          {
+            "cardinality" : "multi",
             "id" : "relation_closure",
             "type" : "string",
             "description" : "SubPropertyOf reflexive closure for association_relation",
@@ -147,6 +148,7 @@
             "property" : []
          },
          {
+            "cardinality" : "multi",
             "id" : "relation_closure_label",
             "type" : "string",
             "description" : "labels for association_relation_closure",
@@ -205,6 +207,38 @@
             "type" : "string",
             "description" : "Label for association_object_category",
             "display_name" : "Object type",
+            "property" : []
+         },
+         {
+            "id" : "object_taxon",
+            "type" : "string",
+            "description" : "Taxonomic class of the object. This is typically a CURIE of the form NCBITaxon:nnnn. This field may be unfilled when used with certain categories",
+            "display_name" : "Taxon",
+            "property" : []
+         },
+         {
+            "searchable" : "true",
+            "id" : "object_taxon_label",
+            "type" : "string",
+            "description" : "Label of taxon.",
+            "display_name" : "Taxon",
+            "property" : []
+         },
+         {
+            "cardinality" : "multi",
+            "id" : "object_taxon_closure",
+            "type" : "string",
+            "description" : "Reflexive closure of taxon. ALWAYS up SubClassOf.",
+            "display_name" : "Taxon",
+            "property" : []
+         },
+         {
+            "searchable" : "true",
+            "cardinality" : "multi",
+            "id" : "object_taxon_closure_label",
+            "type" : "string",
+            "description" : "Labels for taxon_closure.",
+            "display_name" : "Taxon",
             "property" : []
          },
          {
@@ -375,6 +409,14 @@
          }
       ],
       "fields_hash" : {
+         "object_taxon_closure" : {
+            "cardinality" : "multi",
+            "id" : "object_taxon_closure",
+            "type" : "string",
+            "description" : "Reflexive closure of taxon. ALWAYS up SubClassOf.",
+            "display_name" : "Taxon",
+            "property" : []
+         },
          "object_class_secondary_closure_label" : {
             "searchable" : "true",
             "cardinality" : "multi",
@@ -406,11 +448,27 @@
             "display_name" : "Isoform",
             "property" : []
          },
+         "object_taxon" : {
+            "id" : "object_taxon",
+            "type" : "string",
+            "description" : "Taxonomic class of the object. This is typically a CURIE of the form NCBITaxon:nnnn. This field may be unfilled when used with certain categories",
+            "display_name" : "Taxon",
+            "property" : []
+         },
          "relation_label" : {
             "id" : "relation_label",
             "type" : "string",
             "description" : "Label for association_relation",
             "display_name" : "Relationship",
+            "property" : []
+         },
+         "object_taxon_closure_label" : {
+            "searchable" : "true",
+            "cardinality" : "multi",
+            "id" : "object_taxon_closure_label",
+            "type" : "string",
+            "description" : "Labels for taxon_closure.",
+            "display_name" : "Taxon",
             "property" : []
          },
          "subject_closure" : {
@@ -586,6 +644,7 @@
             "property" : []
          },
          "relation_closure" : {
+            "cardinality" : "multi",
             "id" : "relation_closure",
             "type" : "string",
             "description" : "SubPropertyOf reflexive closure for association_relation",
@@ -657,19 +716,19 @@
             "display_name" : "Synonym",
             "property" : []
          },
-         "object_class_closure" : {
-            "cardinality" : "multi",
-            "id" : "object_class_closure",
-            "type" : "string",
-            "description" : "Reflexive closure of association_has_object. A list of CURIEs. If an individual, first traverse rdf:tpye. The default closure is subclass, but other may optionally be added depending on what type of association this is and what the class is. E.g. for expression associations, the object is an anatomy class, and the closure will include part_of",
-            "display_name" : "Inferred object",
-            "property" : []
-         },
          "object_class_secondary_closure" : {
             "cardinality" : "multi",
             "id" : "object_class_secondary_closure",
             "type" : "string",
             "description" : "Optional. This is similar to object_class_closure, but allows for the scenario whereby a different (more inclusive, or exclusive) closure is used. The exact OPs used will depend on the association type. This would ideally be communicating from loader conf through to the client somehow",
+            "display_name" : "Inferred object",
+            "property" : []
+         },
+         "object_class_closure" : {
+            "cardinality" : "multi",
+            "id" : "object_class_closure",
+            "type" : "string",
+            "description" : "Reflexive closure of association_has_object. A list of CURIEs. If an individual, first traverse rdf:tpye. The default closure is subclass, but other may optionally be added depending on what type of association this is and what the class is. E.g. for expression associations, the object is an anatomy class, and the closure will include part_of",
             "display_name" : "Inferred object",
             "property" : []
          },
@@ -681,6 +740,7 @@
             "property" : []
          },
          "relation_closure_label" : {
+            "cardinality" : "multi",
             "id" : "relation_closure_label",
             "type" : "string",
             "description" : "labels for association_relation_closure",
@@ -701,6 +761,14 @@
             "type" : "string",
             "description" : "Labels for object_class_closure.",
             "display_name" : "Involved in",
+            "property" : []
+         },
+         "object_taxon_label" : {
+            "searchable" : "true",
+            "id" : "object_taxon_label",
+            "type" : "string",
+            "description" : "Label of taxon.",
+            "display_name" : "Taxon",
             "property" : []
          },
          "object_category_label" : {
