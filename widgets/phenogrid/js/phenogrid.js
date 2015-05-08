@@ -3382,7 +3382,8 @@ function modelDataPointPrint(point) {
 			// go get the assocated genotypes
 			//var url = this.state.serverURL+"/gene/"+ modelInfo.id.replace('_', ':') + ".json";		
 			//var url = this.state.serverURL+"/genotypes/"+ modelInfo.id.replace('_', ':');
-			var url = "http://tartini.crbs.ucsd.edu/dynamic/gene/" + modelInfo.id.replace('_', ':') +
+		    // HARDCODE ALERT - REFACTOR
+			var url = "http://beta.monarchinitiative.org/dynamic/gene/" + modelInfo.id.replace('_', ':') +
 						"/genotype/nodes.json";
 			console.log("Getting Gene " + url);
 			//console.profile("genotypes call");

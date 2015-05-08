@@ -53,7 +53,7 @@
 	jQuery(document).ready(
 	function(){
 	$("#phen_vis").phenogrid({serverURL :
-	"http://tartini.crbs.ucsd.edu", phenotypeData:	phenotypes,targetSpeciesName: "Mus musculus" });
+	"http://beta.monarchinitiative.org", phenotypeData:	phenotypes,targetSpeciesName: "Mus musculus" });
 	   });
 	
 	</script>
@@ -108,7 +108,7 @@ A quick guide to installing and configuring the widget on your site:
 					</li>
 			<li>Add a jQuery .ready function that will add the widget to an empty div tag (see Step 4) as follows  (The following example assumes you are adding the widget to a div with an id="phen_vis"): 
 		<ul><li><pre>jQuery(document).ready(function(){$("#phen_vis").phenogrid(
-	{serverURL: "http://tartini.crbs.ucsd.edu", phenotypeData: phenotypes, target_species: "10090" });
+	{serverURL: "http://beta.monarchinitiative.org", phenotypeData: phenotypes, target_species: "10090" });
 });</pre>	
 				</li>
 			<li>
@@ -118,7 +118,7 @@ A quick guide to installing and configuring the widget on your site:
 									<li><b><em>phenotypeData</em></b> [required] - It is a Javascript array of objects listing the phenotypes to be rendered in the widget.
 									</li>
 									<li><b><em>serverURL</em></b> [required] - This URL should be pointed to the OWLSim URL server associated with your installation containing the Monarch web services. You have three options:<br/>
-										<ol><li>Use http://tartini.crbs.ucsd.edu to connect to the development/test web services.  This server is less stable than the production server.</li> 
+										<ol><li>Use http://beta.monarchinitiative.org to connect to the development/test web services.  This server is less stable than the production server.</li> 
 										  <li>Use http://monarch.monarchinitiative.org to connect to the stable, production version of the web services (better uptime)</li>
 										  <li>If you are running the complete monarch-app, you can point it to http://localhost:8080, or whichever server/port you are using in your local installation.</li></ol>
 									</li>
@@ -142,7 +142,7 @@ A quick guide to installing and configuring the widget on your site:
 		{ id:"HP:0000746", observed:"positive"}];
 		
 	jQuery(document).ready(function(){
-		$("#phen_vis").phenogrid({serverURL : "http://tartini.crbs.ucsd.edu", 
+		$("#phen_vis").phenogrid({serverURL : "http://beta.monarchinitiative.org", 
 			phenotypeData: phenotypes, targetSpecies: "10090" });	
 	});
 &lt;/script&gt;</pre>
