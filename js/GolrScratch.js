@@ -22,8 +22,8 @@ function getTableFromSolr(id, golr_field){
     
     // Add filters.
     var f_opts = {
-	'meta_label': 'Total:&nbsp;',
-	'display_free_text_p': true
+	    'meta_label': 'Total:&nbsp;',
+	    'display_free_text_p': true
     };
     var filters = new bbop.widget.live_filters('bs3filter', srch, gconf, f_opts);
     filters.establish_display();
@@ -34,12 +34,12 @@ function getTableFromSolr(id, golr_field){
     var pager = new bbop.widget.live_pager('bs3pager', srch, pager_opts);
     // Add results.
     var results_opts = {
-    //'callback_priority': -200,
-    'user_buttons_div_id': pager.button_span_id(),
-    'user_buttons': [],
-    'selectable_p' : false
+        //'callback_priority': -200,
+        'user_buttons_div_id': pager.button_span_id(),
+        'user_buttons': [],
+        'selectable_p' : false
     };
-    var results = new bbop.widget.live_results('bs3results', srch, confc,
+    var results = new bbop.monarch.widget.live_results('bs3results', srch, confc,
                            handler, linker, results_opts);
     
     // Add pre and post run spinner (borrow filter's for now).
@@ -67,22 +67,21 @@ function getOntologyBrowser(id){
     
     // Browser.
     var b = new bbop.widget.browse(srv, gconf, 'brw', {
-    'transitivity_graph_field':
-    'regulates_transitivity_graph_json',
-    'base_icon_url': sd.image_base(),
-    'info_icon': 'info',
-    'current_icon': 'current_term',
-    'image_type': 'gif',
-    'info_button_callback':
-    function(term_acc, term_doc){
-        // // Local form.
-        // shield.draw(term_doc);
-        // Remote form (works).
-        //shield.draw(term_acc);
-    }
+        'transitivity_graph_field':
+        'regulates_transitivity_graph_json',
+        'base_icon_url': sd.image_base(),
+        'info_icon': 'info',
+        'current_icon': 'current_term',
+        'image_type': 'gif',
+        'info_button_callback':
+            function(term_acc, term_doc){
+                // // Local form.
+                // shield.draw(term_doc);
+                // Remote form (works).
+                //shield.draw(term_acc);
+            }
     });
     b.draw_browser(id);
-    
 }
 
 function LaunchEverything(){
