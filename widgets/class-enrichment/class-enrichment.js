@@ -78,16 +78,17 @@ $.widget('monarch.classenrichment', {
                             sample: iris
                         },
                         success: function( response ) {
-                            var processedData = _.map(response, function(n){ return [n.iri, n.pValue]; });
+                            var processedData = _.map(response, function(n){ return [n.labels, n.iri, n.pValue]; });
                             var resultTable = $( '<table cellpadding="0" cellspacing="0" border="0" class="display"></table>' );
                             _this.resultArea.html( resultTable );
                             resultTable.dataTable( {
                                 "data": processedData,
                                 "columns": [
+                                    { "title": "Labels"},
                                     { "title": "IRI" },
                                     { "title": "P-value" }
                                 ],
-                                "order": [[ 1, "asc" ]]
+                                "order": [[ 2, "asc" ]]
                             } ); 
                         },
                         error: function( response ) {
