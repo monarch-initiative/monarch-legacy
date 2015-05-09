@@ -1,7 +1,7 @@
 {
     "type" : "dev",
     
-    "app_base" : "http://localhost:8080",
+    "app_base" : "http://beta.monarchinitiative.org",
     
     "ontology_services_url" : "http://nif-services-stage.neuinfo.org/ontoquest-lamhdi/",
     
