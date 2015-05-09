@@ -14,24 +14,24 @@ function getTableFromSolr(id, golr_field){
     var confc = gconf.get_class('generic_association');
     
     // Other widget tests; start with manager.
-    var srch = new bbop.golr.manager.jquery(srv, gconf);
+    var golr_response = new bbop.golr.manager.jquery(srv, gconf);
 
-    srch.set_personality('generic_association');
-    //srch.add_query_filter('document_category', 'annotation', ['*']);
-    srch.add_query_filter(golr_field, id, ['*']);
+    golr_response.set_personality('generic_association');
+    //golr_response.add_query_filter('document_category', 'annotation', ['*']);
+    golr_response.add_query_filter(golr_field, id, ['*']);
     
     // Add filters.
     var f_opts = {
 	    'meta_label': 'Total:&nbsp;',
 	    'display_free_text_p': true
     };
-    var filters = new bbop.widget.live_filters('bs3filter', srch, gconf, f_opts);
+    var filters = new bbop.widget.live_filters('bs3filter', golr_response, gconf, f_opts);
     filters.establish_display();
 
     // Attach pager.
     var pager_opts = {
     };
-    var pager = new bbop.widget.live_pager('bs3pager', srch, pager_opts);
+    var pager = new bbop.widget.live_pager('bs3pager', golr_response, pager_opts);
     // Add results.
     var results_opts = {
         //'callback_priority': -200,
@@ -39,19 +39,66 @@ function getTableFromSolr(id, golr_field){
         'user_buttons': [],
         'selectable_p' : false
     };
-    var results = new bbop.monarch.widget.live_results('bs3results', srch, confc,
+    var results = new bbop.widget.live_results('bs3results', golr_response, confc,
                            handler, linker, results_opts);
+
+    bbop.widget.display.results_table_by_class_conf_b3.prototype.process_entry = function(bit, field_id, document, display_context){
+        
+        var anchor = this;
+
+        // First, allow the hanndler to take a whack at it. Forgive
+        // the local return. The major difference that we'll have here
+        // is between standard fields and special handler fields. If
+        // the handler resolves to null, fall back onto standard.
+        var out = anchor._handler.dispatch(bit, field_id, display_context);
+        if( bbop.core.is_defined(out) && out != null ){
+            return out;
+        }
+
+        // Otherwise, use the rest of the context to try and render
+        // the item.
+        var retval = '';
+        var did = document['id'];
+        
+        // Get a label instead if we can.
+        var ilabel = anchor._golr_response.get_doc_label(did, field_id, bit);
+        if( ! ilabel ){
+            ilabel = bit;
+        }
+        
+        // Extract highlighting if we can from whatever our "label"
+        // was.
+        var hl = anchor._golr_response.get_doc_highlight(did, field_id, ilabel);
+
+        //Get cateogry
+        var category = anchor._golr_response.get_doc_field(did, field_id+'_category');
+        
+        // See what kind of link we can create from what we got.
+        var ilink =
+            anchor._linker.anchor({id:bit, label:ilabel, hilite:hl, category:category}, field_id);
+        
+        // See what we got, in order of how much we'd like to have it.
+        if( ilink ){
+            retval = ilink;
+        }else if( ilabel ){
+            retval = ilabel;
+        }else{
+            retval = bit;
+        }
+        
+        return retval;
+    };
     
     // Add pre and post run spinner (borrow filter's for now).
-    srch.register('prerun', 'foo', function(){
+    golr_response.register('prerun', 'foo', function(){
     filters.spin_up();
     });
-    srch.register('postrun', 'foo', function(){
+    golr_response.register('postrun', 'foo', function(){
     filters.spin_down();
     });
     
     // Initial run.
-    srch.search();
+    golr_response.search();
 }
 
 function getOntologyBrowser(id){
