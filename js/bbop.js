@@ -293,9 +293,7 @@ bbop.core.what_is = function(in_thing){
 bbop.core.is_array = function(in_thing){
     var retval = false;
     if( in_thing &&
-	typeof(in_thing) == 'object' &&
-	typeof(in_thing.push) == 'function' &&
-	typeof(in_thing.length) == 'number' ){
+	Array.isArray(in_thing) ){
 	retval = true;
     }
     return retval;
@@ -512,19 +510,19 @@ bbop.core.clone = function(thing){
 	// Is it a null, hash, or an array?
 	if( thing == null ){
 	    clone = null;
-	}else if( typeof(thing.length) === 'undefined' ){
-	    // Looks like a hash!
-	    //print("looks like a hash");
-	    clone = {};
-	    for(var h in thing){
-		clone[h] = bbop.core.clone(thing[h]);
-	    }
-	}else{
+	}else if( Array.isArray(thing) ){
 	    // Looks like an array!
 	    //print("looks like an array");
 	    clone = [];
 	    for(var i = 0; i < thing.length; i++){
 		clone[i] = bbop.core.clone(thing[i]);
+	    }
+	}else{
+	    // Looks like a hash!
+	    //print("looks like a hash");
+	    clone = {};
+	    for(var h in thing){
+		clone[h] = bbop.core.clone(thing[h]);
 	    }
 	}
     }else{
@@ -1254,6 +1252,21 @@ if ( typeof bbop == "undefined" ){ var bbop = {}; }
 bbop.test = function(){
 
     ///
+    /// Either rhino or node, right?
+    ///
+
+    // print or console.log
+    var barker = function(thing){};
+    if( typeof(console) !== 'undefined' && typeof(console.log) === 'function' ){
+	barker = console.log;	
+    }else if( typeof(print) === 'function' ){
+	barker = print;
+    }
+    function bark(thing){
+	barker(thing);
+    }
+
+    ///
     /// Accounting and reporting.
     ///
 
@@ -1267,16 +1280,16 @@ bbop.test = function(){
     function _complete(bool, msg){
 	if( bool ){
 	    if( msg ){
-		print('Test ' + test_number + ' passed: ' + msg + '.');
+		bark('Test ' + test_number + ' passed: ' + msg + '.');
 	    }else{
-		print('Test ' + test_number + ' passed.');
+		bark('Test ' + test_number + ' passed.');
 	    }
 	    _incr_passed();
 	}else{
 	    if( msg ){
-		print('FAIL: Test ' + test_number + ' failed: ' + msg + '.');
+		bark('FAIL: Test ' + test_number + ' failed: ' + msg + '.');
 	    }else{
-		print('FAIL: Test ' + test_number + ' failed.');
+		bark('FAIL: Test ' + test_number + ' failed.');
 	    }
 	    _incr_failed();
 	}
@@ -1296,10 +1309,10 @@ bbop.test = function(){
      */
     this.report = function(){
 	if( tests_passed + 1 == test_number ){
-	    print('* All tests passed.');
+	    bark('* All tests passed.');
 	}else{
-	    print('* Tests passed: ' + tests_passed);
-	    print('* Tests failed: ' + tests_failed);
+	    bark('* Tests passed: ' + tests_passed);
+	    bark('* Tests failed: ' + tests_failed);
 	}
     };
 
@@ -1324,6 +1337,7 @@ bbop.test = function(){
     }
 
     // Looking at array as sets of...something.
+    // DEPRECATED
     function _same_set(set1, set2){
 	var h1 = {};
 	var h2 = {};
@@ -1333,6 +1347,7 @@ bbop.test = function(){
     }
 
     // NOTE/WARNING: This is a very shallow comparison function.
+    // DEPRECATED
     function _same_hash(hash1, hash2){
 
 	var same_p = true;
@@ -1361,6 +1376,69 @@ bbop.test = function(){
 	}
 	
 	return same_p;
+    }
+
+    // Better general comparison function.
+    function _is_same(a, b){
+	//bark('typeof(a, b): ' + typeof(a) + ',' + typeof(b));
+
+	var ret = false;
+	if( a == b ){ // atoms, incl. null and 'string'
+	    //bark('true on equal atoms: ' + a + '<>' + b);
+	    ret = true;
+	}else{ // is list or obj (ignore func)
+	    if( typeof(a) === 'object' && typeof(b) === 'object' ){
+		//bark('...are objects');
+		
+		// Null is an object, but not like the others.
+		if( a == null || b == null ){
+		    ret = false;
+		}else if( Array.isArray(a) && Array.isArray(b) ){ // array equiv
+		    //bark('...are arrays');
+		    
+		    // Recursively check array equiv.
+		    if( a.length == b.length ){
+			if( a.length == 0 ){
+			    //bark('true on 0 length array');
+			    ret = true;
+			}else{
+			    ret = true; // assume true until false here
+			    for( var i = 0; i < a.length; i++ ){
+				if( ! _is_same(a[i], b[i]) ){
+				    //bark('false on diff @ index: ' + i);
+				    ret = false;
+				    break;
+				}
+			    }
+			}
+		    }
+
+		}else{ // object equiv.
+
+		    // Get unique set of keys.
+		    var a_keys = Object.keys(a);
+		    var b_keys = Object.keys(b);
+		    var keys = a_keys.concat(b_keys.filter(function(it){
+			return a_keys.indexOf(it) < 0;
+		    }));
+		    
+		    // Assume true until false.
+		    ret = true;
+		    for( var j = 0; j < keys.length; j++ ){ // no forEach - break
+			var k = keys[j];
+			if( ! _is_same(a[k], b[k]) ){
+			    //bark('false on key: ' + k);
+			    ret = false;
+			    break;
+			}
+		    }
+		}
+	    }else{
+		//bark('false by default');
+	    }
+	}
+	
+	return ret;
     }
 
     // TODO: This could probably be done better.
@@ -1438,7 +1516,7 @@ bbop.test = function(){
 	    
 	    var car = base_str.substr(0, si);
 	    var cdr = base_str.substr(si, base_str.length);
-	    //print(car + "|" + add_str + "|" + cdr);
+	    //bark(car + "|" + add_str + "|" + cdr);
 	    if( car + add_str + cdr == target_str){
 		retval = true;
 		break;
@@ -1453,6 +1531,8 @@ bbop.test = function(){
 
     /*
      * Function: is_same_atom
+     *
+     * DEPRECATED
      *
      * Test whether two atoms are the same.
      *
@@ -1473,6 +1553,8 @@ bbop.test = function(){
      * Function: is_different_atom
      *
      * A negative version of <is_same_atom>.
+     *
+     * DEPRECATED
      *
      * Parameters: 
      *  question - the atom to test
@@ -1653,6 +1735,8 @@ bbop.test = function(){
      *
      * Test whether two sets (as atomic arrays) are the same.
      *
+     * DEPRECATED
+     *
      * Parameters: 
      *  set1 - set (as array)
      *  set2 - set (as array)
@@ -1669,6 +1753,8 @@ bbop.test = function(){
      * Function: is_different_set
      *
      * A negative version of <is_same_set>.
+     *
+     * DEPRECATED
      *
      * Parameters: 
      *  set1 - set (as array)
@@ -1687,6 +1773,8 @@ bbop.test = function(){
      *
      * Test whether two simple atomic hashes are the same.
      *
+     * DEPRECATED
+     *
      * Parameters: 
      *  hash1 - hash
      *  hash2 - hash
@@ -1704,6 +1792,8 @@ bbop.test = function(){
      *
      * A negative version of <is_same_hash>.
      *
+     * DEPRECATED
+     *
      * Parameters: 
      *  hash1 - hash
      *  hash2 - hash
@@ -1714,6 +1804,47 @@ bbop.test = function(){
      */
     this.is_different_hash = function(hash1, hash2, msg){
 	_complete(! _same_hash(hash1, hash2), msg);
+    };
+
+    /*
+     * Function: is_same_thing
+     *
+     * Test whether two things (not functions) are pretty much the
+     * same. For atoms and structures of atoms and other structures.
+     *
+     * This is a general purpose tool that should replace all the
+     * other similarity functions.
+     *
+     * Parameters: 
+     *  thing1 - thing (not function)
+     *  thing2 - thing (not function)
+     *  msg - *[optional]* informational message about test
+     *
+     * Returns: 
+     *  n/a
+     */
+    this.is_same_thing = function(thing1, thing2, msg){
+	_complete(_is_same(thing1, thing2), msg);
+    };
+
+    /*
+     * Function: is_different_thing
+     *
+     * A negative version of <is_same_thing>.
+     *
+     * This is a general purpose tool that should replace all the
+     * other difference functions.
+     *
+     * Parameters: 
+     *  thing1 - thing (not function)
+     *  thing2 - thing (not function)
+     *  msg - *[optional]* informational message about test
+     *
+     * Returns: 
+     *  n/a
+     */
+    this.is_different_thing = function(thing1, thing2, msg){
+	_complete(! _is_same(thing1, thing2), msg);
     };
 
     /*
@@ -1879,14 +2010,14 @@ if ( typeof bbop.version == "undefined" ){ bbop.version = {}; }
  * Partial version for this library; revision (major/minor version numbers)
  * information.
  */
-bbop.version.revision = "2.2.3";
+bbop.version.revision = "2.3.1";
 
 /*
  * Variable: release
  *
  * Partial version for this library: release (date-like) information.
  */
-bbop.version.release = "20140928";
+bbop.version.release = "20150508";
 /*
  * Package: logger.js
  * 
@@ -6607,15 +6738,21 @@ bbop.model.bracket.graph = function(){
 
 	var rel = predicate_acc || '';
 	var dflt = default_weight || 0;
-	var order =
-	    {
-		is_a: 1,
-		has_part: 2,
-		part_of: 3,
-		regulates: 4,
-		negatively_regulates: 5,
-		positively_regulates: 6
-	    };
+	var order = {
+	    'is_a': 1,
+	    'is a': 1,
+	    'has_part': 2,
+	    'has part': 2,
+	    'part_of': 3,
+	    'part of': 3,
+	    'regulates': 4,
+	    'negatively_regulates': 5,
+	    'negatively regulates': 5,
+	    'positively_regulates': 6,
+	    'positively regulates': 6,
+	    'occurs_in': 7,
+	    'occurs in': 7
+	};
 
 	var ret_weight = dflt;
 	if( bbop.core.is_defined(rel) &&
@@ -6713,65 +6850,61 @@ bbop.model.bracket.graph = function(){
 	// So, let's go through all the rows, looking on the
 	// transitivity graph to see if we can find the predicates.
 	var bracket_list = [];
-	each(layout,
-	    function(layout_level){
-		var bracket = [];
-		each(layout_level,
-		     function(layout_item){
-
-			 // The defaults for what we'll pass back out.
-			 var curr_acc = layout_item;
-			 var pred_id = 'is_a';			 
-			 var curr_node = anchor.get_node(curr_acc);
-			 var label = curr_node.label() || layout_item;
-
-			 // 
-
-			 // Now we just have to determine
-			 // predicates. If we're the one, we'll just
-			 // use the defaults.
-			 if( curr_acc == term_acc ){
-			     // Default.
-			 }else{
-			     // Since the transitivity graph only
-			     // stores ancestors, we can also use it
-			     // to passively test if these are
-			     // children we should be looking for.
-			     var trels =
-				 transitivity_graph.get_predicates(term_acc,
-								   curr_acc);
-			     if( ! bbop.core.is_empty(trels) ){
-				 // Not children, so decide which of
-				 // the returned edges is the best.
-				 pred_id = anchor.dominant_relationship(trels);
-			     }else{
-				 // Probably children, so go ahead and
-				 // try and pull the direct
-				 // parent/child relation.
-				 var drels = anchor.get_predicates(curr_acc,
-								   term_acc);
-				 pred_id = anchor.dominant_relationship(drels);
-			     }
-			 }
-
-			 // Turn our old layout item into a new-info
-			 // rich list.
-			 bracket.push([curr_acc, label, pred_id]);
-		     });
-		// Sort alphanum and then re-add to list.
-		bracket.sort(
-		    function(a, b){
-			if( a[1] < b[1] ){
-			    return -1;
-			}else if( a[1] > b[1] ){
-			    return 1;
-			}else{
-			    return 0;
+	each(layout, function(layout_level){
+	    var bracket = [];
+	    each(layout_level, function(layout_item){
+		
+		// The defaults for what we'll pass back out.
+		var curr_acc = layout_item;
+		//var pred_id = 'is_a';
+		// BUG/TODO: This is the temporary workaround for
+		// incomplete transitivity graphs in some cases:
+		// https://github.com/kltm/bbop-js/wiki/TransitivityGraph#troubleshooting-caveats-and-fail-modes
+		var pred_id = 'related_to';
+		var curr_node = anchor.get_node(curr_acc);
+		var label = curr_node.label() || layout_item;
+		
+		// Now we just have to determine predicates. If we're
+		// the one, we'll just use the defaults.
+		if( curr_acc == term_acc ){
+		    // Default.
+		}else{
+		    // Since the transitivity graph only stores
+		    // ancestors, we can also use it to passively test
+		    // if these are children we should be looking for.
+		    var trels =
+			transitivity_graph.get_predicates(term_acc, curr_acc);
+		    if( ! bbop.core.is_empty(trels) ){
+			// Not children, so decide which of
+			// the returned edges is the best.
+			pred_id = anchor.dominant_relationship(trels);
+		    }else{
+			// Probably children, so go ahead and try and
+			// pull the direct parent/child relation.
+			var drels = anchor.get_predicates(curr_acc, term_acc);
+			if( ! bbop.core.is_empty(drels) ){
+			    pred_id = anchor.dominant_relationship(drels);
 			}
-		    });
-		bracket_list.push(bracket);
+		    }
+		}
+		
+		// Turn our old layout item into a new-info
+		// rich list.
+		bracket.push([curr_acc, label, pred_id]);
 	    });
-
+	    // Sort alphanum and then re-add to list.
+	    bracket.sort(function(a, b){
+		if( a[1] < b[1] ){
+		    return -1;
+		}else if( a[1] > b[1] ){
+		    return 1;
+		}else{
+		    return 0;
+		}
+	    });
+	    bracket_list.push(bracket);
+	});
+	
 	return bracket_list;
     };
 };
@@ -8663,29 +8796,30 @@ bbop.rest.manager.node.prototype.update = function(callback_type){
 	res.setEncoding('utf8');
 	var raw_data = '';
 	res.on('data', function (chunk) {
-		   //console.log('BODY: ' + chunk);
-		   raw_data = raw_data + chunk;
-	       });
+	    //console.log('BODY: ' + chunk);
+	    raw_data = raw_data + chunk;
+	});
 	// Throw to .
 	res.on('end', function () {
-		   var response = new anchor._response_handler(raw_data);
-		   if( response && response.okay() ){
-		       anchor.apply_callbacks('success', [response, anchor]);
-		   }else{
-		       // Make sure that there is something there to
-		       // hold on to.
-		       if( ! response ){
-			   response = new anchor._response_handler(null);
-			   response.okay(false);
-			   response.message_type('error');
-			   response.message('null response');
-		       }else{
-			   response.message_type('error');
-			   response.message('bad response');
-		       }
-		       anchor.apply_callbacks('error', [response, anchor]);
-		   }
-	       });
+	    //console.log('END with: ' + raw_data);
+	    var response = new anchor._response_handler(raw_data);
+	    if( response && response.okay() ){
+		anchor.apply_callbacks('success', [response, anchor]);
+	    }else{
+		// Make sure that there is something there to
+		// hold on to.
+		if( ! response ){
+		    response = new anchor._response_handler(null);
+		    response.okay(false);
+		    response.message_type('error');
+		    response.message('null response');
+		}else{
+		    response.message_type('error');
+		    response.message('bad response');
+		}
+		anchor.apply_callbacks('error', [response, anchor]);
+	    }
+	});
     }
 
     // Conditional merging of the remaining variant parts.
@@ -11760,25 +11894,39 @@ bbop.golr.manager = function (golr_loc, golr_conf_obj){
 	// Check that there is something there.
 	if( new_query && new_query.length && new_query.length > 0 ){
 
-	    // That it is alphanum+space-ish
-	    if( alphanum.test(new_query) ){
-	    
-		// Break it into tokens and get the last.
-		var tokens = new_query.split(new RegExp('\\s+'));
-		var last_token = tokens[tokens.length -1];
-		//ll('last: ' + last_token);
-		
-		if( tokens.length == 1 ){
+	    // Check if the last real input has a space after it.
+	    var has_cursor_p = true;
+	    if( new_query.slice(-1) === ' ' ){
+		has_cursor_p = false;
+	    }
 
-		    // If it is three or more, add the wildcard.
-		    if( last_token.length >= 3 ){
+	    // Now chomp it down again to get rid of whitespace.
+	    new_query = bbop.core.chomp(new_query);
+
+	    // Check (again) that there is something there.
+	    if( new_query && new_query.length && new_query.length > 0 ){
+
+		// That it is alphanum+space-ish and that we actually
+		// might want to add a wildcard (i.e. has cursor).
+		if( alphanum.test(new_query) && has_cursor_p ){
+	    
+		    // Break it into tokens and get the last.
+		    var tokens = new_query.split(new RegExp('\\s+'));
+		    var last_token = tokens[tokens.length -1];
+		    //ll('last: ' + last_token);
+		
+		    if( tokens.length == 1 ){
+			
+			// If it is three or more, add the wildcard.
+			if( last_token.length >= 3 ){
+			    tokens[tokens.length -1] = last_token + '*';
+			}
+		    }else{
 			tokens[tokens.length -1] = last_token + '*';
 		    }
-		}else{
-		    tokens[tokens.length -1] = last_token + '*';
+		    // And join it all back into our comfy query.
+		    comfy_query = tokens.join(' ');
 		}
-		// And join it all back into our comfy query.
-		comfy_query = tokens.join(' ');
 	    }
 	}
 
@@ -14826,6 +14974,11 @@ bbop.widget.display.results_table_by_class_conf_b3 = function(cclass,
     logger.DEBUG = false;
     function ll(str){ logger.kvetch('RTBCCBS3: ' + str); }
 
+    // Tie important things down for cell rendering prototype.
+    anchor._golr_response = golr_resp;
+    anchor._linker = linker;
+    anchor._handler = handler;
+
     // Conveience aliases.
     var each = bbop.core.each;
     var is_defined = bbop.core.is_defined;
@@ -14999,45 +15152,6 @@ bbop.widget.display.results_table_by_class_conf_b3 = function(cclass,
     /// Render the documents.
     ///
 
-    // Some of what we'll do for each field in each doc (see below).
-    // var ext = cclass.searchable_extension();
-    function _process_entry(fid, iid, doc){
-
-	var retval = '';
-	var did = doc['id'];
-
-	// BUG/TODO: First see if the filed will be multi or not.
-	// If not multi, follow the first path. If multi, break it
-	// down and try again.
-
-	// Get a label instead if we can.
-	var ilabel = golr_resp.get_doc_label(did, fid, iid);
-	if( ! ilabel ){
-	    ilabel = iid;
-	}
-
-	// Extract highlighting if we can from whatever our "label"
-	// was.
-	var hl = golr_resp.get_doc_highlight(did, fid, ilabel);
-
-	// See what kind of link we can create from what we got.
-	var ilink = linker.anchor({id: iid, label: ilabel, hilite: hl}, fid);
-	
-	ll('processing: ' + [fid, ilabel, iid].join(', '));
-	//ll('ilink: ' + ilink);
-
-	// See what we got, in order of how much we'd like to have it.
-	if( ilink ){
-	    retval = ilink;
-	}else if( ilabel ){
-	    retval = ilabel;
-	}else{
-	    retval = iid;
-	}
-
-	return retval;
-    }
-
     // Cycle through and render each document.
     // For each doc, deal with it as best we can using a little
     // probing. Score is a special case as it is not an explicit
@@ -15084,23 +15198,9 @@ bbop.widget.display.results_table_by_class_conf_b3 = function(cclass,
 		
 		// Render each of the bits.
 		var tmp_buff = [];
-		each(bits, function(bit){
-		    
-		    // The major difference that we'll have here is
-		    // between standard fields and special handler
-		    // fields. If the handler resolves to null, fall
-		    // back onto standard.
-		    ll('! B:' + bit + ', F:' + fid + ', D:' + display_context);
-		    var out = handler.dispatch(bit, fid, display_context);
-		    if( is_defined(out) && out != null ){
-			// Handler success.
-			tmp_buff.push(out);
-		    }else{
-			// Standard output.   
-			out = _process_entry(fid, bit, doc);
-			//ll('out: ' + out);
-			tmp_buff.push(out);
-		    }
+		each(bits, function(bit){		    
+		    out = anchor.process_entry(bit, fid, doc, display_context);
+		    tmp_buff.push(out);
 		});
 		// Join it, trim/store it, push to to output.
 		var joined = tmp_buff.join('<br />');
@@ -15158,6 +15258,79 @@ bbop.widget.display.results_table_by_class_conf_b3 = function(cclass,
 	});
     }
 };
+
+/*
+ * Function: process_entry
+ *
+ * The function used to render a single entry in a cell in the results
+ * table. It can be overridden to specify special behaviour. There may
+ * be multiple entries within a cell, but they will all have this
+ * function individually run over them.
+ *
+ * This function can access this._golr_response (a
+ * <bbop.golr.response>), this._linker (a <bbop.linker>), and
+ * this._handler (a <bbop.handler>).
+ *
+ * Arguments:
+ *  bit - string (?) for the one entry in the cell
+ *  field_id - string for the field under consideration
+ *  document - the single document for this item from the solr response
+ *
+ * Returns:
+ *  string or empty string ('')
+ */
+bbop.widget.display.results_table_by_class_conf_b3.prototype.process_entry = 
+    function(bit, field_id, document, display_context){
+	
+    	var anchor = this;
+
+	// First, allow the hanndler to take a whack at it. Forgive
+	// the local return. The major difference that we'll have here
+	// is between standard fields and special handler fields. If
+	// the handler resolves to null, fall back onto standard.
+	//ll('! B:' + bit + ', F:' + fid + ', D:' + display_context);
+	var out = anchor._handler.dispatch(bit, field_id, display_context);
+	if( bbop.core.is_defined(out) && out != null ){
+	    return out;
+	}
+
+	// Otherwise, use the rest of the context to try and render
+	// the item.
+    	var retval = '';
+    	var did = document['id'];
+	
+    	// BUG/TODO: First see if the filed will be multi or not.
+    	// If not multi, follow the first path. If multi, break it
+    	// down and try again.
+	
+    	// Get a label instead if we can.
+    	var ilabel = anchor._golr_response.get_doc_label(did, field_id, bit);
+    	if( ! ilabel ){
+    	    ilabel = bit;
+    	}
+	
+    	// Extract highlighting if we can from whatever our "label"
+    	// was.
+    	var hl = anchor._golr_response.get_doc_highlight(did, field_id, ilabel);
+	
+    	// See what kind of link we can create from what we got.
+    	var ilink =
+    	    anchor._linker.anchor({id:bit, label:ilabel, hilite:hl}, field_id);
+	
+    	//ll('processing: ' + [field_id, ilabel, bit].join(', '));
+    	//ll('ilink: ' + ilink);
+	
+    	// See what we got, in order of how much we'd like to have it.
+    	if( ilink ){
+    	    retval = ilink;
+    	}else if( ilabel ){
+    	    retval = ilabel;
+    	}else{
+    	    retval = bit;
+    	}
+	
+    	return retval;
+    };
 /*
  * Package: two_column_layout.js
  * 
@@ -15179,7 +15352,7 @@ if ( typeof bbop.widget.display == "undefined" ){ bbop.widget.display = {}; }
  * These are currently hardwired to:
  * 
  * : 'class': 'twocol-leftcolumn', 'style': 'margin-top: -15px;'
- * : 'class': 'twocol-content', 'style': 'margin-left: 26em; margin-top: -15px;'
+ * : 'class': 'twocol-content', 'style': 'margin-left: 28em; margin-top: -15px;'
  * 
  * Parameters:
  *  col1 - the string or <bbop.html> object for the left column
@@ -15202,8 +15375,8 @@ bbop.widget.display.two_column_layout = function (col1, col2){
     // Right (display) side.
     this._two_column_stack_right =
 	new bbop.html.tag('div',
-			  {'class': 'twocol-content',
-			   'style': 'margin-left: 26em; margin-top: -15px;'},
+			  {'class': 'twocol-content'},
+			   // 'style': 'margin-left: 28em; margin-top: -15px;'},
 			  col2);
     this.add_to(this._two_column_stack_right);
 };
@@ -17823,9 +17996,10 @@ if ( typeof bbop.widget == "undefined" ){ bbop.widget = {}; }
  * there are probably some fields that you'll want to fill out to make
  * things work decently. The options for the argument hash are:
  * 
- *  fill_p - whether or not to fill the input with the val on select(default true)
+ *  fill_p - whether or not to fill the input with the val on select (default true)
  *  label_template - string template for dropdown, can use any document field
  *  value_template - string template for selected, can use any document field
+ *  additional_results_class - class to add to the pop-up autocomplete ul tag when there are more results than are shown in the results
  *  minimum_length - wait for this many characters to start (default 3)
  *  list_select_callback - function takes a json solr doc on dropdown selection
  * 
@@ -17864,6 +18038,7 @@ bbop.widget.search_box = function(golr_loc,
 	    'fill_p': true,
 	    'label_template': '{{id}}',
 	    'value_template': '{{id}}',
+	    'additional_results_class': '',
 	    'minimum_length': 3, // wait for three characters or more
 	    'list_select_callback': function(){}
 	};
@@ -17876,7 +18051,12 @@ bbop.widget.search_box = function(golr_loc,
     this._list_select_callback = arg_hash['list_select_callback'];
     var label_tt = new bbop.template(arg_hash['label_template']);
     var value_tt = new bbop.template(arg_hash['value_template']);
+    var ar_class = arg_hash['additional_results_class'];
     var minlen = arg_hash['minimum_length'];
+    // The document  return counts. Need  tri-state here since 0  is a
+    // legit return.
+    var result_count = null;
+    var return_count = null;
 
     // The all-important argument hash. See:
     // http://jqueryui.com/demos/autocomplete/#method-widget
@@ -17890,7 +18070,17 @@ bbop.widget.search_box = function(golr_loc,
 	    anchor.jq_vars['success'] = function(json_data){
 		var retlist = [];
 		var resp = new bbop.golr.response(json_data);
+
+		// Reset the last return; remember: tri-state.
+		result_count = null;
+		return_count = null;
+
 		if( resp.success() ){
+
+		    // Get best shot at document counts.
+		    result_count = resp.total_documents();
+		    return_count = resp.documents().length;
+
 		    loop(resp.documents(),
 			 function(doc){
 
@@ -17933,15 +18123,56 @@ bbop.widget.search_box = function(golr_loc,
 	    }
 
 	    // Only do the callback if it is defined.
-	    if( bbop.core.is_defined(anchor._list_select_callback) ){
+	    if( doc_to_apply && 
+		bbop.core.is_defined(anchor._list_select_callback) ){
 		anchor._list_select_callback(doc_to_apply);
 	    }
+	},
+	// What to do when a search is completed.
+	response: function(event, ui){
+	    // if(	result_count != null && return_count != null ){ // possible
+	    // 	if( result_count > return_count ){
+	    // 	    //console.log('incomplete listing');
+	    // 	    var item = {
+	    // 		'label': '...',
+	    // 		'value': null,
+	    // 		'document': null
+	    // 	    };
+	    // 	    ui.content.push(item);
+	    // 	}else{
+	    // 	    //console.log('complete listing');
+	    // 	}
+	    // }
 	}
     };
 
     // Set the ball rolling (attach jQuery autocomplete to doc).
-    jQuery('#' + anchor._interface_id).autocomplete(auto_args);
+    var jac = jQuery('#' + anchor._interface_id).autocomplete(auto_args);
 
+    // Add our render override.
+    // Extension point to get the additional
+    jac.data('ui-autocomplete')._renderMenu = function(ul, items){
+
+	// Allow standard menu construction delegation.
+	var anchor = this;
+	loop(items, function(item){
+	    anchor._renderItemData(ul, item);
+	});
+	
+	// Add a special class to the UL if there are results that
+	// are not shown.
+	if( ar_class && ar_class != '' ){
+	    jQuery(ul).removeClass(ar_class); // default no
+	    if( result_count != null && return_count != null ){ // possible
+		console.log('res_c: ' + result_count);
+		console.log('ret_c: ' + return_count);
+		if( result_count > return_count ){
+		    // If 
+		    jQuery(ul).addClass(ar_class);
+		}
+	    }
+	}
+    };
 
     /*
      * Function: destroy
@@ -20609,13 +20840,19 @@ if ( typeof bbop.widget == "undefined" ){ bbop.widget = {}; }
  * 
  * Results table and optional buttons.
  *
+ * Optional options looks like:
+ *  callback_priority - default 0
+ *  user_buttons - default [], should be any passable renderable button
+ *  user_buttons_div_id - default null
+ *  selectable_p - have selectable side buttons (default true)
+ *
  * Arguments:
  *  interface_id - string id of the element to build on
  *  manager - the shared GOlr manager to use
  *  conf_class - the profile of the specific conf to use
  *  handler - handler to use in rendering
  *  linker - linker to use in rendering
- *  in_argument_hash - *[optional]* optional hash of optional arguments
+ *  in_argument_hash - *[optional]* optional hash of optional arguments, described above
  * 
  * Returns:
  *  this object
@@ -20761,11 +20998,11 @@ bbop.widget.live_results = function(interface_id, manager, conf_class,
 	    // Display results.
 	    var bwd = bbop.widget.display;
 	    results_table =
-		bwd.results_table_by_class_conf_b3(conf_class, resp, linker,
-						   handler, interface_id,
-						   selectable_p,
-						   select_column_id,
-						   select_item_name);
+		new bwd.results_table_by_class_conf_b3(conf_class, resp, linker,
+						       handler, interface_id,
+						       selectable_p,
+						       select_column_id,
+						       select_item_name);
 	}
     }
     manager.register('search', fun_id, _draw_table_or_something,
