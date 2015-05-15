@@ -1,10 +1,13 @@
-/* Test: handler.js.test
+/* Test: linker.js.test
 
-   Tests the Monarch handler class
+   Tests the Monarch linker class
    
    To run:
+   
+   Unfortunately paths are hardcoded so for now this must be ran at the top level
+   monarch-app directory, with ringo replaced with the path to the ringo binary
 
-    > RINGO_MODULE_PATH=../stick/lib:./modules/ ringo ./js/lib/monarch/handler.js.test
+    > RINGO_MODULE_PATH=../stick/lib:./modules/ ringo ./js/lib/monarch/linker.js.test
 
  */
 var fs = require('fs');
@@ -12,6 +15,7 @@ var assert = require("assert");
 var bbop = require("bbop");
 load('./js/amigo2.js')
 load('./lib/monarch/api.js');
+load('./js/lib/monarch/linker.js');
 
 if (typeof bbop == 'undefined') { var bbop = {};}
 if (typeof bbop.monarch == 'undefined') { bbop.monarch = {};}
@@ -23,11 +27,33 @@ var engine = new bbop.monarch.Engine();
 var global_app_base = engine.config.app_base;
 
 exports.testAssociation = function() {
-    
-    load('./js/lib/monarch/linker.js');
+   
     var linker = new bbop.monarch.linker();
-
     assert.equal(linker.url('MONARCH:1234', 'evidence'), null);
+
+};
+
+exports.testOMIMGene = function() {
+
+    var linker = new bbop.monarch.linker();
+    var expectedURL = global_app_base+'/gene/OMIM:1234';
+    assert.equal(linker.url('OMIM:1234', 'object', undefined, 'gene'), expectedURL);
+
+};
+
+exports.testOMIMDisease = function() {
+
+    var linker = new bbop.monarch.linker();
+    var expectedURL = global_app_base+'/disease/OMIM:1234';
+    assert.equal(linker.url('OMIM:1234', 'object', undefined, 'disease'), expectedURL);
+
+};
+
+exports.testOMIMDisease = function() {
+    
+    var linker = new bbop.monarch.linker();
+    var expectedURL = global_app_base+'/disease/OMIM:1234';
+    assert.equal(linker.url('OMIM:1234', 'subject', undefined, 'disease'), expectedURL);
 
 };
 
