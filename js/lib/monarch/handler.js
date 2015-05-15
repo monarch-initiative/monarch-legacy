@@ -36,11 +36,13 @@ bbop.monarch.handler = function (){
     var is_def = bbop.core.is_defined;
 
     // Let's ensure we're sane.
+    /*
     if( ! is_def(amigo)
             || ! is_def(amigo.data) 
             || ! is_def(amigo.data.dispatch) ){
         throw new Error('we are missing access to amigo.data.dispatch!');
     }
+    */
 
     // Okay, since trying functions into existence is slow, we'll
     // create a cache of strings to functions.
@@ -86,6 +88,7 @@ bbop.monarch.handler.prototype.dispatch = function(data, name, context, fallback
 	this.entries += 1;
 
 	// First, try and get the most specific.
+	/*
 	if( is_def(amigo.data.dispatch[name]) ){
 
 	    var field_hash = amigo.data.dispatch[name];
@@ -102,7 +105,7 @@ bbop.monarch.handler.prototype.dispatch = function(data, name, context, fallback
 		    function_string = field_hash['default'];
         }
     }
-
+    */
 	    // At the end of this section, if we don't have a string
 	    // to resolve into a function, the data format we're
 	    // working from is damaged.

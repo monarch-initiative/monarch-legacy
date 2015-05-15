@@ -13,7 +13,7 @@
 var fs = require('fs');
 var assert = require("assert");
 var bbop = require("bbop");
-load('./js/amigo2.js')
+
 load('./lib/monarch/api.js');
 load('./js/lib/monarch/linker.js');
 
@@ -30,6 +30,8 @@ exports.testAssociation = function() {
     assert.equal(linker.url('MONARCH:1234', 'evidence'), null);
 };
 
+// Test that the category functionality is working from
+// ./js/GolrScratch.js
 exports.testOMIMGene = function() {
     var expectedURL = global_app_base+'/gene/OMIM:1234';
     assert.equal(linker.url('OMIM:1234', 'object', undefined, 'gene'), expectedURL);
