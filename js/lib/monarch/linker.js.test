@@ -1,0 +1,37 @@
+/* Test: handler.js.test
+
+   Tests the Monarch handler class
+   
+   To run:
+
+    > RINGO_MODULE_PATH=../stick/lib:./modules/ ringo ./js/lib/monarch/handler.js.test
+
+ */
+var fs = require('fs');
+var assert = require("assert");
+var bbop = require("bbop");
+load('./js/amigo2.js')
+load('./lib/monarch/api.js');
+
+if (typeof bbop == 'undefined') { var bbop = {};}
+if (typeof bbop.monarch == 'undefined') { bbop.monarch = {};}
+
+bbop.monarch.defaultConfig = JSON.parse(fs.read("conf/server_config_dev.json"));
+var global_xrefs_conf = JSON.parse(fs.read('conf/xrefs.json'));
+
+var engine = new bbop.monarch.Engine();
+var global_app_base = engine.config.app_base;
+
+exports.testAssociation = function() {
+    
+    load('./js/lib/monarch/linker.js');
+    var linker = new bbop.monarch.linker();
+
+    assert.equal(linker.url('MONARCH:1234', 'evidence'), null);
+
+};
+
+if (require.main == module.id) {
+    require("test").run(exports);
+}
+

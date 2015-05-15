@@ -36,10 +36,10 @@ bbop.monarch.handler = function (){
     var is_def = bbop.core.is_defined;
 
     // Let's ensure we're sane.
-    if( ! is_def(amigo) ||
-	! is_def(amigo.data) ||
-	! is_def(amigo.data.dispatch) ){
-	throw new Error('we are missing access to amigo.data.dispatch!');
+    if( ! is_def(amigo)
+            || ! is_def(amigo.data) 
+            || ! is_def(amigo.data.dispatch) ){
+        throw new Error('we are missing access to amigo.data.dispatch!');
     }
 
     // Okay, since trying functions into existence is slow, we'll
