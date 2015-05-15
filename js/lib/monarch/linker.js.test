@@ -21,40 +21,23 @@ if (typeof bbop == 'undefined') { var bbop = {};}
 if (typeof bbop.monarch == 'undefined') { bbop.monarch = {};}
 
 bbop.monarch.defaultConfig = JSON.parse(fs.read("conf/server_config_dev.json"));
-var global_xrefs_conf = JSON.parse(fs.read('conf/xrefs.json'));
-
 var engine = new bbop.monarch.Engine();
+var global_xrefs_conf = JSON.parse(fs.read('conf/xrefs.json'));
 var global_app_base = engine.config.app_base;
+var linker = new bbop.monarch.linker();
 
 exports.testAssociation = function() {
-   
-    var linker = new bbop.monarch.linker();
     assert.equal(linker.url('MONARCH:1234', 'evidence'), null);
-
 };
 
 exports.testOMIMGene = function() {
-
-    var linker = new bbop.monarch.linker();
     var expectedURL = global_app_base+'/gene/OMIM:1234';
     assert.equal(linker.url('OMIM:1234', 'object', undefined, 'gene'), expectedURL);
-
 };
 
 exports.testOMIMDisease = function() {
-
-    var linker = new bbop.monarch.linker();
     var expectedURL = global_app_base+'/disease/OMIM:1234';
     assert.equal(linker.url('OMIM:1234', 'object', undefined, 'disease'), expectedURL);
-
-};
-
-exports.testOMIMDisease = function() {
-    
-    var linker = new bbop.monarch.linker();
-    var expectedURL = global_app_base+'/disease/OMIM:1234';
-    assert.equal(linker.url('OMIM:1234', 'subject', undefined, 'disease'), expectedURL);
-
 };
 
 if (require.main == module.id) {
