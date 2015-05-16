@@ -105,7 +105,7 @@ bbop.monarch.linker.prototype.url = function (id, xid, modifier, category){
                 // Now, check to see if it is indeed in our store.
                 var lc_src = src.toLowerCase();
                 var xref = global_xrefs_conf[lc_src];
-                if(xref && xref['url_syntax']){
+                if (xref && xref['url_syntax']){
                     retval =
                         xref['url_syntax'].replace('[example_id]', sid, 'g');
                 }
@@ -114,6 +114,56 @@ bbop.monarch.linker.prototype.url = function (id, xid, modifier, category){
     }
     return retval;
 };
+
+/*
+ * Function: img
+ * 
+ * Return a html img string.
+ * 
+ * Arguments:
+ *  args - id
+ *  xid - *[optional]* an internal transformation id
+ *  modifier - *[optional]* modify xid; only used with xid
+ * 
+ * Returns:
+ *  string (img tag); null if it couldn't create anything
+ */
+bbop.monarch.linker.prototype.img = function (id, xid, modifier, category){
+    
+    var retval = null;
+
+    ///
+    /// Monarch hard-coded internal link types.
+    ///
+
+    // For us, having an xid means that we will be doing some more
+    // complicated routing.
+    if(xid && xid != ''){
+
+        if(!retval && id && id != ''){ // not internal, but still has an id
+            if(!global_xrefs_conf){
+                throw new Error('global_xrefs_conf is missing!');
+            }
+    
+            // First, extract the probable source and break it into parts.
+            var full_id_parts = bbop.core.first_split(':', id);
+            if(full_id_parts && full_id_parts[0] && full_id_parts[1]){
+                var src = full_id_parts[0];
+                var sid = full_id_parts[1];
+        
+                // Now, check to see if it is indeed in our store.
+                var lc_src = src.toLowerCase();
+                var xref = global_xrefs_conf[lc_src];
+                if (xref && xref['image_path']){
+                    retval = '<img class="source" src="' + global_app_base 
+                              + xref['image_path'] + '"/>';
+                }
+            }
+        }
+    }
+    return retval;
+};
+
 
 /*
  * Function: anchor
@@ -139,27 +189,33 @@ bbop.monarch.linker.prototype.anchor = function(args, xid, modifier){
 
         // Get what fundamental arguments we can.
         var id = args['id'];
-        if(id){
+        if (id){
 
             // Infer label from id if not present.
             var label = args['label'];
-            if(!label){ 
+            if (!label){ 
                 label = id; 
             }
             
             // Infer hilite from label if not present.
             var hilite = args['hilite'];
-            if( ! hilite ){ hilite = label; }
+            if (!hilite){ hilite = label; }
             
             var category = args['category'];
             
             // See if the URL is legit. If it is, make something for it.
             var url = this.url(id, xid, modifier, category);
-            if(url){
+            var img = this.img(id, xid, modifier, category);
+            if (url){
 
                 // If it wasn't in the special transformations, just make
                 // something generic.
-                if( ! retval ){
+                if (!retval && typeof img != 'undefined'
+                        && xid == 'evidence'){
+                    retval = '<a title="' + id +
+                    ' (go to the page for ' + label +
+                    ')" href="' + url + '">' + img + '</a>';
+                } else if (!retval){
                     retval = '<a title="' + id +
                     ' (go to the page for ' + label +
                     ')" href="' + url + '">' + hilite + '</a>';
@@ -207,13 +263,15 @@ bbop.monarch.handler = function (){
     var is_def = bbop.core.is_defined;
 
     // Let's ensure we're sane.
-    if( ! is_def(amigo) ||
-	! is_def(amigo.data) ||
-	! is_def(amigo.data.dispatch) ){
-	throw new Error('we are missing access to amigo.data.dispatch!');
+    /*
+    if( ! is_def(amigo)
+            || ! is_def(amigo.data) 
+            || ! is_def(amigo.data.dispatch) ){
+        throw new Error('we are missing access to amigo.data.dispatch!');
     }
+    */
 
-    // Okay, since trying functions into existance is slow, we'll
+    // Okay, since trying functions into existence is slow, we'll
     // create a cache of strings to functions.
     this.mangle = bbop.core.uuid();
     this.string_to_function_map = {};
@@ -252,48 +310,49 @@ bbop.monarch.handler.prototype.dispatch = function(data, name, context, fallback
 
     // If the combination is not already in the map, fill it in as
     // best we can.
-    if( ! is_def(this.string_to_function_map[did]) ){
+    if(!is_def(this.string_to_function_map[did])){
 	
 	this.entries += 1;
 
 	// First, try and get the most specific.
+
 	if( is_def(amigo.data.dispatch[name]) ){
 
 	    var field_hash = amigo.data.dispatch[name];
 	    var function_string = null;
 
-	    if( is_def(field_hash['context']) &&
-		is_def(field_hash['context'][context]) ){
-		// The most specific.
-		function_string = field_hash['context'][context];
-	    }else{
+	    if (is_def(field_hash['context']) 
+                && is_def(field_hash['context'][context])){
+		    // The most specific.
+		    function_string = field_hash['context'][context];
+	    } else {
 		// If the most specific cannot be found, try and get
 		// the more general one.
-		if( is_def(field_hash['default']) ){
+		if (is_def(field_hash['default'])){
 		    function_string = field_hash['default'];
-		}
-	    }
+        }
+    }
 
 	    // At the end of this section, if we don't have a string
 	    // to resolve into a function, the data format we're
 	    // working from is damaged.
-	    if( function_string == null ){
-		throw new Error('amigo.data.dispatch appears to be damaged!');
-	    }
+	    if (function_string == null){
+            throw new Error('amigo.data.dispatch appears to be damaged!');
+        }
 	    
 	    // We have a string. Pop it into existance with eval.
 	    var evalled_thing = eval(function_string);
 
 	    // Final test, make sure it is a function.
-	    if( ! is_def(evalled_thing) ||
-		evalled_thing == null ||
-		bbop.core.what_is(evalled_thing) != 'function' ){
-		throw new Error('"' + function_string + '" did not resolve!');
-	    }else{
-		this.string_to_function_map[did] = evalled_thing;		
+	    if (! is_def(evalled_thing) 
+	            || evalled_thing == null 
+	            || bbop.core.what_is(evalled_thing) != 'function'){
+            throw new Error('"' + function_string + '" did not resolve!');
+	    } else {
+            this.string_to_function_map[did] = evalled_thing;		
 	    }
 
-	}else if( is_def(fallback) ){
+	} else if( is_def(fallback) ){
 	    // Nothing could be found, so add the fallback if it is
 	    // there.
 	    this.string_to_function_map[did] = fallback;
@@ -307,9 +366,9 @@ bbop.monarch.handler.prototype.dispatch = function(data, name, context, fallback
     // null, so let's finish it--either the return value of the called
     // function or null.
     var retval = null;
-    if( this.string_to_function_map[did] != null ){
-	var cfunc = this.string_to_function_map[did];
-	retval = cfunc(data, name, context);
+    if(this.string_to_function_map[did] != null){
+        var cfunc = this.string_to_function_map[did];
+        retval = cfunc(data, name, context);
     }
     
     if (name === 'evidence' && /^MONARCH:/.test(data)){

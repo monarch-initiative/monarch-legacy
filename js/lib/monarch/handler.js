@@ -88,7 +88,7 @@ bbop.monarch.handler.prototype.dispatch = function(data, name, context, fallback
 	this.entries += 1;
 
 	// First, try and get the most specific.
-	/*
+
 	if( is_def(amigo.data.dispatch[name]) ){
 
 	    var field_hash = amigo.data.dispatch[name];
@@ -105,7 +105,7 @@ bbop.monarch.handler.prototype.dispatch = function(data, name, context, fallback
 		    function_string = field_hash['default'];
         }
     }
-    */
+
 	    // At the end of this section, if we don't have a string
 	    // to resolve into a function, the data format we're
 	    // working from is damaged.
