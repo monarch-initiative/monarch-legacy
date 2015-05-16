@@ -14,6 +14,7 @@ var fs = require('fs');
 var assert = require("assert");
 var bbop = require("bbop");
 
+load('./js/amigo2.js');
 load('./lib/monarch/api.js');
 load('./js/lib/monarch/linker.js');
 
@@ -30,8 +31,7 @@ exports.testAssociation = function() {
     assert.equal(linker.url('MONARCH:1234', 'evidence'), null);
 };
 
-// Test that the category functionality is working from
-// ./js/GolrScratch.js
+// Test that the category functionality is working
 exports.testOMIMGene = function() {
     var expectedURL = global_app_base+'/gene/OMIM:1234';
     assert.equal(linker.url('OMIM:1234', 'object', undefined, 'gene'), expectedURL);
@@ -40,6 +40,11 @@ exports.testOMIMGene = function() {
 exports.testOMIMDisease = function() {
     var expectedURL = global_app_base+'/disease/OMIM:1234';
     assert.equal(linker.url('OMIM:1234', 'object', undefined, 'disease'), expectedURL);
+};
+
+exports.testOrphanetImg = function() {
+    var expectedIMG = '<img class="source" src="' + global_app_base + '/image/source-orphanet.png"/>';
+    assert.equal(linker.img('Orphanet:1234', 'evidence', undefined, undefined), expectedIMG);
 };
 
 if (require.main == module.id) {

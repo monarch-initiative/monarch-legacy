@@ -4686,7 +4686,8 @@
       "id" : null,
       "abbreviation" : "ORPHANET",
       "url_syntax" : "http://www.orpha.net/consor/cgi-bin/OC_Exp.php?lng=en&Expert=[example_id]",
-      "datatype" : null
+      "datatype" : null,
+      "image_path" : "/image/source-orphanet.png"
    },
    "hpo" : {
       "object" : "Identifier",
