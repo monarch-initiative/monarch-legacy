@@ -1,0 +1,64 @@
+####
+#### Use kwalify and this schema to validate the monarch-team.yaml file.
+####
+#### E.g.:
+####    kwalify -f ./conf/monarch-team.schema.yaml ./conf/monarch-team.yaml
+####
+#### Schema meta-validation:
+####    kwalify -m ./conf/monarch-team.schema.yaml
+####
+type: map
+mapping:
+  "institutions":
+    type: seq
+    sequence:
+      - type: map
+        mapping:
+          "id":
+            type: str
+            required: yes
+          "name":
+            type: str
+            required: yes
+          "logo":
+            type: str
+            required: yes
+          "website":
+            type: str
+            required: yes
+          "people":
+            type: seq
+            sequence:
+              - type: map
+                mapping:
+                  "name":
+                    type: str
+                    required: yes
+                  "title":
+                    type: str
+                    required: yes
+                  "alumni":
+                    type: bool
+                    required: yes
+                  "bio":
+                    type: str
+                    required: yes 
+                  "picture":
+                    type: str
+                    required: no
+                  "contact":
+                    type: map
+                    required: no
+                    mapping:
+                      "email":
+                        type: str
+                        required: no
+                      "website":
+                        type: str
+                        required: no
+                      "twitter":
+                        type: str
+                        required: no
+                      "facebook":
+                        type: str
+                        required: no
