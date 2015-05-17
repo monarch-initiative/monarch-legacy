@@ -4,6 +4,9 @@ tests/behave/include
 tests/behave/lib
 tests/behave/local
 
+## Ignore npm libs.
+node_modules
+
 ## Other stuff?
 .project
 .pl-history
