@@ -43,7 +43,9 @@
 		<dt><a href="#{{id}}">{{name}}</a></dt>
 		<dd>
 		  {{#people}}
+		  {{^alumni}}
 		  {{name}}&nbsp;
+		  {{/alumni}}
 		  {{/people}}
 		</dd>
 		{{/conf.monarch-team.institutions}}
