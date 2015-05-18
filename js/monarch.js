@@ -213,7 +213,7 @@ bbop.monarch.linker.prototype.anchor = function(args, xid, modifier){
                 if (!retval && typeof img != 'undefined'
                         && xid == 'evidence'){
                     retval = '<a title="' + id +
-                    ' (go to the page for ' + label +
+                    ' (go to source page for ' + label +
                     ')" href="' + url + '">' + img + '</a>';
                 } else if (!retval){
                     retval = '<a title="' + id +
