@@ -29,7 +29,8 @@
         "gulp-mocha": "^2.0.1",
         "gulp-rename": "^1.2.2",
         "gulp-uglify": "^1.2.0",
-        "js-yaml": "^3.3.1"
+        "js-yaml": "^3.3.1",
+        "map-stream": "^0.0.5"
     },
     "bundleDependencies": [],
     "private": false,
