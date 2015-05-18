@@ -61,12 +61,12 @@ institutions:
       #   title: Lead Moose Foil
       #   alumni: false
       #   bio: Alumni of Wossamotta U, after a career in television and international espionage (1959-1964), and a brief stint in the movie industry consulting (working with Yutte Hermsgervordenbroti, Olaf Prot, and Jurgan Wigg), he has settled into handling PR and moose-related needs for scientific groups. 
-      #   picture: /image/person-rocky.png
-        # contact:
-        #   email: spam@spamspam.spam
-        #   twitter: http://twitter.com
-        #   facebook: http://facebook.com
-        #   website: https://en.wikipedia.org/wiki/Rocky_the_Flying_Squirrel
+      #   picture: /image/person-unknown.png
+      #   contact:
+      #     email: spam@spamspam.spam
+      #     twitter: http://twitter.com
+      #     facebook: http://facebook.com
+      #     website: https://en.wikipedia.org/wiki/Rocky_the_Flying_Squirrel
       - name: Sarah Kim
         title: Web Developer/Designer
         alumni: true

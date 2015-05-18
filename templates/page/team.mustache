@@ -34,17 +34,21 @@
 
 	  <!-- Participating orgs. -->
 	  <div class="team">
-            <div class="teamname">
+            <div class="teamtochead">
 	      Participating Institutions
 	    </div>
-	    {{#conf.monarch-team.institutions}}
-	    <div>
-	      <a href="#{{id}}">{{name}}</a>
-	      {{#people}}
-	      {{name}}
-	      {{/people}}
+	    <div class="teamtoc">
+	      <dl>
+		{{#conf.monarch-team.institutions}}
+		<dt><a href="#{{id}}">{{name}}</a></dt>
+		<dd>
+		  {{#people}}
+		  {{name}}&nbsp;
+		  {{/people}}
+		</dd>
+		{{/conf.monarch-team.institutions}}
+	      </dl>
 	    </div>
-	    {{/conf.monarch-team.institutions}}
 	  </div>
 
 	  <!-- Detail lists. -->
@@ -57,11 +61,38 @@
 	    {{#people}}
 	    {{^alumni}}
 	    <div class="teammember">
-	      <div class="membername">{{name}}</div>
-	      <div class="membertitle">{{title}}</div>
+	      <div class="memberhead">
+		<div class="membername">{{name}}</div>
+		<div class="membertitle">{{title}}</div>
+	      </div>
+	      <!-- <div class=""> -->
+	      {{#picture}}
+	      <img class="memberpicture" src="{{picture}}" />
+	      {{/picture}}
+	      {{^picture}}
+	      <img class="memberpicture" src="/image/person-unknown.png" />
+	      {{/picture}}
+	      <!-- </div> -->
+	      <div class="clear"></div>
 	      <div class="memberbio">
 		{{bio}}
 	      </div>
+	      {{#contact}}
+	      <div class="membercontact">
+		{{#email}}
+		<a title="email" href="mailto:{{email}}"><img class="contactlogo" src="/image/logo-email.png" /></a>
+		{{/email}}
+		{{#website}}
+		<a title="website" href="{{website}}"><img class="contactlogo" src="/image/logo-website.png" /></a>
+		{{/website}}
+		{{#twitter}}
+		<a title="twitter" href="{{twitter}}"><img class="contactlogo" src="/image/logo-twitter.png" /></a>
+		{{/twitter}}
+		{{#facebook}}
+		<a title="facebook" href="{{facebook}}"><img class="contactlogo" src="/image/logo-facebook.png" /></a>
+		{{/facebook}}
+	      </div>
+	      {{/contact}}
 	    </div>
 	    {{/alumni}}
 	    {{#alumni}}
