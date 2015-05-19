@@ -14,6 +14,13 @@
     /* background: #ff0; */
     padding: 0 1px;
 }
+.qualifier-not {
+    padding: 2px;
+    /* background: #fff; */
+    border: 1px solid #F00;
+    color: #F00;
+    font-weight: bold;
+}
 a:hover .hilite, a:active .hilite {
     color: #fff;
     background: #3875D7;
@@ -129,7 +136,15 @@ a:hover .hilite, a:active .hilite {
  */
 
 /* Allow wider layouts for search than bs3's default. */
-.amigo-ui-wide-max { max-width: 1800px; }
+.amigo-ui-wide-max {
+    max-width: 1800px;
+    /* WARNING: while this addition prevents some weirdness in sizing at
+       different levels (e.g. no snapping to size at different screen
+       sizes), but I'm worried that it may cause other layout issues
+       elsewhere. Keep an eye out for situations where the top-level
+       container is not off. */
+    width: auto;
+}
 .navbar { z-index: 100; } /* Default of 1000 interferes with popups etc. */
 .page-header { text-align: center; }
 .page-header { text-align: center; }
