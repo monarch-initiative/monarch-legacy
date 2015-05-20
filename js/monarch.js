@@ -1,10 +1,12 @@
 /* 
  * Package: handler.js
  * 
- * Namespace: amigo.handler
+ * Namespace: bbop.monarch.handler
  * 
- * Generic AmiGO handler (conforming to what /should/ be described in
- * the BBOP JS documentation), fed by <amigo.data.dispatch>.
+ * External inks generated with conf/xrefs.json
+ * Global variables passed by PupTent in webapp.js:
+ * 
+ * global_xrefs_conf: Xrefs conf file from conf/xrefs.json
  */
 
 // Module and namespace checking.
@@ -36,13 +38,9 @@ bbop.monarch.handler = function (){
     var is_def = bbop.core.is_defined;
 
     // Let's ensure we're sane.
-    /*
-    if( ! is_def(amigo)
-            || ! is_def(amigo.data) 
-            || ! is_def(amigo.data.dispatch) ){
-        throw new Error('we are missing access to amigo.data.dispatch!');
+    if(!global_xrefs_conf){
+                throw new Error('global_xrefs_conf is missing!');
     }
-    */
 
     // Okay, since trying functions into existence is slow, we'll
     // create a cache of strings to functions.
