@@ -357,7 +357,17 @@ p {
 
 /* BS3 Pager from bbop.live_pager widget */
 #bs3pager .btn {
-	margin-right: 3px
+	margin-right: 3px;
+}
+
+/* BS3 Filter from bbop.live_filter widget */
+#bs3filter .well-sm {
+    padding: 7px;
+}
+
+#bs3filter .table .btn-xs {
+    padding: 0px 6px 1px 6px;
+    margin-right: 1px;
 }
 
 /* Amigo Styling needed for golr views, need to update to fit the monarch site
