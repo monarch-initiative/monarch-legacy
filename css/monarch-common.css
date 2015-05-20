@@ -355,11 +355,16 @@ p {
     padding-bottom: 5px;
 }
 
+/* BS3 Pager from bbop.live_pager widget */
+#bs3pager .btn {
+	margin-right: 3px
+}
+
 /* Amigo Styling needed for golr views, need to update to fit the monarch site
  */
  
 .hidden { visibility: hidden; }
-.odd_row { background: #e9effa; }
+.odd_row { background: #ffffff; }
 .even_row { }
 .crossed_row { background: #d3dff5; }
 .nowrap { white-space: nowrap; }
