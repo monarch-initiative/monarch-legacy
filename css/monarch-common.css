@@ -364,6 +364,7 @@ p {
 #bs3filter .well-sm {
     padding: 7px;
     margin-bottom: 10px;
+    display: none;
 }
 
 #bs3filter .panel {
