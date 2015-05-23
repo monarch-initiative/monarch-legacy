@@ -1750,20 +1750,6 @@
       "url_syntax" : null,
       "datatype" : null
    },
-   "pmid" : {
-      "object" : "Identifier",
-      "uri_prefix" : null,
-      "name" : null,
-      "url_example" : "http://www.ncbi.nlm.nih.gov/pubmed/4208797",
-      "database" : "PubMed",
-      "example_id" : "PMID:4208797",
-      "generic_url" : "http://www.ncbi.nlm.nih.gov/PubMed/",
-      "fullname" : null,
-      "id" : null,
-      "abbreviation" : "PMID",
-      "url_syntax" : "http://www.ncbi.nlm.nih.gov/pubmed/[example_id]",
-      "datatype" : null
-   },
    "maizegdb" : {
       "object" : "MaizeGDB Object ID Number",
       "uri_prefix" : null,

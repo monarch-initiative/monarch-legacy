@@ -154,6 +154,7 @@ bbop.monarch.linker.prototype.img = function (id, xid, modifier, category){
                 // Now, check to see if it is indeed in our store.
                 var lc_src = src.toLowerCase();
                 var xref = global_xrefs_conf[lc_src];
+                console.log(JSON.stringify(xref));
                 if (xref && xref['image_path']){
                     retval = '<img class="source" src="' + global_app_base 
                               + xref['image_path'] + '"/>';
@@ -210,7 +211,7 @@ bbop.monarch.linker.prototype.anchor = function(args, xid, modifier){
 
                 // If it wasn't in the special transformations, just make
                 // something generic.
-                if (!retval && typeof img != 'undefined'
+                if (!retval && img
                         && xid == 'evidence'){
                     retval = '<a title="' + id +
                     ' (go to source page for ' + label +
