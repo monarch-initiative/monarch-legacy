@@ -2010,14 +2010,14 @@ if ( typeof bbop.version == "undefined" ){ bbop.version = {}; }
  * Partial version for this library; revision (major/minor version numbers)
  * information.
  */
-bbop.version.revision = "2.3.1";
+bbop.version.revision = "2.3.2";
 
 /*
  * Variable: release
  *
  * Partial version for this library: release (date-like) information.
  */
-bbop.version.release = "20150508";
+bbop.version.release = "20150526";
 /*
  * Package: logger.js
  * 
@@ -20548,12 +20548,14 @@ bbop.widget.live_pager = function(interface_id, manager, in_argument_hash){
 
     // Handle incoming arguements.
     var default_hash = {
-	'callback_priority': 0
+	'callback_priority': 0,
+	'selection_counts': [10, 25, 50, 100]
     };
     var folding_hash = in_argument_hash || {};
     var arg_hash = bbop.core.fold(default_hash, folding_hash);
     //
     var callback_priority = arg_hash['callback_priority'];
+    var selection_counts = arg_hash['selection_counts'];
 
     // Last things last, bind to the manager.
     // TODO/BUG: Should this actually happen outside the widget? How
@@ -20629,7 +20631,7 @@ bbop.widget.live_pager = function(interface_id, manager, in_argument_hash){
 	    // Create inputs (the current order is important for proper
 	    // for/id creation).
 	    var cinputs = [];
-	    each([10, 25, 50, 100],
+	    each(selection_counts,
 		 function(num, cindex){
 		     // Create and store the option.
 		     var sel_input_attrs = {

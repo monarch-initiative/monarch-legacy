@@ -30,6 +30,7 @@ function getTableFromSolr(id, golr_field){
 
     // Attach pager.
     var pager_opts = {
+        'selection_counts': [10, 25, 50, 100, 5000]
     };
     var pager = new bbop.widget.live_pager('bs3pager', golr_response, pager_opts);
     // Add results.
