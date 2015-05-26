@@ -358,6 +358,12 @@ p {
 /* BS3 Pager from bbop.live_pager widget */
 #bs3pager .btn {
 	margin-right: 2px;
+	padding: 2px 12px;
+}
+
+#bs3pager-bottom .btn {
+    margin-right: 2px;
+    padding: 2px 12px;
 }
 
 /* BS3 Filter from bbop.live_filter widget */

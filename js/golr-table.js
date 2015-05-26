@@ -33,6 +33,7 @@ function getTableFromSolr(id, golr_field){
         'selection_counts': [10, 25, 50, 100, 5000]
     };
     var pager = new bbop.widget.live_pager('bs3pager', golr_response, pager_opts);
+    var pager_bottom = new bbop.widget.live_pager('bs3pager-bottom', golr_response, pager_opts);
     // Add results.
     var results_opts = {
         //'callback_priority': -200,
