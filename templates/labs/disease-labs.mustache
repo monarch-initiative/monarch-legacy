@@ -14,10 +14,17 @@
                     <a href="{{{download.json}}}" class="btn btn-default downloadline downloadline-left monarch-phenotype-dark">JSON</a>
                     <a class="downloadline btn btn-large btn-default btn-monarch-main monarch-feedback-dark"
                             href="mailto:info@monarchinitiative.org">Your feedback welcome!</a>
-                    <p>
-                    {{#hasDef}}
-                    {{definitions}}<br/>
-                    {{/hasDef}}
+                     <p>
+                        {{#hasDef}}
+                        {{definitions}}<br/>
+                        {{/hasDef}}
+                        {{#hasComment}}
+                        {{comment}}<br/>
+                        {{/hasComment}}
+                        {{#hasHeritability}}
+                        {{heritability}}<br />
+                        {{/hasHeritability}}
+                        Source: {{{primary_xref}}}
                     </p>
                 </div>
                 <div id="categories">
@@ -39,39 +46,19 @@
             </div>
             <div id="complete-info">
                 <div id="overview" class="first category">
-                    <h3>IDs</h3>
-                        <div class="ids">
-                            <b>URI:</b> <a href="{{{url}}}">{{{url}}}</a>
-                        </div>
-                        {{#hasAka}}
-                            <div class="ids">
-                                <b>AKA:</b>
-                                {{aka}}
-                            </div>
-                        {{/hasAka}}
-                        {{#hasXrefs}}
-                            <div class="ids">
-                                <b>xref IDs:</b> {{{xrefs}}}
-                            </div>
-                        {{/hasXrefs}}
+                    {{#hasAka}}
+                    <div class="ids">
+                        <b>AKA:</b>
+                        {{aka}}
+                    </div>
+                    {{/hasAka}}
+                    {{#hasXrefs}}
+                    <div class="ids">
+                        <b>xref IDs:</b> {{{xrefs}}}
+                    </div>
+                    {{/hasXrefs}}
                     <h3>Classification</h3>
                     {{{includes.classificationComponent}}}
-                    <div id="r2" class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
-      
-                    <!-- Quiet rollover. -->
-                    <div class="panel panel-default">
-                      <div class="panel-heading">
-                      <h3 class="panel-title">Browser</h3>
-                    </div>
-                    <div class="panel-body">
-                      <div id="brw">
-                    </div>
-                    <div class="clearfix"></div>
-                    </div>
-                    <!-- <div class="panel-footer text-right">ooo</div> -->
-                    </div>
-      
-                    </div>
                 </div>
                 <div id="mainTable" class="category">
                     <div id="r3" class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
