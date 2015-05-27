@@ -14,26 +14,26 @@ function getTableFromSolr(id, golr_field){
     var confc = gconf.get_class('generic_association');
     
     // Other widget tests; start with manager.
-    var golr_response = new bbop.golr.manager.jquery(srv, gconf);
+    var golr_manager = new bbop.golr.manager.jquery(srv, gconf);
 
-    golr_response.set_personality('generic_association');
-    //golr_response.add_query_filter('document_category', 'annotation', ['*']);
-    golr_response.add_query_filter(golr_field, id, ['*']);
+    golr_manager.set_personality('generic_association');
+    //golr_manager.add_query_filter('document_category', 'annotation', ['*']);
+    golr_manager.add_query_filter(golr_field, id, ['*']);
     
     // Add filters.
     var f_opts = {
 	    'meta_label': 'Total:&nbsp;',
 	    'display_free_text_p': true
     };
-    var filters = new bbop.widget.live_filters('bs3filter', golr_response, gconf, f_opts);
+    var filters = new bbop.widget.live_filters('bs3filter', golr_manager, gconf, f_opts);
     filters.establish_display();
 
     // Attach pager.
     var pager_opts = {
         'selection_counts': [10, 25, 50, 100, 5000]
     };
-    var pager = new bbop.widget.live_pager('bs3pager', golr_response, pager_opts);
-    var pager_bottom = new bbop.widget.live_pager('bs3pager-bottom', golr_response, pager_opts);
+    var pager = new bbop.widget.live_pager('bs3pager', golr_manager, pager_opts);
+    var pager_bottom = new bbop.widget.live_pager('bs3pager-bottom', golr_manager, pager_opts);
     // Add results.
     var results_opts = {
         //'callback_priority': -200,
@@ -41,7 +41,7 @@ function getTableFromSolr(id, golr_field){
         'user_buttons': [],
         'selectable_p' : false
     };
-    var results = new bbop.widget.live_results('bs3results', golr_response, confc,
+    var results = new bbop.widget.live_results('bs3results', golr_manager, confc,
                            handler, linker, results_opts);
 
     bbop.widget.display.results_table_by_class_conf_b3.prototype.process_entry = function(bit, field_id, document, display_context){
@@ -92,15 +92,15 @@ function getTableFromSolr(id, golr_field){
     };
     
     // Add pre and post run spinner (borrow filter's for now).
-    golr_response.register('prerun', 'foo', function(){
+    golr_manager.register('prerun', 'foo', function(){
     filters.spin_up();
     });
-    golr_response.register('postrun', 'foo', function(){
+    golr_manager.register('postrun', 'foo', function(){
     filters.spin_down();
     });
     
     // Initial run.
-    golr_response.search();
+    golr_manager.search();
 }
 
 function getOntologyBrowser(id){
