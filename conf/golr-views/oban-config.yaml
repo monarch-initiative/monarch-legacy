@@ -27,7 +27,7 @@ weight: 20
 boost_weights: subject^2.0 subject_label^1.0 object^2.0 object_label^1.0
 
 ## Results table, horizontal
-result_weights: subject^7.0 subject_category^6.2 subject_taxon^6.5 relation^6.0  object^5.0 evidence^4.0
+result_weights: subject^7.0 subject_category^6.2 subject_taxon^6.5 relation^6.0  object^5.0 evidence^4.0 source^3.5
 
 ## Ordering of facets, vertical
 filter_weights: subject_category^8.0 subject_taxon^7.5 subject_closure_label^7.0 relation_closure_label^6.5 evidence_closure_label^6.0 object_category^5.0 object_closure_label^4.5
