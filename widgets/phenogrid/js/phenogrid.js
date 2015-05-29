@@ -2704,7 +2704,7 @@ function modelDataPointPrint(point) {
 				height: 250,
 				maxHeight: 300,
 				minWidth: 400,
-				resizable: false,
+				resizable: true,
 				draggable: true,
 				dialogClass: "dialogBG",
 				position: { my: "top", at: "top+25%",of: "#pg_svg_area"},

@@ -20,7 +20,6 @@ jQuery(document).ready(function(){
     /* This changes the color and style of tabs upon click. */
     jQuery('.contenttab').click(function() {
         jQuery('.contenttab').css({'color': 'white', 'background-color': '#999', 'border-bottom': '1px solid black'});
-        console.log(this);
         jQuery(this).css({'color': 'black', 'background-color': 'white', 'border-bottom': '1px solid white'});
     });
 

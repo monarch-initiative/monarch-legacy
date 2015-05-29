@@ -1,11 +1,13 @@
 {
     "type" : "production",
     
-    "app_base" : "http://http://monarchinitiative.org",
+    "app_base" : "http://monarchinitiative.org",
     
     "ontology_services_url" : "http://services.monarchinitiative.org/ontoquest/",
     
     "scigraph_url" : "http://kato.crbs.ucsd.edu:9000/scigraph/",
+    
+    "golr_url" : "http://geoffrey.crbs.ucsd.edu:8080/solr/golr/",
     
     "federation_services_url" : "http://neuinfo.org/servicesv1/v1/federation/",
 

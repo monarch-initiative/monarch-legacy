@@ -4,7 +4,7 @@
 ## The model is roughly OBAN: https://github.com/jamesmalone/OBAN
 ##
 ## Note: initial implementation - fields will change in future
-## 
+##
 ## This schema is a generalization of the one used for GO/AmiGO 2. See: https://github.com/geneontology/amigo/blob/master/metadata/ann-config.yaml
 ## A few points are worth bearing in mind when aligning the schema:
 ##
@@ -27,7 +27,7 @@ weight: 20
 boost_weights: subject^2.0 subject_label^1.0 object^2.0 object_label^1.0
 
 ## Results table, horizontal
-result_weights: subject^7.0 subject_category^6.2 subject_taxon^6.5 relation^6.0  object^5.0 evidence^4.0
+result_weights: subject^7.0 subject_category^6.2 subject_taxon^6.5 relation^6.0  object^5.0 evidence^4.0 source^3.5
 
 ## Ordering of facets, vertical
 filter_weights: subject_category^8.0 subject_taxon^7.5 subject_closure_label^7.0 relation_closure_label^6.5 evidence_closure_label^6.0 object_category^5.0 object_closure_label^4.5
@@ -39,7 +39,7 @@ fields:
   - id: id
     description: "A unique identifier (CURIE) for the association. Optional."
     display_name: Association id
-    type: uuid 
+    type: uuid
     property: []
 
 ## SUBJECT
@@ -327,7 +327,31 @@ fields:
     description: "TBD: ALIGN GO AND DC TERMINOLOGY. Source of association. The association may be derived from multiple source, but this should be the 'outer' source, if applicable"
     display_name: Source
     type: string
+    cardinality: multi
     property: []
+
+  - id: source_label
+    description: "Label for source"
+    display_name: Object
+    type: string
+    cardinality: multi
+    property: []
+    searchable: true
+
+  - id: source_closure
+    description: "CURIEs for source_closure"
+    display_name: Object (Inferred)
+    type: string
+    cardinality: multi
+    property: []
+
+  - id: source_closure_label
+    description: "Labels for source_closure"
+    display_name: Object (Inferred)
+    type: string
+    cardinality: multi
+    property: []
+    searchable: true
 
   - id: date
     description: "Date of assignment. The association may be derived from multiple source, but this should be the 'outer' source, if applicable."
@@ -412,10 +436,30 @@ fields:
     cardinality: multi
     property: []
 
+  - id: evidence_object_label
+    description: "evidence object label"
+    display_name: Evidence label
+    type: string
+    cardinality: multi
+    property: []
+
+  - id: evidence_object_closure
+    description: "Closure for evidence object"
+    display_name: Evidence type
+    type: string
+    cardinality: multi
+    property: []
+
+  - id: evidence_object_closure_label
+    description: "List of CURIES of all entities that form part of the evidence closure."
+    display_name: Evidence label closure
+    type: string
+    cardinality: multi
+    property: []
+
   - id: citation
     description: "citation."
     display_name: Reference
     type: string
     cardinality: multi
     property: []
-

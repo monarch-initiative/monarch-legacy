@@ -19,6 +19,9 @@ RINGO_PORT ?= 8080
 #OWLTOOLS_MAX_MEMORY ?= 1G
 OWLTOOLS_BIN ?= ~/local/src/svn/owltools/OWLTools-Runner/bin/owltools
 
+## Version
+MONARCH_VERSION = 0.1.1
+
 ###
 ### Tests
 ###
@@ -100,6 +103,14 @@ reconfigure-golr: solr-schema golr-conf-as-json
 .PHONY: docs
 docs:
 	naturaldocs --rebuild-output --input lib/monarch --project lib/.naturaldocs_project/ --output html docs/
+
+###
+### Create exportable JS bundle.
+###
+
+.PHONY: bundle
+bundle:
+	./scripts/release-js.pl -v -i scripts/release-file-map.txt -o js/monarch.js -n monarch -d js -r $(MONARCH_VERSION)
 
 ###
 ### Deployment.

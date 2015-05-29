@@ -1,0 +1,204 @@
+{
+  "institutions": [
+    {
+      "id": "ohsu",
+      "name": "Oregon Health & Science University",
+      "logo": "/image/team-ohsu.gif",
+      "website": "http://ohsu.edu",
+      "people": [
+        {
+          "name": "Melissa Haendel",
+          "title": "Monarch PI",
+          "alumni": false,
+          "bio": "Dr. Haendel is currently a PI of the Monarch Initiative. She has a BA from Reed College in Chemistry and a Ph.D. in Neuroscience from the University of Wisconsin, Madison. She is currently a PI of the Monarch Initiative, with the aim of providing integrated access to model systems phenotype-genotype data for the purposes of disease hypothesis exploration. She also participates in development of the eagle-i and CTSAconnect ontologies, designed to collect and disseminate information about biomedical resources and enable research profiling. Her research interests are in using ontologies to promote synthetic science though connections within biomedical data, to utilize information science during the course of research and its publication, and to enable scientific reproducibility."
+        },
+        {
+          "name": "Nicole Vasilevsky",
+          "title": "Project Manager",
+          "alumni": false,
+          "bio": "Dr. Vasilevsky has a BA in Biology from Reed College and a Ph.D. in Cell Biology from OHSU. Nicole is the project manager of the OHSU Ontology Development Group and works on the Monarch project as the project manager and as a data curator. In addition, Nicole works on the eagle-i Network and the CTSAconnect project."
+        },
+        {
+          "name": "Matthew Brush",
+          "title": "Ontologist",
+          "alumni": false,
+          "bio": "Dr. Brush has a BS from Notre Dame and a Ph.D.in Cell Biology from Duke University, and is a former Biomedical Informatics Fellow at Oregon Health and Science University. He is the lead developer of the Genotype Ontology (GENO) for Monarch, and coordinates its use in ingest of genotype and phenotype data. In addition, he has contributed to development of several other ontologies that will be employed in the Monarch system, including the Reagent Ontology (ReO), the Ontology of Biomedical Investigations (OBI), the Cell Line Ontology (CLO), and the eagle-i Ontology (ERO)."
+        },
+        {
+          "name": "Bryan Laraway",
+          "title": "Data Wrangler",
+          "alumni": false,
+          "bio": "Bryan has a BA from Reed College in Biology, post-bac training in MIS from Oregon Institute of Technology, and is currently a Master’s student in Bioinformatics &amp; Computational Biology at Oregon Health &amp; Science University. He is currently a Data Wrangler for the Monarch Initiative, assisting with data ingestion."
+        },
+        {
+          "name": "Kent Shefchek",
+          "title": "Bioinfomatics Software Engineer",
+          "alumni": false,
+          "bio": "Kent is a Software Engineer for the OHSU ontology development group where he develops the Monarch API, front end visualizations, and the data ingest pipeline. Kent has a BS in Biology from the University of Maryland, College Park and a MS in Biotechnology with a specialization in Bioinformatics from the University of Maryland, University College."
+        }
+      ]
+    },
+    {
+      "id": "lbnl",
+      "name": "Lawrence Berkeley National Laboratory",
+      "logo": "/image/team-lbnl.svg",
+      "website": "http://lbl.gov",
+      "people": [
+        {
+          "name": "Chris Mungall",
+          "title": "Monarch PI",
+          "alumni": false,
+          "bio": "Dr. Mungall is currently a PI of the Monarch Initiative. He has a BSc in Computer Science from the University of Edinburgh and a Ph.D. from University of Edinburgh in Biological Sciences. He is currently the PI of the Monarch Initiative and his current research focuses on the use of informatics techniques and tools to integrate and interpret life science data across a variety of domains. In particular, he is interested in connecting biological models at multiple scales: the biochemical, molecular, cellular, organismal and ecological."
+        },
+        {
+          "name": "Suzanna Lewis",
+          "title": "Genomics",
+          "alumni": false,
+          "bio": "Suzi has an MS in Biology and MS in Computer Science. She is a scientist and Principal Investigator at the Berkeley Bioinformatics Open-source Project (BBOP) based at Lawrence Berkeley National Laboratory. She is one of the pioneers of developing open standards and software for genome annotation and ontologies."
+        },
+        {
+          "name": "Nicole Washington",
+          "title": "Lead Bioinformatician",
+          "alumni": false,
+          "bio": "Dr. Washington has a BS in Biology from Harvey Mudd College and a Ph.D. in Molecular and Cellular Biology from The University of Arizona where she focused on the study of the C. elegans as a model for human disease. She is interested in the intersection of computers with biological research, in particular making tools to realize hidden connections in diverse types of biological data and integrating large-scale experiments."
+        },
+        {
+          "name": "Seth Carbon",
+          "title": "Software Engineer",
+          "alumni": false,
+          "bio": "Seth is an occasional software engineer for the Monarch Initiative. He specializes in tools for science and education and has participated in projects in a broad range of fields, including Bioinformatics, Planetary Science, Geology, and Linguistics. His current focus is on capturing and making use of ontology and annotation data. His educational background is undergraduate degrees in Mathematics and Computer Science (UCSC)."
+        },
+        {
+          "name": "Jeremy Nguyen Xuan",
+          "title": "Software Engineer",
+          "alumni": false,
+          "bio": "Jeremy has a MS in Computer Science from the École polytechnique fédérale de Lausanne (EPFL). After spending three years at CERN in the Beams department and a year in a finance company, he joined LBNL in 2015."
+        },
+        {
+          "name": "Nathan Dunn",
+          "title": "Software Engineer",
+          "alumni": false,
+          "bio": "Nathan Dunn has a a MS in Chemical Engineering from the University of Washington and a PhD in Computer Science from the University of Oregon where he focused on using artifical neural networks to model the C. elegans nervous system. Since then he has worked in various capacities supporting scientific research.  His current focus is on development of collaborative genomic editing tools."
+        },
+        {
+          "name": "Sarah Kim",
+          "title": "Web Developer/Designer",
+          "alumni": true,
+          "bio": "Sarah is currently a undergraduate Computer Science student at UC Berkeley. She is working on the front-end of the Monarch website."
+        }
+      ]
+    },
+    {
+      "id": "ucsd",
+      "name": "University of California, San Diego",
+      "logo": "/image/team-ucsd.png",
+      "website": "http://ucsd.edu",
+      "people": [
+        {
+          "name": "Maryann Martone",
+          "alumni": false,
+          "title": "Monarch PI",
+          "bio": "Dr. Martone is currently a PI of the Monarch Initiative. She has a BA from Wellesley College in biological psychology and a Ph. D. in neuroscience from the University of California, San Diego, where she is currently a Professor in the Department of Neuroscience. Her background is in neuroanatomy, particularly light and electron microscopy, but she spends most of her time now in the field of neuroinformatics. She is the principal investigator of the Neuroinformatics Framework project, a national project to establish a uniform resource description framework for neuroscience. Her recent work has focused on building ontologies for neuroscience for data integration. She heads the International Neuroinformatics Coordinating Facility (INCF) program on ontologies. She is the executive director of FORCE11, an organization dedicated to advancing scholarly communication and e-scholarship."
+        },
+        {
+          "name": "Anita Bandrowski",
+          "alumni": false,
+          "title": "Bioinformatician",
+          "bio": "Dr. Bandrowski trained as a neurophysiologist at UC Riverside and Stanford, however moved to bioinformatics with the human genome project at Celera. Currently working at the Center of Research in Biological Systems at UCSD, Dr. Bandrowski builds systems that attempt to make sense of the vast information being produced by biologists."
+        },
+        {
+          "name": "Jeffrey Grethe",
+          "alumni": false,
+          "title": "Architect",
+          "bio": "Dr. Grethe has a BS from the University of California Irvine in Applied Mathematics and a Ph.D. in Neuroscience, with a focus on bioinformatics, from the University of Southern California. Throughout his career, his primary focus has been on enabling collaborative research, data sharing and discovery through the application of advanced informatics approaches. Before coming to UCSD he was one of the core members responsible for bringing the fMRI Data Center online, the first publicly accessible repository of peer-reviewed fMRI studies. He is currently leading a number of large scale biological and biomedical informatics projects (i.e. PI for the NIDDK Interconnectivity Network Coordinating Center, co-PI for the Neuroscience Information Framework, and Technical Lead for the Community Cyberinfrastructure for Advanced Microbial Ecology Research and Analysis) in the Center for Research in Biological Systems at the University of California, San Diego."
+        },
+        {
+          "name": "Amarnath Gupta",
+          "alumni": false,
+          "title": "Lead Semantic Architect",
+          "bio": "Dr. Gupta received his Bachelor of Technology from the Indian Institute of Technology, Kharagpur, a Master of Science in Biomedical Engineering from University of Texas, Arlington, and his Ph.D. (Engineering) degree in Computer Science from Jadavpur University, India. He is a Research Scientist at the San Diego Supercomputer Center (SDSC) of the University of California San Diego. He leads the Advanced Query Processing Laboratory in the Data and Knowledge Systems group at SDSC. His research interests include scientific data modeling, information integration, multimedia databases and spatiotemporal data management."
+        },
+        {
+          "name": "Larry Lui",
+          "alumni": false,
+          "title": "Systems Support",
+          "bio": "Larry is a systems engineer working for the Center for Research in Biological Systems at the University of California, San Diego. He has 10+ years of experience working on linux system integration as well as deploying, configuring, and administering high performance compute clusters. He is currently involved with the Neuroscience Information Framework project, International Neuroinformatics Coordinating Facility (UCSD node), and The Cell: An Image Library."
+        }
+      ]
+    },
+    {
+      "id": "pitt",
+      "name": "University of Pittsburgh",
+      "logo": "/image/team-pitt.png",
+      "website": "http://pitt.edu",
+      "people": [
+        {
+          "name": "Harry Hocheiser",
+          "alumni": false,
+          "title": "Monarch PI",
+          "bio": "Dr. Hocheiser is currently a PI of the Monarch Initiative. He has BS and MS in Computer Science and Engineering from MIT and a Ph.D. in Computer Science from University of Maryland. His research interests lie at the intersection of biomedical informatics and human-computer interaction (HCI). His ongoing research efforts involve the application of contextual inquiry, human-centered design, information visualization, and other HCI techniques to challenges in collaborative bioinformatics and clinical informatics."
+        },
+        {
+          "name": "Chuck Borromeo",
+          "alumni": false,
+          "title": "Interface Architect",
+          "bio": "Chuck is a programmer on a wide range of projects (e.g. FaceBase, Monarch, Ontology for Craniofacial Development and Malformations) in the Department of Biomedical Informatics. His responsibilities include leading the FaceBase development team and providing technical solutions on other projects. In the past, Chuck led the development of the Resource Discovery System (RDS) an application tracking 1500 scientific resources from several NIH research programs."
+        },
+        {
+          "name": "Jeremy Espino",
+          "alumni": false,
+          "title": "Senior Research Scientist, Department of Biomedical Informatics",
+          "bio": "Jeremy is trained in General Medicine, Medical Informatics and Intelligent Systems.  His claim to fame is programming the first real-time disease surveillance system in 1999—the Real-time Outbreak and Disease Surveillance System (RODS).  RODS and its open source derivatives have subsequently been deployed in over 16 states and a couple of countries.  He has also managed the IT infrastructure of the National Retail Monitor which provides over-the-counter medication sales data from over 33,000 retail stores to health departments across the U.S..  In his free time he enjoys hacking micro controllers, piano and 3d printing."
+        }
+      ]
+    },
+    {
+      "id": "charite",
+      "name": "Charité - Universitätsmedizin Berlin",
+      "logo": "/image/team-charite.png",
+      "website": "http://charite.de/en/charite/",
+      "people": [
+        {
+          "name": "Peter Robinson",
+          "alumni": false,
+          "title": "Clinical Bioinformatician",
+          "bio": "Dr. Robinson has a BA in Mathematics as well as an MSC. in computer science from Columbia University, and an MD from University of Pennsylvania. He has been working as a clinician and a research at the Charité Universitätsmedizin Berlin, Germany, since 1996, and has obtained certification (“Facharzt”) in pediatrics, as well as a Habilitation (“Privatdozent”) in Human Genetics. He is currently Professor for Medical Genomics at the Charité and leads a mixed group of bioinformaticians, biologists, and MDs. Much of Peter’s work has involved the development of computational resources and algorithms for the study of human hereditary diseases, including the development of the Human Phenotype Ontology (HPO) as well as the bioinformatics analysis of next-generation sequencing data including exome,  genome, RNA-Seq, ChIP-Seq, and TCR sequencing experiments. Recent wetlab highlights include the identification of the disease genes CA8, PIGV, PIGO, and PGAP2 as well as the development of a novel therapy for Marfan syndrome based on inhibition of a class of GxxPG-containing fragments of the extracellular matrix."
+        },
+        {
+          "name": "Sebastian Köhler",
+          "alumni": false,
+          "title": "Bioinformatician & Developer",
+          "bio": "Dr. Sebastian Köhler has a B.Sc., M.Sc., and Ph.D. in bioinformatics from the Freie Universität in Berlin, Germany. He has been working mostly on developing and validating computational methods for network and ontology based research on gene-to-phenotype relations. He is one of the developers of the Human Phenotype Ontology and cross-species phenotype resources."
+        }
+      ]
+    },
+    {
+      "id": "sanger",
+      "name": "Sanger Institute",
+      "logo": "/image/team-sanger.png",
+      "website": "http://sanger.ac.uk",
+      "people": [
+        {
+          "name": "Damian Smedley",
+          "alumni": false,
+          "title": "Senior Scientific Manager",
+          "bio": "Dr. Smedley has a BSc in Biochemistry from the University of Bristol and a Ph.D. from the University of Cambridge, also in Biochemistry. His lab research focused on the effect of mutation on protein structure and function and the identification and characterisation of cancer-associated chromosomal changes. He switched to a purely computational approach after completing an MSc in Bioinformatics from Birbeck College and was a developer of the BioMart distributed data integration solution. He currently leads a team investigating the use of model organism phenotype data to better understand the role of gene mutation in human disease."
+        }
+      ]
+    },
+    {
+      "id": "garvan",
+      "name": "Garvan Institute",
+      "logo": "/image/team-garvan.png",
+      "website": "http://garvan.org.au/",
+      "people": [
+        {
+          "name": "Tudor Groza",
+          "alumni": false,
+          "title": "Developer",
+          "bio": "Dr. Groza is Phenomics Team Leader in the Kinghorn Centre for Clinical Genomics, at the Garvan Institute of Medical Research, Sydney Australia. Tudor has a BSc and an MSc, both in Computer Science, from Technical University of Cluj Napoca, Romania and a PhD in Semantic Web / Computer Science from the Digital Enterprise Research Institute (DERI) Galway, National University of Ireland, Galway. His current research covers the entire phenotype analytics stack, from representation and acquisition (from publications or clinical reports) to decision making - including disorder prediction, patient matchmaking or variant prioritisation."
+        }
+      ]
+    }
+  ]
+}

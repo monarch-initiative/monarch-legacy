@@ -105,7 +105,7 @@ bbop.monarch.linker.prototype.url = function (id, xid, modifier, category){
                 // Now, check to see if it is indeed in our store.
                 var lc_src = src.toLowerCase();
                 var xref = global_xrefs_conf[lc_src];
-                if(xref && xref['url_syntax']){
+                if (xref && xref['url_syntax']){
                     retval =
                         xref['url_syntax'].replace('[example_id]', sid, 'g');
                 }
@@ -116,10 +116,62 @@ bbop.monarch.linker.prototype.url = function (id, xid, modifier, category){
 };
 
 /*
+ * Function: img
+ * 
+ * Return a html img string.
+ * 
+ * Arguments:
+ *  args - id
+ *  xid - *[optional]* an internal transformation id
+ *  modifier - *[optional]* modify xid; only used with xid
+ * 
+ * Returns:
+ *  string (img tag); null if it couldn't create anything
+ */
+bbop.monarch.linker.prototype.img = function (id, xid, modifier, category){
+    
+    var retval = null;
+
+    ///
+    /// Monarch hard-coded internal link types.
+    ///
+
+    // For us, having an xid means that we will be doing some more
+    // complicated routing.
+    if(xid && xid != ''){
+
+        if(!retval && id && id != ''){ // not internal, but still has an id
+            if(!global_xrefs_conf){
+                throw new Error('global_xrefs_conf is missing!');
+            }
+    
+            // First, extract the probable source and break it into parts.
+            var full_id_parts = bbop.core.first_split(':', id);
+            if(full_id_parts && full_id_parts[0] && full_id_parts[1]){
+                var src = full_id_parts[0];
+                var sid = full_id_parts[1];
+        
+                // Now, check to see if it is indeed in our store.
+                var lc_src = src.toLowerCase();
+                var xref = global_xrefs_conf[lc_src];
+                if (xref && xref['image_path']){
+                    retval = '<img class="source" src="' + global_app_base 
+                              + xref['image_path'] + '"/>';
+                }
+            }
+        }
+    }
+    return retval;
+};
+
+
+/*
  * Function: anchor
  * 
  * Return a link as a chunk of HTML, all ready to consume in a
  * display.
+ * 
+ * If args['id'] is a list then iterate over this.set_anchor()
  * 
  * Arguments:
  *  args - hash--'id' required; 'label' and 'hilite' are inferred if not extant
@@ -136,37 +188,66 @@ bbop.monarch.linker.prototype.anchor = function(args, xid, modifier){
 
     // Don't even start if there is nothing.
     if(args){
-
         // Get what fundamental arguments we can.
         var id = args['id'];
-        if(id){
-
-            // Infer label from id if not present.
-            var label = args['label'];
-            if(!label){ 
-                label = id; 
+        if (typeof id === 'string'){
+            retval = this.set_anchor(id, args, xid, modifier);
+        } else if (id instanceof Array){
+            retval = '';
+            for (var i = 0, l = id.length; i < l; i++){
+                var anchor_tag = this.set_anchor(id[i], args, xid, modifier);
+                if (anchor_tag){
+                    retval += ' &nbsp;' + anchor_tag;
+                } 
             }
-            
-            // Infer hilite from label if not present.
-            var hilite = args['hilite'];
-            if( ! hilite ){ hilite = label; }
-            
-            var category = args['category'];
-            
-            // See if the URL is legit. If it is, make something for it.
-            var url = this.url(id, xid, modifier, category);
-            if(url){
-
-                // If it wasn't in the special transformations, just make
-                // something generic.
-                if( ! retval ){
-                    retval = '<a title="' + id +
-                    ' (go to the page for ' + label +
-                    ')" href="' + url + '">' + hilite + '</a>';
-                }
+            if (retval === ''){
+                retval = null;
             }
         }
     }
 
     return retval;
 };
+
+/*
+ * Function: set_anchor
+ * 
+ * Return a link as a chunk of HTML, all ready to consume in a
+ * display.
+ */
+bbop.monarch.linker.prototype.set_anchor = function(id, args, xid, modifier){
+    
+    var retval = null;
+    var label = args['label'];
+    if (!label){ 
+        label = id; 
+    }
+    
+    // Infer hilite from label if not present.
+    var hilite = args['hilite'];
+    if (!hilite){ hilite = label; }
+    
+    var category = args['category'];
+    
+    // See if the URL is legit. If it is, make something for it.
+    var url = this.url(id, xid, modifier, category);
+    var img = this.img(id, xid, modifier, category);
+    if (url){
+
+        // If it wasn't in the special transformations, just make
+        // something generic.
+        if (!retval && img
+                && xid == 'source'){
+            retval = '<a title="' + id +
+            ' (go to source page for ' + label +
+            ')" href="' + url + '">' + img + '</a>';
+        } else if (!retval){
+            retval = '<a title="' + id +
+            ' (go to the page for ' + label +
+            ')" href="' + url + '">' + hilite + '</a>';
+        }
+    }
+    return retval;
+}
+    
+
