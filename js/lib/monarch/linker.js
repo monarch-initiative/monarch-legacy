@@ -239,8 +239,7 @@ bbop.monarch.linker.prototype.set_anchor = function(id, args, xid, modifier){
         if (!retval && img
                 && xid == 'source'){
             retval = '<a title="' + id +
-            ' (go to source page for ' + label +
-            ')" href="' + url + '">' + img + '</a>';
+            ' (go to source page)" href="' + url + '">' + img + '</a>';
         } else if (!retval){
             retval = '<a title="' + id +
             ' (go to the page for ' + label +

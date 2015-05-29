@@ -55,7 +55,7 @@ bbop.monarch.handler = function (){
  * Return a string.
  * 
  * The fallback function is called if no match could be found in the
- * amigo.data.dispatch. It is called with the name and context
+ * global_xrefs_conf. It is called with the name and context
  * arguments in the same order.
  * 
  * Arguments:
@@ -87,9 +87,9 @@ bbop.monarch.handler.prototype.dispatch = function(data, name, context, fallback
 
 	// First, try and get the most specific.
 
-	if( is_def(amigo.data.dispatch[name]) ){
+	if( is_def(global_xrefs_conf[name]) ){
 
-	    var field_hash = amigo.data.dispatch[name];
+	    var field_hash = global_xrefs_conf[name];
 	    var function_string = null;
 
 	    if (is_def(field_hash['context']) 
@@ -108,7 +108,7 @@ bbop.monarch.handler.prototype.dispatch = function(data, name, context, fallback
 	    // to resolve into a function, the data format we're
 	    // working from is damaged.
 	    if (function_string == null){
-            throw new Error('amigo.data.dispatch appears to be damaged!');
+            throw new Error('global_xrefs_conf appears to be damaged!');
         }
 	    
 	    // We have a string. Pop it into existance with eval.
@@ -141,9 +141,6 @@ bbop.monarch.handler.prototype.dispatch = function(data, name, context, fallback
         var cfunc = this.string_to_function_map[did];
         retval = cfunc(data, name, context);
     }
-    
-    if (name === 'evidence' && /^MONARCH:/.test(data)){
-        retval = '';
-    }
+
     return retval;
 };
