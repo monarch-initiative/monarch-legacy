@@ -356,44 +356,44 @@ p {
 }
 
 /* BS3 Pager from bbop.live_pager widget */
-#bs3pager .btn {
+.bs3pager .btn {
 	margin-right: 2px;
 	padding: 2px 12px;
 }
 
-#bs3pager-bottom .btn {
+.bs3pager-bottom .btn {
     margin-right: 2px;
     padding: 2px 12px;
 }
 
 /* BS3 Filter from bbop.live_filter widget */
-#bs3filter .well-sm {
+.bs3filter .well-sm {
     padding: 7px;
     margin-bottom: 10px;
-    display: none;
+   /* display: none; */
 }
 
-#bs3filter .panel {
+.bs3filter .panel {
     margin-bottom: 10px;
 }
 
-#bs3filter .table .btn-xs {
+.bs3filter .table .btn-xs {
     padding: 0px 6px 1px 6px;
 }
 
-#bs3filter .panel-group .panel {
+.bs3filter .panel-group .panel {
     margin-bottom: 3px;
 }
 
-#bs3filter .panel-group .panel .panel-heading{
+.bs3filter .panel-group .panel .panel-heading{
     margin: -15px -15px -15px;
 }
 
-#bs3filter .panel-group .panel .panel-heading .panel-title{
+.bs3filter .panel-group .panel .panel-heading .panel-title{
     font-size: 17px;
 }
 
-#bs3filter .panel-group .panel .panel-collapse .panel-body{
+.bs3filter .panel-group .panel .panel-collapse .panel-body{
     padding-top: 30px;
 }
 
