@@ -3,6 +3,31 @@
   <head>
       <title>{{title}}</title>    
       <link rel="icon" href="/image/favicon.ico" type="image/x-icon">
+      
+      <!-- CSS. -->
+      {{#pup_tent_css_libraries}}
+      <link rel="stylesheet" type="text/css" href="{{{.}}}">
+      {{/pup_tent_css_libraries}}
+    
+      <!-- JS variables. -->
+      {{#pup_tent_js_variables}}
+      <script type="text/javascript">var {{name}} = {{{value}}};</script>
+      {{/pup_tent_js_variables}}
+    
+      <!-- JS libraries. -->
+      {{#pup_tent_js_libraries}}
+      <script type="text/javascript" src="{{{.}}}"></script>
+      {{/pup_tent_js_libraries}}
+      
+      <!-- JS launcher. -->
+      <script type="text/javascript">
+      jQuery(document).ready(function(){
+      {{#monarch_launchable}}
+      {{.}};
+      {{/monarch_launchable}}
+      });
+      </script>
+      
       <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
       <meta charset="utf-8"/>
   </head>
