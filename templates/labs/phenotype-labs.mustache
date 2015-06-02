@@ -22,42 +22,11 @@
                 </div>
                 <div id="categories">
                     <a href="#overview"><div id="initialtab" class="tab contenttab">Overview</div></a>
-                    <div class="tabcontainer">
-                        <div class="tabhover">View diseases with this phenotype</div>
-                        {{#hasDiseases}}
-                            <a href="#disease"><div class="tab contenttab">Disease ({{diseaseNum}})</div></a>
-                        {{/hasDiseases}}
-                        {{^hasDiseases}}
-                            <div class="tab greyed-out">Disease (0)</div>
-                        {{/hasDiseases}}
-                    </div>
-                    <div class="tabcontainer">
-                        <div class="tabhover">Diseases loaded from Golr</div>
-                        {{#hasGenes}}
-                            <a href="#genes"><div class="tab contenttab">Disease-Golr</div></a>
-                        {{/hasGenes}}
-                        {{^hasGenes}}
-                            <div class="tab greyed-out">Genes (0)</div>
-                        {{/hasGenes}}
-                    </div>
-                    <div class="tabcontainer">
-                        <div class="tabhover">View genotypes with this phenotype</div>
-                        {{#hasGenotypes}}
-                            <a href="#genotypes"><div class="tab contenttab">Models ({{genotypeNum}})</div></a>
-                        {{/hasGenotypes}}
-                        {{^hasGenotypes}}
-                            <div class="tab greyed-out">Models (0)</div>
-                        {{/hasGenotypes}}
-                    </div>
-                    <div class="tabcontainer">
-                        <div class="tabhover">View citations for the data on this page</div>
-                        {{#hasLiterature}}
-                            <a href="#literature"><div class="tab contenttab">Literature ({{literatureNum}})</div></a>
-                        {{/hasLiterature}}
-                        {{^hasLiterature}}
-                            <div class="tab greyed-out">Literature (0)</div>
-                        {{/hasLiterature}}
-                    </div>
+                    {{{includes.disease_anchor}}}
+                    {{{includes.gene_anchor}}}
+                    {{{includes.model_anchor}}}
+                    {{{includes.variant_anchor}}}
+                    {{{includes.pathway_anchor}}}
                 </div>
             </div>
             <div id="complete-info">
@@ -79,86 +48,12 @@
                         {{/hasXrefs}}
                     <h3>Classification</h3>
                     {{{includes.classificationComponent}}}
-                    <div id="r2" class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
-      
-                    <!-- Quiet rollover. -->
-                    <div class="panel panel-default">
-                      <div class="panel-heading">
-                      <h3 class="panel-title">Browser</h3>
                     </div>
-                    <div class="panel-body">
-                      <div id="brw">
-                    </div>
-                    <div class="clearfix"></div>
-                    </div>
-                    <!-- <div class="panel-footer text-right">ooo</div> -->
-      </div>
-      
-    </div>
-                </div>
-                {{#hasDiseases}}
-                <div id="disease" class="category">
-                    <table class="{{css.table}}">
-                    {{{diseaseTable}}}
-                    </table>
-                </div>
-                {{/hasDiseases}}
-                {{#hasGenes}}
-                <div id="genes" class="category">
-                    <table class="{{css.table}}">
-                    {{{geneTable}}}
-                    </table>
-                    <div id="r3" class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
-      
-                      <!-- Quiet rollover. -->
-                      <div class="panel panel-default">
-                      <!-- <div class="panel-heading"> -->
-                      <!--   <h3 class="panel-title">BS3 Tests</h3> -->
-                      <!-- </div> -->
-                      <div class="panel-body">
-
-                      <div id="results-area" class="row">
-                      
-                        <div class="col-xs-12 col-sm-12 col-md-2 col-lg-2">
-                          <div>
-                          <h4>Filter results</h4>
-        
-                         <div id="bs3results-filter">
-                           Loading...
-                         </div>
-        
-                         </div>      
-                      </div>
-        
-                      <div class="col-xs-12 col-sm-12 col-md-10 col-lg-10">
-          
-                        <div id="bs3results-pager-top">
-                        </div>
-                        <div id="bs3results">
-                          pending...
-                        </div>
-                      </div>
-
-                     </div>
-
-                   <!-- <div class="clearfix"></div> -->
-                   </div>
-                 </div>
-                {{/hasGenes}}
-                {{#hasGenotypes}}
-                <div id="genotypes" class="category">
-                    <table class="{{css.table}}">
-                    {{{genotypeTable}}}
-                    </table>
-                </div>
-                {{/hasGenotypes}}
-                {{#hasLiterature}}
-                <div id="literature" class="category">
-                    <table class="{{css.table}}">
-                        {{{literatureTable}}}
-                    </table>
-                </div>
-                {{/hasLiterature}}
+                    {{{includes.disease_table}}}
+            {{{includes.gene_table}}}
+            {{{includes.model_table}}}
+            {{{includes.variant_table}}}
+            {{{includes.pathway_table}}}
             </div>
         
             </div> <!-- closes wrapperforfooter -->
