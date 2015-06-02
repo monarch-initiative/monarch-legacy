@@ -24,7 +24,6 @@ function getTableFromSolr(id, golr_field, div, filter){
     // Conf.
     var gconf = new bbop.golr.conf(global_golr_conf);
     var srv = global_solr_url;
-    var defs = new amigo.data.definitions();
     var handler = new bbop.monarch.handler();
     var linker = new bbop.monarch.linker();
     var confc = gconf.get_class('generic_association');
@@ -37,7 +36,7 @@ function getTableFromSolr(id, golr_field, div, filter){
     golr_manager.add_query_filter(golr_field, id, ['*']);
     
     if (filter != null && filter.field && filter.value){
-        golrManager.add_query_filter(filter.field, filter.value, ['*']);
+        golr_manager.add_query_filter(filter.field, filter.value, ['*']);
     }
     
     // Add filters.

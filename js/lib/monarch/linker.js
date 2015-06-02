@@ -85,7 +85,7 @@ bbop.monarch.linker.prototype.url = function (id, xid, modifier, category){
                 if (typeof category === 'undefined'){
                     throw new Error('category is missing!');
                 }
-                retval = this.app_base + '/' + category + '/' + id;
+                retval = this.app_base + '/labs/widget-scratch/' + category + '/' + id;
             }
         }
     

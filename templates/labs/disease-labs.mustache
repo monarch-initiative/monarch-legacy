@@ -30,6 +30,10 @@
                 <div id="categories">
                     <a href="#overview"><div id="initialtab" class="tab contenttab">Overview</div></a>
                     {{{includes.phenotype_anchor}}}
+                    {{{includes.gene_anchor}}}
+                    {{{includes.model_anchor}}}
+                    {{{includes.variant_anchor}}}
+                    {{{includes.pathway_anchor}}}
                     <div class="tabcontainer">
                         <div class="tabhover">View phenotypically similar diseases and genes in a grid</div>
                         {{#hasPhenotypes}}
@@ -57,47 +61,11 @@
                     <h3>Classification</h3>
                     {{{includes.classificationComponent}}}
                 </div>
-                <div id="mainTable" class="category">
-                    <div id="r3" class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
-      
-                      <!-- Quiet rollover. -->
-                      <div class="panel panel-default">
-                      <!-- <div class="panel-heading"> -->
-                      <!--   <h3 class="panel-title">BS3 Tests</h3> -->
-                      <!-- </div> -->
-                      <div class="panel-body">
-
-                      <div id="results-area" class="row">
-                      
-                        <div class="col-xs-12 col-sm-12 col-md-2 col-lg-2">
-                          <div>
-                          <h4>Filter results</h4>
-        
-                         <div id="bs3results-filter" class="bs3filter">
-                           Loading...
-                         </div>
-        
-                         </div>      
-                      </div>
-        
-                      <div class="col-xs-12 col-sm-12 col-md-10 col-lg-10">
-          
-                        <div id="bs3results-pager-top" class="bs3pager">
-                        </div>
-                        <div id="bs3results">
-                          pending...
-                        </div>
-                        <div id="bs3results-pager-bottom" class="bs3pager-bottom">
-                        </div>
-                      </div>
-
-                     </div>
-
-                   <!-- <div class="clearfix"></div> -->
-                   </div>
-                 </div>
-            </div>
-            </div>
+            {{{includes.phenotype_table}}}
+            {{{includes.gene_table}}}
+            {{{includes.model_table}}}
+            {{{includes.variant_table}}}
+            {{{includes.pathway_table}}}
             <div id="compare" class="category">
                 <div id="phen_vis"></div>
             </div>

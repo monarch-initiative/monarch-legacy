@@ -1,5 +1,5 @@
 #!/bin/sh
-sh ./update_dependencies.sh
+#sh ./update_dependencies.sh
 
 
 PATH_TO_ME=`which $0`
