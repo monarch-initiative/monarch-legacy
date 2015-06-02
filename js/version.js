@@ -24,4 +24,4 @@ monarch.version.revision = "0.1.1";
  *
  * Partial version for this library: release (date-like) information.
  */
-monarch.version.release = "20150601";
+monarch.version.release = "20150602";

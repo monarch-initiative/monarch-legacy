@@ -2,7 +2,7 @@
     <div class="monarch-container">
         <div class="content">
             <div class="wrapperforfooter">
-            <div class="jumbotron monarch-phenotype-light">
+            <div class="jumbotron monarch-disease-light">
                 <div id="description">
                     {{#alerts}}
                     <div class="alert">
@@ -34,19 +34,15 @@
                     {{{includes.model_anchor}}}
                     {{{includes.variant_anchor}}}
                     {{{includes.pathway_anchor}}}
-                    <div class="tabcontainer">
-                        <div class="tabhover">View phenotypically similar diseases and genes in a grid</div>
-                        {{#hasPhenotypes}}
-                            <a href="#compare"><div class="tab contenttab">Compare</div></a>
-                        {{/hasPhenotypes}}
-                        {{^hasPhenotypes}}
-                            <div class="tab greyed-out">Compare</div>
-                        {{/hasPhenotypes}} 
-                    </div>
+                    {{{includes.phenogrid_anchor}}}
                 </div>
             </div>
             <div id="complete-info">
                 <div id="overview" class="first category">
+                  <h3>IDs</h3>
+                    <div class="ids">
+                        <b>URI:</b> <a href="{{{uri}}}">{{{uri}}}</a>
+                    </div>
                     {{#hasAka}}
                     <div class="ids">
                         <b>AKA:</b>

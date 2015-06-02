@@ -85,7 +85,7 @@ bbop.monarch.linker.prototype.url = function (id, xid, modifier, category){
                 if (typeof category === 'undefined'){
                     throw new Error('category is missing!');
                 }
-                retval = this.app_base + '/labs/widget-scratch/' + category + '/' + id;
+                retval = this.app_base + '/' + category + '/' + id;
             }
         }
     
@@ -196,8 +196,9 @@ bbop.monarch.linker.prototype.anchor = function(args, xid, modifier){
             retval = '';
             for (var i = 0, l = id.length; i < l; i++){
                 var anchor_tag = this.set_anchor(id[i], args, xid, modifier);
+                
                 if (anchor_tag){
-                    retval += ' &nbsp;' + anchor_tag;
+                    retval = retval + ((retval) ? ', ' + anchor_tag : anchor_tag);
                 } 
             }
             if (retval === ''){
@@ -237,10 +238,15 @@ bbop.monarch.linker.prototype.set_anchor = function(id, args, xid, modifier){
         // If it wasn't in the special transformations, just make
         // something generic.
         if (!retval && img
-                && xid == 'source'){
+                && xid == 'source-site'){
             retval = '<a title="' + id +
             ' (go to source page)" href="' + url + '">' + img + '</a>';
-        } else if (!retval){
+        } else if (!retval && img
+                && xid == 'source'){
+            retval = '<a title="' + id +
+            ' (go to source page) " + href="' + url + '">' + id + '</a>';
+        }
+        else if (!retval){
             retval = '<a title="' + id +
             ' (go to the page for ' + label +
             ')" href="' + url + '">' + hilite + '</a>';

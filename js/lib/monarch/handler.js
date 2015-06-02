@@ -33,7 +33,7 @@ if (typeof bbop.monarch == 'undefined') { bbop.monarch = {};}
  *  self
  */
 bbop.monarch.handler = function (){
-    this._is_a = 'amigo.handler';
+    this._is_a = 'bbop.monarch.handler';
 
     var is_def = bbop.core.is_defined;
 
