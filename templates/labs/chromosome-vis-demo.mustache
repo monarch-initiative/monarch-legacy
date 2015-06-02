@@ -41,4 +41,25 @@
         </div>
       </div>
   </body>
+
+  <body ng-controller="MainCtrl">
+
+<div chromosome id="chr13" chr="13" rel-size="false" axis="true" assembly="37" width='900' height="20" mode="single" centromere="line"></div>
+
+<chromosome  id="chr1" chr="1" rel-size="false" axis="true" assembly="37" width='900' height="20" mode="single" centromere="dot" geneview-map="true"></chromosome>
+
+<!-- JS Script Dependencies -->
+<script src="bower_components/angular/angular.min.js"></script>
+<script src="bower_components/d3/d3.min.js"></script>
+<script src="bower_components/underscore/underscore-min.js"></script>
+
+<script src="angular-chromosome-vis.js"></script>
+<script src="bower_components/jsdas/jsdas.min.js"></script>
+
+<script>
+    var demoApp = angular.module('demoApp', ['angularChromosomeVis']);
+    demoApp.controller('MainCtrl', ['$scope', function() {}]);
+</script>
+</body>
+
 </html>
