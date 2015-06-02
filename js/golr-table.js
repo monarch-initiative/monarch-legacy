@@ -37,7 +37,7 @@ function getTableFromSolr(id, golr_field, div, filter){
     golr_manager.add_query_filter(golr_field, id, ['*']);
     
     if (filter != null && filter.field && filter.value){
-        golrManager.add_query_filter(filter.field, filter.value, ['*']);
+        golr_manager.add_query_filter(filter.field, filter.value, ['*']);
     }
     
     // Add filters.
