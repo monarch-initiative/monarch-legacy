@@ -1421,6 +1421,26 @@ function modelDataPointPrint(point) {
 		});
 		return res;
 	},
+	
+	   // generic ajax call for all queries
+    _ajaxPostData: function (target, url) {
+        var self = this;
+        var res;
+        jQuery.ajax({
+            url: url,
+            method: 'POST',
+            async : false,
+            dataType : 'json',
+            success : function(data) {
+                res = data;
+            },
+            error: function (xhr, errorType, exception) {
+            // Triggered if an error communicating with server
+                self._displayResult(xhr, errorType, exception);
+            }
+        });
+        return res;
+    },
 
 	_displayResult: function(xhr, errorType, exception){
 		var msg;
