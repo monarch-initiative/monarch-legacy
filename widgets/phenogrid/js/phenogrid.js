@@ -1038,8 +1038,8 @@ function modelDataPointPrint(point) {
 			var url = this._getLoadDataURL(phenotypeList,taxon,limit);
 			
 			//@kshefchek NOTE, this is really sloppy on my part and should be cleaned up
-			if (this.state.owlSimFunction != 'compare'){
-			    postData = 'input_items='+ phenotypeList.join("+") + "&target_species=" + taxon;
+            if (this.state.owlSimFunction != 'compare'){
+                postData = 'input_items='+ phenotypeList.join("+") + "&target_species=" + taxon;
                 if (typeof(limit) !== 'undefined') {
                     postData += "&limit=" + limit;
                 }
