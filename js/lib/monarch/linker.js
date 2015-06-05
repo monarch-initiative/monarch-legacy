@@ -40,7 +40,7 @@ bbop.monarch.linker = function (){
 
     // With the new dispatcher, relative URLs no longer work, so we
     // have to bring in server data--first let's ensure it.
-    if( ! global_app_base ){
+    if(typeof global_app_base === 'undefined'){
     throw new Error('we are missing access to global_app_base!');
     }
     // Easy app base.
