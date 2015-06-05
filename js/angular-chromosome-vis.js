@@ -12,7 +12,9 @@
 	angularChromosomeVis.factory('dasLoader', function() {
 		return {
 			loadModel: function (segment, assembly) {
-				return JSDAS.Simple.getClient("http://www.ensembl.org/das/Homo_sapiens.GRCh" + assembly + ".karyotype");
+				var returnStuff = JSDAS.Simple.getClient("http://www.ensembl.org/das/Homo_sapiens.GRCh" + assembly + ".karyotype");
+				//returnStuff.push();
+				return returnStuff ; 
 			}
 		}
 	});
@@ -42,7 +44,7 @@
 				$rootScope.$broadcast('selectors:deleted');
 			}
 		};
-	}])
+	}]);
 
 	angularChromosomeVis.directive('chromosome', ['dasLoader', 'chrSelectors', function(dasLoader, chrSelectors) {
 
@@ -54,6 +56,7 @@
 			scope.height = angular.isDefined(scope.height) ? scope.height : 20;
 			scope.axis = angular.isDefined(scope.axis) ? scope.axis : true;
 			scope.mode = angular.isDefined(scope.mode) ? scope.mode : "multi";
+			scope.centromere = angular.isDefined(scope.centromere) ? scope.centromere : "line";
 
 			var dasModel;
 			scope.selectors = { list: [] }; //holds selector objects
@@ -63,7 +66,8 @@
 				PADDING = 30,
 				LABEL_PADDING = 24,
 				AXIS_SPACING = 4,
-				STALK_SPACING = 3;
+				STALK_SPACING = 3,
+				FUN = 10;
 
 			var target = d3.select(element[0]).append('svg');
 			target.attr('id', scope.id + 'svg'); //take id from the scope
@@ -74,6 +78,7 @@
 			} else {
 				target.attr({height: scope.height + PADDING});
 			}
+
 			dasLoader.loadModel(scope.chr, scope.assembly)
 				.features({segment: scope.chr}, function (res) {
 					//success response
@@ -88,6 +93,8 @@
 						console.log("JSDAS results empty for segment");
 					}
 
+
+		//			console.log(JSON.stringify(dasModel.bands));
 
 					if (typeof dasModel.err === 'undefined') {
 
@@ -109,8 +116,58 @@
 							.data(dasModel.bands)
 							.enter().append("g");
 
+
 						band.append("title")
 							.text(function(m) {return m.id; });
+
+						var centromereLocation;
+						var toDraw = [];
+
+						band.append('rect')
+							.attr('class', function (m) {
+								//Calculate centromere location
+								if(m.TYPE.id === "band:acen" && (m.id.indexOf('p')==0)) {
+									centromereLocation = m.END.textContent;
+								}
+								else if(FUN % 15 === 0){
+									toDraw.push(m);
+								}
+
+								FUN  += 5;
+
+								return m.TYPE.id.replace(':', ' ');
+							})
+							.attr('height', function (m) {
+								return (m.TYPE.id === "band:stalk") ? (scope.height * STALK_MAG_PC) : scope.height;
+							})
+							.attr('width', function (m) {
+								return xscale(+m.END.textContent) - xscale(+m.START.textContent);
+							})
+							.attr('x', function (m) {
+								return xscale(m.START.textContent);
+							})
+							.attr('y', function (m) {
+								return (m.TYPE.id === "band:stalk") ? (PADDING + STALK_SPACING) : PADDING;
+							});
+
+
+						var test;
+
+						band.append('circle')
+							.classed('variant', true)
+							.attr('cx', function(m){
+								FUN += 5;
+								test = xscale(m.START.textContent);
+								if(FUN % 15 === 0){
+									return xscale(m.START.textContent) + ((xscale(+m.END.textContent) - xscale(+m.START.textContent)) / 2);
+								}else{
+									//A value way passed the window length so it doesn't show up
+									return 100000;
+								}
+							})
+							.attr('cy', PADDING - 6)
+							.attr('r', 5);
+
 
 						band.append('rect')
 							.attr('class', function (m) {
@@ -131,7 +188,7 @@
 
 						var label = target.append("text")
 							.attr("class", "band-lbl")
-							.attr("y", LABEL_PADDING);
+							.attr("y", LABEL_PADDING - 7);
 
 						band.on("mouseover", function (m) {
 							label.text(m.id)
@@ -295,7 +352,9 @@
 				height: '=?',
 				axis: '=?',
 				mode: '@',
-				id: '@'
+				id: '@',
+				centromere: '@',
+				geneviewMap: '=?'
 			},
 		template: '<h5>Chromosome {{chr}}</h5>' +
 		'<p ng-repeat="selector in selectors.list">' +
