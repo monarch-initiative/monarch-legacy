@@ -163,7 +163,23 @@
 									return xscale(m.START.textContent) + ((xscale(+m.END.textContent) - xscale(+m.START.textContent)) / 2);
 							})
 							.attr('cy', PADDING - 6)
-							.attr('r', 5);
+							.attr('r', 5)
+							.style('fill', function(m){
+								//Create a scale of redness
+								var scale = d3.scale.linear()
+									.domain([-2, 20, 40])
+									.range(["white", "red", "black"]);
+
+								var num = Number(m.TYPE.variant); //Get how many variants are on a band
+
+								//Don't want the dot to get full black
+								if(num >= 30){
+									num = 30;
+								}
+
+								return scale(num); //Return a relative shade of red
+
+							});
 
 
 						band.append('rect')
@@ -187,12 +203,29 @@
 							.attr("class", "band-lbl")
 							.attr("y", LABEL_PADDING - 7);
 
-						band.on("mouseover", function (m) {
-							label.text(m.id)
-								.attr('x', (xscale(m.START.textContent)));
+						var varLabel = target.append("text")
+							.attr("class", "var-lbl")
+							.attr("y", LABEL_PADDING - 10);
+
+						variation.on("mouseover", function(m){
+							varLabel.text(m.id)
+								.attr('x', xscale(m.START.textContent));
 						});
 
-						band.on("mouseout", function (m) {
+						variation.on("mouseout", function(){
+							varLabel.text('');
+						});
+
+						variation.on("click", function(m){
+							//Zoom in on band?
+						});
+
+						band.on("mouseover", function (m) {
+							label.text(m.id)
+								.attr('x', xscale(m.START.textContent));
+						});
+
+						band.on("mouseout", function () {
 							label.text(''); //empty the label
 						});
 
