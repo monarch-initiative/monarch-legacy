@@ -68,6 +68,12 @@ on the anatomical entity the phenotype affects!
 When we have a gene x phenotype association derived from genotype x gene
 and genotype x phenotype, should we put the genotype in the 'evidence' field?
 
+## Ontology Config
+
+There is a separate config for loading ontologies. For now we use the
+owltools flexloader for this, see: https://github.com/monarch-initiative/monarch-app/issues/730
+
+The yaml for this should not be edited manually: copy from the amigo conf. Talk to @kltm for details.
 
 
 
