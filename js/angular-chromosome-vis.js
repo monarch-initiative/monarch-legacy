@@ -53,7 +53,7 @@
 			//set default scope values if not provided
 			scope.relSize = angular.isDefined(scope.relSize) ? scope.relSize : true;
 			scope.assembly = angular.isDefined(scope.assembly) ? scope.assembly : 37;
-			scope.height = angular.isDefined(scope.height) ? scope.height : 40;
+			scope.height = angular.isDefined(scope.height) ? scope.height : 100;
 			scope.axis = angular.isDefined(scope.axis) ? scope.axis : true;
 			scope.mode = angular.isDefined(scope.mode) ? scope.mode : "multi";
 			scope.centromere = angular.isDefined(scope.centromere) ? scope.centromere : "line";
@@ -63,7 +63,8 @@
 
 			var CHR1_BP_END = 248956422,
 				STALK_MAG_PC = 0.8,
-				PADDING = 50,
+				PADDING = 100,
+				BAND_HEIGHT = 50,
 				LABEL_PADDING = 24,
 				AXIS_SPACING = 4,
 				STALK_SPACING = 3;
@@ -169,7 +170,7 @@
 								return xscale(m.START.textContent);
 							})
 							.attr('y', function (m) {
-								return (m.TYPE.id === "band:stalk") ? (PADDING + STALK_SPACING) : PADDING;
+								return (m.TYPE.id === "band:stalk") ? (PADDING + STALK_SPACING) : BAND_HEIGHT;
 							});
 
 
@@ -178,7 +179,7 @@
 									return xscale(m.START.textContent) + ((xscale(+m.END.textContent) - xscale(+m.START.textContent)) / 2);
 							})
 							.attr('cy', function(){
-								return PADDING - 6;
+								return BAND_HEIGHT - 6;
 							})
 							.attr('r', 5)
 							.style('fill', function(m){
@@ -215,7 +216,7 @@
 								return xscale(m.START.textContent) + ((xscale(+m.END.textContent) - xscale(+m.START.textContent)) / 2);
 							})
 							.attr('cy', function(){
-								return PADDING - 16;
+								return BAND_HEIGHT - 16;
 							})
 							.attr('r', 5)
 							.style('fill', function(m){
@@ -252,7 +253,7 @@
 								return xscale(m.START.textContent) + ((xscale(+m.END.textContent) - xscale(+m.START.textContent)) / 2);
 							})
 							.attr('cy', function(){
-								return PADDING - 26;
+								return BAND_HEIGHT - 26;
 							})
 							.attr('r', 5)
 							.style('fill', function(m){
@@ -299,8 +300,75 @@
 								return xscale(m.START.textContent);
 							})
 							.attr('y', function (m) {
-								return (m.TYPE.id === "band:stalk") ? (PADDING + STALK_SPACING) : PADDING;
+								return (m.TYPE.id === "band:stalk") ? (PADDING + STALK_SPACING) : BAND_HEIGHT;
 							});
+
+			/**			var key = target.append('rect')
+							.attr('height', function(){
+								return 85;
+							})
+							.attr('width', function(){
+								return 500;
+							})
+							.attr('x', function(){
+								return 20;
+							})
+							.attr('y', function(){
+								return PADDING + 20;
+							})
+							.style('fill', "transparent")
+							.style('stroke-width', "3")
+							.style('stroke', "black");
+
+						var data = ["Option 1", "Option 2", "Option 3"];
+
+						var select = d3.select('body')
+							.append('select')
+							.attr('class','select')
+							.on('change',onchange)
+
+						var options = select.selectAll('option')
+							.data(data).enter()
+							.append('option')
+							.text(function (d) { return d; })
+							.attr('x', 30);
+
+						function onchange() {
+							selectValue = d3.select('select').property('value')
+							d3.select('body')
+								.append('p')
+								.text(selectValue + ' is the last selected option.')
+						};
+
+						target.append('circle')
+							.attr('cx', 20)
+							.attr('cy', PADDING)
+							.attr('r', 5)
+							.style('fill', function(){
+								//Create a scale with the color associated with the phenotype
+								return "red";
+							});
+
+						target.append('text')
+							.text("Nervous")
+							.attr('y', PADDING + 40)
+							.attr('x', 30);
+
+						target.append('text')
+							.text("Skeletal")
+							.attr('y', PADDING + 65)
+							.attr('x', 30);
+
+						target.append('text')
+							.text("Head and Neck")
+							.attr('y', PADDING + 90)
+							.attr('x', 30);
+			 **/
+
+						target.append('text')
+							.text("Hover over a band to see the band's id, and hover over a circle indicator to see how many phenotypes and of what kind are in a specific band.")
+							.attr('y', PADDING + 40)
+							.attr('x', 15);
 
 						var label = target.append("text")
 							.attr("class", "band-lbl")
@@ -377,7 +445,7 @@
 
 							target.append('g')
 								.attr('class', 'bp-axis')
-								.attr('transform', 'translate(0,' + (scope.height + PADDING + AXIS_SPACING) + ")")
+								.attr('transform', 'translate(0,' + (scope.height + BAND_HEIGHT + AXIS_SPACING) + ")")
 								.call(bpAxis);
 						}
 					}
@@ -499,6 +567,7 @@
 			};
 
 		};
+
 
 		return {
 			link: link,
