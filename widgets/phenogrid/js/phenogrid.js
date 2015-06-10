@@ -1036,7 +1036,18 @@ function modelDataPointPrint(point) {
 		// COMPARE CALL HACK - REFACTOR OUT
 		if(jQuery.isEmptyObject(this.state.providedData)) {
 			var url = this._getLoadDataURL(phenotypeList,taxon,limit);
-			res = this._ajaxLoadData(speciesName,url);
+			
+			//@kshefchek NOTE, this is really sloppy on my part and should be cleaned up
+            if (this.state.owlSimFunction != 'compare'){
+                postData = 'input_items='+ phenotypeList.join("+") + "&target_species=" + taxon;
+                if (typeof(limit) !== 'undefined') {
+                    postData += "&limit=" + limit;
+                }
+                var url = this.state.simServerURL + this.state.simSearchQuery;
+                res = this._ajaxPostData(speciesName, url, postData);
+			} else {
+			    res = this._ajaxLoadData(speciesName,url);
+			}
 		} else {
 			res = this.state.providedData;
 		}
@@ -1421,6 +1432,27 @@ function modelDataPointPrint(point) {
 		});
 		return res;
 	},
+	
+	// generic ajax call for all queries
+    _ajaxPostData: function (target, url, postData) {
+        var self = this;
+        var res;
+        jQuery.ajax({
+            url: url,
+            method: 'POST',
+            data: postData,
+            async : false,
+            dataType : 'json',
+            success : function(data) {
+                res = data;
+            },
+            error: function (xhr, errorType, exception) {
+            // Triggered if an error communicating with server
+                self._displayResult(xhr, errorType, exception);
+            }
+        });
+        return res;
+    },
 
 	_displayResult: function(xhr, errorType, exception){
 		var msg;

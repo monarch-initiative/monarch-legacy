@@ -1,0 +1,31 @@
+id: gene_phenotype
+schema_generating: true
+document_category: generic_association
+weight: 20
+
+## Results table, horizontal
+result_weights: relation^6.0  object^5.0 evidence^4.0 source^3.5
+
+## Ordering of facets, vertical
+filter_weights: relation_closure_label^6.5 evidence_closure_label^6.0 object_category^5.0 object_closure_label^4.5
+
+## SOLR FIELD DEFINITIONS
+
+fields:
+
+## SUBJECT
+
+
+  - id: object
+    description: "The CURIE for oban:association_has_object. This is often, but not always an ontology class. E.g. for a gene-gene interaction it is an (arbitrary) member of the pair."
+    display_name: Phenotype
+    type: string
+    property: []
+
+  - id: object_label
+    description: "Label for association_object."
+    display_name: Phenotype
+    type: string
+    property: []
+    searchable: true
+
