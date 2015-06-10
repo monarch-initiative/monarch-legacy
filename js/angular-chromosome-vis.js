@@ -431,7 +431,7 @@
 								end = +m.END.textContent;
 
 							if (scope.mode === 'multi' || (scope.mode === "single" && scope.selectors.list.length == 0)) {
-								var newSel = newSelector(scope, xscale, start, end, (PADDING - AXIS_SPACING)).draw(); //create new selector and draw it
+								var newSel = newSelector(scope, xscale, start, end, (BAND_HEIGHT - AXIS_SPACING)).draw(); //create new selector and draw it
 								addSelector(newSel);//add new selector to local scope
 								chrSelectors.addSelector(newSel); //add new location to the service
 							}
