@@ -12,9 +12,11 @@
 	angularChromosomeVis.factory('dasLoader', function() {
 		return {
 			loadModel: function (segment, assembly) {
-				var returnStuff = JSDAS.Simple.getClient("http://www.ensembl.org/das/Homo_sapiens.GRCh" + assembly + ".karyotype");
+				//var returnStuff = JSDAS.Simple.getClient("http://www.ensembl.org/das/Homo_sapiens.GRCh" + assembly + ".karyotype");
+				var returnStuff = $.getJSON("http://geoffrey.crbs.ucsd.edu:8080/solr/feature-location/select/?q=*%3A*&wt=json");
+
 				//returnStuff.push();
-				return returnStuff ; 
+				return returnStuff ;
 			}
 		}
 	});
@@ -78,6 +80,7 @@
 			} else {
 				target.attr({height: scope.height + PADDING});
 			}
+
 
 			dasLoader.loadModel(scope.chr, scope.assembly)
 				.features({segment: scope.chr}, function (res) {
