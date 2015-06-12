@@ -12,8 +12,8 @@
 	angularChromosomeVis.factory('dasLoader', function() {
 		return {
 			loadModel: function (segment, assembly) {
-				//var returnStuff = JSDAS.Simple.getClient("http://www.ensembl.org/das/Homo_sapiens.GRCh" + assembly + ".karyotype");
-				var returnStuff = $.getJSON("http://geoffrey.crbs.ucsd.edu:8080/solr/feature-location/select/?q=*%3A*&wt=json");
+				var returnStuff = JSDAS.Simple.getClient("http://www.ensembl.org/das/Homo_sapiens.GRCh" + assembly + ".karyotype");
+				//var returnStuff = $.getJSON("http://geoffrey.crbs.ucsd.edu:8080/solr/feature-location/select/?q=*%3A*&wt=json");
 
 				//returnStuff.push();
 				return returnStuff ;
