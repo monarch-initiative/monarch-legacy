@@ -6,6 +6,7 @@
 
 	var angularChromosomeVis = angular.module('angularChromosomeVis', []);
 
+	var Variants = [];
 
 	/**
 	 * service that retrieves DAS model
@@ -15,11 +16,11 @@
 		return {
 			loadModel: function (scope, assembly) {
 
-				var returnStuff = null;
+				var returnStuff = JSDAS.Simple.getClient("http://www.ensembl.org/das/Homo_sapiens.GRCh" + assembly + ".karyotype");
 
 				var customCallBack = function (res) {
-					console.log(res._raw.response);
-					returnStuff = res._raw.response;
+					//console.log(res._raw.response.docs);
+					Variants = res._raw.response.docs;
 				};
 
 				GOLRTest(customCallBack);
@@ -36,7 +37,7 @@
 
 		GolrManager.register('search', 'foo', custom);
 		GolrManager.set_query('*:*');
-		GolrManager.set('_raw.response.docs', Array[100]);
+		GolrManager.set_results_count(10);
 		GolrManager.search();
 	}
 
@@ -85,7 +86,7 @@
 
 			var CHR1_BP_END = 248956422,
 				STALK_MAG_PC = 0.8,
-				PADDING = 100,
+				PADDING = 50,
 				BAND_HEIGHT = 50,
 				LABEL_PADDING = 24,
 				AXIS_SPACING = 4,
@@ -102,8 +103,8 @@
 			}
 
 
-			dasLoader.loadModel(scope.chr, scope.assembly);
-		/**		.features({segment: scope.chr}, function (res) {
+			dasLoader.loadModel(scope.chr, scope.assembly)
+				.features({segment: scope.chr}, function (res) {
 					//success response
 					if (res.GFF.SEGMENT.length > 0) {
 						dasModel = {
@@ -134,28 +135,19 @@
 							.range([0, rangeTo]);
 
 						var band = target.selectAll("chromosome" + " g")
-							.data(TBands)
+							.data(dasModel.bands)
 							.enter().append("g");
 
-						var Variants1 = [];
-						var Variants2 = [];
-						var Variants3 = [];
+						var variant = target.selectAll("chromosome" + " v")
+							.data(Variants)
+							.enter().append("g");
+
 
 						band.append("title")
 							.text(function(m) {
-								//Push all the bands that have variants
-								if(m.TYPE.vid1){
-									Variants1.push(m);
-								}
-								if(m.TYPE.vid2){
-									Variants2.push(m);
-								}
-								if(m.TYPE.vid3){
-									Variants3.push(m);
-								}
 								return m.id;
 							});
-
+/*
 						var variation1 = target.selectAll("chromosome" + " v")
 							.data(Variants1)
 							.enter().append("g");
@@ -167,7 +159,7 @@
 						var variation3 = target.selectAll("chromosome" + " n")
 							.data(Variants3)
 							.enter().append("g");
-
+*/
 
 						var centromereLocation;
 
@@ -193,7 +185,29 @@
 								return (m.TYPE.id === "band:stalk") ? (PADDING + STALK_SPACING) : BAND_HEIGHT;
 							});
 
+						console.log(Variants);
 
+						variant.append('circle')
+							.attr('cx', function(v){
+								var xvalue = 0;
+								band.each(function(m){
+									if(parseInt(m.START.textContent) <= parseInt(v.start) && parseInt(v.start) <= parseInt(m.END.textContent)){
+										xvalue =  xscale(m.START.textContent) + ((xscale(+m.END.textContent) - xscale(+m.START.textContent)) / 2);
+										//return xscale(v.start);
+										console.log(m.END.textContent);
+									}
+								});
+								//return xscale(v.start) + ((xscale(+v.end) - xscale(+v.start)) / 2);
+								xvalue = xscale(v.start);
+								console.log(v.start);
+								return xvalue;
+							})
+							.attr('cy', function(){
+								return BAND_HEIGHT - 6;
+							})
+							.attr('r', 5)
+							.style('fill', 'red');
+/*
 						variation1.append('circle')
 							.attr('cx', function(m){
 									return xscale(m.START.textContent) + ((xscale(+m.END.textContent) - xscale(+m.START.textContent)) / 2);
@@ -305,23 +319,7 @@
 
 							});
 
-
-						band.append('rect')
-							.attr('class', function (m) {
-								return m.TYPE.id.replace(':', ' ');
-							})
-							.attr('height', function (m) {
-								return (m.TYPE.id === "band:stalk") ? (scope.height * STALK_MAG_PC) : scope.height;
-							})
-							.attr('width', function (m) {
-								return xscale(+m.END.textContent) - xscale(+m.START.textContent);
-							})
-							.attr('x', function (m) {
-								return xscale(m.START.textContent);
-							})
-							.attr('y', function (m) {
-								return (m.TYPE.id === "band:stalk") ? (PADDING + STALK_SPACING) : BAND_HEIGHT;
-							});
+*/
 
 			/**			var key = target.append('rect')
 							.attr('height', function(){
@@ -389,6 +387,7 @@
 							.text("Hover over a band to see the band's id, and hover over a circle indicator to see how many phenotypes and of what kind are in a specific band.")
 							.attr('y', PADDING + 40)
 							.attr('x', 15);
+					**/
 
 						var label = target.append("text")
 							.attr("class", "band-lbl")
@@ -398,6 +397,7 @@
 							.attr("class", "var-lbl")
 							.attr("y", LABEL_PADDING - 10);
 
+						/*
 						variation1.on("mouseover", function(m){
 							varLabel.text(m.TYPE.vid1 + ": " + m.TYPE.variant1)
 								.attr('x', xscale(m.START.textContent));
@@ -436,7 +436,7 @@
 						variation3.on("click", function(m){
 							//Zoom in on band?
 						});
-
+*/
 						band.on("mouseover", function (m) {
 							label.text(m.id)
 								.attr('x', xscale(m.START.textContent));
@@ -474,7 +474,8 @@
 					//error response handler
 					console.log("Error from DAS loader: " + err);
 				});
-***/
+
+
 			function addSelector(sel) {
 				"use strict";
 				scope.$apply(function() {
