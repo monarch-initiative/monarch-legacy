@@ -6,20 +6,40 @@
 
 	var angularChromosomeVis = angular.module('angularChromosomeVis', []);
 
+
 	/**
 	 * service that retrieves DAS model
 	 */
+
 	angularChromosomeVis.factory('dasLoader', function() {
 		return {
-			loadModel: function (segment, assembly) {
-				var returnStuff = JSDAS.Simple.getClient("http://www.ensembl.org/das/Homo_sapiens.GRCh" + assembly + ".karyotype");
-				//var returnStuff = $.getJSON("http://geoffrey.crbs.ucsd.edu:8080/solr/feature-location/select/?q=*%3A*&wt=json");
+			loadModel: function (scope, assembly) {
 
-				//returnStuff.push();
-				return returnStuff ;
+				var returnStuff = null;
+
+				var customCallBack = function (res) {
+					console.log(res._raw.response);
+					returnStuff = res._raw.response;
+				};
+
+				GOLRTest(customCallBack);
+
+				return returnStuff;
 			}
 		}
 	});
+
+	function GOLRTest(custom){
+		var gconf = new bbop.golr.conf(amigo.data.golr);
+		var golr_loc = 'http://geoffrey.crbs.ucsd.edu:8080/solr/feature-location/';
+		var GolrManager = new bbop.golr.manager.jquery(golr_loc, gconf);
+
+		GolrManager.register('search', 'foo', custom);
+		GolrManager.set_query('*:*');
+		GolrManager.set('_raw.response.docs', Array[100]);
+		GolrManager.search();
+	}
+
 
 	/**
 	 * service that maintains an array of selectors. can be injected into any controller, directive, etc.
@@ -82,8 +102,8 @@
 			}
 
 
-			dasLoader.loadModel(scope.chr, scope.assembly)
-				.features({segment: scope.chr}, function (res) {
+			dasLoader.loadModel(scope.chr, scope.assembly);
+		/**		.features({segment: scope.chr}, function (res) {
 					//success response
 					if (res.GFF.SEGMENT.length > 0) {
 						dasModel = {
@@ -363,7 +383,7 @@
 							.text("Head and Neck")
 							.attr('y', PADDING + 90)
 							.attr('x', 30);
-			 **/
+
 
 						target.append('text')
 							.text("Hover over a band to see the band's id, and hover over a circle indicator to see how many phenotypes and of what kind are in a specific band.")
@@ -454,7 +474,7 @@
 					//error response handler
 					console.log("Error from DAS loader: " + err);
 				});
-
+***/
 			function addSelector(sel) {
 				"use strict";
 				scope.$apply(function() {
