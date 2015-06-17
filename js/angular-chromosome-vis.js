@@ -116,7 +116,7 @@
 				var densityMult = true;
 				var variant_circle;
 
-				variant_circle = n.append('circle')
+				variant_circle = band.append('circle')
 							.attr('cx', function(m){
 								//Loop through all the bands to get the densityMax before the style below
 								if(densityMax < m.density.length){
