@@ -18,28 +18,10 @@
 
 				var returnStuff = JSDAS.Simple.getClient("http://www.ensembl.org/das/Homo_sapiens.GRCh" + assembly + ".karyotype");
 
-				var customCallBack = function (res) {
-					//console.log(res._raw.response.docs);
-					Variants = res._raw.response.docs;
-				};
-
-				GOLRTest(customCallBack);
-
 				return returnStuff;
 			}
 		}
 	});
-
-	function GOLRTest(custom){
-		var gconf = new bbop.golr.conf(amigo.data.golr);
-		var golr_loc = 'http://geoffrey.crbs.ucsd.edu:8080/solr/feature-location/';
-		var GolrManager = new bbop.golr.manager.jquery(golr_loc, gconf);
-
-		GolrManager.register('search', 'foo', custom);
-		GolrManager.set_query('*:*');
-		GolrManager.set_results_count(10);
-		GolrManager.search();
-	}
 
 
 	/**
@@ -82,6 +64,8 @@
 			scope.centromere = angular.isDefined(scope.centromere) ? scope.centromere : "line";
 
 			var dasModel;
+			var band;
+
 			scope.selectors = { list: [] }; //holds selector objects
 
 			var CHR1_BP_END = 248956422,
@@ -92,6 +76,9 @@
 				AXIS_SPACING = 4,
 				STALK_SPACING = 3;
 
+			var rangeTo,
+				variantNumber;
+
 			var target = d3.select(element[0]).append('svg');
 			target.attr('id', scope.id + 'svg'); //take id from the scope
 			target.attr({width: '100%'});
@@ -100,6 +87,104 @@
 				target.attr({height: scope.height + (2 * PADDING)});
 			} else {
 				target.attr({height: scope.height + PADDING});
+			}
+
+			var text = document.querySelector("input");
+			var button = document.getElementById("getvariant");
+
+			function loadVariants(){
+
+				var variant = target.selectAll("chromosome" + " v")
+					.data(Variants)
+					.enter().append("g");
+
+				var xscale = d3.scale.linear()
+					.domain([dasModel.start, dasModel.stop])
+					.range([0, rangeTo]);
+
+				//For every variant, find which band it's on and have the band register it
+				variant.each(function(v){
+					band.each(function(m) {
+						if (parseInt(m.START.textContent) <= parseInt(v.start) && parseInt(v.start) <= parseInt(m.END.textContent)) {
+							m.density.push(v);
+						}
+					});
+				});
+
+				//Variable to hold the number of variants the most populated band has
+				var densityMax = 0;
+				var densityMult = true;
+				var variant_circle;
+
+				variant_circle = n.append('circle')
+							.attr('cx', function(m){
+								//Loop through all the bands to get the densityMax before the style below
+								if(densityMax < m.density.length){
+									densityMax = m.density.length;
+								}
+
+								//Return the middle of the band as the x value
+								return xscale(m.START.textContent) + ((xscale(+m.END.textContent) - xscale(+m.START.textContent)) / 2);
+							})
+							.attr('cy', function(){
+								return BAND_HEIGHT - 6;
+							})
+							.attr('r', 5)
+							.style('fill', function(m) {
+								//Make the densityMax good for a domain just once
+								if(densityMult){
+									densityMax = densityMax * 1.33;
+									densityMult = false;
+								}
+
+								//Create a gradient of redness
+								var scale = d3.scale.linear()
+									.domain([0, (densityMax / 2), densityMax])
+									.range(["white", "red", "black"]);
+
+								//Get the color reflective of the density on each band
+						return scale(Number(m.density.length));
+					});
+
+				//Create a text label to display when variant circles are hovered over
+				var varLabel = target.append("text")
+					.attr("class", "var-lbl")
+					.attr("y", LABEL_PADDING - 7);
+
+				variant_circle.on("mouseover", function (m) {
+					varLabel.text("Variants: " + m.density.length)
+						.attr('x', xscale(m.START.textContent));
+				});
+
+				variant_circle.on("mouseout", function () {
+					varLabel.text(''); //empty the label
+				});
+			}
+
+
+			button.addEventListener("click", function(){
+				//Check if the input is a number
+				if(!isNaN(text.value) && text.value != ''){
+					//Get the variants
+					variantNumber = parseInt(text.value);
+					golrCall();
+				}
+			});
+
+			function golrCall(){
+				var gconf = new bbop.golr.conf(amigo.data.golr);
+				var golr_loc = 'http://geoffrey.crbs.ucsd.edu:8080/solr/feature-location/';
+				var GolrManager = new bbop.golr.manager.jquery(golr_loc, gconf);
+
+				var customCallBack = function (res) {
+					Variants = res._raw.response.docs;
+					loadVariants();
+				};
+
+				GolrManager.register('search', 'foo', customCallBack);
+				GolrManager.set_query('*:*');
+				GolrManager.set_results_count(variantNumber);
+				GolrManager.search();
 			}
 
 
@@ -120,8 +205,6 @@
 
 					if (typeof dasModel.err === 'undefined') {
 
-						var rangeTo;
-
 						if (scope.width === 'inherit') {
 							var svgWidth = target[0][0].width.baseVal.value;
 							rangeTo = scope.relSize ? ((+dasModel.stop / CHR1_BP_END) * svgWidth) - PADDING : svgWidth - PADDING;
@@ -134,17 +217,14 @@
 							.domain([dasModel.start, dasModel.stop])
 							.range([0, rangeTo]);
 
-						var band = target.selectAll("chromosome" + " g")
+						band = target.selectAll("chromosome" + " g")
 							.data(dasModel.bands)
 							.enter().append("g");
 
-						var variant = target.selectAll("chromosome" + " v")
-							.data(Variants)
-							.enter().append("g");
-
-
 						band.append("title")
 							.text(function(m) {
+								//Add a variable to hold the variants on the band
+								m.density = [];
 								return m.id;
 							});
 /*
@@ -159,6 +239,7 @@
 						var variation3 = target.selectAll("chromosome" + " n")
 							.data(Variants3)
 							.enter().append("g");
+
 */
 
 						var centromereLocation;
@@ -169,7 +250,6 @@
 								if(m.TYPE.id === "band:acen" && (m.id.indexOf('p')==0)) {
 									centromereLocation = m.END.textContent;
 								}
-
 								return m.TYPE.id.replace(':', ' ');
 							})
 							.attr('height', function (m) {
@@ -184,29 +264,6 @@
 							.attr('y', function (m) {
 								return (m.TYPE.id === "band:stalk") ? (PADDING + STALK_SPACING) : BAND_HEIGHT;
 							});
-
-						console.log(Variants);
-
-						variant.append('circle')
-							.attr('cx', function(v){
-								var xvalue = 0;
-								band.each(function(m){
-									if(parseInt(m.START.textContent) <= parseInt(v.start) && parseInt(v.start) <= parseInt(m.END.textContent)){
-										xvalue =  xscale(m.START.textContent) + ((xscale(+m.END.textContent) - xscale(+m.START.textContent)) / 2);
-										//return xscale(v.start);
-										console.log(m.END.textContent);
-									}
-								});
-								//return xscale(v.start) + ((xscale(+v.end) - xscale(+v.start)) / 2);
-								xvalue = xscale(v.start);
-								console.log(v.start);
-								return xvalue;
-							})
-							.attr('cy', function(){
-								return BAND_HEIGHT - 6;
-							})
-							.attr('r', 5)
-							.style('fill', 'red');
 /*
 						variation1.append('circle')
 							.attr('cx', function(m){
@@ -391,52 +448,8 @@
 
 						var label = target.append("text")
 							.attr("class", "band-lbl")
-							.attr("y", LABEL_PADDING - 7);
+							.attr("y", LABEL_PADDING + 5);
 
-						var varLabel = target.append("text")
-							.attr("class", "var-lbl")
-							.attr("y", LABEL_PADDING - 10);
-
-						/*
-						variation1.on("mouseover", function(m){
-							varLabel.text(m.TYPE.vid1 + ": " + m.TYPE.variant1)
-								.attr('x', xscale(m.START.textContent));
-						});
-
-						variation1.on("mouseout", function(){
-							varLabel.text('');
-						});
-
-						variation1.on("click", function(m){
-							//Zoom in on band?
-						});
-
-						variation2.on("mouseover", function(m){
-							varLabel.text(m.TYPE.vid2 + ": " + m.TYPE.variant2)
-								.attr('x', xscale(m.START.textContent))
-						});
-
-						variation2.on("mouseout", function(){
-							varLabel.text('');
-						});
-
-						variation2.on("click", function(m){
-							//Zoom in on band?
-						});
-
-						variation3.on("mouseover", function(m){
-							varLabel.text(m.TYPE.vid3 + ": " + m.TYPE.variant3)
-								.attr('x', xscale(m.START.textContent))
-						});
-
-						variation3.on("mouseout", function(){
-							varLabel.text('');
-						});
-
-						variation3.on("click", function(m){
-							//Zoom in on band?
-						});
-*/
 						band.on("mouseover", function (m) {
 							label.text(m.id)
 								.attr('x', xscale(m.START.textContent));
