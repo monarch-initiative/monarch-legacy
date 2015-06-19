@@ -2,7 +2,7 @@
     <div class="monarch-container">
         <div class="content">
             <div class="wrapperforfooter">
-            <div class="jumbotron monarch-phenotype-light">
+            <div class="jumbotron monarch-disease-light">
                 <div id="description">
                     {{#alerts}}
                     <div class="alert">
@@ -22,42 +22,11 @@
                 </div>
                 <div id="categories">
                     <a href="#overview"><div id="initialtab" class="tab contenttab">Overview</div></a>
-                    <div class="tabcontainer">
-                        <div class="tabhover">View diseases with this phenotype</div>
-                        {{#hasDiseases}}
-                            <a href="#disease"><div class="tab contenttab">Disease ({{diseaseNum}})</div></a>
-                        {{/hasDiseases}}
-                        {{^hasDiseases}}
-                            <div class="tab greyed-out">Disease (0)</div>
-                        {{/hasDiseases}}
-                    </div>
-                    <div class="tabcontainer">
-                        <div class="tabhover">View genes associated with this phenotype</div>
-                        {{#hasGenes}}
-                            <a href="#genes"><div class="tab contenttab">Genes ({{geneNum}})</div></a>
-                        {{/hasGenes}}
-                        {{^hasGenes}}
-                            <div class="tab greyed-out">Genes (0)</div>
-                        {{/hasGenes}}
-                    </div>
-                    <div class="tabcontainer">
-                        <div class="tabhover">View genotypes with this phenotype</div>
-                        {{#hasGenotypes}}
-                            <a href="#genotypes"><div class="tab contenttab">Models ({{genotypeNum}})</div></a>
-                        {{/hasGenotypes}}
-                        {{^hasGenotypes}}
-                            <div class="tab greyed-out">Models (0)</div>
-                        {{/hasGenotypes}}
-                    </div>
-                    <div class="tabcontainer">
-                        <div class="tabhover">View citations for the data on this page</div>
-                        {{#hasLiterature}}
-                            <a href="#literature"><div class="tab contenttab">Literature ({{literatureNum}})</div></a>
-                        {{/hasLiterature}}
-                        {{^hasLiterature}}
-                            <div class="tab greyed-out">Literature (0)</div>
-                        {{/hasLiterature}}
-                    </div>
+                    {{{includes.disease_anchor}}}
+                    {{{includes.gene_anchor}}}
+                    {{{includes.model_anchor}}}
+                    {{{includes.variant_anchor}}}
+                    {{{includes.pathway_anchor}}}
                 </div>
             </div>
             <div id="complete-info">
@@ -79,35 +48,12 @@
                         {{/hasXrefs}}
                     <h3>Classification</h3>
                     {{{includes.classificationComponent}}}
-                </div>
-                {{#hasDiseases}}
-                <div id="disease" class="category">
-                    <table class="{{css.table}}">
-                    {{{diseaseTable}}}
-                    </table>
-                </div>
-                {{/hasDiseases}}
-                {{#hasGenes}}
-                <div id="genes" class="category">
-                    <table class="{{css.table}}">
-                    {{{geneTable}}}
-                    </table>
-                </div>
-                {{/hasGenes}}
-                {{#hasGenotypes}}
-                <div id="genotypes" class="category">
-                    <table class="{{css.table}}">
-                    {{{genotypeTable}}}
-                    </table>
-                </div>
-                {{/hasGenotypes}}
-                {{#hasLiterature}}
-                <div id="literature" class="category">
-                    <table class="{{css.table}}">
-                        {{{literatureTable}}}
-                    </table>
-                </div>
-                {{/hasLiterature}}
+                    </div>
+                    {{{includes.disease_table}}}
+            {{{includes.gene_table}}}
+            {{{includes.model_table}}}
+            {{{includes.variant_table}}}
+            {{{includes.pathway_table}}}
             </div>
         
             </div> <!-- closes wrapperforfooter -->
