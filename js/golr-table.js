@@ -19,7 +19,7 @@ function getTableFromSolr(id, golr_field, div, filter, personality){
     if (personality == null){
         personality = 'generic_association';
     }
-    console.log(personality);
+    
     //divs
     pager_top_div = div+'-pager-top';
     pager_bot_div = div+'-pager-bottom';
