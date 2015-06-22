@@ -7,7 +7,7 @@ weight: 20
 result_weights: subject^7.0 subject_taxon^6.5 relation^6.0  object^5.0 object_taxon^4.2 evidence^4.0 source^3.5
 
 ## Ordering of facets, vertical
-filter_weights: relation_closure_label^6.5 evidence_closure_label^6.0 subject_closure_label^4.5 object_closure_label^4.0
+filter_weights: relation_closure_label^6.5 evidence_closure_label^6.0 subject_closure_label^4.5 object_closure_label^4.0 subject_taxon_closure_label^3.5 object_taxon_closure_label^3.0
 
 ## SOLR FIELD DEFINITIONS
 
@@ -30,14 +30,42 @@ fields:
 
   - id: subject_closure
     description: "Reflexive closure of association_has_subject. A list of CURIEs. If an individual, first traverse rdf:tpye. The default closure is subclass, but other may optionally be added depending on what type of association this is and what the class is. E.g. for expression associations, the object is an anatomy class, and the closure will include part_of"
-    display_name: Gene
+    display_name: Gene Closure
     type: string
     cardinality: multi
     property: []
 
   - id: subject_closure_label
     description: "Labels for subject_closure."
-    display_name: Gene
+    display_name: Gene Closure
+    type: string
+    cardinality: multi
+    property: []
+    searchable: true
+
+  - id: subject_taxon
+    description: "Taxonomic class of the subject. This is typically a CURIE of the form NCBITaxon:nnnn."
+    display_name: Gene Taxon
+    type: string
+    property: []
+
+  - id: subject_taxon_label
+    description: "Label of taxon."
+    display_name: Gene Taxon
+    type: string
+    property: []
+    searchable: true
+
+  - id: subject_taxon_closure
+    description: "Reflexive closure of taxon. ALWAYS up SubClassOf."
+    display_name: Gene Taxon Closure
+    type: string
+    cardinality: multi
+    property: []
+
+  - id: subject_taxon_closure_label
+    description: "Labels for taxon_closure."
+    display_name: Gene Taxon Closure
     type: string
     cardinality: multi
     property: []
@@ -58,14 +86,42 @@ fields:
 
   - id: object_closure
     description: "Reflexive closure of association_has_object. A list of CURIEs. If an individual, first traverse rdf:tpye. The default closure is subclass, but other may optionally be added depending on what type of association this is and what the class is. E.g. for expression associations, the object is an anatomy class, and the closure will include part_of"
-    display_name: Homolog
+    display_name: Homolog Closure
     type: string
     cardinality: multi
     property: []
 
   - id: object_closure_label
     description: "Labels for object_class_closure."
-    display_name: Homolog
+    display_name: Homolog Closure
+    type: string
+    cardinality: multi
+    property: []
+    searchable: true
+
+  - id: object_taxon
+    description: "Taxonomic class of the object. This is typically a CURIE of the form NCBITaxon:nnnn. This field may be unfilled when used with certain categories"
+    display_name: Homolog Taxon
+    type: string
+    property: []
+
+  - id: object_taxon_label
+    description: "Label of taxon."
+    display_name: Homolog Taxon
+    type: string
+    property: []
+    searchable: true
+
+  - id: object_taxon_closure
+    description: "Reflexive closure of taxon. ALWAYS up SubClassOf."
+    display_name: Homolog Taxon Closure
+    type: string
+    cardinality: multi
+    property: []
+
+  - id: object_taxon_closure_label
+    description: "Labels for taxon_closure."
+    display_name: Homolog Taxon Closure
     type: string
     cardinality: multi
     property: []
