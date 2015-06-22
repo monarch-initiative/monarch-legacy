@@ -155,6 +155,34 @@ fields:
     property: []
     searchable: true
 
+  - id: subject_chromosome
+    description: "Chromosome related to the subject."
+    display_name: Subject Chromosome
+    type: string
+    property: []
+
+  - id: subject_chromosome_label
+    description: "Label of the chromosome."
+    display_name: Subject Chromosome
+    type: string
+    property: []
+    searchable: true
+
+  - id: subject_chromosome_closure
+    description: "Reflexive closure of chromosome."
+    display_name: Chromosome
+    type: string
+    cardinality: multi
+    property: []
+
+  - id: subject_chromosome_closure_label
+    description: "Labels for chromosome_closure."
+    display_name: Chromosome
+    type: string
+    cardinality: multi
+    property: []
+    searchable: true
+
   - id: subject_family
     description: PANTHER families that are associated with this entity.
     display_name: PANTHER family
@@ -297,6 +325,34 @@ fields:
   - id: object_gene_closure_label
     description: "Labels for gene_closure."
     display_name: Gene
+    type: string
+    cardinality: multi
+    property: []
+    searchable: true
+
+  - id: object_chromosome
+    description: "Chromosome related to the subject."
+    display_name: Object Chromosome
+    type: string
+    property: []
+
+  - id: object_chromosome_label
+    description: "Label of the chromosome."
+    display_name: Object Chromosome
+    type: string
+    property: []
+    searchable: true
+
+  - id: object_chromosome_closure
+    description: "Reflexive closure of chromosome."
+    display_name: Chromosome
+    type: string
+    cardinality: multi
+    property: []
+
+  - id: object_chromosome_closure_label
+    description: "Labels for chromosome_closure."
+    display_name: Chromosome
     type: string
     cardinality: multi
     property: []
