@@ -1,4 +1,4 @@
-id: gene_phenotype
+id: gene_homolog
 schema_generating: true
 document_category: generic_association
 weight: 20
@@ -45,27 +45,27 @@ fields:
 
   - id: object
     description: "The CURIE for oban:association_has_object. This is often, but not always an ontology class. E.g. for a gene-gene interaction it is an (arbitrary) member of the pair."
-    display_name: Phenotype
+    display_name: Disease
     type: string
     property: []
 
   - id: object_label
     description: "Label for association_object."
-    display_name: Phenotype
+    display_name: Disease
     type: string
     property: []
     searchable: true
 
   - id: object_closure
     description: "Reflexive closure of association_has_object. A list of CURIEs. If an individual, first traverse rdf:tpye. The default closure is subclass, but other may optionally be added depending on what type of association this is and what the class is. E.g. for expression associations, the object is an anatomy class, and the closure will include part_of"
-    display_name: Phenotype
+    display_name: Disease
     type: string
     cardinality: multi
     property: []
 
   - id: object_closure_label
     description: "Labels for object_class_closure."
-    display_name: Phenotype
+    display_name: Disease
     type: string
     cardinality: multi
     property: []
