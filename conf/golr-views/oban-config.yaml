@@ -127,6 +127,33 @@ fields:
     property: []
     searchable: true
 
+  - id: subject_gene
+    description: "Gene related to the subject."
+    display_name: Subject Gene
+    type: string
+    property: []
+
+  - id: subject_gene_label
+    description: "Label of the gene."
+    display_name: Subject Gene
+    type: string
+    property: []
+    searchable: true
+
+  - id: subject_gene_closure
+    description: "Reflexive closure of gene."
+    display_name: Gene
+    type: string
+    cardinality: multi
+    property: []
+
+  - id: subject_gene_closure_label
+    description: "Labels for gene_closure."
+    display_name: Gene
+    type: string
+    cardinality: multi
+    property: []
+    searchable: true
 
   - id: subject_family
     description: PANTHER families that are associated with this entity.
@@ -242,6 +269,34 @@ fields:
   - id: object_taxon_closure_label
     description: "Labels for taxon_closure."
     display_name: Taxon
+    type: string
+    cardinality: multi
+    property: []
+    searchable: true
+
+  - id: object_gene
+    description: "Gene related to the subject."
+    display_name: Object Gene
+    type: string
+    property: []
+
+  - id: object_gene_label
+    description: "Label of the gene."
+    display_name: Object Gene
+    type: string
+    property: []
+    searchable: true
+
+  - id: object_gene_closure
+    description: "Reflexive closure of gene."
+    display_name: Gene
+    type: string
+    cardinality: multi
+    property: []
+
+  - id: object_gene_closure_label
+    description: "Labels for gene_closure."
+    display_name: Gene
     type: string
     cardinality: multi
     property: []
@@ -370,30 +425,6 @@ fields:
     display_name: Redundant for
     type: string
     property: []
-
-#   - id: type_closure
-#     description: "Derived from c12 + SO."
-#     display_name: Type closure
-#     type: string
-#     cardinality: multi
-#     property: []
-#   - id: type_closure_label
-#     description: "Derived from c12 + SO."
-#     display_name: Type label closure
-#     type: string
-#     cardinality: multi
-#     property: []
-
-
-
-
-
-#   - id: bioentity_isoform_label
-#     description: ???
-#     display_name: Bioentity isoform label
-#     type: string
-#     cardinality: multi
-#     property: []
 
   - id: evidence_graph
     description: "Evidence graph"
