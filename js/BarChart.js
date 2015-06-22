@@ -30,7 +30,7 @@ function makePhenotypeAnnotationGraph(data){
     phenoGraph.init(".graph-container",data);*/
     var graphDiv = ".graph-container";
     this.makeTwoSizeGraph(data,graphDiv,
-            bbop.monarch.phenotypeAnnotationConfig,
+            bbop.monarch.homePageConfig,
             bbop.monarch.homePageConfig,
             1900,950)
 }
