@@ -15,7 +15,7 @@ echo "done"
 
 echo "Generating json conf file..."
 
-perl ./confyaml2json.pl -i $REF_DIR >$REF_DIR/../golr-conf.json-test
+perl ./confyaml2json.pl -i $REF_DIR >$REF_DIR/../golr-conf-beta.json
 
 echo "done"
 
