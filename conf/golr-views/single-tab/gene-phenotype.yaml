@@ -15,6 +15,18 @@ fields:
 
 ## SUBJECT
 
+  - id: subject
+    description: "The CURIE for oban:association_has_subject. May be disease, variant, gene, person, ...."
+    display_name: Gene
+    type: string
+    property: []
+
+  - id: subject_label
+    description: "Label for association_subject. This will always be rdfs:label. Conventions may vary as to what goes in the label. For genes will be symbol, but we may choose to uniquify by prefixing with species"
+    display_name: Gene
+    type: string
+    property: []
+    searchable: true
 
   - id: object
     description: "The CURIE for oban:association_has_object. This is often, but not always an ontology class. E.g. for a gene-gene interaction it is an (arbitrary) member of the pair."

@@ -82,7 +82,8 @@ exit(0);
 
 ## Subroutines ##
 
-## Merge two hashes together.
+## Merge two hashes together, based on merge sub in
+## @ktlm's confyaml2json.pl with merging of fields list added
 sub merge {
 
   my $default_hash = shift || {};
