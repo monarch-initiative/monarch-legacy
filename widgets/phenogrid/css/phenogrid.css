@@ -321,7 +321,7 @@
 .expandbtn {
     padding: 0;
     border: none;
-    background: transparent url('./widgets/phenogrid/image/ExpandAllIcon.png') no-repeat;
+    background: transparent url('/widgets/phenogrid/image/ExpandAllIcon.png') no-repeat;
     margin-left: auto;
     margin-right: auto;
     width: 18px;
