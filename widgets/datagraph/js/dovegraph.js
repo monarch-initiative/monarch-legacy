@@ -50,14 +50,6 @@ monarch.dovegraph = function(config){
     self.parents = [];
     self.html_div = html_div;
 };
-
-monarch.dovegraph.prototype.run = function(html_div,DATA){
-    var self = this;
-    
-    self.makeGraphDOM(html_div,DATA); 
-    var d3Config = self.setD3Config(html_div,DATA);
-    self.drawGraph(DATA,d3Config,html_div);
-};
         
 monarch.dovegraph.prototype.init = function(html_div,DATA){
      var self = this;
@@ -68,9 +60,13 @@ monarch.dovegraph.prototype.init = function(html_div,DATA){
      
          if (jQuery(window).width() < (config.benchmarkWidth-100) || jQuery(window).height() < (config.benchmarkHeight-100)){
              self.setSizeConfiguration(config.graphSizingRatios);
-             self.run(html_div,DATA);
+             self.makeGraphDOM(html_div,DATA); 
+             var d3Config = self.setD3Config(html_div,DATA);
+             self.drawGraph(DATA,d3Config,html_div);
          } else {
-             self.run(html_div,DATA);
+             self.makeGraphDOM(html_div,DATA); 
+             var d3Config = self.setD3Config(html_div,DATA);
+             self.drawGraph(DATA,d3Config,html_div);
          }
      
          window.addEventListener('resize', function(event){
@@ -78,11 +74,15 @@ monarch.dovegraph.prototype.init = function(html_div,DATA){
              if (jQuery(window).width() < (config.benchmarkWidth-100) || jQuery(window).height() < (config.benchmarkHeight-100)){
                  jQuery(html_div).children().remove();
                  self.setSizeConfiguration(config.graphSizingRatios);
-                 self.run(html_div,DATA);
+                 self.makeGraphDOM(html_div,DATA); 
+                 var d3Config = self.setD3Config(html_div,DATA);
+                 self.drawGraph(DATA,d3Config,html_div);
              }
          });
      } else {
-         self.run(html_div,DATA);
+         self.makeGraphDOM(html_div,DATA); 
+         var d3Config = self.setD3Config(html_div,DATA);
+         self.drawGraph(DATA,d3Config,html_div);
      }
 };
 
