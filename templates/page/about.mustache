@@ -38,6 +38,7 @@
 						</div>
 					    <div id="goal-content" class="panel-collapse collapse in">
 							<div class="panel-body">
+								<div class="text">
 								<img id="monarch-logo-stacked" src="/image/logo-stacked.jpg" align="right" height="200px"/>
 								<ul>
 									<li>Integrate, align, and re-distribute cross-species gene,
@@ -68,6 +69,7 @@
 				                comparison both within and across species, with the ultimate goal of
 						        improving biomedical research.
 								</p>
+								</div> <!--text-->
 							</div> <!--panel-body-->
 						</div> <!--panel-collapse-->
 					</div><!--panel goals-->
@@ -83,13 +85,14 @@
                         </div>
                         <div id="background-content" class="panel-collapse collapse in">
                             <div class="panel-body">                                
+								<div class="text">
 								<p>
 								It is well-known that mutations in orthologous genes and genes in the same 
 								signaling pathway often manifest in similar phenotypes, and therefore study 
 								of variant phenotypes in model systems may provide insight into human gene 
 								function and understanding of disease.  For example, mutations in 
 								<a href="/gene/NCBIGene:5080">PAX6</a>, which gives rise to the condition 
-								<a haref="/disease/OMIM:106210">Aniridia</a> with striking eye phenotypes, 
+								<a href="/disease/OMIM:106210">Aniridia</a> with striking eye phenotypes, 
 								also cause eye phenotypic abnormalities in mouse, zebrafish, and flies, 
 								including <a href="/phenotype/HP_0000517">abnormal lenses</a>, 
 								<a href="/phenotype/MP_0001286">underdeveloped</a> or even <a href="/phenotype/MP_0001293">
@@ -167,7 +170,8 @@
 								novel hypotheses within and between species.
 								</p>
 
-								</div> <!--panel-body-->
+								</div> <!--text -->
+							</div> <!--panel-body-->
                         </div> <!--panel-collapse-->
                     </div><!--panel goals-->
                 </div> <!--panel-group accordion -->
@@ -200,7 +204,7 @@
 										<li>phenotypes</li>
 										<li>publications</li>
 									</ul>
-								</div>
+								</div> <!-- text -->
 								<div class="text">
 								<h5>Data modeling, transformation, and curation</h5>
 							<p>
@@ -212,7 +216,7 @@
 							relevant columns, mappings between columns (such as between identifier and labels, but 
 							also more complex associations, such as between a genotype-phenotype association and 
 							the publication it was mentioned in), and value-level mapping. Because our focus is 
-							on genotype-phenotype data, we focus our efforts on ensuring that each resources’ 
+							on genotype-phenotype data, we focus our efforts on ensuring that each resource’s
 							variants, genes, genotypes, strains, and phenotypes are well-typed using ontologies 
 							and standardized identifiers.  Internally, we map all genes to 
 							<a href="http://www.ncbi.nlm.nih.gov/gene/">NCBI gene</a> identifiers, 
@@ -233,7 +237,7 @@
 							<p>
 								Once curated, we generate views and semantically index them into a Solr instance, 
 								and the data is served via REST services through NIF.  That way when a user is 
-								interested in exploring <a href="http://monarchinitiative.org/Phenotype/HP_0000598">abnormalities of the ear</a>,
+								interested in exploring <a href="/Phenotype/HP_0000598">abnormalities of the ear</a>,
 								a single query can retrieve all relevant data from the system.  
 								Our web application wraps <a href="http://nif-services.neuinfo.org/servicesv1/">NIF’s REST services</a>.  
 							</p>
@@ -242,7 +246,7 @@
 							use of a graph database (based on Neo4j) to serve up all our data and ontologies.  
 							This will have the side benefit of providing the community our semantically mapped data in RDF. 
 							</p>
-						</div>
+						</div> <!-- text -->
 						<div class="text">
 							<h5>Ontologies</h5>
 							<p>
@@ -251,7 +255,7 @@
 							system, including:</p>
 							<ul> 
 								<li><b>Anatomy:</b>
-									We utilize a variety of species specific anatomy ontologies, for example 
+									We utilize a variety of species-specific anatomy ontologies, for example 
 									the Zebrafish Anatomy ontology, which are all integrated in the context 
 									of the multi-species anatomy ontology <a href="http://uberon.org">Uberon</a>, 
 									which covers metazoans. We are 
@@ -281,12 +285,12 @@
 							<p>
 								These ontologies are merged into monarch.owl, and used to drive the system.
 							</p>
-						</div>
+						</div> <!-- text -->
 						<div class="text">
 							<h5>Semantic Similarity</h5>
 							<p>
 							Once data has been ingested and transformed as above, it is ready for loading into 
-							our semantic similarity engine.  <a href="http://www.owlsim.org">OWLSim</a> enables search, 
+							our semantic similarity engine.  <a href="https://github.com/owlcollab/owltools/wiki/Owl-Sim">OWLSim</a> enables search,
 							comparison, and analysis of semantic annotations between entities (genes, 
 							genotypes, diseases, etc.), leveraging ontologies and computational reasoners.  
 							In the case of Monarch, we currently utilize OWLSim for analysis of collections 
@@ -300,7 +304,7 @@
 							abnormal and remarkably normal (NOT abnormal) phenotypes when searching and 
 							comparing collections of phenotypes.
 							</p>
-						</div>
+						</div> <!-- text -->
 						<div class="text">
                            <figure class="bottomright" href="#fig4">
                                 <img src="/image/pheno_species_coverage.jpg" height="200px">
@@ -329,7 +333,7 @@
 							We can also confirm what we have known for a long time, which is that different 
 							model organisms are used to study different areas of biology.  
 							</p>
-							</div>
+							</div> <!-- text -->
                             </div> <!--panel-body-->
                         </div> <!--panel-collapse-->
                     </div><!--panel -->
@@ -345,6 +349,7 @@
                         </div>
                         <div id="partner-text" class="panel-collapse collapse in">
                             <div class="panel-body">
+								<div class="text">
 								<p>
 								We are proud to work with several organizations to develop ontologies, 
 								drive community standards, research rare disease, and influence publishers 
@@ -367,6 +372,7 @@
                                         <td><a href="https://www.force11.org"><img src="/image/partner-force11.png" alt="Force11"></a></td>
                                     </tr>
 								</table>
+                            </div> <!--text -->
                             </div> <!--panel-body-->
                         </div> <!--panel-collapse-->
                     </div><!--panel -->
