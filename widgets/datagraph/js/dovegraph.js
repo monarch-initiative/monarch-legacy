@@ -41,20 +41,21 @@ monarch.dovegraph = function(config){
         self.config.graphSizingRatios = self.setSizingRatios();
     }
 
-    self.tooltip = d3.select(html_div)
-        .append("div")
-        .attr("class", "tip");
-
-    self.groups = self.getGroups(DATA);
     self.level = 0;
     self.parents = [];
-    self.html_div = html_div;
+    
 };
         
 monarch.dovegraph.prototype.init = function(html_div,DATA){
      var self = this;
      var config = self.config;
      self.checkData(DATA);
+     self.html_div = html_div;
+     self.tooltip = d3.select(html_div)
+         .append("div")
+         .attr("class", "tip");
+
+     self.groups = self.getGroups(DATA);
      
      if (config.isDynamicallyResized){
      
@@ -140,8 +141,8 @@ monarch.dovegraph.prototype.makeGraphDOM = function(html_div,data){
           jQuery(html_div+" .interaction li").append("<div class=breadcrumbs></div>");
           d3.select(html_div).select(".breadcrumbs")
               .append("svg")
-              .attr("height",(conf.bread.height+2))
-              .attr("width",conf.bcWidth);
+              .attr("height",(config.bread.height+2))
+              .attr("width",config.bcWidth);
       }
       
       jQuery(html_div+" .interaction li").append("<div class=settings></div>");

@@ -11,11 +11,11 @@ if (typeof monarch.dovegraph == 'undefined') { monarch.dovegraph = {};}
 if (typeof monarch.dovegraph.model == 'undefined') { monarch.dovegraph.model = {};}
 
 
-monarch.dovegraph.model.tree = function(self.data){
+monarch.dovegraph.model.tree = function(data){
     var self = this;
-    self.data = self.data;
+    self.data = data;
     self.checkData();
-}
+};
 
 monarch.dovegraph.model.tree.getGroupMax = function(){
     var self = this;
@@ -67,7 +67,7 @@ monarch.dovegraph.model.tree.getStackedStats = function(){
     return self;
 };
 
-monarch.dovegraph.model.tree.sortself.dataByGroupCount = function(groups){
+monarch.dovegraph.model.tree.sortDataByGroupCount = function(groups){
     var self = this;
     //Check if total counts have been calculated via getStackedStats()
     if (self.data[0].counts[0].x1 == null){

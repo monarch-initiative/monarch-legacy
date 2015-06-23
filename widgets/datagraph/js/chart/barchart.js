@@ -44,7 +44,7 @@ monarch.dovegraph.chart.barchart = function(config){
         .attr("height", conf.height + conf.margin.top + conf.margin.bottom)
         .append("g")
         .attr("transform", "translate(" + conf.margin.left + "," + conf.margin.top + ")");
-}
+};
 
 monarch.dovegraph.chart.barchart.prototype.transitionYAxisToNewScale = function(duration) {
     var self = this;

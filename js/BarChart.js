@@ -67,6 +67,14 @@ function makeTestGraph(data){
             bbop.monarch.resizeConfig);
 }
 
+function makeDoveGraph(data){
+
+    var graphDiv = ".dove-container";
+    graphObject = 
+        new monarch.dovegraph(bbop.monarch.homePageConfig);
+    graphObject.init(graphDiv,data);
+}
+
 function makeTwoSizeGraph(data,graphDiv,largeConfig,smallConfig,width,height){
 
     var sizeTracker;
