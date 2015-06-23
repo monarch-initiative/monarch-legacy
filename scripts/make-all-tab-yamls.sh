@@ -19,7 +19,7 @@
 ./make-tab-yaml.pl Variant Disease > ../conf/golr-views/single-tab/variant-disease.yaml
 ./make-tab-yaml.pl Variant Model > ../conf/golr-views/single-tab/variant-model.yaml
 ./make-tab-yaml.pl Variant Pathway > ../conf/golr-views/single-tab/variant-pathway.yaml
-./make-tab-yaml.pl Variant Gene > ../conf/golr-views/single-tab/variant-pathway.yaml
+./make-tab-yaml.pl Variant Gene > ../conf/golr-views/single-tab/variant-gene.yaml
 
 # Model
 ./make-tab-yaml.pl Model Phenotype > ../conf/golr-views/single-tab/model-phenotype.yaml
