@@ -62,9 +62,36 @@
 *
 */
 
-#getvariant{
-	left: 100px;
+
+#NewHeader{
+	visibility: hidden;
+	position: absolute;
+	right: 0;
+	top: 0;
+	margin: 30px;
+	width: 30%;
+	background-color:#456789;
+	z-index: 2;
 }
+
+#myTable{
+	border: 1px;
+	border-spacing: 10px;
+}
+
+#Table{
+	visibility: hidden;
+	position: absolute;
+	right: 0;
+	top: 0;
+	margin: 30px;
+	width: 30%;
+	background-color:#999;
+	height: 200px;
+	z-index: 1;
+	overflow: auto;
+}
+
 
 .bp-axis path,
 .bp-axis line {
@@ -87,17 +114,6 @@
 
 }
 
-.selected rect{
-	fill: #5eba5b;
-	fill-opacity: 0.2;
-	stroke: #666666;
-	stroke-width: 0.5;
-}
-
 .centromere {
     fill: #ff5962;
-}
-
-.variant {
-	fill: #ff5962;
 }

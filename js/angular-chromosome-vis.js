@@ -4,6 +4,16 @@
 
 (function() {
 
+	$(document).ready(function(){
+		var counter = 0;
+		$("#myTable th").each(function(){
+			var width = $('.MyTable tr:last td:eq(' + counter + ')').width();
+			$("#NewHeader tr").append(this);
+			this.width = width;
+			counter++;
+		});
+	});
+
 	var angularChromosomeVis = angular.module('angularChromosomeVis', []);
 
 	var Variants = [];
@@ -94,6 +104,9 @@
 
 			function loadVariants(){
 
+				document.getElementById("NewHeader").style.visibility = 'visible';
+				document.getElementById("Table").style.visibility = 'visible';
+
 				var variant = target.selectAll("chromosome" + " v")
 					.data(Variants)
 					.enter().append("g");
@@ -177,7 +190,13 @@
 				var GolrManager = new bbop.golr.manager.jquery(golr_loc, gconf);
 
 				var customCallBack = function (res) {
+					//Get the array of variants
 					Variants = res._raw.response.docs;
+					//Sort the variants in the order they appear on the chromosome
+					Variants.sort(function(a, b){
+						return Number(a.start) - Number(b.start);
+					});
+
 					loadVariants();
 				};
 
@@ -464,6 +483,22 @@
 								end = +m.END.textContent;
 
 							if (scope.mode === 'multi' || (scope.mode === "single" && scope.selectors.list.length == 0)) {
+								//Display selected bands information in table
+								var table = document.getElementById("myTable");
+								table.insertRow().insertCell(0).innerHTML = "Empty";
+
+								for(var variant in Variants) {
+									var obj = Variants[variant];
+									if (obj.start >= start && obj.end <= end) {
+										var row = table.insertRow();
+										row.insertCell(0).innerHTML = obj.id;
+										row.insertCell(1).innerHTML = obj.feature_closure_label[2];
+									}
+									else if (obj.start > end) {
+										break;
+									}
+								}
+
 								var newSel = newSelector(scope, xscale, start, end, (BAND_HEIGHT - AXIS_SPACING)).draw(); //create new selector and draw it
 								addSelector(newSel);//add new selector to local scope
 								chrSelectors.addSelector(newSel); //add new location to the service
@@ -510,7 +545,7 @@
 				sel.delete();
 				scope.selectors.list = _.without(scope.selectors.list, sel) //delete locally
 				chrSelectors.deleteSelector(sel); //delete from the service
-			}
+			};
 
 			function newSelector(scope, xscale, start, end, yshift) {
 				return new Selector({
@@ -519,7 +554,7 @@
 					y: yshift,
 					target: '#' + scope.id + 'svg'
 				}).init(start, end);
-			};
+			}
 		}
 
 		/**
@@ -552,6 +587,23 @@
 				var ext = self.brush.extent();
 				self.start = Math.round(ext[0]);
 				self.end = Math.round(ext[1]);
+
+				var table = document.getElementById("myTable");
+				table.innerHTML = "";
+				table.insertRow();
+				//Display selected bands information in table
+				for(var variant in Variants) {
+					var obj = Variants[variant];
+
+					if (obj.start >= self.start && obj.end <= self.end) {
+						var row = table.insertRow();
+						row.insertCell(0).innerHTML = obj.id;
+						row.insertCell(1).innerHTML = obj.feature_closure_label[2];
+					}
+					else if (obj.start > self.end) {
+						break;
+					}
+				}
 			}
 
 			//initialize the selector
@@ -600,7 +652,7 @@
 				return self;
 			};
 
-		};
+		}
 
 
 		return {
@@ -620,7 +672,8 @@
 			},
 		template: '<h5>Chromosome {{chr}}</h5>' +
 		'<p ng-repeat="selector in selectors.list">' +
-		'{{selector.start}}:{{selector.end}}' +
+		'<input type="number" ng-model="selector.start" ng-change="selector.move(selector.end, selector.start)"> : <input type="number" ng-model="selector.end" ng-change="selector.move(selector.end, selector.start)"> ' +
+		'<button class="btn btn-xs btn-danger" ng-click="delSelector(selector)">delete</button>' +
 		'</p>'
 		}
 	}]);
