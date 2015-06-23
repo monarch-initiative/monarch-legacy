@@ -14,13 +14,17 @@ monarch.dovegraph.chart.barchart = function(config){
     var self = this;
 
     //Define scales
+    // Lower value of a bar vertically
     self.y0 = d3.scale.ordinal()
         .rangeRoundBands([0,conf.height], .1);
-
+    
+    //Upper value of a bar vertically
     self.y1 = d3.scale.ordinal();
+    
+    // Lower value of a bar horizontally
+    self.x0 = 0;
 
-    self.xMin = 0;
-
+    // Upper value of a bar horizontally
     self.x = d3.scale.linear()
         .range([self.xMin, conf.width]);
   

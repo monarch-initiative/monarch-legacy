@@ -203,10 +203,10 @@ monarch.dovegraph.prototype.setD3Config = function (html_div,DATA){
 
     d3Config.y1 = d3.scale.ordinal();
     
-    d3Config.xMin = 0;
+    d3Config.x0 = 0;
 
     d3Config.x = d3.scale.linear()
-        .range([d3Config.xMin, conf.width]);
+        .range([d3Config.x0, conf.width]);
       
     //Bar colors
     d3Config.color = d3.scale.ordinal()
@@ -409,12 +409,12 @@ monarch.dovegraph.prototype.setXYDomains = function (graphConfig,data,groups) {
     
     if (jQuery('input[name=mode]:checked').val()=== 'grouped' || groups.length === 1){
         var xGroupMax = self.getGroupMax(data);
-        graphConfig.x.domain([graphConfig.xMin, xGroupMax]);
+        graphConfig.x.domain([graphConfig.x0, xGroupMax]);
         graphConfig.y1.domain(groups)
         .rangeRoundBands([0, graphConfig.y0.rangeBand()]);
     } else if (jQuery('input[name=mode]:checked').val()=== 'stacked'){
         var xStackMax = self.getStackMax(data);
-        graphConfig.x.domain([graphConfig.xMin, xStackMax]);
+        graphConfig.x.domain([graphConfig.x0, xStackMax]);
         graphConfig.y1.domain(groups).rangeRoundBands([0,0]);
     } else {
         graphConfig.y1.domain(groups)
@@ -499,10 +499,10 @@ monarch.dovegraph.prototype.makeBar = function (barGroup,graphConfig,barLayout) 
 monarch.dovegraph.prototype.setLinearScale = function (graphConfig,data,groups,rect) {
     var self = this;
     var config = self.config;
-    graphConfig.xMin = 0;
+    graphConfig.x0 = 0;
     
     graphConfig.x = d3.scale.linear()
-        .range([graphConfig.xMin, config.width]);
+        .range([graphConfig.x0, config.width]);
 
     graphConfig.xAxis = d3.svg.axis()
         .scale(graphConfig.x)
@@ -515,10 +515,10 @@ monarch.dovegraph.prototype.setLinearScale = function (graphConfig,data,groups,r
 monarch.dovegraph.prototype.setLogScale = function (graphConfig,data,groups,rect) {
     var self = this;
     var config = self.config;
-    graphConfig.xMin = .1;
+    graphConfig.x0 = .1;
     
     graphConfig.x = d3.scale.log()
-        .range([graphConfig.xMin, config.width]);
+        .range([graphConfig.x0, config.width]);
 
     graphConfig.xAxis = d3.svg.axis()
         .scale(graphConfig.x)
