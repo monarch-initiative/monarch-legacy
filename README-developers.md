@@ -40,8 +40,8 @@ for example, to add disease phenotype associations to a disease page:
          
         var phenotype_filter = { field: 'object_category', value: 'phenotype' };
         
-        # Add the table where the second parameter is where we search for the disease ID, in this case
-        # it is part of the subject closure field
+        # Add the table where the second parameter is where we filter out the disease ID, typically either 
+        # object_closure or subject_closure, in this case the disease ID is filtered via the subject_closure field
         addGolrTable(info, "subject_closure", id, 'phenotypes-table', phenotype_filter, 'generic_association');
         
         # Server side query to get the result counts
@@ -54,6 +54,7 @@ for example, to add disease phenotype associations to a disease page:
 Then in the mustache template, add the anchor to categories div
           
         disease.mustache
+        
         <div id="categories">
             {{{includes.phenotype_anchor}}}
         </div>
@@ -61,6 +62,7 @@ Then in the mustache template, add the anchor to categories div
 Then add the table to the complete-info div
 
         disease.mustache
+        
         <div id="complete-info">
             {{{includes.phenotype_table}}}
         </div>
