@@ -71,8 +71,7 @@ function makeDoveGraph(data){
 
     var graphDiv = ".dove-container";
     graphObject = 
-        new monarch.dovegraph(bbop.monarch.homePageConfig);
-    graphObject.init(graphDiv,data);
+        new monarch.dovegraph(bbop.monarch.homePageConfig, data, graphDiv);
 }
 
 function makeTwoSizeGraph(data,graphDiv,largeConfig,smallConfig,width,height){
