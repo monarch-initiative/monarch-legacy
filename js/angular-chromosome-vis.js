@@ -104,8 +104,15 @@
 
 			function loadVariants(){
 
+				var subVar,
+					copVar,
+					seqVar,
+					insVar,
+					stackCircle = BAND_HEIGHT - 6;
+
 				document.getElementById("NewHeader").style.visibility = 'visible';
 				document.getElementById("Table").style.visibility = 'visible';
+				document.getElementById("Form").style.visibility = 'visible';
 
 				var variant = target.selectAll("chromosome" + " v")
 					.data(Variants)
@@ -115,8 +122,21 @@
 					.domain([dasModel.start, dasModel.stop])
 					.range([0, rangeTo]);
 
+				//Classify each type of variant
 				//For every variant, find which band it's on and have the band register it
 				variant.each(function(v){
+					if (v.feature_closure_label[2] == "copy_number_variation") {
+						copVar.push(v);
+					}
+					else if (v.feature_closure_label[2] == "sequence_alteration") {
+						seqVar.push(v);
+					}
+					else if (v.feature_closure_label[2] == "insertion") {
+						insVar.push(v);
+					}
+					else {
+						subVar.push(v);
+					}
 					band.each(function(m) {
 						if (parseInt(m.START.textContent) <= parseInt(v.start) && parseInt(v.start) <= parseInt(m.END.textContent)) {
 							m.density.push(v);
@@ -124,55 +144,93 @@
 					});
 				});
 
-				//Variable to hold the number of variants the most populated band has
-				var densityMax = 0;
-				var densityMult = true;
-				var variant_circle;
+				function drawCircle(color, type){
+					//Variable to hold the number of variants the most populated band has
+					var densityMax = 0;
+					var densityMult = true;
 
-				variant_circle = band.append('circle')
-							.attr('cx', function(m){
-								//Loop through all the bands to get the densityMax before the style below
-								if(densityMax < m.density.length){
-									densityMax = m.density.length;
-								}
+					//Draw the circle then make sure the next set is higher
+					var variant_circle = band.append('circle')
+						.attr('class', type)
+						.attr('cx', function(m){
+							//Loop through all the bands to get the densityMax before the style below
+							if(densityMax < m.density.length){
+								densityMax = m.density.length;
+							}
 
-								//Return the middle of the band as the x value
-								return xscale(m.START.textContent) + ((xscale(+m.END.textContent) - xscale(+m.START.textContent)) / 2);
-							})
-							.attr('cy', function(){
-								return BAND_HEIGHT - 6;
-							})
-							.attr('r', 5)
-							.style('fill', function(m) {
-								//Make the densityMax good for a domain just once
-								if(densityMult){
-									densityMax = densityMax * 1.33;
-									densityMult = false;
-								}
+							//Return the middle of the band as the x value
+							return xscale(m.START.textContent) + ((xscale(+m.END.textContent) - xscale(+m.START.textContent)) / 2);
+						})
+						.attr('cy', function(){
+							return stackCircle;
+						})
+						.attr('r', 5)
+						.style('fill', function(m) {
+							//Make the densityMax good for a domain just once
+							if(densityMult){
+								densityMax = densityMax * 1.33;
+								densityMult = false;
+							}
 
-								//Create a gradient of redness
-								var scale = d3.scale.linear()
-									.domain([0, (densityMax / 2), densityMax])
-									.range(["white", "red", "black"]);
+							//Create a gradient of redness
+							var scale = d3.scale.linear()
+								.domain([-(densityMax * 0.25), (densityMax / 2), densityMax])
+								.range(["white", color, "black"]);
 
-								//Get the color reflective of the density on each band
-						return scale(Number(m.density.length));
+							//Get the color reflective of the density on each band if there are more than 0 variants
+							return Number(m.density.length) != 0 ? scale(Number(m.density.length)) : scale(-(densityMax * 0.25));
+						});
+
+					stackCircle = stackCircle - 10;
+
+					//Create a text label to display when variant circles are hovered over
+					var varLabel = target.append("text")
+						.attr("class", "var-lbl")
+						.attr("y", LABEL_PADDING - 7);
+
+					variant_circle.on("mouseover", function (m) {
+						varLabel.text("Variants: " + m.density.length)
+							.attr('x', xscale(m.START.textContent));
 					});
 
-				//Create a text label to display when variant circles are hovered over
-				var varLabel = target.append("text")
-					.attr("class", "var-lbl")
-					.attr("y", LABEL_PADDING - 7);
+					variant_circle.on("mouseout", function () {
+						varLabel.text(''); //empty the label
+					});
 
-				variant_circle.on("mouseover", function (m) {
-					varLabel.text("Variants: " + m.density.length)
-						.attr('x', xscale(m.START.textContent));
-				});
-
-				variant_circle.on("mouseout", function () {
-					varLabel.text(''); //empty the label
-				});
+				}
 			}
+
+			document.getElementById("substitution").onclick = function(){
+				if(this.checked){
+					console.log("checked");
+				}else{
+					console.log("unchecked");
+				}
+			};
+
+			document.getElementById("copy_number").onclick = function(){
+				if(this.checked){
+					console.log("checked");
+				}else{
+					console.log("unchecked");
+				}
+			};
+
+			document.getElementById("sequence_alteration").onclick = function(){
+				if(this.checked){
+					console.log("checked");
+				}else{
+					console.log("unchecked");
+				}
+			};
+
+			document.getElementById("insertion").onclick = function(){
+				if(this.checked){
+					console.log("checked");
+				}else{
+					console.log("unchecked");
+				}
+			};
 
 
 			button.addEventListener("click", function(){
@@ -246,20 +304,6 @@
 								m.density = [];
 								return m.id;
 							});
-/*
-						var variation1 = target.selectAll("chromosome" + " v")
-							.data(Variants1)
-							.enter().append("g");
-
-						var variation2 = target.selectAll("chromosome" + " b")
-							.data(Variants2)
-							.enter().append("g");
-
-						var variation3 = target.selectAll("chromosome" + " n")
-							.data(Variants3)
-							.enter().append("g");
-
-*/
 
 						var centromereLocation;
 
@@ -483,22 +527,6 @@
 								end = +m.END.textContent;
 
 							if (scope.mode === 'multi' || (scope.mode === "single" && scope.selectors.list.length == 0)) {
-								//Display selected bands information in table
-								var table = document.getElementById("myTable");
-								table.insertRow().insertCell(0).innerHTML = "Empty";
-
-								for(var variant in Variants) {
-									var obj = Variants[variant];
-									if (obj.start >= start && obj.end <= end) {
-										var row = table.insertRow();
-										row.insertCell(0).innerHTML = obj.id;
-										row.insertCell(1).innerHTML = obj.feature_closure_label[2];
-									}
-									else if (obj.start > end) {
-										break;
-									}
-								}
-
 								var newSel = newSelector(scope, xscale, start, end, (BAND_HEIGHT - AXIS_SPACING)).draw(); //create new selector and draw it
 								addSelector(newSel);//add new selector to local scope
 								chrSelectors.addSelector(newSel); //add new location to the service
@@ -579,6 +607,8 @@
 			}());
 
 			this.delete = function () {
+				var table = document.getElementById("myTable");
+				table.innerHTML = "";
 				_selector.remove();
 				_initialized = false;
 			};
@@ -588,9 +618,13 @@
 				self.start = Math.round(ext[0]);
 				self.end = Math.round(ext[1]);
 
+				updateTable();
+			}
+
+			function updateTable(){
 				var table = document.getElementById("myTable");
 				table.innerHTML = "";
-				table.insertRow();
+				table.insertRow().insertCell(0).innerHTML = "Empty";
 				//Display selected bands information in table
 				for(var variant in Variants) {
 					var obj = Variants[variant];
@@ -606,7 +640,7 @@
 				}
 			}
 
-			//initialize the selector
+			//initialize the selector and table
 			this.init = function (start, end) {
 				self.brush = d3.svg.brush()
 					.x(options.xscale)
@@ -634,6 +668,9 @@
 					.attr('height', options.height + (AXIS_SPACING * 2));
 
 				_initialized = true;
+
+				updateTable();
+
 				return self;
 			};
 
@@ -649,6 +686,7 @@
 				self.brush.extent([to, from]);
 				var selector = d3.select(options.target + ' .selector');
 				selector.call(self.brush);
+				updateTable();
 				return self;
 			};
 

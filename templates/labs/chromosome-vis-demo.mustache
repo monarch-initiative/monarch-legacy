@@ -77,9 +77,16 @@
                 </table>
             </div>
 
-
             <input type="text" name="numbervariants" placeholder="Number of Variants"><br>
             <button id="getvariant" type="submit">Get Variants</button>
+
+            <fieldset id="Form">
+                <legend>Variants</legend>
+                <input type="checkbox" name="substitution" id="substitution" value="substitution" checked="checked"/><label for="track">Substitutions</label><br />
+                <input type="checkbox" name="copy_number" id="copy_number" value="copy_number"  checked="checked"/><label for="event">Copy Number Variations</label><br />
+                <input type="checkbox" name="sequence_alteration" id="sequence_alteration" value="sequence_alteration" checked="checked"/><label for="message">Sequence Alterations</label><br />
+                <input type="checkbox" name="insertion" id="insertion" value="insertion" checked="checked"/><label for="message">Insertions</label><br />
+            </fieldset>
 
           <div class="wrapperforfooter">
             

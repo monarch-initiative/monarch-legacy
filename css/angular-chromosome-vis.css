@@ -62,6 +62,15 @@
 *
 */
 
+fieldset{
+	visibility: hidden;
+	margin: 20px;
+}
+
+input[type="checkbox"] {
+	margin-right: 3px;
+}
+
 
 #NewHeader{
 	visibility: hidden;
@@ -74,9 +83,10 @@
 	z-index: 2;
 }
 
-#myTable{
-	border: 1px;
-	border-spacing: 10px;
+#myTable, th, td{
+	font-size: 10pt;
+	border: 1px solid black;
+	padding: 5px;
 }
 
 #Table{
