@@ -52,7 +52,7 @@ monarch.dovegraph = function(config, data, html_div){
 
         self.groups = self.getGroups(data);
         self.makeGraphDOM(html_div, data); 
-        var histogram = new monarch.dovegraph.chart.barchart(config, html_div);
+        var histogram = new monarch.chart.barchart(config, html_div);
         self.drawGraph(data, histogram, html_div);
     };
     

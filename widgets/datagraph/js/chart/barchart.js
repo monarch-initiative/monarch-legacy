@@ -7,10 +7,9 @@
 
 // Module and namespace checking.
 if (typeof monarch == 'undefined') { var monarch = {};}
-if (typeof monarch.dovegraph == 'undefined') { monarch.dovegraph = {};}
-if (typeof monarch.dovegraph.chart == 'undefined') { monarch.dovegraph.chart = {};}
+if (typeof monarch.chart == 'undefined') { monarch.chart = {};}
 
-monarch.dovegraph.chart.barchart = function(config, html_div){
+monarch.chart.barchart = function(config, html_div){
     var self = this;
 
     //Define scales
@@ -49,7 +48,7 @@ monarch.dovegraph.chart.barchart = function(config, html_div){
         .attr("transform", "translate(" + config.margin.left + "," + config.margin.top + ")");
 };
 
-monarch.dovegraph.chart.barchart.prototype.setLinearScale = function(width) {
+monarch.chart.barchart.prototype.setLinearScale = function(width) {
     var self = this;
     self.x0 = 0;
     
@@ -64,7 +63,7 @@ monarch.dovegraph.chart.barchart.prototype.setLinearScale = function(width) {
     return self;
 };
 
-monarch.dovegraph.chart.barchart.prototype.setLogScale = function(width) {
+monarch.chart.barchart.prototype.setLogScale = function(width) {
     var self = this;
     self.x0 = .1;
     
@@ -79,20 +78,20 @@ monarch.dovegraph.chart.barchart.prototype.setLogScale = function(width) {
     return self;
 };
 
-monarch.dovegraph.chart.barchart.prototype.transitionYAxisToNewScale = function(duration) {
+monarch.chart.barchart.prototype.transitionYAxisToNewScale = function(duration) {
     var self = this;
     self.svg.transition().duration(duration)
         .select(".y.axis").call(self.yAxis);
 };
 
-monarch.dovegraph.chart.barchart.prototype.transitionXAxisToNewScale = function(duration) {
+monarch.chart.barchart.prototype.transitionXAxisToNewScale = function(duration) {
     var self = this;
     self.svg.transition()
         .duration(duration).select(".x.axis").call(self.xAxis);
 };
 
 //Adjusts the y axis labels in relation to axis ticks
-monarch.dovegraph.chart.barchart.prototype.setYAxisTextSpacing = function(dx){
+monarch.chart.barchart.prototype.setYAxisTextSpacing = function(dx){
     self.svg.select(".y.axis")
       .selectAll("text")
       .attr("dx", dx);
