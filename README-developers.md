@@ -41,7 +41,7 @@ for example, to add disease phenotype associations to a disease page:
         var phenotype_filter = { field: 'object_category', value: 'phenotype' };
         
         # Add the table where the second parameter is where we filter out the disease ID, typically either 
-        # object_closure or subject_closure, in this case the disease ID is filtered via the subject_closure field
+        # object_closure or subject_closure, in this case the disease ID is filtered via the subject_closure
         addGolrTable(info, "subject_closure", id, 'phenotypes-table', phenotype_filter, 'generic_association');
         
         # Server side query to get the result counts
@@ -69,6 +69,8 @@ Then add the table to the complete-info div
 
 Note: in some cases a new data association will require making new functions to serialize the table and anchor html templates. 
 New functions can be made by following this format:
+
+        webapp.js
 
         function addPhenotypeAnchor(info) {
             var phenotype_anchor = {id: info.id,
