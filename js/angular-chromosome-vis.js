@@ -4,22 +4,35 @@
 
 (function() {
 
+	$(document).ready(function(){
+		var counter = 0;
+		$("#myTable th").each(function(){
+			var width = $('.MyTable tr:last td:eq(' + counter + ')').width();
+			$("#NewHeader tr").append(this);
+			this.width = width;
+			counter++;
+		});
+	});
+
 	var angularChromosomeVis = angular.module('angularChromosomeVis', []);
+
+	var Variants = [];
 
 	/**
 	 * service that retrieves DAS model
 	 */
+
 	angularChromosomeVis.factory('dasLoader', function() {
 		return {
-			loadModel: function (segment, assembly) {
-				var returnStuff = JSDAS.Simple.getClient("http://www.ensembl.org/das/Homo_sapiens.GRCh" + assembly + ".karyotype");
-				//var returnStuff = $.getJSON("http://geoffrey.crbs.ucsd.edu:8080/solr/feature-location/select/?q=*%3A*&wt=json");
+			loadModel: function (scope, assembly) {
 
-				//returnStuff.push();
-				return returnStuff ;
+				var returnStuff = JSDAS.Simple.getClient("http://www.ensembl.org/das/Homo_sapiens.GRCh" + assembly + ".karyotype");
+
+				return returnStuff;
 			}
 		}
 	});
+
 
 	/**
 	 * service that maintains an array of selectors. can be injected into any controller, directive, etc.
@@ -61,15 +74,20 @@
 			scope.centromere = angular.isDefined(scope.centromere) ? scope.centromere : "line";
 
 			var dasModel;
+			var band;
+
 			scope.selectors = { list: [] }; //holds selector objects
 
 			var CHR1_BP_END = 248956422,
 				STALK_MAG_PC = 0.8,
-				PADDING = 100,
+				PADDING = 50,
 				BAND_HEIGHT = 50,
 				LABEL_PADDING = 24,
 				AXIS_SPACING = 4,
 				STALK_SPACING = 3;
+
+			var rangeTo,
+				variantNumber;
 
 			var target = d3.select(element[0]).append('svg');
 			target.attr('id', scope.id + 'svg'); //take id from the scope
@@ -79,6 +97,187 @@
 				target.attr({height: scope.height + (2 * PADDING)});
 			} else {
 				target.attr({height: scope.height + PADDING});
+			}
+
+			var text = document.querySelector("input");
+			var button = document.getElementById("getvariant");
+
+			function loadVariants(){
+
+				var subVar = [],
+					copVar = [],
+					seqVar = [],
+					insVar = [],
+					stackCircle = BAND_HEIGHT - 6;
+
+				document.getElementById("NewHeader").style.visibility = 'visible';
+				document.getElementById("Table").style.visibility = 'visible';
+				document.getElementById("Form").style.visibility = 'visible';
+
+				var variant = target.selectAll("chromosome" + " v")
+					.data(Variants)
+					.enter().append("g");
+
+				var xscale = d3.scale.linear()
+					.domain([dasModel.start, dasModel.stop])
+					.range([0, rangeTo]);
+
+				//Classify each type of variant
+				//For every variant, find which band it's on and have the band register it
+				variant.each(function(v){
+					if (v.feature_closure_label[2] == "copy_number_variation") {
+						copVar.push(v);
+					}
+					else if (v.feature_closure_label[2] == "sequence_alteration") {
+						seqVar.push(v);
+					}
+					else if (v.feature_closure_label[2] == "insertion") {
+						insVar.push(v);
+					}
+					else {
+						subVar.push(v);
+					}
+					band.each(function(m) {
+						if (parseInt(m.START.textContent) <= parseInt(v.start) && parseInt(v.start) <= parseInt(m.END.textContent)) {
+							m.density.push(v);
+						}
+					});
+				});
+
+				band.each(function(m){
+					for(var i = 0; i < m.density.length; i++){
+						var varObj = m.density[i];
+						if(subVar.indexOf(varObj)){
+
+						}
+						else if(copVar.indexOf(varObj)){
+
+						}
+						else if(seqVar.indexOf(varObj)){
+
+						}
+						else{
+
+						}
+					}
+
+				});
+
+					//Variable to hold the number of variants the most populated band has
+					var densityMax = 0;
+					var densityMult = true;
+
+
+					//Draw the circle then make sure the next set is higher
+					var variant_circle = band.append('circle')
+						.attr('cx', function(m){
+							//Loop through all the bands to get the densityMax before the style below
+							if(densityMax < m.density.length){
+								densityMax = m.density.length;
+							}
+
+							//Return the middle of the band as the x value
+							return xscale(m.START.textContent) + ((xscale(+m.END.textContent) - xscale(+m.START.textContent)) / 2);
+						})
+						.attr('cy', function(){
+							return stackCircle;
+						})
+						.attr('r', 5)
+						.style('fill', function(m) {
+							//Make the densityMax good for a domain just once
+							if(densityMult){
+								densityMax = densityMax * 1.33;
+								densityMult = false;
+							}
+
+							//Create a gradient of redness
+							var scale = d3.scale.linear()
+								.domain([-(densityMax * 0.25), (densityMax / 2), densityMax])
+								.range(["white", "red", "black"]);
+
+							//Get the color reflective of the density on each band if there are more than 0 variants
+							return Number(m.density.length) != 0 ? scale(Number(m.density.length)) : scale(-(densityMax * 0.25));
+						});
+
+					stackCircle = stackCircle - 10;
+
+					//Create a text label to display when variant circles are hovered over
+					var varLabel = target.append("text")
+						.attr("class", "var-lbl")
+						.attr("y", LABEL_PADDING - 7);
+
+					variant_circle.on("mouseover", function (m) {
+						varLabel.text("Variants: " + m.density.length)
+							.attr('x', xscale(m.START.textContent));
+					});
+
+					variant_circle.on("mouseout", function () {
+						varLabel.text(''); //empty the label
+					});
+			}
+
+			document.getElementById("substitution").onclick = function(){
+				if(this.checked){
+					console.log("checked");
+				}else{
+					console.log("unchecked");
+				}
+			};
+
+			document.getElementById("copy_number").onclick = function(){
+				if(this.checked){
+					console.log("checked");
+				}else{
+					console.log("unchecked");
+				}
+			};
+
+			document.getElementById("sequence_alteration").onclick = function(){
+				if(this.checked){
+					console.log("checked");
+				}else{
+					console.log("unchecked");
+				}
+			};
+
+			document.getElementById("insertion").onclick = function(){
+				if(this.checked){
+					console.log("checked");
+				}else{
+					console.log("unchecked");
+				}
+			};
+
+
+			button.addEventListener("click", function(){
+				//Check if the input is a number
+				if(!isNaN(text.value) && text.value != ''){
+					//Get the variants
+					variantNumber = parseInt(text.value);
+					golrCall();
+				}
+			});
+
+			function golrCall(){
+				var gconf = new bbop.golr.conf(amigo.data.golr);
+				var golr_loc = 'http://geoffrey.crbs.ucsd.edu:8080/solr/feature-location/';
+				var GolrManager = new bbop.golr.manager.jquery(golr_loc, gconf);
+
+				var customCallBack = function (res) {
+					//Get the array of variants
+					Variants = res._raw.response.docs;
+					//Sort the variants in the order they appear on the chromosome
+					Variants.sort(function(a, b){
+						return Number(a.start) - Number(b.start);
+					});
+
+					loadVariants();
+				};
+
+				GolrManager.register('search', 'foo', customCallBack);
+				GolrManager.set_query('*:*');
+				GolrManager.set_results_count(variantNumber);
+				GolrManager.search();
 			}
 
 
@@ -99,8 +298,6 @@
 
 					if (typeof dasModel.err === 'undefined') {
 
-						var rangeTo;
-
 						if (scope.width === 'inherit') {
 							var svgWidth = target[0][0].width.baseVal.value;
 							rangeTo = scope.relSize ? ((+dasModel.stop / CHR1_BP_END) * svgWidth) - PADDING : svgWidth - PADDING;
@@ -113,41 +310,16 @@
 							.domain([dasModel.start, dasModel.stop])
 							.range([0, rangeTo]);
 
-						var band = target.selectAll("chromosome" + " g")
-							.data(TBands)
+						band = target.selectAll("chromosome" + " g")
+							.data(dasModel.bands)
 							.enter().append("g");
-
-						var Variants1 = [];
-						var Variants2 = [];
-						var Variants3 = [];
 
 						band.append("title")
 							.text(function(m) {
-								//Push all the bands that have variants
-								if(m.TYPE.vid1){
-									Variants1.push(m);
-								}
-								if(m.TYPE.vid2){
-									Variants2.push(m);
-								}
-								if(m.TYPE.vid3){
-									Variants3.push(m);
-								}
+								//Add a variable to hold the variants on the band
+								m.density = [];
 								return m.id;
 							});
-
-						var variation1 = target.selectAll("chromosome" + " v")
-							.data(Variants1)
-							.enter().append("g");
-
-						var variation2 = target.selectAll("chromosome" + " b")
-							.data(Variants2)
-							.enter().append("g");
-
-						var variation3 = target.selectAll("chromosome" + " n")
-							.data(Variants3)
-							.enter().append("g");
-
 
 						var centromereLocation;
 
@@ -157,7 +329,6 @@
 								if(m.TYPE.id === "band:acen" && (m.id.indexOf('p')==0)) {
 									centromereLocation = m.END.textContent;
 								}
-
 								return m.TYPE.id.replace(':', ' ');
 							})
 							.attr('height', function (m) {
@@ -172,8 +343,7 @@
 							.attr('y', function (m) {
 								return (m.TYPE.id === "band:stalk") ? (PADDING + STALK_SPACING) : BAND_HEIGHT;
 							});
-
-
+/*
 						variation1.append('circle')
 							.attr('cx', function(m){
 									return xscale(m.START.textContent) + ((xscale(+m.END.textContent) - xscale(+m.START.textContent)) / 2);
@@ -285,23 +455,7 @@
 
 							});
 
-
-						band.append('rect')
-							.attr('class', function (m) {
-								return m.TYPE.id.replace(':', ' ');
-							})
-							.attr('height', function (m) {
-								return (m.TYPE.id === "band:stalk") ? (scope.height * STALK_MAG_PC) : scope.height;
-							})
-							.attr('width', function (m) {
-								return xscale(+m.END.textContent) - xscale(+m.START.textContent);
-							})
-							.attr('x', function (m) {
-								return xscale(m.START.textContent);
-							})
-							.attr('y', function (m) {
-								return (m.TYPE.id === "band:stalk") ? (PADDING + STALK_SPACING) : BAND_HEIGHT;
-							});
+*/
 
 			/**			var key = target.append('rect')
 							.attr('height', function(){
@@ -363,59 +517,17 @@
 							.text("Head and Neck")
 							.attr('y', PADDING + 90)
 							.attr('x', 30);
-			 **/
+
 
 						target.append('text')
 							.text("Hover over a band to see the band's id, and hover over a circle indicator to see how many phenotypes and of what kind are in a specific band.")
 							.attr('y', PADDING + 40)
 							.attr('x', 15);
+					**/
 
 						var label = target.append("text")
 							.attr("class", "band-lbl")
-							.attr("y", LABEL_PADDING - 7);
-
-						var varLabel = target.append("text")
-							.attr("class", "var-lbl")
-							.attr("y", LABEL_PADDING - 10);
-
-						variation1.on("mouseover", function(m){
-							varLabel.text(m.TYPE.vid1 + ": " + m.TYPE.variant1)
-								.attr('x', xscale(m.START.textContent));
-						});
-
-						variation1.on("mouseout", function(){
-							varLabel.text('');
-						});
-
-						variation1.on("click", function(m){
-							//Zoom in on band?
-						});
-
-						variation2.on("mouseover", function(m){
-							varLabel.text(m.TYPE.vid2 + ": " + m.TYPE.variant2)
-								.attr('x', xscale(m.START.textContent))
-						});
-
-						variation2.on("mouseout", function(){
-							varLabel.text('');
-						});
-
-						variation2.on("click", function(m){
-							//Zoom in on band?
-						});
-
-						variation3.on("mouseover", function(m){
-							varLabel.text(m.TYPE.vid3 + ": " + m.TYPE.variant3)
-								.attr('x', xscale(m.START.textContent))
-						});
-
-						variation3.on("mouseout", function(){
-							varLabel.text('');
-						});
-
-						variation3.on("click", function(m){
-							//Zoom in on band?
-						});
+							.attr("y", LABEL_PADDING + 5);
 
 						band.on("mouseover", function (m) {
 							label.text(m.id)
@@ -455,6 +567,7 @@
 					console.log("Error from DAS loader: " + err);
 				});
 
+
 			function addSelector(sel) {
 				"use strict";
 				scope.$apply(function() {
@@ -476,7 +589,7 @@
 				sel.delete();
 				scope.selectors.list = _.without(scope.selectors.list, sel) //delete locally
 				chrSelectors.deleteSelector(sel); //delete from the service
-			}
+			};
 
 			function newSelector(scope, xscale, start, end, yshift) {
 				return new Selector({
@@ -485,7 +598,7 @@
 					y: yshift,
 					target: '#' + scope.id + 'svg'
 				}).init(start, end);
-			};
+			}
 		}
 
 		/**
@@ -510,6 +623,8 @@
 			}());
 
 			this.delete = function () {
+				var table = document.getElementById("myTable");
+				table.innerHTML = "";
 				_selector.remove();
 				_initialized = false;
 			};
@@ -518,9 +633,30 @@
 				var ext = self.brush.extent();
 				self.start = Math.round(ext[0]);
 				self.end = Math.round(ext[1]);
+
+				updateTable();
 			}
 
-			//initialize the selector
+			function updateTable(){
+				var table = document.getElementById("myTable");
+				table.innerHTML = "";
+				table.insertRow().insertCell(0).innerHTML = "Empty";
+				//Display selected bands information in table
+				for(var variant in Variants) {
+					var obj = Variants[variant];
+
+					if (obj.start >= self.start && obj.end <= self.end) {
+						var row = table.insertRow();
+						row.insertCell(0).innerHTML = obj.id;
+						row.insertCell(1).innerHTML = obj.feature_closure_label[2];
+					}
+					else if (obj.start > self.end) {
+						break;
+					}
+				}
+			}
+
+			//initialize the selector and table
 			this.init = function (start, end) {
 				self.brush = d3.svg.brush()
 					.x(options.xscale)
@@ -548,6 +684,9 @@
 					.attr('height', options.height + (AXIS_SPACING * 2));
 
 				_initialized = true;
+
+				updateTable();
+
 				return self;
 			};
 
@@ -563,10 +702,11 @@
 				self.brush.extent([to, from]);
 				var selector = d3.select(options.target + ' .selector');
 				selector.call(self.brush);
+				updateTable();
 				return self;
 			};
 
-		};
+		}
 
 
 		return {
@@ -586,7 +726,8 @@
 			},
 		template: '<h5>Chromosome {{chr}}</h5>' +
 		'<p ng-repeat="selector in selectors.list">' +
-		'{{selector.start}}:{{selector.end}}' +
+		'<input type="number" ng-model="selector.start" ng-change="selector.move(selector.end, selector.start)"> : <input type="number" ng-model="selector.end" ng-change="selector.move(selector.end, selector.start)"> ' +
+		'<button class="btn btn-xs btn-danger" ng-click="delSelector(selector)">delete</button>' +
 		'</p>'
 		}
 	}]);
