@@ -1,34 +1,34 @@
-Data and Ontology Visual Explorer
+### Data and Ontology Visual Explorer
 
-The Data and Ontology Visual Explorer (DOVE) Widget creates a horizontal bar chart using D3.js and jQuery.  The chart
-allows a user to transition between stacked and grouped configurations.  In addition, the
-graph can traverse layered data, such as data structured as a heirarchy, directed graph,
-or a directed acyclic graph.  For example, data represented by an ontology can be stored
-and traversed using navigation arrows and breadcrumbs.
+The Data and Ontology Visual Explorer (DOVE) widget creates interactive ontology backed charts.
+Currently the DOVE widget provides a framework for creating a horizontal bar chart that displays
+data structured as a tree.  The chart can be traversed by drilling down into branches of data using
+navigation arrows and breadcrumbs. In addition, the widget provides a basic UI  to allow a user to
+transition between stacked and grouped configurations, log and linear scale, and filter out groups that contain no data.
 
 #### Please note the barchart code is currently being refactored.  The below documentation refers to the legacy code in datagraph.js.
 
 Steps for Adding the Monarch Graph Widget to Your Webpage
 
    This page describes how to include the Monarch Graph Widget on any webpage. Steps are
-   provided for adding required javascript files*, adding parameters to the widget call,
+   provided for adding required JavaScript files*, adding parameters to the widget call,
    and adding the widget to the html file.
 
    *Required files are available at: 
        https://github.com/monarch-initiative/monarch-app/tree/master/widgets/datagraph
     
-1. Add the Required Javascript Libraries and Image
+1. Add the Required JavaScript Libraries and Image
 
    The following .js code libraries are required:
    
         jQuery (tested with 1.11.0)
-        d3 (tested with 3.2.4)
+        d3 (tested with 3.5.5)
         
-   The custom javascript file for the Monarch Graph widget is required.
+   The custom JavaScript file for the Monarch Graph widget is required.
    
         datagraph.js
         
-   Create a new html file and add all required javascript files within the html <head> tags
+   Create a new html file and add all required JavaScript files within the html <head> tags
         For example:
 
         <head>
@@ -43,9 +43,9 @@ Steps for Adding the Monarch Graph Widget to Your Webpage
     objects with the following attributes:
 
         [
-          {
-            "label": "Nervous System",
+          { 
             "id": "HP:0000707",
+            "label": "Nervous System",
             "counts": [
               {
                 "value": 21290,
@@ -91,8 +91,8 @@ Steps for Adding the Monarch Graph Widget to Your Webpage
 
         [
           {
-            "label": "Nervous System",
             "id": "HP:0000707",
+            "label": "Nervous System",
             "counts": [
               {
                 "value": 21290,
@@ -128,12 +128,12 @@ Steps for Adding the Monarch Graph Widget to Your Webpage
 
    Basic Settings:
 
-    a. datagraph.chartTitle - Chart Title
-    b. datagraph.xAxisLabel - X Axis Label
-    c. datagraph.width - Chart Width
-    d. datagraph.height - Chart Height
-    e. datagraph.useLegend - Use Chart Legend (default: true)
-    f. datagraph.color - CSS colors
+        a. datagraph.chartTitle - Chart Title
+        b. datagraph.xAxisLabel - X Axis Label
+        c. datagraph.width - Chart Width
+        d. datagraph.height - Chart Height
+        e. datagraph.useLegend - Use Chart Legend (default: true)
+        f. datagraph.color - CSS colors
             
    The color variable is a JSON object with the following format:
    
@@ -169,23 +169,23 @@ Steps for Adding the Monarch Graph Widget to Your Webpage
 
   Advanced Settings:
        
-    a. datagraph.isYLabelURL = true; - Is the yLabel linkable?
-    b. datagraph.yLabelBaseURL = '/phenotype' - Y axis base URLs
+        a. datagraph.isYLabelURL = true; - Is the yLabel linkable?
+        b. datagraph.yLabelBaseURL = '/phenotype' - Y axis base URLs
                                                 Group IDs are appended to the base URL
-    c. datagraph.margin = {top: 40, right: 80, bottom: 200, left: 320} - Chart Margins
-    d. datagraph.title = { 
-        'margin-left' : '360px',
-        'padding-bottom': '10px',
-        'font-size' : '20px',
-        'font-weight': 'bold'
-     };
+        c. datagraph.margin = {top: 40, right: 80, bottom: 200, left: 320} - Chart Margins
+        d. datagraph.title = { 
+            'margin-left' : '360px',
+            'padding-bottom': '10px',
+            'font-size' : '20px',
+            'font-weight': 'bold'
+         };
 
   Bread Crumbs:
            The Monarch Graph creates bread crumbs when traversing layered data.  
            When using breadcrumbs the first "crumb" can be set since this value
            is not stored in the JSON object.
            
-    a. datagraph.firstCrumb = "Phenotypic Abnormality"; - Name of first bread crumb
+        a. datagraph.firstCrumb = "Phenotypic Abnormality"; - Name of first bread crumb
 
 
    Add the statistics array or URL and the jQuery function between <script> tags in the html <head>

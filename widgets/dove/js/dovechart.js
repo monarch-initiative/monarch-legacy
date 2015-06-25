@@ -8,7 +8,7 @@
 // Module and namespace checking.
 if (typeof monarch == 'undefined') { var monarch = {};}
 
-monarch.dovechart = function(config, data, html_div){
+monarch.dovechart = function(config, tree, html_div){
     self = this;
     if (config == null || typeof config == 'undefined'){
         self.config = self.getDefaultConfig();
@@ -44,6 +44,7 @@ monarch.dovechart = function(config, data, html_div){
     self.level = 0;
     self.parents = [];
     self.html_div = html_div;
+    var data = tree.getTree();
     
     self.init = function(html_div, data){
         self.tooltip = d3.select(html_div)
@@ -1231,6 +1232,31 @@ monarch.dovechart.prototype.setXAxisPos = function(w,h){
     this.config.xAxisPos = {dx:w,y:h};
     return this.config.xAxisPos;
 };
+
+/*
+ * setSizeConfiguration and setSizingRatios() are from an incompleted attempt
+ * to create dynamically resized charts.  If implementing something like this
+ * could be added to the init function:
+ * 
+ *   if (config.isDynamicallyResized){
+     
+         if (jQuery(window).width() < (config.benchmarkWidth) || jQuery(window).height() < (config.benchmarkHeight)){
+             self.setSizeConfiguration(config.graphSizingRatios);
+             //init
+         } else {
+             //init
+         }
+     
+         window.addEventListener('resize', function(event){
+  
+             if (jQuery(window).width() < (config.benchmarkWidth) || jQuery(window).height() < (config.benchmarkHeight)){
+                 jQuery(html_div).children().remove();
+                 self.setSizeConfiguration(config.graphSizingRatios);
+                //init
+             }
+         });
+     }
+ */
 
 
 monarch.dovechart.prototype.setSizeConfiguration = function(graphRatio){
