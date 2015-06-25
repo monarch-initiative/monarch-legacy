@@ -168,7 +168,7 @@ monarch.dovechart.prototype.makeNavArrow = function(data, navigate, triangleDim,
     var self = this;
     var config = self.config;
     
-    var arrow = navigate.selectAll(".tick.major")
+    var arrow = navigate.selectAll(".tick")
         .data(data)
         .append("svg:polygon")
         .attr("class", "wedge")
@@ -203,7 +203,7 @@ monarch.dovechart.prototype.transitionToNewGraph = function(histogram,data,barGr
     self = this;
     config = self.config;
     self.tooltip.style("display", "none");
-    histogram.svg.selectAll(".tick.major").remove();
+    histogram.svg.selectAll(".tick").remove();
     
     if (parents){
         self.level++;
@@ -682,7 +682,7 @@ monarch.dovechart.prototype.pickUpBreadcrumb = function(histogram,index,groups,r
     //set global level
     self.level = index;
     
-    histogram.svg.selectAll(".tick.major").remove();
+    histogram.svg.selectAll(".tick").remove();
     self.drawSubGraph(histogram,superclass,self.parents,isFromCrumb);
     
     for (var i=(index+1); i <= self.parents.length; i++){
