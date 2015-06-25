@@ -7,17 +7,25 @@
 
 // Module and namespace checking.
 if (typeof monarch == 'undefined') { var monarch = {};}
-if (typeof monarch.dovegraph == 'undefined') { monarch.dovegraph = {};}
-if (typeof monarch.dovegraph.model == 'undefined') { monarch.dovegraph.model = {};}
+if (typeof monarch.dovegraph.model == 'undefined') { monarch.model = {};}
 
 
-monarch.dovegraph.model.tree = function(data){
+monarch.model.tree = function(data){
     var self = this;
-    self.data = data;
-    self.checkData();
+    self._data = data;
+    self.checkBranch(data);
 };
 
-monarch.dovegraph.model.tree.getGroupMax = function(){
+monarch.model.tree.getTree = function(){
+    return this._data;
+};
+
+/*
+monarch.model.tree.getBranch = function(parents){
+    return this._data.subGraph;
+};
+*/
+monarch.model.tree.getGroupMax = function(){
     var self = this;
     return d3.max(self.data, function(d) { 
         return d3.max(d.counts, function(d) { return d.value; });
@@ -25,7 +33,7 @@ monarch.dovegraph.model.tree.getGroupMax = function(){
 };
 
 //get X Axis limit for stacked configuration
-monarch.dovegraph.model.tree.getStackMax = function(){
+monarch.model.tree.getStackMax = function(){
     var self = this;
     return d3.max(self.data, function(d) { 
         return d3.max(d.counts, function(d) { return d.x1; });
@@ -33,14 +41,14 @@ monarch.dovegraph.model.tree.getStackMax = function(){
 };
 
 //get largest Y axis label for font resizing
-monarch.dovegraph.model.tree.getYMax = function(){
+monarch.model.tree.getYMax = function(){
     var self = this;
     return d3.max(self.data, function(d) { 
         return d.label.length;
     });
 };
 
-monarch.dovegraph.model.tree.checkForSubGraphs = function(){
+monarch.model.tree.checkForSubGraphs = function(){
     var self = this;
     for (i = 0;i < self.data.length; i++) {
         if ((Object.keys(self.data[i]).indexOf('subGraph') >= 0 ) &&
@@ -51,7 +59,8 @@ monarch.dovegraph.model.tree.checkForSubGraphs = function(){
     return false;
 };
 
-monarch.dovegraph.model.tree.getStackedStats = function(){
+//change this to set
+monarch.model.tree.getStackedStats = function(){
     var self = this;
     //Add x0,x1 values for stacked barchart
     self.data.forEach(function (r){
@@ -67,7 +76,7 @@ monarch.dovegraph.model.tree.getStackedStats = function(){
     return self;
 };
 
-monarch.dovegraph.model.tree.sortDataByGroupCount = function(groups){
+monarch.model.tree.sortDataByGroupCount = function(groups){
     var self = this;
     //Check if total counts have been calculated via getStackedStats()
     if (self.data[0].counts[0].x1 == null){
@@ -85,7 +94,7 @@ monarch.dovegraph.model.tree.sortDataByGroupCount = function(groups){
     return self;
 };
 
-monarch.dovegraph.model.tree.getGroups = function() {
+monarch.model.tree.getGroups = function() {
     var self = this;
     var groups = [];
     var unique = {};
@@ -99,13 +108,12 @@ monarch.dovegraph.model.tree.getGroups = function() {
 };
 
 //TODO improve checking
-monarch.dovegraph.model.tree.checkData = function(){
-    var self = this;
-    if (typeof self.data === 'undefined'){
+monarch.model.tree.checkBranch = function(branch){
+    if (typeof branch === 'undefined'){
         throw new Error ("tree object is undefined");
     }
   
-    self.data.forEach(function (r){
+    branch.forEach(function (r){
         //Check ID
         if (r.id == null){
             throw new Error ("ID is not defined in self.data object");
@@ -126,7 +134,7 @@ monarch.dovegraph.model.tree.checkData = function(){
 };
 
 //remove zero length bars
-monarch.dovegraph.model.tree.removeZeroCounts = function(){
+monarch.model.tree.removeZeroCounts = function(){
     var self = this;
     trimmedGraph = [];
     self.data.forEach(function (r){
@@ -141,7 +149,7 @@ monarch.dovegraph.model.tree.removeZeroCounts = function(){
     return trimmedGraph;
 };
 
-monarch.dovegraph.model.tree.addEllipsisToLabel = function(max){
+monarch.model.tree.addEllipsisToLabel = function(max){
     var self = this;
     var reg = new RegExp("(.{"+max+"})(.+)");
     var ellipsis = new RegExp('\\.\\.\\.$');
@@ -156,7 +164,7 @@ monarch.dovegraph.model.tree.addEllipsisToLabel = function(max){
     return self;
 };
 
-monarch.dovegraph.model.tree.getFullLabel = function (label){
+monarch.model.tree.getFullLabel = function (label){
     var self = this;
     for (var i=0, len=self.data.length; i < len; i++){
         if (self.data[i].label === label){
@@ -166,7 +174,7 @@ monarch.dovegraph.model.tree.getFullLabel = function (label){
     }
 };
 
-monarch.dovegraph.model.tree.getGroupID = function (label){
+monarch.model.tree.getGroupID = function (label){
     var self = this;
     for (var i=0, len=self.data.length; i < len; i++){
         if (self.data[i].label === label){
@@ -176,7 +184,7 @@ monarch.dovegraph.model.tree.getGroupID = function (label){
     }
 };
 
-monarch.dovegraph.model.tree.getIDLabel = function (id){
+monarch.model.tree.getIDLabel = function (id){
     var self = this;
     for (var i=0, len=self.data.length; i < len; i++){
         if (self.data[i].id === id){

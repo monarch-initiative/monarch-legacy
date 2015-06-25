@@ -70,6 +70,7 @@ function makeTestGraph(data){
 function makeDoveGraph(data){
 
     var graphDiv = ".dove-container";
+    //var tree = new monarch.model.tree(data);
     graphObject = 
         new monarch.dovegraph(bbop.monarch.homePageConfig, data, graphDiv);
 }
