@@ -104,10 +104,10 @@
 
 			function loadVariants(){
 
-				var subVar,
-					copVar,
-					seqVar,
-					insVar,
+				var subVar = [],
+					copVar = [],
+					seqVar = [],
+					insVar = [],
 					stackCircle = BAND_HEIGHT - 6;
 
 				document.getElementById("NewHeader").style.visibility = 'visible';
@@ -144,14 +144,32 @@
 					});
 				});
 
-				function drawCircle(color, type){
+				band.each(function(m){
+					for(var i = 0; i < m.density.length; i++){
+						var varObj = m.density[i];
+						if(subVar.indexOf(varObj)){
+
+						}
+						else if(copVar.indexOf(varObj)){
+
+						}
+						else if(seqVar.indexOf(varObj)){
+
+						}
+						else{
+
+						}
+					}
+
+				});
+
 					//Variable to hold the number of variants the most populated band has
 					var densityMax = 0;
 					var densityMult = true;
 
+
 					//Draw the circle then make sure the next set is higher
 					var variant_circle = band.append('circle')
-						.attr('class', type)
 						.attr('cx', function(m){
 							//Loop through all the bands to get the densityMax before the style below
 							if(densityMax < m.density.length){
@@ -175,7 +193,7 @@
 							//Create a gradient of redness
 							var scale = d3.scale.linear()
 								.domain([-(densityMax * 0.25), (densityMax / 2), densityMax])
-								.range(["white", color, "black"]);
+								.range(["white", "red", "black"]);
 
 							//Get the color reflective of the density on each band if there are more than 0 variants
 							return Number(m.density.length) != 0 ? scale(Number(m.density.length)) : scale(-(densityMax * 0.25));
@@ -196,8 +214,6 @@
 					variant_circle.on("mouseout", function () {
 						varLabel.text(''); //empty the label
 					});
-
-				}
 			}
 
 			document.getElementById("substitution").onclick = function(){
