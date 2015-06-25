@@ -1,14 +1,14 @@
 /* 
- * Package: dovegraph.js
+ * Package: dovechart.js
  * 
- * Namespace: monarch.dovegraph
+ * Namespace: monarch.dovechart
  * 
  */
 
 // Module and namespace checking.
 if (typeof monarch == 'undefined') { var monarch = {};}
 
-monarch.dovegraph = function(config, data, html_div){
+monarch.dovechart = function(config, data, html_div){
     self = this;
     if (config == null || typeof config == 'undefined'){
         self.config = self.getDefaultConfig();
@@ -59,8 +59,8 @@ monarch.dovegraph = function(config, data, html_div){
     self.init(html_div, data);
 };
 
-//Uses JQuery to create the DOM for the dovegraph
-monarch.dovegraph.prototype.makeGraphDOM = function(html_div, data){
+//Uses JQuery to create the DOM for the dovechart
+monarch.dovechart.prototype.makeGraphDOM = function(html_div, data){
       var self = this;
       var config = self.config;
       var groups = self.getGroups(data);
@@ -117,7 +117,7 @@ monarch.dovegraph.prototype.makeGraphDOM = function(html_div, data){
       }
 };
 
-monarch.dovegraph.prototype.makeLogScaleCheckBox = function (html_div){
+monarch.dovechart.prototype.makeLogScaleCheckBox = function (html_div){
     var config = this.config;
     jQuery(html_div+" .interaction li .settings").append(" <form class=scale"+
         " style=font-size:" + config.settingsFontSize + "; >" +
@@ -126,7 +126,7 @@ monarch.dovegraph.prototype.makeLogScaleCheckBox = function (html_div){
         "</form> ");
 }
 
-monarch.dovegraph.prototype.makeGroupedStackedForm = function(html_div){
+monarch.dovechart.prototype.makeGroupedStackedForm = function(html_div){
     var config = this.config;
     jQuery(html_div+" .interaction li .settings").append(" <form class=configure"+
         " style=font-size:" + config.settingsFontSize + "; >" +
@@ -137,13 +137,12 @@ monarch.dovegraph.prototype.makeGroupedStackedForm = function(html_div){
         "</form>");
 }
 
-monarch.dovegraph.prototype.makeLegend = function(histogram){
+monarch.dovechart.prototype.makeLegend = function(histogram){
     var config = this.config;
-    var svg = histogram.svg;
     var groups = self.groups;
-    var color = histogram.color;
+    
     //Set legend
-    var legend = svg.selectAll(".legend")
+    var legend = histogram.svg.selectAll(".legend")
        .data(groups.slice())
        .enter().append("g")
        .attr("class", "legend")
@@ -154,7 +153,7 @@ monarch.dovegraph.prototype.makeLegend = function(histogram){
        .attr("y", 6)
        .attr("width", config.legend.width)
        .attr("height", config.legend.height)
-       .style("fill", color);
+       .style("fill", histogram.color);
 
     legend.append("text")
        .attr("x", config.width+config.legend.width+32)
@@ -165,7 +164,7 @@ monarch.dovegraph.prototype.makeLegend = function(histogram){
        .text(function(d) { return d; });
 };
 
-monarch.dovegraph.prototype.makeNavArrow = function(data, navigate, triangleDim, barGroup, rect, histogram){
+monarch.dovechart.prototype.makeNavArrow = function(data, navigate, triangleDim, barGroup, rect, histogram){
     var self = this;
     var config = self.config;
     
@@ -200,7 +199,7 @@ monarch.dovegraph.prototype.makeNavArrow = function(data, navigate, triangleDim,
         });
 };
 
-monarch.dovegraph.prototype.transitionToNewGraph = function(histogram,data,barGroup,rect,parents){
+monarch.dovechart.prototype.transitionToNewGraph = function(histogram,data,barGroup,rect,parents){
     self = this;
     config = self.config;
     self.tooltip.style("display", "none");
@@ -227,7 +226,7 @@ monarch.dovegraph.prototype.transitionToNewGraph = function(histogram,data,barGr
     }
 };
 
-monarch.dovegraph.prototype.removeSVGWithSelection = function(select,duration,y,opacity){
+monarch.dovechart.prototype.removeSVGWithSelection = function(select,duration,y,opacity){
     select.transition()
         .duration(duration)
         .attr("y", y)
@@ -235,7 +234,7 @@ monarch.dovegraph.prototype.removeSVGWithSelection = function(select,duration,y,
         .remove();
 };
 
-monarch.dovegraph.prototype.removeSVGWithClass = function(histogram,htmlClass,duration,y,opacity){
+monarch.dovechart.prototype.removeSVGWithClass = function(histogram,htmlClass,duration,y,opacity){
     histogram.svg.selectAll(htmlClass).transition()
         .duration(duration)
         .attr("y", y)
@@ -243,7 +242,7 @@ monarch.dovegraph.prototype.removeSVGWithClass = function(histogram,htmlClass,du
         .remove();
 };
 
-monarch.dovegraph.prototype.displaySubClassTip = function(tooltip,d3Selection){
+monarch.dovechart.prototype.displaySubClassTip = function(tooltip,d3Selection){
     var self = this;
     var config = self.config;
     d3.select(d3Selection)
@@ -261,12 +260,12 @@ monarch.dovegraph.prototype.displaySubClassTip = function(tooltip,d3Selection){
     .style("left",w+config.margin.left+config.arrowOffset.width+"px");
 };
 
-monarch.dovegraph.prototype.getCountMessage = function(value,name){
+monarch.dovechart.prototype.getCountMessage = function(value,name){
     return "Counts: "+"<span style='font-weight:bold'>"+value+"</span>"+"<br/>"
             +"Organism: "+ "<span style='font-weight:bold'>"+name;
 };
 
-monarch.dovegraph.prototype.displayCountTip = function(tooltip,value,name,d3Selection,barLayout){
+monarch.dovechart.prototype.displayCountTip = function(tooltip,value,name,d3Selection,barLayout){
     var self = this;
     var config = self.config;
     var coords = d3.transform(d3.select(d3Selection.parentNode)
@@ -289,7 +288,7 @@ monarch.dovegraph.prototype.displayCountTip = function(tooltip,value,name,d3Sele
     }
 };
 
-monarch.dovegraph.prototype.setGroupPositioning = function (histogram,graphData) {
+monarch.dovechart.prototype.setGroupPositioning = function (histogram,graphData) {
     var self = this;
     var data = self.setDataPerSettings(graphData);
     var groupPos = histogram.svg.selectAll()
@@ -300,7 +299,7 @@ monarch.dovegraph.prototype.setGroupPositioning = function (histogram,graphData)
     return groupPos;
 };
 
-monarch.dovegraph.prototype.setXYDomains = function (histogram,data,groups) {
+monarch.dovechart.prototype.setXYDomains = function (histogram,data,groups) {
     var self = this;
     //Set y0 domain
     data = self.setDataPerSettings(data);
@@ -321,7 +320,7 @@ monarch.dovegraph.prototype.setXYDomains = function (histogram,data,groups) {
     }
 };
 
-monarch.dovegraph.prototype.makeBar = function (barGroup,histogram,barLayout) {
+monarch.dovechart.prototype.makeBar = function (barGroup,histogram,barLayout) {
     var rect;
     var self = this;
     var config = self.config;
@@ -395,7 +394,7 @@ monarch.dovegraph.prototype.makeBar = function (barGroup,histogram,barLayout) {
     return rect;
 };
 
-monarch.dovegraph.prototype.transitionGrouped = function (histogram,data,groups,rect) {
+monarch.dovechart.prototype.transitionGrouped = function (histogram,data,groups,rect) {
     var self = this;
     var config = self.config;
     self.setXYDomains(histogram,data,groups);
@@ -430,7 +429,7 @@ monarch.dovegraph.prototype.transitionGrouped = function (histogram,data,groups,
     })
 };
 
-monarch.dovegraph.prototype.transitionStacked = function (histogram,data,groups,rect) {
+monarch.dovechart.prototype.transitionStacked = function (histogram,data,groups,rect) {
     var self = this;
     var config = self.config;
     self.setXYDomains(histogram, data, groups, 'stacked');
@@ -474,7 +473,7 @@ monarch.dovegraph.prototype.transitionStacked = function (histogram,data,groups,
 };
 
 //HACK, need to refactor all draw functions into one
-monarch.dovegraph.prototype.redrawGraph = function (data,histogram) {
+monarch.dovechart.prototype.redrawGraph = function (data,histogram) {
     var self = this;
     var config = self.config;
     var groups = self.groups;
@@ -534,7 +533,7 @@ monarch.dovegraph.prototype.redrawGraph = function (data,histogram) {
     });
 };
 
-monarch.dovegraph.prototype.drawGraph = function (data, histogram) {
+monarch.dovechart.prototype.drawGraph = function (data, histogram) {
     var self = this;
     var config = self.config;
     var groups = self.groups;
@@ -620,7 +619,7 @@ monarch.dovegraph.prototype.drawGraph = function (data, histogram) {
 };
 
 //
-monarch.dovegraph.prototype.setDataPerSettings = function(data){
+monarch.dovechart.prototype.setDataPerSettings = function(data){
     var self = this;
     if (self.getValueOfCheckbox('zero','remove')){
         data = self.removeZeroCounts(data);
@@ -629,7 +628,7 @@ monarch.dovegraph.prototype.setDataPerSettings = function(data){
 }
 // Generic function to check the value of a checkbox given it's name
 // and value
-monarch.dovegraph.prototype.getValueOfCheckbox = function(name,value){
+monarch.dovechart.prototype.getValueOfCheckbox = function(name,value){
     var self = this;
     if (jQuery('input[name='+name+']:checked').val() === value){
         return true;
@@ -638,7 +637,7 @@ monarch.dovegraph.prototype.getValueOfCheckbox = function(name,value){
     }
 };
 
-monarch.dovegraph.prototype.changeScalePerSettings = function(histogram){
+monarch.dovechart.prototype.changeScalePerSettings = function(histogram){
     var self = this;
     if (self.getValueOfCheckbox('scale','log')){
         histogram.setLogScale(self.config.width);
@@ -647,7 +646,7 @@ monarch.dovegraph.prototype.changeScalePerSettings = function(histogram){
     }
 };
 
-monarch.dovegraph.prototype.changeBarConfig = function(histogram,data,groups,rect){
+monarch.dovechart.prototype.changeBarConfig = function(histogram,data,groups,rect){
     var self = this;
     if (self.getValueOfCheckbox('mode','grouped')){
         self.transitionGrouped(histogram,data,groups,rect);
@@ -657,7 +656,7 @@ monarch.dovegraph.prototype.changeBarConfig = function(histogram,data,groups,rec
 };
 
 //Resize height of chart after transition
-monarch.dovegraph.prototype.resizeChart = function(data){
+monarch.dovechart.prototype.resizeChart = function(data){
     var self = this;
     var config = self.config;
     var height = config.height;
@@ -671,7 +670,7 @@ monarch.dovegraph.prototype.resizeChart = function(data){
     return height;
 };
 
-monarch.dovegraph.prototype.pickUpBreadcrumb = function(histogram,index,groups,rect,barGroup) {
+monarch.dovechart.prototype.pickUpBreadcrumb = function(histogram,index,groups,rect,barGroup) {
     var self = this;
     var config = self.config;
     var lastIndex = self.level;
@@ -722,7 +721,7 @@ monarch.dovegraph.prototype.pickUpBreadcrumb = function(histogram,index,groups,r
     }
 };
 
-monarch.dovegraph.prototype.makeBreadcrumb = function(histogram,label,groups,rect,phenoDiv,fullLabel) {
+monarch.dovechart.prototype.makeBreadcrumb = function(histogram,label,groups,rect,phenoDiv,fullLabel) {
     var self = this;
     var config = self.config;
     var html_div = self.html_div;
@@ -871,7 +870,7 @@ monarch.dovegraph.prototype.makeBreadcrumb = function(histogram,label,groups,rec
         });
 };
 
-monarch.dovegraph.prototype.setBarConfigPerCheckBox = function(histogram,data,groups,barGroup) {
+monarch.dovechart.prototype.setBarConfigPerCheckBox = function(histogram,data,groups,barGroup) {
     self = this;
     data = self.setDataPerSettings(data);
     if (jQuery('input[name=mode]:checked').val()=== 'grouped' || groups.length === 1) {
@@ -885,7 +884,7 @@ monarch.dovegraph.prototype.setBarConfigPerCheckBox = function(histogram,data,gr
     }
 };
 
-monarch.dovegraph.prototype.setYAxisText = function(histogram,data){
+monarch.dovechart.prototype.setYAxisText = function(histogram,data){
     self = this;
     config = self.config;
     data = self.setDataPerSettings(data);
@@ -926,7 +925,7 @@ monarch.dovegraph.prototype.setYAxisText = function(histogram,data){
 
 //  Transition to new graph
 //  NOTE - this will be refactored as AJAX calls
-monarch.dovegraph.prototype.drawSubGraph = function(histogram,subGraph,parent,isFromCrumb) {
+monarch.dovechart.prototype.drawSubGraph = function(histogram,subGraph,parent,isFromCrumb) {
     var self = this;
     var config = self.config;
     
@@ -1005,27 +1004,27 @@ monarch.dovegraph.prototype.drawSubGraph = function(histogram,subGraph,parent,is
 //
 
 //get X Axis limit for grouped configuration
-monarch.dovegraph.prototype.getGroupMax = function(data){
+monarch.dovechart.prototype.getGroupMax = function(data){
       return d3.max(data, function(d) { 
           return d3.max(d.counts, function(d) { return d.value; });
       });
 };
 
 //get X Axis limit for stacked configuration
-monarch.dovegraph.prototype.getStackMax = function(data){
+monarch.dovechart.prototype.getStackMax = function(data){
       return d3.max(data, function(d) { 
           return d3.max(d.counts, function(d) { return d.x1; });
       }); 
 };
 
 //get largest Y axis label for font resizing
-monarch.dovegraph.prototype.getYMax = function(data){
+monarch.dovechart.prototype.getYMax = function(data){
       return d3.max(data, function(d) { 
           return d.label.length;
       });
 };
   
-monarch.dovegraph.prototype.checkForSubGraphs = function(data){
+monarch.dovechart.prototype.checkForSubGraphs = function(data){
      for (i = 0;i < data.length; i++) {
           if ((Object.keys(data[i]).indexOf('subGraph') >= 0 ) &&
              ( typeof data[i]['subGraph'][0] != 'undefined' )){
@@ -1035,7 +1034,7 @@ monarch.dovegraph.prototype.checkForSubGraphs = function(data){
      return false;
 };
   
-monarch.dovegraph.prototype.getStackedStats = function(data){
+monarch.dovechart.prototype.getStackedStats = function(data){
       //Add x0,x1 values for stacked barchart
       data.forEach(function (r){
           var count = 0;
@@ -1050,7 +1049,7 @@ monarch.dovegraph.prototype.getStackedStats = function(data){
       return data;
 };
 
-monarch.dovegraph.prototype.sortDataByGroupCount = function(data,groups){
+monarch.dovechart.prototype.sortDataByGroupCount = function(data,groups){
     var self = this;
     //Check if total counts have been calculated via getStackedStats()
     if (data[0].counts[0].x1 == null){
@@ -1068,7 +1067,7 @@ monarch.dovegraph.prototype.sortDataByGroupCount = function(data,groups){
     return data;
 };
 
-monarch.dovegraph.prototype.getGroups = function(data) {
+monarch.dovechart.prototype.getGroups = function(data) {
       var groups = [];
       var unique = {};
       for (var i=0, len=data.length; i<len; i++) { 
@@ -1081,7 +1080,7 @@ monarch.dovegraph.prototype.getGroups = function(data) {
 };
 
 //TODO improve checking
-monarch.dovegraph.prototype.checkData = function(data){  
+monarch.dovechart.prototype.checkData = function(data){  
     if (typeof data === 'undefined'){
         throw new Error ("Data object is undefined");
     }
@@ -1107,7 +1106,7 @@ monarch.dovegraph.prototype.checkData = function(data){
 };
   
 //remove zero length bars
-monarch.dovegraph.prototype.removeZeroCounts = function(data){
+monarch.dovechart.prototype.removeZeroCounts = function(data){
       trimmedGraph = [];
       data.forEach(function (r){
           var count = 0;
@@ -1121,7 +1120,7 @@ monarch.dovegraph.prototype.removeZeroCounts = function(data){
       return trimmedGraph;
 };
 
-monarch.dovegraph.prototype.addEllipsisToLabel = function(data,max){
+monarch.dovechart.prototype.addEllipsisToLabel = function(data,max){
     var reg = new RegExp("(.{"+max+"})(.+)");
     var ellipsis = new RegExp('\\.\\.\\.$');
     data.forEach(function (r){
@@ -1135,7 +1134,7 @@ monarch.dovegraph.prototype.addEllipsisToLabel = function(data,max){
     return data;
 };
 
-monarch.dovegraph.prototype.getFullLabel = function (d,data){
+monarch.dovechart.prototype.getFullLabel = function (d,data){
     for (var i=0, len=data.length; i < len; i++){
         if (data[i].label === d){
             var fullLabel = data[i].fullLabel;
@@ -1145,7 +1144,7 @@ monarch.dovegraph.prototype.getFullLabel = function (d,data){
     }
 };
 
-monarch.dovegraph.prototype.getGroupID = function (d,data){
+monarch.dovechart.prototype.getGroupID = function (d,data){
     for (var i=0, len=data.length; i < len; i++){
         if (data[i].label === d){
             monarchID = data[i].id;
@@ -1155,7 +1154,7 @@ monarch.dovegraph.prototype.getGroupID = function (d,data){
     }
 };
 
-monarch.dovegraph.prototype.getIDLabel = function (d,data){
+monarch.dovechart.prototype.getIDLabel = function (d,data){
     for (var i=0, len=data.length; i < len; i++){
         if (data[i].id === d){
             label = data[i].label;
@@ -1176,7 +1175,7 @@ function getBaseLog(x, y) {
 //Adjust Y label font, arrow size, and spacing
 //when transitioning
 //this is getting funky with graph resizing, maybe should do away
-monarch.dovegraph.prototype.adjustYAxisElements = function(len){
+monarch.dovechart.prototype.adjustYAxisElements = function(len){
    
    var conf = this.config;
    var h = conf.height;
@@ -1203,38 +1202,38 @@ monarch.dovegraph.prototype.adjustYAxisElements = function(len){
 ///////////////////////////////////
 //Setters for sizing configurations
 
-monarch.dovegraph.prototype.setWidth = function(w){
+monarch.dovechart.prototype.setWidth = function(w){
     this.config.width = w;
     return this.config.width;
 };
 
-monarch.dovegraph.prototype.setHeight = function(h){
+monarch.dovechart.prototype.setHeight = function(h){
     this.config.height = h;
     return this.config.height;
 };
 
-monarch.dovegraph.prototype.setYFontSize = function(fSize){
+monarch.dovechart.prototype.setYFontSize = function(fSize){
     this.config.yFontSize = fSize;
     return this.config.yFontSize;
 };
 
-monarch.dovegraph.prototype.setxFontSize = function(fSize){
+monarch.dovechart.prototype.setxFontSize = function(fSize){
     this.config.xFontSize = fSize;
     return this.config.xFontSize;
 };
 
-monarch.dovegraph.prototype.setXLabelFontSize = function(fSize){
+monarch.dovechart.prototype.setXLabelFontSize = function(fSize){
     this.config.xLabelFontSize = fSize;
     return this.config.xLabelFontSize;
 };
 
-monarch.dovegraph.prototype.setXAxisPos = function(w,h){
+monarch.dovechart.prototype.setXAxisPos = function(w,h){
     this.config.xAxisPos = {dx:w,y:h};
     return this.config.xAxisPos;
 };
 
 
-monarch.dovegraph.prototype.setSizeConfiguration = function(graphRatio){
+monarch.dovechart.prototype.setSizeConfiguration = function(graphRatio){
     var self = this;
     var w = jQuery(window).width();
     var h = jQuery(window).height();
@@ -1245,7 +1244,7 @@ monarch.dovegraph.prototype.setSizeConfiguration = function(graphRatio){
     self.setYFontSize( ((total*(graphRatio.yFontSize))/ getBaseLog(20,total)) * 3);
 };
 
-monarch.dovegraph.prototype.setSizingRatios = function(){
+monarch.dovechart.prototype.setSizingRatios = function(){
     var config = this.config;
     var graphRatio = {};
     
@@ -1261,8 +1260,8 @@ monarch.dovegraph.prototype.setSizingRatios = function(){
     return graphRatio;
 };
 
-//dovegraph default SVG Coordinates
-monarch.dovegraph.prototype.setPolygonCoordinates = function(){
+//dovechart default SVG Coordinates
+monarch.dovechart.prototype.setPolygonCoordinates = function(){
     
     //Nav arrow (now triangle) 
     if (this.config.arrowDim == null || typeof this.config.arrowDim == 'undefined'){
@@ -1296,8 +1295,8 @@ monarch.dovegraph.prototype.setPolygonCoordinates = function(){
     }
 };
 
-//dovegraph default configurations
-monarch.dovegraph.prototype.getDefaultConfig = function(){
+//dovechart default configurations
+monarch.dovechart.prototype.getDefaultConfig = function(){
     
     var defaultConfiguration = {
             

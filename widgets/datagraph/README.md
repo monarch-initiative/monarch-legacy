@@ -1,10 +1,12 @@
-Monarch Graph Widget
+Data and Ontology Visual Explorer
 
-The Monarch Graph Widget creates a horizontal bar chart using D3.js and jQuery.  The chart
+The Data and Ontology Visual Explorer (DOVE) Widget creates a horizontal bar chart using D3.js and jQuery.  The chart
 allows a user to transition between stacked and grouped configurations.  In addition, the
 graph can traverse layered data, such as data structured as a heirarchy, directed graph,
 or a directed acyclic graph.  For example, data represented by an ontology can be stored
 and traversed using navigation arrows and breadcrumbs.
+
+#### Please note the barchart code is currently being refactored.  The below documentation refers to the legacy code in datagraph.js.
 
 Steps for Adding the Monarch Graph Widget to Your Webpage
 
@@ -17,14 +19,16 @@ Steps for Adding the Monarch Graph Widget to Your Webpage
     
 1. Add the Required Javascript Libraries and Image
 
-    The following .js code libraries are required:
+   The following .js code libraries are required:
+   
         jQuery (tested with 1.11.0)
         d3 (tested with 3.2.4)
         
-    The custom javascript file for the Monarch Graph widget is required.
+   The custom javascript file for the Monarch Graph widget is required.
+   
         datagraph.js
         
-    Create a new html file and add all required javascript files within the html <head> tags
+   Create a new html file and add all required javascript files within the html <head> tags
         For example:
 
         <head>
@@ -35,7 +39,7 @@ Steps for Adding the Monarch Graph Widget to Your Webpage
 
 2. Add a List of  and a jQuery Function Call
 
-    Create a list of statistics as an array of Javascript
+   Create a list of statistics as an array of Javascript
     objects with the following attributes:
 
         [
@@ -56,7 +60,7 @@ Steps for Adding the Monarch Graph Widget to Your Webpage
         ]
 
 
-    Add a jQuery .ready function that will add the widget to an empty div tag (see Step 3) as
+   Add a jQuery .ready function that will add the widget to an empty div tag (see Step 3) as
     follows (The following example assumes you are adding the widget to a div with a
     class=".graph_container" and have stored your data in the variable 'graph'):
 
@@ -122,20 +126,21 @@ Steps for Adding the Monarch Graph Widget to Your Webpage
         Additional parameters can be set to customize the data graph, such as setting
         the title, axis labels, colors, and chart size.
 
-        Basic Settings:
+   Basic Settings:
 
-            a. datagraph.chartTitle - Chart Title
-            b. datagraph.xAxisLabel - X Axis Label
-            c. datagraph.width - Chart Width
-            d. datagraph.height - Chart Height
-            e. datagraph.useLegend - Use Chart Legend (default: true)
-            f. datagraph.color - CSS colors
+    a. datagraph.chartTitle - Chart Title
+    b. datagraph.xAxisLabel - X Axis Label
+    c. datagraph.width - Chart Width
+    d. datagraph.height - Chart Height
+    e. datagraph.useLegend - Use Chart Legend (default: true)
+    f. datagraph.color - CSS colors
             
-               The color variable is a JSON object with the following format:
-               datagraph.color = { 
-                 first  : '#44A293',   //First group
-                 second : '#A4D6D4',   //Second group
-                   ... 
+   The color variable is a JSON object with the following format:
+   
+                 datagraph.color = { 
+                     first  : '#44A293',   //First group
+                     second : '#A4D6D4',   //Second group
+                     ... 
 
                  yLabel : { 
                      fill  : '#000000',
@@ -154,35 +159,36 @@ Steps for Adding the Monarch Graph Widget to Your Webpage
                        hover : '#EA763B'
                    }
                };
-                Any setting can be updated without creating the entire color object,
-                for example:
+   Any setting can be updated without creating the entire color object,
+   for example:
+   
                 datagraph.color.first = '#44A293';
                 datagraph.color.second = '#A4D6D4';
                   
-                Note: Colors are set in the order they appear in the JSON object
+  Note: Colors are set in the order they appear in the JSON object
 
-       Advanced Settings:
+  Advanced Settings:
        
-            a. datagraph.isYLabelURL = true; - Is the yLabel linkable?
-            b. datagraph.yLabelBaseURL = '/phenotype' - Y axis base URLs
-                                                        Group IDs are appended to the base URL
-            c. datagraph.margin = {top: 40, right: 80, bottom: 200, left: 320} - Chart Margins
-            d. datagraph.title = { 
-                 'margin-left' : '360px',
-                 'padding-bottom': '10px',
-                 'font-size' : '20px',
-                 'font-weight': 'bold'
-               };
+    a. datagraph.isYLabelURL = true; - Is the yLabel linkable?
+    b. datagraph.yLabelBaseURL = '/phenotype' - Y axis base URLs
+                                                Group IDs are appended to the base URL
+    c. datagraph.margin = {top: 40, right: 80, bottom: 200, left: 320} - Chart Margins
+    d. datagraph.title = { 
+        'margin-left' : '360px',
+        'padding-bottom': '10px',
+        'font-size' : '20px',
+        'font-weight': 'bold'
+     };
 
-       Bread Crumbs:
+  Bread Crumbs:
            The Monarch Graph creates bread crumbs when traversing layered data.  
            When using breadcrumbs the first "crumb" can be set since this value
            is not stored in the JSON object.
            
-            a. datagraph.firstCrumb = "Phenotypic Abnormality"; - Name of first bread crumb
+    a. datagraph.firstCrumb = "Phenotypic Abnormality"; - Name of first bread crumb
 
 
-    Add the statistics array or URL and the jQuery function between <script> tags in the html <head>
+   Add the statistics array or URL and the jQuery function between <script> tags in the html <head>
         Example:
 
         <script type="text/javascript">
@@ -197,7 +203,7 @@ Steps for Adding the Monarch Graph Widget to Your Webpage
 
 3. Add the Widget <div>:
 
-    Add an empty <div> tag in the body of the html file.
+   Add an empty <div> tag in the body of the html file.
     For example:
 
     <body>    

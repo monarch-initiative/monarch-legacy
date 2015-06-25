@@ -1,13 +1,13 @@
 /* 
  * Package: tree.js
  * 
- * Namespace: monarch.dovegraph.model.tree
+ * Namespace: monarch.model.tree
  * 
  */
 
 // Module and namespace checking.
 if (typeof monarch == 'undefined') { var monarch = {};}
-if (typeof monarch.dovegraph.model == 'undefined') { monarch.model = {};}
+if (typeof monarch.model == 'undefined') { monarch.model = {};}
 
 
 monarch.model.tree = function(data){

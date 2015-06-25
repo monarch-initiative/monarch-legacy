@@ -1,7 +1,7 @@
 /* 
- * Class: barchart.js
+ * Package: barchart.js
  * 
- * Namespace: monarch.dovegraph.chart.barchart
+ * Namespace: monarch.chart.barchart
  * 
  */
 
