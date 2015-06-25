@@ -1,4 +1,4 @@
-Data and Ontology Visual Explorer
+###Data and Ontology Visual Explorer
 
 The Data and Ontology Visual Explorer (DOVE) Widget creates a horizontal bar chart using D3.js and jQuery.  The chart
 allows a user to transition between stacked and grouped configurations.  In addition, the
@@ -6,7 +6,7 @@ graph can traverse layered data, such as data structured as a heirarchy, directe
 or a directed acyclic graph.  For example, data represented by an ontology can be stored
 and traversed using navigation arrows and breadcrumbs.
 
-#### Please note the barchart code is currently being refactored.  The below documentation refers to the legacy code in datagraph.js.
+##### Please note the barchart code is currently being refactored.  The below documentation refers to the legacy code in datagraph.js.
 
 Steps for Adding the Monarch Graph Widget to Your Webpage
 
