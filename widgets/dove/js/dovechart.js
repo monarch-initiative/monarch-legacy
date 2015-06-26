@@ -44,17 +44,18 @@ monarch.dovechart = function(config, tree, html_div){
     self.level = 0;
     self.parents = [];
     self.html_div = html_div;
+    self.tooltip = d3.select(html_div)
+        .append("div")
+        .attr("class", "tip");
+    
     var data = tree.getTree();
     
     self.init = function(html_div, data){
-        self.tooltip = d3.select(html_div)
-            .append("div")
-            .attr("class", "tip");
 
         self.groups = self.getGroups(data);
         self.makeGraphDOM(html_div, data); 
         var histogram = new monarch.chart.barchart(config, html_div);
-        self.drawGraph(data, histogram, html_div);
+        self.drawGraph(histogram, data);
     };
     
     self.init(html_div, data);
@@ -208,7 +209,7 @@ monarch.dovechart.prototype.transitionToNewGraph = function(histogram,data,barGr
     
     if (parents){
         self.level++;
-        self.drawSubGraph(histogram,data.subGraph,parents);
+        self.drawGraph(histogram,data.subGraph,parents);
         self.removeSVGWithSelection(barGroup,650,60,1e-6);
         self.removeSVGWithSelection(rect,650,60,1e-6);
     } else {
@@ -534,49 +535,52 @@ monarch.dovechart.prototype.redrawGraph = function (data,histogram) {
     });
 };
 
-monarch.dovechart.prototype.drawGraph = function (data, histogram) {
+monarch.dovechart.prototype.drawGraph = function (histogram, data, parent, isFromCrumb, newParent) {
     var self = this;
     var config = self.config;
-    var groups = self.groups;
 
+    self.groups = self.getGroups(data);
+
+    self.checkData(data);
     data = self.getStackedStats(data);
-    data = self.sortDataByGroupCount(data,groups);
-    data = self.addEllipsisToLabel(data,config.maxLabelSize);
-    
-    self.setXYDomains(histogram,data,groups);
-    
-    if (groups.length == 1){
+    data = self.sortDataByGroupCount(data, self.groups);
+
+    if (!isFromCrumb){
+        data = self.addEllipsisToLabel(data,config.maxLabelSize);
+    }
+
+    if (typeof parent != 'undefined'){
+        self.parents.push(parent);
+    }
+        
+    if (self.groups.length == 1){
         config.barOffset.grouped.height = config.barOffset.grouped.height+8;
         config.barOffset.stacked.height = config.barOffset.stacked.height+8;
     }
+
+    var height = self.resizeChart(data);
+    //reset d3 config after changing height
+    histogram.y0 = d3.scale.ordinal()
+      .rangeRoundBands([0,height], .1);
+            
+    histogram.yAxis = d3.svg.axis()
+      .scale(histogram.y0)
+      .orient("left");
     
+    self.setXYDomains(histogram, data, self.groups);
+    if (!parent){
+        histogram.setXTicks(config).setYTicks();
+    }
+
     //Dynamically decrease font size for large labels
     var yFont = self.adjustYAxisElements(data.length);
+    histogram.transitionYAxisToNewScale(1000);
     
-    //Set x axis ticks
-    var xTicks = histogram.svg.append("g")
-        .attr("class", "x axis")
-        .call(histogram.xAxis)
-        .style("font-size",config.xFontSize)
-        .append("text")
-        .attr("transform", "rotate(0)")
-        .attr("y", config.xAxisPos.y)
-        .attr("dx", config.xAxisPos.dx)
-        .attr("dy", "0em")
-        .style("text-anchor", "end")
-        .style("font-size",config.xLabelFontSize)
-        .text(config.xAxisLabel);
-    
-    //Set Y axis ticks and labels
-    var yTicks = histogram.svg.append("g")
-        .attr("class", "y axis")
-        .call(histogram.yAxis);
-        
     self.setYAxisText(histogram,data);
     
     //Create SVG:G element that holds groups
     var barGroup = self.setGroupPositioning(histogram,data);
-    var rect = self.setBarConfigPerCheckBox(histogram,data,groups,barGroup);
+    var rect = self.setBarConfigPerCheckBox(histogram,data,self.groups,barGroup);
     
     //Create navigation arrow
     var navigate = histogram.svg.selectAll(".y.axis");
@@ -593,23 +597,23 @@ monarch.dovechart.prototype.drawGraph = function (data, histogram) {
     }
 
     //Make first breadcrumb
-    if (config.useCrumb){
+    if (config.useCrumb && !parent){
         self.makeBreadcrumb(histogram,config.firstCrumb,
-                                 groups,rect,barGroup);
+                                 self.groups,rect,barGroup);
     }
     
     d3.select(self.html_div).select('.configure')
       .on("change",function(){
-          self.changeBarConfig(histogram,data,groups,rect);});
+          self.changeBarConfig(histogram,data,self.groups,rect);});
     
     d3.select(self.html_div).select('.scale')
     .on("change",function(){
         self.changeScalePerSettings(histogram);
-        if (groups.length > 1){
+        if (self.groups.length > 1){
             //reuse change bar config
-            self.changeBarConfig(histogram,data,groups,rect);
+            self.changeBarConfig(histogram,data,self.groups,rect);
         } else {
-            self.transitionGrouped(histogram,data,groups,rect);
+            self.transitionGrouped(histogram,data,self.groups,rect);
         }
     });
     
@@ -684,7 +688,7 @@ monarch.dovechart.prototype.pickUpBreadcrumb = function(histogram,index,groups,r
     self.level = index;
     
     histogram.svg.selectAll(".tick").remove();
-    self.drawSubGraph(histogram,superclass,self.parents,isFromCrumb);
+    self.drawGraph(histogram,superclass,self.parents,isFromCrumb);
     
     for (var i=(index+1); i <= self.parents.length; i++){
         d3.select(self.html_div).select(".bread"+i).remove();
@@ -921,78 +925,6 @@ monarch.dovechart.prototype.setYAxisText = function(histogram,data){
         } else if (yFont < 12) {//HARDCODE alert
               return (self.getIDLabel(d,data));
         }
-    });
-};
-
-//  Transition to new graph
-//  NOTE - this will be refactored as AJAX calls
-monarch.dovechart.prototype.drawSubGraph = function(histogram,subGraph,parent,isFromCrumb) {
-    var self = this;
-    var config = self.config;
-    
-    self.checkData(subGraph);
-
-    self.groups = self.getGroups(subGraph);
-    var groups = self.groups;
-  
-    subGraph = self.getStackedStats(subGraph);
-    subGraph = self.sortDataByGroupCount(subGraph,groups);
-    
-    if (!isFromCrumb){
-        subGraph = self.addEllipsisToLabel(subGraph,config.maxLabelSize);
-    }
-    
-    if (parent){
-        self.parents.push(parent);
-    }
-        
-    var height = self.resizeChart(subGraph);
-    //reset d3 config after changing height
-    histogram.y0 = d3.scale.ordinal()
-      .rangeRoundBands([0,height], .1);
-            
-    histogram.yAxis = d3.svg.axis()
-      .scale(histogram.y0)
-      .orient("left");
-
-    self.setXYDomains(histogram,subGraph,groups);
-        
-    //Dynamically decrease font size for large labels
-    var yFont = self.adjustYAxisElements(subGraph.length);
-    histogram.transitionYAxisToNewScale(1000);
-    
-    self.setYAxisText(histogram,subGraph);
-
-    var barGroup = self.setGroupPositioning(histogram,subGraph);
-    var rect = self.setBarConfigPerCheckBox(histogram,subGraph,groups,barGroup);
-    
-    var navigate = histogram.svg.selectAll(".y.axis");
-    self.makeNavArrow(subGraph,navigate,config.arrowDim,
-                           barGroup,rect,histogram);
-
-    if (!self.checkForSubGraphs(subGraph)){
-        histogram.setYAxisTextSpacing(0);
-        histogram.svg.selectAll("polygon.wedge").remove();
-    }
-
-    d3.select(self.html_div).select('.configure')
-    .on("change",function(){
-        self.changeBarConfig(histogram,subGraph,groups,rect);});
-  
-    d3.select(self.html_div).select('.scale')
-    .on("change",function(){
-        self.changeScalePerSettings(histogram);
-        if (groups.length > 1){
-            //reuse change bar config
-            self.changeBarConfig(histogram,subGraph,groups,rect);
-        } else {
-            self.transitionGrouped(histogram,subGraph,groups,rect);
-        }
-    });
-  
-    d3.select(self.html_div).select('.zero')
-    .on("change",function(){
-        self.transitionToNewGraph(histogram,subGraph,barGroup,rect);
     });
 };
 

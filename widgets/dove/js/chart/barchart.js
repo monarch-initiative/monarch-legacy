@@ -48,6 +48,35 @@ monarch.chart.barchart = function(config, html_div){
         .attr("transform", "translate(" + config.margin.left + "," + config.margin.top + ")");
 };
 
+monarch.chart.barchart.prototype.setXTicks = function(config) {
+    var self = this;
+    //Set x axis ticks
+    self.svg.append("g")
+        .attr("class", "x axis")
+        .call(self.xAxis)
+        .style("font-size", config.xFontSize)
+        .append("text")
+        .attr("transform", "rotate(0)")
+        .attr("y", config.xAxisPos.y)
+        .attr("dx", config.xAxisPos.dx)
+        .attr("dy", "0em")
+        .style("text-anchor", "end")
+        .style("font-size",config.xLabelFontSize)
+        .text(config.xAxisLabel);
+    
+    return self;
+};
+
+monarch.chart.barchart.prototype.setYTicks = function() {
+    var self = this;
+    //Set Y axis ticks and labels
+    self.svg.append("g")
+        .attr("class", "y axis")
+        .call(self.yAxis);
+    
+    return self;
+}
+
 monarch.chart.barchart.prototype.setLinearScale = function(width) {
     var self = this;
     self.x0 = 0;
@@ -92,6 +121,7 @@ monarch.chart.barchart.prototype.transitionXAxisToNewScale = function(duration) 
 
 //Adjusts the y axis labels in relation to axis ticks
 monarch.chart.barchart.prototype.setYAxisTextSpacing = function(dx){
+    var self = this;
     self.svg.select(".y.axis")
       .selectAll("text")
       .attr("dx", dx);
