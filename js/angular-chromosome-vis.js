@@ -16,7 +16,11 @@
 
 	var angularChromosomeVis = angular.module('angularChromosomeVis', []);
 
-	var Variants = [];
+	var Variants = [],
+		subOn = true,
+		copOn = true,
+		seqOn = true,
+		insOn = true;
 
 	/**
 	 * service that retrieves DAS model
@@ -107,8 +111,7 @@
 				var subVar = [],
 					copVar = [],
 					seqVar = [],
-					insVar = [],
-					stackCircle = BAND_HEIGHT - 6;
+					insVar = [];
 
 				document.getElementById("NewHeader").style.visibility = 'visible';
 				document.getElementById("Table").style.visibility = 'visible';
@@ -138,116 +141,270 @@
 						subVar.push(v);
 					}
 					band.each(function(m) {
-						if (parseInt(m.START.textContent) <= parseInt(v.start) && parseInt(v.start) <= parseInt(m.END.textContent)) {
+						if (m.START.textContent <= v.start && v.start <= m.END.textContent) {
 							m.density.push(v);
 						}
 					});
 				});
 
-				band.each(function(m){
-					for(var i = 0; i < m.density.length; i++){
-						var varObj = m.density[i];
-						if(subVar.indexOf(varObj)){
+				//Variables to hold the number of variants the most populated band has
+				var subMax = 0,
+					copMax = 0,
+					seqMax = 0,
+					insMax = 0;
 
-						}
-						else if(copVar.indexOf(varObj)){
+				//Create a text label to display when variant circles are hovered over
+				var varLabel = target.append("text")
+					.attr("class", "var-lbl")
+					.attr("y", LABEL_PADDING - 7);
 
-						}
-						else if(seqVar.indexOf(varObj)){
-
-						}
-						else{
-
-						}
-					}
-
-				});
-
-					//Variable to hold the number of variants the most populated band has
+				function drawCircle(center, height, color, density, max){
 					var densityMax = 0;
-					var densityMult = true;
-
-
-					//Draw the circle then make sure the next set is higher
-					var variant_circle = band.append('circle')
-						.attr('cx', function(m){
-							//Loop through all the bands to get the densityMax before the style below
-							if(densityMax < m.density.length){
-								densityMax = m.density.length;
-							}
-
-							//Return the middle of the band as the x value
-							return xscale(m.START.textContent) + ((xscale(+m.END.textContent) - xscale(+m.START.textContent)) / 2);
-						})
-						.attr('cy', function(){
-							return stackCircle;
-						})
+					var circle = target.append('circle')
+						.attr('class', 'test')
+						.attr('cx', center)
+						.attr('cy', height)
 						.attr('r', 5)
-						.style('fill', function(m) {
-							//Make the densityMax good for a domain just once
-							if(densityMult){
-								densityMax = densityMax * 1.33;
-								densityMult = false;
-							}
+						.style('fill', function(){
+							densityMax = max * 1.33;
 
-							//Create a gradient of redness
+							//Create a gradient based on desnity
 							var scale = d3.scale.linear()
 								.domain([-(densityMax * 0.25), (densityMax / 2), densityMax])
-								.range(["white", "red", "black"]);
+								.range(["white", color, "black"]);
 
 							//Get the color reflective of the density on each band if there are more than 0 variants
-							return Number(m.density.length) != 0 ? scale(Number(m.density.length)) : scale(-(densityMax * 0.25));
+							return scale(density);
 						});
 
-					stackCircle = stackCircle - 10;
-
-					//Create a text label to display when variant circles are hovered over
-					var varLabel = target.append("text")
-						.attr("class", "var-lbl")
-						.attr("y", LABEL_PADDING - 7);
-
-					variant_circle.on("mouseover", function (m) {
-						varLabel.text("Variants: " + m.density.length)
+					circle.on("mouseover", function (m) {
+						varLabel.text()
 							.attr('x', xscale(m.START.textContent));
 					});
 
-					variant_circle.on("mouseout", function () {
+					circle.on("mouseout", function () {
 						varLabel.text(''); //empty the label
 					});
+				}
+
+				function drawVariants(){
+					//Variables for looping through arrays
+					var sIndex = 0,
+						cIndex = 0,
+						qIndex = 0,
+						iIndex = 0;
+
+					band.each(function(m){
+						//Booleans to see if the variation is in the band
+						var sub = false,
+							cop = false,
+							seq = false,
+							ins = false;
+						var numCircle = 0;
+						var height = BAND_HEIGHT - 6;
+						var centerBand = xscale(m.START.textContent) + ((xscale(+m.END.textContent) - xscale(+m.START.textContent)) / 2);
+
+						//Go through all the types of variants and check if they appear in the band
+						for(var s = sIndex; s < subVar.length; s++){
+							//If the array is past the ending point of the band, break
+							if(subVar[s].start > m.END.textContent){
+								//Make the index to start from on the next band, the last index
+								sIndex = s;
+								break;
+							}else{
+								sub = true;
+								++numCircle;
+								//If this is the last of the variant type, shut it down
+								if((s + 1) >= subVar.length){
+									sIndex = s + 1;
+								}
+							}
+						}
+
+						if(sub && subOn){
+							//Change the max number of substitution variants one band has, if necessary
+							if(subMax < numCircle){
+								subMax = numCircle;
+							}
+							drawCircle(centerBand, height, "red", numCircle, subMax);
+							numCircle = 0; //Reset for the next variant
+							height = height - 10; //Next circle will be higher
+						}
+
+						//Go through all the types of variants and check if they appear in the band
+						for(var c = cIndex; c < copVar.length; c++){
+							//If the array is past the ending point of the band, break
+							if(copVar[c].start > m.END.textContent){
+								//Make the index to start from on the next band, the last index
+								cIndex = c;
+								break;
+							}else{
+								console.log(copVar[c].start + " < " + m.END.textContent);
+								cop = true;
+								++numCircle;
+								//If this is the last of the variant type, shut it down
+								if((c + 1) >= copVar.length){
+									cIndex = c + 1;
+								}
+							}
+						}
+
+						if(cop && copOn){
+							//Change the max number of copy variants one band has, if necessary
+							if(copMax < numCircle){
+								copMax = numCircle;
+							}
+							drawCircle(centerBand, height, "green", numCircle, copMax);
+							numCircle = 0; //Reset for the next variant
+							height = height - 10; //Next circle will be higher
+						}
+
+						//Go through all the types of variants and check if they appear in the band
+						for(var q = qIndex; q < seqVar.length; q++){
+							//If the array is past the ending point of the band, break
+							if(seqVar[q].start > m.END.textContent){
+								//Make the index to start from on the next band, the last index
+								qIndex = q;
+								break;
+							}else{
+								seq = true;
+								++numCircle;
+								//If this is the last of the variant type, shut it down
+								if((q + 1) >= seqVar.length){
+									qIndex = q + 1;
+								}
+							}
+						}
+
+						if(seq && seqOn){
+							//Change the max number of sequence variants one band has, if necessary
+							if(seqMax < numCircle){
+								seqMax = numCircle;
+							}
+							drawCircle(centerBand, height, "blue", numCircle, seqMax);
+							numCircle = 0; //Reset for the next variant
+							height = height - 10; //Next circle will be higher
+						}
+
+						//Go through all the types of variants and check if they appear in the band
+						for(var i = iIndex; i < insVar.length; i++){
+							//If the array is past the ending point of the band, break
+							if(insVar[i].start > m.END.textContent){
+								//Make the index to start from on the next band, the last index
+								iIndex = i;
+								break;
+							}else{
+								ins = true;
+								++numCircle;
+								//If this is the last of the variant type, shut it down
+								if((i + 1) >= insVar.length){
+									iIndex = i + 1;
+								}
+							}
+						}
+
+						if(ins && insOn){
+							//Change the max number of insertion variants one band has, if necessary
+							if(insMax < numCircle){
+								insMax = numCircle;
+							}
+							drawCircle(centerBand, height, "Turquoise", numCircle, insMax);
+						}
+					});
+				}
+
+
+				document.getElementById("substitution").onclick = function(){
+					//Remove all the circles
+					target.selectAll("circle")
+						.remove();
+
+					if(this.checked){
+						subOn = true;
+					}else{
+						subOn = false;
+					}
+
+					//Redraw the circles
+					drawVariants();
+
+					//Update the table
+					angular.forEach (scope.selectors.list, function(sel) {
+						"use strict";
+						sel.update();
+					});
+				};
+
+				document.getElementById("copy_number").onclick = function(){
+					//Remove all the circles
+					target.selectAll("circle")
+						.remove();
+
+					if(this.checked){
+						copOn = true;
+					}else{
+						copOn = false;
+					}
+
+					//Redraw the circles
+					drawVariants();
+
+					//Update the table
+					angular.forEach (scope.selectors.list, function(sel) {
+						"use strict";
+						sel.update();
+					});
+				};
+
+				document.getElementById("sequence_alteration").onclick = function(){
+					//Remove all the circles
+					target.selectAll("circle")
+						.remove();
+
+					if(this.checked){
+						seqOn = true;
+					}else{
+						seqOn = false;
+					}
+
+					//Redraw the circles
+					drawVariants();
+
+					//Update the table
+					angular.forEach (scope.selectors.list, function(sel) {
+						"use strict";
+						sel.update();
+					});
+				};
+
+				document.getElementById("insertion").onclick = function(){
+					//Remove all the circles
+					target.selectAll("circle")
+						.remove();
+
+					if(this.checked){
+						insOn = true;
+					}else{
+						insOn = false;
+					}
+
+					//Redraw the circles
+					drawVariants();
+
+					//Update the table
+					angular.forEach (scope.selectors.list, function(sel) {
+						"use strict";
+						sel.update();
+					});
+				};
+
+				drawVariants();
+
+				target.selectAll("circle")
+					.remove();
+
+				drawVariants();
 			}
-
-			document.getElementById("substitution").onclick = function(){
-				if(this.checked){
-					console.log("checked");
-				}else{
-					console.log("unchecked");
-				}
-			};
-
-			document.getElementById("copy_number").onclick = function(){
-				if(this.checked){
-					console.log("checked");
-				}else{
-					console.log("unchecked");
-				}
-			};
-
-			document.getElementById("sequence_alteration").onclick = function(){
-				if(this.checked){
-					console.log("checked");
-				}else{
-					console.log("unchecked");
-				}
-			};
-
-			document.getElementById("insertion").onclick = function(){
-				if(this.checked){
-					console.log("checked");
-				}else{
-					console.log("unchecked");
-				}
-			};
-
 
 			button.addEventListener("click", function(){
 				//Check if the input is a number
@@ -343,119 +500,6 @@
 							.attr('y', function (m) {
 								return (m.TYPE.id === "band:stalk") ? (PADDING + STALK_SPACING) : BAND_HEIGHT;
 							});
-/*
-						variation1.append('circle')
-							.attr('cx', function(m){
-									return xscale(m.START.textContent) + ((xscale(+m.END.textContent) - xscale(+m.START.textContent)) / 2);
-							})
-							.attr('cy', function(){
-								return BAND_HEIGHT - 6;
-							})
-							.attr('r', 5)
-							.style('fill', function(m){
-								//Create a scale with the color associated with the phenotype
-								if(m.TYPE.vid1 === "nervous"){
-									var scale = d3.scale.linear()
-										.domain([-2, 20, 40])
-										.range(["white", "red", "black"]);
-								}
-								else if(m.TYPE.vid1 === "skeletal"){
-									var scale = d3.scale.linear()
-										.domain([-5, 20, 40])
-										.range(["white", "green", "black"]);
-								}
-								else if(m.TYPE.vid1 === "head"){
-									var scale = d3.scale.linear()
-										.domain([-5, 20, 40])
-										.range(["white", "blue", "black"]);
-								}
-
-								var num = Number(m.TYPE.variant1); //Get how many variants are on a band
-
-								//Don't want the dot to get full black
-								if(num >= 30){
-									num = 30;
-								}
-
-								return scale(num); //Return a relative shade of red
-
-							});
-
-						variation2.append('circle')
-							.attr('cx', function(m){
-								return xscale(m.START.textContent) + ((xscale(+m.END.textContent) - xscale(+m.START.textContent)) / 2);
-							})
-							.attr('cy', function(){
-								return BAND_HEIGHT - 16;
-							})
-							.attr('r', 5)
-							.style('fill', function(m){
-								//Create a scale with the color associated with the phenotype
-								if(m.TYPE.vid2 === "nervous"){
-									var scale = d3.scale.linear()
-										.domain([-2, 20, 40])
-										.range(["white", "red", "black"]);
-								}
-								else if(m.TYPE.vid2 === "skeletal"){
-									var scale = d3.scale.linear()
-										.domain([-5, 20, 40])
-										.range(["white", "green", "black"]);
-								}
-								else if(m.TYPE.vid2 === "head"){
-									var scale = d3.scale.linear()
-										.domain([-5, 20, 40])
-										.range(["white", "blue", "black"]);
-								}
-
-								var num = Number(m.TYPE.variant2); //Get how many variants are on a band
-
-								//Don't want the dot to get full black
-								if(num >= 30){
-									num = 30;
-								}
-
-								return scale(num); //Return a relative shade of red
-
-							});
-
-						variation3.append('circle')
-							.attr('cx', function(m){
-								return xscale(m.START.textContent) + ((xscale(+m.END.textContent) - xscale(+m.START.textContent)) / 2);
-							})
-							.attr('cy', function(){
-								return BAND_HEIGHT - 26;
-							})
-							.attr('r', 5)
-							.style('fill', function(m){
-								//Create a scale with the color associated with the phenotype
-								if(m.TYPE.vid3 === "nervous"){
-									var scale = d3.scale.linear()
-										.domain([-2, 20, 40])
-										.range(["white", "red", "black"]);
-								}
-								else if(m.TYPE.vid3 === "skeletal"){
-									var scale = d3.scale.linear()
-										.domain([-5, 20, 40])
-										.range(["white", "green", "black"]);
-								}
-								else if(m.TYPE.vid3 === "head"){
-									var scale = d3.scale.linear()
-										.domain([-5, 20, 40])
-										.range(["white", "blue", "black"]);
-								}
-
-								var num = Number(m.TYPE.variant3); //Get how many variants are on a band
-
-								//Don't want the dot to get full black
-								if(num >= 30){
-									num = 30;
-								}
-
-								return scale(num); //Return a relative shade of red
-
-							});
-
-*/
 
 			/**			var key = target.append('rect')
 							.attr('height', function(){
@@ -622,6 +666,56 @@
 				}, opt || {});
 			}());
 
+			function makeRow(variant, table){
+				var row = table.insertRow();
+				row.insertCell(0).innerHTML = variant.id;
+				row.insertCell(1).innerHTML = variant.feature_closure_label[2];
+			}
+
+			this.update = function updateTable(){
+				var table = document.getElementById("myTable");
+				table.innerHTML = "";
+				table.insertRow().insertCell(0).innerHTML = "Empty";
+				//Display selected bands information in table
+				for(var v = 0; v < Variants.length; v++) {
+					var obj = Variants[v];
+
+					//Only display those that are actively selected
+					if(obj.feature_closure_label[2] == "substitution" && subOn){
+						if (obj.start >= self.start && obj.end <= self.end) {
+							makeRow(obj, table);
+						}
+						else if (obj.start > self.end) {
+							break;
+						}
+					}
+					else if(obj.feature_closure_label[2] == "copy_number_variation" && copOn){
+						if (obj.start >= self.start && obj.end <= self.end) {
+							makeRow(obj, table);
+						}
+						else if (obj.start > self.end) {
+							break;
+						}
+					}
+					else if(obj.feature_closure_label[2] == "sequence_alteration" && seqOn){
+						if (obj.start >= self.start && obj.end <= self.end) {
+							makeRow(obj, table);
+						}
+						else if (obj.start > self.end) {
+							break;
+						}
+					}
+					else if(obj.feature_closure_label[2] == "insertion" && insOn){
+						if (obj.start >= self.start && obj.end <= self.end) {
+							makeRow(obj, table);
+						}
+						else if (obj.start > self.end) {
+							break;
+						}
+					}
+				}
+			};
+
 			this.delete = function () {
 				var table = document.getElementById("myTable");
 				table.innerHTML = "";
@@ -634,26 +728,7 @@
 				self.start = Math.round(ext[0]);
 				self.end = Math.round(ext[1]);
 
-				updateTable();
-			}
-
-			function updateTable(){
-				var table = document.getElementById("myTable");
-				table.innerHTML = "";
-				table.insertRow().insertCell(0).innerHTML = "Empty";
-				//Display selected bands information in table
-				for(var variant in Variants) {
-					var obj = Variants[variant];
-
-					if (obj.start >= self.start && obj.end <= self.end) {
-						var row = table.insertRow();
-						row.insertCell(0).innerHTML = obj.id;
-						row.insertCell(1).innerHTML = obj.feature_closure_label[2];
-					}
-					else if (obj.start > self.end) {
-						break;
-					}
-				}
+				this.update();
 			}
 
 			//initialize the selector and table
@@ -685,7 +760,7 @@
 
 				_initialized = true;
 
-				updateTable();
+				this.update();
 
 				return self;
 			};
@@ -702,7 +777,7 @@
 				self.brush.extent([to, from]);
 				var selector = d3.select(options.target + ' .selector');
 				selector.call(self.brush);
-				updateTable();
+				this.update();
 				return self;
 			};
 
