@@ -129,7 +129,6 @@
 				//For every variant, find which band it's on and have the band register it
 				variant.each(function(v){
 					if (v.feature_closure_label[2] == "copy_number_variation") {
-						console.log(v.start + " and " + v.end);
 						copVar.push(v);
 					}
 					else if (v.feature_closure_label[2] == "sequence_alteration") {
@@ -177,7 +176,7 @@
 							//Get the color reflective of the density on each band
 							return scale(density);
 						});
-
+/**
 					circle.on("mouseover", function (m) {
 						varLabel.text()
 							.attr('x', xscale(m.START.textContent));
@@ -186,6 +185,7 @@
 					circle.on("mouseout", function () {
 						varLabel.text(''); //empty the label
 					});
+ **/
 				}
 
 				function drawVariants(){
