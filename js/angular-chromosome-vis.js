@@ -129,6 +129,7 @@
 				//For every variant, find which band it's on and have the band register it
 				variant.each(function(v){
 					if (v.feature_closure_label[2] == "copy_number_variation") {
+						console.log(v.start + " and " + v.end);
 						copVar.push(v);
 					}
 					else if (v.feature_closure_label[2] == "sequence_alteration") {
@@ -158,22 +159,22 @@
 					.attr("class", "var-lbl")
 					.attr("y", LABEL_PADDING - 7);
 
+
 				function drawCircle(center, height, color, density, max){
-					var densityMax = 0;
 					var circle = target.append('circle')
 						.attr('class', 'test')
 						.attr('cx', center)
 						.attr('cy', height)
 						.attr('r', 5)
 						.style('fill', function(){
-							densityMax = max * 1.33;
+							var densityMax = max * 1.33;
 
-							//Create a gradient based on desnity
+							//Create a gradient based on density
 							var scale = d3.scale.linear()
 								.domain([-(densityMax * 0.25), (densityMax / 2), densityMax])
 								.range(["white", color, "black"]);
 
-							//Get the color reflective of the density on each band if there are more than 0 variants
+							//Get the color reflective of the density on each band
 							return scale(density);
 						});
 
@@ -204,111 +205,118 @@
 						var height = BAND_HEIGHT - 6;
 						var centerBand = xscale(m.START.textContent) + ((xscale(+m.END.textContent) - xscale(+m.START.textContent)) / 2);
 
-						//Go through all the types of variants and check if they appear in the band
-						for(var s = sIndex; s < subVar.length; s++){
-							//If the array is past the ending point of the band, break
-							if(subVar[s].start > m.END.textContent){
-								//Make the index to start from on the next band, the last index
-								sIndex = s;
-								break;
-							}else{
-								sub = true;
-								++numCircle;
-								//If this is the last of the variant type, shut it down
-								if((s + 1) >= subVar.length){
-									sIndex = s + 1;
+						if(subOn){
+							//Go through all the types of variants and check if they appear in the band
+							for(var s = sIndex; s < subVar.length; s++){
+								//If the array is past the ending point of the band, break
+								if(subVar[s].start > m.END.textContent){
+									//Make the index to start from on the next band, the last index
+									sIndex = s;
+									//If this is the last of the variant type, shut it down
+									if((s + 1) >= subVar.length){
+										sIndex = s + 1;
+									}
+									break;
+								}else{
+									sub = true;
+									++numCircle;
 								}
 							}
-						}
 
-						if(sub && subOn){
-							//Change the max number of substitution variants one band has, if necessary
-							if(subMax < numCircle){
-								subMax = numCircle;
+							if(sub){
+								//Change the max number of substitution variants one band has, if necessary
+								if(subMax < numCircle){
+									subMax = numCircle;
+								}
+								drawCircle(centerBand, height, "red", numCircle, subMax);
+								numCircle = 0; //Reset for the next variant
+								height = height - 10; //Next circle will be higher
 							}
-							drawCircle(centerBand, height, "red", numCircle, subMax);
-							numCircle = 0; //Reset for the next variant
-							height = height - 10; //Next circle will be higher
 						}
 
-						//Go through all the types of variants and check if they appear in the band
-						for(var c = cIndex; c < copVar.length; c++){
-							//If the array is past the ending point of the band, break
-							if(copVar[c].start > m.END.textContent){
-								//Make the index to start from on the next band, the last index
-								cIndex = c;
-								break;
-							}else{
-								console.log(copVar[c].start + " < " + m.END.textContent);
-								cop = true;
-								++numCircle;
-								//If this is the last of the variant type, shut it down
-								if((c + 1) >= copVar.length){
-									cIndex = c + 1;
+						if(copOn){
+							//Go through all the types of variants and check if they appear in the band
+							for(var c = cIndex; c < copVar.length; c++){
+								//If the array is past the ending point of the band, break
+								if(copVar[c].start > m.END.textContent){
+									//If this is the last of the variant type, shut it down
+									break;
+								}else{
+									//Stop looping over a variant if the end has been passed
+									if(copVar[c].end < m.START.textContent){
+
+									}else {
+										cop = true;
+										++numCircle;
+									}
 								}
 							}
-						}
 
-						if(cop && copOn){
-							//Change the max number of copy variants one band has, if necessary
-							if(copMax < numCircle){
-								copMax = numCircle;
+							if(cop){
+								//Change the max number of copy variants one band has, if necessary
+								if(copMax < numCircle){
+									copMax = numCircle;
+								}
+								drawCircle(centerBand, height, "green", numCircle, copMax);
+								numCircle = 0; //Reset for the next variant
+								height = height - 10; //Next circle will be higher
 							}
-							drawCircle(centerBand, height, "green", numCircle, copMax);
-							numCircle = 0; //Reset for the next variant
-							height = height - 10; //Next circle will be higher
 						}
 
-						//Go through all the types of variants and check if they appear in the band
-						for(var q = qIndex; q < seqVar.length; q++){
-							//If the array is past the ending point of the band, break
-							if(seqVar[q].start > m.END.textContent){
-								//Make the index to start from on the next band, the last index
-								qIndex = q;
-								break;
-							}else{
-								seq = true;
-								++numCircle;
-								//If this is the last of the variant type, shut it down
-								if((q + 1) >= seqVar.length){
-									qIndex = q + 1;
+						if(seqOn){
+							//Go through all the types of variants and check if they appear in the band
+							for(var q = qIndex; q < seqVar.length; q++){
+								//If the array is past the ending point of the band, break
+								if(seqVar[q].start > m.END.textContent){
+									//Make the index to start from on the next band, the last index
+									qIndex = q;
+									break;
+								}else{
+									seq = true;
+									++numCircle;
+									//If this is the last of the variant type, shut it down
+									if((q + 1) >= seqVar.length){
+										qIndex = q + 1;
+									}
 								}
 							}
-						}
 
-						if(seq && seqOn){
-							//Change the max number of sequence variants one band has, if necessary
-							if(seqMax < numCircle){
-								seqMax = numCircle;
+							if(seq){
+								//Change the max number of sequence variants one band has, if necessary
+								if(seqMax < numCircle){
+									seqMax = numCircle;
+								}
+								drawCircle(centerBand, height, "blue", numCircle, seqMax);
+								numCircle = 0; //Reset for the next variant
+								height = height - 10; //Next circle will be higher
 							}
-							drawCircle(centerBand, height, "blue", numCircle, seqMax);
-							numCircle = 0; //Reset for the next variant
-							height = height - 10; //Next circle will be higher
 						}
 
-						//Go through all the types of variants and check if they appear in the band
-						for(var i = iIndex; i < insVar.length; i++){
-							//If the array is past the ending point of the band, break
-							if(insVar[i].start > m.END.textContent){
-								//Make the index to start from on the next band, the last index
-								iIndex = i;
-								break;
-							}else{
-								ins = true;
-								++numCircle;
-								//If this is the last of the variant type, shut it down
-								if((i + 1) >= insVar.length){
-									iIndex = i + 1;
+						if(insOn){
+							//Go through all the types of variants and check if they appear in the band
+							for(var i = iIndex; i < insVar.length; i++){
+								//If the array is past the ending point of the band, break
+								if(insVar[i].start > m.END.textContent){
+									//Make the index to start from on the next band, the last index
+									iIndex = i;
+									break;
+								}else{
+									ins = true;
+									++numCircle;
+									//If this is the last of the variant type, shut it down
+									if((i + 1) >= insVar.length){
+										iIndex = i + 1;
+									}
 								}
 							}
-						}
 
-						if(ins && insOn){
-							//Change the max number of insertion variants one band has, if necessary
-							if(insMax < numCircle){
-								insMax = numCircle;
+							if(ins){
+								//Change the max number of insertion variants one band has, if necessary
+								if(insMax < numCircle){
+									insMax = numCircle;
+								}
+								drawCircle(centerBand, height, "Turquoise", numCircle, insMax);
 							}
-							drawCircle(centerBand, height, "Turquoise", numCircle, insMax);
 						}
 					});
 				}
@@ -417,12 +425,14 @@
 
 			function golrCall(){
 				var gconf = new bbop.golr.conf(amigo.data.golr);
+				//var golr_loc = 'http://sirius.monarchinitiative.org:8080/solr/feature-location/';
 				var golr_loc = 'http://geoffrey.crbs.ucsd.edu:8080/solr/feature-location/';
 				var GolrManager = new bbop.golr.manager.jquery(golr_loc, gconf);
 
 				var customCallBack = function (res) {
 					//Get the array of variants
 					Variants = res._raw.response.docs;
+
 					//Sort the variants in the order they appear on the chromosome
 					Variants.sort(function(a, b){
 						return Number(a.start) - Number(b.start);
@@ -672,7 +682,7 @@
 				row.insertCell(1).innerHTML = variant.feature_closure_label[2];
 			}
 
-			this.update = function updateTable(){
+			this.update = function (){
 				var table = document.getElementById("myTable");
 				table.innerHTML = "";
 				table.insertRow().insertCell(0).innerHTML = "Empty";
@@ -690,7 +700,7 @@
 						}
 					}
 					else if(obj.feature_closure_label[2] == "copy_number_variation" && copOn){
-						if (obj.start >= self.start && obj.end <= self.end) {
+						if (obj.start <= self.end && obj.end >= self.start) {
 							makeRow(obj, table);
 						}
 						else if (obj.start > self.end) {
@@ -728,7 +738,7 @@
 				self.start = Math.round(ext[0]);
 				self.end = Math.round(ext[1]);
 
-				this.update();
+				self.update();
 			}
 
 			//initialize the selector and table
