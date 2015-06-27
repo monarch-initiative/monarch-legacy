@@ -63,6 +63,11 @@ monarch.model.tree.prototype.getTree = function(){
     return this._data;
 };
 
+//Return entire tree data 
+//NOT IMPLEMENTED
+monarch.model.tree.prototype.addBranch = function(){
+};
+
 /*
  * Function: getDescendants
  * 
@@ -78,17 +83,19 @@ monarch.model.tree.prototype.getDescendants = function(parents){
     var self = this;
     var descendant = self.getTree();
     
-    if (!typeof parents === 'undefined'){
-        self.parents.forEach( function(r){
-            if (r.indexOf(
+    if (typeof parents != 'undefined'){
+        parents.forEach( function(r){
+            if (!r.indexOf(
                     descendant.map(function(i){return i.id;}) > -1)){
                 throw new Error ("Error in locating descendant given "
                                  + parents + " failed at ID: " + r);
             }
-            descendant = r.filter(function(i){return i.id = r;})
+            descendant = descendant.filter(function(i){return i.id == r;});
+            if (descendant.length > 1){
+                throw new Error ("Cannot disambiguate id: " + r);
+            }
+            descendant = descendant[0].subGraph;
         });
-    } else {
-        throw new Error ("parents not defined");
     }
     return descendant;
 };
