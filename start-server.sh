@@ -1,9 +1,13 @@
 #!/bin/sh
-#sh ./update_dependencies.sh
 
+RUNENV=$1
+if [ ! $RUNENV ]; then
+	RUNENV=dev
+fi
 
 PATH_TO_ME=`which $0`
 cd `dirname $PATH_TO_ME`
+
 if [ $PORT ]
   then
    MARGS="--port $PORT"
@@ -13,4 +17,4 @@ if [ $PORT ]
 fi
 echo starting server
 export RINGO_MODULE_PATH=./modules/:$RINGO_MODULE_PATH
-./ringojs/bin/ringo lib/monarch/web/webapp_launcher_dev.js $MARGS
+tools/ringo lib/monarch/web/webapp_launcher_$RUNENV.js $MARGS
