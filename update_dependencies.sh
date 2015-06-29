@@ -8,11 +8,16 @@
 CWD=`pwd`
 if [ ! -d ./widgets/phenogrid ]; then
     cd ./widgets
+    echo "Cloning phenogrid via Git"
     git clone https://github.com/monarch-initiative/phenogrid.git
     cd $CWD
-else 
+else
     cd ./widgets/phenogrid
-    git pull
+	if [ -d ./.git ]; then
+		echo "Updating phenogrid via Git"
+    	git pull
+    else
+		echo "Using Monarch version of phenogrid"
+    fi
     cd $CWD
 fi
-
