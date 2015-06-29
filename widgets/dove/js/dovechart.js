@@ -495,7 +495,7 @@ monarch.dovechart.prototype.drawGraph = function (histogram, isFromCrumb, parent
         data = self.addEllipsisToLabel(data,config.maxLabelSize);
     }
 
-    if (self.groups.length == 1){
+    if (self.groups.length == 1 && isFirstGraph){
         config.barOffset.grouped.height = config.barOffset.grouped.height+8;
         config.barOffset.stacked.height = config.barOffset.stacked.height+8;
     }
