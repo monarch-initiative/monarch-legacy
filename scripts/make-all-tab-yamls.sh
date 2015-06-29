@@ -18,6 +18,7 @@
 ./make-tab-yaml.pl Variant Phenotype > ../conf/golr-views/single-tab/variant-phenotype.yaml
 ./make-tab-yaml.pl Variant Disease > ../conf/golr-views/single-tab/variant-disease.yaml
 ./make-tab-yaml.pl Variant Model > ../conf/golr-views/single-tab/variant-model.yaml
+./make-tab-yaml.pl Variant Genotype > ../conf/golr-views/single-tab/variant-genotype.yaml
 ./make-tab-yaml.pl Variant Pathway > ../conf/golr-views/single-tab/variant-pathway.yaml
 ./make-tab-yaml.pl Variant Gene > ../conf/golr-views/single-tab/variant-gene.yaml
 
@@ -29,10 +30,12 @@
 ./make-tab-yaml.pl Model Pathway > ../conf/golr-views/single-tab/model-pathway.yaml
 
 # Gene
-#./make-tab-yaml.pl Gene Phenotype > ../conf/golr-views/single-tab/gene-phenotype.yaml
+./make-tab-yaml.pl Gene Phenotype > ../conf/golr-views/single-tab/gene-phenotype.yaml
 ./make-tab-yaml.pl Gene Disease > ../conf/golr-views/single-tab/gene-disease.yaml
 ./make-tab-yaml.pl Gene Model > ../conf/golr-views/single-tab/gene-model.yaml
 ./make-tab-yaml.pl Gene Variant > ../conf/golr-views/single-tab/gene-variant.yaml
 ./make-tab-yaml.pl Gene Pathway > ../conf/golr-views/single-tab/gene-pathway.yaml
 ./make-tab-yaml.pl Gene Homolog > ../conf/golr-views/single-tab/gene-homolog.yaml
 
+#Genotype
+./make-tab-yaml.pl Genotype Variant > ../conf/golr-views/single-tab/genotype-variant.yaml
