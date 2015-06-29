@@ -13,9 +13,8 @@ bbop.monarch.exampleConfig = {
     xLabelFontSize : "14px",
     xFontSize : "14px",
                 
-    //Chart title and first breadcrumb
+    //Chart title
     chartTitle : "Chart Title",
-    firstCrumb : "first bread crumb",
                 
     //Title size/font settings
     title : {

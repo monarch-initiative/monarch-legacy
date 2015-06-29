@@ -540,7 +540,7 @@ monarch.dovechart.prototype.drawGraph = function (histogram, isFromCrumb, parent
 
     //Make first breadcrumb
     if (config.useCrumb && isFirstGraph){
-        self.makeBreadcrumb(histogram,config.firstCrumb,
+        self.makeBreadcrumb(histogram,self.tree.getRootLabel(),
                                  self.groups,rect,barGroup);
     }
     
@@ -1212,7 +1212,6 @@ monarch.dovechart.prototype.getDefaultConfig = function(){
             
             //Chart title and first breadcrumb
             chartTitle : "Chart Title",
-            firstCrumb : "first bread crumb",
             
             //Title size/font settings
             title : {

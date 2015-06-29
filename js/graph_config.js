@@ -26,7 +26,6 @@ bbop.monarch.homePageConfig = {
         
         //Chart title and first breadcrumb
         chartTitle : "Number of Phenotype Annotations Per Species",
-        firstCrumb : "Phenotypic Abnormality",
         
         //Title size/font settings
         title : {
@@ -100,7 +99,6 @@ bbop.monarch.phenotypeAnnotationConfig = {
   
   //Chart title and first breadcrumb
   chartTitle : "Number of Phenotype Annotations Per Species",
-  firstCrumb : "Phenotypic Abnormality",
   
   //Title size/font settings
   title : {
@@ -174,7 +172,6 @@ bbop.monarch.diseaseGeneConfig = {
         
         //Chart title and first breadcrumb
         chartTitle : "Number of Disease-Gene Associations",
-        firstCrumb : "Anatomical Entity",
         
         //Title size/font settings
         title : {
@@ -248,7 +245,6 @@ bbop.monarch.diseasePhenotypeConfig = {
         
         //Chart title and first breadcrumb
         chartTitle : "Number of Disease-Phenotype Associations",
-        firstCrumb : "Anatomical Entity",
         
         //Title size/font settings
         title : {
@@ -322,7 +318,6 @@ bbop.monarch.genotypePhenotypeConfig = {
         
         //Chart title and first breadcrumb
         chartTitle : "Number of Genotype-Phenotype Associations",
-        firstCrumb : "Phenotypic Abnormality",
         
         //Title size/font settings
         title : {
@@ -411,7 +406,6 @@ bbop.monarch.diseaseGeneConfigSmall = {
         
         //Chart title and first breadcrumb
         chartTitle : "Number of Disease-Gene Associations",
-        firstCrumb : "Anatomical Entity",
         
         //Title size/font settings
         title : {
@@ -493,7 +487,6 @@ bbop.monarch.diseasePhenotypeConfigSmall = {
         
         //Chart title and first breadcrumb
         chartTitle : "Number of Disease-Phenotype Associations",
-        firstCrumb : "Anatomical Entity",
         
         //Title size/font settings
         title : {
@@ -575,7 +568,6 @@ bbop.monarch.genotypePhenotypeConfigSmall = {
         
         //Chart title and first breadcrumb
         chartTitle : "Number of Genotype-Phenotype Associations",
-        firstCrumb : "Phenotypic Abnormality",
         
         //Title size/font settings
         title : {
@@ -657,7 +649,6 @@ bbop.monarch.homePageConfigSmall = {
         
         //Chart title and first breadcrumb
         chartTitle : "Number of Phenotype Annotations Per Species",
-        firstCrumb : "Phenotypic Abnormality",
         
         //Title size/font settings
         title : {
@@ -735,7 +726,6 @@ bbop.monarch.resizeConfig = {
         
         //Chart title and first breadcrumb
         chartTitle : "Number of Phenotype Annotations Per Species",
-        firstCrumb : "Phenotypic Abnormality",
         
         //Title size/font settings
         title : {
