@@ -17,6 +17,7 @@ semantic.cache
 .DS_Store
 ringojs-0.9
 *~
+tools/
 .emacs.*
 log
 .idea/**

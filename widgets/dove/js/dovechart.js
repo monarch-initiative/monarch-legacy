@@ -167,7 +167,7 @@ monarch.dovechart.prototype.makeLegend = function(histogram){
        .text(function(d) { return d; });
 };
 
-monarch.dovechart.prototype.makeNavArrow = function(data, navigate, triangleDim, barGroup, rect, histogram){
+monarch.dovechart.prototype.makeNavArrow = function(data, navigate, triangleDim, barGroup, bar, histogram){
     var self = this;
     var config = self.config;
     
@@ -197,12 +197,12 @@ monarch.dovechart.prototype.makeNavArrow = function(data, navigate, triangleDim,
         .on("click", function(d){
             if (d.children && d.children[0]){ //TODO use tree api
                 self.transitionToNewGraph(histogram,d,
-                        barGroup,rect, d.id);
+                        barGroup,bar, d.id);
             }
         });
 };
 
-monarch.dovechart.prototype.transitionToNewGraph = function(histogram,data,barGroup,rect, parent){
+monarch.dovechart.prototype.transitionToNewGraph = function(histogram,data,barGroup,bar, parent){
     self = this;
     config = self.config;
     self.tooltip.style("display", "none");
@@ -212,20 +212,20 @@ monarch.dovechart.prototype.transitionToNewGraph = function(histogram,data,barGr
         self.level++;
         self.drawGraph(histogram, false, parent);
         self.removeSVGWithSelection(barGroup,650,60,1e-6);
-        self.removeSVGWithSelection(rect,650,60,1e-6);
+        self.removeSVGWithSelection(bar,650,60,1e-6);
     } else {
         self.drawGraph(histogram);
         self.removeSVGWithSelection(barGroup,650,60,1e-6);
-        self.removeSVGWithSelection(rect,650,60,1e-6);
+        self.removeSVGWithSelection(bar,650,60,1e-6);
         return;
     }
     //remove old bars
     self.removeSVGWithSelection(barGroup,650,60,1e-6);
-    self.removeSVGWithSelection(rect,650,60,1e-6);
+    self.removeSVGWithSelection(bar,650,60,1e-6);
     
     if (config.useCrumb){
         self.makeBreadcrumb(histogram,data.label,self.groups,
-                rect,barGroup,data.fullLabel);
+                bar,barGroup,data.fullLabel);
     }
 };
 
@@ -324,13 +324,13 @@ monarch.dovechart.prototype.setXYDomains = function (histogram,data,groups) {
 };
 
 monarch.dovechart.prototype.makeBar = function (barGroup,histogram,barLayout) {
-    var rect;
+    var bar;
     var self = this;
     var config = self.config;
     
     //Create bars 
     if (barLayout == 'grouped'){
-        rect = barGroup.selectAll("g")
+        bar = barGroup.selectAll("g")
           .data(function(d) { return d.counts; })
           .enter().append("rect")
           .attr("class",("rect"+self.level))
@@ -358,7 +358,7 @@ monarch.dovechart.prototype.makeBar = function (barGroup,histogram,barLayout) {
           .style("fill", function(d) { return histogram.color(d.name); });
         
     } else if (barLayout == 'stacked') {
-        rect = barGroup.selectAll("g")
+        bar = barGroup.selectAll("g")
           .data(function(d) { return d.counts; })
           .enter().append("rect")
           .attr("class",("rect"+self.level))
@@ -394,16 +394,16 @@ monarch.dovechart.prototype.makeBar = function (barGroup,histogram,barLayout) {
           })
           .style("fill", function(d) { return histogram.color(d.name); });
     }
-    return rect;
+    return bar;
 };
 
-monarch.dovechart.prototype.transitionGrouped = function (histogram,data,groups,rect) {
+monarch.dovechart.prototype.transitionGrouped = function (histogram,data,groups,bar) {
     var self = this;
     var config = self.config;
     self.setXYDomains(histogram,data,groups);
     histogram.transitionXAxisToNewScale(750);
           
-    rect.transition()
+    bar.transition()
       .duration(500)
       .delay(function(d, i) { return i * 10; })
       .attr("height", histogram.y1.rangeBand())
@@ -419,7 +419,7 @@ monarch.dovechart.prototype.transitionGrouped = function (histogram,data,groups,
           }
       }); 
           
-    rect.on("mouseover", function(d){
+    bar.on("mouseover", function(d){
             
         d3.select(this)
         .style("fill", config.color.bar.fill);
@@ -432,13 +432,13 @@ monarch.dovechart.prototype.transitionGrouped = function (histogram,data,groups,
     })
 };
 
-monarch.dovechart.prototype.transitionStacked = function (histogram,data,groups,rect) {
+monarch.dovechart.prototype.transitionStacked = function (histogram,data,groups,bar) {
     var self = this;
     var config = self.config;
     self.setXYDomains(histogram, data, groups, 'stacked');
     histogram.transitionXAxisToNewScale(750);
          
-    rect.transition()
+    bar.transition()
       .duration(500)
       .delay(function(d, i) { return i * 10; })
       .attr("x", function(d){
@@ -462,7 +462,7 @@ monarch.dovechart.prototype.transitionStacked = function (histogram,data,groups,
       .attr("height", histogram.y0.rangeBand())
       .attr("y", function(d) { return histogram.y1(d.name); })
       
-    rect.on("mouseover", function(d){
+    bar.on("mouseover", function(d){
             
         d3.select(this)
             .style("fill", config.color.bar.fill);
@@ -483,7 +483,6 @@ monarch.dovechart.prototype.drawGraph = function (histogram, isFromCrumb, parent
         self.parents.push(parent);
     }
     var data = self.tree.getDescendants(self.parents);
-    console.log(data);
 
     self.groups = self.getGroups(data);
 
@@ -522,12 +521,12 @@ monarch.dovechart.prototype.drawGraph = function (histogram, isFromCrumb, parent
     
     //Create SVG:G element that holds groups
     var barGroup = self.setGroupPositioning(histogram,data);
-    var rect = self.setBarConfigPerCheckBox(histogram,data,self.groups,barGroup);
+    var bar = self.setBarConfigPerCheckBox(histogram,data,self.groups,barGroup);
     
     //Create navigation arrow
     var navigate = histogram.svg.selectAll(".y.axis");
     self.makeNavArrow(data,navigate,config.arrowDim,
-                           barGroup,rect,histogram);
+                           barGroup,bar,histogram);
     if (!self.checkForChildren(data)){
         histogram.setYAxisTextSpacing(0);
         histogram.svg.selectAll("polygon.wedge").remove();
@@ -541,27 +540,28 @@ monarch.dovechart.prototype.drawGraph = function (histogram, isFromCrumb, parent
     //Make first breadcrumb
     if (config.useCrumb && isFirstGraph){
         self.makeBreadcrumb(histogram,self.tree.getRootLabel(),
-                                 self.groups,rect,barGroup);
+                                 self.groups,bar,barGroup);
     }
     
+    // Some functions to controll the configurations box
     d3.select(self.html_div).select('.configure')
       .on("change",function(){
-          self.changeBarConfig(histogram,data,self.groups,rect);});
+          self.changeBarConfig(histogram,data,self.groups,bar);});
     
     d3.select(self.html_div).select('.scale')
     .on("change",function(){
         self.changeScalePerSettings(histogram);
         if (self.groups.length > 1){
             //reuse change bar config
-            self.changeBarConfig(histogram,data,self.groups,rect);
+            self.changeBarConfig(histogram,data,self.groups,bar);
         } else {
-            self.transitionGrouped(histogram,data,self.groups,rect);
+            self.transitionGrouped(histogram,data,self.groups,bar);
         }
     });
     
     d3.select(self.html_div).select('.zero')
     .on("change",function(){
-        self.transitionToNewGraph(histogram,data,barGroup,rect);
+        self.transitionToNewGraph(histogram,data,barGroup,bar);
     });
 };
 
@@ -593,12 +593,12 @@ monarch.dovechart.prototype.changeScalePerSettings = function(histogram){
     }
 };
 
-monarch.dovechart.prototype.changeBarConfig = function(histogram,data,groups,rect){
+monarch.dovechart.prototype.changeBarConfig = function(histogram,data,groups,bar){
     var self = this;
     if (self.getValueOfCheckbox('mode','grouped')){
-        self.transitionGrouped(histogram,data,groups,rect);
+        self.transitionGrouped(histogram,data,groups,bar);
     } else if (self.getValueOfCheckbox('mode','stacked')) {
-        self.transitionStacked(histogram,data,groups,rect);
+        self.transitionStacked(histogram,data,groups,bar);
     }
 };
 
@@ -617,7 +617,7 @@ monarch.dovechart.prototype.resizeChart = function(data){
     return height;
 };
 
-monarch.dovechart.prototype.pickUpBreadcrumb = function(histogram,index,groups,rect,barGroup) {
+monarch.dovechart.prototype.pickUpBreadcrumb = function(histogram,index,groups,bar,barGroup) {
     var self = this;
     var config = self.config;
     var isFromCrumb = true;
@@ -666,7 +666,7 @@ monarch.dovechart.prototype.pickUpBreadcrumb = function(histogram,index,groups,r
     }
 };
 
-monarch.dovechart.prototype.makeBreadcrumb = function(histogram,label,groups,rect,phenoDiv,fullLabel) {
+monarch.dovechart.prototype.makeBreadcrumb = function(histogram,label,groups,bar,phenoDiv,fullLabel) {
     var self = this;
     var config = self.config;
     var html_div = self.html_div;
@@ -693,7 +693,7 @@ monarch.dovechart.prototype.makeBreadcrumb = function(histogram,label,groups,rec
                .attr("fill", config.color.crumb.bottom);
             })
             .on("click", function(){
-                self.pickUpBreadcrumb(histogram,lastIndex,groups,rect,phenoDiv);
+                self.pickUpBreadcrumb(histogram,lastIndex,groups,bar,phenoDiv);
             });
         }
         
@@ -718,7 +718,7 @@ monarch.dovechart.prototype.makeBreadcrumb = function(histogram,label,groups,rec
               }
           })
           .on("click", function(){
-                self.pickUpBreadcrumb(histogram,lastIndex,groups,rect,phenoDiv);
+                self.pickUpBreadcrumb(histogram,lastIndex,groups,bar,phenoDiv);
           });
     }
     
