@@ -31,7 +31,7 @@ if (typeof monarch.model == 'undefined') { monarch.model = {};}
  *              "name": "Mouse"
  *             }
  *           ],
- *           "subGraph":[
+ *           "children":[
  *             {
  *               "label":"Nervous System Morphology",
  *               "id":"HP:0012639",
@@ -55,12 +55,25 @@ if (typeof monarch.model == 'undefined') { monarch.model = {};}
 monarch.model.tree = function(data){
     var self = this;
     self._data = data;
-    self.checkTopLevel(data); //Only checks root level graph
+    self.checkSiblings(data.root.children); //Only checks the root's children
 };
 
 //Return entire tree data 
 monarch.model.tree.prototype.getTree = function(){
     return this._data;
+};
+
+//Return entire tree data 
+monarch.model.tree.prototype.getRootID = function(){
+    return this._data.root.id;
+};
+
+monarch.model.tree.prototype.getRootLabel = function(){
+    return this._data.root.label;
+};
+
+monarch.model.tree.prototype.getFirstSiblings = function(){
+    return this._data.root.children;
 };
 
 //Return entire tree data 
@@ -81,33 +94,36 @@ monarch.model.tree.prototype.addBranch = function(){
  */
 monarch.model.tree.prototype.getDescendants = function(parents){
     var self = this;
-    var descendant = self.getTree();
     
-    if (typeof parents != 'undefined'){
+    // Start with the first list of siblings
+    var descendants = self.getFirstSiblings();
+    
+    if (typeof parents != 'undefined' && parents.length > 0){
         parents.forEach( function(r){
             if (!r.indexOf(
-                    descendant.map(function(i){return i.id;}) > -1)){
+                    descendants.map(function(i){return i.id;}) > -1)){
                 throw new Error ("Error in locating descendant given "
                                  + parents + " failed at ID: " + r);
             }
-            descendant = descendant.filter(function(i){return i.id == r;});
-            if (descendant.length > 1){
+            descendants = descendants.filter(function(i){return i.id == r;});
+            if (descendants.length > 1){
                 throw new Error ("Cannot disambiguate id: " + r);
             }
-            descendant = descendant[0].subGraph;
+            descendants = descendants[0].children;
         });
-    }
-    return descendant;
+    } 
+    
+    return descendants;
 };
 
 //TODO improve checking
 // Just checks top level of tree
-monarch.model.tree.prototype.checkTopLevel = function(tree){
-    if (typeof tree === 'undefined'){
+monarch.model.tree.prototype.checkSiblings = function(siblings){
+    if (typeof siblings === 'undefined'){
         throw new Error ("tree object is undefined");
     }
   
-    tree.forEach(function (r){
+    siblings.forEach(function (r){
         //Check ID
         if (r.id == null){
             throw new Error ("ID is not defined in self.data object");

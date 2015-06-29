@@ -51,7 +51,7 @@ monarch.dovechart = function(config, tree, html_div){
         .attr("class", "tip");
     
     self.init = function(html_div, tree){
-        var data = tree.getTree();
+        var data = tree.getFirstSiblings();
         self.groups = self.getGroups(data);
         self.makeGraphDOM(html_div, data); 
         var histogram = new monarch.chart.barchart(config, html_div);
@@ -82,7 +82,7 @@ monarch.dovechart.prototype.makeGraphDOM = function(html_div, data){
       jQuery(html_div+" .interaction").append( "<li></li>" );
          
       //Override breadcrumb config if subgraphs exist
-      config.useCrumb = self.checkForSubGraphs(data);
+      config.useCrumb = self.checkForChildren(data);
       
       //add breadcrumb div
       if (config.useCrumb){
@@ -178,14 +178,14 @@ monarch.dovechart.prototype.makeNavArrow = function(data, navigate, triangleDim,
         .attr("points",triangleDim)
         .attr("fill", config.color.arrow.fill)
         .attr("display", function(d){
-            if (d.subGraph && d.subGraph[0]){
+            if (d.children && d.children[0]){ //TODO use tree API
                 return "initial";
             } else {
                 return "none";
             }
         })
         .on("mouseover", function(d){        
-           if (d.subGraph && d.subGraph[0]){
+           if (d.children && d.children[0]){ //TODO use tree api
                self.displaySubClassTip(self.tooltip,this)
            } 
         })
@@ -195,7 +195,7 @@ monarch.dovechart.prototype.makeNavArrow = function(data, navigate, triangleDim,
             self.tooltip.style("display", "none");
         })
         .on("click", function(d){
-            if (d.subGraph && d.subGraph[0]){
+            if (d.children && d.children[0]){ //TODO use tree api
                 self.transitionToNewGraph(histogram,d,
                         barGroup,rect, d.id);
             }
@@ -483,6 +483,7 @@ monarch.dovechart.prototype.drawGraph = function (histogram, isFromCrumb, parent
         self.parents.push(parent);
     }
     var data = self.tree.getDescendants(self.parents);
+    console.log(data);
 
     self.groups = self.getGroups(data);
 
@@ -527,7 +528,7 @@ monarch.dovechart.prototype.drawGraph = function (histogram, isFromCrumb, parent
     var navigate = histogram.svg.selectAll(".y.axis");
     self.makeNavArrow(data,navigate,config.arrowDim,
                            barGroup,rect,histogram);
-    if (!self.checkForSubGraphs(data)){
+    if (!self.checkForChildren(data)){
         histogram.setYAxisTextSpacing(0);
         histogram.svg.selectAll("polygon.wedge").remove();
     }
@@ -896,10 +897,10 @@ monarch.dovechart.prototype.getYMax = function(data){
       });
 };
   
-monarch.dovechart.prototype.checkForSubGraphs = function(data){
+monarch.dovechart.prototype.checkForChildren = function(data){
      for (i = 0;i < data.length; i++) {
-          if ((Object.keys(data[i]).indexOf('subGraph') >= 0 ) &&
-             ( typeof data[i]['subGraph'][0] != 'undefined' )){
+          if ((Object.keys(data[i]).indexOf('children') >= 0 ) &&
+             ( typeof data[i]['children'][0] != 'undefined' )){
               return true;
           } 
      }

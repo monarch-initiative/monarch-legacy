@@ -79,17 +79,16 @@ function makeTwoSizeGraph(data,graphDiv,largeConfig,smallConfig,width,height){
 
     var sizeTracker;
     var graphObject;
+    var tree = new monarch.model.tree(data);
       
     //Check screen size on page load
     if (jQuery(window).width() > width && jQuery(window).height() > height){
         graphObject = 
-            new bbop.monarch.datagraph(largeConfig);
-        graphObject.init(graphDiv,data);
+            new monarch.dovechart(largeConfig, tree, graphDiv);
         sizeTracker = 'large';
     } else {
         graphObject = 
-            new bbop.monarch.datagraph(smallConfig);
-        graphObject.init(graphDiv,data);
+            new monarch.dovechart(smallConfig, tree, graphDiv);
         sizeTracker = 'small';
     }
     this.setMinHeightWidth(graphObject,graphDiv);
@@ -99,15 +98,13 @@ function makeTwoSizeGraph(data,graphDiv,largeConfig,smallConfig,width,height){
         if (jQuery(window).width() > width && jQuery(window).height() > height && sizeTracker != 'large'){
             jQuery(graphDiv).children().remove();
             graphObject = 
-                new bbop.monarch.datagraph(largeConfig);
-            graphObject.init(graphDiv,data);
+                new monarch.dovechart(largeConfig, tree, graphDiv);
             this.setMinHeightWidth(graphObject,graphDiv);
             sizeTracker = 'large';
         } else if (jQuery(window).width() < width && jQuery(window).height() < height && sizeTracker != 'small') {
             jQuery(graphDiv).children().remove();
             graphObject = 
-                new bbop.monarch.datagraph(smallConfig);
-            graphObject.init(graphDiv,data);
+                new monarch.dovechart(smallConfig, tree, graphDiv);
             this.setMinHeightWidth(graphObject,graphDiv);
             sizeTracker = 'small';
         }
