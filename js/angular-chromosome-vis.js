@@ -84,10 +84,10 @@
 
 			var CHR1_BP_END = 248956422,
 				STALK_MAG_PC = 0.8,
-				PADDING = 50,
-				BAND_HEIGHT = 50,
-				LABEL_PADDING = 24,
-				AXIS_SPACING = 4,
+				PADDING = 70,
+				BAND_HEIGHT = 70,
+				LABEL_PADDING = 25,
+				AXIS_SPACING = 5,
 				STALK_SPACING = 3;
 
 			var rangeTo,
@@ -98,6 +98,7 @@
 			target.attr({width: '100%'});
 
 			if (scope.axis) {
+				console.log();
 				target.attr({height: scope.height + (2 * PADDING)});
 			} else {
 				target.attr({height: scope.height + PADDING});
@@ -156,12 +157,11 @@
 				//Create a text label to display when variant circles are hovered over
 				var varLabel = target.append("text")
 					.attr("class", "var-lbl")
-					.attr("y", LABEL_PADDING - 7);
+					.attr("y", LABEL_PADDING - 13);
 
 
-				function drawCircle(center, height, color, density, max){
+				function drawCircle(center, height, color, density, max, type){
 					var circle = target.append('circle')
-						.attr('class', 'test')
 						.attr('cx', center)
 						.attr('cy', height)
 						.attr('r', 5)
@@ -176,16 +176,55 @@
 							//Get the color reflective of the density on each band
 							return scale(density);
 						});
-/**
-					circle.on("mouseover", function (m) {
-						varLabel.text()
-							.attr('x', xscale(m.START.textContent));
+
+					circle.on("mouseover", function () {
+						varLabel.text(type + ": " + density)
+							.attr('x', center);
 					});
 
 					circle.on("mouseout", function () {
 						varLabel.text(''); //empty the label
 					});
- **/
+				}
+
+				//Create a text label to display when variant lines are hovered over
+				var lineLabel = target.append("text")
+					.attr("class", "var-lbl")
+					.attr("y", LABEL_PADDING - 13);
+
+				function drawLine(center, destination, height, prevHeight, color, density, type){
+					var line = target.append('line')
+						.attr('x1', function(){
+							if(center > destination){
+								return center - 5;
+							}else{
+								return center + 5;
+							}
+						})
+						.attr('x2', destination)
+						.attr('y1', height)
+						.attr('y2', function(){
+							if(center > destination){
+								return prevHeight;
+							}else{
+								return height;
+							}
+						})
+						.attr('stroke', color)
+						.attr('stroke-width', function(){
+							return density;
+						});
+
+					line.on("mouseover", function(){
+						lineLabel.text(type + ": " + density)
+							.attr('x', function(){
+								return (center + destination) / 2;
+							});
+					});
+
+					line.on("mouseout", function () {
+						lineLabel.text(''); //empty the label
+					});
 				}
 
 				function drawVariants(){
@@ -193,33 +232,54 @@
 					var sIndex = 0,
 						cIndex = 0,
 						qIndex = 0,
-						iIndex = 0;
+						iIndex = 0,
+						copHolder = BAND_HEIGHT - 6,
+						seqHolder = BAND_HEIGHT - 6,
+						insHolder = BAND_HEIGHT - 6;
+
 
 					band.each(function(m){
 						//Booleans to see if the variation is in the band
 						var sub = false,
 							cop = false,
 							seq = false,
-							ins = false;
-						var numCircle = 0;
-						var height = BAND_HEIGHT - 6;
-						var centerBand = xscale(m.START.textContent) + ((xscale(+m.END.textContent) - xscale(+m.START.textContent)) / 2);
+							ins = false,
+							lineEnd = false,
+							lineStart = false;
+						var numCircle = 0,
+						    numLineEnd = 0,
+							numLineStart = 0;
+						var height = BAND_HEIGHT - 6,
+							prevHeight = height;
+						var centerBand = xscale(m.START.textContent) + ((xscale(+m.END.textContent) - xscale(+m.START.textContent)) / 2),
+							startBand = xscale(m.START.textContent),
+							endBand = xscale(m.END.textContent);
 
 						if(subOn){
 							//Go through all the types of variants and check if they appear in the band
 							for(var s = sIndex; s < subVar.length; s++){
 								//If the array is past the ending point of the band, break
 								if(subVar[s].start > m.END.textContent){
-									//Make the index to start from on the next band, the last index
-									sIndex = s;
-									//If this is the last of the variant type, shut it down
-									if((s + 1) >= subVar.length){
-										sIndex = s + 1;
-									}
 									break;
 								}else{
-									sub = true;
-									++numCircle;
+									//The variant is on the band if the end is passed the beginning
+									if(subVar[s].end >= m.START.textContent){
+										sub = true;
+										++numCircle;
+
+										//If the variant keeps going, draw a line to indicate so
+										if(subVar[s].end > m.END.textContent){
+											lineEnd = true;
+											++numLineEnd;
+										}
+
+										//If the variant began before, draw a line to indicate so
+										if(subVar[s].start < m.START.textContent){
+											lineStart = true;
+											++numLineStart;
+										}
+
+									}
 								}
 							}
 
@@ -228,9 +288,20 @@
 								if(subMax < numCircle){
 									subMax = numCircle;
 								}
-								drawCircle(centerBand, height, "red", numCircle, subMax);
+								drawCircle(centerBand, height, "red", numCircle, subMax, "Substitutions");
+
+								if(lineEnd){
+									drawLine(centerBand, endBand, height, height, "red", numLineEnd, "Substitutions");
+								}
+								if(lineStart){
+									drawLine(centerBand, startBand, height, height, "red", numLineStart, "Substitutions");
+								}
 								numCircle = 0; //Reset for the next variant
 								height = height - 10; //Next circle will be higher
+								lineEnd = false;
+								lineStart = false;
+								numLineEnd = 0;
+								numLineStart = 0;
 							}
 						}
 
@@ -239,27 +310,50 @@
 							for(var c = cIndex; c < copVar.length; c++){
 								//If the array is past the ending point of the band, break
 								if(copVar[c].start > m.END.textContent){
-									//If this is the last of the variant type, shut it down
 									break;
 								}else{
-									//Stop looping over a variant if the end has been passed
-									if(copVar[c].end < m.START.textContent){
-
-									}else {
+									//The variant is on the band if the end is passed the beginning
+									if(copVar[c].end >= m.START.textContent){
 										cop = true;
 										++numCircle;
+
+										//If the variant keeps going, draw a line to indicate so
+										if(copVar[c].end > m.END.textContent){
+											//Indicate the height for the next band to be able to correct
+											prevHeight = height;
+											lineEnd = true;
+											++numLineEnd;
+										}
+
+										//If the variant began before, draw a line to indicate so
+										if(copVar[c].start < m.START.textContent){
+											lineStart = true;
+											++numLineStart;
+										}
 									}
 								}
 							}
+
 
 							if(cop){
 								//Change the max number of copy variants one band has, if necessary
 								if(copMax < numCircle){
 									copMax = numCircle;
 								}
-								drawCircle(centerBand, height, "green", numCircle, copMax);
+								drawCircle(centerBand, height, "green", numCircle, copMax, "Copy Number Variations");
+								if(lineEnd){
+									drawLine(centerBand, endBand, height, copHolder, "green", numLineEnd, "Copy Number Variations");
+								}
+								if(lineStart){
+									drawLine(centerBand, startBand, height, copHolder, "green", numLineStart, "Copy Number Variations");
+								}
 								numCircle = 0; //Reset for the next variant
 								height = height - 10; //Next circle will be higher
+								copHolder = prevHeight; //The height of the current variant is saved
+								lineEnd = false;
+								lineStart = false;
+								numLineEnd = 0;
+								numLineStart = 0;
 							}
 						}
 
@@ -268,15 +362,26 @@
 							for(var q = qIndex; q < seqVar.length; q++){
 								//If the array is past the ending point of the band, break
 								if(seqVar[q].start > m.END.textContent){
-									//Make the index to start from on the next band, the last index
-									qIndex = q;
 									break;
 								}else{
-									seq = true;
-									++numCircle;
-									//If this is the last of the variant type, shut it down
-									if((q + 1) >= seqVar.length){
-										qIndex = q + 1;
+									//The variant is on the band if the end is passed the beginning
+									if(seqVar[q].end >= m.START.textContent){
+										seq = true;
+										++numCircle;
+
+										//If the variant keeps going, draw a line to indicate so
+										if(seqVar[q].end > m.END.textContent){
+											//Indicate the height for the next band to be able to correct
+											prevHeight = height;
+											lineEnd = true;
+											++numLineEnd;
+										}
+
+										//If the variant began before, draw a line to indicate so
+										if(seqVar[q].start < m.START.textContent){
+											lineStart = true;
+											++numLineStart;
+										}
 									}
 								}
 							}
@@ -286,9 +391,20 @@
 								if(seqMax < numCircle){
 									seqMax = numCircle;
 								}
-								drawCircle(centerBand, height, "blue", numCircle, seqMax);
+								drawCircle(centerBand, height, "blue", numCircle, seqMax, "Sequence Alterations");
+								if(lineEnd){
+									drawLine(centerBand, endBand, height, seqHolder, "blue", numLineEnd, "Copy Number Variations");
+								}
+								if(lineStart){
+									drawLine(centerBand, startBand, height, seqHolder, "blue", numLineStart, "Copy Number Variations");
+								}
 								numCircle = 0; //Reset for the next variant
 								height = height - 10; //Next circle will be higher
+								seqHolder = prevHeight; //The height of the current variant is saved
+								lineEnd = false;
+								lineStart = false;
+								numLineEnd = 0;
+								numLineStart = 0;
 							}
 						}
 
@@ -297,15 +413,26 @@
 							for(var i = iIndex; i < insVar.length; i++){
 								//If the array is past the ending point of the band, break
 								if(insVar[i].start > m.END.textContent){
-									//Make the index to start from on the next band, the last index
-									iIndex = i;
 									break;
 								}else{
-									ins = true;
-									++numCircle;
-									//If this is the last of the variant type, shut it down
-									if((i + 1) >= insVar.length){
-										iIndex = i + 1;
+									//The variant is on the band if the end is passed the beginning
+									if(insVar[i].end >= m.START.textContent){
+										ins = true;
+										++numCircle;
+
+										//If the variant keeps going, draw a line to indicate so
+										if(insVar[i].end > m.END.textContent){
+											//Indicate the height for the next band to be able to correct
+											prevHeight = height;
+											lineEnd = true;
+											++numLineEnd;
+										}
+
+										//If the variant began before, draw a line to indicate so
+										if(insVar[i].start < m.START.textContent){
+											lineStart = true;
+											++numLineStart;
+										}
 									}
 								}
 							}
@@ -315,7 +442,15 @@
 								if(insMax < numCircle){
 									insMax = numCircle;
 								}
-								drawCircle(centerBand, height, "Turquoise", numCircle, insMax);
+								drawCircle(centerBand, height, "Turquoise", numCircle, insMax, "Insertions");
+
+								if(lineEnd){
+									drawLine(centerBand, endBand, height, insHolder, "Turquoise", numLineEnd, "Copy Number Variations");
+								}
+								if(lineStart){
+									drawLine(centerBand, startBand, height, insHolder, "Turquoise", numLineStart, "Copy Number Variations");
+								}
+								insHolder = prevHeight; //The height of the current variant is saved
 							}
 						}
 					});
@@ -325,6 +460,10 @@
 				document.getElementById("substitution").onclick = function(){
 					//Remove all the circles
 					target.selectAll("circle")
+						.remove();
+
+					//Remove all the lines
+					target.selectAll("line")
 						.remove();
 
 					if(this.checked){
@@ -348,6 +487,10 @@
 					target.selectAll("circle")
 						.remove();
 
+					//Remove all the lines
+					target.selectAll("line")
+						.remove();
+
 					if(this.checked){
 						copOn = true;
 					}else{
@@ -369,6 +512,10 @@
 					target.selectAll("circle")
 						.remove();
 
+					//Remove all the lines
+					target.selectAll("line")
+						.remove();
+
 					if(this.checked){
 						seqOn = true;
 					}else{
@@ -388,6 +535,10 @@
 				document.getElementById("insertion").onclick = function(){
 					//Remove all the circles
 					target.selectAll("circle")
+						.remove();
+
+					//Remove all the lines
+					target.selectAll("line")
 						.remove();
 
 					if(this.checked){
@@ -511,77 +662,10 @@
 								return (m.TYPE.id === "band:stalk") ? (PADDING + STALK_SPACING) : BAND_HEIGHT;
 							});
 
-			/**			var key = target.append('rect')
-							.attr('height', function(){
-								return 85;
-							})
-							.attr('width', function(){
-								return 500;
-							})
-							.attr('x', function(){
-								return 20;
-							})
-							.attr('y', function(){
-								return PADDING + 20;
-							})
-							.style('fill', "transparent")
-							.style('stroke-width', "3")
-							.style('stroke', "black");
-
-						var data = ["Option 1", "Option 2", "Option 3"];
-
-						var select = d3.select('body')
-							.append('select')
-							.attr('class','select')
-							.on('change',onchange)
-
-						var options = select.selectAll('option')
-							.data(data).enter()
-							.append('option')
-							.text(function (d) { return d; })
-							.attr('x', 30);
-
-						function onchange() {
-							selectValue = d3.select('select').property('value')
-							d3.select('body')
-								.append('p')
-								.text(selectValue + ' is the last selected option.')
-						};
-
-						target.append('circle')
-							.attr('cx', 20)
-							.attr('cy', PADDING)
-							.attr('r', 5)
-							.style('fill', function(){
-								//Create a scale with the color associated with the phenotype
-								return "red";
-							});
-
-						target.append('text')
-							.text("Nervous")
-							.attr('y', PADDING + 40)
-							.attr('x', 30);
-
-						target.append('text')
-							.text("Skeletal")
-							.attr('y', PADDING + 65)
-							.attr('x', 30);
-
-						target.append('text')
-							.text("Head and Neck")
-							.attr('y', PADDING + 90)
-							.attr('x', 30);
-
-
-						target.append('text')
-							.text("Hover over a band to see the band's id, and hover over a circle indicator to see how many phenotypes and of what kind are in a specific band.")
-							.attr('y', PADDING + 40)
-							.attr('x', 15);
-					**/
 
 						var label = target.append("text")
 							.attr("class", "band-lbl")
-							.attr("y", LABEL_PADDING + 5);
+							.attr("y", LABEL_PADDING - 7);
 
 						band.on("mouseover", function (m) {
 							label.text(m.id)
@@ -692,7 +776,7 @@
 
 					//Only display those that are actively selected
 					if(obj.feature_closure_label[2] == "substitution" && subOn){
-						if (obj.start >= self.start && obj.end <= self.end) {
+						if (obj.start <= self.end && obj.end >= self.start) {
 							makeRow(obj, table);
 						}
 						else if (obj.start > self.end) {
@@ -708,7 +792,7 @@
 						}
 					}
 					else if(obj.feature_closure_label[2] == "sequence_alteration" && seqOn){
-						if (obj.start >= self.start && obj.end <= self.end) {
+						if (obj.start <= self.end && obj.end >= self.start) {
 							makeRow(obj, table);
 						}
 						else if (obj.start > self.end) {
@@ -716,7 +800,7 @@
 						}
 					}
 					else if(obj.feature_closure_label[2] == "insertion" && insOn){
-						if (obj.start >= self.start && obj.end <= self.end) {
+						if (obj.start <= self.end && obj.end >= self.start) {
 							makeRow(obj, table);
 						}
 						else if (obj.start > self.end) {
