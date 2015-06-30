@@ -2591,44 +2591,56 @@ function modelDataPointPrint(point) {
 
 	// Previously _createModelLines
 	_createXLines: function() {
-		var modelLineGap = 10;
-		var lineY = this.state.yoffset - modelLineGap;
+		// Make sure the X line is created once - Joe
+		if (this.state.svg.select("#x_line")[0][0] === null) {
+			var modelLineGap = 10;
+			var lineX = this.state.yoffset - modelLineGap;
+
+			this.state.svg.append("line")
+				.attr("id", "x_line")
+				.attr("transform", "translate(" + (this.state.textWidth + this.state.xOffsetOver + 30) + "," + lineX + ")")
+				.attr("x1", 0)
+				.attr("y1", 0)
+				.attr("x2", this.state.modelWidth)
+				.attr("y2", 0)
+				.attr("stroke", "#0F473E")
+				.attr("stroke-width", 1);
+		} 
+		
+		// Why the following? - Joe
 		this.state.svg.selectAll("path.domain").remove();
 		this.state.svg.selectAll("text.scores").remove();
 		this.state.svg.selectAll("#pg_specieslist").remove();
-
-		this.state.svg.append("line")
-			.attr("transform","translate(" + (this.state.textWidth + this.state.xOffsetOver + 30) + "," + lineY + ")")
-			.attr("x1", 0)
-			.attr("y1", 0)
-			.attr("x2", this.state.modelWidth)
-			.attr("y2", 0)
-			.attr("stroke", "#0F473E")
-			.attr("stroke-width", 1);
 	},
 
 	_createYLines: function() {
-	    var self = this;
-		var modelLineGap = 30;
-		var lineY = this.state.yoffset + modelLineGap;
-		var displayCount = self._getYLimit();
-		//this.state.svg.selectAll("path.domain").remove();
-		//this.state.svg.selectAll("text.scores").remove();
-		//this.state.svg.selectAll("#pg_specieslist").remove();
+		// Make sure the Y line is created once - Joe
+		if (this.state.svg.select("#y_line")[0][0] === null) {
+			var self = this;
+			var modelLineGap = 30;
+			var lineY = this.state.yoffset + modelLineGap;
+			var displayCount = self._getYLimit();
+			//this.state.svg.selectAll("path.domain").remove();
+			//this.state.svg.selectAll("text.scores").remove();
+			//this.state.svg.selectAll("#pg_specieslist").remove();
 
-		var gridHeight = displayCount * self.state.heightOfSingleModel + 10;
-		if (gridHeight < self.state.minHeight) {
-			gridHeight = self.state.minHeight;
+			var gridHeight = displayCount * self.state.heightOfSingleModel + 10;
+			if (gridHeight < self.state.minHeight) {
+				gridHeight = self.state.minHeight;
+			}
+
+			this.state.svg.append("line")
+				.attr("id", "y_line")
+				.attr("transform", "translate(" + (this.state.textWidth + 15) + "," + lineY + ")")
+				.attr("x1", 0)
+				.attr("y1", 0)
+				.attr("x2", 0)
+				.attr("y2", gridHeight)
+				.attr("stroke", "#0F473E") // SVG stroke defines the color of a line, text, or outline of an element - Joe
+				.attr("stroke-width", 1); // SVG stroke-width defines the thickness of a line, text, or outline of an element - Joe
+
 		}
 
-		this.state.svg.append("line")
-			.attr("transform","translate(" + (this.state.textWidth + 15) + "," + lineY + ")")
-			.attr("x1", 0)
-			.attr("y1", 0)
-			.attr("x2", 0)
-			.attr("y2", gridHeight)
-			.attr("stroke", "#0F473E")
-			.attr("stroke-width", 1);
 	},
 
 	_createTextScores: function() {
