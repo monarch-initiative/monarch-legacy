@@ -10,57 +10,71 @@ if (typeof monarch == 'undefined') { var monarch = {};}
 if (typeof monarch.model == 'undefined') { monarch.model = {};}
 
 /*
- * Namespace: monarch.model.tree
- * 
  * Constructor: tree
  * 
  * Parameters:
  *  data - the JSON object as a string in the following format:
- * 
- *      [
- *        {
- *          "id": "HP:0000707",
- *          "label": "Nervous System",
- *          "counts": [
- *             {
- *               "value": 21290,
- *               "name": "Human"
- *             },
- *             {
- *              "value": 38136,
- *              "name": "Mouse"
- *             }
- *           ],
- *           "children":[
- *             {
- *               "label":"Nervous System Morphology",
- *               "id":"HP:0012639",
- *               "counts": [
- *                  {
- *                    "value":7431,
- *                    "name":"Human",
- *                  {
- *                    "value":24948,
- *                    "name":"Mouse"
- *                  }
- *               ],
- *             },...
- *         },...
- *      ]  
- *      
+ * {
+     "root": {
+         "id": "HP:0000118",
+         "label": "Phenotypic Abnormality",
+         "children": [
+             {
+                 "id": "HP:0000707",
+                 "label": "Nervous System",
+                 "counts": [
+                     {
+                         "value": 21290,
+                         "name": "Human"
+                     },
+                     {
+                         "value": 38136,
+                         "name": "Mouse"
+                     }
+                 ],
+                 "children": [
+                     {
+                         "label": "Nervous System Morphology",
+                         "id": "HP:0012639",
+                         "counts": [
+                             {
+                                 "value": 7431,
+                                 "name": "Human"
+                             },
+                             {
+                                 "value": 24948,
+                                 "name": "Mouse"
+                             }
+                         ]
+                     }
+                 ]
+             }
+         ]
+     }
+ * }
  * Returns:
  *  tree object
  */
-
 monarch.model.tree = function(data){
     var self = this;
-    self._data = data;
-    self.checkSiblings(data.root.children); //Only checks the root's children
+    if (data){
+        self._data = data;
+        self.checkSiblings(data.root.children);
+    }
 };
 
 //Return entire tree data 
 monarch.model.tree.prototype.getTree = function(){
     return this._data;
+};
+
+//Set entire tree data 
+monarch.model.tree.prototype.setTree = function(data){
+    self._data = data;
+};
+
+monarch.model.tree.prototype.setRoot = function(root){
+    this._data.root = root;
 };
 
 //Return entire tree data 
@@ -70,6 +84,10 @@ monarch.model.tree.prototype.getRootID = function(){
 
 monarch.model.tree.prototype.getRootLabel = function(){
     return this._data.root.label;
+};
+
+monarch.model.tree.prototype.hasRoot = function(){
+    return (this._data.root && this.getRootID());
 };
 
 monarch.model.tree.prototype.getFirstSiblings = function(){
