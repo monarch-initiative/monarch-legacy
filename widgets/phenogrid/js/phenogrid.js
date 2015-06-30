@@ -3139,15 +3139,16 @@ function modelDataPointPrint(point) {
 
 		list = self._getSortedIDListStrict(self.state.filteredYAxis.entries());
 
-		var rect_text = this.state.svg
-			.selectAll(".a_text")
-			.data(list, function(d) { return d; });
+		var rect_text = this.state.svg.selectAll(".a_text").data(list, function(d) { 
+				return d; 
+			});
+			
 		rect_text.enter()
 			.append("text")
 			.attr("class", function(d) {
 				return "a_text data_text " + d;
 			})
-		// store the id for this item. This will be used on click events
+		    // store the id for this item. This will be used on click events
 			.attr("ontology_id", function(d) {
 				return d;
 			})
@@ -3161,13 +3162,11 @@ function modelDataPointPrint(point) {
 			.on("mouseover", function(d) {
 				self._selectYItem(d, d3.mouse(this));
 			})
-			.on("mouseout", function(d) {
+			.on("mouseout", function(d) { 
 				self._deselectData(d, d3.mouse(this));
 			})
-			.attr("width", self.state.textWidth)
-			.attr("height", 50)
 			.attr("data-tooltip", "sticky1")
-			.style("fill", function(d){
+			.style("fill", function(d) {
 				return self._getExpandStyling(d);
 			})
 			.text(function(d) {
@@ -3181,17 +3180,14 @@ function modelDataPointPrint(point) {
 
 		this._buildUnmatchedPhenotypeDisplay();
 
-		rect_text.transition()
-			.style('opacity', '1.0')
-			.delay(5)
+
+		rect_text
 			.attr("y", function(d) {
 				return self._getAxisData(d).ypos + self.state.yoffsetOver + pad;
 			});
-		rect_text.exit()
-			.transition()
-			.delay(20)
-			.style('opacity', '0.0')
-			.remove();
+
+		
+		rect_text.exit().remove();
 	},
 
 	_getUnmatchedPhenotypes: function(){
