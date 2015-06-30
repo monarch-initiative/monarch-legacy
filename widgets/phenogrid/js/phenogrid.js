@@ -745,40 +745,45 @@ function modelDataPointPrint(point) {
 		return selectedScale(score);
 	},
 
+	// model scores legend is not created after flipping the widget - Joe
 	_createModelScoresLegend: function() {
-		var self = this;
-		var scoreTipY = self.state.yoffset;
-		var faqY = scoreTipY - self.state.gridTitleYOffset;
-		var tipTextLength = 92;
-		var explYOffset = 15;
-		var explXOffset = 10;
-		var scoretip = self.state.svg.append("text")
-			.attr("transform","translate(" + (self.state.axis_pos_list[2] ) + "," + scoreTipY + ")")
-			.attr("x", 0)
-			.attr("y", 0)
-			.attr("class", "pg_tip")
-			.text("< Model Scores");
+		// Make sure the legend is only created once - Joe
+		if (this.state.svg.select(".pg_tip")[0][0] === null) {
+			var self = this;
+			var scoreTipY = self.state.yoffset;
+			var faqY = scoreTipY - self.state.gridTitleYOffset;
+			var tipTextLength = 92;
+			var explYOffset = 15;
+			var explXOffset = 10;
+			var scoretip = self.state.svg.append("text")
+				.attr("transform", "translate(" + (self.state.axis_pos_list[2] ) + "," + scoreTipY + ")")
+				.attr("x", 0)
+				.attr("y", 0)
+				.attr("class", "pg_tip")
+				.text("<- Model Scores"); // changed "<" to "<-" to make it look more like an arrow pointer - Joe
 
-		var tip	= self.state.svg
-			.append("svg:image")
-			.attr("xlink:href", this.state.scriptpath + "../image/greeninfo30.png")
-			.attr("transform","translate(" + (self.state.axis_pos_list[2] + tipTextLength) + "," + faqY + ")")
-			.attr("id","modelscores")
-			.attr("x", 0)
-			.attr("y", 0)
-			.attr("width", self.state.faqImgSize)
-			.attr("height", self.state.faqImgSize)
-			.attr("class", "pg_faq_img")
-			.on("click", function(d) {
-				var name = "modelscores";
-				self._showDialog(name);
-			});
+			var tip	= self.state.svg
+				.append("svg:image")
+				.attr("xlink:href", this.state.scriptpath + "../image/greeninfo30.png")
+				.attr("transform", "translate(" + (self.state.axis_pos_list[2] + tipTextLength) + "," + faqY + ")")
+				.attr("id", "modelscores")
+				.attr("x", 0)
+				.attr("y", 0)
+				.attr("width", self.state.faqImgSize)
+				.attr("height", self.state.faqImgSize)
+				.attr("class", "pg_faq_img")
+				.on("click", function(d) {
+					var name = "modelscores";
+					self._showDialog(name);
+				});
 
-		var expl = self.state.svg.append("text")
-			.attr("x",self.state.axis_pos_list[2] + explXOffset)
-			.attr("y",scoreTipY + explYOffset)
-			.attr("class","pg_tip")
-			.text("best matches left to right.");
+			var expl = self.state.svg.append("text")
+				.attr("x", self.state.axis_pos_list[2] + explXOffset)
+				.attr("y", scoreTipY + explYOffset)
+				.attr("class", "pg_tip")
+				.text("Best matches left to right."); // uppercased best - > Best - Joe
+		}
+		
 	},
 
 	_createDiseaseTitleBox: function() {
