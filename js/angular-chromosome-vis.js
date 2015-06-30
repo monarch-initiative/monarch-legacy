@@ -152,7 +152,11 @@
 				var subMax = 0,
 					copMax = 0,
 					seqMax = 0,
-					insMax = 0;
+					insMax = 0,
+					subLine = 0,
+					copLine = 0,
+					seqLine = 0,
+					insLine = 0;
 
 				//Create a text label to display when variant circles are hovered over
 				var varLabel = target.append("text")
@@ -160,7 +164,7 @@
 					.attr("y", LABEL_PADDING - 13);
 
 
-				function drawCircle(center, height, color, density, max, type){
+				function drawCircle(center, height, color, density, max, type, start, end){
 					var circle = target.append('circle')
 						.attr('cx', center)
 						.attr('cy', height)
@@ -185,6 +189,15 @@
 					circle.on("mouseout", function () {
 						varLabel.text(''); //empty the label
 					});
+
+					circle.on("click", function () {
+						if (scope.mode === 'multi' || (scope.mode === "single" && scope.selectors.list.length == 0)) {
+							var newSel = newSelector(scope, xscale, start, end, (BAND_HEIGHT - AXIS_SPACING)).draw(); //create new selector and draw it
+							addSelector(newSel);//add new selector to local scope
+							chrSelectors.addSelector(newSel); //add new location to the service
+						}
+					});
+
 				}
 
 				//Create a text label to display when variant lines are hovered over
@@ -192,7 +205,7 @@
 					.attr("class", "var-lbl")
 					.attr("y", LABEL_PADDING - 13);
 
-				function drawLine(center, destination, height, prevHeight, color, density, type){
+				function drawLine(center, destination, height, prevHeight, color, density, max, type, start, end){
 					var line = target.append('line')
 						.attr('x1', function(){
 							if(center > destination){
@@ -212,7 +225,15 @@
 						})
 						.attr('stroke', color)
 						.attr('stroke-width', function(){
-							return density;
+							var densityMax = max * 1.33;
+
+							//Create a gradient based on density
+							var scale = d3.scale.linear()
+								.domain([-(densityMax * 0.25), (densityMax / 2), densityMax])
+								.range([0, 2.5, 5]);
+
+							//Get the color reflective of the density on each band
+							return scale(density);
 						});
 
 					line.on("mouseover", function(){
@@ -224,6 +245,14 @@
 
 					line.on("mouseout", function () {
 						lineLabel.text(''); //empty the label
+					});
+
+					line.on("click", function () {
+						if (scope.mode === 'multi' || (scope.mode === "single" && scope.selectors.list.length == 0)) {
+							var newSel = newSelector(scope, xscale, start, end, (BAND_HEIGHT - AXIS_SPACING)).draw(); //create new selector and draw it
+							addSelector(newSel);//add new selector to local scope
+							chrSelectors.addSelector(newSel); //add new location to the service
+						}
 					});
 				}
 
@@ -248,12 +277,15 @@
 							lineStart = false;
 						var numCircle = 0,
 						    numLineEnd = 0,
-							numLineStart = 0;
+							numLineStart = 0,
+							lineDistance = 0,
+							startHolder = 0,
+							endHolder = 0;
 						var height = BAND_HEIGHT - 6,
 							prevHeight = height;
 						var centerBand = xscale(m.START.textContent) + ((xscale(+m.END.textContent) - xscale(+m.START.textContent)) / 2),
-							startBand = xscale(m.START.textContent),
-							endBand = xscale(m.END.textContent);
+							startBand = m.START.textContent,
+							endBand = m.END.textContent;
 
 						if(subOn){
 							//Go through all the types of variants and check if they appear in the band
@@ -269,12 +301,25 @@
 
 										//If the variant keeps going, draw a line to indicate so
 										if(subVar[s].end > m.END.textContent){
+											//For selector purposes, find the largest overlapping variant
+											if(lineDistance < subVar[s].end - subVar[s].start){
+												startHolder = subVar[s].start;
+												endHolder = subVar[s].end;
+												lineDistance = endHolder - startHolder;
+											}
+											prevHeight = height;
 											lineEnd = true;
 											++numLineEnd;
 										}
 
 										//If the variant began before, draw a line to indicate so
 										if(subVar[s].start < m.START.textContent){
+											//For selector purposes, find the largest overlapping variant
+											if(lineDistance < subVar[s].end - subVar[s].start){
+												startHolder = subVar[s].start;
+												endHolder = subVar[s].end;
+												lineDistance = endHolder - startHolder;
+											}
 											lineStart = true;
 											++numLineStart;
 										}
@@ -288,13 +333,19 @@
 								if(subMax < numCircle){
 									subMax = numCircle;
 								}
-								drawCircle(centerBand, height, "red", numCircle, subMax, "Substitutions");
+								if(subLine < numLineEnd){
+									subLine = numLineEnd;
+								}
+								if(subLine < numLineStart){
+									subLine = numLineStart;
+								}
+								drawCircle(centerBand, height, "red", numCircle, subMax, "Substitutions", startBand, endBand);
 
 								if(lineEnd){
-									drawLine(centerBand, endBand, height, height, "red", numLineEnd, "Substitutions");
+									drawLine(centerBand, xscale(endBand), height, height, "red", numLineEnd, subLine, "Substitutions", startHolder, endHolder);
 								}
 								if(lineStart){
-									drawLine(centerBand, startBand, height, height, "red", numLineStart, "Substitutions");
+									drawLine(centerBand, xscale(startBand), height, height, "red", numLineStart, subLine, "Substitutions", startHolder, endHolder);
 								}
 								numCircle = 0; //Reset for the next variant
 								height = height - 10; //Next circle will be higher
@@ -302,6 +353,9 @@
 								lineStart = false;
 								numLineEnd = 0;
 								numLineStart = 0;
+								startHolder = 0;
+								endHolder = 0;
+								lineDistance = 0;
 							}
 						}
 
@@ -319,6 +373,12 @@
 
 										//If the variant keeps going, draw a line to indicate so
 										if(copVar[c].end > m.END.textContent){
+											//For selector purposes, find the largest overlapping variant
+											if(lineDistance < copVar[c].end - copVar[c].start){
+												startHolder = copVar[c].start;
+												endHolder = copVar[c].end;
+												lineDistance = endHolder - startHolder;
+											}
 											//Indicate the height for the next band to be able to correct
 											prevHeight = height;
 											lineEnd = true;
@@ -327,6 +387,12 @@
 
 										//If the variant began before, draw a line to indicate so
 										if(copVar[c].start < m.START.textContent){
+											//For selector purposes, find the largest overlapping variant
+											if(lineDistance < copVar[c].end - copVar[c].start){
+												startHolder = copVar[c].start;
+												endHolder = copVar[c].end;
+												lineDistance = endHolder - startHolder;
+											}
 											lineStart = true;
 											++numLineStart;
 										}
@@ -340,12 +406,18 @@
 								if(copMax < numCircle){
 									copMax = numCircle;
 								}
-								drawCircle(centerBand, height, "green", numCircle, copMax, "Copy Number Variations");
+								if(copLine < numLineEnd){
+									copLine = numLineEnd;
+								}
+								if(copLine < numLineStart){
+									copLine = numLineStart;
+								}
+								drawCircle(centerBand, height, "green", numCircle, copMax, "Copy Number Variations", startBand, endBand);
 								if(lineEnd){
-									drawLine(centerBand, endBand, height, copHolder, "green", numLineEnd, "Copy Number Variations");
+									drawLine(centerBand, xscale(endBand), height, copHolder, "green", numLineEnd, copLine, "Copy Number Variations", startHolder, endHolder);
 								}
 								if(lineStart){
-									drawLine(centerBand, startBand, height, copHolder, "green", numLineStart, "Copy Number Variations");
+									drawLine(centerBand, xscale(startBand), height, copHolder, "green", numLineStart, copLine, "Copy Number Variations", startHolder, endHolder);
 								}
 								numCircle = 0; //Reset for the next variant
 								height = height - 10; //Next circle will be higher
@@ -354,6 +426,9 @@
 								lineStart = false;
 								numLineEnd = 0;
 								numLineStart = 0;
+								startHolder = 0;
+								endHolder = 0;
+								lineDistance = 0;
 							}
 						}
 
@@ -371,6 +446,12 @@
 
 										//If the variant keeps going, draw a line to indicate so
 										if(seqVar[q].end > m.END.textContent){
+											//For selector purposes, find the largest overlapping variant
+											if(lineDistance < seqVar[q].end - seqVar[q].start){
+												startHolder = seqVar[q].start;
+												endHolder = seqVar[q].end;
+												lineDistance = endHolder - startHolder;
+											}
 											//Indicate the height for the next band to be able to correct
 											prevHeight = height;
 											lineEnd = true;
@@ -379,6 +460,12 @@
 
 										//If the variant began before, draw a line to indicate so
 										if(seqVar[q].start < m.START.textContent){
+											//For selector purposes, find the largest overlapping variant
+											if(lineDistance < seqVar[q].end - seqVar[q].start){
+												startHolder = seqVar[q].start;
+												endHolder = seqVar[q].end;
+												lineDistance = endHolder - startHolder;
+											}
 											lineStart = true;
 											++numLineStart;
 										}
@@ -391,12 +478,18 @@
 								if(seqMax < numCircle){
 									seqMax = numCircle;
 								}
-								drawCircle(centerBand, height, "blue", numCircle, seqMax, "Sequence Alterations");
+								if(seqLine < numLineEnd){
+									seqLine = numLineEnd;
+								}
+								if(seqLine < numLineStart){
+									seqLine = numLineStart;
+								}
+								drawCircle(centerBand, height, "blue", numCircle, seqMax, "Sequence Alterations", startBand, endBand);
 								if(lineEnd){
-									drawLine(centerBand, endBand, height, seqHolder, "blue", numLineEnd, "Copy Number Variations");
+									drawLine(centerBand, xscale(endBand), height, seqHolder, "blue", numLineEnd, seqLine, "Sequence Alterations", startHolder, endHolder);
 								}
 								if(lineStart){
-									drawLine(centerBand, startBand, height, seqHolder, "blue", numLineStart, "Copy Number Variations");
+									drawLine(centerBand, xscale(startBand), height, seqHolder, "blue", numLineStart, seqLine, "Sequence Alterations", startHolder, endHolder);
 								}
 								numCircle = 0; //Reset for the next variant
 								height = height - 10; //Next circle will be higher
@@ -405,6 +498,9 @@
 								lineStart = false;
 								numLineEnd = 0;
 								numLineStart = 0;
+								startHolder = 0;
+								endHolder = 0;
+								lineDistance = 0;
 							}
 						}
 
@@ -422,6 +518,12 @@
 
 										//If the variant keeps going, draw a line to indicate so
 										if(insVar[i].end > m.END.textContent){
+											//For selector purposes, find the largest overlapping variant
+											if(lineDistance < insVar[i].end - insVar[i].start){
+												startHolder = insVar[i].start;
+												endHolder = insVar[i].end;
+												lineDistance = endHolder - startHolder;
+											}
 											//Indicate the height for the next band to be able to correct
 											prevHeight = height;
 											lineEnd = true;
@@ -430,6 +532,12 @@
 
 										//If the variant began before, draw a line to indicate so
 										if(insVar[i].start < m.START.textContent){
+											//For selector purposes, find the largest overlapping variant
+											if(lineDistance < insVar[i].end - insVar[i].start){
+												startHolder = insVar[i].start;
+												endHolder = insVar[i].end;
+												lineDistance = endHolder - startHolder;
+											}
 											lineStart = true;
 											++numLineStart;
 										}
@@ -442,13 +550,19 @@
 								if(insMax < numCircle){
 									insMax = numCircle;
 								}
-								drawCircle(centerBand, height, "Turquoise", numCircle, insMax, "Insertions");
+								if(insLine < numLineEnd){
+									insLine = numLineEnd;
+								}
+								if(insLine < numLineStart){
+									insLine = numLineStart;
+								}
+								drawCircle(centerBand, height, "Turquoise", numCircle, insMax, "Insertions", startBand, endBand);
 
 								if(lineEnd){
-									drawLine(centerBand, endBand, height, insHolder, "Turquoise", numLineEnd, "Copy Number Variations");
+									drawLine(centerBand, xscale(endBand), height, insHolder, "Turquoise", numLineEnd, insLine, "Insertions", startHolder, endHolder);
 								}
 								if(lineStart){
-									drawLine(centerBand, startBand, height, insHolder, "Turquoise", numLineStart, "Copy Number Variations");
+									drawLine(centerBand, xscale(startBand), height, insHolder, "Turquoise", numLineStart, insLine, "Insertions", startHolder, endHolder);
 								}
 								insHolder = prevHeight; //The height of the current variant is saved
 							}
@@ -559,7 +673,11 @@
 
 				drawVariants();
 
+				//Refresh the drawings so that the maxes are absolute
 				target.selectAll("circle")
+					.remove();
+
+				target.selectAll("line")
 					.remove();
 
 				drawVariants();
