@@ -745,40 +745,45 @@ function modelDataPointPrint(point) {
 		return selectedScale(score);
 	},
 
+	// model scores legend is not created after flipping the widget - Joe
 	_createModelScoresLegend: function() {
-		var self = this;
-		var scoreTipY = self.state.yoffset;
-		var faqY = scoreTipY - self.state.gridTitleYOffset;
-		var tipTextLength = 92;
-		var explYOffset = 15;
-		var explXOffset = 10;
-		var scoretip = self.state.svg.append("text")
-			.attr("transform","translate(" + (self.state.axis_pos_list[2] ) + "," + scoreTipY + ")")
-			.attr("x", 0)
-			.attr("y", 0)
-			.attr("class", "pg_tip")
-			.text("< Model Scores");
+		// Make sure the legend is only created once - Joe
+		if (this.state.svg.select(".pg_tip")[0][0] === null) {
+			var self = this;
+			var scoreTipY = self.state.yoffset;
+			var faqY = scoreTipY - self.state.gridTitleYOffset;
+			var tipTextLength = 92;
+			var explYOffset = 15;
+			var explXOffset = 10;
+			var scoretip = self.state.svg.append("text")
+				.attr("transform", "translate(" + (self.state.axis_pos_list[2] ) + "," + scoreTipY + ")")
+				.attr("x", 0)
+				.attr("y", 0)
+				.attr("class", "pg_tip")
+				.text("<- Model Scores"); // changed "<" to "<-" to make it look more like an arrow pointer - Joe
 
-		var tip	= self.state.svg
-			.append("svg:image")
-			.attr("xlink:href", this.state.scriptpath + "../image/greeninfo30.png")
-			.attr("transform","translate(" + (self.state.axis_pos_list[2] + tipTextLength) + "," + faqY + ")")
-			.attr("id","modelscores")
-			.attr("x", 0)
-			.attr("y", 0)
-			.attr("width", self.state.faqImgSize)
-			.attr("height", self.state.faqImgSize)
-			.attr("class", "pg_faq_img")
-			.on("click", function(d) {
-				var name = "modelscores";
-				self._showDialog(name);
-			});
+			var tip	= self.state.svg
+				.append("svg:image")
+				.attr("xlink:href", this.state.scriptpath + "../image/greeninfo30.png")
+				.attr("transform", "translate(" + (self.state.axis_pos_list[2] + tipTextLength) + "," + faqY + ")")
+				.attr("id", "modelscores")
+				.attr("x", 0)
+				.attr("y", 0)
+				.attr("width", self.state.faqImgSize)
+				.attr("height", self.state.faqImgSize)
+				.attr("class", "pg_faq_img")
+				.on("click", function(d) {
+					var name = "modelscores";
+					self._showDialog(name);
+				});
 
-		var expl = self.state.svg.append("text")
-			.attr("x",self.state.axis_pos_list[2] + explXOffset)
-			.attr("y",scoreTipY + explYOffset)
-			.attr("class","pg_tip")
-			.text("best matches left to right.");
+			var expl = self.state.svg.append("text")
+				.attr("x", self.state.axis_pos_list[2] + explXOffset)
+				.attr("y", scoreTipY + explYOffset)
+				.attr("class", "pg_tip")
+				.text("Best matches left to right."); // uppercased best - > Best - Joe
+		}
+		
 	},
 
 	_createDiseaseTitleBox: function() {
@@ -2585,50 +2590,62 @@ function modelDataPointPrint(point) {
 
 	// Previously _clearModelLabels
 	_clearXLabels: function() {
-		this.state.svg.selectAll("g .x.axis").remove();
+		this.state.svg.selectAll("g.x").remove();
 		this.state.svg.selectAll("g .tick.major").remove();
 	},
 
 	// Previously _createModelLines
 	_createXLines: function() {
-		var modelLineGap = 10;
-		var lineY = this.state.yoffset - modelLineGap;
+		// Make sure the X line is created once - Joe
+		if (this.state.svg.select("#x_line")[0][0] === null) {
+			var modelLineGap = 10;
+			var lineX = this.state.yoffset - modelLineGap;
+
+			this.state.svg.append("line")
+				.attr("id", "x_line")
+				.attr("transform", "translate(" + (this.state.textWidth + this.state.xOffsetOver + 30) + "," + lineX + ")")
+				.attr("x1", 0)
+				.attr("y1", 0)
+				.attr("x2", this.state.modelWidth)
+				.attr("y2", 0)
+				.attr("stroke", "#0F473E")
+				.attr("stroke-width", 1);
+		} 
+		
+		// Why the following? - Joe
 		this.state.svg.selectAll("path.domain").remove();
 		this.state.svg.selectAll("text.scores").remove();
 		this.state.svg.selectAll("#pg_specieslist").remove();
-
-		this.state.svg.append("line")
-			.attr("transform","translate(" + (this.state.textWidth + this.state.xOffsetOver + 30) + "," + lineY + ")")
-			.attr("x1", 0)
-			.attr("y1", 0)
-			.attr("x2", this.state.modelWidth)
-			.attr("y2", 0)
-			.attr("stroke", "#0F473E")
-			.attr("stroke-width", 1);
 	},
 
 	_createYLines: function() {
-	    var self = this;
-		var modelLineGap = 30;
-		var lineY = this.state.yoffset + modelLineGap;
-		var displayCount = self._getYLimit();
-		//this.state.svg.selectAll("path.domain").remove();
-		//this.state.svg.selectAll("text.scores").remove();
-		//this.state.svg.selectAll("#pg_specieslist").remove();
+		// Make sure the Y line is created once - Joe
+		if (this.state.svg.select("#y_line")[0][0] === null) {
+			var self = this;
+			var modelLineGap = 30;
+			var lineY = this.state.yoffset + modelLineGap;
+			var displayCount = self._getYLimit();
+			//this.state.svg.selectAll("path.domain").remove();
+			//this.state.svg.selectAll("text.scores").remove();
+			//this.state.svg.selectAll("#pg_specieslist").remove();
 
-		var gridHeight = displayCount * self.state.heightOfSingleModel + 10;
-		if (gridHeight < self.state.minHeight) {
-			gridHeight = self.state.minHeight;
+			var gridHeight = displayCount * self.state.heightOfSingleModel + 10;
+			if (gridHeight < self.state.minHeight) {
+				gridHeight = self.state.minHeight;
+			}
+
+			this.state.svg.append("line")
+				.attr("id", "y_line")
+				.attr("transform", "translate(" + (this.state.textWidth + 15) + "," + lineY + ")")
+				.attr("x1", 0)
+				.attr("y1", 0)
+				.attr("x2", 0)
+				.attr("y2", gridHeight)
+				.attr("stroke", "#0F473E") // SVG stroke defines the color of a line, text, or outline of an element - Joe
+				.attr("stroke-width", 1); // SVG stroke-width defines the thickness of a line, text, or outline of an element - Joe
+
 		}
 
-		this.state.svg.append("line")
-			.attr("transform","translate(" + (this.state.textWidth + 15) + "," + lineY + ")")
-			.attr("x1", 0)
-			.attr("y1", 0)
-			.attr("x2", 0)
-			.attr("y2", gridHeight)
-			.attr("stroke", "#0F473E")
-			.attr("stroke-width", 1);
 	},
 
 	_createTextScores: function() {
@@ -3122,15 +3139,16 @@ function modelDataPointPrint(point) {
 
 		list = self._getSortedIDListStrict(self.state.filteredYAxis.entries());
 
-		var rect_text = this.state.svg
-			.selectAll(".a_text")
-			.data(list, function(d) { return d; });
+		var rect_text = this.state.svg.selectAll(".a_text").data(list, function(d) { 
+				return d; 
+			});
+			
 		rect_text.enter()
 			.append("text")
 			.attr("class", function(d) {
 				return "a_text data_text " + d;
 			})
-		// store the id for this item. This will be used on click events
+		    // store the id for this item. This will be used on click events
 			.attr("ontology_id", function(d) {
 				return d;
 			})
@@ -3144,13 +3162,11 @@ function modelDataPointPrint(point) {
 			.on("mouseover", function(d) {
 				self._selectYItem(d, d3.mouse(this));
 			})
-			.on("mouseout", function(d) {
+			.on("mouseout", function(d) { 
 				self._deselectData(d, d3.mouse(this));
 			})
-			.attr("width", self.state.textWidth)
-			.attr("height", 50)
 			.attr("data-tooltip", "sticky1")
-			.style("fill", function(d){
+			.style("fill", function(d) {
 				return self._getExpandStyling(d);
 			})
 			.text(function(d) {
@@ -3164,17 +3180,14 @@ function modelDataPointPrint(point) {
 
 		this._buildUnmatchedPhenotypeDisplay();
 
-		rect_text.transition()
-			.style('opacity', '1.0')
-			.delay(5)
+
+		rect_text
 			.attr("y", function(d) {
 				return self._getAxisData(d).ypos + self.state.yoffsetOver + pad;
 			});
-		rect_text.exit()
-			.transition()
-			.delay(20)
-			.style('opacity', '0.0')
-			.remove();
+
+		
+		rect_text.exit().remove();
 	},
 
 	_getUnmatchedPhenotypes: function(){
