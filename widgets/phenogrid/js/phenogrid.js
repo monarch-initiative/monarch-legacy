@@ -2340,25 +2340,10 @@ function modelDataPointPrint(point) {
 			// I need to pass this into the function
 			.on("mouseover", function(d) {
 				this.parentNode.appendChild(this);
-				// if this column and row are selected, clear the column/row and unset the column/row flag
-				if (self.state.selectedColumn !== undefined && self.state.selectedRow !== undefined) {
-					self.state.selectedColumn = undefined;
-					self.state.selectedRow = undefined;
-					self._deselectData();
-					if (this != self.state.currSelectedRect){
-						self._highlightIntersection(d, d3.mouse(this));
-						// put the clicked rect on the top layer of the svg so other events work
-						//???this.parentNode.appendChild(this);
-						self._enableRowColumnRects(this);
-						// set the current selected rectangle
-						self.state.currSelectedRect = this;
-					}
-				} else {
-					self._highlightIntersection(d, d3.mouse(this));
-					self._enableRowColumnRects(this);
-					self.state.currSelectedRect = this;
-				}
-			self._showModelData(d, this);
+				self._highlightIntersection(d, d3.mouse(this));
+				self._enableRowColumnRects(this);
+				self.state.currSelectedRect = this;
+				self._showModelData(d, this);
 			})
 			.on("mouseout", function(d) {
 				self._deselectData(data);
@@ -2485,8 +2470,6 @@ function modelDataPointPrint(point) {
 			.attr("width", this.state.modelWidth - 4)
 			.attr("height", 12);
 
-		this.state.selectedRow = curr_data.yID;
-		this.state.selectedColumn = curr_data.xID;
 		this._resetLinks();
 
 		/*
