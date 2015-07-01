@@ -128,15 +128,20 @@ monarch.model.tree.prototype.addNode = function(node, parents){
 monarch.model.tree.prototype.getDescendants = function(parents){
     var self = this;
     
-    if (parents[0] != self.getRootID()){
-        throw new Error ("first id in parent list is not root");
-    }
-    parents.shift();
     // Start at root
     var descendants = self.getFirstSiblings();
     
     if (typeof parents != 'undefined' && parents.length > 0){
-        parents.forEach( function(r){
+        
+        if (parents[0] != self.getRootID()){
+            throw new Error ("first id in parent list is not root");
+        }
+        
+        parents.forEach( function(r,i){
+            //skip root
+            if (i == 0){
+              return;
+            }
             if (!r.indexOf(
                     descendants.map(function(i){return i.id;}) > -1)){
                 throw new Error ("Error in locating descendant given "

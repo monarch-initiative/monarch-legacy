@@ -483,8 +483,9 @@ monarch.dovechart.prototype.drawGraph = function (histogram, isFromCrumb, parent
     if (typeof parent != 'undefined'){
         self.parents.push(parent);
     }
+    
     var data = self.tree.getDescendants(self.parents);
-
+    
     self.groups = self.getGroups(data);
 
     self.checkData(data);
