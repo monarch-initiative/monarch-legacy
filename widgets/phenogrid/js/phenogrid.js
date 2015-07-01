@@ -2375,8 +2375,6 @@ function modelDataPointPrint(point) {
 		});
 
 		model_rects
-			.delay(20)
-			.style('opacity', '1.0')
 			.attr("y", function(d) {
 				return self._getAxisData(d.yID).ypos - 10; // rowid
 			})
