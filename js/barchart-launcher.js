@@ -1,3 +1,23 @@
+function makeDoveGraph(data){
+
+    var graphDiv = ".dove-container";
+    var tree = new monarch.model.tree(data);
+    graphObject = 
+        new monarch.dovechart(bbop.monarch.homePageConfig, tree, graphDiv);
+    
+    // Some testing for the ajax version
+    
+    // global_golr_conf, global_solr_url, and scigrap_url are global variables
+    // set in webapp.js using puptent
+    var gconf = new bbop.golr.conf(global_golr_conf);
+    var server = global_solr_url;
+    var golr_manager = new bbop.golr.manager.jquery(global_solr_url, gconf);
+    var scigraph_base = global_scigraph_url;
+    
+    var builder = new monarch.builder.tree_builder(golr_manager, scigraph_base);
+    builder.getOntology('HP:0000118', 1);
+}
+
 function makeHomePageGraph(data){
     /*var phenoGraph = 
         new bbop.monarch.datagraph(bbop.monarch.homePageConfig);
@@ -65,14 +85,6 @@ function makeTestGraph(data){
     var graphDiv = '.graph-container';
     this.makeResizableGraph(data,graphDiv,
             bbop.monarch.resizeConfig);
-}
-
-function makeDoveGraph(data){
-
-    var graphDiv = ".dove-container";
-    var tree = new monarch.model.tree(data);
-    graphObject = 
-        new monarch.dovechart(bbop.monarch.homePageConfig, tree, graphDiv);
 }
 
 function makeTwoSizeGraph(data,graphDiv,largeConfig,smallConfig,width,height){

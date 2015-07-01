@@ -43,6 +43,7 @@ monarch.dovechart = function(config, tree, html_div){
 
     self.level = 0;
     self.parents = [];
+    self.parents.push(tree.getRootID());
     self.html_div = html_div;
     self.tree = tree;
     

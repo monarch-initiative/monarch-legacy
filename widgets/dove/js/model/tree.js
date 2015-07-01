@@ -73,8 +73,8 @@ monarch.model.tree.prototype.setTree = function(data){
     self._data = data;
 };
 
-monarch.model.tree.prototype.setRoot = function(root){
-    this._data.root = root;
+monarch.model.tree.prototype.setRootID = function(root){
+    this._data.root.id = root;
 };
 
 //Return entire tree data 
@@ -94,10 +94,25 @@ monarch.model.tree.prototype.getFirstSiblings = function(){
     return this._data.root.children;
 };
 
-//Return entire tree data 
 //NOT IMPLEMENTED
-monarch.model.tree.prototype.addBranch = function(){
+monarch.model.tree.prototype.addBranch = function(branch, parents){
+    
+    
 };
+
+//Not implemented
+/*
+monarch.model.tree.prototype.addNode = function(node, parents){
+    var self = this;
+    var parent = self.getRootID();
+    
+    if (parents[0] != self.getRootID()){
+        throw new Error ("first id in parent list is not root");
+    }
+    parents.shift();
+    // Start at root
+    var descendants = self.getFirstSiblings();
+};*/
 
 /*
  * Function: getDescendants
@@ -113,7 +128,11 @@ monarch.model.tree.prototype.addBranch = function(){
 monarch.model.tree.prototype.getDescendants = function(parents){
     var self = this;
     
-    // Start with the first list of siblings
+    if (parents[0] != self.getRootID()){
+        throw new Error ("first id in parent list is not root");
+    }
+    parents.shift();
+    // Start at root
     var descendants = self.getFirstSiblings();
     
     if (typeof parents != 'undefined' && parents.length > 0){
@@ -160,3 +179,35 @@ monarch.model.tree.prototype.checkSiblings = function(siblings){
     });
     return self;
 };
+
+/* 
+ * Node sub-object
+ * TODO -  determine if this is needed
+ * 
+ * Namespace: monarch.model.tree
+ * 
+ */
+
+// Module and namespace checking.
+if (typeof monarch == 'undefined') { var monarch = {};}
+if (typeof monarch.model == 'undefined') { monarch.model = {};}
+if (typeof monarch.model.tree == 'undefined') { monarch.model.tree = {};}
+
+
+monarch.model.tree.node = function(id, label, children){
+    var self = this;
+    self.id = id;
+    
+    if (typeof label != 'undefined'){
+        self.label = label;
+    } else {
+        self.label = id;
+    }
+    
+    if (typeof children != 'undefined'){
+        self.children = children;
+    } else {
+        self.children = [];
+    }
+};
+  
