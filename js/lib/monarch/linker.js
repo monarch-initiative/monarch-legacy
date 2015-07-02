@@ -248,6 +248,10 @@ bbop.monarch.linker.prototype.set_anchor = function(id, args, xid, modifier){
             ' (go to source page) " + href="' + url + '">' + id + '</a>';
         }
         else if (!retval){
+            // We want to escape < >
+            hilite = hilite.replace(/\>/,'&gt;');
+            hilite = hilite.replace(/\</,'&lt;');
+            
             retval = '<a title="' + id +
             ' (go to the page for ' + label +
             ')" href="' + url + '">' + hilite + '</a>';
