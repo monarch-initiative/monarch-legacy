@@ -84,8 +84,9 @@ bbop.monarch.linker.prototype.url = function (id, xid, modifier, category){
             if(this.generic_item[xid]){
                 if (typeof category === 'undefined'){
                     throw new Error('category is missing!');
+                } else if (category != 'pathway'){
+                    retval = this.app_base + '/' + category + '/' + id;
                 }
-                retval = this.app_base + '/' + category + '/' + id;
             }
         }
     

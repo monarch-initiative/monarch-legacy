@@ -564,6 +564,20 @@
       "url_syntax" : "http://www.reactome.org/cgi-bin/eventbrowser_st_id?ST_ID=[example_id]",
       "datatype" : null
    },
+   "react" : {
+      "object" : "Identifier",
+      "name" : null,
+      "uri_prefix" : null,
+      "url_example" : "http://www.reactome.org/cgi-bin/eventbrowser_st_id?ST_ID=REACT_604",
+      "database" : "Reactome - a curated knowledgebase of biological pathways",
+      "example_id" : "REACT:604",
+      "generic_url" : "http://www.reactome.org/",
+      "fullname" : null,
+      "abbreviation" : "REACT",
+      "id" : null,
+      "url_syntax" : "http://www.reactome.org/cgi-bin/eventbrowser_st_id?ST_ID=REACT_[example_id]",
+      "datatype" : null
+   },
    "pfamb" : {
       "object" : "Accession",
       "uri_prefix" : null,
@@ -2918,6 +2932,21 @@
       "fullname" : null,
       "id" : null,
       "abbreviation" : "KEGG_PATHWAY",
+      "url_syntax" : "http://www.genome.jp/dbget-bin/www_bget?path:[example_id]",
+      "datatype" : null,
+      "image_path" : "/image/source-kegg.png"
+   },
+   "kegg-path" : {
+      "object" : "Pathway",
+      "uri_prefix" : null,
+      "name" : null,
+      "url_example" : "http://www.genome.jp/dbget-bin/www_bget?path:ot00020",
+      "database" : "KEGG Pathways Database",
+      "example_id" : "KEGG-path:ot00020",
+      "generic_url" : "http://www.genome.jp/kegg/pathway.html",
+      "fullname" : null,
+      "id" : null,
+      "abbreviation" : "KEGG-path",
       "url_syntax" : "http://www.genome.jp/dbget-bin/www_bget?path:[example_id]",
       "datatype" : null,
       "image_path" : "/image/source-kegg.png"
