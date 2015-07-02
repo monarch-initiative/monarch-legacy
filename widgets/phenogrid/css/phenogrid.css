@@ -101,6 +101,10 @@
 	font-weight:bold;
 }
 
+.cursor_pointer {
+cursor:pointer;
+}
+
 #pg_tip {
 	font-size: 10px;
 	margin-left:-20px;
