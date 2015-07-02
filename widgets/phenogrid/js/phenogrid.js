@@ -763,15 +763,15 @@ function modelDataPointPrint(point) {
 				.text("<- Model Scores"); // changed "<" to "<-" to make it look more like an arrow pointer - Joe
 
 			var tip	= self.state.svg
-				.append("svg:image")
-				.attr("xlink:href", this.state.scriptpath + "../image/greeninfo30.png")
-				.attr("transform", "translate(" + (self.state.axis_pos_list[2] + tipTextLength) + "," + faqY + ")")
+				.append("text")
+				.attr('font-family', 'FontAwesome')
+				.text(function(d) { 
+					return '\uF05A\n'; // Need to convert HTML/CSS unicode to javascript unicode - Joe
+				})
 				.attr("id", "modelscores")
-				.attr("x", 0)
-				.attr("y", 0)
-				.attr("width", self.state.faqImgSize)
-				.attr("height", self.state.faqImgSize)
-				.attr("class", "pg_faq_img")
+				.attr("x", self.state.axis_pos_list[2] + tipTextLength)
+				.attr("y", faqY + 20) // 20 padding - Joe
+				.style('cursor', 'hand')
 				.on("click", function(d) {
 					var name = "modelscores";
 					self._showDialog(name);
@@ -1635,19 +1635,15 @@ function modelDataPointPrint(point) {
 			.attr("y",this.state.gridTitleYOffset)
 			.text(titleText);
 
-		/*
-		 * foffset is the offset to place the icon at the right of the grid title.
-		 * ideally should do this by dynamically grabbing the width of mtitle,
-		 * but that doesn't seem to work.
-		 */
 		var faq	= this.state.svg
-			.append("svg:image")
-			.attr("xlink:href", this.state.scriptpath + "../image/greeninfo30.png")
-			.attr("x",xoffset+foffset)
-			.attr("id","pg_faqinfo")
-			.attr("width", this.state.faqImgSize)
-			.attr("height",this.state.faqImgSize)
-			.attr("class","pg_faq_img")
+			.append("text")
+			.attr('font-family', 'FontAwesome')
+			.text(function(d) { 
+				return '\uF05A\n'; // Need to convert HTML/CSS unicode to javascript unicode - Joe
+			})
+			.attr("x", xoffset+foffset)
+			.attr("y", this.state.gridTitleYOffset)
+			.style('cursor', 'hand')
 			.on("click", function(d) {
 				self._showDialog("faq");
 			});
@@ -3070,7 +3066,7 @@ function modelDataPointPrint(point) {
 	// create the html necessary for selecting the calculation
 	_createCalculationSelection: function () {
 		var optionhtml = "<span id='pg_calc_div'>Display"+
-			"<span id='pg_calcs'> <img class='pg_faq_img' src='" + this.state.scriptpath + "../image/greeninfo30.png'></span>" +
+			"<span id='pg_calcs'> <i class='fa fa-info-circle cursor_pointer'></i></span>" +
 			"<span id='calc_sel'><select id='pg_calculation'>";
 
 		for (var idx in this.state.similarityCalculation) {
@@ -3089,7 +3085,7 @@ function modelDataPointPrint(point) {
 	// create the html necessary for selecting the sort
 	_createSortPhenotypeSelection: function () {
 		var optionhtml ="<span id='pg_sort_div'>Sort Phenotypes" +
-			"<span id='pg_sorts'> <img class='pg_faq_img' src='" + this.state.scriptpath + "../image/greeninfo30.png'></span>" +
+			"<span id='pg_sorts'> <i class='fa fa-info-circle cursor_pointer'></i></span>" +
 			"<span><select id='pg_sortphenotypes'>";
 
 		for (var idx in this.state.phenotypeSort) {
