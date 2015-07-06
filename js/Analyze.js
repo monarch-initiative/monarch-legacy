@@ -749,7 +749,15 @@ function AnalyzeInit(uploaded_data){
     //Control instructions show/hide href
     $("#instructions-toggle").click(function(e){
         e.preventDefault();
-        $("#instructions").toggle(400);
+        // Weird hack to prevent one off alignment of tabs and jumbotron
+        // Default set to 1px in analyze.mustache
+        if ($("#instructions").is(':visible')) {
+            $(".jumbotron").css("padding-bottom", "1px");
+        } else {
+            $(".jumbotron").css("padding-bottom", "0px");
+        }
+        
+        $("#instructions").toggle(400); 
     });
     
 }
