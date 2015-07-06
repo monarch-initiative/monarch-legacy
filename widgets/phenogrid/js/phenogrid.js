@@ -140,7 +140,7 @@ function modelDataPointPrint(point) {
 		selectedCalculation: 0,
 		invertAxis: false,
 		hpoDepth: 10,	// Numerical value that determines how far to go up the tree in relations.
-		hpoDirection: "out",	// String that determines what direction to go in relations.  Default is "out".
+		hpoDirection: "OUTGOING",	// String that determines what direction to go in relations.  Default is "OUTGOING".
 		hpoTreeAmounts: 1,	// Allows you to decide how many HPO Trees to render.  Once a tree hits the high-level parent, it will count it as a complete tree.  Additional branchs or seperate trees count as seperate items
 							// [vaa12] DO NOT CHANGE UNTIL THE DISPLAY HPOTREE FUNCTIONS HAVE BEEN CHANGED. WILL WORK ON SEPERATE TREES, BUT BRANCHES MAY BE INACCURATE
 		selectedSort: "Frequency",
@@ -1841,6 +1841,8 @@ function modelDataPointPrint(point) {
 	_capitalizeString: function(word){
 		if (word === undefined) {
 			return "Undefined";
+		}  else if (word === null) {
+			return "";
 		} else {
 			return word.charAt(0).toUpperCase() + word.slice(1);
 		}
@@ -2362,9 +2364,7 @@ function modelDataPointPrint(point) {
 			.attr("x", function(d) {
 				return self.state.xScale(d.xID);
 			});
-		model_rects.exit().transition()
-			.style('opacity', '0.0')
-			.remove();
+		model_rects.exit().remove();
 	},
 
 	_highlightSpecies: function () {
@@ -3399,7 +3399,7 @@ function modelDataPointPrint(point) {
 				// Labels/Nodes are done seperately to reduce redunancy as there might be multiple phenotypes with the same related nodes
 				for (var i in nodes){
 					if(!nodes.hasOwnProperty(i)){break;}
-					if (!this.state.hpoCacheLabels.containsKey(nodes[i].id) && (nodes[i].id != "MP:0000001" && nodes[i].id != "UPHENO_0001001" && nodes[i].id != "UPHENO_0001002" && nodes[i].id != "HP:0000118" && nodes[i].id != "HP:0000001")){
+					if (!this.state.hpoCacheLabels.containsKey(nodes[i].id) && (nodes[i].id != "MP:0000001" && nodes[i].id != "OBO:UPHENO_0001001" && nodes[i].id != "OBO:UPHENO_0001002" && nodes[i].id != "HP:0000118" && nodes[i].id != "HP:0000001")){
 						this.state.hpoCacheLabels.put(nodes[i].id,this._capitalizeString(nodes[i].lbl));
 					}
 				}
@@ -3407,7 +3407,7 @@ function modelDataPointPrint(point) {
 				// Used to prevent breaking objects
 				for (var j in edges){
 					if(!edges.hasOwnProperty(j)){break;}
-					if (edges[j].obj != "MP:0000001" && edges[j].obj != "UPHENO_0001001" && edges[j].obj != "UPHENO_0001002" && edges[j].obj != "HP:0000118" && edges[j].obj != "HP:0000001"){
+					if (edges[j].obj != "MP:0000001" && edges[j].obj != "OBO:UPHENO_0001001" && edges[j].obj != "OBO:UPHENO_0001002" && edges[j].obj != "HP:0000118" && edges[j].obj != "HP:0000001"){
 						HPOInfo.push(edges[j]);
 					}
 				}
