@@ -745,4 +745,11 @@ function AnalyzeInit(uploaded_data){
             return {};
          }
     }
+    
+    //Control instructions show/hide href
+    $("#instructions-toggle").click(function(e){
+        e.preventDefault();
+        $("#instructions").toggle(400);
+    });
+    
 }
