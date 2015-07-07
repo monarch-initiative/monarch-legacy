@@ -39,6 +39,17 @@ def step_impl(context, text):
     except NoSuchElementException:
         assert True
     assert False
+    
+## The document body should not contain an internal hyperlink to {link}
+@then('the document should not contain an internal link to "{link}"')
+def step_impl(context, link):
+    webelts = context.browser.find_elements_by_tag_name('a')
+    isNotFound = True
+    for elt in webelts:
+        href = elt.get_attribute("href")
+        if href.rfind(context.target+link) != -1:
+            isNotFound = False
+    assert isNotFound == True
 
 ## A given class should contain a given piece of text/content. Not
 ## generably usable by non-dev test writers.
