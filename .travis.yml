@@ -10,7 +10,7 @@ script:
   - "sudo pip install selenium"
   - "sudo pip install behave"
   - "sudo pip install jsonpath-rw"
-  - "./start-server.sh"
+  - "./start-server.sh &"
   - "cd tests/behave"
   - "behave"
 
