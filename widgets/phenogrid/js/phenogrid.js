@@ -2192,7 +2192,6 @@ function modelDataPointPrint(point) {
 			.attr("y", yv)
 			.attr("x", wv)
 			.append("xhtml:body")
-			.attr("id", "pg_detail_text")
 			.html(htmltext);
 	},
 
