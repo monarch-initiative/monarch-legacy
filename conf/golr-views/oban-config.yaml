@@ -213,14 +213,14 @@ fields:
 
   - id: relation_closure
     description: "SubPropertyOf reflexive closure for association_relation"
-    display_name: Inferred relationship
+    display_name: Relationship
     type: string
     cardinality: multi
     property: []
 
   - id: relation_closure_label
     description: "labels for association_relation_closure"
-    display_name: Inferred relationship
+    display_name: Relationship
     type: string
     cardinality: multi
     property: []
@@ -511,7 +511,7 @@ fields:
 
   - id: evidence_closure_label
     description: "List of CURIES of all entities that form part of the evidence graph."
-    display_name: Evidence label closure
+    display_name: Evidence
     type: string
     cardinality: multi
     property: []
@@ -539,7 +539,7 @@ fields:
 
   - id: evidence_object_closure_label
     description: "List of CURIES of all entities that form part of the evidence closure."
-    display_name: Evidence label closure
+    display_name: Evidence
     type: string
     cardinality: multi
     property: []
