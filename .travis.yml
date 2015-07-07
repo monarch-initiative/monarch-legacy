@@ -7,9 +7,9 @@ install:
 # command to run tests
 script: 
   - "make test"
-  - "pip install selenium"
-  - "pip install behave"
-  - "pip install jsonpath-rw"
+  - "sudo pip install selenium"
+  - "sudo pip install behave"
+  - "sudo pip install jsonpath-rw"
   - "cd tests/behave"
   - "source bin/activate"
   - "behave"
