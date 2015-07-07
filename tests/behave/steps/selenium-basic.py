@@ -34,11 +34,13 @@ def step_impl(context, text):
 ## The document body should not contain a hyperlink with text.
 @then('the document should not contain link with "{text}"')
 def step_impl(context, text):
+    from selenium.common.exceptions import NoSuchElementException
+    isNotFound = False
     try:
         context.browser.find_element_by_link_text(text)
     except NoSuchElementException:
-        assert True
-    assert False
+        isNotFound = True
+    assert isNotFound
     
 ## The document body should not contain an internal hyperlink to {link}
 @then('the document should not contain an internal link to "{link}"')
