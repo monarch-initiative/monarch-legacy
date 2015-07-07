@@ -1,3 +1,5 @@
+[![Build Status](https://travis-ci.org/monarch-initiative/monarch-app.svg?branch=master)](https://travis-ci.org/monarch-initiative/monarch-app)
+
 ## About
 
 This repo contains the JS API and RingoJS application to drive the Monarch Initiative web interface.
