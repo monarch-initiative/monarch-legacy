@@ -3,6 +3,7 @@
 ####
 
 from behave import *
+from urlparse import urlparse
 
 ## The basic and critical "go to page".
 @given('I go to page "{page}"')
@@ -70,15 +71,13 @@ def step_impl(context, tabname, text):
     webelts = context.browser.find_elements_by_class_name("tab")
     for w in webelts:
         if w.text.rfind(tabname) != -1:
-            print(tabname)
-            print(w)
-            print(w.id)
-            print(w.text)
-            print(w.parent)
-            #parent_id = w.parent.id
             parent = w.find_element_by_xpath("..")
-            parent_id = parent.id
-            tab_area_elt = context.browser.find_element_by_id(parent_id)
-            assert tab_area_elt.text.rfind(text) != -1
+            tab_href = parent.get_attribute("href")
+            url = urlparse(tab_href)
+            tab_id = url.fragment
+            #print(tab_id)
+            tab_area_elt = context.browser.find_element_by_id(tab_id)
+            #print(tab_area_elt)
+            assert tab_area_elt and tab_area_elt.text.rfind(text) != -1
         else:
             assert 1 == 0
