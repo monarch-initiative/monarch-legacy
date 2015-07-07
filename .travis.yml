@@ -5,10 +5,11 @@ install:
   - "pip install jsonpath-rw"
 
 # command to run tests
-script: make test
-cd tests/behave
-source bin/activate
-behave
+script: 
+    - make test
+    - cd tests/behave
+    - source bin/activate
+    - behave
 
 after_success:
   coveralls
