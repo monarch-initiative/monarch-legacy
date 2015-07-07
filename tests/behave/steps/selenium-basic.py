@@ -31,6 +31,28 @@ def step_impl(context, text):
     webelt = context.browser.find_element_by_tag_name('html')
     assert webelt.text.rfind(text) != -1
 
+## The document body should not contain a hyperlink with text.
+@then('the document should not contain link with "{text}"')
+def step_impl(context, text):
+    from selenium.common.exceptions import NoSuchElementException
+    isNotFound = False
+    try:
+        context.browser.find_element_by_link_text(text)
+    except NoSuchElementException:
+        isNotFound = True
+    assert isNotFound
+    
+## The document body should not contain an internal hyperlink to {link}
+@then('the document should not contain an internal link to "{link}"')
+def step_impl(context, link):
+    webelts = context.browser.find_elements_by_tag_name('a')
+    isNotFound = True
+    for elt in webelts:
+        href = elt.get_attribute("href")
+        if href.rfind(context.target+link) != -1:
+            isNotFound = False
+    assert isNotFound == True
+
 ## A given class should contain a given piece of text/content. Not
 ## generably usable by non-dev test writers.
 @then('the class "{clss}" should contain "{text}"')
