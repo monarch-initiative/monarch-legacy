@@ -1,18 +1,18 @@
+language: javascript
+
 # command to install dependencies
 install:
-  - "pip install selenium"
-  - "pip install behave"
-  - "pip install jsonpath-rw"
+  - "./install.sh"
 
 # command to run tests
 script: 
-    - make test
-    - cd tests/behave
-    - source bin/activate
-    - behave
-
-after_success:
-  coveralls
+  - "make test"
+  - "pip install selenium"
+  - "pip install behave"
+  - "pip install jsonpath-rw"
+  - "cd tests/behave"
+  - "source bin/activate"
+  - "behave"
 
 # whitelist
 branches:
