@@ -1,16 +1,14 @@
-language: python
-python:
-  - "3.3"
-  - "3.4"
-
 # command to install dependencies
 install:
-  - "pip install -r requirements.txt"
-  - "pip install python-coveralls"
-  - "pip install ."
+  - "pip install selenium"
+  - "pip install behave"
+  - "pip install jsonpath-rw"
 
 # command to run tests
 script: make test
+cd tests/behave
+source bin/activate
+behave
 
 after_success:
   coveralls
@@ -23,5 +21,3 @@ branches:
 notifications:
   email:
     - kshefchek@gmail.com
-    - nlwashington@lbl.gov
-    - larawayb@ohsu.edu
