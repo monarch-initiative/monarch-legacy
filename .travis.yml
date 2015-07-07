@@ -1,11 +1,13 @@
 language: javascript
 
-addons:
-  firefox: "17.0"
-
 # command to install dependencies
 install:
   - "./install.sh"
+
+before_script:
+  - "export DISPLAY=:99.0"
+  - "sh -e /etc/init.d/xvfb start"
+  - "./start-server.sh &"
 
 # command to run tests
 script: 
@@ -13,7 +15,6 @@ script:
   - "sudo pip install selenium"
   - "sudo pip install behave"
   - "sudo pip install jsonpath-rw"
-  - "./start-server.sh &"
   - "cd tests/behave"
   - "TARGET=http://localhost:8080 behave"
 
