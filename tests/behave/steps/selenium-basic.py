@@ -61,4 +61,24 @@ def step_impl(context, clss, text):
     #print(title)
     webelt = context.browser.find_element_by_class_name(clss)
     assert webelt.text.rfind(text) != -1
-
+    
+## A given tab should contain a given piece of text/content. 
+@then('the "{tabname}" tab should contain "{text}"')
+def step_impl(context, tabname, text):
+    #print(context.browser.title)
+    #print(title)
+    webelts = context.browser.find_elements_by_class_name("tab")
+    for w in webelts:
+        if w.text.rfind(tabname) != -1:
+            print(tabname)
+            print(w)
+            print(w.id)
+            print(w.text)
+            print(w.parent)
+            #parent_id = w.parent.id
+            parent = w.find_element_by_xpath("..")
+            parent_id = parent.id
+            tab_area_elt = context.browser.find_element_by_id(parent_id)
+            assert tab_area_elt.text.rfind(text) != -1
+        else:
+            assert 1 == 0
