@@ -1,5 +1,8 @@
 #!/bin/sh
 
+echo "update_dependencies.sh is obsolete and should not be called. Exiting"
+exit
+
 # get/update phenogrid
 # eventually, if needed, figure out a way to make this nicely iterate over lists of pairs of
 # directory names and github repos.
