@@ -63,17 +63,6 @@
 	fill: #0F473E;
 }
 
-#pg_detail_text {
-	font-size: 10px;
-	padding: 8px;
-	/* background-color:#ea763b;*/
-	background-color: #A5D5D3;
-	border: 1px solid #858585;
-	-webkit-border-radius: 8px;
-	border-radius: 8px; 
-	-moz-border-radius: 8px;
-}
-
 #pg_hpoDiv {
 	text-align:left;
 }
@@ -164,10 +153,18 @@ cursor:pointer;
 	margin-left: 5px;
 }
 
+
 #pg_detail_content {
+	font-size: 10px;
+	padding: 8px;
+	/* background-color:#ea763b;*/
+	background-color: #A5D5D3;
+	border: 1px solid #858585;
+	-webkit-border-radius: 8px;
+	border-radius: 8px; 
+	-moz-border-radius: 8px;
 	z-index:500;
 }
-
 
 #pg_logo {
 	height:90px;
