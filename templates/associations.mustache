@@ -1,0 +1,66 @@
+ {{{includes.navbar}}}
+    <div class="monarch-container">
+        <div class="content">
+            <div class="wrapperforfooter">
+            <div class="jumbotron monarch-disease-light">
+                <div id="description">
+                    {{#alerts}}
+                    <div class="alert">
+                      {{{.}}}
+                    </div>
+                    {{/alerts}}
+                    <img id="monarch-logo" class="downloadline" src="/image/logo.png"/>
+                    <h1 class="downloadline">{{type}}: {{label}}</h1>
+                    <a href="{{{download.json}}}" class="btn btn-default downloadline downloadline-left monarch-phenotype-dark">JSON</a>
+                    <a class="downloadline btn btn-large btn-default btn-monarch-main monarch-feedback-dark"
+                            href="mailto:info@monarchinitiative.org">Your feedback welcome!</a>
+                     <p>
+                        {{#hasDef}}
+                        {{definitions}}<br/>
+                        {{/hasDef}}
+                        {{#hasComment}}
+                        {{comment}}<br/>
+                        {{/hasComment}}
+                        {{#hasHeritability}}
+                        {{heritability}}<br />
+                        {{/hasHeritability}}
+                        Source: {{{primary_xref}}}
+                    </p>
+                </div>
+                <div id="categories">
+                    <a href="#overview"><div id="initialtab" class="tab contenttab">Overview</div></a>
+                    <div class="tabcontainer"> 
+                      <div class="tabhover">Data associated with {{{id}}} </div>
+                      {{#associationNum}}
+                      <a href="#associations"><div class="tab contenttab">Associations ({{associationNum}})</div></a>
+                      {{/associationNum}}
+                      {{^associationNum}}
+                      <div class="tab greyed-out">{{{type}}} (0)</div>
+                      {{/associationNum}}
+                    </div>
+                </div>
+            </div>
+            <div id="complete-info">
+                <div id="overview" class="first category">
+                  <h3>IDs</h3>
+                    <div class="ids">
+                        <b>URI:</b> <a href="{{{uri}}}">{{{uri}}}</a>
+                    </div>
+                    {{#hasAka}}
+                    <div class="ids">
+                        <b>AKA:</b>
+                        {{aka}}
+                    </div>
+                    {{/hasAka}}
+                    {{#hasXrefs}}
+                    <div class="ids">
+                        <b>xref IDs:</b> {{{xrefs}}}
+                    </div>
+                    {{/hasXrefs}}
+                </div>
+            {{{includes.assoc_table}}}
+            </div>
+            </div> <!-- closes wrapperforfooter -->
+            {{{includes.footer}}}
+        </div>
+    </div>
