@@ -23,7 +23,7 @@
     "npm": ">= 2.7.4"
   },
   "dependencies": {
-    "phenogrid": "*",
+    "phenogrid": "git+https://github.com/DoctorBud/phenogrid.git#zy3-with-dist",
     "underscore": "1.8.3"
   },
   "devDependencies": {
