@@ -1,7 +1,13 @@
 {
   "name": "monarch-app",
   "version": "0.0.1",
-  "license": "BSD",
+  "license": "CC-BY-3.0",
+  "licenses": [
+    {
+      "type": "CC-BY-3.0",
+      "url": "https://creativecommons.org/licenses/by/3.0/us/legalcode"
+    }
+  ],
   "description": "Monarch web application and API.",
   "keywords": [
     "Monarch Initiative"
@@ -17,20 +23,26 @@
     "npm": ">= 2.7.4"
   },
   "dependencies": {
+    "phenogrid": "git+https://github.com/DoctorBud/phenogrid.git#zy3-with-dist",
     "underscore": "1.8.3"
   },
   "devDependencies": {
+    "browserify": "^10.2.4",
+    "browserify-shim": "^3.8.9",
     "chai": "^2.3.0",
     "del": "^1.1.1",
     "gulp": "^3.9.0",
     "gulp-bump": "^0.3.0",
+    "gulp-concat": "^2.6.0",
     "gulp-git": "^1.2.3",
     "gulp-jsdoc": "^0.1.4",
     "gulp-mocha": "^2.0.1",
     "gulp-rename": "^1.2.2",
+    "gulp-shell": "^0.4.2",
     "gulp-uglify": "^1.2.0",
     "js-yaml": "^3.3.1",
-    "map-stream": "^0.0.5"
+    "map-stream": "^0.0.5",
+    "vinyl-source-stream": "^1.1.0"
   },
   "bundleDependencies": [],
   "private": false,
