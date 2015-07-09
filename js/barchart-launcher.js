@@ -12,18 +12,17 @@ function makeDoveGraph(data){
     var gconf = new bbop.golr.conf(global_golr_conf);
     var server = global_solr_url;
     var golr_manager = new bbop.golr.manager.jquery(global_solr_url, gconf);
+    var personality = 'generic_association';
+    var species_list ["NCBITaxon:9606","NCBITaxon:10090","NCBITaxon:7955"];
+    var gene_filter = { field: 'subject_category', value: 'gene' };
     var scigraph_base = global_scigraph_url;
     
-    var builder = new monarch.builder.tree_builder(golr_manager, scigraph_base);
+    var builder = new monarch.builder.tree_builder(golr_manager, scigraph_base, species_list, filters);
     builder.getOntology('HP:0000118', 1);
 }
 
 function makeHomePageGraph(data){
-    /*var phenoGraph = 
-        new bbop.monarch.datagraph(bbop.monarch.homePageConfig);
-    phenoGraph.init(".graph-container",data);
 
-    this.setMinHeightWidth(phenoGraph,".graph-container");*/
     var graphDiv = '.graph-container';
     this.makeTwoSizeGraph(data,graphDiv,
             bbop.monarch.homePageConfig,
@@ -32,9 +31,6 @@ function makeHomePageGraph(data){
 }
 
 function makeDiseaseGeneGraph(data){
-    /*var disGraph = 
-        new bbop.monarch.datagraph(bbop.monarch.diseaseGeneConfig);
-    disGraph.init(".disease-gene-container",data);*/
 
     var graphDiv = ".disease-gene-container";
     this.makeTwoSizeGraph(data,graphDiv,
@@ -45,9 +41,6 @@ function makeDiseaseGeneGraph(data){
 
 function makePhenotypeAnnotationGraph(data){
 
-    /*var phenoGraph = 
-        new bbop.monarch.datagraph(bbop.monarch.phenotypeAnnotationConfig);
-    phenoGraph.init(".graph-container",data);*/
     var graphDiv = ".graph-container";
     this.makeTwoSizeGraph(data,graphDiv,
             bbop.monarch.homePageConfig,
@@ -56,10 +49,6 @@ function makePhenotypeAnnotationGraph(data){
 }
                   
 function makeDiseasePhenotypeGraph(data) {
-
-    /*var disPhenoGraph = 
-        new bbop.monarch.datagraph(bbop.monarch.diseasePhenotypeConfig);
-    disPhenoGraph.init(".disease-pheno-container",data);*/
     
     var graphDiv = ".disease-pheno-container";
     this.makeTwoSizeGraph(data,graphDiv,
@@ -69,9 +58,6 @@ function makeDiseasePhenotypeGraph(data) {
 }
 
 function makePhenoGenoGraph(data) {
-    /*var genoGraph = 
-        new bbop.monarch.datagraph(bbop.monarch.genotypePhenotypeConfig);
-    genoGraph.init(".pheno-geno-container",data);*/
     
     var graphDiv = ".pheno-geno-container";
     this.makeTwoSizeGraph(data,graphDiv,

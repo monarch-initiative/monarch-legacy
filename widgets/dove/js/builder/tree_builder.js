@@ -156,4 +156,13 @@ monarch.builder.tree_builder.prototype.processLabel = function(label){
     return label;
 };
 
+// Hardcoded taxon map
+monarch.builder.tree_builder.prototype.getTaxonMap = function(){
+    return {
+        "NCBITaxon:10090" : "Mouse",
+        "NCBITaxon:9606" : "Human",
+        "NCBITaxon:7955" : "Zebrafish"
+    };
+};
+
 
