@@ -46,7 +46,7 @@ monarch.dovechart = function(config, tree, html_div){
     self.parents.push(tree.getRootID());
     self.html_div = html_div;
     self.tree = tree;
-    
+
     self.tooltip = d3.select(html_div)
         .append("div")
         .attr("class", "tip");
@@ -628,9 +628,11 @@ monarch.dovechart.prototype.pickUpBreadcrumb = function(histogram,index,groups,b
     //set global level
     self.level = index;
     var parentLen = self.parents.length;
-    
-    self.parents.splice(index,(parentLen)); 
-    
+
+    // Remove all elements following (index+1).
+    // parentLen is greater than the number of elements remaining, but that's OK with splice()
+    self.parents.splice(index + 1,(parentLen));
+
     histogram.svg.selectAll(".tick").remove();
     self.drawGraph(histogram,isFromCrumb);
 
