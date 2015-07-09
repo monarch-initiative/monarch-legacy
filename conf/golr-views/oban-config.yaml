@@ -511,7 +511,7 @@ fields:
 
   - id: evidence_closure_label
     description: "List of CURIES of all entities that form part of the evidence graph."
-    display_name: Evidence
+    display_name: Evidence type
     type: string
     cardinality: multi
     property: []
