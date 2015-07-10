@@ -2,8 +2,7 @@ function makeDoveGraph(data){
 
     var graphDiv = ".dove-container";
     var tree = new monarch.model.tree(data);
-    graphObject = 
-        new monarch.dovechart(bbop.monarch.homePageConfig, tree, graphDiv);
+    
     
     // Some testing for the ajax version
     
@@ -23,6 +22,9 @@ function makeDoveGraph(data){
     var builder = new monarch.builder.tree_builder(golr_manager, scigraph_base);
     builder.getCountsForClass('HP:0000118', 'object_closure',species_list, gene_filter, personality);
     builder.getOntology('HP:0000118', 1);
+    
+    graphObject = 
+        new monarch.dovechart(bbop.monarch.homePageConfig, tree, graphDiv);
 }
 
 function makeHomePageGraph(data){

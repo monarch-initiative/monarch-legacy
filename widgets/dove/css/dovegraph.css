@@ -78,6 +78,17 @@
     padding-top: 1em;
 }
 
+#graph-message{
+	text-align: center;
+	padding-bottom:12px;
+    font-weight:bold;
+    font-size: 20px;
+}
+
+#windcatcher{
+    margin: 0 auto;
+}
+
 /* AJAX Spinner credit to https://github.com/oskargustafsson/CSS-spinners
    Code based on https://github.com/oskargustafsson/CSS-spinners/blob/440051e/style.css
 */
@@ -115,18 +126,18 @@
 }
 
 @-webkit-keyframes windcatcherBg {
-  0% { background-color: rgb(255, 0, 0); }
-  50% { background-color: rgb(150, 0, 0); }
-  51% { background-color: rgb(255, 100, 100); }
-  70% { background-color: rgb(255, 25, 25); }
-  100% { background-color: rgb(255, 0, 0); }
+  0% { background-color: rgb(68, 162, 147); }
+  50% { background-color: rgb(54,129,117); }
+  51% { background-color: rgb(133, 204, 192); }
+  70% { background-color: rgb(71, 169, 153); }
+  100% { background-color: rgb(68, 162, 147); }
 }
 @keyframes windcatcherBg {
-  0% { background-color: rgb(255, 0, 0); }
-  50% { background-color: rgb(150, 0, 0); }
-  51% { background-color: rgb(255, 100, 100); }
-  70% { background-color: rgb(255, 25, 25); }
-  100% { background-color: rgb(255, 0, 0); }
+  0% { background-color: rgb(68, 162, 147); }
+  50% { background-color: rgb(54,129,117); }
+  51% { background-color: rgb(133, 204, 192); }
+  70% { background-color: rgb(71, 169, 153); }
+  100% { background-color: rgb(68, 162, 147); }
 }
 
 .spinner.windcatcher {
@@ -137,8 +148,8 @@
 }
 
 .spinner.windcatcher .blade {
-  height: 0.5em;
-  background: red;
+  height: 0.4em;
+  background: rgb(68, 162, 147);
   margin-bottom: 0.1em;
   -webkit-animation: windcatcherSpin 4s linear infinite, windcatcherBg 2s linear infinite;
   animation: windcatcherSpin 4s linear infinite, windcatcherBg 2s linear infinite;
