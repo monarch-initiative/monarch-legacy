@@ -2745,16 +2745,6 @@ button.ui-button::-moz-focus-inner {
 /*
  *  Phenogrid related styling
  */
-#phenogrid_container{
-	font-family: Arial, Helvetica, sans-serif;
-	font-size: 14px;
-}
-
-#phenogrid_container .a_text {
-	text-anchor:end; /* If removed, Y legend will overlap to the grid */
-	opacity: 1.0;
-	font-size: 12px;
-}
 
 #pg_errmsg {
 	padding-top: 30px;
