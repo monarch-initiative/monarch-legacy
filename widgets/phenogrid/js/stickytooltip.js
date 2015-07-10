@@ -133,3 +133,7 @@ var stickytooltip={
 
 //stickytooltip.init("targetElementSelector", "tooltipcontainer")
 //stickytooltip.init("*[data-tooltip]", "mystickytooltip")
+
+
+// CommonJS format - Joe
+module.exports=stickytooltip;

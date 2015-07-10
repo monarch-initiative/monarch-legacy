@@ -1,8 +1,16 @@
-#phen_vis {
+/*
+ *  Phenogrid related styling
+ */
+#phenogrid_container{
 	font-family: Arial, Helvetica, sans-serif;
 	font-size: 14px;
 }
 
+#phenogrid_container .a_text {
+	text-anchor:end; /* If removed, Y legend will overlap to the grid */
+	opacity: 1.0;
+	font-size: 12px;
+}
 
 #pg_errmsg {
 	padding-top: 30px;
@@ -12,15 +20,15 @@
 }
 
 #pg_gridline {
-	fill: #ffffff;
+	fill: #fff;
 	fill-opacity: 0;
 	stroke: #e5e5e5;
 	stroke-width: 1;
 }
 
 #pg_globalview {
-	fill: #ffffff;
-	stroke: #000000;
+	fill: #fff;
+	stroke: #000;
 	stroke-width: 2;
 }
 
@@ -30,17 +38,18 @@
 	/*stroke:#ea763b;*/
 	stroke:#4CA092;
 	stroke-width: 2;
-	fill: #4CA092;   //#ffffff;
-	fill-opacity: 0.1;    //0.05;
+	fill: #4CA092;   /*#fff;*/
+	fill-opacity: 0.1;    /*0.05;*/
 }
 
-/*.pg_gene_accent {
-	/*stroke:#ea763b;*/
+/*
+.pg_gene_accent {
 	stroke:#4CA092;
 	stroke-width: 2;
 	fill: #4CA092;
 	fill-opacity: 0.1;
-}*/
+}
+*/
 
 .pg_scroll_text {
 	font-size: 9px;
@@ -52,27 +61,11 @@
 	float:left;
 }
 
-#phen_vis .a_text {
-	text-anchor:end;
-	opacity: 1.0;
-	font-size: 12px;
-}
-
 #pg_scorelist {
 	font-size:10px;
 	fill: #0F473E;
 }
 
-#pg_hpoDiv {
-	text-align:left;
-}
-
-#pg_svg_area {
-	float:left;
-	margin-top: -35px;
-	padding-top: 35px;
-	/*height:500px;  !important;*/
-}
 
 #pg_selectionrect {
 	fill: grey;
@@ -87,18 +80,6 @@
 	width: 80px;
 	height:10px;
 	font-size:10px;
-	font-weight:bold;
-}
-
-.cursor_pointer {
-cursor:pointer;
-}
-
-#pg_tip {
-	font-size: 10px;
-	margin-left:-20px;
-	stroke-width: 1px;
-	stroke:#25349A;
 }
 
 #pg_diseasetitle {
@@ -113,29 +94,28 @@ cursor:pointer;
 	font-weight:bold;
 }
 
+#pg_org_div {
+	float: left;
+	width:140px;
+}
 
 #pg_sort_div {
 	float: left;
 	width:180px;
-	font-weight:bold;
 }
 
 #pg_calc_div {
 	float: left;
 	width:120px;
-	font-weight:bold;
 }
 
-#pg_org_div {
-	float: left;
-	width:200px;
-	font-weight:bold;
+label.pg_ctrl_label{
+	font-weight:700;
 }
 
 #pg_axis_div {
 	float: left;
 	width: 120px;
-	font-weight:bold;
 }
 
 
@@ -144,12 +124,6 @@ cursor:pointer;
 #pg_sortphenotypes,
 #pg_axisflip {
 	margin-top: 5px; 
-	margin-left: 5px;
-}
-
-
-.pg_faq_img {
-	height:15px;
 	margin-left: 5px;
 }
 
@@ -172,8 +146,8 @@ cursor:pointer;
 	display:none;
 	position:absolute;
 	display:none;
-	border:1px solid black; /*Border around tooltip*/
-	background:white;
+	border:1px solid #000;
+	background:#fff;
 	z-index:3000;
 	font:10px Arial;
 }
@@ -187,42 +161,20 @@ cursor:pointer;
 	font:bold 11px Arial;
 }
 
+
 #pg_logo {
 	height:90px;
 }
 
-/** jQDialog styles */
-.ui-dialog-titlebar {
-	background-color:#253494;
-	color:#FFFFFF;
-}
+/** Overwrite jquery-ui default style */
 
 .ui-dialog-content {
 	font-size:11px;
 	font-family: arial;
-	color:#000000;
+	color:#000;
 }
 
-.ui-dialog-content a {
-	color: #253494;
-}
-
-.ui-dialog-buttonpane {
-	background-color: #253494;
-}
-
-.ui-dialog-buttonset {
-	background-color: #25349A;
-}
-
-.ui-dialog-osx {
-	-webkit-border-radius: 0 0 8px 8px;
-	border-radius: 0 0 8px 8px; 
-	border-width: 3px;
-	-moz-border-radius: 0 0 8px 8px;
-}
-
-/** end jquery stuff*/
+/* End jquery-ui stuff*/
 
 /*#redtext,
 #bluetext,
@@ -256,9 +208,11 @@ cursor:pointer;
 }
 
 #phenogrid_controls {
-	float:left;
-	clear:both;
 	margin-left:10px;
+}
+
+.cursor_pointer {
+cursor:pointer;
 }
 
 #pg_svg_container {
@@ -270,49 +224,9 @@ cursor:pointer;
 	font-size:1.2em;
 }
 
-
-/** for spinner*/
-.cube1,
-.cube2 {
-	background-color: #333;
-	width: 10px;
-	height: 10px;
-	top: 100;
-	left: 300;
-
-	-webkit-animation: cubemove 1.8s infinite ease-in-out;
-	animation: cubemove 1.8s infinite ease-in-out;
-}
-
-.cube2 {
-	-webkit-animation-delay: -0.9s;
-	animation-delay: -0.9s;
-}
-
-@-webkit-keyframes cubemove {
-	25% { -webkit-transform: translateX(42px) rotate(-90deg) scale(0.5) }
-	50% { -webkit-transform: translateX(42px) translateY(42px) rotate(-180deg) }
-	75% { -webkit-transform: translateX(0px) translateY(42px) rotate(-270deg) scale(0.5) }
-	100% { -webkit-transform: rotate(-360deg) }
-}
-
-@keyframes cubemove {
-	25% { 
-		transform: translateX(42px) rotate(-90deg) scale(0.5);
-		-webkit-transform: translateX(42px) rotate(-90deg) scale(0.5);
-	} 50% { 
-		transform: translateX(42px) translateY(42px) rotate(-179deg);
-		-webkit-transform: translateX(42px) translateY(42px) rotate(-179deg);
-	} 50.1% { 
-		transform: translateX(42px) translateY(42px) rotate(-180deg);
-		-webkit-transform: translateX(42px) translateY(42px) rotate(-180deg);
-	} 75% { 
-		transform: translateX(0px) translateY(42px) rotate(-270deg) scale(0.5);
-		-webkit-transform: translateX(0px) translateY(42px) rotate(-270deg) scale(0.5);
-	} 100% { 
-		transform: rotate(-360deg);
-		-webkit-transform: rotate(-360deg);
-	}
+/* Cursor for mini map */
+.draggable{
+cursor:move;
 }
 
 #unmatchedimg,
@@ -335,41 +249,18 @@ cursor:pointer;
 	clear: both;
 }
 
-.faqdialog {
-	background: white;
+/* Background color of jquery-ui dialog */
+.faqdialog_bg_color {
+background-color: #fff !important;
 }
 
-.expandbtn {
-    padding: 0;
-    border: none;
-    background: transparent url('/widgets/phenogrid/image/ExpandAllIcon.png') no-repeat;
-    margin-left: auto;
-    margin-right: auto;
-    width: 18px;
-    height: 17px;
-	background-color: white;
-	//box-shadow: 1px 1px 1px #888888;
+.HPO_icon{
+margin-left:5px;
 }
 
-.collapsebtn {
-    padding: 0;
-    border: none;
-    background: transparent url('/widgets/phenogrid/image/CollapseAllIcon.png') no-repeat;
-    margin-left: auto;
-    margin-right: auto;    
-    width: 18px;
-    height: 17px;
-	background-color: white;
-	//box-shadow: 1px 1px 1px #888888;	
+em.HPO_tree_indent{
+width:12px;
+float:left;
+display:inline-block;
+height:1px;
 }
-
-.dialogBG {
-	background-color: white;
-}
-
-/*.spinner {
-	background: url('/widgets/phenogrid/image/throbber.gif') no-repeat;
-	top: 10px;
-	left: 100px;
-	position: absolute;
-}*/

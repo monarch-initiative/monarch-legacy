@@ -100,6 +100,30 @@ fields:
     property: []
     searchable: true
     type: string
+  - cardinality: multi
+    description: List of CURIES of all entities that form part of the evidence graph.
+    display_name: Evidence
+    id: evidence_object
+    property: []
+    type: string
+  - cardinality: multi
+    description: evidence object label
+    display_name: Evidence
+    id: evidence_object_label
+    property: []
+    type: string
+  - cardinality: multi
+    description: Closure for evidence object
+    display_name: Evidence
+    id: evidence_object_closure
+    property: []
+    type: string
+  - cardinality: multi
+    description: List of CURIES of all entities that form part of the evidence closure.
+    display_name: Evidence
+    id: evidence_object_closure_label
+    property: []
+    type: string
   - description: A unique identifier (CURIE) for the association. Optional.
     display_name: Association id
     id: id
@@ -402,32 +426,8 @@ fields:
     type: string
   - cardinality: multi
     description: List of CURIES of all entities that form part of the evidence graph.
-    display_name: Evidence
-    id: evidence_closure_label
-    property: []
-    type: string
-  - cardinality: multi
-    description: List of CURIES of all entities that form part of the evidence graph.
-    display_name: Evidence from
-    id: evidence_object
-    property: []
-    type: string
-  - cardinality: multi
-    description: evidence object label
-    display_name: Evidence label
-    id: evidence_object_label
-    property: []
-    type: string
-  - cardinality: multi
-    description: Closure for evidence object
     display_name: Evidence type
-    id: evidence_object_closure
-    property: []
-    type: string
-  - cardinality: multi
-    description: List of CURIES of all entities that form part of the evidence closure.
-    display_name: Evidence
-    id: evidence_object_closure_label
+    id: evidence_closure_label
     property: []
     type: string
   - cardinality: multi

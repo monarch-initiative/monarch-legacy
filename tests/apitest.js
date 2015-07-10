@@ -89,7 +89,7 @@ exports.testFetchAssociations = function() {
     diseaseIds.forEach(
             function(id) {
                 console.log("Fetching:"+id);
-                engine.fetchAssociations(id, 'subject_closure', filter, 10000);
+                engine.fetchAssociations(id, 'subject_closure', filter, 1000);
                 engine.fetchAssociations(id, 'object_closure');
                 engine.fetchAssociations(id, 'subject_closure', null, 10);
             }
@@ -98,7 +98,7 @@ exports.testFetchAssociations = function() {
     geneIds.forEach(
             function(id) {
                 console.log("Fetching:"+id);
-                engine.fetchAssociations(id, 'subject_closure', filter, 10000);
+                engine.fetchAssociations(id, 'subject_closure', filter, 1000);
                 engine.fetchAssociations(id, 'object_closure');
                 engine.fetchAssociations(id, 'subject_closure', null, 10);
             }
@@ -107,7 +107,7 @@ exports.testFetchAssociations = function() {
     phenotypeIds.forEach(
             function(id) {
                 console.log("Fetching:"+id);
-                engine.fetchAssociations(id, 'subject_closure', filter, 10000);
+                engine.fetchAssociations(id, 'subject_closure', filter, 1000);
                 engine.fetchAssociations(id, 'object_closure');
                 engine.fetchAssociations(id, 'subject_closure', null, 10);
             }

@@ -126,3 +126,31 @@ fields:
     cardinality: multi
     property: []
     searchable: true
+
+  - id: evidence_object
+    description: "List of CURIES of all entities that form part of the evidence graph."
+    display_name: Evidence
+    type: string
+    cardinality: multi
+    property: []
+
+  - id: evidence_object_label
+    description: "evidence object label"
+    display_name: Evidence
+    type: string
+    cardinality: multi
+    property: []
+
+  - id: evidence_object_closure
+    description: "Closure for evidence object"
+    display_name: Evidence
+    type: string
+    cardinality: multi
+    property: []
+
+  - id: evidence_object_closure_label
+    description: "List of CURIES of all entities that form part of the evidence closure."
+    display_name: Evidence
+    type: string
+    cardinality: multi
+    property: []

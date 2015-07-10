@@ -1,56 +1,87 @@
+#1. Make sure npm installed
 
-#Phenogrid installation
+Before you get started, you will need to make sure you have npm installed first. npm is bundled and installed automatically with node.js. If not, you need to install them.
 
-Please see the instructions in index.html to see how to install the
-Phenogrid widget.
+```
+curl -sL https://rpm.nodesource.com/setup | bash -
 
-#Phenogrid configuration
+yum install -y nodejs
+```
 
-The phenogrid can be configured via a variety of options contained in
-the ./js/phenogrid_config.js file. This file must be loaded as a
-separate Javascript file in every page that uses the phenogrid. Please
-be sure that this file is loaded _before_ the main ./js/phenogrid.js file.
+#2. Install phenogrid widget
 
-Options that can be modified include
+Now it's time to download and extract our phenogrid widget. In the phenogrid package directory, just run
 
-* *serverURL* - the base url of the server/site from which the widget
-   will be served. Should usually left to be null, in which case the
-   server url be inferred from the code.
+```
+npm install
+```
 
-* *selectedCalculation*: an integer value describing the initial
-   similarity  measure that will be used. Other values can always be
-   selected via the appropriate pulldown. Possible values include:
-   
-  * 0 - for Similarity (default)
-  * 1 - Ratio (q)
-  * 2 - Uniqueness
-  * 3 - Ratio (t)
+Sometimes, it requires root access to for the installation, just run the following instead
 
-* *selectedSort* - the initial sort order. As with the calculation,
-   these choices may be adjusted via a pulldown. Values include
-   Frequency, Alphabetic, and Frequency and Rarity. Frequency is the default.
+```
+sudo npm install
+```
 
-* *targetSpeciesList* - a list of "name", "taxon" pairs indicating the
-   organisms to be shown in the phenogrid. "Name" should be the
-   traditional latin name, while "taxon" should be the NCBI taxon
-   number.  Default value includes Homo sapiens, Mus musculus, Danio
-   rerio, and Drosophila melanogaster
+This will create a local `/node_modules` folder in the phenogrid root directory, and download/install all the dependencies(jquery, jquery-ui, d3, and jshashtable) and tools (gulp, browserify, etc.) into the local `/node_modules` folder.
 
+#3. Run gulp to build this widget
 
-* *targetSpeciesName* The initial species name to be displayed, or
-   "Overview" if the multi-species overview is desired.   Must be one
-   of the species included in the *targetSpeciesList*. Default is "overview".
+```
+gulp browserify-byo
+gulp create-bundle
+```
 
-* *refSpecies* the reference species that provides the comparison
-   point for similarity scoring.  Must be one of the species included
-   in the *targetSpeciesList*. Defaults to "Homo sapiens".
+This command will use browserify to bundle up phenogrid core and its dependencies except jquery. And the target file `phenogrid-bundle.js` will be put into the newly created `dist` folder.
 
+#4. Add phenogrid in your target page
 
-The Phenogrid is implemented as a jQuery UI Widget. However, due to
-the overhead of refresh, we do not automatically update when options
-are set. If you wish to set options using the configuration file,
-those options will be read and processed upon initialization. For any
-other changes, you should be able to use *setOption* or *setOptions*
-followed by a manual call to the *reDraw* method.
+In the below sample code, you will see how to use phenogrid as a embeded widget in your HTML.
 
+````html
+<html>
+<head>
+<title>Monarch Phenotype Grid Widget</title>
 
+<script src="config/phenogrid_config.js"></script>
+<script src="dist/phenogrid-bundle.js"></script>
+
+<link rel="stylesheet" type="text/css" href="dist/phenogrid-bundle.css">
+
+<script>
+var phenotypes = [
+	{ id:"HP:0000726", observed:"positive"},
+	{ id:"HP:0000746", observed:"positive"},
+	{ id:"HP:0001300", observed:"positive"},
+	{ id:"HP:0002367", observed:"positive"},
+	{ id:"HP:0000012", observed:"positive"},
+	{ id:"HP:0000716", observed:"positive"},
+	{ id:"HP:0000726", observed:"positive"},
+	{ id:"HP:0000739", observed:"positive"},
+	{ id:"HP:0001332", observed:"positive"},
+	{ id:"HP:0001347", observed:"positive"},
+	{ id:"HP:0002063", observed:"positive"},
+	{ id:"HP:0002067", observed:"positive"},
+	{ id:"HP:0002172", observed:"positive"},
+	{ id:"HP:0002322", observed:"positive"},
+	{ id:"HP:0007159", observed:"positive"}
+];	
+
+$(document).ready(function(){
+	$("#phenogrid_container").phenogrid({
+		serverURL :"http://beta.monarchinitiative.org", 
+		phenotypeData: phenotypes,
+		targetSpeciesName: "Mus musculus" 
+	});
+});
+
+</script>
+
+</head>
+
+<body>
+
+<div id="phenogrid_container"></div>
+
+</body>
+</html>
+````

@@ -80,14 +80,16 @@ phenotype: function(tooltip) {
 			hpoData += "<strong>HPO Structure:</strong>" + hpoTree;
 		}
 	}
-	if (!tooltip.parent.state.preloadHPO){
+	
+	// Used font awesome for expand/collapse buttons - Joe
+	if ( ! tooltip.parent.state.preloadHPO){
 		if (hpoExpand){
-			returnHtml = "<br/><br/>Click button to <b>collapse</b> HPO info &nbsp;&nbsp;";
-			returnHtml += "<button class=\"collapsebtn\" type=\"button\" onClick=\"self._collapseHPO('" + tooltip.id + "')\"></button>";
+			returnHtml = "<br/><br/>Click icon to <b>collapse</b> HPO info";
+			returnHtml += "<i class=\"HPO_icon fa fa-minus-circle cursor_pointer \" onClick=\"self._collapseHPO('" + tooltip.id + "')\"></i>";
 			returnHtml += hpoData;
 		} else {
-			returnHtml = "<br/><br/>Click button to <b>expand</b> HPO info &nbsp;&nbsp;";
-			returnHtml += "<button class=\"expandbtn\" type=\"button\" onClick=\"self._expandHPO('" + tooltip.id + "')\"></button>";
+			returnHtml = "<br/><br/>Click icon to <b>expand</b> HPO info";
+			returnHtml += "<i class=\"HPO_icon fa fa-plus-circle cursor_pointer \" onClick=\"self._expandHPO('" + tooltip.id + "')\"></i>";
 		}
 	}
 	else {
@@ -146,3 +148,6 @@ genotype: function(tooltip) {
 }
 
 };
+
+// CommonJS format - Joe
+module.exports = TooltipRender;
