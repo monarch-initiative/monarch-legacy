@@ -77,3 +77,78 @@
 .datagraph-caption {
     padding-top: 1em;
 }
+
+/* AJAX Spinner credit to https://github.com/oskargustafsson/CSS-spinners
+   Code based on https://github.com/oskargustafsson/CSS-spinners/blob/440051e/style.css
+*/
+
+/* GENERAL */
+
+@-webkit-keyframes fade {
+  from { opacity: 1; }
+  to { opacity: 0.2; }
+}
+@keyframes fade {
+  from { opacity: 1; }
+  to { opacity: 0.2; }
+}
+
+@-webkit-keyframes rotate {
+  from { -webkit-transform: rotate(0deg); }
+  to { -webkit-transform: rotate(360deg); }
+}
+@keyframes rotate {
+  from { transform: rotate(0deg); }
+  to { transform: rotate(360deg); }
+}
+
+
+/* WIND CATCHER */
+
+@-webkit-keyframes windcatcherSpin {
+  from { -webkit-transform: rotateY(0deg) rotateX(-20deg); }
+  to { -webkit-transform: rotateY(360deg) rotateX(-20deg); }
+}
+@keyframes windcatcherSpin {
+  from { transform: rotateY(0deg) rotateX(-20deg); }
+  to { transform: rotateY(360deg) rotateX(-20deg); }
+}
+
+@-webkit-keyframes windcatcherBg {
+  0% { background-color: rgb(255, 0, 0); }
+  50% { background-color: rgb(150, 0, 0); }
+  51% { background-color: rgb(255, 100, 100); }
+  70% { background-color: rgb(255, 25, 25); }
+  100% { background-color: rgb(255, 0, 0); }
+}
+@keyframes windcatcherBg {
+  0% { background-color: rgb(255, 0, 0); }
+  50% { background-color: rgb(150, 0, 0); }
+  51% { background-color: rgb(255, 100, 100); }
+  70% { background-color: rgb(255, 25, 25); }
+  100% { background-color: rgb(255, 0, 0); }
+}
+
+.spinner.windcatcher {
+  width: 4em;
+  perspective: 50em;
+  -webkit-animation: rotate 4s linear infinite;
+  animation: rotate 4s linear infinite;
+}
+
+.spinner.windcatcher .blade {
+  height: 0.5em;
+  background: red;
+  margin-bottom: 0.1em;
+  -webkit-animation: windcatcherSpin 4s linear infinite, windcatcherBg 2s linear infinite;
+  animation: windcatcherSpin 4s linear infinite, windcatcherBg 2s linear infinite;
+}
+
+.spinner.windcatcher .blade:nth-child(1) { -webkit-animation-delay: 0s; animation-delay: 0s; }
+.spinner.windcatcher .blade:nth-child(2) { -webkit-animation-delay: 0.25s; animation-delay: 0.25s; }
+.spinner.windcatcher .blade:nth-child(3) { -webkit-animation-delay: 0.5s; animation-delay: 0.5s; }
+.spinner.windcatcher .blade:nth-child(4) { -webkit-animation-delay: 0.75s; animation-delay: 0.75s; }
+.spinner.windcatcher .blade:nth-child(5) { -webkit-animation-delay: 1s; animation-delay: 1s; }
+.spinner.windcatcher .blade:nth-child(6) { -webkit-animation-delay: 1.25s; animation-delay: 1.25s; }
+.spinner.windcatcher .blade:nth-child(7) { -webkit-animation-delay: 1.5s; animation-delay: 1.5s; }
+.spinner.windcatcher .blade:nth-child(8) { -webkit-animation-delay: 1.75s; animation-delay: 1.75s; }
