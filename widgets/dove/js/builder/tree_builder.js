@@ -120,7 +120,7 @@ monarch.builder.tree_builder.prototype.getCountsForClass = function(id, id_field
     var register_id = 'data_counts_'+id;
     
     self.golr_manager.register('search', register_id, makeDataNode);
-    self.golr_manager.search();
+    //self.golr_manager.search();
     
 };
 
