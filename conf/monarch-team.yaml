@@ -26,7 +26,7 @@ institutions:
       - name: Julie McMurry
         picture: /image/team/JulieMcMurry.jpg
         title: Software Program Manager
-        alumni: false,
+        alumni: false
         bio: Julie specializes in ontology-aware tools that facilitate synthesis research. She holds a BA in Biology (Rhode Island College), with post-bac training in Computer Science (Harvard Extension School), as well as Immunology & Virology (Brown University). She holds a MSc in Public Health from the University of London.
       - name: Bryan Laraway
         title: Data Wrangler
