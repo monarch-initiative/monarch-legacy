@@ -45,7 +45,7 @@ institutions:
         picture: /image/team/ChrisMungall.jpg
         title: Monarch PI
         alumni: false
-        bio: "Dr. Mungall is currently a PI of the Monarch Initiative. He has a BSc in Computer Science from the University of Edinburgh and a Ph.D. from University of Edinburgh in Biological Sciences. He is currently the PI of the Monarch Initiative and his current research focuses on the use of informatics techniques and tools to integrate and interpret life science data across a variety of domains. In particular, he is interested in connecting biological models at multiple scales: the biochemical, molecular, cellular, organismal and ecological."
+        bio: Dr. Mungall is currently a PI of the Monarch Initiative. He has a BSc in Computer Science from the University of Edinburgh and a Ph.D. from University of Edinburgh in Biological Sciences. He is currently the PI of the Monarch Initiative and his current research focuses on the use of informatics techniques and tools to integrate and interpret life science data across a variety of domains. In particular, he is interested in connecting biological models at multiple scales: the biochemical, molecular, cellular, organismal and ecological.
       - name: Suzanna Lewis
         picture: /image/team/SuzannaLewis.jpg
         title: Genomics
@@ -119,11 +119,11 @@ institutions:
         title: Monarch PI
         bio: Dr. Hocheiser is currently a PI of the Monarch Initiative. He has BS and MS in Computer Science and Engineering from MIT and a Ph.D. in Computer Science from University of Maryland. His research interests lie at the intersection of biomedical informatics and human-computer interaction (HCI). His ongoing research efforts involve the application of contextual inquiry, human-centered design, information visualization, and other HCI techniques to challenges in collaborative bioinformatics and clinical informatics.
       - name: Chuck Borromeo
-        alumni: false
+        alumni: true
         title: Interface Architect
         bio: Chuck is a programmer on a wide range of projects (e.g. FaceBase, Monarch, Ontology for Craniofacial Development and Malformations) in the Department of Biomedical Informatics. His responsibilities include leading the FaceBase development team and providing technical solutions on other projects. In the past, Chuck led the development of the Resource Discovery System (RDS) an application tracking 1500 scientific resources from several NIH research programs.
       - name: Jeremy Espino
-        alumni: false
+        alumni: true
         title: Senior Research Scientist, Department of Biomedical Informatics
         bio: Jeremy is trained in General Medicine, Medical Informatics and Intelligent Systems.  His claim to fame is programming the first real-time disease surveillance system in 1999—the Real-time Outbreak and Disease Surveillance System (RODS).  RODS and its open source derivatives have subsequently been deployed in over 16 states and a couple of countries.  He has also managed the IT infrastructure of the National Retail Monitor which provides over-the-counter medication sales data from over 33,000 retail stores to health departments across the U.S..  In his free time he enjoys hacking micro controllers, piano and 3d printing.
   - id: charite
