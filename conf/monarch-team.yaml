@@ -45,7 +45,7 @@ institutions:
         picture: /image/team/ChrisMungall.jpg
         title: Monarch PI
         alumni: false
-        bio: Dr. Mungall is currently a PI of the Monarch Initiative. He has a BSc in Computer Science from the University of Edinburgh and a Ph.D. from University of Edinburgh in Biological Sciences. He is currently the PI of the Monarch Initiative and his current research focuses on the use of informatics techniques and tools to integrate and interpret life science data across a variety of domains. In particular, he is interested in connecting biological models at multiple scales: the biochemical, molecular, cellular, organismal and ecological.
+        bio: "Dr. Mungall is currently a PI of the Monarch Initiative. He has a BSc in Computer Science from the University of Edinburgh and a Ph.D. from University of Edinburgh in Biological Sciences. He is currently the PI of the Monarch Initiative and his current research focuses on the use of informatics techniques and tools to integrate and interpret life science data across a variety of domains. In particular, he is interested in connecting biological models at multiple scales: the biochemical, molecular, cellular, organismal and ecological."
       - name: Suzanna Lewis
         picture: /image/team/SuzannaLewis.jpg
         title: Genomics
