@@ -31,6 +31,12 @@
           "bio": "Bryan has a BA from Reed College in Biology, post-bac training in MIS from Oregon Institute of Technology, and is currently a Master’s student in Bioinformatics &amp; Computational Biology at Oregon Health &amp; Science University. He is currently a Data Wrangler for the Monarch Initiative, assisting with data ingestion."
         },
         {
+          "name": "Julie McMurry",
+          "title": "Software Program Manager",
+          "alumni": false,
+          "bio": "Julie specializes in ontology-aware tools that facilitate synthesis research. She holds a BA in Biology (Rhode Island College), with post-bac training in Computer Science (Harvard Extension School), as well as Immunology & Virology (Brown University). She holds a MSc in Public Health from the University of London."
+        },
+        {
           "name": "Kent Shefchek",
           "title": "Bioinfomatics Software Engineer",
           "alumni": false,
