@@ -9,17 +9,25 @@ institutions:
     website: http://ohsu.edu
     people:
       - name: Melissa Haendel
+        picture: /image/team/MelissaHaendel.jpg
         title: Monarch PI
         alumni: false
         bio: Dr. Haendel is currently a PI of the Monarch Initiative. She has a BA from Reed College in Chemistry and a Ph.D. in Neuroscience from the University of Wisconsin, Madison. She is currently a PI of the Monarch Initiative, with the aim of providing integrated access to model systems phenotype-genotype data for the purposes of disease hypothesis exploration. She also participates in development of the eagle-i and CTSAconnect ontologies, designed to collect and disseminate information about biomedical resources and enable research profiling. Her research interests are in using ontologies to promote synthetic science though connections within biomedical data, to utilize information science during the course of research and its publication, and to enable scientific reproducibility.
       - name: Nicole Vasilevsky
+        picture: /image/team/NicoleVasilevsky.jpg
         title: Project Manager
         alumni: false
         bio: Dr. Vasilevsky has a BA in Biology from Reed College and a Ph.D. in Cell Biology from OHSU. Nicole is the project manager of the OHSU Ontology Development Group and works on the Monarch project as the project manager and as a data curator. In addition, Nicole works on the eagle-i Network and the CTSAconnect project.
       - name: Matthew Brush
+        picture: /image/team/MatthewBrush.jpg
         title: Ontologist
         alumni: false
         bio: Dr. Brush has a BS from Notre Dame and a Ph.D.in Cell Biology from Duke University, and is a former Biomedical Informatics Fellow at Oregon Health and Science University. He is the lead developer of the Genotype Ontology (GENO) for Monarch, and coordinates its use in ingest of genotype and phenotype data. In addition, he has contributed to development of several other ontologies that will be employed in the Monarch system, including the Reagent Ontology (ReO), the Ontology of Biomedical Investigations (OBI), the Cell Line Ontology (CLO), and the eagle-i Ontology (ERO).
+      - name: Julie McMurry
+        picture: /image/team/JulieMcMurry.jpg
+        title: Software Program Manager
+        alumni: false,
+        bio: Julie specializes in ontology-aware tools that facilitate synthesis research. She holds a BA in Biology (Rhode Island College), with post-bac training in Computer Science (Harvard Extension School), as well as Immunology & Virology (Brown University). She holds a MSc in Public Health from the University of London.
       - name: Bryan Laraway
         title: Data Wrangler
         alumni: false
@@ -34,14 +42,17 @@ institutions:
     website: http://lbl.gov
     people:
       - name: Chris Mungall
+        picture: /image/team/ChrisMungall.jpg
         title: Monarch PI
         alumni: false
         bio: "Dr. Mungall is currently a PI of the Monarch Initiative. He has a BSc in Computer Science from the University of Edinburgh and a Ph.D. from University of Edinburgh in Biological Sciences. He is currently the PI of the Monarch Initiative and his current research focuses on the use of informatics techniques and tools to integrate and interpret life science data across a variety of domains. In particular, he is interested in connecting biological models at multiple scales: the biochemical, molecular, cellular, organismal and ecological."
       - name: Suzanna Lewis
+        picture: /image/team/SuzannaLewis.jpg
         title: Genomics
         alumni: false
         bio: Suzi has an MS in Biology and MS in Computer Science. She is a scientist and Principal Investigator at the Berkeley Bioinformatics Open-source Project (BBOP) based at Lawrence Berkeley National Laboratory. She is one of the pioneers of developing open standards and software for genome annotation and ontologies.
       - name: Nicole Washington
+        picture: /image/team/NicoleWashington.jpg
         title: Lead Bioinformatician
         alumni: false
         bio: Dr. Washington has a BS in Biology from Harvey Mudd College and a Ph.D. in Molecular and Cellular Biology from The University of Arizona where she focused on the study of the C. elegans as a model for human disease. She is interested in the intersection of computers with biological research, in particular making tools to realize hidden connections in diverse types of biological data and integrating large-scale experiments.
@@ -54,6 +65,7 @@ institutions:
         alumni: false
         bio: Jeremy has a MS in Computer Science from the École polytechnique fédérale de Lausanne (EPFL). After spending three years at CERN in the Beams department and a year in a finance company, he joined LBNL in 2015.
       - name: Nathan Dunn
+        picture: /image/team/NathanDunn.jpg
         title: Software Engineer
         alumni: false
         bio: Nathan Dunn has a a MS in Chemical Engineering from the University of Washington and a PhD in Computer Science from the University of Oregon where he focused on using artifical neural networks to model the C. elegans nervous system. Since then he has worked in various capacities supporting scientific research.  His current focus is on development of collaborative genomic editing tools.
@@ -102,6 +114,7 @@ institutions:
     website: http://pitt.edu
     people:
       - name: Harry Hocheiser
+        picture: /image/team/HarryHocheiser.png
         alumni: false
         title: Monarch PI
         bio: Dr. Hocheiser is currently a PI of the Monarch Initiative. He has BS and MS in Computer Science and Engineering from MIT and a Ph.D. in Computer Science from University of Maryland. His research interests lie at the intersection of biomedical informatics and human-computer interaction (HCI). His ongoing research efforts involve the application of contextual inquiry, human-centered design, information visualization, and other HCI techniques to challenges in collaborative bioinformatics and clinical informatics.
