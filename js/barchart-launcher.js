@@ -11,13 +11,17 @@ function makeDoveGraph(data){
     // set in webapp.js using puptent
     var gconf = new bbop.golr.conf(global_golr_conf);
     var server = global_solr_url;
+    var personality = 'dovechart';
+    var species_list = ["NCBITaxon:9606","NCBITaxon:10090","NCBITaxon:7955"];
+    
     var golr_manager = new bbop.golr.manager.jquery(global_solr_url, gconf);
-    var personality = 'generic_association';
-    var species_list ["NCBITaxon:9606","NCBITaxon:10090","NCBITaxon:7955"];
+
+    golr_manager.set_personality(personality);
     var gene_filter = { field: 'subject_category', value: 'gene' };
     var scigraph_base = global_scigraph_url;
     
-    var builder = new monarch.builder.tree_builder(golr_manager, scigraph_base, species_list, filters);
+    var builder = new monarch.builder.tree_builder(golr_manager, scigraph_base);
+    builder.getCountsForClass('HP:0000118', 'object_closure',species_list, gene_filter, personality);
     builder.getOntology('HP:0000118', 1);
 }
 

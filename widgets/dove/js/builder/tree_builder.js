@@ -13,15 +13,15 @@ if (typeof monarch.builder == 'undefined') { monarch.builder = {};}
  * Constructor: tree_builder
  * 
  * Parameters:
- *    data_manager - SoLR Manager, such as a GOlr manager,
+ *    golr_manager - SoLR Manager, such as a GOlr manager,
  *                   should probably just rename golr manager
  *    scigraph_url - Base URL of SciGraph REST API
  *    tree - monarch.model.tree object
  *  
  */
-monarch.builder.tree_builder = function(data_manager, scigraph_url, tree){
+monarch.builder.tree_builder = function(golr_manager, scigraph_url, tree){
     var self = this;
-    self.data_manager = data_manager;
+    self.golr_manager = golr_manager;
     self.scigraph_url = scigraph_url;
     if (typeof tree === 'undefined') {
         self.tree = new monarch.model.tree();
@@ -63,6 +63,65 @@ monarch.builder.tree_builder.prototype.getOntology = function(id, depth){
            console.log(data);
         }
     });
+};
+
+/*
+ * Function: getCountsForClass
+ * 
+ * Parameters:
+ *    id -
+ *    id_field -
+ *    species -
+ *    filters -
+ *    
+ * Returns:
+ *    node object
+ */
+monarch.builder.tree_builder.prototype.setGolrManager = function(id, id_field, filter, personality){
+    var self = this;
+    
+    self.golr_manager.reset_query_filters();
+    self.golr_manager.add_query_filter(id_field, id, ['*']);
+    self.golr_manager.set_results_count(0);
+    self.golr_manager.lite(true);
+    
+    if (filter != null && filter.field && filter.value){
+        self.golr_manager.add_query_filter(filter.field, filter.value, ['*']);
+    }
+    
+    if (personality != null){
+        self.golr_manager.set_personality(personality);
+    }
+    return self;
+};
+
+
+/*
+ * Function: getCountsForClass
+ * 
+ * Parameters:
+ *    id -
+ *    id_field -
+ *    species -
+ *    filters -
+ *    
+ * Returns:
+ *    node object
+ */
+monarch.builder.tree_builder.prototype.getCountsForClass = function(id, id_field, species, filter, personality){
+    var self = this;
+    var node = {"id":id, "counts": []};
+    
+    self.setGolrManager(id, id_field, filter, personality);
+    
+    var makeDataNode = function(res){
+        //console.log(res);
+    }
+    var register_id = 'data_counts_'+id;
+    
+    self.golr_manager.register('search', register_id, makeDataNode);
+    self.golr_manager.search();
+    
 };
 
 /*
