@@ -1,56 +1,62 @@
 
-#Phenogrid installation
+#About Phenogrid
 
-Please see the instructions in index.html to see how to install the
-Phenogrid widget.
+Phenogrid is implemented as a jQuery UI widget. The phenogrid widget uses semantic similarity calculations provided by OWLSim (www.owlsim.org), as provided through APIs from the Monarch Initiative (www.monarchinitiative.org).
 
-#Phenogrid configuration
+Given an input list of phenotypes (you will see the sample input below) and parameters specified in `config/phenogrid_config.js` indicating desired source of matching models (humans, model organisms, etc.), the phenogrid will call the Monarch API to get OWLSim results and render them in your web browser in data visualization. And you may use the visualized data for your research.
 
-The phenogrid can be configured via a variety of options contained in
-the ./js/phenogrid_config.js file. This file must be loaded as a
-separate Javascript file in every page that uses the phenogrid. Please
-be sure that this file is loaded _before_ the main ./js/phenogrid.js file.
+#How to use Phenogrid in your web page
 
-Options that can be modified include
+All the javascript dependency files have been bundled into a single `js/phenogrid.js`, and all the external styling details are bundled into `css/phenogrid.css`. 
 
-* *serverURL* - the base url of the server/site from which the widget
-   will be served. Should usually left to be null, in which case the
-   server url be inferred from the code.
+In the below sample code, you will see how to use phenogrid as an embeded widget in your HTML.
 
-* *selectedCalculation*: an integer value describing the initial
-   similarity  measure that will be used. Other values can always be
-   selected via the appropriate pulldown. Possible values include:
-   
-  * 0 - for Similarity (default)
-  * 1 - Ratio (q)
-  * 2 - Uniqueness
-  * 3 - Ratio (t)
+````html
+<html>
+<head>
+<title>Monarch Phenotype Grid Widget</title>
 
-* *selectedSort* - the initial sort order. As with the calculation,
-   these choices may be adjusted via a pulldown. Values include
-   Frequency, Alphabetic, and Frequency and Rarity. Frequency is the default.
+<script src="config/phenogrid_config.js"></script>
+<script src="js/phenogrid.js"></script>
 
-* *targetSpeciesList* - a list of "name", "taxon" pairs indicating the
-   organisms to be shown in the phenogrid. "Name" should be the
-   traditional latin name, while "taxon" should be the NCBI taxon
-   number.  Default value includes Homo sapiens, Mus musculus, Danio
-   rerio, and Drosophila melanogaster
+<link rel="stylesheet" type="text/css" href="css/phenogrid.css">
 
+<script>
+var phenotypes = [
+	{id:"HP:0000726", observed:"positive"},
+	{id:"HP:0000746", observed:"positive"},
+	{id:"HP:0001300", observed:"positive"},
+	{id:"HP:0002367", observed:"positive"},
+	{id:"HP:0000012", observed:"positive"},
+	{id:"HP:0000716", observed:"positive"},
+	{id:"HP:0000726", observed:"positive"},
+	{id:"HP:0000739", observed:"positive"},
+	{id:"HP:0001332", observed:"positive"},
+	{id:"HP:0001347", observed:"positive"},
+	{id:"HP:0002063", observed:"positive"},
+	{id:"HP:0002067", observed:"positive"},
+	{id:"HP:0002172", observed:"positive"},
+	{id:"HP:0002322", observed:"positive"},
+	{id:"HP:0007159", observed:"positive"}
+];	
 
-* *targetSpeciesName* The initial species name to be displayed, or
-   "Overview" if the multi-species overview is desired.   Must be one
-   of the species included in the *targetSpeciesList*. Default is "overview".
+$(document).ready(function(){
+	$("#phenogrid_container").phenogrid({
+		serverURL :"http://beta.monarchinitiative.org", 
+		phenotypeData: phenotypes,
+		targetSpeciesName: "Mus musculus" 
+	});
+});
 
-* *refSpecies* the reference species that provides the comparison
-   point for similarity scoring.  Must be one of the species included
-   in the *targetSpeciesList*. Defaults to "Homo sapiens".
+</script>
 
+</head>
 
-The Phenogrid is implemented as a jQuery UI Widget. However, due to
-the overhead of refresh, we do not automatically update when options
-are set. If you wish to set options using the configuration file,
-those options will be read and processed upon initialization. For any
-other changes, you should be able to use *setOption* or *setOptions*
-followed by a manual call to the *reDraw* method.
+<body>
 
+<div id="phenogrid_container"></div>
+
+</body>
+</html>
+````
 
