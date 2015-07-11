@@ -72,7 +72,7 @@ institutions:
       # - name: Rocket J. Squirrel
       #   title: Lead Moose Foil
       #   alumni: false
-      #   bio: Alumni of Wossamotta U, after a career in television and international espionage (1959-1964), and a brief stint in the movie industry consulting (working with Yutte Hermsgervordenbroti, Olaf Prot, and Jurgan Wigg), he has settled into handling PR and moose-related needs for scientific groups. 
+      #   bio: Alumni of Wossamotta U, after a career in television and international espionage (1959-1964), and a brief stint in the movie industry consulting (working with Yutte Hermsgervordenbroti, Olaf Prot, and Jurgan Wigg), he has settled into handling PR and moose-related needs for scientific groups.
       #   picture: /image/person-unknown.png
       #   contact:
       #     email: spam@spamspam.spam
@@ -82,7 +82,7 @@ institutions:
       - name: Sarah Kim
         title: Web Developer/Designer
         alumni: true
-        bio: Sarah is currently a undergraduate Computer Science student at UC Berkeley. She is working on the front-end of the Monarch website.      
+        bio: Sarah is currently a undergraduate Computer Science student at UC Berkeley. She is working on the front-end of the Monarch website.
   - id: ucsd
     name: University of California, San Diego
     logo: /image/team-ucsd.png
@@ -93,7 +93,7 @@ institutions:
         title: Monarch PI
         bio: Dr. Martone is currently a PI of the Monarch Initiative. She has a BA from Wellesley College in biological psychology and a Ph. D. in neuroscience from the University of California, San Diego, where she is currently a Professor in the Department of Neuroscience. Her background is in neuroanatomy, particularly light and electron microscopy, but she spends most of her time now in the field of neuroinformatics. She is the principal investigator of the Neuroinformatics Framework project, a national project to establish a uniform resource description framework for neuroscience. Her recent work has focused on building ontologies for neuroscience for data integration. She heads the International Neuroinformatics Coordinating Facility (INCF) program on ontologies. She is the executive director of FORCE11, an organization dedicated to advancing scholarly communication and e-scholarship.
       - name: Anita Bandrowski
-        alumni: false    
+        alumni: false
         title: Bioinformatician
         bio: Dr. Bandrowski trained as a neurophysiologist at UC Riverside and Stanford, however moved to bioinformatics with the human genome project at Celera. Currently working at the Center of Research in Biological Systems at UCSD, Dr. Bandrowski builds systems that attempt to make sense of the vast information being produced by biologists.
       - name: Jeffrey Grethe
@@ -118,10 +118,10 @@ institutions:
         alumni: false
         title: Monarch PI
         bio: Dr. Hocheiser is currently a PI of the Monarch Initiative. He has BS and MS in Computer Science and Engineering from MIT and a Ph.D. in Computer Science from University of Maryland. His research interests lie at the intersection of biomedical informatics and human-computer interaction (HCI). His ongoing research efforts involve the application of contextual inquiry, human-centered design, information visualization, and other HCI techniques to challenges in collaborative bioinformatics and clinical informatics.
-      - Name: Michael Davis
-      	 alumni: false
-      	 title: Software Developer
-	 bio: Michael is a Software Engineer for the Department of Biomedical Informatics (DBMI) at the University of Pittsburgh where he works on the development of Phenogrid.  He has an MS in Information Science from the University of Pittsburgh. He has worked for several years developing oncology-based database applications at UPMC CancerCenter. His current interest is the development and integration of analytical tools to support big data repositories in research.
+      - name: Michael Davis
+        alumni: false
+        title: Software Developer
+        bio: Michael is a Software Engineer for the Department of Biomedical Informatics (DBMI) at the University of Pittsburgh where he works on the development of Phenogrid.  He has an MS in Information Science from the University of Pittsburgh. He has worked for several years developing oncology-based database applications at UPMC CancerCenter. His current interest is the development and integration of analytical tools to support big data repositories in research.
       - name: Chuck Borromeo
         alumni: true
         title: Interface Architect
@@ -142,7 +142,7 @@ institutions:
       - name: Sebastian Köhler
         alumni: false
         title: Bioinformatician & Developer
-        bio: Dr. Sebastian Köhler has a B.Sc., M.Sc., and Ph.D. in bioinformatics from the Freie Universität in Berlin, Germany. He has been working mostly on developing and validating computational methods for network and ontology based research on gene-to-phenotype relations. He is one of the developers of the Human Phenotype Ontology and cross-species phenotype resources.                    
+        bio: Dr. Sebastian Köhler has a B.Sc., M.Sc., and Ph.D. in bioinformatics from the Freie Universität in Berlin, Germany. He has been working mostly on developing and validating computational methods for network and ontology based research on gene-to-phenotype relations. He is one of the developers of the Human Phenotype Ontology and cross-species phenotype resources.
   - id: sanger
     name: Sanger Institute
     logo: /image/team-sanger.png
