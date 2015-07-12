@@ -1,12 +1,13 @@
 // Phenogrid loader
 function loadPhenogrid(){
 
+    var isGridLoading = false;
     jQuery('#categories a[href="#compare"]').click(function(event) {
-        if (!(jQuery('#pg_svg_container').length)){
+        if (!(jQuery('#pg_svg_container').length)  && isGridLoading == false){
+            isGridLoading = true;
             initPhenogrid();
         }
     });
-
 
     function initPhenogrid () { 
         var disease_id = this.location.pathname;
@@ -22,7 +23,7 @@ function loadPhenogrid(){
             }
         });
 
-        $("#phen_vis").phenogrid({phenotypeData: phenotype_list});
+        jQuery("#phen_vis").phenogrid({phenotypeData: phenotype_list});
     }
 
 }
