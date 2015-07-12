@@ -10,8 +10,18 @@
  *                          value: 'phenotype"
  *                      }
  */
-function getTableFromSolr(id, golr_field, div, filter, personality){
-
+function getTableFromSolr(id, golr_field, div, filter, personality, tab_anchor){
+    if (tab_anchor != null){
+        jQuery('#categories a[href="'+tab_anchor+'"]').click(function(event) {
+            getTable(id, golr_field, div, filter, personality);
+        });
+        console.log("foo");
+    } else {
+        getTable(id, golr_field, div, filter, personality);
+        console.log("bar");
+    }
+    
+    function getTable(id, golr_field, div, filter, personality){
     if (golr_field == null) {
         golr_field = 'object_closure';
     }
@@ -124,6 +134,7 @@ function getTableFromSolr(id, golr_field, div, filter, personality){
     
     // Initial run.
     golr_manager.search();
+    }
 }
 
 function getOntologyBrowser(id){
