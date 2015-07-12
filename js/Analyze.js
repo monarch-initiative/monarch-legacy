@@ -17,6 +17,20 @@ function AnalyzeInit(uploaded_data){
     var analyze_auto_target_elt = '#' + analyze_auto_target_id;
     var analyze_auto_list_id = 'analyze_auto_list';
     var analyze_auto_list_elt = '#' + analyze_auto_list_id;
+    
+    //Control instructions show/hide href
+    $("#instructions-toggle").click(function(e){
+        e.preventDefault();
+        // Weird hack to prevent one off alignment of tabs and jumbotron
+        // Default set to 1px in analyze.mustache
+        if ($("#instructions").is(':visible')) {
+            $(".jumbotron").css("padding-bottom", "1px");
+        } else {
+            $(".jumbotron").css("padding-bottom", "0px");
+        }
+        
+        $("#instructions").toggle(400); 
+    });
 
     ///
     /// Gunna go crazy without bbop-js, so adding a few things
@@ -745,19 +759,5 @@ function AnalyzeInit(uploaded_data){
             return {};
          }
     }
-    
-    //Control instructions show/hide href
-    $("#instructions-toggle").click(function(e){
-        e.preventDefault();
-        // Weird hack to prevent one off alignment of tabs and jumbotron
-        // Default set to 1px in analyze.mustache
-        if ($("#instructions").is(':visible')) {
-            $(".jumbotron").css("padding-bottom", "1px");
-        } else {
-            $(".jumbotron").css("padding-bottom", "0px");
-        }
-        
-        $("#instructions").toggle(400); 
-    });
     
 }
