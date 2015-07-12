@@ -13,12 +13,12 @@
 function getTableFromSolr(id, golr_field, div, filter, personality, tab_anchor){
     if (tab_anchor != null){
         jQuery('#categories a[href="'+tab_anchor+'"]').click(function(event) {
-            getTable(id, golr_field, div, filter, personality);
+            if (!(jQuery('#'+div+' .table').length)){
+                getTable(id, golr_field, div, filter, personality);
+            }
         });
-        console.log("foo");
     } else {
         getTable(id, golr_field, div, filter, personality);
-        console.log("bar");
     }
     
     function getTable(id, golr_field, div, filter, personality){
