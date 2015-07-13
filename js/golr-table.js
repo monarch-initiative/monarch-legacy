@@ -31,9 +31,9 @@ function getTableFromSolr(id, golr_field, div, filter, personality, tab_anchor){
     }
     
     //divs
-    pager_top_div = div+'-pager-top';
-    pager_bot_div = div+'-pager-bottom';
-    pager_filter = div+'-filter';
+    var pager_top_div = div+'-pager-top';
+    var pager_bot_div = div+'-pager-bottom';
+    var pager_filter = div+'-filter';
 
     // Conf.
     var gconf = new bbop.golr.conf(global_golr_conf);
@@ -136,6 +136,22 @@ function getTableFromSolr(id, golr_field, div, filter, personality, tab_anchor){
     
     // Initial run.
     golr_manager.search();
+    
+    console.log(pager_top_div);
+    
+    jQuery('#'+pager_top_div).on('change', function() {
+        var val = jQuery('#'+pager_top_div).find('select').val()
+        disableBottomPager(val);
+    });
+    
+    function disableBottomPager(value){
+        if (value <= 10){
+            jQuery('#'+pager_bot_div).hide();
+        } else {
+            jQuery('#'+pager_bot_div).show(2000);
+        }
+    }
+    jQuery('#'+pager_bot_div).hide();
     }
 }
 
