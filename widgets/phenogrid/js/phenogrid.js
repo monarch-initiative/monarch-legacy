@@ -1201,6 +1201,7 @@ var TooltipRender = require('./render.js');
 				var newItem = { id: dummyId,
 					label: this.state.dummyModelName,
 					score: {score: 0, rank: Number.MAX_VALUE},
+					taxon: {id: dummyId, label: this.state.dummyModelName}
 				};
 				res.b.push(newItem);
 			}
