@@ -29,25 +29,25 @@ fields:
     searchable: true
     type: string
   - description: Taxonomic class of the subject. This is typically a CURIE of the form NCBITaxon:nnnn.
-    display_name: Gene Taxon
+    display_name: Species
     id: subject_taxon
     property: []
     type: string
   - description: Label of taxon.
-    display_name: Gene Taxon
+    display_name: Species
     id: subject_taxon_label
     property: []
     searchable: true
     type: string
   - cardinality: multi
     description: Reflexive closure of taxon. ALWAYS up SubClassOf.
-    display_name: Gene Taxon
+    display_name: Species
     id: subject_taxon_closure
     property: []
     type: string
   - cardinality: multi
     description: Labels for taxon_closure.
-    display_name: Gene Taxon
+    display_name: Species
     id: subject_taxon_closure_label
     property: []
     searchable: true
