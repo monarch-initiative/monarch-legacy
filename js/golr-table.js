@@ -12,8 +12,10 @@
  */
 function getTableFromSolr(id, golr_field, div, filter, personality, tab_anchor){
     if (tab_anchor != null){
+        var isTabLoading = false;
         jQuery('#categories a[href="'+tab_anchor+'"]').click(function(event) {
-            if (!(jQuery('#'+div+' .table').length)){
+            if (!(jQuery('#'+div+' .table').length) && !isTabLoading){
+                isTabLoading = true;
                 getTable(id, golr_field, div, filter, personality);
             }
         });

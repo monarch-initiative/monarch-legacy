@@ -63,6 +63,8 @@ monarch.builder.tree_builder.prototype.getOntology = function(id, depth){
            console.log(data);
         }
     });
+    
+    return;
 };
 
 /*
@@ -115,12 +117,13 @@ monarch.builder.tree_builder.prototype.getCountsForClass = function(id, id_field
     self.setGolrManager(id, id_field, filter, personality);
     
     var makeDataNode = function(res){
-        //console.log(res);
+        console.log(res);
     }
     var register_id = 'data_counts_'+id;
     
     self.golr_manager.register('search', register_id, makeDataNode);
-    //self.golr_manager.search();
+//    /self.golr_manager.search();
+    return;
     
 };
 

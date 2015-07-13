@@ -3,7 +3,6 @@ function makeDoveGraph(data){
     var graphDiv = ".dove-container";
     var tree = new monarch.model.tree(data);
     
-    
     // Some testing for the ajax version
     
     // global_golr_conf, global_solr_url, and scigrap_url are global variables
@@ -23,8 +22,15 @@ function makeDoveGraph(data){
     builder.getCountsForClass('HP:0000118', 'object_closure',species_list, gene_filter, personality);
     builder.getOntology('HP:0000118', 1);
     
-    graphObject = 
-        new monarch.dovechart(bbop.monarch.homePageConfig, tree, graphDiv);
+    var initGraph = function(){ 
+        jQuery("#graph-loader").hide();
+    
+        graphObject = 
+            new monarch.dovechart(bbop.monarch.homePageConfig, tree, graphDiv);
+    };
+    
+    golr_manager.register('search', 'initGraph' , initGraph)
+    golr_manager.search();
 }
 
 function makeHomePageGraph(data){
