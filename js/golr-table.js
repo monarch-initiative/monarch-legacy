@@ -76,6 +76,8 @@ function getTableFromSolr(id, golr_field, div, filter, personality, tab_anchor){
     };
     var results = new bbop.widget.live_results(div, golr_manager, confc,
                            handler, linker, results_opts);
+    
+    addDownloadButton(pager, golr_manager);
 
     bbop.widget.display.results_table_by_class_conf_b3.prototype.process_entry = function(bit, field_id, document, display_context){
         
@@ -135,6 +137,40 @@ function getTableFromSolr(id, golr_field, div, filter, personality, tab_anchor){
     // Initial run.
     golr_manager.search();
     }
+}
+
+function addDownloadButton(pager, manager){
+    
+    var fun_id = bbop.core.uuid();
+    manager.register('search', fun_id, _drawDownloadButton, '-2');
+    
+    function _drawDownloadButton(){
+    
+    var span = pager.button_span_id();
+    /// Add button to DOM.
+    var button_props = {
+    'generate_id': true,
+    'class': 'btn btn-success'
+    };
+    var label = 'TSV';
+    var title = 'Download Data';
+    var button = new bbop.html.button(label, button_props);
+    
+    jQuery('#' + span).append('&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;'+button.to_string());
+    jQuery('#' + button.get_id()).attr('title',title);
+
+    var forwardToDownload = function(){
+        var field_list = ['subject', 'subject_taxon', 'relation', 'object', 'object_taxon', 'evidence','source'];
+        var args_hash = {
+                rows : '10000'
+        }
+        url = manager.get_download_url(field_list, args_hash);
+        window.location = url;
+    }
+    
+    jQuery('#' + button.get_id()).click(forwardToDownload);
+    }
+
 }
 
 function getOntologyBrowser(id){
