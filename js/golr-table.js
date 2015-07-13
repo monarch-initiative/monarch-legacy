@@ -171,7 +171,7 @@ function addDownloadButton(pager, manager){
     'class': 'btn btn-success'
     };
     var label = 'TSV';
-    var title = 'Download Data';
+    var title = 'Download data (up to 100,000 rows)';
     var button = new bbop.html.button(label, button_props);
     
     jQuery('#' + span).append('&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;'+button.to_string());
@@ -180,7 +180,7 @@ function addDownloadButton(pager, manager){
     var forwardToDownload = function(){
         var field_list = ['subject', 'subject_taxon', 'relation', 'object', 'object_taxon', 'evidence','source'];
         var args_hash = {
-                rows : '10000'
+                rows : '100000'
         }
         url = manager.get_download_url(field_list, args_hash);
         window.location = url;
