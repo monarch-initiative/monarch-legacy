@@ -138,9 +138,7 @@ function getTableFromSolr(id, golr_field, div, filter, personality, tab_anchor){
     
     // Initial run.
     golr_manager.search();
-    
-    console.log(pager_top_div);
-    
+        
     jQuery('#'+pager_top_div).on('change', function() {
         var val = jQuery('#'+pager_top_div).find('select').val()
         disableBottomPager(val);
@@ -173,59 +171,22 @@ function addDownloadButton(pager, manager){
     var label = 'TSV';
     var title = 'Download data (up to 100,000 rows)';
     var button = new bbop.html.button(label, button_props);
+    var button_elt = '#' + button.get_id();
     
     jQuery('#' + span).append('&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;'+button.to_string());
-    jQuery('#' + button.get_id()).attr('title',title);
+    jQuery(button_elt).attr('title',title);
 
     var forwardToDownload = function(){
         var field_list = ['subject', 'subject_taxon', 'relation', 'object', 'object_taxon', 'evidence','source'];
         var args_hash = {
                 rows : '100000'
         }
+        
         url = manager.get_download_url(field_list, args_hash);
-        window.location = url;
+        location.href = url;
     }
     
     jQuery('#' + button.get_id()).click(forwardToDownload);
     }
 
-}
-
-function getOntologyBrowser(id){
-    
-    // Conf.
-    var gconf = new bbop.golr.conf(amigo.data.golr);
-    var srv = 'http://toaster.lbl.gov:9000/solr/';
-    var sd = new amigo.data.server();
-    var defs = new amigo.data.definitions();
-    var handler = new amigo.handler();
-    var linker = new amigo.linker();
-    var confc = gconf.get_class('annotation');
-    
-    // Browser.
-    var b = new bbop.widget.browse(srv, gconf, 'brw', {
-        'transitivity_graph_field':
-        'regulates_transitivity_graph_json',
-        'base_icon_url': sd.image_base(),
-        'info_icon': 'info',
-        'current_icon': 'current_term',
-        'image_type': 'gif',
-        'info_button_callback':
-            function(term_acc, term_doc){
-                // // Local form.
-                // shield.draw(term_doc);
-                // Remote form (works).
-                //shield.draw(term_acc);
-            }
-    });
-    b.draw_browser(id);
-}
-
-function LaunchEverything(){
-  
-    if( queryID ){ // globally declared from webapp.js
-    
-     getTableFromSolr(queryID);
-     getOntologyBrowser(queryID);
-    }
 }
