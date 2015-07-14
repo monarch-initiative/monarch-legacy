@@ -30,6 +30,10 @@ monarch.builder.tree_builder = function(solr_url, scigraph_url, golr_conf,  tree
     } else {
         self.tree = tree;
     }
+    
+    //Variable to keep track of nodes in a sibling group for testing, remove
+    self.siblings = [];
+    
 };
 
 /*
@@ -54,7 +58,7 @@ monarch.builder.tree_builder.prototype.getOntology = function(id, depth){
     
     var query = self.setGraphNeighborsUrl(id, depth, relationship, direction);
     
-    jQuery.ajax({
+    return jQuery.ajax({
         url: query,
         jsonp: "callback",
         dataType: "jsonp",
@@ -107,29 +111,40 @@ monarch.builder.tree_builder.prototype.setGolrManager = function(golr_manager, i
  *    id_field -
  *    species -
  *    filters -
+ *    personality - 
+ *    facet - 
+ *    parents - 
+ *    final_function -
  *    
  * Returns:
  *    JQuery Ajax Function
  */
-monarch.builder.tree_builder.prototype.getCountsForSiblings = function(id_field, species, filter, personality){
+monarch.builder.tree_builder.prototype.getCountsForSiblings = function(id_field, species, filter, personality, facet, parents, final_function){
     var self = this;
+    
     var promises = [];
+    var success_callbacks = [];
+    var error_callbacks = [];
     
-    var test_obj = [{'id':'HP:0000707'},{'id':'HP:0000924'}];
-    
+    //Todo delete
+    var test_obj = [{'id':'HP:0000707'},{'id':'HP:0000924'}];  
     var id_list = test_obj.map(function(i){return i.id;});
     
     id_list.forEach( function(i) {
-        promises.push(self._getCountsForClass(i, id_field, species, filter, personality));
+        var ajax = self._getCountsForClass(i, id_field, species, filter, personality, facet);
+        promises.push(jQuery.ajax(ajax.qurl,ajax.jq_vars));
+        success_callbacks.push(ajax.jq_vars['success']);
+        error_callbacks.push(ajax.jq_vars['error']);
     });
     
-    jQuery.when.apply(jQuery,promises).then(function(d,a) {
-        console.log(d);
-        console.log(a);
-    });
+    jQuery.when.apply(jQuery,promises).done(success_callbacks).done(function(){
+        console.log(self.getSiblings());
+        if (typeof final_function != 'undefined'){
+            final_function;
+        }
+    }).fail(error_callbacks);
     
 };
-
 
 /*
  * Function: getCountsForClass
@@ -139,11 +154,14 @@ monarch.builder.tree_builder.prototype.getCountsForSiblings = function(id_field,
  *    id_field -
  *    species -
  *    filters -
+ *    personality -
+ *    facet - 
+ *    parents -
  *    
  * Returns:
  *    JQuery Ajax Function
  */
-monarch.builder.tree_builder.prototype._getCountsForClass = function(id, id_field, species, filter, personality){
+monarch.builder.tree_builder.prototype._getCountsForClass = function(id, id_field, species, filter, personality, facet, parents){
     var self = this;
     var node = {"id":id, "counts": []};
     
@@ -162,14 +180,44 @@ monarch.builder.tree_builder.prototype._getCountsForClass = function(id, id_fiel
         this.jq_vars['success'] = this._callback_type_decider; // decide & run
         this.jq_vars['error'] = this._run_error_callbacks; // run error cbs
 
-        return this.JQ.ajax(qurl, this.jq_vars);
+        return {qurl: qurl, jq_vars: this.jq_vars};
         }
     };
     
+    /* No idea why I need to override this to comment out checking
+     * for response.success(), hoping the error callbacks will 
+     * catch any errors
+     */
+    golr_manager._callback_type_decider = function(json_data){
+        var response = new bbop.golr.response(json_data);
+
+            // 
+            if( ! response.success() ){
+                //throw new Error("Unsuccessful response from golr server!");
+            }else{
+                var cb_type = response.callback_type();
+                if( cb_type == 'reset' ){
+                    golr_manager._run_reset_callbacks(json_data);
+                }else if( cb_type == 'search' ){
+                    golr_manager._run_search_callbacks(json_data);
+                }else{
+                    throw new Error("Unknown callback type!");
+                }
+            }
+        };
+    
     golr_manager = self.setGolrManager(golr_manager, id, id_field, filter, personality);
     
-    var makeDataNode = function(res){
-        //console.log(res);
+    var makeDataNode = function(golr_response){
+        var node = {'id':id,'counts':[]};
+        var facet_counts = golr_response.facet_field(facet);
+        facet_counts.forEach(function(i){
+            node.counts.push({
+                'name': self.getTaxonMap()[i[0]],
+                'value' : i[1]});
+        });    
+        self.addSibling(node);
+        //Replace with add node to Tree
     }
     var register_id = 'data_counts_'+id;
     
@@ -276,6 +324,21 @@ monarch.builder.tree_builder.prototype.getTaxonMap = function(){
         "NCBITaxon:9606" : "Human",
         "NCBITaxon:7955" : "Zebrafish"
     };
+};
+
+//These functions are just of for testing, remove
+
+monarch.builder.tree_builder.prototype.addSibling = function(sibling) {
+    var self = this;
+    self.siblings.push(sibling);
+};
+
+monarch.builder.tree_builder.prototype.resetSiblings = function(){
+    this.siblings = [];
+};
+
+monarch.builder.tree_builder.prototype.getSiblings = function() {
+    return this.siblings;
 };
 
 

@@ -9,11 +9,12 @@ function makeDoveGraph(data){
     
     //golr_manager.set_personality(personality);
     var gene_filter = { field: 'subject_category', value: 'gene' };
+    var facet = 'subject_taxon';
     
     // global_golr_conf, global_solr_url, and scigrap_url are global variables
     // set in webapp.js using puptent
     var builder = new monarch.builder.tree_builder(global_solr_url, global_scigraph_url, global_golr_conf);
-    builder.getCountsForSiblings('object_closure',species_list, gene_filter, personality);
+    builder.getCountsForSiblings('object_closure',species_list, gene_filter, personality, facet);
     builder.getOntology('HP:0000118', 1);
     
     var initGraph = function(){ 
