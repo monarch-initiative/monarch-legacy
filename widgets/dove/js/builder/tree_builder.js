@@ -13,15 +13,17 @@ if (typeof monarch.builder == 'undefined') { monarch.builder = {};}
  * Constructor: tree_builder
  * 
  * Parameters:
- *    golr_manager - SoLR Manager, such as a GOlr manager,
- *                   should probably just rename golr manager
+ *    solr_url - Base URL for Solr service
  *    scigraph_url - Base URL of SciGraph REST API
+ *    golr_conf - Congifuration for golr_manager
  *    tree - monarch.model.tree object
  *  
  */
-monarch.builder.tree_builder = function(golr_manager, scigraph_url, tree){
+monarch.builder.tree_builder = function(solr_url, scigraph_url, golr_conf,  tree){
     var self = this;
-    self.golr_manager = golr_manager;
+    self.solr_url = solr_url;
+    // Turn into official golr conf object
+    self.golr_conf = new bbop.golr.conf(golr_conf);
     self.scigraph_url = scigraph_url;
     if (typeof tree === 'undefined') {
         self.tree = new monarch.model.tree();
@@ -79,22 +81,53 @@ monarch.builder.tree_builder.prototype.getOntology = function(id, depth){
  * Returns:
  *    node object
  */
-monarch.builder.tree_builder.prototype.setGolrManager = function(id, id_field, filter, personality){
+monarch.builder.tree_builder.prototype.setGolrManager = function(golr_manager, id, id_field, filter, personality){
     var self = this;
     
-    self.golr_manager.reset_query_filters();
-    self.golr_manager.add_query_filter(id_field, id, ['*']);
-    self.golr_manager.set_results_count(0);
-    self.golr_manager.lite(true);
+    golr_manager.reset_query_filters();
+    golr_manager.add_query_filter(id_field, id, ['*']);
+    golr_manager.set_results_count(0);
+    golr_manager.lite(true);
     
     if (filter != null && filter.field && filter.value){
-        self.golr_manager.add_query_filter(filter.field, filter.value, ['*']);
+        golr_manager.add_query_filter(filter.field, filter.value, ['*']);
     }
     
     if (personality != null){
-        self.golr_manager.set_personality(personality);
+        golr_manager.set_personality(personality);
     }
-    return self;
+    return golr_manager;
+};
+
+/*
+ * Function: getCountsForClass
+ * 
+ * Parameters:
+ *    id -
+ *    id_field -
+ *    species -
+ *    filters -
+ *    
+ * Returns:
+ *    JQuery Ajax Function
+ */
+monarch.builder.tree_builder.prototype.getCountsForSiblings = function(id_field, species, filter, personality){
+    var self = this;
+    var promises = [];
+    
+    var test_obj = [{'id':'HP:0000707'},{'id':'HP:0000924'}];
+    
+    var id_list = test_obj.map(function(i){return i.id;});
+    
+    id_list.forEach( function(i) {
+        promises.push(self._getCountsForClass(i, id_field, species, filter, personality));
+    });
+    
+    jQuery.when.apply(jQuery,promises).then(function(d,a) {
+        console.log(d);
+        console.log(a);
+    });
+    
 };
 
 
@@ -108,22 +141,40 @@ monarch.builder.tree_builder.prototype.setGolrManager = function(id, id_field, f
  *    filters -
  *    
  * Returns:
- *    node object
+ *    JQuery Ajax Function
  */
-monarch.builder.tree_builder.prototype.getCountsForClass = function(id, id_field, species, filter, personality){
+monarch.builder.tree_builder.prototype._getCountsForClass = function(id, id_field, species, filter, personality){
     var self = this;
     var node = {"id":id, "counts": []};
     
-    self.setGolrManager(id, id_field, filter, personality);
+    var golr_manager = new bbop.golr.manager.jquery(self.solr_url, self.golr_conf);
+    
+    //First lets override the update function
+    golr_manager.update = function(callback_type, rows, start){
+        
+        // Get "parents" url first.
+        var parent_update = bbop.golr.manager.prototype.update;
+        var qurl = parent_update.call(this, callback_type, rows, start);
+
+        if( ! this.safety() ){
+        
+        // Setup JSONP for Solr and jQuery ajax-specific parameters.
+        this.jq_vars['success'] = this._callback_type_decider; // decide & run
+        this.jq_vars['error'] = this._run_error_callbacks; // run error cbs
+
+        return this.JQ.ajax(qurl, this.jq_vars);
+        }
+    };
+    
+    golr_manager = self.setGolrManager(golr_manager, id, id_field, filter, personality);
     
     var makeDataNode = function(res){
-        console.log(res);
+        //console.log(res);
     }
     var register_id = 'data_counts_'+id;
     
-    self.golr_manager.register('search', register_id, makeDataNode);
-//    /self.golr_manager.search();
-    return;
+    golr_manager.register('search', register_id, makeDataNode);
+    return golr_manager.update('search');
     
 };
 
