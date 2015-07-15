@@ -3,7 +3,6 @@ $(function () {
     var slash_idx = id.indexOf('/');
     id = id.substring(slash_idx+1);
     var phenotype_list = [];
-    var phenotype_list = [];
     var phenogridContainer = document.getElementById('phen_vis');
     var species;
 
