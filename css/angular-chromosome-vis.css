@@ -72,17 +72,6 @@ input[type="checkbox"] {
 }
 
 
-#NewHeader{
-	visibility: hidden;
-	position: absolute;
-	right: 0;
-	top: 0;
-	margin: 30px;
-	width: 30%;
-	background-color:#456789;
-	z-index: 2;
-}
-
 #myTable, th, td{
 	font-size: 10pt;
 	border: 1px solid black;
@@ -91,11 +80,7 @@ input[type="checkbox"] {
 
 #Table{
 	visibility: hidden;
-	position: absolute;
-	right: 0;
-	top: 0;
 	margin: 30px;
-	width: 30%;
 	background-color:#999;
 	height: 200px;
 	z-index: 1;

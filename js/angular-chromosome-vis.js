@@ -109,12 +109,12 @@
 
 			function loadVariants(){
 
+				console.log(Variants);
 				var subVar = [],
 					copVar = [],
 					seqVar = [],
 					insVar = [];
 
-				document.getElementById("NewHeader").style.visibility = 'visible';
 				document.getElementById("Table").style.visibility = 'visible';
 				document.getElementById("Form").style.visibility = 'visible';
 
@@ -374,7 +374,7 @@
 										//If the variant keeps going, draw a line to indicate so
 										if(copVar[c].end > m.END.textContent){
 											//For selector purposes, find the largest overlapping variant
-											if(lineDistance < copVar[c].end - copVar[c].start){
+											if(lineDistance < (copVar[c].end - copVar[c].start)){
 												startHolder = copVar[c].start;
 												endHolder = copVar[c].end;
 												lineDistance = endHolder - startHolder;
@@ -388,7 +388,7 @@
 										//If the variant began before, draw a line to indicate so
 										if(copVar[c].start < m.START.textContent){
 											//For selector purposes, find the largest overlapping variant
-											if(lineDistance < copVar[c].end - copVar[c].start){
+											if(lineDistance < (copVar[c].end - copVar[c].start)){
 												startHolder = copVar[c].start;
 												endHolder = copVar[c].end;
 												lineDistance = endHolder - startHolder;
@@ -694,8 +694,8 @@
 
 			function golrCall(){
 				var gconf = new bbop.golr.conf(amigo.data.golr);
-				//var golr_loc = 'http://sirius.monarchinitiative.org:8080/solr/feature-location/';
-				var golr_loc = 'http://geoffrey.crbs.ucsd.edu:8080/solr/feature-location/';
+				var golr_loc = 'http://sirius.monarchinitiative.org:8080/solr/feature-location/';
+				//var golr_loc = 'http://geoffrey.crbs.ucsd.edu:8080/solr/feature-location/';
 				var GolrManager = new bbop.golr.manager.jquery(golr_loc, gconf);
 
 				var customCallBack = function (res) {
@@ -880,14 +880,20 @@
 
 			function makeRow(variant, table){
 				var row = table.insertRow();
-				row.insertCell(0).innerHTML = variant.id;
-				row.insertCell(1).innerHTML = variant.feature_closure_label[2];
+				row.insertCell(0).innerHTML = variant.feature[0];
+				row.insertCell(1).innerHTML = variant.feature_closure_label[0];
+				row.insertCell(2).innerHTML = variant.chromosome_closure_label[0];
+				row.insertCell(3).innerHTML = variant.start;
+				row.insertCell(4).innerHTML = variant.end;
 			}
 
 			this.update = function (){
 				var table = document.getElementById("myTable");
-				table.innerHTML = "";
-				table.insertRow().insertCell(0).innerHTML = "Empty";
+				document.getElementById("Table").style.width = table.offsetWidth;
+				//Delete all the previous rows
+				for(var i = (table.rows.length - 1); i > 0; i--){
+					table.deleteRow(i);
+				}
 				//Display selected bands information in table
 				for(var v = 0; v < Variants.length; v++) {
 					var obj = Variants[v];
@@ -930,7 +936,10 @@
 
 			this.delete = function () {
 				var table = document.getElementById("myTable");
-				table.innerHTML = "";
+				//Delete all the previous rows
+				for(var j = (table.rows.length - 1); j > 0; j--){
+					table.deleteRow(j);
+				}
 				_selector.remove();
 				_initialized = false;
 			};
