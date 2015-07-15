@@ -550,3 +550,10 @@ fields:
     type: string
     cardinality: multi
     property: []
+
+  - id: is_defined_by
+    description: "Ontologies that generated evidence axioms"
+    display_name: Defined
+    type: string
+    cardinality: multi
+    property: []
