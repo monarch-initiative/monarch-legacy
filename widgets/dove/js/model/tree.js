@@ -124,7 +124,7 @@ monarch.model.tree.prototype.addCountsToNode = function(node_id, counts, parents
         throw new Error ("Error in locating node given "
                          + parents + " and ID: " + node_id);
     } else {
-        index = siblings.map(function(i){return i.id;}).indexOf(node_id)
+        var index = siblings.map(function(i){return i.id;}).indexOf(node_id);
         siblings[index]['counts'] = counts;
     }
     

@@ -1030,6 +1030,20 @@ monarch.dovechart.prototype.checkData = function(data){
                 r.value = 0;
             }
         });
+        // Make sure counts are always in same order
+        var orderedCounts = [];
+        //Check that we're not missing any group member
+        self.groups.forEach(function (val, index){
+            if (r.counts.map(function(i){return i.name;}).indexOf(val) == -1){
+                var count = {'name': val, 'value': 0};
+                orderedCounts.push(count);
+            } else {
+                var i = r.counts.map(function(i){return i.name;}).indexOf(val);
+                orderedCounts[i] = (r['counts'][index]);
+            }   
+        });
+        r.counts = orderedCounts;
+        
     });
     return data;
 };
