@@ -299,7 +299,12 @@ monarch.dovechart.prototype.setGroupPositioning = function (histogram,graphData)
        .data(data)
        .enter().append("svg:g")
        .attr("class", ("bar"+self.level))
-       .attr("transform", function(d) { return "translate(0," + histogram.y0(d.id) + ")"; });
+       .attr("transform", function(d) { return "translate(0," + histogram.y0(d.id) + ")"; })
+       .on("click", function(d){
+           if (config.isYLabelURL){
+               document.location.href = config.yLabelBaseURL + d.id;
+           }
+       });
     return groupPos;
 };
 
@@ -571,11 +576,11 @@ monarch.dovechart.prototype.drawGraph = function (histogram, isFromCrumb, parent
     var yFont = self.adjustYAxisElements(data.length);
     histogram.transitionYAxisToNewScale(1000);
     
-    self.setYAxisText(histogram,data);
-    
     //Create SVG:G element that holds groups
     var barGroup = self.setGroupPositioning(histogram,data);
     var bar = self.setBarConfigPerCheckBox(histogram,data,self.groups,barGroup,isFirstGraph);
+    
+    self.setYAxisText(histogram,data, barGroup, bar);
     
     //Create navigation arrow
     var navigate = histogram.svg.selectAll(".y.axis");
@@ -885,41 +890,48 @@ monarch.dovechart.prototype.setBarConfigPerCheckBox = function(histogram,data,gr
     }
 };
 
-monarch.dovechart.prototype.setYAxisText = function(histogram,data){
+monarch.dovechart.prototype.setYAxisText = function(histogram,data, barGroup, bar){
     self = this;
     config = self.config;
     data = self.setDataPerSettings(data);
     
     histogram.svg.select(".y.axis")
     .selectAll("text")
-    .text(function(d){ return self.getIDLabel(d,data) })
+    .data(data)
+    .text(function(d){ return self.getIDLabel(d.id,data) })
     .attr("font-size", yFont)
-    .on("mouseover", function(d){
+    .on("mouseover", function(){
         if (config.isYLabelURL){
             d3.select(this).style("cursor", "pointer");
             d3.select(this).style("fill", config.color.yLabel.hover);
             d3.select(this).style("text-decoration", "underline");
+            self.displaySubClassTip(self.tooltip,this)
         }
     })
     .on("mouseout", function(){
         d3.select(this).style("fill", config.color.yLabel.fill );
         d3.select(this).style("text-decoration", "none");
+        self.tooltip.style("display", "none");
     })
     .on("click", function(d){
-        if (config.isYLabelURL){
+        /*if (config.isYLabelURL){
             d3.select(this).style("cursor", "pointer");
             document.location.href = config.yLabelBaseURL + d;
+        }*/
+        if (d.children && d.children[0]){ //TODO use tree api
+            self.transitionToNewGraph(histogram,d,
+                    barGroup,bar, d.id);
         }
     })
     .style("text-anchor", "end")
     .attr("dx", config.yOffset)
     .append("svg:title")
     .text(function(d){
-        if (/\.\.\./.test(self.getIDLabel(d,data))){
-            var fullLabel = self.getFullLabel(self.getIDLabel(d,data),data);
+        if (/\.\.\./.test(self.getIDLabel(d.id,data))){
+            var fullLabel = self.getFullLabel(self.getIDLabel(d.id,data),data);
               return (fullLabel);  
         } else if (yFont < 12) {//HARDCODE alert
-              return (self.getIDLabel(d,data));
+              return (self.getIDLabel(d.id,data));
         }
     });
 };
