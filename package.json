@@ -17,6 +17,7 @@
     "npm": ">= 2.7.4"
   },
   "dependencies": {
+    "phenogrid": "git+https://github.com/DoctorBud/phenogrid.git#replace-missing-fixes-from-my-previous-pr",
     "underscore": "1.8.3"
   },
   "devDependencies": {
