@@ -46,7 +46,7 @@ bbop.monarch.homePageConfig = {
         legendFontSize : 10,
         settingsFontSize : '11px',
         
-        maxLabelSize : 23,
+        maxLabelSize : 26,
         
         //Turn on/off legend
         useLegend : true,
@@ -120,7 +120,7 @@ bbop.monarch.phenotypeAnnotationConfig = {
   legendFontSize : 14,
   settingsFontSize : '14px',
   
-  maxLabelSize : 23,
+  maxLabelSize : 26,
   
   //Turn on/off legend
   useLegend : true,
@@ -194,7 +194,7 @@ bbop.monarch.diseaseGeneConfig = {
         legendFontSize : 14,
         settingsFontSize : '14px',
         
-        maxLabelSize : 23,
+        maxLabelSize : 26,
         
         //Turn on/off legend
         useLegend : false,
@@ -267,7 +267,7 @@ bbop.monarch.diseasePhenotypeConfig = {
         legendFontSize : 14,
         settingsFontSize : '14px',
         
-        maxLabelSize : 23,
+        maxLabelSize : 26,
         
         //Turn on/off legend
         useLegend : false,
@@ -340,7 +340,7 @@ bbop.monarch.genotypePhenotypeConfig = {
         legendFontSize : 14,
         settingsFontSize : '14px',
         
-        maxLabelSize : 23,
+        maxLabelSize : 26,
         
         //Turn on/off legend
         useLegend : true,
@@ -428,7 +428,7 @@ bbop.monarch.diseaseGeneConfigSmall = {
         legendFontSize : 10,
         settingsFontSize : '11px',
         
-        maxLabelSize : 23,
+        maxLabelSize : 26,
         
         //Turn on/off legend
         useLegend : false,
@@ -509,7 +509,7 @@ bbop.monarch.diseasePhenotypeConfigSmall = {
         legendFontSize : 14,
         settingsFontSize : '11px',
         
-        maxLabelSize : 23,
+        maxLabelSize : 26,
         
         //Turn on/off legend
         useLegend : false,
@@ -590,7 +590,7 @@ bbop.monarch.genotypePhenotypeConfigSmall = {
         legendFontSize : 10,
         settingsFontSize : '11px',
         
-        maxLabelSize : 23,
+        maxLabelSize : 26,
         
         //Turn on/off legend
         useLegend : true,
@@ -748,7 +748,7 @@ bbop.monarch.resizeConfig = {
         legendFontSize : 14,
         settingsFontSize : '14px',
         
-        maxLabelSize : 23,
+        maxLabelSize : 26,
         
         //Turn on/off legend
         useLegend : true,
