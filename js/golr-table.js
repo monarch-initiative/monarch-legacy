@@ -19,6 +19,11 @@ function getTableFromSolr(id, golr_field, div, filter, personality, tab_anchor){
                 getTable(id, golr_field, div, filter, personality);
             }
         });
+        // Trigger a click event if we're loading the page on an href
+        if ( window && window.location && window.location.hash &&
+                window.location.hash != "" && window.location.hash != "#" ){
+            jQuery('#categories a[href="'+window.location.hash+'"]').click();
+        }
     } else {
         getTable(id, golr_field, div, filter, personality);
     }

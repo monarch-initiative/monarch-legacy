@@ -7,6 +7,12 @@ function loadPhenogrid(){
             initPhenogrid();
         }
     });
+    
+    // Trigger a click event if we're loading the page on an href
+    if ( window && window.location && window.location.hash &&
+            window.location.hash != "" && window.location.hash == "#compare" ){
+        jQuery('#categories a[href="#compare"]').click();
+    }
 
     function initPhenogrid () {
         var disease_id = this.location.pathname;
