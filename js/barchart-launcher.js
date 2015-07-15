@@ -4,25 +4,26 @@ function makeDoveGraph(data){
     var tree = new monarch.model.tree(data);
     
     // Some testing for the ajax version
-    var personality = 'dovechart';
+    /*var personality = 'dovechart';
     var species_list = ["NCBITaxon:9606","NCBITaxon:10090","NCBITaxon:7955"];
     
     //golr_manager.set_personality(personality);
     var gene_filter = { field: 'subject_category', value: 'gene' };
-    var facet = 'subject_taxon';
+    var facet = 'subject_taxon';*/
     
     // global_golr_conf, global_solr_url, and scigrap_url are global variables
     // set in webapp.js using puptent
-    var builder = new monarch.builder.tree_builder(global_solr_url, global_scigraph_url, global_golr_conf);
-    builder.getCountsForSiblings('object_closure',species_list, gene_filter, personality, facet);
-    builder.getOntology('HP:0000118', 1);
+    var builder = new monarch.builder.tree_builder(global_solr_url, global_scigraph_url, global_golr_conf, tree);
+    //builder.getCountsForSiblings('object_closure',species_list, gene_filter, personality, facet);
+   //builder.getOntology('HP:0000118', 1);
     
     var initGraph = function(){ 
         jQuery("#graph-loader").hide();
-    
+        tree = builder.tree;
         graphObject = 
             new monarch.dovechart(bbop.monarch.homePageConfig, tree, graphDiv);
     };
+    builder.build_tree(['HP:0000118'], initGraph);
     
 }
 

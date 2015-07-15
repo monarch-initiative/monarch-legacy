@@ -114,6 +114,23 @@ monarch.model.tree.prototype.addNode = function(node, parents){
     var descendants = self.getFirstSiblings();
 };*/
 
+
+monarch.model.tree.prototype.addCountsToNode = function(node_id, counts, parents) {
+    var self = this;
+    
+    //Check that parents lead to something
+    var siblings = self.getDescendants(parents);
+    if (siblings.map(function(i){return i.id;}).indexOf(node_id) == -1){
+        throw new Error ("Error in locating node given "
+                         + parents + " and ID: " + node_id);
+    } else {
+        index = siblings.map(function(i){return i.id;}).indexOf(node_id)
+        siblings[index]['counts'] = counts;
+    }
+    
+    return self;
+};
+
 /*
  * Function: getDescendants
  * 
@@ -142,8 +159,7 @@ monarch.model.tree.prototype.getDescendants = function(parents){
             if (i == 0){
               return;
             }
-            if (!r.indexOf(
-                    descendants.map(function(i){return i.id;}) > -1)){
+            if (descendants.map(function(i){return i.id;}).indexOf(r) == -1){
                 throw new Error ("Error in locating descendant given "
                                  + parents + " failed at ID: " + r);
             }
@@ -174,13 +190,14 @@ monarch.model.tree.prototype.checkSiblings = function(siblings){
             r.label = r.id;
         }
         if (r.counts == null){
-            throw new Error ("No statistics for "+r.id+" in self.data object");
+            //throw new Error ("No statistics for "+r.id+" in self.data object");
+        } else {
+            r.counts.forEach(function (i){
+                if (i.value == null){
+                    r.value = 0;
+                }
+            });
         }
-        r.counts.forEach(function (i){
-            if (i.value == null){
-                r.value = 0;
-            }
-        });
     });
     return self;
 };

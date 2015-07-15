@@ -31,8 +31,22 @@ monarch.builder.tree_builder = function(solr_url, scigraph_url, golr_conf,  tree
         self.tree = tree;
     }
     
-    //Variable to keep track of nodes in a sibling group for testing, remove
-    self.siblings = [];
+};
+
+monarch.builder.tree_builder.prototype.build_tree = function(parents, final_function){
+    var self = this;
+    
+    var personality = 'dovechart';
+    var species_list = ["NCBITaxon:9606","NCBITaxon:10090","NCBITaxon:7955"];
+    
+    //golr_manager.set_personality(personality);
+    var gene_filter = { field: 'subject_category', value: 'gene' };
+    var facet = 'subject_taxon';
+    
+    //This is just a test with a hardcoded ontology file
+    var siblings = self.tree.getDescendants(parents);
+    
+    self.getCountsForSiblings(siblings, 'object_closure',species_list, gene_filter, personality, facet, parents, final_function);
     
 };
 
@@ -119,28 +133,23 @@ monarch.builder.tree_builder.prototype.setGolrManager = function(golr_manager, i
  * Returns:
  *    JQuery Ajax Function
  */
-monarch.builder.tree_builder.prototype.getCountsForSiblings = function(id_field, species, filter, personality, facet, parents, final_function){
+monarch.builder.tree_builder.prototype.getCountsForSiblings = function(siblings, id_field, species, filter, personality, facet, parents, final_function){
     var self = this;
     
     var promises = [];
     var success_callbacks = [];
     var error_callbacks = [];
     
-    //Todo delete
-    var test_obj = [{'id':'HP:0000707'},{'id':'HP:0000924'}];  
-    var id_list = test_obj.map(function(i){return i.id;});
-    
-    id_list.forEach( function(i) {
-        var ajax = self._getCountsForClass(i, id_field, species, filter, personality, facet);
+    siblings.map(function(i){return i.id;}).forEach( function(i) {
+        var ajax = self._getCountsForClass(i, id_field, species, filter, personality, facet, parents);
         promises.push(jQuery.ajax(ajax.qurl,ajax.jq_vars));
         success_callbacks.push(ajax.jq_vars['success']);
         error_callbacks.push(ajax.jq_vars['error']);
     });
     
     jQuery.when.apply(jQuery,promises).done(success_callbacks).done(function(){
-        console.log(self.getSiblings());
         if (typeof final_function != 'undefined'){
-            final_function;
+            final_function();
         }
     }).fail(error_callbacks);
     
@@ -209,15 +218,14 @@ monarch.builder.tree_builder.prototype._getCountsForClass = function(id, id_fiel
     golr_manager = self.setGolrManager(golr_manager, id, id_field, filter, personality);
     
     var makeDataNode = function(golr_response){
-        var node = {'id':id,'counts':[]};
+        var counts = [];
         var facet_counts = golr_response.facet_field(facet);
         facet_counts.forEach(function(i){
-            node.counts.push({
+            counts.push({
                 'name': self.getTaxonMap()[i[0]],
                 'value' : i[1]});
-        });    
-        self.addSibling(node);
-        //Replace with add node to Tree
+        });
+        self.tree.addCountsToNode(id,counts,parents)
     }
     var register_id = 'data_counts_'+id;
     
@@ -325,20 +333,3 @@ monarch.builder.tree_builder.prototype.getTaxonMap = function(){
         "NCBITaxon:7955" : "Zebrafish"
     };
 };
-
-//These functions are just of for testing, remove
-
-monarch.builder.tree_builder.prototype.addSibling = function(sibling) {
-    var self = this;
-    self.siblings.push(sibling);
-};
-
-monarch.builder.tree_builder.prototype.resetSiblings = function(){
-    this.siblings = [];
-};
-
-monarch.builder.tree_builder.prototype.getSiblings = function() {
-    return this.siblings;
-};
-
-

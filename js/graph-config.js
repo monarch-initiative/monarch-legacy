@@ -58,6 +58,7 @@ bbop.monarch.homePageConfig = {
         color : { 
                  first  : '#44A293',
                  second : '#A4D6D4',
+                 third : '#dfc0fd',
                    
                  yLabel : { 
                    fill  : '#000000',
@@ -131,6 +132,7 @@ bbop.monarch.phenotypeAnnotationConfig = {
   color : { 
            first  : '#44A293',
            second : '#A4D6D4',
+           third : '#dfc0fd',
              
            yLabel : { 
              fill  : '#000000',
