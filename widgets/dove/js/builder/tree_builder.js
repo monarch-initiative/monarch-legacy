@@ -43,10 +43,14 @@ monarch.builder.tree_builder.prototype.build_tree = function(parents, final_func
     var gene_filter = { field: 'subject_category', value: 'gene' };
     var facet = 'subject_taxon';
     
-    //This is just a test with a hardcoded ontology file
-    var siblings = self.tree.getDescendants(parents);
-    
-    self.getCountsForSiblings(siblings, 'object_closure',species_list, gene_filter, personality, facet, parents, final_function);
+    // Check tree to see if we have classes, if so skip getting ontology
+    // structure from SciGraph
+    if (!self.tree.checkDescendants(parents)){
+        //get data from ontology
+    } else {  
+        var siblings = self.tree.getDescendants(parents);    
+        self.getCountsForSiblings(siblings, 'object_closure',species_list, gene_filter, personality, facet, parents, final_function);
+    }
     
 };
 

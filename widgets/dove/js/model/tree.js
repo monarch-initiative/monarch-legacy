@@ -94,42 +94,69 @@ monarch.model.tree.prototype.getFirstSiblings = function(){
     return this._data.root.children;
 };
 
-//NOT IMPLEMENTED
-monarch.model.tree.prototype.addBranch = function(branch, parents){
-    
-    
-};
-
-//Not implemented
-/*
-monarch.model.tree.prototype.addNode = function(node, parents){
-    var self = this;
-    var parent = self.getRootID();
-    
-    if (parents[0] != self.getRootID()){
-        throw new Error ("first id in parent list is not root");
-    }
-    parents.shift();
-    // Start at root
-    var descendants = self.getFirstSiblings();
-};*/
-
 
 monarch.model.tree.prototype.addCountsToNode = function(node_id, counts, parents) {
     var self = this;
     
     //Check that parents lead to something
     var siblings = self.getDescendants(parents);
-    if (siblings.map(function(i){return i.id;}).indexOf(node_id) == -1){
+    var index = siblings.map(function(i){return i.id;}).indexOf(node_id);
+    
+    if (index == -1){
         throw new Error ("Error in locating node given "
                          + parents + " and ID: " + node_id);
     } else {
-        var index = siblings.map(function(i){return i.id;}).indexOf(node_id);
         siblings[index]['counts'] = counts;
     }
     
     return self;
 };
+
+/*
+ * Function: checkDescendants
+ * 
+ * Check if we have descendants given a list of parents
+ * 
+ * Parameters:
+ *  parents - list of IDs leading to descendant
+ * 
+ * Returns:
+ *  boolean 
+ */
+monarch.model.tree.prototype.checkDescendants = function(parents){
+    var self = this;
+    var areThereDescendants = true;
+    var descendants =[];
+    
+    if (typeof parents != 'undefined' && parents.length > 0){
+        
+        if (parents[0] != self.getRootID()){
+            throw new Error ("first id in parent list is not root");
+        }
+        descendants = self.getFirstSiblings();
+        for (var i = 0; i < (parents.length-1); i++) {
+            //skip root
+            if (i == 0){
+                continue;
+            } else {
+                var branch = self._jumpOneLevel(parents[i], descendants);
+                descendants = branch.children;
+            }
+        }
+        
+    } else {
+        areThereDescendants =  self.hasRoot();
+    }
+    console.log(descendants);
+    if (descendants.length > 0 && 'id' in descendants[0] && typeof descendants[0].id != 'undefined'){
+        areThereDescendants = true;
+    } else {
+        areThereDescendants = false;
+    }
+
+    return areThereDescendants;
+};
+    
 
 /*
  * Function: getDescendants
@@ -146,33 +173,50 @@ monarch.model.tree.prototype.getDescendants = function(parents){
     var self = this;
     
     // Start at root
-    var descendants = self.getFirstSiblings();
+    var descendants = [];
     
     if (typeof parents != 'undefined' && parents.length > 0){
         
         if (parents[0] != self.getRootID()){
             throw new Error ("first id in parent list is not root");
         }
-        
+
         parents.forEach( function(r,i){
             //skip root
             if (i == 0){
-              return;
+              descendants = self.getFirstSiblings();
+            } else {
+                var branch = self._jumpOneLevel(r, descendants);
+                descendants = branch.children;
             }
-            if (descendants.map(function(i){return i.id;}).indexOf(r) == -1){
-                throw new Error ("Error in locating descendant given "
-                                 + parents + " failed at ID: " + r);
-            }
-            descendants = descendants.filter(function(i){return i.id == r;});
-            if (descendants.length > 1){
-                throw new Error ("Cannot disambiguate id: " + r);
-            }
-            descendants = descendants[0].children;
         });
     } 
     
     return descendants;
 };
+
+/*
+ * Function: _jumpOneLevel
+ * 
+ * Return a descendant given a list of IDs leading to the descendant
+ * 
+ * Parameters:
+ *  id - id to move into on branch
+ *  branch - branch of a tree
+ * 
+ * Returns:
+ *  object containing branch of data where id is the root
+ */
+monarch.model.tree.prototype._jumpOneLevel = function(id, branch){
+    branch = branch.filter(function(i){return i.id == id;});
+    if (branch.length > 1){
+        throw new Error ("Cannot disambiguate id: " + id);
+    } else if (branch.length == 0){
+        throw new Error ("Error in locating descendant given "
+                + parents + " failed at ID: " + id);
+    }
+    return branch[0];
+}
 
 //TODO improve checking
 // Just checks top level of tree
@@ -201,35 +245,3 @@ monarch.model.tree.prototype.checkSiblings = function(siblings){
     });
     return self;
 };
-
-/* 
- * Node sub-object
- * TODO -  determine if this is needed
- * 
- * Namespace: monarch.model.tree
- * 
- */
-
-// Module and namespace checking.
-if (typeof monarch == 'undefined') { var monarch = {};}
-if (typeof monarch.model == 'undefined') { monarch.model = {};}
-if (typeof monarch.model.tree == 'undefined') { monarch.model.tree = {};}
-
-
-monarch.model.tree.node = function(id, label, children){
-    var self = this;
-    self.id = id;
-    
-    if (typeof label != 'undefined'){
-        self.label = label;
-    } else {
-        self.label = id;
-    }
-    
-    if (typeof children != 'undefined'){
-        self.children = children;
-    } else {
-        self.children = [];
-    }
-};
-  
