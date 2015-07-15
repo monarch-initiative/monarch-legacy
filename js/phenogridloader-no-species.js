@@ -22,7 +22,8 @@ function loadPhenogrid(){
             error : function(jqXHR, textStatus, errorThrown) {
                 var phenogridOpts = {
                                         phenotypeData: phenotype_list,
-                                        imagePath: '/node_modules/phenogrid/image/'
+                                        imagePath: '/node_modules/phenogrid/image/',
+										htmlPath: '/node_modules/phenogrid/js/res/'
                                     };
                 Phenogrid.createPhenogridForElement(phenogridContainer, phenogridOpts);
             },
@@ -31,7 +32,8 @@ function loadPhenogrid(){
 
                 var phenogridOpts = {
                                         phenotypeData: phenotype_list,
-                                        imagePath: '/node_modules/phenogrid/image/'
+                                        imagePath: '/node_modules/phenogrid/image/',
+										htmlPath: '/node_modules/phenogrid/js/res/'
                                     };
                 Phenogrid.createPhenogridForElement(phenogridContainer, phenogridOpts);
             }
