@@ -40,7 +40,7 @@ bbop.monarch.homePageConfig = {
         //Yaxis links
         yFontSize : 11,
         isYLabelURL : true,
-        yLabelBaseURL : "/phenotype/",
+        yLabelBaseURL : "/labs/golr/",
         
         //font sizes
         legendFontSize : 10,
@@ -114,7 +114,7 @@ bbop.monarch.phenotypeAnnotationConfig = {
   //Yaxis links
   yFontSize : 'default',
   isYLabelURL : true,
-  yLabelBaseURL : "/phenotype/",
+  yLabelBaseURL : "/labs/golr/",
   
   //font sizes
   legendFontSize : 14,
@@ -188,7 +188,7 @@ bbop.monarch.diseaseGeneConfig = {
         //Yaxis links
         yFontSize : 'default',
         isYLabelURL : true,
-        yLabelBaseURL : "/disease/",
+        yLabelBaseURL : "/labs/golr/",
         
         //font sizes
         legendFontSize : 14,
@@ -261,7 +261,7 @@ bbop.monarch.diseasePhenotypeConfig = {
         //Yaxis links
         yFontSize : 'default',
         isYLabelURL : true,
-        yLabelBaseURL : "/disease/",
+        yLabelBaseURL : "/labs/golr/",
         
         //font sizes
         legendFontSize : 14,
@@ -334,7 +334,7 @@ bbop.monarch.genotypePhenotypeConfig = {
         //Yaxis links
         yFontSize : 'default',
         isYLabelURL : true,
-        yLabelBaseURL : "/phenotype/",
+        yLabelBaseURL : "/labs/golr/",
         
         //font sizes
         legendFontSize : 14,
@@ -422,7 +422,7 @@ bbop.monarch.diseaseGeneConfigSmall = {
         //Yaxis links
         yFontSize : 11,
         isYLabelURL : true,
-        yLabelBaseURL : "/disease/",
+        yLabelBaseURL : "/labs/golr/",
         
         //font sizes
         legendFontSize : 10,
@@ -503,7 +503,7 @@ bbop.monarch.diseasePhenotypeConfigSmall = {
         //Yaxis links
         yFontSize : 11,
         isYLabelURL : true,
-        yLabelBaseURL : "/disease/",
+        yLabelBaseURL : "/labs/golr/",
         
         //font sizes
         legendFontSize : 14,
@@ -584,7 +584,7 @@ bbop.monarch.genotypePhenotypeConfigSmall = {
         //Yaxis links
         yFontSize : 11,
         isYLabelURL : true,
-        yLabelBaseURL : "/phenotype/",
+        yLabelBaseURL : "/labs/golr/",
         
         //font sizes
         legendFontSize : 10,
@@ -665,7 +665,7 @@ bbop.monarch.homePageConfigSmall = {
         //Yaxis links
         yFontSize : 8,
         isYLabelURL : true,
-        yLabelBaseURL : "/phenotype/",
+        yLabelBaseURL : "/labs/golr/",
         
         //font sizes
         legendFontSize : 9,
@@ -742,7 +742,7 @@ bbop.monarch.resizeConfig = {
         //Yaxis links
         yFontSize : 14,
         isYLabelURL : true,
-        yLabelBaseURL : "/phenotype/",
+        yLabelBaseURL : "/labs/golr/",
         
         //font sizes
         legendFontSize : 14,

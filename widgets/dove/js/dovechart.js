@@ -592,7 +592,7 @@ monarch.dovechart.prototype.drawGraph = function (histogram, isFromCrumb, parent
     }*/
     // We're just going to remove the wedges for now
     histogram.setYAxisTextSpacing(0);
-    histogram.svg.selectAll("polygon.wedge").remove();
+    //histogram.svg.selectAll("polygon.wedge").remove();
     
     //Create legend
     if (config.useLegend){
