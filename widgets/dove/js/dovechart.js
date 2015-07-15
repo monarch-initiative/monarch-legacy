@@ -584,12 +584,15 @@ monarch.dovechart.prototype.drawGraph = function (histogram, isFromCrumb, parent
     
     //Create navigation arrow
     var navigate = histogram.svg.selectAll(".y.axis");
-    self.makeNavArrow(data,navigate,config.arrowDim,
+    /*self.makeNavArrow(data,navigate,config.arrowDim,
                            barGroup,bar,histogram);
     if (!self.checkForChildren(data)){
         histogram.setYAxisTextSpacing(0);
         histogram.svg.selectAll("polygon.wedge").remove();
-    }
+    }*/
+    // We're just going to remove the wedges for now
+    histogram.setYAxisTextSpacing(0);
+    histogram.svg.selectAll("polygon.wedge").remove();
     
     //Create legend
     if (config.useLegend){
