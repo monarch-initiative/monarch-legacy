@@ -79,6 +79,9 @@ monarch.model.tree.prototype.setRoot = function(node){
     this._data.root = node;
 };
 
+monarch.model.tree.prototype.getRoot = function(){
+    return this._data.root;
+};
 
 monarch.model.tree.prototype.setRootID = function(id){
     this._data.root.id = id;
@@ -99,6 +102,10 @@ monarch.model.tree.prototype.hasRoot = function(){
 
 monarch.model.tree.prototype.getFirstSiblings = function(){
     return this._data.root.children;
+};
+
+monarch.model.tree.prototype.setFirstSiblings = function(siblings){
+    this._data.root.children = siblings;
 };
 
 
@@ -123,15 +130,21 @@ monarch.model.tree.prototype.addSiblingGroup = function(nodes, parents) {
     var self = this;
     
     //Check that parents lead to something
-    var root = parents.pop();
-    var siblings = self.getDescendants(parents);
-    var index = siblings.map(function(i){return i.id;}).indexOf(root);
+    var p_clone = JSON.parse(JSON.stringify(parents));
+    var root = p_clone.pop();
     
-    if (index == -1){
-        throw new Error ("Error in locating node given "
-                         + parents + " and ID: " + root);
+    if (p_clone.length == 0){
+        self.setFirstSiblings(nodes);
     } else {
-        siblings[index]['children'] = nodes;
+        var siblings = self.getDescendants(p_clone);
+        var index = siblings.map(function(i){return i.id;}).indexOf(root);
+    
+        if (index == -1){
+            throw new Error ("Error in locating node given "
+                         + p_clone + " and ID: " + root);
+        } else {
+            siblings[index]['children'] = nodes;
+        }
     }
     
     return self;
@@ -160,7 +173,7 @@ monarch.model.tree.prototype.checkDescendants = function(parents, checkForData){
             throw new Error ("first id in parent list is not root");
         }
         descendants = self.getFirstSiblings();
-        for (var i = 0; i < (parents.length-1); i++) {
+        for (var i = 0; i < (parents.length); i++) {
             //skip root
             if (i == 0){
                 continue;
@@ -171,7 +184,7 @@ monarch.model.tree.prototype.checkDescendants = function(parents, checkForData){
         }
         
     } else {
-        areThereDescendants =  self.hasRoot();
+        return self.hasRoot();
     }
 
     if (typeof descendants != 'undefined' && descendants.length > 0 
@@ -179,7 +192,7 @@ monarch.model.tree.prototype.checkDescendants = function(parents, checkForData){
             && typeof descendants[0].id != 'undefined'){
         areThereDescendants = true;
         
-            if (checkForData && descendants[0].id.counts != 'undefined'){
+            if ( checkForData && !('counts' in descendants[0]) ){
                 areThereDescendants = false;
             }
     } else {
@@ -222,7 +235,9 @@ monarch.model.tree.prototype.getDescendants = function(parents){
                 descendants = branch.children;
             }
         });
-    } 
+    } else {
+        descendants = self.getRoot();
+    }
     
     return descendants;
 };
@@ -244,8 +259,7 @@ monarch.model.tree.prototype._jumpOneLevel = function(id, branch){
     if (branch.length > 1){
         throw new Error ("Cannot disambiguate id: " + id);
     } else if (branch.length == 0){
-        throw new Error ("Error in locating descendant given "
-                + parents + " failed at ID: " + id);
+        throw new Error ("Error in locating descendants given id: "+id);
     }
     return branch[0];
 }

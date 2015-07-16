@@ -3,9 +3,9 @@ function makeDoveGraph(data){
     var graphDiv = ".dove-container";
     var tree = new monarch.model.tree(data);
     
-    /*var tree = new monarch.model.tree();
+ /*   var tree = new monarch.model.tree();
     var root = {'id' : 'HP:0000118', 'label': 'Phenotypic Abnormality'};
-    tree.setRoot(root);*/
+    tree.setRoot(root); */
     
     
     // Some testing for the ajax version
@@ -26,7 +26,7 @@ function makeDoveGraph(data){
         jQuery("#graph-loader").hide();
         tree = builder.tree;
         graphObject = 
-            new monarch.dovechart(bbop.monarch.homePageConfig, tree, graphDiv);
+            new monarch.dovechart(bbop.monarch.homePageConfig, tree, graphDiv, builder);
     };
     builder.build_tree(['HP:0000118'], initGraph);
     

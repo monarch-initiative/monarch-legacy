@@ -8,7 +8,7 @@
 // Module and namespace checking.
 if (typeof monarch == 'undefined') { var monarch = {};}
 
-monarch.dovechart = function(config, tree, html_div){
+monarch.dovechart = function(config, tree, html_div, tree_builder){
     self = this;
     if (config == null || typeof config == 'undefined'){
         self.config = self.getDefaultConfig();
@@ -46,6 +46,7 @@ monarch.dovechart = function(config, tree, html_div){
     self.parents.push(tree.getRootID());
     self.html_div = html_div;
     self.tree = tree;
+    self.tree_builder = tree_builder;
 
     self.tooltip = d3.select(html_div)
         .append("div")
@@ -538,7 +539,7 @@ monarch.dovechart.prototype.drawGraph = function (histogram, isFromCrumb, parent
     var config = self.config;
     
     if (typeof parent != 'undefined'){
-        self.parents.push(parent);
+      //  self.parents.push(parent);
     }
     
     var data = self.tree.getDescendants(self.parents);
@@ -920,11 +921,19 @@ monarch.dovechart.prototype.setYAxisText = function(histogram,data, barGroup, ba
         /*if (config.isYLabelURL){
             d3.select(this).style("cursor", "pointer");
             document.location.href = config.yLabelBaseURL + d;
-        }*/
+        }
         if (d.children && d.children[0]){ //TODO use tree api
             self.transitionToNewGraph(histogram,d,
                     barGroup,bar, d.id);
-        }
+        }*/
+        self.parents.push(d.id);
+
+        var transitionToGraph = function(){
+            self.tree = self.tree_builder.tree;
+            self.transitionToNewGraph(histogram, d, barGroup,bar, d.id); 
+        };
+        self.tree_builder.build_tree(self.parents, transitionToGraph);
+        
     })
     .style("text-anchor", "end")
     .attr("dx", config.yOffset)
@@ -1054,7 +1063,7 @@ monarch.dovechart.prototype.checkData = function(data){
                 orderedCounts.push(count);
             } else {
                 var i = r.counts.map(function(i){return i.name;}).indexOf(val);
-                orderedCounts[i] = (r['counts'][index]);
+                orderedCounts[index] = (r['counts'][i]);
             }   
         });
         r.counts = orderedCounts;

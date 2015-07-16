@@ -42,13 +42,17 @@ monarch.builder.tree_builder.prototype.build_tree = function(parents, final_func
     //golr_manager.set_personality(personality);
     var gene_filter = { field: 'subject_category', value: 'gene' };
     var facet = 'subject_taxon';
+    var checkForData = true;
     
     // Check tree to see if we have classes, if so skip getting ontology
     // structure from SciGraph
     if (!self.tree.checkDescendants(parents)){
         //get data from ontology
-        self.addOntologyToTree(parents[parents.length-1], 1);
-    } else {  
+        var final_callback = function(){
+            self.getCountsForSiblings(parents, 'object_closure',species_list, gene_filter, personality, facet, final_function
+        )};
+        self.addOntologyToTree(parents[parents.length-1], 1, parents, final_callback);
+    } else if (!self.tree.checkDescendants(parents, checkForData)){
         self.getCountsForSiblings(parents, 'object_closure',species_list, gene_filter, personality, facet, final_function);
     }
     
@@ -64,7 +68,7 @@ monarch.builder.tree_builder.prototype.build_tree = function(parents, final_func
  * Returns:
  *    object, maybe should be monarch.model.tree?
  */
-monarch.builder.tree_builder.prototype.addOntologyToTree = function(id, depth, callback){
+monarch.builder.tree_builder.prototype.addOntologyToTree = function(id, depth, parents, final_function){
     var self = this;
     
     // Some Hardcoded options for scigraph
@@ -76,17 +80,22 @@ monarch.builder.tree_builder.prototype.addOntologyToTree = function(id, depth, c
     jQuery.ajax({
         url: query,
         jsonp: "callback",
-        dataType: "jsonp",
+        dataType: "json",
         error: function(){
           console.log('ERROR: looking at: ' + query);
         },
         success: function(data) {
-            console.log(JSON.stringify(data));
-            /*var graph = new bbop.model.graph(data);
-            console.log(graph);
-            var parent_node = graph.get_node(id);
-            var foo = graph.get_child_nodes(parent_node, relationship);
-            console.log(foo);*/
+            var graph = new bbop.model.graph();
+            graph.load_json(data);
+            var child_nodes = graph.get_child_nodes(id);
+            var siblings = child_nodes.map(function(i){
+                return {'id' : i.id(),
+                        'label' : i.label()};
+            });
+            self.tree.addSiblingGroup(siblings, parents)
+            if (typeof final_function != 'undefined'){
+                final_function();
+            }
         }
     });
 
@@ -141,7 +150,7 @@ monarch.builder.tree_builder.prototype.setGolrManager = function(golr_manager, i
 monarch.builder.tree_builder.prototype.getCountsForSiblings = function(parents, id_field, species, filter, personality, facet, final_function){
     var self = this;
     
-    var siblings = self.tree.getDescendants(parents);    
+    var siblings = self.tree.getDescendants(parents);
 
     var promises = [];
     var success_callbacks = [];
