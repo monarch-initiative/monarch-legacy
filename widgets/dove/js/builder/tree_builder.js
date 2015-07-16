@@ -92,7 +92,7 @@ monarch.builder.tree_builder.prototype.addOntologyToTree = function(id, depth, p
             var child_nodes = graph.get_child_nodes(id);
             var siblings = child_nodes.map(function(i){
                 return {'id' : i.id(),
-                        'label' : i.label()};
+                        'label' : self.processLabel(i.label())};
             });
             self.tree.addSiblingGroup(siblings, parents)
             if (typeof final_function != 'undefined'){
