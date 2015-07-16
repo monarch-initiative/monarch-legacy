@@ -3,6 +3,11 @@ function makeDoveGraph(data){
     var graphDiv = ".dove-container";
     var tree = new monarch.model.tree(data);
     
+    /*var tree = new monarch.model.tree();
+    var root = {'id' : 'HP:0000118', 'label': 'Phenotypic Abnormality'};
+    tree.setRoot(root);*/
+    
+    
     // Some testing for the ajax version
     /*var personality = 'dovechart';
     var species_list = ["NCBITaxon:9606","NCBITaxon:10090","NCBITaxon:7955"];

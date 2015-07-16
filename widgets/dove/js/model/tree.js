@@ -60,6 +60,8 @@ monarch.model.tree = function(data){
     if (data){
         self._data = data;
         self.checkSiblings(data.root.children);
+    } else {
+        self._data = {'root' : {'id' : '', 'label' : ''}};
     }
 };
 
@@ -73,8 +75,13 @@ monarch.model.tree.prototype.setTree = function(data){
     self._data = data;
 };
 
-monarch.model.tree.prototype.setRootID = function(root){
-    this._data.root.id = root;
+monarch.model.tree.prototype.setRoot = function(node){
+    this._data.root = node;
+};
+
+
+monarch.model.tree.prototype.setRootID = function(id){
+    this._data.root.id = id;
 };
 
 //Return entire tree data 
@@ -112,6 +119,24 @@ monarch.model.tree.prototype.addCountsToNode = function(node_id, counts, parents
     return self;
 };
 
+monarch.model.tree.prototype.addSiblingGroup = function(nodes, parents) {
+    var self = this;
+    
+    //Check that parents lead to something
+    var root = parents.pop();
+    var siblings = self.getDescendants(parents);
+    var index = siblings.map(function(i){return i.id;}).indexOf(root);
+    
+    if (index == -1){
+        throw new Error ("Error in locating node given "
+                         + parents + " and ID: " + root);
+    } else {
+        siblings[index]['children'] = nodes;
+    }
+    
+    return self;
+};
+
 /*
  * Function: checkDescendants
  * 
@@ -119,11 +144,12 @@ monarch.model.tree.prototype.addCountsToNode = function(node_id, counts, parents
  * 
  * Parameters:
  *  parents - list of IDs leading to descendant
+ *  checkForData - boolean - optional flag to check if descendants have count data
  * 
  * Returns:
  *  boolean 
  */
-monarch.model.tree.prototype.checkDescendants = function(parents){
+monarch.model.tree.prototype.checkDescendants = function(parents, checkForData){
     var self = this;
     var areThereDescendants = true;
     var descendants =[];
@@ -147,9 +173,15 @@ monarch.model.tree.prototype.checkDescendants = function(parents){
     } else {
         areThereDescendants =  self.hasRoot();
     }
-    console.log(descendants);
-    if (descendants.length > 0 && 'id' in descendants[0] && typeof descendants[0].id != 'undefined'){
+
+    if (typeof descendants != 'undefined' && descendants.length > 0 
+            && 'id' in descendants[0] 
+            && typeof descendants[0].id != 'undefined'){
         areThereDescendants = true;
+        
+            if (checkForData && descendants[0].id.counts != 'undefined'){
+                areThereDescendants = false;
+            }
     } else {
         areThereDescendants = false;
     }

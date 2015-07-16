@@ -47,15 +47,15 @@ monarch.builder.tree_builder.prototype.build_tree = function(parents, final_func
     // structure from SciGraph
     if (!self.tree.checkDescendants(parents)){
         //get data from ontology
+        self.addOntologyToTree(parents[parents.length-1], 1);
     } else {  
-        var siblings = self.tree.getDescendants(parents);    
-        self.getCountsForSiblings(siblings, 'object_closure',species_list, gene_filter, personality, facet, parents, final_function);
+        self.getCountsForSiblings(parents, 'object_closure',species_list, gene_filter, personality, facet, final_function);
     }
     
 };
 
 /*
- * Function: getOntology
+ * Function: addOntologyToTree
  * 
  * Parameters:
  *    id - string, root id as curie or url
@@ -64,11 +64,8 @@ monarch.builder.tree_builder.prototype.build_tree = function(parents, final_func
  * Returns:
  *    object, maybe should be monarch.model.tree?
  */
-monarch.builder.tree_builder.prototype.getOntology = function(id, depth){
+monarch.builder.tree_builder.prototype.addOntologyToTree = function(id, depth, callback){
     var self = this;
-    var tree = new monarch.model.tree();
-    
-    // var graph = new bbop.model.graph();
     
     // Some Hardcoded options for scigraph
     var direction = 'INCOMING';
@@ -76,7 +73,7 @@ monarch.builder.tree_builder.prototype.getOntology = function(id, depth){
     
     var query = self.setGraphNeighborsUrl(id, depth, relationship, direction);
     
-    return jQuery.ajax({
+    jQuery.ajax({
         url: query,
         jsonp: "callback",
         dataType: "jsonp",
@@ -84,11 +81,15 @@ monarch.builder.tree_builder.prototype.getOntology = function(id, depth){
           console.log('ERROR: looking at: ' + query);
         },
         success: function(data) {
-           console.log(data);
+            console.log(JSON.stringify(data));
+            /*var graph = new bbop.model.graph(data);
+            console.log(graph);
+            var parent_node = graph.get_node(id);
+            var foo = graph.get_child_nodes(parent_node, relationship);
+            console.log(foo);*/
         }
     });
-    
-    return;
+
 };
 
 /*
@@ -137,9 +138,11 @@ monarch.builder.tree_builder.prototype.setGolrManager = function(golr_manager, i
  * Returns:
  *    JQuery Ajax Function
  */
-monarch.builder.tree_builder.prototype.getCountsForSiblings = function(siblings, id_field, species, filter, personality, facet, parents, final_function){
+monarch.builder.tree_builder.prototype.getCountsForSiblings = function(parents, id_field, species, filter, personality, facet, final_function){
     var self = this;
     
+    var siblings = self.tree.getDescendants(parents);    
+
     var promises = [];
     var success_callbacks = [];
     var error_callbacks = [];
@@ -238,22 +241,6 @@ monarch.builder.tree_builder.prototype._getCountsForClass = function(id, id_fiel
     
 };
 
-/*
- * Function: addOntologyToTree
- * 
- * Parameters:
- *    ontology - object, ontology structured as monarch.model.tree
- *    tree - monarch.model.tree object, empty or containing data
- *    parents - parents of "root" if adding a branch to an existing ontology
- *    
- * Returns:
- *    monarch.model.tree
- */
-monarch.builder.tree_builder.prototype.addOntologyToTree = function(ontology, tree, parents){
-    var self = this;
-    // Throw error is parents are defined and there is no root
-    // Add root to tree if it doesn't exist 
-};
 
 /*
  * Function: setGraphNeighborsUrl
