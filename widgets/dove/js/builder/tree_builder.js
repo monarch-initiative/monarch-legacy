@@ -54,6 +54,8 @@ monarch.builder.tree_builder.prototype.build_tree = function(parents, final_func
         self.addOntologyToTree(parents[parents.length-1], 1, parents, final_callback);
     } else if (!self.tree.checkDescendants(parents, checkForData)){
         self.getCountsForSiblings(parents, 'object_closure',species_list, gene_filter, personality, facet, final_function);
+    } else {
+        final_function();
     }
     
 };

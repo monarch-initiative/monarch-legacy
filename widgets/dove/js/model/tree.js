@@ -186,7 +186,7 @@ monarch.model.tree.prototype.checkDescendants = function(parents, checkForData){
     } else {
         return self.hasRoot();
     }
-
+    
     if (typeof descendants != 'undefined' && descendants.length > 0 
             && 'id' in descendants[0] 
             && typeof descendants[0].id != 'undefined'){

@@ -544,7 +544,7 @@ monarch.dovechart.prototype.drawGraph = function (histogram, isFromCrumb, parent
     
     var data = self.tree.getDescendants(self.parents);
     
-    self.groups = self.getGroups(data);
+    //self.groups = self.getGroups(data);
 
     self.checkData(data);
     data = self.getStackedStats(data);
@@ -1005,7 +1005,7 @@ monarch.dovechart.prototype.getStackedStats = function(data){
 monarch.dovechart.prototype.sortDataByGroupCount = function(data,groups){
     var self = this;
     //Check if total counts have been calculated via getStackedStats()
-    if (data[0].counts[0].x1 == null){
+    if (!data[0] && data[0].counts[0].x1 == null){
         data = self.getStackedStats(data);
     }
     
