@@ -948,6 +948,7 @@ monarch.dovechart.prototype.setYAxisText = function(histogram,data, barGroup, ba
             document.location.href = config.yLabelBaseURL + d;
         }*/
         if (!self.tree_builder){
+            self.parents.push(d.id);
             if (d.children && d.children[0]){ //TODO use tree api
                 self.transitionToNewGraph(histogram,d,
                     barGroup,bar, d.id);
