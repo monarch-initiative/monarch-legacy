@@ -25,7 +25,7 @@ bbop.monarch.homePageConfig = {
         xFontSize : "9px",
         
         //Chart title and first breadcrumb
-        chartTitle : "Number of Phenotype Annotations Per Species",
+        chartTitle : "Number of Phenotype Gene Associations Per Species",
         
         //Title size/font settings
         title : {
@@ -79,7 +79,7 @@ bbop.monarch.homePageConfig = {
                  crumbText : '#FFFFFF'
         },
 
-        useCrumb : false,
+        useCrumb : true,
         crumbFontSize : 8.5,
         useCrumbShape : true
  };

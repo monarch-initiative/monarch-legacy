@@ -22,4 +22,9 @@ body {
     border-style:solid;
     border-width:1px;
 }
+.dove-container{
+    position: relative;
+    border-style:solid;
+    border-width:1px;
+}
 

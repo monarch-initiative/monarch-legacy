@@ -33,7 +33,7 @@ monarch.builder.tree_builder = function(solr_url, scigraph_url, golr_conf,  tree
     
 };
 
-monarch.builder.tree_builder.prototype.build_tree = function(parents, final_function){
+monarch.builder.tree_builder.prototype.build_tree = function(parents, final_function, error_function){
     var self = this;
     
     var personality = 'dovechart';
@@ -49,11 +49,11 @@ monarch.builder.tree_builder.prototype.build_tree = function(parents, final_func
     if (!self.tree.checkDescendants(parents)){
         //get data from ontology
         var final_callback = function(){
-            self.getCountsForSiblings(parents, 'object_closure',species_list, gene_filter, personality, facet, final_function
+            self.getCountsForSiblings(parents, 'object_closure',species_list, gene_filter, personality, facet, final_function, error_function
         )};
         self.addOntologyToTree(parents[parents.length-1], 1, parents, final_callback);
     } else if (!self.tree.checkDescendants(parents, checkForData)){
-        self.getCountsForSiblings(parents, 'object_closure',species_list, gene_filter, personality, facet, final_function);
+        self.getCountsForSiblings(parents, 'object_closure',species_list, gene_filter, personality, facet, final_function, error_function);
     } else {
         final_function();
     }
@@ -149,7 +149,7 @@ monarch.builder.tree_builder.prototype.setGolrManager = function(golr_manager, i
  * Returns:
  *    JQuery Ajax Function
  */
-monarch.builder.tree_builder.prototype.getCountsForSiblings = function(parents, id_field, species, filter, personality, facet, final_function){
+monarch.builder.tree_builder.prototype.getCountsForSiblings = function(parents, id_field, species, filter, personality, facet, final_function, error_function){
     var self = this;
     
     var siblings = self.tree.getDescendants(parents);
@@ -169,7 +169,11 @@ monarch.builder.tree_builder.prototype.getCountsForSiblings = function(parents, 
         if (typeof final_function != 'undefined'){
             final_function();
         }
-    }).fail(error_callbacks);
+    }).fail(error_callbacks).fail(function (){
+        if (typeof error_function != 'undefined'){
+            error_function();
+        }
+    });
     
 };
 

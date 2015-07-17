@@ -109,7 +109,32 @@ monarch.dovechart.prototype.makeGraphDOM = function(html_div, data){
               "<label><input type=\"checkbox\" name=\"zero\"" +
               " value=\"remove\"> Remove Empty Groups</label> " +
               "</form> ");
-
+      
+      // Ajax spinner
+      jQuery(html_div+" .interaction li .settings").append("<div id=\"ajax-spinner\">"+
+                          "<div class=\"ortholog-spinner\" > " +
+                            "<div class=\"spinner-container container1\">" +
+                              "<div class=\"circle1\"></div>" +
+                              "<div class=\"circle2\"></div>" +
+                              "<div class=\"circle3\"></div>" +
+                              "<div class=\"circle4\"></div>" +
+                            "</div>" +
+                            "<div class=\"spinner-container container2\"> " +
+                              "<div class=\"circle1\"></div>" +
+                              "<div class=\"circle2\"></div>" +
+                              "<div class=\"circle3\"></div>" +
+                              "<div class=\"circle4\"></div>" +
+                            "</div>" +
+                            "<div class=\"spinner-container container3\">" +
+                              "<div class=\"circle1\"></div>" +
+                              "<div class=\"circle2\"></div>" +
+                              "<div class=\"circle3\"></div>" +
+                              "<div class=\"circle4\"></div>" +
+                            "</div>" +
+                          "</div>" +
+                          "<div id='fetching'>Fetching Data...</div></div>" +
+                          "<div id='error-msg'>Error Fetching Data</div>");
+      //jQuery("#ajax-spinner").show();
       //Update tooltip positioning
       if (!config.useCrumb && groups.length>1){
           config.arrowOffset.height = 12;
@@ -926,13 +951,22 @@ monarch.dovechart.prototype.setYAxisText = function(histogram,data, barGroup, ba
             self.transitionToNewGraph(histogram,d,
                     barGroup,bar, d.id);
         }*/
+        self.disableYAxisText(histogram,data, barGroup, bar);
         self.parents.push(d.id);
-
+        jQuery("#ajax-spinner").show();
         var transitionToGraph = function(){
+            jQuery("#ajax-spinner").hide();
             self.tree = self.tree_builder.tree;
             self.transitionToNewGraph(histogram, d, barGroup,bar, d.id); 
         };
-        self.tree_builder.build_tree(self.parents, transitionToGraph);
+        
+        var showErrorMessage = function(){
+            jQuery("#ajax-spinner").hide();
+            self.setYAxisText(histogram,data, barGroup, bar);
+            jQuery("#error-msg").show().delay(3000).fadeOut();
+        };
+        
+        self.tree_builder.build_tree(self.parents, transitionToGraph, showErrorMessage);
         
     })
     .style("text-anchor", "end")
@@ -948,6 +982,26 @@ monarch.dovechart.prototype.setYAxisText = function(histogram,data, barGroup, ba
     });
 };
 
+
+monarch.dovechart.prototype.disableYAxisText = function(histogram,data, barGroup, bar){
+    self = this;
+    config = self.config;
+    data = self.setDataPerSettings(data);
+    
+    histogram.svg.select(".y.axis")
+    .selectAll("text")
+    .on("mouseover", function(){
+        d3.select(this).style("cursor", "arrow");
+    })
+    .on("mouseout", function(){
+        d3.select(this).style("fill", config.color.yLabel.fill );
+        d3.select(this).style("text-decoration", "none");
+        self.tooltip.style("display", "none");
+    })
+    .on("click", function(d){
+    });
+    
+};
 ////////////////////////////////////////////////////////////////////
 //
 //Data object manipulation
@@ -1274,7 +1328,7 @@ monarch.dovechart.prototype.setPolygonCoordinates = function(){
     }
     
     //breadcrumb div dimensions
-    this.config.bcWidth = 560;
+    this.config.bcWidth = 900;
     
     //Y axis positioning when arrow present
     if (this.config.yOffset == null || typeof this.config.yOffset == 'undefined'){

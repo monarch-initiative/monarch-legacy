@@ -27,6 +27,7 @@ function makeDoveGraph(data){
         tree = builder.tree;
         graphObject = 
             new monarch.dovechart(bbop.monarch.homePageConfig, tree, graphDiv, builder);
+        this.setMinHeightWidth(graphObject,graphDiv);
     };
     builder.build_tree(['HP:0000118'], initGraph);
     
