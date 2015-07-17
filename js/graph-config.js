@@ -41,7 +41,7 @@ bbop.monarch.phenotypeLandingConfig = {
         //Yaxis links
         yFontSize : 11,
         isYLabelURL : true,
-        yLabelBaseURL : "/labs/golr/",
+        yLabelBaseURL : "/phenotype/",
         
         //font sizes
         legendFontSize : 10,
