@@ -5,9 +5,8 @@ function makePhenotypeLandingGraph(data){
     
     // global_golr_conf, global_solr_url, and scigrap_url are global variables
     // set in webapp.js using puptent
-    var builder = new monarch.builder.tree_builder(global_solr_url, global_scigraph_url, global_golr_conf, tree);
-    //builder.getCountsForSiblings('object_closure',species_list, gene_filter, personality, facet);
-   //builder.getOntology('HP:0000118', 1);
+    var builder = new monarch.builder.tree_builder(global_solr_url, global_scigraph_url, global_golr_conf,
+            tree, bbop.monarch.phenotypeGeneGolrSettings);
     
     var initGraph = function(){ 
         jQuery("#graph-loader").hide();
@@ -19,6 +18,10 @@ function makePhenotypeLandingGraph(data){
     builder.build_tree(['HP:0000118'], initGraph);
     
 }
+
+/*
+ * The following are functions for the legacy graphs and will be removed
+ */
 
 function makeHomePageGraph(data){
 

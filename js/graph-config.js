@@ -2,7 +2,7 @@ if (typeof bbop == 'undefined') { var bbop = {};}
 if (typeof bbop.monarch == 'undefined') { bbop.monarch = {};}
 
 
-//Graph for homepage
+//Graph for phenotypeLandingPage
 bbop.monarch.phenotypeLandingConfig = {
         
         //override default
@@ -85,6 +85,16 @@ bbop.monarch.phenotypeLandingConfig = {
         useCrumbShape : true
  };
 
+/*
+ * GOlr configurations for the graph widget
+ */
+bbop.monarch.phenotypeGeneGolrSettings = {
+        id_field : 'object_closure',
+        personality : 'dovechart',
+        species_list : ["NCBITaxon:9606","NCBITaxon:10090","NCBITaxon:7955"],
+        filter : [{ field: 'subject_category', value: 'gene' }],
+        facet : 'subject_taxon'
+};
 
 /*
  * The following were made for the legacy charts to deal with mutliple resizing
