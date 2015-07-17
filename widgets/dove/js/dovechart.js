@@ -946,27 +946,30 @@ monarch.dovechart.prototype.setYAxisText = function(histogram,data, barGroup, ba
         /*if (config.isYLabelURL){
             d3.select(this).style("cursor", "pointer");
             document.location.href = config.yLabelBaseURL + d;
-        }
-        if (d.children && d.children[0]){ //TODO use tree api
-            self.transitionToNewGraph(histogram,d,
-                    barGroup,bar, d.id);
         }*/
-        self.disableYAxisText(histogram,data, barGroup, bar);
-        self.parents.push(d.id);
-        jQuery("#ajax-spinner").show();
-        var transitionToGraph = function(){
-            jQuery("#ajax-spinner").hide();
-            self.tree = self.tree_builder.tree;
-            self.transitionToNewGraph(histogram, d, barGroup,bar, d.id); 
-        };
+        if (!self.tree_builder){
+            if (d.children && d.children[0]){ //TODO use tree api
+                self.transitionToNewGraph(histogram,d,
+                    barGroup,bar, d.id);
+            }
+        } else {
+            self.disableYAxisText(histogram,data, barGroup, bar);
+            self.parents.push(d.id);
+            jQuery("#ajax-spinner").show();
+            var transitionToGraph = function(){
+                jQuery("#ajax-spinner").hide();
+                self.tree = self.tree_builder.tree;
+                self.transitionToNewGraph(histogram, d, barGroup,bar, d.id); 
+            };
         
-        var showErrorMessage = function(){
-            jQuery("#ajax-spinner").hide();
-            self.setYAxisText(histogram,data, barGroup, bar);
-            jQuery("#error-msg").show().delay(3000).fadeOut();
-        };
+            var showErrorMessage = function(){
+                jQuery("#ajax-spinner").hide();
+                self.setYAxisText(histogram,data, barGroup, bar);
+                jQuery("#error-msg").show().delay(3000).fadeOut();
+            };
         
-        self.tree_builder.build_tree(self.parents, transitionToGraph, showErrorMessage);
+            self.tree_builder.build_tree(self.parents, transitionToGraph, showErrorMessage);
+        }
         
     })
     .style("text-anchor", "end")
