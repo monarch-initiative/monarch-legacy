@@ -1328,7 +1328,7 @@ monarch.dovechart.prototype.setPolygonCoordinates = function(){
     }
     
     //breadcrumb div dimensions
-    this.config.bcWidth = 900;
+    this.config.bcWidth = 700;
     
     //Y axis positioning when arrow present
     if (this.config.yOffset == null || typeof this.config.yOffset == 'undefined'){
@@ -1336,9 +1336,9 @@ monarch.dovechart.prototype.setPolygonCoordinates = function(){
     }
     
     //Check that breadcrumb width is valid
-    if (this.config.bcWidth > this.config.width+this.config.margin.right+this.config.margin.left){
+    /*if (this.config.bcWidth > this.config.width+this.config.margin.right+this.config.margin.left){
         this.config.bcWidth = this.config.bread.width+(this.config.bread.offset*5)+5;
-    }
+    }*/
 };
 
 //dovechart default configurations

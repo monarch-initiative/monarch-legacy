@@ -169,6 +169,10 @@
 #ajax-spinner {
     display:none;
 }
+#fetching {
+    font-size: 12px;
+    line-height: 40px;
+}
 
 #error-msg {
     display:none;

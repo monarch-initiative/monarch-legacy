@@ -19,7 +19,7 @@ if (typeof monarch.builder == 'undefined') { monarch.builder = {};}
  *    tree - monarch.model.tree object
  *  
  */
-monarch.builder.tree_builder = function(solr_url, scigraph_url, golr_conf,  tree){
+monarch.builder.tree_builder = function(solr_url, scigraph_url, golr_conf, tree, config){
     var self = this;
     self.solr_url = solr_url;
     // Turn into official golr conf object
@@ -30,18 +30,17 @@ monarch.builder.tree_builder = function(solr_url, scigraph_url, golr_conf,  tree
     } else {
         self.tree = tree;
     }
+    if (config == null || typeof config == 'undefined'){
+        self.config = self.getDefaultConfig();
+    } else {
+        self.config = config;
+    }
     
 };
 
 monarch.builder.tree_builder.prototype.build_tree = function(parents, final_function, error_function){
     var self = this;
     
-    var personality = 'dovechart';
-    var species_list = ["NCBITaxon:9606","NCBITaxon:10090","NCBITaxon:7955"];
-    
-    //golr_manager.set_personality(personality);
-    var gene_filter = { field: 'subject_category', value: 'gene' };
-    var facet = 'subject_taxon';
     var checkForData = true;
     
     // Check tree to see if we have classes, if so skip getting ontology
@@ -49,11 +48,11 @@ monarch.builder.tree_builder.prototype.build_tree = function(parents, final_func
     if (!self.tree.checkDescendants(parents)){
         //get data from ontology
         var final_callback = function(){
-            self.getCountsForSiblings(parents, 'object_closure',species_list, gene_filter, personality, facet, final_function, error_function
+            self.getCountsForSiblings(parents, final_function, error_function
         )};
         self.addOntologyToTree(parents[parents.length-1], 1, parents, final_callback);
     } else if (!self.tree.checkDescendants(parents, checkForData)){
-        self.getCountsForSiblings(parents, 'object_closure',species_list, gene_filter, personality, facet, final_function, error_function);
+        self.getCountsForSiblings(parents, final_function, error_function);
     } else {
         final_function();
     }
@@ -117,18 +116,23 @@ monarch.builder.tree_builder.prototype.addOntologyToTree = function(id, depth, p
  */
 monarch.builder.tree_builder.prototype.setGolrManager = function(golr_manager, id, id_field, filter, personality){
     var self = this;
+    var config = self.config;
     
     golr_manager.reset_query_filters();
-    golr_manager.add_query_filter(id_field, id, ['*']);
+    golr_manager.add_query_filter(config.id_field, id, ['*']);
     golr_manager.set_results_count(0);
     golr_manager.lite(true);
     
-    if (filter != null && filter.field && filter.value){
-        golr_manager.add_query_filter(filter.field, filter.value, ['*']);
+    if (config.filter instanceof Array && config.filter.length > 0){
+        config.filter.forEach(function(val){
+            if (val != null && val.field && val.value){
+                golr_manager.add_query_filter(val.field, val.value, ['*']);
+            }
+        });
     }
     
-    if (personality != null){
-        golr_manager.set_personality(personality);
+    if (config.personality != null){
+        golr_manager.set_personality(config.personality);
     }
     return golr_manager;
 };
@@ -149,7 +153,7 @@ monarch.builder.tree_builder.prototype.setGolrManager = function(golr_manager, i
  * Returns:
  *    JQuery Ajax Function
  */
-monarch.builder.tree_builder.prototype.getCountsForSiblings = function(parents, id_field, species, filter, personality, facet, final_function, error_function){
+monarch.builder.tree_builder.prototype.getCountsForSiblings = function(parents, final_function, error_function){
     var self = this;
     
     var siblings = self.tree.getDescendants(parents);
@@ -159,7 +163,7 @@ monarch.builder.tree_builder.prototype.getCountsForSiblings = function(parents, 
     var error_callbacks = [];
     
     siblings.map(function(i){return i.id;}).forEach( function(i) {
-        var ajax = self._getCountsForClass(i, id_field, species, filter, personality, facet, parents);
+        var ajax = self._getCountsForClass(i, parents);
         promises.push(jQuery.ajax(ajax.qurl,ajax.jq_vars));
         success_callbacks.push(ajax.jq_vars['success']);
         error_callbacks.push(ajax.jq_vars['error']);
@@ -192,7 +196,7 @@ monarch.builder.tree_builder.prototype.getCountsForSiblings = function(parents, 
  * Returns:
  *    JQuery Ajax Function
  */
-monarch.builder.tree_builder.prototype._getCountsForClass = function(id, id_field, species, filter, personality, facet, parents){
+monarch.builder.tree_builder.prototype._getCountsForClass = function(id, parents){
     var self = this;
     var node = {"id":id, "counts": []};
     
@@ -237,11 +241,11 @@ monarch.builder.tree_builder.prototype._getCountsForClass = function(id, id_fiel
             }
         };
     
-    golr_manager = self.setGolrManager(golr_manager, id, id_field, filter, personality);
+    golr_manager = self.setGolrManager(golr_manager, id);
     
     var makeDataNode = function(golr_response){
         var counts = [];
-        var facet_counts = golr_response.facet_field(facet);
+        var facet_counts = golr_response.facet_field(self.config.facet);
         facet_counts.forEach(function(i){
             counts.push({
                 'name': self.getTaxonMap()[i[0]],
@@ -339,3 +343,20 @@ monarch.builder.tree_builder.prototype.getTaxonMap = function(){
         "NCBITaxon:7955" : "Zebrafish"
     };
 };
+
+monarch.builder.tree_builder.prototype.addFilter = function(filter_args){
+    var self = this;
+    self.config.filter.push(filter_args);
+}
+
+
+monarch.builder.tree_builder.prototype.getDefaultConfig = function(){
+    var config = {
+            id_field : 'object_closure',
+            personality : 'dovechart',
+            species_list : ["NCBITaxon:9606","NCBITaxon:10090","NCBITaxon:7955"],
+            filter : [{ field: 'subject_category', value: 'gene' }],
+            facet : 'subject_taxon'
+    }
+    return config;
+}

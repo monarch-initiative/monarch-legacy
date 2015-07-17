@@ -1,20 +1,7 @@
-function makeDoveGraph(data){
+function makePhenotypeLandingGraph(data){
 
     var graphDiv = ".dove-container";
     var tree = new monarch.model.tree(data);
-    
- /*   var tree = new monarch.model.tree();
-    var root = {'id' : 'HP:0000118', 'label': 'Phenotypic Abnormality'};
-    tree.setRoot(root); */
-    
-    
-    // Some testing for the ajax version
-    /*var personality = 'dovechart';
-    var species_list = ["NCBITaxon:9606","NCBITaxon:10090","NCBITaxon:7955"];
-    
-    //golr_manager.set_personality(personality);
-    var gene_filter = { field: 'subject_category', value: 'gene' };
-    var facet = 'subject_taxon';*/
     
     // global_golr_conf, global_solr_url, and scigrap_url are global variables
     // set in webapp.js using puptent
@@ -26,7 +13,7 @@ function makeDoveGraph(data){
         jQuery("#graph-loader").hide();
         tree = builder.tree;
         graphObject = 
-            new monarch.dovechart(bbop.monarch.homePageConfig, tree, graphDiv, builder);
+            new monarch.dovechart(bbop.monarch.phenotypeLandingConfig, tree, graphDiv, builder);
         this.setMinHeightWidth(graphObject,graphDiv);
     };
     builder.build_tree(['HP:0000118'], initGraph);
