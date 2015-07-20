@@ -133,7 +133,8 @@ monarch.dovechart.prototype.makeGraphDOM = function(html_div, data){
                             "</div>" +
                           "</div>" +
                           "<div id='fetching'>Fetching Data...</div></div>" +
-                          "<div id='error-msg'>Error Fetching Data</div>");
+                          "<div id='error-msg'>Error Fetching Data</div>" +
+                          "<div id='leaf-msg'></div>");
       //jQuery("#ajax-spinner").show();
       //Update tooltip positioning
       if (!config.useCrumb && groups.length>1){
@@ -714,6 +715,8 @@ monarch.dovechart.prototype.pickUpBreadcrumb = function(histogram,index,groups,b
     //set global level
     self.level = index;
     var parentLen = self.parents.length;
+    
+    jQuery("#leaf-msg").hide();
 
     // Remove all elements following (index+1).
     // parentLen is greater than the number of elements remaining, but that's OK with splice()
@@ -947,6 +950,7 @@ monarch.dovechart.prototype.setYAxisText = function(histogram,data, barGroup, ba
             d3.select(this).style("cursor", "pointer");
             document.location.href = config.yLabelBaseURL + d;
         }*/
+        jQuery("#leaf-msg").hide();
         if (!self.tree_builder){
             self.parents.push(d.id);
             if (d.children && d.children[0]){ //TODO use tree api
@@ -960,7 +964,15 @@ monarch.dovechart.prototype.setYAxisText = function(histogram,data, barGroup, ba
             var transitionToGraph = function(){
                 jQuery("#ajax-spinner").hide();
                 self.tree = self.tree_builder.tree;
-                self.transitionToNewGraph(histogram, d, barGroup,bar, d.id); 
+                // Check if we've found a new class
+                if (!self.tree.checkDescendants(self.parents)){
+                    self.parents.pop();
+                    jQuery("#leaf-msg").html('There are no subclasses of <br/>'+d.fullLabel);
+                    jQuery("#leaf-msg").show().delay(3000).fadeOut();
+                    self.setYAxisText(histogram,data, barGroup, bar);
+                } else {
+                    self.transitionToNewGraph(histogram, d, barGroup,bar, d.id);
+                }
             };
         
             var showErrorMessage = function(){
