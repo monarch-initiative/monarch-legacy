@@ -179,14 +179,14 @@ monarch.dovechart.prototype.makeLegend = function(histogram){
        .attr("transform", function(d, i) { return "translate(0," + i * (config.legend.height+7) + ")"; });
 
     legend.append("rect")
-       .attr("x", config.width+config.legend.width+37)//HARDCODE
+       .attr("x", config.width+config.legend.width+45)//HARDCODE
        .attr("y", 6)
        .attr("width", config.legend.width)
        .attr("height", config.legend.height)
        .style("fill", histogram.color);
 
     legend.append("text")
-       .attr("x", config.width+config.legend.width+32)
+       .attr("x", config.width+config.legend.width+40)
        .attr("y", 14)
        .attr("dy", config.legendText.height)
        .attr("font-size",config.legendFontSize)
