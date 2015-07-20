@@ -136,15 +136,16 @@ function getTableFromSolr(id, golr_field, div, filter, personality, tab_anchor){
     // Details for spinner
     var spinner_top_div = makeSpinnerDiv();
     var spinner_bot_div = makeSpinnerDiv();
+    jQuery('#'+pager_top_div).prepend(spinner_top_div.to_string());
     
     // Add pre and post run spinner (borrow filter's for now).
     golr_manager.register('prerun', 'foo', function(){
-    //filters.spin_up();
-        jQuery('#'+pager_top_div).append(spinner_top_div.to_string());
-        jQuery('#'+pager_bot_div).append(spinner_bot_div.to_string());
+        filters.spin_up();
+        jQuery('#'+pager.button_span_id()).append(spinner_top_div.to_string());
+        jQuery('#'+pager_bottom.button_span_id()).append(spinner_bot_div.to_string());
     });
     golr_manager.register('postrun', 'foo', function(){
-    //filters.spin_down();
+        filters.spin_down();
         //jQuery('#'+spinner_top_div.get_id()).hide();
         //jQuery('#'+spinner_bot_div.get_id()).hide();    
     });
@@ -218,8 +219,8 @@ function makeSpinnerDiv(){
     new bbop.html.tag('div',
               {'generate_id': true,
                'class':
-               'progress progress-striped active pull-right',
-               'style': 'width: 3em;'},
+               'progress progress-striped active',
+               'style': 'width: 3em; position:absolute; display:inline-block; margin-top:3px; margin-left:10px;'},
               indiv);
     
     return spinner_div;
