@@ -3,6 +3,8 @@ Feature: Monarch-app's JSON service is sane
  Monarch-app JSON blobs behave as expected for various data.
  
  ## No Background necessary.
+ 
+ ## Removed - and the JSON should have JSONPath "annotation_sufficiency" equal to "integer" "0"
 
  @data
  Scenario: User attempts to use consume the JSON for a disease
@@ -14,5 +16,4 @@ Feature: Monarch-app's JSON service is sane
       and the JSON should have the top-level property "fragment"
       and the JSON should have the top-level property "curie"
       and the JSON should have the JSONPath "relationships[*].source"
-      and the JSON should have JSONPath "annotation_sufficiency" equal to "integer" "0"
       and the JSON should have JSONPath "synonyms[0]" equal to "string" "food hypersensitivity"

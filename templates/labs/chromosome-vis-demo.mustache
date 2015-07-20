@@ -5,7 +5,8 @@
       <link rel="icon" href="/image/favicon.ico" type="image/x-icon">
 
       <link data-require="bootstrap@*" rel="stylesheet" href="//maxcdn.bootstrapcdn.com/bootstrap/3.3.1/css/bootstrap.min.css" />
-      <script src="../js/sampleBand.js"></script>
+      <script src="../js/bbop.js"></script>
+      <script src="../js/amigo2.js"></script>
       <script data-require="angular.js@1.2.28" src="https://code.angularjs.org/1.2.28/angular.js"></script
       <script src="jsdas.min.js"></script>
       <script data-require="underscore.js@*" src="//cdnjs.cloudflare.com/ajax/libs/underscore.js/1.6.0/underscore-min.js"></script>
@@ -55,7 +56,37 @@
    <!--       <div chromosome id="chr13" chr="13" rel-size="false" axis="true" assembly="37" width='900' height="20" mode="single" centromere="line"></div>
    -->
 
-          <chromosome  id="chr1" chr="1" rel-size="false" axis="true" assembly="37" width='900' height="20" mode="single" centromere="dot" geneview-map="true"></chromosome>
+          <chromosome  id="chr22" chr="22" rel-size="false" axis="true" assembly="37" width='900' height="20" mode="single" centromere="dot" geneview-map="true"></chromosome>
+
+            <div id="Headers">
+                <table id="NewHeader">
+                    <tr>
+                    </tr>
+                </table>
+            </div>
+            <div id="Table">
+                <table id="myTable">
+                    <tr>
+                        <th>
+                            Variant ID
+                        </th>
+                        <th>
+                            Variant Type
+                        </th>
+                    </tr>
+                </table>
+            </div>
+
+            <input type="text" name="numbervariants" placeholder="Number of Variants"><br>
+            <button id="getvariant" type="submit">Get Variants</button>
+
+            <fieldset id="Form">
+                <legend>Variants</legend>
+                <input type="checkbox" name="substitution" id="substitution" value="substitution" checked="checked"/><label for="track">Substitutions</label><br />
+                <input type="checkbox" name="copy_number" id="copy_number" value="copy_number"  checked="checked"/><label for="event">Copy Number Variations</label><br />
+                <input type="checkbox" name="sequence_alteration" id="sequence_alteration" value="sequence_alteration" checked="checked"/><label for="message">Sequence Alterations</label><br />
+                <input type="checkbox" name="insertion" id="insertion" value="insertion" checked="checked"/><label for="message">Insertions</label><br />
+            </fieldset>
 
           <div class="wrapperforfooter">
             

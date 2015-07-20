@@ -10,7 +10,7 @@
 RINGO_MODULE_PATH ?= ../stick/lib:./modules/
 ## TODO/BUG: highly non-canonical location--should be passed as
 ## variable, not hard-coded.
-RINGO_BIN ?= ./ringojs/bin/ringo
+RINGO_BIN ?= ./tools/ringo
 ## Workaround for the above.
 RINGO_CLI_BIN ?= /usr/bin/ringo
 RINGO_PORT ?= 8080

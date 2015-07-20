@@ -1,6 +1,6 @@
 ## Alerts
 
-If there are anticipated problems, change alerts.js ot be:
+If there are anticipated problems, change alerts.js to be:
 
     ["We are currently experiencing difficulties. <b>Results may be unreliable</b>. Please check back later."]
 
@@ -12,7 +12,7 @@ One of three configurations are selected at startup time
  * server_config_dev.json
  * server_config_alpha.json  <-- use for bleeding edge testing
 
-In addition we provide amother json files for booking purposes:
+In addition we provide another json file for booking purposes:
 
  * server_config_public.json
 

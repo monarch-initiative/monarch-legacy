@@ -1,4 +1,9 @@
-<div class="tabcontainer">
+<div class="tabcontainer"> 
   <div class="tabhover">{{{type}}} associated with {{{id}}} </div>
-  <a href="#{{{href}}}"><div class="tab contenttab">{{{type}}}</div></a>
+  {{#resultNum}}
+  <a href="#{{{href}}}"><div class="tab contenttab">{{{type}}} ({{resultNum}})</div></a>
+  {{/resultNum}}
+  {{^resultNum}}
+  <div class="tab greyed-out">{{{type}}} (0)</div>
+  {{/resultNum}}
 </div>

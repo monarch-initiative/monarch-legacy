@@ -230,8 +230,9 @@ bbop.monarch.linker.prototype.url = function (id, xid, modifier, category){
             if(this.generic_item[xid]){
                 if (typeof category === 'undefined'){
                     throw new Error('category is missing!');
+                } else if (category != 'pathway'){
+                    retval = this.app_base + '/' + category + '/' + id;
                 }
-                retval = this.app_base + '/' + category + '/' + id;
             }
         }
     
@@ -393,6 +394,10 @@ bbop.monarch.linker.prototype.set_anchor = function(id, args, xid, modifier){
             ' (go to source page) " + href="' + url + '">' + id + '</a>';
         }
         else if (!retval){
+            // We want to escape < >
+            hilite = hilite.replace(/\>/,'&gt;');
+            hilite = hilite.replace(/\</,'&lt;');
+            
             retval = '<a title="' + id +
             ' (go to the page for ' + label +
             ')" href="' + url + '">' + hilite + '</a>';

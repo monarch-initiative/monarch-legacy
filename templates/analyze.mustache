@@ -2,7 +2,7 @@
     <div class="monarch-container">
         <div class="content">
             <div class="wrapperforfooter">
-            <div class="jumbotron">
+            <div class="jumbotron" style="padding-bottom:1px">
                 <div id="description">
                     {{#alerts}}
                     <div class="alert">
@@ -22,25 +22,27 @@
 					</p>
 
 					<p style="font-size:15px">
-					<b>Instructions:</b>
-					<ul style="font-size:15px; line-height:110%">
-					<li><i>Search</i></li>
-					<ul>
-                    <li><b>Step 1</b>: create a Phenotype Profile by entering a set of phenotypes.</li>
-                    <li><b>Step 2</b>: modify the settings for how to perform the comparison: <i>search</i> against the entire database
-                    or <i>compare</i> against a selected set of genes.</li>
-                    <li><b>Step 3</b>: Submit and view your results in the Results tab.
-                    (If you want to visualize preformatted <a href="https://www.sanger.ac.uk/resources/software/exomiser/">Exomiser</a> output,
-                    jump over to the <a id="internal-link" href="#upload">upload tab</a>.)</li>
-                    <li><b>Step 4</b>: Repeat.  The list of phenotypes and genes stay
-                    populated enabling you to iterate and refine your lists. You can start over by
-                    hitting Reset.</li>
-					</ul>
-					<li><i>Upload</i></li>
-					<ul>
-					<li>Upload or Paste your preformatted phenotype-comparison output to visualize in the Phenogrid.</li>
-					</ul>
-					</ul>
+					<b>Instructions:   <a id="instructions-toggle" href="#instructions" style="font-weight:normal">Show/Hide</a> </b>
+					<div id="instructions" style="display:none">
+					  <ul style="font-size:15px; line-height:110%">
+					    <li><i>Search</i></li>
+					    <ul>
+                          <li><b>Step 1</b>: create a Phenotype Profile by entering a set of phenotypes.</li>
+                          <li><b>Step 2</b>: modify the settings for how to perform the comparison: <i>search</i> against the entire database
+                              or <i>compare</i> against a selected set of genes.</li>
+                          <li><b>Step 3</b>: Submit and view your results in the Results tab.
+                              (If you want to visualize preformatted <a href="https://www.sanger.ac.uk/resources/software/exomiser/">Exomiser</a> output,
+                              jump over to the <a id="internal-link" href="#upload">upload tab</a>.)</li>
+                          <li><b>Step 4</b>: Repeat.  The list of phenotypes and genes stay
+                              populated enabling you to iterate and refine your lists. You can start over by
+                              hitting Reset.</li>
+					    </ul>
+					    <li><i>Upload</i></li>
+					      <ul>
+					        <li>Upload or Paste your preformatted phenotype-comparison output to visualize in the Phenogrid.</li>
+					      </ul>
+					  </ul>
+					</div>
 						
                     {{/isPhenotype}}
                 </div>
@@ -111,7 +113,7 @@
                         <div id="analyze-search" class="col-xs-6 col-sm-6 col-md-6 col-lg-6">
                           <div class="pheno-radio-button">
                             <label id="pheno-search">
-                              <input id="srch" type="radio" checked="true" value="search" name="mode"> Search</label>
+                              <input id="srch" type="radio" checked="checked" value="search" name="mode"> Search</label>
                           </div>
                           <div class="explain search-text">
                             Refine your search space by taxon or target type (disease or gene)
@@ -169,9 +171,6 @@
                           Expand your list of genes using the convenience buttons at the bottom. </p>
                         <div id="compare-form-group">
                           <div id="gene-autocomplete" class="compare-text">Enter Gene Symbol:
-                            <div class="small autocomplete-message compare-text">
-                              Note: Autocomplete currently only supports human genes
-                            </div>
                           </div>
                           <input id="auto_gene_input" type="text" class="form-control"
                           placeholder="e.g. LHX1" disabled>

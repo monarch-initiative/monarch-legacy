@@ -140,7 +140,7 @@ function modelDataPointPrint(point) {
 		selectedCalculation: 0,
 		invertAxis: false,
 		hpoDepth: 10,	// Numerical value that determines how far to go up the tree in relations.
-		hpoDirection: "out",	// String that determines what direction to go in relations.  Default is "out".
+		hpoDirection: "OUTGOING",	// String that determines what direction to go in relations.  Default is "OUTGOING".
 		hpoTreeAmounts: 1,	// Allows you to decide how many HPO Trees to render.  Once a tree hits the high-level parent, it will count it as a complete tree.  Additional branchs or seperate trees count as seperate items
 							// [vaa12] DO NOT CHANGE UNTIL THE DISPLAY HPOTREE FUNCTIONS HAVE BEEN CHANGED. WILL WORK ON SEPERATE TREES, BUT BRANCHES MAY BE INACCURATE
 		selectedSort: "Frequency",
@@ -745,40 +745,45 @@ function modelDataPointPrint(point) {
 		return selectedScale(score);
 	},
 
+	// model scores legend is not created after flipping the widget - Joe
 	_createModelScoresLegend: function() {
-		var self = this;
-		var scoreTipY = self.state.yoffset;
-		var faqY = scoreTipY - self.state.gridTitleYOffset;
-		var tipTextLength = 92;
-		var explYOffset = 15;
-		var explXOffset = 10;
-		var scoretip = self.state.svg.append("text")
-			.attr("transform","translate(" + (self.state.axis_pos_list[2] ) + "," + scoreTipY + ")")
-			.attr("x", 0)
-			.attr("y", 0)
-			.attr("class", "pg_tip")
-			.text("< Model Scores");
+		// Make sure the legend is only created once - Joe
+		if (this.state.svg.select(".pg_tip")[0][0] === null) {
+			var self = this;
+			var scoreTipY = self.state.yoffset;
+			var faqY = scoreTipY - self.state.gridTitleYOffset;
+			var tipTextLength = 92;
+			var explYOffset = 15;
+			var explXOffset = 10;
+			var scoretip = self.state.svg.append("text")
+				.attr("transform", "translate(" + (self.state.axis_pos_list[2] ) + "," + scoreTipY + ")")
+				.attr("x", 0)
+				.attr("y", 0)
+				.attr("class", "pg_tip")
+				.text("<- Model Scores"); // changed "<" to "<-" to make it look more like an arrow pointer - Joe
 
-		var tip	= self.state.svg
-			.append("svg:image")
-			.attr("xlink:href", this.state.scriptpath + "../image/greeninfo30.png")
-			.attr("transform","translate(" + (self.state.axis_pos_list[2] + tipTextLength) + "," + faqY + ")")
-			.attr("id","modelscores")
-			.attr("x", 0)
-			.attr("y", 0)
-			.attr("width", self.state.faqImgSize)
-			.attr("height", self.state.faqImgSize)
-			.attr("class", "pg_faq_img")
-			.on("click", function(d) {
-				var name = "modelscores";
-				self._showDialog(name);
-			});
+			var tip	= self.state.svg
+				.append("text")
+				.attr('font-family', 'FontAwesome')
+				.text(function(d) { 
+					return '\uF05A\n'; // Need to convert HTML/CSS unicode to javascript unicode - Joe
+				})
+				.attr("id", "modelscores")
+				.attr("x", self.state.axis_pos_list[2] + tipTextLength)
+				.attr("y", faqY + 20) // 20 padding - Joe
+				.style('cursor', 'hand')
+				.on("click", function(d) {
+					var name = "modelscores";
+					self._showDialog(name);
+				});
 
-		var expl = self.state.svg.append("text")
-			.attr("x",self.state.axis_pos_list[2] + explXOffset)
-			.attr("y",scoreTipY + explYOffset)
-			.attr("class","pg_tip")
-			.text("best matches left to right.");
+			var expl = self.state.svg.append("text")
+				.attr("x", self.state.axis_pos_list[2] + explXOffset)
+				.attr("y", scoreTipY + explYOffset)
+				.attr("class", "pg_tip")
+				.text("Best matches left to right."); // uppercased best - > Best - Joe
+		}
+		
 	},
 
 	_createDiseaseTitleBox: function() {
@@ -1630,19 +1635,15 @@ function modelDataPointPrint(point) {
 			.attr("y",this.state.gridTitleYOffset)
 			.text(titleText);
 
-		/*
-		 * foffset is the offset to place the icon at the right of the grid title.
-		 * ideally should do this by dynamically grabbing the width of mtitle,
-		 * but that doesn't seem to work.
-		 */
 		var faq	= this.state.svg
-			.append("svg:image")
-			.attr("xlink:href", this.state.scriptpath + "../image/greeninfo30.png")
-			.attr("x",xoffset+foffset)
-			.attr("id","pg_faqinfo")
-			.attr("width", this.state.faqImgSize)
-			.attr("height",this.state.faqImgSize)
-			.attr("class","pg_faq_img")
+			.append("text")
+			.attr('font-family', 'FontAwesome')
+			.text(function(d) { 
+				return '\uF05A\n'; // Need to convert HTML/CSS unicode to javascript unicode - Joe
+			})
+			.attr("x", xoffset+foffset)
+			.attr("y", this.state.gridTitleYOffset)
+			.style('cursor', 'hand')
 			.on("click", function(d) {
 				self._showDialog("faq");
 			});
@@ -1840,6 +1841,8 @@ function modelDataPointPrint(point) {
 	_capitalizeString: function(word){
 		if (word === undefined) {
 			return "Undefined";
+		}  else if (word === null) {
+			return "";
 		} else {
 			return word.charAt(0).toUpperCase() + word.slice(1);
 		}
@@ -2189,7 +2192,6 @@ function modelDataPointPrint(point) {
 			.attr("y", yv)
 			.attr("x", wv)
 			.append("xhtml:body")
-			.attr("id", "pg_detail_text")
 			.html(htmltext);
 	},
 
@@ -2335,25 +2337,10 @@ function modelDataPointPrint(point) {
 			// I need to pass this into the function
 			.on("mouseover", function(d) {
 				this.parentNode.appendChild(this);
-				// if this column and row are selected, clear the column/row and unset the column/row flag
-				if (self.state.selectedColumn !== undefined && self.state.selectedRow !== undefined) {
-					self.state.selectedColumn = undefined;
-					self.state.selectedRow = undefined;
-					self._deselectData();
-					if (this != self.state.currSelectedRect){
-						self._highlightIntersection(d, d3.mouse(this));
-						// put the clicked rect on the top layer of the svg so other events work
-						//???this.parentNode.appendChild(this);
-						self._enableRowColumnRects(this);
-						// set the current selected rectangle
-						self.state.currSelectedRect = this;
-					}
-				} else {
-					self._highlightIntersection(d, d3.mouse(this));
-					self._enableRowColumnRects(this);
-					self.state.currSelectedRect = this;
-				}
-			self._showModelData(d, this);
+				self._highlightIntersection(d, d3.mouse(this));
+				self._enableRowColumnRects(this);
+				self.state.currSelectedRect = this;
+				self._showModelData(d, this);
 			})
 			.on("mouseout", function(d) {
 				self._deselectData(data);
@@ -2369,18 +2356,14 @@ function modelDataPointPrint(point) {
 			return self._getColorForModelValue(self,self._getAxisData(colorID).species,d.value[self.state.selectedCalculation]);
 		});
 
-		model_rects.transition()
-			.delay(20)
-			.style('opacity', '1.0')
+		model_rects
 			.attr("y", function(d) {
 				return self._getAxisData(d.yID).ypos - 10; // rowid
 			})
 			.attr("x", function(d) {
 				return self.state.xScale(d.xID);
 			});
-		model_rects.exit().transition()
-			.style('opacity', '0.0')
-			.remove();
+		model_rects.exit().remove();
 	},
 
 	_highlightSpecies: function () {
@@ -2482,8 +2465,6 @@ function modelDataPointPrint(point) {
 			.attr("width", this.state.modelWidth - 4)
 			.attr("height", 12);
 
-		this.state.selectedRow = curr_data.yID;
-		this.state.selectedColumn = curr_data.xID;
 		this._resetLinks();
 
 		/*
@@ -2585,50 +2566,62 @@ function modelDataPointPrint(point) {
 
 	// Previously _clearModelLabels
 	_clearXLabels: function() {
-		this.state.svg.selectAll("g .x.axis").remove();
+		this.state.svg.selectAll("g.x").remove();
 		this.state.svg.selectAll("g .tick.major").remove();
 	},
 
 	// Previously _createModelLines
 	_createXLines: function() {
-		var modelLineGap = 10;
-		var lineY = this.state.yoffset - modelLineGap;
+		// Make sure the X line is created once - Joe
+		if (this.state.svg.select("#x_line")[0][0] === null) {
+			var modelLineGap = 10;
+			var lineX = this.state.yoffset - modelLineGap;
+
+			this.state.svg.append("line")
+				.attr("id", "x_line")
+				.attr("transform", "translate(" + (this.state.textWidth + this.state.xOffsetOver + 30) + "," + lineX + ")")
+				.attr("x1", 0)
+				.attr("y1", 0)
+				.attr("x2", this.state.modelWidth)
+				.attr("y2", 0)
+				.attr("stroke", "#0F473E")
+				.attr("stroke-width", 1);
+		} 
+		
+		// Why the following? - Joe
 		this.state.svg.selectAll("path.domain").remove();
 		this.state.svg.selectAll("text.scores").remove();
 		this.state.svg.selectAll("#pg_specieslist").remove();
-
-		this.state.svg.append("line")
-			.attr("transform","translate(" + (this.state.textWidth + this.state.xOffsetOver + 30) + "," + lineY + ")")
-			.attr("x1", 0)
-			.attr("y1", 0)
-			.attr("x2", this.state.modelWidth)
-			.attr("y2", 0)
-			.attr("stroke", "#0F473E")
-			.attr("stroke-width", 1);
 	},
 
 	_createYLines: function() {
-	    var self = this;
-		var modelLineGap = 30;
-		var lineY = this.state.yoffset + modelLineGap;
-		var displayCount = self._getYLimit();
-		//this.state.svg.selectAll("path.domain").remove();
-		//this.state.svg.selectAll("text.scores").remove();
-		//this.state.svg.selectAll("#pg_specieslist").remove();
+		// Make sure the Y line is created once - Joe
+		if (this.state.svg.select("#y_line")[0][0] === null) {
+			var self = this;
+			var modelLineGap = 30;
+			var lineY = this.state.yoffset + modelLineGap;
+			var displayCount = self._getYLimit();
+			//this.state.svg.selectAll("path.domain").remove();
+			//this.state.svg.selectAll("text.scores").remove();
+			//this.state.svg.selectAll("#pg_specieslist").remove();
 
-		var gridHeight = displayCount * self.state.heightOfSingleModel + 10;
-		if (gridHeight < self.state.minHeight) {
-			gridHeight = self.state.minHeight;
+			var gridHeight = displayCount * self.state.heightOfSingleModel + 10;
+			if (gridHeight < self.state.minHeight) {
+				gridHeight = self.state.minHeight;
+			}
+
+			this.state.svg.append("line")
+				.attr("id", "y_line")
+				.attr("transform", "translate(" + (this.state.textWidth + 15) + "," + lineY + ")")
+				.attr("x1", 0)
+				.attr("y1", 0)
+				.attr("x2", 0)
+				.attr("y2", gridHeight)
+				.attr("stroke", "#0F473E") // SVG stroke defines the color of a line, text, or outline of an element - Joe
+				.attr("stroke-width", 1); // SVG stroke-width defines the thickness of a line, text, or outline of an element - Joe
+
 		}
 
-		this.state.svg.append("line")
-			.attr("transform","translate(" + (this.state.textWidth + 15) + "," + lineY + ")")
-			.attr("x1", 0)
-			.attr("y1", 0)
-			.attr("x2", 0)
-			.attr("y2", gridHeight)
-			.attr("stroke", "#0F473E")
-			.attr("stroke-width", 1);
 	},
 
 	_createTextScores: function() {
@@ -3072,7 +3065,7 @@ function modelDataPointPrint(point) {
 	// create the html necessary for selecting the calculation
 	_createCalculationSelection: function () {
 		var optionhtml = "<span id='pg_calc_div'>Display"+
-			"<span id='pg_calcs'> <img class='pg_faq_img' src='" + this.state.scriptpath + "../image/greeninfo30.png'></span>" +
+			"<span id='pg_calcs'> <i class='fa fa-info-circle cursor_pointer'></i></span>" +
 			"<span id='calc_sel'><select id='pg_calculation'>";
 
 		for (var idx in this.state.similarityCalculation) {
@@ -3091,7 +3084,7 @@ function modelDataPointPrint(point) {
 	// create the html necessary for selecting the sort
 	_createSortPhenotypeSelection: function () {
 		var optionhtml ="<span id='pg_sort_div'>Sort Phenotypes" +
-			"<span id='pg_sorts'> <img class='pg_faq_img' src='" + this.state.scriptpath + "../image/greeninfo30.png'></span>" +
+			"<span id='pg_sorts'> <i class='fa fa-info-circle cursor_pointer'></i></span>" +
 			"<span><select id='pg_sortphenotypes'>";
 
 		for (var idx in this.state.phenotypeSort) {
@@ -3122,15 +3115,16 @@ function modelDataPointPrint(point) {
 
 		list = self._getSortedIDListStrict(self.state.filteredYAxis.entries());
 
-		var rect_text = this.state.svg
-			.selectAll(".a_text")
-			.data(list, function(d) { return d; });
+		var rect_text = this.state.svg.selectAll(".a_text").data(list, function(d) { 
+				return d; 
+			});
+			
 		rect_text.enter()
 			.append("text")
 			.attr("class", function(d) {
 				return "a_text data_text " + d;
 			})
-		// store the id for this item. This will be used on click events
+		    // store the id for this item. This will be used on click events
 			.attr("ontology_id", function(d) {
 				return d;
 			})
@@ -3144,13 +3138,11 @@ function modelDataPointPrint(point) {
 			.on("mouseover", function(d) {
 				self._selectYItem(d, d3.mouse(this));
 			})
-			.on("mouseout", function(d) {
+			.on("mouseout", function(d) { 
 				self._deselectData(d, d3.mouse(this));
 			})
-			.attr("width", self.state.textWidth)
-			.attr("height", 50)
 			.attr("data-tooltip", "sticky1")
-			.style("fill", function(d){
+			.style("fill", function(d) {
 				return self._getExpandStyling(d);
 			})
 			.text(function(d) {
@@ -3164,17 +3156,14 @@ function modelDataPointPrint(point) {
 
 		this._buildUnmatchedPhenotypeDisplay();
 
-		rect_text.transition()
-			.style('opacity', '1.0')
-			.delay(5)
+
+		rect_text
 			.attr("y", function(d) {
 				return self._getAxisData(d).ypos + self.state.yoffsetOver + pad;
 			});
-		rect_text.exit()
-			.transition()
-			.delay(20)
-			.style('opacity', '0.0')
-			.remove();
+
+		
+		rect_text.exit().remove();
 	},
 
 	_getUnmatchedPhenotypes: function(){
@@ -3409,7 +3398,7 @@ function modelDataPointPrint(point) {
 				// Labels/Nodes are done seperately to reduce redunancy as there might be multiple phenotypes with the same related nodes
 				for (var i in nodes){
 					if(!nodes.hasOwnProperty(i)){break;}
-					if (!this.state.hpoCacheLabels.containsKey(nodes[i].id) && (nodes[i].id != "MP:0000001" && nodes[i].id != "UPHENO_0001001" && nodes[i].id != "UPHENO_0001002" && nodes[i].id != "HP:0000118" && nodes[i].id != "HP:0000001")){
+					if (!this.state.hpoCacheLabels.containsKey(nodes[i].id) && (nodes[i].id != "MP:0000001" && nodes[i].id != "OBO:UPHENO_0001001" && nodes[i].id != "OBO:UPHENO_0001002" && nodes[i].id != "HP:0000118" && nodes[i].id != "HP:0000001")){
 						this.state.hpoCacheLabels.put(nodes[i].id,this._capitalizeString(nodes[i].lbl));
 					}
 				}
@@ -3417,7 +3406,7 @@ function modelDataPointPrint(point) {
 				// Used to prevent breaking objects
 				for (var j in edges){
 					if(!edges.hasOwnProperty(j)){break;}
-					if (edges[j].obj != "MP:0000001" && edges[j].obj != "UPHENO_0001001" && edges[j].obj != "UPHENO_0001002" && edges[j].obj != "HP:0000118" && edges[j].obj != "HP:0000001"){
+					if (edges[j].obj != "MP:0000001" && edges[j].obj != "OBO:UPHENO_0001001" && edges[j].obj != "OBO:UPHENO_0001002" && edges[j].obj != "HP:0000118" && edges[j].obj != "HP:0000001"){
 						HPOInfo.push(edges[j]);
 					}
 				}

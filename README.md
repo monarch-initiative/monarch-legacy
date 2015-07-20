@@ -1,15 +1,12 @@
+[![Build Status](https://travis-ci.org/monarch-initiative/monarch-app.svg?branch=master)](https://travis-ci.org/monarch-initiative/monarch-app)
+
 ## About
 
-This repo contains the JS API and RingoJS application to drive the
-current prototype web interface.
+This repo contains the JS API and RingoJS application to drive the Monarch Initiative web interface.
 
 You can run the website locally (see below).
 
-There may be an instance up and running here:
-
- * http://toaster.lbl.gov:8282/
-
-We are also experimenting with Heroku
+The live version of the Monarch Initiative web interface is at [http://monarchinitiative.org](http://monarchinitiative.org).
 
 ## Quickstart
 
@@ -25,11 +22,11 @@ You're done!
 
 Connect on localhost:
 
- * http://127.0.0.1:8282/
+ * http://127.0.0.1:8080/
 
 Or a particular disease, e.g:
 
- * http://127.0.0.1:8282/disease/DOID_14692
+ * http://127.0.0.1:8080/disease/DOID_14692
 
 ## Alternate installation instructions
 
@@ -41,7 +38,7 @@ Or a particular disease, e.g:
 
 3. Run app
 
-    ringo lib/monarch/web/webapp_launcher.js --port 8282
+    ringo lib/monarch/web/webapp_launcher.js --port 8080
 
 ## Widgets and sub-components
 
@@ -67,7 +64,7 @@ Further components should be added in a similar manner.
 
 Open doc/index.html in a web browser.
 
-Alternative, connect to 127.0.0.1:8282 and select "documentation" from menubar.
+Alternative, connect to 127.0.0.1:8080 and select "documentation" from menubar.
 
 
 ## Making changes

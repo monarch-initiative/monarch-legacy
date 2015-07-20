@@ -2,244 +2,66 @@
     <div class="monarch-container">
         <div class="content">
             <div class="wrapperforfooter">
-            <div class="jumbotron monarch-gene-light">
+            <div class="jumbotron monarch-disease-light">
                 <div id="description">
+                    {{#alerts}}
+                    <div class="alert">
+                      {{{.}}}
+                    </div>
+                    {{/alerts}}
                     <img id="monarch-logo" class="downloadline" src="/image/logo.png"/>
                     <h1 class="downloadline">Gene: {{label}}</h1>
-                    <a href="{{{base_url}}}.json" class="btn btn-default downloadline downloadline-left monarch-gene-dark">JSON</a>
+                    <a href="{{{download.json}}}" class="btn btn-default downloadline downloadline-left monarch-phenotype-dark">JSON</a>
                     <a class="downloadline btn btn-large btn-default btn-monarch-main monarch-feedback-dark"
                             href="mailto:info@monarchinitiative.org">Your feedback welcome!</a>
                     <p>
-                    {{description}}<br/>
-                    Organism: {{{taxon_xref}}}<br/>
-                    Source: {{{primary_xref}}}<br/>
-                    {{#hasSynonym}}
-                    Synonyms: {{{synonyms}}}<br/>
-                    {{/hasSynonym}}
-                    {{comments}}
+                    {{#hasDef}}
+                    {{definitions}}<br/>
+                    {{/hasDef}}
                     </p>
                 </div>
                 <div id="categories">
-                    <div class="tabcontainer">
-                        <a href="#ontology"><div id="initialtab" class="tab contenttab">Overview</div></a>
-                        <div class="tabline"></div>
-                    </div>
-                    <div class="tabcontainer">
-                        <div class="tabhover">View phenotypes related to this gene</div>
-                        {{#hasPhenotypes}}
-                            <a href="#phenotypes"><div class="tab contenttab">Phenotypes ({{phenotypeNum}})</div></a>
-                        {{/hasPhenotypes}}
-                        {{^hasPhenotypes}}
-                            <div class="tab greyed-out">Phenotypes (0)</div>
-                        {{/hasPhenotypes}}
-                    </div>
-
-<div class="tabcontainer">
-                        <div class="tabhover">View phenotypically  similar diseases and genes in a grid</div>
- 			{{#hasPhenotypes}}
-                           <a href="#compare"><div class="tab contenttab">Compare</div></a>
-				{{/hasPhenotypes}}
-                        {{^hasPhenotypes}}
-                            <div class="tab greyed-out">Compare</div>
-                        {{/hasPhenotypes}}
-                    </div>
-
-                    <div class="tabcontainer">
-                        <div class="tabhover">View diseases related to this gene</div>
-                        {{#hasDiseases}}
-                            <a href="#diseases"><div class="tab contenttab">Diseases ({{diseaseNum}})</div></a>
-                        {{/hasDiseases}}
-                        {{^hasDiseases}}
-                            <div class="tab greyed-out">Diseases (0)</div>
-                        {{/hasDiseases}}
-                    </div>
-                    <div class="tabcontainer">
-                        <div class="tabhover">View genotypes of this gene</div>
-                        {{#hasGenotypes}}
-                            <a href="#genotypes"><div class="tab contenttab">Genotypes ({{genotypeNum}})</div></a>
-                        {{/hasGenotypes}}
-                        {{^hasGenotypes}}
-                            <div class="tab greyed-out">Genotypes (0)</div>
-                        {{/hasGenotypes}}
-                    </div>
-                    <div class="tabcontainer">
-                        <div class="tabhover">View variants of this gene</div>
-                        {{#hasAlleles}}
-                            <a href="#alleles"><div class="tab contenttab">Variants ({{alleleNum}})</div></a>
-                        {{/hasAlleles}}
-                        {{^hasAlleles}}
-                            <div class="tab greyed-out">Variants (0)</div>
-                        {{/hasAlleles}}
-                    </div>
-                    <div class="tabcontainer">
-                        <div class="tabhover">View gene interactions</div>
-                        {{#hasInteractions}}
-                            <a href="#interactions"><div class="tab contenttab">Interactions ({{interactionNum}})</div></a>
-                        {{/hasInteractions}}
-                        {{^hasInteractions}}
-                            <div class="tab greyed-out">Interactions (0)</div>
-                        {{/hasInteractions}}
-                    </div>
-                    <div class="tabcontainer">
-                        <div class="tabhover">View orthologs</div>
-                        {{#hasOrthologs}}
-                            <a href="#orthologs"><div class="tab contenttab">Homologs ({{orthologNum}})</div></a>
-                        {{/hasOrthologs}}
-                        {{^hasOrthologs}}
-                            <div class="tab greyed-out">Homologs (0)</div>
-                        {{/hasOrthologs}}
-                    </div>
-                    <div class="tabcontainer">
-                        <div class="tabhover">View pathways that involve this gene</div>
-                        {{#hasPathways}}
-                            <a href="#pathways"><div class="tab contenttab">Pathways ({{pathwayNum}})</div></a>
-                        {{/hasPathways}}
-                        {{^hasPathways}}
-                            <div class="tab greyed-out">Pathways (0)</div>
-                        {{/hasPathways}}
-                    </div>
-                    <div class="tabcontainer">
-                        <div class="tabhover">View citations for the data on this page</div>
-                        {{#hasLiterature}}
-                            <a href="#literature"><div class="tab contenttab">Literature ({{literatureNum}})</div></a>
-                        {{/hasLiterature}}
-                        {{^hasLiterature}}
-                            <div class="tab greyed-out">Literature (0)</div>
-                        {{/hasLiterature}}
-                    </div>
+                    <a href="#overview"><div id="initialtab" class="tab contenttab">Overview</div></a>
+                    {{{includes.phenotype_anchor}}}
+                    {{{includes.disease_anchor}}}
+                    {{{includes.genotype_anchor}}}
+                    {{{includes.model_anchor}}}
+                    {{{includes.variant_anchor}}}
+                    {{{includes.homolog_anchor}}}
+                    {{{includes.pathway_anchor}}}
+                    {{{includes.phenogrid_anchor}}}
                 </div>
             </div>
             <div id="complete-info">
-                <div id="ontology" class="first category">
-                    <div class="ids">
-                        <b>Gene:</b>
-                        {{label}}
+                <div id="overview" class="first category">
+                    <h3>IDs</h3>
+                        <div class="ids">
+                            <b>URI:</b> <a href="{{{uri}}}">{{{uri}}}</a>
+                        </div>
+                        {{#hasAka}}
+                            <div class="ids">
+                                <b>AKA:</b>
+                                {{aka}}
+                            </div>
+                        {{/hasAka}}
+                        {{#hasXrefs}}
+                            <div class="ids">
+                                <b>xref IDs:</b> {{{xrefs}}}
+                            </div>
+                        {{/hasXrefs}}
                     </div>
-                    <div class="ids">
-                        <b>Description:</b>
-                        {{description}}
+                    {{{includes.phenotype_table}}}
+                    {{{includes.disease_table}}}
+                    {{{includes.genotype_table}}}
+                    {{{includes.model_table}}}
+                    {{{includes.variant_table}}}
+                    {{{includes.homolog_table}}}
+                    {{{includes.pathway_table}}}
+                    <div id="compare" class="category">
+                      <div id="phen_vis"></div>
                     </div>
-                    {{#hasLocation}}
-                    <div class="ids">
-                        <b>Gene Location:</b>
-                        {{location}}
-                    </div>
-                    {{/hasLocation}}
-                    {{#hasSummary}}
-                    <div class="ids">
-                        <b>Summary:</b>
-                        {{summary}}
-                    </div>
-                    {{/hasSummary}}
-                    <div class="ids">
-                        <h3>Cross References</h3>
-                         <table class="{{css.table}}">
-                             {{{xrefTable}}}
-                         </table>
-                    </div>
-                    {{#hasSuperClasses}}
-                    <div class="superclasses">
-                      <h4>Is a subtype of</h4>
-                      <table class="{{css.table}}">
-                        {{{superClassTable}}}
-                      </table>
-                    </div>
-                    {{/hasSuperClasses}}
-                    {{#hasEquivalentClasses}}
-                    <div class="equivs">
-                      <h4>Is equivalent to</h4>
-                      <table class="{{css.table}}">
-                        {{{equivalentClassTable}}}
-                      </table>
-                    </div>
-                    {{/hasEquivalentClasses}}
-                    {{#hasSubClasses}}
-                    <div class="subs">
-                      <h4>Has subtype</h4>
-                      <table class="{{css.table}}">
-                        {{{subClassTable}}}
-                      </table>
-                    </div>
-                    {{/hasSubClasses}}
                 </div>
-                {{#hasPhenotypes}}
-                <div id="phenotypes" class="category">
-                    <div id="annotationscore">
-                        <span class="annotatetext">Annotation Sufficiency:</span>
-                        <span class="stars">{{annotationScore}}</span>
-                        <span class="annotatequestion">?</span>
-                        <span class="annotatehelp">
-                            The annotation score reflects how the breadth and depth of
-                            annotations for this gene compares to all of the other phenotypic
-                            profiles in our corpus. A high score means that the gene is richly
-                            annotated, both across a diverse set of phenotypic categories,
-                            as well as in the number and specificity of each of the phenotypes.
-                        </span>
-                    </div>
-                    <a href="{{analyze_phenotypes}}" class="btn btn-default downloadline monarch-gene-dark">Analyze Phenotypes</a>
-                    <table class="{{css.table}}">
-                     {{{phenotypeTable}}}
-                    </table>
-                </div>
-                {{/hasPhenotypes}}
-                {{#hasDiseases}}
-                <div id="diseases" class="category">
-                    <table class="{{css.table}}">
-                    {{{diseaseTable}}}
-                    </table>
-                </div>
-                {{/hasDiseases}}
-                {{#hasGenotypes}}
-                <div id="genotypes" class="category">
-                    <table class="{{css.table}}">
-                    {{{genotypeTable}}}
-                    </table>
-                </div>
-                {{/hasGenotypes}}
-
-                {{#hasPhenotypes}}
-                <div id="compare" class="category">
-                    <div id="phen_vis"></div>
-                </div>
-                {{/hasPhenotypes}}
-
-
-                {{#hasAlleles}}
-                <div id="alleles" class="category">
-                    <table class="{{css.table}}">
-                    {{{alleleTable}}}
-                    </table>
-                </div>
-                {{/hasAlleles}}
-                {{#hasInteractions}}
-                <div id="interactions" class="category">
-                    <table class="{{css.table}}">
-                    {{{interactionTable}}}
-                    </table>
-                </div>
-                {{/hasInteractions}}
-                {{#hasOrthologs}}
-                <div id="orthologs" class="category">
-                    <table class="{{css.table}}">
-                    {{{orthologTable}}}
-                    </table>
-                </div>
-                {{/hasOrthologs}}
-                {{#hasPathways}}
-                <div id="pathways" class="category">
-                    <table class="{{css.table}}">
-                        {{{pathwayTable}}}
-                    </table>
-                </div>
-                {{/hasPathways}}
-                {{#hasLiterature}}
-                <div id="literature" class="category">
-                    <table class="{{css.table}}">
-                        {{{literatureTable}}}
-                    </table>
-                </div>
-                {{/hasLiterature}}
-            </div>
+        
             </div> <!-- closes wrapperforfooter -->
             {{{includes.footer}}}
         </div>

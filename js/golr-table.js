@@ -10,10 +10,14 @@
  *                          value: 'phenotype"
  *                      }
  */
-function getTableFromSolr(id, golr_field, div, filter){
+function getTableFromSolr(id, golr_field, div, filter, personality){
 
     if (golr_field == null) {
         golr_field = 'object_closure';
+    }
+    
+    if (personality == null){
+        personality = 'generic_association';
     }
     
     //divs
@@ -26,12 +30,12 @@ function getTableFromSolr(id, golr_field, div, filter){
     var srv = global_solr_url;
     var handler = new bbop.monarch.handler();
     var linker = new bbop.monarch.linker();
-    var confc = gconf.get_class('generic_association');
+    var confc = gconf.get_class(personality);
     
     // Other widget tests; start with manager.
     var golr_manager = new bbop.golr.manager.jquery(srv, gconf);
 
-    golr_manager.set_personality('generic_association');
+    golr_manager.set_personality(personality);
     //golr_manager.add_query_filter('document_category', 'annotation', ['*']);
     golr_manager.add_query_filter(golr_field, id, ['*']);
     
