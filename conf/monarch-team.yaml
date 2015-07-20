@@ -9,22 +9,31 @@ institutions:
     website: http://ohsu.edu
     people:
       - name: Melissa Haendel
+        picture: /image/team/MelissaHaendel.jpg
         title: Monarch PI
         alumni: false
         bio: Dr. Haendel is currently a PI of the Monarch Initiative. She has a BA from Reed College in Chemistry and a Ph.D. in Neuroscience from the University of Wisconsin, Madison. She is currently a PI of the Monarch Initiative, with the aim of providing integrated access to model systems phenotype-genotype data for the purposes of disease hypothesis exploration. She also participates in development of the eagle-i and CTSAconnect ontologies, designed to collect and disseminate information about biomedical resources and enable research profiling. Her research interests are in using ontologies to promote synthetic science though connections within biomedical data, to utilize information science during the course of research and its publication, and to enable scientific reproducibility.
       - name: Nicole Vasilevsky
+        picture: /image/team/NicoleVasilevsky.jpg
         title: Project Manager
         alumni: false
         bio: Dr. Vasilevsky has a BA in Biology from Reed College and a Ph.D. in Cell Biology from OHSU. Nicole is the project manager of the OHSU Ontology Development Group and works on the Monarch project as the project manager and as a data curator. In addition, Nicole works on the eagle-i Network and the CTSAconnect project.
       - name: Matthew Brush
+        picture: /image/team/MatthewBrush.jpg
         title: Ontologist
         alumni: false
         bio: Dr. Brush has a BS from Notre Dame and a Ph.D.in Cell Biology from Duke University, and is a former Biomedical Informatics Fellow at Oregon Health and Science University. He is the lead developer of the Genotype Ontology (GENO) for Monarch, and coordinates its use in ingest of genotype and phenotype data. In addition, he has contributed to development of several other ontologies that will be employed in the Monarch system, including the Reagent Ontology (ReO), the Ontology of Biomedical Investigations (OBI), the Cell Line Ontology (CLO), and the eagle-i Ontology (ERO).
+      - name: Julie McMurry
+        picture: /image/team/JulieMcMurry.jpg
+        title: Software Program Manager
+        alumni: false
+        bio: Julie specializes in ontology-aware tools that facilitate synthesis research. She holds a BA in Biology (Rhode Island College), with post-bac training in Computer Science (Harvard Extension School), as well as Immunology & Virology (Brown University). She holds a MSc in Public Health from the University of London.
       - name: Bryan Laraway
         title: Data Wrangler
         alumni: false
         bio: Bryan has a BA from Reed College in Biology, post-bac training in MIS from Oregon Institute of Technology, and is currently a Master’s student in Bioinformatics &amp; Computational Biology at Oregon Health &amp; Science University. He is currently a Data Wrangler for the Monarch Initiative, assisting with data ingestion.
       - name: Kent Shefchek
+        picture: /image/team/ks.jpg
         title: Bioinfomatics Software Engineer
         alumni: false
         bio: Kent is a Software Engineer for the OHSU ontology development group where he develops the Monarch API, front end visualizations, and the data ingest pipeline. Kent has a BS in Biology from the University of Maryland, College Park and a MS in Biotechnology with a specialization in Bioinformatics from the University of Maryland, University College.
@@ -34,14 +43,17 @@ institutions:
     website: http://lbl.gov
     people:
       - name: Chris Mungall
+        picture: /image/team/ChrisMungall.jpg
         title: Monarch PI
         alumni: false
         bio: "Dr. Mungall is currently a PI of the Monarch Initiative. He has a BSc in Computer Science from the University of Edinburgh and a Ph.D. from University of Edinburgh in Biological Sciences. He is currently the PI of the Monarch Initiative and his current research focuses on the use of informatics techniques and tools to integrate and interpret life science data across a variety of domains. In particular, he is interested in connecting biological models at multiple scales: the biochemical, molecular, cellular, organismal and ecological."
       - name: Suzanna Lewis
+        picture: /image/team/SuzannaLewis.jpg
         title: Genomics
         alumni: false
         bio: Suzi has an MS in Biology and MS in Computer Science. She is a scientist and Principal Investigator at the Berkeley Bioinformatics Open-source Project (BBOP) based at Lawrence Berkeley National Laboratory. She is one of the pioneers of developing open standards and software for genome annotation and ontologies.
       - name: Nicole Washington
+        picture: /image/team/NicoleWashington.jpeg
         title: Lead Bioinformatician
         alumni: false
         bio: Dr. Washington has a BS in Biology from Harvey Mudd College and a Ph.D. in Molecular and Cellular Biology from The University of Arizona where she focused on the study of the C. elegans as a model for human disease. She is interested in the intersection of computers with biological research, in particular making tools to realize hidden connections in diverse types of biological data and integrating large-scale experiments.
@@ -54,13 +66,14 @@ institutions:
         alumni: false
         bio: Jeremy has a MS in Computer Science from the École polytechnique fédérale de Lausanne (EPFL). After spending three years at CERN in the Beams department and a year in a finance company, he joined LBNL in 2015.
       - name: Nathan Dunn
+        picture: /image/team/NathanDunn.jpg
         title: Software Engineer
         alumni: false
         bio: Nathan Dunn has a a MS in Chemical Engineering from the University of Washington and a PhD in Computer Science from the University of Oregon where he focused on using artifical neural networks to model the C. elegans nervous system. Since then he has worked in various capacities supporting scientific research.  His current focus is on development of collaborative genomic editing tools.
       # - name: Rocket J. Squirrel
       #   title: Lead Moose Foil
       #   alumni: false
-      #   bio: Alumni of Wossamotta U, after a career in television and international espionage (1959-1964), and a brief stint in the movie industry consulting (working with Yutte Hermsgervordenbroti, Olaf Prot, and Jurgan Wigg), he has settled into handling PR and moose-related needs for scientific groups. 
+      #   bio: Alumni of Wossamotta U, after a career in television and international espionage (1959-1964), and a brief stint in the movie industry consulting (working with Yutte Hermsgervordenbroti, Olaf Prot, and Jurgan Wigg), he has settled into handling PR and moose-related needs for scientific groups.
       #   picture: /image/person-unknown.png
       #   contact:
       #     email: spam@spamspam.spam
@@ -70,7 +83,7 @@ institutions:
       - name: Sarah Kim
         title: Web Developer/Designer
         alumni: true
-        bio: Sarah is currently a undergraduate Computer Science student at UC Berkeley. She is working on the front-end of the Monarch website.      
+        bio: Sarah is currently a undergraduate Computer Science student at UC Berkeley. She is working on the front-end of the Monarch website.
   - id: ucsd
     name: University of California, San Diego
     logo: /image/team-ucsd.png
@@ -81,7 +94,7 @@ institutions:
         title: Monarch PI
         bio: Dr. Martone is currently a PI of the Monarch Initiative. She has a BA from Wellesley College in biological psychology and a Ph. D. in neuroscience from the University of California, San Diego, where she is currently a Professor in the Department of Neuroscience. Her background is in neuroanatomy, particularly light and electron microscopy, but she spends most of her time now in the field of neuroinformatics. She is the principal investigator of the Neuroinformatics Framework project, a national project to establish a uniform resource description framework for neuroscience. Her recent work has focused on building ontologies for neuroscience for data integration. She heads the International Neuroinformatics Coordinating Facility (INCF) program on ontologies. She is the executive director of FORCE11, an organization dedicated to advancing scholarly communication and e-scholarship.
       - name: Anita Bandrowski
-        alumni: false    
+        alumni: false
         title: Bioinformatician
         bio: Dr. Bandrowski trained as a neurophysiologist at UC Riverside and Stanford, however moved to bioinformatics with the human genome project at Celera. Currently working at the Center of Research in Biological Systems at UCSD, Dr. Bandrowski builds systems that attempt to make sense of the vast information being produced by biologists.
       - name: Jeffrey Grethe
@@ -102,15 +115,20 @@ institutions:
     website: http://pitt.edu
     people:
       - name: Harry Hocheiser
+        picture: /image/team/HarryHocheiser.jpg
         alumni: false
         title: Monarch PI
         bio: Dr. Hocheiser is currently a PI of the Monarch Initiative. He has BS and MS in Computer Science and Engineering from MIT and a Ph.D. in Computer Science from University of Maryland. His research interests lie at the intersection of biomedical informatics and human-computer interaction (HCI). His ongoing research efforts involve the application of contextual inquiry, human-centered design, information visualization, and other HCI techniques to challenges in collaborative bioinformatics and clinical informatics.
-      - name: Chuck Borromeo
+      - name: Michael Davis
         alumni: false
+        title: Software Developer
+        bio: Michael is a Software Engineer for the Department of Biomedical Informatics (DBMI) at the University of Pittsburgh where he works on the development of Phenogrid.  He has an MS in Information Science from the University of Pittsburgh. He has worked for several years developing oncology-based database applications at UPMC CancerCenter. His current interest is the development and integration of analytical tools to support big data repositories in research.
+      - name: Chuck Borromeo
+        alumni: true
         title: Interface Architect
         bio: Chuck is a programmer on a wide range of projects (e.g. FaceBase, Monarch, Ontology for Craniofacial Development and Malformations) in the Department of Biomedical Informatics. His responsibilities include leading the FaceBase development team and providing technical solutions on other projects. In the past, Chuck led the development of the Resource Discovery System (RDS) an application tracking 1500 scientific resources from several NIH research programs.
       - name: Jeremy Espino
-        alumni: false
+        alumni: true
         title: Senior Research Scientist, Department of Biomedical Informatics
         bio: Jeremy is trained in General Medicine, Medical Informatics and Intelligent Systems.  His claim to fame is programming the first real-time disease surveillance system in 1999—the Real-time Outbreak and Disease Surveillance System (RODS).  RODS and its open source derivatives have subsequently been deployed in over 16 states and a couple of countries.  He has also managed the IT infrastructure of the National Retail Monitor which provides over-the-counter medication sales data from over 33,000 retail stores to health departments across the U.S..  In his free time he enjoys hacking micro controllers, piano and 3d printing.
   - id: charite
@@ -125,7 +143,7 @@ institutions:
       - name: Sebastian Köhler
         alumni: false
         title: Bioinformatician & Developer
-        bio: Dr. Sebastian Köhler has a B.Sc., M.Sc., and Ph.D. in bioinformatics from the Freie Universität in Berlin, Germany. He has been working mostly on developing and validating computational methods for network and ontology based research on gene-to-phenotype relations. He is one of the developers of the Human Phenotype Ontology and cross-species phenotype resources.                    
+        bio: Dr. Sebastian Köhler has a B.Sc., M.Sc., and Ph.D. in bioinformatics from the Freie Universität in Berlin, Germany. He has been working mostly on developing and validating computational methods for network and ontology based research on gene-to-phenotype relations. He is one of the developers of the Human Phenotype Ontology and cross-species phenotype resources.
   - id: sanger
     name: Sanger Institute
     logo: /image/team-sanger.png

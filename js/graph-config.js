@@ -1,6 +1,105 @@
 if (typeof bbop == 'undefined') { var bbop = {};}
 if (typeof bbop.monarch == 'undefined') { bbop.monarch = {};}
 
+
+//Graph for phenotypeLandingPage
+bbop.monarch.phenotypeLandingConfig = {
+        
+        //override default
+        arrowDim : "-19,-5, -10,0 -19,5",
+        yOffset : "-1.3em",
+        
+        firstCr : "0,1 0,26 50,26 60,12.5 50,1",
+        trailCrumbs : "0,1 10,12.5, 0,26 50,26 60,12.5 50,1",
+        bread : {width:60, height: 25, offset:50, space: 1},
+        
+        //Chart margins    
+        margin : {top: 35, right: 63, bottom: 5, left: 175},
+        
+        width : 250,
+        height : 300,
+        
+        //X Axis Label
+        xAxisLabel : "",
+        xAxisPos : {dx:"15em",y:"-22"},
+        xLabelFontSize : "12px",
+        xFontSize : "9px",
+        
+        //Chart title and first breadcrumb
+        chartTitle : "Number of Phenotype Gene Associations Per Species",
+        
+        //Title size/font settings
+        title : {
+                  'text-align': 'none',
+                  'text-indent' : '20px',
+                  'font-size' : '18px',
+                  'font-weight': 'none',
+                  'background-color' : '#f5f5f5',
+                  'border-bottom-color' : '#ddd'
+        },
+        
+        //Yaxis links
+        yFontSize : 11,
+        isYLabelURL : true,
+        yLabelBaseURL : "/phenotype/",
+        
+        //font sizes
+        legendFontSize : 10,
+        settingsFontSize : '11px',
+        
+        maxLabelSize : 26,
+        
+        //Turn on/off legend
+        useLegend : true,
+        //Legend dimensions
+        legend : {width:10,height:10},
+        legendText : {height:".01em"},
+        
+        //Colors set in the order they appear in the JSON object
+        color : { 
+                 first  : '#44A293',
+                 second : '#A4D6D4',
+                 third : '#dfc0fd',
+                   
+                 yLabel : { 
+                   fill  : '#000000',
+                   hover : '#EA763B'
+                 },
+                 arrow : {
+                   fill  : "#496265",
+                   hover : "#EA763B"
+                 },
+                 bar : {
+                   fill  : '#EA763B'
+                 },
+                 crumb : {
+                   top   : '#496265',
+                   bottom: '#3D6FB7',
+                   hover : '#EA763B'
+                 },
+                 crumbText : '#FFFFFF'
+        },
+
+        useCrumb : true,
+        crumbFontSize : 8.5,
+        useCrumbShape : true
+ };
+
+/*
+ * GOlr configurations for the graph widget
+ */
+bbop.monarch.phenotypeGeneGolrSettings = {
+        id_field : 'object_closure',
+        personality : 'dovechart',
+        species_list : ["NCBITaxon:9606","NCBITaxon:10090","NCBITaxon:7955"],
+        filter : [{ field: 'subject_category', value: 'gene' }],
+        facet : 'subject_taxon'
+};
+
+/*
+ * The following were made for the legacy charts to deal with mutliple resizing
+ */
+
 //Graph for homepage
 bbop.monarch.homePageConfig = {
         
@@ -25,7 +124,7 @@ bbop.monarch.homePageConfig = {
         xFontSize : "9px",
         
         //Chart title and first breadcrumb
-        chartTitle : "Number of Phenotype Annotations Per Species",
+        chartTitle : "Number of Phenotype Gene Associations Per Species",
         
         //Title size/font settings
         title : {
@@ -40,13 +139,13 @@ bbop.monarch.homePageConfig = {
         //Yaxis links
         yFontSize : 11,
         isYLabelURL : true,
-        yLabelBaseURL : "/phenotype/",
+        yLabelBaseURL : "/labs/golr/",
         
         //font sizes
         legendFontSize : 10,
         settingsFontSize : '11px',
         
-        maxLabelSize : 23,
+        maxLabelSize : 26,
         
         //Turn on/off legend
         useLegend : true,
@@ -58,6 +157,7 @@ bbop.monarch.homePageConfig = {
         color : { 
                  first  : '#44A293',
                  second : '#A4D6D4',
+                 third : '#dfc0fd',
                    
                  yLabel : { 
                    fill  : '#000000',
@@ -78,7 +178,7 @@ bbop.monarch.homePageConfig = {
                  crumbText : '#FFFFFF'
         },
 
-        useCrumb : false,
+        useCrumb : true,
         crumbFontSize : 8.5,
         useCrumbShape : true
  };
@@ -113,13 +213,13 @@ bbop.monarch.phenotypeAnnotationConfig = {
   //Yaxis links
   yFontSize : 'default',
   isYLabelURL : true,
-  yLabelBaseURL : "/phenotype/",
+  yLabelBaseURL : "/labs/golr/",
   
   //font sizes
   legendFontSize : 14,
   settingsFontSize : '14px',
   
-  maxLabelSize : 23,
+  maxLabelSize : 26,
   
   //Turn on/off legend
   useLegend : true,
@@ -131,6 +231,7 @@ bbop.monarch.phenotypeAnnotationConfig = {
   color : { 
            first  : '#44A293',
            second : '#A4D6D4',
+           third : '#dfc0fd',
              
            yLabel : { 
              fill  : '#000000',
@@ -186,13 +287,13 @@ bbop.monarch.diseaseGeneConfig = {
         //Yaxis links
         yFontSize : 'default',
         isYLabelURL : true,
-        yLabelBaseURL : "/disease/",
+        yLabelBaseURL : "/labs/golr/",
         
         //font sizes
         legendFontSize : 14,
         settingsFontSize : '14px',
         
-        maxLabelSize : 23,
+        maxLabelSize : 26,
         
         //Turn on/off legend
         useLegend : false,
@@ -259,13 +360,13 @@ bbop.monarch.diseasePhenotypeConfig = {
         //Yaxis links
         yFontSize : 'default',
         isYLabelURL : true,
-        yLabelBaseURL : "/disease/",
+        yLabelBaseURL : "/labs/golr/",
         
         //font sizes
         legendFontSize : 14,
         settingsFontSize : '14px',
         
-        maxLabelSize : 23,
+        maxLabelSize : 26,
         
         //Turn on/off legend
         useLegend : false,
@@ -332,13 +433,13 @@ bbop.monarch.genotypePhenotypeConfig = {
         //Yaxis links
         yFontSize : 'default',
         isYLabelURL : true,
-        yLabelBaseURL : "/phenotype/",
+        yLabelBaseURL : "/labs/golr/",
         
         //font sizes
         legendFontSize : 14,
         settingsFontSize : '14px',
         
-        maxLabelSize : 23,
+        maxLabelSize : 26,
         
         //Turn on/off legend
         useLegend : true,
@@ -420,13 +521,13 @@ bbop.monarch.diseaseGeneConfigSmall = {
         //Yaxis links
         yFontSize : 11,
         isYLabelURL : true,
-        yLabelBaseURL : "/disease/",
+        yLabelBaseURL : "/labs/golr/",
         
         //font sizes
         legendFontSize : 10,
         settingsFontSize : '11px',
         
-        maxLabelSize : 23,
+        maxLabelSize : 26,
         
         //Turn on/off legend
         useLegend : false,
@@ -501,13 +602,13 @@ bbop.monarch.diseasePhenotypeConfigSmall = {
         //Yaxis links
         yFontSize : 11,
         isYLabelURL : true,
-        yLabelBaseURL : "/disease/",
+        yLabelBaseURL : "/labs/golr/",
         
         //font sizes
         legendFontSize : 14,
         settingsFontSize : '11px',
         
-        maxLabelSize : 23,
+        maxLabelSize : 26,
         
         //Turn on/off legend
         useLegend : false,
@@ -582,13 +683,13 @@ bbop.monarch.genotypePhenotypeConfigSmall = {
         //Yaxis links
         yFontSize : 11,
         isYLabelURL : true,
-        yLabelBaseURL : "/phenotype/",
+        yLabelBaseURL : "/labs/golr/",
         
         //font sizes
         legendFontSize : 10,
         settingsFontSize : '11px',
         
-        maxLabelSize : 23,
+        maxLabelSize : 26,
         
         //Turn on/off legend
         useLegend : true,
@@ -663,7 +764,7 @@ bbop.monarch.homePageConfigSmall = {
         //Yaxis links
         yFontSize : 8,
         isYLabelURL : true,
-        yLabelBaseURL : "/phenotype/",
+        yLabelBaseURL : "/labs/golr/",
         
         //font sizes
         legendFontSize : 9,
@@ -740,13 +841,13 @@ bbop.monarch.resizeConfig = {
         //Yaxis links
         yFontSize : 14,
         isYLabelURL : true,
-        yLabelBaseURL : "/phenotype/",
+        yLabelBaseURL : "/labs/golr/",
         
         //font sizes
         legendFontSize : 14,
         settingsFontSize : '14px',
         
-        maxLabelSize : 23,
+        maxLabelSize : 26,
         
         //Turn on/off legend
         useLegend : true,

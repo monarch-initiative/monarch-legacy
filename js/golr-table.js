@@ -10,8 +10,25 @@
  *                          value: 'phenotype"
  *                      }
  */
-function getTableFromSolr(id, golr_field, div, filter, personality){
-
+function getTableFromSolr(id, golr_field, div, filter, personality, tab_anchor){
+    if (tab_anchor != null){
+        var isTabLoading = false;
+        jQuery('#categories a[href="'+tab_anchor+'"]').click(function(event) {
+            if (!(jQuery('#'+div+' .table').length) && !isTabLoading){
+                isTabLoading = true;
+                getTable(id, golr_field, div, filter, personality);
+            }
+        });
+        // Trigger a click event if we're loading the page on an href
+        if ( window && window.location && window.location.hash &&
+                window.location.hash != "" && window.location.hash != "#" ){
+            jQuery('#categories a[href="'+window.location.hash+'"]').click();
+        }
+    } else {
+        getTable(id, golr_field, div, filter, personality);
+    }
+    
+    function getTable(id, golr_field, div, filter, personality){
     if (golr_field == null) {
         golr_field = 'object_closure';
     }
@@ -21,9 +38,9 @@ function getTableFromSolr(id, golr_field, div, filter, personality){
     }
     
     //divs
-    pager_top_div = div+'-pager-top';
-    pager_bot_div = div+'-pager-bottom';
-    pager_filter = div+'-filter';
+    var pager_top_div = div+'-pager-top';
+    var pager_bot_div = div+'-pager-bottom';
+    var pager_filter = div+'-filter';
 
     // Conf.
     var gconf = new bbop.golr.conf(global_golr_conf);
@@ -66,6 +83,8 @@ function getTableFromSolr(id, golr_field, div, filter, personality){
     };
     var results = new bbop.widget.live_results(div, golr_manager, confc,
                            handler, linker, results_opts);
+    
+    addDownloadButton(pager, golr_manager);
 
     bbop.widget.display.results_table_by_class_conf_b3.prototype.process_entry = function(bit, field_id, document, display_context){
         
@@ -124,43 +143,55 @@ function getTableFromSolr(id, golr_field, div, filter, personality){
     
     // Initial run.
     golr_manager.search();
-}
-
-function getOntologyBrowser(id){
-    
-    // Conf.
-    var gconf = new bbop.golr.conf(amigo.data.golr);
-    var srv = 'http://toaster.lbl.gov:9000/solr/';
-    var sd = new amigo.data.server();
-    var defs = new amigo.data.definitions();
-    var handler = new amigo.handler();
-    var linker = new amigo.linker();
-    var confc = gconf.get_class('annotation');
-    
-    // Browser.
-    var b = new bbop.widget.browse(srv, gconf, 'brw', {
-        'transitivity_graph_field':
-        'regulates_transitivity_graph_json',
-        'base_icon_url': sd.image_base(),
-        'info_icon': 'info',
-        'current_icon': 'current_term',
-        'image_type': 'gif',
-        'info_button_callback':
-            function(term_acc, term_doc){
-                // // Local form.
-                // shield.draw(term_doc);
-                // Remote form (works).
-                //shield.draw(term_acc);
-            }
+        
+    jQuery('#'+pager_top_div).on('change', function() {
+        var val = jQuery('#'+pager_top_div).find('select').val()
+        disableBottomPager(val);
     });
-    b.draw_browser(id);
+    
+    function disableBottomPager(value){
+        if (value <= 10){
+            jQuery('#'+pager_bot_div).hide();
+        } else {
+            jQuery('#'+pager_bot_div).show(2000);
+        }
+    }
+    jQuery('#'+pager_bot_div).hide();
+    }
 }
 
-function LaunchEverything(){
-  
-    if( queryID ){ // globally declared from webapp.js
+function addDownloadButton(pager, manager){
     
-     getTableFromSolr(queryID);
-     getOntologyBrowser(queryID);
+    var fun_id = bbop.core.uuid();
+    manager.register('search', fun_id, _drawDownloadButton, '-2');
+    
+    function _drawDownloadButton(){
+    
+    var span = pager.button_span_id();
+    /// Add button to DOM.
+    var button_props = {
+    'generate_id': true,
+    'class': 'btn btn-success'
+    };
+    var label = 'TSV';
+    var title = 'Download data (up to 100,000 rows)';
+    var button = new bbop.html.button(label, button_props);
+    var button_elt = '#' + button.get_id();
+    
+    jQuery('#' + span).append('&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;'+button.to_string());
+    jQuery(button_elt).attr('title',title);
+
+    var forwardToDownload = function(){
+        var field_list = ['subject', 'subject_taxon', 'relation', 'object', 'object_taxon', 'evidence','source'];
+        var args_hash = {
+                rows : '100000'
+        }
+        
+        url = manager.get_download_url(field_list, args_hash);
+        location.href = url;
     }
+    
+    jQuery('#' + button.get_id()).click(forwardToDownload);
+    }
+
 }

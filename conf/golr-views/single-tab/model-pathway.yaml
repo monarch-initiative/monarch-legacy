@@ -30,14 +30,14 @@ fields:
 
   - id: subject_closure
     description: "Reflexive closure of association_has_subject. A list of CURIEs. If an individual, first traverse rdf:tpye. The default closure is subclass, but other may optionally be added depending on what type of association this is and what the class is. E.g. for expression associations, the object is an anatomy class, and the closure will include part_of"
-    display_name: Model Closure
+    display_name: Model
     type: string
     cardinality: multi
     property: []
 
   - id: subject_closure_label
     description: "Labels for subject_closure."
-    display_name: Model Closure
+    display_name: Model
     type: string
     cardinality: multi
     property: []
@@ -58,14 +58,14 @@ fields:
 
   - id: subject_taxon_closure
     description: "Reflexive closure of taxon. ALWAYS up SubClassOf."
-    display_name: Model Taxon Closure
+    display_name: Model Taxon
     type: string
     cardinality: multi
     property: []
 
   - id: subject_taxon_closure_label
     description: "Labels for taxon_closure."
-    display_name: Model Taxon Closure
+    display_name: Model Taxon
     type: string
     cardinality: multi
     property: []
@@ -86,14 +86,14 @@ fields:
 
   - id: object_closure
     description: "Reflexive closure of association_has_object. A list of CURIEs. If an individual, first traverse rdf:tpye. The default closure is subclass, but other may optionally be added depending on what type of association this is and what the class is. E.g. for expression associations, the object is an anatomy class, and the closure will include part_of"
-    display_name: Pathway Closure
+    display_name: Pathway
     type: string
     cardinality: multi
     property: []
 
   - id: object_closure_label
     description: "Labels for object_class_closure."
-    display_name: Pathway Closure
+    display_name: Pathway
     type: string
     cardinality: multi
     property: []
@@ -114,15 +114,43 @@ fields:
 
   - id: object_taxon_closure
     description: "Reflexive closure of taxon. ALWAYS up SubClassOf."
-    display_name: Pathway Taxon Closure
+    display_name: Pathway Taxon
     type: string
     cardinality: multi
     property: []
 
   - id: object_taxon_closure_label
     description: "Labels for taxon_closure."
-    display_name: Pathway Taxon Closure
+    display_name: Pathway Taxon
     type: string
     cardinality: multi
     property: []
     searchable: true
+
+  - id: evidence_object
+    description: "List of CURIES of all entities that form part of the evidence graph."
+    display_name: Evidence
+    type: string
+    cardinality: multi
+    property: []
+
+  - id: evidence_object_label
+    description: "evidence object label"
+    display_name: Evidence
+    type: string
+    cardinality: multi
+    property: []
+
+  - id: evidence_object_closure
+    description: "Closure for evidence object"
+    display_name: Evidence
+    type: string
+    cardinality: multi
+    property: []
+
+  - id: evidence_object_closure_label
+    description: "List of CURIES of all entities that form part of the evidence closure."
+    display_name: Evidence
+    type: string
+    cardinality: multi
+    property: []

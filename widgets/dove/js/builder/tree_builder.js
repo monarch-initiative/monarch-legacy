@@ -13,25 +13,54 @@ if (typeof monarch.builder == 'undefined') { monarch.builder = {};}
  * Constructor: tree_builder
  * 
  * Parameters:
- *    data_manager - SoLR Manager, such as a GOlr manager,
- *                   should probably just rename golr manager
+ *    solr_url - Base URL for Solr service
  *    scigraph_url - Base URL of SciGraph REST API
+ *    golr_conf - Congifuration for golr_manager
  *    tree - monarch.model.tree object
  *  
  */
-monarch.builder.tree_builder = function(data_manager, scigraph_url, tree){
+monarch.builder.tree_builder = function(solr_url, scigraph_url, golr_conf, tree, config){
     var self = this;
-    self.data_manager = data_manager;
+    self.solr_url = solr_url;
+    // Turn into official golr conf object
+    self.golr_conf = new bbop.golr.conf(golr_conf);
     self.scigraph_url = scigraph_url;
     if (typeof tree === 'undefined') {
         self.tree = new monarch.model.tree();
     } else {
         self.tree = tree;
     }
+    if (config == null || typeof config == 'undefined'){
+        self.config = self.getDefaultConfig();
+    } else {
+        self.config = config;
+    }
+    
+};
+
+monarch.builder.tree_builder.prototype.build_tree = function(parents, final_function, error_function){
+    var self = this;
+    
+    var checkForData = true;
+    
+    // Check tree to see if we have classes, if so skip getting ontology
+    // structure from SciGraph
+    if (!self.tree.checkDescendants(parents)){
+        //get data from ontology
+        var final_callback = function(){
+            self.getCountsForSiblings(parents, final_function, error_function
+        )};
+        self.addOntologyToTree(parents[parents.length-1], 1, parents, final_callback);
+    } else if (!self.tree.checkDescendants(parents, checkForData)){
+        self.getCountsForSiblings(parents, final_function, error_function);
+    } else {
+        final_function();
+    }
+    
 };
 
 /*
- * Function: getOntology
+ * Function: addOntologyToTree
  * 
  * Parameters:
  *    id - string, root id as curie or url
@@ -40,11 +69,8 @@ monarch.builder.tree_builder = function(data_manager, scigraph_url, tree){
  * Returns:
  *    object, maybe should be monarch.model.tree?
  */
-monarch.builder.tree_builder.prototype.getOntology = function(id, depth){
+monarch.builder.tree_builder.prototype.addOntologyToTree = function(id, depth, parents, final_function){
     var self = this;
-    var tree = new monarch.model.tree();
-    
-    // var graph = new bbop.model.graph();
     
     // Some Hardcoded options for scigraph
     var direction = 'INCOMING';
@@ -55,32 +81,185 @@ monarch.builder.tree_builder.prototype.getOntology = function(id, depth){
     jQuery.ajax({
         url: query,
         jsonp: "callback",
-        dataType: "jsonp",
+        dataType: "json",
         error: function(){
           console.log('ERROR: looking at: ' + query);
         },
         success: function(data) {
-           console.log(data);
+            var graph = new bbop.model.graph();
+            graph.load_json(data);
+            var child_nodes = graph.get_child_nodes(id);
+            var siblings = child_nodes.map(function(i){
+                return {'id' : i.id(),
+                        'label' : self.processLabel(i.label())};
+            });
+            self.tree.addSiblingGroup(siblings, parents)
+            if (typeof final_function != 'undefined'){
+                final_function();
+            }
         }
     });
+
 };
 
 /*
- * Function: addOntologyToTree
+ * Function: getCountsForClass
  * 
  * Parameters:
- *    ontology - object, ontology structured as monarch.model.tree
- *    tree - monarch.model.tree object, empty or containing data
- *    parents - parents of "root" if adding a branch to an existing ontology
+ *    id -
+ *    id_field -
+ *    species -
+ *    filters -
  *    
  * Returns:
- *    monarch.model.tree
+ *    node object
  */
-monarch.builder.tree_builder.prototype.addOntologyToTree = function(ontology, tree, parents){
+monarch.builder.tree_builder.prototype.setGolrManager = function(golr_manager, id, id_field, filter, personality){
     var self = this;
-    // Throw error is parents are defined and there is no root
-    // Add root to tree if it doesn't exist 
+    var config = self.config;
+    
+    golr_manager.reset_query_filters();
+    golr_manager.add_query_filter(config.id_field, id, ['*']);
+    golr_manager.set_results_count(0);
+    golr_manager.lite(true);
+    
+    if (config.filter instanceof Array && config.filter.length > 0){
+        config.filter.forEach(function(val){
+            if (val != null && val.field && val.value){
+                golr_manager.add_query_filter(val.field, val.value, ['*']);
+            }
+        });
+    }
+    
+    if (config.personality != null){
+        golr_manager.set_personality(config.personality);
+    }
+    return golr_manager;
 };
+
+/*
+ * Function: getCountsForClass
+ * 
+ * Parameters:
+ *    id -
+ *    id_field -
+ *    species -
+ *    filters -
+ *    personality - 
+ *    facet - 
+ *    parents - 
+ *    final_function -
+ *    
+ * Returns:
+ *    JQuery Ajax Function
+ */
+monarch.builder.tree_builder.prototype.getCountsForSiblings = function(parents, final_function, error_function){
+    var self = this;
+    
+    var siblings = self.tree.getDescendants(parents);
+
+    var promises = [];
+    var success_callbacks = [];
+    var error_callbacks = [];
+    
+    siblings.map(function(i){return i.id;}).forEach( function(i) {
+        var ajax = self._getCountsForClass(i, parents);
+        promises.push(jQuery.ajax(ajax.qurl,ajax.jq_vars));
+        success_callbacks.push(ajax.jq_vars['success']);
+        error_callbacks.push(ajax.jq_vars['error']);
+    });
+    
+    jQuery.when.apply(jQuery,promises).done(success_callbacks).done(function(){
+        if (typeof final_function != 'undefined'){
+            final_function();
+        }
+    }).fail(error_callbacks).fail(function (){
+        if (typeof error_function != 'undefined'){
+            error_function();
+        }
+    });
+    
+};
+
+/*
+ * Function: getCountsForClass
+ * 
+ * Parameters:
+ *    id -
+ *    id_field -
+ *    species -
+ *    filters -
+ *    personality -
+ *    facet - 
+ *    parents -
+ *    
+ * Returns:
+ *    JQuery Ajax Function
+ */
+monarch.builder.tree_builder.prototype._getCountsForClass = function(id, parents){
+    var self = this;
+    var node = {"id":id, "counts": []};
+    
+    var golr_manager = new bbop.golr.manager.jquery(self.solr_url, self.golr_conf);
+    
+    //First lets override the update function
+    golr_manager.update = function(callback_type, rows, start){
+        
+        // Get "parents" url first.
+        var parent_update = bbop.golr.manager.prototype.update;
+        var qurl = parent_update.call(this, callback_type, rows, start);
+
+        if( ! this.safety() ){
+        
+        // Setup JSONP for Solr and jQuery ajax-specific parameters.
+        this.jq_vars['success'] = this._callback_type_decider; // decide & run
+        this.jq_vars['error'] = this._run_error_callbacks; // run error cbs
+
+        return {qurl: qurl, jq_vars: this.jq_vars};
+        }
+    };
+    
+    /* No idea why I need to override this to comment out checking
+     * for response.success(), hoping the error callbacks will 
+     * catch any errors
+     */
+    golr_manager._callback_type_decider = function(json_data){
+        var response = new bbop.golr.response(json_data);
+
+            // 
+            if( ! response.success() ){
+                //throw new Error("Unsuccessful response from golr server!");
+            }else{
+                var cb_type = response.callback_type();
+                if( cb_type == 'reset' ){
+                    golr_manager._run_reset_callbacks(json_data);
+                }else if( cb_type == 'search' ){
+                    golr_manager._run_search_callbacks(json_data);
+                }else{
+                    throw new Error("Unknown callback type!");
+                }
+            }
+        };
+    
+    golr_manager = self.setGolrManager(golr_manager, id);
+    
+    var makeDataNode = function(golr_response){
+        var counts = [];
+        var facet_counts = golr_response.facet_field(self.config.facet);
+        facet_counts.forEach(function(i){
+            counts.push({
+                'name': self.getTaxonMap()[i[0]],
+                'value' : i[1]});
+        });
+        self.tree.addCountsToNode(id,counts,parents)
+    }
+    var register_id = 'data_counts_'+id;
+    
+    golr_manager.register('search', register_id, makeDataNode);
+    return golr_manager.update('search');
+    
+};
+
 
 /*
  * Function: setGraphNeighborsUrl
@@ -156,4 +335,28 @@ monarch.builder.tree_builder.prototype.processLabel = function(label){
     return label;
 };
 
+// Hardcoded taxon map
+monarch.builder.tree_builder.prototype.getTaxonMap = function(){
+    return {
+        "NCBITaxon:10090" : "Mouse",
+        "NCBITaxon:9606" : "Human",
+        "NCBITaxon:7955" : "Zebrafish"
+    };
+};
 
+monarch.builder.tree_builder.prototype.addFilter = function(filter_args){
+    var self = this;
+    self.config.filter.push(filter_args);
+}
+
+
+monarch.builder.tree_builder.prototype.getDefaultConfig = function(){
+    var config = {
+            id_field : 'object_closure',
+            personality : 'dovechart',
+            species_list : ["NCBITaxon:9606","NCBITaxon:10090","NCBITaxon:7955"],
+            filter : [{ field: 'subject_category', value: 'gene' }],
+            facet : 'subject_taxon'
+    }
+    return config;
+}

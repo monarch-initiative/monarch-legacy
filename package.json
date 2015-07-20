@@ -1,7 +1,7 @@
 {
   "name": "monarch-app",
   "version": "0.0.1",
-  "license": "BSD",
+  "license": "BSD-3-Clause",
   "description": "Monarch web application and API.",
   "keywords": [
     "Monarch Initiative"
@@ -17,6 +17,7 @@
     "npm": ">= 2.7.4"
   },
   "dependencies": {
+    "phenogrid": "git+https://github.com/monarch-initiative/phenogrid.git#master",
     "underscore": "1.8.3"
   },
   "devDependencies": {

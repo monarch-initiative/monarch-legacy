@@ -1,0 +1,20 @@
+id: dovechart
+schema_generating: true
+document_category: generic_association
+weight: 20
+
+## Results table, horizontal
+result_weights: subject^7.0 subject_category^6.2 subject_taxon^6.5 relation^6.0  object^5.0 object_category^4.5 object_taxon^4.2 evidence^4.0 source^3.5
+
+## Ordering of facets, vertical
+filter_weights: subject_taxon^7.5 object_taxon^4.7
+
+fields:
+
+  - id: subject
+    description: "The CURIE for oban:association_has_subject. May be disease, variant, gene, person, ...."
+    display_name: Subject
+    type: string
+    property: []
+
+

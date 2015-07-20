@@ -8,7 +8,7 @@
 // Module and namespace checking.
 if (typeof monarch == 'undefined') { var monarch = {};}
 
-monarch.dovechart = function(config, tree, html_div){
+monarch.dovechart = function(config, tree, html_div, tree_builder){
     self = this;
     if (config == null || typeof config == 'undefined'){
         self.config = self.getDefaultConfig();
@@ -26,7 +26,7 @@ monarch.dovechart = function(config, tree, html_div){
     self.setPolygonCoordinates();
     
     //Tooltip offsetting
-    self.config.arrowOffset = {height: 21, width: -90};
+    self.config.arrowOffset = {height: 21, width: -100};
     self.config.barOffset = {
                  grouped:{
                     height: 95,
@@ -46,7 +46,8 @@ monarch.dovechart = function(config, tree, html_div){
     self.parents.push(tree.getRootID());
     self.html_div = html_div;
     self.tree = tree;
-    
+    self.tree_builder = tree_builder;
+
     self.tooltip = d3.select(html_div)
         .append("div")
         .attr("class", "tip");
@@ -108,7 +109,32 @@ monarch.dovechart.prototype.makeGraphDOM = function(html_div, data){
               "<label><input type=\"checkbox\" name=\"zero\"" +
               " value=\"remove\"> Remove Empty Groups</label> " +
               "</form> ");
-
+      
+      // Ajax spinner
+      jQuery(html_div+" .interaction li .settings").append("<div id=\"ajax-spinner\">"+
+                          "<div class=\"ortholog-spinner\" > " +
+                            "<div class=\"spinner-container container1\">" +
+                              "<div class=\"circle1\"></div>" +
+                              "<div class=\"circle2\"></div>" +
+                              "<div class=\"circle3\"></div>" +
+                              "<div class=\"circle4\"></div>" +
+                            "</div>" +
+                            "<div class=\"spinner-container container2\"> " +
+                              "<div class=\"circle1\"></div>" +
+                              "<div class=\"circle2\"></div>" +
+                              "<div class=\"circle3\"></div>" +
+                              "<div class=\"circle4\"></div>" +
+                            "</div>" +
+                            "<div class=\"spinner-container container3\">" +
+                              "<div class=\"circle1\"></div>" +
+                              "<div class=\"circle2\"></div>" +
+                              "<div class=\"circle3\"></div>" +
+                              "<div class=\"circle4\"></div>" +
+                            "</div>" +
+                          "</div>" +
+                          "<div id='fetching'>Fetching Data...</div></div>" +
+                          "<div id='error-msg'>Error Fetching Data</div>");
+      //jQuery("#ajax-spinner").show();
       //Update tooltip positioning
       if (!config.useCrumb && groups.length>1){
           config.arrowOffset.height = 12;
@@ -134,10 +160,10 @@ monarch.dovechart.prototype.makeGroupedStackedForm = function(html_div){
     var config = this.config;
     jQuery(html_div+" .interaction li .settings").append(" <form class=configure"+
         " style=font-size:" + config.settingsFontSize + "; >" +
-        "<label><input id=\"group\" type=\"radio\" name=\"mode\"" +
-        " value=\"grouped\" checked> Grouped</label> " +
         "<label><input id=\"stack\" type=\"radio\" name=\"mode\"" +
-        " value=\"stacked\"> Stacked</label>" +
+        " value=\"stacked\" checked> Stacked</label> " +
+        "<label><input id=\"group\" type=\"radio\" name=\"mode\"" +
+        " value=\"grouped\"> Grouped</label>" +
         "</form>");
 }
 
@@ -299,7 +325,12 @@ monarch.dovechart.prototype.setGroupPositioning = function (histogram,graphData)
        .data(data)
        .enter().append("svg:g")
        .attr("class", ("bar"+self.level))
-       .attr("transform", function(d) { return "translate(0," + histogram.y0(d.id) + ")"; });
+       .attr("transform", function(d) { return "translate(0," + histogram.y0(d.id) + ")"; })
+       .on("click", function(d){
+           if (config.isYLabelURL){
+               document.location.href = config.yLabelBaseURL + d.id;
+           }
+       });
     return groupPos;
 };
 
@@ -324,7 +355,7 @@ monarch.dovechart.prototype.setXYDomains = function (histogram,data,groups) {
     }
 };
 
-monarch.dovechart.prototype.makeBar = function (barGroup,histogram,barLayout) {
+monarch.dovechart.prototype.makeBar = function (barGroup,histogram,barLayout,isFirstGraph) {
     var bar;
     var self = this;
     var config = self.config;
@@ -338,14 +369,7 @@ monarch.dovechart.prototype.makeBar = function (barGroup,histogram,barLayout) {
           .attr("height", histogram.y1.rangeBand())
           .attr("y", function(d) { return histogram.y1(d.name); })
           .attr("x", 1)
-          .attr("width", function(d) { 
-              if (( jQuery('input[name=scale]:checked').val() === 'log' )&&
-                  ( d.value == 0 )){
-                  return 1;
-              } else {
-                  return histogram.x(d.value); 
-              }
-           })
+          .attr("width", 0)
           .on("mouseover", function(d){
             d3.select(this)
               .style("fill", config.color.bar.fill);
@@ -358,28 +382,25 @@ monarch.dovechart.prototype.makeBar = function (barGroup,histogram,barLayout) {
           })
           .style("fill", function(d) { return histogram.color(d.name); });
         
+        if (isFirstGraph){
+            self.transitionFromZero(bar,histogram,barLayout);
+        } else {
+            bar.attr("width", function(d) { 
+                if (( jQuery('input[name=scale]:checked').val() === 'log' )
+                        && ( d.value == 0 )){
+                  return 1;
+              } else {
+                  return histogram.x(d.value); 
+              }});
+        }
+        
     } else if (barLayout == 'stacked') {
         bar = barGroup.selectAll("g")
           .data(function(d) { return d.counts; })
           .enter().append("rect")
           .attr("class",("rect"+self.level))
-          .attr("x", function(d){
-              if (d.x0 == 0){
-                  return 1;
-              } else { 
-                return histogram.x(d.x0);
-              } 
-          })
-          .attr("width", function(d) { 
-              if (d.x0 == 0 && d.x1 != 0){
-                  return histogram.x(d.x1); 
-              } else if (( jQuery('input[name=scale]:checked').val() === 'log' ) &&
-                         ( histogram.x(d.x1) - histogram.x(d.x0) == 0 )){
-                  return 1;  
-              } else {
-                  return histogram.x(d.x1) - histogram.x(d.x0); 
-              }
-          })
+          .attr("x", 1)
+          .attr("width", 0)
           .attr("height", histogram.y0.rangeBand())
           .attr("y", function(d) { return histogram.y1(d.name); })
           .on("mouseover", function(d){
@@ -394,8 +415,70 @@ monarch.dovechart.prototype.makeBar = function (barGroup,histogram,barLayout) {
             self.tooltip.style("display", "none");
           })
           .style("fill", function(d) { return histogram.color(d.name); });
+        
+        if (isFirstGraph){
+            self.transitionFromZero(bar,histogram,barLayout);
+        } else {
+            bar.attr("x", function(d){
+                if (d.x0 == 0){
+                    return 1;
+                } else { 
+                  return histogram.x(d.x0);
+                } 
+            })
+                .attr("width", function(d) { 
+                    if (d.x0 == 0 && d.x1 != 0){
+                        return histogram.x(d.x1); 
+                    } else if (( jQuery('input[name=scale]:checked').val() === 'log' ) &&
+                            ( histogram.x(d.x1) - histogram.x(d.x0) == 0 )){
+                        return 1;  
+                    } else {
+                        return histogram.x(d.x1) - histogram.x(d.x0); 
+                    }
+                });
+        }
     }
     return bar;
+};
+
+//Transition bars from a width of 0 to their respective positions
+monarch.dovechart.prototype.transitionFromZero = function (bar,histogram,barLayout) {
+    var self = this;
+    if (barLayout == 'grouped'){
+        bar.transition()
+        .duration(800)
+        .delay(function(d, i, j) { return j * 20; })
+        .attr("x", 1)
+        .attr("width", function(d) { 
+        if (( jQuery('input[name=scale]:checked').val() === 'log' )
+                && ( d.value == 0 )){
+          return 1;
+      } else {
+          return histogram.x(d.value); 
+      }
+        });     
+    } else if (barLayout == 'stacked') {
+        bar.transition()
+        .duration(800)
+        .delay(function(d, i, j) { return j * 20; })
+        .attr("x", function(d){
+            if (d.x0 == 0){
+                return 1;
+            } else { 
+                return histogram.x(d.x0);
+            } 
+        })
+        .attr("width", function(d) { 
+            if (d.x0 == 0 && d.x1 != 0){
+                return histogram.x(d.x1); 
+            } else if (( jQuery('input[name=scale]:checked').val() === 'log' ) &&
+                 ( histogram.x(d.x1) - histogram.x(d.x0) == 0 )){
+                return 1;  
+            } else {
+                return histogram.x(d.x1) - histogram.x(d.x0); 
+            }
+        });
+    }
 };
 
 monarch.dovechart.prototype.transitionGrouped = function (histogram,data,groups,bar) {
@@ -406,7 +489,7 @@ monarch.dovechart.prototype.transitionGrouped = function (histogram,data,groups,
           
     bar.transition()
       .duration(500)
-      .delay(function(d, i) { return i * 10; })
+      .delay(function(d, i, j) { return j * 30; })
       .attr("height", histogram.y1.rangeBand())
       .attr("y", function(d) { return histogram.y1(d.name); })  
       .transition()
@@ -418,7 +501,7 @@ monarch.dovechart.prototype.transitionGrouped = function (histogram,data,groups,
           } else {
               return histogram.x(d.value); 
           }
-      }); 
+      });
           
     bar.on("mouseover", function(d){
             
@@ -441,7 +524,7 @@ monarch.dovechart.prototype.transitionStacked = function (histogram,data,groups,
          
     bar.transition()
       .duration(500)
-      .delay(function(d, i) { return i * 10; })
+      .delay(function(d, i, j) { return j * 30; })
       .attr("x", function(d){
               if (d.x0 == 0){
                   return 1;
@@ -481,12 +564,12 @@ monarch.dovechart.prototype.drawGraph = function (histogram, isFromCrumb, parent
     var config = self.config;
     
     if (typeof parent != 'undefined'){
-        self.parents.push(parent);
+      //  self.parents.push(parent);
     }
     
     var data = self.tree.getDescendants(self.parents);
     
-    self.groups = self.getGroups(data);
+    //self.groups = self.getGroups(data);
 
     self.checkData(data);
     data = self.getStackedStats(data);
@@ -519,20 +602,23 @@ monarch.dovechart.prototype.drawGraph = function (histogram, isFromCrumb, parent
     var yFont = self.adjustYAxisElements(data.length);
     histogram.transitionYAxisToNewScale(1000);
     
-    self.setYAxisText(histogram,data);
-    
     //Create SVG:G element that holds groups
     var barGroup = self.setGroupPositioning(histogram,data);
-    var bar = self.setBarConfigPerCheckBox(histogram,data,self.groups,barGroup);
+    var bar = self.setBarConfigPerCheckBox(histogram,data,self.groups,barGroup,isFirstGraph);
+    
+    self.setYAxisText(histogram,data, barGroup, bar);
     
     //Create navigation arrow
     var navigate = histogram.svg.selectAll(".y.axis");
-    self.makeNavArrow(data,navigate,config.arrowDim,
+    /*self.makeNavArrow(data,navigate,config.arrowDim,
                            barGroup,bar,histogram);
     if (!self.checkForChildren(data)){
         histogram.setYAxisTextSpacing(0);
         histogram.svg.selectAll("polygon.wedge").remove();
-    }
+    }*/
+    // We're just going to remove the wedges for now
+    histogram.setYAxisTextSpacing(0);
+    //histogram.svg.selectAll("polygon.wedge").remove();
     
     //Create legend
     if (config.useLegend){
@@ -628,9 +714,11 @@ monarch.dovechart.prototype.pickUpBreadcrumb = function(histogram,index,groups,b
     //set global level
     self.level = index;
     var parentLen = self.parents.length;
-    
-    self.parents.splice(index,(parentLen)); 
-    
+
+    // Remove all elements following (index+1).
+    // parentLen is greater than the number of elements remaining, but that's OK with splice()
+    self.parents.splice(index + 1,(parentLen));
+
     histogram.svg.selectAll(".tick").remove();
     self.drawGraph(histogram,isFromCrumb);
 
@@ -817,59 +905,107 @@ monarch.dovechart.prototype.makeBreadcrumb = function(histogram,label,groups,bar
         });
 };
 
-monarch.dovechart.prototype.setBarConfigPerCheckBox = function(histogram,data,groups,barGroup) {
+monarch.dovechart.prototype.setBarConfigPerCheckBox = function(histogram,data,groups,barGroup,isFirstGraph) {
     self = this;
     data = self.setDataPerSettings(data);
     if (jQuery('input[name=mode]:checked').val()=== 'grouped' || groups.length === 1) {
         self.setXYDomains(histogram,data,groups,'grouped');
         histogram.transitionXAxisToNewScale(1000);
-        return self.makeBar(barGroup,histogram,'grouped');
+        return self.makeBar(barGroup,histogram,'grouped',isFirstGraph);
     } else {     
         self.setXYDomains(histogram,data,groups,'stacked');
         histogram.transitionXAxisToNewScale(1000);
-        return self.makeBar(barGroup,histogram,'stacked');
+        return self.makeBar(barGroup,histogram,'stacked',isFirstGraph);
     }
 };
 
-monarch.dovechart.prototype.setYAxisText = function(histogram,data){
+monarch.dovechart.prototype.setYAxisText = function(histogram,data, barGroup, bar){
     self = this;
     config = self.config;
     data = self.setDataPerSettings(data);
     
     histogram.svg.select(".y.axis")
     .selectAll("text")
-    .text(function(d){ return self.getIDLabel(d,data) })
+    .data(data)
+    .text(function(d){ return self.getIDLabel(d.id,data) })
     .attr("font-size", yFont)
-    .on("mouseover", function(d){
+    .on("mouseover", function(){
         if (config.isYLabelURL){
             d3.select(this).style("cursor", "pointer");
             d3.select(this).style("fill", config.color.yLabel.hover);
             d3.select(this).style("text-decoration", "underline");
+            self.displaySubClassTip(self.tooltip,this)
         }
     })
     .on("mouseout", function(){
         d3.select(this).style("fill", config.color.yLabel.fill );
         d3.select(this).style("text-decoration", "none");
+        self.tooltip.style("display", "none");
     })
     .on("click", function(d){
-        if (config.isYLabelURL){
+        /*if (config.isYLabelURL){
             d3.select(this).style("cursor", "pointer");
             document.location.href = config.yLabelBaseURL + d;
+        }*/
+        if (!self.tree_builder){
+            self.parents.push(d.id);
+            if (d.children && d.children[0]){ //TODO use tree api
+                self.transitionToNewGraph(histogram,d,
+                    barGroup,bar, d.id);
+            }
+        } else {
+            self.disableYAxisText(histogram,data, barGroup, bar);
+            self.parents.push(d.id);
+            jQuery("#ajax-spinner").show();
+            var transitionToGraph = function(){
+                jQuery("#ajax-spinner").hide();
+                self.tree = self.tree_builder.tree;
+                self.transitionToNewGraph(histogram, d, barGroup,bar, d.id); 
+            };
+        
+            var showErrorMessage = function(){
+                jQuery("#ajax-spinner").hide();
+                self.setYAxisText(histogram,data, barGroup, bar);
+                jQuery("#error-msg").show().delay(3000).fadeOut();
+            };
+        
+            self.tree_builder.build_tree(self.parents, transitionToGraph, showErrorMessage);
         }
+        
     })
     .style("text-anchor", "end")
     .attr("dx", config.yOffset)
     .append("svg:title")
     .text(function(d){
-        if (/\.\.\./.test(self.getIDLabel(d,data))){
-            var fullLabel = self.getFullLabel(self.getIDLabel(d,data),data);
+        if (/\.\.\./.test(self.getIDLabel(d.id,data))){
+            var fullLabel = self.getFullLabel(self.getIDLabel(d.id,data),data);
               return (fullLabel);  
         } else if (yFont < 12) {//HARDCODE alert
-              return (self.getIDLabel(d,data));
+              return (self.getIDLabel(d.id,data));
         }
     });
 };
 
+
+monarch.dovechart.prototype.disableYAxisText = function(histogram,data, barGroup, bar){
+    self = this;
+    config = self.config;
+    data = self.setDataPerSettings(data);
+    
+    histogram.svg.select(".y.axis")
+    .selectAll("text")
+    .on("mouseover", function(){
+        d3.select(this).style("cursor", "arrow");
+    })
+    .on("mouseout", function(){
+        d3.select(this).style("fill", config.color.yLabel.fill );
+        d3.select(this).style("text-decoration", "none");
+        self.tooltip.style("display", "none");
+    })
+    .on("click", function(d){
+    });
+    
+};
 ////////////////////////////////////////////////////////////////////
 //
 //Data object manipulation
@@ -927,7 +1063,7 @@ monarch.dovechart.prototype.getStackedStats = function(data){
 monarch.dovechart.prototype.sortDataByGroupCount = function(data,groups){
     var self = this;
     //Check if total counts have been calculated via getStackedStats()
-    if (data[0].counts[0].x1 == null){
+    if (!data[0] || !data[0].counts || data[0].counts[0].x1 == null){
         data = self.getStackedStats(data);
     }
     
@@ -976,6 +1112,20 @@ monarch.dovechart.prototype.checkData = function(data){
                 r.value = 0;
             }
         });
+        // Make sure counts are always in same order
+        var orderedCounts = [];
+        //Check that we're not missing any group member
+        self.groups.forEach(function (val, index){
+            if (r.counts.map(function(i){return i.name;}).indexOf(val) == -1){
+                var count = {'name': val, 'value': 0};
+                orderedCounts.push(count);
+            } else {
+                var i = r.counts.map(function(i){return i.name;}).indexOf(val);
+                orderedCounts[index] = (r['counts'][i]);
+            }   
+        });
+        r.counts = orderedCounts;
+        
     });
     return data;
 };
@@ -1182,7 +1332,7 @@ monarch.dovechart.prototype.setPolygonCoordinates = function(){
     }
     
     //breadcrumb div dimensions
-    this.config.bcWidth = 560;
+    this.config.bcWidth = 700;
     
     //Y axis positioning when arrow present
     if (this.config.yOffset == null || typeof this.config.yOffset == 'undefined'){
@@ -1190,9 +1340,9 @@ monarch.dovechart.prototype.setPolygonCoordinates = function(){
     }
     
     //Check that breadcrumb width is valid
-    if (this.config.bcWidth > this.config.width+this.config.margin.right+this.config.margin.left){
+    /*if (this.config.bcWidth > this.config.width+this.config.margin.right+this.config.margin.left){
         this.config.bcWidth = this.config.bread.width+(this.config.bread.offset*5)+5;
-    }
+    }*/
 };
 
 //dovechart default configurations

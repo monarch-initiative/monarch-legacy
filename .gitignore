@@ -3,6 +3,8 @@ tests/behave/bin
 tests/behave/include
 tests/behave/lib
 tests/behave/local
+tests/behave/.Python
+tests/behave/pip-selfcheck.json
 
 ## Ignore npm libs.
 node_modules
