@@ -203,7 +203,7 @@ bbop.monarch.diseaseLandingConfig = {
       xFontSize : "9px",
       
       //Chart title and first breadcrumb
-      chartTitle : "Number of Disease Gene Associations Per Species",
+      chartTitle : "Number of Disease Phenotype Associations",
       
       //Title size/font settings
       title : {
@@ -227,7 +227,7 @@ bbop.monarch.diseaseLandingConfig = {
       maxLabelSize : 26,
       
       //Turn on/off legend
-      useLegend : true,
+      useLegend : false,
       //Legend dimensions
       legend : {width:10,height:10},
       legendText : {height:".01em"},

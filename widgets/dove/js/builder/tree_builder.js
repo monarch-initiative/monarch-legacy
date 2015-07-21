@@ -248,7 +248,7 @@ monarch.builder.tree_builder.prototype._getCountsForClass = function(id, parents
     
     var makeDataNode = function(golr_response){
         var counts = [];
-        if (typeof self.config.facets != 'undefined'){
+        if (typeof self.config.facet != 'undefined'){
             var facet_counts = golr_response.facet_field(self.config.facet);
             facet_counts.forEach(function(i){
                 var index = counts.map(function(d){return d.name}).indexOf(self.getTaxonMap()[i[0]]);
