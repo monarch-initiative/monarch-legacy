@@ -50,7 +50,7 @@ monarch.builder.tree_builder.prototype.build_tree = function(parents, final_func
         var final_callback = function(){
             self.getCountsForSiblings(parents, final_function, error_function
         )};
-        self.addOntologyToTree(parents[parents.length-1], 1, parents, final_callback);
+        self.addOntologyToTree(parents[parents.length-1], 1, parents, final_callback, error_function);
     } else if (!self.tree.checkDescendants(parents, checkForData)){
         self.getCountsForSiblings(parents, final_function, error_function);
     } else {
@@ -69,7 +69,7 @@ monarch.builder.tree_builder.prototype.build_tree = function(parents, final_func
  * Returns:
  *    object, maybe should be monarch.model.tree?
  */
-monarch.builder.tree_builder.prototype.addOntologyToTree = function(id, depth, parents, final_function){
+monarch.builder.tree_builder.prototype.addOntologyToTree = function(id, depth, parents, final_function, error_function){
     var self = this;
     
     // Some Hardcoded options for scigraph
@@ -84,6 +84,9 @@ monarch.builder.tree_builder.prototype.addOntologyToTree = function(id, depth, p
         dataType: "json",
         error: function(){
           console.log('ERROR: looking at: ' + query);
+          if (typeof error_function != 'undefined'){
+              error_function();
+          }
         },
         success: function(data) {
             var graph = new bbop.model.graph();
