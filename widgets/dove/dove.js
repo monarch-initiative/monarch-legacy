@@ -1140,7 +1140,7 @@ monarch.dovechart.prototype.getStackedStats = function(data){
 monarch.dovechart.prototype.sortDataByGroupCount = function(data,groups){
     var self = this;
     //Check if total counts have been calculated via getStackedStats()
-    if (!data[0] || !data[0].counts || data[0].counts[0].x1 == null){
+    if (!data[0] || !data[0].counts ||  !data[0].counts[0] || data[0].counts[0].x1 == null){
         data = self.getStackedStats(data);
     }
     
@@ -2050,17 +2050,28 @@ monarch.builder.tree_builder.prototype._getCountsForClass = function(id, parents
     
     var makeDataNode = function(golr_response){
         var counts = [];
-        var facet_counts = golr_response.facet_field(self.config.facet);
-        facet_counts.forEach(function(i){
-            var index = counts.map(function(d){return d.name}).indexOf(self.getTaxonMap()[i[0]]);
-            if (index != -1){
-                counts[index]['value'] += i[1];
-            } else {
-                counts.push({
-                    'name': self.getTaxonMap()[i[0]],
-                    'value' : i[1]});
-            }
-        });
+        if (typeof self.config.facets != 'undefined'){
+            var facet_counts = golr_response.facet_field(self.config.facet);
+            facet_counts.forEach(function(i){
+                var index = counts.map(function(d){return d.name}).indexOf(self.getTaxonMap()[i[0]]);
+                if (index != -1){
+                    counts[index]['value'] += i[1];
+                } else {
+                    counts.push({
+                        'name': self.getTaxonMap()[i[0]],
+                        'value' : i[1]
+                    });
+                }
+            });
+        } else if (typeof self.config.single_group != 'undefined') {
+            counts.push({
+                'name': self.config.single_group,
+                'value' : golr_response.total_documents()
+            });
+            console.log(counts);
+        } else {
+            throw new Error("Either facet or single_group required in config");
+        }
         self.tree.addCountsToNode(id,counts,parents)
     }
     var register_id = 'data_counts_'+id;
@@ -2134,13 +2145,16 @@ monarch.builder.tree_builder.prototype.convertGraphToTree = function(graph, root
  * Returns:
  *    string
  */
-monarch.builder.tree_builder.prototype.processLabel = function(label){   
-    label = label.replace(/Abnormality of (the )?/, '');
-    label = label.replace(/abnormal(\(ly\))? /, '');
-    label = label.replace(/ phenotype$/, '');
+monarch.builder.tree_builder.prototype.processLabel = function(label){
+    if (typeof label != 'undefined'){
+        label = label.replace(/Abnormality of (the )?/, '');
+        label = label.replace(/abnormal(\(ly\))? /, '');
+        label = label.replace(/ phenotype$/, '');
     
-    label = label.replace(/\b[a-z]/g, function() {
-        return arguments[0].toUpperCase()});
+        label = label.replace(/\b[a-z]/g, function() {
+            return arguments[0].toUpperCase()
+        });
+    }
     
     return label;
 };
@@ -2168,9 +2182,7 @@ monarch.builder.tree_builder.prototype.getDefaultConfig = function(){
     var config = {
             id_field : 'object_closure',
             personality : 'dovechart',
-            species_list : ["NCBITaxon:9606","NCBITaxon:10090","NCBITaxon:7955"],
             filter : [{ field: 'subject_category', value: 'gene' }],
-            facet : 'subject_taxon'
     }
     return config;
 }

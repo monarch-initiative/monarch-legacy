@@ -1140,7 +1140,7 @@ monarch.dovechart.prototype.getStackedStats = function(data){
 monarch.dovechart.prototype.sortDataByGroupCount = function(data,groups){
     var self = this;
     //Check if total counts have been calculated via getStackedStats()
-    if (!data[0] || !data[0].counts || data[0].counts[0].x1 == null){
+    if (!data[0] || !data[0].counts ||  !data[0].counts[0] || data[0].counts[0].x1 == null){
         data = self.getStackedStats(data);
     }
     

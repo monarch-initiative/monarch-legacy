@@ -40,6 +40,29 @@ function makeGenotypeLandingGraph(data){
     
 }
 
+function makeDiseaseLandingGraph(data){
+
+    var graphDiv = ".dove-container";
+    var tree = new monarch.model.tree(data);
+
+    
+    // global_golr_conf, global_solr_url, and scigrap_url are global variables
+    // set in webapp.js using puptent
+    var builder = new monarch.builder.tree_builder(global_solr_url, global_scigraph_url, global_golr_conf,
+            tree, bbop.monarch.diseasePhenotypeGolrSettings);
+    
+    var initGraph = function(){ 
+        jQuery("#graph-loader").hide();
+        tree = builder.tree;
+        console.log(tree);
+        graphObject = 
+            new monarch.dovechart(bbop.monarch.diseaseLandingConfig, tree, graphDiv, builder);
+        this.setMinHeightWidth(graphObject,graphDiv);
+    };
+    builder.build_tree(['DOID:4'], initGraph);
+    
+}
+
 
 /*
  * The following are functions for the legacy graphs and will be removed
