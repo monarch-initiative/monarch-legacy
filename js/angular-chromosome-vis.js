@@ -22,6 +22,8 @@
 		seqOn = true,
 		insOn = true;
 
+	var vertical = true;
+
 	/**
 	 * service that retrieves DAS model
 	 */
@@ -86,7 +88,7 @@
 				STALK_MAG_PC = 0.8,
 				PADDING = 70,
 				BAND_HEIGHT = 70,
-				LABEL_PADDING = 25,
+				LABEL_PADDING = 125,
 				AXIS_SPACING = 5,
 				STALK_SPACING = 3;
 
@@ -95,17 +97,16 @@
 
 			var target = d3.select(element[0]).append('svg');
 			target.attr('id', scope.id + 'svg'); //take id from the scope
-			target.attr({width: '100%'});
+			target.attr({height: '450px'});
 
 			if (scope.axis) {
-				console.log();
-				target.attr({height: scope.height + (2 * PADDING)});
+				target.attr({width: scope.height + (5 * PADDING)});
 			} else {
-				target.attr({height: scope.height + PADDING});
+				target.attr({width: scope.height + PADDING});
 			}
 
-			var text = document.querySelector("input");
-			var button = document.getElementById("getvariant");
+			var text = document.getElementById("numberVariants");
+			var button = document.getElementById("getVariant");
 
 			function loadVariants(){
 
@@ -124,7 +125,7 @@
 
 				var xscale = d3.scale.linear()
 					.domain([dasModel.start, dasModel.stop])
-					.range([0, rangeTo]);
+					.range([0, rangeTo / 2]);
 
 				//Classify each type of variant
 				//For every variant, find which band it's on and have the band register it
@@ -161,13 +162,13 @@
 				//Create a text label to display when variant circles are hovered over
 				var varLabel = target.append("text")
 					.attr("class", "var-lbl")
-					.attr("y", LABEL_PADDING - 13);
+					.attr("x", LABEL_PADDING + 13);
 
 
 				function drawCircle(center, height, color, density, max, type, start, end){
 					var circle = target.append('circle')
-						.attr('cx', center)
-						.attr('cy', height)
+						.attr('cy', center)
+						.attr('cx', height)
 						.attr('r', 5)
 						.style('fill', function(){
 							var densityMax = max * 1.33;
@@ -183,7 +184,7 @@
 
 					circle.on("mouseover", function () {
 						varLabel.text(type + ": " + density)
-							.attr('x', center);
+							.attr('y', center);
 					});
 
 					circle.on("mouseout", function () {
@@ -203,20 +204,20 @@
 				//Create a text label to display when variant lines are hovered over
 				var lineLabel = target.append("text")
 					.attr("class", "var-lbl")
-					.attr("y", LABEL_PADDING - 13);
+					.attr("x", LABEL_PADDING + 13);
 
 				function drawLine(center, destination, height, prevHeight, color, density, max, type, start, end){
 					var line = target.append('line')
-						.attr('x1', function(){
+						.attr('y1', function(){
 							if(center > destination){
 								return center - 5;
 							}else{
 								return center + 5;
 							}
 						})
-						.attr('x2', destination)
-						.attr('y1', height)
-						.attr('y2', function(){
+						.attr('y2', destination)
+						.attr('x1', height)
+						.attr('x2', function(){
 							if(center > destination){
 								return prevHeight;
 							}else{
@@ -238,7 +239,7 @@
 
 					line.on("mouseover", function(){
 						lineLabel.text(type + ": " + density)
-							.attr('x', function(){
+							.attr('y', function(){
 								return (center + destination) / 2;
 							});
 					});
@@ -262,9 +263,9 @@
 						cIndex = 0,
 						qIndex = 0,
 						iIndex = 0,
-						copHolder = BAND_HEIGHT - 6,
-						seqHolder = BAND_HEIGHT - 6,
-						insHolder = BAND_HEIGHT - 6;
+						copHolder = BAND_HEIGHT + scope.height + 6,
+						seqHolder = BAND_HEIGHT + scope.height + 6,
+						insHolder = BAND_HEIGHT + scope.height + 6;
 
 
 					band.each(function(m){
@@ -281,7 +282,7 @@
 							lineDistance = 0,
 							startHolder = 0,
 							endHolder = 0;
-						var height = BAND_HEIGHT - 6,
+						var height = BAND_HEIGHT + scope.height + 6,
 							prevHeight = height;
 						var centerBand = xscale(m.START.textContent) + ((xscale(+m.END.textContent) - xscale(+m.START.textContent)) / 2),
 							startBand = m.START.textContent,
@@ -348,7 +349,7 @@
 									drawLine(centerBand, xscale(startBand), height, height, "red", numLineStart, subLine, "Substitutions", startHolder, endHolder);
 								}
 								numCircle = 0; //Reset for the next variant
-								height = height - 10; //Next circle will be higher
+								height = height + 10; //Next circle will be higher
 								lineEnd = false;
 								lineStart = false;
 								numLineEnd = 0;
@@ -420,7 +421,7 @@
 									drawLine(centerBand, xscale(startBand), height, copHolder, "green", numLineStart, copLine, "Copy Number Variations", startHolder, endHolder);
 								}
 								numCircle = 0; //Reset for the next variant
-								height = height - 10; //Next circle will be higher
+								height = height + 10; //Next circle will be higher
 								copHolder = prevHeight; //The height of the current variant is saved
 								lineEnd = false;
 								lineStart = false;
@@ -492,7 +493,7 @@
 									drawLine(centerBand, xscale(startBand), height, seqHolder, "blue", numLineStart, seqLine, "Sequence Alterations", startHolder, endHolder);
 								}
 								numCircle = 0; //Reset for the next variant
-								height = height - 10; //Next circle will be higher
+								height = height + 10; //Next circle will be higher
 								seqHolder = prevHeight; //The height of the current variant is saved
 								lineEnd = false;
 								lineStart = false;
@@ -744,13 +745,13 @@
 
 						var xscale = d3.scale.linear()
 							.domain([dasModel.start, dasModel.stop])
-							.range([0, rangeTo]);
+							.range([0, (rangeTo / 2)]);
 
 						band = target.selectAll("chromosome" + " g")
 							.data(dasModel.bands)
 							.enter().append("g");
 
-						band.append("title")
+						band.append('title')
 							.text(function(m) {
 								//Add a variable to hold the variants on the band
 								m.density = [];
@@ -767,27 +768,27 @@
 								}
 								return m.TYPE.id.replace(':', ' ');
 							})
-							.attr('height', function (m) {
+							.attr('width', function (m) {
 								return (m.TYPE.id === "band:stalk") ? (scope.height * STALK_MAG_PC) : scope.height;
 							})
-							.attr('width', function (m) {
+							.attr('height', function (m) {
 								return xscale(+m.END.textContent) - xscale(+m.START.textContent);
 							})
-							.attr('x', function (m) {
+							.attr('y', function (m) {
 								return xscale(m.START.textContent);
 							})
-							.attr('y', function (m) {
+							.attr('x', function (m) {
 								return (m.TYPE.id === "band:stalk") ? (PADDING + STALK_SPACING) : BAND_HEIGHT;
 							});
 
 
 						var label = target.append("text")
 							.attr("class", "band-lbl")
-							.attr("y", LABEL_PADDING - 7);
+							.attr("x", LABEL_PADDING + 10);
 
 						band.on("mouseover", function (m) {
 							label.text(m.id)
-								.attr('x', xscale(m.START.textContent));
+								.attr('y', (xscale(m.START.textContent) + xscale(m.END.textContent)) / 2);
 						});
 
 						band.on("mouseout", function () {
@@ -809,11 +810,17 @@
 							var bpAxis = d3.svg.axis()
 								.scale(xscale)
 								.tickFormat(d3.format('s'))
-								.orient("bottom");
+								.orient("left");
 
 							target.append('g')
 								.attr('class', 'bp-axis')
-								.attr('transform', 'translate(0,' + (scope.height + BAND_HEIGHT + AXIS_SPACING) + ")")
+								.attr('transform', function(){
+									if(vertical){
+										return 'translate(' + (BAND_HEIGHT - AXIS_SPACING) + ')'
+									}else{
+										return 'translate(0,' + (scope.height + BAND_HEIGHT + AXIS_SPACING) + ')'
+									}
+								})
 								.call(bpAxis);
 						}
 					}
@@ -868,7 +875,8 @@
 				_selector,
 				_initialized;
 
-			var AXIS_SPACING = 4;
+			var AXIS_SPACING = 4,
+				BAND_HEIGHT = 70;
 
 			var options = (function () {
 				return _.extend({}, {
@@ -889,7 +897,7 @@
 
 			this.update = function (){
 				var table = document.getElementById("myTable");
-				document.getElementById("Table").style.width = table.offsetWidth;
+			//	document.getElementById("Table").style.width = table.offsetWidth;
 				//Delete all the previous rows
 				for(var i = (table.rows.length - 1); i > 0; i--){
 					table.deleteRow(i);
@@ -955,7 +963,7 @@
 			//initialize the selector and table
 			this.init = function (start, end) {
 				self.brush = d3.svg.brush()
-					.x(options.xscale)
+					.y(options.xscale)
 					.extent([start, end]);
 
 				self.start = Math.round(start);
@@ -973,11 +981,11 @@
 
 				_selector = d3.select(options.target).append("g")
 					.classed('selector', true)
-					.attr('transform',"translate(0,"+ options.y +")")
+					.attr('transform',"translate(" + BAND_HEIGHT + ")")
 					.call(self.brush);
 
 				_selector.selectAll('rect')
-					.attr('height', options.height + (AXIS_SPACING * 2));
+					.attr('width', options.height + (AXIS_SPACING * 2));
 
 				_initialized = true;
 

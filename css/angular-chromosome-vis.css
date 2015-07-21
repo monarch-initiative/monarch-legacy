@@ -71,6 +71,15 @@ input[type="checkbox"] {
 	margin-right: 3px;
 }
 
+#numberVariants{
+	display: block;
+	margin-left: 15px;
+}
+
+#getVariant{
+	margin-left: 15px;
+}
+
 
 #myTable, th, td{
 	font-size: 10pt;
@@ -82,7 +91,8 @@ input[type="checkbox"] {
 	visibility: hidden;
 	margin: 30px;
 	background-color:#999;
-	height: 200px;
+	height: 210px;
+	border: 1px solid black;
 	z-index: 1;
 	overflow: auto;
 }
