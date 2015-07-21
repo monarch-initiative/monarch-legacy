@@ -578,7 +578,7 @@ monarch.dovechart.prototype.drawGraph = function (histogram, isFromCrumb, parent
     // Some updates to dynamically increase the size of the graph
     //  This is a bit hacky and needs refactoring
     if (data.length > 25 && self.config.height == self.config.initialHeight){
-        self.config.height = data.length * 14.15;
+        self.config.height = data.length * 14.05;
         jQuery(self.html_div + ' .barchart').remove();
         histogram = new monarch.chart.barchart(self.config, self.html_div);
         self.drawGraph(histogram, false, undefined, false, true);
@@ -973,45 +973,7 @@ monarch.dovechart.prototype.setYAxisText = function(histogram,data, barGroup, ba
         self.tooltip.style("display", "none");
     })
     .on("click", function(d){
-        /*if (config.isYLabelURL){
-            d3.select(this).style("cursor", "pointer");
-            document.location.href = config.yLabelBaseURL + d;
-        }*/
-        jQuery("#leaf-msg").hide();
-        if (!self.tree_builder){
-            self.parents.push(d.id);
-            if (d.children && d.children[0]){ //TODO use tree api
-                self.transitionToNewGraph(histogram,d,
-                    barGroup,bar, d.id);
-            }
-        } else {
-            self.disableYAxisText(histogram,data, barGroup, bar);
-            self.parents.push(d.id);
-            jQuery("#ajax-spinner").show();
-            var transitionToGraph = function(){
-                jQuery("#ajax-spinner").hide();
-                self.tree = self.tree_builder.tree;
-                // Check if we've found a new class
-                if (!self.tree.checkDescendants(self.parents)){
-                    self.parents.pop();
-                    jQuery("#leaf-msg").html('There are no subclasses of <br/>'+d.fullLabel);
-                    jQuery("#leaf-msg").show().delay(3000).fadeOut();
-                    self.activateYAxisText(histogram,data, barGroup, bar);
-                } else {
-                    self.transitionToNewGraph(histogram, d, barGroup,bar, d.id);
-                }
-            };
-        
-            var showErrorMessage = function(){
-                self.parents.pop();
-                jQuery("#ajax-spinner").hide();
-                self.activateYAxisText(histogram,data, barGroup, bar);
-                jQuery("#error-msg").show().delay(3000).fadeOut();
-            };
-        
-            self.tree_builder.build_tree(self.parents, transitionToGraph, showErrorMessage);
-        }
-        
+        self.getDataAndTransitionOnClick(d, histogram, data, barGroup, bar);
     })
     .style("text-anchor", "end")
     .attr("dx", config.yOffset)
@@ -1068,44 +1030,54 @@ monarch.dovechart.prototype.activateYAxisText = function(histogram,data, barGrou
         self.tooltip.style("display", "none");
     })
     .on("click", function(d){
-        jQuery("#leaf-msg").hide();
-        if (!self.tree_builder){
-            self.parents.push(d.id);
-            if (d.children && d.children[0]){ //TODO use tree api
-                self.transitionToNewGraph(histogram,d,
-                    barGroup,bar, d.id);
-            }
-        } else {
-            self.disableYAxisText(histogram,data, barGroup, bar);
-            self.parents.push(d.id);
-            jQuery("#ajax-spinner").show();
-            var transitionToGraph = function(){
-                jQuery("#ajax-spinner").hide();
-                self.tree = self.tree_builder.tree;
-                // Check if we've found a new class
-                if (!self.tree.checkDescendants(self.parents)){
-                    self.parents.pop();
-                    jQuery("#leaf-msg").html('There are no subclasses of <br/>'+d.fullLabel);
-                    jQuery("#leaf-msg").show().delay(3000).fadeOut();
-                    self.setYAxisText(histogram,data, barGroup, bar);
-                } else {
-                    self.transitionToNewGraph(histogram, d, barGroup,bar, d.id);
-                }
-            };
-        
-            var showErrorMessage = function(){
-                self.parents.pop();
-                jQuery("#ajax-spinner").hide();
-                self.setYAxisText(histogram,data, barGroup, bar);
-                jQuery("#error-msg").show().delay(3000).fadeOut();
-            };
-        
-            self.tree_builder.build_tree(self.parents, transitionToGraph, showErrorMessage);
-        }
-        
+        self.getDataAndTransitionOnClick(d, histogram, data, barGroup, bar);
     });
     
 };
+
+monarch.dovechart.prototype.getDataAndTransitionOnClick = function(node, histogram, data, barGroup, bar){
+    var self = this;
+    console.log(node);
+    // Clear these in case they haven't faded out
+    jQuery("#leaf-msg").hide();
+    jQuery("#error-msg").hide();
+    
+    if (!self.tree_builder){
+        self.parents.push(node.id);
+        if (node.children && node.children[0]){ //TODO use tree api
+            self.transitionToNewGraph(histogram,node,
+                barGroup,bar, node.id);
+        }
+    } else {
+        self.disableYAxisText(histogram,data, barGroup, bar);
+        self.parents.push(node.id);
+        jQuery("#ajax-spinner").show();
+        var transitionToGraph = function(){
+            jQuery("#ajax-spinner").hide();
+            self.tree = self.tree_builder.tree;
+            // Check if we've found a new class
+            if (!self.tree.checkDescendants(self.parents)){
+                self.parents.pop();
+                jQuery("#leaf-msg").html('There are no subclasses of <br/>'+node.fullLabel);
+                jQuery("#leaf-msg").show().delay(3000).fadeOut();
+                self.activateYAxisText(histogram,data, barGroup, bar);
+            } else {
+                self.transitionToNewGraph(histogram, node, barGroup,bar, node.id);
+            }
+        };
+    
+        var showErrorMessage = function(){
+            self.parents.pop();
+            jQuery("#ajax-spinner").hide();
+            self.activateYAxisText(histogram,data, barGroup, bar);
+            jQuery("#error-msg").show().delay(3000).fadeOut();
+        };
+    
+        self.tree_builder.build_tree(self.parents, transitionToGraph, showErrorMessage);
+    }
+    
+};
+
 ////////////////////////////////////////////////////////////////////
 //
 //Data object manipulation
