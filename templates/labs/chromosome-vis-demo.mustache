@@ -58,27 +58,8 @@
 
           <chromosome  id="chr22" chr="22" rel-size="false" axis="true" assembly="37" width='900' height="20" mode="single" centromere="dot" geneview-map="true"></chromosome>
 
-            <div id="Headers">
-                <table id="NewHeader">
-                    <tr>
-                    </tr>
-                </table>
-            </div>
-            <div id="Table">
-                <table id="myTable">
-                    <tr>
-                        <th>
-                            Variant ID
-                        </th>
-                        <th>
-                            Variant Type
-                        </th>
-                    </tr>
-                </table>
-            </div>
-
-            <input type="text" name="numbervariants" placeholder="Number of Variants"><br>
-            <button id="getvariant" type="submit">Get Variants</button>
+            <input type="text" id="numberVariants" name="numbervariants" placeholder="Number of Variants"><br>
+            <button id="getVariant" type="submit">Get Variants</button>
 
             <fieldset id="Form">
                 <legend>Variants</legend>
@@ -87,6 +68,29 @@
                 <input type="checkbox" name="sequence_alteration" id="sequence_alteration" value="sequence_alteration" checked="checked"/><label for="message">Sequence Alterations</label><br />
                 <input type="checkbox" name="insertion" id="insertion" value="insertion" checked="checked"/><label for="message">Insertions</label><br />
             </fieldset>
+
+            <div id="Table">
+                <table id="myTable">
+                    <tr bgcolor="#708090">
+                        <th>
+                            Variant ID
+                        </th>
+                        <th>
+                            Variant Label
+                        </th>
+                        <th>
+                            Chromosome
+                        </th>
+                        <th>
+                            Start Coor
+                        </th>
+                        <th>
+                            Stop Coor
+                        </th>
+
+                    </tr>
+                </table>
+            </div>
 
           <div class="wrapperforfooter">
             
