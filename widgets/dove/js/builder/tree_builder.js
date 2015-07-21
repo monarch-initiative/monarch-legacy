@@ -250,9 +250,14 @@ monarch.builder.tree_builder.prototype._getCountsForClass = function(id, parents
         var counts = [];
         var facet_counts = golr_response.facet_field(self.config.facet);
         facet_counts.forEach(function(i){
-            counts.push({
-                'name': self.getTaxonMap()[i[0]],
-                'value' : i[1]});
+            var index = counts.map(function(d){return d.name}).indexOf(self.getTaxonMap()[i[0]]);
+            if (index != -1){
+                counts[index]['value'] += i[1];
+            } else {
+                counts.push({
+                    'name': self.getTaxonMap()[i[0]],
+                    'value' : i[1]});
+            }
         });
         self.tree.addCountsToNode(id,counts,parents)
     }
@@ -343,7 +348,11 @@ monarch.builder.tree_builder.prototype.getTaxonMap = function(){
     return {
         "NCBITaxon:10090" : "Mouse",
         "NCBITaxon:9606" : "Human",
-        "NCBITaxon:7955" : "Zebrafish"
+        "NCBITaxon:7955" : "Zebrafish",
+        "NCBITaxon:57486" : "Mouse",
+        "NCBITaxon:39442" : "Mouse",
+        "NCBITaxon:10092" : "Mouse",
+        "NCBITaxon:10091" : "Mouse"
     };
 };
 

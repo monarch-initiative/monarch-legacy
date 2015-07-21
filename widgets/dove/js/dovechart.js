@@ -632,7 +632,12 @@ monarch.dovechart.prototype.drawGraph = function (histogram, isFromCrumb, parent
     
     //Create SVG:G element that holds groups
     var barGroup = self.setGroupPositioning(histogram,data);
-    var bar = self.setBarConfigPerCheckBox(histogram,data,self.groups,barGroup,isFirstGraph);
+    
+    var showTransition = false;
+    if (isFirstGraph || isFromResize || isFromCrumb){
+        showTransition = true;
+    }
+    var bar = self.setBarConfigPerCheckBox(histogram,data,self.groups,barGroup,showTransition);
     
     self.setYAxisText(histogram,data, barGroup, bar);
     
@@ -1284,7 +1289,6 @@ monarch.dovechart.prototype.adjustYAxisElements = function(len){
    var arrowDim = conf.arrowDim;
    
    //Check for density BETA
-   /*
    if (density < 15 && density < yFont ){
        yFont = density+2;
        //yOffset = "-2em";
@@ -1294,7 +1298,7 @@ monarch.dovechart.prototype.adjustYAxisElements = function(len){
     
    if (isUpdated && yFont > conf.yFontSize){
        yFont = conf.yFontSize;
-   }*/
+   }
    return yFont;
 };
 ///////////////////////////////////
