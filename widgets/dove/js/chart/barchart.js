@@ -42,6 +42,7 @@ monarch.chart.barchart = function(config, html_div){
         .orient("left");
 
     self.svg = d3.select(html_div).append("svg")
+        .attr("class", "barchart")
         .attr("width", config.width + config.margin.left + config.margin.right)
         .attr("height", config.height + config.margin.top + config.margin.bottom)
         .append("g")

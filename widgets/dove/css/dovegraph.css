@@ -175,8 +175,16 @@
 }
 
 #error-msg {
+    font-size: 13px;
     display:none;
     line-height: 40px;
+}
+
+#leaf-msg {
+	padding-top:10px;
+	font-size: 14px;
+	line-height: 20px;
+    display:none;
 }
 
 .ortholog-spinner {
