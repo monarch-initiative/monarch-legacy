@@ -71,17 +71,15 @@ input[type="checkbox"] {
 	margin-right: 3px;
 }
 
-
-#NewHeader{
-	visibility: hidden;
-	position: absolute;
-	right: 0;
-	top: 0;
-	margin: 30px;
-	width: 30%;
-	background-color:#456789;
-	z-index: 2;
+#numberVariants{
+	display: block;
+	margin-left: 15px;
 }
+
+#getVariant{
+	margin-left: 15px;
+}
+
 
 #myTable, th, td{
 	font-size: 10pt;
@@ -91,13 +89,10 @@ input[type="checkbox"] {
 
 #Table{
 	visibility: hidden;
-	position: absolute;
-	right: 0;
-	top: 0;
 	margin: 30px;
-	width: 30%;
 	background-color:#999;
-	height: 200px;
+	height: 210px;
+	border: 1px solid black;
 	z-index: 1;
 	overflow: auto;
 }
