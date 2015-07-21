@@ -158,5 +158,5 @@
   "id":"nif-0000-21427",
   "data_categories": "genotype-phenotype association; experimental reagents (morpholinos)",
   "monarch_use": "We integrate the curated genotype-phenotype data, including experimentally derived fish (such as via application of morpholions), and links to the literature as evidence.  "
-},
+}
 ]

@@ -26,7 +26,7 @@ def step_impl(context, page, id):
     #print(context.browser.title)
     context.browser.get(context.target + page)
     #time.sleep(30)
-    element = WebDriverWait(context.browser, 60).until(EC.presence_of_element_located((By.ID, id)))
+    element = WebDriverWait(context.browser, 200).until(EC.presence_of_element_located((By.ID, id)))
     # try:
     #     print(id)
     #     element = WebDriverWait(context.browser, 30).until(EC.presence_of_element_located((By.ID, id)))

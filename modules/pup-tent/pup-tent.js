@@ -275,7 +275,7 @@ module.exports = function(search_path_list, filename_list){
 		 each(files,
 		      function(file){
 			  // Get only files, not directories.
-			  //console.log('found file: ' + file);
+			  //console.log('found file: ' + file + '      ' + loc + '/' + file);
 			  var full_file = loc + '/' + file;
 			  _check_and_save(full_file);
 		      });

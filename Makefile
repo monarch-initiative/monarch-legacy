@@ -7,7 +7,7 @@
 ###
 
 ## Ringo
-RINGO_MODULE_PATH ?= ../stick/lib:./modules/
+RINGO_MODULE_PATH ?= ../stick/lib:./modules:./lib/monarch
 ## TODO/BUG: highly non-canonical location--should be passed as
 ## variable, not hard-coded.
 RINGO_BIN ?= ./tools/ringo
