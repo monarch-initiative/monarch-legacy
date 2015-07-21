@@ -578,7 +578,7 @@ monarch.dovechart.prototype.drawGraph = function (histogram, isFromCrumb, parent
     // Some updates to dynamically increase the size of the graph
     //  This is a bit hacky and needs refactoring
     if (data.length > 25 && self.config.height == self.config.initialHeight){
-        self.config.height = data.length * 14;
+        self.config.height = data.length * 14.15;
         jQuery(self.html_div + ' .barchart').remove();
         histogram = new monarch.chart.barchart(self.config, self.html_div);
         self.drawGraph(histogram, false, undefined, false, true);
@@ -618,6 +618,8 @@ monarch.dovechart.prototype.drawGraph = function (histogram, isFromCrumb, parent
       .scale(histogram.y0)
       .orient("left");
     
+    self.changeScalePerSettings(histogram);
+    
     self.setXYDomains(histogram, data, self.groups);
     if (isFirstGraph || isFromResize){
         histogram.setXTicks(config).setYTicks();
@@ -625,6 +627,7 @@ monarch.dovechart.prototype.drawGraph = function (histogram, isFromCrumb, parent
 
     //Dynamically decrease font size for large labels
     var yFont = self.adjustYAxisElements(data.length);
+    
     histogram.transitionYAxisToNewScale(1000);
     
     //Create SVG:G element that holds groups
@@ -1309,6 +1312,7 @@ monarch.dovechart.prototype.adjustYAxisElements = function(len){
    var arrowDim = conf.arrowDim;
    
    //Check for density BETA
+   /*
    if (density < 15 && density < yFont ){
        yFont = density+2;
        //yOffset = "-2em";
@@ -1318,7 +1322,7 @@ monarch.dovechart.prototype.adjustYAxisElements = function(len){
     
    if (isUpdated && yFont > conf.yFontSize){
        yFont = conf.yFontSize;
-   }
+   }*/
    return yFont;
 };
 ///////////////////////////////////
