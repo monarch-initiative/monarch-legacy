@@ -71,8 +71,13 @@ input[type="checkbox"] {
 	margin-right: 3px;
 }
 
-#numberVariants{
+#orientButton{
 	display: block;
+	margin: 0px 0px 20px 15px;
+
+}
+
+#numberVariants{
 	margin-left: 15px;
 }
 
