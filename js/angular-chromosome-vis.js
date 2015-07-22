@@ -4,16 +4,6 @@
 
 (function() {
 
-	$(document).ready(function(){
-		var counter = 0;
-		$("#myTable th").each(function(){
-			var width = $('.MyTable tr:last td:eq(' + counter + ')').width();
-			$("#NewHeader tr").append(this);
-			this.width = width;
-			counter++;
-		});
-	});
-
 	var angularChromosomeVis = angular.module('angularChromosomeVis', []);
 
 	var Variants = [],
@@ -27,7 +17,6 @@
 	/**
 	 * service that retrieves DAS model
 	 */
-
 	angularChromosomeVis.factory('dasLoader', function() {
 		return {
 			loadModel: function (scope, assembly) {
@@ -88,7 +77,7 @@
 				STALK_MAG_PC = 0.8,
 				PADDING = 70,
 				BAND_HEIGHT = 70,
-				LABEL_PADDING = 125,
+				LABEL_PADDING = vertical ? 125 : 24,
 				AXIS_SPACING = 5,
 				STALK_SPACING = 3;
 
@@ -97,16 +86,22 @@
 
 			var target = d3.select(element[0]).append('svg');
 			target.attr('id', scope.id + 'svg'); //take id from the scope
-			target.attr({height: '450px'});
 
-			if (scope.axis) {
-				target.attr({width: scope.height + (5 * PADDING)});
-			} else {
-				target.attr({width: scope.height + PADDING});
+			function setTarget(){
+				target.attr({height: vertical ? '450px' : scope.height + (2 * PADDING)});
+
+				if (scope.axis) {
+					target.attr({width: vertical ? scope.height + (5 * PADDING) : '100%'});
+				} else {
+					target.attr({width: scope.height + PADDING});
+				}
 			}
 
+			setTarget();
+
 			var text = document.getElementById("numberVariants");
-			var button = document.getElementById("getVariant");
+			var variantButton = document.getElementById("getVariant");
+			var orientButton = document.getElementById("orientButton");
 
 			function loadVariants(){
 
@@ -125,7 +120,7 @@
 
 				var xscale = d3.scale.linear()
 					.domain([dasModel.start, dasModel.stop])
-					.range([0, rangeTo / 2]);
+					.range([0, vertical ? rangeTo / 2 : rangeTo]);
 
 				//Classify each type of variant
 				//For every variant, find which band it's on and have the band register it
@@ -162,13 +157,25 @@
 				//Create a text label to display when variant circles are hovered over
 				var varLabel = target.append("text")
 					.attr("class", "var-lbl")
-					.attr("x", LABEL_PADDING + 13);
+					.attr(vertical ? "x" : "y", LABEL_PADDING + 13);
 
 
 				function drawCircle(center, height, color, density, max, type, start, end){
 					var circle = target.append('circle')
-						.attr('cy', center)
-						.attr('cx', height)
+						.attr('cx', function(){
+							if(vertical){
+								return height;
+							}else{
+								return center;
+							}
+						})
+						.attr('cy', function(){
+							if(vertical){
+								return center;
+							}else{
+								return height;
+							}
+						})
 						.attr('r', 5)
 						.style('fill', function(){
 							var densityMax = max * 1.33;
@@ -184,7 +191,7 @@
 
 					circle.on("mouseover", function () {
 						varLabel.text(type + ": " + density)
-							.attr('y', center);
+							.attr(vertical ? 'y' : 'x', center);
 					});
 
 					circle.on("mouseout", function () {
@@ -204,24 +211,52 @@
 				//Create a text label to display when variant lines are hovered over
 				var lineLabel = target.append("text")
 					.attr("class", "var-lbl")
-					.attr("x", LABEL_PADDING + 13);
+					.attr(vertical ? "x" : "y", LABEL_PADDING + 13);
 
 				function drawLine(center, destination, height, prevHeight, color, density, max, type, start, end){
 					var line = target.append('line')
 						.attr('y1', function(){
-							if(center > destination){
-								return center - 5;
-							}else{
-								return center + 5;
-							}
-						})
-						.attr('y2', destination)
-						.attr('x1', height)
-						.attr('x2', function(){
-							if(center > destination){
-								return prevHeight;
+							if(vertical){
+								if(center > destination){
+									return center - 5;
+								}else{
+									return center + 5;
+								}
 							}else{
 								return height;
+							}
+						})
+						.attr('y2', function(){
+							if(vertical){
+								return destination;
+							}else{
+								if(center > destination){
+									return prevHeight;
+								}else{
+									return height;
+								}
+							}
+						})
+						.attr('x1', function(){
+							if(vertical){
+								return height;
+							}else{
+								if(center > destination){
+									return center - 5;
+								}else{
+									return center + 5;
+								}
+							}
+						})
+						.attr('x2', function(){
+							if(vertical){
+								if(center > destination){
+									return prevHeight;
+								}else{
+									return height;
+								}
+							}else{
+								return destination;
 							}
 						})
 						.attr('stroke', color)
@@ -239,7 +274,7 @@
 
 					line.on("mouseover", function(){
 						lineLabel.text(type + ": " + density)
-							.attr('y', function(){
+							.attr(vertical ? 'y' : 'x', function(){
 								return (center + destination) / 2;
 							});
 					});
@@ -258,15 +293,21 @@
 				}
 
 				function drawVariants(){
+					//Change band height if the band is vertical or horizontal
+					if(vertical){
+						var variantHeights = BAND_HEIGHT + scope.height + 6;
+					}else{
+						var variantHeights = BAND_HEIGHT - 6;
+					}
+
 					//Variables for looping through arrays
 					var sIndex = 0,
 						cIndex = 0,
 						qIndex = 0,
 						iIndex = 0,
-						copHolder = BAND_HEIGHT + scope.height + 6,
-						seqHolder = BAND_HEIGHT + scope.height + 6,
-						insHolder = BAND_HEIGHT + scope.height + 6;
-
+						copHolder = variantHeights,
+						seqHolder = variantHeights,
+						insHolder = variantHeights;
 
 					band.each(function(m){
 						//Booleans to see if the variation is in the band
@@ -282,7 +323,7 @@
 							lineDistance = 0,
 							startHolder = 0,
 							endHolder = 0;
-						var height = BAND_HEIGHT + scope.height + 6,
+						var height = variantHeights,
 							prevHeight = height;
 						var centerBand = xscale(m.START.textContent) + ((xscale(+m.END.textContent) - xscale(+m.START.textContent)) / 2),
 							startBand = m.START.textContent,
@@ -349,7 +390,7 @@
 									drawLine(centerBand, xscale(startBand), height, height, "red", numLineStart, subLine, "Substitutions", startHolder, endHolder);
 								}
 								numCircle = 0; //Reset for the next variant
-								height = height + 10; //Next circle will be higher
+								height = vertical ? height + 10 : height - 10; //Next circle will be higher
 								lineEnd = false;
 								lineStart = false;
 								numLineEnd = 0;
@@ -421,7 +462,7 @@
 									drawLine(centerBand, xscale(startBand), height, copHolder, "green", numLineStart, copLine, "Copy Number Variations", startHolder, endHolder);
 								}
 								numCircle = 0; //Reset for the next variant
-								height = height + 10; //Next circle will be higher
+								height = vertical ? height + 10 : height - 10; //Next circle will be higher
 								copHolder = prevHeight; //The height of the current variant is saved
 								lineEnd = false;
 								lineStart = false;
@@ -493,7 +534,7 @@
 									drawLine(centerBand, xscale(startBand), height, seqHolder, "blue", numLineStart, seqLine, "Sequence Alterations", startHolder, endHolder);
 								}
 								numCircle = 0; //Reset for the next variant
-								height = height + 10; //Next circle will be higher
+								height = vertical ? height + 10 : height - 10; //Next circle will be higher
 								seqHolder = prevHeight; //The height of the current variant is saved
 								lineEnd = false;
 								lineStart = false;
@@ -573,12 +614,8 @@
 
 
 				document.getElementById("substitution").onclick = function(){
-					//Remove all the circles
-					target.selectAll("circle")
-						.remove();
-
-					//Remove all the lines
-					target.selectAll("line")
+					//Refresh the drawings so that the maxes are absolute
+					target.selectAll("circle, line")
 						.remove();
 
 					if(this.checked){
@@ -598,12 +635,8 @@
 				};
 
 				document.getElementById("copy_number").onclick = function(){
-					//Remove all the circles
-					target.selectAll("circle")
-						.remove();
-
-					//Remove all the lines
-					target.selectAll("line")
+					//Refresh the drawings so that the maxes are absolute
+					target.selectAll("circle, line")
 						.remove();
 
 					if(this.checked){
@@ -623,12 +656,8 @@
 				};
 
 				document.getElementById("sequence_alteration").onclick = function(){
-					//Remove all the circles
-					target.selectAll("circle")
-						.remove();
-
-					//Remove all the lines
-					target.selectAll("line")
+					//Refresh the drawings so that the maxes are absolute
+					target.selectAll("circle, line")
 						.remove();
 
 					if(this.checked){
@@ -648,12 +677,8 @@
 				};
 
 				document.getElementById("insertion").onclick = function(){
-					//Remove all the circles
-					target.selectAll("circle")
-						.remove();
-
-					//Remove all the lines
-					target.selectAll("line")
+					//Refresh the drawings so that the maxes are absolute
+					target.selectAll("circle, line")
 						.remove();
 
 					if(this.checked){
@@ -675,21 +700,40 @@
 				drawVariants();
 
 				//Refresh the drawings so that the maxes are absolute
-				target.selectAll("circle")
-					.remove();
-
-				target.selectAll("line")
+				target.selectAll("circle, line")
 					.remove();
 
 				drawVariants();
 			}
 
-			button.addEventListener("click", function(){
+			variantButton.addEventListener("click", function(){
 				//Check if the input is a number
 				if(!isNaN(text.value) && text.value != ''){
 					//Get the variants
 					variantNumber = parseInt(text.value);
 					golrCall();
+				}
+			});
+
+			orientButton.addEventListener("click", function(){
+				if(vertical){
+					orientButton.textContent = "Vertical";
+					vertical = false;
+				}else{
+					orientButton.textContent = "Horizontal";
+					vertical = true;
+				}
+
+				//Repaint the entire thing
+				target.selectAll("circle, line, rect, g")
+					.remove();
+
+				setTarget();
+
+				drawBand();
+
+				if(Variants.length != 0){
+					loadVariants();
 				}
 			});
 
@@ -717,6 +761,117 @@
 				GolrManager.search();
 			}
 
+			function drawBand(){
+				if (typeof dasModel.err === 'undefined') {
+
+					if (scope.width === 'inherit') {
+						var svgWidth = target[0][0].width.baseVal.value;
+						rangeTo = scope.relSize ? ((+dasModel.stop / CHR1_BP_END) * svgWidth) - PADDING : svgWidth - PADDING;
+					}
+					else {
+						rangeTo = scope.relSize ? ((+dasModel.stop / CHR1_BP_END) * scope.width) - PADDING : scope.width - PADDING;
+					}
+
+					var xscale = d3.scale.linear()
+						.domain([dasModel.start, dasModel.stop])
+						.range([0, vertical ? (rangeTo / 2) : rangeTo]);
+
+					band = target.selectAll("chromosome" + " g")
+						.data(dasModel.bands)
+						.enter().append("g");
+
+					band.append('title')
+						.text(function(m) {
+							//Add a variable to hold the variants on the band
+							m.density = [];
+							return m.id;
+						});
+
+					var centromereLocation;
+
+					band.append('rect')
+						.attr('class', function (m) {
+							//Calculate centromere location
+							if(m.TYPE.id === "band:acen" && (m.id.indexOf('p')==0)) {
+								centromereLocation = m.END.textContent;
+							}
+							return m.TYPE.id.replace(':', ' ');
+						})
+						.attr('width', function (m) {
+							if(vertical){
+								return (m.TYPE.id === "band:stalk") ? (scope.height * STALK_MAG_PC) : scope.height;
+							}else{
+								return xscale(+m.END.textContent) - xscale(+m.START.textContent);
+							}
+						})
+						.attr('height', function (m) {
+							if(vertical){
+								return xscale(+m.END.textContent) - xscale(+m.START.textContent);
+							}else{
+								return (m.TYPE.id === "band:stalk") ? (scope.height * STALK_MAG_PC) : scope.height;
+							}
+						})
+						.attr('y', function (m) {
+							if(vertical){
+								return xscale(m.START.textContent);
+							}else{
+								return (m.TYPE.id === "band:stalk") ? (PADDING + STALK_SPACING) : BAND_HEIGHT;
+							}
+						})
+						.attr('x', function (m) {
+							if(vertical){
+								return (m.TYPE.id === "band:stalk") ? (PADDING + STALK_SPACING) : BAND_HEIGHT;
+							}else{
+								return xscale(m.START.textContent);
+							}
+						});
+
+
+
+					var label = target.append("text")
+						.attr("class", "band-lbl")
+						.attr(vertical ? 'x' : 'y', LABEL_PADDING + 10);
+
+					band.on("mouseover", function (m) {
+						label.text(m.id)
+							.attr(vertical ? 'y' : 'x', (xscale(m.START.textContent) + xscale(m.END.textContent)) / 2);
+					});
+
+					band.on("mouseout", function () {
+						label.text(''); //empty the label
+					});
+
+					band.on("click", function (m) {
+						var start = +m.START.textContent,
+							end = +m.END.textContent;
+
+						if (scope.mode === 'multi' || (scope.mode === "single" && scope.selectors.list.length == 0)) {
+							var newSel = newSelector(scope, xscale, start, end, (BAND_HEIGHT - AXIS_SPACING)).draw(); //create new selector and draw it
+							addSelector(newSel);//add new selector to local scope
+							chrSelectors.addSelector(newSel); //add new location to the service
+						}
+					});
+
+					if (scope.axis) {
+						var bpAxis = d3.svg.axis()
+							.scale(xscale)
+							.tickFormat(d3.format('s'))
+							.orient(vertical ? "left" : "bottom");
+
+						target.append('g')
+							.attr('class', 'bp-axis')
+							.attr('transform', function(){
+								if(vertical){
+									return 'translate(' + (BAND_HEIGHT - AXIS_SPACING) + ')'
+								}else{
+									return 'translate(0,' + (scope.height + BAND_HEIGHT + AXIS_SPACING) + ')'
+								}
+							})
+							.call(bpAxis);
+					}
+				}
+			}
+
 
 			dasLoader.loadModel(scope.chr, scope.assembly)
 				.features({segment: scope.chr}, function (res) {
@@ -732,98 +887,7 @@
 						console.log("JSDAS results empty for segment");
 					}
 
-
-					if (typeof dasModel.err === 'undefined') {
-
-						if (scope.width === 'inherit') {
-							var svgWidth = target[0][0].width.baseVal.value;
-							rangeTo = scope.relSize ? ((+dasModel.stop / CHR1_BP_END) * svgWidth) - PADDING : svgWidth - PADDING;
-						}
-						else {
-							rangeTo = scope.relSize ? ((+dasModel.stop / CHR1_BP_END) * scope.width) - PADDING : scope.width - PADDING;
-						}
-
-						var xscale = d3.scale.linear()
-							.domain([dasModel.start, dasModel.stop])
-							.range([0, (rangeTo / 2)]);
-
-						band = target.selectAll("chromosome" + " g")
-							.data(dasModel.bands)
-							.enter().append("g");
-
-						band.append('title')
-							.text(function(m) {
-								//Add a variable to hold the variants on the band
-								m.density = [];
-								return m.id;
-							});
-
-						var centromereLocation;
-
-						band.append('rect')
-							.attr('class', function (m) {
-								//Calculate centromere location
-								if(m.TYPE.id === "band:acen" && (m.id.indexOf('p')==0)) {
-									centromereLocation = m.END.textContent;
-								}
-								return m.TYPE.id.replace(':', ' ');
-							})
-							.attr('width', function (m) {
-								return (m.TYPE.id === "band:stalk") ? (scope.height * STALK_MAG_PC) : scope.height;
-							})
-							.attr('height', function (m) {
-								return xscale(+m.END.textContent) - xscale(+m.START.textContent);
-							})
-							.attr('y', function (m) {
-								return xscale(m.START.textContent);
-							})
-							.attr('x', function (m) {
-								return (m.TYPE.id === "band:stalk") ? (PADDING + STALK_SPACING) : BAND_HEIGHT;
-							});
-
-
-						var label = target.append("text")
-							.attr("class", "band-lbl")
-							.attr("x", LABEL_PADDING + 10);
-
-						band.on("mouseover", function (m) {
-							label.text(m.id)
-								.attr('y', (xscale(m.START.textContent) + xscale(m.END.textContent)) / 2);
-						});
-
-						band.on("mouseout", function () {
-							label.text(''); //empty the label
-						});
-
-						band.on("click", function (m) {
-							var start = +m.START.textContent,
-								end = +m.END.textContent;
-
-							if (scope.mode === 'multi' || (scope.mode === "single" && scope.selectors.list.length == 0)) {
-								var newSel = newSelector(scope, xscale, start, end, (BAND_HEIGHT - AXIS_SPACING)).draw(); //create new selector and draw it
-								addSelector(newSel);//add new selector to local scope
-								chrSelectors.addSelector(newSel); //add new location to the service
-							}
-						});
-
-						if (scope.axis) {
-							var bpAxis = d3.svg.axis()
-								.scale(xscale)
-								.tickFormat(d3.format('s'))
-								.orient("left");
-
-							target.append('g')
-								.attr('class', 'bp-axis')
-								.attr('transform', function(){
-									if(vertical){
-										return 'translate(' + (BAND_HEIGHT - AXIS_SPACING) + ')'
-									}else{
-										return 'translate(0,' + (scope.height + BAND_HEIGHT + AXIS_SPACING) + ')'
-									}
-								})
-								.call(bpAxis);
-						}
-					}
+					drawBand();
 
 				}, function (err) {
 					//error response handler
@@ -962,9 +1026,15 @@
 
 			//initialize the selector and table
 			this.init = function (start, end) {
-				self.brush = d3.svg.brush()
-					.y(options.xscale)
-					.extent([start, end]);
+				if(vertical){
+					self.brush = d3.svg.brush()
+						.y(options.xscale)
+						.extent([start, end]);
+				}else{
+					self.brush = d3.svg.brush()
+						.x(options.xscale)
+						.extent([start, end]);
+				}
 
 				self.start = Math.round(start);
 				self.end = Math.round(end);
@@ -979,13 +1049,23 @@
 				//	//do something here on brush end
 				//});
 
-				_selector = d3.select(options.target).append("g")
-					.classed('selector', true)
-					.attr('transform',"translate(" + BAND_HEIGHT + ")")
-					.call(self.brush);
+				if(vertical){
+					_selector = d3.select(options.target).append("g")
+						.classed('selector', true)
+						.attr('transform',"translate(" + BAND_HEIGHT + ")")
+						.call(self.brush);
 
-				_selector.selectAll('rect')
-					.attr('width', options.height + (AXIS_SPACING * 2));
+					_selector.selectAll('rect')
+						.attr('width', options.height + (AXIS_SPACING * 2));
+				}else{
+					_selector = d3.select(options.target).append("g")
+						.classed('selector', true)
+						.attr('transform',"translate(0,"+ options.y +")")
+						.call(self.brush);
+
+					_selector.selectAll('rect')
+						.attr('height', options.height + (AXIS_SPACING * 2));
+				}
 
 				_initialized = true;
 
