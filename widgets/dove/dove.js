@@ -108,7 +108,7 @@ monarch.dovechart.prototype.makeGraphDOM = function(html_div, data){
       jQuery(html_div+" .interaction li .settings").append(" <form class=zero"+
               " style=font-size:" + config.settingsFontSize + "; >" +
               "<label><input type=\"checkbox\" name=\"zero\"" +
-              " value=\"remove\"> Remove Empty Groups</label> " +
+              " value=\"remove\" checked> Remove Empty Groups</label> " +
               "</form> ");
       
       // Ajax spinner
@@ -139,7 +139,7 @@ monarch.dovechart.prototype.makeGraphDOM = function(html_div, data){
       //jQuery(".ajax-spinner").show();
       //Update tooltip positioning
       if (!config.useCrumb && groups.length>1){
-          config.arrowOffset.height = 12;
+          config.arrowOffset.height = 14;
           config.barOffset.grouped.height = 102;
           config.barOffset.stacked.height = 81;
       } else if (!config.useCrumb){
@@ -320,9 +320,9 @@ monarch.dovechart.prototype.displayCountTip = function(tooltip,value,name,d3Sele
     }
 };
 
-monarch.dovechart.prototype.setGroupPositioning = function (histogram,graphData) {
+monarch.dovechart.prototype.setGroupPositioning = function (histogram,data) {
     var self = this;
-    var data = self.setDataPerSettings(graphData);
+
     var groupPos = histogram.svg.selectAll()
        .data(data)
        .enter().append("svg:g")
@@ -339,15 +339,15 @@ monarch.dovechart.prototype.setGroupPositioning = function (histogram,graphData)
 monarch.dovechart.prototype.setXYDomains = function (histogram,data,groups) {
     var self = this;
     //Set y0 domain
-    data = self.setDataPerSettings(data);
+
     histogram.y0.domain(data.map(function(d) { return d.id; }));
     
-    if (jQuery('input[name=mode]:checked').val()=== 'grouped' || groups.length === 1){
+    if (jQuery(self.html_div + ' input[name=mode]:checked').val()=== 'grouped' || groups.length === 1){
         var xGroupMax = self.getGroupMax(data);
         histogram.x.domain([histogram.x0, xGroupMax]);
         histogram.y1.domain(groups)
         .rangeRoundBands([0, histogram.y0.rangeBand()]);
-    } else if (jQuery('input[name=mode]:checked').val()=== 'stacked'){
+    } else if (jQuery(self.html_div + ' input[name=mode]:checked').val()=== 'stacked'){
         var xStackMax = self.getStackMax(data);
         histogram.x.domain([histogram.x0, xStackMax]);
         histogram.y1.domain(groups).rangeRoundBands([0,0]);
@@ -388,7 +388,7 @@ monarch.dovechart.prototype.makeBar = function (barGroup,histogram,barLayout,isF
             self.transitionFromZero(bar,histogram,barLayout);
         } else {
             bar.attr("width", function(d) { 
-                if (( jQuery('input[name=scale]:checked').val() === 'log' )
+                if (( jQuery(self.html_div + ' input[name=scale]:checked').val() === 'log' )
                         && ( d.value == 0 )){
                   return 1;
               } else {
@@ -431,7 +431,7 @@ monarch.dovechart.prototype.makeBar = function (barGroup,histogram,barLayout,isF
                 .attr("width", function(d) { 
                     if (d.x0 == 0 && d.x1 != 0){
                         return histogram.x(d.x1); 
-                    } else if (( jQuery('input[name=scale]:checked').val() === 'log' ) &&
+                    } else if (( jQuery(self.html_div + ' input[name=scale]:checked').val() === 'log' ) &&
                             ( histogram.x(d.x1) - histogram.x(d.x0) == 0 )){
                         return 1;  
                     } else {
@@ -452,7 +452,7 @@ monarch.dovechart.prototype.transitionFromZero = function (bar,histogram,barLayo
         .delay(function(d, i, j) { return j * 20; })
         .attr("x", 1)
         .attr("width", function(d) { 
-        if (( jQuery('input[name=scale]:checked').val() === 'log' )
+        if (( jQuery(self.html_div + ' input[name=scale]:checked').val() === 'log' )
                 && ( d.value == 0 )){
           return 1;
       } else {
@@ -473,7 +473,7 @@ monarch.dovechart.prototype.transitionFromZero = function (bar,histogram,barLayo
         .attr("width", function(d) { 
             if (d.x0 == 0 && d.x1 != 0){
                 return histogram.x(d.x1); 
-            } else if (( jQuery('input[name=scale]:checked').val() === 'log' ) &&
+            } else if (( jQuery(self.html_div + ' input[name=scale]:checked').val() === 'log' ) &&
                  ( histogram.x(d.x1) - histogram.x(d.x0) == 0 )){
                 return 1;  
             } else {
@@ -497,7 +497,7 @@ monarch.dovechart.prototype.transitionGrouped = function (histogram,data,groups,
       .transition()
       .attr("x", 1)
       .attr("width", function(d) { 
-          if (( jQuery('input[name=scale]:checked').val() === 'log' ) &&
+          if (( jQuery(self.html_div + ' input[name=scale]:checked').val() === 'log' ) &&
               ( d.value == 0 )){
               return 1;
           } else {
@@ -537,7 +537,7 @@ monarch.dovechart.prototype.transitionStacked = function (histogram,data,groups,
       .attr("width", function(d) { 
           if (d.x0 == 0 && d.x1 != 0){
               return histogram.x(d.x1); 
-          } else if (( jQuery('input[name=scale]:checked').val() === 'log' ) &&
+          } else if (( jQuery(self.html_div + ' input[name=scale]:checked').val() === 'log' ) &&
                      ( histogram.x(d.x1) - histogram.x(d.x0) == 0 )){
               return 1;  
           } else {
@@ -574,6 +574,7 @@ monarch.dovechart.prototype.drawGraph = function (histogram, isFromCrumb, parent
     //self.groups = self.getGroups(data);
 
     self.checkData(data);
+    data = self.setDataPerSettings(data);
     
     // Some updates to dynamically increase the size of the graph
     //  This is a bit hacky and needs refactoring
@@ -605,6 +606,7 @@ monarch.dovechart.prototype.drawGraph = function (histogram, isFromCrumb, parent
     
     data = self.getStackedStats(data);
     data = self.sortDataByGroupCount(data, self.groups);
+    
 
     if (!isFromCrumb){
         data = self.addEllipsisToLabel(data,config.maxLabelSize);
@@ -704,9 +706,9 @@ monarch.dovechart.prototype.setDataPerSettings = function(data){
 // and value
 monarch.dovechart.prototype.getValueOfCheckbox = function(name,value){
     var self = this;
-    if (jQuery('input[name='+name+']:checked').val() === value){
+    if (jQuery(self.html_div + ' input[name='+name+']:checked').val() === value){
         return true;
-    } else if (typeof jQuery('input[name=zero]:checked').val() === 'undefined'){
+    } else if (typeof jQuery(self.html_div + ' input[name=zero]:checked').val() === 'undefined'){
         return false;
     }
 };
@@ -734,7 +736,7 @@ monarch.dovechart.prototype.resizeChart = function(data){
     var self = this;
     var config = self.config;
     var height = config.height;
-    data = self.setDataPerSettings(data);
+
     if (data.length < 25){
          height = data.length*26; 
          if (height > config.height){
@@ -948,8 +950,8 @@ monarch.dovechart.prototype.makeBreadcrumb = function(histogram,label,groups,bar
 
 monarch.dovechart.prototype.setBarConfigPerCheckBox = function(histogram,data,groups,barGroup,isFirstGraph) {
     self = this;
-    data = self.setDataPerSettings(data);
-    if (jQuery('input[name=mode]:checked').val()=== 'grouped' || groups.length === 1) {
+
+    if (jQuery(self.html_div + ' input[name=mode]:checked').val()=== 'grouped' || groups.length === 1) {
         self.setXYDomains(histogram,data,groups,'grouped');
         histogram.transitionXAxisToNewScale(1000);
         return self.makeBar(barGroup,histogram,'grouped',isFirstGraph);
@@ -963,7 +965,6 @@ monarch.dovechart.prototype.setBarConfigPerCheckBox = function(histogram,data,gr
 monarch.dovechart.prototype.setYAxisText = function(histogram,data, barGroup, bar, yFont){
     var self = this;
     config = self.config;
-    data = self.setDataPerSettings(data);
     
     histogram.svg.select(".y.axis")
     .selectAll("text")
@@ -1002,7 +1003,6 @@ monarch.dovechart.prototype.setYAxisText = function(histogram,data, barGroup, ba
 monarch.dovechart.prototype.disableYAxisText = function(histogram,data, barGroup, bar){
     self = this;
     config = self.config;
-    data = self.setDataPerSettings(data);
     
     histogram.svg.select(".y.axis")
     .selectAll("text")
@@ -1022,7 +1022,6 @@ monarch.dovechart.prototype.disableYAxisText = function(histogram,data, barGroup
 monarch.dovechart.prototype.activateYAxisText = function(histogram,data, barGroup, bar){
     self = this;
     config = self.config;
-    data = self.setDataPerSettings(data);
     
     histogram.svg.select(".y.axis")
     .selectAll("text")

@@ -108,7 +108,7 @@ monarch.dovechart.prototype.makeGraphDOM = function(html_div, data){
       jQuery(html_div+" .interaction li .settings").append(" <form class=zero"+
               " style=font-size:" + config.settingsFontSize + "; >" +
               "<label><input type=\"checkbox\" name=\"zero\"" +
-              " value=\"remove\"> Remove Empty Groups</label> " +
+              " value=\"remove\" checked> Remove Empty Groups</label> " +
               "</form> ");
       
       // Ajax spinner
@@ -139,7 +139,7 @@ monarch.dovechart.prototype.makeGraphDOM = function(html_div, data){
       //jQuery(".ajax-spinner").show();
       //Update tooltip positioning
       if (!config.useCrumb && groups.length>1){
-          config.arrowOffset.height = 12;
+          config.arrowOffset.height = 14;
           config.barOffset.grouped.height = 102;
           config.barOffset.stacked.height = 81;
       } else if (!config.useCrumb){
@@ -320,9 +320,9 @@ monarch.dovechart.prototype.displayCountTip = function(tooltip,value,name,d3Sele
     }
 };
 
-monarch.dovechart.prototype.setGroupPositioning = function (histogram,graphData) {
+monarch.dovechart.prototype.setGroupPositioning = function (histogram,data) {
     var self = this;
-    var data = self.setDataPerSettings(graphData);
+
     var groupPos = histogram.svg.selectAll()
        .data(data)
        .enter().append("svg:g")
@@ -339,7 +339,7 @@ monarch.dovechart.prototype.setGroupPositioning = function (histogram,graphData)
 monarch.dovechart.prototype.setXYDomains = function (histogram,data,groups) {
     var self = this;
     //Set y0 domain
-    data = self.setDataPerSettings(data);
+
     histogram.y0.domain(data.map(function(d) { return d.id; }));
     
     if (jQuery(self.html_div + ' input[name=mode]:checked').val()=== 'grouped' || groups.length === 1){
@@ -574,6 +574,7 @@ monarch.dovechart.prototype.drawGraph = function (histogram, isFromCrumb, parent
     //self.groups = self.getGroups(data);
 
     self.checkData(data);
+    data = self.setDataPerSettings(data);
     
     // Some updates to dynamically increase the size of the graph
     //  This is a bit hacky and needs refactoring
@@ -605,6 +606,7 @@ monarch.dovechart.prototype.drawGraph = function (histogram, isFromCrumb, parent
     
     data = self.getStackedStats(data);
     data = self.sortDataByGroupCount(data, self.groups);
+    
 
     if (!isFromCrumb){
         data = self.addEllipsisToLabel(data,config.maxLabelSize);
@@ -734,7 +736,7 @@ monarch.dovechart.prototype.resizeChart = function(data){
     var self = this;
     var config = self.config;
     var height = config.height;
-    data = self.setDataPerSettings(data);
+
     if (data.length < 25){
          height = data.length*26; 
          if (height > config.height){
@@ -948,7 +950,7 @@ monarch.dovechart.prototype.makeBreadcrumb = function(histogram,label,groups,bar
 
 monarch.dovechart.prototype.setBarConfigPerCheckBox = function(histogram,data,groups,barGroup,isFirstGraph) {
     self = this;
-    data = self.setDataPerSettings(data);
+
     if (jQuery(self.html_div + ' input[name=mode]:checked').val()=== 'grouped' || groups.length === 1) {
         self.setXYDomains(histogram,data,groups,'grouped');
         histogram.transitionXAxisToNewScale(1000);
@@ -963,7 +965,6 @@ monarch.dovechart.prototype.setBarConfigPerCheckBox = function(histogram,data,gr
 monarch.dovechart.prototype.setYAxisText = function(histogram,data, barGroup, bar, yFont){
     var self = this;
     config = self.config;
-    data = self.setDataPerSettings(data);
     
     histogram.svg.select(".y.axis")
     .selectAll("text")
@@ -1002,7 +1003,6 @@ monarch.dovechart.prototype.setYAxisText = function(histogram,data, barGroup, ba
 monarch.dovechart.prototype.disableYAxisText = function(histogram,data, barGroup, bar){
     self = this;
     config = self.config;
-    data = self.setDataPerSettings(data);
     
     histogram.svg.select(".y.axis")
     .selectAll("text")
@@ -1022,7 +1022,6 @@ monarch.dovechart.prototype.disableYAxisText = function(histogram,data, barGroup
 monarch.dovechart.prototype.activateYAxisText = function(histogram,data, barGroup, bar){
     self = this;
     config = self.config;
-    data = self.setDataPerSettings(data);
     
     histogram.svg.select(".y.axis")
     .selectAll("text")
