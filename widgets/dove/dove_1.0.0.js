@@ -8,7 +8,7 @@
 // Module and namespace checking.
 if (typeof monarch == 'undefined') { var monarch = {};}
 
-monarch.dovechart = function(config, tree, html_div){
+monarch.dovechart = function(config, tree, html_div, tree_builder){
     self = this;
     if (config == null || typeof config == 'undefined'){
         self.config = self.getDefaultConfig();
@@ -41,13 +41,15 @@ monarch.dovechart = function(config, tree, html_div){
         self.config.graphSizingRatios = self.setSizingRatios();
     }
 
-    self.level = 0;
+    self.level = 0; //Do away with this and just use self.parents.length
+    self.config.initialHeight = config.height;
     self.parents = [];
     self.parents.push(tree.getRootID());
     self.html_div = html_div;
     self.tree = tree;
+    self.tree_builder = tree_builder;
 
-    self.tooltip = d3.select(html_div)
+    self.tooltip = d3.select(self.html_div)
         .append("div")
         .attr("class", "tip");
     
@@ -108,7 +110,33 @@ monarch.dovechart.prototype.makeGraphDOM = function(html_div, data){
               "<label><input type=\"checkbox\" name=\"zero\"" +
               " value=\"remove\"> Remove Empty Groups</label> " +
               "</form> ");
-
+      
+      // Ajax spinner
+      jQuery(html_div+" .interaction li .settings").append("<div class=\"ajax-spinner\">"+
+                          "<div class=\"ortholog-spinner\" > " +
+                            "<div class=\"spinner-container container1\">" +
+                              "<div class=\"circle1\"></div>" +
+                              "<div class=\"circle2\"></div>" +
+                              "<div class=\"circle3\"></div>" +
+                              "<div class=\"circle4\"></div>" +
+                            "</div>" +
+                            "<div class=\"spinner-container container2\"> " +
+                              "<div class=\"circle1\"></div>" +
+                              "<div class=\"circle2\"></div>" +
+                              "<div class=\"circle3\"></div>" +
+                              "<div class=\"circle4\"></div>" +
+                            "</div>" +
+                            "<div class=\"spinner-container container3\">" +
+                              "<div class=\"circle1\"></div>" +
+                              "<div class=\"circle2\"></div>" +
+                              "<div class=\"circle3\"></div>" +
+                              "<div class=\"circle4\"></div>" +
+                            "</div>" +
+                          "</div>" +
+                          "<div class='fetching'>Fetching Data...</div></div>" +
+                          "<div class='error-msg'>Error Fetching Data</div>" +
+                          "<div class='leaf-msg'></div>");
+      //jQuery(".ajax-spinner").show();
       //Update tooltip positioning
       if (!config.useCrumb && groups.length>1){
           config.arrowOffset.height = 12;
@@ -153,14 +181,14 @@ monarch.dovechart.prototype.makeLegend = function(histogram){
        .attr("transform", function(d, i) { return "translate(0," + i * (config.legend.height+7) + ")"; });
 
     legend.append("rect")
-       .attr("x", config.width+config.legend.width+37)//HARDCODE
+       .attr("x", config.width+config.legend.width+45)//HARDCODE
        .attr("y", 6)
        .attr("width", config.legend.width)
        .attr("height", config.legend.height)
        .style("fill", histogram.color);
 
     legend.append("text")
-       .attr("x", config.width+config.legend.width+32)
+       .attr("x", config.width+config.legend.width+40)
        .attr("y", 14)
        .attr("dy", config.legendText.height)
        .attr("font-size",config.legendFontSize)
@@ -239,7 +267,7 @@ monarch.dovechart.prototype.removeSVGWithSelection = function(select,duration,y,
 };
 
 monarch.dovechart.prototype.removeSVGWithClass = function(histogram,htmlClass,duration,y,opacity){
-    histogram.svg.selectAll(htmlClass).transition()
+    d3.select(self.html_div+'.barchart').selectAll(htmlClass).transition()
         .duration(duration)
         .attr("y", y)
         .style("fill-opacity", opacity)
@@ -533,19 +561,48 @@ monarch.dovechart.prototype.transitionStacked = function (histogram,data,groups,
     })
 };
 
-monarch.dovechart.prototype.drawGraph = function (histogram, isFromCrumb, parent, isFirstGraph) {
+monarch.dovechart.prototype.drawGraph = function (histogram, isFromCrumb, parent, isFirstGraph, isFromResize) {
     var self = this;
     var config = self.config;
     
     if (typeof parent != 'undefined'){
-        self.parents.push(parent);
+      //  self.parents.push(parent);
     }
     
     var data = self.tree.getDescendants(self.parents);
     
-    self.groups = self.getGroups(data);
+    //self.groups = self.getGroups(data);
 
     self.checkData(data);
+    
+    // Some updates to dynamically increase the size of the graph
+    //  This is a bit hacky and needs refactoring
+    if (data.length > 25 && self.config.height == self.config.initialHeight){
+        self.config.height = data.length * 14.05;
+        jQuery(self.html_div + ' .barchart').remove();
+        histogram = new monarch.chart.barchart(self.config, self.html_div);
+        self.drawGraph(histogram, false, undefined, false, true);
+        return;
+    } else if (data.length > 25 && self.config.height != self.config.initialHeight && !isFromResize){
+        self.config.height = data.length * 14.05;
+        jQuery(self.html_div + ' .barchart').remove();
+        histogram = new monarch.chart.barchart(self.config, self.html_div);
+        self.drawGraph(histogram, false, undefined, false, true);
+        return;
+    } else if (data.length <= 25 && self.config.height != self.config.initialHeight ) {
+        self.config.height = self.config.initialHeight;
+        jQuery(self.html_div + ' .barchart').remove();
+        histogram = new monarch.chart.barchart(self.config, self.html_div);
+        self.drawGraph(histogram, isFromCrumb, undefined, false, true);
+        return;
+    } else if (isFromCrumb && !isFromResize) {
+        self.config.height = self.config.initialHeight;
+        jQuery(self.html_div + ' .barchart').remove();
+        histogram = new monarch.chart.barchart(self.config, self.html_div);
+        self.drawGraph(histogram, isFromCrumb, undefined, false, true);
+        return;
+    }
+    
     data = self.getStackedStats(data);
     data = self.sortDataByGroupCount(data, self.groups);
 
@@ -553,7 +610,7 @@ monarch.dovechart.prototype.drawGraph = function (histogram, isFromCrumb, parent
         data = self.addEllipsisToLabel(data,config.maxLabelSize);
     }
 
-    if (self.groups.length == 1 && isFirstGraph){
+    if (self.groups.length == 1 && isFirstGraph && !isFromResize){
         config.barOffset.grouped.height = config.barOffset.grouped.height+8;
         config.barOffset.stacked.height = config.barOffset.stacked.height+8;
     }
@@ -567,20 +624,28 @@ monarch.dovechart.prototype.drawGraph = function (histogram, isFromCrumb, parent
       .scale(histogram.y0)
       .orient("left");
     
+    self.changeScalePerSettings(histogram);
+    
     self.setXYDomains(histogram, data, self.groups);
-    if (isFirstGraph){
+    if (isFirstGraph || isFromResize){
         histogram.setXTicks(config).setYTicks();
     }
 
     //Dynamically decrease font size for large labels
-    var yFont = self.adjustYAxisElements(data.length);
+    var yFontSize = self.adjustYAxisElements(data.length);
+    
     histogram.transitionYAxisToNewScale(1000);
     
     //Create SVG:G element that holds groups
     var barGroup = self.setGroupPositioning(histogram,data);
-    var bar = self.setBarConfigPerCheckBox(histogram,data,self.groups,barGroup,isFirstGraph);
     
-    self.setYAxisText(histogram,data, barGroup, bar);
+    var showTransition = false;
+    if (isFirstGraph || isFromResize || isFromCrumb){
+        showTransition = true;
+    }
+    var bar = self.setBarConfigPerCheckBox(histogram,data,self.groups,barGroup,showTransition);
+    
+    self.setYAxisText(histogram,data, barGroup, bar, yFontSize);
     
     //Create navigation arrow
     var navigate = histogram.svg.selectAll(".y.axis");
@@ -600,7 +665,7 @@ monarch.dovechart.prototype.drawGraph = function (histogram, isFromCrumb, parent
     }
 
     //Make first breadcrumb
-    if (config.useCrumb && isFirstGraph){
+    if (config.useCrumb && isFirstGraph && !isFromResize){
         self.makeBreadcrumb(histogram,self.tree.getRootLabel(),
                                  self.groups,bar,barGroup);
     }
@@ -688,12 +753,14 @@ monarch.dovechart.prototype.pickUpBreadcrumb = function(histogram,index,groups,b
     //set global level
     self.level = index;
     var parentLen = self.parents.length;
+    
+    jQuery(self.html_div+" .leaf-msg").hide();
 
     // Remove all elements following (index+1).
     // parentLen is greater than the number of elements remaining, but that's OK with splice()
     self.parents.splice(index + 1,(parentLen));
 
-    histogram.svg.selectAll(".tick").remove();
+    d3.select(self.html_div+'.barchart').selectAll(".tick").remove();
     self.drawGraph(histogram,isFromCrumb);
 
     for (var i=(index+1); i <= parentLen; i++){
@@ -893,8 +960,8 @@ monarch.dovechart.prototype.setBarConfigPerCheckBox = function(histogram,data,gr
     }
 };
 
-monarch.dovechart.prototype.setYAxisText = function(histogram,data, barGroup, bar){
-    self = this;
+monarch.dovechart.prototype.setYAxisText = function(histogram,data, barGroup, bar, yFont){
+    var self = this;
     config = self.config;
     data = self.setDataPerSettings(data);
     
@@ -903,6 +970,62 @@ monarch.dovechart.prototype.setYAxisText = function(histogram,data, barGroup, ba
     .data(data)
     .text(function(d){ return self.getIDLabel(d.id,data) })
     .attr("font-size", yFont)
+    .on("mouseover", function(){
+        d3.select(this).style("cursor", "pointer");
+        d3.select(this).style("fill", config.color.yLabel.hover);
+        d3.select(this).style("text-decoration", "underline");
+        self.displaySubClassTip(self.tooltip,this)
+    })
+    .on("mouseout", function(){
+        d3.select(this).style("fill", config.color.yLabel.fill );
+        d3.select(this).style("text-decoration", "none");
+        self.tooltip.style("display", "none");
+    })
+    .on("click", function(d){
+        console.log(self);
+        self.getDataAndTransitionOnClick(d, histogram, data, barGroup, bar);
+    })
+    .style("text-anchor", "end")
+    .attr("dx", config.yOffset)
+    .append("svg:title")
+    .text(function(d){
+        if (/\.\.\./.test(self.getIDLabel(d.id,data))){
+            var fullLabel = self.getFullLabel(self.getIDLabel(d.id,data),data);
+              return (fullLabel);  
+        } else if (yFont < 12) {//HARDCODE alert
+              return (self.getIDLabel(d.id,data));
+        }
+    });
+};
+
+
+monarch.dovechart.prototype.disableYAxisText = function(histogram,data, barGroup, bar){
+    self = this;
+    config = self.config;
+    data = self.setDataPerSettings(data);
+    
+    histogram.svg.select(".y.axis")
+    .selectAll("text")
+    .on("mouseover", function(){
+        d3.select(this).style("cursor", "arrow");
+    })
+    .on("mouseout", function(){
+        d3.select(this).style("fill", config.color.yLabel.fill );
+        d3.select(this).style("text-decoration", "none");
+        self.tooltip.style("display", "none");
+    })
+    .on("click", function(d){
+    });
+    
+};
+
+monarch.dovechart.prototype.activateYAxisText = function(histogram,data, barGroup, bar){
+    self = this;
+    config = self.config;
+    data = self.setDataPerSettings(data);
+    
+    histogram.svg.select(".y.axis")
+    .selectAll("text")
     .on("mouseover", function(){
         if (config.isYLabelURL){
             d3.select(this).style("cursor", "pointer");
@@ -917,26 +1040,51 @@ monarch.dovechart.prototype.setYAxisText = function(histogram,data, barGroup, ba
         self.tooltip.style("display", "none");
     })
     .on("click", function(d){
-        /*if (config.isYLabelURL){
-            d3.select(this).style("cursor", "pointer");
-            document.location.href = config.yLabelBaseURL + d;
-        }*/
-        if (d.children && d.children[0]){ //TODO use tree api
-            self.transitionToNewGraph(histogram,d,
-                    barGroup,bar, d.id);
-        }
-    })
-    .style("text-anchor", "end")
-    .attr("dx", config.yOffset)
-    .append("svg:title")
-    .text(function(d){
-        if (/\.\.\./.test(self.getIDLabel(d.id,data))){
-            var fullLabel = self.getFullLabel(self.getIDLabel(d.id,data),data);
-              return (fullLabel);  
-        } else if (yFont < 12) {//HARDCODE alert
-              return (self.getIDLabel(d.id,data));
-        }
+        self.getDataAndTransitionOnClick(d, histogram, data, barGroup, bar);
     });
+    
+};
+
+monarch.dovechart.prototype.getDataAndTransitionOnClick = function(node, histogram, data, barGroup, bar){
+    var self = this;
+    // Clear these in case they haven't faded out
+    jQuery(self.html_div+" .leaf-msg").hide();
+    jQuery(self.html_div+" .error-msg").hide();
+    
+    if (!self.tree_builder){
+        self.parents.push(node.id);
+        if (node.children && node.children[0]){ //TODO use tree api
+            self.transitionToNewGraph(histogram,node,
+                barGroup,bar, node.id);
+        }
+    } else {
+        self.disableYAxisText(histogram,data, barGroup, bar);
+        self.parents.push(node.id);
+        jQuery(self.html_div+" .ajax-spinner").show();
+        var transitionToGraph = function(){
+            jQuery(self.html_div+" .ajax-spinner").hide();
+            self.tree = self.tree_builder.tree;
+            // Check if we've found a new class
+            if (!self.tree.checkDescendants(self.parents)){
+                self.parents.pop();
+                jQuery(self.html_div+" .leaf-msg").html('There are no subclasses of <br/>'+node.fullLabel);
+                jQuery(self.html_div+" .leaf-msg").show().delay(3000).fadeOut();
+                self.activateYAxisText(histogram,data, barGroup, bar);
+            } else {
+                self.transitionToNewGraph(histogram, node, barGroup,bar, node.id);
+            }
+        };
+    
+        var showErrorMessage = function(){
+            self.parents.pop();
+            jQuery(self.html_div+" .ajax-spinner").hide();
+            self.activateYAxisText(histogram,data, barGroup, bar);
+            jQuery(self.html_div+" .error-msg").show().delay(3000).fadeOut();
+        };
+    
+        self.tree_builder.build_tree(self.parents, transitionToGraph, showErrorMessage);
+    }
+    
 };
 
 ////////////////////////////////////////////////////////////////////
@@ -996,7 +1144,7 @@ monarch.dovechart.prototype.getStackedStats = function(data){
 monarch.dovechart.prototype.sortDataByGroupCount = function(data,groups){
     var self = this;
     //Check if total counts have been calculated via getStackedStats()
-    if (data[0].counts[0].x1 == null){
+    if (!data[0] || !data[0].counts ||  !data[0].counts[0] || data[0].counts[0].x1 == null){
         data = self.getStackedStats(data);
     }
     
@@ -1054,7 +1202,7 @@ monarch.dovechart.prototype.checkData = function(data){
                 orderedCounts.push(count);
             } else {
                 var i = r.counts.map(function(i){return i.name;}).indexOf(val);
-                orderedCounts[i] = (r['counts'][index]);
+                orderedCounts[index] = (r['counts'][i]);
             }   
         });
         r.counts = orderedCounts;
@@ -1140,7 +1288,7 @@ monarch.dovechart.prototype.adjustYAxisElements = function(len){
    var density = h/len;
    var isUpdated = false;
    
-   yFont = conf.yFontSize;
+   var yFont = conf.yFontSize;
    var yOffset = conf.yOffset;
    var arrowDim = conf.arrowDim;
    
@@ -1265,7 +1413,7 @@ monarch.dovechart.prototype.setPolygonCoordinates = function(){
     }
     
     //breadcrumb div dimensions
-    this.config.bcWidth = 560;
+    this.config.bcWidth = 700;
     
     //Y axis positioning when arrow present
     if (this.config.yOffset == null || typeof this.config.yOffset == 'undefined'){
@@ -1273,9 +1421,9 @@ monarch.dovechart.prototype.setPolygonCoordinates = function(){
     }
     
     //Check that breadcrumb width is valid
-    if (this.config.bcWidth > this.config.width+this.config.margin.right+this.config.margin.left){
+    /*if (this.config.bcWidth > this.config.width+this.config.margin.right+this.config.margin.left){
         this.config.bcWidth = this.config.bread.width+(this.config.bread.offset*5)+5;
-    }
+    }*/
 };
 
 //dovechart default configurations
@@ -1426,6 +1574,8 @@ monarch.model.tree = function(data){
     if (data){
         self._data = data;
         self.checkSiblings(data.root.children);
+    } else {
+        self._data = {'root' : {'id' : '', 'label' : ''}};
     }
 };
 
@@ -1439,8 +1589,16 @@ monarch.model.tree.prototype.setTree = function(data){
     self._data = data;
 };
 
-monarch.model.tree.prototype.setRootID = function(root){
-    this._data.root.id = root;
+monarch.model.tree.prototype.setRoot = function(node){
+    this._data.root = node;
+};
+
+monarch.model.tree.prototype.getRoot = function(){
+    return this._data.root;
+};
+
+monarch.model.tree.prototype.setRootID = function(id){
+    this._data.root.id = id;
 };
 
 //Return entire tree data 
@@ -1460,25 +1618,9 @@ monarch.model.tree.prototype.getFirstSiblings = function(){
     return this._data.root.children;
 };
 
-//NOT IMPLEMENTED
-monarch.model.tree.prototype.addBranch = function(branch, parents){
-    
-    
+monarch.model.tree.prototype.setFirstSiblings = function(siblings){
+    this._data.root.children = siblings;
 };
-
-//Not implemented
-/*
-monarch.model.tree.prototype.addNode = function(node, parents){
-    var self = this;
-    var parent = self.getRootID();
-    
-    if (parents[0] != self.getRootID()){
-        throw new Error ("first id in parent list is not root");
-    }
-    parents.shift();
-    // Start at root
-    var descendants = self.getFirstSiblings();
-};*/
 
 
 monarch.model.tree.prototype.addCountsToNode = function(node_id, counts, parents) {
@@ -1486,16 +1628,94 @@ monarch.model.tree.prototype.addCountsToNode = function(node_id, counts, parents
     
     //Check that parents lead to something
     var siblings = self.getDescendants(parents);
-    if (siblings.map(function(i){return i.id;}).indexOf(node_id) == -1){
+    var index = siblings.map(function(i){return i.id;}).indexOf(node_id);
+    
+    if (index == -1){
         throw new Error ("Error in locating node given "
                          + parents + " and ID: " + node_id);
     } else {
-        var index = siblings.map(function(i){return i.id;}).indexOf(node_id);
         siblings[index]['counts'] = counts;
     }
     
     return self;
 };
+
+monarch.model.tree.prototype.addSiblingGroup = function(nodes, parents) {
+    var self = this;
+    
+    //Check that parents lead to something
+    var p_clone = JSON.parse(JSON.stringify(parents));
+    var root = p_clone.pop();
+    
+    if (p_clone.length == 0){
+        self.setFirstSiblings(nodes);
+    } else {
+        var siblings = self.getDescendants(p_clone);
+        var index = siblings.map(function(i){return i.id;}).indexOf(root);
+    
+        if (index == -1){
+            throw new Error ("Error in locating node given "
+                         + p_clone + " and ID: " + root);
+        } else {
+            siblings[index]['children'] = nodes;
+        }
+    }
+    
+    return self;
+};
+
+/*
+ * Function: checkDescendants
+ * 
+ * Check if we have descendants given a list of parents
+ * 
+ * Parameters:
+ *  parents - list of IDs leading to descendant
+ *  checkForData - boolean - optional flag to check if descendants have count data
+ * 
+ * Returns:
+ *  boolean 
+ */
+monarch.model.tree.prototype.checkDescendants = function(parents, checkForData){
+    var self = this;
+    var areThereDescendants = true;
+    var descendants =[];
+    
+    if (typeof parents != 'undefined' && parents.length > 0){
+        
+        if (parents[0] != self.getRootID()){
+            throw new Error ("first id in parent list is not root");
+        }
+        descendants = self.getFirstSiblings();
+        for (var i = 0; i < (parents.length); i++) {
+            //skip root
+            if (i == 0){
+                continue;
+            } else {
+                var branch = self._jumpOneLevel(parents[i], descendants);
+                descendants = branch.children;
+            }
+        }
+        
+    } else {
+        return self.hasRoot();
+    }
+    
+    if (typeof descendants != 'undefined' && descendants.length > 0 
+            && 'id' in descendants[0] 
+            && typeof descendants[0].id != 'undefined'){
+        areThereDescendants = true;
+        
+            if ( checkForData && !('counts' in descendants[0]) ){
+                areThereDescendants = false;
+            }
+    } else {
+        areThereDescendants = false;
+    }
+
+    return areThereDescendants;
+};
+    
 
 /*
  * Function: getDescendants
@@ -1512,33 +1732,51 @@ monarch.model.tree.prototype.getDescendants = function(parents){
     var self = this;
     
     // Start at root
-    var descendants = self.getFirstSiblings();
+    var descendants = [];
     
     if (typeof parents != 'undefined' && parents.length > 0){
         
         if (parents[0] != self.getRootID()){
             throw new Error ("first id in parent list is not root");
         }
-        
+
         parents.forEach( function(r,i){
             //skip root
             if (i == 0){
-              return;
+              descendants = self.getFirstSiblings();
+            } else {
+                var branch = self._jumpOneLevel(r, descendants);
+                descendants = branch.children;
             }
-            if (descendants.map(function(i){return i.id;}).indexOf(r) == -1){
-                throw new Error ("Error in locating descendant given "
-                                 + parents + " failed at ID: " + r);
-            }
-            descendants = descendants.filter(function(i){return i.id == r;});
-            if (descendants.length > 1){
-                throw new Error ("Cannot disambiguate id: " + r);
-            }
-            descendants = descendants[0].children;
         });
-    } 
+    } else {
+        descendants = self.getRoot();
+    }
     
     return descendants;
 };
+
+/*
+ * Function: _jumpOneLevel
+ * 
+ * Return a descendant given a list of IDs leading to the descendant
+ * 
+ * Parameters:
+ *  id - id to move into on branch
+ *  branch - branch of a tree
+ * 
+ * Returns:
+ *  object containing branch of data where id is the root
+ */
+monarch.model.tree.prototype._jumpOneLevel = function(id, branch){
+    branch = branch.filter(function(i){return i.id == id;});
+    if (branch.length > 1){
+        throw new Error ("Cannot disambiguate id: " + id);
+    } else if (branch.length == 0){
+        throw new Error ("Error in locating descendants given id: "+id);
+    }
+    return branch[0];
+}
 
 //TODO improve checking
 // Just checks top level of tree
@@ -1566,40 +1804,7 @@ monarch.model.tree.prototype.checkSiblings = function(siblings){
         }
     });
     return self;
-};
-
-/* 
- * Node sub-object
- * TODO -  determine if this is needed
- * 
- * Namespace: monarch.model.tree
- * 
- */
-
-// Module and namespace checking.
-if (typeof monarch == 'undefined') { var monarch = {};}
-if (typeof monarch.model == 'undefined') { monarch.model = {};}
-if (typeof monarch.model.tree == 'undefined') { monarch.model.tree = {};}
-
-
-monarch.model.tree.node = function(id, label, children){
-    var self = this;
-    self.id = id;
-    
-    if (typeof label != 'undefined'){
-        self.label = label;
-    } else {
-        self.label = id;
-    }
-    
-    if (typeof children != 'undefined'){
-        self.children = children;
-    } else {
-        self.children = [];
-    }
-};
-  
-/* 
+};/* 
  * Package: tree_builder.js
  * 
  * Namespace: monarch.builder
@@ -1620,7 +1825,7 @@ if (typeof monarch.builder == 'undefined') { monarch.builder = {};}
  *    tree - monarch.model.tree object
  *  
  */
-monarch.builder.tree_builder = function(solr_url, scigraph_url, golr_conf,  tree){
+monarch.builder.tree_builder = function(solr_url, scigraph_url, golr_conf, tree, config){
     var self = this;
     self.solr_url = solr_url;
     // Turn into official golr conf object
@@ -1631,28 +1836,37 @@ monarch.builder.tree_builder = function(solr_url, scigraph_url, golr_conf,  tree
     } else {
         self.tree = tree;
     }
+    if (config == null || typeof config == 'undefined'){
+        self.config = self.getDefaultConfig();
+    } else {
+        self.config = config;
+    }
     
 };
 
-monarch.builder.tree_builder.prototype.build_tree = function(parents, final_function){
+monarch.builder.tree_builder.prototype.build_tree = function(parents, final_function, error_function){
     var self = this;
     
-    var personality = 'dovechart';
-    var species_list = ["NCBITaxon:9606","NCBITaxon:10090","NCBITaxon:7955"];
+    var checkForData = true;
     
-    //golr_manager.set_personality(personality);
-    var gene_filter = { field: 'subject_category', value: 'gene' };
-    var facet = 'subject_taxon';
-    
-    //This is just a test with a hardcoded ontology file
-    var siblings = self.tree.getDescendants(parents);
-    
-    self.getCountsForSiblings(siblings, 'object_closure',species_list, gene_filter, personality, facet, parents, final_function);
+    // Check tree to see if we have classes, if so skip getting ontology
+    // structure from SciGraph
+    if (!self.tree.checkDescendants(parents)){
+        //get data from ontology
+        var final_callback = function(){
+            self.getCountsForSiblings(parents, final_function, error_function
+        )};
+        self.addOntologyToTree(parents[parents.length-1], 1, parents, final_callback, error_function);
+    } else if (!self.tree.checkDescendants(parents, checkForData)){
+        self.getCountsForSiblings(parents, final_function, error_function);
+    } else {
+        final_function();
+    }
     
 };
 
 /*
- * Function: getOntology
+ * Function: addOntologyToTree
  * 
  * Parameters:
  *    id - string, root id as curie or url
@@ -1661,11 +1875,8 @@ monarch.builder.tree_builder.prototype.build_tree = function(parents, final_func
  * Returns:
  *    object, maybe should be monarch.model.tree?
  */
-monarch.builder.tree_builder.prototype.getOntology = function(id, depth){
+monarch.builder.tree_builder.prototype.addOntologyToTree = function(id, depth, parents, final_function, error_function){
     var self = this;
-    var tree = new monarch.model.tree();
-    
-    // var graph = new bbop.model.graph();
     
     // Some Hardcoded options for scigraph
     var direction = 'INCOMING';
@@ -1673,19 +1884,31 @@ monarch.builder.tree_builder.prototype.getOntology = function(id, depth){
     
     var query = self.setGraphNeighborsUrl(id, depth, relationship, direction);
     
-    return jQuery.ajax({
+    jQuery.ajax({
         url: query,
         jsonp: "callback",
-        dataType: "jsonp",
+        dataType: "json",
         error: function(){
           console.log('ERROR: looking at: ' + query);
+          if (typeof error_function != 'undefined'){
+              error_function();
+          }
         },
         success: function(data) {
-           console.log(data);
+            var graph = new bbop.model.graph();
+            graph.load_json(data);
+            var child_nodes = graph.get_child_nodes(id);
+            var siblings = child_nodes.map(function(i){
+                return {'id' : i.id(),
+                        'label' : self.processLabel(i.label())};
+            });
+            self.tree.addSiblingGroup(siblings, parents)
+            if (typeof final_function != 'undefined'){
+                final_function();
+            }
         }
     });
-    
-    return;
+
 };
 
 /*
@@ -1702,18 +1925,23 @@ monarch.builder.tree_builder.prototype.getOntology = function(id, depth){
  */
 monarch.builder.tree_builder.prototype.setGolrManager = function(golr_manager, id, id_field, filter, personality){
     var self = this;
+    var config = self.config;
     
     golr_manager.reset_query_filters();
-    golr_manager.add_query_filter(id_field, id, ['*']);
+    golr_manager.add_query_filter(config.id_field, id, ['*']);
     golr_manager.set_results_count(0);
     golr_manager.lite(true);
     
-    if (filter != null && filter.field && filter.value){
-        golr_manager.add_query_filter(filter.field, filter.value, ['*']);
+    if (config.filter instanceof Array && config.filter.length > 0){
+        config.filter.forEach(function(val){
+            if (val != null && val.field && val.value){
+                golr_manager.add_query_filter(val.field, val.value, ['*']);
+            }
+        });
     }
     
-    if (personality != null){
-        golr_manager.set_personality(personality);
+    if (config.personality != null){
+        golr_manager.set_personality(config.personality);
     }
     return golr_manager;
 };
@@ -1734,15 +1962,17 @@ monarch.builder.tree_builder.prototype.setGolrManager = function(golr_manager, i
  * Returns:
  *    JQuery Ajax Function
  */
-monarch.builder.tree_builder.prototype.getCountsForSiblings = function(siblings, id_field, species, filter, personality, facet, parents, final_function){
+monarch.builder.tree_builder.prototype.getCountsForSiblings = function(parents, final_function, error_function){
     var self = this;
     
+    var siblings = self.tree.getDescendants(parents);
+
     var promises = [];
     var success_callbacks = [];
     var error_callbacks = [];
     
     siblings.map(function(i){return i.id;}).forEach( function(i) {
-        var ajax = self._getCountsForClass(i, id_field, species, filter, personality, facet, parents);
+        var ajax = self._getCountsForClass(i, parents);
         promises.push(jQuery.ajax(ajax.qurl,ajax.jq_vars));
         success_callbacks.push(ajax.jq_vars['success']);
         error_callbacks.push(ajax.jq_vars['error']);
@@ -1752,7 +1982,11 @@ monarch.builder.tree_builder.prototype.getCountsForSiblings = function(siblings,
         if (typeof final_function != 'undefined'){
             final_function();
         }
-    }).fail(error_callbacks);
+    }).fail(error_callbacks).fail(function (){
+        if (typeof error_function != 'undefined'){
+            error_function();
+        }
+    });
     
 };
 
@@ -1771,7 +2005,7 @@ monarch.builder.tree_builder.prototype.getCountsForSiblings = function(siblings,
  * Returns:
  *    JQuery Ajax Function
  */
-monarch.builder.tree_builder.prototype._getCountsForClass = function(id, id_field, species, filter, personality, facet, parents){
+monarch.builder.tree_builder.prototype._getCountsForClass = function(id, parents){
     var self = this;
     var node = {"id":id, "counts": []};
     
@@ -1816,16 +2050,31 @@ monarch.builder.tree_builder.prototype._getCountsForClass = function(id, id_fiel
             }
         };
     
-    golr_manager = self.setGolrManager(golr_manager, id, id_field, filter, personality);
+    golr_manager = self.setGolrManager(golr_manager, id);
     
     var makeDataNode = function(golr_response){
         var counts = [];
-        var facet_counts = golr_response.facet_field(facet);
-        facet_counts.forEach(function(i){
+        if (typeof self.config.facet != 'undefined'){
+            var facet_counts = golr_response.facet_field(self.config.facet);
+            facet_counts.forEach(function(i){
+                var index = counts.map(function(d){return d.name}).indexOf(self.getTaxonMap()[i[0]]);
+                if (index != -1){
+                    counts[index]['value'] += i[1];
+                } else {
+                    counts.push({
+                        'name': self.getTaxonMap()[i[0]],
+                        'value' : i[1]
+                    });
+                }
+            });
+        } else if (typeof self.config.single_group != 'undefined') {
             counts.push({
-                'name': self.getTaxonMap()[i[0]],
-                'value' : i[1]});
-        });
+                'name': self.config.single_group,
+                'value' : golr_response.total_documents()
+            });
+        } else {
+            throw new Error("Either facet or single_group required in config");
+        }
         self.tree.addCountsToNode(id,counts,parents)
     }
     var register_id = 'data_counts_'+id;
@@ -1835,22 +2084,6 @@ monarch.builder.tree_builder.prototype._getCountsForClass = function(id, id_fiel
     
 };
 
-/*
- * Function: addOntologyToTree
- * 
- * Parameters:
- *    ontology - object, ontology structured as monarch.model.tree
- *    tree - monarch.model.tree object, empty or containing data
- *    parents - parents of "root" if adding a branch to an existing ontology
- *    
- * Returns:
- *    monarch.model.tree
- */
-monarch.builder.tree_builder.prototype.addOntologyToTree = function(ontology, tree, parents){
-    var self = this;
-    // Throw error is parents are defined and there is no root
-    // Add root to tree if it doesn't exist 
-};
 
 /*
  * Function: setGraphNeighborsUrl
@@ -1915,13 +2148,16 @@ monarch.builder.tree_builder.prototype.convertGraphToTree = function(graph, root
  * Returns:
  *    string
  */
-monarch.builder.tree_builder.prototype.processLabel = function(label){   
-    label = label.replace(/Abnormality of (the )?/, '');
-    label = label.replace(/abnormal(\(ly\))? /, '');
-    label = label.replace(/ phenotype$/, '');
+monarch.builder.tree_builder.prototype.processLabel = function(label){
+    if (typeof label != 'undefined'){
+        label = label.replace(/Abnormality of (the )?/, '');
+        label = label.replace(/abnormal(\(ly\))? /, '');
+        label = label.replace(/ phenotype$/, '');
     
-    label = label.replace(/\b[a-z]/g, function() {
-        return arguments[0].toUpperCase()});
+        label = label.replace(/\b[a-z]/g, function() {
+            return arguments[0].toUpperCase()
+        });
+    }
     
     return label;
 };
@@ -1931,9 +2167,28 @@ monarch.builder.tree_builder.prototype.getTaxonMap = function(){
     return {
         "NCBITaxon:10090" : "Mouse",
         "NCBITaxon:9606" : "Human",
-        "NCBITaxon:7955" : "Zebrafish"
+        "NCBITaxon:7955" : "Zebrafish",
+        "NCBITaxon:57486" : "Mouse",
+        "NCBITaxon:39442" : "Mouse",
+        "NCBITaxon:10092" : "Mouse",
+        "NCBITaxon:10091" : "Mouse"
     };
 };
+
+monarch.builder.tree_builder.prototype.addFilter = function(filter_args){
+    var self = this;
+    self.config.filter.push(filter_args);
+}
+
+
+monarch.builder.tree_builder.prototype.getDefaultConfig = function(){
+    var config = {
+            id_field : 'object_closure',
+            personality : 'dovechart',
+            filter : [{ field: 'subject_category', value: 'gene' }],
+    }
+    return config;
+}
 /* 
  * Package: barchart.js
  * 
@@ -1978,6 +2233,7 @@ monarch.chart.barchart = function(config, html_div){
         .orient("left");
 
     self.svg = d3.select(html_div).append("svg")
+        .attr("class", "barchart")
         .attr("width", config.width + config.margin.left + config.margin.right)
         .attr("height", config.height + config.margin.top + config.margin.bottom)
         .append("g")

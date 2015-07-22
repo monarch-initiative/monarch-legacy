@@ -49,7 +49,7 @@ monarch.dovechart = function(config, tree, html_div, tree_builder){
     self.tree = tree;
     self.tree_builder = tree_builder;
 
-    self.tooltip = d3.select(html_div)
+    self.tooltip = d3.select(self.html_div)
         .append("div")
         .attr("class", "tip");
     
@@ -112,7 +112,7 @@ monarch.dovechart.prototype.makeGraphDOM = function(html_div, data){
               "</form> ");
       
       // Ajax spinner
-      jQuery(html_div+" .interaction li .settings").append("<div id=\"ajax-spinner\">"+
+      jQuery(html_div+" .interaction li .settings").append("<div class=\"ajax-spinner\">"+
                           "<div class=\"ortholog-spinner\" > " +
                             "<div class=\"spinner-container container1\">" +
                               "<div class=\"circle1\"></div>" +
@@ -133,10 +133,10 @@ monarch.dovechart.prototype.makeGraphDOM = function(html_div, data){
                               "<div class=\"circle4\"></div>" +
                             "</div>" +
                           "</div>" +
-                          "<div id='fetching'>Fetching Data...</div></div>" +
-                          "<div id='error-msg'>Error Fetching Data</div>" +
-                          "<div id='leaf-msg'></div>");
-      //jQuery("#ajax-spinner").show();
+                          "<div class='fetching'>Fetching Data...</div></div>" +
+                          "<div class='error-msg'>Error Fetching Data</div>" +
+                          "<div class='leaf-msg'></div>");
+      //jQuery(".ajax-spinner").show();
       //Update tooltip positioning
       if (!config.useCrumb && groups.length>1){
           config.arrowOffset.height = 12;
@@ -578,7 +578,13 @@ monarch.dovechart.prototype.drawGraph = function (histogram, isFromCrumb, parent
     // Some updates to dynamically increase the size of the graph
     //  This is a bit hacky and needs refactoring
     if (data.length > 25 && self.config.height == self.config.initialHeight){
-        self.config.height = data.length * 14.15;
+        self.config.height = data.length * 14.05;
+        jQuery(self.html_div + ' .barchart').remove();
+        histogram = new monarch.chart.barchart(self.config, self.html_div);
+        self.drawGraph(histogram, false, undefined, false, true);
+        return;
+    } else if (data.length > 25 && self.config.height != self.config.initialHeight && !isFromResize){
+        self.config.height = data.length * 14.05;
         jQuery(self.html_div + ' .barchart').remove();
         histogram = new monarch.chart.barchart(self.config, self.html_div);
         self.drawGraph(histogram, false, undefined, false, true);
@@ -626,15 +632,20 @@ monarch.dovechart.prototype.drawGraph = function (histogram, isFromCrumb, parent
     }
 
     //Dynamically decrease font size for large labels
-    var yFont = self.adjustYAxisElements(data.length);
+    var yFontSize = self.adjustYAxisElements(data.length);
     
     histogram.transitionYAxisToNewScale(1000);
     
     //Create SVG:G element that holds groups
     var barGroup = self.setGroupPositioning(histogram,data);
-    var bar = self.setBarConfigPerCheckBox(histogram,data,self.groups,barGroup,isFirstGraph);
     
-    self.setYAxisText(histogram,data, barGroup, bar);
+    var showTransition = false;
+    if (isFirstGraph || isFromResize || isFromCrumb){
+        showTransition = true;
+    }
+    var bar = self.setBarConfigPerCheckBox(histogram,data,self.groups,barGroup,showTransition);
+    
+    self.setYAxisText(histogram,data, barGroup, bar, yFontSize);
     
     //Create navigation arrow
     var navigate = histogram.svg.selectAll(".y.axis");
@@ -743,7 +754,7 @@ monarch.dovechart.prototype.pickUpBreadcrumb = function(histogram,index,groups,b
     self.level = index;
     var parentLen = self.parents.length;
     
-    jQuery("#leaf-msg").hide();
+    jQuery(self.html_div+" .leaf-msg").hide();
 
     // Remove all elements following (index+1).
     // parentLen is greater than the number of elements remaining, but that's OK with splice()
@@ -949,8 +960,8 @@ monarch.dovechart.prototype.setBarConfigPerCheckBox = function(histogram,data,gr
     }
 };
 
-monarch.dovechart.prototype.setYAxisText = function(histogram,data, barGroup, bar){
-    self = this;
+monarch.dovechart.prototype.setYAxisText = function(histogram,data, barGroup, bar, yFont){
+    var self = this;
     config = self.config;
     data = self.setDataPerSettings(data);
     
@@ -960,12 +971,10 @@ monarch.dovechart.prototype.setYAxisText = function(histogram,data, barGroup, ba
     .text(function(d){ return self.getIDLabel(d.id,data) })
     .attr("font-size", yFont)
     .on("mouseover", function(){
-        if (config.isYLabelURL){
-            d3.select(this).style("cursor", "pointer");
-            d3.select(this).style("fill", config.color.yLabel.hover);
-            d3.select(this).style("text-decoration", "underline");
-            self.displaySubClassTip(self.tooltip,this)
-        }
+        d3.select(this).style("cursor", "pointer");
+        d3.select(this).style("fill", config.color.yLabel.hover);
+        d3.select(this).style("text-decoration", "underline");
+        self.displaySubClassTip(self.tooltip,this)
     })
     .on("mouseout", function(){
         d3.select(this).style("fill", config.color.yLabel.fill );
@@ -973,45 +982,8 @@ monarch.dovechart.prototype.setYAxisText = function(histogram,data, barGroup, ba
         self.tooltip.style("display", "none");
     })
     .on("click", function(d){
-        /*if (config.isYLabelURL){
-            d3.select(this).style("cursor", "pointer");
-            document.location.href = config.yLabelBaseURL + d;
-        }*/
-        jQuery("#leaf-msg").hide();
-        if (!self.tree_builder){
-            self.parents.push(d.id);
-            if (d.children && d.children[0]){ //TODO use tree api
-                self.transitionToNewGraph(histogram,d,
-                    barGroup,bar, d.id);
-            }
-        } else {
-            self.disableYAxisText(histogram,data, barGroup, bar);
-            self.parents.push(d.id);
-            jQuery("#ajax-spinner").show();
-            var transitionToGraph = function(){
-                jQuery("#ajax-spinner").hide();
-                self.tree = self.tree_builder.tree;
-                // Check if we've found a new class
-                if (!self.tree.checkDescendants(self.parents)){
-                    self.parents.pop();
-                    jQuery("#leaf-msg").html('There are no subclasses of <br/>'+d.fullLabel);
-                    jQuery("#leaf-msg").show().delay(3000).fadeOut();
-                    self.activateYAxisText(histogram,data, barGroup, bar);
-                } else {
-                    self.transitionToNewGraph(histogram, d, barGroup,bar, d.id);
-                }
-            };
-        
-            var showErrorMessage = function(){
-                self.parents.pop();
-                jQuery("#ajax-spinner").hide();
-                self.activateYAxisText(histogram,data, barGroup, bar);
-                jQuery("#error-msg").show().delay(3000).fadeOut();
-            };
-        
-            self.tree_builder.build_tree(self.parents, transitionToGraph, showErrorMessage);
-        }
-        
+        console.log(self);
+        self.getDataAndTransitionOnClick(d, histogram, data, barGroup, bar);
     })
     .style("text-anchor", "end")
     .attr("dx", config.yOffset)
@@ -1068,44 +1040,53 @@ monarch.dovechart.prototype.activateYAxisText = function(histogram,data, barGrou
         self.tooltip.style("display", "none");
     })
     .on("click", function(d){
-        jQuery("#leaf-msg").hide();
-        if (!self.tree_builder){
-            self.parents.push(d.id);
-            if (d.children && d.children[0]){ //TODO use tree api
-                self.transitionToNewGraph(histogram,d,
-                    barGroup,bar, d.id);
-            }
-        } else {
-            self.disableYAxisText(histogram,data, barGroup, bar);
-            self.parents.push(d.id);
-            jQuery("#ajax-spinner").show();
-            var transitionToGraph = function(){
-                jQuery("#ajax-spinner").hide();
-                self.tree = self.tree_builder.tree;
-                // Check if we've found a new class
-                if (!self.tree.checkDescendants(self.parents)){
-                    self.parents.pop();
-                    jQuery("#leaf-msg").html('There are no subclasses of <br/>'+d.fullLabel);
-                    jQuery("#leaf-msg").show().delay(3000).fadeOut();
-                    self.setYAxisText(histogram,data, barGroup, bar);
-                } else {
-                    self.transitionToNewGraph(histogram, d, barGroup,bar, d.id);
-                }
-            };
-        
-            var showErrorMessage = function(){
-                self.parents.pop();
-                jQuery("#ajax-spinner").hide();
-                self.setYAxisText(histogram,data, barGroup, bar);
-                jQuery("#error-msg").show().delay(3000).fadeOut();
-            };
-        
-            self.tree_builder.build_tree(self.parents, transitionToGraph, showErrorMessage);
-        }
-        
+        self.getDataAndTransitionOnClick(d, histogram, data, barGroup, bar);
     });
     
 };
+
+monarch.dovechart.prototype.getDataAndTransitionOnClick = function(node, histogram, data, barGroup, bar){
+    var self = this;
+    // Clear these in case they haven't faded out
+    jQuery(self.html_div+" .leaf-msg").hide();
+    jQuery(self.html_div+" .error-msg").hide();
+    
+    if (!self.tree_builder){
+        self.parents.push(node.id);
+        if (node.children && node.children[0]){ //TODO use tree api
+            self.transitionToNewGraph(histogram,node,
+                barGroup,bar, node.id);
+        }
+    } else {
+        self.disableYAxisText(histogram,data, barGroup, bar);
+        self.parents.push(node.id);
+        jQuery(self.html_div+" .ajax-spinner").show();
+        var transitionToGraph = function(){
+            jQuery(self.html_div+" .ajax-spinner").hide();
+            self.tree = self.tree_builder.tree;
+            // Check if we've found a new class
+            if (!self.tree.checkDescendants(self.parents)){
+                self.parents.pop();
+                jQuery(self.html_div+" .leaf-msg").html('There are no subclasses of <br/>'+node.fullLabel);
+                jQuery(self.html_div+" .leaf-msg").show().delay(3000).fadeOut();
+                self.activateYAxisText(histogram,data, barGroup, bar);
+            } else {
+                self.transitionToNewGraph(histogram, node, barGroup,bar, node.id);
+            }
+        };
+    
+        var showErrorMessage = function(){
+            self.parents.pop();
+            jQuery(self.html_div+" .ajax-spinner").hide();
+            self.activateYAxisText(histogram,data, barGroup, bar);
+            jQuery(self.html_div+" .error-msg").show().delay(3000).fadeOut();
+        };
+    
+        self.tree_builder.build_tree(self.parents, transitionToGraph, showErrorMessage);
+    }
+    
+};
+
 ////////////////////////////////////////////////////////////////////
 //
 //Data object manipulation
@@ -1163,7 +1144,7 @@ monarch.dovechart.prototype.getStackedStats = function(data){
 monarch.dovechart.prototype.sortDataByGroupCount = function(data,groups){
     var self = this;
     //Check if total counts have been calculated via getStackedStats()
-    if (!data[0] || !data[0].counts || data[0].counts[0].x1 == null){
+    if (!data[0] || !data[0].counts ||  !data[0].counts[0] || data[0].counts[0].x1 == null){
         data = self.getStackedStats(data);
     }
     
@@ -1307,12 +1288,11 @@ monarch.dovechart.prototype.adjustYAxisElements = function(len){
    var density = h/len;
    var isUpdated = false;
    
-   yFont = conf.yFontSize;
+   var yFont = conf.yFontSize;
    var yOffset = conf.yOffset;
    var arrowDim = conf.arrowDim;
    
    //Check for density BETA
-   /*
    if (density < 15 && density < yFont ){
        yFont = density+2;
        //yOffset = "-2em";
@@ -1322,7 +1302,7 @@ monarch.dovechart.prototype.adjustYAxisElements = function(len){
     
    if (isUpdated && yFont > conf.yFontSize){
        yFont = conf.yFontSize;
-   }*/
+   }
    return yFont;
 };
 ///////////////////////////////////
