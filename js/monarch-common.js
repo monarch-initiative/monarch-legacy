@@ -1,23 +1,13 @@
 /* This script document contains functions relating to general Monarch pages. */
 
-$(document).ready(function(){
-
-    /* Annotation Score Stars */
-
-    /* This displays the stars used to denote annotation sufficiency. For example,
-     * annotation sufficiency scores are currently located on the phenotype tab
-     * of the disease page. */
-    $.fn.stars = function() {
-        return this.each(function(i,e){$(e).html($('<span/>').width($(e).text()*16));});
-    };
-    $('.stars').stars();
+jQuery(document).ready(function(){
 
     /* This displays the help text about the annotation sufficiency score upon
      * hovering over the blue question mark box. */
-    $('#annotationscore > span.annotatequestion').hover(function() {
-        $('#annotationscore > span.annotatehelp').css({'display': 'block'});
+    jQuery('#annotationscore > span.annotatequestion').hover(function() {
+        jQuery('#annotationscore > span.annotatehelp').css({'display': 'block'});
     }, function() {
-        $('#annotationscore > span.annotatehelp').css({'display': 'none'});
+        jQuery('#annotationscore > span.annotatehelp').css({'display': 'none'});
     });
 
 
@@ -26,30 +16,92 @@ $(document).ready(function(){
     /* This displays the box of found terms upon hovering over a highlighted/linked
      * term. An example is located in the Text Annotater (found on the Annotate Text
      * tab of the main drop-down navigation menu). */
-    $('.linkedspan').hover(function() {
-        $(this).find('.linkedterms').css({'display': 'block'});
+    jQuery('.linkedspan').hover(function() {
+        jQuery(this).find('.linkedterms').css({'display': 'block'});
     }, function() {
-        $(this).find('.linkedterms').css({'display': 'none'});
+        jQuery(this).find('.linkedterms').css({'display': 'none'});
     });
 
 
     /* Show/Hide items */
     /* Used when a "more..." kind of functionality is desired */
-    $('.fewitems').click(function(event) {
-        $(this).hide();
-        $(this).parent().find('.moreitems').show();
-        $(this).parent().find('.hideitems').show();
+    jQuery('.fewitems').click(function(event) {
+        jQuery(this).hide();
+        jQuery(this).parent().find('.moreitems').show();
+        jQuery(this).parent().find('.hideitems').show();
     });
 
-    $('.hideitems').click(function(event) {
-        $(this).hide();
-        $(this).parent().find('.moreitems').hide();
-        $(this).parent().find('.hideitems').hide();
-        $(this).parent().find('.fewitems').show();
+    jQuery('.hideitems').click(function(event) {
+        jQuery(this).hide();
+        jQuery(this).parent().find('.moreitems').hide();
+        jQuery(this).parent().find('.hideitems').hide();
+        jQuery(this).parent().find('.fewitems').show();
     });
 
 
 });
+
+function getAnnotationScore() {
+    
+    var isLoading = false;
+    jQuery('#categories a[href="#phenotypes"]').click(function(event) {
+        if (isLoading == false){
+            isLoading = true;
+            getPhenotypesAndScore();
+        }
+    });
+    
+    function getPhenotypesAndScore(){
+        jQuery('.stars').hide();
+        var spinner_class = 'ui-score-spinner';
+        jQuery('.score-spinner').addClass(spinner_class);
+    
+        var id = this.location.pathname;
+        var slash_idx = id.indexOf('/');
+        id = id.substring(slash_idx+1);
+    
+        var query = '/' + id + '/phenotype_list.json';
+    
+        jQuery.ajax({
+            url : query,
+            dataType: "json",
+            error: function(){
+                console.log('ERROR: looking at: ' + query);
+            },
+            success: function(data) {
+            
+                var score_query = '/score';
+                var profile = JSON.stringify({features:data.phenotype_list});
+                var params = {'annotation_profile' : profile};
+                jQuery.ajax({
+                    type : 'POST',
+                    url : score_query,
+                    data : params,
+                    dataType: "json",
+                    error: function(){
+                        console.log('ERROR: looking at: ' + score_query);
+                    },
+                    success: function(data) {
+                        jQuery('.score-spinner').removeClass(spinner_class);
+                        console.log(data);
+                        var score = (5 * data.scaled_score);
+                        jQuery(".stars").text(score);
+                    
+                        /* This displays the stars used to denote annotation sufficiency. For example,
+                         * annotation sufficiency scores are currently located on the phenotype tab
+                         * of the disease page. */
+                        jQuery.fn.stars = function() {
+                            return this.each(function(i,e){jQuery(e).html(jQuery('<span/>').width(jQuery(e).text()*16));});
+                        };
+                        jQuery('.stars').stars();
+                        jQuery('.stars').show();
+                    }
+                });
+            }
+            
+        });
+    }    
+}
 
 function genTable(spec, rows) {
     var content = "";
