@@ -266,7 +266,6 @@ monarch.builder.tree_builder.prototype._getCountsForClass = function(id, parents
                 'name': self.config.single_group,
                 'value' : golr_response.total_documents()
             });
-            console.log(counts);
         } else {
             throw new Error("Either facet or single_group required in config");
         }

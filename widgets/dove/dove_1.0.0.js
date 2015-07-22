@@ -49,7 +49,7 @@ monarch.dovechart = function(config, tree, html_div, tree_builder){
     self.tree = tree;
     self.tree_builder = tree_builder;
 
-    self.tooltip = d3.select(html_div)
+    self.tooltip = d3.select(self.html_div)
         .append("div")
         .attr("class", "tip");
     
@@ -112,7 +112,7 @@ monarch.dovechart.prototype.makeGraphDOM = function(html_div, data){
               "</form> ");
       
       // Ajax spinner
-      jQuery(html_div+" .interaction li .settings").append("<div id=\"ajax-spinner\">"+
+      jQuery(html_div+" .interaction li .settings").append("<div class=\"ajax-spinner\">"+
                           "<div class=\"ortholog-spinner\" > " +
                             "<div class=\"spinner-container container1\">" +
                               "<div class=\"circle1\"></div>" +
@@ -133,10 +133,10 @@ monarch.dovechart.prototype.makeGraphDOM = function(html_div, data){
                               "<div class=\"circle4\"></div>" +
                             "</div>" +
                           "</div>" +
-                          "<div id='fetching'>Fetching Data...</div></div>" +
-                          "<div id='error-msg'>Error Fetching Data</div>" +
-                          "<div id='leaf-msg'></div>");
-      //jQuery("#ajax-spinner").show();
+                          "<div class='fetching'>Fetching Data...</div></div>" +
+                          "<div class='error-msg'>Error Fetching Data</div>" +
+                          "<div class='leaf-msg'></div>");
+      //jQuery(".ajax-spinner").show();
       //Update tooltip positioning
       if (!config.useCrumb && groups.length>1){
           config.arrowOffset.height = 12;
@@ -583,6 +583,12 @@ monarch.dovechart.prototype.drawGraph = function (histogram, isFromCrumb, parent
         histogram = new monarch.chart.barchart(self.config, self.html_div);
         self.drawGraph(histogram, false, undefined, false, true);
         return;
+    } else if (data.length > 25 && self.config.height != self.config.initialHeight && !isFromResize){
+        self.config.height = data.length * 14.05;
+        jQuery(self.html_div + ' .barchart').remove();
+        histogram = new monarch.chart.barchart(self.config, self.html_div);
+        self.drawGraph(histogram, false, undefined, false, true);
+        return;
     } else if (data.length <= 25 && self.config.height != self.config.initialHeight ) {
         self.config.height = self.config.initialHeight;
         jQuery(self.html_div + ' .barchart').remove();
@@ -626,7 +632,7 @@ monarch.dovechart.prototype.drawGraph = function (histogram, isFromCrumb, parent
     }
 
     //Dynamically decrease font size for large labels
-    var yFont = self.adjustYAxisElements(data.length);
+    var yFontSize = self.adjustYAxisElements(data.length);
     
     histogram.transitionYAxisToNewScale(1000);
     
@@ -639,7 +645,7 @@ monarch.dovechart.prototype.drawGraph = function (histogram, isFromCrumb, parent
     }
     var bar = self.setBarConfigPerCheckBox(histogram,data,self.groups,barGroup,showTransition);
     
-    self.setYAxisText(histogram,data, barGroup, bar);
+    self.setYAxisText(histogram,data, barGroup, bar, yFontSize);
     
     //Create navigation arrow
     var navigate = histogram.svg.selectAll(".y.axis");
@@ -748,7 +754,7 @@ monarch.dovechart.prototype.pickUpBreadcrumb = function(histogram,index,groups,b
     self.level = index;
     var parentLen = self.parents.length;
     
-    jQuery("#leaf-msg").hide();
+    jQuery(self.html_div+" .leaf-msg").hide();
 
     // Remove all elements following (index+1).
     // parentLen is greater than the number of elements remaining, but that's OK with splice()
@@ -954,8 +960,8 @@ monarch.dovechart.prototype.setBarConfigPerCheckBox = function(histogram,data,gr
     }
 };
 
-monarch.dovechart.prototype.setYAxisText = function(histogram,data, barGroup, bar){
-    self = this;
+monarch.dovechart.prototype.setYAxisText = function(histogram,data, barGroup, bar, yFont){
+    var self = this;
     config = self.config;
     data = self.setDataPerSettings(data);
     
@@ -965,12 +971,10 @@ monarch.dovechart.prototype.setYAxisText = function(histogram,data, barGroup, ba
     .text(function(d){ return self.getIDLabel(d.id,data) })
     .attr("font-size", yFont)
     .on("mouseover", function(){
-        if (config.isYLabelURL){
-            d3.select(this).style("cursor", "pointer");
-            d3.select(this).style("fill", config.color.yLabel.hover);
-            d3.select(this).style("text-decoration", "underline");
-            self.displaySubClassTip(self.tooltip,this)
-        }
+        d3.select(this).style("cursor", "pointer");
+        d3.select(this).style("fill", config.color.yLabel.hover);
+        d3.select(this).style("text-decoration", "underline");
+        self.displaySubClassTip(self.tooltip,this)
     })
     .on("mouseout", function(){
         d3.select(this).style("fill", config.color.yLabel.fill );
@@ -978,6 +982,7 @@ monarch.dovechart.prototype.setYAxisText = function(histogram,data, barGroup, ba
         self.tooltip.style("display", "none");
     })
     .on("click", function(d){
+        console.log(self);
         self.getDataAndTransitionOnClick(d, histogram, data, barGroup, bar);
     })
     .style("text-anchor", "end")
@@ -1042,10 +1047,9 @@ monarch.dovechart.prototype.activateYAxisText = function(histogram,data, barGrou
 
 monarch.dovechart.prototype.getDataAndTransitionOnClick = function(node, histogram, data, barGroup, bar){
     var self = this;
-    console.log(node);
     // Clear these in case they haven't faded out
-    jQuery("#leaf-msg").hide();
-    jQuery("#error-msg").hide();
+    jQuery(self.html_div+" .leaf-msg").hide();
+    jQuery(self.html_div+" .error-msg").hide();
     
     if (!self.tree_builder){
         self.parents.push(node.id);
@@ -1056,15 +1060,15 @@ monarch.dovechart.prototype.getDataAndTransitionOnClick = function(node, histogr
     } else {
         self.disableYAxisText(histogram,data, barGroup, bar);
         self.parents.push(node.id);
-        jQuery("#ajax-spinner").show();
+        jQuery(self.html_div+" .ajax-spinner").show();
         var transitionToGraph = function(){
-            jQuery("#ajax-spinner").hide();
+            jQuery(self.html_div+" .ajax-spinner").hide();
             self.tree = self.tree_builder.tree;
             // Check if we've found a new class
             if (!self.tree.checkDescendants(self.parents)){
                 self.parents.pop();
-                jQuery("#leaf-msg").html('There are no subclasses of <br/>'+node.fullLabel);
-                jQuery("#leaf-msg").show().delay(3000).fadeOut();
+                jQuery(self.html_div+" .leaf-msg").html('There are no subclasses of <br/>'+node.fullLabel);
+                jQuery(self.html_div+" .leaf-msg").show().delay(3000).fadeOut();
                 self.activateYAxisText(histogram,data, barGroup, bar);
             } else {
                 self.transitionToNewGraph(histogram, node, barGroup,bar, node.id);
@@ -1073,9 +1077,9 @@ monarch.dovechart.prototype.getDataAndTransitionOnClick = function(node, histogr
     
         var showErrorMessage = function(){
             self.parents.pop();
-            jQuery("#ajax-spinner").hide();
+            jQuery(self.html_div+" .ajax-spinner").hide();
             self.activateYAxisText(histogram,data, barGroup, bar);
-            jQuery("#error-msg").show().delay(3000).fadeOut();
+            jQuery(self.html_div+" .error-msg").show().delay(3000).fadeOut();
         };
     
         self.tree_builder.build_tree(self.parents, transitionToGraph, showErrorMessage);
@@ -1284,7 +1288,7 @@ monarch.dovechart.prototype.adjustYAxisElements = function(len){
    var density = h/len;
    var isUpdated = false;
    
-   yFont = conf.yFontSize;
+   var yFont = conf.yFontSize;
    var yOffset = conf.yOffset;
    var arrowDim = conf.arrowDim;
    
@@ -2068,7 +2072,6 @@ monarch.builder.tree_builder.prototype._getCountsForClass = function(id, parents
                 'name': self.config.single_group,
                 'value' : golr_response.total_documents()
             });
-            console.log(counts);
         } else {
             throw new Error("Either facet or single_group required in config");
         }

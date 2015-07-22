@@ -11,9 +11,9 @@ function makePhenotypeLandingGraph(data){
     var initGraph = function(){ 
         jQuery("#graph-loader").hide();
         tree = builder.tree;
-        graphObject = 
+        var graphObject = 
             new monarch.dovechart(bbop.monarch.phenotypeLandingConfig, tree, graphDiv, builder);
-        this.setMinHeightWidth(graphObject,graphDiv);
+        this.setMinHeightWidth(graphObject, graphDiv);
     };
     builder.build_tree(['HP:0000118'], initGraph);
     
@@ -30,12 +30,12 @@ function makeGeneDiseaseLandingGraph(data){
     var builder = new monarch.builder.tree_builder(global_solr_url, global_scigraph_url, global_golr_conf,
             tree, bbop.monarch.phenotypeGeneGolrSettings);
     
-    var initGraph = function(){ 
+    var initGraph = function(){
         jQuery("#second-loader").hide();
         tree = builder.tree;
-        graphObject = 
+        var graphObject = 
             new monarch.dovechart(bbop.monarch.phenotypeLandingConfig, tree, graphDiv, builder);
-        this.setMinHeightWidth(graphObject,graphDiv);
+        this.setMinHeightWidth(graphObject, graphDiv);
     };
     builder.build_tree(['DOID:4'], initGraph);
     
@@ -54,7 +54,7 @@ function makeGenotypeLandingGraph(data){
     var initGraph = function(){ 
         jQuery("#graph-loader").hide();
         tree = builder.tree;
-        graphObject = 
+        var graphObject = 
             new monarch.dovechart(bbop.monarch.genotypeLandingConfig, tree, graphDiv, builder);
         this.setMinHeightWidth(graphObject,graphDiv);
     };
@@ -76,8 +76,7 @@ function makeDiseaseLandingGraph(data){
     var initGraph = function(){ 
         jQuery("#graph-loader").hide();
         tree = builder.tree;
-        console.log(tree);
-        graphObject = 
+        var graphObject = 
             new monarch.dovechart(bbop.monarch.diseaseLandingConfig, tree, graphDiv, builder);
         this.setMinHeightWidth(graphObject,graphDiv);
     };

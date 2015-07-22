@@ -78,14 +78,14 @@
     padding-top: 1em;
 }
 
-#graph-message{
+.graph-message{
 	text-align: center;
 	padding-bottom:12px;
     font-weight:bold;
     font-size: 20px;
 }
 
-#windcatcher{
+.windcatcher-spinner{
     margin: 0 auto;
 }
 
@@ -166,21 +166,21 @@
 
 
 
-#ajax-spinner {
+.ajax-spinner {
     display:none;
 }
-#fetching {
+.fetching {
     font-size: 12px;
     line-height: 40px;
 }
 
-#error-msg {
+.error-msg {
     font-size: 13px;
     display:none;
     line-height: 40px;
 }
 
-#leaf-msg {
+.leaf-msg {
 	padding-top:10px;
 	font-size: 14px;
 	line-height: 20px;
