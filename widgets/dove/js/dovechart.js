@@ -342,12 +342,12 @@ monarch.dovechart.prototype.setXYDomains = function (histogram,data,groups) {
     data = self.setDataPerSettings(data);
     histogram.y0.domain(data.map(function(d) { return d.id; }));
     
-    if (jQuery('input[name=mode]:checked').val()=== 'grouped' || groups.length === 1){
+    if (jQuery(self.html_div + ' input[name=mode]:checked').val()=== 'grouped' || groups.length === 1){
         var xGroupMax = self.getGroupMax(data);
         histogram.x.domain([histogram.x0, xGroupMax]);
         histogram.y1.domain(groups)
         .rangeRoundBands([0, histogram.y0.rangeBand()]);
-    } else if (jQuery('input[name=mode]:checked').val()=== 'stacked'){
+    } else if (jQuery(self.html_div + ' input[name=mode]:checked').val()=== 'stacked'){
         var xStackMax = self.getStackMax(data);
         histogram.x.domain([histogram.x0, xStackMax]);
         histogram.y1.domain(groups).rangeRoundBands([0,0]);
@@ -388,7 +388,7 @@ monarch.dovechart.prototype.makeBar = function (barGroup,histogram,barLayout,isF
             self.transitionFromZero(bar,histogram,barLayout);
         } else {
             bar.attr("width", function(d) { 
-                if (( jQuery('input[name=scale]:checked').val() === 'log' )
+                if (( jQuery(self.html_div + ' input[name=scale]:checked').val() === 'log' )
                         && ( d.value == 0 )){
                   return 1;
               } else {
@@ -431,7 +431,7 @@ monarch.dovechart.prototype.makeBar = function (barGroup,histogram,barLayout,isF
                 .attr("width", function(d) { 
                     if (d.x0 == 0 && d.x1 != 0){
                         return histogram.x(d.x1); 
-                    } else if (( jQuery('input[name=scale]:checked').val() === 'log' ) &&
+                    } else if (( jQuery(self.html_div + ' input[name=scale]:checked').val() === 'log' ) &&
                             ( histogram.x(d.x1) - histogram.x(d.x0) == 0 )){
                         return 1;  
                     } else {
@@ -452,7 +452,7 @@ monarch.dovechart.prototype.transitionFromZero = function (bar,histogram,barLayo
         .delay(function(d, i, j) { return j * 20; })
         .attr("x", 1)
         .attr("width", function(d) { 
-        if (( jQuery('input[name=scale]:checked').val() === 'log' )
+        if (( jQuery(self.html_div + ' input[name=scale]:checked').val() === 'log' )
                 && ( d.value == 0 )){
           return 1;
       } else {
@@ -473,7 +473,7 @@ monarch.dovechart.prototype.transitionFromZero = function (bar,histogram,barLayo
         .attr("width", function(d) { 
             if (d.x0 == 0 && d.x1 != 0){
                 return histogram.x(d.x1); 
-            } else if (( jQuery('input[name=scale]:checked').val() === 'log' ) &&
+            } else if (( jQuery(self.html_div + ' input[name=scale]:checked').val() === 'log' ) &&
                  ( histogram.x(d.x1) - histogram.x(d.x0) == 0 )){
                 return 1;  
             } else {
@@ -497,7 +497,7 @@ monarch.dovechart.prototype.transitionGrouped = function (histogram,data,groups,
       .transition()
       .attr("x", 1)
       .attr("width", function(d) { 
-          if (( jQuery('input[name=scale]:checked').val() === 'log' ) &&
+          if (( jQuery(self.html_div + ' input[name=scale]:checked').val() === 'log' ) &&
               ( d.value == 0 )){
               return 1;
           } else {
@@ -537,7 +537,7 @@ monarch.dovechart.prototype.transitionStacked = function (histogram,data,groups,
       .attr("width", function(d) { 
           if (d.x0 == 0 && d.x1 != 0){
               return histogram.x(d.x1); 
-          } else if (( jQuery('input[name=scale]:checked').val() === 'log' ) &&
+          } else if (( jQuery(self.html_div + ' input[name=scale]:checked').val() === 'log' ) &&
                      ( histogram.x(d.x1) - histogram.x(d.x0) == 0 )){
               return 1;  
           } else {
@@ -704,9 +704,9 @@ monarch.dovechart.prototype.setDataPerSettings = function(data){
 // and value
 monarch.dovechart.prototype.getValueOfCheckbox = function(name,value){
     var self = this;
-    if (jQuery('input[name='+name+']:checked').val() === value){
+    if (jQuery(self.html_div + ' input[name='+name+']:checked').val() === value){
         return true;
-    } else if (typeof jQuery('input[name=zero]:checked').val() === 'undefined'){
+    } else if (typeof jQuery(self.html_div + ' input[name=zero]:checked').val() === 'undefined'){
         return false;
     }
 };
@@ -949,7 +949,7 @@ monarch.dovechart.prototype.makeBreadcrumb = function(histogram,label,groups,bar
 monarch.dovechart.prototype.setBarConfigPerCheckBox = function(histogram,data,groups,barGroup,isFirstGraph) {
     self = this;
     data = self.setDataPerSettings(data);
-    if (jQuery('input[name=mode]:checked').val()=== 'grouped' || groups.length === 1) {
+    if (jQuery(self.html_div + ' input[name=mode]:checked').val()=== 'grouped' || groups.length === 1) {
         self.setXYDomains(histogram,data,groups,'grouped');
         histogram.transitionXAxisToNewScale(1000);
         return self.makeBar(barGroup,histogram,'grouped',isFirstGraph);
