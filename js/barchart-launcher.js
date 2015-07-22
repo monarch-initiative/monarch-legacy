@@ -23,8 +23,7 @@ function makeGeneDiseaseLandingGraph(data){
 
     var graphDiv = ".gene-disease-container";
     var tree = new monarch.model.tree(data);
-    bbop.monarch.phenotypeLandingConfig.chartTitle = "Number of Gene Disease Associations Per Species";
-    
+
     // global_golr_conf, global_solr_url, and scigrap_url are global variables
     // set in webapp.js using puptent
     var builder = new monarch.builder.tree_builder(global_solr_url, global_scigraph_url, global_golr_conf,
@@ -34,7 +33,7 @@ function makeGeneDiseaseLandingGraph(data){
         jQuery("#second-loader").hide();
         tree = builder.tree;
         var graphObject = 
-            new monarch.dovechart(bbop.monarch.phenotypeLandingConfig, tree, graphDiv, builder);
+            new monarch.dovechart(bbop.monarch.geneLandingConfig, tree, graphDiv, builder);
         this.setMinHeightWidth(graphObject, graphDiv);
     };
     builder.build_tree(['DOID:4'], initGraph);
