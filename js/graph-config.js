@@ -95,6 +95,13 @@ bbop.monarch.phenotypeGeneGolrSettings = {
         facet : 'subject_taxon'
 };
 
+bbop.monarch.phenotypeGenotypeGolrSettings = {
+        id_field : 'object_closure',
+        personality : 'dovechart',
+        filter : [{ field: 'subject_category', value: 'genotype' }],
+        facet : 'subject_taxon'
+};
+
 //Graph for phenotypeLandingPage
 bbop.monarch.geneLandingConfig = {
         
