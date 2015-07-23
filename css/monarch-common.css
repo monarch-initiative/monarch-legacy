@@ -311,7 +311,12 @@ p {
 }
 /* Get a spinner for jQuery autocomplete wait. */
 .ui-autocomplete-loading {
+    background: white url('/image/waiting_ac.gif') right center no-repeat !important;
+}
+
+.ui-score-spinner {
     background: white url('/image/waiting_ac.gif') right center no-repeat;
+    padding-right: 15px;
 }
 
 .form-control {

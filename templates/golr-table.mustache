@@ -1,5 +1,22 @@
 <div id="{{{href}}}" class="category">
   <div id="r3" class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
+    {{#isPhenotypeTable}}
+    {{#isLeafNode}}
+    <div id="annotationscore">
+      <span class="annotatetext">Annotation Sufficiency:</span>
+      <span class="score-spinner"></span>
+      <span class="stars"></span>
+      <span class="annotatequestion">?</span>
+      <span class="annotatehelp">
+           The annotation score reflects how the breadth and depth of
+           annotations for this disease compares to all of the other phenotypic
+           profiles in our corpus. A high score means that the disease is richly
+           annotated, both across a diverse set of phenotypic categories,
+           as well as in the number and specificity of each of the phenotypes.
+      </span>
+    </div>
+    {{/isLeafNode}}
+    {{/isPhenotypeTable}}
       
     <!-- Quiet rollover. -->
     <div class="panel panel-default">
