@@ -754,7 +754,10 @@ function AnalyzeInit(uploaded_data){
 			targetSpeciesName: species,
 			owlSimFunction: urlParams.mode,
 			geneList: urlParams.geneList,
-			providedData: urlParams.user_input
+			providedData: urlParams.user_input,
+            imagePath: '/node_modules/phenogrid/image/', 
+            htmlPath: '/node_modules/phenogrid/js/res/'
+
 		});
 	};
     }

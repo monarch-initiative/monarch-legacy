@@ -114,11 +114,11 @@ institutions:
     logo: /image/team-pitt.png
     website: http://pitt.edu
     people:
-      - name: Harry Hocheiser
-        picture: /image/team/HarryHocheiser.jpg
+      - name: Harry Hochheiser
+        picture: /image/team/HarryHochheiser.jpg
         alumni: false
         title: Monarch PI
-        bio: Dr. Hocheiser is currently a PI of the Monarch Initiative. He has BS and MS in Computer Science and Engineering from MIT and a Ph.D. in Computer Science from University of Maryland. His research interests lie at the intersection of biomedical informatics and human-computer interaction (HCI). His ongoing research efforts involve the application of contextual inquiry, human-centered design, information visualization, and other HCI techniques to challenges in collaborative bioinformatics and clinical informatics.
+        bio: Dr. Hochheiser is currently a PI of the Monarch Initiative. He has BS and MS in Computer Science and Engineering from MIT and a Ph.D. in Computer Science from University of Maryland. His research interests lie at the intersection of biomedical informatics and human-computer interaction (HCI). His ongoing research efforts involve the application of contextual inquiry, human-centered design, information visualization, and other HCI techniques to challenges in collaborative bioinformatics and clinical informatics.
       - name: Michael Davis
         alumni: false
         title: Software Developer
