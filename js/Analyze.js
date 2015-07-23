@@ -736,12 +736,27 @@ function AnalyzeInit(uploaded_data){
         
 
         var phenotypes  = text.split(/[\s,]+/);
-        jQuery("#phen_vis").phenogrid({phenotypeData: phenotypes,
-                                       targetSpeciesName: species,
-                                       owlSimFunction: urlParams.mode,
-                                       geneList: urlParams.geneList,
-                                       providedData: urlParams.user_input
-                                      });
+        // Old way - Zhou
+		/*
+		$("#phen_vis").phenogrid({
+					phenotypeData: phenotypes,
+					targetSpeciesName: species,
+					owlSimFunction: urlParams.mode,
+					geneList: urlParams.geneList,
+					providedData: urlParams.user_input
+				});
+		*/	
+
+        // New way - Zhou		
+	window.onload = function() {
+		Phenogrid.createPhenogridForElement(document.getElementById('phen_vis'), {
+			phenotypeData: phenotypes,
+			targetSpeciesName: species,
+			owlSimFunction: urlParams.mode,
+			geneList: urlParams.geneList,
+			providedData: urlParams.user_input
+		});
+	};
     }
 
     // Flatten JSON output from Exomiser
