@@ -123,6 +123,11 @@ institutions:
         alumni: false
         title: Software Developer
         bio: Michael is a Software Engineer for the Department of Biomedical Informatics (DBMI) at the University of Pittsburgh where he works on the development of Phenogrid.  He has an MS in Information Science from the University of Pittsburgh. He has worked for several years developing oncology-based database applications at UPMC CancerCenter. His current interest is the development and integration of analytical tools to support big data repositories in research.
+      - name: Zhou Yuan
+        picture: /image/team/ZhouYuan.jpg
+        alumni: false
+        title: Web Application Developer
+        bio: Zhou is a Web Application Developer working on the development of Phenogrid in the Department of Biomedical Informatics (DBMI) at the University of Pittsburgh. He has an MS in Information Science from the University of Pittsburgh. He is also the creator of InfoPotao, Quotagger, PotatoPy, and PotatoGuide. He works as an enthusiastic web developer who tries to create detailed designs to balance the aesthetics, web standards, security, usability, and accessibility aspects in support of biomedical research.
       - name: Chuck Borromeo
         alumni: true
         title: Interface Architect
