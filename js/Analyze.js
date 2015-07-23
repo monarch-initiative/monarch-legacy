@@ -737,15 +737,15 @@ function AnalyzeInit(uploaded_data){
 
         var phenotypes  = text.split(/[\s,]+/);
         // Old way - Zhou
-		/*
-		$("#phen_vis").phenogrid({
-					phenotypeData: phenotypes,
-					targetSpeciesName: species,
-					owlSimFunction: urlParams.mode,
-					geneList: urlParams.geneList,
-					providedData: urlParams.user_input
-				});
-		*/	
+	/*
+	$("#phen_vis").phenogrid({
+				phenotypeData: phenotypes,
+				targetSpeciesName: species,
+				owlSimFunction: urlParams.mode,
+				geneList: urlParams.geneList,
+				providedData: urlParams.user_input
+			});
+	*/	
 
         // New way - Zhou		
 	window.onload = function() {
@@ -755,8 +755,8 @@ function AnalyzeInit(uploaded_data){
 			owlSimFunction: urlParams.mode,
 			geneList: urlParams.geneList,
 			providedData: urlParams.user_input,
-            imagePath: '/node_modules/phenogrid/image/', 
-            htmlPath: '/node_modules/phenogrid/js/res/'
+			imagePath: '/node_modules/phenogrid/image/', // path to external images - Zhou
+			htmlPath: '/node_modules/phenogrid/js/res/' // path to html help text - Zhou
 
 		});
 	};
