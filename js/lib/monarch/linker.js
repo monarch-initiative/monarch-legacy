@@ -250,8 +250,8 @@ bbop.monarch.linker.prototype.set_anchor = function(id, args, xid, modifier){
         else if (!retval){
             // We want to escape < and >
             // should probably break out into function
-            hilite = hilite.replace(/\>/,'&gt;');
-            hilite = hilite.replace(/\</,'&lt;');
+            hilite = hilite.replace(/\>/g,'&gt;');
+            hilite = hilite.replace(/\</g,'&lt;');
             
             retval = '<a title="' + id +
             ' (go to the page for ' + label +
