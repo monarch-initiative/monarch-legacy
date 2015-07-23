@@ -83,7 +83,6 @@ function getAnnotationScore() {
                     },
                     success: function(data) {
                         jQuery('.score-spinner').removeClass(spinner_class);
-                        console.log(data);
                         var score = (5 * data.scaled_score);
                         jQuery(".stars").text(score);
                     
