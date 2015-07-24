@@ -14,15 +14,6 @@
                     <a class="downloadline btn btn-large btn-default btn-monarch-main monarch-feedback-dark"
                             href="mailto:info@monarchinitiative.org">Your feedback welcome!</a>
                      <p>
-                        {{#hasDef}}
-                        {{definitions}}<br/>
-                        {{/hasDef}}
-                        {{#hasComment}}
-                        {{comment}}<br/>
-                        {{/hasComment}}
-                        {{#hasHeritability}}
-                        {{heritability}}<br />
-                        {{/hasHeritability}}
                         Source: {{{primary_xref}}}
                     </p>
                 </div>
@@ -49,9 +40,29 @@
                         {{aka}}
                     </div>
                     {{/hasAka}}
+                    {{#hasDef}}
+                      <div class="ids">
+                        <b>Description:</b> {{definitions}}
+                       </div>  
+                    {{/hasDef}}
+                    
+                    {{#hasComment}}
+                      <div class="ids">
+                        <b>Comment:</b> {{comment}}
+                       </div>  
+                    {{/hasComment}}
+                    
+                                        
+                    {{#hasHeritability}}
+                      <div class="ids">
+                        <b>Heritability:</b> {{heritability}}
+                       </div>  
+                    {{/hasHeritability}}
+                    
+                    
                     {{#hasXrefs}}
                     <div class="ids">
-                        <b>xref IDs:</b> {{{xrefs}}}
+                        <b>Cross References::</b> {{{xrefs}}}
                     </div>
                     {{/hasXrefs}}
                     <h3>Classification</h3>
