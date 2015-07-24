@@ -28,9 +28,9 @@ monarch.chart.barchart = function(config, html_div){
         .range([self.x0, config.width]);
   
     //Bar colors
+    barColors = config.color.bars;
     self.color = d3.scale.ordinal()
-        .range([config.color.first,config.color.second,config.color.third,
-                config.color.fourth,config.color.fifth,config.color.sixth]);
+        .range(Object.keys(barColors).map(function(k) { return barColors[k] }));
 
     self.xAxis = d3.svg.axis()
         .scale(self.x)
