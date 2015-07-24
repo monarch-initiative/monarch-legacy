@@ -983,7 +983,6 @@ monarch.dovechart.prototype.setYAxisText = function(histogram,data, barGroup, ba
         self.tooltip.style("display", "none");
     })
     .on("click", function(d){
-        console.log(self);
         self.getDataAndTransitionOnClick(d, histogram, data, barGroup, bar);
     })
     .style("text-anchor", "end")
