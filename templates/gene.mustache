@@ -15,7 +15,7 @@
                             href="mailto:info@monarchinitiative.org">Your feedback welcome!</a>
                 </div>
                 <div id="categories">
-                    <a href="#overview"><div id="initialtab" class="tab contenttab">Overview</div></a>
+                    {{{includes.phenogrid_anchor}}}
                     {{{includes.phenotype_anchor}}}
                     {{{includes.disease_anchor}}}
                     {{{includes.genotype_anchor}}}
@@ -23,11 +23,11 @@
                     {{{includes.variant_anchor}}}
                     {{{includes.homolog_anchor}}}
                     {{{includes.pathway_anchor}}}
-                    {{{includes.phenogrid_anchor}}}
+                    <a href="#overview"><div id="initialtab" class="tab contenttab">Overview</div></a>
                 </div>
             </div>
             <div id="complete-info">
-                <div id="overview" class="first category">
+                <div id="overview" class="category">
                     <h3>IDs</h3>
                         <div class="ids">
                             <b>URI:</b> <a href="{{{uri}}}">{{{uri}}}</a>
@@ -56,7 +56,7 @@
                     {{{includes.variant_table}}}
                     {{{includes.homolog_table}}}
                     {{{includes.pathway_table}}}
-                    <div id="compare" class="category">
+                    <div id="compare" class="first category">
                       <div id="phen_vis"></div>
                     </div>
                 </div>
