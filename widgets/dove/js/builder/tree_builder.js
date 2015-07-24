@@ -365,7 +365,16 @@ monarch.builder.tree_builder.prototype.getTaxonMap = function(){
         "NCBITaxon:57486" : "Mouse",
         "NCBITaxon:39442" : "Mouse",
         "NCBITaxon:10092" : "Mouse",
-        "NCBITaxon:10091" : "Mouse"
+        "NCBITaxon:10091" : "Mouse",
+        "NCBITaxon:9823" : "Pig",
+        "NCBITaxon:10116" : "Rat",
+        "NCBITaxon:9913" : "Cow",
+        "NCBITaxon:6239" : "Worm",
+        "NCBITaxon:7227" : "Fly",
+        "NCBITaxon:8364" : "Frog",
+        "NCBITaxon:9544" : "Monkey",
+        "NCBITaxon:9258" : "Platypus",
+        "NCBITaxon:9031" : "Chicken"
     };
 };
 
