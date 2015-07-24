@@ -141,7 +141,7 @@ bbop.monarch.geneLandingConfig = {
         //Yaxis links
         yFontSize : 11,
         isYLabelURL : true,
-        yLabelBaseURL : "/phenotype/",
+        yLabelBaseURL : "/disease/",
         
         //font sizes
         legendFontSize : 10,
