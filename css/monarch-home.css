@@ -48,8 +48,17 @@
     max-height: 5em;
     width: auto;
     float: left;
-    padding-right: 1em;
+    margin-left: 0.3em;
+    margin-right: 2em;
+    margin-top: 0.3em;
+    margin-bottom: 2em;
 }
+
+.monarch-carousel-explore-title {
+    font-weight: 600;
+    font-size: 1.1em;
+}
+
 
 .monarch-nav-embedded-image {
     max-height: 1.5em;
