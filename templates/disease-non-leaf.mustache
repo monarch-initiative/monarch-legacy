@@ -15,27 +15,31 @@
                             href="mailto:info@monarchinitiative.org">Your feedback welcome!</a>
                 </div>
                 <div id="categories">
-                    {{{includes.phenogrid_anchor}}}
+                    <a href="#overview"><div id="initialtab" class="tab contenttab">Overview</div></a>
                     {{{includes.phenotype_anchor}}}
                     {{{includes.gene_anchor}}}
                     {{{includes.genotype_anchor}}}
                     {{{includes.model_anchor}}}
                     {{{includes.variant_anchor}}}
                     {{{includes.pathway_anchor}}}
-                    <a href="#overview"><div class="tab contenttab">Overview</div></a>
-                   
+                    <div class="tabcontainer">
+                      <div class="tabhover">View phenotypically similar diseases and genes in a grid</div>
+                        {{#hasPhenotypes}}
+                        <a href="#compare"><div class="tab contenttab">Compare</div></a>
+                        {{/hasPhenotypes}}
+                        {{^hasPhenotypes}}
+                        <div class="tab greyed-out">Compare</div>
+                        {{/hasPhenotypes}} 
+                    </div>
                 </div>
             </div>
             <div id="complete-info">
-                <div id="compare" class="first category">
-                   <div id="phen_vis"></div>
-                </div>
-                <div id="overview" class="category">
+                <div id="overview" class="first category">
                   <h3>IDs</h3>
                     <div class="ids">
                         <b>URI:</b> <a href="{{{uri}}}">{{{uri}}}</a>
                     </div>
-                    {{#hasAka}}
+                     {{#hasAka}}
                     <div class="ids">
                         <b>AKA:</b>
                         {{aka}}
@@ -78,7 +82,9 @@
             {{{includes.model_table}}}
             {{{includes.variant_table}}}
             {{{includes.pathway_table}}}
-           
+            <div id="compare" class="category">
+                <div id="phen_vis"></div>
+            </div>
             </div>
             </div> <!-- closes wrapperforfooter -->
             {{{includes.footer}}}
