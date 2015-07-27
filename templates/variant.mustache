@@ -21,14 +21,29 @@
                     {{{includes.model_anchor}}}
                     {{{includes.genotype_anchor}}}
                     {{{includes.pathway_anchor}}}
+                    {{#hasPhenotypes}}
                     <a href="#overview"><div class="tab contenttab">Overview</div></a>
+                    {{/hasPhenotypes}}
+                    {{^hasPhenotypes}}
+                    <a href="#overview"><div id="initialtab" class="tab contenttab">Overview</div></a>
+                    {{/hasPhenotypes}}
                 </div>
             </div>
             <div id="complete-info">
-                <div id="compare" class="first category">
-                    <div id="phen_vis"></div>
-                </div>
-                <div id="overview" class="category">
+               {{#hasPhenotypes}}
+                 <div id="compare" class="first category">
+               {{/hasPhenotypes}}
+               {{^hasPhenotypes}}
+                  <div id="compare" class="category">
+               {{/hasPhenotypes}}
+                      <div id="phen_vis"></div>
+                  </div>
+                {{#hasPhenotypes}}
+                  <div id="overview" class="category">
+                {{/hasPhenotypes}}
+                {{^hasPhenotypes}}
+                  <div id="overview" class="first category">
+                {{/hasPhenotypes}}
                     <h3>IDs</h3>
                         <div class="ids">
                             <b>URI:</b> <a href="{{{uri}}}">{{{uri}}}</a>

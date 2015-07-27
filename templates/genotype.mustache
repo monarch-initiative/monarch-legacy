@@ -21,11 +21,21 @@
                     {{{includes.gene_anchor}}}
                     {{{includes.variant_anchor}}}
                     {{{includes.pathway_anchor}}}
+                    {{#hasPhenotypes}}
                     <a href="#overview"><div class="tab contenttab">Overview</div></a>
+                    {{/hasPhenotypes}}
+                    {{^hasPhenotypes}}
+                    <a href="#overview"><div id="initialtab" class="tab contenttab">Overview</div></a>
+                    {{/hasPhenotypes}}
                 </div>
             </div>
             <div id="complete-info">
+                {{#hasPhenotypes}}
                 <div id="overview" class="category">
+                {{/hasPhenotypes}}
+                {{^hasPhenotypes}}
+                <div id="overview" class="first category">
+                {{/hasPhenotypes}}
                     <h3>IDs</h3>
                         <div class="ids">
                             <b>URI:</b> <a href="{{{uri}}}">{{{uri}}}</a>
@@ -52,7 +62,12 @@
                     {{{includes.gene_table}}}
                     {{{includes.variant_table}}}
                     {{{includes.pathway_table}}}
+                    {{#hasPhenotypes}}
                     <div id="compare" class="first category">
+                    {{/hasPhenotypes}}
+                    {{^hasPhenotypes}}
+                    <div id="compare" class="category">
+                    {{/hasPhenotypes}}
                       <div id="phen_vis"></div>
                     </div>
                 </div>
