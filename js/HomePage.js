@@ -196,7 +196,7 @@ jQuery(document).ready(function(){
 
     // Ready search form in corner, with non-standard names.
     // (Default should not load as the default ids do not exists here.)
-    navbar_search_init('home_search', 'home_search_form');
+    //navbar_search_init('home_search', 'home_search_form');
 
     // Start carsousel.
     var mcid = '#' + "monarch-carousel"; // carousel series

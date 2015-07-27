@@ -27,6 +27,10 @@ def text_to_input(context, elt_id, text):
 def step_impl(context, text):
     text_to_input(context, 'home_search', text)
 
+@given('I type "{text}" into the navbar search')
+def step_impl(context, text):
+    text_to_input(context, 'search', text)
+
 @given('I type "{text}" into the phenotype analyze search')
 def step_impl(context, text):
     text_to_input(context, 'analyze_auto_input', text)
