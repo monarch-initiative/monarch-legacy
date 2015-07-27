@@ -52,3 +52,13 @@
   Or against the UI/server target of your choice:
 
   : TARGET=http://localhost:8989 behave
+
+* Debugging tests
+
+It is sometimes useful to pause the tests so that you can see what Selenium sees. This can
+be accomplished with Python's 'time.sleep' function:
+
+  : import time
+    ...
+  : time.sleep(5)  # 5 seconds
+

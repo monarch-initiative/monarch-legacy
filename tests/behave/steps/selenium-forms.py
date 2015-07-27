@@ -21,6 +21,13 @@ def step_impl(context):
     webelt = context.browser.find_element_by_id('home_search_form')
     webelt.submit()
 
+## Submit navbar search.
+@given('I submit navbar search')
+def step_impl(context):
+    #print(context.browser.title)
+    webelt = context.browser.find_element_by_id('search_form')
+    webelt.submit()
+
 ###
 ### Example for input for a possible text area form.
 ###

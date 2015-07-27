@@ -1,13 +1,19 @@
-<div class="navbar navbar-inverse navbar-fixed-top" role="navigation">
-    <div class="containter-fluid"> <!-- monarch-navbar-container">-->
+<div class="navbar navbar-inverse navbar-fixed-top monarch-navbar" role="navigation">
+    <div class="container-fluid">
         <div class="navbar-header">
             <button type="button" class="navbar-toggle" data-toggle="collapse"
-                data-target="#collapsed-navbar">
+                    data-target="#collapsed-navbar">
                 <span class="icon-bar"></span>
                 <span class="icon-bar"></span>
                 <span class="icon-bar"></span>
             </button>
-            <a class="navbar-brand" href="/">Monarch</a>
+            <a class="navbar-brand" href="/">
+                <img class="branding-logo"
+                     src="/image/logo.png"
+                     alt="Monarch Initiative logo"
+                     title="Monarch Initiative front page">
+                Monarch
+            </a>
         </div>
         <div id="collapsed-navbar" class="nav-collapse collapse">
             <ul class="nav navbar-nav">
@@ -39,6 +45,7 @@
                         <li><a href="/sources">Data Sources</a></li>
                         <li><a href="/page/releases">Releases</a></li>
                         <li><a href="/page/team">Monarch Team</a></li>
+
                     </ul>
                 </li>
                 <li class="dropdown">
@@ -50,8 +57,7 @@
                         <li><a href="/docs/index.html">Javascript API</a></li>
                         <li><a href="/page/phenogrid">Monarch Phenotype Grid Widget</a></li>
                         <li><a href="http://monarch-initiative.blogspot.com/2015/01/how-to-annotate-patients-phenotypic.html">Phenotype Curation Guidelines</a></li>
-                        <li><a href="https://github.com/monarch-initiative/monarch-app">GitHub
-                        Project</a></li>
+                        <li><a href="https://github.com/monarch-initiative/monarch-app">GitHub Project</a></li>
                         <li><a href="https://code.google.com/p/phenotype-ontologies/">Ontologies</a></li>
                         <li><a href="/page/pubs">Publications</a></li>
                         <li><a href="/page/glossary">Glossary</a></li>
@@ -67,7 +73,8 @@
                     </ul>
                 </li>
             </ul>
-            <form id="search_form" class="navbar-form navbar-left searchspace" action="/search" role="search">
+            {{#monarch_nav_search_p}}
+            <form id="search_form" class="navbar-form navbar-right searchspace" action="/search" role="search">
                 <div class="input-group">
                 <input id="search" type="text" class="form-control search-box" placeholder="Search (e.g. Parkinson's)"/>
                 <span class="input-group-btn nav-search-btn">
@@ -75,6 +82,7 @@
                 </span>
                 </div>
             </form>
+            {{/monarch_nav_search_p}}
         </div>
     </div>
 </div>

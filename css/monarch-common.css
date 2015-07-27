@@ -13,6 +13,8 @@ p {
     clear: both;
 }
 
+
+
 /* Navbar */
 /* These are navbar styles that depend heavily on media queries to determine the
  * width of the user's browser window. Make sure that you are adding styles to the
@@ -20,6 +22,13 @@ p {
  *
  * The default Bootstrap behavior makes the navbar quite different from regular
  * browser width to smaller (e.g. smartphone browsers). */
+
+.navbar.monarch-navbar {
+    padding:0;
+    padding-left: 5px;
+    padding-right: 5px;
+    margin:0;
+}
 
 @media (min-width: 815px) {
     .monarch-navbar-container {
@@ -149,7 +158,6 @@ p {
     cursor: pointer;
 }
 
-
 /* Logos */
 /* These styles standardize the size of logos over all Monarch pages. */
 
@@ -266,40 +274,22 @@ p {
     text-align: center;
     font-weight: 200;
     font-size: 12px;
-    color: white;
-    transition: color 0.2s;
-    -webkit-transition: color 0.2s;
-    -moz-transition: color 0.2s;
-}
-#footer:hover {
     color: #777;
 }
-@media (min-width: 1110px) {
-    .wrapperforfooter {
-        min-height: 100%;
-        padding-bottom: 80px;
-    }
-    #footer {
-        margin-top: -80px;
-    }
+
+#footer.fadeable {
+    color: white;
+    transition: initial;
+    -webkit-transition: initial;
+    -moz-transition: initial;
 }
-@media (max-width: 1110px) {
-    .wrapperforfooter {
-        min-height: 100%;
-        padding-bottom: 90px;
-    }
-    #footer {
-        margin-top: -90px;
-    }
+
+#footer.fadeable:hover {
+    color: #777;
 }
-@media (max-width: 840px) {
-    .wrapperforfooter {
-        min-height: 100%;
-        padding-bottom: 110px;
-    }
-    #footer {
-        margin-top: -110px;
-    }
+
+.wrapperforfooter {
+    min-height: 100%;
 }
 
 /* Search Bar */
@@ -356,8 +346,18 @@ p {
  */
 
 .branding-logo {
-    max-height: 30px;
-    padding-bottom: 5px;
+    height: 30px;
+    width: 60px;
+    margin: 0;
+    margin-top: -3px;
+    margin-left: -5px;
+    margin-right: 4px;
+    padding: 0;
+}
+
+.navbar-brand {
+    font-size: 18px;
+    margin-top: -2px;
 }
 
 /* BS3 Pager from bbop.live_pager widget */
@@ -552,6 +552,7 @@ a:hover .hilite, a:active .hilite {
     width: auto;
 }
 .navbar { z-index: 100; } /* Default of 1000 interferes with popups etc. */
+.navbar { padding: 3px;}
 .page-header { text-align: center; }
 .page-header { text-align: center; }
 .page-header { text-align: center; }
