@@ -14,7 +14,7 @@ Feature: Analyze phenotypes is usable by the expected user interfaces
      and I wait until "Asthma" appears in the autocomplete
      and I click the autocomplete item "Asthma"
      when I submit analyze phenotype
-     then the document should contain "Ichthyosis Vulgaris"
+     then the document should contain "ichthyosis vulgaris"
 
  ## Example how you might do other forms.
  # @data
