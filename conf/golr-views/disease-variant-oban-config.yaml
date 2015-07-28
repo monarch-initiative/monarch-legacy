@@ -444,6 +444,6 @@ fields:
     type: string
 filter_weights: relation_closure_label^6.5 evidence_closure_label^6.0 subject_closure_label^4.5 object_closure_label^4.0 subject_taxon_closure_label^3.5 object_taxon_closure_label^3.0
 id: disease_variant
-result_weights: subject^7.0 subject_taxon^6.5 relation^6.0  object^5.0 object_taxon^4.2 evidence^4.0 source^3.5
+result_weights: subject^7.0 relation^6.0  object^5.0 object_taxon^4.2 evidence^4.0 source^3.5
 schema_generating: true
 weight: 20
