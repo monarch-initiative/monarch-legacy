@@ -3338,6 +3338,21 @@
       "datatype" : null,
       "image_path" : "/image/source-kegg.png"
    },
+   "kegg-hsa" : {
+      "object" : "identifier",
+      "uri_prefix" : null,
+      "name" : "KEGG",
+      "url_example" : "http://www.kegg.jp/dbget-bin/www_bget?hsa:6469",
+      "database" : "Kyoto Encyclopedia of Genes and Genomes",
+      "example_id" : "KEGG:hsa_6469",
+      "generic_url" : "http://www.genome.ad.jp/kegg/",
+      "fullname" : null,
+      "id" : null,
+      "abbreviation" : "KEGG",
+      "url_syntax" : "http://www.kegg.jp/dbget-bin/www_bget?hsa:[example_id]",
+      "datatype" : null,
+      "image_path" : "/image/source-kegg.png"
+   },
    "smart" : {
       "object" : "Accession",
       "uri_prefix" : null,
