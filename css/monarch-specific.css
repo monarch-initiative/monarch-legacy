@@ -169,7 +169,8 @@ span.stars > *{
 /* Analyze */
 
 #analyze-profile > ul#analyze_auto_list > li.list-group-item {
-    background-color: #acd8ec;
+    background-color: #A4D6D4;
+    
 }
 #analyze-profile > ul#analyze_auto_list > li#analyze-empty-item {
     background-color: white;
@@ -242,6 +243,13 @@ figcaption {
 
 /* Analyze */
 
+.compare-text{
+	opacity: .5;
+}
+.search-text{
+	opacity: 1.0;
+}
+
 #settings-header {
     text-align: center;
 }
@@ -252,7 +260,10 @@ figcaption {
 	font-weight: normal;
     font-size: 15px;
     text-align:right;
-    padding-top:3px;
+    padding-top:1px;
+}
+#type,#target {
+    width:100%;
 }
 
 #analyze-target {
@@ -260,7 +271,7 @@ figcaption {
 }
 
 .pheno-radio-button {
-	width: 20%;
+	width: 14%;
     margin: 0 auto;
     padding-bottom: 10px;
 }
@@ -270,20 +281,65 @@ figcaption {
     font-size: 16px;
     white-space: nowrap;
 }
+#gene-autocomplete {
+    padding-bottom: 5px;
+    font-size: 15px;
+    line-height: 100%;
+}
 #gene-text-area {
+	padding: 10px 0 5px 0;
+    font-size: 15px;
+    line-height: 100%;
+}
+#gene-list {
+    line-height: 110%;
+}
+#ortholog-text-area {
+	display: none;
+    padding-top: 10px;
     font-size: 15px;
 }
-#gene-shortcuts {
-	padding: 5px 0 5px 0;
+#paralog-text-area {
+	display: none;
+    padding-top: 10px;
     font-size: 15px;
+    
+}
+#gene-shortcuts {
+	padding: 10px 0 5px 0;
+    font-size: 15px;
+    line-height: 100%;
 }
 .explain {
     font-size: 14px;
     padding-bottom: 20px;
 }
-.small {
+#separator{
+	position:absolute;
+	line-height:1px;
+	width: 100%;
+	text-align: center;
+}
+#separator-text{
+	position:relative;
+    font-style: italic;
+    font-weight: bold;
+    background-color:white;
+}
+#paste-buttons {
+    padding-bottom: 10px;
+}
+.compare-instructions {
+	padding-bottom: 10px;
+}
+.autocomplete-message{
+	margin-top: 4px;
+}
+.small {  
+    font-family: Helvetica, Arial, sans-serif;
     font-weight: normal;
     font-size: 12px;
+    line-height:130%;
 }
 #ajax-spinner {
     display:none;
@@ -301,6 +357,147 @@ figcaption {
 	float:left;
 	padding-top:35px;
 	width:100%
+}
+.example-similarity{
+	margin: 0 5px 1px 0;
+}
+#analyze-submit{
+	margin: 5px 0 10px 0;
+}
+#reset{
+    padding: 5px 18px 5px 18px;
+}
+#upload-reset{
+    margin: 0 0 1px 5px;
+}
+.monarch-btn{
+	background-color: #44A293;
+	color : white;
+}
+#upload-btn{
+    margin: 0 0 10px 10px;
+    display: inline-block;
+}
+#choose-file{
+	display: inline-block;
+	font-weight: bold;
+}
+.monarch-btn:hover{
+	background-color: #3A9889;
+}
+#browse{
+    margin-bottom: 10px;
+}
+#file-error {
+    margin: 10px 0 20px 0;
+    font-weight: bold;
+}
+#file-name {
+    font-weight: normal;
+}
+
+
+
+@media (max-width: 840px) {
+
+  #analyze-compare {
+      border-left: none;
+      border-top: 1px solid #e8e8e8;
+      padding-top: 10px;
+  }
+  .search-label {
+    font-weight: normal;
+    font-size: 15px;
+    text-align:left;
+    padding-top:1px;
+  }
+  .explain {
+    text-align: center;
+  }
+  #analyze-submit{
+    margin: 0 5px 0 0;
+  }
+}
+
+@media (max-width: 400px) {
+  .pheno-radio-button {
+    width: 40%;
+  }
+  #ortholog {
+    margin-bottom: 5px;
+  }
+  #paralog {
+    padding-right: 20px;
+  }
+
+}
+
+@media (min-width: 840px) {
+  .analyze-query .panel { 
+    border-top-left-radius: 0px;
+    border-top-right-radius: 0px;
+  }
+
+  .analyze-query .panel-heading { 
+	position: relative;
+	border-top-left-radius: 0px;
+    border-top-right-radius: 0px;
+    padding: 10px 0 9px 0;
+	background: #f5f5f5;
+	border-bottom: 1px solid #ddd; 
+  } 
+  .analyze-query .panel-heading:after, .analyze-query .panel-heading:before { 
+	left: 100%;
+	top: 50%;
+	border: solid transparent;
+	content: " ";
+	height: 0;
+	width: 0;
+	position: absolute;
+	pointer-events: none;
+  } 
+  .analyze-query .panel-heading:after {
+	border-color: rgba(245, 245, 245, 0);
+	border-left-color: #F5F5F5;
+	border-width: 19px;
+	margin-top: -19px;
+	-moz-transform: scale(.9999);
+  } 
+  .analyze-query .panel-heading:before {
+	border-color: rgba(221, 221, 221, 0);
+	border-left-color: #C8C8C8;
+	border-width: 20px;
+	margin-top: -20px;
+	-moz-transform: scale(.9999);
+  }
+}
+
+/* File upload credit http://www.abeautifulsite.net/whipping-file-inputs-into-shape-with-bootstrap-3/ */
+.btn-file {
+    position: relative;
+    overflow: hidden;
+}
+.btn-file input[type=file] {
+    position: absolute;
+    top: 0;
+    right: 0;
+    min-width: 100%;
+    min-height: 100%;
+    font-size: 100px;
+    text-align: right;
+    filter: alpha(opacity=0);
+    opacity: 0;
+    outline: none;
+    background: white;
+    cursor: inherit;
+    display: block;
+}
+#file-desc{
+	margin-bottom: 10px;
+	width: 72%;
+}
+.phenotype-auto-desc{
+	padding-bottom: 8px;
 }
 
 /* Global Ajax */
@@ -355,7 +552,7 @@ figcaption {
   }
 }
 
-.spinner {
+.ortholog-spinner {
   margin: 10px;
   width: 20px;
   height: 20px;
@@ -377,7 +574,7 @@ figcaption {
   animation-fill-mode: both;
 }
 
-.spinner .spinner-container {
+.ortholog-spinner .spinner-container {
   position: absolute;
   width: 100%;
   height: 100%;

@@ -20,7 +20,6 @@ jQuery(document).ready(function(){
     /* This changes the color and style of tabs upon click. */
     jQuery('.contenttab').click(function() {
         jQuery('.contenttab').css({'color': 'white', 'background-color': '#999', 'border-bottom': '1px solid black'});
-        console.log(this);
         jQuery(this).css({'color': 'black', 'background-color': 'white', 'border-bottom': '1px solid white'});
     });
 
@@ -35,6 +34,16 @@ jQuery(document).ready(function(){
         event.preventDefault();
         jQuery('.category').hide();
         jQuery(panel_id).show();
+    });
+    //HACK TO GET THE ANALYZE PAGE TO WORK, REFACTOR OUT
+    jQuery('#internal-link').click(function(event) {
+        var panel_id = jQuery(this).attr('href');
+        event.preventDefault();
+        jQuery('.category').hide();
+        jQuery(panel_id).show();
+        jQuery(".query-tab").css({'color': 'white', 'background-color': '#999', 'border-bottom': '1px solid black'});
+        jQuery(".results-tab").css({'color': 'white', 'background-color': '#999', 'border-bottom': '1px solid black'});
+        jQuery(".upload-tab").css({'color': 'black', 'background-color': 'white', 'border-bottom': '1px solid white'}); 
     });
     
     // Since we're a tabby version, we're going to try and open

@@ -1,3 +1,15 @@
+## Try to not include files for the behave test suite's python virtualenv.
+tests/behave/bin
+tests/behave/include
+tests/behave/lib
+tests/behave/local
+tests/behave/.Python
+tests/behave/pip-selfcheck.json
+
+## Ignore npm libs.
+node_modules
+
+## Other stuff?
 .project
 .pl-history
 cache/*/key*json
@@ -7,6 +19,7 @@ semantic.cache
 .DS_Store
 ringojs-0.9
 *~
+tools/
 .emacs.*
 log
 .idea/**

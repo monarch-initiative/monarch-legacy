@@ -101,7 +101,8 @@
       "id" : null,
       "abbreviation" : "HGNC",
       "url_syntax" : "http://www.genenames.org/data/hgnc_data.php?hgnc_id=HGNC:[example_id]",
-      "datatype" : null
+      "datatype" : null,
+      "image_path" : "/image/source-hgnc.ico"
    },
    "patric" : {
       "object" : "Feature identifier",
@@ -206,7 +207,8 @@
       "id" : null,
       "abbreviation" : "NCBI_gi",
       "url_syntax" : "http://www.ncbi.nlm.nih.gov/entrez/viewer.fcgi?val=[example_id]",
-      "datatype" : null
+      "datatype" : null,
+      "image_path" : "/image/source-ncbi.png"
    },
    "geo" : {
       "object" : null,
@@ -383,7 +385,8 @@
       "abbreviation" : "Ensembl",
       "id" : null,
       "url_syntax" : "http://www.ensembl.org/id/[example_id]",
-      "datatype" : null
+      "datatype" : null,
+      "image_path" : "/image/source-ensembl.png"
    },
    "wbphenotype" : {
       "object" : "Gene identifier",
@@ -399,7 +402,8 @@
       "id" : null,
       "abbreviation" : "WBPhenotype",
       "url_syntax" : "http://www.wormbase.org/species/c_elegans/phenotype/WBPhenotype:[example_id]",
-      "datatype" : null
+      "datatype" : null,
+      "image_path" : "/image/source-wormbase.png"
    },
    "casspc" : {
       "object" : "Identifier",
@@ -470,7 +474,8 @@
       "id" : null,
       "abbreviation" : "UniProtKB-SubCell",
       "url_syntax" : "http://www.uniprot.org/locations/[example_id]",
-      "datatype" : null
+      "datatype" : null,
+      "image_path" : "/image/source-uniprot.ico"
    },
    "yeastfunc" : {
       "object" : null,
@@ -498,7 +503,8 @@
       "abbreviation" : "PubMed",
       "id" : null,
       "url_syntax" : "http://www.ncbi.nlm.nih.gov/pubmed/[example_id]",
-      "datatype" : null
+      "datatype" : null,
+      "image_path" : "/image/source-ncbi.png"
    },
    "pmid" : {
       "object" : "Identifier",
@@ -512,7 +518,8 @@
       "abbreviation" : "PubMed",
       "id" : null,
       "url_syntax" : "http://www.ncbi.nlm.nih.gov/pubmed/[example_id]",
-      "datatype" : null
+      "datatype" : null,
+      "image_path" : "/image/source-ncbi.png"
    },
    "jcvi_pfa1" : {
       "object" : "Accession",
@@ -555,6 +562,20 @@
       "abbreviation" : "REAC",
       "id" : null,
       "url_syntax" : "http://www.reactome.org/cgi-bin/eventbrowser_st_id?ST_ID=[example_id]",
+      "datatype" : null
+   },
+   "react" : {
+      "object" : "Identifier",
+      "name" : null,
+      "uri_prefix" : null,
+      "url_example" : "http://www.reactome.org/cgi-bin/eventbrowser_st_id?ST_ID=REACT_604",
+      "database" : "Reactome - a curated knowledgebase of biological pathways",
+      "example_id" : "REACT:604",
+      "generic_url" : "http://www.reactome.org/",
+      "fullname" : null,
+      "abbreviation" : "REACT",
+      "id" : null,
+      "url_syntax" : "http://www.reactome.org/cgi-bin/eventbrowser_st_id?ST_ID=REACT_[example_id]",
       "datatype" : null
    },
    "pfamb" : {
@@ -642,7 +663,8 @@
       "id" : null,
       "abbreviation" : "RefSeq",
       "url_syntax" : "http://www.ncbi.nlm.nih.gov/entrez/viewer.fcgi?val=[example_id]",
-      "datatype" : null
+      "datatype" : null,
+      "image_path" : "/image/source-ncbi.png"
    },
    "prints" : {
       "object" : "Accession",
@@ -701,7 +723,8 @@
       "id" : null,
       "url_syntax" : "http://www.uniprot.org/uniprot/[example_id]",
       "is_obsolete" : "true",
-      "datatype" : null
+      "datatype" : null,
+      "image_path" : "/image/source-uniprot.ico"
    },
    "coriell" : {
       "object" : "Identifier",
@@ -716,7 +739,8 @@
       "id" : null,
       "abbreviation" : "CORIELL",
       "url_syntax" : "http://ccr.coriell.org/Sections/Search/Sample_Detail.aspx?Ref=[example_id]",
-      "datatype" : null
+      "datatype" : null,
+      "image_path" : "/image/source-coriell.png"
    },
    "cdd" : {
       "object" : "Identifier",
@@ -730,7 +754,8 @@
       "id" : null,
       "abbreviation" : "CDD",
       "url_syntax" : "http://www.ncbi.nlm.nih.gov/Structure/cdd/cddsrv.cgi?uid=[example_id]",
-      "datatype" : null
+      "datatype" : null,
+      "image_path" : "/image/source-ncbi.png"
    },
    "biosis" : {
       "object" : "Identifier",
@@ -832,7 +857,8 @@
       "id" : null,
       "abbreviation" : "VEGA",
       "url_syntax" : "http://vega.sanger.ac.uk/perl/searchview?species=all&idx=All&q=[example_id]",
-      "datatype" : null
+      "datatype" : null,
+      "image_path" : "/image/source-vega.png"
    },
    "gorel" : {
       "object" : null,
@@ -935,7 +961,8 @@
       "abbreviation" : "WormBase",
       "id" : null,
       "url_syntax" : "http://www.wormbase.org/db/gene/gene?name=[example_id]",
-      "datatype" : null
+      "datatype" : null,
+      "image_path" : "/image/source-wormbase.png"
    },
    "corum" : {
       "object" : "Identifier",
@@ -1070,7 +1097,8 @@
       "id" : null,
       "abbreviation" : "PANTHER",
       "url_syntax" : "http://www.pantherdb.org/panther/family.do?clsAccession=[example_id]",
-      "datatype" : null
+      "datatype" : null,
+      "image_path" : "/image/source-panther.jpg"
    },
    "jcvi_tba1" : {
       "object" : "Accession",
@@ -1190,7 +1218,8 @@
       "id" : null,
       "abbreviation" : "PubChem_Compound",
       "url_syntax" : "http://www.ncbi.nlm.nih.gov/entrez/query.fcgi?CMD=search&DB=pccompound&term=[example_id]",
-      "datatype" : null
+      "datatype" : null,
+      "image_path" : "/image/source-ncbi.png"
    },
    "mitre" : {
       "object" : null,
@@ -1377,7 +1406,8 @@
       "abbreviation" : "RefSeq_Prot",
       "is_obsolete" : "true",
       "url_syntax" : "http://www.ncbi.nlm.nih.gov/entrez/viewer.fcgi?val=[example_id]",
-      "datatype" : null
+      "datatype" : null,
+      "image_path" : "/image/source-ncbi.png"
    },
    "uniprotkb-kw" : {
       "object" : "Identifier",
@@ -1391,7 +1421,8 @@
       "id" : null,
       "abbreviation" : "UniProtKB-KW",
       "url_syntax" : "http://www.uniprot.org/keywords/[example_id]",
-      "datatype" : null
+      "datatype" : null,
+      "image_path" : "/image/source-uniprot.ico"
    },
    "ddb" : {
       "object" : "Identifier",
@@ -1551,7 +1582,8 @@
       "id" : null,
       "abbreviation" : "KEGG_REACTION",
       "url_syntax" : "http://www.genome.jp/dbget-bin/www_bget?rn:[example_id]",
-      "datatype" : null
+      "datatype" : null,
+      "image_path" : "/image/source-kegg.png"
    },
    "merops_fam" : {
       "object" : "Peptidase family identifier",
@@ -1594,7 +1626,8 @@
       "id" : null,
       "abbreviation" : "KEGG_LIGAND",
       "url_syntax" : "http://www.genome.jp/dbget-bin/www_bget?cpd:[example_id]",
-      "datatype" : null
+      "datatype" : null,
+      "image_path" : "/image/source-kegg.png"
    },
    "refseq_na" : {
       "object" : "Identifier",
@@ -1610,7 +1643,8 @@
       "abbreviation" : "RefSeq_NA",
       "is_obsolete" : "true",
       "url_syntax" : "http://www.ncbi.nlm.nih.gov/entrez/viewer.fcgi?val=[example_id]",
-      "datatype" : null
+      "datatype" : null,
+      "image_path" : "/image/source-ncbi.png"
    },
    "jstor" : {
       "object" : "journal article",
@@ -1654,7 +1688,8 @@
       "id" : null,
       "abbreviation" : "OMIM",
       "url_syntax" : "http://omim.org/entry/[example_id]",
-      "datatype" : null
+      "datatype" : null,
+      "image_path" : "/image/source-omim.png"
    },
    "imgt_hla" : {
       "object" : null,
@@ -1698,7 +1733,8 @@
       "id" : null,
       "abbreviation" : "PMCID",
       "url_syntax" : "http://www.ncbi.nlm.nih.gov/sites/entrez?db=pmc&cmd=search&term=[example_id]",
-      "datatype" : null
+      "datatype" : null,
+      "image_path" : "/image/source-ncbi.png"
    },
    "biomd" : {
       "object" : "Accession",
@@ -1726,20 +1762,6 @@
       "id" : null,
       "abbreviation" : "Alzheimers_University_of_Toronto",
       "url_syntax" : null,
-      "datatype" : null
-   },
-   "pmid" : {
-      "object" : "Identifier",
-      "uri_prefix" : null,
-      "name" : null,
-      "url_example" : "http://www.ncbi.nlm.nih.gov/pubmed/4208797",
-      "database" : "PubMed",
-      "example_id" : "PMID:4208797",
-      "generic_url" : "http://www.ncbi.nlm.nih.gov/PubMed/",
-      "fullname" : null,
-      "id" : null,
-      "abbreviation" : "PMID",
-      "url_syntax" : "http://www.ncbi.nlm.nih.gov/pubmed/[example_id]",
       "datatype" : null
    },
    "maizegdb" : {
@@ -1799,7 +1821,8 @@
       "id" : null,
       "abbreviation" : "ENSEMBL_TranscriptID",
       "url_syntax" : "http://www.ensembl.org/id/[example_id]",
-      "datatype" : null
+      "datatype" : null,
+      "image_path" : "/image/source-ensembl.png"
    },
    "um-bbd_ruleid" : {
       "object" : "Rule identifier",
@@ -1830,7 +1853,8 @@
       "abbreviation" : "UniProt",
       "id" : null,
       "url_syntax" : "http://www.uniprot.org/uniprot/[example_id]",
-      "datatype" : null
+      "datatype" : null,
+      "image_path" : "/image/source-uniprot.ico"
    },
    "pharmgkb" : {
       "object" : null,
@@ -1844,7 +1868,8 @@
       "id" : null,
       "abbreviation" : "PharmGKB",
       "url_syntax" : "http://www.pharmgkb.org/do/serve?objId=[example_id]",
-      "datatype" : null
+      "datatype" : null,
+      "image_path" : "/image/source-pharmgkb.png"
    },
    "mesh" : {
       "object" : "MeSH heading",
@@ -1975,7 +2000,8 @@
       "id" : null,
       "abbreviation" : "ZFIN",
       "url_syntax" : "http://zfin.org/cgi-bin/ZFIN_jump?record=[example_id]",
-      "datatype" : null
+      "datatype" : null,
+      "image_path" : "/image/source-zfin.png"
    },
    "protein_id" : {
       "object" : "Identifier",
@@ -2303,7 +2329,8 @@
       "abbreviation" : "NCBI",
       "! url_syntax" : "http://www.ncbi.nlm.nih.gov/entrez/viewer.fcgi?val=[example_id]",
       "url_syntax" : null,
-      "datatype" : null
+      "datatype" : null,
+      "image_path" : "/image/source-ncbi.png"
    },
    "cgsc" : {
       "object" : "Gene symbol",
@@ -2366,7 +2393,8 @@
       "id" : null,
       "abbreviation" : "ENSEMBL_GeneID",
       "url_syntax" : "http://www.ensembl.org/id/[example_id]",
-      "datatype" : null
+      "datatype" : null,
+      "image_path" : "/image/source-ensembl.png"
    },
    "unigene" : {
       "object" : "Identifier (for transcript cluster)",
@@ -2486,7 +2514,8 @@
       "id" : null,
       "abbreviation" : "NCBI_GP",
       "url_syntax" : "http://www.ncbi.nlm.nih.gov/entrez/viewer.fcgi?db=protein&val=[example_id]",
-      "datatype" : null
+      "datatype" : null,
+      "image_path" : "/image/source-ncbi.png"
    },
    "sgdid" : {
       "object" : "Identifier for SGD Loci",
@@ -2662,7 +2691,8 @@
       "abbreviation" : "MIM",
       "id" : null,
       "url_syntax" : "http://omim.org/entry/[example_id]",
-      "datatype" : null
+      "datatype" : null,
+      "image_path" : "/image/source-omim.png"
    },
    "lifedb" : {
       "object" : "cDNA clone identifier",
@@ -2782,7 +2812,8 @@
       "abbreviation" : "Swiss-Prot",
       "is_obsolete" : "true",
       "url_syntax" : "http://www.uniprot.org/uniprot/[example_id]",
-      "datatype" : null
+      "datatype" : null,
+      "image_path" : "/image/source-uniprot.ico"
    },
    "gb" : {
       "object" : "Sequence accession",
@@ -2799,7 +2830,8 @@
       "abbreviation" : "GB",
       "id" : null,
       "url_syntax" : "http://www.ncbi.nlm.nih.gov/entrez/viewer.fcgi?db=nucleotide&val=[example_id]",
-      "datatype" : null
+      "datatype" : null,
+      "image_path" : "/image/source-ncbi.png"
    },
    "fbbt" : {
       "object" : "Identifier",
@@ -2813,7 +2845,8 @@
       "id" : null,
       "abbreviation" : "FBbt",
       "url_syntax" : "http://flybase.org/cgi-bin/fbcvq.html?query=FBbt:[example_id]",
-      "datatype" : null
+      "datatype" : null,
+      "image_path" : "/image/source-flybase.png"
    },
    "cog_pathway" : {
       "object" : "Identifier",
@@ -2885,7 +2918,8 @@
       "id" : null,
       "abbreviation" : "WB_REF",
       "url_syntax" : "http://www.wormbase.org/db/misc/paper?name=[example_id]",
-      "datatype" : null
+      "datatype" : null,
+      "image_path" : "/image/source-wormbase.png"
    },
    "kegg_pathway" : {
       "object" : "Pathway",
@@ -2899,7 +2933,23 @@
       "id" : null,
       "abbreviation" : "KEGG_PATHWAY",
       "url_syntax" : "http://www.genome.jp/dbget-bin/www_bget?path:[example_id]",
-      "datatype" : null
+      "datatype" : null,
+      "image_path" : "/image/source-kegg.png"
+   },
+   "kegg-path" : {
+      "object" : "Pathway",
+      "uri_prefix" : null,
+      "name" : null,
+      "url_example" : "http://www.genome.jp/dbget-bin/www_bget?path:ot00020",
+      "database" : "KEGG Pathways Database",
+      "example_id" : "KEGG-path:ot00020",
+      "generic_url" : "http://www.genome.jp/kegg/pathway.html",
+      "fullname" : null,
+      "id" : null,
+      "abbreviation" : "KEGG-path",
+      "url_syntax" : "http://www.genome.jp/dbget-bin/www_bget?path:[example_id]",
+      "datatype" : null,
+      "image_path" : "/image/source-kegg.png"
    },
    "pdb" : {
       "object" : "Identifier",
@@ -3094,7 +3144,8 @@
       "abbreviation" : "TrEMBL",
       "is_obsolete" : "true",
       "url_syntax" : "http://www.uniprot.org/uniprot/[example_id]",
-      "datatype" : null
+      "datatype" : null,
+      "image_path" : "/image/source-uniprot.ico"
    },
    "ecogene_g" : {
       "object" : "EcoGene Primary Gene Name",
@@ -3150,7 +3201,8 @@
       "abbreviation" : "SP_SL",
       "id" : null,
       "url_syntax" : "http://www.uniprot.org/locations/[example_id]",
-      "datatype" : null
+      "datatype" : null,
+      "image_path" : "/image/source-uniprot.ico"
    },
    "cas_gen" : {
       "object" : "Identifier",
@@ -3283,7 +3335,8 @@
       "id" : null,
       "abbreviation" : "KEGG",
       "url_syntax" : "http://www.kegg.jp/dbget-bin/www_bget?[example_id]",
-      "datatype" : null
+      "datatype" : null,
+      "image_path" : "/image/source-kegg.png"
    },
    "smart" : {
       "object" : "Accession",
@@ -3416,7 +3469,8 @@
       "abbreviation" : "GeneID",
       "id" : null,
       "url_syntax" : "http://www.ncbi.nlm.nih.gov/sites/entrez?cmd=Retrieve&db=gene&list_uids=[example_id]",
-      "datatype" : null
+      "datatype" : null,
+      "image_path" : "/image/source-ncbi.png"
    },
    "aspgdid" : {
       "object" : "Identifier for AspGD Loci",
@@ -3827,7 +3881,8 @@
       "id" : null,
       "abbreviation" : "MGI",
       "url_syntax" : "http://www.informatics.jax.org/accession/MGI:[example_id]",
-      "datatype" : null
+      "datatype" : null,
+      "image_path" : "/image/source-mgi.png"
    },
    "wikipedia" : {
       "object" : "Page Reference Identifier",
@@ -3855,7 +3910,8 @@
       "abbreviation" : "SP_KW",
       "id" : null,
       "url_syntax" : "http://www.uniprot.org/keywords/[example_id]",
-      "datatype" : null
+      "datatype" : null,
+      "image_path" : "/image/source-uniprot.ico"
    },
    "subtilist" : {
       "object" : "Accession",
@@ -3987,7 +4043,8 @@
       "id" : null,
       "abbreviation" : "UniProtKB",
       "url_syntax" : "http://www.uniprot.org/uniprot/[example_id]",
-      "datatype" : null
+      "datatype" : null,
+      "image_path" : "/image/source-uniprot.ico"
    },
    "ensemblfungi" : {
       "object" : "Identifier",
@@ -4045,7 +4102,8 @@
       "id" : null,
       "abbreviation" : "WB",
       "url_syntax" : "http://www.wormbase.org/db/gene/gene?name=[example_id]",
-      "datatype" : null
+      "datatype" : null,
+      "image_path" : "/image/source-wormbase.png"
    },
    "mtbbase" : {
       "object" : null,
@@ -4088,7 +4146,8 @@
       "id" : null,
       "abbreviation" : "UniParc",
       "url_syntax" : "http://www.uniprot.org/uniparc/[example_id]",
-      "datatype" : null
+      "datatype" : null,
+      "image_path" : "/image/source-uniprot.ico"
    },
    "locusid" : {
       "object" : "Identifier",
@@ -4104,7 +4163,8 @@
       "abbreviation" : "LocusID",
       "id" : null,
       "url_syntax" : "http://www.ncbi.nlm.nih.gov/sites/entrez?cmd=Retrieve&db=gene&list_uids=[example_id]",
-      "datatype" : null
+      "datatype" : null,
+      "image_path" : "/image/source-ncbi.png"
    },
    "genbank" : {
       "object" : "Sequence accession",
@@ -4121,7 +4181,8 @@
       "id" : null,
       "abbreviation" : "GenBank",
       "url_syntax" : "http://www.ncbi.nlm.nih.gov/entrez/viewer.fcgi?db=nucleotide&val=[example_id]",
-      "datatype" : null
+      "datatype" : null,
+      "image_path" : "/image/source-ncbi.png"
    },
    "gdb" : {
       "object" : "Accession",
@@ -4150,7 +4211,8 @@
       "id" : null,
       "abbreviation" : "ENSEMBL_ProteinID",
       "url_syntax" : "http://www.ensembl.org/id/[example_id]",
-      "datatype" : null
+      "datatype" : null,
+      "image_path" : "/image/source-ensembl.png"
    },
    "sgd_ref" : {
       "object" : "Literature Reference Identifier",
@@ -4477,7 +4539,8 @@
       "id" : null,
       "abbreviation" : "KEGG_ENZYME",
       "url_syntax" : "http://www.genome.jp/dbget-bin/www_bget?ec:[example_id]",
-      "datatype" : null
+      "datatype" : null,
+      "image_path" : "/image/source-kegg.png"
    },
    "uniprotkb/trembl" : {
       "object" : "Accession",
@@ -4494,7 +4557,8 @@
       "id" : null,
       "url_syntax" : "http://www.uniprot.org/uniprot/[example_id]",
       "is_obsolete" : "true",
-      "datatype" : null
+      "datatype" : null,
+      "image_path" : "/image/source-uniprot.ico"
    },
    "jcvi_egad" : {
       "object" : "Accession",
@@ -4523,7 +4587,8 @@
       "id" : null,
       "abbreviation" : "PubChem_Substance",
       "url_syntax" : "http://www.ncbi.nlm.nih.gov/entrez/query.fcgi?CMD=search&DB=pcsubstance&term=[example_id]",
-      "datatype" : null
+      "datatype" : null,
+      "image_path" : "/image/source-ncbi.png"
    },
    "multifun" : {
       "object" : null,
@@ -4567,7 +4632,8 @@
       "id" : null,
       "abbreviation" : "WBbt",
       "url_syntax" : null,
-      "datatype" : null
+      "datatype" : null,
+      "image_path" : "/image/source-wormbase.png"
    },
    "vz" : {
       "object" : "Page Reference Identifier",
@@ -4597,7 +4663,8 @@
       "id" : null,
       "abbreviation" : "NCBI_Gene",
       "url_syntax" : "http://www.ncbi.nlm.nih.gov/sites/entrez?cmd=Retrieve&db=gene&list_uids=[example_id]",
-      "datatype" : null
+      "datatype" : null,
+      "image_path" : "/image/source-ncbi.png"
    },
    "ncbigene" : {
       "object" : "Identifier",
@@ -4613,7 +4680,8 @@
       "id" : null,
       "abbreviation" : "NCBIGene",
       "url_syntax" : "http://www.ncbi.nlm.nih.gov/sites/entrez?cmd=Retrieve&db=gene&list_uids=[example_id]",
-      "datatype" : null
+      "datatype" : null,
+      "image_path" : "/image/source-ncbi.png"
    },
 
    "hamap" : {
@@ -4686,7 +4754,8 @@
       "id" : null,
       "abbreviation" : "ORPHANET",
       "url_syntax" : "http://www.orpha.net/consor/cgi-bin/OC_Exp.php?lng=en&Expert=[example_id]",
-      "datatype" : null
+      "datatype" : null,
+      "image_path" : "/image/source-orphanet.png"
    },
    "hpo" : {
       "object" : "Identifier",
@@ -4701,7 +4770,8 @@
       "id" : null,
       "abbreviation" : "HP",
       "url_syntax" : "http://www.human-phenotype-ontology.org/hpoweb/showterm?id=HP:[example_id]",
-      "datatype" : null
+      "datatype" : null,
+      "image_path" : "/image/source-hpo.png"
    },
    "clinvar" : {
       "object" : "Identifier",
@@ -4716,7 +4786,8 @@
       "id" : null,
       "abbreviation" : "ClinVar",
       "url_syntax" : "https://www.ncbi.nlm.nih.gov/clinvar/?term=[example_id]",
-      "datatype" : null
+      "datatype" : null,
+      "image_path" : "/image/source-clinvar.png"
    },
    "biogrid" : {
       "object" : "Identifier",
@@ -4731,7 +4802,8 @@
       "id" : null,
       "abbreviation" : "BioGRID",
       "url_syntax" : "http://thebiogrid.org/[example_id]",
-      "datatype" : null
+      "datatype" : null,
+      "image_path" : "/image/source-biogrid.ico"
    },
    "ctd" : {
       "object" : "Identifier",
@@ -4746,7 +4818,8 @@
       "id" : null,
       "abbreviation" : "CTD",
       "url_syntax" : "http://ctdbase.org/basicQuery.go?bqCat=all&bq=[example_id]",
-      "datatype" : null
+      "datatype" : null,
+      "image_path" : "/image/source-ctd.png"
    },
    "omia" : {
       "object" : "Identifier",
@@ -4776,7 +4849,8 @@
       "id" : null,
       "abbreviation" : "MPD",
       "url_syntax" : "http://phenome.jax.org/db/qp?rtn=views/measplot&brieflook=[example_id]",
-      "datatype" : null
+      "datatype" : null,
+      "image_path" : "/image/source-mpd.jpg"
    },
    "impc" : {
       "object" : "Identifier",
@@ -4791,7 +4865,8 @@
       "id" : null,
       "abbreviation" : "IMPC",
       "url_syntax" : "https://www.mousephenotype.org/data/search?q=[example_id]",
-      "datatype" : null
+      "datatype" : null,
+      "image_path" : "/image/source-impc.png"
    },
    "genereviews" : {
       "object" : "Identifier",
@@ -4806,7 +4881,8 @@
       "id" : null,
       "abbreviation" : "GeneReviews",
       "url_syntax" : "http://www.ncbi.nlm.nih.gov/books/[example_id]",
-      "datatype" : null
+      "datatype" : null,
+      "image_path" : "/image/source-genereviews.png"
    },
    "dbvar" : {
       "object" : "Identifier",
@@ -4837,5 +4913,34 @@
       "url_syntax" : "http://www.informatics.jax.org/reference/[example_id]",
       "datatype" : null
    },
-
+   "decipher" : {
+      "object" : "Identifier",
+      "uri_prefix" : null,
+      "name" : "Decipher",
+      "url_example" : "https://decipher.sanger.ac.uk/patient/12345",
+      "database" : "Decipher",
+      "example_id" : "DECIPHER:12345",
+      "generic_url" : "https://decipher.sanger.ac.uk/patient/",
+      "fullname" : "DatabasE of genomiC varIation and Phenotype in Humans using Ensembl Resources",
+      "id" : null,
+      "abbreviation" : "DECIPHER",
+      "url_syntax" : "https://decipher.sanger.ac.uk/patient/[example_id]",
+      "datatype" : null,
+      "image_path" : "/image/source-decipher.png"
+   },
+   "mygene" : {
+      "object" : "Identifier",
+      "uri_prefix" : null,
+      "name" : "MyGene",
+      "url_example" : "http://mygene.info/v2/query?q=",
+      "database" : "MyGene",
+      "example_id" : "MYGENE:12345",
+      "generic_url" : "http://mygene.info/v2/query?q=",
+      "fullname" : "MyGene.info",
+      "id" : null,
+      "abbreviation" : "MYGENE",
+      "url_syntax" : "http://mygene.info/v2/query?q=[example_id]",
+      "datatype" : null,
+      "image_path" : "/image/source-mygene.png"
+   }
 }

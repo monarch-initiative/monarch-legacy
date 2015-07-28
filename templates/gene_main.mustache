@@ -22,28 +22,7 @@
 	  phenotypically-curated data in the system.
 	</p>
       </div>
-    </div>
-
-    <!-- Annotation Graph-->
-    <div class="col-xs-12 col-sm-12 col-md-12 col-lg-9">
-      <div class="panel panel-default">
-        <div class="disease-gene-container"></div>
-	<p class="datagraph-caption">
-	  This <em>interactive graph</em> displays the number of
-	  disease-gene associations for human diseases per major
-	  disease category.  You can explore the distribution of
-	  disease subtypes by clicking on the wedge symbol, or visit
-	  the disease page itself by clicking on the disease name. You
-	  can navigate back to less-specific disease categories by
-	  clicking on the breadcrumbs listed in the top left-hand
-	  corner.
-	</p>
-      </div>
-    </div>
-
-    <!-- Disease spotlight -->
-    <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
-      <div class="panel panel-default">
+            <div class="panel panel-default">
         <h4>Gene Spotlight: {{{spotlight.link}}}</h4>
         <div>
           <p>{{spotlight.description}}</p>
@@ -56,11 +35,78 @@
             <li>Pathways: {{{spotlight.pathways}}}</li>
             <li>Publications: {{{spotlight.publications}}}</li>
           </ul>
-		</div>
+        </div>
       </div>
+
+      
     </div>
-  </div>
-</div>
+
+    <!-- Annotation Graph-->
+    <div class="col-xs-12 col-sm-12 col-md-12 col-lg-9">
+      <div class="panel panel-default">
+        <div class="dove-container">
+        
+            <div id="graph-loader">
+                       <div class="graph-message">Loading Graph...</div>
+                       <div class="windcatcher-spinner spinner windcatcher">
+                         <div class="blade"></div>
+                         <div class="blade"></div>
+                         <div class="blade"></div>
+                         <div class="blade"></div>
+                         <div class="blade"></div>
+                         <div class="blade"></div>
+                         <div class="blade"></div>
+                         <div class="blade"></div>
+                       </div>
+                       </div>
+          </div>
+        
+	<p class="datagraph-caption">
+	  This <em>interactive graph</em> displays the number of
+	  phenotype associations for genes per major phenotypic category. You can explore
+      the distribution of more specific phenotypes by clicking on
+      the Y axis labels, or visit the phenotype page itself by
+      clicking on the corresponding bar. You can navigate back to
+      less-specific phenotypes by clicking on the breadcrumbs
+      listed in the top left-hand corner.
+	</p>
+      </div>
+      
+      
+      <div class="panel panel-default">
+        <div class="gene-disease-container">
+        
+            <div id="second-loader">
+                       <div class="graph-message">Loading Graph...</div>
+                       <div class="windcatcher-spinner spinner windcatcher">
+                         <div class="blade"></div>
+                         <div class="blade"></div>
+                         <div class="blade"></div>
+                         <div class="blade"></div>
+                         <div class="blade"></div>
+                         <div class="blade"></div>
+                         <div class="blade"></div>
+                         <div class="blade"></div>
+                       </div>
+                       </div>
+          </div>
+        
+    <p class="datagraph-caption">
+      This <em>interactive graph</em> displays the number of
+      disease-gene associations for human diseases per major
+      disease category.  You can explore the distribution of
+      disease subtypes by clicking on the Y axis labels, or visit
+      the disease page itself by clicking on the corresponding bar. You
+      can navigate back to less-specific disease categories by
+      clicking on the breadcrumbs listed in the top left-hand
+      corner.
+    </p>
+      </div>
+      
+    </div>
+
+
+</div></div>
 
 <!-- Footer. -->
 <hr>

@@ -6,7 +6,7 @@
 .twocol-leftcolumn {
     padding-top: 25px; /* offset bs3's -15px margin @element.style */
     float: left;
-    width: 25em;
+    width: 27em;
 }
 
 /*
@@ -32,7 +32,8 @@
 }
 
 .twocol-content {
-    /* margin-left: 25em; */
+    margin-left: 28em;
+    margin-top: -15px;
 }
 
 /*

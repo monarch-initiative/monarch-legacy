@@ -67,7 +67,7 @@ var geneIds =
 exports.testGeneBasic = function() {
     geneIds.forEach(
         function(id) {
-            var json = engine.fetchGeneInfo(id);
+            //var json = engine.fetchGeneInfo(id);
             // todo - check json
         }
     );
@@ -80,6 +80,38 @@ exports.testLiteratureBasic = function() {
     console.log(JSON.stringify(json));
     // todo - check json
 
+}
+
+//Test fetchAssociations
+exports.testFetchAssociations = function() {
+    var filter = {field: 'object_category', value: 'phenotype'};
+    
+    diseaseIds.forEach(
+            function(id) {
+                console.log("Fetching:"+id);
+                engine.fetchAssociations(id, 'subject_closure', filter, 1000);
+                engine.fetchAssociations(id, 'object_closure');
+                engine.fetchAssociations(id, 'subject_closure', null, 10);
+            }
+    );
+    
+    geneIds.forEach(
+            function(id) {
+                console.log("Fetching:"+id);
+                engine.fetchAssociations(id, 'subject_closure', filter, 1000);
+                engine.fetchAssociations(id, 'object_closure');
+                engine.fetchAssociations(id, 'subject_closure', null, 10);
+            }
+        );
+    
+    phenotypeIds.forEach(
+            function(id) {
+                console.log("Fetching:"+id);
+                engine.fetchAssociations(id, 'subject_closure', filter, 1000);
+                engine.fetchAssociations(id, 'object_closure');
+                engine.fetchAssociations(id, 'subject_closure', null, 10);
+            }
+        );
 }
 
 if (require.main == module) {
@@ -99,6 +131,7 @@ if (require.main == module) {
 
     setup = options.setup;
     var conf = "conf/server_config_dev.json";
+    var golrConf = "conf/golr-conf.json";
 
     if (setup != null) {
         if (setup == 'production') {
@@ -108,6 +141,7 @@ if (require.main == module) {
 
     // see: https://docs.google.com/document/d/1ZxGuuvyvMmHVWQ7rIleIRkmbiDTNNP27eAHhxyFWHok/edit#
     bbop.monarch.defaultConfig = JSON.parse(fs.read(conf));
+    bbop.monarch.golrConfig = JSON.parse(fs.read(golrConf));
 
     engine = new bbop.monarch.Engine();
     engine.isProduction = function() { return false }; // always log in test mode

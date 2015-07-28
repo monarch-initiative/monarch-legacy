@@ -10,7 +10,7 @@
 RINGO_MODULE_PATH ?= ../stick/lib:./modules/
 ## TODO/BUG: highly non-canonical location--should be passed as
 ## variable, not hard-coded.
-RINGO_BIN ?= ./ringojs/bin/ringo
+RINGO_BIN ?= ./tools/ringo
 ## Workaround for the above.
 RINGO_CLI_BIN ?= /usr/bin/ringo
 RINGO_PORT ?= 8080
@@ -18,6 +18,9 @@ RINGO_PORT ?= 8080
 ## OWLTools.
 #OWLTOOLS_MAX_MEMORY ?= 1G
 OWLTOOLS_BIN ?= ~/local/src/svn/owltools/OWLTools-Runner/bin/owltools
+
+## Version
+MONARCH_VERSION = 0.1.1
 
 ###
 ### Tests
@@ -31,22 +34,22 @@ apitest: $(patsubst %, test-%, $(APITESTS))
 production-test: $(patsubst %, production-test-%, $(TESTS))
 
 test-%:
-	$(RINGO_BIN) tests/$*.js
+	RINGO_MODULE_PATH=$(RINGO_MODULE_PATH) $(RINGO_BIN) tests/$*.js
 
 production-test-%:
-	$(RINGO_BIN) tests/$*.js -s production
+	RINGO_MODULE_PATH=$(RINGO_MODULE_PATH) $(RINGO_BIN) tests/$*.js -s production
 
 nif-production-url-test:
-	$(RINGO_BIN) tests/urltester.js -s production -c vocabulary,ontoquest,federation,monarch
+	RINGO_MODULE_PATH=$(RINGO_MODULE_PATH) $(RINGO_BIN) tests/urltester.js -s production -c vocabulary,ontoquest,federation,monarch
 
 nif-production-federation-tests:
-	$(RINGO_BIN) tests/urltester.js -s production -c federation
+	RINGO_MODULE_PATH=$(RINGO_MODULE_PATH) $(RINGO_BIN) tests/urltester.js -s production -c federation
 
 nif-production-scigraph-tests:
-	$(RINGO_BIN) tests/urltester.js -s production -c scigraph
+	RINGO_MODULE_PATH=$(RINGO_MODULE_PATH) $(RINGO_BIN) tests/urltester.js -s production -c scigraph
 
 nif-production-federation-search-tests:
-	$(RINGO_BIN) tests/urltester.js -s production -c federation-search
+	RINGO_MODULE_PATH=$(RINGO_MODULE_PATH) $(RINGO_BIN) tests/urltester.js -s production -c federation-search
 
 D2T_YAMLS = $(wildcard conf/rdf-mapping/*.yaml)
 D2T_JSONS = $(D2T_YAMLS:.yaml=.json)
@@ -55,13 +58,13 @@ d2t: $(D2T_JSONS)
 	echo YAMLS: $^
 
 triples: conf/monarch-context.jsonld d2t
-#	$(RINGO_BIN) bin/generate-triples-from-nif.js -c conf/server_config_production.json $(D2T_ARGS) conf/rdf-mapping/*-map.json && ./bin/target-ttl-to-owl.sh
-	$(RINGO_BIN) bin/generate-triples-from-nif.js -c conf/server_config_dev.json $(D2T_ARGS) conf/rdf-mapping/*-map.json && ./bin/target-ttl-to-owl.sh
+#	RINGO_MODULE_PATH=$(RINGO_MODULE_PATH) $(RINGO_BIN) bin/generate-triples-from-nif.js -c conf/server_config_production.json $(D2T_ARGS) conf/rdf-mapping/*-map.json && ./bin/target-ttl-to-owl.sh
+	RINGO_MODULE_PATH=$(RINGO_MODULE_PATH) $(RINGO_BIN) bin/generate-triples-from-nif.js -c conf/server_config_dev.json $(D2T_ARGS) conf/rdf-mapping/*-map.json && ./bin/target-ttl-to-owl.sh
 
 #SERVERCONF := production
 SERVERCONF := dev
 target/%.ttl: conf/rdf-mapping/%-map.json conf/monarch-context.jsonld
-	$(RINGO_BIN) bin/generate-triples-from-nif.js -c conf/server_config_$(SERVERCONF).json $<
+	RINGO_MODULE_PATH=$(RINGO_MODULE_PATH) $(RINGO_BIN) bin/generate-triples-from-nif.js -c conf/server_config_$(SERVERCONF).json $<
 
 target/%.owl: target/%.ttl
 	owltools $< --set-ontology-id http://purl.obolibrary.org/obo/upheno/data/$*.owl -o -f ofn target/$*.owl 
@@ -86,9 +89,10 @@ conf/monarch-context.jsonld: conf/monarch-context.yaml
 solr-schema: ./conf/golr-views/*-config.yaml
 	$(OWLTOOLS_BIN) --solr-config $? --solr-schema-dump | ./scripts/remove-schema-cruft.pl > ./conf/schema.xml
 
-.PHONY: schema-as-json
-golr-conf-as-json:
-	./scripts/confyaml2json.pl -i ./conf/golr-views > ./conf/golr-conf.json
+.PHONY: golr-conf-as-json
+golr-conf-as-json: ./conf/golr-conf.json
+./conf/golr-conf.json: ./conf/golr-views
+	./scripts/confyaml2json.pl -i $< > $@.tmp && mv $@.tmp $@
 
 reconfigure-golr: solr-schema golr-conf-as-json
 
@@ -99,6 +103,14 @@ reconfigure-golr: solr-schema golr-conf-as-json
 .PHONY: docs
 docs:
 	naturaldocs --rebuild-output --input lib/monarch --project lib/.naturaldocs_project/ --output html docs/
+
+###
+### Create exportable JS bundle.
+###
+
+.PHONY: bundle
+bundle:
+	./scripts/release-js.pl -v -i scripts/release-file-map.txt -o js/monarch.js -n monarch -d js -r $(MONARCH_VERSION)
 
 ###
 ### Deployment.

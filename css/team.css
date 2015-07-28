@@ -9,7 +9,8 @@
 }
 .team {
     background-color: #EEE;
-    padding: 20px;
+    padding-left: 20px;
+    padding-right: 20px;
     margin-top: 20px;
     border: #AAA solid 1px;
 }
@@ -25,13 +26,21 @@
     float: right;
     height: 50px;
 }
-#ucsd {
-    height: 40px;
-    margin-top: 10px;
+.teamtochead {
+    display: inline-block;
+    font-size: 25px;
+    font-weight: 700;
+    padding-top: 10px;
 }
-#pitt {
-    padding: 5px 10px;
+.teamtoc {
 }
+/* #ucsd { */
+/*     height: 40px; */
+/*     margin-top: 10px; */
+/* } */
+/* #pitt { */
+/*     padding: 5px 10px; */
+/* } */
 .teammember {
     border-top: #428bca solid 1px;
     padding: 10px 0px;
@@ -48,4 +57,17 @@
     line-height: 24px;
     font-weight: 200;
     font-family: Helvetica, Arial, sans-serif;
+}
+.memberhead {
+    float: left;
+}
+.memberpicture {
+    padding-left: 1em;
+    max-height: 45px;
+    height: auto;
+}
+.contactlogo {
+    padding-right: 0.5em;
+    max-height: 20px;
+    height: auto;    
 }

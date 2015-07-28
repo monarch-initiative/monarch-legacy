@@ -8,4 +8,5 @@ find ./cache/overview -name "*.json" -exec rm -rf {} \;
 find ./cache/phenotype -name "*.json" -exec rm -rf {} \;
 find ./cache/phenotypeprofile -name "*.json" -exec rm -rf {} \;
 rm log
-sh ./start-server.sh >log 2>&1
+
+./start-server.sh dev >log 2>&1

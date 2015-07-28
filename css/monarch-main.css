@@ -44,3 +44,6 @@
     cursor:default;
     z-index:4000 !important
 }
+.bbop-js-ui-hoverable{
+	cursor: text;
+}

@@ -185,7 +185,7 @@
                 format : "json",
                 min_results : 3,
                 must_contain : {
-                    disease_id: "ORPHANET:399", // ID for Huntington's disease
+                    disease_id: "Orphanet:399", // ID for Huntington's disease
                 }
             }
         },
@@ -226,61 +226,6 @@
                 must_contain : {
                     completion: "brain"
                 },
-            }
-        },
-
-
-        // ====================
-        // ONTOQUEST QUERIES
-        // ====================
-        {
-            component : "ontoquest",
-            subcomponent : "concepts",
-            priority : 1,
-            url : "http://nif-services-stage.neuinfo.org/ontoquest-lamhdi/concepts/term/HP_0003325",
-            desc : "Concept details for 'limb girdle muscle weakness''",
-            notes : "Currently just checks for string matches in returned XML",
-            maxTimeMilliseconds : 2000,
-            expects : {
-                format : "xml",
-                raw_contains : 
-                ["Limb-girdle muscle weakness",
-                 "HP:0008971", // alt ID
-                 "Weakness of the limb-girdle muscles"     // definition field
-                ]
-            }
-        },
-
-        {
-            component : "ontoquest",
-            subcomponent : "concepts",
-            priority : 1,
-            url : "http://nif-services-stage.neuinfo.org/ontoquest-lamhdi/concepts/term/ZP_0000001",
-            desc : "Concept details for 'abnormal(ly) quality zebrafish anatomical entity''",
-            notes : "Currently just checks for string matches in returned XML",
-            maxTimeMilliseconds : 2000,
-            expects : {
-                format : "xml",
-                raw_contains : 
-                ["abnormal(ly) quality zebrafish anatomical entity"
-                ]
-            }
-        },
-
-        {
-            component : "ontoquest",
-            subcomponent : "rel",
-            priority : 1,
-            url : "http://nif-services-stage.neuinfo.org/ontoquest-lamhdi/rel/all/MP_0002789?level=1",
-            desc : "Relationships for male pseudohermaphroditism",
-            notes : "Currently just checks for string matches in returned XML",
-            maxTimeMilliseconds : 2000,
-            expects : {
-                format : "xml",
-                raw_contains : [
-                    "HP_0000037", // equivalent HP class
-                    "MP_0002787", // parent class pseudohermaphroditism
-                ],
             }
         },
 

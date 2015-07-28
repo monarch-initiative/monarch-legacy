@@ -1,0 +1,54 @@
+* Overview
+
+  Essentially, the idea is this: there are human language-like files
+  (features) that describe scenarios--pre-conditions, actions, and
+  their results; separately, there is code that maps these statements
+  to python selenium code and assertions (steps).
+
+  More information here: http://pythonhosted.org/behave/index.html
+
+  What this gets you is a pretty nice separation between the tests and
+  the code. The test language is simple and can be built up in such a
+  way that a complete non-programmer can easily write unit tests,
+  snapping them together like legos. The developer makes the legos and
+  run the tests. With the whole BDD thing there is a lot of kool-aid
+  being passed around (actually driving development with this seems a
+  bit mad to me), but being able to have a separation of concerns
+  between the human language-esque tests and the plumbing will allow
+  us to actually build up a body of tests without taking too much away
+  from development time.
+
+* Tags
+
+  These are the tags that we're currently using in the tests (in case
+  you want to check or remove just a subset).
+
+  - ui: tests written for the Monarch-app UI, likely Selenium
+  - data: tests specific to testing the sanity of Monarch data
+
+* Running (as a user)
+
+** Ubuntu 14.04 LTS
+
+  Starting from the monarch-app root directory, using Ubuntu 12.04.
+
+  Setup the python environment in the right place.
+
+  : sudo apt-get -u install python-virtualenv
+  : cd tests/behave
+  : virtualenv `pwd`
+  : source bin/activate
+  : pip install selenium
+  : pip install behave
+  : pip install jsonpath-rw
+
+  The products of these steps should all be hidden by the .gitirnore
+  file.
+
+  Running all tests (the *.feature files) should be as simple as:
+
+  : behave
+
+  Or against the UI/server target of your choice:
+
+  : TARGET=http://localhost:8989 behave

@@ -1,0 +1,18 @@
+<div class="monarch-container">
+	{{{includes.navbar}}}
+	<h1 class="text-center">Class Enrichment analyzer</h1>
+    	<div id="class-enrichment-demo"/>
+</div>
+<script>
+	$(document).ready(
+	    function () {
+	        $("#class-enrichment-demo").classenrichment({hostUrl: "http://duckworth.crbs.ucsd.edu:9000",
+	        											 sampleSetLabel: "Genes sample set:",
+	        											 backgroundLabel: "Bakground:",
+	        											 pathLabel: "Path:",
+	        											 sampleSetDefault: "PTCH1 ptch2",
+	        											 backgroundDefault: "SO:0000704",
+	        											 pathDefault: "<-[:GENO:0000408*0..1]-(feature)<-[:BFO:0000051!*]-(genotype)-[:RO:0002200*]->"});
+	    }
+	);
+</script>

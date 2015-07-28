@@ -1,0 +1,126 @@
+ {{{includes.navbar}}}
+    <div class="monarch-container">
+        <div class="content">
+            <div class="wrapperforfooter">
+            <div class="jumbotron monarch-disease-light">
+                <div id="description">
+                    {{#alerts}}
+                    <div class="alert">
+                      {{{.}}}
+                    </div>
+                    {{/alerts}}
+                    <img id="monarch-logo" class="downloadline" src="/image/logo.png"/>
+                    <h1 class="downloadline">{{type}} {{label}}</h1>
+                    <a class="downloadline btn btn-large btn-default btn-monarch-main monarch-feedback-dark"
+                            href="mailto:info@monarchinitiative.org">Your feedback welcome!</a>
+                     <p>
+                        Source: {{{primary_xref}}}
+                    </p>
+                </div>
+                <div id="categories">
+                    <a href="#associations"><div id="initialtab" class="tab contenttab">Direct Associations ({{associationNum}})</div></a>
+                    <div class="tabcontainer"> 
+  {{#inferredNum}}
+  <a href="#inferred"><div class="tab contenttab">Inferred Associations ({{inferredNum}})</div></a>
+  {{/inferredNum}}
+  {{^inferredNum}}
+  <div class="tab greyed-out">Inferred Associations (0)</div>
+  {{/inferredNum}}
+</div>
+                </div>
+            </div>
+            <div id="complete-info">
+            
+            <div id="associations" class="first category">
+  <div id="r3" class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
+      
+    <!-- Quiet rollover. -->
+    <div class="panel panel-default">
+      <!-- <div class="panel-heading"> -->
+        <!--   <h3 class="panel-title">BS3 Tests</h3> -->
+      <!-- </div> -->
+      <div class="panel-body">
+
+        <div id="results-area" class="row">
+                      
+          <div class="col-xs-12 col-sm-12 col-md-2 col-lg-2">
+            <div>
+              <h4>Filter results</h4>
+        
+              <div id="associations-table-filter" class="bs3filter">
+                Loading...
+             </div>
+        
+            </div>      
+          </div>
+        
+          <div class="col-xs-12 col-sm-12 col-md-10 col-lg-10">
+          
+            <div id="associations-table-pager-top" class="bs3pager">
+            </div>
+            <div id="associations-table">
+              pending...
+            </div>
+            <div id="associations-table-pager-bottom" class="bs3pager-bottom">
+            </div>
+          
+          </div>
+
+       </div>
+
+      <!-- <div class="clearfix"></div> -->
+      </div>
+    </div>
+  </div>
+</div>
+
+<div id="inferred" class="category">
+  <div style="font-weight:bold; font-size:15px; padding-bottom:5px;">Association is used as evidence in other associations</div>
+  
+  <div id="r3" class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
+      
+    <!-- Quiet rollover. -->
+    <div class="panel panel-default">
+      <!-- <div class="panel-heading"> -->
+        <!--   <h3 class="panel-title">BS3 Tests</h3> -->
+      <!-- </div> -->
+      <div class="panel-body">
+
+        <div id="results-area" class="row">
+                      
+          <div class="col-xs-12 col-sm-12 col-md-2 col-lg-2">
+            <div>
+              <h4>Filter results</h4>
+        
+              <div id="inferred-table-filter" class="bs3filter">
+                Loading...
+             </div>
+        
+            </div>      
+          </div>
+        
+          <div class="col-xs-12 col-sm-12 col-md-10 col-lg-10">
+          
+            <div id="inferred-table-pager-top" class="bs3pager">
+            </div>
+            <div id="inferred-table">
+              pending...
+            </div>
+            <div id="inferred-table-pager-bottom" class="bs3pager-bottom">
+            </div>
+          
+          </div>
+
+       </div>
+
+      <!-- <div class="clearfix"></div> -->
+      </div>
+    </div>
+  </div>
+</div>
+
+            </div>
+            </div> <!-- closes wrapperforfooter -->
+            {{{includes.footer}}}
+        </div>
+    </div>

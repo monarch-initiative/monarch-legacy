@@ -24,7 +24,7 @@ exports.testDiseasePhenotype = function() {
 var equivSets =
     [
         ['OMIM:107320', // antiphospholipid syndrome
-         'DOID:2988',  // antiphospholipid syndrome
+         //'DOID:2988',  // antiphospholipid syndrome
          'MESH:C531622']
     ]
      
