@@ -983,7 +983,6 @@ monarch.dovechart.prototype.setYAxisText = function(histogram,data, barGroup, ba
         self.tooltip.style("display", "none");
     })
     .on("click", function(d){
-        console.log(self);
         self.getDataAndTransitionOnClick(d, histogram, data, barGroup, bar);
     })
     .style("text-anchor", "end")
@@ -2170,7 +2169,16 @@ monarch.builder.tree_builder.prototype.getTaxonMap = function(){
         "NCBITaxon:57486" : "Mouse",
         "NCBITaxon:39442" : "Mouse",
         "NCBITaxon:10092" : "Mouse",
-        "NCBITaxon:10091" : "Mouse"
+        "NCBITaxon:10091" : "Mouse",
+        "NCBITaxon:9823" : "Pig",
+        "NCBITaxon:10116" : "Rat",
+        "NCBITaxon:9913" : "Cow",
+        "NCBITaxon:6239" : "Worm",
+        "NCBITaxon:7227" : "Fly",
+        "NCBITaxon:8364" : "Frog",
+        "NCBITaxon:9544" : "Monkey",
+        "NCBITaxon:9258" : "Platypus",
+        "NCBITaxon:9031" : "Chicken"
     };
 };
 
@@ -2218,9 +2226,9 @@ monarch.chart.barchart = function(config, html_div){
         .range([self.x0, config.width]);
   
     //Bar colors
+    barColors = config.color.bars;
     self.color = d3.scale.ordinal()
-        .range([config.color.first,config.color.second,config.color.third,
-                config.color.fourth,config.color.fifth,config.color.sixth]);
+        .range(Object.keys(barColors).map(function(k) { return barColors[k] }));
 
     self.xAxis = d3.svg.axis()
         .scale(self.x)

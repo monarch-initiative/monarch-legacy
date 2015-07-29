@@ -23,51 +23,58 @@
 	<div class="panel-body">
 
 	  <div id="monarch-carousel" class="monarch-carousel">
+
 	    <div class="monarch-carousel-item monarch-carousel-item-selected">
-	      <p>
-		<img src="/image/carousel-diseases-0.5.jpg" class="monarch-carousel-embedded-image" alt="Diseases" />
-		<strong>Learn about Mendelian diseases</strong><br />
+			<a role="button" href="/disease">
+				<img src="/image/carousel-diseases-0.5.jpg" class="monarch-carousel-embedded-image" alt="Diseases" />
+				<span class="monarch-carousel-explore-title">Learn about Mendelian diseases &raquo;</span>
+			</a>
+			<br />
       		Diseases described by collections of phenotypes can be
       		compared to each other and to animal models to
       		investigate genetic underpinnings.
-		<a class="btn btn-primary btn-mini" role="button" href="/disease">More &raquo;</a>
-	      </p>
 	    </div>
+
 	    <div class="monarch-carousel-item monarch-carousel-item-unselected">
-	      <p>
-		<img src="/image/carousel-phenotypes-0.5.jpg" class="monarch-carousel-embedded-image" alt="Phenotypes" />
-      		<strong>Explore phenotypes</strong><br /> Similar
+				<a role="button" href="/phenotype">
+					<img src="/image/carousel-phenotypes-0.5.jpg" class="monarch-carousel-embedded-image" alt="Phenotypes" />
+					<span class="monarch-carousel-explore-title">Explore phenotypes &raquo;</span>
+				</a>
+      	<br />
+      		Similar
       		phenotypes may be observed in various diseases and
       		across species.
-		<a class="btn btn-primary btn-mini" role="button" href="/phenotype">More &raquo;</a>
-	      </p>
+					&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;
 	    </div>
+
 	    <div class="monarch-carousel-item monarch-carousel-item-unselected monarch-carousel-item-largest">
-	      <p>
-		<img src="/image/carousel-models-0.5.jpg" class="monarch-carousel-embedded-image" alt="Models" />
-      		<strong>Find models of disease</strong><br /> In vitro
-      		and in vivo disease models can recapitulate some or
-      		all phenotypes of human disease.  Comparison of animal
-      		model phenotypes with human disease can suggest
-      		candidate genes.
-		<a class="btn btn-primary btn-mini" role="button" href="/model">More &raquo;</a>
-	      </p>
+				<a role="button" href="/model">
+					<img src="/image/carousel-models-0.5.jpg" class="monarch-carousel-embedded-image" alt="Models" />
+					<span class="monarch-carousel-explore-title">Find models of disease &raquo;</span>
+				</a>
+    		<br/>
+    		In vitro
+    		and in vivo disease models can recapitulate some or
+    		all phenotypes of human disease.  Comparison of animal
+    		model phenotypes with human disease can suggest
+    		candidate genes.
 	    </div>
+
 	    <div class="monarch-carousel-item monarch-carousel-item-unselected">
-	      <p>
-		<img src="/image/carousel-genes-0.5.jpg" class="monarch-carousel-embedded-image" alt="Genes" />
-      		<strong>Understand the genetics</strong><br />
+				<a role="button" href="/gene">
+					<img src="/image/carousel-genes-0.5.jpg" class="monarch-carousel-embedded-image" alt="Genes" />
+					<span class="monarch-carousel-explore-title">Understand the genetics &raquo;</span>
+				</a>
+ 				<br />
       		Variations in genes and other genomic features are
       		often associated with diseases and variant phenotypes.
       		Learn about the phenotypes associated with your
       		favorite gene.
-		<a class="btn btn-primary btn-mini" role="button" href="/gene">More &raquo;</a>
-	      </p>
 	    </div>
 	  </div>
 
 	  <!-- The weird tabber thing. -->
-	  <div class="clearfix"></div>
+	  <div style="clear:both;"></div>
 	  <div id="monarch-tabber" class="container monarch-tabber">
 	    <div class="row monarch-tabber-controls">
 	      <div class="col-xs-12 col-sm-6 col-md-6 col-lg-3 monarch-tabber-control">
@@ -157,14 +164,41 @@
 
 	</div>
 	<div id="twitter" class="col-xs-12 col-sm-6 col-md-6 col-lg-6">
+	    <a  class="twitter-timeline"
+	    	href="https://twitter.com/search?q=%40MonarchInit+OR+%23raredisease+OR+%40GA4GH+OR+%40phenomecentral"
+	    	data-widget-id="527567015918051328"
+	    	data-chrome=""
+	    	height="340"
+	    	width="520">
+	    	Loading Tweets about "@MonarchInit OR #raredisease OR @GA4GH OR @phenomecentral"
+	    </a>
 
-	  <p>
-	    <a class="twitter-timeline" href="https://twitter.com/search?q=%40MonarchInit+OR+%23raredisease+OR+%40GA4GH+OR+%40phenomecentral" data-widget-id="527567015918051328">Tweets about "@MonarchInit OR #raredisease OR @GA4GH OR @phenomecentral"</a>
+<script>
+// From https://dev.twitter.com/web/javascript/loading - 7/26/2015
+
+window.twttr = (function(d, s, id) {
+  var js, fjs = d.getElementsByTagName(s)[0],
+    t = window.twttr || {};
+  if (d.getElementById(id)) return t;
+  js = d.createElement(s);
+  js.id = id;
+  js.src = "https://platform.twitter.com/widgets.js";
+  fjs.parentNode.insertBefore(js, fjs);
+
+  t._e = [];
+  t.ready = function(f) {
+    t._e.push(f);
+  };
+
+  return t;
+}(document, "script", "twitter-wjs"));
+</script>
+
+<!--
 	    <script>!function(d,s,id){var js,fjs=d.getElementsByTagName(s)[0],p=/^http:/.test(d.location)?'http':'https';if(!d.getElementById(id)){js=d.createElement(s);js.id=id;js.src=p+"://platform.twitter.com/widgets.js";fjs.parentNode.insertBefore(js,fjs);}}(document,"script","twitter-wjs");</script>
-	  </p>
-
+-->
+	  </div>
 	</div>
-      </div>
 
     </div>
 
@@ -175,15 +209,10 @@
       <div>
 	<div class="panel panel-default"> <!-- style="padding-bottom: 0;"> -->
 	  <div class="panel-heading">
-	    <h3 class="panel-title">Search Monarch Data</h3>
+	    <h3 class="panel-title">Advanced Phenotype Search</h3>
 	  </div>
 	  <div class="panel-body">
-
-	    <!-- <p> -->
-	    <!--   Search Monarch data. -->
-	    <!-- </p> -->
-	    <!-- class="navbar-form" -->
-
+<!--
 	    <h5><strong>Basic Search</strong></h5>
 	    <p>
 	      Select from autocomplete and jump to relevant pages.
@@ -192,73 +221,32 @@
 	      <form id="home_search_form"
 		    action="/search"
 		    role="form">
-		
-		<div class="input-group">
-		  
-		  <input id="home_search"
-			 type="text"
-			 class="form-control"
-			 placeholder="Search (e.g. Parkinson's)" />
-		  <span class="input-group-btn">
-                    <button class="btn btn-primary" type="submit">Go</button>
-		  </span>
-		</div>
 
-		<!-- <select class="form-control"> -->
-		<!--   <option>1</option> -->
-		<!--   <option>2</option> -->
-		<!--   <option>3</option> -->
-		<!--   <option>4</option> -->
-		<!--   <option>5</option> -->
-		<!-- </select> -->
-		
-		<!-- <div class="panel panel-default" style="padding-bottom: 0;"> -->
-		<!--   <div class="panel-heading" style="margin-bottom: 0;"> -->
-		<!--     <span><small><a data-toggle="collapse" data-target="#collapseOne" aria-expanded="true" aria-controls="collapseOne">Advanced options</a></small></span> -->
-		<!--   </div> -->
-		<!--   <div id="collapseOne" class="panel-collapse collapse"> -->
-		<!--     <div class="panel-body"> -->
-		
-		<!--       <div class="radio"> -->
-		<!-- 	<label> -->
-		<!-- 	  <input type="radio" name="optionsRadios" id="optionsRadios1" value="option1" checked> -->
-		<!-- 	  Option one -->
-		<!-- 	</label> -->
-		<!--       </div> -->
-		<!--       <div class="radio"> -->
-		<!-- 	<label> -->
-		<!-- 	  <input type="radio" name="optionsRadios" id="optionsRadios2" value="option2"> -->
-		<!-- 	  Option two -->
-		<!-- 	</label> -->
-		<!--       </div> -->
-		<!--       <div class="radio disabled"> -->
-		<!-- 	<label> -->
-		<!-- 	  <input type="radio" name="optionsRadios" id="optionsRadios3" value="option3" disabled> -->
-		<!-- 	  Option three -->
-		<!-- 	</label> -->
-		<!--       </div> -->
-		
-		<!--     </div> -->
-		<!--   </div> -->
-		<!-- </div> -->
+			<div class="input-group">
 
+			<input id="home_search"
+				type="text"
+				class="form-control"
+				placeholder="Search (e.g. Parkinson's)" />
+				<span class="input-group-btn">
+				    <button class="btn btn-primary" type="submit">Go</button>
+				</span>
+			</div>
 	      </form>
 	    </p>
+-->
 
-	    <h5><strong>Advanced Phenotype Search</strong></h5>
 	    <p class="">
-	      Find models and phenotypes similar to a set of
-	      abnormal phenotypes of interest.
+	      Find models and phenotypes similar to a set of abnormal phenotypes of interest and then visualize their overlap.
 	    </p>
-	    <p class="">
-	      <a class="btn btn-primary" href="/analyze/phenotypes">
-		Go to Advanced Search &raquo;
+	    <div class="center-block text-center">
+	      <a class="btn btn-primary center-block" href="/analyze/phenotypes">
+			Go to Phenotype Profile Analysis &raquo;
 	      </a>
-	    </p>	    
-
+	    </div>
 	  </div>
 	</div>
-      </div>
+	</div>
 
       <!-- Placeholder. -->
       <div class="row">

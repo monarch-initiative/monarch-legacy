@@ -13,6 +13,11 @@
                     <h1 class="downloadline">Gene: {{label}}</h1>
                     <a class="downloadline btn btn-large btn-default btn-monarch-main monarch-feedback-dark"
                             href="mailto:info@monarchinitiative.org">Your feedback welcome!</a>
+                   <p>
+                    {{#taxon}}
+                    Organism: {{{taxon_xref}}}<br/>
+                    {{/taxon}}
+                    </p>
                 </div>
                 <div id="categories">
                     {{{includes.phenogrid_anchor}}}
@@ -23,11 +28,21 @@
                     {{{includes.variant_anchor}}}
                     {{{includes.homolog_anchor}}}
                     {{{includes.pathway_anchor}}}
-                    <a href="#overview"><div class="tab contenttab">Info</div></a>
+                    {{#hasPhenotypes}}
+                    <a href="#overview"><div class="tab contenttab">Overview</div></a>
+                    {{/hasPhenotypes}}
+                    {{^hasPhenotypes}}
+                    <a href="#overview"><div id="initialtab" class="tab contenttab">Overview</div></a>
+                    {{/hasPhenotypes}}
                 </div>
             </div>
             <div id="complete-info">
+                {{#hasPhenotypes}}
                 <div id="overview" class="category">
+                {{/hasPhenotypes}}
+                {{^hasPhenotypes}}
+                <div id="overview" class="first category">
+                {{/hasPhenotypes}}
                     <h3>IDs</h3>
                         <div class="ids">
                             <b>URI:</b> <a href="{{{uri}}}">{{{uri}}}</a>
@@ -48,6 +63,11 @@
                                 <b>Cross References:</b> {{{xrefs}}}
                             </div>
                         {{/hasXrefs}}
+                         {{#hasEqual}}
+                            <div class="ids">
+                                <b>Equivalent IDs:</b> {{{equal_ids}}}
+                            </div>
+                        {{/hasEqual}}
                     </div>
                     {{{includes.phenotype_table}}}
                     {{{includes.disease_table}}}
@@ -56,7 +76,12 @@
                     {{{includes.variant_table}}}
                     {{{includes.homolog_table}}}
                     {{{includes.pathway_table}}}
+                    {{#hasPhenotypes}}
                     <div id="compare" class="first category">
+                    {{/hasPhenotypes}}
+                    {{^hasPhenotypes}}
+                    <div id="compare" class="category">
+                    {{/hasPhenotypes}}
                       <div id="phen_vis"></div>
                     </div>
                 </div>

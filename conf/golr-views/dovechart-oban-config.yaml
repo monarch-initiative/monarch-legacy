@@ -436,6 +436,12 @@ fields:
     id: citation
     property: []
     type: string
+  - cardinality: multi
+    description: Ontologies that generated evidence axioms
+    display_name: Defined
+    id: is_defined_by
+    property: []
+    type: string
 filter_weights: subject_taxon^7.5 object_taxon^4.7
 id: dovechart
 result_weights: subject^7.0 subject_category^6.2 subject_taxon^6.5 relation^6.0  object^5.0 object_category^4.5 object_taxon^4.2 evidence^4.0 source^3.5

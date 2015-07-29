@@ -1,0 +1,55 @@
+    {{{includes.navbar}}}
+    <div class="monarch-container">
+        <div class="content">
+            <div class="wrapperforfooter">
+            <div class="jumbotron monarch-disease-light">
+                <div id="description">
+                    <img id="monarch-logo" class="downloadline" src="/image/logo.png"/>
+                    <h1 class="downloadline">Case: {{label}}</h1>
+                    <a class="downloadline btn btn-large btn-default btn-monarch-main monarch-feedback-dark"
+                            href="mailto:info@monarchinitiative.org">Your feedback welcome!</a>
+                </div>
+                <div id="categories">
+                    {{{includes.phenogrid_anchor}}}
+                    <a href="#overview"><div class="tab contenttab">Info</div></a>
+                   
+                   
+                </div>
+            </div>
+            <div id="complete-info">
+                <div id="compare" class="first category">
+                   <div id="phen_vis"></div>
+                </div>
+                                <div id="overview" class="category">
+                                       <div class="ids">
+                    <b>Source:</b>
+                        {{{source}}}
+                    </div>
+                    
+                    {{#hasFam}}
+                    <div class="ids">
+                        <b>Family:</b>
+                        {{{fam}}}
+                    </div>
+                    {{/hasFam}}
+                    {{#hasRelated}}
+                      <div class="ids">
+                        <b>DNA Samples/Cell Lines:</b> {{{rel}}}
+                       </div>  
+                    {{/hasRelated}}
+                    
+                    {{#hasGeno}}
+                      <div class="ids">
+                        <b>Genotypes:</b> {{{geno}}}
+                       </div>  
+                    {{/hasGeno}}
+                    
+
+                </div>
+                
+           
+            </div>
+            </div> <!-- closes wrapperforfooter -->
+            {{{includes.footer}}}
+        </div>
+    </div>

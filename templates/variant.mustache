@@ -13,22 +13,43 @@
                     <h1 class="downloadline">Variant: {{label}}</h1>
                     <a class="downloadline btn btn-large btn-default btn-monarch-main monarch-feedback-dark"
                             href="mailto:info@monarchinitiative.org">Your feedback welcome!</a>
+                    <p>
+                    {{#taxon}}
+                    Organism: {{{taxon_xref}}}<br/>
+                    {{/taxon}}
+                    </p>
                 </div>
                 <div id="categories">
                     {{{includes.phenogrid_anchor}}}
-                    <a href="#overview"><div class="tab contenttab">Info</div></a>
                     {{{includes.phenotype_anchor}}}
+                    {{{includes.gene_anchor}}}
                     {{{includes.disease_anchor}}}
                     {{{includes.model_anchor}}}
                     {{{includes.genotype_anchor}}}
                     {{{includes.pathway_anchor}}}
+                    {{#hasPhenotypes}}
+                    <a href="#overview"><div class="tab contenttab">Overview</div></a>
+                    {{/hasPhenotypes}}
+                    {{^hasPhenotypes}}
+                    <a href="#overview"><div id="initialtab" class="tab contenttab">Overview</div></a>
+                    {{/hasPhenotypes}}
                 </div>
             </div>
             <div id="complete-info">
-                <div id="compare" class="first category">
-                    <div id="phen_vis"></div>
-                </div>
-                <div id="overview" class="category">
+               {{#hasPhenotypes}}
+                 <div id="compare" class="first category">
+               {{/hasPhenotypes}}
+               {{^hasPhenotypes}}
+                  <div id="compare" class="category">
+               {{/hasPhenotypes}}
+                      <div id="phen_vis"></div>
+                  </div>
+                {{#hasPhenotypes}}
+                  <div id="overview" class="category">
+                {{/hasPhenotypes}}
+                {{^hasPhenotypes}}
+                  <div id="overview" class="first category">
+                {{/hasPhenotypes}}
                     <h3>IDs</h3>
                         <div class="ids">
                             <b>URI:</b> <a href="{{{uri}}}">{{{uri}}}</a>
@@ -57,9 +78,15 @@
                                 <b>Cross References:</b> {{{xrefs}}}
                             </div>
                         {{/hasXrefs}}
+                        {{#hasEqual}}
+                            <div class="ids">
+                                <b>Equivalent IDs:</b> {{{equal_ids}}}
+                            </div>
+                        {{/hasEqual}}
                     </div>
                     {{{includes.phenotype_table}}}
                     {{{includes.disease_table}}}
+                    {{{includes.gene_table}}}
                     {{{includes.model_table}}}
                     {{{includes.genotype_table}}}
                     {{{includes.pathway_table}}}
