@@ -13,6 +13,11 @@
                     <h1 class="downloadline">Variant: {{label}}</h1>
                     <a class="downloadline btn btn-large btn-default btn-monarch-main monarch-feedback-dark"
                             href="mailto:info@monarchinitiative.org">Your feedback welcome!</a>
+                    <p>
+                    {{#taxon}}
+                    Organism: {{{taxon_xref}}}<br/>
+                    {{/taxon}}
+                    </p>
                 </div>
                 <div id="categories">
                     {{{includes.phenogrid_anchor}}}
@@ -73,6 +78,11 @@
                                 <b>Cross References:</b> {{{xrefs}}}
                             </div>
                         {{/hasXrefs}}
+                        {{#hasEqual}}
+                            <div class="ids">
+                                <b>Equivalent IDs:</b> {{{equal_ids}}}
+                            </div>
+                        {{/hasEqual}}
                     </div>
                     {{{includes.phenotype_table}}}
                     {{{includes.disease_table}}}
