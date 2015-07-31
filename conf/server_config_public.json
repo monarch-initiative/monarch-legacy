@@ -1,7 +1,7 @@
 {
     "type" : "public",
     
-    "app_base" : "http://monarchinitiative.org",
+    "app_base" : "",
     
     "scigraph_data_url" : "http://datagraph.monarchinitiative.org/"
     

@@ -1,7 +1,7 @@
 {
     "type" : "production",
     
-    "app_base" : "http://monarchinitiative.org",
+    "app_base" : "",
     
     "scigraph_url" : "http://lurch.crbs.ucsd.edu:9000/scigraph/",
     

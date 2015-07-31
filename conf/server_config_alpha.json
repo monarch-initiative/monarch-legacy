@@ -1,7 +1,7 @@
 {
     "type" : "alpha",
     
-    "app_base" : "http://localhost:8080",
+    "app_base" : "",
     
     "scigraph_url" : "http://geoffrey.crbs.ucsd.edu:9000/scigraph/",
     
