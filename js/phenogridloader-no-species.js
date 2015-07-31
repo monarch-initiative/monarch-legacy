@@ -10,7 +10,7 @@ function loadPhenogrid(){
         var phenotype_list = [];
         var phenogridContainer = document.getElementById('phen_vis');
         jQuery.ajax({
-            url : '/' + disease_id + '/phenotype_list.json',
+            url : '/' + disease_id + '/phenotype_list.json', // Fetching this list takes several seconds which causes empty page conten - Zhou
             async : true,
             dataType : 'json',
             //timeout : 180000,
@@ -23,6 +23,8 @@ function loadPhenogrid(){
                 Phenogrid.createPhenogridForElement(phenogridContainer, phenogridOpts);
             },
             success : function(data) {
+                // Phenogrid will remove the duplicated phenotypes in this monarch-app returned phenotype_list
+                // before sending the ajax POST to simsearch - Zhou
                 phenotype_list = data.phenotype_list;
 
                 // imagePath and htmlPath will overwrite the imagePath and htmlPath in phenogrid.js

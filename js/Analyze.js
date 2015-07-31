@@ -739,7 +739,9 @@ function AnalyzeInit(uploaded_data){
 			});
 	*/	
 
-        // New way - Zhou		
+        // New way - Zhou
+        // Phenogrid will remove the duplicated phenotypes in this monarch-app returned phenotype_list
+        // before sending the ajax POST to simsearch - Zhou
 	window.onload = function() {
 		Phenogrid.createPhenogridForElement(document.getElementById('phen_vis'), {
 			phenotypeData: phenotypes,
