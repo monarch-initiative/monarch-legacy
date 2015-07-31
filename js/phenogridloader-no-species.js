@@ -23,6 +23,8 @@ function loadPhenogrid(){
                 Phenogrid.createPhenogridForElement(phenogridContainer, phenogridOpts);
             },
             success : function(data) {
+                // Phenogrid will remove the duplicated phenotypes in this monarch-app returned phenotype_list
+                // before sending the ajax POST to simsearch - Zhou
                 phenotype_list = data.phenotype_list;
 
                 // imagePath and htmlPath will overwrite the imagePath and htmlPath in phenogrid.js
