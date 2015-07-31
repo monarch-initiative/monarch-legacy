@@ -10,7 +10,7 @@ function loadPhenogrid(){
         var phenotype_list = [];
         var phenogridContainer = document.getElementById('phen_vis');
         jQuery.ajax({
-            url : '/' + disease_id + '/phenotype_list.json',
+            url : '/' + disease_id + '/phenotype_list.json', // Fetching this list takes several seconds which causes empty page conten - Zhou
             async : true,
             dataType : 'json',
             //timeout : 180000,
