@@ -1,6 +1,6 @@
 <!-- Top-level internal container. -->
 <!-- <div class="container-fluid" class="conflict-top-container-margin"> -->
-<div class="container-fluid" style="margin: 0.8em;">
+<div id="monarch-home-container" class="container-fluid" style="margin: 0.8em;margin-top:0.3em;padding:0;">
 
   <div class="jumbotron monarch-home-splash">
     <span class="monarch-home-splash-text">
@@ -16,81 +16,77 @@
       <!-- Quiet rollover. -->
       <!-- WARNING: There is an HTML/CSS trick in here--the largest -->
       <!-- item is in "relative" position and the rest are in "absolute". -->
-      <div class="panel-body" style="margin-top:-2px;">
-        <div id="monarch-tabber" class="container monarch-tabber">
-
+      <div class="panel-body" style="margin-top:-20px;">
+        <div id="monarch-tabber" class="monarch-tabber">
           <div class="row monarch-tabber-controls">
-            <div class="col-12 col-lg-4 monarch-tabber-control">
-              <button class="btn btn-block btn-sm monarch-tabber-on-item monarch-tabber-control-btn">
-                <img src="/image/carousel-monarch.png"
-                     class="monarch-nav-embedded-image" alt="Monarch" />
+            <div class="monarch-tabber-control">
+              <a href="/page/about" class="btn btn-block btn-sm monarch-tabber-on-item monarch-tabber-control-btn">
+                <span class="monarch-nav-item-title">Overview</span>
                 <br/>
-                <span class="monarch-nav-item-title">Monarch</span>
-              </button>
+                <img src="/image/carousel-monarch.png"
+                     class="monarch-nav-embedded-image" alt="Overview" />
+              </a>
             </div>
 
-            <div class="col-3 col-lg-2 monarch-tabber-control">
-              <button class="btn btn-block btn-sm monarch-tabber-off-item monarch-tabber-control-btn">
+            <div class="monarch-tabber-control">
+              <a href="/disease" class="btn btn-block btn-sm monarch-tabber-off-item monarch-tabber-control-btn">
+                <span class="monarch-nav-item-title">Diseases</span>
+                <br/>
                 <img src="/image/carousel-diseases.png"
                      class="monarch-nav-embedded-image" alt="Diseases" />
-                <br/>
-                Diseases
-              </button>
+              </a>
             </div>
 
-            <div class="col-3 col-lg-2 monarch-tabber-control">
-              <button class="btn btn-block btn-sm monarch-tabber-off-item monarch-tabber-control-btn">
+            <div class="monarch-tabber-control">
+              <a href="/phenotype" class="btn btn-block btn-sm monarch-tabber-off-item monarch-tabber-control-btn">
+                <span class="monarch-nav-item-title">Phenotypes&nbsp;</span>
+                <br/>
                 <img src="/image/carousel-phenotypes.png"
                      class="monarch-nav-embedded-image" alt="Phenotypes" />
-                <br/>
-                <span>Phenotypes</span>
-              </button>
+              </a>
             </div>
 
-            <div class="col-3 col-lg-2 monarch-tabber-control">
-              <button class="btn btn-block btn-sm monarch-tabber-off-item monarch-tabber-control-btn">
+            <div class="monarch-tabber-control">
+              <a href="/model" class="btn btn-block btn-sm monarch-tabber-off-item monarch-tabber-control-btn">
+                <span class="monarch-nav-item-title">Models</span>
+                <br/>
                 <img src="/image/carousel-models.png" class="monarch-nav-embedded-image" alt="Models" />
-                <!-- Models of diseases -->
-                <br/>
-                <span>Models</span>
-              </button>
+              </a>
             </div>
 
-            <div class="col-3 col-lg-2 monarch-tabber-control">
-              <button class="btn btn-block btn-sm monarch-tabber-off-item monarch-tabber-control-btn">
+            <div class="monarch-tabber-control">
+              <a href="/gene" class="btn btn-block btn-sm monarch-tabber-off-item monarch-tabber-control-btn">
+                <span class="monarch-nav-item-title">Genes</span>
+                <br/>
                 <img src="/image/carousel-genes.png"
                      class="monarch-nav-embedded-image" alt="Genetics" />
-                <!-- Understand genetics -->
-                <br/>
-                <span>Genes</span>
-              </button>
+              </a>
             </div>
-
           </div> <!-- monarch-tabber-controls -->
         </div> <!-- monarch-tabber -->
+      </div>
 
-        <hr class="monarch-home-carousel-separator-hr"/>
+      <hr class="monarch-home-carousel-separator-hr"/>
 
+      <div class="panel-body">
         <div id="monarch-carousel" class="monarch-carousel">
-
-          <div class="monarch-carousel-item monarch-carousel-item-selected">
+          <div class="monarch-carousel-item monarch-carousel-item-selected monarch-carousel-item-largest">
             <div>
+              <a role="button" href="/page/about">
+                <div class="btn btn-block btn-default monarch-carousel-explore-title">Explore, Discover, Understand with Monarch</div>
+              </a>
+
+              <hr class="monarch-home-carousel-item-hr"/>
+
               <div class="monarch-home-carousel-item-text">
                 Monarch enables navigation across a rich landscape of
                 phenotypes, diseases, models, and genes for
                 translational research.
               </div>
-
-              <hr class="monarch-home-carousel-item-hr"/>
-
-              <a role="button" href="/page/about">
-                <div class="btn btn-block btn-default monarch-carousel-explore-title">Learn about Monarch</div>
-              </a>
-
             </div>
 
             <div class="center-block text-center" style="clear:both;">
-              <img class="monarch-carousel-item-image" src="/image/homepage.png"
+              <img class="monarch-carousel-item-image" src="/image/carousel-overview.png"
                    class="img-responsive"
                    alt="Explore Monarch" />
             </div>
@@ -98,18 +94,17 @@
 
           <div class="monarch-carousel-item monarch-carousel-item-unselected">
             <div>
+              <a role="button" href="/disease">
+                <div class="btn btn-block btn-default monarch-carousel-explore-title">Learn about Mendelian diseases</div>
+              </a>
+
+              <hr class="monarch-home-carousel-item-hr"/>
+
               <div class="monarch-home-carousel-item-text">
                 Diseases described by collections of phenotypes can be
                 compared to each other and to animal models to
                 investigate genetic underpinnings.
               </div>
-
-              <hr class="monarch-home-carousel-item-hr"/>
-
-              <a role="button" href="/disease">
-                <div class="btn btn-block btn-default monarch-carousel-explore-title">Learn about Mendelian diseases</div>
-              </a>
-
             </div>
 
             <div class="center-block text-center" style="clear:both;">
@@ -121,18 +116,15 @@
 
           <div class="monarch-carousel-item monarch-carousel-item-unselected">
             <div>
-              <div class="monarch-home-carousel-item-text">
-                Similar phenotypes may be observed in various diseases and across species.
-                &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;
-                &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;
-                &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;
-              </div>
-
-              <hr class="monarch-home-carousel-item-hr"/>
-
               <a role="button" href="/phenotype">
                 <div class="btn btn-block btn-default monarch-carousel-explore-title">Explore phenotypes</div>
               </a>
+
+              <hr class="monarch-home-carousel-item-hr"/>
+
+              <div class="monarch-home-carousel-item-text">
+                Similar phenotypes may be observed in various diseases and across species.
+              </div>
             </div>
 
             <div class="center-block text-center" style="clear:both;">
@@ -142,8 +134,14 @@
             </div>
           </div>
 
-          <div class="monarch-carousel-item monarch-carousel-item-unselected monarch-carousel-item-largest">
+          <div class="monarch-carousel-item monarch-carousel-item-unselected">
             <div>
+              <a role="button" href="/model">
+                <div class="btn btn-block btn-default monarch-carousel-explore-title">Find models of disease</div>
+              </a>
+
+              <hr class="monarch-home-carousel-item-hr"/>
+
               <div class="monarch-home-carousel-item-text">
                 In vitro
                 and in vivo disease models can recapitulate some or
@@ -151,12 +149,6 @@
                 model phenotypes with human disease can suggest
                 candidate genes.
               </div>
-
-              <hr class="monarch-home-carousel-item-hr"/>
-
-              <a role="button" href="/model">
-                <div class="btn btn-block btn-default monarch-carousel-explore-title">Find models of disease</div>
-              </a>
             </div>
 
             <div class="center-block text-center" style="clear:both;">
@@ -168,18 +160,18 @@
 
           <div class="monarch-carousel-item monarch-carousel-item-unselected">
             <div>
+              <a role="button" href="/gene">
+                <div class="btn btn-block btn-default monarch-carousel-explore-title">Understand the genetics</div>
+              </a>
+
+              <hr class="monarch-home-carousel-item-hr"/>
+
               <div class="monarch-home-carousel-item-text">
                 Variations in genes and other genomic features are
                 often associated with diseases and variant phenotypes.
                 Learn about the phenotypes associated with your
                 favorite gene.
               </div>
-
-              <hr class="monarch-home-carousel-item-hr"/>
-
-              <a role="button" href="/gene">
-                <div class="btn btn-block btn-default monarch-carousel-explore-title">Understand the genetics</div>
-              </a>
             </div>
 
             <div class="center-block text-center" style="clear:both;">
@@ -188,6 +180,14 @@
                    alt="Explore Genes" />
             </div>
           </div>
+        <a id="monarch-tabber-next" class="monarch-tabber-control-next">
+          <div class="monarch-tabber-chevron monarch-tabber-right-chevron">
+          </div>
+        </a>
+        <a id="monarch-tabber-prev" class="monarch-tabber-control-prev">
+          <div class="monarch-tabber-chevron monarch-tabber-left-chevron">
+          </div>
+        </a>
         </div> <!-- monarch-carousel -->
 
       </div> <!-- panel-body -->
@@ -197,39 +197,24 @@
     <!-- Two-column layout, col. 2 -->
     <div id="col-1" class="col-xs-12 col-sm-4 col-md-4 col-lg-4">
 
-
-<!--
-      <div class="panel panel-default">
-        <div class="panel-heading clearfix">
-          <h3 class="panel-title pull-left">About Monarch</h3>
-        </div>
-        <div class="panel-body">
-            <p><a href="/page/about#goals">What is Monarch?</a></p>
-            <p><a href="/page/about#background">Can Monarch help me investigate biology of disease?</a></p>
-            <p><a href="/page/about#dataflow">How does Monarch integrate phenotype data?</a></p>
-            <p><a href="/page/about#partners">Who are our partners?</a></p>
-        </div>
-      </div>
--->
-
       <!-- Search. -->
       <div class="panel panel-default"> <!-- style="padding-bottom: 0;"> -->
         <div class="panel-heading">
           <h3 class="panel-title">Compare Phenotypes</h3>
         </div>
         <div class="panel-body">
-          <p class="">
-            Find models and phenotypes similar to a set of abnormal phenotypes of interest and then visualize their overlap.
-          </p>
+          <span class="">
+            Find models and diseases similar to a set of abnormal phenotypes of interest and then visualize their overlap.
+          </span>
           <div class="center-block text-center" style="clear:both;">
             <a href="/analyze/phenotypes">
-              <img class="monarch-carousel-item-image" src="/image/Phenogrid3Compare.png"
-                   class="img-responsive"
+              <img src="/image/Phenogrid3Compare.png"
+                   class="img-responsive monarch-home-phenotype-image"
                    alt="Explore Diseases" />
             </a>
           </div>
           <div class="center-block text-center">
-            <a class="btn btn-primary center-block" href="/analyze/phenotypes">
+            <a class="btn btn-primary center-block monarch-home-phenotype-analysis" href="/analyze/phenotypes">
               Go to Phenotype Analysis
             </a>
           </div>
@@ -241,31 +226,30 @@
         <div id="blog" class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
 
           <div
-            class="panel panel-default news-panel"
-            style="border-radius:5px;border-color:#e8e8e8;padding-top:12px;">
+            class="panel panel-default news-panel">
             <div class="panel-heading">
               <h3 class="panel-title">News and Events</h3>
             </div>
-            {{#blog_results}}
-            <dl class="news-list">
-              <dt>
-                <a href="{{link}}">{{title}}</a>
-                {{#category}}
-                <a href="{{link}}" class="label label-default">{{label}}</a>
-                {{/category}}
-              </dt>
-              <dd>
-                <strong>{{moddate}}</strong>
-                <!-- <strong>{{pubdate}}</strong> -->
-                <!-- {{{truncated}}} -->
-              </dd>
-            </dl>
-            {{/blog_results}}
-            <p class="news-more">
-              <a href="http://monarch-initiative.blogspot.com/" alt="More posts">
-                <strong>More...</strong>
-              </a>
-            </p>
+            <div class="panel-body news-list">
+              {{#blog_results}}
+                <div class="news-item">
+                  <a href="{{link}}">
+                     <span class="news-item-date">{{date}} &nbsp;</span>
+                     <span class="news-item-title">{{title}}</span>
+                  </a>
+                  {{#category}}
+                    <a href="{{link}}" class="label label-default">
+                      {{label}}
+                    </a>
+                  {{/category}}
+                </div>
+              {{/blog_results}}
+              <div class="news-more">
+                <a href="http://monarch-initiative.blogspot.com/" alt="More posts">
+                  More...
+                </a>
+              </div>
+            </div>
           </div> <!-- news-panel -->
 
         </div> <!-- blog -->
