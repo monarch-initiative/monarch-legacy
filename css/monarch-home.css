@@ -2,17 +2,50 @@
  ** Additional CSS to make the home page specific things look nice.
  **/
 
+#monarch-home-container .panel-default {
+    margin:0;
+    margin-bottom: 7px;
+    margin-left:auto;
+    margin-right:auto;
+}
+
+#monarch-home-container .panel-heading {
+    padding: 5px;
+    padding-left: 10px;
+}
+
+#monarch-home-container .panel-title {
+  font-size:14px;
+}
+
+#monarch-home-container .container {
+    max-width:100%;
+}
 /*
  * Compact the news list just a little. Assumes dl.
  */
 .news-list {
-    margin-bottom: 10px;
-    margin-top: 10px;
+  margin: -15px;
+  padding-left: 12px;
+  padding-right: 12px;
 }
 .news-more {
+  text-align: center;
 }
 .news-panel {
-    padding-bottom: 3px;
+}
+
+.news-item {
+  margin-bottom: 5px;
+}
+
+.news-item-date {
+  font-size: 0.9em;
+  color: darkgray;
+}
+
+.news-item-title {
+  font-weight: 500;
 }
 
 /*
@@ -21,17 +54,47 @@
 
 .monarch-carousel {
     position: relative;
+    height:100% !important;
 }
 
 .monarch-carousel-item {
     position: absolute;
     top: 0px;
     left: 0px;
+    width:100% !important;
+}
+
+.monarch-home-carousel-separator-hr {
+    height: 1px;
+    margin: 0.3em;
+    border: none;
+    clear:both;
+}
+
+.monarch-home-carousel-item-hr {
+    height: 1px;
+    margin: 0;
+    padding: 0;
+    background-color: transparent;
+    border: none;
+}
+
+.monarch-home-carousel-item-text {
+    padding: 0.3em;
+    margin: 25px;
+    margin-top:2px;
+    margin-bottom:5px;
+    font-size: 1.1em;
+    font-weight: 500;
+    height:90px;
+    text-align:center;
+    vertical-align:text-top;
 }
 
 /* Reserved for the largest item to get layout sizing correct. */
 .monarch-carousel-item-largest {
     position: relative;
+    margin-bottom:20px;
 }
 
 .monarch-carousel-item-selected {
@@ -44,36 +107,76 @@
     z-index: 0;
 }
 
-.monarch-carousel-embedded-image {
-    max-height: 5em;
-    width: auto;
-    float: left;
-    margin-left: 0.3em;
-    margin-right: 2em;
-    margin-top: 0.3em;
-    margin-bottom: 2em;
+.monarch-carousel-item-image {
+    width: 90%;
+    //height: 100%;
+    padding: 10px;
+    margin: 0;
+    //margin-bottom:10%;
+    display:inline-block;
+    border:1px solid darkgray;
+}
+
+.monarch-home-phenotype-image {
+    padding: 0;
+    padding-top: 5px;
+    padding-bottom: 10px;
+    margin: 0;
+}
+
+.monarch-home-phenotype-analysis {
+  margin: 0;
+  margin-top: 1px;
+  padding: 2px;
+  padding-left:4px;
+  padding-right:4px;
 }
 
 .monarch-carousel-explore-title {
-    font-weight: 600;
+    font-weight: 500;
     font-size: 1.1em;
+    text-align:center;
+    margin:auto;
+    padding:5px;
+    color: black;
+    background-color:#f5f5f5;
+    width:90% !important;
+    border:none;
 }
 
 
 .monarch-nav-embedded-image {
-    max-height: 1.5em;
-    width: auto;
-    float: left;
-    padding-right: 0.5em;
+    width: 100%;
+    padding:0;
+    margin:auto;
+    margin-top:4px;
+    max-width:70px;
+}
+
+.monarch-nav-item-title {
+    text-align:center;
+    margin:auto;
+    padding:0;
+    width: 100%;
+    color:black;
+    font-weight: 500;
+    border:3px solid transparent;
+}
+
+.monarch-tabber-on-item .monarch-nav-item-title {
+    border-bottom:3px solid darkgray;
 }
 
 .monarch-home-splash {
     background-image: url('/image/home-splash-0.5.jpg');
-    margin-bottom: 17.5px;
     padding-top: 40px;
     padding-bottom: 40px;
     padding-left: 40px;
     /* padding-right: 60px; */
+    margin:0;
+    margin-bottom: 17.5px;
+    padding-top:25px;
+    padding-bottom:25px;
 }
 .monarch-home-splash-text {
     color: #ffffff;
@@ -84,76 +187,130 @@
    /* -webkit-text-stroke-width: 1px; */
    /* -webkit-text-stroke-color: black; */
   text-shadow:
-   -1px -1px 0 #000,  
+   -1px -1px 0 #000,
     1px -1px 0 #000,
     -1px 1px 0 #000,
      1px 1px 0 #000;
 }
 
 .monarch-tabber {
-    margin-top: 0.5em;
+    margin:0;
+    margin-top:10px;
+    padding:0;
 }
 .monarch-tabber-controls {
-    padding-left: 10px;
-    padding-right: 10px;
+    margin:0;
+    padding:0;
 }
 .monarch-tabber-control {
-    padding-top: 2.5px;
-    padding-bottom: 2.5px;
-    padding-left: 5px;
-    padding-right: 5px;
+    padding:0;
+    margin: 0;
+    width:20%;
+    float:left;
 }
 .monarch-tabber-control-btn {
-    padding-left: 10px;
-    padding-right: 10px;
+    padding: 0;
+    margin: 0;
 }
-.monarch-tabber-content {
-}
+
 /* These are essentially overrides for btn-*. */
 .monarch-tabber-on-item {
-    background-color: #555555;
-    border-bottom-color: #474949;
-    border-left-color-ltr-source: physical;
-    border-left-color-rtl-source: physical;
-    border-left-color-value: #474949;
-    border-right-color-ltr-source: physical;
-    border-right-color-rtl-source: physical;
-    border-right-color-value: #474949;
-    border-top-color: #474949;
-    color: #fff;
+    background: none !important;
+    color: #000;
+    padding:0;
 }
 .monarch-tabber-off-item {
-    background-color: #f5f5f5;
+    padding:0;
+    background: none !important;
     color: #000;
-    border-bottom-color: #ddd;
-    border-left-color-ltr-source: physical;
-    border-left-color-rtl-source: physical;
-    border-left-color-value: #ddd;
-    border-right-color-ltr-source: physical;
-    border-right-color-rtl-source: physical;
-    border-right-color-value: #ddd;
-    border-top-color: #ddd;
-    border-left-color: #ddd;
-    border-right-color: #ddd;
+}
+.monarch-tabber-on-item:hover {
+    background-color: #ffffff;
+    color: #000;
 }
 .monarch-tabber-off-item:hover {
     background-color: #ffffff;
-    color: #111;
+    color: #000;
 }
 
-/*
- * Static exploration images (lower-right).
- */
 
-.monarch-home-explore-img {
-    /* max-height: 300px; */
+a.monarch-tabber-control-prev, a.monarch-tabber-control-next {
+    position: absolute;
+    top:160px;
+    left:-8px;
+    z-index: 1;
+    display: inline-block;
+    padding: 0;
+    margin:0;
+    color: #fff;
+    text-decoration: none;
+    opacity: 0.5;
+    cursor: pointer;
+    width:25px;
 }
-.monarch-home-explore-img .panel .panel-heading {
-    padding-bottom: 5px;
-    padding-left: 10px;
-    padding-right: 10px;
-    padding-top: 5px;
+a.monarch-tabber-control-prev:hover, a.monarch-tabber-control-next:hover {
+    opacity: 1;
+    -webkit-transition: all 0.2s ease;
 }
+a.monarch-tabber-control-prev {
+}
+a.monarch-tabber-control-next {
+    left:initial;
+    right: -8px;
+}
+
+.monarch-tabber-chevron {
+  position: relative;
+  padding: 0px;
+  height:80px;
+  width: 8px;
+  margin:auto;
+  margin-top:0px;
+}
+
+.monarch-tabber-chevron:before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  height: 50%;
+  width: 100%;
+  background: gray;
+  -webkit-transform: skew(25deg, 0deg);
+  -moz-transform: skew(25deg, 0deg);
+  -ms-transform: skew(25deg, 0deg);
+  -o-transform: skew(25deg, 0deg);
+  transform: skew(25deg, 0deg);
+}
+
+.monarch-tabber-chevron:after {
+  content: '';
+  position: absolute;
+  top: 50%;
+  right: 0;
+  height: 50%;
+  width: 100%;
+  background: gray;
+  -webkit-transform: skew(-25deg, 0deg);
+  -moz-transform: skew(-25deg, 0deg);
+  -ms-transform: skew(-25deg, 0deg);
+  -o-transform: skew(-25deg, 0deg);
+  transform: skew(-25deg, 0deg);
+}
+
+
+.monarch-tabber-left-chevron {
+  -webkit-transform: rotate(180deg);
+  -moz-transform: rotate(180deg);
+  -ms-transform: rotate(180deg);
+  -o-transform: rotate(180deg);
+  transform: rotate(180deg);
+}
+
+.monarch-tabber-right-chevron
+{
+}
+
 
 #home_search{
     line-height:20px;
@@ -165,7 +322,7 @@
     border-style:solid;
     border-width:1px;
     border-radius:4px;
-    border-color:#ddd;    
+    border-color:#ddd;
     -webkit-box-shadow:0 1px 1px rgba(0,0,0,0.05);
     box-shadow:0 1px 1px rgba(0,0,0,0.05)
 }

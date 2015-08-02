@@ -3,12 +3,37 @@
 ////
 
 //
-function MonarchCarousel(carousel_elt, tabber_elt){
+function MonarchCarousel(carousel_elt, tabber_elt, next_id, prev_id){
 
     var self = this;
 
     var celt = carousel_elt;
     var telt = tabber_elt;
+
+	var prev_elt = jQuery(prev_id);
+	var next_elt = jQuery(next_id);
+
+	prev_elt.click(function(){
+		_cancel_timers();
+    	var count = self.get_count();
+    	var current = self.get_current();
+    	var new_index = (current === 1) ? count : (current - 1);
+		self.update_carousel_to(new_index, function(){
+			    self.update_tabber_to(new_index);
+			});
+	});
+
+	next_elt.click(function(){
+		_cancel_timers();
+    	var count = self.get_count();
+    	var current = self.get_current();
+    	console.log('count:', count, ' current:', current);
+    	var new_index = (current === count) ? 1 : (current + 1);
+    	self.update_carousel_to(new_index, function(){
+    		    self.update_tabber_to(new_index);
+    		});
+	});
+
 
     // The classes to switch on the tabber during cycling.
     var on_class = 'monarch-tabber-on-item';
@@ -51,7 +76,7 @@ function MonarchCarousel(carousel_elt, tabber_elt){
 	    var kids = jQuery(telt).children().children();
 	    _.each(kids, function(child, index){
 		if( jQuery(child).children() ){
-		    if( jQuery(jQuery(child).children()[0]).is('button') ){
+		    if( jQuery(jQuery(child).children()[0]).is('a') ){
 			// Only safe place!
 		    }else{ strikes = strikes + 1; }
 		}else{ strikes = strikes + 1; }
@@ -201,7 +226,9 @@ jQuery(document).ready(function(){
     // Start carsousel.
     var mcid = '#' + "monarch-carousel"; // carousel series
     var mtid = '#' + "monarch-tabber"; // carousel tabber
-    var car = new MonarchCarousel(mcid, mtid);
+    var nextid = '#' + "monarch-tabber-next"; // carousel tabber
+    var previd = '#' + "monarch-tabber-prev"; // carousel tabber
+    var car = new MonarchCarousel(mcid, mtid, nextid, previd);
     car.start_cycle();
 
     // Get explore popovers ready.
