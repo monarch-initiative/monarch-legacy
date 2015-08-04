@@ -27,7 +27,7 @@ function makeGeneDiseaseLandingGraph(data){
     // global_golr_conf, global_solr_url, and scigrap_url are global variables
     // set in webapp.js using puptent
     var builder = new monarch.builder.tree_builder(global_solr_url, global_scigraph_url, global_golr_conf,
-            tree, bbop.monarch.phenotypeGeneGolrSettings);
+            tree, bbop.monarch.diseaseGeneGolrSettings);
     
     var initGraph = function(){
         jQuery("#second-loader").hide();

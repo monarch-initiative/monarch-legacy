@@ -38,7 +38,12 @@ for example, to add disease phenotype associations to a disease page:
 
         webapp.js
          
-        var phenotype_filter = { field: 'object_category', value: 'phenotype' };
+        var phenotype_filter = [
+                                { 
+                                    field: 'object_category',
+                                    value: 'phenotype' 
+                                }
+        ];
         
         # Add the table where the second parameter is where we filter out the disease ID, typically either 
         # object_closure or subject_closure, in this case the disease ID is filtered via the subject_closure

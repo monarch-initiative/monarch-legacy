@@ -97,6 +97,16 @@ bbop.monarch.phenotypeGeneGolrSettings = {
         facet : 'subject_taxon'
 };
 
+bbop.monarch.diseaseGeneGolrSettings = {
+        id_field : 'object_closure',
+        personality : 'dovechart',
+        filter : [
+                  { field: 'subject_category', value: 'gene' },
+                  { field: 'object_category', value: 'disease' }
+        ],
+        facet : 'subject_taxon'
+};
+
 bbop.monarch.phenotypeGenotypeGolrSettings = {
         id_field : 'object_closure',
         personality : 'dovechart',

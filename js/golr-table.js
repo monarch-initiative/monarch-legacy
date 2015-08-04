@@ -28,63 +28,67 @@ function getTableFromSolr(id, golr_field, div, filter, personality, tab_anchor){
         getTable(id, golr_field, div, filter, personality);
     }
     
-    function getTable(id, golr_field, div, filter, personality){
-    if (golr_field == null) {
-        golr_field = 'object_closure';
-    }
+    function getTable(id, golr_field, div, filter, personality) {
+        if (golr_field == null) {
+            golr_field = 'object_closure';
+        }
     
-    if (personality == null){
-        personality = 'generic_association';
-    }
+        if (personality == null){
+            personality = 'generic_association';
+        }
     
-    //divs
-    var pager_top_div = div+'-pager-top';
-    var pager_bot_div = div+'-pager-bottom';
-    var pager_filter = div+'-filter';
+        //divs
+        var pager_top_div = div+'-pager-top';
+        var pager_bot_div = div+'-pager-bottom';
+        var pager_filter = div+'-filter';
 
-    // Conf.
-    var gconf = new bbop.golr.conf(global_golr_conf);
-    var srv = global_solr_url;
-    var handler = new bbop.monarch.handler();
-    var linker = new bbop.monarch.linker();
-    var confc = gconf.get_class(personality);
+        // Conf.
+        var gconf = new bbop.golr.conf(global_golr_conf);
+        var srv = global_solr_url;
+        var handler = new bbop.monarch.handler();
+        var linker = new bbop.monarch.linker();
+        var confc = gconf.get_class(personality);
     
-    // Other widget tests; start with manager.
-    var golr_manager = new bbop.golr.manager.jquery(srv, gconf);
+        // Other widget tests; start with manager.
+        var golr_manager = new bbop.golr.manager.jquery(srv, gconf);
 
-    golr_manager.set_personality(personality);
-    //golr_manager.add_query_filter('document_category', 'annotation', ['*']);
-    golr_manager.add_query_filter(golr_field, id, ['*']);
+        golr_manager.set_personality(personality);
+        //golr_manager.add_query_filter('document_category', 'annotation', ['*']);
+        golr_manager.add_query_filter(golr_field, id, ['*']);
     
-    if (filter != null && filter.field && filter.value){
-        golr_manager.add_query_filter(filter.field, filter.value, ['*']);
-    }
+        if (filter != null && filter instanceof Array && filter.length > 0){
+            filter.forEach( function (val) {
+                if (val != null && val.field && val.value){
+                    golr_manager.add_query_filter(val.field, val.value, ['*']);
+                }
+            });
+        }
     
-    // Add filters.
-    var f_opts = {
-	    'meta_label': 'Total:&nbsp;',
-	    'display_free_text_p': true
-    };
-    var filters = new bbop.widget.live_filters(pager_filter, golr_manager, gconf, f_opts);
-    filters.establish_display();
+        // Add filters.
+        var f_opts = {
+                'meta_label': 'Total:&nbsp;',
+                'display_free_text_p': true
+        };
+        var filters = new bbop.widget.live_filters(pager_filter, golr_manager, gconf, f_opts);
+        filters.establish_display();
 
-    // Attach pager.
-    var pager_opts = {
-        'selection_counts': [10, 25, 50, 100, 5000]
-    };
-    var pager = new bbop.widget.live_pager(pager_top_div, golr_manager, pager_opts);
-    var pager_bottom = new bbop.widget.live_pager(pager_bot_div, golr_manager, pager_opts);
-    // Add results.
-    var results_opts = {
-        //'callback_priority': -200,
-        'user_buttons_div_id': pager.button_span_id(),
-        'user_buttons': [],
-        'selectable_p' : false
-    };
-    var results = new bbop.widget.live_results(div, golr_manager, confc,
+        // Attach pager.
+        var pager_opts = {
+                'selection_counts': [10, 25, 50, 100, 5000]
+        };
+        var pager = new bbop.widget.live_pager(pager_top_div, golr_manager, pager_opts);
+        var pager_bottom = new bbop.widget.live_pager(pager_bot_div, golr_manager, pager_opts);
+        // Add results.
+        var results_opts = {
+                //'callback_priority': -200,
+                'user_buttons_div_id': pager.button_span_id(),
+                'user_buttons': [],
+                'selectable_p' : false
+        };
+        var results = new bbop.widget.live_results(div, golr_manager, confc,
                            handler, linker, results_opts);
     
-    addDownloadButton(pager, golr_manager);
+        addDownloadButton(pager, golr_manager);
 
     bbop.widget.display.results_table_by_class_conf_b3.prototype.process_entry = function(bit, field_id, document, display_context){
         
