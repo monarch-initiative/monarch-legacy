@@ -11,7 +11,7 @@
   <div class="row">
 
     <!-- Blurb. -->
-    <div class="col-xs-12 col-sm-12 col-md-12 col-lg-3">
+    <div class="col-xs-12 col-sm-12 col-md-12 col-lg-4">
       <div class="panel panel-default">
 	<p>
 	  Monarch <b>Disease</b> integrates information from a variety of
@@ -22,10 +22,29 @@
 	  the phenotypically-curated disease data in the system.
 	</p>
       </div>
+      
+          <!-- Disease spotlight -->
+      <div class="panel panel-default">
+        <h4>Disease Spotlight: {{{spotlight.link}}}</h4>
+        <div>
+          <p>{{spotlight.description}}</p>
+          <ul>
+            <li>Heritability: {{{spotlight.heritability}}}</li>
+            <li>Phenotypes: {{{spotlight.phenotypes}}}</li>
+            <li>Genes: {{{spotlight.genes}}}</li>
+            <li>Models: {{{spotlight.models}}} 
+              <!--({{spotlight.model_with_phenotype_count}} with phenotypes) -->
+            </li>
+            <li>Publications: {{{spotlight.publications}}}</li>
+          </ul>
+        </div>
+      </div>
+      
+      
     </div>
 
     <!-- Annotation Graph-->
-    <div class="col-xs-12 col-sm-12 col-md-12 col-lg-9">
+    <div class="col-xs-12 col-sm-12 col-md-12 col-lg-8">
       <div class="panel panel-default">
          <div class="dove-container">
         
@@ -56,24 +75,6 @@
       </div>
     </div>
     
-    <!-- Disease spotlight -->
-    <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
-      <div class="panel panel-default">
-        <h4>Disease Spotlight: {{{spotlight.link}}}</h4>
-        <div>
-          <p>{{spotlight.description}}</p>
-          <ul>
-            <li>Heritability: {{{spotlight.heritability}}}</li>
-            <li>Phenotypes: {{{spotlight.phenotypes}}}</li>
-            <li>Genes: {{{spotlight.genes}}}</li>
-            <li>Models: {{{spotlight.models}}} 
-              <!--({{spotlight.model_with_phenotype_count}} with phenotypes) -->
-            </li>
-            <li>Publications: {{{spotlight.publications}}}</li>
-          </ul>
-        </div>
-      </div>
-    </div>
   </div>
 </div>
 

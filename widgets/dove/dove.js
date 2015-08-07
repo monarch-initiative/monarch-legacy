@@ -700,6 +700,7 @@ monarch.dovechart.prototype.setDataPerSettings = function(data){
     if (self.getValueOfCheckbox('zero','remove')){
         data = self.removeZeroCounts(data);
     }
+    data = self.removeIdWithoutLabel(data);
     return data;
 }
 // Generic function to check the value of a checkbox given it's name
@@ -1212,14 +1213,21 @@ monarch.dovechart.prototype.checkData = function(data){
 //remove zero length bars
 monarch.dovechart.prototype.removeZeroCounts = function(data){
       trimmedGraph = [];
-      data.forEach(function (r){
+      trimmedGraph = data.filter(function (r){
           var count = 0;
           r.counts.forEach(function (i){
                count += i.value;
            });
-          if (count > 0){
-              trimmedGraph.push(r);
-          }
+          return (count > 0);
+      });
+      return trimmedGraph;
+};
+
+//remove classes without labels, see https://github.com/monarch-initiative/monarch-app/issues/894
+monarch.dovechart.prototype.removeIdWithoutLabel = function(data){
+      trimmedGraph = [];
+      trimmedGraph = data.filter(function (r){
+          return (r.label != null && r.id != r.label);
       });
       return trimmedGraph;
 };
