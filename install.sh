@@ -1,5 +1,5 @@
 #!/bin/sh
 
 ./installRingo.sh
-npm install --force
-gulp assemble
+npm install
+./node_modules/.bin/gulp assemble
