@@ -169,6 +169,8 @@
 
 .monarch-home-splash {
     background-image: url('/image/home-splash.png');
+    margin:0;
+    margin-bottom: 17.5px;
     padding-top: 40px;
     padding-bottom: 40px;
     padding-left: 40px;
@@ -215,28 +217,28 @@
 
 /* These are essentially overrides for btn-*. */
 .monarch-tabber-on-item {
-    background: none !important;
+    background: none;
     color: #000;
     padding:0;
 }
 .monarch-tabber-off-item {
     padding:0;
-    background: none !important;
+    background: none;
     color: #000;
 }
 .monarch-tabber-on-item:hover {
-    background-color: #ffffff;
+    background-color: #e5e5e5;
     color: #000;
 }
 .monarch-tabber-off-item:hover {
-    background-color: #ffffff;
+    background-color: #e5e5e5;
     color: #000;
 }
 
 
 a.monarch-tabber-control-prev, a.monarch-tabber-control-next {
     position: absolute;
-    top:160px;
+    top:0;
     left:-8px;
     z-index: 1;
     display: inline-block;
