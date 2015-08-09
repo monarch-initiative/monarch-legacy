@@ -6,6 +6,7 @@
 ####
 
 import os
+import time
 from selenium import webdriver
 
 ###
@@ -20,12 +21,26 @@ def before_all(context):
         context.target = os.environ['TARGET']
     if 'BROWSER' in os.environ and os.environ['BROWSER'] == 'phantomjs':
         context.browser = webdriver.PhantomJS()
+        print("# Using PhantomJS")
     else:
         context.browser = webdriver.Firefox()
+    #
+    # Set a 30 second implicit wait - http://selenium-python.readthedocs.org/en/latest/waits.html#implicit-waits
+    # Once set, the implicit wait is set for the life of the WebDriver object instance.
+    #
+    context.browser.set_window_size(1440, 900)
+    context.browser.implicitly_wait(30) # seconds
 
 ## Do this after completing everything.
 def after_all(context):
     context.browser.quit()
+
+# Run this before each scenario
+# This works around a problem where the maui_gene test works fine independently, but
+# seems to fail randomly when run after the last test in maui_basic.
+# def before_scenario(context, scenario):
+#     time.sleep(1)
+
 
 ###
 ### Working on a more complex run environment for the future.

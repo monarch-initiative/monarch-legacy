@@ -42,7 +42,8 @@ def step_impl(context, text):
 def step_impl(context, item):
 
     ## Implicity poll for items to appear for 10 seconds.
-    context.browser.implicitly_wait(10)
+    # context.browser.implicitly_wait(20) setup in environment.py for session
+
     webelt = context.browser.find_element_by_partial_link_text(item)
 
     ## TODO: 
