@@ -329,8 +329,8 @@ monarch.dovechart.prototype.setGroupPositioning = function (histogram,data) {
        .attr("class", ("bar"+self.level))
        .attr("transform", function(d) { return "translate(0," + histogram.y0(d.id) + ")"; })
        .on("click", function(d){
-           if (config.isYLabelURL){
-               document.location.href = config.yLabelBaseURL + d.id;
+           if (self.config.isYLabelURL){
+               document.location.href = self.config.yLabelBaseURL + d.id;
            }
        });
     return groupPos;
