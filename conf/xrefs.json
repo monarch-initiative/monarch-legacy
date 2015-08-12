@@ -4804,6 +4804,22 @@
       "datatype" : null,
       "image_path" : "/image/source-clinvar.png"
    },
+      "clinvarvariant" : {
+      "object" : "Identifier",
+      "uri_prefix" : null,
+      "name" : "ClinVar",
+      "url_example" : "https://www.ncbi.nlm.nih.gov/clinvar/variation/12345",
+      "database" : "ClinVarVariant",
+      "description" : "ClinVar aggregates information about sequence variation and its relationship to human health.",
+      "example_id" : "ClinVarVariant:1234",
+      "generic_url" : "https://www.ncbi.nlm.nih.gov/clinvar/variation",
+      "fullname" : null,
+      "id" : null,
+      "abbreviation" : "ClinVarVariant",
+      "url_syntax" : "https://www.ncbi.nlm.nih.gov/clinvar/variation/[example_id]",
+      "datatype" : null,
+      "image_path" : "/image/source-clinvar.png"
+   },
    "biogrid" : {
       "object" : "Identifier",
       "uri_prefix" : null,
