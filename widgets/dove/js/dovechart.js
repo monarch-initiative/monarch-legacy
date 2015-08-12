@@ -582,13 +582,13 @@ monarch.dovechart.prototype.drawGraph = function (histogram, isFromCrumb, parent
         self.config.height = data.length * 14.05;
         jQuery(self.html_div + ' .barchart').remove();
         histogram = new monarch.chart.barchart(self.config, self.html_div);
-        self.drawGraph(histogram, false, undefined, false, true);
+        self.drawGraph(histogram, isFromCrumb, undefined, false, true);
         return;
     } else if (data.length > 25 && self.config.height != self.config.initialHeight && !isFromResize){
         self.config.height = data.length * 14.05;
         jQuery(self.html_div + ' .barchart').remove();
         histogram = new monarch.chart.barchart(self.config, self.html_div);
-        self.drawGraph(histogram, false, undefined, false, true);
+        self.drawGraph(histogram, isFromCrumb, undefined, false, true);
         return;
     } else if (data.length <= 25 && self.config.height != self.config.initialHeight ) {
         self.config.height = self.config.initialHeight;
@@ -992,9 +992,12 @@ monarch.dovechart.prototype.setYAxisText = function(histogram,data, barGroup, ba
     .text(function(d){
         if (/\.\.\./.test(self.getIDLabel(d.id,data))){
             var fullLabel = self.getFullLabel(self.getIDLabel(d.id,data),data);
-              return (fullLabel);  
+            var title = fullLabel +" (" + d.id.replace(/(.*):(.*)/, "$1") + ")";
+              return title;  
         } else if (yFont < 12) {//HARDCODE alert
-              return (self.getIDLabel(d.id,data));
+            var label = self.getIDLabel(d.id,data);
+            var title = label +" (" + d.id.replace(/(.*):(.*)/, "$1") + ")";
+            return title;
         }
     });
 };
