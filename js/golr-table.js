@@ -113,10 +113,18 @@ function getTableFromSolr(id, golr_field, div, filter, personality, tab_anchor){
         if( ! ilabel ){
             ilabel = bit;
         }
+        if (ilabel != null) {
+            ilabel = ilabel.replace(/\>/g,'&gt;');
+            ilabel = ilabel.replace(/\</g,'&lt;');
+        }
         
         // Extract highlighting if we can from whatever our "label"
         // was.
         var hl = anchor._golr_response.get_doc_highlight(did, field_id, ilabel);
+        if (hl != null) {
+            hl = hl.replace(/\>/g,'&gt;');
+            hl = hl.replace(/\</g,'&lt;');
+        }
 
         //Get cateogry
         var category = anchor._golr_response.get_doc_field(did, field_id+'_category');
