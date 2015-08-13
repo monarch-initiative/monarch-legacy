@@ -18,6 +18,12 @@
                   </p>
                 </div>
                 <div id="categories">
+                    {{#hasPhenotypes}}
+                    <a href="#overview"><div class="tab contenttab">Overview</div></a>
+                    {{/hasPhenotypes}}
+                    {{^hasPhenotypes}}
+                    <a href="#overview"><div id="initialtab" class="tab contenttab">Overview</div></a>
+                    {{/hasPhenotypes}}
                     {{{includes.phenogrid_anchor}}}
                     {{{includes.phenotype_anchor}}}
                     {{{includes.gene_anchor}}}
@@ -25,13 +31,6 @@
                     {{{includes.model_anchor}}}
                     {{{includes.variant_anchor}}}
                     {{{includes.pathway_anchor}}}
-                    {{#hasPhenotypes}}
-                    <a href="#overview"><div class="tab contenttab">Overview</div></a>
-                    {{/hasPhenotypes}}
-                    {{^hasPhenotypes}}
-                    <a href="#overview"><div id="initialtab" class="tab contenttab">Overview</div></a>
-                    {{/hasPhenotypes}}
-                   
                 </div>
             </div>
             <div id="complete-info">
