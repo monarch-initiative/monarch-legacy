@@ -51,6 +51,14 @@ function getAnnotationScore() {
         }
     });
     
+    // Trigger a click event if we're loading the page on an href
+    if ( window && window.location && window.location.hash
+            && window.location.hash != "" && window.location.hash == "#phenotypes"
+            && isLoading == false){
+        isLoading = true;
+        getPhenotypesAndScore();
+    }
+    
     function getPhenotypesAndScore(){
         jQuery('.stars').hide();
         var spinner_class = 'ui-score-spinner';
