@@ -26,7 +26,7 @@ MONARCH_VERSION = 0.1.1
 ### Tests
 ###
 
-APITESTS = apitest literature-test class-info-test disease-phenotype-test
+APITESTS = apitest literature-test class-info-test
 TESTS = $(APITESTS) urltester
 
 test: $(patsubst %, test-%, $(TESTS))
