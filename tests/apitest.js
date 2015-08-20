@@ -32,17 +32,6 @@ var diseaseIds =
         "OMIM:270400", // SLO
     ];
 
-exports.testDiseaseBasic = function() {
-    diseaseIds.forEach(
-        function(id) {
-            console.log("Fetching:"+id);
-            var json = engine.fetchDiseaseInfo(id);
-            // todo - check json
-        }
-    );
-}
-
-
 // feel free to add more here...
 var phenotypeIds =
     [
@@ -50,29 +39,10 @@ var phenotypeIds =
         "MP:0000913", // abnormal brain development
     ];
 
-exports.testPhenotypeBasic = function() {
-    phenotypeIds.forEach(
-        function(id) {
-            var json = engine.fetchPhenotypeInfo(id);
-            // todo - check json
-        }
-    );
-}
-
-
 var geneIds =
     [
         "NCBIGene:388552", 
     ];
-exports.testGeneBasic = function() {
-    geneIds.forEach(
-        function(id) {
-            //var json = engine.fetchGeneInfo(id);
-            // todo - check json
-        }
-    );
-}
-
 
 var pmids = [14581620, 20080219, 11912187];
 exports.testLiteratureBasic = function() {
