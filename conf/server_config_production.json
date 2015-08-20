@@ -17,7 +17,7 @@
     
     "autocomplete_url" : "http://neuinfo.org/servicesv1/v1/vocabulary.json",
 
-    "owlsim_services_url" : "http://owlsim.monarchinitiative.org/",
+    "owlsim_services_url" : "http://owlsim.crbs.ucsd.edu/",
     
     "analytics_id" : "UA-41803362-1"
         
