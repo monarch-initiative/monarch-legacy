@@ -12,8 +12,8 @@ Feature: Monarch-app's JSON service is sane
      then the content type should be "application/json"
       and the content should contain "relationships"
     when the content is converted to JSON
-     then the JSON should have the top-level property "uri"
-      and the JSON should have the top-level property "fragment"
+     then the JSON should have the top-level property "iri"
+      and the JSON should have the top-level property "id"
       and the JSON should have the top-level property "curie"
       and the JSON should have the JSONPath "relationships[*].source"
       and the JSON should have JSONPath "synonyms[0]" equal to "string" "food hypersensitivity"
