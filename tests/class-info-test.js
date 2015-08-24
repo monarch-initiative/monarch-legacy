@@ -5,7 +5,7 @@ var engine;
 var classIds =
     [
         "DOID:14330", // PD
-        "DOID_12358", // patulous eustachian tube
+        "DOID:12358", // patulous eustachian tube
     ];
 
 exports.testClassInfo = function() {
