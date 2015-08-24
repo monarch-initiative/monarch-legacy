@@ -150,11 +150,11 @@ function CyExploreDemoInit(){
 
 	// Data call setup.
 	var base = 'http://kato.crbs.ucsd.edu:9000/scigraph/graph/neighbors/' +
-	    arg1 + '.jsonp';
+	    arg1 + '.json';
 	var rsrc = base + '?' + 'depth=' + desired_spread;
 	manager.resource(rsrc);
 	manager.method('get');
-	manager.use_jsonp(true);
+	//manager.use_jsonp(true);
 	manager.jsonp_callback('callback');
 
 	// Action.
@@ -234,9 +234,9 @@ function CyExploreDemoInit(){
 
 	    // Define and run request on service.
 	    var query =
-		'http://kato.crbs.ucsd.edu:9000/scigraph/vocabulary/prefix/' +
+		'http://kato.crbs.ucsd.edu:9000/scigraph/vocabulary/autocomplete/' +
 		request.term +
-		'.jsonp?limit=20&searchSynonyms=true';
+		'.json?limit=20&searchSynonyms=true';
 	    jQuery.ajax({
 			    'url': query,
 			    'dataType': 'jsonp',
