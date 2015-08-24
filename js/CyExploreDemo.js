@@ -186,11 +186,11 @@ function CyExploreDemoInit(){
 		    if( item['concept']['categories'] &&
 			! bbop.core.is_empty(item['concept']['categories']) ){
 			appendee = item['concept']['categories'].join(' ');
-		    }else if( item['concept']['fragment'] ){
+		    }else if( item['concept']['curie'] ){
 			// Get first split on '_'.
 			var fspl =
 			    bbop.core.first_split('_',
-						  item['concept']['fragment']);
+						  item['concept']['curie']);
 			if( fspl[0] ){
 			    appendee = fspl[0];
 			}
@@ -200,7 +200,7 @@ function CyExploreDemoInit(){
 		return {
 		    label: item['completion'],
 		    tag: appendee,
-		    name: item['concept']['fragment']
+		    name: item['concept']['curie']
 		};
 	    };
 	    var _on_success = function(data) {
