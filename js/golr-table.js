@@ -237,3 +237,33 @@ function makeSpinnerDiv(){
     
     return spinner_div;
 }
+
+function getOntologyBrowser(id){
+    
+    // Conf.
+    var gconf = new bbop.golr.conf(amigo.data.golr);
+    var srv = 'http://golr.berkeleybop.org/';
+    var sd = new amigo.data.server();
+    var defs = new amigo.data.definitions();
+    var handler = new amigo.handler();
+    var linker = new amigo.linker();
+    var confc = gconf.get_class('annotation');
+    
+    // Browser.
+    var b = new bbop.widget.browse(srv, gconf, 'brw', {
+        'transitivity_graph_field':
+        'regulates_transitivity_graph_json',
+        'base_icon_url': sd.image_base(),
+        'info_icon': 'info',
+        'current_icon': 'current_term',
+        'image_type': 'gif',
+        'info_button_callback':
+            function(term_acc, term_doc){
+                // // Local form.
+                // shield.draw(term_doc);
+                // Remote form (works).
+                //shield.draw(term_acc);
+            }
+    });
+    b.draw_browser(id);
+}
