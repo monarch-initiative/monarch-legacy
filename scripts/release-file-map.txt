@@ -1,3 +1,4 @@
 // Core browser/server libraries
 js/lib/monarch/handler.js
 js/lib/monarch/linker.js
+js/lib/monarch/widget/browse.js

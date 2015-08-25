@@ -240,22 +240,18 @@ function makeSpinnerDiv(){
 
 function getOntologyBrowser(id){
     
-    // Conf.
-    var gconf = new bbop.golr.conf(amigo.data.golr);
-    var srv = 'http://golr.berkeleybop.org/';
-    var sd = new amigo.data.server();
-    var defs = new amigo.data.definitions();
-    var handler = new amigo.handler();
-    var linker = new amigo.linker();
-    var confc = gconf.get_class('annotation');
+    // Conf
+    var srv = global_scigraph_url;
     
+    //bbop.core.extend(bbop.rest.manager, bbop.registry);
+    //bbop.core.extend(bbop.rest.manager.jquery, bbop.rest.manager);
+    var manager = new bbop.rest.manager.jquery(bbop.rest.response.json);
+
     // Browser.
-    var b = new bbop.widget.browse(srv, gconf, 'brw', {
-        'transitivity_graph_field':
-        'regulates_transitivity_graph_json',
-        'base_icon_url': sd.image_base(),
+    var b = new bbop.monarch.widget.browse(srv, manager, 'brw', {
         'info_icon': 'info',
         'current_icon': 'current_term',
+        'base_icon_url': '/image',
         'image_type': 'gif',
         'info_button_callback':
             function(term_acc, term_doc){
@@ -265,5 +261,6 @@ function getOntologyBrowser(id){
                 //shield.draw(term_acc);
             }
     });
+
     b.draw_browser(id);
 }
