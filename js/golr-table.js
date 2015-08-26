@@ -248,7 +248,7 @@ function getOntologyBrowser(id){
     var manager = new bbop.rest.manager.jquery(bbop.rest.response.json);
 
     // Browser.
-    var b = new bbop.monarch.widget.browse(srv, manager, 'brw', {
+    var b = new bbop.monarch.widget.browse(srv, manager, id, 'brw', {
         'info_icon': 'info',
         'current_icon': 'current_term',
         'base_icon_url': '/image',
@@ -262,5 +262,5 @@ function getOntologyBrowser(id){
             }
     });
 
-    b.draw_browser(id);
+    b.init_browser(id);
 }

@@ -52,15 +52,16 @@ if ( typeof bbop.monarch.widget == "undefined" ){ bbop.monarch.widget = {}; }
  * an empty function is used.
  * 
  * Arguments:
- *  golr_loc - string url to GOlr server;
- *  golr_conf_obj - a <bbop.golr.conf> object
- *  interface_id - string id of the element to build on
+ *  server - string url to SciGraph server;
+ *  manager - a <bbop.rest.manager.jquery> object
+ *  reference_id - starting ontology class ID
+ *  interface_id - string id of the HTML element to build on
  *  in_argument_hash - *[optional]* optional hash of optional arguments
  * 
  * Returns:
  *  this object
  */
-bbop.monarch.widget.browse = function(server, manager, interface_id,
+bbop.monarch.widget.browse = function(server, manager, reference_id, interface_id,
                   in_argument_hash){
 
     // Per-UI logger.
@@ -98,6 +99,7 @@ bbop.monarch.widget.browse = function(server, manager, interface_id,
    
     // The current acc that we are interested in.
     this._current_acc = null;
+    this._reference_id = reference_id;
     this.server = server;
     this.manager = manager;
 
@@ -116,10 +118,28 @@ bbop.monarch.widget.browse = function(server, manager, interface_id,
         var topo_graph = new bbop.model.bracket.graph();
         topo_graph.load_json(resp._raw);
         
-        var anscestors = topo_graph.get_ancestor_subgraph('MP:0003675');
+        var ancestors = topo_graph.get_ancestor_subgraph(anchor._current_acc);
+        
+        var trans_graph = new bbop.model.graph()
+        
+        loop(ancestors.all_nodes(), function(n){
+            if (n.id() != 'HP:0000118'){
+                trans_graph.add_node(n);
+                var edge = new bbop.model.edge(anchor._current_acc, n.id(), 'subClassOf');
+                trans_graph.add_edge(edge);
+            }
+        });
+        
+        loop(topo_graph.get_child_nodes(anchor._current_acc), function(n){
+            if (n.id() != 'HP:0000118'){
+                trans_graph.add_node(n);
+                var edge = new bbop.model.edge(n.id(), anchor._current_acc, 'subClassOf')
+                trans_graph.add_edge(edge);
+            }
+        });
 
-        var trans_graph = new bbop.model.graph();
-        trans_graph.load_json(anscestors);
+        //var trans_graph = new bbop.model.graph();
+        //trans_graph.load_json(ancestors);
 
         //ll('to: ' + doc['topology_graph']);
         //ll('tr: ' + doc['transitivity_graph']);
@@ -127,7 +147,7 @@ bbop.monarch.widget.browse = function(server, manager, interface_id,
         //ll('g: ' + topo_graph.get_parent_nodes(anchor._current_acc));
         var rich_layout = topo_graph.rich_bracket_layout(anchor._current_acc,
                                  trans_graph);
-        //ll("rl: " + bbop.core.dump(rich_layout));
+        ll("rl: " + bbop.core.dump(rich_layout));
 
         ///
         /// Next, produce the raw HTML skeleton.
@@ -266,7 +286,14 @@ bbop.monarch.widget.browse = function(server, manager, interface_id,
                  var tid = jQuery(this).attr('id');
                  var call_time_node_id = nav_button_hash[tid];
                  //alert(call_time_node_id);
-                 anchor.draw_browser(call_time_node_id);
+                 // Check if the reference class is a subclass of the current node
+                 
+                 parent_nodes = topo_graph.get_parent_nodes().map( function (val){ return val.id; });
+                 if (parent_nodes.indexOf(anchor._reference_id) > -1){
+                     anchor.draw_browser('HP:0000118', anchor._reference_id, call_time_node_id, call_time_node_id);
+                 } else {
+                     anchor.draw_browser('HP:0000118', call_time_node_id, anchor._reference_id, call_time_node_id);
+                 }
                  });
              });
 
@@ -296,7 +323,33 @@ bbop.monarch.widget.browse = function(server, manager, interface_id,
      * Returns
      *  n/a
      */
-    this.draw_browser = function(term_acc){
+    this.draw_browser = function(root, middle, leaf, term_acc){
+        anchor._current_acc = term_acc;
+        // Data call setup
+        // http://geoffrey.crbs.ucsd.edu:9000/scigraph/dynamic/browser/branch?start_id=MP%3A0005266&root_id=HP%3A0000118&leaf_id=HP%3A0011014
+        var rsrc = this.server + "dynamic/browser/branch.json" + "?root_id=" + root 
+                               + "&start_id=" + middle
+                               + "&leaf_id=" + leaf + "&relationship=subClassOf|partOf|isA";
+       
+        anchor.manager.resource(rsrc);
+        anchor.manager.method('get');
+        anchor.manager.jsonp_callback('callback');
+        
+        anchor.manager.update('search');
+    };
+    
+    /*
+     * Function: init_browser
+     * 
+     * Bootstraps the process.
+     * 
+     * Parameters:
+     *  term_acc - acc of term we want to have as the term of interest
+     * 
+     * Returns
+     *  n/a
+     */
+    this.init_browser = function(term_acc){
         anchor._current_acc = term_acc;
         // Data call setup
         var rsrc = this.server + "dynamic/browser.json" + "?start_id=" + term_acc + "&root_id=HP:0000118&relationship=subClassOf|partOf|isA";
