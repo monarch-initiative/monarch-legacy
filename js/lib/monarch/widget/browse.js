@@ -123,32 +123,23 @@ bbop.monarch.widget.browse = function(server, manager, reference_id, interface_i
         var trans_graph = new bbop.model.graph()
         
         loop(ancestors.all_nodes(), function(n){
-            if (n.id() != 'HP:0000118'){
-                trans_graph.add_node(n);
-                var edge = new bbop.model.edge(anchor._current_acc, n.id(), 'subClassOf');
-                trans_graph.add_edge(edge);
-            }
+            trans_graph.add_node(n);
+            var edge = new bbop.model.edge(anchor._current_acc, n.id(), 'subClassOf');
+            trans_graph.add_edge(edge);
         });
         
-        loop(topo_graph.get_child_nodes(anchor._current_acc), function(n){
-            if (n.id() != 'HP:0000118'){
+        var descendants = topo_graph.get_non_immediate_descendent_subgraph(anchor._current_acc, 'subClassOf', 1, 1);
+        loop(descendants.all_nodes(), function(n){
+
                 trans_graph.add_node(n);
                 var edge = new bbop.model.edge(n.id(), anchor._current_acc, 'subClassOf')
                 trans_graph.add_edge(edge);
-            }
+            
         });
 
-        //var trans_graph = new bbop.model.graph();
-        //trans_graph.load_json(ancestors);
-
-        //ll('to: ' + doc['topology_graph']);
-        //ll('tr: ' + doc['transitivity_graph']);
-        //ll('ro: ' + anchor._current_acc);
-        //ll('g: ' + topo_graph.get_parent_nodes(anchor._current_acc));
         var rich_layout = topo_graph.rich_bracket_layout(anchor._current_acc,
                                  trans_graph);
-        ll("rl: " + bbop.core.dump(rich_layout));
-
+        
         ///
         /// Next, produce the raw HTML skeleton.
         /// TODO: Keep a cache of the interesting ids for adding
@@ -359,6 +350,26 @@ bbop.monarch.widget.browse = function(server, manager, reference_id, interface_i
         anchor.manager.jsonp_callback('callback');
         
         anchor.manager.update('search');
+    };
+    
+    bbop.model.graph.prototype.get_non_immediate_descendent_subgraph = function(obj_id, pred, start, current_level){   
+        var anchor = this;
+        var edge_list = new Array();
+        var descendent_graph = new bbop.model.graph();
+        
+        anchor.get_child_nodes(obj_id, pred).forEach(function(sub_node){
+            if (start > current_level){
+                return;
+            }
+            var sub_id = sub_node.id();
+            descendent_graph.add_edge(anchor.get_edge(sub_id, obj_id, pred));
+            descendent_graph.add_node(anchor.get_node(sub_id));
+            descendent_graph.add_node(anchor.get_node(obj_id));
+            current_level++;
+            descendent_graph.merge_in(anchor.get_non_immediate_descendent_subgraph(sub_id, pred, start, current_level));
+        });
+            
+        return descendent_graph; 
     };
     
 };
