@@ -35,6 +35,12 @@ def step_impl(context, page, id):
     #     #context.browser.quit()
 
 
+## URL Check
+@then('the url will be "{url}"')
+def step_impl(context, url):
+    full_url = context.target + url
+    assert context.browser.current_url == full_url
+
 ## Title check.
 @then('the title should be "{title}"')
 def step_impl(context, title):

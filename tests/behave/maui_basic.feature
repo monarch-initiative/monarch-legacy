@@ -27,6 +27,17 @@ Feature: Monarch-app UI basic pages display okay
     | /page/pubs          | Monarch Publications          |
     | /page/glossary      | Monarch Glossary              |
     | /page/team          | Monarch Development Team      |
+    
+ @ui
+ Scenario: Going to the page /resolve/HP:0006645 will forward to /phenotype/HP:0006645
+    Given I go to page "/resolve/HP:0006645"
+     then the url will be "/phenotype/HP:0006645"
+     
+ @ui
+ Scenario: Going to the page /resolve/ClinVarVariant:159648 will forward to /variant/ClinVarVariant:159648
+    Given I go to page "/resolve/ClinVarVariant:159648"
+     then the url will be "/variant/ClinVarVariant:159648"
+    
 
  @ui
  Scenario: A hyperlink with text "All" should not be linked from /phenotype/HP:0000118
