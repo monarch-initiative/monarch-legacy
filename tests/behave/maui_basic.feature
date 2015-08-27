@@ -42,6 +42,11 @@ Feature: Monarch-app UI basic pages display okay
  Scenario: Going to the page /resolve/MGI:3771021 will forward to /genotype/MGI:3771021
     Given I go to page "/resolve/MGI:3771021"
      then the url will be "/genotype/MGI:3771021"
+     
+ @ui
+ Scenario: Going to the page /resolve/OMIM:600669 will forward to /disease/OMIM:600669
+    Given I go to page "/resolve/OMIM:600669"
+     then the url will be "/disease/OMIM:600669"
 
  @ui
  Scenario: A hyperlink with text "All" should not be linked from /phenotype/HP:0000118
