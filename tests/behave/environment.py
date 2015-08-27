@@ -15,8 +15,8 @@ from selenium import webdriver
 
 ## Run this before anything else.
 def before_all(context):
-    ## Determine the server target. Default: http://tartini.crbs.ucsd.edu.
-    context.target = 'http://tartini.crbs.ucsd.edu'
+    ## Determine the server target. Default: http://beta.monarchinitiative.org.
+    context.target = 'http://beta.monarchinitiative.org'
     if 'TARGET' in os.environ:
         context.target = os.environ['TARGET']
     if 'BROWSER' in os.environ and os.environ['BROWSER'] == 'phantomjs':
