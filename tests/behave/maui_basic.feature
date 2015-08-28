@@ -49,6 +49,17 @@ Feature: Monarch-app UI basic pages display okay
      then the url will be "/disease/OMIM:600669"
 
  @ui
+ Scenario: Going to the page /resolve/OMIM_600669 will forward to /disease/OMIM:600669
+    Given I go to page "/resolve/OMIM_600669"
+     then the url will be "/disease/OMIM:600669"
+
+ @ui
+ Scenario: Going to the page /resolve/Bogus:123 will produce a Page Not Found error
+    Given I go to page "/resolve/Bogus:123"
+     then the document should contain "Sorry. Your page could not be found"
+     and the title should be "Error"
+
+ @ui
  Scenario: A hyperlink with text "All" should not be linked from /phenotype/HP:0000118
     Given I go to page "/phenotype/HP:0000118"
      then the document should not contain link with "All"
