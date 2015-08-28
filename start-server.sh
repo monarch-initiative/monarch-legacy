@@ -16,5 +16,5 @@ if [ $PORT ]
    MARGS="--port 8080"
 fi
 echo starting server
-export RINGO_MODULE_PATH=./modules/:$RINGO_MODULE_PATH
+export RINGO_MODULE_PATH=./modules/:./node_modules:./lib/monarch:$RINGO_MODULE_PATH
 tools/ringo lib/monarch/web/webapp_launcher_$RUNENV.js $MARGS

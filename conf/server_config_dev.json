@@ -1,24 +1,13 @@
 {
     "type" : "dev",
-    
     "app_base" : "",
-    
     "ontology_services_url" : "http://nif-services-stage.neuinfo.org/ontoquest-lamhdi/",
-    
     "scigraph_url" : "http://geoffrey.crbs.ucsd.edu:9000/scigraph/",
-    
     "scigraph_data_url" : "http://rosie.crbs.ucsd.edu:9000/scigraph/",
-
     "golr_url" : "http://persei.monarchinitiative.org:8080/solr/golr/",
-
     "federation_services_url" : "http://beta.neuinfo.org/services/v1/federation/",
-
     "annotate_services_url" : "http://beta.neuinfo.org/services/v1/annotate/",
-    
     "autocomplete_url" : "http://beta.neuinfo.org/services/v1/vocabulary.json",
-
     "owlsim_services_url" : "http://owlsim.crbs.ucsd.edu/",
-    
     "analytics_id" : ""
-    
 }
