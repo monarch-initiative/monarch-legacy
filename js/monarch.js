@@ -826,7 +826,7 @@ bbop.monarch.widget.browse = function(server, manager, reference_id, interface_i
         each = bbop.core.each;
         // First, lets just get our base bracket layout.
         var layout = anchor.bracket_layout(term_acc);
-
+        var curr_acc;
         // So, let's go through all the rows, looking on the
         // transitivity graph to see if we can find the predicates.
         var bracket_list = [];
@@ -835,20 +835,33 @@ bbop.monarch.widget.browse = function(server, manager, reference_id, interface_i
             each(layout_level, function(layout_item){
             
             // The defaults for what we'll pass back out.
-            var curr_acc = layout_item;
+            curr_acc = layout_item;
             //var pred_id = 'is_a';
             // BUG/TODO: This is the temporary workaround for
             // incomplete transitivity graphs in some cases:
             // https://github.com/kltm/bbop-js/wiki/TransitivityGraph#troubleshooting-caveats-and-fail-modes
+            
+            // CHANGE FOR MONACH - MAKE DEFAULT CURRENT TERM
             var pred_id = 'current term';
             var curr_node = anchor.get_node(curr_acc);
             var label = curr_node.label() || layout_item;
             
             // Now we just have to determine predicates. If we're
             // the one, we'll just use the defaults.
-            if( curr_acc == term_acc ){
-                // Default.
-            }else{
+            if( curr_acc == term_acc ) {
+                // Try to get siblings here
+                unique_list = {};
+                loop(anchor.get_parent_nodes(curr_acc), function (n) {
+                    loop(anchor.get_child_nodes(n.id()), function (sibling) {
+                        if (sibling.id() != term_acc 
+                                && !( sibling.id() in unique_list )) {
+                            bracket.push([sibling.id(), sibling.label(),
+                                          anchor.get_predicates(sibling.id(), n.id())[0]]);
+                        }
+                        unique_list[sibling.id()] = 1;
+                    });
+                });
+            } else {
                 // Since the transitivity graph only stores
                 // ancestors, we can also use it to passively test
                 // if these are children we should be looking for.
@@ -872,16 +885,19 @@ bbop.monarch.widget.browse = function(server, manager, reference_id, interface_i
             // rich list.
             bracket.push([curr_acc, label, pred_id]);
             });
-            // Sort alphanum and then re-add to list.
-            bracket.sort(function(a, b){
-            if( a[1] < b[1] ){
-                return -1;
-            }else if( a[1] > b[1] ){
-                return 1;
-            }else{
-                return 0;
+            // Sort alphanum and then re-add to list. Skip if current_acc
+            if( curr_acc != term_acc ) {
+           
+                bracket.sort(function(a, b) {
+                    if( a[1] < b[1] ){
+                        return -1;
+                    } else if( a[1] > b[1] ) {
+                        return 1;
+                    } else {
+                        return 0;
+                    }
+                });
             }
-            });
             bracket_list.push(bracket);
         });
         return bracket_list;
