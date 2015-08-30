@@ -118,7 +118,45 @@ bbop.monarch.widget.browse = function(server, manager, reference_id, interface_i
         var topo_graph = new bbop.model.bracket.graph();
         topo_graph.load_json(resp._raw);
         
-        var ancestors = topo_graph.get_ancestor_subgraph(anchor._current_acc);
+        var clean_graph = new bbop.model.bracket.graph();
+        
+        // Remove nodes with an underscore, also fix equivalencies so they always appear under a node
+        loop(topo_graph.all_nodes(), function(ref_node){
+            if (!/^_/.test(ref_node.id())){
+                clean_graph.add_node(ref_node);
+            }
+            var children = topo_graph.get_child_nodes(ref_node.id());
+                loop(children, function(n){
+                    if (!/^_/.test(n.id())){
+                        var edge = new bbop.model.edge(n, ref_node, 
+                                                       topo_graph.get_predicates(n.id(), ref_node.id())[0]);
+                        
+                        if (n.id() == anchor._current_acc 
+                                && topo_graph.get_predicates(n.id(), ref_node.id())[0] == 'equivalentClass' ){
+                            edge = new bbop.model.edge(ref_node, n, 'equivalentClass');
+                            clean_graph.add_edge(edge);
+                        } else {
+                            clean_graph.add_edge(edge);
+                        }
+                    }
+                });
+            var parents = topo_graph.get_parent_nodes(ref_node.id());
+                loop(parents, function(n){
+                    if (!/^_/.test(n.id())){
+                        
+                        if (ref_node.id() == anchor._current_acc 
+                                && topo_graph.get_predicates(ref_node.id(), n.id())[0] == 'equivalentClass' ){    
+                        } else {
+                        var edge = new bbop.model.edge(ref_node, n, 
+                                                       topo_graph.get_predicates(ref_node.id(), n.id())[0]);
+                        clean_graph.add_edge(edge); }
+                    }
+                });
+        });
+        topo_graph = clean_graph;
+
+        
+        var ancestors = topo_graph.get_ancestor_subgraph(anchor._current_acc, 'subClassOf');
         
         var trans_graph = new bbop.model.graph()
         
@@ -137,7 +175,7 @@ bbop.monarch.widget.browse = function(server, manager, reference_id, interface_i
             
         });
 
-        var rich_layout = topo_graph.rich_bracket_layout(anchor._current_acc,
+        var rich_layout = topo_graph.monarch_bracket_layout(anchor._current_acc,
                                  trans_graph);
         
         ///
@@ -186,13 +224,13 @@ bbop.monarch.widget.browse = function(server, manager, reference_id, interface_i
                       'class': 'bbop-js-text-button-sim-inactive',
                       'title': 'Current term.'
                       };
-                      nav_b = new bbop.html.span(nid, inact_attrs);
+                      nav_b = new bbop.html.span(lbl, inact_attrs);
                   }else{
                       var tbs = bbop.widget.display.text_button_sim;
                       var bttn_title =
-                      'Reorient neighborhood onto this node (' +
-                      nid + ').';
-                      nav_b = new tbs(nid, bttn_title);
+                      'Reorient neighborhood onto this node ' +
+                      lbl + '( '+ nid +' ).';
+                      nav_b = new tbs(lbl, bttn_title);
                       nav_button_hash[nav_b.get_id()] = nid;
                   }
 
@@ -206,8 +244,9 @@ bbop.monarch.widget.browse = function(server, manager, reference_id, interface_i
                                     image_type);
                       info_b =
                       new bbop.html.image({'alt': info_alt,
-                                   'title': info_alt,
+                                   'title': 'Go to page for '+lbl,
                                    'src': imgsrc,
+                                   'style': 'cursor:pointer;vertical-align:top;padding-top:2px;',
                                    'generate_id': true});
                   }else{
                       // Do a text-only version.
@@ -254,7 +293,7 @@ bbop.monarch.widget.browse = function(server, manager, reference_id, interface_i
                   top_level.add_to(spaces,
                            icon,
                            nav_b.to_string(),
-                           lbl,
+                           '&nbsp;',
                            info_b.to_string());
                   }); 
              spaces = spaces + spacing;
@@ -296,7 +335,7 @@ bbop.monarch.widget.browse = function(server, manager, reference_id, interface_i
                  function(){
                  var tid = jQuery(this).attr('id');
                  var call_time_node_id = info_button_hash[tid];
-                 var newurl = "/phenotype/"+call_time_node_id;
+                 var newurl = "/resolve/"+call_time_node_id;
                  window.location.href = newurl;
                  
                  });
@@ -372,4 +411,69 @@ bbop.monarch.widget.browse = function(server, manager, reference_id, interface_i
         return descendent_graph; 
     };
     
+    bbop.model.bracket.graph.prototype.monarch_bracket_layout = function(term_acc, transitivity_graph){
+        var anchor = this;
+        each = bbop.core.each;
+        // First, lets just get our base bracket layout.
+        var layout = anchor.bracket_layout(term_acc);
+
+        // So, let's go through all the rows, looking on the
+        // transitivity graph to see if we can find the predicates.
+        var bracket_list = [];
+        each(layout, function(layout_level){
+            var bracket = [];
+            each(layout_level, function(layout_item){
+            
+            // The defaults for what we'll pass back out.
+            var curr_acc = layout_item;
+            //var pred_id = 'is_a';
+            // BUG/TODO: This is the temporary workaround for
+            // incomplete transitivity graphs in some cases:
+            // https://github.com/kltm/bbop-js/wiki/TransitivityGraph#troubleshooting-caveats-and-fail-modes
+            var pred_id = 'current term';
+            var curr_node = anchor.get_node(curr_acc);
+            var label = curr_node.label() || layout_item;
+            
+            // Now we just have to determine predicates. If we're
+            // the one, we'll just use the defaults.
+            if( curr_acc == term_acc ){
+                // Default.
+            }else{
+                // Since the transitivity graph only stores
+                // ancestors, we can also use it to passively test
+                // if these are children we should be looking for.
+                var trels =
+                transitivity_graph.get_predicates(term_acc, curr_acc);
+                if( ! bbop.core.is_empty(trels) ){
+                // Not children, so decide which of
+                // the returned edges is the best.
+                pred_id = anchor.dominant_relationship(trels);
+                }else{
+                // Probably children, so go ahead and try and
+                // pull the direct parent/child relation.
+                var drels = anchor.get_predicates(curr_acc, term_acc);
+                if( ! bbop.core.is_empty(drels) ){
+                    pred_id = anchor.dominant_relationship(drels);
+                }
+                }
+            }
+            
+            // Turn our old layout item into a new-info
+            // rich list.
+            bracket.push([curr_acc, label, pred_id]);
+            });
+            // Sort alphanum and then re-add to list.
+            bracket.sort(function(a, b){
+            if( a[1] < b[1] ){
+                return -1;
+            }else if( a[1] > b[1] ){
+                return 1;
+            }else{
+                return 0;
+            }
+            });
+            bracket_list.push(bracket);
+        });
+        return bracket_list;
+    };
 };
