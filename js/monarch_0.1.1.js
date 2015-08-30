@@ -576,14 +576,6 @@ bbop.monarch.widget.browse = function(server, manager, reference_id, interface_i
             trans_graph.add_edge(edge);
         });
         
-        var descendants = topo_graph.get_non_immediate_descendent_subgraph(anchor._current_acc, 'subClassOf', 1, 1);
-        loop(descendants.all_nodes(), function(n){
-
-                trans_graph.add_node(n);
-                var edge = new bbop.model.edge(n.id(), anchor._current_acc, 'subClassOf')
-                trans_graph.add_edge(edge);
-            
-        });
 
         var rich_layout = topo_graph.monarch_bracket_layout(anchor._current_acc,
                                  trans_graph);
@@ -640,7 +632,13 @@ bbop.monarch.widget.browse = function(server, manager, reference_id, interface_i
                       var bttn_title =
                       'Reorient neighborhood onto this node ' +
                       lbl + '( '+ nid +' ).';
-                      nav_b = new tbs(lbl, bttn_title);
+                      var btn_attrs = {};
+                      if (anchor._reference_id == nid){
+                          btn_attrs = {
+                              'style': 'background-color: #4CFFA8;'
+                          };
+                      }
+                      nav_b = new tbs(lbl, bttn_title, null, btn_attrs);
                       nav_button_hash[nav_b.get_id()] = nid;
                   }
 
@@ -801,32 +799,13 @@ bbop.monarch.widget.browse = function(server, manager, reference_id, interface_i
         anchor.manager.update('search');
     };
     
-    bbop.model.graph.prototype.get_non_immediate_descendent_subgraph = function(obj_id, pred, start, current_level){   
-        var anchor = this;
-        var edge_list = new Array();
-        var descendent_graph = new bbop.model.graph();
-        
-        anchor.get_child_nodes(obj_id, pred).forEach(function(sub_node){
-            if (start > current_level){
-                return;
-            }
-            var sub_id = sub_node.id();
-            descendent_graph.add_edge(anchor.get_edge(sub_id, obj_id, pred));
-            descendent_graph.add_node(anchor.get_node(sub_id));
-            descendent_graph.add_node(anchor.get_node(obj_id));
-            current_level++;
-            descendent_graph.merge_in(anchor.get_non_immediate_descendent_subgraph(sub_id, pred, start, current_level));
-        });
-            
-        return descendent_graph; 
-    };
-    
     bbop.model.bracket.graph.prototype.monarch_bracket_layout = function(term_acc, transitivity_graph){
         var anchor = this;
         each = bbop.core.each;
         // First, lets just get our base bracket layout.
         var layout = anchor.bracket_layout(term_acc);
         var curr_acc;
+        var isChildOfTerm = false;
         // So, let's go through all the rows, looking on the
         // transitivity graph to see if we can find the predicates.
         var bracket_list = [];
@@ -874,6 +853,7 @@ bbop.monarch.widget.browse = function(server, manager, reference_id, interface_i
                 }else{
                 // Probably children, so go ahead and try and
                 // pull the direct parent/child relation.
+                isChildOfTerm = true;
                 var drels = anchor.get_predicates(curr_acc, term_acc);
                 if( ! bbop.core.is_empty(drels) ){
                     pred_id = anchor.dominant_relationship(drels);
@@ -898,7 +878,34 @@ bbop.monarch.widget.browse = function(server, manager, reference_id, interface_i
                     }
                 });
             }
+            if ( isChildOfTerm ) {
+                // Make sure the class with additional children is at the bottom of the list        
+                for (i=0; i < bracket.length; i++){
+                    if (anchor.get_child_nodes(bracket[i][0]).length > 0){
+                        bracket.splice((bracket.length-1), 0, bracket.splice(i, 1)[0]);
+                        break;
+                    }
+                }
+            }
             bracket_list.push(bracket);
+            
+            // This only works because we know there is only one relationship
+            // from child to the starting class
+            if ( isChildOfTerm ) {
+                function addToBracket(id) {
+                    var new_bracket = [];
+                    loop(anchor.get_child_nodes(id), function (n) {
+                        new_bracket.push([n.id(), n.label(),
+                                      anchor.get_predicates(n.id(), id)[0]]);
+                        bracket_list.push(new_bracket);
+                        console.log(n.id());
+                        addToBracket(n.id());
+                    });            
+                }
+                if (bracket.length-1 > 0){
+                    addToBracket(bracket[bracket.length-1][0]);
+                }
+            }
         });
         return bracket_list;
     };
