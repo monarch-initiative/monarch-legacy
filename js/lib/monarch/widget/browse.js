@@ -200,6 +200,7 @@ bbop.monarch.widget.browse = function(server, manager, reference_id, interface_i
                   var lbl = level_item[1];
                   lbl = lbl.replace(/\b[a-z]/g, function() {
                       return arguments[0].toUpperCase()});
+                  lbl = lbl.replace(/Abnormal\(Ly\)/,'Abnormal(ly)');
                   var rel = level_item[2];
                   
                   // For various sections, decide to run image
