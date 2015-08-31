@@ -721,7 +721,7 @@ bbop.monarch.widget.browse = function(server, manager, reference_id, interface_i
         } else {
             jQuery('html, body').animate({
                 scrollTop: jQuery(".bbop-js-text-button-sim-inactive").offset().top - 45
-            }, 10);
+            }, 500);
         }
 
         ///
