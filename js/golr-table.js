@@ -151,12 +151,12 @@ function getTableFromSolr(id, golr_field, div, filter, personality, tab_anchor){
     jQuery('#'+pager_top_div).prepend(spinner_top_div.to_string());
     
     // Add pre and post run spinner (borrow filter's for now).
-    golr_manager.register('prerun', 'foo', function(){
+    golr_manager.register('prerun', 'pre', function(){
         filters.spin_up();
         jQuery('#'+pager.button_span_id()).append(spinner_top_div.to_string());
         jQuery('#'+pager_bottom.button_span_id()).append(spinner_bot_div.to_string());
     });
-    golr_manager.register('postrun', 'foo', function(){
+    golr_manager.register('postrun', 'post', function(){
         filters.spin_down();
         //jQuery('#'+spinner_top_div.get_id()).hide();
         //jQuery('#'+spinner_bot_div.get_id()).hide();    

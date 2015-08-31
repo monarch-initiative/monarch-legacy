@@ -512,6 +512,7 @@ bbop.monarch.widget.browse = function(server, manager, reference_id, interface_i
     this._reference_id = reference_id;
     this.server = server;
     this.manager = manager;
+    var isInitialRun = true;
 
     // Successful callbacks call draw_rich_layout.
     manager.register('success', 'do', draw_rich_layout);
@@ -699,14 +700,14 @@ bbop.monarch.widget.browse = function(server, manager, reference_id, interface_i
                       icon = '[???]';
                       }
                   }
-
+                  foo = makeSpinnerDiv();
                   // Stack the info, with the additional
                   // spaces, into the div.
                   top_level.add_to(spaces,
                            info_b.to_string(),
                            icon,
                            nav_b.to_string(),
-                           '&nbsp;');
+                           '&nbsp;',foo);
                   }); 
              spaces = spaces + spacing;
              }); 
@@ -714,6 +715,14 @@ bbop.monarch.widget.browse = function(server, manager, reference_id, interface_i
         // Add the skeleton to the doc.
         jQuery('#' + anchor._interface_id).empty();
         jQuery('#' + anchor._interface_id).append(top_level.to_string());
+        
+        if (isInitialRun) {
+            isInitialRun = false;
+        } else {
+            jQuery('html, body').animate({
+                scrollTop: jQuery(".bbop-js-text-button-sim-inactive").offset().top - 45
+            }, 10);
+        }
 
         ///
         /// Finally, attach any events to the browser HTML doc.
@@ -726,6 +735,9 @@ bbop.monarch.widget.browse = function(server, manager, reference_id, interface_i
              jQuery('#' + button_id).click(
                  function(){
                  var tid = jQuery(this).attr('id');
+                 //Override display none
+                 jQuery('#'+tid).siblings('.progress').css("display", "inline-block");
+                 
                  var call_time_node_id = nav_button_hash[tid];
                  //alert(call_time_node_id);
                  // Check if the reference class is a subclass of the current node
@@ -902,7 +914,6 @@ bbop.monarch.widget.browse = function(server, manager, reference_id, interface_i
                         new_bracket.push([n.id(), n.label(),
                                       anchor.get_predicates(n.id(), id)[0]]);
                         bracket_list.push(new_bracket);
-                        console.log(n.id());
                         addToBracket(n.id());
                     });            
                 }
@@ -913,4 +924,24 @@ bbop.monarch.widget.browse = function(server, manager, reference_id, interface_i
         });
         return bracket_list;
     };
+    function makeSpinnerDiv(){
+        // Details for spinner
+           var inspan = new bbop.html.tag('span', {'class': 'sr-only'}, '...');
+           var indiv = new bbop.html.tag('div', {'class': 'progress-bar',
+                             'role': 'progressbar',
+                             'aria-valuenow': '100',
+                             'aria-valuemin': '0',
+                             'aria-valuemax': '100',
+                             'style': 'width: 100%;'},
+                         inspan);
+           var spinner_div =
+           new bbop.html.tag('div',
+                     {'generate_id': true,
+                      'class':
+                      'progress progress-striped active',
+                      'style': 'width: 3em; position:absolute; display:inline-block; display:none; margin-bottom:3px;'},
+                     indiv);
+           
+           return spinner_div;
+       }
 };
