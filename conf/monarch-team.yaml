@@ -30,7 +30,7 @@ institutions:
         bio: Julie specializes in ontology-aware tools that facilitate synthesis research. She holds a BA in Biology (Rhode Island College), with post-bac training in Computer Science (Harvard Extension School), as well as Immunology & Virology (Brown University). She holds a MSc in Public Health from the University of London.
       - name: Bryan Laraway
         title: Data Wrangler
-        alumni: false
+        alumni: true
         bio: Bryan has a BA from Reed College in Biology, post-bac training in MIS from Oregon Institute of Technology, and is currently a Master’s student in Bioinformatics &amp; Computational Biology at Oregon Health &amp; Science University. He is currently a Data Wrangler for the Monarch Initiative, assisting with data ingestion.
       - name: Kent Shefchek
         picture: /image/team/KentShefchek.jpg
@@ -80,6 +80,9 @@ institutions:
       #     twitter: http://twitter.com
       #     facebook: http://facebook.com
       #     website: https://en.wikipedia.org/wiki/Rocky_the_Flying_Squirrel
+       - name: Chris Condit
+              title: SciGraph developer
+              alumni: true
       - name: Sarah Kim
         title: Web Developer/Designer
         alumni: true
@@ -90,7 +93,7 @@ institutions:
     website: http://ucsd.edu
     people:
       - name: Maryann Martone
-        alumni: false
+        alumni: true
         title: Monarch PI
         bio: Dr. Martone is currently a PI of the Monarch Initiative. She has a BA from Wellesley College in biological psychology and a Ph. D. in neuroscience from the University of California, San Diego, where she is currently a Professor in the Department of Neuroscience. Her background is in neuroanatomy, particularly light and electron microscopy, but she spends most of her time now in the field of neuroinformatics. She is the principal investigator of the Neuroinformatics Framework project, a national project to establish a uniform resource description framework for neuroscience. Her recent work has focused on building ontologies for neuroscience for data integration. She heads the International Neuroinformatics Coordinating Facility (INCF) program on ontologies. She is the executive director of FORCE11, an organization dedicated to advancing scholarly communication and e-scholarship.
       - name: Anita Bandrowski
@@ -98,11 +101,12 @@ institutions:
         title: Bioinformatician
         bio: Dr. Bandrowski trained as a neurophysiologist at UC Riverside and Stanford, however moved to bioinformatics with the human genome project at Celera. Currently working at the Center of Research in Biological Systems at UCSD, Dr. Bandrowski builds systems that attempt to make sense of the vast information being produced by biologists.
       - name: Jeffrey Grethe
+        title: Monarch PI
         alumni: false
         title: Architect
         bio: Dr. Grethe has a BS from the University of California Irvine in Applied Mathematics and a Ph.D. in Neuroscience, with a focus on bioinformatics, from the University of Southern California. Throughout his career, his primary focus has been on enabling collaborative research, data sharing and discovery through the application of advanced informatics approaches. Before coming to UCSD he was one of the core members responsible for bringing the fMRI Data Center online, the first publicly accessible repository of peer-reviewed fMRI studies. He is currently leading a number of large scale biological and biomedical informatics projects (i.e. PI for the NIDDK Interconnectivity Network Coordinating Center, co-PI for the Neuroscience Information Framework, and Technical Lead for the Community Cyberinfrastructure for Advanced Microbial Ecology Research and Analysis) in the Center for Research in Biological Systems at the University of California, San Diego.
       - name: Amarnath Gupta
-        alumni: false
+        alumni: true
         title: Lead Semantic Architect
         bio: Dr. Gupta received his Bachelor of Technology from the Indian Institute of Technology, Kharagpur, a Master of Science in Biomedical Engineering from University of Texas, Arlington, and his Ph.D. (Engineering) degree in Computer Science from Jadavpur University, India. He is a Research Scientist at the San Diego Supercomputer Center (SDSC) of the University of California San Diego. He leads the Advanced Query Processing Laboratory in the Data and Knowledge Systems group at SDSC. His research interests include scientific data modeling, information integration, multimedia databases and spatiotemporal data management.
       - name: Larry Lui
