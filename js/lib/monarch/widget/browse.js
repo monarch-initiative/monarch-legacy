@@ -220,7 +220,7 @@ bbop.monarch.widget.browse = function(server, manager, reference_id, interface_i
                   if(anchor._current_acc == nid){
                       var inact_attrs = {
                       'class': 'bbop-js-text-button-sim-inactive',
-                      'title': 'Current term.',
+                      'title': 'Current term ( ' + nid + ' )',
                       'style': 'background-color: #4F5F65; color: white;'
                       };
                       nav_b = new bbop.html.span(lbl, inact_attrs);
@@ -293,14 +293,14 @@ bbop.monarch.widget.browse = function(server, manager, reference_id, interface_i
                       icon = '[???]';
                       }
                   }
-                  foo = makeSpinnerDiv();
+                  var spinner = makeSpinnerDiv();
                   // Stack the info, with the additional
                   // spaces, into the div.
                   top_level.add_to(spaces,
-                           info_b.to_string(),
+                           //info_b.to_string(),
                            icon,
                            nav_b.to_string(),
-                           '&nbsp;',foo);
+                           '&nbsp;', spinner);
                   }); 
              spaces = spaces + spacing;
              }); 
@@ -327,6 +327,8 @@ bbop.monarch.widget.browse = function(server, manager, reference_id, interface_i
 
              jQuery('#' + button_id).click(
                  function(){
+                     
+                 /*
                  var tid = jQuery(this).attr('id');
                  //Override display none
                  jQuery('#'+tid).siblings('.progress').css("display", "inline-block");
@@ -341,6 +343,11 @@ bbop.monarch.widget.browse = function(server, manager, reference_id, interface_i
                  } else {
                      anchor.draw_browser('HP:0000118', call_time_node_id, anchor._reference_id, call_time_node_id);
                  }
+                 */
+                     var tid = jQuery(this).attr('id');
+                     var call_time_node_id = nav_button_hash[tid];
+                     var newurl = "/resolve/"+call_time_node_id;
+                     window.location.href = newurl;
                  });
              });
 
@@ -350,10 +357,10 @@ bbop.monarch.widget.browse = function(server, manager, reference_id, interface_i
 
              jQuery('#' + button_id).click(
                  function(){
-                 var tid = jQuery(this).attr('id');
-                 var call_time_node_id = info_button_hash[tid];
-                 var newurl = "/resolve/"+call_time_node_id;
-                 window.location.href = newurl;
+                     var tid = jQuery(this).attr('id');
+                     var call_time_node_id = info_button_hash[tid];
+                     var newurl = "/resolve/"+call_time_node_id;
+                     window.location.href = newurl;
                  
                  });
          });
