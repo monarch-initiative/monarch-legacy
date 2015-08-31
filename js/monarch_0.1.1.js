@@ -607,6 +607,8 @@ bbop.monarch.widget.browse = function(server, manager, reference_id, interface_i
 
                   var nid = level_item[0];
                   var lbl = level_item[1];
+                  lbl = lbl.replace(/\b[a-z]/g, function() {
+                      return arguments[0].toUpperCase()});
                   var rel = level_item[2];
                   
                   // For various sections, decide to run image
@@ -624,7 +626,8 @@ bbop.monarch.widget.browse = function(server, manager, reference_id, interface_i
                   if(anchor._current_acc == nid){
                       var inact_attrs = {
                       'class': 'bbop-js-text-button-sim-inactive',
-                      'title': 'Current term.'
+                      'title': 'Current term.',
+                      'style': 'background-color: #4F5F65; color: white;'
                       };
                       nav_b = new bbop.html.span(lbl, inact_attrs);
                   }else{
@@ -632,10 +635,11 @@ bbop.monarch.widget.browse = function(server, manager, reference_id, interface_i
                       var bttn_title =
                       'Reorient neighborhood onto this node ' +
                       lbl + '( '+ nid +' ).';
-                      var btn_attrs = {};
+                      var btn_attrs = {'style': 'background-color: #e3efff; border-style: none;'
+                          };
                       if (anchor._reference_id == nid){
                           btn_attrs = {
-                              'style': 'background-color: #4CFFA8;'
+                              'style': 'background-color: #9EBFCB; border-style: none;'
                           };
                       }
                       nav_b = new tbs(lbl, bttn_title, null, btn_attrs);
@@ -654,7 +658,7 @@ bbop.monarch.widget.browse = function(server, manager, reference_id, interface_i
                       new bbop.html.image({'alt': info_alt,
                                    'title': 'Go to page for '+lbl,
                                    'src': imgsrc,
-                                   'style': 'cursor:pointer;vertical-align:top;padding-top:2px;',
+                                   'style': 'cursor:pointer;',
                                    'generate_id': true});
                   }else{
                       // Do a text-only version.
@@ -699,10 +703,10 @@ bbop.monarch.widget.browse = function(server, manager, reference_id, interface_i
                   // Stack the info, with the additional
                   // spaces, into the div.
                   top_level.add_to(spaces,
+                           info_b.to_string(),
                            icon,
                            nav_b.to_string(),
-                           '&nbsp;',
-                           info_b.to_string());
+                           '&nbsp;');
                   }); 
              spaces = spaces + spacing;
              }); 
