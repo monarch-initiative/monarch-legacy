@@ -415,6 +415,11 @@ p {
     margin-left : 20px;
 }
 
+#overview .col-xs-12, #overview .col-sm-12, #overview .col-md-12, #overview .col-lg-4{
+	padding-left: 0px;
+	padding-top: 10px;
+}
+
 
 .sibling-form label {
 	font-weight: normal;

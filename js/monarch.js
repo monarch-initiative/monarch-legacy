@@ -471,7 +471,7 @@ if ( typeof bbop.monarch.widget == "undefined" ){ bbop.monarch.widget = {}; }
  * Returns:
  *  this object
  */
-bbop.monarch.widget.browse = function(server, manager, reference_id, interface_id,
+bbop.monarch.widget.browse = function(server, manager, reference_id, root, interface_id,
                   in_argument_hash){
 
     // Per-UI logger.
@@ -510,6 +510,12 @@ bbop.monarch.widget.browse = function(server, manager, reference_id, interface_i
     // The current acc that we are interested in.
     this._current_acc = null;
     this._reference_id = reference_id;
+    
+    if (!root){
+        root = "HP:0000118";
+    }
+    this._root = root;
+
     this.server = server;
     this.manager = manager;
     var isInitialRun = true;
@@ -635,10 +641,14 @@ bbop.monarch.widget.browse = function(server, manager, reference_id, interface_i
                       };
                       nav_b = new bbop.html.span(lbl, inact_attrs);
                   }else{
+                      var node = topo_graph.get_node(nid);
+                      var metadata = node.metadata();
+                      var bttn_title = 'Go to page for '+ nid;
+                      if (metadata && metadata['definition']){
+                          bttn_title = bttn_title + ": " + metadata['definition'];
+                      }
                       var tbs = bbop.widget.display.text_button_sim;
-                      var bttn_title =
-                      'Reorient neighborhood onto this node ' +
-                      lbl + '( '+ nid +' ).';
+
                       var btn_attrs = {'style': 'background-color: #e3efff; border-style: none;'
                           };
                       if (anchor._reference_id == nid){
@@ -706,11 +716,15 @@ bbop.monarch.widget.browse = function(server, manager, reference_id, interface_i
                   var spinner = makeSpinnerDiv();
                   // Stack the info, with the additional
                   // spaces, into the div.
-                  top_level.add_to(spaces,
-                           //info_b.to_string(),
-                           icon,
-                           nav_b.to_string(),
-                           '&nbsp;', spinner);
+                  if (nid != anchor._root){
+                      top_level.add_to(spaces,
+                              //info_b.to_string(),
+                              icon,
+                              nav_b.to_string(),
+                              '&nbsp;', spinner);
+                  } else {
+                      top_level.add_to(spaces,  nav_b.to_string(), '&nbsp;', spinner); 
+                  }
                   }); 
              spaces = spaces + spacing;
              }); 
@@ -738,22 +752,6 @@ bbop.monarch.widget.browse = function(server, manager, reference_id, interface_i
              jQuery('#' + button_id).click(
                  function(){
                      
-                 /*
-                 var tid = jQuery(this).attr('id');
-                 //Override display none
-                 jQuery('#'+tid).siblings('.progress').css("display", "inline-block");
-                 
-                 var call_time_node_id = nav_button_hash[tid];
-                 //alert(call_time_node_id);
-                 // Check if the reference class is a subclass of the current node
-                 
-                 parent_nodes = topo_graph.get_parent_nodes().map( function (val){ return val.id; });
-                 if (parent_nodes.indexOf(anchor._reference_id) > -1){
-                     anchor.draw_browser('HP:0000118', anchor._reference_id, call_time_node_id, call_time_node_id);
-                 } else {
-                     anchor.draw_browser('HP:0000118', call_time_node_id, anchor._reference_id, call_time_node_id);
-                 }
-                 */
                      var tid = jQuery(this).attr('id');
                      var call_time_node_id = nav_button_hash[tid];
                      var newurl = "/resolve/"+call_time_node_id;
@@ -816,7 +814,7 @@ bbop.monarch.widget.browse = function(server, manager, reference_id, interface_i
     this.init_browser = function(term_acc){
         anchor._current_acc = term_acc;
         // Data call setup
-        var rsrc = this.server + "dynamic/browser.json" + "?start_id=" + term_acc + "&root_id=HP:0000118&relationship=subClassOf|partOf|isA";
+        var rsrc = this.server + "dynamic/browser.json" + "?start_id=" + term_acc + "&root_id=" + anchor._root+ "&relationship=subClassOf|partOf|isA";
        
         anchor.manager.resource(rsrc);
         anchor.manager.method('get');

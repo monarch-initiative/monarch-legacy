@@ -217,8 +217,17 @@ function addDownloadButton(pager, manager){
 
 }
 
-function makeSpinnerDiv(){
+function makeSpinnerDiv(args){
  // Details for spinner
+    
+    var default_args = {'generate_id': true,
+                        'class':
+                        'progress progress-striped active',
+                        'style': 'width: 3em; position:absolute; display:inline-block; margin-top:3px; margin-left:10px;'
+    };
+    if (!args){
+        args = default_args;
+    }
     var inspan = new bbop.html.tag('span', {'class': 'sr-only'}, '...');
     var indiv = new bbop.html.tag('div', {'class': 'progress-bar',
                       'role': 'progressbar',
@@ -229,26 +238,63 @@ function makeSpinnerDiv(){
                   inspan);
     var spinner_div =
     new bbop.html.tag('div',
-              {'generate_id': true,
-               'class':
-               'progress progress-striped active',
-               'style': 'width: 3em; position:absolute; display:inline-block; margin-top:3px; margin-left:10px;'},
+              args,
               indiv);
     
     return spinner_div;
 }
 
-function getOntologyBrowser(id){
+function getOntologyBrowser(id, root){
     
     // Conf
     var srv = global_scigraph_url;
     
-    //bbop.core.extend(bbop.rest.manager, bbop.registry);
-    //bbop.core.extend(bbop.rest.manager.jquery, bbop.rest.manager);
+    var spinner_args = {'generate_id': true,
+            'class':
+            'progress progress-striped active',
+            'style': 'width: 3em; display:inline-block; margin-top:3px; margin-left:10px;'
+    };
+    var spinner = makeSpinnerDiv(spinner_args);
+    
+    jQuery('#brw').append(spinner.to_string());
+
     var manager = new bbop.rest.manager.jquery(bbop.rest.response.json);
+    
+    if (!root){
+        root = "HP:0000118";
+    }
 
     // Browser.
-    var b = new bbop.monarch.widget.browse(srv, manager, id, 'brw', {
+    var b = new bbop.monarch.widget.browse(srv, manager, id, root, 'brw', {
+        'info_icon': 'info',
+        'current_icon': 'current_term',
+        'base_icon_url': '/image',
+        'image_type': 'gif',
+        'info_button_callback':
+            function(term_acc, term_doc){
+                // // Local form.
+                // shield.draw(term_doc);
+                // Remote form (works).
+                //shield.draw(term_acc);
+            }
+    });
+
+    b.init_browser(id);
+}
+
+function getInteractiveOntologyBrowser(id, root){
+    
+    // Conf
+    var srv = global_scigraph_url;
+
+    var manager = new bbop.rest.manager.jquery(bbop.rest.response.json);
+    
+    if (!root){
+        root = "HP:0000118";
+    }
+
+    // Browser.
+    var b = new bbop.monarch.widget.interactive_browse(srv, manager, id, root, 'brw', {
         'info_icon': 'info',
         'current_icon': 'current_term',
         'base_icon_url': '/image',
