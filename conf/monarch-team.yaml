@@ -80,9 +80,6 @@ institutions:
       #     twitter: http://twitter.com
       #     facebook: http://facebook.com
       #     website: https://en.wikipedia.org/wiki/Rocky_the_Flying_Squirrel
-       - name: Chris Condit
-              title: SciGraph developer
-              alumni: true
       - name: Sarah Kim
         title: Web Developer/Designer
         alumni: true
@@ -113,6 +110,9 @@ institutions:
         alumni: false
         title: Systems Support
         bio: "Larry is a systems engineer working for the Center for Research in Biological Systems at the University of California, San Diego. He has 10+ years of experience working on linux system integration as well as deploying, configuring, and administering high performance compute clusters. He is currently involved with the Neuroscience Information Framework project, International Neuroinformatics Coordinating Facility (UCSD node), and The Cell: An Image Library."
+      - name: Chris Condit
+        alumni: true
+        title: SciGraph developer
   - id: pitt
     name: University of Pittsburgh
     logo: /image/team-pitt.png
