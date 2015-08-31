@@ -173,3 +173,11 @@ institutions:
         alumni: false
         title: Developer
         bio: Dr. Groza is Phenomics Team Leader in the Kinghorn Centre for Clinical Genomics, at the Garvan Institute of Medical Research, Sydney Australia. Tudor has a BSc and an MSc, both in Computer Science, from Technical University of Cluj Napoca, Romania and a PhD in Semantic Web / Computer Science from the Digital Enterprise Research Institute (DERI) Galway, National University of Ireland, Galway. His current research covers the entire phenotype analytics stack, from representation and acquisition (from publications or clinical reports) to decision making - including disorder prediction, patient matchmaking or variant prioritisation.
+      - name: Craig McNamara
+        alumni: false
+        title: Developer
+        bio: Craig is a UX & front-end engineer in the Phenomics Team at the Kinghorn Centre for Clinical Genomics, where he is leading the front-end development of several components, including PhenoDisquss and the Patient Archive. Craig is an expert in UX design and testing, as well as development using AngularJS, and has a double degree in Software Engineering and Multimedia Design from the University of Queensland.
+      - name: Edwin Zhang
+        alumni: false
+        title: Developer
+        bio: Edwin is a Software Engineer in the Phenomics Team at the Kinghorn Centre for Clinical Genomics. He is in charge with the development of the backend of the collaborative knowledge curation platform PhenoDisquss. Edwin is an expert in data structures, algorithms and big data and has a BS in Telecommunication Engineering from Nanjing Institute of Technology and two MS - one in Computer Science (University of Wollongong) and one in Information Technology (University of Technology Sydney).
