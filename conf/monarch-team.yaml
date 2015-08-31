@@ -94,7 +94,7 @@ institutions:
         title: Monarch PI
         bio: Dr. Martone is currently a PI of the Monarch Initiative. She has a BA from Wellesley College in biological psychology and a Ph. D. in neuroscience from the University of California, San Diego, where she is currently a Professor in the Department of Neuroscience. Her background is in neuroanatomy, particularly light and electron microscopy, but she spends most of her time now in the field of neuroinformatics. She is the principal investigator of the Neuroinformatics Framework project, a national project to establish a uniform resource description framework for neuroscience. Her recent work has focused on building ontologies for neuroscience for data integration. She heads the International Neuroinformatics Coordinating Facility (INCF) program on ontologies. She is the executive director of FORCE11, an organization dedicated to advancing scholarly communication and e-scholarship.
       - name: Anita Bandrowski
-        alumni: false
+        alumni: true
         title: Bioinformatician
         bio: Dr. Bandrowski trained as a neurophysiologist at UC Riverside and Stanford, however moved to bioinformatics with the human genome project at Celera. Currently working at the Center of Research in Biological Systems at UCSD, Dr. Bandrowski builds systems that attempt to make sense of the vast information being produced by biologists.
       - name: Jeffrey Grethe

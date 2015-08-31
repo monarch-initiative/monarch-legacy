@@ -117,7 +117,7 @@
         },
         {
           "name": "Anita Bandrowski",
-          "alumni": false,
+          "alumni": true,
           "title": "Bioinformatician",
           "bio": "Dr. Bandrowski trained as a neurophysiologist at UC Riverside and Stanford, however moved to bioinformatics with the human genome project at Celera. Currently working at the Center of Research in Biological Systems at UCSD, Dr. Bandrowski builds systems that attempt to make sense of the vast information being produced by biologists."
         },
