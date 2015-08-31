@@ -33,7 +33,7 @@ institutions:
         alumni: false
         bio: Bryan has a BA from Reed College in Biology, post-bac training in MIS from Oregon Institute of Technology, and is currently a Master’s student in Bioinformatics &amp; Computational Biology at Oregon Health &amp; Science University. He is currently a Data Wrangler for the Monarch Initiative, assisting with data ingestion.
       - name: Kent Shefchek
-        picture: /image/team/ks.jpg
+        picture: /image/team/KentShefcheck.jpg
         title: Bioinfomatics Software Engineer
         alumni: false
         bio: Kent is a Software Engineer for the OHSU ontology development group where he develops the Monarch API, front end visualizations, and the data ingest pipeline. Kent has a BS in Biology from the University of Maryland, College Park and a MS in Biotechnology with a specialization in Bioinformatics from the University of Maryland, University College.
@@ -142,6 +142,8 @@ institutions:
     website: http://charite.de/en/charite/
     people:
       - name: Peter Robinson
+        title: Monarch PI
+        picture: /image/team/PeterRobinson.jpg
         alumni: false
         title: Clinical Bioinformatician
         bio:  Dr. Robinson has a BA in Mathematics as well as an MSC. in computer science from Columbia University, and an MD from University of Pennsylvania. He has been working as a clinician and a research at the Charité Universitätsmedizin Berlin, Germany, since 1996, and has obtained certification (“Facharzt”) in pediatrics, as well as a Habilitation (“Privatdozent”) in Human Genetics. He is currently Professor for Medical Genomics at the Charité and leads a mixed group of bioinformaticians, biologists, and MDs. Much of Peter’s work has involved the development of computational resources and algorithms for the study of human hereditary diseases, including the development of the Human Phenotype Ontology (HPO) as well as the bioinformatics analysis of next-generation sequencing data including exome,  genome, RNA-Seq, ChIP-Seq, and TCR sequencing experiments. Recent wetlab highlights include the identification of the disease genes CA8, PIGV, PIGO, and PGAP2 as well as the development of a novel therapy for Marfan syndrome based on inhibition of a class of GxxPG-containing fragments of the extracellular matrix.
