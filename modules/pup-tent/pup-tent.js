@@ -223,29 +223,32 @@ module.exports = function(search_path_list, filename_list){
     // Make sure the file is there, then save it to the
     // appropriate caches.
     function _check_and_save(path){
-	//console.log('l@: ' + path);
+    	var cache_exclusions_re = /\.DS_Store$/;
 	if( afs.exists_p(path) ){
-	    if( afs.file_p(path) ){
+	    if( afs.file_p(path) && !cache_exclusions_re.test(path)){
 		//console.log('found file: ' + path);
-		
+
 		// Break into parts for saving if it is a full file.
 		var filename = path;
 		var slash_loc = path.lastIndexOf('/') + 1;
-		if( slash_loc != 0 ){
+		if( slash_loc !== 0 ){
 		    filename = path.substr(slash_loc, path.length);
 		}
-		
+
 		// Capture full path.
 		path_cache[path] = path;
 		zcache[path] = afs.read_file(path);
-		
+
 		// Capture flattened name.
 		path_cache[filename] = path;
 		zcache[filename] = afs.read_file(path);
-		
+
 		// Capture which is which.
 		ns_cache_flat[filename] = true;
 		ns_cache_full[path] = true;
+	    }
+	    else {
+          // console.log('_check_and_save EXCLUDE:', path);
 	    }
 	}
     }
