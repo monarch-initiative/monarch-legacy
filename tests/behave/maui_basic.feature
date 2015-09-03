@@ -58,6 +58,21 @@ Feature: Monarch-app UI basic pages display okay
     Given I go to page "/resolve/Bogus:123"
      then the document should contain "Sorry. Your page could not be found"
      and the title should be "Error"
+     
+ @ui
+ Scenario: Going to the page /resolve/Coriell:ND24213 will forward to /model/Coriell:ND24213
+    Given I go to page "/resolve/Coriell:ND24213"
+     then the url will be "/model/Coriell:ND24213"
+     
+ @ui
+ Scenario: Going to the page /resolve/RRID:Coriell:ND24213 will forward to /model/RRID:Coriell:ND24213
+    Given I go to page "/resolve/RRID:Coriell:ND24213"
+     then the url will be "/model/RRID:Coriell:ND24213"
+     
+ @ui
+ Scenario: Going to the page /resolve/OMIM_600669 will forward to /disease/OMIM:600669
+    Given I go to page "/resolve/OMIM_600669"
+     then the url will be "/disease/OMIM:600669"
 
  @ui
  Scenario: A hyperlink with text "All" should not be linked from /phenotype/HP:0000118
