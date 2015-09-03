@@ -442,7 +442,7 @@ fields:
     id: is_defined_by
     property: []
     type: string
-filter_weights: relation_closure_label^6.5 evidence_closure_label^6.0 subject_taxon_closure_label^3.5 object_taxon_closure_label^3.0
+filter_weights: subject_taxon_closure_label^3.5 object_taxon_closure_label^3.0
 id: model_pathway
 result_weights: object^8.0 relation^7.0 subject^6.0 evidence^4.0 source^3.5
 schema_generating: true
