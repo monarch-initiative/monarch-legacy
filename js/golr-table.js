@@ -55,6 +55,8 @@ function getTableFromSolr(id, golr_field, div, filter, personality, tab_anchor){
         golr_manager.set_personality(personality);
         //golr_manager.add_query_filter('document_category', 'annotation', ['*']);
         golr_manager.add_query_filter(golr_field, id, ['*']);
+        golr_manager.query_variants['facet.method'] = 'enum'
+        
     
         if (filter != null && filter instanceof Array && filter.length > 0){
             filter.forEach( function (val) {
