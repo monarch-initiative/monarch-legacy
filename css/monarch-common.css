@@ -372,11 +372,6 @@ p {
 }
 
 /* BS3 Filter from bbop.live_filter widget */
-.bs3filter .well-sm {
-    padding: 7px;
-    margin-bottom: 10px;
-   /* display: none; */
-}
 
 .bs3filter .panel {
     margin-bottom: 10px;

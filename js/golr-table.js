@@ -69,10 +69,21 @@ function getTableFromSolr(id, golr_field, div, filter, personality, tab_anchor){
         // Add filters.
         var f_opts = {
                 'meta_label': 'Total:&nbsp;',
-                'display_free_text_p': true
+                'display_free_text_p': false,
+                'display_meta_p': false
         };
         var filters = new bbop.widget.live_filters(pager_filter, golr_manager, gconf, f_opts);
         filters.establish_display();
+        
+        //Remove sticky filter
+        var remove_stick_filter = function(){
+            
+            jQuery('#'+pager_filter+' div')
+                .filter(function() {
+                    return this.id.match(/_sticky_filters\-id$/);
+                })
+                .remove();
+        };
 
         // Attach pager.
         var pager_opts = {
@@ -155,6 +166,7 @@ function getTableFromSolr(id, golr_field, div, filter, personality, tab_anchor){
     // Add pre and post run spinner (borrow filter's for now).
     golr_manager.register('prerun', 'pre', function(){
         filters.spin_up();
+        remove_stick_filter();
         jQuery('#'+pager.button_span_id()).append(spinner_top_div.to_string());
         jQuery('#'+pager_bottom.button_span_id()).append(spinner_bot_div.to_string());
     });
