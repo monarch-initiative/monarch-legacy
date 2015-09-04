@@ -84,6 +84,17 @@ function getTableFromSolr(id, golr_field, div, filter, personality, tab_anchor){
                 })
                 .remove();
         };
+        
+        //open species filter
+        var open_species_filter = function(){
+            
+            jQuery('#'+pager_filter+' div')
+                .filter(function() {
+                    return this.id.match(/^collapsible-subject_taxon_label/);
+                })
+                .removeClass('collapse')
+                .addClass('in');
+        };
 
         // Attach pager.
         var pager_opts = {
@@ -167,11 +178,13 @@ function getTableFromSolr(id, golr_field, div, filter, personality, tab_anchor){
     golr_manager.register('prerun', 'pre', function(){
         filters.spin_up();
         remove_stick_filter();
+        
         jQuery('#'+pager.button_span_id()).append(spinner_top_div.to_string());
         jQuery('#'+pager_bottom.button_span_id()).append(spinner_bot_div.to_string());
     });
     golr_manager.register('postrun', 'post', function(){
         filters.spin_down();
+        open_species_filter();
         //jQuery('#'+spinner_top_div.get_id()).hide();
         //jQuery('#'+spinner_bot_div.get_id()).hide();    
     });
