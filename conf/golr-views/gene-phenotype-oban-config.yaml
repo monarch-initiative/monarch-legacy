@@ -442,7 +442,7 @@ fields:
     id: is_defined_by
     property: []
     type: string
-filter_weights: subject_taxon_closure_label^3.5
+filter_weights: subject_taxon_label^3.5
 id: gene_phenotype
 result_weights: subject^7.0 subject_taxon^6.5 relation^6.0  object^5.0 evidence^4.0 source^3.5
 schema_generating: true
