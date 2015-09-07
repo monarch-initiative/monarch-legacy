@@ -115,253 +115,279 @@ bbop.monarch.widget.browse = function(server, manager, reference_id, root, inter
 
     // Recursively draw a rich layout using nested uls.
     function draw_rich_layout(resp){
-    
-        ///
-        /// Get the rich layout from the returned document if
-        /// possible. Note the use of JSON, supplied by jQuery,
-        /// instead of out internal method bbop.json.parse.
-        ///
-
+        
         var topo_graph = new bbop.model.bracket.graph();
         topo_graph.load_json(resp._raw);
         
-        var clean_graph = new bbop.model.bracket.graph();
+        var subclass_manager = new bbop.rest.manager.jquery(bbop.rest.response.json);
+        rsrc =  anchor.server + "graph/neighbors/" + anchor._reference_id + ".json?&depth=1&blankNodes=false&relationshipType=subClassOf&direction=INCOMING&project=%2A";
+
+        subclass_manager.resource(rsrc);
+        subclass_manager.method('get');
+        subclass_manager.jsonp_callback('callback');
+        subclass_manager.register('success', 'do', combine_graphs);
+        subclass_manager.update('search');
         
-        // Remove nodes with an underscore, also fix equivalencies so they always appear under a node
-        loop(topo_graph.all_nodes(), function(ref_node){
-            if (!/^_/.test(ref_node.id())){
-                clean_graph.add_node(ref_node);
-            }
-            var children = topo_graph.get_child_nodes(ref_node.id());
-                loop(children, function(n){
-                    if (!/^_/.test(n.id())){
-                        var edge = new bbop.model.edge(n, ref_node, 
-                                                       topo_graph.get_predicates(n.id(), ref_node.id())[0]);
-                        
-                        if (n.id() == anchor._current_acc 
-                                && topo_graph.get_predicates(n.id(), ref_node.id())[0] == 'equivalentClass' ){
-                            edge = new bbop.model.edge(ref_node, n, 'equivalentClass');
-                            clean_graph.add_edge(edge);
-                        } else {
-                            clean_graph.add_edge(edge);
+        function combine_graphs(resp){
+            var subclass_graph = new bbop.model.bracket.graph();
+            subclass_graph.load_json(resp._raw);
+            topo_graph.merge_in(subclass_graph);
+            
+          ///
+            /// Get the rich layout from the returned document if
+            /// possible. Note the use of JSON, supplied by jQuery,
+            /// instead of out internal method bbop.json.parse.
+            ///
+
+            
+            
+            var clean_graph = new bbop.model.bracket.graph();
+            
+            // Remove nodes with an underscore, also fix equivalencies so they always appear under a node
+            loop(topo_graph.all_nodes(), function(ref_node){
+                if (!/^_/.test(ref_node.id())){
+                    clean_graph.add_node(ref_node);
+                }
+                var children = topo_graph.get_child_nodes(ref_node.id());
+                    loop(children, function(n){
+                        if (!/^_/.test(n.id()) && ref_node.id() != 'http://www.w3.org/2002/07/owl#Thing'
+                                && n.id() != 'http://www.w3.org/2002/07/owl#Thing'){
+                            
+                            
+                            var edge = new bbop.model.edge(n, ref_node, 
+                                                           topo_graph.get_predicates(n.id(), ref_node.id())[0]);
+                            
+                            if (n.id() == anchor._current_acc 
+                                    && topo_graph.get_predicates(n.id(), ref_node.id())[0] == 'equivalentClass' ){
+                                edge = new bbop.model.edge(ref_node, n, 'equivalentClass');
+                                clean_graph.add_edge(edge);
+                            } else {
+                                clean_graph.add_edge(edge);
+                            }
                         }
-                    }
-                });
-            var parents = topo_graph.get_parent_nodes(ref_node.id());
-                loop(parents, function(n){
-                    if (!/^_/.test(n.id())){
-                        
-                        if (ref_node.id() == anchor._current_acc 
-                                && topo_graph.get_predicates(ref_node.id(), n.id())[0] == 'equivalentClass' ){    
-                        } else {
-                        var edge = new bbop.model.edge(ref_node, n, 
-                                                       topo_graph.get_predicates(ref_node.id(), n.id())[0]);
-                        clean_graph.add_edge(edge); }
-                    }
-                });
-        });
-        topo_graph = clean_graph;
+                    });
+                var parents = topo_graph.get_parent_nodes(ref_node.id());
+                    loop(parents, function(n){
+                        if (!/^_/.test(n.id()) && ref_node.id() != 'http://www.w3.org/2002/07/owl#Thing'
+                              && n.id() != 'http://www.w3.org/2002/07/owl#Thing'){
+                            
+                            if (ref_node.id() != anchor._current_acc 
+                                    && topo_graph.get_predicates(ref_node.id(), n.id())[0] != 'equivalentClass' ) {    
+                               
+                                var edge = new bbop.model.edge(ref_node, n, 
+                                                               topo_graph.get_predicates(ref_node.id(), n.id())[0]);
+                                clean_graph.add_edge(edge); 
+                            }
+                        }
+                    });
+            });
+            topo_graph = clean_graph;
 
-        
-        var ancestors = topo_graph.get_ancestor_subgraph(anchor._current_acc, 'subClassOf');
-        
-        var trans_graph = new bbop.model.graph()
-        
-        loop(ancestors.all_nodes(), function(n){
-            trans_graph.add_node(n);
-            var edge = new bbop.model.edge(anchor._current_acc, n.id(), 'subClassOf');
-            trans_graph.add_edge(edge);
-        });
-        
+            
+            var ancestors = topo_graph.get_ancestor_subgraph(anchor._current_acc, 'subClassOf');
+            
+            var trans_graph = new bbop.model.graph()
+            
+            loop(ancestors.all_nodes(), function(n){
+                trans_graph.add_node(n);
+                var edge = new bbop.model.edge(anchor._current_acc, n.id(), 'subClassOf');
+                trans_graph.add_edge(edge);
+            });
+            
 
-        var rich_layout = topo_graph.monarch_bracket_layout(anchor._current_acc,
-                                 trans_graph);
-        
-        ///
-        /// Next, produce the raw HTML skeleton.
-        /// TODO: Keep a cache of the interesting ids for adding
-        /// events later.
-        ///
+            var rich_layout = topo_graph.monarch_bracket_layout(anchor._current_acc,
+                                     trans_graph);
+            
+            ///
+            /// Next, produce the raw HTML skeleton.
+            /// TODO: Keep a cache of the interesting ids for adding
+            /// events later.
+            ///
 
-        // I guess we'll just start by making the list.
-        var tl_attrs = {
-            'class': 'bbop-js-ui-browse'
-        };
-        var top_level = new bbop.html.list([], tl_attrs);
+            // I guess we'll just start by making the list.
+            var tl_attrs = {
+                'class': 'bbop-js-ui-browse'
+            };
+            var top_level = new bbop.html.list([], tl_attrs);
 
-        // Store the navigation anf info buttons.
-        var nav_button_hash = {};
-        var info_button_hash = {};
+            // Store the navigation anf info buttons.
+            var nav_button_hash = {};
+            var info_button_hash = {};
 
-        // Cycle down through the brackets, adding spaces every time
-        // we go down another level.
-        var spacing = '&nbsp;&nbsp;&nbsp;&nbsp;';
-        var spaces = spacing;
-        loop(rich_layout, // for every level
-             function(layout_level){
-             loop(layout_level, // for every item at this level
-                  function(level_item){           
+            // Cycle down through the brackets, adding spaces every time
+            // we go down another level.
+            var spacing = '&nbsp;&nbsp;&nbsp;&nbsp;';
+            var spaces = spacing;
+            loop(rich_layout, // for every level
+                 function(layout_level){
+                 loop(layout_level, // for every item at this level
+                      function(level_item){           
 
-                  var nid = level_item[0];
-                  var lbl = level_item[1];
-                  if (lbl) {
-                      lbl = lbl.replace(/\b[a-z]/g, function() {
-                          return arguments[0].toUpperCase()});
-                      lbl = lbl.replace(/Abnormal\(Ly\)/,'Abnormal(ly)');
-                  }
-                  var rel = level_item[2];
-                  
-                  // For various sections, decide to run image
-                  // (img) or text code depending on whether
-                  // or not it looks like we have a real URL.
-                  var use_img_p = true;
-                  if( base_icon_url == null || base_icon_url == '' ){
-                      use_img_p = false;
-                  }
-
-                  // Clickable acc span.
-                  // No images, so the same either way. Ignore
-                  // it if we're current.
-                  var nav_b = null;
-                  if(anchor._current_acc == nid){
-                      var inact_attrs = {
-                      'class': 'bbop-js-text-button-sim-inactive',
-                      'title': 'Current term ( ' + nid + ' )',
-                      'style': 'background-color: #4F5F65; color: white;'
-                      };
-                      nav_b = new bbop.html.span(lbl, inact_attrs);
-                  }else{
-                      var node = topo_graph.get_node(nid);
-                      var metadata = node.metadata();
-                      var bttn_title = 'Go to page for '+ nid;
-                      if (metadata && metadata['definition']){
-                          bttn_title = bttn_title + ": " + metadata['definition'];
+                      var nid = level_item[0];
+                      var lbl = level_item[1];
+                      if (lbl) {
+                          lbl = lbl.replace(/\b[a-z]/g, function() {
+                              return arguments[0].toUpperCase()});
+                          lbl = lbl.replace(/Abnormal\(Ly\)/,'Abnormal(ly)');
                       }
-                      var tbs = bbop.widget.display.text_button_sim;
-
-                      var btn_attrs = {'style': 'background-color: #e3efff; border-style: none;'
-                          };
-                      if (anchor._reference_id == nid){
-                          btn_attrs = {
-                              'style': 'background-color: #9EBFCB; border-style: none;'
-                          };
+                      var rel = level_item[2];
+                      
+                      // For various sections, decide to run image
+                      // (img) or text code depending on whether
+                      // or not it looks like we have a real URL.
+                      var use_img_p = true;
+                      if( base_icon_url == null || base_icon_url == '' ){
+                          use_img_p = false;
                       }
-                      nav_b = new tbs(lbl, bttn_title, null, btn_attrs);
-                      nav_button_hash[nav_b.get_id()] = nid;
-                  }
 
-                  // Clickable info span. A little difference
-                  // if we have images.
-                  var info_b = null;
-                  if( use_img_p ){
-                      // Do the icon version.
-                      var imgsrc = bbop.core.resourcify(base_icon_url,
-                                    info_icon,
-                                    image_type);
-                      info_b =
-                      new bbop.html.image({'alt': info_alt,
-                                   'title': 'Go to page for '+lbl,
-                                   'src': imgsrc,
-                                   'style': 'cursor:pointer;',
-                                   'generate_id': true});
-                  }else{
-                      // Do a text-only version.
-                      info_b =
-                      new bbop.html.span('<b>[i]</b>',
-                                 {'generate_id': true});
-                  }
-                  info_button_hash[info_b.get_id()] = nid;
-
-                  // "Icon". If base_icon_url is defined as
-                  // something try for images, otherwise fall
-                  // back to this text ick.
-                  var icon = null;
-                  if( use_img_p ){
-                      // Do the icon version.
-                      var ialt = '[' + rel + ']';
-                      var isrc = null;
+                      // Clickable acc span.
+                      // No images, so the same either way. Ignore
+                      // it if we're current.
+                      var nav_b = null;
                       if(anchor._current_acc == nid){
-                      isrc = bbop.core.resourcify(base_icon_url,
-                                          current_icon,
-                                      image_type);
+                          var inact_attrs = {
+                          'class': 'bbop-js-text-button-sim-inactive',
+                          'title': 'Current term ( ' + nid + ' )',
+                          'style': 'background-color: #4F5F65; color: white;'
+                          };
+                          nav_b = new bbop.html.span(lbl, inact_attrs);
                       }else{
-                      isrc = bbop.core.resourcify(base_icon_url,
-                                          rel, image_type);
+                          var node = topo_graph.get_node(nid);
+                          var metadata = node.metadata();
+                          var bttn_title = 'Go to page for '+ nid;
+                          if (metadata && metadata['definition']){
+                              bttn_title = bttn_title + ": " + metadata['definition'];
+                          }
+                          var tbs = bbop.widget.display.text_button_sim;
+
+                          var btn_attrs = {'style': 'background-color: #e3efff; border-style: none;'
+                              };
+                          if (anchor._reference_id == nid){
+                              btn_attrs = {
+                                  'style': 'background-color: #9EBFCB; border-style: none;'
+                              };
+                          }
+                          nav_b = new tbs(lbl, bttn_title, null, btn_attrs);
+                          nav_button_hash[nav_b.get_id()] = nid;
                       }
-                      icon =
-                      new bbop.html.image({'alt': ialt,
-                                   'title': rel,
-                                   'src': isrc,
-                                   'generate_id': true});
-                  }else{
-                      // Do a text-only version.
-                      if(anchor._current_acc == nid){
-                      icon = '[[->]]';
-                      }else if( rel && rel.length && rel.length > 0 ){
-                      icon = '[' + rel + ']';
+
+                      // Clickable info span. A little difference
+                      // if we have images.
+                      var info_b = null;
+                      if( use_img_p ){
+                          // Do the icon version.
+                          var imgsrc = bbop.core.resourcify(base_icon_url,
+                                        info_icon,
+                                        image_type);
+                          info_b =
+                          new bbop.html.image({'alt': info_alt,
+                                       'title': 'Go to page for '+lbl,
+                                       'src': imgsrc,
+                                       'style': 'cursor:pointer;',
+                                       'generate_id': true});
                       }else{
-                      icon = '[???]';
+                          // Do a text-only version.
+                          info_b =
+                          new bbop.html.span('<b>[i]</b>',
+                                     {'generate_id': true});
                       }
-                  }
-                  var spinner = makeSpinnerDiv();
-                  // Stack the info, with the additional
-                  // spaces, into the div.
-                  if (nid != anchor._root){
-                      top_level.add_to(spaces,
-                              //info_b.to_string(),
-                              icon,
-                              nav_b.to_string(),
-                              '&nbsp;', spinner);
-                  } else {
-                      top_level.add_to(spaces,  nav_b.to_string(), '&nbsp;', spinner); 
-                  }
-                  }); 
-             spaces = spaces + spacing;
-             }); 
+                      info_button_hash[info_b.get_id()] = nid;
 
-        // Add the skeleton to the doc.
-        jQuery('#' + anchor._interface_id).empty();
-        jQuery('#' + anchor._interface_id).append(top_level.to_string());
-        
-        if (isInitialRun) {
-            isInitialRun = false;
-        } else {
-            jQuery('html, body').animate({
-                scrollTop: jQuery(".bbop-js-text-button-sim-inactive").offset().top - 45
-            }, 500);
-        }
+                      // "Icon". If base_icon_url is defined as
+                      // something try for images, otherwise fall
+                      // back to this text ick.
+                      var icon = null;
+                      if( use_img_p ){
+                          // Do the icon version.
+                          var ialt = '[' + rel + ']';
+                          var isrc = null;
+                          if(anchor._current_acc == nid){
+                          isrc = bbop.core.resourcify(base_icon_url,
+                                              current_icon,
+                                          image_type);
+                          }else{
+                          isrc = bbop.core.resourcify(base_icon_url,
+                                              rel, image_type);
+                          }
+                          icon =
+                          new bbop.html.image({'alt': ialt,
+                                       'title': rel,
+                                       'src': isrc,
+                                       'generate_id': true});
+                      }else{
+                          // Do a text-only version.
+                          if(anchor._current_acc == nid){
+                          icon = '[[->]]';
+                          }else if( rel && rel.length && rel.length > 0 ){
+                          icon = '[' + rel + ']';
+                          }else{
+                          icon = '[???]';
+                          }
+                      }
+                      var spinner = makeSpinnerDiv();
+                      // Stack the info, with the additional
+                      // spaces, into the div.
+                      if (nid != anchor._root){
+                          top_level.add_to(spaces,
+                                  //info_b.to_string(),
+                                  icon,
+                                  nav_b.to_string(),
+                                  '&nbsp;', spinner);
+                      } else {
+                          top_level.add_to(spaces,  nav_b.to_string(), '&nbsp;', spinner); 
+                      }
+                      }); 
+                 spaces = spaces + spacing;
+                 }); 
 
-        ///
-        /// Finally, attach any events to the browser HTML doc.
-        ///
+            // Add the skeleton to the doc.
+            jQuery('#' + anchor._interface_id).empty();
+            jQuery('#' + anchor._interface_id).append(top_level.to_string());
+            
+            if (isInitialRun) {
+                isInitialRun = false;
+            } else {
+                jQuery('html, body').animate({
+                    scrollTop: jQuery(".bbop-js-text-button-sim-inactive").offset().top - 45
+                }, 500);
+            }
 
-        // Navigation.
-        loop(nav_button_hash,
-             function(button_id, node_id){
+            ///
+            /// Finally, attach any events to the browser HTML doc.
+            ///
 
-             jQuery('#' + button_id).click(
-                 function(){
+            // Navigation.
+            loop(nav_button_hash,
+                 function(button_id, node_id){
+
+                 jQuery('#' + button_id).click(
+                     function(){
+                         
+                         var tid = jQuery(this).attr('id');
+                         var call_time_node_id = nav_button_hash[tid];
+                         var newurl = "/resolve/"+call_time_node_id;
+                         window.location.href = newurl;
+                     });
+                 });
+
+            // Information.
+            loop(info_button_hash,
+                 function(button_id, node_id){
+
+                 jQuery('#' + button_id).click(
+                     function(){
+                         var tid = jQuery(this).attr('id');
+                         var call_time_node_id = info_button_hash[tid];
+                         var newurl = "/resolve/"+call_time_node_id;
+                         window.location.href = newurl;
                      
-                     var tid = jQuery(this).attr('id');
-                     var call_time_node_id = nav_button_hash[tid];
-                     var newurl = "/resolve/"+call_time_node_id;
-                     window.location.href = newurl;
-                 });
+                     });
              });
-
-        // Information.
-        loop(info_button_hash,
-             function(button_id, node_id){
-
-             jQuery('#' + button_id).click(
-                 function(){
-                     var tid = jQuery(this).attr('id');
-                     var call_time_node_id = info_button_hash[tid];
-                     var newurl = "/resolve/"+call_time_node_id;
-                     window.location.href = newurl;
-                 
-                 });
-         });
+            
+            
+        }
+    
+        
     }
     
     /*
@@ -404,7 +430,8 @@ bbop.monarch.widget.browse = function(server, manager, reference_id, root, inter
     this.init_browser = function(term_acc){
         anchor._current_acc = term_acc;
         // Data call setup
-        var rsrc = this.server + "dynamic/browser.json" + "?start_id=" + term_acc + "&root_id=" + anchor._root+ "&relationship=subClassOf|partOf|isA";
+        // var rsrc = this.server + "dynamic/browser.json" + "?start_id=" + term_acc + "&root_id=" + anchor._root+ "&relationship=subClassOf|partOf|isA";
+        var rsrc = this.server + "graph/neighbors/" + term_acc + ".json?&depth=25&blankNodes=false&relationshipType=subClassOf&direction=OUTGOING&project=%2A";
        
         anchor.manager.resource(rsrc);
         anchor.manager.method('get');
