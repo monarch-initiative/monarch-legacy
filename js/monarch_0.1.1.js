@@ -549,7 +549,7 @@ bbop.monarch.widget.browse = function(server, manager, reference_id, root, inter
             /// instead of out internal method bbop.json.parse.
             ///
 
-            
+            var nodes_to_exclude = ['MESH:C', 'MESH:D035583', 'http://www.w3.org/2002/07/owl#Thing'];
             
             var clean_graph = new bbop.model.bracket.graph();
             
@@ -560,8 +560,8 @@ bbop.monarch.widget.browse = function(server, manager, reference_id, root, inter
                 }
                 var children = topo_graph.get_child_nodes(ref_node.id());
                     loop(children, function(n){
-                        if (!/^_/.test(n.id()) && ref_node.id() != 'http://www.w3.org/2002/07/owl#Thing'
-                                && n.id() != 'http://www.w3.org/2002/07/owl#Thing'){
+                        if (!/^_/.test(n.id()) && nodes_to_exclude.indexOf(ref_node.id()) == -1
+                                && nodes_to_exclude.indexOf(n.id()) == -1 ){
                             
                             
                             var edge = new bbop.model.edge(n, ref_node, 
@@ -578,8 +578,8 @@ bbop.monarch.widget.browse = function(server, manager, reference_id, root, inter
                     });
                 var parents = topo_graph.get_parent_nodes(ref_node.id());
                     loop(parents, function(n){
-                        if (!/^_/.test(n.id()) && ref_node.id() != 'http://www.w3.org/2002/07/owl#Thing'
-                              && n.id() != 'http://www.w3.org/2002/07/owl#Thing'){
+                        if (!/^_/.test(n.id()) && nodes_to_exclude.indexOf(ref_node.id()) == -1
+                              && nodes_to_exclude.indexOf(n.id()) == -1){
                             
                             if (ref_node.id() != anchor._current_acc 
                                     && topo_graph.get_predicates(ref_node.id(), n.id())[0] != 'equivalentClass' ) {    
