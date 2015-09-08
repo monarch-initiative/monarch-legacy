@@ -437,7 +437,7 @@ fields:
     property: []
     type: string
   - cardinality: multi
-    description: The knowledge graph from which the evidence axioms are drawn.
+    description: Associations are obtained from the source(s) listed. More than one source indicates the association leveraged information from each.
     display_name: Source
     id: is_defined_by
     property: []
