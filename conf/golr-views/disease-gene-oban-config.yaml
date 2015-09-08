@@ -362,7 +362,7 @@ fields:
     type: string
   - cardinality: multi
     description: "TBD: ALIGN GO AND DC TERMINOLOGY. Source of association. The association may be derived from multiple source, but this should be the 'outer' source, if applicable"
-    display_name: Source
+    display_name: Reference
     id: source
     property: []
     type: string
@@ -437,13 +437,13 @@ fields:
     property: []
     type: string
   - cardinality: multi
-    description: Ontologies that generated evidence axioms
-    display_name: Defined
+    description: The knowledge graph from which the evidence axioms are drawn.
+    display_name: Source
     id: is_defined_by
     property: []
     type: string
 filter_weights: subject_taxon_closure_label^3.5 object_taxon_closure_label^3.0
 id: disease_gene
-result_weights: subject^7.0 relation^6.0  object^5.0 object_taxon^4.2 evidence^4.0 source^3.5
+result_weights: subject^7.0 relation^6.0  object^5.0 object_taxon^4.2 evidence^4.0 source^3.5 is_defined_by^3.0
 schema_generating: true
 weight: 20

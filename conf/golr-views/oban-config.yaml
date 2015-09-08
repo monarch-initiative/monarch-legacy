@@ -436,7 +436,7 @@ fields:
 
   - id: source
     description: "TBD: ALIGN GO AND DC TERMINOLOGY. Source of association. The association may be derived from multiple source, but this should be the 'outer' source, if applicable"
-    display_name: Source
+    display_name: Reference
     type: string
     cardinality: multi
     property: []
@@ -552,8 +552,8 @@ fields:
     property: []
 
   - id: is_defined_by
-    description: "Ontologies that generated evidence axioms"
-    display_name: Defined
+    description: "The knowledge graph from which the evidence axioms are drawn."
+    display_name: Source
     type: string
     cardinality: multi
     property: []
