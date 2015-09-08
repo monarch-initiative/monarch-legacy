@@ -678,10 +678,12 @@ bbop.monarch.widget.browse = function(server, manager, reference_id, root, inter
                                                   //console.log('removing equivalent node '+ id);
                                                   v.splice(i,1)
                                                   i--;
+                                                  break;
                                               } else {
                                                   //console.log('removing equivalent node '+node_id);
                                                   v.splice(k, 1);
                                                   k--;
+                                                  continue;
                                               }
                                           }
                                         }
