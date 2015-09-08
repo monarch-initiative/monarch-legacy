@@ -260,9 +260,19 @@ bbop.monarch.widget.browse = function(server, manager, reference_id, root, inter
                                     for (var k=i+1; k < v.length; k++) {
                                         var node_id = v[k][0];
                                         if (node_id) {
+                                          //console.log('comparing id: ' + id + ' to: ' + node_id);
                                           if (eq_node_list.indexOf(node_id) > -1){
-                                              console.log('removing'+node_id);
-                                              v.splice(k, 1);
+                                              
+                                              // If the id is from MESH
+                                              if (/^MESH/.test(id)){
+                                                  //console.log('removing equivalent node '+ id);
+                                                  v.splice(i,1)
+                                                  i--;
+                                              } else {
+                                                  //console.log('removing equivalent node '+node_id);
+                                                  v.splice(k, 1);
+                                                  k--;
+                                              }
                                           }
                                         }
                                     
