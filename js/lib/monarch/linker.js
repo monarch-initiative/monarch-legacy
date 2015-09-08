@@ -145,13 +145,20 @@ bbop.monarch.linker.prototype.img = function (id, xid, modifier, category){
             if(!global_xrefs_conf){
                 throw new Error('global_xrefs_conf is missing!');
             }
+            var src;
+            if (/^http/.test(id)){
+                src = id.replace(/.*\/(\w+)\.ttl/, "$1");
+            } else {
     
-            // First, extract the probable source and break it into parts.
-            var full_id_parts = bbop.core.first_split(':', id);
-            if(full_id_parts && full_id_parts[0] && full_id_parts[1]){
-                var src = full_id_parts[0];
-                var sid = full_id_parts[1];
-        
+                // First, extract the probable source and break it into parts.
+                var full_id_parts = bbop.core.first_split(':', id);
+                if(full_id_parts && full_id_parts[0] && full_id_parts[1]){
+                    src = full_id_parts[0];
+                }
+            }
+            
+            if (src) {
+                
                 // Now, check to see if it is indeed in our store.
                 var lc_src = src.toLowerCase();
                 var xref = global_xrefs_conf[lc_src];
@@ -256,6 +263,12 @@ bbop.monarch.linker.prototype.set_anchor = function(id, args, xid, modifier){
             retval = '<a title="' + id +
             ' (go to the page for ' + label +
             ')" href="' + url + '">' + hilite + '</a>';
+        }
+    } else {
+        // Check if id is an is_defined_by url
+        if (!retval && img
+                && xid == 'is_defined_by'){
+            retval = img;
         }
     }
     return retval;
