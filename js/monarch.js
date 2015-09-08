@@ -423,7 +423,6 @@ bbop.monarch.linker.prototype.set_anchor = function(id, args, xid, modifier){
         }
         if (!retval && img
                 && xid == 'is_defined_by'){
-            console.log(title);
             retval = '<span title="' + title + '">' + img + '</span>';
         }
     }
