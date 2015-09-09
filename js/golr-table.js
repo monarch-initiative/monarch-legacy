@@ -231,7 +231,7 @@ function addDownloadButton(pager, manager){
     jQuery(button_elt).attr('title',title);
 
     var forwardToDownload = function(){
-        var field_list = ['subject', 'subject_taxon', 'relation', 'object', 'object_taxon', 'evidence','source'];
+        var field_list = ['subject', 'subject_taxon', 'relation', 'object', 'object_taxon', 'evidence','source', 'is_defined_by', 'qualifier'];
         var args_hash = {
                 rows : '100000'
         }
