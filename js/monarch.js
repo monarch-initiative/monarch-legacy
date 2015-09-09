@@ -1388,9 +1388,18 @@ bbop.monarch.widget.display.results_table_by_class_conf_bs3 = function(cclass,
 			bits = [doc[fid]];
 		    }
 		}
-		//Terrible hack to add "indirect" when relation is null
+		//Terrible hack to add qualifier when relation is null
 		if (fid == 'relation' && bits.length == 0) {
-		    bits = ["Indirect"];
+		    if( doc['qualifier'] ){
+		        var qual_field = cclass.get_field('qualifier');
+	            if( qual_field.is_multi() ){
+	            //ll("Is multi: " + fid);
+	            bits = doc['qualifier'];
+	            }else{
+	            //ll("Is single: " + fid);
+	            bits = [doc['qualifier']];
+	            }
+	        }
 		}
 		// Render each of the bits.
 		var tmp_buff = [];
