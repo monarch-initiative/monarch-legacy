@@ -17,12 +17,13 @@ script:
   - "sudo pip install behave"
   - "sudo pip install jsonpath-rw"
   - "cd tests/behave"
-  - "TARGET=http://localhost:8080 behave -e maui_gene"
+  - "TARGET=http://localhost:8080 behave"
 
 # whitelist
 branches:
   only:
     - master
+    - production
 
 notifications:
   email:
