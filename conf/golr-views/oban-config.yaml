@@ -200,7 +200,7 @@ fields:
 ## RELATIONSHIP BETWEEN SUBJECT AND OBJECT
 
   - id: relation
-    description: "A relationship type that connects the subject with object. TODO: check for correspondence in OBAN"
+    description: "A relationship type that connects the subject with object."
     display_name: Relationship
     type: string
     property: []

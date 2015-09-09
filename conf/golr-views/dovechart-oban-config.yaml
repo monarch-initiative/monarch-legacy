@@ -139,7 +139,7 @@ fields:
     property: []
     searchable: true
     type: string
-  - description: 'A relationship type that connects the subject with object. TODO: check for correspondence in OBAN'
+  - description: A relationship type that connects the subject with object.
     display_name: Relationship
     id: relation
     property: []
