@@ -3293,7 +3293,8 @@
       "id" : null,
       "abbreviation" : "FB",
       "url_syntax" : "http://flybase.org/reports/[example_id].html",
-      "datatype" : null
+      "datatype" : null,
+      "image_path" : "/image/source-flybase.png"
    },
    "issn" : {
       "object" : "Identifier",
@@ -3545,7 +3546,8 @@
       "abbreviation" : "FLYBASE",
       "id" : null,
       "url_syntax" : "http://flybase.org/reports/[example_id].html",
-      "datatype" : null
+      "datatype" : null,
+      "image_path" : "/image/source-flybase.png"
    },
    "ensemblplants/gramene" : {
       "object" : "Identifier",
