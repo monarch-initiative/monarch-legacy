@@ -14,16 +14,21 @@
     > ringo tests/apitest.js
 
  */
+var env = require('serverenv.js');
+var bbop = require('api.js').bbop;
 
-load('lib/monarch/api.js');
-var Parser = require('ringo/args').Parser;
-var system = require('system');
+if (env.isRingoJS()) {
+    var Parser = require('ringo/args').Parser;
+    var system = require('system');
+}
+else {
+    var WaitFor = require('wait.for');
+}
+
 var assert = require("assert");
 var fs = require('fs');
 var engine;
 var setup;
-if (typeof bbop == 'undefined') { var bbop = {};}
-if (typeof bbop.monarch == 'undefined') { bbop.monarch = {};}
 
 // feel free to add more here...
 var diseaseIds =
@@ -85,18 +90,25 @@ exports.testFetchAssociations = function() {
 }
 
 if (require.main == module) {
-    var script = system.args.shift();
-    var parser = new Parser(system.args);
-    parser.addOption('h', 'help', null, 'Display help');
-    parser.addOption('s', 'setup', 'String', 'one of: beta, production');
-    
-    var options = parser.parse(system.args);
-    if (options.help) {
-        print("Usage: ringo OPTIONS tests/apitest.js\n");
-        print("Runs API tests");
-        print("\nOptions:");
-	print(parser.help());
-	system.exit('-1');
+    if (env.isRingoJS()) {
+        var parser = new Parser(system.args);
+        parser.addOption('h', 'help', null, 'Display help');
+        parser.addOption('s', 'setup', 'String', 'one of: beta, production');
+        
+        var options = parser.parse(system.args);
+        if (options.help) {
+            print("Usage: ringo OPTIONS tests/apitest.js\n");
+            print("Runs API tests");
+            print("\nOptions:");
+        	print(parser.help());
+        	system.exit('-1');
+        }
+    }
+    else {
+        console.log("CLI parsing NYI for NodeJS");
+        options = {
+            setup: null
+        };
     }
 
     setup = options.setup;
@@ -110,13 +122,21 @@ if (require.main == module) {
     }
 
     // see: https://docs.google.com/document/d/1ZxGuuvyvMmHVWQ7rIleIRkmbiDTNNP27eAHhxyFWHok/edit#
-    bbop.monarch.defaultConfig = JSON.parse(fs.read(conf));
-    bbop.monarch.golrConfig = JSON.parse(fs.read(golrConf));
+    bbop.monarch.defaultConfig = env.readJSON(conf);
+    bbop.monarch.golrConfig = env.readJSON(golrConf);
 
     engine = new bbop.monarch.Engine();
     engine.isProduction = function() { return false }; // always log in test mode
 
-    var rtn = require("test").run(exports);
-    print("Return code="+rtn);
-    system.exit(rtn);
+    if (env.isRingoJS()) {
+        var rtn = require("test").run(exports);
+        print("Return code="+rtn);
+        system.exit(rtn);
+    }
+    else {
+        WaitFor.launchFiber( function () {
+            exports.testLiteratureBasic();
+            exports.testFetchAssociations();
+        });
+    }
 }
