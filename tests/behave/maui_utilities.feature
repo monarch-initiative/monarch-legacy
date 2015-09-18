@@ -61,12 +61,11 @@ Feature: NodeJS and RingoJS pass all tests.
      then the document should contain "Smith-Lemli-Opitz syndrome"
 
 
+#This test is pretty flimsy, refactor to be a bit more flexible
 @ui
 Scenario: The "/query/orthologs/" endpoint returns the correct JSON
-   Given I go to page "/query/orthologs/NCBIGene:5156"
-   then the document should contain '"input":["NCBIGene:5156"]'
-
-
+   Given I go to page "/query/orthologs/NCBIGene:6469.json"
+   then the document should contain '{"input":["NCBIGene:6469"],"paralogs":["OMIM:605423"],"orthologs":["NCBIGene:100512749","NCBIGene:30269","NCBIGene:100016531","NCBIGene:29499","NCBIGene:30444","NCBIGene:42737","MGI:98297"]}'
 
 @ui
  Scenario: The "/annotate/text" endpoint returns the correct query page
