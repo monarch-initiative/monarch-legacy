@@ -544,6 +544,20 @@ fields:
     cardinality: multi
     property: []
 
+  - id: evidence_main_object
+    description: "A list of CURIEs for the primary object that supports an association. This will be a subset of evidence_object."
+    display_name: Evidence from (main)
+    type: string
+    cardinality: multi
+    property: []
+
+  - id: evidence_main_object_label
+    description: "evidence main object label"
+    display_name: Evidence main label
+    type: string
+    cardinality: multi
+    property: []
+
   - id: citation
     description: "citation."
     display_name: Reference
