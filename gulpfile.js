@@ -14,6 +14,8 @@ var jsyaml = require('js-yaml');
 var fs = require('fs');
 var us = require('underscore');
 var map = require('map-stream');
+
+
 // Things we'll need later as we go.
 //var browserify = require('browserify');
 //var watchify = require('watchify');
@@ -44,8 +46,8 @@ var yaml_to_json = function yaml_to_json(file, cb){
 	    nfile.contents = new Buffer(JSON.stringify(jsondoc, null, "  "));
 	    //console.log(jsondoc);
 	} catch (e) { console.log(e); }
-    }	
-    
+    }
+
     cb(null, nfile);
 };
 
@@ -58,6 +60,12 @@ gulp.task('yaml-confs-to-json', function() {
 	}))
 	.pipe(gulp.dest('./conf/')); // write back to conf dir
 });
+
+
+
+
+
+
 
 // // Browser runtime environment construction.
 // gulp.task('build', ['browserify', 'compress']);
@@ -76,14 +84,14 @@ gulp.task('yaml-confs-to-json', function() {
 
 // gulp.task('watch', function() {
 //     var bundler = watchify('./js/app.js');
-    
+
 //     function rebundle() {
 // 	return bundler.bundle()
 // 	    .pipe(source('./js/app-bundle.js'))
 // 	    .pipe(rename('app-bundle.js'))
 // 	    .pipe(gulp.dest('./static/'));
 //     }
-//     bundler.on('update', rebundle); 
+//     bundler.on('update', rebundle);
 //     return rebundle();
 // });
 
@@ -94,7 +102,7 @@ gulp.task('yaml-confs-to-json', function() {
 // 	.pipe(gulp.dest('./static/'));
 // });
 
-// // 
+// //
 // gulp.task('clean', function(cb) {
 //     del(['./dist/*', '!./dist/README.org',
 // 	 './doc/*', '!./doc/README.org']);
@@ -114,6 +122,4 @@ gulp.task('yaml-confs-to-json', function() {
 
 // The default task (called when you run `gulp` from cli)
 //gulp.task('default', ['watch', 'scripts', 'images']);
-gulp.task('default', function() {
-    console.log("No default task has yet been configured.");
-});
+gulp.task('default', ['assemble']);

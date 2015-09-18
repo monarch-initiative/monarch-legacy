@@ -292,7 +292,7 @@ bbop.monarch.widget.display.results_table_by_class_conf_bs3 = function(cclass,
 		// Render each of the bits.
 		var tmp_buff = [];
 		each(bits, function(bit){
-		    out = anchor.process_entry(bit, fid, doc, display_context);
+		    var out = anchor.process_entry(bit, fid, doc, display_context);
 		    tmp_buff.push(out);
 		});
 		// Join it, trim/store it, push to to output.

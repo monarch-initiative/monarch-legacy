@@ -6,18 +6,14 @@
 ### Environment variables.
 ###
 
-## NodeJS
-NODE_PATH ?= ./node-modules:./modules:./lib/monarch
+## Ringo
+RINGO_MODULE_PATH ?= ../stick/lib:./modules:./node_modules:./lib/monarch
 ## TODO/BUG: highly non-canonical location--should be passed as
 ## variable, not hard-coded.
-NODE_BIN ?= $(shell which node)
+RINGO_BIN ?= ./tools/ringo
 ## Workaround for the above.
-NODE_CLI_BIN ?= $(shell which node)
-NODE_PORT ?= 8080
-
-test:
-	echo "NODE_BIN: ${NODE_BIN}"
-	NODE_PATH=$(NODE_PATH) $(NODE_BIN) tests/apitest.js
+RINGO_CLI_BIN ?= /usr/bin/ringo
+RINGO_PORT ?= 8080
 
 ## OWLTools.
 #OWLTOOLS_MAX_MEMORY ?= 1G
@@ -33,27 +29,27 @@ MONARCH_VERSION = 0.1.1
 APITESTS = apitest literature-test class-info-test
 TESTS = $(APITESTS) urltester
 
-xtest: $(patsubst %, test-%, $(TESTS))
-xapitest: $(patsubst %, test-%, $(APITESTS))
-xproduction-test: $(patsubst %, production-test-%, $(TESTS))
+test: $(patsubst %, test-%, $(TESTS))
+apitest: $(patsubst %, test-%, $(APITESTS))
+production-test: $(patsubst %, production-test-%, $(TESTS))
 
 test-%:
-	NODE_PATH=$(NODE_PATH) $(NODE_BIN) tests/$*.js
+	RINGO_MODULE_PATH=$(RINGO_MODULE_PATH) $(RINGO_BIN) tests/$*.js
 
 production-test-%:
-	NODE_PATH=$(NODE_PATH) $(NODE_BIN) tests/$*.js -s production
+	RINGO_MODULE_PATH=$(RINGO_MODULE_PATH) $(RINGO_BIN) tests/$*.js -s production
 
 nif-production-url-test:
-	NODE_PATH=$(NODE_PATH) $(NODE_BIN) tests/urltester.js -s production -c vocabulary,ontoquest,federation,monarch
+	RINGO_MODULE_PATH=$(RINGO_MODULE_PATH) $(RINGO_BIN) tests/urltester.js -s production -c vocabulary,ontoquest,federation,monarch
 
 nif-production-federation-tests:
-	NODE_PATH=$(NODE_PATH) $(NODE_BIN) tests/urltester.js -s production -c federation
+	RINGO_MODULE_PATH=$(RINGO_MODULE_PATH) $(RINGO_BIN) tests/urltester.js -s production -c federation
 
 nif-production-scigraph-tests:
-	NODE_PATH=$(NODE_PATH) $(NODE_BIN) tests/urltester.js -s production -c scigraph
+	RINGO_MODULE_PATH=$(RINGO_MODULE_PATH) $(RINGO_BIN) tests/urltester.js -s production -c scigraph
 
 nif-production-federation-search-tests:
-	NODE_PATH=$(NODE_PATH) $(NODE_BIN) tests/urltester.js -s production -c federation-search
+	RINGO_MODULE_PATH=$(RINGO_MODULE_PATH) $(RINGO_BIN) tests/urltester.js -s production -c federation-search
 
 D2T_YAMLS = $(wildcard conf/rdf-mapping/*.yaml)
 D2T_JSONS = $(D2T_YAMLS:.yaml=.json)
@@ -62,13 +58,13 @@ d2t: $(D2T_JSONS)
 	echo YAMLS: $^
 
 triples: conf/monarch-context.jsonld d2t
-#	NODE_PATH=$(NODE_PATH) $(NODE_BIN) bin/generate-triples-from-nif.js -c conf/server_config_production.json $(D2T_ARGS) conf/rdf-mapping/*-map.json && ./bin/target-ttl-to-owl.sh
-	NODE_PATH=$(NODE_PATH) $(NODE_BIN) bin/generate-triples-from-nif.js -c conf/server_config_dev.json $(D2T_ARGS) conf/rdf-mapping/*-map.json && ./bin/target-ttl-to-owl.sh
+#	RINGO_MODULE_PATH=$(RINGO_MODULE_PATH) $(RINGO_BIN) bin/generate-triples-from-nif.js -c conf/server_config_production.json $(D2T_ARGS) conf/rdf-mapping/*-map.json && ./bin/target-ttl-to-owl.sh
+	RINGO_MODULE_PATH=$(RINGO_MODULE_PATH) $(RINGO_BIN) bin/generate-triples-from-nif.js -c conf/server_config_dev.json $(D2T_ARGS) conf/rdf-mapping/*-map.json && ./bin/target-ttl-to-owl.sh
 
 #SERVERCONF := production
 SERVERCONF := dev
 target/%.ttl: conf/rdf-mapping/%-map.json conf/monarch-context.jsonld
-	NODE_PATH=$(NODE_PATH) $(NODE_BIN) bin/generate-triples-from-nif.js -c conf/server_config_$(SERVERCONF).json $<
+	RINGO_MODULE_PATH=$(RINGO_MODULE_PATH) $(RINGO_BIN) bin/generate-triples-from-nif.js -c conf/server_config_$(SERVERCONF).json $<
 
 target/%.owl: target/%.ttl
 	owltools $< --set-ontology-id http://purl.obolibrary.org/obo/upheno/data/$*.owl -o -f ofn target/$*.owl 
@@ -140,10 +136,10 @@ dependencies:
 ## Setup portable Ubuntu environment. -SJC
 .PHONY: cli-launch-prod
 cli-launch-prod: dependencies
-	NODE_PATH=$(NODE_PATH) $(NODE_CLI_BIN) ./lib/monarch/web/webapp_launcher_production.js --port=$(NODE_PORT)
+	RINGO_MODULE_PATH=$(RINGO_MODULE_PATH) $(RINGO_CLI_BIN) ./lib/monarch/web/webapp_launcher_production.js --port=$(RINGO_PORT)
 .PHONY: cli-launch-dev
 cli-launch-dev: dependencies
-	NODE_PATH=$(NODE_PATH) $(NODE_CLI_BIN) ./lib/monarch/web/webapp_launcher_dev.js --port=$(NODE_PORT)
+	RINGO_MODULE_PATH=$(RINGO_MODULE_PATH) $(RINGO_CLI_BIN) ./lib/monarch/web/webapp_launcher_dev.js --port=$(RINGO_PORT)
 .PHONY: cli-launch
 cli-launch: dependencies
-	NODE_PATH=$(NODE_PATH) $(NODE_CLI_BIN) ./lib/monarch/web/webapp_launcher.js --port=$(NODE_PORT)
+	RINGO_MODULE_PATH=$(RINGO_MODULE_PATH) $(RINGO_CLI_BIN) ./lib/monarch/web/webapp_launcher.js --port=$(RINGO_PORT)

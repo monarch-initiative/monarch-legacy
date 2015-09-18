@@ -3,6 +3,17 @@
   "version": "0.0.1",
   "license": "BSD-3-Clause",
   "description": "Monarch web application and API.",
+  "main": "lib/monarch/web/webapp_launcher.js",
+  "scripts": {
+    "build": "webpack --config webpack.build.js --bail -p",
+    "start": "NODE_PATH=./lib/monarch node lib/monarch/web/webapp_launcher.js",
+    "rstart": "./ringo-server.sh",
+    "dev": "NODE_PATH=./lib/monarch nodemon & node node_modules/.bin/webpack-dev-server --port 8081 --history-api-fallback --hot --inline --progress",
+    "test": "make test",
+    "rtest": "make -f MakefileRingo test",
+    "ktest": "karma start",
+    "ktest:live": "karma start --auto-watch --no-single-run"
+  },
   "keywords": [
     "Monarch Initiative"
   ],
@@ -17,6 +28,7 @@
     "npm": ">= 2.7.4"
   },
   "dependencies": {
+    "async": "^1.4.2",
     "bbop": "^2.3.2",
     "binary": "^0.3.0",
     "core-util-is": "^1.0.1",
@@ -28,6 +40,7 @@
     "lodash._isiterateecall": "^3.0.9",
     "mustache": "^2.1.2",
     "phenogrid": "^1.0.3",
+    "querystring": "^0.2.0",
     "request": "^2.60.0",
     "sax": "^1.1.1",
     "timers": "^0.1.1",
@@ -37,8 +50,17 @@
     "xmlbuilder": "^2.6.4"
   },
   "devDependencies": {
+    "autoprefixer": "^6.0.2",
+    "babel-core": "^5.8.24",
+    "babel-loader": "^5.3.2",
+    "babel-runtime": "^5.8.24",
+    "browser-sync-webpack-plugin": "^1.0.0",
     "chai": "^3.2.0",
+    "css-loader": "^0.18.0",
     "del": "^2.0.1",
+    "exports-loader": "^0.6.2",
+    "extract-text-webpack-plugin": "^0.8.2",
+    "file-loader": "^0.8.4",
     "glob": "^5.0.14",
     "gulp": "^3.9.0",
     "gulp-bump": "^0.3.0",
@@ -47,17 +69,29 @@
     "gulp-mocha": "^2.0.1",
     "gulp-rename": "^1.2.2",
     "gulp-uglify": "^1.2.0",
+    "gulp-util": "^3.0.6",
+    "html-loader": "^0.3.0",
+    "html-webpack-plugin": "^1.6.1",
+    "isparta-instrumenter-loader": "^0.2.1",
     "js-yaml": "^3.3.1",
-    "map-stream": "^0.0.6"
+    "jshint": "^2.8.0",
+    "jshint-loader": "^0.8.3",
+    "less-loader": "^2.2.0",
+    "map-stream": "^0.0.6",
+    "nodemon": "^1.5.0",
+    "null-loader": "^0.1.1",
+    "postcss-loader": "^0.6.0",
+    "raw-loader": "^0.5.1",
+    "source-map": "^0.5.0",
+    "style-loader": "^0.12.3",
+    "through2": "^2.0.0",
+    "webpack": "^1.12.1",
+    "webpack-dev-server": "^1.10.1"
   },
   "bundleDependencies": [],
   "private": false,
-  "main": "server.js",
   "bugs": {
     "url": "https://github.com/monarch-initiative/monarch-app/issues"
   },
-  "directories": {},
-  "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
-  }
+  "directories": {}
 }
