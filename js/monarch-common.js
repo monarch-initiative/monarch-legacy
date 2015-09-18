@@ -79,10 +79,7 @@ function getAnnotationScore() {
             success: function(data) {
             
                 var score_query = '/score';
-                var phenotype_map = data.phenotype_list.map( function(val) { 
-                    return {'id': val};
-                });
-                var profile = JSON.stringify({features:phenotype_map});
+                var profile = JSON.stringify({features:data.phenotype_list});
                 var params = {'annotation_profile' : profile};
                 jQuery.ajax({
                     type : 'POST',

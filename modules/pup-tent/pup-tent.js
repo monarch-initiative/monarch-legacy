@@ -7,6 +7,7 @@
 
 var us = require('underscore');
 var mustache = require('mustache');
+var env = require('../../lib/monarch/serverenv.js');
 
 ///
 /// The internal file abstraction necessary to run in both Node.js and
@@ -223,30 +224,37 @@ module.exports = function(search_path_list, filename_list){
     // Make sure the file is there, then save it to the
     // appropriate caches.
     function _check_and_save(path){
-	//console.log('l@: ' + path);
+    	var cache_exclusions_re = /\.DS_Store$/;
 	if( afs.exists_p(path) ){
-	    if( afs.file_p(path) ){
-		//console.log('found file: ' + path);
-		
+	    if( afs.file_p(path) && !cache_exclusions_re.test(path)){
+		// console.log('_check_and_save: ' + path);
+
 		// Break into parts for saving if it is a full file.
 		var filename = path;
 		var slash_loc = path.lastIndexOf('/') + 1;
-		if( slash_loc != 0 ){
+		if( slash_loc !== 0 ){
 		    filename = path.substr(slash_loc, path.length);
 		}
-		
+
 		// Capture full path.
 		path_cache[path] = path;
 		zcache[path] = afs.read_file(path);
-		
+
 		// Capture flattened name.
 		path_cache[filename] = path;
 		zcache[filename] = afs.read_file(path);
-		
+
 		// Capture which is which.
 		ns_cache_flat[filename] = true;
 		ns_cache_full[path] = true;
+          	// console.log('_check_and_save CREATED:', path);
 	    }
+	    else {
+          	// console.log('_check_and_save EXCLUDE:', path);
+	    }
+	}
+	else {
+ 		console.log('_check_and_save NOT FOUND:', path);
 	}
     }
 
@@ -344,13 +352,16 @@ module.exports = function(search_path_list, filename_list){
     function _get(key){
 	var ret = null;
 
+
 	// Pull from cache or re-read from fs.
 	//console.log('key: ' + key)
 	//console.log('use_zcache_p: ' + use_zcache_p)
 	if( use_zcache_p ){
 	    ret = zcache[key];
+		// console.log('_get CACHED: ', key, ret.slice(0, 10));
 	}else{
 	    ret = afs.read_file(path_cache[key]);
+		// console.log('_get FILE: ', key, path_cache[key], ' Length: ', ret.length);
 	}
 
 	return ret;
@@ -359,15 +370,13 @@ module.exports = function(search_path_list, filename_list){
     // Get a string from a named mustache template, with optional
     // args.
     function _apply (tmpl_name, tmpl_args){
-	
 	var ret = null;
-	
+
 	var tmpl = _get(tmpl_name);
 	if( tmpl ){
 	    ret = mustache.render(tmpl, tmpl_args);
 	}
-	// if( tmpl ){ console.log('rendered string length: ' + ret.length); }
-	
+
 	return ret;
     }
 
@@ -569,3 +578,4 @@ module.exports = function(search_path_list, filename_list){
 	}
     };
 };
+

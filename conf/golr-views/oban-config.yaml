@@ -200,7 +200,7 @@ fields:
 ## RELATIONSHIP BETWEEN SUBJECT AND OBJECT
 
   - id: relation
-    description: "A relationship type that connects the subject with object. TODO: check for correspondence in OBAN"
+    description: "A relationship type that connects the subject with object."
     display_name: Relationship
     type: string
     property: []
@@ -436,7 +436,7 @@ fields:
 
   - id: source
     description: "TBD: ALIGN GO AND DC TERMINOLOGY. Source of association. The association may be derived from multiple source, but this should be the 'outer' source, if applicable"
-    display_name: Source
+    display_name: Reference
     type: string
     cardinality: multi
     property: []
@@ -566,8 +566,8 @@ fields:
     property: []
 
   - id: is_defined_by
-    description: "Ontologies that generated evidence axioms"
-    display_name: Defined
+    description: "Associations are obtained from the source(s) listed. More than one source indicates the association leveraged information from each."
+    display_name: Source
     type: string
     cardinality: multi
     property: []

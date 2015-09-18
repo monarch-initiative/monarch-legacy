@@ -3293,7 +3293,8 @@
       "id" : null,
       "abbreviation" : "FB",
       "url_syntax" : "http://flybase.org/reports/[example_id].html",
-      "datatype" : null
+      "datatype" : null,
+      "image_path" : "/image/source-flybase.png"
    },
    "issn" : {
       "object" : "Identifier",
@@ -3545,7 +3546,8 @@
       "abbreviation" : "FLYBASE",
       "id" : null,
       "url_syntax" : "http://flybase.org/reports/[example_id].html",
-      "datatype" : null
+      "datatype" : null,
+      "image_path" : "/image/source-flybase.png"
    },
    "ensemblplants/gramene" : {
       "object" : "Identifier",
@@ -4784,6 +4786,22 @@
       "fullname" : "Human Phenotype Ontology",
       "id" : null,
       "abbreviation" : "HP",
+      "url_syntax" : "http://www.human-phenotype-ontology.org/hpoweb/showterm?id=HP:[example_id]",
+      "datatype" : null,
+      "image_path" : "/image/source-hpo.png"
+   },
+      "hpoa" : {
+      "object" : "Identifier",
+      "uri_prefix" : null,
+      "name" : null,
+      "url_example" : "http://www.human-phenotype-ontology.org/hpoweb/showterm?id=HP:0000118",
+      "description" : "The HPO can be used for clinical diagnostics in human genetics (Phenomizer), bioinformatics research on the relationships between human phenotypic abnormalities and cellular and biochemical networks, for mapping between human and model organism phenotypes, and for providing a standardized vocabulary for clinical databases, among many other things.",
+      "database" : "Human Phenotype Ontology",
+      "example_id" : "HPOA:0000001",
+      "generic_url" : "http://www.human-phenotype-ontology.org",
+      "fullname" : "Human Phenotype Ontology",
+      "id" : null,
+      "abbreviation" : "HPOA",
       "url_syntax" : "http://www.human-phenotype-ontology.org/hpoweb/showterm?id=HP:[example_id]",
       "datatype" : null,
       "image_path" : "/image/source-hpo.png"
