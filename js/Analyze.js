@@ -695,7 +695,7 @@ function AnalyzeInit(uploaded_data){
 
     if (jQuery("#analyze_auto_target").val() !== null) {
         var text = jQuery("#analyze_auto_target").val();
-        var species = jQuery("#analyze_auto_species").val();
+        var species = jQuery("#target").val();
 
         
         if (typeof urlParams.user_input != 'undefined' 
@@ -745,7 +745,7 @@ function AnalyzeInit(uploaded_data){
 	window.onload = function() {
 		Phenogrid.createPhenogridForElement(document.getElementById('phen_vis'), {
 			phenotypeData: phenotypes,
-			targetSpeciesName: species,
+			targetSpecies: species,
 			owlSimFunction: urlParams.mode,
 			geneList: urlParams.geneList,
 			providedData: urlParams.user_input,
