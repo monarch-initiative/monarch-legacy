@@ -27,7 +27,7 @@
     "lodash": "^3.10.1",
     "lodash._isiterateecall": "^3.0.9",
     "mustache": "^2.1.2",
-    "phenogrid": "git+https://github.com/monarch-initiative/phenogrid.git#release_2015-08-06",
+    "phenogrid": "git+https://github.com/monarch-initiative/phenogrid.git#master",
     "request": "^2.60.0",
     "sax": "^1.1.1",
     "timers": "^0.1.1",
