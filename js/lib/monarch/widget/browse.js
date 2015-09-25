@@ -212,81 +212,85 @@ bbop.monarch.widget.browse = function(server, manager, reference_id, root, inter
                 });
             });
  
+            if (equivalent_graph_nodes.length > 0){
             
-            jq_params = {
-                    'relationshipType' : 'equivalentClass',
-                    'depth' : 10,
-                    'blankNodes' : 'false',
-                    'direction' : 'BOTH'
-            };
-            var url = anchor.server + "graph/neighbors?id="+equivalent_graph_nodes.join("&id=");
-            
-            jQuery.ajax({
-                url: url,
-                data: jq_params,
-                jsonp: "callback",
-                dataType: "json",
-                error: function(){
-                  console.log('ERROR: looking at: ' + query);
-                  if (typeof error_function != 'undefined'){
-                      error_function();
-                  }
-                },
-                success: function(data) {
+                jq_params = {
+                        'relationshipType' : 'equivalentClass',
+                        'depth' : 10,
+                        'blankNodes' : 'false',
+                        'direction' : 'BOTH'
+                };
+                var url = anchor.server + "graph/neighbors?id="+equivalent_graph_nodes.join("&id=");
+                
+                jQuery.ajax({
+                    url: url,
+                    data: jq_params,
+                    jsonp: "callback",
+                    dataType: "json",
+                    error: function(){
+                        console.log('ERROR: looking at: ' + query);
+                        if (typeof error_function != 'undefined'){
+                            error_function();
+                        }
+                    },
+                    success: function(data) {
                     
-                    var equivalent_graph = new bbop.model.graph();
-                    equivalent_graph.load_json(data);
+                        var equivalent_graph = new bbop.model.graph();
+                        equivalent_graph.load_json(data);
                     
-                    rich_layout.forEach(function (v) {
-                        if (v.length == 1){
-                            return;
-                        } else {
-                            for (var i=0; i < v.length; i++) {
-                                var id = v[i][0];
-                                if (id) {
-                                    var eq_node_list = [];
-                                    //Get all equivalent nodes of v[i][0]
-                                    var equivalent_nodes = equivalent_graph.get_ancestor_subgraph(id, 'equivalentClass')
-                                                                       .all_nodes();
-                                    var other_eq_nodes = equivalent_graph.get_descendent_subgraph(id, 'equivalentClass')
-                                                                     .all_nodes();
+                        rich_layout.forEach(function (v) {
+                            if (v.length == 1){
+                                return;
+                            } else {
+                                for (var i=0; i < v.length; i++) {
+                                    var id = v[i][0];
+                                    if (id) {
+                                        var eq_node_list = [];
+                                        //Get all equivalent nodes of v[i][0]
+                                        var equivalent_nodes = equivalent_graph.get_ancestor_subgraph(id, 'equivalentClass')
+                                        .all_nodes();
+                                        var other_eq_nodes = equivalent_graph.get_descendent_subgraph(id, 'equivalentClass')
+                                        .all_nodes();
                                     
-                                    eq_node_list = equivalent_nodes.map(function(i){return i.id();});
-                                    var temp_list = other_eq_nodes.map(function(i){return i.id();});
+                                        eq_node_list = equivalent_nodes.map(function(i){return i.id();});
+                                        var temp_list = other_eq_nodes.map(function(i){return i.id();});
                                     
-                                    eq_node_list.push.apply(eq_node_list, temp_list);
-                                    //equivalent_node_list.map
+                                        eq_node_list.push.apply(eq_node_list, temp_list);
+                                        //equivalent_node_list.map
                                 
-                                    for (var k=i+1; k < v.length; k++) {
-                                        var node_id = v[k][0];
-                                        if (node_id) {
-                                          //console.log('comparing id: ' + id + ' to: ' + node_id);
-                                          if (eq_node_list.indexOf(node_id) > -1){
-                                              
-                                              // If the id is from MESH
-                                              if (/^MESH/.test(id)){
-                                                  //console.log('removing equivalent node '+ id);
-                                                  v.splice(i,1)
-                                                  i--;
-                                                  break;
-                                              } else {
-                                                  //console.log('removing equivalent node '+node_id);
-                                                  v.splice(k, 1);
-                                                  k--;
-                                                  continue;
-                                              }
-                                          }
-                                        }
+                                        for (var k=i+1; k < v.length; k++) {
+                                            var node_id = v[k][0];
+                                            if (node_id) {
+                                                //console.log('comparing id: ' + id + ' to: ' + node_id);
+                                                if (eq_node_list.indexOf(node_id) > -1){
+                                                    
+                                                    // If the id is from MESH
+                                                    if (/^MESH/.test(id)){
+                                                        //console.log('removing equivalent node '+ id);
+                                                        v.splice(i,1)
+                                                        i--;
+                                                        break;
+                                                    } else {
+                                                        //console.log('removing equivalent node '+node_id);
+                                                        v.splice(k, 1);
+                                                        k--;
+                                                        continue;
+                                                    }
+                                                }
+                                            }
                                     
+                                        }
                                     }
                                 }
                             }
-                        }
-                    });
+                        });
                     
-                    draw_layout(rich_layout);
-                }
-            });
+                        draw_layout(rich_layout);
+                    }
+                });
+            } else {
+                draw_layout(rich_layout);
+            }
             
             function draw_layout(rich_layout) {
             ///
