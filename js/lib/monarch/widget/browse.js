@@ -536,9 +536,16 @@ bbop.monarch.widget.browse = function(server, manager, reference_id, root, inter
         var anchor = this;
         var edge_list = new Array();
         var descendent_graph = new bbop.model.graph();
+        if (typeof anchor.seen_node_list === 'undefined') {
+            anchor.seen_node_list = [obj_id];
+        }
         
-        anchor.get_child_nodes(obj_id, pred).forEach(function(sub_node){
+        anchor.get_child_nodes(obj_id, pred).forEach( function(sub_node) {
             var sub_id = sub_node.id();
+            if (anchor.seen_node_list.indexOf(sub_id) > -1){
+                return;
+            }
+            anchor.seen_node_list.push(sub_id);
             descendent_graph.add_edge(anchor.get_edge(sub_id, obj_id, pred));
             descendent_graph.add_node(anchor.get_node(sub_id));
             descendent_graph.add_node(anchor.get_node(obj_id));
