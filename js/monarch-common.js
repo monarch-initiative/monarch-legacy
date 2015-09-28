@@ -64,7 +64,7 @@ function getAnnotationScore() {
         var spinner_class = 'ui-score-spinner';
         jQuery('.score-spinner').addClass(spinner_class);
     
-        var id = this.location.pathname;
+        var id = window.location.pathname;
         var slash_idx = id.indexOf('/');
         id = id.substring(slash_idx+1);
     
@@ -289,3 +289,8 @@ function genURL(type,obj,fmt) {
     }
     return url;
 }
+
+if (typeof exports === 'object') {
+    exports.getAnnotationScore = getAnnotationScore;
+}
+

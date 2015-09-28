@@ -268,7 +268,7 @@ bbop.monarch.linker.prototype.set_anchor = function(id, args, xid, modifier){
         // Check if id is an is_defined_by url
         var title = "";
         if (/^http/.test(id)){
-            src = id.replace(/.*\/(\w+)\.ttl/, "$1");
+            var src = id.replace(/.*\/(\w+)\.ttl/, "$1");
             var lc_src = src.toLowerCase();
             var xref = global_xrefs_conf[lc_src];
             if (xref && xref['database']){

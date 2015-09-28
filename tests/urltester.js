@@ -2,7 +2,7 @@
 
    This tests a set of URLs required for Monarch.
 
-   TODO: 
+   TODO:
     - improve XML tests (OntoQuest)
     - allow configurable switching between beta/production URLs
 
@@ -12,12 +12,20 @@
 
  */
 
-var Parser = require('ringo/args').Parser;
-var system = require('system');
-var assert = require("assert");
-var fs = require("fs");
-var httpclient = require('ringo/httpclient');
-var version = null; // alpha, beta or productions
+var env = require('serverenv.js');
+var testCommon = require('./test-common.js');
+
+
+if (env.isRingoJS()) {
+    var httpclient = require('ringo/httpclient');
+    var system = require('system');
+    var Parser = require('ringo/args').Parser;
+}
+else {
+    var AsyncRequest = require('request');
+    var WaitFor = require('wait.for');
+}
+
 
 // list of cfgs to load
 var cfgs =
@@ -25,35 +33,52 @@ var cfgs =
         "urltest_cfg.js"
     ];
 
+var version = null; // alpha, beta or productions
 var components = null;  // list of components to be tested. Defaults to all
 var urlToTest = null;   // set if only a single URL is to be tested
 
 // test ALL configs
 exports.testAll = function() {
+    var testFailed = false;
+
     for (var k in cfgs) {
-        testCfgFile(cfgs[k]);
+        testFailed |= !testCfgFile(cfgs[k]);
     }
+
+    return !testFailed;
 };
 
 var testCfgFile = function(fn) {
+    var testFailed = false;
     var urls = [];
+
     try {
-        urls = eval(fs.read("tests/"+fn));
+        urls = eval(env.fs_readFileSync("tests/"+fn) + '');
     }
     catch(msg) {
         console.error("Cannot parse: "+fn);
-        var stm = require("ringo/logging").getScriptStack(msg);
-        print(msg);
-        print(stm);
-        assert.isTrue(false);
+        if (env.isRingoJS()) {
+            var stm = require("ringo/logging").getScriptStack(msg);
+        }
+        else {
+            var stm = 'StackTrace NYI for NodeJS';
+        }
+        console.error(msg);
+        console.error(stm);
+        return false;   // Indicate a test failure
     }
     for (var k in urls) {
-        testUrl(urls[k]);
+        var url = urls[k];
+        //console.log('urls ', k, ' [k]:', JSON.stringify(url));
+        testFailed |= !testUrl(url);
     }
+
+    return !testFailed;
 }
 
 // test a particular URL, check if returns expected results
 var testUrl = function(urlinfo) {
+    var testFailed = false;
     var url = urlinfo.url;
     var component = urlinfo.component;
     var expects = urlinfo.expects;
@@ -61,23 +86,33 @@ var testUrl = function(urlinfo) {
     if (components != null) {
         if (components.indexOf(component) == -1) {
             console.log("Skipping test on: "+url);
-            return;
+            return true;
         }
     }
     if (urlToTest != null) {
         if (url != urlToTest) {
             console.log("Skipping test on: "+url);
-            return;
+            return true;
         }
     }
 
     url = modifyUrlForComponent(url, component);
 
     console.log("Testing URL: "+url);
-    print(JSON.stringify(urlinfo, ' ', null));
+    console.log(JSON.stringify(urlinfo, ' ', null));
     var date = new Date();
     var t1 = date.getTime();
-    var x = httpclient.get(url);
+
+    if (env.isRingoJS()) {
+        var x = httpclient.get(url);
+    }
+    else {
+        var requestResult = WaitFor.for(AsyncRequest.get, url);
+        //console.log('requestResult:', requestResult);
+        requestResult.content = requestResult.body + '';
+        var x = requestResult;
+    }
+
     date = new Date();
     var t2 = date.getTime();
     var td = t2-t1;
@@ -90,14 +125,17 @@ var testUrl = function(urlinfo) {
         }
     }
     if (expects.status != null) {
-        assert.equal(expects.status, x.status);
+        testFailed |= !testCommon.assert(
+                        "expects.status === x.status",
+                        expects.status === x.status);
     }
     if (expects.status == null && x.status == 500) {
         console.warn("Received a 500");
         console.warn("DEBUG:"+x.content);
-        assert.notEqual(x.status, 500);
-        // no point testing further
-        return;
+        testFailed |= !testCommon.assert(
+                        "x.status !== 500",
+                        x.status !== 500);
+        return false;   // no point testing further
     }
 
     var resultObj = null;
@@ -109,7 +147,9 @@ var testUrl = function(urlinfo) {
             strings.forEach(function(s) {
                 console.log("Checking for presence of string: "+s);
                 //assert.isTrue(rawContent.indexOf(s) > -1);
-                assert.stringContains(rawContent, s);
+                testFailed |= !testCommon.assert(
+                                "rawContent.indexOf(s) >= 0",
+                                rawContent.indexOf(s) >= 0);
             });
         }
 
@@ -118,10 +158,12 @@ var testUrl = function(urlinfo) {
             strings.forEach(function(s) {
                 console.log("Checking for presence of string: "+s);
                 //assert.isTrue(rawContent.indexOf(s) > -1);
-                assert.stringContains(rawContent, s);
+                testFailed |= !testCommon.assert(
+                                "rawContent.indexOf(s) >= 0",
+                                rawContent.indexOf(s) >= 0);
             });
         }
-        
+
         if (expects.format == 'json') {
             resultObj = JSON.parse(rawContent);
         }
@@ -172,40 +214,54 @@ var testUrl = function(urlinfo) {
             results = resultObj;
         }
         console.log("# results: "+results.length);
-        testResults(urlinfo, results);
+        testFailed |= !testResults(urlinfo, results);
     }
+
+    return !testFailed;
 }
 
 var testResults = function(urlinfo, results) {
+    var testFailed = false;
+
     var expects = urlinfo.expects;
 
     if (expects.min_results != null) {
         console.log("Expects: min_results = "+expects.min_results+" Actual #results="+results.length);
-        assert.isTrue(results.length >= expects.min_results);
+        testFailed |= !testCommon.assert(
+                        "results.length >= expects.min_results",
+                        results.length >= expects.min_results);
     }
     if (expects.max_results != null) {
         console.log("Expects: max_results = "+expects.max_results+" Actual #results="+results.length);
-        assert.isTrue(results.length <= expects.max_results);
+        testFailed |= !testCommon.assert(
+                        "results.length <= expects.max_results",
+                        results.length <= expects.max_results);
     }
     if (expects.must_contain != null) {
         console.log("Expects: match = "+JSON.stringify(expects.must_contain, null, ' '));
         listify(expects.must_contain).forEach(
-            function(matchObj) { 
+            function(matchObj) {
                 var matches = results.filter(function(r) { return matchesQuery(r, matchObj) });
                 if (matches.length == 0) {
                     console.error("ACTUAL = "+JSON.stringify(results, null, ' '));
                 }
-                assert.notEqual(matches.length, 0);
+                testFailed |= !testCommon.assert(
+                                "matches.length !== 0",
+                                matches.length !== 0);
             });
     }
     if (expects.must_not_contain != null) {
         console.log("Expects: NO match = "+JSON.stringify(expects.must_not_contain, null, ' '));
         listify(expects.must_not_contain).forEach(
-            function(matchObj) { 
+            function(matchObj) {
                 var matches = results.filter(function(r) { return matchesQuery(r, matchObj) });
-                assert.equal(matches.length, 0);
+                testFailed |= !testCommon.assert(
+                                "matches.length === 0",
+                                matches.length === 0);
             });
     }
+
+    return !testFailed;
 }
 
 var matchesQuery = function(obj, pattern) {
@@ -258,8 +314,7 @@ var modifyUrlForComponent = function(url, component) {
         }
         else {
             console.warn("UNKNOWN: "+version);
-	    system.exit('-1');
-            
+            env.exit(-1);
         }
     }
     else if (component == 'ontoquest') {
@@ -273,21 +328,24 @@ function listify(x) {
 }
 
 if (require.main == module) {
-    var script = system.args.shift();
-    console.log("ARGS="+system.args);
-    var parser = new Parser(system.args);
-    parser.addOption('h', 'help', null, 'Display help');
-    parser.addOption('c', 'components', 'String', 'comma separated list of components. "ALL" for all');
-    parser.addOption('s', 'setup', 'String', 'one of: alpha, beta, production');
-    parser.addOption('u', 'url', 'URL', 'URL to test');
-    
-    var options = parser.parse(system.args);
-    if (options.help) {
-        print("Usage: ringo OPTIONS tests/urltester.js\n");
-        print("Runs URL tests");
-        print("\nOptions:");
-	print(parser.help());
-        print("\n\n\
+    if (env.isRingoJS()) {
+        var httpclient = require('ringo/httpclient');
+
+        var script = system.args.shift();
+        console.log("ARGS="+system.args);
+        var parser = new Parser(system.args);
+        parser.addOption('h', 'help', null, 'Display help');
+        parser.addOption('c', 'components', 'String', 'comma separated list of components. "ALL" for all');
+        parser.addOption('s', 'setup', 'String', 'one of: alpha, beta, production');
+        parser.addOption('u', 'url', 'URL', 'URL to test');
+
+        var options = parser.parse(system.args);
+        if (options.help) {
+            print("Usage: ringo OPTIONS tests/urltester.js\n");
+            print("Runs URL tests");
+            print("\nOptions:");
+            print(parser.help());
+            print("\n\n\
 Example:\n\
 # Tests vocabulary component\n\
 ringo -c vocabulary tests/urltester.js\n\
@@ -300,7 +358,16 @@ Example:\n\
 # all tests\
 ringo  -c vocabulary tests/urltester.js\n\
 ");
-	system.exit('-1');
+            system.exit('-1');
+        }
+    }
+    else {
+        var AsyncRequest = require('request');
+        var WaitFor = require('wait.for');
+
+        options = {
+            components: 'ALL'
+        };
     }
 
     console.log("options.components = " + options.components);
@@ -314,7 +381,7 @@ ringo  -c vocabulary tests/urltester.js\n\
             components = null;
         }
     }
-    else {
+    if (components === null) {
         components = [
             'vocabulary',
             'federation',
@@ -327,7 +394,5 @@ ringo  -c vocabulary tests/urltester.js\n\
     console.log("Version = " + version);
 
     //system.args.forEach(function(fn) { print(fn) });
-    var rtn = require("test").run(exports);
-    print("Return code="+rtn);
-    system.exit(rtn);
+    testCommon.runTests(exports);
 }

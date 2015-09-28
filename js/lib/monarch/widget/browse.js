@@ -120,7 +120,7 @@ bbop.monarch.widget.browse = function(server, manager, reference_id, root, inter
         topo_graph.load_json(resp._raw);
         
         var subclass_manager = new bbop.rest.manager.jquery(bbop.rest.response.json);
-        rsrc =  anchor.server + "graph/neighbors/" + anchor._reference_id + ".json?&depth=1&blankNodes=false&relationshipType=subClassOf&direction=INCOMING&project=%2A";
+        var rsrc =  anchor.server + "graph/neighbors/" + anchor._reference_id + ".json?&depth=1&blankNodes=false&relationshipType=subClassOf&direction=INCOMING&project=%2A";
 
         subclass_manager.resource(rsrc);
         subclass_manager.method('get');
@@ -214,7 +214,7 @@ bbop.monarch.widget.browse = function(server, manager, reference_id, root, inter
  
             if (equivalent_graph_nodes.length > 0){
             
-                jq_params = {
+                var jq_params = {
                         'relationshipType' : 'equivalentClass',
                         'depth' : 10,
                         'blankNodes' : 'false',

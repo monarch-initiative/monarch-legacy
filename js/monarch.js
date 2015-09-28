@@ -9,6 +9,11 @@
  * global_xrefs_conf: Xrefs conf file from conf/xrefs.json
  */
 
+if (typeof bbop == 'undefined') {
+    var bbop = require('bbop');
+    window.bbop = bbop;
+}
+
 // Module and namespace checking.
 if (typeof bbop == 'undefined') { var bbop = {};}
 if (typeof bbop.monarch == 'undefined') { bbop.monarch = {};}
@@ -414,7 +419,7 @@ bbop.monarch.linker.prototype.set_anchor = function(id, args, xid, modifier){
         // Check if id is an is_defined_by url
         var title = "";
         if (/^http/.test(id)){
-            src = id.replace(/.*\/(\w+)\.ttl/, "$1");
+            var src = id.replace(/.*\/(\w+)\.ttl/, "$1");
             var lc_src = src.toLowerCase();
             var xref = global_xrefs_conf[lc_src];
             if (xref && xref['database']){
@@ -552,7 +557,7 @@ bbop.monarch.widget.browse = function(server, manager, reference_id, root, inter
         topo_graph.load_json(resp._raw);
         
         var subclass_manager = new bbop.rest.manager.jquery(bbop.rest.response.json);
-        rsrc =  anchor.server + "graph/neighbors/" + anchor._reference_id + ".json?&depth=1&blankNodes=false&relationshipType=subClassOf&direction=INCOMING&project=%2A";
+        var rsrc =  anchor.server + "graph/neighbors/" + anchor._reference_id + ".json?&depth=1&blankNodes=false&relationshipType=subClassOf&direction=INCOMING&project=%2A";
 
         subclass_manager.resource(rsrc);
         subclass_manager.method('get');
@@ -666,6 +671,7 @@ bbop.monarch.widget.browse = function(server, manager, reference_id, root, inter
                         }
                     },
                     success: function(data) {
+
                     
                         var equivalent_graph = new bbop.model.graph();
                         equivalent_graph.load_json(data);
@@ -993,7 +999,7 @@ bbop.monarch.widget.browse = function(server, manager, reference_id, root, inter
     
     bbop.model.bracket.graph.prototype.monarch_bracket_layout = function(term_acc, transitivity_graph){
         var anchor = this;
-        each = bbop.core.each;
+        var each = bbop.core.each;
         // First, lets just get our base bracket layout.
         var layout = anchor.bracket_layout(term_acc);
         var curr_acc;
@@ -1021,7 +1027,7 @@ bbop.monarch.widget.browse = function(server, manager, reference_id, root, inter
             // the one, we'll just use the defaults.
             if( curr_acc == term_acc ) {
                 // Try to get siblings here
-                unique_list = {};
+                var unique_list = {};
                 loop(anchor.get_parent_nodes(curr_acc), function (n) {
                     loop(anchor.get_child_nodes(n.id()), function (sibling) {
                         if (sibling.id() != term_acc 
@@ -1072,7 +1078,7 @@ bbop.monarch.widget.browse = function(server, manager, reference_id, root, inter
             }
             if ( isChildOfTerm ) {
                 // Make sure the class with additional children is at the bottom of the list        
-                for (i=0; i < bracket.length; i++){
+                for (var i=0; i < bracket.length; i++){
                     if (anchor.get_child_nodes(bracket[i][0]).length > 0){
                         bracket.splice((bracket.length-1), 0, bracket.splice(i, 1)[0]);
                         break;
@@ -1415,7 +1421,7 @@ bbop.monarch.widget.display.results_table_by_class_conf_bs3 = function(cclass,
 		// Render each of the bits.
 		var tmp_buff = [];
 		each(bits, function(bit){
-		    out = anchor.process_entry(bit, fid, doc, display_context);
+		    var out = anchor.process_entry(bit, fid, doc, display_context);
 		    tmp_buff.push(out);
 		});
 		// Join it, trim/store it, push to to output.

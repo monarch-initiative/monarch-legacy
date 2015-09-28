@@ -16,13 +16,13 @@
  */
 var env = require('serverenv.js');
 var bbop = require('api.js').bbop;
+var testCommon = require('./test-common.js');
 
 if (env.isRingoJS()) {
     var Parser = require('ringo/args').Parser;
     var system = require('system');
 }
 else {
-    var WaitFor = require('wait.for');
 }
 
 var assert = require("assert");
@@ -46,30 +46,34 @@ var phenotypeIds =
 
 var geneIds =
     [
-        "NCBIGene:388552", 
+        "NCBIGene:388552",
     ];
-
-var pmids = [14581620, 20080219, 11912187];
-exports.testLiteratureBasic = function() {
-    var json = engine.fetchPubFromPMID(pmids);
-    console.log(JSON.stringify(json));
-    // todo - check json
-
-}
 
 //Test fetchAssociations
 exports.testFetchAssociations = function() {
+    var testFailed = false;
     var filter = {field: 'object_category', value: 'phenotype'};
-    
+
     diseaseIds.forEach(
             function(id) {
                 console.log("Fetching:"+id);
-                engine.fetchAssociations(id, 'subject_closure', filter, 1000);
-                engine.fetchAssociations(id, 'object_closure');
-                engine.fetchAssociations(id, 'subject_closure', null, 10);
+                var golrResponse = engine.fetchAssociations(id, 'subject_closure', filter, 1000);
+
+                var thisTestSucceeded = testCommon.assert(
+                    "golrResponse._is_a === 'bbop.golr.response'",
+                     golrResponse._is_a === 'bbop.golr.response');
+                testFailed |= !thisTestSucceeded;
+                if (thisTestSucceeded) {
+                    var firstDoc = golrResponse.documents()[0];
+                    if (id === "DOID:14330") {
+                        testFailed |= !testCommon.assert(
+                                        "firstDoc.object_label === 'Salivary secretion'",
+                                        firstDoc.object_label === 'Salivary secretion');
+                    }
+                }
             }
     );
-    
+
     geneIds.forEach(
             function(id) {
                 console.log("Fetching:"+id);
@@ -78,7 +82,7 @@ exports.testFetchAssociations = function() {
                 engine.fetchAssociations(id, 'subject_closure', null, 10);
             }
         );
-    
+
     phenotypeIds.forEach(
             function(id) {
                 console.log("Fetching:"+id);
@@ -87,14 +91,16 @@ exports.testFetchAssociations = function() {
                 engine.fetchAssociations(id, 'subject_closure', null, 10);
             }
         );
-}
+    return !testFailed;
+};
+
 
 if (require.main == module) {
     if (env.isRingoJS()) {
         var parser = new Parser(system.args);
         parser.addOption('h', 'help', null, 'Display help');
         parser.addOption('s', 'setup', 'String', 'one of: beta, production');
-        
+
         var options = parser.parse(system.args);
         if (options.help) {
             print("Usage: ringo OPTIONS tests/apitest.js\n");
@@ -128,15 +134,5 @@ if (require.main == module) {
     engine = new bbop.monarch.Engine();
     engine.isProduction = function() { return false }; // always log in test mode
 
-    if (env.isRingoJS()) {
-        var rtn = require("test").run(exports);
-        print("Return code="+rtn);
-        system.exit(rtn);
-    }
-    else {
-        WaitFor.launchFiber( function () {
-            exports.testLiteratureBasic();
-            exports.testFetchAssociations();
-        });
-    }
+    testCommon.runTests(exports);
 }
