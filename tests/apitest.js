@@ -67,8 +67,8 @@ exports.testFetchAssociations = function() {
                     var firstDoc = golrResponse.documents()[0];
                     if (id === "DOID:14330") {
                         testFailed |= !testCommon.assert(
-                                        "firstDoc.object_label === 'Salivary secretion'",
-                                        firstDoc.object_label === 'Salivary secretion');
+                                        "firstDoc.subject_category === 'disease'",
+                                        firstDoc.subject_category === 'disease');
                     }
                 }
             }
