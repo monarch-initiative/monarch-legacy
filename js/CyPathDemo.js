@@ -328,8 +328,11 @@ function CyPathDemoInit(){
     ll('Done ready!');
 };
 
-// jQuery gets to bootstrap everything.
-jQuery(document).ready(
-    function(){
-	CyPathDemoInit();
-    });
+
+
+if (typeof(loaderGlobals) === 'object') {
+    loaderGlobals.CyPathDemoInit = CyPathDemoInit;
+}
+if (typeof(global) === 'object') {
+    global.CyPathDemoInit = CyPathDemoInit;
+}

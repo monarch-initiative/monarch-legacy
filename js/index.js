@@ -10,27 +10,67 @@
 // angular.module('app', [uirouter, landing, about])
 //   .config(routing);
 
-var $ = require('jquery');
-window.jQuery = $;
-window.$ = $;
+var jq = require('jquery');
+window.jQuery = jq;
+window.$ = jq;
+global.jQuery = jq;
 
-//import '../css/bootstrap.min.css';
-//import '../css/monarch-common.css';
-//import '../css/jquery-ui.css';
+import '../image/home-splash.png';
+import '../image/partner-do.png';
+import '../css/monarch.less';
+// import '../node_modules/bootstrap/dist/css/bootstrap.min.css';
+import '../css/monarch-common.css';
 
-import './underscore-min.js';
-import './jquery-1.11.0.min.js';
-import './jquery-ui-1.10.3.custom.min.js';
-import './bootstrap.min.js';
-import './d3.min.js';
+import '../node_modules/jquery-ui/themes/trontastic/jquery-ui.css';
+import '../css/monarch-main.css';
+import '../css/monarch-home.css';
+import '../css/monarch-specific.css';
+
+import 'underscore';
+import 'bootstrap';
+// '/bootstrap-theme.css',
+import 'jquery-ui';
+// import './jquery-1.11.0.min.js';
+// import './jquery-ui-1.10.3.custom.min.js';
+import 'd3';
 import './search_form.js';
-import './tabs.js';
+import './search-results.js';
+import './monarch-tabs.js';
+
+//console.log('before import bbop:', Object.keys(bbop));
+import _bbop from 'bbop';
+var bbop = _bbop;
+console.log('after import bbop:', Object.keys(bbop));
 window.getAnnotationScore = require("exports?getAnnotationScore!./monarch-common.js");
-window.makeDiseaseLandingGraph = require("exports?makeDiseaseLandingGraph!./barchart-launcher.js");
-import 'bbop';
+
+console.log('before import monarch:', Object.keys(bbop));
 import './monarch.js';
-import './golr-table.js';
+console.log('after import monarch:', Object.keys(bbop));
 import './jquery.cookie.js';
 import './jquery.xml2json.js';
 
 import './HomePage.js';
+import '../css/bbop.css';
+import './golr-table.js';
+import './stupidtable.min.js';
+window.InitTables = require("exports?InitTables!./tables.js");
+
+var bl = require("exports?makeDiseaseLandingGraph,makePhenotypeLandingGraph,makeDiseaseLandingGraph,makeGeneDiseaseLandingGraph,makeGenotypeLandingGraph!./barchart-launcher.js");
+global.makeDiseaseLandingGraph = bl.makeDiseaseLandingGraph;
+global.makePhenotypeLandingGraph = bl.makePhenotypeLandingGraph;
+global.makeGenotypeLandingGraph = bl.makeGenotypeLandingGraph;
+global.makeDiseaseLandingGraph = bl.makeDiseaseLandingGraph;
+global.bbop = bbop;
+console.log('index.js bbop:', bbop);
+if (typeof(loaderGlobals) === 'object') {
+	loaderGlobals.bbop = global.bbop;
+	loaderGlobals.InitTabs = global.InitTabs;
+	loaderGlobals.InitTables = global.InitTables;
+	loaderGlobals.InitMonarch = global.InitMonarch;
+	loaderGlobals.makeDiseaseLandingGraph = global.makeDiseaseLandingGraph;
+	loaderGlobals.makePhenotypeLandingGraph = global.makePhenotypeLandingGraph;
+	loaderGlobals.makeGenotypeLandingGraph = global.makeGenotypeLandingGraph;
+	loaderGlobals.makeGeneDiseaseLandingGraph = global.makeGeneDiseaseLandingGraph;
+	loaderGlobals.getTableFromSolr = global.getTableFromSolr;
+	loaderGlobals.getOntologyBrowser = global.getOntologyBrowser;
+}

@@ -225,7 +225,7 @@ sub make_compressed_js {
   my $out_file = shift || die "no second arg";
 
   #my @args = ("shrinksafe", $in_file, ">", $out_file);
-  my @args = ("yui-compressor", "--nomunge", "--type", "js",
+  my @args = ("node_modules/.bin/yuicompressor", "--nomunge", "--type", "js",
 	      "-o", $out_file, $in_file);
   ll("System: \"@args\"");
   system(@args) == 0 || die "System \"@args\" failed: $?";

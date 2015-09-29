@@ -10,6 +10,19 @@
         <link rel="stylesheet" type="text/css" href="{{{.}}}">
     {{/pup_tent_css_libraries}}
 
+    <!-- JS launcher. -->
+    <script type="text/javascript">
+        loaderGlobals = {};
+{{#useBundle}}
+    globalUseBundle = useBundle = window.useBundle = true;
+{{/useBundle}}
+{{^useBundle}}
+    globalUseBundle = useBundle = window.useBundle = false;
+{{/useBundle}}
+
+    console.log('USE_BUNDLE: ', useBundle);
+    </script>
+
     <!-- JS variables. -->
     {{#pup_tent_js_variables}}
         <script type="text/javascript">var {{name}} = {{{value}}};</script>
@@ -22,12 +35,42 @@
 
     <!-- JS launcher. -->
     <script type="text/javascript">
-        jQuery = $;
-        jQuery(document).ready(function () {
+        function loaderBody() {
+makeDiseaseLandingGraph = loaderGlobals.makeDiseaseLandingGraph;
+makeGenotypeLandingGraph = loaderGlobals.makeGenotypeLandingGraph;
+makePhenotypeLandingGraph = loaderGlobals.makePhenotypeLandingGraph;
+makeDiseaseLandingGraph = loaderGlobals.makeDiseaseLandingGraph;
+makeGeneDiseaseLandingGraph = loaderGlobals.makeGeneDiseaseLandingGraph;
+getTableFromSolr = loaderGlobals.getTableFromSolr;
+getOntologyBrowser = loaderGlobals.getOntologyBrowser;
+bbop = loaderGlobals.bbop;
+navbar_search_init = loaderGlobals.navbar_search_init;
+InitHomePage = loaderGlobals.InitHomePage;
+InitTables = loaderGlobals.InitTables;
+
+console.log('loader before launchable:', loaderGlobals);
+console.log('before initMonarch');
+            loaderGlobals.InitMonarch();
+console.log('before initMonarchPage');
+            loaderGlobals.initMonarchPage();
+            loaderGlobals.InitTabs();
+
             {{#monarch_launchable}}
                 {{.}};
             {{/monarch_launchable}}
+        }
+
+function loader() {
+    console.log('loader loaderGlobals:', Object.keys(window));
+    if (jQuery) {
+        jQuery(document).ready(function () {
+            loaderBody();
         });
+    }
+    else {
+        loaderBody();
+    }
+}
     </script>
 
     <link rel="icon" href="/image/favicon.ico" type="image/x-icon">
@@ -36,12 +79,29 @@
 </head>
 
 {{#home_page}}
-<body style="padding-top: 40px;">
+<body
+    style="padding-top: 40px;"
 {{/home_page}}
 
 {{^home_page}}
-<body>
+<body
 {{/home_page}}
+
+{{#useBundle}}
+onload="loaderBody()"
+{{/useBundle}}
+>
+
+{{#useBundle}}
+<script>
+//loader();
+</script>
+{{/useBundle}}
+
+{{^useBundle}}
+<script src="/require.js" data-main="/requireconfig"></script>
+{{/useBundle}}
+
 
 {{&pup_tent_content}}
 

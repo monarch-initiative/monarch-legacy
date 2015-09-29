@@ -418,7 +418,7 @@ bbop.monarch.widget.interactive_browse = function(server, manager, reference_id,
     
     bbop.model.bracket.graph.prototype.monarch_bracket_layout = function(term_acc, transitivity_graph){
         var anchor = this;
-        each = bbop.core.each;
+        var each = bbop.core.each;
         // First, lets just get our base bracket layout.
         var layout = anchor.bracket_layout(term_acc);
         var curr_acc;

@@ -8,12 +8,52 @@ html, body {
 }
 p {
     font-family: Helvetica, Arial, sans-serif;
+    font-size: 14px;
+    margin-bottom: 0px;
+}
+
+p.bigfont {
+    font-size: 16px;
+    line-height: 26px;
 }
 .clear {
     clear: both;
 }
 
+#accordion .panel-title {
+    color: #428bca;
+    font-size: 18px;
+}
 
+/* This overrides many Bootstrap jumbotron styles to make things take less height. */
+
+.monarch-container .jumbotron {
+    position: relative;
+    margin:0;
+    margin-top: 0px;
+    margin-bottom: 20px;
+    border-radius: 2px;
+    border-bottom: black solid 1px;
+    padding: 0px 30px 0px 30px;
+    border: 1px solid transparent;
+}
+.monarch-container .jumbotron h1 {
+    font-size: 30px;
+    margin: 10px 0px;
+}
+.monarch-container .jumbotron p {
+    font-size: 16px;
+    line-height: 20px;
+    margin: 0px;
+    padding: 0px;
+    display:inline-block;
+}
+
+.jumbotron.jumbotron-expanded {
+    padding: 0 !important;
+    margin: 0 !important;
+    border:1px solid red;
+}
 
 /* Navbar */
 /* These are navbar styles that depend heavily on media queries to determine the
@@ -30,14 +70,55 @@ p {
     margin:0;
 }
 
+#navbar .searchspace {
+    margin: 0;
+    margin-top:5px;
+    padding: 0;
+}
+
+#search {
+    margin: 0;
+    width:180px;
+    font-size: 13px;
+    height:30px;
+/*
+    border:2px solid lightblue;
+    margin: 0;
+    padding: 0;
+    width: 100%;
+    margin: 5px 0 1px 0;
+    margin: 4px 0 2px 0;
+    font-size: 13px;
+*/
+}
+
+#navbar .nav-search-btn {
+    font-weight:500;
+    padding: 0px 10px;
+    font-weight:500;
+    width:40px;
+    height: 30px;
+    margin:0;
+    margin-left:-3px;
+/*
+    height: 28px;
+    width:auto;
+    padding: 0px 10px;
+    border-radius: 2px;
+    font-weight:500;
+    background-color: pink !important;
+*/
+}
+
 @media (min-width: 815px) {
     .monarch-navbar-container {
         padding: 0px 10px;
     }
 }
 @media (min-width: 768px) {
-    .navbar {
-        min-height: 30px;
+    #navbar.navbar {
+        min-height: 40px;
+        max-height: 40px;
     }
     .nav>li>a {
         padding: 0px;
@@ -60,31 +141,18 @@ p {
         font-weight: 400;
         margin-right: 5px;
     }
-    .searchspace {
-        float: right;
-    }
     .input-group {
         margin-bottom: 0px;
     }
-    .form-control {
-        padding: 0px 10px;
-        height: 28px;
-        border-radius: 2px;
-    }
-    .nav-search-btn{
-        width:auto;
-    }
     .input-group-btn .btn {
         padding: 0px 10px;
-        height: 28px;
         border-radius: 2px;
-    }
-    #search {
-        width: 180px;
-        font-size: 13px;
     }
 }
 @media (max-width: 800px) {
+    .navbar {
+        min-height: 40px;
+    }
     .monarch-navbar-container {
         margin: 0px -3px;
     }
@@ -111,13 +179,6 @@ p {
     .navbar-form {
         margin-top: 0px;
     }
-    #search_form{
-        width: 90%;
-    }
-    #search { 
-        margin: 0 20px;
-        font-size: 13px;        
-    }
 }
 
 /* Content Containers */
@@ -133,7 +194,7 @@ p {
         padding: 50px 0px 0px;
         height: 100%;
     }
-    
+
     .input-group-btn .btn {
         padding: 5px 10px;
         line-height: 26px;
@@ -143,6 +204,12 @@ p {
 .content {
     display: inline-block;
     height: 100%;
+    padding: 0;
+    margin: 0;
+}
+
+.content-bottom {
+    padding: 20px 30px 0 30px;
 }
 
 .toggleitems > .fewitems {
@@ -164,6 +231,7 @@ p {
 #monarch-logo {
     height: 45px;
     float: left;
+    margin-right: 20px;
 }
 #monarch-logo-horizontal {
     height: 50px;
@@ -255,7 +323,16 @@ p {
 }
 .downloadline {
     display: inline-block;
+
 }
+
+img.downloadline {
+    margin-top: 10px !important;
+}
+h1.downloadline {
+    margin-top: 20px !important;
+}
+
 .btn.downloadline {
     padding: 5px 15px;
     margin-bottom: 10px;
@@ -301,7 +378,7 @@ p {
 }
 /* Get a spinner for jQuery autocomplete wait. */
 .ui-autocomplete-loading {
-    background: white url('/image/waiting_ac.gif') right center no-repeat !important;
+    background: white url('../image/waiting_ac.gif') 95% center no-repeat !important;
 }
 
 .ui-score-spinner {
@@ -312,9 +389,10 @@ p {
 .form-control {
     padding: 2px 10px;
     line-height: 13px;
+    height:28px;
     border-radius: 2px;
 }
-
+*/
 /* Analyze Page */
 
 .analyze-delete-button {
@@ -332,13 +410,14 @@ p {
 /* Alerts */
 /* This is the styling for alerts about development that appear at the tops of dev
  * pages throughout the Monarch site. */
- 
-.alert {
-    margin: 0px;
-    padding: 0px 20px;
+
+.top-alert {
     border: 1px solid black;
     border-radius: 0px 0px 3px 3px;
     border-top: none;
+    font-size: 1.4em;
+    padding: 0.4em;
+    margin: auto;
 }
 
 /*
@@ -349,21 +428,26 @@ p {
     height: 30px;
     width: 60px;
     margin: 0;
-    margin-top: -3px;
-    margin-left: -5px;
-    margin-right: 4px;
+    margin-top: -4px;
+    margin-left: -7px;
+    margin-right: 10px;
     padding: 0;
 }
 
-.navbar-brand {
+#navbar .navbar-brand {
+    height: 35px;
+    padding: 9px 25px 0px 14px;
     font-size: 18px;
-    margin-top: -2px;
+    font-weight: 500;
+    margin:0;
+    margin-left:-17px;
+    margin-top:-2px;
 }
 
 /* BS3 Pager from bbop.live_pager widget */
 .bs3pager .btn {
-	margin-right: 2px;
-	padding: 2px 12px;
+    margin-right: 2px;
+    padding: 2px 12px;
 }
 
 .bs3pager-bottom .btn {
@@ -399,7 +483,7 @@ p {
 
 /* BBOP overrides and additions */
 .bbop-js-ui-browse li {
-	margin-top: 2px;
+    margin-top: 2px;
 }
 
 .bbop-js-text-button-sim:hover {
@@ -411,18 +495,18 @@ p {
 }
 
 #overview .col-xs-12, #overview .col-sm-12, #overview .col-md-12, #overview .col-lg-4{
-	padding-left: 0px;
-	padding-top: 10px;
+    padding-left: 0px;
+    padding-top: 10px;
 }
 
 
 .sibling-form label {
-	font-weight: normal;
+    font-weight: normal;
 }
 
 /* Amigo Styling needed for golr views, need to update to fit the monarch site
  */
- 
+
 .hidden { visibility: hidden; }
 .odd_row { background: #ffffff; }
 .even_row { }
@@ -596,8 +680,6 @@ a:hover .hilite, a:active .hilite {
     font-size: 16px;
 }
 
-
-
 .main-content {
   background-color:#EEEEEE;
 }
@@ -684,13 +766,21 @@ a:hover .hilite, a:active .hilite {
 
 #navbar #feedback-trigger {
     height:30px;
+<<<<<<< HEAD
     margin-top: -1px;
+=======
+    margin-top: 0;
+>>>>>>> Run with `npm run start` or `./start-server.sh`
     border:1px solid transparent;
     background-color: #222;
     color: #43A395;
     font-weight: 400;
 }
+<<<<<<< HEAD
 #navbar #feedback-trigger:hover {
+=======
+#feedback-trigger:hover {
+>>>>>>> Run with `npm run start` or `./start-server.sh`
     color: #FFF;
     border:1px solid transparent;
 }
@@ -707,7 +797,7 @@ a:hover .hilite, a:active .hilite {
   width: 90%;
   padding: 0 !important;
   margin:auto !important;;
-  top: 80px;
+  top: 50px;
   border: none;
   background: transparent;
 }
@@ -716,4 +806,3 @@ a:hover .hilite, a:active .hilite {
   border-radius: 0;
   box-shadow: none;
 }
-

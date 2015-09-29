@@ -7,7 +7,7 @@ function loadPhenogrid(){
         // Add spinner
         var spinner_div = makeSpinnerDiv();
         jQuery('#compare').append(spinner_div.to_string());
-        
+
         var disease_id = window.location.pathname;
         var slash_idx = disease_id.indexOf('/');
         disease_id = disease_id.substring(slash_idx+1);
@@ -40,4 +40,6 @@ function loadPhenogrid(){
             }
         });
     }
+
+    initPhenogrid();
 }

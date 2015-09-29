@@ -5,7 +5,7 @@
             <div class="jumbotron">
                 <div id="description">
                     {{#alerts}}
-                    <div class="alert">
+                    <div class="alert alert-warning alert-block top-alert">
                         {{{.}}}
                     </div>
                     {{/alerts}}
@@ -103,7 +103,7 @@
                       <div class="panel-heading">
                         <h4 class="panel-title text-center">Phenotypes</h4>
                       </div>
-                      <div class="arrow-right"></div>
+                      <div class="panel-body">
                         <input id="analyze_auto_target" name="input_items" value="{{input_items}}" type="hidden"/>
                         <div id="analyze-searchlist" class="form-group">
                           <label for="analyze_auto_input"><h4>Create a phenotype profile:</h4></label>
@@ -120,6 +120,7 @@
                             <li id="analyze-empty-item" class="list-group-item">Empty: Add items using the input above.</li>
                             </ul>
                         </div>
+                      </div>
                     </div>
                   </div>
                   <div class="col-xs-6 col-sm-6 col-md-6 col-lg-6">
@@ -127,7 +128,7 @@
                       <div class="panel-heading">
                         <h4 class="panel-title text-center">Settings</h4>
                       </div>
-                      <div class="row">
+                      <div class="panel-body">
                         <div id="analyze-search" class="col-xs-6 col-sm-6 col-md-6 col-lg-6">
                           <div class="pheno-radio-button">
                             <label id="pheno-search">

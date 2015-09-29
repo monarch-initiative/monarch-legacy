@@ -18,10 +18,6 @@
  *   
  */
 
-if ( typeof bbop == "undefined" ){ var bbop = {}; }
-if ( typeof bbop.monarch == "undefined" ){ bbop.monarch = {}; }
-if ( typeof bbop.monarch.widget == "undefined" ){ bbop.monarch.widget = {}; }
-
 /*
  * Constructor: browse
  * 
@@ -483,7 +479,7 @@ bbop.monarch.widget.browse = function(server, manager, reference_id, root, inter
     
     bbop.model.bracket.graph.prototype.monarch_bracket_layout = function(term_acc, transitivity_graph){
         var anchor = this;
-        each = bbop.core.each;
+        var each = bbop.core.each;
         // First, lets just get our base bracket layout.
         var layout = anchor.bracket_layout(term_acc);
         var curr_acc;
@@ -511,7 +507,7 @@ bbop.monarch.widget.browse = function(server, manager, reference_id, root, inter
             // the one, we'll just use the defaults.
             if( curr_acc == term_acc ) {
                 // Try to get siblings here
-                unique_list = {};
+                var unique_list = {};
                 loop(anchor.get_parent_nodes(curr_acc), function (n) {
                     loop(anchor.get_child_nodes(n.id()), function (sibling) {
                         if (sibling.id() != term_acc 
@@ -562,7 +558,7 @@ bbop.monarch.widget.browse = function(server, manager, reference_id, root, inter
             }
             if ( isChildOfTerm ) {
                 // Make sure the class with additional children is at the bottom of the list        
-                for (i=0; i < bracket.length; i++){
+                for (var i=0; i < bracket.length; i++){
                     if (anchor.get_child_nodes(bracket[i][0]).length > 0){
                         bracket.splice((bracket.length-1), 0, bracket.splice(i, 1)[0]);
                         break;

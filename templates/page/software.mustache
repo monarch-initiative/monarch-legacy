@@ -1,32 +1,8 @@
-<!DOCTYPE html>
-<html>
-<head>
-    <title>Monarch Software</title>
-    
-    {{{includes.analytics}}}
-    
-     <!-- CSS. -->
-    {{#pup_tent_css_libraries}}
-    <link rel="stylesheet" type="text/css" href="{{{.}}}">
-    {{/pup_tent_css_libraries}}
-    
-    <!-- JS variables. -->
-    {{#pup_tent_js_variables}}
-    <script type="text/javascript">var {{name}} = {{{value}}};</script>
-    {{/pup_tent_js_variables}}
-    
-    <!-- JS libraries. -->
-    {{#pup_tent_js_libraries}}
-    <script type="text/javascript" src="{{{.}}}"></script>
-    {{/pup_tent_js_libraries}}
+<div class="wrapperforfooter">
+    <div class="monarch-container container-fluid" style="margin-top:2.8em;padding:0;">
+        {{{includes.navbar}}}
 
-    <link rel="icon" href="/image/favicon.ico" type="image/x-icon">
-    <meta charset="utf-8"/> 
-</head>
-<body>
-    {{{includes.navbar}}}
-    <div class="monarch-container">
-        <div class="content">
+        <div class="content content-bottom" style="padding:0;">
             <div class="wrapperforfooter">
             <div class="jumbotron">
                 <h2>Install Monarch Web Server</h2>
@@ -107,9 +83,10 @@
                     for more details.
                     </p>
             </div>
-            </div> <!-- closes wrapperforfooter -->
-            {{{includes.footer}}}
         </div>
     </div>
-</body>
-</html>
+</div>
+
+
+<!-- Footer. -->
+{{{includes.footer}}}

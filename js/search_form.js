@@ -5,7 +5,7 @@
 
 // Initializer for search autocomplete.
 function navbar_search_init(in_search_id, in_form_id){
-
+	console.log('navbar_search_init... window:', window);
     // Default DOM contact points.
     var search_elt = '#search';
     var form_elt = '#search_form';
@@ -13,7 +13,6 @@ function navbar_search_init(in_search_id, in_form_id){
     // Allow argument overrides.
     if( in_search_id ){ search_elt = '#' + in_search_id; }
     if( in_form_id ){ form_elt = '#' + in_form_id; }
-
 
     // Only run if these IDs are legit.
     if( jQuery(form_elt).length && jQuery(search_elt).length ){
@@ -48,6 +47,7 @@ function navbar_search_init(in_search_id, in_form_id){
 		window.location.href = newurl;
 	    });
 
+	console.log('search_form.js');
 	// Arguments for autocomplete box.
 	var ac_args = {
 	    position : {
@@ -85,7 +85,7 @@ function navbar_search_init(in_search_id, in_form_id){
 		    };
 		};
 		var _on_success = function(data) {
-
+			console.log('success:', data);
 		    // Pare out duplicates. Assume existence of 'id'
 		    // field. Would really be nice to have bbop.core in
 		    // here...
@@ -139,6 +139,7 @@ function navbar_search_init(in_search_id, in_form_id){
 		};
 
 		var query = "/autocomplete/"+request.term+".json";
+		console.log('about to do query:', query);
 		jQuery.ajax({
 		    url: query,
 		    dataType:"json",
@@ -164,7 +165,9 @@ function navbar_search_init(in_search_id, in_form_id){
 	// Create our own custom rendering to make the categories a little
 	// nicer to look at (as minor data).
 	// http://jqueryui.com/autocomplete/#custom-data
+	console.log('BEFORE autocomplete: args:', ac_args);
 	var jac = jQuery(search_elt).autocomplete(ac_args);
+	console.log('jac:', jac);
 	jac.data('ui-autocomplete')._renderItem = function(ul, item){
 	    var li = jQuery('<li>');
 	    li.append('<a alt="'+ item.name +'" title="'+ item.name +'">' +
@@ -182,7 +185,9 @@ function navbar_search_init(in_search_id, in_form_id){
     }
 }
 
-// Run initializer on jQuery ready event.
-jQuery(document).ready(function(){
-    navbar_search_init();
-});
+if (typeof exports === 'object') {
+    exports.navbar_search_init = navbar_search_init;
+}
+if (typeof(loaderGlobals) === 'object') {
+    loaderGlobals.navbar_search_init = navbar_search_init;
+}

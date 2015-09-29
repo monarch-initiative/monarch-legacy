@@ -4,24 +4,19 @@
 /* Description */
 /* This styles the jumbotron (information spotlight) at the top of all specific pages. */
 
-.jumbotron {
-    border-radius: 2px;
-    padding: 0px 30px 0px;
-    margin-bottom: 20px;
-    border-bottom: black solid 1px;
-}
-.jumbotron h1 {
-    font-size: 30px;
-}
-#monarch-logo {
+
+/*#monarch-logo {
     margin-top: 10px;
     margin-right: 20px;
 }
-p {
+*/
+/*p {
     font-size: 16px;
     line-height: 26px;
     margin-bottom: 0px;
 }
+*/
+
 .ids {
     margin-top: 5px;
     font-size: 15px;
@@ -33,7 +28,7 @@ p {
 
 #categories {
     margin-top: 10px;
-    margin-bottom: -3px;
+    margin-bottom: -1px;
 }
 .tabcontainer {
     display: inline-block;
@@ -183,10 +178,6 @@ figure {
     padding: 15px;
 }
 
-.panel-body {
-    overflow: hidden;
-}
-
 .right {
   float:right;
 }
@@ -234,7 +225,6 @@ figcaption {
     margin-right: auto;
     max-height: 125px;
     max-width: 125px;
-    padding: 5px 20px"
 }
 
 .no-results{
@@ -336,7 +326,7 @@ figcaption {
 	margin-top: 4px;
 }
 .small {  
-    font-family: Helvetica, Arial, sans-serif;
+    font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
     font-weight: normal;
     font-size: 12px;
     line-height:130%;

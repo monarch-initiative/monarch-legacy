@@ -1,32 +1,8 @@
-<!DOCTYPE html>
-<html>
-<head>
-    <title>Monarch Publications</title>
-    
-    {{{includes.analytics}}}
-    
-    <!-- CSS. -->
-    {{#pup_tent_css_libraries}}
-    <link rel="stylesheet" type="text/css" href="{{{.}}}">
-    {{/pup_tent_css_libraries}}
-    
-    <!-- JS variables. -->
-    {{#pup_tent_js_variables}}
-    <script type="text/javascript">var {{name}} = {{{value}}};</script>
-    {{/pup_tent_js_variables}}
-    
-    <!-- JS libraries. -->
-    {{#pup_tent_js_libraries}}
-    <script type="text/javascript" src="{{{.}}}"></script>
-    {{/pup_tent_js_libraries}}   
-
-    <link rel="icon" href="/image/favicon.ico" type="image/x-icon" ></link>
-    <meta charset="utf-8"/> 
-</head>
-<body>
-    <div class="monarch-container">
+<div class="wrapperforfooter">
+    <div class="monarch-container container-fluid" style="margin-top:2.8em;padding:0;">
         {{{includes.navbar}}}
-        <div class="content">
+
+        <div class="content content-bottom">
             <div class="wrapperforfooter">
             <div class="title">Monarch Publications</div>
             <div class="section" style="max-width:1280px;">
@@ -67,12 +43,6 @@
 					<p>Oellrich A, Koehler S, Washington N; Sanger Mouse Genetic Project, Mungall C, Lewis S, Haendel M, Robinson PN, Smedley D.
 					<b>The influence of disease categories on gene candidate predictions from model organism phenotypes.</b> <i>J Biomed Semantics.</i> 2014 Jun 3;5(Suppl 1 Proceedings of the Bio-Ontologies Spec Interest G):S4. [<a href="http://www.ncbi.nlm.nih.gov/pubmed/25093073">pubmed</a>]</p>
 
-																																																								<p>Haendel MA, Balhoff JP, Bastian FB, Blackburn DC, Blake JA, Bradford Y, Comte A, Dahdul WM, Dececchi TA, Druzinsky RE, Hayamizu TF, Ibrahim N, Lewis SE, Mabee PM, Niknejad A, Robinson-Rechavi M, Sereno PC, Mungall CJ. Mungall, C. J. (2014). <b>Unification of multi-species vertebrate anatomy ontologies for comparative biology in Uberon.</b> <i>Journal of Biomedical Semantics.</i> 5(1), 21. [<a href="http://www.ncbi.nlm.nih.gov/pubmed/25009735">pubmed</a>]</p> 
-
-																																																								<p>Jager M, Wang K, Bauer S, Smedley D, Krawitz P, Robinson PN. <b>Jannovar: a java library for exome annotation.</b> <i>Hum Mutat.</i> 2014 May;35(5):548-55. [<a href="http://www.ncbi.nlm.nih.gov/pubmed/24677618">pubmed</a>]</p>
-																																																								<p>Robinson PN, Webber C. <b>Phenotype ontologies and cross-species analysis for translational research.</b> <i>PLoS Genet.</i> 2014 Apr 3;10(4):e1004268. [<a href="http://www.ncbi.nlm.nih.gov/pubmed/24699242">pubmed</a>]</p>
-
-																																																								<p>Hoehndorf R, Haendel M, Stevens R, Rebholz-Schuhmann D. <b>Thematic series on biomedical ontologies in JBMS: challenges and new directions.</b> <i>J Biomed Semantics.</i> 2014 Mar 6;5:15. Review. [<a href="http://www.ncbi.nlm.nih.gov/pubmed/24602198">pubmed</a>]</p>
 
 <p>Robinson PN, Kohler S, Oellrich A, Sanger Mouse Genetics Project, Wang K, Mungall CJ, Lewis SE, Washington N, Bauer S, Seelow D, Krawitz P, Gilissen C, Haendel M, Smedley D. <b>Improved exome prioritization of disease genes through cross-species phenotype comparison.</b> <i>Genome Res.</i> 2014 Feb;24(2):340-8. [<a href="http://www.ncbi.nlm.nih.gov/pubmed/24162188">pubmed</a>]</p>
 
@@ -192,9 +162,11 @@
 </div> <!-- end 2007 pubs -->
 
             </div>
-            </div> <!-- closes wrapperforfooter -->
-            {{{includes.footer}}}
         </div>
     </div>
-</body>
-</html>
+
+</div>
+
+
+<!-- Footer. -->
+{{{includes.footer}}}

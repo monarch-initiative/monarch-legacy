@@ -2,9 +2,6 @@
 .clear {
     clear: both;
 }
-.content {
-    padding: 20px 30px 20px;
-}
 .title {
     font-size: 50px;
     font-weight: 500;
@@ -38,6 +35,9 @@
     line-height: 25px;
     margin-top: 10px;
     font-family: Helvetica, Arial, sans-serif;
+}
+h5 {
+    font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
 }
 .category {
     font-style: italic;

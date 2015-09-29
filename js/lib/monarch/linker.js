@@ -17,10 +17,6 @@
  * 
  */
 
-// Module and namespace checking.
-if (typeof bbop == 'undefined') { var bbop = {};}
-if (typeof bbop.monarch == 'undefined') { bbop.monarch = {};}
-
 /*
  * Constructor: linker
  * 

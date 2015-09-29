@@ -2,6 +2,20 @@
  ** Additional CSS to make the home page specific things look nice.
  **/
 
+
+.test-image {
+    background-image: url(../image/partner-do.png) !important;
+    margin:0;
+    padding:0;
+    height:54px;
+    width:130px;
+    position:absolute;
+    top:80px;
+    left:10px;
+    z-index:9999;
+    border:5px solid green;
+}
+
 #monarch-home-container .panel-default {
     margin:0;
     margin-bottom: 7px;
@@ -25,7 +39,9 @@
  * Compact the news list just a little. Assumes dl.
  */
 .news-list {
-  margin: -15px;
+  margin:0;
+  margin-top: -15px;
+  padding-bottom: 0;
   padding-left: 12px;
   padding-right: 12px;
 }
@@ -195,18 +211,16 @@
     border-bottom:3px solid darkgray;
 }
 
-.monarch-home-splash {
-    background-image: url('/image/home-splash.png');
+#monarch-home-container .monarch-home-splash {
+    background-image: url(../image/home-splash.png) !important;
     margin:0;
     margin-bottom: 17.5px;
-    padding-top: 40px;
-    padding-bottom: 40px;
+    padding:0;
+    padding-top: 35px;
+    padding-bottom: 15px;
     padding-left: 40px;
-    /* padding-right: 60px; */
-    margin:0;
-    margin-bottom: 17.5px;
-    padding-top:25px;
-    padding-bottom:25px;
+    padding-right: 60px;
+    height:114px;
 }
 .monarch-home-splash-text {
     color: #ffffff;
@@ -225,7 +239,6 @@
 
 .monarch-tabber {
     margin:0;
-    margin-top:10px;
     padding:0;
 }
 .monarch-tabber-controls {
@@ -241,6 +254,7 @@
 .monarch-tabber-control-btn {
     padding: 0;
     margin: 0;
+    font-size: 1.0em;
 }
 
 /* These are essentially overrides for btn-*. */
