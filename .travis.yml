@@ -1,12 +1,11 @@
-sudo: false
 language: javascript
 
 # command to install dependencies
 install:
   - "./install.sh"
-  - "pip install selenium"
-  - "pip install behave"
-  - "pip install jsonpath-rw"
+  - "sudo pip install selenium"
+  - "sudo pip install behave"
+  - "sudo pip install jsonpath-rw"
 
 before_script:
   - "export DISPLAY=:99.0"
