@@ -6,7 +6,7 @@ Feature: Analyze phenotypes is usable by the expected user interfaces
 
  @data
  Scenario: adding "allergy" and "asthma" to analyze phenotype results in "Ichthyosis Vulgaris"
-    Given I go to page "/analyze/phenotype"
+    Given I go to page "/analyze/phenotypes"
      and I type "aller" into the phenotype analyze search
      and I wait until "Allergy" appears in the autocomplete
      and I click the autocomplete item "Allergy"

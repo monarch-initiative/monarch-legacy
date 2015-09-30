@@ -1,3 +1,10 @@
+if (!jQuery) {
+    var jQuery = require('jquery');
+}
+if (!_) {
+    var _ = require('underscore');
+}
+
 function makePhenotypeLandingGraph(data){
 
     var graphDiv = ".dove-container";
@@ -216,4 +223,9 @@ function setMinHeightWidth (graphObject, div){
     "min-width": minWidth + "px"//,
     //"height": minHeight + 125 + "px"
     });
+}
+
+if (typeof exports === 'object') {
+    exports.makeDiseaseLandingGraph = makeDiseaseLandingGraph;
+    window.makeDiseaseLandingGraph = makeDiseaseLandingGraph;
 }

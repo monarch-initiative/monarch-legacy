@@ -50,7 +50,7 @@
                 {{/hasPhenotypes}}
                   <h3>IDs</h3>
                     <div class="ids">
-                        <b>URI:</b> <a href="{{{uri}}}">{{{uri}}}</a>
+                        <b>URI:</b> <a href="{{{iri}}}">{{{iri}}}</a>
                     </div>
                     {{#hasAka}}
                     <div class="ids">
@@ -86,8 +86,22 @@
                         <b>Cross References::</b> {{{xrefs}}}
                     </div>
                     {{/hasXrefs}}
-                    <h3>Classification</h3>
-                    {{{includes.classificationComponent}}}
+                    {{#hasEqual}}
+                            <div class="ids">
+                                <b>Equivalent IDs:</b> {{{equivalentClasses}}}
+                            </div>
+                    {{/hasEqual}}
+                    <div class="col-xs-12 col-sm-12 col-md-12 col-lg-8">
+                   <div class="panel panel-default">
+                      <div class="panel-heading">
+                      <h3 class="panel-title">Neighborhood</h3>
+                    </div>
+                    <div class="panel-body">
+                      <div id="brw">
+                    </div>
+                    <div class="clearfix"></div>
+                    </div></div>
+                    </div>
                 </div>
             {{{includes.phenotype_table}}}
             {{{includes.genotype_table}}}

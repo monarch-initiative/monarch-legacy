@@ -150,11 +150,11 @@ function CyExploreDemoInit(){
 
 	// Data call setup.
 	var base = 'http://kato.crbs.ucsd.edu:9000/scigraph/graph/neighbors/' +
-	    arg1 + '.jsonp';
+	    arg1 + '.json';
 	var rsrc = base + '?' + 'depth=' + desired_spread;
 	manager.resource(rsrc);
 	manager.method('get');
-	manager.use_jsonp(true);
+	//manager.use_jsonp(true);
 	manager.jsonp_callback('callback');
 
 	// Action.
@@ -186,11 +186,11 @@ function CyExploreDemoInit(){
 		    if( item['concept']['categories'] &&
 			! bbop.core.is_empty(item['concept']['categories']) ){
 			appendee = item['concept']['categories'].join(' ');
-		    }else if( item['concept']['fragment'] ){
+		    }else if( item['concept']['curie'] ){
 			// Get first split on '_'.
 			var fspl =
 			    bbop.core.first_split('_',
-						  item['concept']['fragment']);
+						  item['concept']['curie']);
 			if( fspl[0] ){
 			    appendee = fspl[0];
 			}
@@ -200,7 +200,7 @@ function CyExploreDemoInit(){
 		return {
 		    label: item['completion'],
 		    tag: appendee,
-		    name: item['concept']['fragment']
+		    name: item['concept']['curie']
 		};
 	    };
 	    var _on_success = function(data) {
@@ -234,9 +234,9 @@ function CyExploreDemoInit(){
 
 	    // Define and run request on service.
 	    var query =
-		'http://kato.crbs.ucsd.edu:9000/scigraph/vocabulary/prefix/' +
+		'http://kato.crbs.ucsd.edu:9000/scigraph/vocabulary/autocomplete/' +
 		request.term +
-		'.jsonp?limit=20&searchSynonyms=true';
+		'.json?limit=20&searchSynonyms=true';
 	    jQuery.ajax({
 			    'url': query,
 			    'dataType': 'jsonp',

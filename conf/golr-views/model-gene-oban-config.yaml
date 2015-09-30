@@ -211,7 +211,7 @@ fields:
     property: []
     searchable: true
     type: string
-  - description: 'A relationship type that connects the subject with object. TODO: check for correspondence in OBAN'
+  - description: A relationship type that connects the subject with object.
     display_name: Relationship
     id: relation
     property: []
@@ -362,7 +362,7 @@ fields:
     type: string
   - cardinality: multi
     description: "TBD: ALIGN GO AND DC TERMINOLOGY. Source of association. The association may be derived from multiple source, but this should be the 'outer' source, if applicable"
-    display_name: Source
+    display_name: Reference
     id: source
     property: []
     type: string
@@ -437,13 +437,13 @@ fields:
     property: []
     type: string
   - cardinality: multi
-    description: Ontologies that generated evidence axioms
-    display_name: Defined
+    description: Associations are obtained from the source(s) listed. More than one source indicates the association leveraged information from each.
+    display_name: Source
     id: is_defined_by
     property: []
     type: string
-filter_weights: relation_closure_label^6.5 evidence_closure_label^6.0 subject_closure_label^4.5 object_closure_label^4.0 subject_taxon_closure_label^3.5 object_taxon_closure_label^3.0
+filter_weights: subject_taxon_closure_label^3.5 object_taxon_closure_label^3.0
 id: model_gene
-result_weights: subject^7.0 subject_taxon^6.5 relation^6.0  object^5.0 object_taxon^4.2 evidence^4.0 source^3.5
+result_weights: subject^7.0 subject_taxon^6.5 relation^6.0  object^5.0 object_taxon^4.2 evidence^4.0 source^3.5 is_defined_by^3.0
 schema_generating: true
 weight: 20

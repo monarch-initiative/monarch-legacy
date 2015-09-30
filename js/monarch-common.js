@@ -64,7 +64,7 @@ function getAnnotationScore() {
         var spinner_class = 'ui-score-spinner';
         jQuery('.score-spinner').addClass(spinner_class);
     
-        var id = this.location.pathname;
+        var id = window.location.pathname;
         var slash_idx = id.indexOf('/');
         id = id.substring(slash_idx+1);
     
@@ -79,10 +79,7 @@ function getAnnotationScore() {
             success: function(data) {
             
                 var score_query = '/score';
-                var phenotype_map = data.phenotype_list.map( function(val) { 
-                    return {'id': val};
-                });
-                var profile = JSON.stringify({features:phenotype_map});
+                var profile = JSON.stringify({features:data.phenotype_list});
                 var params = {'annotation_profile' : profile};
                 jQuery.ajax({
                     type : 'POST',
@@ -292,3 +289,8 @@ function genURL(type,obj,fmt) {
     }
     return url;
 }
+
+if (typeof exports === 'object') {
+    exports.getAnnotationScore = getAnnotationScore;
+}
+

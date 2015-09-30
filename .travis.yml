@@ -3,6 +3,9 @@ language: javascript
 # command to install dependencies
 install:
   - "./install.sh"
+  - "sudo pip install selenium"
+  - "sudo pip install behave"
+  - "sudo pip install jsonpath-rw"
 
 before_script:
   - "export DISPLAY=:99.0"
@@ -13,16 +16,14 @@ before_script:
 # command to run tests
 script: 
   - "make test"
-  - "sudo pip install selenium"
-  - "sudo pip install behave"
-  - "sudo pip install jsonpath-rw"
   - "cd tests/behave"
-  - "TARGET=http://localhost:8080 behave -e maui_gene"
+  - "TARGET=http://localhost:8080 behave"
 
 # whitelist
 branches:
   only:
     - master
+    - production
 
 notifications:
   email:

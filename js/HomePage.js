@@ -3,6 +3,13 @@
 ////
 
 //
+if (!jQuery) {
+	var jQuery = require('jquery');
+}
+if (!_) {
+	var _ = require('underscore');
+}
+
 function MonarchCarousel(carousel_elt, tabber_elt, next_id, prev_id){
 
     var self = this;
@@ -78,10 +85,10 @@ function MonarchCarousel(carousel_elt, tabber_elt, next_id, prev_id){
 		if( jQuery(child).children() ){
 		    if( jQuery(jQuery(child).children()[0]).is('a') ){
 			// Only safe place!
-		    }else{ strikes = strikes + 1; }
-		}else{ strikes = strikes + 1; }
+		    }else{ strikes = strikes + 1;}
+		}else{ strikes = strikes + 1;}
 	    });
-	}else{ strikes = strikes + 1; }
+	}else{ strikes = strikes + 1;}
 	
 	// Only good if no strikes.
 	if( strikes == 0 ){
@@ -217,6 +224,7 @@ function MonarchCarousel(carousel_elt, tabber_elt, next_id, prev_id){
 }
 
 //
+if (location.pathname === '/') {
 jQuery(document).ready(function(){
 
     // Ready search form in corner, with non-standard names.
@@ -234,3 +242,5 @@ jQuery(document).ready(function(){
     // Get explore popovers ready.
     jQuery('[data-toggle="popover"]').popover({'trigger':'hover'})
 });
+}
+

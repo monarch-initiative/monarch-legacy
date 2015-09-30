@@ -55,6 +55,8 @@ function getTableFromSolr(id, golr_field, div, filter, personality, tab_anchor){
         golr_manager.set_personality(personality);
         //golr_manager.add_query_filter('document_category', 'annotation', ['*']);
         golr_manager.add_query_filter(golr_field, id, ['*']);
+        golr_manager.query_variants['facet.method'] = 'enum'
+        
     
         if (filter != null && filter instanceof Array && filter.length > 0){
             filter.forEach( function (val) {
@@ -67,10 +69,32 @@ function getTableFromSolr(id, golr_field, div, filter, personality, tab_anchor){
         // Add filters.
         var f_opts = {
                 'meta_label': 'Total:&nbsp;',
-                'display_free_text_p': true
+                'display_free_text_p': false,
+                'display_meta_p': false
         };
         var filters = new bbop.widget.live_filters(pager_filter, golr_manager, gconf, f_opts);
         filters.establish_display();
+        
+        //Remove sticky filter
+        var remove_stick_filter = function(){
+            
+            jQuery('#'+pager_filter+' div')
+                .filter(function() {
+                    return this.id.match(/_sticky_filters\-id$/);
+                })
+                .remove();
+        };
+        
+        //open species filter
+        var open_species_filter = function(){
+            
+            jQuery('#'+pager_filter+' div')
+                .filter(function() {
+                    return this.id.match(/^collapsible-subject_taxon_label/);
+                })
+                .removeClass('collapse')
+                .addClass('in');
+        };
 
         // Attach pager.
         var pager_opts = {
@@ -89,7 +113,8 @@ function getTableFromSolr(id, golr_field, div, filter, personality, tab_anchor){
                            handler, linker, results_opts);
     
         addDownloadButton(pager, golr_manager);
-
+        
+    bbop.widget.display.results_table_by_class_conf_b3 = bbop.monarch.widget.display.results_table_by_class_conf_bs3;
     bbop.widget.display.results_table_by_class_conf_b3.prototype.process_entry = function(bit, field_id, document, display_context){
         
         var anchor = this;
@@ -151,13 +176,16 @@ function getTableFromSolr(id, golr_field, div, filter, personality, tab_anchor){
     jQuery('#'+pager_top_div).prepend(spinner_top_div.to_string());
     
     // Add pre and post run spinner (borrow filter's for now).
-    golr_manager.register('prerun', 'foo', function(){
+    golr_manager.register('prerun', 'pre', function(){
         filters.spin_up();
+        remove_stick_filter();
+        
         jQuery('#'+pager.button_span_id()).append(spinner_top_div.to_string());
         jQuery('#'+pager_bottom.button_span_id()).append(spinner_bot_div.to_string());
     });
-    golr_manager.register('postrun', 'foo', function(){
+    golr_manager.register('postrun', 'post', function(){
         filters.spin_down();
+        open_species_filter();
         //jQuery('#'+spinner_top_div.get_id()).hide();
         //jQuery('#'+spinner_bot_div.get_id()).hide();    
     });
@@ -203,7 +231,7 @@ function addDownloadButton(pager, manager){
     jQuery(button_elt).attr('title',title);
 
     var forwardToDownload = function(){
-        var field_list = ['subject', 'subject_taxon', 'relation', 'object', 'object_taxon', 'evidence','source'];
+        var field_list = ['subject', 'subject_taxon', 'relation', 'object', 'object_taxon', 'evidence','source', 'is_defined_by', 'qualifier'];
         var args_hash = {
                 rows : '100000'
         }
@@ -217,8 +245,17 @@ function addDownloadButton(pager, manager){
 
 }
 
-function makeSpinnerDiv(){
+function makeSpinnerDiv(args){
  // Details for spinner
+    
+    var default_args = {'generate_id': true,
+                        'class':
+                        'progress progress-striped active',
+                        'style': 'width: 3em; position:absolute; display:inline-block; margin-top:3px; margin-left:10px;'
+    };
+    if (!args){
+        args = default_args;
+    }
     var inspan = new bbop.html.tag('span', {'class': 'sr-only'}, '...');
     var indiv = new bbop.html.tag('div', {'class': 'progress-bar',
                       'role': 'progressbar',
@@ -229,11 +266,75 @@ function makeSpinnerDiv(){
                   inspan);
     var spinner_div =
     new bbop.html.tag('div',
-              {'generate_id': true,
-               'class':
-               'progress progress-striped active',
-               'style': 'width: 3em; position:absolute; display:inline-block; margin-top:3px; margin-left:10px;'},
+              args,
               indiv);
     
     return spinner_div;
+}
+
+function getOntologyBrowser(id, root){
+    
+    // Conf
+    var srv = global_scigraph_url;
+    
+    var spinner_args = {'generate_id': true,
+            'class':
+            'progress progress-striped active',
+            'style': 'width: 3em; display:inline-block; margin-top:3px; margin-left:10px;'
+    };
+    var spinner = makeSpinnerDiv(spinner_args);
+    
+    jQuery('#brw').append(spinner.to_string());
+
+    var manager = new bbop.rest.manager.jquery(bbop.rest.response.json);
+    
+    if (!root){
+        root = "HP:0000118";
+    }
+
+    // Browser.
+    var b = new bbop.monarch.widget.browse(srv, manager, id, root, 'brw', {
+        'info_icon': 'info',
+        'current_icon': 'current_term',
+        'base_icon_url': '/image',
+        'image_type': 'gif',
+        'info_button_callback':
+            function(term_acc, term_doc){
+                // // Local form.
+                // shield.draw(term_doc);
+                // Remote form (works).
+                //shield.draw(term_acc);
+            }
+    });
+
+    b.init_browser(id);
+}
+
+function getInteractiveOntologyBrowser(id, root){
+    
+    // Conf
+    var srv = global_scigraph_url;
+
+    var manager = new bbop.rest.manager.jquery(bbop.rest.response.json);
+    
+    if (!root){
+        root = "HP:0000118";
+    }
+
+    // Browser.
+    var b = new bbop.monarch.widget.interactive_browse(srv, manager, id, root, 'brw', {
+        'info_icon': 'info',
+        'current_icon': 'current_term',
+        'base_icon_url': '/image',
+        'image_type': 'gif',
+        'info_button_callback':
+            function(term_acc, term_doc){
+                // // Local form.
+                // shield.draw(term_doc);
+                // Remote form (works).
+                //shield.draw(term_acc);
+            }
+    });
+
+    b.init_browser(id);
 }

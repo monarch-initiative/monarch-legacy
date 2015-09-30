@@ -1,5 +1,5 @@
 $(function () {
-    var id = this.location.pathname;
+    var id = window.location.pathname;
     var slash_idx = id.indexOf('/');
     id = id.substring(slash_idx+1);
     var phenotype_list = [];

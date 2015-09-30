@@ -14,16 +14,21 @@
     > ringo tests/apitest.js
 
  */
+var env = require('serverenv.js');
+var bbop = require('api.js').bbop;
+var testCommon = require('./test-common.js');
 
-load('lib/monarch/api.js');
-var Parser = require('ringo/args').Parser;
-var system = require('system');
+if (env.isRingoJS()) {
+    var Parser = require('ringo/args').Parser;
+    var system = require('system');
+}
+else {
+}
+
 var assert = require("assert");
 var fs = require('fs');
 var engine;
 var setup;
-if (typeof bbop == 'undefined') { var bbop = {};}
-if (typeof bbop.monarch == 'undefined') { bbop.monarch = {};}
 
 // feel free to add more here...
 var diseaseIds =
@@ -41,30 +46,34 @@ var phenotypeIds =
 
 var geneIds =
     [
-        "NCBIGene:388552", 
+        "NCBIGene:388552",
     ];
-
-var pmids = [14581620, 20080219, 11912187];
-exports.testLiteratureBasic = function() {
-    var json = engine.fetchPubFromPMID(pmids);
-    console.log(JSON.stringify(json));
-    // todo - check json
-
-}
 
 //Test fetchAssociations
 exports.testFetchAssociations = function() {
+    var testFailed = false;
     var filter = {field: 'object_category', value: 'phenotype'};
-    
+
     diseaseIds.forEach(
             function(id) {
                 console.log("Fetching:"+id);
-                engine.fetchAssociations(id, 'subject_closure', filter, 1000);
-                engine.fetchAssociations(id, 'object_closure');
-                engine.fetchAssociations(id, 'subject_closure', null, 10);
+                var golrResponse = engine.fetchAssociations(id, 'subject_closure', filter, 1000);
+
+                var thisTestSucceeded = testCommon.assert(
+                    "golrResponse._is_a === 'bbop.golr.response'",
+                     golrResponse._is_a === 'bbop.golr.response');
+                testFailed |= !thisTestSucceeded;
+                if (thisTestSucceeded) {
+                    var firstDoc = golrResponse.documents()[0];
+                    if (id === "DOID:14330") {
+                        testFailed |= !testCommon.assert(
+                                        "firstDoc.subject_category === 'disease'",
+                                        firstDoc.subject_category === 'disease');
+                    }
+                }
             }
     );
-    
+
     geneIds.forEach(
             function(id) {
                 console.log("Fetching:"+id);
@@ -73,7 +82,7 @@ exports.testFetchAssociations = function() {
                 engine.fetchAssociations(id, 'subject_closure', null, 10);
             }
         );
-    
+
     phenotypeIds.forEach(
             function(id) {
                 console.log("Fetching:"+id);
@@ -82,21 +91,30 @@ exports.testFetchAssociations = function() {
                 engine.fetchAssociations(id, 'subject_closure', null, 10);
             }
         );
-}
+    return !testFailed;
+};
+
 
 if (require.main == module) {
-    var script = system.args.shift();
-    var parser = new Parser(system.args);
-    parser.addOption('h', 'help', null, 'Display help');
-    parser.addOption('s', 'setup', 'String', 'one of: beta, production');
-    
-    var options = parser.parse(system.args);
-    if (options.help) {
-        print("Usage: ringo OPTIONS tests/apitest.js\n");
-        print("Runs API tests");
-        print("\nOptions:");
-	print(parser.help());
-	system.exit('-1');
+    if (env.isRingoJS()) {
+        var parser = new Parser(system.args);
+        parser.addOption('h', 'help', null, 'Display help');
+        parser.addOption('s', 'setup', 'String', 'one of: beta, production');
+
+        var options = parser.parse(system.args);
+        if (options.help) {
+            print("Usage: ringo OPTIONS tests/apitest.js\n");
+            print("Runs API tests");
+            print("\nOptions:");
+        	print(parser.help());
+        	system.exit('-1');
+        }
+    }
+    else {
+        console.log("CLI parsing NYI for NodeJS");
+        options = {
+            setup: null
+        };
     }
 
     setup = options.setup;
@@ -110,13 +128,11 @@ if (require.main == module) {
     }
 
     // see: https://docs.google.com/document/d/1ZxGuuvyvMmHVWQ7rIleIRkmbiDTNNP27eAHhxyFWHok/edit#
-    bbop.monarch.defaultConfig = JSON.parse(fs.read(conf));
-    bbop.monarch.golrConfig = JSON.parse(fs.read(golrConf));
+    bbop.monarch.defaultConfig = env.readJSON(conf);
+    bbop.monarch.golrConfig = env.readJSON(golrConf);
 
     engine = new bbop.monarch.Engine();
     engine.isProduction = function() { return false }; // always log in test mode
 
-    var rtn = require("test").run(exports);
-    print("Return code="+rtn);
-    system.exit(rtn);
+    testCommon.runTests(exports);
 }

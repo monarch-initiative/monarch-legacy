@@ -1,21 +1,26 @@
-load('tests/test-common.js');
+var env = require('serverenv.js');
+var _ = require('underscore');
+var testCommon = require('./test-common.js');
 var engine;
 
-var pmids = [14581620, 20080219, 11912187];
+var pmidsDesired = [14581620, 20080219, 11912187];
 exports.testLiteratureBasic = function() {
-    var json = engine.fetchPubFromPMID(pmids);
-    console.log(JSON.stringify(json));
-    // todo - check json
+    var json = engine.fetchPubFromPMID(pmidsDesired);
+    // console.log(JSON.stringify(json));
+    var pmidsFound = _.map(json, function (doc) {
+    	return doc.pmid;
+    });
+    // console.log('pmidsFound:', pmidsFound);
 
-}
+    var pmidMissing = false;
+    _.each(pmidsDesired, function (pmid) {
+    	pmidMissing |= pmidsFound.indexOf(pmid) < 0;
+    });
+
+    return testCommon.assert("fetchPubFromPMID missing pmidsDesired", !pmidMissing);
+};
 
 if (require.main == module) {
-    engine = new getTestEngine();
-
-    var rtn = require("test").run(exports);
-    print("Return code="+rtn);
-    system.exit(rtn);
+    engine = new testCommon.getTestEngine();
+    testCommon.runTests(exports);
 }
-
-
-

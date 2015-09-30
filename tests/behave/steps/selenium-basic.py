@@ -26,7 +26,7 @@ def step_impl(context, page, id):
     #print(context.browser.title)
     context.browser.get(context.target + page)
     #time.sleep(30)
-    element = WebDriverWait(context.browser, 60).until(EC.presence_of_element_located((By.ID, id)))
+    element = WebDriverWait(context.browser, 200).until(EC.presence_of_element_located((By.ID, id)))
     # try:
     #     print(id)
     #     element = WebDriverWait(context.browser, 30).until(EC.presence_of_element_located((By.ID, id)))
@@ -34,6 +34,12 @@ def step_impl(context, page, id):
     #     print("FINALLY")
     #     #context.browser.quit()
 
+
+## URL Check
+@then('the url will be "{url}"')
+def step_impl(context, url):
+    full_url = context.target + url
+    assert context.browser.current_url == full_url
 
 ## Title check.
 @then('the title should be "{title}"')
@@ -53,11 +59,21 @@ def step_impl(context):
 def step_impl(context, text):
     print(context.browser.title)
     webelt = context.browser.find_element_by_tag_name('html')
-    print(webelt.text)
+    # print("###### text: %s" % text)
+    # print("###### webelt.text: %s" % webelt.text)
+    # print("###### rfind: %d" % webelt.text.rfind(text))
     assert webelt.text.rfind(text) != -1
     # webelt = context.browser.find_element_by_tag_name('body')
     # print(webelt.get_attribute('innerHTML'))
     # assert webelt.get_attribute('innerHTML').rfind(text) != -1
+
+## The document body should contain a certain piece of text.
+@then("the document should contain '{text}'")
+def step_impl(context, text):
+    print(context.browser.title)
+    webelt = context.browser.find_element_by_tag_name('html')
+    print(webelt.text)
+    assert webelt.text.rfind(text) != -1
 
 ## The document body should not contain a hyperlink with text.
 @then('the document should not contain link with "{text}"')
