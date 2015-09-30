@@ -8,7 +8,7 @@
     "build": "webpack --config webpack.build.js --bail -p",
     "start": "NODE_PATH=./lib/monarch node lib/monarch/web/webapp_launcher.js",
     "rstart": "./ringo-server.sh",
-    "dev": "NODE_PATH=./lib/monarch nodemon & node node_modules/.bin/webpack-dev-server --port 8081 --history-api-fallback --hot --inline --progress",
+    "dev": "xUSE_BUNDLE=1 NODE_PATH=./lib/monarch nodemon -d 2 -V & node node_modules/.bin/webpack-dev-server --port 8081 --history-api-fallback --hot --inline --progress",
     "test": "make test",
     "rtest": "make -f MakefileRingo test",
     "ktest": "karma start",

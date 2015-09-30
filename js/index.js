@@ -10,19 +10,20 @@
 // angular.module('app', [uirouter, landing, about])
 //   .config(routing);
 
-var $ = require('jquery');
-window.jQuery = $;
-window.$ = $;
+var jq = require('jquery');
+window.jQuery = jq;
+window.$ = jq;
+global.jQuery = jq;
 
-//import '../css/bootstrap.min.css';
-//import '../css/monarch-common.css';
+import '../node_modules/bootstrap/dist/css/bootstrap.min.css';
+import '../css/monarch-common.css';
 //import '../css/jquery-ui.css';
 
-import './underscore-min.js';
+import 'underscore';
 import './jquery-1.11.0.min.js';
 import './jquery-ui-1.10.3.custom.min.js';
-import './bootstrap.min.js';
-import './d3.min.js';
+import 'bootstrap';
+import 'd3';
 import './search_form.js';
 import './tabs.js';
 window.getAnnotationScore = require("exports?getAnnotationScore!./monarch-common.js");
