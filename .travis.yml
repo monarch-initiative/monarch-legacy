@@ -4,6 +4,9 @@ language: javascript
 # command to install dependencies
 install:
   - "./install.sh"
+  - "pip install selenium"
+  - "pip install behave"
+  - "pip install jsonpath-rw"
 
 before_script:
   - "export DISPLAY=:99.0"
@@ -14,9 +17,6 @@ before_script:
 # command to run tests
 script: 
   - "make test"
-  - "pip install selenium"
-  - "pip install behave"
-  - "pip install jsonpath-rw"
   - "cd tests/behave"
   - "TARGET=http://localhost:8080 behave"
 
