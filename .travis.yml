@@ -1,3 +1,4 @@
+sudo: false
 language: javascript
 
 # command to install dependencies
@@ -13,9 +14,9 @@ before_script:
 # command to run tests
 script: 
   - "make test"
-  - "sudo pip install selenium"
-  - "sudo pip install behave"
-  - "sudo pip install jsonpath-rw"
+  - "pip install selenium"
+  - "pip install behave"
+  - "pip install jsonpath-rw"
   - "cd tests/behave"
   - "TARGET=http://localhost:8080 behave"
 
