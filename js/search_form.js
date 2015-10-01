@@ -200,17 +200,14 @@ function navbar_search_init(in_search_id, in_form_id){
 		                            for (var k=i+1; k < map.length; k++) {
 		                                var node_id = map[k]['id'];
 		                                if (node_id) {
-		                                    console.log('comparing id: ' + id + ' to: ' + node_id);
 		                                    if (eq_node_list.indexOf(node_id) > -1){
 		                                        
 		                                        // If the id is from MESH
 		                                        if (/^MESH/.test(id)){
-		                                            console.log('removing equivalent node '+ id);
 		                                            map.splice(i,1)
 		                                            i--;
 		                                            break;
 		                                        } else {
-		                                            console.log('removing equivalent node '+node_id);
 		                                            map.splice(k, 1);
 		                                            k--;
 		                                            continue;
