@@ -30,14 +30,34 @@ p {
     margin:0;
 }
 
+.searchspace {
+    height: 35px;
+    margin: 0;
+    padding: 0;
+}
+
+#search { 
+    margin: 0;
+    padding: 0;
+    width: 100%;
+    margin: 5px 0 1px 0;
+    font-size: 13px;        
+}
+
+.nav-search-btn {
+    margin-top: 4px;
+    margin-left: -30px;
+}
+
 @media (min-width: 815px) {
     .monarch-navbar-container {
         padding: 0px 10px;
     }
 }
 @media (min-width: 768px) {
-    .navbar {
-        min-height: 30px;
+    #navbar.navbar {
+        min-height: 40px;
+        max-height: 40px;
     }
     .nav>li>a {
         padding: 0px;
@@ -60,9 +80,6 @@ p {
         font-weight: 400;
         margin-right: 5px;
     }
-    .searchspace {
-        float: right;
-    }
     .input-group {
         margin-bottom: 0px;
     }
@@ -71,20 +88,16 @@ p {
         height: 28px;
         border-radius: 2px;
     }
-    .nav-search-btn{
-        width:auto;
-    }
     .input-group-btn .btn {
         padding: 0px 10px;
         height: 28px;
         border-radius: 2px;
     }
-    #search {
-        width: 180px;
-        font-size: 13px;
-    }
 }
 @media (max-width: 800px) {
+    .navbar {
+        min-height: 40px;
+    }
     .monarch-navbar-container {
         margin: 0px -3px;
     }
@@ -110,13 +123,6 @@ p {
     }
     .navbar-form {
         margin-top: 0px;
-    }
-    #search_form{
-        width: 90%;
-    }
-    #search { 
-        margin: 0 20px;
-        font-size: 13px;        
     }
 }
 
@@ -332,13 +338,14 @@ p {
 /* Alerts */
 /* This is the styling for alerts about development that appear at the tops of dev
  * pages throughout the Monarch site. */
- 
-.alert {
-    margin: 0px;
-    padding: 0px 20px;
+
+.top-alert {
     border: 1px solid black;
     border-radius: 0px 0px 3px 3px;
     border-top: none;
+    font-size: 1.4em;
+    padding: 0.4em;
+    margin: auto;
 }
 
 /*
@@ -349,21 +356,22 @@ p {
     height: 30px;
     width: 60px;
     margin: 0;
-    margin-top: -3px;
-    margin-left: -5px;
-    margin-right: 4px;
+    margin-top: -5px;
+    margin-left: -8px;
+    margin-right: 10px;
     padding: 0;
 }
 
 .navbar-brand {
+    height: 35px;
+    padding: 8px 20px 0px 20px;
     font-size: 18px;
-    margin-top: -2px;
 }
 
 /* BS3 Pager from bbop.live_pager widget */
 .bs3pager .btn {
-	margin-right: 2px;
-	padding: 2px 12px;
+    margin-right: 2px;
+    padding: 2px 12px;
 }
 
 .bs3pager-bottom .btn {
@@ -399,7 +407,7 @@ p {
 
 /* BBOP overrides and additions */
 .bbop-js-ui-browse li {
-	margin-top: 2px;
+    margin-top: 2px;
 }
 
 .bbop-js-text-button-sim:hover {
@@ -411,13 +419,13 @@ p {
 }
 
 #overview .col-xs-12, #overview .col-sm-12, #overview .col-md-12, #overview .col-lg-4{
-	padding-left: 0px;
-	padding-top: 10px;
+    padding-left: 0px;
+    padding-top: 10px;
 }
 
 
 .sibling-form label {
-	font-weight: normal;
+    font-weight: normal;
 }
 
 /* Amigo Styling needed for golr views, need to update to fit the monarch site
@@ -595,3 +603,4 @@ a:hover .hilite, a:active .hilite {
 .amigo-jumbotron-override .lead {
     font-size: 16px;
 }
+

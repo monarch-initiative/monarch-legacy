@@ -20,7 +20,7 @@ function makePhenotypeLandingGraph(data){
         tree = builder.tree;
         var graphObject = 
             new monarch.dovechart(bbop.monarch.phenotypeLandingConfig, tree, graphDiv, builder);
-        this.setMinHeightWidth(graphObject, graphDiv);
+        setMinHeightWidth(graphObject, graphDiv);
     };
     builder.build_tree(['HP:0000118'], initGraph);
     
@@ -41,7 +41,7 @@ function makeGeneDiseaseLandingGraph(data){
         tree = builder.tree;
         var graphObject = 
             new monarch.dovechart(bbop.monarch.geneLandingConfig, tree, graphDiv, builder);
-        this.setMinHeightWidth(graphObject, graphDiv);
+        setMinHeightWidth(graphObject, graphDiv);
     };
     builder.build_tree(['DOID:4'], initGraph);
     
@@ -62,7 +62,7 @@ function makeGenotypeLandingGraph(data){
         tree = builder.tree;
         var graphObject = 
             new monarch.dovechart(bbop.monarch.genotypeLandingConfig, tree, graphDiv, builder);
-        this.setMinHeightWidth(graphObject,graphDiv);
+        setMinHeightWidth(graphObject,graphDiv);
     };
     builder.build_tree(['HP:0000118'], initGraph);
     
@@ -84,7 +84,7 @@ function makeDiseaseLandingGraph(data){
         tree = builder.tree;
         var graphObject = 
             new monarch.dovechart(bbop.monarch.diseaseLandingConfig, tree, graphDiv, builder);
-        this.setMinHeightWidth(graphObject,graphDiv);
+        setMinHeightWidth(graphObject,graphDiv);
     };
     builder.build_tree(['DOID:4'], initGraph);
     
@@ -163,7 +163,7 @@ function makeTwoSizeGraph(data,graphDiv,largeConfig,smallConfig,width,height){
             new monarch.dovechart(smallConfig, tree, graphDiv);
         sizeTracker = 'small';
     }
-    this.setMinHeightWidth(graphObject,graphDiv);
+    setMinHeightWidth(graphObject,graphDiv);
     
     window.addEventListener('resize', function(event){
  
@@ -171,13 +171,13 @@ function makeTwoSizeGraph(data,graphDiv,largeConfig,smallConfig,width,height){
             jQuery(graphDiv).children().remove();
             graphObject = 
                 new monarch.dovechart(largeConfig, tree, graphDiv);
-            this.setMinHeightWidth(graphObject,graphDiv);
+            setMinHeightWidth(graphObject,graphDiv);
             sizeTracker = 'large';
         } else if (jQuery(window).width() < width && jQuery(window).height() < height && sizeTracker != 'small') {
             jQuery(graphDiv).children().remove();
             graphObject = 
                 new monarch.dovechart(smallConfig, tree, graphDiv);
-            this.setMinHeightWidth(graphObject,graphDiv);
+            setMinHeightWidth(graphObject,graphDiv);
             sizeTracker = 'small';
         }
     });
@@ -187,10 +187,10 @@ function makeResizableGraph(data,graphDiv,config){
     
     var graphObject = new bbop.monarch.datagraph(config);
     graphObject.init(graphDiv,data);
-    this.setMinHeightWidth(graphObject,graphDiv);
+    setMinHeightWidth(graphObject,graphDiv);
     
     window.addEventListener('resize', function(event){
-        this.setMinHeightWidth(graphObject,graphDiv);   
+        setMinHeightWidth(graphObject,graphDiv);   
     });
 }
 

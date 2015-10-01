@@ -261,7 +261,15 @@ module.exports = function makeWebpackConfig (options) {
     var BrowserSyncPlugin = require('browser-sync-webpack-plugin');
     config.plugins.push(
       new BrowserSyncPlugin({
-        proxy: 'localhost:8081'
+        proxy: 'localhost:8081',
+        ghostMode: {
+            clicks: false,
+            forms: false,
+            scroll: false
+        },
+        // logLevel: "debug",
+        // logConnections: true,
+        reloadOnRestart: true
       }));
   }
 
@@ -270,7 +278,7 @@ module.exports = function makeWebpackConfig (options) {
     alias: {
         'bbop.min.js': path.join(__dirname, "node_modules/bbop.js"),
         jquery: path.join(__dirname, "js/jquery-1.11.0.min.js"),
-        underscore: path.join(__dirname, "js/underscore-min.js"),
+        // underscore: path.join(__dirname, "js/underscore-min.js"),
         'ringo/httpclient': path.join(__dirname, "js/nop.js")
     }
   };
