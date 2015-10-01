@@ -26,12 +26,14 @@ import 'bootstrap';
 import 'd3';
 import './search_form.js';
 import './tabs.js';
-window.getAnnotationScore = require("exports?getAnnotationScore!./monarch-common.js");
-window.makeDiseaseLandingGraph = require("exports?makeDiseaseLandingGraph!./barchart-launcher.js");
 import 'bbop';
+window.getAnnotationScore = require("exports?getAnnotationScore!./monarch-common.js");
 import './monarch.js';
-import './golr-table.js';
 import './jquery.cookie.js';
 import './jquery.xml2json.js';
 
 import './HomePage.js';
+import '../css/bbop.css';
+import './golr-table.js';
+window.makeDiseaseLandingGraph = require("exports?makeDiseaseLandingGraph!./barchart-launcher.js");
+

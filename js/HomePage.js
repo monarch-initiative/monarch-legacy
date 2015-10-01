@@ -223,6 +223,10 @@ function MonarchCarousel(carousel_elt, tabber_elt, next_id, prev_id){
     }
 }
 
+// Hack so that HomePage.js only executes this document.ready function
+// when actually on the home page.
+// The proper way to do this is to expose this function and invoke it via
+// pup_tent's monarch_launchable feature.
 //
 if (location.pathname === '/') {
 jQuery(document).ready(function(){
