@@ -39,7 +39,7 @@
     "lodash": "^3.10.1",
     "lodash._isiterateecall": "^3.0.9",
     "mustache": "^2.1.2",
-    "phenogrid": "^1.1.0",
+    "phenogrid": "^1.1.1",
     "querystring": "^0.2.0",
     "request": "^2.60.0",
     "sax": "^1.1.1",
