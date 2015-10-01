@@ -27,20 +27,15 @@ function loadPhenogrid(){
             //timeout : 180000,
             error : function(jqXHR, textStatus, errorThrown) {
                 var phenogridOpts = {
-                                        phenotypeData: phenotype_list,
-                                        imagePath: '/node_modules/phenogrid/image/',
-                    htmlPath: '/node_modules/phenogrid/js/res/'
+                                        phenotypeData: phenotype_list
                                     };
                 Phenogrid.createPhenogridForElement(phenogridContainer, phenogridOpts);
             },
             success : function(data) {
                 phenotype_list = data.phenotype_list;
 
-                // imagePath and htmlPath will overwrite the imagePath and htmlPath in phenogrid.js
                 var phenogridOpts = {
-                                        phenotypeData: phenotype_list,
-                                        imagePath: '/node_modules/phenogrid/image/', 
-                    htmlPath: '/node_modules/phenogrid/js/res/'
+                                        phenotypeData: phenotype_list
                                     };
                 Phenogrid.createPhenogridForElement(phenogridContainer, phenogridOpts);
             }

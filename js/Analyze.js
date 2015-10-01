@@ -728,16 +728,6 @@ function AnalyzeInit(uploaded_data){
         
 
         var phenotypes  = text.split(/[\s,]+/);
-        // Old way - Zhou
-	/*
-	$("#phen_vis").phenogrid({
-				phenotypeData: phenotypes,
-				targetSpeciesName: species,
-				owlSimFunction: urlParams.mode,
-				geneList: urlParams.geneList,
-				providedData: urlParams.user_input
-			});
-	*/	
 
         // New way - Zhou
         // Phenogrid will remove the duplicated phenotypes in this monarch-app returned phenotype_list
@@ -748,10 +738,7 @@ function AnalyzeInit(uploaded_data){
 			targetSpecies: species,
 			owlSimFunction: urlParams.mode,
 			geneList: urlParams.geneList,
-			providedData: urlParams.user_input,
-			imagePath: '/node_modules/phenogrid/image/', // path to external images - Zhou
-			htmlPath: '/node_modules/phenogrid/js/res/' // path to html help text - Zhou
-
+			providedData: urlParams.user_input
 		});
 	};
     }

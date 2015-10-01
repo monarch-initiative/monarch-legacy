@@ -59,6 +59,8 @@ Feature: NodeJS and RingoJS pass all tests.
  Scenario: The "/compare/" endpoint returns the correct JSON
     Given I go to page "/compare/OMIM:270400/NCBIGene:5156,OMIM:249000,OMIM:194050.json"
      then the document should contain "Smith-Lemli-Opitz syndrome"
+     then the document should contain "PDGFRA"
+     then the document should contain "Blue irides"
 
 
 #This test is pretty flimsy, refactor to be a bit more flexible
