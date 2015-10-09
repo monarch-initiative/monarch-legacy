@@ -291,13 +291,20 @@ bbop.monarch.linker.prototype.img = function (id, xid, modifier, category){
             if(!global_xrefs_conf){
                 throw new Error('global_xrefs_conf is missing!');
             }
+            var src;
+            if (/^http/.test(id)){
+                src = id.replace(/.*\/(\w+)\.ttl/, "$1");
+            } else {
     
-            // First, extract the probable source and break it into parts.
-            var full_id_parts = bbop.core.first_split(':', id);
-            if(full_id_parts && full_id_parts[0] && full_id_parts[1]){
-                var src = full_id_parts[0];
-                var sid = full_id_parts[1];
-        
+                // First, extract the probable source and break it into parts.
+                var full_id_parts = bbop.core.first_split(':', id);
+                if(full_id_parts && full_id_parts[0] && full_id_parts[1]){
+                    src = full_id_parts[0];
+                }
+            }
+            
+            if (src) {
+                
                 // Now, check to see if it is indeed in our store.
                 var lc_src = src.toLowerCase();
                 var xref = global_xrefs_conf[lc_src];
@@ -403,6 +410,21 @@ bbop.monarch.linker.prototype.set_anchor = function(id, args, xid, modifier){
             ' (go to the page for ' + label +
             ')" href="' + url + '">' + hilite + '</a>';
         }
+    } else {
+        // Check if id is an is_defined_by url
+        var title = "";
+        if (/^http/.test(id)){
+            var src = id.replace(/.*\/(\w+)\.ttl/, "$1");
+            var lc_src = src.toLowerCase();
+            var xref = global_xrefs_conf[lc_src];
+            if (xref && xref['database']){
+                title = xref['database'];
+            }
+        }
+        if (!retval && img
+                && xid == 'is_defined_by'){
+            retval = '<span title="' + title + '">' + img + '</span>';
+        }
     }
     return retval;
 }
@@ -471,7 +493,7 @@ if ( typeof bbop.monarch.widget == "undefined" ){ bbop.monarch.widget = {}; }
  * Returns:
  *  this object
  */
-bbop.monarch.widget.browse = function(server, manager, reference_id, interface_id,
+bbop.monarch.widget.browse = function(server, manager, reference_id, root, interface_id,
                   in_argument_hash){
 
     // Per-UI logger.
@@ -510,6 +532,12 @@ bbop.monarch.widget.browse = function(server, manager, reference_id, interface_i
     // The current acc that we are interested in.
     this._current_acc = null;
     this._reference_id = reference_id;
+    
+    if (!root){
+        root = "HP:0000118";
+    }
+    this._root = root;
+
     this.server = server;
     this.manager = manager;
     var isInitialRun = true;
@@ -519,255 +547,381 @@ bbop.monarch.widget.browse = function(server, manager, reference_id, interface_i
 
     // Recursively draw a rich layout using nested uls.
     function draw_rich_layout(resp){
-    
-        ///
-        /// Get the rich layout from the returned document if
-        /// possible. Note the use of JSON, supplied by jQuery,
-        /// instead of out internal method bbop.json.parse.
-        ///
-
+        
         var topo_graph = new bbop.model.bracket.graph();
         topo_graph.load_json(resp._raw);
         
-        var clean_graph = new bbop.model.bracket.graph();
+        var subclass_manager = new bbop.rest.manager.jquery(bbop.rest.response.json);
+        var rsrc =  anchor.server + "graph/neighbors/" + anchor._reference_id + ".json?&depth=1&blankNodes=false&relationshipType=subClassOf&direction=INCOMING&project=%2A";
+
+        subclass_manager.resource(rsrc);
+        subclass_manager.method('get');
+        subclass_manager.jsonp_callback('callback');
+        subclass_manager.register('success', 'do', combine_graphs);
+        subclass_manager.update('search');
         
-        // Remove nodes with an underscore, also fix equivalencies so they always appear under a node
-        loop(topo_graph.all_nodes(), function(ref_node){
-            if (!/^_/.test(ref_node.id())){
-                clean_graph.add_node(ref_node);
-            }
-            var children = topo_graph.get_child_nodes(ref_node.id());
-                loop(children, function(n){
-                    if (!/^_/.test(n.id())){
-                        var edge = new bbop.model.edge(n, ref_node, 
-                                                       topo_graph.get_predicates(n.id(), ref_node.id())[0]);
-                        
-                        if (n.id() == anchor._current_acc 
-                                && topo_graph.get_predicates(n.id(), ref_node.id())[0] == 'equivalentClass' ){
-                            edge = new bbop.model.edge(ref_node, n, 'equivalentClass');
-                            clean_graph.add_edge(edge);
-                        } else {
-                            clean_graph.add_edge(edge);
+        function combine_graphs(resp){
+            var subclass_graph = new bbop.model.bracket.graph();
+            subclass_graph.load_json(resp._raw);
+            topo_graph.merge_in(subclass_graph);
+            
+          ///
+            /// Get the rich layout from the returned document if
+            /// possible. Note the use of JSON, supplied by jQuery,
+            /// instead of out internal method bbop.json.parse.
+            ///
+
+            var nodes_to_exclude = ['MESH:C', 'MESH:D035583', 'http://www.w3.org/2002/07/owl#Thing', 'HP:0000001'];
+            
+            var clean_graph = new bbop.model.bracket.graph();
+            
+            // Remove nodes with an underscore, also fix equivalencies so they always appear under a node
+            loop(topo_graph.all_nodes(), function(ref_node){
+                if (!/^_/.test(ref_node.id())){
+                    clean_graph.add_node(ref_node);
+                }
+                var children = topo_graph.get_child_nodes(ref_node.id());
+                    loop(children, function(n){
+                        if (!/^_/.test(n.id()) && nodes_to_exclude.indexOf(ref_node.id()) == -1
+                                && nodes_to_exclude.indexOf(n.id()) == -1 ){
+                            
+                            
+                            var edge = new bbop.model.edge(n, ref_node, 
+                                                           topo_graph.get_predicates(n.id(), ref_node.id())[0]);
+                            
+                            if (n.id() == anchor._current_acc 
+                                    && topo_graph.get_predicates(n.id(), ref_node.id())[0] == 'equivalentClass' ){
+                                edge = new bbop.model.edge(ref_node, n, 'equivalentClass');
+                                clean_graph.add_edge(edge);
+                            } else {
+                                clean_graph.add_edge(edge);
+                            }
                         }
+                    });
+                var parents = topo_graph.get_parent_nodes(ref_node.id());
+                    loop(parents, function(n){
+                        if (!/^_/.test(n.id()) && nodes_to_exclude.indexOf(ref_node.id()) == -1
+                              && nodes_to_exclude.indexOf(n.id()) == -1){
+                            
+                            if (ref_node.id() != anchor._current_acc 
+                                    && topo_graph.get_predicates(ref_node.id(), n.id())[0] != 'equivalentClass' ) {    
+                               
+                                var edge = new bbop.model.edge(ref_node, n, 
+                                                               topo_graph.get_predicates(ref_node.id(), n.id())[0]);
+                                clean_graph.add_edge(edge); 
+                            }
+                        }
+                    });
+            });
+            topo_graph = clean_graph;
+
+            
+            var ancestors = topo_graph.get_ancestor_subgraph(anchor._current_acc, 'subClassOf');
+            
+            var trans_graph = new bbop.model.graph()
+            
+            loop(ancestors.all_nodes(), function(n){
+                trans_graph.add_node(n);
+                var edge = new bbop.model.edge(anchor._current_acc, n.id(), 'subClassOf');
+                trans_graph.add_edge(edge);
+            });
+            
+
+            var rich_layout = topo_graph.monarch_bracket_layout(anchor._current_acc,
+                                     trans_graph);
+            
+            /* Fetch Equivalencies of each node
+             * We can eliminate the last node in each list to shorten our call to
+             * scigraph
+             */
+            var equivalent_graph_nodes = [];
+          
+            rich_layout.forEach(function (i) {
+                i.forEach(function (val, index) {
+                    if (index != i.length-1){
+                        equivalent_graph_nodes.push(val[0]);
                     }
                 });
-            var parents = topo_graph.get_parent_nodes(ref_node.id());
-                loop(parents, function(n){
-                    if (!/^_/.test(n.id())){
-                        
-                        if (ref_node.id() == anchor._current_acc 
-                                && topo_graph.get_predicates(ref_node.id(), n.id())[0] == 'equivalentClass' ){    
-                        } else {
-                        var edge = new bbop.model.edge(ref_node, n, 
-                                                       topo_graph.get_predicates(ref_node.id(), n.id())[0]);
-                        clean_graph.add_edge(edge); }
+            });
+ 
+            if (equivalent_graph_nodes.length > 0){
+            
+                var jq_params = {
+                        'relationshipType' : 'equivalentClass',
+                        'depth' : 10,
+                        'blankNodes' : 'false',
+                        'direction' : 'BOTH'
+                };
+                var url = anchor.server + "graph/neighbors?id="+equivalent_graph_nodes.join("&id=");
+                
+                jQuery.ajax({
+                    url: url,
+                    data: jq_params,
+                    jsonp: "callback",
+                    dataType: "json",
+                    error: function(){
+                        console.log('ERROR: looking at: ' + query);
+                        if (typeof error_function != 'undefined'){
+                            error_function();
+                        }
+                    },
+                    success: function(data) {
+                    
+                        var equivalent_graph = new bbop.model.graph();
+                        equivalent_graph.load_json(data);
+                    
+                        rich_layout.forEach(function (v) {
+                            if (v.length == 1){
+                                return;
+                            } else {
+                                for (var i=0; i < v.length; i++) {
+                                    var id = v[i][0];
+                                    if (id) {
+                                        var eq_node_list = [];
+                                        //Get all equivalent nodes of v[i][0]
+                                        var equivalent_nodes = equivalent_graph.get_ancestor_subgraph(id, 'equivalentClass')
+                                        .all_nodes();
+                                        var other_eq_nodes = equivalent_graph.get_descendent_subgraph(id, 'equivalentClass')
+                                        .all_nodes();
+                                    
+                                        eq_node_list = equivalent_nodes.map(function(i){return i.id();});
+                                        var temp_list = other_eq_nodes.map(function(i){return i.id();});
+                                    
+                                        eq_node_list.push.apply(eq_node_list, temp_list);
+                                        //equivalent_node_list.map
+                                
+                                        for (var k=i+1; k < v.length; k++) {
+                                            var node_id = v[k][0];
+                                            if (node_id) {
+                                                //console.log('comparing id: ' + id + ' to: ' + node_id);
+                                                if (eq_node_list.indexOf(node_id) > -1){
+                                                    
+                                                    // If the id is from MESH
+                                                    if (/^MESH/.test(id)){
+                                                        //console.log('removing equivalent node '+ id);
+                                                        v.splice(i,1)
+                                                        i--;
+                                                        break;
+                                                    } else {
+                                                        //console.log('removing equivalent node '+node_id);
+                                                        v.splice(k, 1);
+                                                        k--;
+                                                        continue;
+                                                    }
+                                                }
+                                            }
+                                    
+                                        }
+                                    }
+                                }
+                            }
+                        });
+                    
+                        draw_layout(rich_layout);
                     }
                 });
-        });
-        topo_graph = clean_graph;
+            } else {
+                draw_layout(rich_layout);
+            }
+            
+            function draw_layout(rich_layout) {
+            ///
+            /// Next, produce the raw HTML skeleton.
+            /// TODO: Keep a cache of the interesting ids for adding
+            /// events later.
+            ///
 
-        
-        var ancestors = topo_graph.get_ancestor_subgraph(anchor._current_acc, 'subClassOf');
-        
-        var trans_graph = new bbop.model.graph()
-        
-        loop(ancestors.all_nodes(), function(n){
-            trans_graph.add_node(n);
-            var edge = new bbop.model.edge(anchor._current_acc, n.id(), 'subClassOf');
-            trans_graph.add_edge(edge);
-        });
-        
+            // I guess we'll just start by making the list.
+            var tl_attrs = {
+                'class': 'bbop-js-ui-browse'
+            };
+            var top_level = new bbop.html.list([], tl_attrs);
 
-        var rich_layout = topo_graph.monarch_bracket_layout(anchor._current_acc,
-                                 trans_graph);
-        
-        ///
-        /// Next, produce the raw HTML skeleton.
-        /// TODO: Keep a cache of the interesting ids for adding
-        /// events later.
-        ///
+            // Store the navigation anf info buttons.
+            var nav_button_hash = {};
+            var info_button_hash = {};
 
-        // I guess we'll just start by making the list.
-        var tl_attrs = {
-            'class': 'bbop-js-ui-browse'
-        };
-        var top_level = new bbop.html.list([], tl_attrs);
+            // Cycle down through the brackets, adding spaces every time
+            // we go down another level.
+            var spacing = '&nbsp;&nbsp;&nbsp;&nbsp;';
+            var spaces = spacing;
+            loop(rich_layout, // for every level
+                 function(layout_level){
+                 loop(layout_level, // for every item at this level
+                      function(level_item){           
 
-        // Store the navigation anf info buttons.
-        var nav_button_hash = {};
-        var info_button_hash = {};
-
-        // Cycle down through the brackets, adding spaces every time
-        // we go down another level.
-        var spacing = '&nbsp;&nbsp;&nbsp;&nbsp;';
-        var spaces = spacing;
-        loop(rich_layout, // for every level
-             function(layout_level){
-             loop(layout_level, // for every item at this level
-                  function(level_item){           
-
-                  var nid = level_item[0];
-                  var lbl = level_item[1];
-                  if (lbl) {
-                      lbl = lbl.replace(/\b[a-z]/g, function() {
-                          return arguments[0].toUpperCase()});
-                      lbl = lbl.replace(/Abnormal\(Ly\)/,'Abnormal(ly)');
-                  }
-                  var rel = level_item[2];
-                  
-                  // For various sections, decide to run image
-                  // (img) or text code depending on whether
-                  // or not it looks like we have a real URL.
-                  var use_img_p = true;
-                  if( base_icon_url == null || base_icon_url == '' ){
-                      use_img_p = false;
-                  }
-
-                  // Clickable acc span.
-                  // No images, so the same either way. Ignore
-                  // it if we're current.
-                  var nav_b = null;
-                  if(anchor._current_acc == nid){
-                      var inact_attrs = {
-                      'class': 'bbop-js-text-button-sim-inactive',
-                      'title': 'Current term.',
-                      'style': 'background-color: #4F5F65; color: white;'
-                      };
-                      nav_b = new bbop.html.span(lbl, inact_attrs);
-                  }else{
-                      var tbs = bbop.widget.display.text_button_sim;
-                      var bttn_title =
-                      'Reorient neighborhood onto this node ' +
-                      lbl + '( '+ nid +' ).';
-                      var btn_attrs = {'style': 'background-color: #e3efff; border-style: none;'
-                          };
-                      if (anchor._reference_id == nid){
-                          btn_attrs = {
-                              'style': 'background-color: #9EBFCB; border-style: none;'
-                          };
+                      var nid = level_item[0];
+                      var lbl = level_item[1];
+                      if (lbl) {
+                          lbl = lbl.replace(/\b'?[a-z]/g, function() {
+                              if (!/'/.test(arguments[0])) {
+                                  return arguments[0].toUpperCase()
+                              } else {
+                                  return arguments[0];
+                              }
+                          });
+                          lbl = lbl.replace(/Abnormal\(Ly\)/,'Abnormal(ly)');
                       }
-                      nav_b = new tbs(lbl, bttn_title, null, btn_attrs);
-                      nav_button_hash[nav_b.get_id()] = nid;
-                  }
+                      var rel = level_item[2];
+                      
+                      // For various sections, decide to run image
+                      // (img) or text code depending on whether
+                      // or not it looks like we have a real URL.
+                      var use_img_p = true;
+                      if( base_icon_url == null || base_icon_url == '' ){
+                          use_img_p = false;
+                      }
 
-                  // Clickable info span. A little difference
-                  // if we have images.
-                  var info_b = null;
-                  if( use_img_p ){
-                      // Do the icon version.
-                      var imgsrc = bbop.core.resourcify(base_icon_url,
-                                    info_icon,
-                                    image_type);
-                      info_b =
-                      new bbop.html.image({'alt': info_alt,
-                                   'title': 'Go to page for '+lbl,
-                                   'src': imgsrc,
-                                   'style': 'cursor:pointer;',
-                                   'generate_id': true});
-                  }else{
-                      // Do a text-only version.
-                      info_b =
-                      new bbop.html.span('<b>[i]</b>',
-                                 {'generate_id': true});
-                  }
-                  info_button_hash[info_b.get_id()] = nid;
-
-                  // "Icon". If base_icon_url is defined as
-                  // something try for images, otherwise fall
-                  // back to this text ick.
-                  var icon = null;
-                  if( use_img_p ){
-                      // Do the icon version.
-                      var ialt = '[' + rel + ']';
-                      var isrc = null;
+                      // Clickable acc span.
+                      // No images, so the same either way. Ignore
+                      // it if we're current.
+                      var nav_b = null;
                       if(anchor._current_acc == nid){
-                      isrc = bbop.core.resourcify(base_icon_url,
-                                          current_icon,
-                                      image_type);
+                          var inact_attrs = {
+                          'class': 'bbop-js-text-button-sim-inactive',
+                          'title': 'Current term ( ' + nid + ' )',
+                          'style': 'background-color: #4F5F65; color: white;'
+                          };
+                          nav_b = new bbop.html.span(lbl, inact_attrs);
                       }else{
-                      isrc = bbop.core.resourcify(base_icon_url,
-                                          rel, image_type);
+                          var node = topo_graph.get_node(nid);
+                          var metadata = node.metadata();
+                          var bttn_title = 'Go to page for '+ nid;
+                          if (metadata && metadata['definition']){
+                              bttn_title = bttn_title + ": " + metadata['definition'];
+                          }
+                          var tbs = bbop.widget.display.text_button_sim;
+
+                          var btn_attrs = {'style': 'background-color: #e3efff; border-style: none;'
+                              };
+                          if (anchor._reference_id == nid){
+                              btn_attrs = {
+                                  'style': 'background-color: #9EBFCB; border-style: none;'
+                              };
+                          }
+                          nav_b = new tbs(lbl, bttn_title, null, btn_attrs);
+                          nav_button_hash[nav_b.get_id()] = nid;
                       }
-                      icon =
-                      new bbop.html.image({'alt': ialt,
-                                   'title': rel,
-                                   'src': isrc,
-                                   'generate_id': true});
-                  }else{
-                      // Do a text-only version.
-                      if(anchor._current_acc == nid){
-                      icon = '[[->]]';
-                      }else if( rel && rel.length && rel.length > 0 ){
-                      icon = '[' + rel + ']';
+
+                      // Clickable info span. A little difference
+                      // if we have images.
+                      var info_b = null;
+                      if( use_img_p ){
+                          // Do the icon version.
+                          var imgsrc = bbop.core.resourcify(base_icon_url,
+                                        info_icon,
+                                        image_type);
+                          info_b =
+                          new bbop.html.image({'alt': info_alt,
+                                       'title': 'Go to page for '+lbl,
+                                       'src': imgsrc,
+                                       'style': 'cursor:pointer;',
+                                       'generate_id': true});
                       }else{
-                      icon = '[???]';
+                          // Do a text-only version.
+                          info_b =
+                          new bbop.html.span('<b>[i]</b>',
+                                     {'generate_id': true});
                       }
-                  }
-                  foo = makeSpinnerDiv();
-                  // Stack the info, with the additional
-                  // spaces, into the div.
-                  top_level.add_to(spaces,
-                           info_b.to_string(),
-                           icon,
-                           nav_b.to_string(),
-                           '&nbsp;',foo);
-                  }); 
-             spaces = spaces + spacing;
-             }); 
+                      info_button_hash[info_b.get_id()] = nid;
 
-        // Add the skeleton to the doc.
-        jQuery('#' + anchor._interface_id).empty();
-        jQuery('#' + anchor._interface_id).append(top_level.to_string());
-        
-        if (isInitialRun) {
-            isInitialRun = false;
-        } else {
-            jQuery('html, body').animate({
-                scrollTop: jQuery(".bbop-js-text-button-sim-inactive").offset().top - 45
-            }, 500);
-        }
+                      // "Icon". If base_icon_url is defined as
+                      // something try for images, otherwise fall
+                      // back to this text ick.
+                      var icon = null;
+                      if( use_img_p ){
+                          // Do the icon version.
+                          var ialt = '[' + rel + ']';
+                          var isrc = null;
+                          if(anchor._current_acc == nid){
+                          isrc = bbop.core.resourcify(base_icon_url,
+                                              current_icon,
+                                          image_type);
+                          }else{
+                          isrc = bbop.core.resourcify(base_icon_url,
+                                              rel, image_type);
+                          }
+                          icon =
+                          new bbop.html.image({'alt': ialt,
+                                       'title': rel,
+                                       'src': isrc,
+                                       'generate_id': true});
+                      }else{
+                          // Do a text-only version.
+                          if(anchor._current_acc == nid){
+                          icon = '[[->]]';
+                          }else if( rel && rel.length && rel.length > 0 ){
+                          icon = '[' + rel + ']';
+                          }else{
+                          icon = '[???]';
+                          }
+                      }
+                      var spinner = makeSpinnerDiv();
+                      // Stack the info, with the additional
+                      // spaces, into the div.
+                      if (nid != anchor._root){
+                          top_level.add_to(spaces,
+                                  //info_b.to_string(),
+                                  icon,
+                                  nav_b.to_string(),
+                                  '&nbsp;', spinner);
+                      } else {
+                          top_level.add_to(spaces,  nav_b.to_string(), '&nbsp;', spinner); 
+                      }
+                      }); 
+                 spaces = spaces + spacing;
+                 }); 
 
-        ///
-        /// Finally, attach any events to the browser HTML doc.
-        ///
+            // Add the skeleton to the doc.
+            jQuery('#' + anchor._interface_id).empty();
+            jQuery('#' + anchor._interface_id).append(top_level.to_string());
+            
+            if (isInitialRun) {
+                isInitialRun = false;
+            } else {
+                jQuery('html, body').animate({
+                    scrollTop: jQuery(".bbop-js-text-button-sim-inactive").offset().top - 45
+                }, 500);
+            }
 
-        // Navigation.
-        loop(nav_button_hash,
-             function(button_id, node_id){
+            ///
+            /// Finally, attach any events to the browser HTML doc.
+            ///
 
-             jQuery('#' + button_id).click(
-                 function(){
-                 var tid = jQuery(this).attr('id');
-                 //Override display none
-                 jQuery('#'+tid).siblings('.progress').css("display", "inline-block");
-                 
-                 var call_time_node_id = nav_button_hash[tid];
-                 //alert(call_time_node_id);
-                 // Check if the reference class is a subclass of the current node
-                 
-                 parent_nodes = topo_graph.get_parent_nodes().map( function (val){ return val.id; });
-                 if (parent_nodes.indexOf(anchor._reference_id) > -1){
-                     anchor.draw_browser('HP:0000118', anchor._reference_id, call_time_node_id, call_time_node_id);
-                 } else {
-                     anchor.draw_browser('HP:0000118', call_time_node_id, anchor._reference_id, call_time_node_id);
-                 }
+            // Navigation.
+            loop(nav_button_hash,
+                 function(button_id, node_id){
+
+                 jQuery('#' + button_id).click(
+                     function(){
+                         
+                         var tid = jQuery(this).attr('id');
+                         var call_time_node_id = nav_button_hash[tid];
+                         var newurl = "/resolve/"+call_time_node_id;
+                         window.location.href = newurl;
+                     });
                  });
+
+            // Information.
+            loop(info_button_hash,
+                 function(button_id, node_id){
+
+                 jQuery('#' + button_id).click(
+                     function(){
+                         var tid = jQuery(this).attr('id');
+                         var call_time_node_id = info_button_hash[tid];
+                         var newurl = "/resolve/"+call_time_node_id;
+                         window.location.href = newurl;
+                     
+                     });
              });
-
-        // Information.
-        loop(info_button_hash,
-             function(button_id, node_id){
-
-             jQuery('#' + button_id).click(
-                 function(){
-                 var tid = jQuery(this).attr('id');
-                 var call_time_node_id = info_button_hash[tid];
-                 var newurl = "/resolve/"+call_time_node_id;
-                 window.location.href = newurl;
-                 
-                 });
-         });
-    }
+             }
+            
+            
+        }
+    
+        
+    };
     
     /*
      * Function: draw_browser
@@ -809,13 +963,37 @@ bbop.monarch.widget.browse = function(server, manager, reference_id, interface_i
     this.init_browser = function(term_acc){
         anchor._current_acc = term_acc;
         // Data call setup
-        var rsrc = this.server + "dynamic/browser.json" + "?start_id=" + term_acc + "&root_id=HP:0000118&relationship=subClassOf|partOf|isA";
+        // var rsrc = this.server + "dynamic/browser.json" + "?start_id=" + term_acc + "&root_id=" + anchor._root+ "&relationship=subClassOf|partOf|isA";
+        var rsrc = this.server + "graph/neighbors/" + term_acc + ".json?&depth=25&blankNodes=false&relationshipType=subClassOf&direction=OUTGOING&project=%2A";
        
         anchor.manager.resource(rsrc);
         anchor.manager.method('get');
         anchor.manager.jsonp_callback('callback');
         
         anchor.manager.update('search');
+    };
+    
+    bbop.model.graph.prototype.get_descendent_subgraph = function(obj_id, pred){   
+        var anchor = this;
+        var edge_list = new Array();
+        var descendent_graph = new bbop.model.graph();
+        if (typeof anchor.seen_node_list === 'undefined') {
+            anchor.seen_node_list = [obj_id];
+        }
+        
+        anchor.get_child_nodes(obj_id, pred).forEach( function(sub_node) {
+            var sub_id = sub_node.id();
+            if (anchor.seen_node_list.indexOf(sub_id) > -1){
+                return;
+            }
+            anchor.seen_node_list.push(sub_id);
+            descendent_graph.add_edge(anchor.get_edge(sub_id, obj_id, pred));
+            descendent_graph.add_node(anchor.get_node(sub_id));
+            descendent_graph.add_node(anchor.get_node(obj_id));
+            descendent_graph.merge_in(anchor.get_descendent_subgraph(sub_id, pred));
+        });
+            
+        return descendent_graph; 
     };
     
     bbop.model.bracket.graph.prototype.monarch_bracket_layout = function(term_acc, transitivity_graph){
@@ -948,3 +1126,436 @@ bbop.monarch.widget.browse = function(server, manager, reference_id, interface_i
            return spinner_div;
        }
 };
+/*
+ * Package: results_table_by_class_conf_bs3.js
+ * 
+ * Namespace: bbop.widget.display.results_table_by_class_conf_bs3
+ * 
+ * Subclass of <bbop.html.tag>.
+ */
+
+if ( typeof bbop == "undefined" ){ var bbop = {}; }
+if ( typeof bbop.monarch == "undefined" ){ bbop.monarch = {}; }
+if ( typeof bbop.monarch.widget == "undefined" ){ bbop.monarch.widget = {}; }
+if ( typeof bbop.monarch.widget.display == "undefined" ){ bbop.monarch.widget.display = {}; }
+
+/*
+ * Function: results_table_by_class_conf_bs3
+ *
+ * Using a conf class and a set of data, automatically populate and
+ * return a results table.
+ *  
+ * This is the Bootstrap 3 version of this display. It affixes itself
+ * directly to the DOM using jQuery at elt_id.
+ *  
+ * Parameters:
+ *  class_conf - a <bbop.golr.conf_class>
+ *  golr_resp - a <bbop.golr.response>
+ *  linker - a linker object; see <amigo.linker> for more details
+ *  handler - a handler object; see <amigo.handler> for more details
+ *  elt_id - the element id to attach it to
+ *  selectable_p - *[optional]* whether to create checkboxes (default true)
+ *
+ * Returns:
+ *  this object
+ *
+ * See Also:
+ *  <bbop.widget.display.results_table_by_class>
+ */
+bbop.monarch.widget.display.results_table_by_class_conf_bs3 = function(cclass,
+							      golr_resp,
+							      linker,
+							      handler,
+							      elt_id,
+							      selectable_p,
+							      select_toggle_id,
+							      select_item_name){
+
+    //
+    var anchor = this;
+
+    // Temp logger.
+    var logger = new bbop.logger();
+    //logger.DEBUG = true;
+    logger.DEBUG = false;
+    function ll(str){ logger.kvetch('RTBCCBS3: ' + str); }
+
+    // Tie important things down for cell rendering prototype.
+    anchor._golr_response = golr_resp;
+    anchor._linker = linker;
+    anchor._handler = handler;
+
+    // Conveience aliases.
+    var each = bbop.core.each;
+    var is_defined = bbop.core.is_defined;
+
+    // The context we'll deliver to
+    var display_context = 'bbop.widgets.search_pane';
+
+    // Only want to compile once.
+    var ea_regexp = new RegExp("\<\/a\>", "i"); // detect an <a>
+    var br_regexp = new RegExp("\<br\ \/\>", "i"); // detect a <br />
+    var sp_regexp = new RegExp("\&nbsp\;", "i"); // detect a &nbsp;
+    var img_regexp = new RegExp("\<img", "i"); // detect a <img
+
+    // // Sort out whether we want to display checkboxes. Also, give life
+    // // to the necessary variables if they will be called upon.
+    // var select_toggle_id = null;
+    // var select_item_name = null;
+    // if( is_defined(selectable_p) && selectable_p == true ){
+
+    // }
+
+    // Now take what we have, and wrap around some expansion code
+    // if it looks like it is too long.
+    var trim_hash = {};
+    var trimit = 100;
+    function _trim_and_store( in_str ){
+
+	var retval = in_str;
+
+	//ll("T&S: " + in_str);
+
+	// Skip if it is too short.
+	//if( ! ea_regexp.test(retval) && retval.length > (trimit + 50) ){
+	if( retval.length > (trimit + 50) ){
+	    //ll("T&S: too long: " + retval);
+
+	    // Let there be tests.
+	    var list_p = br_regexp.test(retval);
+	    var anchors_p = ea_regexp.test(retval);
+	    var space_p = sp_regexp.test(retval);
+
+	    var tease = null;
+	    if( ! anchors_p && ! list_p && ! space_p){
+		// A normal string then...trim it!
+		//ll("\tT&S: easy normal text, go nuts!");
+		tease = new bbop.html.span(bbop.core.crop(retval, trimit, ''),
+					   {'generate_id': true});
+	    }else if( anchors_p && ! list_p ){
+		// It looks like it is a link without a break, so not
+		// a list. We cannot trim this safely.
+		//ll("\tT&S: single link so cannot work on!");
+	    }else{
+		//ll("\tT&S: we have a list to deal with");
+		
+		var new_str_list = retval.split(br_regexp);
+		if( new_str_list.length <= 3 ){
+		    // Let's just ignore lists that are only three
+		    // items.
+		    //ll("\tT&S: pass thru list length <= 3");
+		}else{
+		    //ll("\tT&S: contruct into 2 plus tag");
+		    var new_str = '';
+		    new_str = new_str + new_str_list.shift();
+		    new_str = new_str + '<br />';
+		    new_str = new_str + new_str_list.shift();
+		    tease = new bbop.html.span(new_str, {'generate_id': true});
+		}
+	    }
+
+	    // If we have a tease, assemble the rest of the packet
+	    // to create the UI.
+	    if( tease ){
+		// Setup the text for tease and full versions.
+		function bgen(lbl, dsc){
+		    var b = new bbop.html.button(
+  			lbl,
+			{
+			    'generate_id': true,
+			    'type': 'button',
+			    'title': dsc || lbl,
+			    //'class': 'btn btn-default btn-xs'
+			    'class': 'btn btn-primary btn-xs'
+			});
+		    return b;
+		}
+		var more_b = new bgen('more...', 'Display the complete list');
+		var full = new bbop.html.span(retval,
+					      {'generate_id': true});
+		var less_b = new bgen('less', 'Display the truncated list');
+		
+		// Store the different parts for later activation.
+		var tease_id = tease.get_id();
+		var more_b_id = more_b.get_id();
+		var full_id = full.get_id();
+		var less_b_id = less_b.get_id();
+		trim_hash[tease_id] = 
+		    [tease_id, more_b_id, full_id, less_b_id];
+		
+		// New final string.
+		retval = tease.to_string() + " " +
+		    more_b.to_string() + " " +
+		    full.to_string() + " " +
+		    less_b.to_string();
+	    }
+	}
+
+	return retval;
+    }
+
+    // Create a locally mangled checkbox.
+    function _create_select_box(val, id, name){
+	if( ! is_defined(name) ){
+	    name = select_item_name;	    
+	}
+	
+	var input_attrs = {
+	    'value': val,
+	    'name': name,
+	    'type': 'checkbox'
+	};
+	if( is_defined(id) ){
+	    input_attrs['id'] = id;
+	}
+	var input = new bbop.html.input(input_attrs);
+	return input;
+    }
+
+    ///
+    /// Render the headers.
+    ///
+
+    // Start with score, and add the others by order of the class
+    // results_weights field.
+    // var headers = ['score'];
+    // var headers_display = ['Score'];
+    var headers = [];
+    var headers_display = [];
+    if( selectable_p ){
+	// Hint for later.
+	headers.push(select_toggle_id);
+
+	// Header select for selecting all.
+	var hinp = _create_select_box('', select_toggle_id, '');
+	//headers_display.push('All ' + hinp.to_string());
+	headers_display.push(hinp.to_string());
+    }
+    var results_order = cclass.field_order_by_weight('result');
+    each(results_order,
+	 function(fid){
+	     // Store the raw headers/fid for future use.
+	     headers.push(fid);
+	     // Get the headers into a presentable state.
+	     var field = cclass.get_field(fid);
+	     if( ! field ){ throw new Error('conf error: not found:' + fid); }
+	     //headers_display.push(field.display_name());
+	     var fdname = field.display_name();
+	     var fdesc = field.description() || '???';
+	     var head_span_attrs = {
+		 // TODO/NOTE: to make the tooltip work properly, since the
+		 // table headers are being created each time,
+		 // the tooltop initiator would have to be called after
+		 // each pass...I don't know that I want to do that.
+		 //'class': 'bbop-js-ui-hoverable bbop-js-ui-tooltip',
+		 'class': 'bbop-js-ui-hoverable',
+		 'title': fdesc
+	     };
+	     // More aggressive link version.
+	     //var head_span = new bbop.html.anchor(fdname, head_span_attrs);
+	     var head_span = new bbop.html.span(fdname, head_span_attrs);
+	     headers_display.push(head_span.to_string());
+	 });
+
+    ///
+    /// Render the documents.
+    ///
+
+    // Cycle through and render each document.
+    // For each doc, deal with it as best we can using a little
+    // probing. Score is a special case as it is not an explicit
+    // field.
+    var table_buff = [];
+    var docs = golr_resp.documents();
+    each(docs, function(doc){
+	     
+	// Well, they had better be in here, so we're just gunna cycle
+	// through all the headers/fids.
+	var entry_buff = [];
+	each(headers, function(fid){
+	    // Detect out use of the special selectable column and add
+	    // a special checkbox there.
+	    if( fid == select_toggle_id ){
+		// Also
+		var did = doc['id'];
+		var dinp = _create_select_box(did);
+		entry_buff.push(dinp.to_string());
+	    }else if( fid == 'score' ){
+		// Remember: score is also
+		// special--non-explicit--case.
+		var score = doc['score'] || 0.0;
+		score = bbop.core.to_string(100.0 * score);
+		entry_buff.push(bbop.core.crop(score, 4) + '%');
+	    }else{
+		
+		// Not "score", so let's figure out what we can
+		// automatically.
+		var field = cclass.get_field(fid);
+		
+		// Make sure that something is there and that we can
+		// iterate over whatever it is.
+		var bits = [];
+		if( doc[fid] ){
+		    if( field.is_multi() ){
+			//ll("Is multi: " + fid);
+			bits = doc[fid];
+		    }else{
+			//ll("Is single: " + fid);
+			bits = [doc[fid]];
+		    }
+		}
+		//Terrible hack to add qualifier when relation is null
+		if (fid == 'relation' && bits.length == 0) {
+		    if( doc['qualifier'] ){
+		        var qual_field = cclass.get_field('qualifier');
+	            if( qual_field.is_multi() ){
+	            //ll("Is multi: " + fid);
+	            bits = doc['qualifier'];
+	            }else{
+	            //ll("Is single: " + fid);
+	            bits = [doc['qualifier']];
+	            }
+	        }
+		}
+		// Render each of the bits.
+		var tmp_buff = [];
+		each(bits, function(bit){
+		    var out = anchor.process_entry(bit, fid, doc, display_context);
+		    tmp_buff.push(out);
+		});
+		// Join it, trim/store it, push to to output.
+        var joined;
+		//Terrible hack to remove breaks for images
+		if (img_regexp.test(tmp_buff)){
+		    joined = tmp_buff.join('&nbsp;&nbsp;');
+		} else {
+		    joined = tmp_buff.join('<br />');
+		}
+		
+		entry_buff.push(_trim_and_store(joined));
+	    }
+	});
+	table_buff.push(entry_buff);
+    });
+	
+    // Add the table to the DOM.
+    var final_table =
+	new bbop.html.table(headers_display, table_buff,
+			    {'class': 'table table-striped table-hover table-condensed'});
+	// new bbop.html.table(headers_display, table_buff,
+	// 		    {'class': 'bbop-js-search-pane-results-table'});
+    jQuery('#' + elt_id).append(bbop.core.to_string(final_table));
+    
+    // Add the roll-up/down events to the doc.
+    each(trim_hash, function(key, val){
+	var tease_id = val[0];
+	var more_b_id = val[1];
+	var full_id = val[2];
+	var less_b_id = val[3];
+	
+	// Initial state.
+	jQuery('#' + full_id ).hide();
+	jQuery('#' + less_b_id ).hide();
+	
+	// Click actions to go back and forth.
+	jQuery('#' + more_b_id ).click(function(){
+	    jQuery('#' + tease_id ).hide();
+	    jQuery('#' + more_b_id ).hide();
+	    jQuery('#' + full_id ).show('fast');
+	    jQuery('#' + less_b_id ).show('fast');
+	});
+	jQuery('#' + less_b_id ).click(function(){
+	    jQuery('#' + full_id ).hide();
+	    jQuery('#' + less_b_id ).hide();
+	    jQuery('#' + tease_id ).show('fast');
+	    jQuery('#' + more_b_id ).show('fast');
+	});
+    });
+
+    // Since we already added to the DOM in the table, now add the
+    // group toggle if the optional checkboxes are defined.
+    if( select_toggle_id && select_item_name ){
+	jQuery('#' + select_toggle_id).click(function(){
+	    var cstr = 'input[id=' + select_toggle_id + ']';
+	    var nstr = 'input[name=' + select_item_name + ']';
+	    if( jQuery(cstr).prop('checked') ){
+		jQuery(nstr).prop('checked', true);
+	    }else{
+		jQuery(nstr).prop('checked', false);
+	    }
+	});
+    }
+};
+
+/*
+ * Function: process_entry
+ *
+ * The function used to render a single entry in a cell in the results
+ * table. It can be overridden to specify special behaviour. There may
+ * be multiple entries within a cell, but they will all have this
+ * function individually run over them.
+ *
+ * This function can access this._golr_response (a
+ * <bbop.golr.response>), this._linker (a <bbop.linker>), and
+ * this._handler (a <bbop.handler>).
+ *
+ * Arguments:
+ *  bit - string (?) for the one entry in the cell
+ *  field_id - string for the field under consideration
+ *  document - the single document for this item from the solr response
+ *
+ * Returns:
+ *  string or empty string ('')
+ */
+bbop.monarch.widget.display.results_table_by_class_conf_bs3.prototype.process_entry = 
+    function(bit, field_id, document, display_context){
+	
+    	var anchor = this;
+
+	// First, allow the hanndler to take a whack at it. Forgive
+	// the local return. The major difference that we'll have here
+	// is between standard fields and special handler fields. If
+	// the handler resolves to null, fall back onto standard.
+	//ll('! B:' + bit + ', F:' + fid + ', D:' + display_context);
+	var out = anchor._handler.dispatch(bit, field_id, display_context);
+	if( bbop.core.is_defined(out) && out != null ){
+	    return out;
+	}
+
+	// Otherwise, use the rest of the context to try and render
+	// the item.
+    	var retval = '';
+    	var did = document['id'];
+	
+    	// BUG/TODO: First see if the filed will be multi or not.
+    	// If not multi, follow the first path. If multi, break it
+    	// down and try again.
+	
+    	// Get a label instead if we can.
+    	var ilabel = anchor._golr_response.get_doc_label(did, field_id, bit);
+    	if( ! ilabel ){
+    	    ilabel = bit;
+    	}
+	
+    	// Extract highlighting if we can from whatever our "label"
+    	// was.
+    	var hl = anchor._golr_response.get_doc_highlight(did, field_id, ilabel);
+	
+    	// See what kind of link we can create from what we got.
+    	var ilink =
+    	    anchor._linker.anchor({id:bit, label:ilabel, hilite:hl}, field_id);
+	
+    	//ll('processing: ' + [field_id, ilabel, bit].join(', '));
+    	//ll('ilink: ' + ilink);
+	
+    	// See what we got, in order of how much we'd like to have it.
+    	if( ilink ){
+    	    retval = ilink;
+    	}else if( ilabel ){
+    	    retval = ilabel;
+    	}else{
+    	    retval = bit;
+    	}
+	
+    	return retval;
+    };

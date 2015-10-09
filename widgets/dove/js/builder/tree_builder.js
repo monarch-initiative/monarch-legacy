@@ -348,8 +348,12 @@ monarch.builder.tree_builder.prototype.processLabel = function(label){
         label = label.replace(/abnormal(\(ly\))? /, '');
         label = label.replace(/ phenotype$/, '');
     
-        label = label.replace(/\b[a-z]/g, function() {
-            return arguments[0].toUpperCase()
+        label = label.replace(/\b'?[a-z]/g, function() {
+            if (!/'/.test(arguments[0])) {
+                return arguments[0].toUpperCase()
+            } else {
+                return arguments[0];
+            }
         });
     }
     

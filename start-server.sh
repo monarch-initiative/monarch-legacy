@@ -1,5 +1,12 @@
 #!/bin/sh
 
+# ./start-server.sh [ENVNAME]
+#
+# ENVNAME: dev, stage, production (default is 'dev')
+# Optional environment variables:
+#	PORT (defaults to 8080)
+#
+
 RUNENV=$1
 if [ ! $RUNENV ]; then
 	RUNENV=dev
@@ -12,9 +19,8 @@ if [ $PORT ]
   then
    MARGS="--port $PORT"
   else
-   echo using default port
    MARGS="--port 8080"
 fi
-echo starting server
-export RINGO_MODULE_PATH=./modules/:./node_modules:./lib/monarch:$RINGO_MODULE_PATH
-tools/ringo lib/monarch/web/webapp_launcher_$RUNENV.js $MARGS
+
+export NODE_PATH=./lib/monarch
+node lib/monarch/web/webapp_launcher.js $MARGS $RUNENV

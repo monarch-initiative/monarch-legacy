@@ -372,18 +372,13 @@ p {
 }
 
 /* BS3 Filter from bbop.live_filter widget */
-.bs3filter .well-sm {
-    padding: 7px;
-    margin-bottom: 10px;
-   /* display: none; */
-}
 
 .bs3filter .panel {
     margin-bottom: 10px;
 }
 
 .bs3filter .table .btn-xs {
-    padding: 0px 6px 1px 6px;
+    padding: 0px 6px 2px 6px;
 }
 
 .bs3filter .panel-group .panel {
@@ -411,6 +406,19 @@ p {
     background-color: #BCE3F2 !important;
 }
 
+.sibling-form label {
+    margin-left : 20px;
+}
+
+#overview .col-xs-12, #overview .col-sm-12, #overview .col-md-12, #overview .col-lg-4{
+	padding-left: 0px;
+	padding-top: 10px;
+}
+
+
+.sibling-form label {
+	font-weight: normal;
+}
 
 /* Amigo Styling needed for golr views, need to update to fit the monarch site
  */

@@ -57,11 +57,20 @@ bbop.monarch.phenotypeLandingConfig = {
         
         //Colors set in the order they appear in the JSON object
         color : { 
-                 bars : {
-                     first  : '#44A293',
-                     second : '#A4D6D4',
-                     third : '#44B985'
-                 },
+            bars : {
+                human  : '#44A293',
+                fly : '#A4D6D4',
+                mouse : '#44B985',
+                zebrafish : '#CCBD00',
+                worm : '#50617F',
+                rat : '#4C8DFF',
+                pig : '#B9FF0D',
+                chicken : '#14B212',
+                monkey : '#277F26',
+                platypus : '#CC6414',
+                cow : '#4119FF',
+                frog : '#14CC7A'
+            },
                    
                  yLabel : { 
                    fill  : '#000000',
@@ -264,11 +273,20 @@ bbop.monarch.genotypeLandingConfig = {
         
         //Colors set in the order they appear in the JSON object
         color : { 
-                 bars : {
-                     first  : '#44A293',
-                     second : '#A4D6D4',
-                     third : '#44B985'
-                 },
+            bars : {
+                human  : '#44A293',
+                fly : '#A4D6D4',
+                mouse : '#44B985',
+                zebrafish : '#CCBD00',
+                worm : '#50617F',
+                rat : '#4C8DFF',
+                pig : '#B9FF0D',
+                chicken : '#14B212',
+                monkey : '#277F26',
+                platypus : '#CC6414',
+                cow : '#4119FF',
+                frog : '#14CC7A'
+            },
                    
                  yLabel : { 
                    fill  : '#000000',
@@ -350,11 +368,20 @@ bbop.monarch.diseaseLandingConfig = {
       
       //Colors set in the order they appear in the JSON object
       color : { 
-               bars: {
-                   first  : '#44A293',
-                   second : '#A4D6D4',
-                   third : '#44B985'
-               },
+          bars : {
+              human  : '#44A293',
+              fly : '#A4D6D4',
+              mouse : '#44B985',
+              zebrafish : '#CCBD00',
+              worm : '#50617F',
+              rat : '#4C8DFF',
+              pig : '#B9FF0D',
+              chicken : '#14B212',
+              monkey : '#277F26',
+              platypus : '#CC6414',
+              cow : '#4119FF',
+              frog : '#14CC7A'
+          },
                  
                yLabel : { 
                  fill  : '#000000',
@@ -449,11 +476,20 @@ bbop.monarch.homePageConfig = {
         
         //Colors set in the order they appear in the JSON object
         color : { 
-                 bars: {
-                     first  : '#44A293',
-                     second : '#A4D6D4',
-                     third : '#dfc0fd'
-                 },
+            bars : {
+                human  : '#44A293',
+                fly : '#A4D6D4',
+                mouse : '#44B985',
+                zebrafish : '#CCBD00',
+                worm : '#50617F',
+                rat : '#4C8DFF',
+                pig : '#B9FF0D',
+                chicken : '#14B212',
+                monkey : '#277F26',
+                platypus : '#CC6414',
+                cow : '#4119FF',
+                frog : '#14CC7A'
+            },
                    
                  yLabel : { 
                    fill  : '#000000',
