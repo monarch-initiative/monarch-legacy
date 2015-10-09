@@ -42,6 +42,13 @@
           "bio": "Kent is a Software Engineer for the OHSU ontology development group where he develops the Monarch API, front end visualizations, and the data ingest pipeline. Kent has a BS in Biology from the University of Maryland, College Park and a MS in Biotechnology with a specialization in Bioinformatics from the University of Maryland, University College."
         },
         {
+          "name": "Shahim Essaid",
+          "picture": "/image/team/ShahimEssaid.jpg",
+          "title": "Ontologist",
+          "alumni": false,
+          "bio": "Dr. Essaid is an Ontologist and Software Engineer; he has an MD University of Baghdad, Iraq and holds a graduate certificate Department of Medical Informatics and Clinical Epidemiology from OHSU."
+        },
+        {
           "name": "Bryan Laraway",
           "title": "Data Wrangler",
           "alumni": true,
@@ -117,7 +124,7 @@
         },
         {
           "name": "Larry Lui",
-          "alumni": false,
+          "alumni": true,
           "title": "Systems Support",
           "bio": "Larry is a systems engineer working for the Center for Research in Biological Systems at the University of California, San Diego. He has 10+ years of experience working on linux system integration as well as deploying, configuring, and administering high performance compute clusters. He is currently involved with the Neuroscience Information Framework project, International Neuroinformatics Coordinating Facility (UCSD node), and The Cell: An Image Library."
         },
