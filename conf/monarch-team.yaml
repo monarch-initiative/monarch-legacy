@@ -33,6 +33,11 @@ institutions:
         title: Bioinfomatics Software Engineer
         alumni: false
         bio: Kent is a Software Engineer for the OHSU ontology development group where he develops the Monarch API, front end visualizations, and the data ingest pipeline. Kent has a BS in Biology from the University of Maryland, College Park and a MS in Biotechnology with a specialization in Bioinformatics from the University of Maryland, University College.
+      - name: Shahim Essaid
+              picture: /image/team/ShahimEssaid.jpg
+              title: Ontologist
+              alumni: false
+              bio: Dr. Essaid is an Ontologist and Software Engineer; he has an MD University of Baghdad, Iraq and holds a graduate certificate Department of Medical Informatics and Clinical Epidemiology from OHSU.
       - name: Bryan Laraway
         title: Data Wrangler
         alumni: true
@@ -96,7 +101,7 @@ institutions:
         title: Architect
         bio: Dr. Grethe has a BS from the University of California Irvine in Applied Mathematics and a Ph.D. in Neuroscience, with a focus on bioinformatics, from the University of Southern California. Throughout his career, his primary focus has been on enabling collaborative research, data sharing and discovery through the application of advanced informatics approaches. Before coming to UCSD he was one of the core members responsible for bringing the fMRI Data Center online, the first publicly accessible repository of peer-reviewed fMRI studies. He is currently leading a number of large scale biological and biomedical informatics projects (i.e. PI for the NIDDK Interconnectivity Network Coordinating Center, co-PI for the Neuroscience Information Framework, and Technical Lead for the Community Cyberinfrastructure for Advanced Microbial Ecology Research and Analysis) in the Center for Research in Biological Systems at the University of California, San Diego.
       - name: Larry Lui
-        alumni: false
+        alumni: true
         title: Systems Support
         bio: "Larry is a systems engineer working for the Center for Research in Biological Systems at the University of California, San Diego. He has 10+ years of experience working on linux system integration as well as deploying, configuring, and administering high performance compute clusters. He is currently involved with the Neuroscience Information Framework project, International Neuroinformatics Coordinating Facility (UCSD node), and The Cell: An Image Library."
       - name: Chris Condit
