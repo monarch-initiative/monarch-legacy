@@ -119,9 +119,9 @@
 
 .monarch-home-phenotype-image {
     padding: 0;
-    padding-top: 5px;
-    padding-bottom: 10px;
     margin: 0;
+    margin-top:4px;
+    margin-bottom:4px;
 }
 
 .monarch-home-phenotype-analysis {
