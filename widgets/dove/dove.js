@@ -231,7 +231,7 @@ monarch.dovechart.prototype.makeNavArrow = function(data, navigate, triangleDim,
         });
 };
 
-monarch.dovechart.prototype.transitionToNewGraph = function(histogram,data,barGroup,bar, parent){
+monarch.dovechart.prototype.transitionToNewGraph = function(histogram, data, barGroup, bar, parent){
     self = this;
     config = self.config;
     self.tooltip.style("display", "none");
@@ -258,7 +258,7 @@ monarch.dovechart.prototype.transitionToNewGraph = function(histogram,data,barGr
     }
 };
 
-monarch.dovechart.prototype.removeSVGWithSelection = function(select,duration,y,opacity){
+monarch.dovechart.prototype.removeSVGWithSelection = function(select, duration, y, opacity){
     select.transition()
         .duration(duration)
         .attr("y", y)
@@ -266,7 +266,7 @@ monarch.dovechart.prototype.removeSVGWithSelection = function(select,duration,y,
         .remove();
 };
 
-monarch.dovechart.prototype.removeSVGWithClass = function(histogram,htmlClass,duration,y,opacity){
+monarch.dovechart.prototype.removeSVGWithClass = function(histogram, htmlClass, duration, y, opacity){
     d3.select(self.html_div+'.barchart').selectAll(htmlClass).transition()
         .duration(duration)
         .attr("y", y)
@@ -274,7 +274,7 @@ monarch.dovechart.prototype.removeSVGWithClass = function(histogram,htmlClass,du
         .remove();
 };
 
-monarch.dovechart.prototype.displaySubClassTip = function(tooltip,d3Selection){
+monarch.dovechart.prototype.displaySubClassTip = function(tooltip, d3Selection){
     var self = this;
     var config = self.config;
     d3.select(d3Selection)
@@ -292,12 +292,12 @@ monarch.dovechart.prototype.displaySubClassTip = function(tooltip,d3Selection){
     .style("left",w+config.margin.left+config.arrowOffset.width+"px");
 };
 
-monarch.dovechart.prototype.getCountMessage = function(value,name){
+monarch.dovechart.prototype.getCountMessage = function(value, name){
     return "Counts: "+"<span style='font-weight:bold'>"+value+"</span>"+"<br/>"
             +"Organism: "+ "<span style='font-weight:bold'>"+name;
 };
 
-monarch.dovechart.prototype.displayCountTip = function(tooltip,value,name,d3Selection,barLayout){
+monarch.dovechart.prototype.displayCountTip = function(tooltip, value, name, d3Selection, barLayout){
     var self = this;
     var config = self.config;
     var coords = d3.transform(d3.select(d3Selection.parentNode)
@@ -320,7 +320,7 @@ monarch.dovechart.prototype.displayCountTip = function(tooltip,value,name,d3Sele
     }
 };
 
-monarch.dovechart.prototype.setGroupPositioning = function (histogram,data) {
+monarch.dovechart.prototype.setGroupPositioning = function (histogram, data) {
     var self = this;
 
     var groupPos = histogram.svg.selectAll()
@@ -336,7 +336,7 @@ monarch.dovechart.prototype.setGroupPositioning = function (histogram,data) {
     return groupPos;
 };
 
-monarch.dovechart.prototype.setXYDomains = function (histogram,data,groups) {
+monarch.dovechart.prototype.setXYDomains = function (histogram, data, groups) {
     var self = this;
     //Set y0 domain
 
@@ -357,7 +357,7 @@ monarch.dovechart.prototype.setXYDomains = function (histogram,data,groups) {
     }
 };
 
-monarch.dovechart.prototype.makeBar = function (barGroup,histogram,barLayout,isFirstGraph) {
+monarch.dovechart.prototype.makeBar = function (barGroup, histogram, barLayout, isFirstGraph) {
     var bar;
     var self = this;
     var config = self.config;
@@ -444,7 +444,7 @@ monarch.dovechart.prototype.makeBar = function (barGroup,histogram,barLayout,isF
 };
 
 //Transition bars from a width of 0 to their respective positions
-monarch.dovechart.prototype.transitionFromZero = function (bar,histogram,barLayout) {
+monarch.dovechart.prototype.transitionFromZero = function (bar, histogram, barLayout) {
     var self = this;
     if (barLayout == 'grouped'){
         bar.transition()
@@ -483,7 +483,7 @@ monarch.dovechart.prototype.transitionFromZero = function (bar,histogram,barLayo
     }
 };
 
-monarch.dovechart.prototype.transitionGrouped = function (histogram,data,groups,bar) {
+monarch.dovechart.prototype.transitionGrouped = function (histogram, data, groups, bar) {
     var self = this;
     var config = self.config;
     self.setXYDomains(histogram,data,groups);
@@ -518,7 +518,7 @@ monarch.dovechart.prototype.transitionGrouped = function (histogram,data,groups,
     })
 };
 
-monarch.dovechart.prototype.transitionStacked = function (histogram,data,groups,bar) {
+monarch.dovechart.prototype.transitionStacked = function (histogram, data, groups, bar) {
     var self = this;
     var config = self.config;
     self.setXYDomains(histogram, data, groups, 'stacked');
@@ -723,7 +723,7 @@ monarch.dovechart.prototype.changeScalePerSettings = function(histogram){
     }
 };
 
-monarch.dovechart.prototype.changeBarConfig = function(histogram,data,groups,bar){
+monarch.dovechart.prototype.changeBarConfig = function(histogram, data, groups, bar){
     var self = this;
     if (self.getValueOfCheckbox('mode','grouped')){
         self.transitionGrouped(histogram,data,groups,bar);
@@ -747,7 +747,7 @@ monarch.dovechart.prototype.resizeChart = function(data){
     return height;
 };
 
-monarch.dovechart.prototype.pickUpBreadcrumb = function(histogram,index,groups,bar,barGroup) {
+monarch.dovechart.prototype.pickUpBreadcrumb = function(histogram, index, groups, bar, barGroup) {
     var self = this;
     var config = self.config;
     var isFromCrumb = true;
@@ -800,7 +800,7 @@ monarch.dovechart.prototype.pickUpBreadcrumb = function(histogram,index,groups,b
     }
 };
 
-monarch.dovechart.prototype.makeBreadcrumb = function(histogram,label,groups,bar,phenoDiv,fullLabel) {
+monarch.dovechart.prototype.makeBreadcrumb = function(histogram, label, groups, bar, phenoDiv, fullLabel) {
     var self = this;
     var config = self.config;
     var html_div = self.html_div;
@@ -949,7 +949,7 @@ monarch.dovechart.prototype.makeBreadcrumb = function(histogram,label,groups,bar
         });
 };
 
-monarch.dovechart.prototype.setBarConfigPerCheckBox = function(histogram,data,groups,barGroup,isFirstGraph) {
+monarch.dovechart.prototype.setBarConfigPerCheckBox = function(histogram, data, groups, barGroup, isFirstGraph) {
     self = this;
 
     if (jQuery(self.html_div + ' input[name=mode]:checked').val()=== 'grouped' || groups.length === 1) {
@@ -963,7 +963,7 @@ monarch.dovechart.prototype.setBarConfigPerCheckBox = function(histogram,data,gr
     }
 };
 
-monarch.dovechart.prototype.setYAxisText = function(histogram,data, barGroup, bar, yFont){
+monarch.dovechart.prototype.setYAxisText = function(histogram, data, barGroup, bar, yFont){
     var self = this;
     config = self.config;
     
@@ -991,7 +991,7 @@ monarch.dovechart.prototype.setYAxisText = function(histogram,data, barGroup, ba
     .append("svg:title")
     .text(function(d){
         if (/\.\.\./.test(self.getIDLabel(d.id,data))){
-            var fullLabel = self.getFullLabel(self.getIDLabel(d.id,data),data);
+            var fullLabel = self.getFullLabel(d.id, data);
             var title = fullLabel +" (" + d.id.replace(/(.*):(.*)/, "$1") + ")";
               return title;  
         } else if (yFont < 12) {//HARDCODE alert
@@ -1003,7 +1003,7 @@ monarch.dovechart.prototype.setYAxisText = function(histogram,data, barGroup, ba
 };
 
 
-monarch.dovechart.prototype.disableYAxisText = function(histogram,data, barGroup, bar){
+monarch.dovechart.prototype.disableYAxisText = function(histogram, data, barGroup, bar){
     self = this;
     config = self.config;
     
@@ -1022,7 +1022,7 @@ monarch.dovechart.prototype.disableYAxisText = function(histogram,data, barGroup
     
 };
 
-monarch.dovechart.prototype.activateYAxisText = function(histogram,data, barGroup, bar){
+monarch.dovechart.prototype.activateYAxisText = function(histogram, data, barGroup, bar){
     self = this;
     config = self.config;
     
@@ -1143,7 +1143,7 @@ monarch.dovechart.prototype.getStackedStats = function(data){
       return data;
 };
 
-monarch.dovechart.prototype.sortDataByGroupCount = function(data,groups){
+monarch.dovechart.prototype.sortDataByGroupCount = function(data, groups){
     var self = this;
     //Check if total counts have been calculated via getStackedStats()
     if (!data[0] || !data[0].counts ||  !data[0].counts[0] || data[0].counts[0].x1 == null){
@@ -1235,7 +1235,7 @@ monarch.dovechart.prototype.removeIdWithoutLabel = function(data){
       return trimmedGraph;
 };
 
-monarch.dovechart.prototype.addEllipsisToLabel = function(data,max){
+monarch.dovechart.prototype.addEllipsisToLabel = function(data, max){
     var reg = new RegExp("(.{"+max+"})(.+)");
     var ellipsis = new RegExp('\\.\\.\\.$');
     data.forEach(function (r){
@@ -1249,32 +1249,29 @@ monarch.dovechart.prototype.addEllipsisToLabel = function(data,max){
     return data;
 };
 
-monarch.dovechart.prototype.getFullLabel = function (d,data){
+monarch.dovechart.prototype.getFullLabel = function (id, data){
     for (var i=0, len=data.length; i < len; i++){
-        if (data[i].label === d){
+        if (data[i].id === id){
             var fullLabel = data[i].fullLabel;
             return fullLabel;
-            break;
         }
     }
 };
 
-monarch.dovechart.prototype.getGroupID = function (d,data){
+monarch.dovechart.prototype.getGroupID = function (id, data){
     for (var i=0, len=data.length; i < len; i++){
-        if (data[i].label === d){
+        if (data[i].label === id){
             monarchID = data[i].id;
             return monarchID;
-            break;
         }
     }
 };
 
-monarch.dovechart.prototype.getIDLabel = function (d,data){
+monarch.dovechart.prototype.getIDLabel = function (id, data){
     for (var i=0, len=data.length; i < len; i++){
-        if (data[i].id === d){
+        if (data[i].id === id){
             label = data[i].label;
             return label;
-            break;
         }
     }
 };
