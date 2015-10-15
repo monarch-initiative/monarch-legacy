@@ -58,10 +58,15 @@ Feature: NodeJS and RingoJS pass all tests.
 @ui
  Scenario: The "/compare/" endpoint returns the correct JSON
     Given I go to page "/compare/OMIM:270400/NCBIGene:5156,OMIM:249000,OMIM:194050.json"
-     then the document should contain "Smith-Lemli-Opitz syndrome"
+     then the document should contain "Smith-Lemli-Opitz Syndrome"
      then the document should contain "PDGFRA"
      then the document should contain "Blue irides"
-
+     
+@ui
+ Scenario: The "/compare/" endpoint returns the correct JSON with invalid ID
+    Given I go to page "/compare/HP:0012774+HP:0002650/1232413241234.json"
+     then the document should contain "HP:0012774"
+     then the document should contain "HP:0002650"
 
 #This test is pretty flimsy, refactor to be a bit more flexible
 @ui
