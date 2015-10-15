@@ -28,4 +28,4 @@ Feature: Basic autocomplete works
      and I type "ZRS" into the navbar search
      and I wait until "ZRS" appears in the autocomplete 
      and I click the autocomplete item "ZRS"
-     then the title should be "Monarch Gene: LMBR1 (NCBIGene:373986)"
+     then the title should be "Monarch Gene: LMBR1 (NCBIGene:64327)"
