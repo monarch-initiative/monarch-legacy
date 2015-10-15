@@ -17,7 +17,7 @@ Feature: Basic autocomplete works
  @ui
  Scenario: "food" in the navbar search with a click goes to a details page
     Given I go to page "/"
-     and I type "food" into the navbar search
+     and I type "food a" into the navbar search
      and I wait until "food allergy" appears in the autocomplete 
      and I click the autocomplete item "food allergy"
      then the title should be "Monarch Disease: food allergy (DOID:3044)"
@@ -27,5 +27,5 @@ Feature: Basic autocomplete works
     Given I go to page "/"
      and I type "ZRS" into the navbar search
      and I wait until "ZRS" appears in the autocomplete 
-     and I click the autocomplete item "ZRS"
+     and I click the autocomplete dropdown item "ZRS" with category "Human"
      then the title should be "Monarch Gene: LMBR1 (NCBIGene:64327)"

@@ -63,3 +63,10 @@ def step_impl(context, item):
     #print(context.browser.title)
     webelt = context.browser.find_element_by_partial_link_text(item)
     webelt.click()
+
+@given('I click the item "{item}" with category "{category}"')
+def step_impl(context, item, category):
+    link = item + ' ' + category;
+    webelt = context.browser.find_element_by_link_text(link)
+    webelt.click()
+
