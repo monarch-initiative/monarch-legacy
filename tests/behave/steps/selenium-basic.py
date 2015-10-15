@@ -44,8 +44,8 @@ def step_impl(context, url):
 ## Title check.
 @then('the title should be "{title}"')
 def step_impl(context, title):
-    #print(context.browser.title)
-    #print(title)
+    print(context.browser.title)
+    print(title)
     assert context.browser.title == title
 
 ## The empty title check, a bit of a special case for known "bad" page
