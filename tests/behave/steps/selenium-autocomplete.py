@@ -64,7 +64,7 @@ def step_impl(context, item):
     webelt = context.browser.find_element_by_partial_link_text(item)
     webelt.click()
 
-@given('I click the item "{item}" with category "{category}"')
+@given('I click the autocomplete dropdown item "{item}" with category "{category}"')
 def step_impl(context, item, category):
     link = item + ' ' + category;
     webelt = context.browser.find_element_by_link_text(link)
