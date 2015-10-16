@@ -23,6 +23,14 @@ Feature: Basic autocomplete works
      then the title should be "Monarch Disease: food allergy (DOID:3044)"
 
  @ui
+ Scenario: "ZRS" in the navbar search with a click goes to a gene page
+    Given I go to page "/"
+     and I type "ZRS" into the navbar search
+     and I wait until "ZRS" appears in the autocomplete 
+     and I click the autocomplete dropdown item "ZRS" with category "Human"
+     then the title should be "Monarch Gene: LMBR1 (NCBIGene:64327)"
+     
+ @ui
  Scenario: "hyper-be" in the navbar search with a click goes to a disease page
     Given I go to page "/"
      and I type "hyper-be" into the navbar search
