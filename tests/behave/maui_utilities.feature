@@ -68,7 +68,6 @@ Feature: NodeJS and RingoJS pass all tests.
      then the document should contain "HP:0012774"
      then the document should contain "HP:0002650"
 
-#This test is pretty flimsy, refactor to be a bit more flexible
 @ui
 Scenario: The "/query/orthologs/" endpoint returns the correct JSON
    Given I go to page "/query/orthologs/NCBIGene:6469.json"
