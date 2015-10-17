@@ -229,11 +229,29 @@ function addDownloadButton(pager, manager){
     
     jQuery('#' + span).append('&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;'+button.to_string());
     jQuery(button_elt).attr('title',title);
-
+    
+    // Get fields from personality
+    var fields_without_labels = ['source', 'is_defined_by', 'qualifier'];
+    
+    var personality = manager.get_personality();
+    var result_weights = global_golr_conf[personality]['result_weights'].split(/\s+/);
+    result_weights = result_weights.map( function (i) { return i.replace(/\^.+$/, ''); });
+    
+    var fields = result_weights.slice();
+    var splice_index = 1;
+    result_weights.forEach( function (val, index) {
+        if (fields_without_labels.indexOf(val) === -1) {
+            var result_label = val + '_label';
+            fields.splice(index+splice_index, 0, result_label);
+            splice_index++;
+        }
+    });
+    
     var forwardToDownload = function(){
-        var field_list = ['subject', 'subject_taxon', 'relation', 'object', 'object_taxon', 'evidence','source', 'is_defined_by', 'qualifier'];
+        var field_list = fields;
         var args_hash = {
-                rows : '100000'
+                rows : '100000',
+                header : "true"
         }
         
         url = manager.get_download_url(field_list, args_hash);
