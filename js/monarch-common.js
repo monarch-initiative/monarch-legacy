@@ -137,7 +137,6 @@ function getAnnotationScore() {
  * Returns: Updated map with equivalents filtered out
  */
 bbop.monarch.filter_equivalents = function (eq_graph, map) {
-    console.log(JSON.stringify(map));
     var equivalent_graph = new bbop.model.graph();
     equivalent_graph.load_json(eq_graph);
     
