@@ -8,6 +8,8 @@ install:
   - "sudo pip install jsonpath-rw"
 
 before_script:
+  - "export DISPLAY=:99.0"
+  - "/sbin/start-stop-daemon --start --quiet --pidfile /tmp/custom_xvfb_99.pid --make-pidfile --background --exec /usr/bin/Xvfb -- :99 -ac -screen 0 1280x1024x16"
   - "./start-server.sh &"
   - "sleep 25"
 
@@ -15,7 +17,7 @@ before_script:
 script: 
   - "make test"
   - "cd tests/behave"
-  - "TARGET=http://localhost:8080 BROWSER=phantomjs behave"
+  - "TARGET=http://localhost:8080 behave"
 
 # whitelist
 branches:
