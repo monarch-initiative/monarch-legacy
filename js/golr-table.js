@@ -234,6 +234,8 @@ function addDownloadButton(pager, manager){
     var fields_without_labels = ['source', 'is_defined_by', 'qualifier'];
     
     var personality = manager.get_personality();
+    
+    // We have a bbop.golr.conf api that may be able to replace this
     var result_weights = global_golr_conf[personality]['result_weights'].split(/\s+/);
     result_weights = result_weights.map( function (i) { return i.replace(/\^.+$/, ''); });
     
@@ -246,6 +248,9 @@ function addDownloadButton(pager, manager){
             splice_index++;
         }
     });
+    if (fields.indexOf('qualifier') == -1) {
+        fields.push('qualifier');
+    }
     
     var forwardToDownload = function(){
         var field_list = fields;
