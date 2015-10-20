@@ -11,6 +11,7 @@ install:
   - "sudo pip install jsonpath-rw"
 
 before_script:
+  - "export DISPLAY=:99.0"
   - "./start-server.sh &"
   - "sleep 25"
 
