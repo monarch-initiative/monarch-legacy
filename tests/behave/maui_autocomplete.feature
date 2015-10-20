@@ -31,10 +31,10 @@ Feature: Basic autocomplete works
      then the title should be "Monarch Gene: LMBR1 (NCBIGene:64327)"
      
 ## Commenting out, see https://github.com/monarch-initiative/monarch-app/issues/1017
- @ui
- Scenario: "hyper-be" in the navbar search with a click goes to a disease page
-    Given I go to page "/"
-     and I type "hyper-be" into the navbar search
-     and I wait until "Hyper-beta-alaninemia" appears in the autocomplete
-     and I click the autocomplete item "Hyper-beta-alaninemia"
-     then the title should be "Monarch Disease: Hyper-beta-alaninemia (OMIM:237400)"
+# @ui
+# Scenario: "hyper-be" in the navbar search with a click goes to a disease page
+#    Given I go to page "/"
+#     and I type "hyper-be" into the navbar search
+#     and I wait until "Hyper-beta-alaninemia" appears in the autocomplete
+#     and I click the autocomplete item "Hyper-beta-alaninemia"
+#     then the title should be "Monarch Disease: Hyper-beta-alaninemia (OMIM:237400)"
