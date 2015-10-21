@@ -1,5 +1,8 @@
 language: javascript
 
+before_install:
+  - "/sbin/start-stop-daemon --start --quiet --pidfile /tmp/custom_xvfb_99.pid --make-pidfile --background --exec /usr/bin/Xvfb -- :99 -ac -screen 0 1280x1024x16"
+
 # command to install dependencies
 install:
   - "./install.sh"
@@ -9,7 +12,6 @@ install:
 
 before_script:
   - "export DISPLAY=:99.0"
-  - "/sbin/start-stop-daemon --start --quiet --pidfile /tmp/custom_xvfb_99.pid --make-pidfile --background --exec /usr/bin/Xvfb -- :99 -ac -screen 0 1280x1024x16"
   - "./start-server.sh &"
   - "sleep 25"
 
