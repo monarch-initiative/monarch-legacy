@@ -640,10 +640,11 @@ a:hover .hilite, a:active .hilite {
     margin-left:20% !important;
     margin-right:20% !important;
     font-size:0.8em;
+    font-weight:500;
     font-style: italic;
     text-align:center;
     margin:auto;
-    background-color: white;
+    //background-color: white;
 }
 
 #feedback-window-container .modal
@@ -672,12 +673,12 @@ a:hover .hilite, a:active .hilite {
 }
 
 #feedback-main {
-  border:5px solid darkgray !important;
+  border:4px solid darkgray !important;
   border-radius: 15px !important;
   padding:20px;
   padding-top: 0;
   margin: auto;
-  background: lightyellow;
+  background: #EEEEEE;
 }
 
 #feedback-trigger {

@@ -29,22 +29,29 @@ jQuery(document).ready(function(){
         var feedbackUrl = '/feedback';
         var goalText = jQuery('#feedback-window-container #feedback-goal').val();
         var improveText = jQuery('#feedback-window-container #feedback-improve').val();
-        var OKQuoteText = jQuery('#feedback-window-container #feedback-OKQuote').val();
-        var OKFollowupText = jQuery('#feedback-window-container #feedback-OKFollowup').val();
+        var OKQuoteText = jQuery('#feedback-window-container #feedback-OKQuote').is(':checked');
+        var OKFollowupText = jQuery('#feedback-window-container #feedback-OKFollowup').is(':checked');
         var emailText = jQuery('#feedback-window-container #feedback-email').val();
         var additionalText = jQuery('#feedback-window-container #feedback-additional').val();
+        var now = new Date();
         var params = {
-            'feedback-form-version':        '1',
+            'feedback-form-metadata': {
+                'version':        '1',
+                'href':           window.location.href,
+                'time-utc':       now.toUTCString(),
+                'time-local':     now.toLocaleString()
+            },
             'feedback-form-response': {
                 'goal':                         goalText,
-                'improve':                         improveText,
-                'OKQuote':                         OKQuoteText,
-                'OKFollowup':                         OKFollowupText,
-                'email':                         emailText,
-                'additional':                         additionalText
+                'improve':                      improveText,
+                'OKQuote':                      OKQuoteText,
+                'OKFollowup':                   OKFollowupText,
+                'email':                        emailText,
+                'additional':                   additionalText
             }
         };
 
+        console.log('FEEDBACK:', params);
         jQuery.ajax({
             type : 'POST',
             url : feedbackUrl,
