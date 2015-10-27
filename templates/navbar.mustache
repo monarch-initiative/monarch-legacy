@@ -123,11 +123,11 @@
                           </div>
 
 
-                          <div class="form-group form-inline row">
-                            <label for="feedback-email" class="col-md-offset-1 col-3">
+                          <div class="form-group form-inline">
+                            <label for="feedback-email" style="padding-right:20px;">
                               E-mail (optional)
                             </label>
-                            <input class="col-9" style="margin:0;margin-top:2px;text-align:left;" type="text" id="feedback-email" value="">
+                            <input class="form-control" style="border:1px solid black;" type="text" id="feedback-email" value="">
                           </div>
 
                           <div class="form-group">
@@ -135,18 +135,20 @@
                             <textarea class="form-control" rows="2" id="feedback-additional"></textarea>
                           </div>
 
-                          <br/>
+                          <hr style="border:1px solid transparent;margin:5px;padding:0;"/>
+
                           <div class="form-group">
-                            <div style="width:30%;margin:auto;">
-                              <input id="feedback-submit-button" class="btn btn-primary btn-block" type="button" name="submit" value="Submit Feedback" />
+                            <div style="width:35%;margin:auto;">
+                              <input id="feedback-submit-button" class="btn btn-primary btn-sm btn-block" type="button" name="submit" value="Submit Feedback" />
                             </div>
                           </div>
                         </form>
 
-                        <br/>
+                        <hr style="border-top-color:darkgray;margin:0;margin-top:15px;margin-bottom:0;padding:0;"/>
+
                         <div class="row">
-                          <div class="col-12">
-                            <strong>Contact Monarch</strong>
+                          <div class="col-12 text-center">
+                            <h5 class="text-center">More Ways to Contact Monarch</h5>
                           </div>
                         </div>
                         <div class="row">
@@ -188,7 +190,7 @@
 
 <div style="position:fixed;z-index:100;top:50px;width:100%;">
     <div class="alert alert-success" id="alert_template" style="margin-left:20%;margin-right:20%;padding:20px;padding-right:30px;padding-top:-30px;display:none;">
-    <button type="button" class="close" style="opacity:1.0;background-color:transparent;margin-top:-10px;" data-dismiss="alert">
+    <button type="button" class="close" style="opacity:1.0;background-color:transparent;margin-top:-15px;" data-dismiss="alert">
         <span style="opacity:1.0;color:black;" aria-hidden="true">&times;</span>
     </button>
     <h4><center><span id="feedback-response"></span></center></h4>
