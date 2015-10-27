@@ -4883,7 +4883,8 @@
       "id" : null,
       "abbreviation" : "OMIA",
       "url_syntax" : "http://omia.angis.org.au/[example_id]",
-      "datatype" : null
+      "datatype" : null,
+      "image_path" : "/image/source-omia.png"
    },
    "mpd" : {
       "object" : "Identifier",
@@ -4991,5 +4992,46 @@
       "url_syntax" : "http://mygene.info/v2/query?q=[example_id]",
       "datatype" : null,
       "image_path" : "/image/source-mygene.png"
+   },
+   "mmrrc" : {
+      "object" : "Identifier",
+      "uri_prefix" : null,
+      "name" : "Mutant Mouse Resource and Research Centers",
+      "url_example" : "https://www.mmrrc.org/catalog/sds.php?mmrrc_id=000001",
+      "database" : "Mutant Mouse Resource and Research Centers",
+      "description" : "The MMRRC distributes and cryopreserves scientifically valuable, genetically engineered mouse strains and mouse ES cell lines with potential value for the genetics and biomedical research community. We are a national network of breeding and distribution facilities plus an information coordinating center serving together as NIH's premier repository of spontaneous and induced mutant mouse and cell lines.",
+      "example_id" : "MMRRC:000001",
+      "generic_url" : "http://www.mmrrc.org",
+      "fullname" : "Mutant Mouse Resource & Research Centers",
+      "id" : null,
+      "abbreviation" : "MMRRC",
+      "url_syntax" : "https://www.mmrrc.org/catalog/sds.php?mmrrc_id=[example_id]",
+      "datatype" : null,
+      "image_path" : "/image/source-mmrrc.png"
+   },
+   "gwascatalog" : {
+      "object" : null,
+      "uri_prefix" : null,
+      "name" : "GWAS Catalog",
+      "database" : "GWAS Catalog",
+      "description" : "The NHGRI-EBI Catalog of published genome-wide association studies",
+      "generic_url" : "http://www.ebi.ac.uk/gwas/",
+      "fullname" : "GWAS Catalog",
+      "abbreviation" : "GWAS",
+      "datatype" : null,
+      "image_path" : "/image/source-gwascatalog.png"
+   },
+   "animalqtldb" : {
+      "object" : null,
+      "uri_prefix" : null,
+      "name" : "AnimalQTLdb",
+      "database" : "AnimalQTLdb",
+      "description" : "The Animal Quantitative Trait Loci (QTL) Database (Animal QTLdb) strives to collect all publicly available trait mapping data, i.e. QTL (phenotype/expression, eQTL), candidate gene and association data (GWAS), and copy number variations (CNV) mapped to livestock animal genomes, in order to facilitate locating and comparing discoveries within and between species.",
+      "generic_url" : "http://www.animalgenome.org",
+      "fullname" : "Animal Quantitative Trait Loci Database",
+      "abbreviation" : "AnimalQTLdb",
+      "datatype" : null,
+      "image_path" : "/image/source-animalqtldb.png"
    }
+
 }
