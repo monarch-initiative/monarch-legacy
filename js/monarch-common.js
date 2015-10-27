@@ -5,6 +5,72 @@ if (typeof bbop.monarch == 'undefined') { bbop.monarch = {};}
 
 jQuery(document).ready(function(){
 
+    // Feedback form
+    $('#feedback-window-container #feedback-trigger').on('click', function(event) {
+      event.preventDefault();
+      event.stopPropagation();
+      $(this).parent().siblings().removeClass('open');
+      $(this).parent().toggleClass('open');
+
+      if ($('#feedback-window-container').hasClass('open')) {
+        jQuery('#alert_template button').click(function(e) {
+                $('#alert_template').fadeOut('slow');
+            });
+
+        $('#feedback-window-container .feedback-close').click(function(e) {
+          $('#feedback-window-container').removeClass('open');
+        });
+      }
+      else {
+      }
+    });
+
+    $('#feedback-window-container #feedback-submit-button').click(function(){
+        var feedbackUrl = '/feedback';
+        var goalText = jQuery('#feedback-window-container #feedback-goal').val();
+        var improveText = jQuery('#feedback-window-container #feedback-improve').val();
+        var OKQuoteText = jQuery('#feedback-window-container #feedback-OKQuote').val();
+        var OKFollowupText = jQuery('#feedback-window-container #feedback-OKFollowup').val();
+        var emailText = jQuery('#feedback-window-container #feedback-email').val();
+        var additionalText = jQuery('#feedback-window-container #feedback-additional').val();
+        var params = {
+            'feedback-form-version':        '1',
+            'feedback-form-response': {
+                'goal':                         goalText,
+                'improve':                         improveText,
+                'OKQuote':                         OKQuoteText,
+                'OKFollowup':                         OKFollowupText,
+                'email':                         emailText,
+                'additional':                         additionalText
+            }
+        };
+
+        jQuery.ajax({
+            type : 'POST',
+            url : feedbackUrl,
+            data : params,
+            dataType: "json",
+            error: function(){
+                console.log('ERROR: posting feedback to: ', feedbackUrl);
+            },
+            success: function(data) {
+                jQuery('#feedback-window-container').removeClass('open');
+
+                // window.setTimeout(function() {
+                //         $('#alert_template').fadeOut('slow');
+                //         $("#alert_template span").remove();
+                //     },
+                //     13000);
+                $("#alert_template #feedback-response").text('Thanks for your feedback');
+                $('#alert_template').fadeIn('slow');
+            }
+        });
+    });
+
+    $("#feedback-window-container #simple-menu").draggable({
+        handle: "#feedback-handle"
+    });
+
     /* This displays the help text about the annotation sufficiency score upon
      * hovering over the blue question mark box. */
     jQuery('#annotationscore > span.annotatequestion').hover(function() {
