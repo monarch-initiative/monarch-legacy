@@ -280,7 +280,7 @@ bbop.monarch.filter_equivalents = function (eq_graph, map) {
 bbop.monarch.remove_equivalent_ids = function (map, id_list, response) {
     //TODO pass server in using puptent var
       var ids = id_list.join('&id=');
-      var qurl = "http://geoffrey.crbs.ucsd.edu:9000/scigraph/graph/neighbors?id=" 
+      var qurl = "http://lurch.crbs.ucsd.edu:9000/scigraph/graph/neighbors?id=" 
           + ids + "&depth=3&blankNodes=false&relationshipType=equivalentClass"
           + "&direction=BOTH&project=%2A";
       jQuery.ajax({
