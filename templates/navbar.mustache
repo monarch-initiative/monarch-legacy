@@ -63,15 +63,116 @@
                         <li><a href="/page/glossary">Glossary</a></li>
                     </ul>
                 </li>
-                <li class="dropdown">
-                    <a href="#" class="dropdown-toggle" data-toggle="dropdown">
-                        <i class="icon-th-large"></i>Contact <b class="caret"></b></a>
-                    <ul class="dropdown-menu">
-                        <li><a href="https://github.com/monarch-initiative/monarch-app/issues" target="_blank">Issue Tracker</a></li>
-                        <li><a href="mailto:info@monarchinitiative.org" target="_blank">Email Us</a></li>
-                        <li><a href="http://mail.monarchinitiative.org/mailman/listinfo/users" target="_blank">Join Listserve</a></li>
-                    </ul>
+
+                <li id="feedback-window-container" class="dropdown">
+                  <button
+                    id="feedback-trigger"
+                    href="#simple-menu"
+                    data-backdrop="false"
+                    data-toggle="modal"
+                    class="btn btn-inverse btn-default dropdown-toggle"
+                    role="button"
+                    aria-haspopup="true"
+                    aria-expanded="false">
+                    &nbsp;Feedback&nbsp;
+                  </button>
+                  <ul id="simple-menu" class="dropdown-menu simple-menu modal">
+                    <li id="feedback-handle" xclass="modal-dialog">
+                      <div id="feedback-main">
+                        <button class="close feedback-close"
+                          data-dismiss="modal" xdata-target="#simple-menu">
+                          <span aria-hidden="true">&times;</span>
+                        </button>
+
+                        <div class="feedback-drag-instructions">
+                            This window may be moved by dragging here
+                        </div>
+                        <form style="padding:0;">
+                          <h5>
+                          Specific feedback from users like you is essential to guide future development and improvement of the Monarch experience. We welcome you to answer the questions below and/or contact us via links below.
+                          </h5>
+
+                          <div class="form-group">
+                            <label for="goal">What did you come to the Monarch site to do?</label>
+                            <textarea class="form-control" rows="2" id="feedback-goal"></textarea>
+                          </div>
+
+                          <div class="form-group">
+                            <label for="improve">What could we improve to make this task easier for you?</label>
+                            <textarea class="form-control" rows="2" id="feedback-improve"></textarea>
+                          </div>
+
+                          <br/>
+
+                          <div class="form-group form-inline">
+                            <div class="checkbox">
+                              <label>
+                                <input type="checkbox" id="feedback-OKQuote">
+                                <span>&nbsp;It is OK to quote my feedback</span>
+                              </label>
+                            </div>
+                          </div>
+
+                          <div class="form-group form-inline">
+                            <div class="checkbox">
+                              <label>
+                                <input type="checkbox" id="feedback-OKFollowup">
+                                <span>&nbsp;It is OK to follow up with me about my feedback</span>
+                              </label>
+                            </div>
+                          </div>
+
+
+                          <div class="form-group form-inline">
+                            <label for="feedback-email" style="padding-right:20px;">
+                              E-mail (optional)
+                            </label>
+                            <input class="form-control" style="border:1px solid black;" type="text" id="feedback-email" value="">
+                          </div>
+
+                          <div class="form-group">
+                            <label for="feedback-additional">Any additional comments?</label>
+                            <textarea class="form-control" rows="2" id="feedback-additional"></textarea>
+                          </div>
+
+                          <hr style="border:1px solid transparent;margin:5px;padding:0;"/>
+
+                          <div class="form-group">
+                            <div style="width:35%;margin:auto;">
+                              <input id="feedback-submit-button" class="btn btn-primary btn-sm btn-block" type="button" name="submit" value="Submit Feedback" />
+                            </div>
+                          </div>
+                        </form>
+
+                        <hr style="border-top-color:darkgray;margin:0;margin-top:15px;margin-bottom:0;padding:0;"/>
+
+                        <div class="row">
+                          <div class="col-12 text-center">
+                            <h5 class="text-center">More Ways to Contact Monarch</h5>
+                          </div>
+                        </div>
+                        <div class="row">
+                          <div class="col-3">
+                              <a href="https://github.com/monarch-initiative/monarch-app/issues" target="_blank">Issue Tracker</a>
+                          </div>
+                          <div class="col-3">
+                              <a href="mailto:info@monarchinitiative.org" target="_blank">Email Us</a>
+                          </div>
+                          <div class="col-3">
+                              <a href="http://mail.monarchinitiative.org/mailman/listinfo/users" target="_blank">Join Listserve</a>
+                          </div>
+                          <div class="col-3">
+                              <a href="https://twitter.com/MonarchInit" target="_blank">Follow us on Twitter</a>
+                          </div>
+                        </div>
+                      </div>
+
+                    </li>
+                  </ul>
                 </li>
+
+
+
             </ul>
             {{#monarch_nav_search_p}}
             <form id="search_form" class="navbar-form navbar-right searchspace" action="/search" role="search">
@@ -86,3 +187,13 @@
         </div>
     </div>
 </div>
+
+<div style="position:fixed;z-index:100;top:50px;width:100%;">
+    <div class="alert alert-success" id="alert_template" style="margin-left:20%;margin-right:20%;padding:20px;padding-right:30px;padding-top:-30px;display:none;">
+    <button type="button" class="close" style="opacity:1.0;background-color:transparent;margin-top:-15px;" data-dismiss="alert">
+        <span style="opacity:1.0;color:black;" aria-hidden="true">&times;</span>
+    </button>
+    <h4><center><span id="feedback-response"></span></center></h4>
+    </div>
+</div>
+

@@ -122,7 +122,7 @@ function navbar_search_init(in_search_id, in_form_id){
 		            dataType:"json",
 		            error: function (){
 		                console.log('could not get taxon for genes');
-		                remove_equivalent_ids(map, id_list, response);
+		                bbop.monarch.remove_equivalent_ids(map, id_list, response);
 		            },
 		            success: function ( data ){
 		                var graph = new bbop.model.graph();
@@ -148,13 +148,15 @@ function navbar_search_init(in_search_id, in_form_id){
 	                            }
 	                        }
                         });
-		                remove_equivalent_ids(map, id_list, response);
+		                bbop.monarch.remove_equivalent_ids(map, id_list, response);
 		            }
 
 		        });
 		    } else {
-		        remove_equivalent_ids(map, id_list, response);
+		        bbop.monarch.remove_equivalent_ids(map, id_list, response);
 		    }
+		    } else {
+		        response(map);
 		    }
 		};
 
@@ -201,87 +203,6 @@ function navbar_search_init(in_search_id, in_form_id){
 	};
     }
 }
-
-var remove_equivalent_ids = function (map, id_list, response) {
-  //TODO pass server in using puptent var
-    var ids = id_list.join('&id=');
-    var qurl = "http://geoffrey.crbs.ucsd.edu:9000/scigraph/graph/neighbors?id=" 
-        + ids + "&depth=3&blankNodes=false&relationshipType=equivalentClass"
-        + "&direction=BOTH&project=%2A";
-    jQuery.ajax({
-        url: qurl,
-        dataType:"json",
-        error: function (){
-            console.log('error fetching equivalencies');
-            response(map);
-        },
-        success: function ( data ){
-            var equivalent_graph = new bbop.model.graph();
-            equivalent_graph.load_json(data);
-            
-            //Need to put this in one place
-            equivalent_graph.get_descendent_subgraph = function(obj_id, pred){   
-                var anchor = this;
-                var edge_list = new Array();
-                var descendent_graph = new bbop.model.graph();
-                if (typeof anchor.seen_node_list === 'undefined') {
-                    anchor.seen_node_list = [obj_id];
-                }
-                
-                anchor.get_child_nodes(obj_id, pred).forEach( function(sub_node) {
-                    var sub_id = sub_node.id();
-                    if (anchor.seen_node_list.indexOf(sub_id) > -1){
-                        return;
-                    }
-                    anchor.seen_node_list.push(sub_id);
-                    descendent_graph.add_edge(anchor.get_edge(sub_id, obj_id, pred));
-                    descendent_graph.add_node(anchor.get_node(sub_id));
-                    descendent_graph.add_node(anchor.get_node(obj_id));
-                    descendent_graph.merge_in(anchor.get_descendent_subgraph(sub_id, pred));
-                });
-                    
-                return descendent_graph; 
-            }
-            
-            for (var i=0; i < map.length; i++) {
-                var id = map[i]['id'];
-                var eq_node_list = [];
-                //Get all equivalent nodes of v[i][0]
-                var equivalent_nodes = equivalent_graph.get_ancestor_subgraph(id, 'equivalentClass')
-                .all_nodes();
-                var other_eq_nodes = equivalent_graph.get_descendent_subgraph(id, 'equivalentClass')
-                .all_nodes();
-                
-                eq_node_list = equivalent_nodes.map(function(i){return i.id();});
-                var temp_list = other_eq_nodes.map(function(i){return i.id();});
-                
-                eq_node_list.push.apply(eq_node_list, temp_list);
-                //equivalent_node_list.map
-                
-                for (var k=i+1; k < map.length; k++) {
-                    var node_id = map[k]['id'];
-                    if (node_id) {
-                        if (eq_node_list.indexOf(node_id) > -1){
-                            
-                            // If the id is from MESH
-                            if (/^MESH/.test(id)){
-                                map.splice(i,1)
-                                i--;
-                                break;
-                            } else {
-                                map.splice(k, 1);
-                                k--;
-                                continue;
-                            }
-                        }
-                    }
-            
-                }
-            }
-            response(map);  
-        }
-    });
-};
 
 // Run initializer on jQuery ready event.
 jQuery(document).ready(function(){

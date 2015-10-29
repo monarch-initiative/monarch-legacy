@@ -1,6 +1,82 @@
 /* This script document contains functions relating to general Monarch pages. */
 
+if (typeof bbop == 'undefined') { var bbop = {};}
+if (typeof bbop.monarch == 'undefined') { bbop.monarch = {};}
+
 jQuery(document).ready(function(){
+
+    // Feedback form
+    $('#feedback-window-container #feedback-trigger').on('click', function(event) {
+      event.preventDefault();
+      event.stopPropagation();
+      $(this).parent().siblings().removeClass('open');
+      $(this).parent().toggleClass('open');
+
+      if ($('#feedback-window-container').hasClass('open')) {
+        jQuery('#alert_template button').click(function(e) {
+                $('#alert_template').fadeOut('slow');
+            });
+
+        $('#feedback-window-container .feedback-close').click(function(e) {
+          $('#feedback-window-container').removeClass('open');
+        });
+      }
+      else {
+      }
+    });
+
+    $('#feedback-window-container #feedback-submit-button').click(function(){
+        var feedbackUrl = '/feedback';
+        var goalText = jQuery('#feedback-window-container #feedback-goal').val();
+        var improveText = jQuery('#feedback-window-container #feedback-improve').val();
+        var OKQuoteText = jQuery('#feedback-window-container #feedback-OKQuote').is(':checked');
+        var OKFollowupText = jQuery('#feedback-window-container #feedback-OKFollowup').is(':checked');
+        var emailText = jQuery('#feedback-window-container #feedback-email').val();
+        var additionalText = jQuery('#feedback-window-container #feedback-additional').val();
+        var now = new Date();
+        var params = {
+            'feedback-form-metadata': {
+                'version':        '1',
+                'href':           window.location.href,
+                'time-utc':       now.toUTCString(),
+                'time-local':     now.toLocaleString()
+            },
+            'feedback-form-response': {
+                'goal':                         goalText,
+                'improve':                      improveText,
+                'OKQuote':                      OKQuoteText,
+                'OKFollowup':                   OKFollowupText,
+                'email':                        emailText,
+                'additional':                   additionalText
+            }
+        };
+
+        console.log('FEEDBACK:', params);
+        jQuery.ajax({
+            type : 'POST',
+            url : feedbackUrl,
+            data : params,
+            dataType: "json",
+            error: function(){
+                console.log('ERROR: posting feedback to: ', feedbackUrl);
+            },
+            success: function(data) {
+                jQuery('#feedback-window-container').removeClass('open');
+
+                // window.setTimeout(function() {
+                //         $('#alert_template').fadeOut('slow');
+                //         $("#alert_template span").remove();
+                //     },
+                //     13000);
+                $("#alert_template #feedback-response").text('Thanks for your feedback');
+                $('#alert_template').fadeIn('slow');
+            }
+        });
+    });
+
+    $("#feedback-window-container #simple-menu").draggable({
+        handle: "#feedback-handle"
+    });
 
     /* This displays the help text about the annotation sufficiency score upon
      * hovering over the blue question mark box. */
@@ -110,185 +186,116 @@ function getAnnotationScore() {
     }    
 }
 
-function genTable(spec, rows) {
-    var content = "";
-    content += "<table class='table table-striped table-condensed simpletable'>\n";
-    if (rows != null) {
-        content += "<thead>\n<tr>\n";
-        for (var j = 0; j < spec.columns.length; j++) {
-            var colname = spec.columns[j].name;
-            var datatype = tableSortDataType(colname);
-            content += "<th data-sort='" + datatype + "'>" + colname;
-            var sortingsupported = ["string", "float", "frequency"];
-            if (sortingsupported.indexOf(datatype) != -1) {
-                content += "<span class=\"arrow\"> &#x2195;</span>";
-            }
-            content += "</th>\n";
+/*
+ * Function: filter_equivalents
+ * 
+ * Arguments: 
+ *    : eq_graph - raw json in the structure of a bbop.model.graph
+ *                 containing equivalency mapping
+ *
+ *    : map - list of objects containing the properties id, label,
+ *            category (optional), and tag (optional)
+ *            for example:
+ *             [
+ *               {
+ *                 "id":"NCBIGene:30269","label":"shh",
+ *                 "category":"gene","tag":"Zebra Fish""
+ *                },
+ *               {
+ *                 "id":"NCBIGene:100512749","label":"SHH",
+ *                 "category":"gene","tag":"Swine"
+ *               }
+ *             ]
+ *
+ * Returns: Updated map with equivalents filtered out
+ */
+bbop.monarch.filter_equivalents = function (eq_graph, map) {
+    var equivalent_graph = new bbop.model.graph();
+    equivalent_graph.load_json(eq_graph);
+    
+    //TODO remove this once we enable the monarch API on the client side
+    equivalent_graph.get_descendent_subgraph = function(obj_id, pred){   
+        var anchor = this;
+        var edge_list = new Array();
+        var descendent_graph = new bbop.model.graph();
+        if (typeof anchor.seen_node_list === 'undefined') {
+            anchor.seen_node_list = [obj_id];
         }
-        content += "</tr>\n</thead>\n<tbody>\n";
-        for (var i = 0; i < rows.length; i++) {
-            content += "<tr>\n";
-            for (var j=0; j< spec.columns.length; j++) {
-                var colspec = spec.columns[j];
-                var ontSpace = "";
-                if (j == 0 && spec.columns.length > 1) {
-                    if (spec.columns[1].val(rows[i]) == "equivalentClass") {
-                        ontSpace += "&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;";
-                    } else if (spec.columns[1].val(rows[i]) == "subClassOf") {
-                        ontSpace += "&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;";
+        
+        anchor.get_child_nodes(obj_id, pred).forEach( function(sub_node) {
+            var sub_id = sub_node.id();
+            if (anchor.seen_node_list.indexOf(sub_id) > -1){
+                return;
+            }
+            anchor.seen_node_list.push(sub_id);
+            descendent_graph.add_edge(anchor.get_edge(sub_id, obj_id, pred));
+            descendent_graph.add_node(anchor.get_node(sub_id));
+            descendent_graph.add_node(anchor.get_node(obj_id));
+            descendent_graph.merge_in(anchor.get_descendent_subgraph(sub_id, pred));
+        });
+            
+        return descendent_graph; 
+    }
+    
+    for (var i=0; i < map.length; i++) {
+        var id = map[i]['id'];
+        var eq_node_list = [];
+        
+        //Get all equivalent nodes of v[i][0]
+        var equivalent_nodes = 
+            equivalent_graph.get_ancestor_subgraph(id, 'equivalentClass')
+                            .all_nodes();
+        var other_eq_nodes = 
+            equivalent_graph.get_descendent_subgraph(id, 'equivalentClass')
+                            .all_nodes();
+        
+        eq_node_list = equivalent_nodes.map(function(i){return i.id();});
+        var temp_list = other_eq_nodes.map(function(i){return i.id();});
+        
+        eq_node_list.push.apply(eq_node_list, temp_list);
+        
+        for (var k=i+1; k < map.length; k++) {
+            var node_id = map[k]['id'];
+            if (node_id) {
+                if (eq_node_list.indexOf(node_id) > -1){
+                    
+                    // MESH terms have a lower priority
+                    if (/^MESH/.test(id)){
+                        map.splice(i,1)
+                        i--;
+                        break;
+                    } else {
+                        map.splice(k, 1);
+                        k--;
+                        continue;
                     }
                 }
-                content += "<td>"+ontSpace+colspec.val(rows[i])+"</td>";                    
             }
-            content += "\n</tr>\n";            
-        }
-        content += "</tbody>\n";
-    }
-    content + "</table>\n";
-    return content;
-}
-
-function convChars (str) {
-
-    // convert label.. modified from 
-    //http://stackoverflow.com/questions/784586/convert-special-characters-to-
-    //html-in-javascript 
-    var converted = str;   
-    if (typeof converted === 'string' && converted !== ""
-            && converted !== undefined && converted !== null) {
-
-        //first, change < > " ' #
-        var c = {'<':'&lt;', '>':'&gt;',  '"':'&quot;', "'":'&#039;', '#':'&#035;' };
-        converted =  str.replace( /[<>'"#]/g, function(s) { return c[s]; } );
     
-        // now, we must convert &, but only if it is not found before any of those..
-        // see http://fineonly.com/solutions/regex-exclude-a-string for a good eplantion of the 
-        // use of ?! for "string to exclude..
-        converted = converted.replace(/&(?!(lt;|gt;|quot;|#039;|#035;))/g,'&amp;');
-        if (typeof converted == 'undefined') {
-            converted = '';
         }
     }
-    return converted;
-}
+    return map;
+};
 
-//Function:
-//- type: object type/category
-//- obj: either { id : id, label : label} or a list of these
-function genObjectHref(type,obj,fmt) {
-    if (obj == null) {
-       return "";
-    }
-    if (obj.type != null && obj.type.id != null) {
-       return genObjectHref(type, obj.type, fmt);
-    }
-    if (obj.map != null) {
-        return obj.map(function(x){return genObjectHref(type,x,fmt)}).join(" ");
-    }
-
-    var url = genURL(type, obj, fmt);
-    var label = obj.label;
-
-    // must escape label here. How do to this in JAvascript.
-    if (label == null || label=="") {
-        label = obj.id;
-    } else {
-        label = convChars(label);
-    }
-    
-    return '<a href="'+url+'">'+label+'</a>';
-}
-
-function genTableOfSearchDataResults(results) {
-    return genTable(
-        {
-            columns: [
-                {name: "category",
-                 val: function(a){ return convChars(a.category) }
-                },
-                {name: "match",
-                 val: function(a){ return genObjectHref(a.category, a) }
-                },
-                {name: "taxon",
-                val : function(a) {return genObjectHref('taxon',a.taxon) }
-                }
-            ]
-        },
-        results);
-}
-
-//Function: used to assign data types to each column for sortable tables
-//- name: name of column
-function tableSortDataType(name) {
- var string_types = ["allele", "associated with", "association type", "authors", "data type", "disease",
-     "similar diseases", "evidence", "gene", "gene A", "gene B", "gene B organism", "genotype", "hit",
-     "homolog", "homology class", "inferred from", "interaction detection method", "interaction type",
-     "journal", "model", "model species", "model type", "most informative shared phenotype", "mutation",
-     "onset", "organism", "other matching phenotypes", "pathway", "phenotype", "phenotype description",
-     "qualifier", "reference", "references", "relationship", "species", "title", "variant"];
- var float_types = ["combined score", "phenotype similarity score", "rank", "year"];
- if (string_types.indexOf(name) != -1) {
-     return "string";
- } else if (float_types.indexOf(name) != -1) {
-     return "float";
- } else {
-     return name;
- }
-}
-
-function genURL(type,obj,fmt) {
-    var id = obj.id;
-    var label = obj.label;
-    if (id == null && label == null) {
-        //HACK - backup case for when a plain id is given
-        id = obj;
-        label = id;
-    }
-    if (type == 'object') {
-        // 'object' is a generic type that should be mapped to 
-        // a more specific type, based on ID.
-        // Note: currently incomplete
-        if (/^(ORPHANET|OMIM|MIM)/.test(id)) {
-            type = 'disease'
-        }
-        else if (/^(ORPHANET|OMIM|MIM)/.test(id)) {
-            type = 'disease'
-        }
-        else if (/^(MP|HP|ZP)/.test(id)) {
-            type = 'phenotype'
-        }
-        else {
-            type = 'unknown';
-            console.error("Could not map: "+id);
-        }
-    }
-    if (type == 'source') {
-        var xrefblob = getXrefObjByPrefix(label);
-        var url = "";
-        if (xrefblob != null) {
-            url = xrefblob.generic_url;
-        } else {
-            //refer to the neurolex wiki, as before
-            // E.g. neurolex.org/wiki/Nif-0000-21427
-            if (id != null) {
-                var toks = id.split("-");
-                toks.pop();
-                var id_trimmed = toks.join("-");
-                url = "http://neurolex.org/wiki/"+id_trimmed;
-            }
-        }
-        return url;
-    }
-    if (type == 'obopurl') {
-        return "http://purl.obolibrary.org/obo/" + id
-    }
-    var url = '/'+type+'/'+id;
-    
-    if (fmt != null) {
-        url = url + '.' + fmt;
-    }
-    return url;
-}
+bbop.monarch.remove_equivalent_ids = function (map, id_list, response) {
+    //TODO pass server in using puptent var
+      var ids = id_list.join('&id=');
+      var qurl = "http://lurch.crbs.ucsd.edu:9000/scigraph/graph/neighbors?id=" 
+          + ids + "&depth=3&blankNodes=false&relationshipType=equivalentClass"
+          + "&direction=BOTH&project=%2A";
+      jQuery.ajax({
+          url: qurl,
+          dataType:"json",
+          error: function (){
+              console.log('error fetching equivalencies');
+              response(map);
+          },
+          success: function ( data ){
+              map = bbop.monarch.filter_equivalents(data, map);
+              response(map);  
+          }
+      });
+};
 
 if (typeof exports === 'object') {
     exports.getAnnotationScore = getAnnotationScore;

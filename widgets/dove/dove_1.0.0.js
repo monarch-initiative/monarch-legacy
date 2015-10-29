@@ -112,6 +112,7 @@ monarch.dovechart.prototype.makeGraphDOM = function(html_div, data){
               "</form> ");
       
       // Ajax spinner
+      // TODO replace with a font awesome spinner
       jQuery(html_div+" .interaction li .settings").append("<div class=\"ajax-spinner\">"+
                           "<div class=\"ortholog-spinner\" > " +
                             "<div class=\"spinner-container container1\">" +
@@ -1072,8 +1073,12 @@ monarch.dovechart.prototype.getDataAndTransitionOnClick = function(node, histogr
                 jQuery(self.html_div+" .leaf-msg").html('There are no subclasses of <br/>'+node.fullLabel);
                 jQuery(self.html_div+" .leaf-msg").show().delay(3000).fadeOut();
                 self.activateYAxisText(histogram,data, barGroup, bar);
+                // Scroll to top of chart
+                jQuery('html, body').animate({ scrollTop: jQuery(self.html_div).offset().top - 50 }, 0);
             } else {
                 self.transitionToNewGraph(histogram, node, barGroup,bar, node.id);
+                // Scroll to top of chart
+                jQuery('html, body').animate({ scrollTop: jQuery(self.html_div).offset().top - 50 }, 0);
             }
         };
     

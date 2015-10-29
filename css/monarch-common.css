@@ -595,3 +595,116 @@ a:hover .hilite, a:active .hilite {
 .amigo-jumbotron-override .lead {
     font-size: 16px;
 }
+
+
+
+.main-content {
+  background-color:#EEEEEE;
+}
+
+#feedback-window-container .form-group {
+  margin: 0;
+  padding: 0;
+}
+
+#feedback-window-container .form-group label {
+  margin: 0;
+  padding: 0;
+  padding-top: 5px;
+}
+
+#feedback-window-container .form-group textarea {
+  margin: 0;
+  //padding: 0;
+  border:1px solid black;
+}
+
+#feedback-window-container .form-group .checkbox label {
+  margin: 0;
+  padding: 0;
+}
+
+
+#feedback-window-container .form-group .checkbox span {
+  margin: 0;
+  padding: 0;
+}
+
+.feedback-close {
+  margin-top:-2px;
+  margin-right:-10px;
+}
+
+.feedback-drag-instructions {
+    margin:0;
+    margin-left:20% !important;
+    margin-right:20% !important;
+    font-size:0.8em;
+    font-weight:500;
+    font-style: italic;
+    text-align:center;
+    margin:auto;
+    //background-color: white;
+}
+
+#feedback-window-container .modal
+{
+    overflow: hidden;
+}
+
+#feedback-window-container .modal-dialog{
+    position:relative;
+    margin: auto;
+    margin-right: 0;
+    margin-left: 0;
+    width:100%;
+    border:none;
+}
+
+#alert_template {
+    border:2px solid darkgray;
+    border-radius: 10px;
+}
+
+#alert_template #feedback-response {
+    text-align: center;
+    font-weight: 500;
+    color: black;
+}
+
+#feedback-main {
+  border:4px solid darkgray !important;
+  border-radius: 15px !important;
+  padding:20px;
+  padding-top: 0;
+  margin: auto;
+  background: #EEEEEE;
+}
+
+#feedback-trigger {
+    height:30px;
+    margin-top: 0;
+    color: lightgreen;
+}
+
+#feedback-handle {
+  margin: auto;
+  padding: 0;
+}
+
+
+#feedback-window-container.dropdown ul.simple-menu {
+  position: fixed;
+  width: 90%;
+  padding: 0 !important;
+  margin:auto !important;;
+  top: 80px;
+  border: none;
+  background: transparent;
+}
+
+.navbar .dropdown-menu {
+  border-radius: 0;
+  box-shadow: none;
+}
+

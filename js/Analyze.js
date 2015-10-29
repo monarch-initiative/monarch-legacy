@@ -573,13 +573,18 @@ function AnalyzeInit(uploaded_data){
 				    },
 				    success: function(data) {
 					ll("auto success");
-					response(jQuery.map(data,
-							    function(item) {
-								return {
-								    'label': item.label,
-								    'id': item.id
-								};
-							    }));
+					var map = jQuery.map(data, function(item) {
+                        return {
+                            'label': item.label,
+                            'id': item.id
+                        };
+                    });
+					if (map.length > 0) {
+					    var id_list = map.map( function(i) { return i.id; });
+					    bbop.monarch.remove_equivalent_ids(map, id_list, response);   
+					} else {
+					    response(map);
+					}
 				    }
 				});
 		},
