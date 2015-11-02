@@ -36,10 +36,12 @@ def after_all(context):
     context.browser.quit()
 
 # Run this before each scenario
-# This works around a problem where the maui_gene test works fine independently, but
-# seems to fail randomly when run after the last test in maui_basic.
-# def before_scenario(context, scenario):
-#     time.sleep(1)
+# This works around a problem with the FireFox driver where the window size periodically
+# gets smaller and hides the navbar search field.
+#
+def before_scenario(context, scenario):
+    context.browser.set_window_size(1100, 800)
+    time.sleep(1)
 
 
 ###
