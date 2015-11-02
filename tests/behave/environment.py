@@ -44,7 +44,6 @@ def before_scenario(context, scenario):
     time.sleep(1)
 
 def after_scenario(context, scenario):
-    dump_log(context, scenario.name)
     time.sleep(20)
     pass
 
