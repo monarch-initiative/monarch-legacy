@@ -43,6 +43,11 @@ def before_scenario(context, scenario):
     context.browser.set_window_size(1100, 800)
     time.sleep(1)
 
+def after_scenario(context, scenario):
+    dump_log(context, scenario.name)
+    time.sleep(20)
+    pass
+
 
 ###
 ### Working on a more complex run environment for the future.
