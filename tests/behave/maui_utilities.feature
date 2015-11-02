@@ -8,14 +8,14 @@ Feature: NodeJS and RingoJS pass all tests.
      then the document should contain "Search Results: twist"
 
 @ui
- Scenario: The "/sources" endpoint returns the correct HTML
-    Given I go to page "/sources"
+ Scenario: The "/about/sources" endpoint returns the correct HTML
+    Given I go to page "/about/sources"
      then the title should be "Data Sources"
      then the document should contain "Data Sources"
 
 @ui
- Scenario: The "/sources.json" endpoint returns the correct JSON
-    Given I go to page "/sources.json"
+ Scenario: The "/about/sources.json" endpoint returns the correct JSON
+    Given I go to page "/about/sources.json"
      then the document should contain '"resource_description":"BioGRID is'
 
 @ui
