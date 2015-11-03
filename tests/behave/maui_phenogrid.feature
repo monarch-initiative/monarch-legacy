@@ -5,7 +5,8 @@ Feature: Phenogrid Works
 
 @ui
 Scenario: Phenotype Analysis Phenogrid works
-    Given I go to slow page "/disease/OMIM:105830" and wait for id "pg_svg"
+    Given I go to page "/disease/OMIM:105830"
+      then wait for id "pg_svg"
       then the title should be "Monarch Disease: Angelman syndrome (OMIM:105830)"
       and the document should contain "Phenotype Similarity Comparison"
 
@@ -16,7 +17,8 @@ Scenario: Documentation example phenogrid appears
 
 @ui
 Scenario: Loading the iframe content for Monarch Phenotype Grid Widget loads a page with the correct title
-   Given I go to slow page "/node_modules/phenogrid/index.html" and wait for id "pg_svg"
+   Given I go to page "/node_modules/phenogrid/index.html"
+     then wait for id "pg_svg"
      then the title should be "Monarch Phenotype Grid Widget"
      and the document should contain "Phenogrid is a Javascript component that visualizes"
      and the document should contain "Phenotype Similarity Comparison"
