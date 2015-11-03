@@ -333,7 +333,7 @@ p {
 @media (min-width: 800px) {
     #collab-spectrum img {
 	    display:block;
-	    margin:0 auto;
+	    margin:10px auto 20px;
 	    width:80%;
     }
 }
