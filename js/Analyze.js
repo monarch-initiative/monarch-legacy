@@ -702,6 +702,8 @@ function AnalyzeInit(uploaded_data){
         var text = jQuery("#analyze_auto_target").val();
         var species = jQuery("#target").val();
         var limit = jQuery("#analyze_limit_input").val();
+        var orthologs = jQuery("#ortholog-list").val();
+        var paralogs = jQuery("#paralog-list").val();
 
         
         if (typeof urlParams.user_input != 'undefined' 
@@ -745,6 +747,8 @@ function AnalyzeInit(uploaded_data){
             searchResultLimit: limit,
 			owlSimFunction: urlParams.mode,
 			geneList: urlParams.geneList, // geneList is only used when in compare mode - Zhou
+            orthologList: orthologs, // additional genes based on relationship with geneList
+            paralogList: paralogs, // additional genes based on relationship with geneList
 			providedData: urlParams.user_input
 		});
 	};
