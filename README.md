@@ -10,9 +10,14 @@ The live version of the Monarch Initiative web interface is at [http://monarchin
 
 ### Transitioned RingoJS vs NodeJS
 
-The Monarch Initiative web application server has been migrated from the RingoJS server-side Javascript framework to the NodeJS framework. The current production version of Monarch is still based upon RingoJS, which uses the Rhino Javascript engine within a Java Virtual Machine. The same Javascript source code that implements Monarch is now able to run under NodeJS, although we are still performing tests and quality assurance. The instructions below refer to the NodeJS implementation unless otherwise clarified as RingoJS-specific.
+The Monarch Initiative web application server has been migrated from the RingoJS server-side Javascript framework to the NodeJS framework. Previous production versions of Monarch prior to October 2015 were based upon RingoJS, which uses the Rhino Javascript engine within a Java Virtual Machine. The same Javascript source code that implements Monarch is now running under NodeJS. The instructions below refer to the NodeJS implementation unless otherwise clarified as RingoJS-specific.
 
 ## Quickstart
+
+These instructions assume that you have a recent NodeJS and npm installed for your particular platform. At the time of this writing, Monarch is known to work with the following versions:
+
+-   npm: '3.3.10'
+-	node: '0.12.7'
 
 After downloading the Monarch GitHub repository, change your working directory to the downloaded source code and then type:
 
@@ -34,7 +39,10 @@ Or view a particular disease, e.g:
 
  * http://127.0.0.1:8080/disease/DOID_14692
 
+
 ### Legacy RingoJS installation and launch instructions
+
+The RingoJS implementation of Monarch is no longer actively tested, and may be unsupported in the future.
 
 1. Install RingoJS - http://ringojs.org
 
@@ -43,6 +51,7 @@ Or view a particular disease, e.g:
 2. Run app
 
     ./ringo-server.sh
+
 
 ## Detailed Launch Instructions
 
