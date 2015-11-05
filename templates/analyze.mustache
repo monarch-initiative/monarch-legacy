@@ -31,16 +31,22 @@
                           <li><b>Step 2</b>: modify the settings for how to perform the comparison: <i>search</i> against the entire database
                               or <i>compare</i> against a selected set of genes.</li>
                           <li><b>Step 3</b>: Submit and view your results in the Results tab.
+                              <!--
                               (If you want to visualize preformatted <a href="https://www.sanger.ac.uk/resources/software/exomiser/">Exomiser</a> output,
-                              jump over to the <a id="internal-link" href="#upload">upload tab</a>.)</li>
+                              jump over to the <a id="internal-link" href="#upload">upload tab</a>.)
+                              -->
+                              </li>
                           <li><b>Step 4</b>: Repeat.  The list of phenotypes and genes stay
                               populated enabling you to iterate and refine your lists. You can start over by
                               hitting Reset.</li>
 					    </ul>
-					    <li><i>Upload</i></li>
+					    
+                        <!--
+                        <li><i>Upload</i></li>
 					      <ul>
 					        <li>Upload or Paste your preformatted phenotype-comparison output to visualize in the Phenogrid.</li>
 					      </ul>
+                        -->
 					  </ul>
 					</div>
 						
@@ -49,18 +55,30 @@
                 <div id="categories">
                     {{#isFileError}}
                     <a href="#query"><div  class="tab contenttab second query-tab">Search</div></a>
+                    
+                    <!--
                     <a href="#upload"><div id="initialtab" class="tab contenttab second upload-tab">Upload</div></a>
+                    -->
+                    
                     <div class="tab greyed-out">Results</div>
                     {{/isFileError}}
                     {{^isFileError}}
                       {{^hasInputItems}}
                       <a href="#query"><div id="initialtab" class="tab contenttab second query-tab">Search</div></a>
+                      
+                      <!--
                       <a href="#upload"><div class="tab contenttab second upload-tab">Upload</div></a>
+                      -->
+                      
                       <div class="tab greyed-out">Results</div>
                       {{/hasInputItems}}
                       {{#hasInputItems}}
                       <a href="#query"><div class="tab contenttab second query-tab">Search</div></a>
+                      
+                      <!--
                       <a href="#upload"><div class="tab contenttab second upload-tab">Upload</div></a>
+                      -->
+                      
                       <a href="#result"><div id="initialtab" class="tab contenttab results-tab">Results</div></a>
                       {{/hasInputItems}}
                     {{/isFileError}}
@@ -132,6 +150,8 @@
                                 </div>
                               </div>
                             </div>
+                           
+                           <!-- 
                             <div class="form-group" id="analyze-type">
                               <div class="row">
                                 <label for="type" class="col-6 control-label search-label search-text">Target Type:</label>
@@ -145,6 +165,8 @@
                                 </div>
                               </div>
                             </div>
+                            -->
+                            
                             <div id="analyze-limit" class="form-group">
                               <div class="row">
                                 <label for="analyze_limit_input" class="col-6 control-label search-label search-text">Maximum number of results:</label>

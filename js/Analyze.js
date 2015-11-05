@@ -208,8 +208,8 @@ function AnalyzeInit(uploaded_data){
         } catch (err){
             console.log(err);
         }
-        //HARDCODE COMPARE
-        urlParams.mode = 'compare';
+
+        urlParams.mode = 'exomiser';
         jQuery('#user-results').val(uploaded_data);
     }
     
@@ -741,6 +741,7 @@ function AnalyzeInit(uploaded_data){
 		Phenogrid.createPhenogridForElement(document.getElementById('phen_vis'), {
 			phenotypeData: phenotypes,
 			targetSpecies: species,
+            searchResultLimit: 100, // hard coded 100 for now - Joe
 			owlSimFunction: urlParams.mode,
 			geneList: urlParams.geneList,
 			providedData: urlParams.user_input
