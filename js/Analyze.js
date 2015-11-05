@@ -701,6 +701,7 @@ function AnalyzeInit(uploaded_data){
     if (jQuery("#analyze_auto_target").val() !== null) {
         var text = jQuery("#analyze_auto_target").val();
         var species = jQuery("#target").val();
+        var limit = jQuery("#analyze_limit_input").val();
 
         
         if (typeof urlParams.user_input != 'undefined' 
@@ -741,9 +742,9 @@ function AnalyzeInit(uploaded_data){
 		Phenogrid.createPhenogridForElement(document.getElementById('phen_vis'), {
 			phenotypeData: phenotypes,
 			targetSpecies: species,
-            searchResultLimit: 100, // hard coded 100 for now - Joe
+            searchResultLimit: limit,
 			owlSimFunction: urlParams.mode,
-			geneList: urlParams.geneList,
+			geneList: urlParams.geneList, // geneList is only used when in compare mode - Zhou
 			providedData: urlParams.user_input
 		});
 	};
