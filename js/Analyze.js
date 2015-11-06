@@ -1,5 +1,8 @@
 
 function AnalyzeInit(uploaded_data){
+    // hide the limit field under search section 
+    // since the selected target species is 'all' by default - Zhou
+    jQuery('#analyze-limit').hide();
     
     var DEFAULT_LIMIT = 100;
     var DEBUG = false;
@@ -256,6 +259,13 @@ function AnalyzeInit(uploaded_data){
     
     jQuery('#target').on('change', function() {
         set_target_type(this.value);
+        // hide the limit field for all species
+        // only show limit for single species - Zhou
+        if (this.value === 'all') {
+            jQuery('#analyze-limit').hide();
+        } else {
+            jQuery('#analyze-limit').show();
+        }
     });
     
     jQuery('#ortholog').click(function(){
