@@ -29,7 +29,7 @@ Feature: Analyze phenotypes is usable by the expected user interfaces
      then the document should contain "pru1"
 
 @data
- Scenario: compare phenotypes with geneList
+ Scenario: compare phenotype with geneList
     Given I go to page "/analyze/phenotypes"
      and I type "micro" into the phenotype analyze search
      and I wait until "Microalbuminuria" appears in the autocomplete
