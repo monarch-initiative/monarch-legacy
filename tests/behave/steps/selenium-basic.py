@@ -71,6 +71,14 @@ def step_impl(context, text):
     # print(webelt.get_attribute('innerHTML'))
     # assert webelt.get_attribute('innerHTML').rfind(text) != -1
 
+## The document body should contain a certain piece of text.
+@then("the document should contain '{text}'")
+def step_impl(context, text):
+    print(context.browser.title)
+    webelt = context.browser.find_element_by_tag_name('html')
+    print(webelt.text)
+    assert webelt.text.rfind(text) != -1
+
 ## The document body should not contain a hyperlink with text.
 @then('the document should not contain link with "{text}"')
 def step_impl(context, text):
