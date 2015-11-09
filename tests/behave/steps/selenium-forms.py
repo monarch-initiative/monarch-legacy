@@ -42,6 +42,11 @@ def step_impl(context):
 ### Example for input for a possible text area form.
 ###
 
+@given('I input "{text}" into the textarea "{eid}"')
+def step_impl(context, text, eid):
+    webelt = context.browser.find_element_by_id(eid)
+    webelt.send_keys(text)
+    
 @given('I input the following text into the textarea "{eid}"')
 def step_impl(context, eid):
     input_box_text = context.text

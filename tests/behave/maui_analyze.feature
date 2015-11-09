@@ -35,10 +35,7 @@ Feature: Analyze phenotypes is usable by the expected user interfaces
      and I wait until "Microalbuminuria" appears in the autocomplete
      and I click the autocomplete item "Microalbuminuria"
      and I click the "compare" radio button
-     and I input the following text into the textarea "gene-list"
-      """
-      NCBIGene:388552,NCBIGene:12166
-      """
+     and I input "NCBIGene:388552,NCBIGene:12166" into the textarea "gene-list"
      when I submit analyze phenotype
      then the document should contain "BLOC1S3"
 
