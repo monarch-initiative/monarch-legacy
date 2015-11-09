@@ -28,6 +28,21 @@ Feature: Analyze phenotypes is usable by the expected user interfaces
      when I submit analyze phenotype
      then the document should contain "pru1"
 
+@data
+ Scenario: compare phenotypes with geneList
+    Given I go to page "/analyze/phenotypes"
+     and I type "micro" into the phenotype analyze search
+     and I wait until "Microalbuminuria" appears in the autocomplete
+     and I click the autocomplete item "Microalbuminuria"
+     and I type "micro" into the phenotype analyze search
+     and I wait until "microcephaly" appears in the autocomplete
+     and I click the autocomplete item "microcephaly"
+     and I click the "compare" radio button
+     and I input the following text into the textarea "gene-list"
+     when I submit analyze phenotype
+     then the document should contain "BLOC1S3"
+
+     
      
  ## Example how you might do other forms.
  # @data

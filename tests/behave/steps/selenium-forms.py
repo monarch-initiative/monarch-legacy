@@ -5,6 +5,16 @@
 from behave import *
 
 ###
+### radio button click
+###
+
+@given('I click the "{id}" radio button')
+def step_impl(context, id):
+    webelt = context.browser.find_element_by_id(id)
+    webelt.click()
+    context.browser.implicitly_wait(30)
+
+###
 ### Submission.
 ###
 
