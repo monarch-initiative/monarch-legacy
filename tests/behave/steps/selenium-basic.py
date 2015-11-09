@@ -34,6 +34,10 @@ def step_impl(context, page, id):
     #     print("FINALLY")
     #     #context.browser.quit()
 
+@when('I wait for id "{id}"')
+def step_impl(context, id):
+    element = WebDriverWait(context.browser, 200).until(EC.presence_of_element_located((By.ID, id)))
+
 
 ## URL Check
 @then('the url will be "{url}"')

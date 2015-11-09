@@ -1,5 +1,8 @@
 
 function AnalyzeInit(uploaded_data){
+    // hide the limit field under search section 
+    // since the selected target species is 'all' by default - Zhou
+    jQuery('#analyze-limit').hide();
     
     var DEFAULT_LIMIT = 100;
     var DEBUG = false;
@@ -208,8 +211,8 @@ function AnalyzeInit(uploaded_data){
         } catch (err){
             console.log(err);
         }
-        //HARDCODE COMPARE
-        urlParams.mode = 'compare';
+
+        urlParams.mode = 'exomiser';
         jQuery('#user-results').val(uploaded_data);
     }
     
@@ -256,6 +259,13 @@ function AnalyzeInit(uploaded_data){
     
     jQuery('#target').on('change', function() {
         set_target_type(this.value);
+        // hide the limit field for all species
+        // only show limit for single species - Zhou
+        if (this.value === 'all') {
+            jQuery('#analyze-limit').hide();
+        } else {
+            jQuery('#analyze-limit').show();
+        }
     });
     
     jQuery('#ortholog').click(function(){
@@ -701,7 +711,7 @@ function AnalyzeInit(uploaded_data){
     if (jQuery("#analyze_auto_target").val() !== null) {
         var text = jQuery("#analyze_auto_target").val();
         var species = jQuery("#target").val();
-
+        var limit = jQuery("#analyze_limit_input").val();
         
         if (typeof urlParams.user_input != 'undefined' 
                 && typeof urlParams.user_input.matches != 'undefined'){
@@ -741,8 +751,9 @@ function AnalyzeInit(uploaded_data){
 		Phenogrid.createPhenogridForElement(document.getElementById('phen_vis'), {
 			phenotypeData: phenotypes,
 			targetSpecies: species,
+            searchResultLimit: limit,
 			owlSimFunction: urlParams.mode,
-			geneList: urlParams.geneList,
+			geneList: urlParams.geneList, // geneList is only used when in compare mode - Zhou
 			providedData: urlParams.user_input
 		});
 	};
