@@ -67,6 +67,7 @@ Feature: NodeJS and RingoJS pass all tests.
     Given I go to page "/compare/HP:0012774+HP:0002650/1232413241234.json"
      then the document should contain "HP:0012774"
      then the document should contain "HP:0002650"
+     then the document should contain '"metric":"combinedScore"'
 
 @ui
 Scenario: The "/query/orthologs/" endpoint returns the correct JSON
