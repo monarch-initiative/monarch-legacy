@@ -46,14 +46,8 @@ p.bigfont {
     line-height: 20px;
     margin: 0px;
     padding: 0px;
-    display:inline-block;
 }
 
-.jumbotron.jumbotron-expanded {
-    padding: 0 !important;
-    margin: 0 !important;
-    border:1px solid red;
-}
 
 /* Navbar */
 /* These are navbar styles that depend heavily on media queries to determine the
@@ -63,7 +57,17 @@ p.bigfont {
  * The default Bootstrap behavior makes the navbar quite different from regular
  * browser width to smaller (e.g. smartphone browsers). */
 
-.navbar.monarch-navbar {
+
+#navbar .navbar { z-index: 100; } /* Default of 1000 interferes with popups etc. */
+#navbar .navbar { padding: 3px;}
+
+
+#navbar .navbar .dropdown-menu {
+  border-radius: 0;
+  box-shadow: none;
+}
+
+#navbar .navbar.monarch-navbar {
     padding:0;
     padding-left: 5px;
     padding-right: 5px;
@@ -81,15 +85,6 @@ p.bigfont {
     width:180px;
     font-size: 13px;
     height:30px;
-/*
-    border:2px solid lightblue;
-    margin: 0;
-    padding: 0;
-    width: 100%;
-    margin: 5px 0 1px 0;
-    margin: 4px 0 2px 0;
-    font-size: 13px;
-*/
 }
 
 #navbar .nav-search-btn {
@@ -100,55 +95,49 @@ p.bigfont {
     height: 30px;
     margin:0;
     margin-left:-3px;
-/*
-    height: 28px;
-    width:auto;
-    padding: 0px 10px;
-    border-radius: 2px;
-    font-weight:500;
-    background-color: pink !important;
-*/
 }
 
-@media (min-width: 815px) {
-    .monarch-navbar-container {
-        padding: 0px 10px;
-    }
+#xnavbar .monarch-navbar-container {
+    padding: 0px 10px;
 }
-@media (min-width: 768px) {
-    #navbar.navbar {
-        min-height: 40px;
-        max-height: 40px;
-    }
-    .nav>li>a {
-        padding: 0px;
-    }
-    .dropdown-toggle {
-        margin: 5px 10px 5px 10px;
-    }
-    .dropdown {
-        padding: 4px 0px 0px;
-    }
-    .navbar-brand {
-        padding: 8px 20px 0px 20px;
-    }
-    .navbar-link {
-        font-size: 14px;
-    }
-    .navbar-text {
-        margin-top: 2px;
-        margin-bottom: 2px;
-        font-weight: 400;
-        margin-right: 5px;
-    }
-    .input-group {
-        margin-bottom: 0px;
-    }
-    .input-group-btn .btn {
-        padding: 0px 10px;
-        border-radius: 2px;
-    }
+#navbar.navbar {
+    min-height: 40px;
+    max-height: 40px;
 }
+#navbar .nav>li>a {
+    padding: 0px;
+}
+#navbar .dropdown-toggle {
+    margin: 5px 10px 5px 10px;
+}
+#navbar .dropdown {
+    padding: 4px 0px 0px;
+}
+#navbar .navbar-brand {
+    padding: 8px 20px 0px 20px;
+}
+#navbar .navbar-link {
+    font-size: 14px;
+}
+#navbar .navbar-text {
+    margin-top: 2px;
+    margin-bottom: 2px;
+    font-weight: 400;
+    margin-right: 5px;
+}
+
+
+
+
+.input-group {
+    margin-bottom: 0px;
+}
+.input-group-btn .btn {
+    padding: 0px 10px;
+    border-radius: 2px;
+}
+
+/*
 @media (max-width: 800px) {
     .navbar {
         min-height: 40px;
@@ -180,15 +169,17 @@ p.bigfont {
         margin-top: 0px;
     }
 }
+*/
 
 /* Content Containers */
 
-@media (min-width: 768px) {
-    .monarch-container {
-        padding: 40px 0px 0px;
-        height: 100%;
-    }
+.wrapperforfooter .container-fluid.monarch-container {
+    padding: 40px 0px 0px;
+    height: 100%;
 }
+/**/
+
+/*
 @media (max-width: 768px) {
     .monarch-container {
         padding: 50px 0px 0px;
@@ -201,15 +192,18 @@ p.bigfont {
         border-radius: 2px;
     }
 }
+*/
+
 .content {
     display: inline-block;
     height: 100%;
+    width: 100%;
     padding: 0;
     margin: 0;
 }
 
 .content-bottom {
-    padding: 20px 30px 0 30px;
+    padding: 0 30px 0 30px;
 }
 
 .toggleitems > .fewitems {
@@ -254,7 +248,7 @@ p.bigfont {
 /* This light brown color is used for jumbotron content related to disease pages.
  * For example, it is use for the disease spotlight on the disease main page and
  * for disease information on disease specific pages. */
-.monarch-disease-light {
+.monarch-container .monarch-disease-light {
     background-color: #ECE8E3;
 }
 /* This darker brown color is used for the buttons related to disease pages. */
@@ -314,6 +308,7 @@ p.bigfont {
 /* These styles override some bootstrap button styles to make the buttons slimmer
  * and less skeuomorphic. */
 
+/*
 .btn {
     padding: 5px 15px;
 }
@@ -321,6 +316,8 @@ p.bigfont {
     background-color: #53AED7;
     border-color: #53AED7;
 }
+*/
+
 .downloadline {
     display: inline-block;
 
@@ -393,6 +390,7 @@ h1.downloadline {
     border-radius: 2px;
 }
 */
+
 /* Analyze Page */
 
 .analyze-delete-button {
@@ -411,7 +409,7 @@ h1.downloadline {
 /* This is the styling for alerts about development that appear at the tops of dev
  * pages throughout the Monarch site. */
 
-.top-alert {
+.monarch-container .top-alert {
     border: 1px solid black;
     border-radius: 0px 0px 3px 3px;
     border-top: none;
@@ -652,8 +650,7 @@ a:hover .hilite, a:active .hilite {
        container is not off. */
     width: auto;
 }
-.navbar { z-index: 100; } /* Default of 1000 interferes with popups etc. */
-.navbar { padding: 3px;}
+
 .page-header { text-align: center; }
 .page-header { text-align: center; }
 .page-header { text-align: center; }
@@ -754,7 +751,7 @@ a:hover .hilite, a:active .hilite {
     color: black;
 }
 
-#feedback-main {
+#navbar #feedback-main {
   border:4px solid darkgray !important;
   border-radius: 15px !important;
   padding:20px;
@@ -763,6 +760,7 @@ a:hover .hilite, a:active .hilite {
   background: #EEEEEE;
 }
 
+<<<<<<< HEAD
 
 #navbar #feedback-trigger {
     height:30px;
@@ -771,28 +769,41 @@ a:hover .hilite, a:active .hilite {
 =======
     margin-top: 0;
 >>>>>>> Run with `npm run start` or `./start-server.sh`
+=======
+#navbar #feedback-trigger {
+    height:30px;
+    margin-top: -2px;
+>>>>>>> major cleanup of the CSS so that things work in bundled mode as well as matching the existing version on master.
     border:1px solid transparent;
     background-color: #222;
     color: #43A395;
     font-weight: 400;
 }
 <<<<<<< HEAD
+<<<<<<< HEAD
 #navbar #feedback-trigger:hover {
 =======
 #feedback-trigger:hover {
 >>>>>>> Run with `npm run start` or `./start-server.sh`
+=======
+#navbar #feedback-trigger:hover {
+>>>>>>> major cleanup of the CSS so that things work in bundled mode as well as matching the existing version on master.
     color: #FFF;
     border:1px solid transparent;
 }
 
+<<<<<<< HEAD
 
 #feedback-handle {
+=======
+#navbar #feedback-handle {
+>>>>>>> major cleanup of the CSS so that things work in bundled mode as well as matching the existing version on master.
   margin: auto;
   padding: 0;
 }
 
 
-#feedback-window-container.dropdown ul.simple-menu {
+#navbar #feedback-window-container.dropdown ul.simple-menu {
   position: fixed;
   width: 90%;
   padding: 0 !important;
@@ -800,9 +811,4 @@ a:hover .hilite, a:active .hilite {
   top: 50px;
   border: none;
   background: transparent;
-}
-
-.navbar .dropdown-menu {
-  border-radius: 0;
-  box-shadow: none;
 }

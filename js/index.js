@@ -19,12 +19,12 @@ import '../image/home-splash.png';
 import '../image/partner-do.png';
 import '../css/monarch.less';
 // import '../node_modules/bootstrap/dist/css/bootstrap.min.css';
-import '../css/monarch-common.css';
 
 import '../node_modules/jquery-ui/themes/trontastic/jquery-ui.css';
+import '../css/monarch-specific.css';
 import '../css/monarch-main.css';
 import '../css/monarch-home.css';
-import '../css/monarch-specific.css';
+import '../css/monarch-common.css';
 
 import 'underscore';
 import 'bootstrap';
@@ -40,12 +40,9 @@ import './monarch-tabs.js';
 //console.log('before import bbop:', Object.keys(bbop));
 import _bbop from 'bbop';
 var bbop = _bbop;
-console.log('after import bbop:', Object.keys(bbop));
 window.getAnnotationScore = require("exports?getAnnotationScore!./monarch-common.js");
 
-console.log('before import monarch:', Object.keys(bbop));
 import './monarch.js';
-console.log('after import monarch:', Object.keys(bbop));
 import './jquery.cookie.js';
 import './jquery.xml2json.js';
 

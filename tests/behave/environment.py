@@ -123,10 +123,11 @@ def after_scenario(context, scenario):
 def dump_log(context, scenarioName):
     log = context.browser.get_log("browser")
     print('')
-    print('--- console.log browser scenario: "' + scenarioName + '"')
+    print('--------- console.log for: "' + scenarioName + '"')
     for l in log:
         # if l['level'] != 'WARNING':
         print(l['level'] + ': ' + l['message'])
+    print('')
 
 ###
 ### Working on a more complex run environment for the future.

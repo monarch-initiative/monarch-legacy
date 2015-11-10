@@ -5,7 +5,6 @@
 
 // Initializer for search autocomplete.
 function navbar_search_init(in_search_id, in_form_id){
-	console.log('navbar_search_init... window:', window);
     // Default DOM contact points.
     var search_elt = '#search';
     var form_elt = '#search_form';
@@ -47,7 +46,6 @@ function navbar_search_init(in_search_id, in_form_id){
 		window.location.href = newurl;
 	    });
 
-	console.log('search_form.js');
 	// Arguments for autocomplete box.
 	var ac_args = {
 	    position : {
@@ -165,9 +163,7 @@ function navbar_search_init(in_search_id, in_form_id){
 	// Create our own custom rendering to make the categories a little
 	// nicer to look at (as minor data).
 	// http://jqueryui.com/autocomplete/#custom-data
-	console.log('BEFORE autocomplete: args:', ac_args);
 	var jac = jQuery(search_elt).autocomplete(ac_args);
-	console.log('jac:', jac);
 	jac.data('ui-autocomplete')._renderItem = function(ul, item){
 	    var li = jQuery('<li>');
 	    li.append('<a alt="'+ item.name +'" title="'+ item.name +'">' +

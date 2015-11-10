@@ -17,7 +17,7 @@
 }
 */
 
-.ids {
+.monarch-container .ids {
     margin-top: 5px;
     font-size: 15px;
     line-height: 22px;
@@ -30,10 +30,10 @@
     margin-top: 10px;
     margin-bottom: -1px;
 }
-.tabcontainer {
+.monarch-container .tabcontainer {
     display: inline-block;
 }
-.tabhover {
+.monarch-container .tabhover {
     position: absolute;
     font-size: 12px;
     line-height: 14px;
@@ -44,7 +44,7 @@
     max-width: 150px;
     z-index: 10;
 }
-.tab {
+.monarch-container .tab {
     display: inline-block;
     padding: 2px 12px;
     text-align: center;
@@ -55,16 +55,16 @@
     border-radius: 5px 5px 0px 0px;
     margin-right: 2px;
 }
-#initialtab {
+.monarch-container #initialtab {
     color: black;
     background-color: white;
     border-bottom: 1px solid white;
 }
-.contenttab {
+.monarch-container .contenttab {
     background-color: #999;
     color: white;
 }
-.greyed-out {
+.monarch-container .greyed-out {
     background-color: #DDD;
     color: #AAA;
 }
@@ -72,19 +72,19 @@
 /* Rest of Content */
 /* This styles the content within tab categories. */
 
-#complete-info {
+.monarch-container #complete-info {
     padding: 0px 30px;
 }
-.category {
+.monarch-container .category {
     display: none;
 }
-.first {
+.monarch-container .first {
     display: block;
 }
-.source {
+.monarch-container .source {
     height: 18px;
 }
-.inlinesource {
+.monarch-container .inlinesource {
     display: inline-block;
     margin-right: 5px;
     margin-bottom: 5px;
@@ -92,13 +92,13 @@
 
 /* Tables */
 
-.table-condensed thead>tr>th {
+.monarch-container .table-condensed thead>tr>th {
     padding: 5px 15px 5px 3px;
 }
-.table-condensed tbody>tr>td {
+.monarch-container .table-condensed tbody>tr>td {
     padding: 3px;
 }
-td {
+.monarch-container td {
     word-wrap: break-word;
 }
 
@@ -107,32 +107,32 @@ td {
  * sufficiency score of some data. For example, there are stars on the phenotype
  * tab of the disease specific pages. */
 
-#annotationscore {
+.monarch-container #annotationscore {
     margin-bottom: 10px;
     position: relative;
 }
-#annotationscore > span.annotatetext {
+.monarch-container #annotationscore > span.annotatetext {
     margin-right: 10px;
     float: left;
 }
-span.stars, span.stars > * {
+.monarch-container span.stars, span.stars > * {
     display: inline-block;
     background: url(../image/stars.png) 0 -16px repeat-x;
     width: 80px;
     height: 16px;
 }
-span.stars > *{
+.monarch-container span.stars > *{
     max-width:80px;
     background-position: 0 0;
 }
-#annotationscore > span.annotatequestion {
+.monarch-container #annotationscore > span.annotatequestion {
     margin-left: 10px;
     padding: 1px 6px;
     background-color: #53AED7;
     color: white;
     border-radius: 2px;
 }
-#annotationscore > span.annotatehelp {
+.monarch-container #annotationscore > span.annotatehelp {
     position: absolute;
     left: 285px;
     top: -5px;
@@ -147,14 +147,14 @@ span.stars > *{
 
 /* Literature Pages & Tabs */
 
-.littabmoreauthors > .etal {
+.monarch-container .littabmoreauthors > .etal {
     color: #53AED7;
     cursor: pointer;
 }
-.moreauthors {
+.monarch-container .moreauthors {
     display: none;
 }
-.littabmoreauthors > .hideauthors {
+.monarch-container .littabmoreauthors > .hideauthors {
     color: #53AED7;
     display: none;
     cursor: pointer;
@@ -163,43 +163,43 @@ span.stars > *{
 
 /* Analyze */
 
-#analyze-profile > ul#analyze_auto_list > li.list-group-item {
+.monarch-container #analyze-profile > ul#analyze_auto_list > li.list-group-item {
     background-color: #A4D6D4;
     
 }
-#analyze-profile > ul#analyze_auto_list > li#analyze-empty-item {
+.monarch-container #analyze-profile > ul#analyze_auto_list > li#analyze-empty-item {
     background-color: white;
 }
 
 /* About */
 
-figure {
+.monarch-container figure {
     display:table;
     padding: 15px;
 }
 
-.right {
+.monarch-container .right {
   float:right;
 }
 
-.left {
+.monarch-container .left {
   float:left;
 }
-.center {
+.monarch-container .center {
     margin-left:auto;
     margin-right:auto;
     vertical-align:middle;
     text-align:center;
 }
 
-.bottomright {
+.monarch-container .bottomright {
     float:right;
     position:relative;
     bottom:0;
     right:0;
 }
 
-figcaption {
+.monarch-container figcaption {
     text-align:justify;
     font-size:12px;
     word-wrap:normal;
@@ -209,180 +209,180 @@ figcaption {
     line-height: 16px;
 }
 
-.collab-table {
+.monarch-container .collab-table {
   table-layout: fixed;
   width: 100%;
 }
 
-.collab-table td {
+.monarch-container .collab-table td {
   width: 125px;
   vertical-align: middle;
   text-align: center;
 }
 
-.collab-table img {
+.monarch-container .collab-table img {
     margin-left: auto;
     margin-right: auto;
     max-height: 125px;
     max-width: 125px;
 }
 
-.no-results{
+.monarch-container .no-results{
 	font-size:16px;
 }
 
 /* Analyze */
 
-.compare-text{
+.monarch-container .compare-text{
 	opacity: .5;
 }
-.search-text{
+.monarch-container .search-text{
 	opacity: 1.0;
 }
 
-#settings-header {
+.monarch-container #settings-header {
     text-align: center;
 }
-#analyze-compare {
+.monarch-container #analyze-compare {
     border-left: 1px solid #e8e8e8;
 }
-.search-label {
+.monarch-container .search-label {
 	font-weight: normal;
     font-size: 15px;
     text-align:right;
     padding-top:1px;
 }
-#type,#target {
+.monarch-container #type,#target {
     width:100%;
 }
 
-#analyze-target {
+.monarch-container #analyze-target {
 	padding-bottom: 30px;
 }
 
-.pheno-radio-button {
+.monarch-container .pheno-radio-button {
 	width: 14%;
     margin: 0 auto;
     padding-bottom: 10px;
 }
 
-.pheno-radio-button label {
+.monarch-container .pheno-radio-button label {
     font-weight: normal;
     font-size: 16px;
     white-space: nowrap;
 }
-#gene-autocomplete {
+.monarch-container #gene-autocomplete {
     padding-bottom: 5px;
     font-size: 15px;
     line-height: 100%;
 }
-#gene-text-area {
+.monarch-container #gene-text-area {
 	padding: 10px 0 5px 0;
     font-size: 15px;
     line-height: 100%;
 }
-#gene-list {
+.monarch-container #gene-list {
     line-height: 110%;
 }
-#ortholog-text-area {
+.monarch-container #ortholog-text-area {
 	display: none;
     padding-top: 10px;
     font-size: 15px;
 }
-#paralog-text-area {
+.monarch-container #paralog-text-area {
 	display: none;
     padding-top: 10px;
     font-size: 15px;
     
 }
-#gene-shortcuts {
+.monarch-container #gene-shortcuts {
 	padding: 10px 0 5px 0;
     font-size: 15px;
     line-height: 100%;
 }
-.explain {
+.monarch-container .explain {
     font-size: 14px;
     padding-bottom: 20px;
 }
-#separator{
+.monarch-container #separator{
 	position:absolute;
 	line-height:1px;
 	width: 100%;
 	text-align: center;
 }
-#separator-text{
+.monarch-container #separator-text{
 	position:relative;
     font-style: italic;
     font-weight: bold;
     background-color:white;
 }
-#paste-buttons {
+.monarch-container #paste-buttons {
     padding-bottom: 10px;
 }
-.compare-instructions {
+.monarch-container .compare-instructions {
 	padding-bottom: 10px;
 }
-.autocomplete-message{
+.monarch-container .autocomplete-message{
 	margin-top: 4px;
 }
-.small {  
+.monarch-container .small {  
     font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
     font-weight: normal;
     font-size: 12px;
     line-height:130%;
 }
-#ajax-spinner {
+.monarch-container #ajax-spinner {
     display:none;
 }
-#fetching {
+.monarch-container #fetching {
 	font-size: 14px;
 	line-height: 40px;
 }
-#error-msg {
+.monarch-container #error-msg {
     display:none;
     line-height: 40px;
 }
-#result-table{
+.monarch-container #result-table{
 	position:relative;
 	float:left;
 	padding-top:35px;
 	width:100%
 }
-.example-similarity{
+.monarch-container .example-similarity{
 	margin: 0 5px 1px 0;
 }
-#analyze-submit{
+.monarch-container #analyze-submit{
 	margin: 5px 0 10px 0;
 }
-#reset{
+.monarch-container #reset{
     padding: 5px 18px 5px 18px;
 }
-#upload-reset{
+.monarch-container #upload-reset{
     margin: 0 0 1px 5px;
 }
-.monarch-btn{
+.monarch-container .monarch-btn{
 	background-color: #44A293;
 	color : white;
 }
-#upload-btn{
+.monarch-container #upload-btn{
     margin: 0 0 10px 10px;
     display: inline-block;
 }
-#choose-file{
+.monarch-container #choose-file{
 	display: inline-block;
 	font-weight: bold;
 }
-.monarch-btn:hover{
+.monarch-container .monarch-btn:hover{
 	background-color: #3A9889;
 }
-#browse{
+.monarch-container #browse{
     margin-bottom: 10px;
 }
-#file-error {
+.monarch-container #file-error {
     margin: 10px 0 20px 0;
     font-weight: bold;
 }
-#file-name {
+.monarch-container #file-name {
     font-weight: normal;
 }
 

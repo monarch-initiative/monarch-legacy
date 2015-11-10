@@ -45,13 +45,11 @@ getTableFromSolr = loaderGlobals.getTableFromSolr;
 getOntologyBrowser = loaderGlobals.getOntologyBrowser;
 bbop = loaderGlobals.bbop;
 navbar_search_init = loaderGlobals.navbar_search_init;
+search_results_init = loaderGlobals.search_results_init;
 InitHomePage = loaderGlobals.InitHomePage;
 InitTables = loaderGlobals.InitTables;
 
-console.log('loader before launchable:', loaderGlobals);
-console.log('before initMonarch');
             loaderGlobals.InitMonarch();
-console.log('before initMonarchPage');
             loaderGlobals.initMonarchPage();
             loaderGlobals.InitTabs();
 

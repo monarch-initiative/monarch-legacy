@@ -1,7 +1,5 @@
 function InitMonarch() {
     var jq = require('jquery');
-    console.log('InitMonarch jq:', jq);
-    console.log('InitMonarch typeof globalUseBundle:', typeof(globalUseBundle));
     if (typeof(globalUseBundle) === 'undefined' || !globalUseBundle) {
         console.log('InitMonarch... using loaderGlobals bbop');
         var bbop = loaderGlobals.bbop;
