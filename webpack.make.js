@@ -100,7 +100,13 @@ module.exports = function makeWebpackConfig (options) {
       // Transpile .js files using babel-loader
       // Compiles ES6 and ES7 into ES5 code
       test: /\.js$/,
-      loader: 'babel?optional=runtime',
+      // loader: 'babel?optional=runtime',
+      loader: 'babel',
+      query: {
+          // https://github.com/babel/babel-loader#options
+          cacheDirectory: true,
+          presets: ['es2015']
+      },
       exclude: /(node_modules|js\/d3\.min\.js|js\/jquery-.+)/
     },
 
