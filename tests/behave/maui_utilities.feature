@@ -61,7 +61,9 @@ Feature: NodeJS and RingoJS pass all tests.
      then the document should contain "Smith-Lemli-Opitz Syndrome"
      then the document should contain "PDGFRA"
      then the document should contain "Blue irides"
-     
+     then the document should contain "maxSumIC"
+     then the document should contain "meanMaxIC"
+
 @ui
  Scenario: The "/compare/" endpoint returns the correct JSON with invalid ID
     Given I go to page "/compare/HP:0012774+HP:0002650/1232413241234.json"
