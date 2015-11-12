@@ -270,33 +270,6 @@ function addDownloadButton(pager, manager){
 
 }
 
-function makeSpinnerDiv(args){
- // Details for spinner
-    
-    var default_args = {'generate_id': true,
-                        'class':
-                        'progress progress-striped active',
-                        'style': 'width: 3em; position:absolute; display:inline-block; margin-top:3px; margin-left:10px;'
-    };
-    if (!args){
-        args = default_args;
-    }
-    var inspan = new bbop.html.tag('span', {'class': 'sr-only'}, '...');
-    var indiv = new bbop.html.tag('div', {'class': 'progress-bar',
-                      'role': 'progressbar',
-                      'aria-valuenow': '100',
-                      'aria-valuemin': '0',
-                      'aria-valuemax': '100',
-                      'style': 'width: 100%;'},
-                  inspan);
-    var spinner_div =
-    new bbop.html.tag('div',
-              args,
-              indiv);
-    
-    return spinner_div;
-}
-
 function getOntologyBrowser(id, root){
     
     // Conf
@@ -319,7 +292,7 @@ function getOntologyBrowser(id, root){
     }
 
     // Browser.
-    var b = new bbop.monarch.widget.browse(srv, manager, id, root, 'brw', {
+    var browser = new bbop.monarch.widget.browse(srv, manager, id, root, 'brw', {
         'info_icon': 'info',
         'current_icon': 'current_term',
         'base_icon_url': '/image',
@@ -333,7 +306,7 @@ function getOntologyBrowser(id, root){
             }
     });
 
-    b.init_browser(id);
+    browser.init_browser(id);
 }
 
 function getInteractiveOntologyBrowser(id, root){

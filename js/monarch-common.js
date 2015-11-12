@@ -209,7 +209,7 @@ function getAnnotationScore() {
  *
  * Returns: Updated map with equivalents filtered out
  */
-bbop.monarch.filter_equivalents = function (eq_graph, map) {
+function filter_equivalents(eq_graph, map) {
     var equivalent_graph = new bbop.model.graph();
     equivalent_graph.load_json(eq_graph);
     
@@ -277,7 +277,7 @@ bbop.monarch.filter_equivalents = function (eq_graph, map) {
     return map;
 };
 
-bbop.monarch.remove_equivalent_ids = function (map, id_list, response) {
+function remove_equivalent_ids(map, id_list, response) {
     //TODO pass server in using puptent var
       var ids = id_list.join('&id=');
       // Global scigraph data url passed in from webapp.js addCoreRenderers
@@ -297,6 +297,34 @@ bbop.monarch.remove_equivalent_ids = function (map, id_list, response) {
           }
       });
 };
+
+
+function makeSpinnerDiv(args){
+ // Details for spinner
+    
+    var default_args = {'generate_id': true,
+                        'class':
+                        'progress progress-striped active',
+                        'style': 'width: 3em; position:absolute; display:inline-block; margin-top:3px; margin-left:10px;'
+    };
+    if (!args){
+        args = default_args;
+    }
+    var inspan = new bbop.html.tag('span', {'class': 'sr-only'}, '...');
+    var indiv = new bbop.html.tag('div', {'class': 'progress-bar',
+                      'role': 'progressbar',
+                      'aria-valuenow': '100',
+                      'aria-valuemin': '0',
+                      'aria-valuemax': '100',
+                      'style': 'width: 100%;'},
+                  inspan);
+    var spinner_div =
+    new bbop.html.tag('div',
+              args,
+              indiv);
+    
+    return spinner_div;
+}
 
 if (typeof exports === 'object') {
     exports.getAnnotationScore = getAnnotationScore;
