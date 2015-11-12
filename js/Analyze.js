@@ -591,7 +591,7 @@ function AnalyzeInit(uploaded_data){
                     });
 					if (map.length > 0) {
 					    var id_list = map.map( function(i) { return i.id; });
-					    bbop.monarch.remove_equivalent_ids(map, id_list, response);   
+					    remove_equivalent_ids(map, id_list, response);   
 					} else {
 					    response(map);
 					}

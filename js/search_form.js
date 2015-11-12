@@ -122,7 +122,7 @@ function navbar_search_init(in_search_id, in_form_id){
 		            dataType:"json",
 		            error: function (){
 		                console.log('could not get taxon for genes');
-		                bbop.monarch.remove_equivalent_ids(map, id_list, response);
+		                remove_equivalent_ids(map, id_list, response);
 		            },
 		            success: function ( data ){
 		                var graph = new bbop.model.graph();
@@ -148,12 +148,12 @@ function navbar_search_init(in_search_id, in_form_id){
 	                            }
 	                        }
                         });
-		                bbop.monarch.remove_equivalent_ids(map, id_list, response);
+		                remove_equivalent_ids(map, id_list, response);
 		            }
 
 		        });
 		    } else {
-		        bbop.monarch.remove_equivalent_ids(map, id_list, response);
+		        remove_equivalent_ids(map, id_list, response);
 		    }
 		    } else {
 		        response(map);

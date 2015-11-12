@@ -292,7 +292,7 @@ function remove_equivalent_ids(map, id_list, response) {
               response(map);
           },
           success: function ( data ){
-              map = bbop.monarch.filter_equivalents(data, map);
+              map = filter_equivalents(data, map);
               response(map);  
           }
       });
