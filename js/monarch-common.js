@@ -281,7 +281,7 @@ bbop.monarch.remove_equivalent_ids = function (map, id_list, response) {
     //TODO pass server in using puptent var
       var ids = id_list.join('&id=');
       // Global scigraph data url passed in from webapp.js addCoreRenderers
-      var qurl = global_scigraph_data_url + "graph/neighbors?id=" 
+      var qurl = global_scigraph_url + "graph/neighbors?id=" 
           + ids + "&depth=3&blankNodes=false&relationshipType=equivalentClass"
           + "&direction=BOTH&project=%2A";
       jQuery.ajax({
