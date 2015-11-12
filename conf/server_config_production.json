@@ -1,7 +1,7 @@
 {
     "type" : "production",
     
-    "app_base" : "",
+    "app_base" : "http://stage.monarchinitiative.org",
     
     "ontology_services_url" : "http://services.monarchinitiative.org/ontoquest/",
     

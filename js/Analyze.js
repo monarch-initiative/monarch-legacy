@@ -750,6 +750,7 @@ function AnalyzeInit(uploaded_data){
 	window.onload = function() {
 		Phenogrid.createPhenogridForElement(document.getElementById('phen_vis'), {
 			phenotypeData: phenotypes,
+			serverURL: global_app_base,
 			targetSpecies: species,
             searchResultLimit: limit,
 			owlSimFunction: urlParams.mode,

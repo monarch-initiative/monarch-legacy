@@ -114,7 +114,7 @@ function navbar_search_init(in_search_id, in_form_id){
 		        var ids = gene_ids.join('&id=');
                 if (gene_ids.length > 0) {
 		        //TODO pass server in using puptent var
-		        var qurl = "http://rosie.crbs.ucsd.edu:9000/scigraph/graph/neighbors?id=" 
+		        var qurl = global_scigraph_data_url+"graph/neighbors?id=" 
 		            + ids + "&depth=1&blankNodes=false&relationshipType=http%3A%2F%2Fpurl.obolibrary.org%2Fobo%2FRO_0002162"
 		            + "&direction=BOTH&project=%2A";
 		        jQuery.ajax({

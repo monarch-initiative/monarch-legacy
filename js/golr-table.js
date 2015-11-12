@@ -43,6 +43,7 @@ function getTableFromSolr(id, golr_field, div, filter, personality, tab_anchor){
         var pager_filter = div+'-filter';
 
         // Conf.
+        // Global golr and solr urls passed in from webapp.js addGolrStaticFiles
         var gconf = new bbop.golr.conf(global_golr_conf);
         var srv = global_solr_url;
         var handler = new bbop.monarch.handler();
@@ -236,6 +237,7 @@ function addDownloadButton(pager, manager){
     var personality = manager.get_personality();
     
     // We have a bbop.golr.conf api that may be able to replace this
+    // Global scigraph url passed in from webapp.js addGolrStaticFiles
     var result_weights = global_golr_conf[personality]['result_weights'].split(/\s+/);
     result_weights = result_weights.map( function (i) { return i.replace(/\^.+$/, ''); });
     
@@ -298,6 +300,7 @@ function makeSpinnerDiv(args){
 function getOntologyBrowser(id, root){
     
     // Conf
+    // Global scigraph url passed in from webapp.js addCoreRenderers
     var srv = global_scigraph_url;
     
     var spinner_args = {'generate_id': true,
@@ -336,6 +339,7 @@ function getOntologyBrowser(id, root){
 function getInteractiveOntologyBrowser(id, root){
     
     // Conf
+    // Global scigraph url passed in from webapp.js addCoreRenderers
     var srv = global_scigraph_url;
 
     var manager = new bbop.rest.manager.jquery(bbop.rest.response.json);
