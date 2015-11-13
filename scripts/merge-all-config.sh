@@ -8,10 +8,7 @@ echo "Merging YAML Files..."
 
 for f in $(ls -1 $FILES | grep '\.yaml' | sed 's/\.yaml//')
 do
-    sed 's/Gene Taxon/Species/g' $FILES/$f.yaml > $FILES/$f.yaml-bak
-    mv $FILES/$f.yaml-bak $FILES/$f.yaml
-    perl ./MergeYamlConf.pl --input $FILES/$f.yaml --reference $REF_DIR/$REF --output $REF_DIR/$f-$REF
-    
+    perl ./MergeYamlConf.pl --input $FILES/$f.yaml --reference $REF_DIR/$REF --output $REF_DIR/$f-$REF  
 done
 
 echo "done"
