@@ -125,29 +125,7 @@ function navbar_search_init(in_search_id, in_form_id){
 		                remove_equivalent_ids(map, id_list, response);
 		            },
 		            success: function ( data ){
-		                var graph = new bbop.model.graph();
-		                graph.load_json(data);
-		                gene_ids.forEach(function (id) {
-		                    var label = '';
-		                    var taxon_list = graph.get_parent_nodes(id, 'http://purl.obolibrary.org/obo/RO_0002162');
-		                    if (taxon_list && taxon_list.length > 0){
-	                            label = taxon_list[0].label();
-	                            var meta = taxon_list[0].metadata();
-	                            if (meta && meta['synonym']){
-	                                label = meta['synonym'][0];
-	                            }
-	                            label = label.replace(/\b[a-z]/g, function() {
-	                                return arguments[0].toUpperCase()
-	                            });
-	                        }
-		                    for (i = 0; i < map.length; i++){
-	                            if (map[i]['id'] == id) {
-	                                if (label) {
-	                                    map[i]['tag'] = label;
-	                                }
-	                            }
-	                        }
-                        });
+		                map = add_species_to_autocomplete(data, map, gene_ids);
 		                remove_equivalent_ids(map, id_list, response);
 		            }
 
