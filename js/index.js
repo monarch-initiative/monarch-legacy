@@ -10,7 +10,7 @@
 // angular.module('app', [uirouter, landing, about])
 //   .config(routing);
 
-require("babel-core/register");
+// require("babel-core/register");
 
 var jq = require('jquery');
 window.jQuery = jq;
