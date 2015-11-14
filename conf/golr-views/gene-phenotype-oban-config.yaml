@@ -77,25 +77,25 @@ fields:
     searchable: true
     type: string
   - description: Taxonomic class of the object. This is typically a CURIE of the form NCBITaxon:nnnn. This field may be unfilled when used with certain categories
-    display_name: Phenotype Taxon
+    display_name: Species
     id: object_taxon
     property: []
     type: string
   - description: Label of taxon.
-    display_name: Phenotype Taxon
+    display_name: Species
     id: object_taxon_label
     property: []
     searchable: true
     type: string
   - cardinality: multi
     description: Reflexive closure of taxon. ALWAYS up SubClassOf.
-    display_name: Phenotype Taxon
+    display_name: Species
     id: object_taxon_closure
     property: []
     type: string
   - cardinality: multi
     description: Labels for taxon_closure.
-    display_name: Phenotype Taxon
+    display_name: Species
     id: object_taxon_closure_label
     property: []
     searchable: true
@@ -112,18 +112,6 @@ fields:
     id: evidence_object_label
     property: []
     type: string
-  - id: evidence_main_object
-    description: "A list of CURIEs for the primary object that supports an association. This will be a subset of evidence_object."
-    display_name: Evidence from (main)
-    type: string
-    cardinality: multi
-    property: []
-  - id: evidence_main_object_label
-    description: "evidence main object label"
-    display_name: Evidence main label
-    type: string
-    cardinality: multi
-    property: []
   - cardinality: multi
     description: Closure for evidence object
     display_name: Evidence
@@ -440,6 +428,18 @@ fields:
     description: List of CURIES of all entities that form part of the evidence graph.
     display_name: Evidence type
     id: evidence_closure_label
+    property: []
+    type: string
+  - cardinality: multi
+    description: A list of CURIEs for the primary object that supports an association. This will be a subset of evidence_object.
+    display_name: Evidence from (main)
+    id: evidence_main_object
+    property: []
+    type: string
+  - cardinality: multi
+    description: evidence main object label
+    display_name: Evidence main label
+    id: evidence_main_object_label
     property: []
     type: string
   - cardinality: multi

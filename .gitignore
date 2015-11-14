@@ -5,6 +5,7 @@ tests/behave/lib
 tests/behave/local
 tests/behave/.Python
 tests/behave/pip-selfcheck.json
+tests/behave/selenium/*
 
 ## Ignore npm libs.
 node_modules

@@ -591,7 +591,7 @@ function AnalyzeInit(uploaded_data){
                     });
 					if (map.length > 0) {
 					    var id_list = map.map( function(i) { return i.id; });
-					    bbop.monarch.remove_equivalent_ids(map, id_list, response);   
+					    remove_equivalent_ids(map, id_list, response);   
 					} else {
 					    response(map);
 					}
@@ -628,13 +628,37 @@ function AnalyzeInit(uploaded_data){
                     },
                     success: function(data) {
                         ll("auto success");
-                        response(jQuery.map(data,
+                        var map = jQuery.map(data,
                                 function(item) {
-                            return {
-                                'label': item.label,
-                                'id': item.id
-                            };
-                        }));
+                                    return {
+                                        'label': item.label,
+                                        'id': item.id
+                                    };
+                        });
+
+                        var gene_ids = map.map(function(i) { return i.id; });
+                        //var gene_ids = id_list;
+                        var ids = gene_ids.join('&id=');
+                        if (gene_ids.length > 0) {
+                            //TODO pass server in using puptent var
+                            var qurl = global_scigraph_data_url+"graph/neighbors?id=" 
+                            + ids + "&depth=1&blankNodes=false&relationshipType=http%3A%2F%2Fpurl.obolibrary.org%2Fobo%2FRO_0002162"
+                            + "&direction=BOTH&project=%2A";
+                            jQuery.ajax({
+                                url: qurl,
+                                dataType:"json",
+                                error: function (){
+                                    console.log('could not get taxon for genes');
+                                    response(map);
+                                },
+                                success: function ( data ){
+                                    map = add_species_to_autocomplete(data, map, gene_ids);
+                                    response(map);
+                                }
+                            });
+                        } else {
+                            response(map);
+                        }
                     }
             });
         },
@@ -657,7 +681,23 @@ function AnalyzeInit(uploaded_data){
         }
     };
     jQuery(analyze_auto_input_elt).autocomplete(auto_args);
-    jQuery('#auto_gene_input').autocomplete(auto_gene_args);
+
+    //  Add species for gene autocomplete
+    var jac = jQuery('#auto_gene_input').autocomplete(auto_gene_args);
+    jac.data('ui-autocomplete')._renderItem = function(ul, item){
+        var li = jQuery('<li>');
+        li.append('<a alt="'+ item.name +'" title="'+ item.name +'">' +
+              '<span class="autocomplete-main-item">' +
+              item.label +
+              '</span>' + 
+              '&nbsp;' + 
+              '<span class="autocomplete-tag-item">' +
+              item.tag +
+              '</span>' + 
+              '</a>');
+        li.appendTo(ul);
+        return li;
+    };
     
     var example_exomiser = '{"input_terms":{"id":"hiPhive specified phenotypes","phenotype_list":["HP:0001156","HP:0001363","HP:0011304","HP:0010055"]},"matches":[{"b":[{"id":"OMIM:101600","label":"Craniofacial-skeletal-dermatologic dysplasia","type":"gene","matches":[{"b":{"id":"HP:0001156","label":"Brachydactyly syndrome","IC":0.0},"a":{"id":"HP:0001156","label":"Brachydactyly syndrome","IC":0.0},"lcs":{"id":"HP:0001156","label":"Brachydactyly syndrome","IC":4.19562}},{"b":{"id":"HP:0004440","label":"Coronal craniosynostosis","IC":0.0},"a":{"id":"HP:0001363","label":"Craniosynostosis","IC":0.0},"lcs":{"id":"HP:0001363","label":"Craniosynostosis","IC":5.962614}},{"b":{"id":"HP:0010055","label":"Broad hallux","IC":0.0},"a":{"id":"HP:0010055","label":"Broad hallux","IC":0.0},"lcs":{"id":"HP:0010055","label":"Broad hallux","IC":7.868505}},{"b":{"id":"HP:0011304","label":"Broad thumb","IC":0.0},"a":{"id":"HP:0011304","label":"Broad thumb","IC":0.0},"lcs":{"id":"HP:0011304","label":"Broad thumb","IC":7.561576}}],"score":{"metric":"hiPhive","score":87,"rank":0},"taxon":{"id":"NCBITaxon:9606","label":"Homo sapiens"}},{"id":"OMIM:113000","label":"Brachydactyly, type B1","type":"gene","matches":[{"b":{"id":"HP:0005831","label":"Type B brachydactyly","IC":0.0},"a":{"id":"HP:0001156","label":"Brachydactyly syndrome","IC":0.0},"lcs":{"id":"HP:0001156","label":"Brachydactyly syndrome","IC":4.19562}},{"b":{"id":"HP:0000270","label":"Delayed cranial suture closure","IC":0.0},"a":{"id":"HP:0001363","label":"Craniosynostosis","IC":0.0},"lcs":{"id":"HP:0011329","label":"Abnormality of cranial sutures","IC":4.960614}},{"b":{"id":"HP:0001841","label":"Preaxial foot polydactyly","IC":0.0},"a":{"id":"HP:0010055","label":"Broad hallux","IC":0.0},"lcs":{"id":"HP:0001844","label":"Abnormality of the hallux","IC":5.866505}},{"b":{"id":"HP:0011304","label":"Broad thumb","IC":0.0},"a":{"id":"HP:0011304","label":"Broad thumb","IC":0.0},"lcs":{"id":"HP:0011304","label":"Broad thumb","IC":7.561576}}],"score":{"metric":"hiPhive","score":83,"rank":1},"taxon":{"id":"NCBITaxon:9606","label":"Homo sapiens"}},{"id":"OMIM:608091","label":"Joubert syndrome 2","type":"gene","matches":[{"b":{"id":"HP:0000268","label":"Dolichocephaly","IC":0.0},"a":{"id":"HP:0001363","label":"Craniosynostosis","IC":0.0},"lcs":{"id":"HP:0002648","label":"Abnormality of calvarial morphology","IC":3.371649}},{"b":{"id":"HP:0001760","label":"Abnormality of the foot","IC":0.0},"a":{"id":"HP:0010055","label":"Broad hallux","IC":0.0},"lcs":{"id":"HP:0001760","label":"Abnormality of the foot","IC":2.688579}},{"b":{"id":"HP:0001162","label":"Postaxial hand polydactyly","IC":0.0},"a":{"id":"HP:0011304","label":"Broad thumb","IC":0.0},"lcs":{"id":"HP:0005918","label":"Abnormality of phalanx of finger","IC":3.415293}}],"score":{"metric":"hiPhive","score":48,"rank":21},"taxon":{"id":"NCBITaxon:9606","label":"Homo sapiens"}},{"id":"ORPHANET:96147","label":"Kleefstra Syndrome Due To 9q34 Microdeletion","type":"gene","matches":[{"b":{"id":"HP:0002648","label":"Abnormality of calvarial morphology","IC":0.0},"a":{"id":"HP:0001363","label":"Craniosynostosis","IC":0.0},"lcs":{"id":"HP:0002648","label":"Abnormality of calvarial morphology","IC":3.371649}}],"score":{"metric":"hiPhive","score":41,"rank":24},"taxon":{"id":"NCBITaxon:9606","label":"Homo sapiens"}}],"a":["HP:0001156","HP:0001363","HP:0010055","HP:0011304"],"cutoff":10},{"b":[{"id":"MGI:95523","label":"Fgfr2","type":"gene","matches":[{"b":{"id":"MP:0000157","label":"abnormal sternum morphology","IC":0.0},"a":{"id":"HP:0001156","label":"Brachydactyly syndrome","IC":0.0},"lcs":{"id":"HP:0002817","label":"Abnormality of the upper limb","IC":2.9923516799420047}},{"b":{"id":"MP:0000081","label":"premature suture closure","IC":0.0},"a":{"id":"HP:0001363","label":"Craniosynostosis","IC":0.0},"lcs":{"id":"MP:0000081","label":"premature suture closure","IC":7.262130933869157}},{"b":{"id":"MP:0000157","label":"abnormal sternum morphology","IC":0.0},"a":{"id":"HP:0010055","label":"Broad hallux","IC":0.0},"lcs":{"id":"HP:0002817","label":"Abnormality of the upper limb","IC":2.9923516799420047}},{"b":{"id":"MP:0000157","label":"abnormal sternum morphology","IC":0.0},"a":{"id":"HP:0011304","label":"Broad thumb","IC":0.0},"lcs":{"id":"HP:0002817","label":"Abnormality of the upper limb","IC":2.9923516799420047}}],"score":{"metric":"hiPhive","score":79,"rank":0},"taxon":{"id":"NCBITaxon:10090","label":"Mus musculus"}},{"id":"MGI:1347521","label":"Ror2","type":"gene","matches":[{"b":{"id":"MP:0002544","label":"brachydactyly","IC":0.0},"a":{"id":"HP:0001156","label":"Brachydactyly syndrome","IC":0.0},"lcs":{"id":"MP:0002544","label":"brachydactyly","IC":5.178556408761554}},{"b":{"id":"MP:0002896","label":"abnormal bone mineralization","IC":0.0},"a":{"id":"HP:0001363","label":"Craniosynostosis","IC":0.0},"lcs":{"id":"MP:0008271","label":"abnormal bone ossification","IC":4.612912842187128}},{"b":{"id":"MP:0002544","label":"brachydactyly","IC":0.0},"a":{"id":"HP:0010055","label":"Broad hallux","IC":0.0},"lcs":{"id":"HP:0001780","label":"Abnormality of toe","IC":4.531274162650655}},{"b":{"id":"MP:0002543","label":"brachyphalangia","IC":0.0},"a":{"id":"HP:0011304","label":"Broad thumb","IC":0.0},"lcs":{"id":"MP:0002543","label":"brachyphalangia","IC":6.155542032591956}}],"score":{"metric":"hiPhive","score":68,"rank":1},"taxon":{"id":"NCBITaxon:10090","label":"Mus musculus"}},{"id":"MGI:104627","label":"Dst","type":"gene","matches":[{"b":{"id":"MP:0000333","label":"decreased bone marrow cell number","IC":0.0},"a":{"id":"HP:0001363","label":"Craniosynostosis","IC":0.0},"lcs":{"id":"MP:0003795","label":"abnormal bone structure","IC":3.4844338981188643}}],"score":{"metric":"hiPhive","score":25,"rank":59},"taxon":{"id":"NCBITaxon:10090","label":"Mus musculus"}}],"a":["HP:0001156","HP:0001363","HP:0010055","HP:0011304"],"cutoff":10},{"b":[{"id":"ZDB-GENE-990706-8","label":"gli2a","type":"gene","matches":[{"b":{"id":"ZP:0000646","label":"abnormal(ly) fused with trabecula cranii towards trabecula cranii","IC":0.0},"a":{"id":"HP:0001363","label":"Craniosynostosis","IC":0.0},"lcs":{"id":null,"label":"UBERON:0001703PHENOTYPE","IC":3.1410619680611025}},{"b":{"id":"ZP:0005395","label":"abnormal(ly) hypoplastic floor plate","IC":0.0},"a":{"id":"HP:0011304","label":"Broad thumb","IC":0.0},"lcs":{"id":null,"label":"UBERON:0002513PHENOTYPE","IC":2.675369817163234}}],"score":{"metric":"hiPhive","score":30,"rank":0},"taxon":{"id":"NCBITaxon:7955","label":"Danio rerio"}},{"id":"ZDB-GENE-040724-172","label":"enpp1","type":"gene","matches":[{"b":{"id":"ZP:0006782","label":"abnormal(ly) nodular cleithrum","IC":0.0},"a":{"id":"HP:0001156","label":"Brachydactyly syndrome","IC":0.0},"lcs":{"id":null,"label":"UBERON:0011582PHENOTYPE","IC":3.0900304386859347}},{"b":{"id":"ZP:0006781","label":"abnormal(ly) increased process quality bone mineralization","IC":0.0},"a":{"id":"HP:0001363","label":"Craniosynostosis","IC":0.0},"lcs":{"id":"MP:0008271","label":"abnormal bone ossification","IC":4.634488795231343}},{"b":{"id":"ZP:0006782","label":"abnormal(ly) nodular cleithrum","IC":0.0},"a":{"id":"HP:0010055","label":"Broad hallux","IC":0.0},"lcs":{"id":"HP:0002817","label":"Abnormality of the upper limb","IC":2.571065720233295}},{"b":{"id":"ZP:0006782","label":"abnormal(ly) nodular cleithrum","IC":0.0},"a":{"id":"HP:0011304","label":"Broad thumb","IC":0.0},"lcs":{"id":null,"label":"UBERON:0010741PHENOTYPE","IC":3.4819346510173244}}],"score":{"metric":"hiPhive","score":40,"rank":1},"taxon":{"id":"NCBITaxon:7955","label":"Danio rerio"}},{"id":"ZDB-GENE-030131-9511","label":"dcaf7","type":"gene","matches":[{"b":{"id":"ZP:0001147","label":"abnormal(ly) aplastic mandibular arch skeleton","IC":0.0},"a":{"id":"HP:0001156","label":"Brachydactyly syndrome","IC":0.0},"lcs":{"id":"HP:0009115","label":"Aplasia/hypoplasia involving the skeleton","IC":2.993545064357974}},{"b":{"id":"ZP:0004599","label":"abnormal(ly) morphology mandibular arch skeleton cartilaginous joint","IC":0.0},"a":{"id":"HP:0001363","label":"Craniosynostosis","IC":0.0},"lcs":{"id":null,"label":"UBERON:0011134PHENOTYPE","IC":5.282941889613182}},{"b":{"id":"ZP:0000268","label":"abnormal(ly) decreased size symplectic","IC":0.0},"a":{"id":"HP:0011304","label":"Broad thumb","IC":0.0},"lcs":{"id":null,"label":"UBERON:0002513PHENOTYPE","IC":2.675369817163234}}],"score":{"metric":"hiPhive","score":37,"rank":2},"taxon":{"id":"NCBITaxon:7955","label":"Danio rerio"}},{"id":"ZDB-GENE-990603-9","label":"smad5","type":"gene","matches":[{"b":{"id":"ZP:0001981","label":"abnormal(ly) decreased length trabecula cranii","IC":0.0},"a":{"id":"HP:0001363","label":"Craniosynostosis","IC":0.0},"lcs":{"id":null,"label":"UBERON:0001703PHENOTYPE","IC":3.1410619680611025}}],"score":{"metric":"hiPhive","score":31,"rank":3},"taxon":{"id":"NCBITaxon:7955","label":"Danio rerio"}},{"id":"ZDB-GENE-021212-1","label":"ddx55","type":"gene","matches":[{"b":{"id":"ZP:0002916","label":"abnormal(ly) bent ceratohyal cartilage","IC":0.0},"a":{"id":"HP:0001363","label":"Craniosynostosis","IC":0.0},"lcs":{"id":null,"label":"UBERON:0004755PHENOTYPE","IC":3.0686708582452824}}],"score":{"metric":"hiPhive","score":21,"rank":4},"taxon":{"id":"NCBITaxon:7955","label":"Danio rerio"}},{"id":"ZDB-GENE-081119-3","label":"frem2a","type":"gene","matches":[{"b":{"id":"ZP:0004697","label":"abnormal(ly) has fewer parts of type pectoral fin towards lepidotrichium","IC":0.0},"a":{"id":"HP:0001156","label":"Brachydactyly syndrome","IC":0.0},"lcs":{"id":"HP:0002817","label":"Abnormality of the upper limb","IC":2.571065720233295}},{"b":{"id":"ZP:0004697","label":"abnormal(ly) has fewer parts of type pectoral fin towards lepidotrichium","IC":0.0},"a":{"id":"HP:0010055","label":"Broad hallux","IC":0.0},"lcs":{"id":"HP:0002817","label":"Abnormality of the upper limb","IC":2.571065720233295}},{"b":{"id":"ZP:0004697","label":"abnormal(ly) has fewer parts of type pectoral fin towards lepidotrichium","IC":0.0},"a":{"id":"HP:0011304","label":"Broad thumb","IC":0.0},"lcs":{"id":"HP:0002817","label":"Abnormality of the upper limb","IC":2.571065720233295}}],"score":{"metric":"hiPhive","score":32,"rank":5},"taxon":{"id":"NCBITaxon:7955","label":"Danio rerio"}}],"a":["HP:0001156","HP:0001363","HP:0010055","HP:0011304"],"cutoff":10}]}';
     
@@ -750,6 +790,7 @@ function AnalyzeInit(uploaded_data){
 	window.onload = function() {
 		Phenogrid.createPhenogridForElement(document.getElementById('phen_vis'), {
 			phenotypeData: phenotypes,
+			serverURL: global_app_base,
 			targetSpecies: species,
             searchResultLimit: limit,
 			owlSimFunction: urlParams.mode,

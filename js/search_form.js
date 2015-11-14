@@ -114,7 +114,7 @@ function navbar_search_init(in_search_id, in_form_id){
 		        var ids = gene_ids.join('&id=');
                 if (gene_ids.length > 0) {
 		        //TODO pass server in using puptent var
-		        var qurl = "http://rosie.crbs.ucsd.edu:9000/scigraph/graph/neighbors?id=" 
+		        var qurl = global_scigraph_data_url+"graph/neighbors?id=" 
 		            + ids + "&depth=1&blankNodes=false&relationshipType=http%3A%2F%2Fpurl.obolibrary.org%2Fobo%2FRO_0002162"
 		            + "&direction=BOTH&project=%2A";
 		        jQuery.ajax({
@@ -122,38 +122,16 @@ function navbar_search_init(in_search_id, in_form_id){
 		            dataType:"json",
 		            error: function (){
 		                console.log('could not get taxon for genes');
-		                bbop.monarch.remove_equivalent_ids(map, id_list, response);
+		                remove_equivalent_ids(map, id_list, response);
 		            },
 		            success: function ( data ){
-		                var graph = new bbop.model.graph();
-		                graph.load_json(data);
-		                gene_ids.forEach(function (id) {
-		                    var label = '';
-		                    var taxon_list = graph.get_parent_nodes(id, 'http://purl.obolibrary.org/obo/RO_0002162');
-		                    if (taxon_list && taxon_list.length > 0){
-	                            label = taxon_list[0].label();
-	                            var meta = taxon_list[0].metadata();
-	                            if (meta && meta['synonym']){
-	                                label = meta['synonym'][0];
-	                            }
-	                            label = label.replace(/\b[a-z]/g, function() {
-	                                return arguments[0].toUpperCase()
-	                            });
-	                        }
-		                    for (i = 0; i < map.length; i++){
-	                            if (map[i]['id'] == id) {
-	                                if (label) {
-	                                    map[i]['tag'] = label;
-	                                }
-	                            }
-	                        }
-                        });
-		                bbop.monarch.remove_equivalent_ids(map, id_list, response);
+		                map = add_species_to_autocomplete(data, map, gene_ids);
+		                remove_equivalent_ids(map, id_list, response);
 		            }
 
 		        });
 		    } else {
-		        bbop.monarch.remove_equivalent_ids(map, id_list, response);
+		        remove_equivalent_ids(map, id_list, response);
 		    }
 		    } else {
 		        response(map);

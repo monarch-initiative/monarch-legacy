@@ -2068,14 +2068,26 @@ monarch.builder.tree_builder.prototype._getCountsForClass = function(id, parents
         if (typeof self.config.facet != 'undefined'){
             var facet_counts = golr_response.facet_field(self.config.facet);
             facet_counts.forEach(function(i){
-                var index = counts.map(function(d){return d.name}).indexOf(self.getTaxonMap()[i[0]]);
-                if (index != -1){
-                    counts[index]['value'] += i[1];
+                if (typeof self.getTaxonMap()[i[0]] != 'undefined') {           
+                    var index = counts.map(function(d){return d.name}).indexOf(self.getTaxonMap()[i[0]]);
+                    if (index != -1){
+                        counts[index]['value'] += i[1];
+                    } else {
+                        counts.push({
+                               'name': self.getTaxonMap()[i[0]],
+                               'value' : i[1]
+                        });
+                    }
                 } else {
-                    counts.push({
-                        'name': self.getTaxonMap()[i[0]],
-                        'value' : i[1]
-                    });
+                    var index = counts.map(function(d){return d.name}).indexOf('Other');
+                    if (index != -1){
+                        counts[index]['value'] += i[1];
+                    } else {
+                        counts.push({
+                            'name': 'Other',
+                            'value' : i[1]
+                        });
+                    }
                 }
             });
         } else if (typeof self.config.single_group != 'undefined') {
@@ -2195,6 +2207,9 @@ monarch.builder.tree_builder.prototype.getTaxonMap = function(){
         "NCBITaxon:8364" : "Frog",
         "NCBITaxon:9544" : "Monkey",
         "NCBITaxon:9258" : "Platypus",
+        "NCBITaxon:9685" : "Cat",
+        "NCBITaxon:9986" : "Rabit",
+        "NCBITaxon:9615" : "Dog",
         "NCBITaxon:9031" : "Chicken"
     };
 };

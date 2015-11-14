@@ -4,7 +4,7 @@ document_category: generic_association
 weight: 20
 
 ## Results table, horizontal
-result_weights: subject^7.0 subject_taxon^6.5 relation^6.0  object^5.0 object_taxon^4.2 evidence^4.0 source^3.5 is_defined_by^3.0
+result_weights: subject^7.0 subject_taxon^6.5 relation^6.0  object^5.0 evidence^4.0 source^3.5 is_defined_by^3.0
 
 ## Ordering of facets, vertical
 filter_weights: subject_taxon_closure_label^3.5 object_taxon_closure_label^3.0
@@ -45,27 +45,27 @@ fields:
 
   - id: subject_taxon
     description: "Taxonomic class of the subject. This is typically a CURIE of the form NCBITaxon:nnnn."
-    display_name: Variant Taxon
+    display_name: Species
     type: string
     property: []
 
   - id: subject_taxon_label
     description: "Label of taxon."
-    display_name: Variant Taxon
+    display_name: Species
     type: string
     property: []
     searchable: true
 
   - id: subject_taxon_closure
     description: "Reflexive closure of taxon. ALWAYS up SubClassOf."
-    display_name: Variant Taxon
+    display_name: Species
     type: string
     cardinality: multi
     property: []
 
   - id: subject_taxon_closure_label
     description: "Labels for taxon_closure."
-    display_name: Variant Taxon
+    display_name: Species
     type: string
     cardinality: multi
     property: []
