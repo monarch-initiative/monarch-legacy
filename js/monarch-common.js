@@ -259,15 +259,17 @@ function filter_equivalents(eq_graph, map) {
             if (node_id) {
                 if (eq_node_list.indexOf(node_id) > -1){
                     
-                    // MESH terms have a lower priority
-                    if (/^MESH/.test(id)){
-                        map.splice(i,1)
-                        i--;
-                        break;
-                    } else {
+                    // cliqueLeaders have priority
+                    if ('types' in equivalent_graph.get_node(id).metadata() 
+                            && (equivalent_graph.get_node(id).metadata()['types'].indexOf('cliqueLeader') > -1)) {
                         map.splice(k, 1);
                         k--;
                         continue;
+                    }
+                    else {
+                        map.splice(i,1)
+                        i--;
+                        break;
                     }
                 }
             }
