@@ -681,11 +681,20 @@ a:hover .hilite, a:active .hilite {
   background: #EEEEEE;
 }
 
-#feedback-trigger {
+
+#navbar #feedback-trigger {
     height:30px;
-    margin-top: 0;
-    color: lightgreen;
+    margin-top: -1px;
+    border:1px solid transparent;
+    background-color: #222;
+    color: #43A395;
+    font-weight: 400;
 }
+#navbar #feedback-trigger:hover {
+    color: #FFF;
+    border:1px solid transparent;
+}
+
 
 #feedback-handle {
   margin: auto;
