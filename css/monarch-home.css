@@ -65,7 +65,7 @@
 }
 
 .monarch-home-carousel-separator-hr {
-    height: 1px;
+    height: 10px;
     margin: 0.3em;
     border: none;
     clear:both;
@@ -108,20 +108,48 @@
 }
 
 .monarch-carousel-item-image {
-    width: 90%;
-    //height: 100%;
-    padding: 10px;
-    margin: 0;
-    //margin-bottom:10%;
-    display:inline-block;
-    border:1px solid darkgray;
+  width: 100%;
+  height: auto;
+  padding: 0 35px 0 35px;
+  margin: 0;
+  margin-left:12px;
+  margin-top: -5px;
+  //margin-bottom:10%;
+  display:inline-block;
+  border:none;
+}
+
+
+.row.monarch-home-cameo-row {
+  margin: 0;
+  padding: 0;
+  margin-left: 20px;
+}
+
+.row.monarch-home-cameo-row .panel {
+}
+
+
+.monarch-home-cameo-image {
+  width: 100%;
+  height: 100%;
+  padding: 0;
+  margin: 0;
+}
+
+.monarch-home-cameo-button {
+  margin-top: 0.5em;
+}
+
+.monarch-home-cameo-text {
+  margin: 0;
+  padding: 0.5em;
+  margin-bottom: 0.3em;
 }
 
 .monarch-home-phenotype-image {
     padding: 0;
     margin: 0;
-    margin-top:4px;
-    margin-bottom:4px;
 }
 
 .monarch-home-phenotype-analysis {
@@ -239,11 +267,10 @@
 a.monarch-tabber-control-prev, a.monarch-tabber-control-next {
     position: absolute;
     top:0;
-    left:-8px;
+    left:10px;
     z-index: 1;
     display: inline-block;
     padding: 0;
-    margin:0;
     color: #fff;
     text-decoration: none;
     opacity: 0.5;
@@ -258,7 +285,7 @@ a.monarch-tabber-control-prev {
 }
 a.monarch-tabber-control-next {
     left:initial;
-    right: -8px;
+    right: -12px;
 }
 
 .monarch-tabber-chevron {
