@@ -48,7 +48,7 @@ module.exports = function makeWebpackConfig (options) {
   } else {
     config.output = {
       // Absolute output directory
-      path: __dirname + '/dist',
+      path: path.join(__dirname, '/dist'),
 
       // Output path from the view of the page
       // Uses webpack-dev-server in development
@@ -279,6 +279,7 @@ module.exports = function makeWebpackConfig (options) {
         // logConnections: true,
         reloadOnRestart: true,
         browser: ["google chrome"], // ["google chrome", "safari"]
+        files: ["serverStarted.dat"]
       }));
   }
 

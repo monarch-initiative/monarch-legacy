@@ -30,3 +30,4 @@ log
 templates/labs/jbrowse
 *.swp
 *.swo
+serverStarted.dat
