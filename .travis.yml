@@ -31,9 +31,9 @@ install:
 
 before_script:
   - "export DISPLAY=:99.0"
-  - "# ./start-server.sh &"
-  - "npm run build"
-  - "npm run bstart &"
+  - "npm run start &"
+  - "# npm run build"
+  - "# npm run bstart &"
   - "sleep 25"
 
 after_success:
