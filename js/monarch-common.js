@@ -356,7 +356,11 @@ function makeSpinnerDiv(args){
 if (typeof exports === 'object') {
     exports.initMonarchPage = initMonarchPage;
     exports.getAnnotationScore = getAnnotationScore;
+    exports.remove_equivalent_ids = remove_equivalent_ids;
+    exports.makeSpinnerDiv = makeSpinnerDiv;
 }
 if (typeof(loaderGlobals) === 'object') {
     loaderGlobals.initMonarchPage = initMonarchPage;
+    loaderGlobals.remove_equivalent_ids = remove_equivalent_ids;
+    loaderGlobals.makeSpinnerDiv = makeSpinnerDiv;
 }

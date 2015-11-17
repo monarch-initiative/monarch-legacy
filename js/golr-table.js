@@ -295,7 +295,7 @@ function getOntologyBrowser(id, label, root){
         success: function ( data ){
             var graph = new bbop.model.graph();
             graph.load_json(data);
-            node_list = [];
+            var node_list = [];
             node_list = graph.all_nodes();
             if (node_list.length > 1) {
                 // An error occurred, there can only be one

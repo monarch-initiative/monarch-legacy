@@ -681,6 +681,7 @@ a:hover .hilite, a:active .hilite {
   background-color:#EEEEEE;
 }
 
+
 #feedback-window-container .form-group {
   margin: 0;
   padding: 0;
@@ -760,44 +761,20 @@ a:hover .hilite, a:active .hilite {
   background: #EEEEEE;
 }
 
-<<<<<<< HEAD
-
-#navbar #feedback-trigger {
-    height:30px;
-<<<<<<< HEAD
-    margin-top: -1px;
-=======
-    margin-top: 0;
->>>>>>> Run with `npm run start` or `./start-server.sh`
-=======
 #navbar #feedback-trigger {
     height:30px;
     margin-top: -2px;
->>>>>>> major cleanup of the CSS so that things work in bundled mode as well as matching the existing version on master.
     border:1px solid transparent;
     background-color: #222;
     color: #43A395;
     font-weight: 400;
 }
-<<<<<<< HEAD
-<<<<<<< HEAD
 #navbar #feedback-trigger:hover {
-=======
-#feedback-trigger:hover {
->>>>>>> Run with `npm run start` or `./start-server.sh`
-=======
-#navbar #feedback-trigger:hover {
->>>>>>> major cleanup of the CSS so that things work in bundled mode as well as matching the existing version on master.
     color: #FFF;
     border:1px solid transparent;
 }
 
-<<<<<<< HEAD
-
-#feedback-handle {
-=======
 #navbar #feedback-handle {
->>>>>>> major cleanup of the CSS so that things work in bundled mode as well as matching the existing version on master.
   margin: auto;
   padding: 0;
 }
