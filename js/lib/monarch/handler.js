@@ -9,10 +9,6 @@
  * global_xrefs_conf: Xrefs conf file from conf/xrefs.json
  */
 
-// Module and namespace checking.
-if (typeof bbop == 'undefined') { var bbop = {};}
-if (typeof bbop.monarch == 'undefined') { bbop.monarch = {};}
-
 // The beginnings of a monarch specific handler, just a copy of amigo's
 // handler right now
 

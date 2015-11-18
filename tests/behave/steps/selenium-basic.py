@@ -77,6 +77,7 @@ def step_impl(context, text):
     webelt = context.browser.find_element_by_tag_name('html')
     # print("###### text: %s" % text)
     # print("###### webelt.text: %s" % webelt.text)
+    # print("###### webelt.innerHTML: %s" % webelt.get_attribute('innerHTML'))
     # print("###### rfind: %d" % webelt.text.rfind(text))
     assert webelt.text.rfind(text) != -1
     # webelt = context.browser.find_element_by_tag_name('body')
@@ -135,9 +136,9 @@ def step_impl(context, tabname, text):
             tab_href = parent.get_attribute("href")
             url = urlparse(tab_href)
             tab_id = url.fragment
-            print(tab_id)
+            # print(tab_id)
             tab_area_elt = context.browser.find_element_by_id(tab_id)
-            print(tab_area_elt.text)
+            # print(tab_area_elt.text)
             assert tab_area_elt and tab_area_elt.text.rfind(text) != -1
     assert found_tab
 

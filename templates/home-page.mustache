@@ -1,12 +1,9 @@
 
 <!-- Nav. -->
 {{{includes.navbar}}}
-<!-- And all between. -->
-<div class="wrapperforfooter">
 
 <!-- Top-level internal container. -->
-<!-- <div class="container-fluid" class="conflict-top-container-margin"> -->
-<div id="monarch-home-container" class="container-fluid" style="margin: 0.8em;margin-top:0.3em;padding:0;">
+<div id="monarch-home-container" class="container-fluid monarch-container" style="margin:3px;margin-top:0.3em;padding:0 12px 0 12px;">
 
   <div class="jumbotron monarch-home-splash">
     <span class="monarch-home-splash-text">
@@ -18,13 +15,11 @@
   <div class="row">
 
     <div id="col-1" class="col-xs-12 col-sm-8">
-
-      <div class="row">
-
       <!-- Quiet rollover. -->
       <!-- WARNING: There is an HTML/CSS trick in here--the largest -->
       <!-- item is in "relative" position and the rest are in "absolute". -->
-      <div class="panel-body" style="margin-top:-20px;">
+
+      <div class="xpanel-body" style="margin:0;margin-top:-10px;">
         <div id="monarch-tabber" class="monarch-tabber">
           <div class="row monarch-tabber-controls">
             <div class="monarch-tabber-control">
@@ -72,15 +67,7 @@
             </div>
           </div> <!-- monarch-tabber-controls -->
         </div> <!-- monarch-tabber -->
-      </div>
-
-      </div> <!-- row -->
-
-      <div class="row">
-        <hr class="monarch-home-carousel-separator-hr"/>
-      </div>
-
-      <div class="row">
+      </div> <!-- panel-body -->
 
       <div class="panel-body">
         <div id="monarch-carousel" class="monarch-carousel">
@@ -196,8 +183,6 @@
         </div> <!-- monarch-carousel -->
 
       </div> <!-- panel-body -->
-      </div> <!-- row -->
-
 
 
       <div class="row monarch-home-cameo-row">
@@ -325,10 +310,11 @@
           </div>
         </div>
       </div>
+
     </div> <!-- column 1 -->
 
     <!-- Two-column layout, col. 2 -->
-    <div id="col-1" class="col-xs-12 col-sm-4 col-md-4 col-lg-4">
+    <div id="col-1" class="col-xs-12 col-sm-4">
 
       <!-- Search. -->
       <div class="panel panel-default"> <!-- style="padding-bottom: 0;"> -->
@@ -356,7 +342,7 @@
 
       <!-- News and twitter combo. -->
       <div class="row">
-        <div id="blog" class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
+        <div id="blog" class="col-xs-12">
 
           <div
             class="panel panel-default news-panel">
@@ -389,9 +375,8 @@
       </div> <!-- row -->
 
 
-
       <div class="row">
-        <div id="twitter" class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
+        <div id="twitter" class="col-xs-12">
           <a  class="twitter-timeline"
             href="https://twitter.com/search?q=%40MonarchInit+OR+%23raredisease+OR+%40GA4GH+OR+%40phenomecentral"
             data-widget-id="527567015918051328"
@@ -428,7 +413,6 @@
 
 
 </div> <!-- container-fluid -->
-</div> <!-- wrapperforfooter -->
 
 <!-- Footer. -->
 <hr/>

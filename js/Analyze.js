@@ -784,10 +784,12 @@ function AnalyzeInit(uploaded_data){
 
         var phenotypes  = text.split(/[\s,]+/);
 
+    console.log('before window.onload in Analyze.js');
         // New way - Zhou
         // Phenogrid will remove the duplicated phenotypes in this monarch-app returned phenotype_list
         // before sending the ajax POST to simsearch - Zhou
-	window.onload = function() {
+	// window.onload = function() {
+        console.log('before Phenogrid.createPhenogridForElement in Analyze.js');
 		Phenogrid.createPhenogridForElement(document.getElementById('phen_vis'), {
 			phenotypeData: phenotypes,
 			serverURL: global_app_base,
@@ -797,7 +799,7 @@ function AnalyzeInit(uploaded_data){
 			geneList: urlParams.geneList, // geneList is only used when in compare mode - Zhou
 			providedData: urlParams.user_input
 		});
-	};
+	// };
     }
 
     // Flatten JSON output from Exomiser

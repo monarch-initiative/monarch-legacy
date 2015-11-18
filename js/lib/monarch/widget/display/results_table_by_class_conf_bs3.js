@@ -6,9 +6,6 @@
  * Subclass of <bbop.html.tag>.
  */
 
-if ( typeof bbop == "undefined" ){ var bbop = {}; }
-if ( typeof bbop.monarch == "undefined" ){ bbop.monarch = {}; }
-if ( typeof bbop.monarch.widget == "undefined" ){ bbop.monarch.widget = {}; }
 if ( typeof bbop.monarch.widget.display == "undefined" ){ bbop.monarch.widget.display = {}; }
 
 /*

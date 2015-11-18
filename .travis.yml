@@ -1,10 +1,29 @@
 language: javascript
 
+
 before_install:
+  - "uname -a"
+  - "gcc --version"
+  - "lsb_release -a"
+  - "sudo add-apt-repository ppa:ubuntu-toolchain-r/test -y"
+  - "sudo apt-get update -q"
+  - "sudo apt-get install python-software-properties -y"
+  - "sudo apt-get install gcc-4.8 -y"
+  - "sudo apt-get install g++-4.8 -y"
+  - "sudo update-alternatives --install /usr/bin/gcc gcc /usr/bin/gcc-4.8 60 --slave /usr/bin/g++ g++ /usr/bin/g++-4.8"
+  - "gcc --version"
   - "/sbin/start-stop-daemon --start --quiet --pidfile /tmp/custom_xvfb_99.pid --make-pidfile --background --exec /usr/bin/Xvfb -- :99 -ac -screen 0 1280x1024x16"
+  - "npm cache clean -f"
+  - "nvm install 4.2.2"
+  - "nvm use 4.2.2"
+  - "npm version"
+  - "npm install -g npm@3.4.0"
+  - "npm version"
+  - "which npm"
 
 # command to install dependencies
 install:
+  - "# rm -rf node_modules/"
   - "./install.sh"
   - "sudo pip install selenium"
   - "sudo pip install behave"
@@ -12,13 +31,27 @@ install:
 
 before_script:
   - "export DISPLAY=:99.0"
-  - "./start-server.sh &"
+  - "npm run start &"
+  - "# npm run build"
+  - "# npm run bstart &"
   - "sleep 25"
 
+after_success:
+  - "cat ./webdriver.log"
+  - "cat ../../start-server.log"
+
+after_failure:
+  - "cat ./webdriver.log"
+  - "cat ../../start-server.log"
+
 # command to run tests
-script: 
+script:
+  - "# ps auwx|grep webapp_launcher.js"
   - "make test"
   - "cd tests/behave"
+  - "# ps auwx|grep webapp_launcher.js"
+  - "# curl -v http://localhost:8080"
+  - "# curl -v http://localhost:8080/disease/DOID:3044.json"
   - "TARGET=http://localhost:8080 behave"
 
 # whitelist

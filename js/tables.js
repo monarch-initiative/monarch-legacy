@@ -10,7 +10,7 @@
  * widgets.js. To make a table sortable, add the column name of the table to the
  * appropriate dictionary for sortable type. */
 
-jQuery(document).ready(function(){
+function InitTables() {
 
     /* This provides functions for comparing elements by datatype. */
     var table = jQuery('.simpletable').stupidtable({
@@ -75,5 +75,11 @@ jQuery(document).ready(function(){
             th.eq(data.column).find('.arrow').text(arrow);
         }
     });
+}
 
-});
+if (typeof(loaderGlobals) === 'object') {
+    loaderGlobals.InitTables = InitTables;
+}
+if (typeof(global) === 'object') {
+    global.InitTables = InitTables;
+}

@@ -66,16 +66,17 @@
  * Make the ajax a little more pleasant if available.
  */
 .ui-autocomplete-loading {
-    background: white url('../images/waiting_ac.gif') right center no-repeat;
+    border:1px solid green !important;
+    background: white url('/images/waiting_ac.gif') right center no-repeat;
 }
 .ui-ajax-loading {
-    background: white url('../images/waiting_ajax.gif') right center no-repeat;
+    background: white url('/images/waiting_ajax.gif') right center no-repeat;
 }
 .ui-poll-loading-right {
-    background: white url('../images/waiting_poll.gif') right center no-repeat;
+    background: white url('/images/waiting_poll.gif') right center no-repeat;
 }
 .ui-poll-loading-left {
-    background: white url('../images/waiting_poll.gif') left center no-repeat;
+    background: white url('/images/waiting_poll.gif') left center no-repeat;
 }
 
 /*

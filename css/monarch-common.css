@@ -8,11 +8,45 @@ html, body {
 }
 p {
     font-family: Helvetica, Arial, sans-serif;
+    font-size: 14px;
+    margin-bottom: 0px;
+}
+
+p.bigfont {
+    font-size: 16px;
+    line-height: 26px;
 }
 .clear {
     clear: both;
 }
 
+#accordion .panel-title {
+    color: #428bca;
+    font-size: 18px;
+}
+
+/* This overrides many Bootstrap jumbotron styles to make things take less height. */
+
+.monarch-container .jumbotron {
+    position: relative;
+    margin:0;
+    margin-top: 0px;
+    margin-bottom: 20px;
+    border-radius: 2px;
+    border-bottom: black solid 1px;
+    padding: 0px 30px 0px 30px;
+    border: 1px solid transparent;
+}
+.monarch-container .jumbotron h1 {
+    font-size: 30px;
+    margin: 10px 0px;
+}
+.monarch-container .jumbotron p {
+    font-size: 16px;
+    line-height: 20px;
+    margin: 0px;
+    padding: 0px;
+}
 
 
 /* Navbar */
@@ -23,68 +57,91 @@ p {
  * The default Bootstrap behavior makes the navbar quite different from regular
  * browser width to smaller (e.g. smartphone browsers). */
 
-.navbar.monarch-navbar {
+
+#navbar .navbar { z-index: 100; } /* Default of 1000 interferes with popups etc. */
+#navbar .navbar { padding: 3px;}
+
+
+#navbar .navbar .dropdown-menu {
+  border-radius: 0;
+  box-shadow: none;
+}
+
+#navbar .navbar.monarch-navbar {
     padding:0;
     padding-left: 5px;
     padding-right: 5px;
     margin:0;
 }
 
-@media (min-width: 815px) {
-    .monarch-navbar-container {
-        padding: 0px 10px;
-    }
+#navbar .searchspace {
+    margin: 0;
+    margin-top:5px;
+    padding: 0;
 }
-@media (min-width: 768px) {
-    .navbar {
-        min-height: 30px;
-    }
-    .nav>li>a {
-        padding: 0px;
-    }
-    .dropdown-toggle {
-        margin: 5px 10px 5px 10px;
-    }
-    .dropdown {
-        padding: 4px 0px 0px;
-    }
-    .navbar-brand {
-        padding: 8px 20px 0px 20px;
-    }
-    .navbar-link {
-        font-size: 14px;
-    }
-    .navbar-text {
-        margin-top: 2px;
-        margin-bottom: 2px;
-        font-weight: 400;
-        margin-right: 5px;
-    }
-    .searchspace {
-        float: right;
-    }
-    .input-group {
-        margin-bottom: 0px;
-    }
-    .form-control {
-        padding: 0px 10px;
-        height: 28px;
-        border-radius: 2px;
-    }
-    .nav-search-btn{
-        width:auto;
-    }
-    .input-group-btn .btn {
-        padding: 0px 10px;
-        height: 28px;
-        border-radius: 2px;
-    }
-    #search {
-        width: 180px;
-        font-size: 13px;
-    }
+
+#search {
+    margin: 0;
+    width:180px;
+    font-size: 13px;
+    height:30px;
 }
+
+#navbar .nav-search-btn {
+    font-weight:500;
+    padding: 0px 10px;
+    font-weight:500;
+    width:40px;
+    height: 30px;
+    margin:0;
+    margin-left:-3px;
+}
+
+#xnavbar .monarch-navbar-container {
+    padding: 0px 10px;
+}
+#navbar.navbar {
+    min-height: 40px;
+    max-height: 40px;
+}
+#navbar .nav>li>a {
+    padding: 0px;
+}
+#navbar .dropdown-toggle {
+    margin: 5px 10px 5px 10px;
+}
+#navbar .dropdown {
+    padding: 4px 0px 0px;
+}
+#navbar .navbar-brand {
+    padding: 8px 20px 0px 20px;
+}
+#navbar .navbar-link {
+    font-size: 14px;
+}
+#navbar .navbar-text {
+    margin-top: 2px;
+    margin-bottom: 2px;
+    font-weight: 400;
+    margin-right: 5px;
+}
+
+
+
+
+.input-group {
+    margin-bottom: 0px;
+}
+.input-group-btn .btn {
+    padding: 0px 10px;
+    border-radius: 2px;
+}
+
+/*
 @media (max-width: 800px) {
+    .navbar {
+        min-height: 40px;
+    }
     .monarch-navbar-container {
         margin: 0px -3px;
     }
@@ -111,38 +168,42 @@ p {
     .navbar-form {
         margin-top: 0px;
     }
-    #search_form{
-        width: 90%;
-    }
-    #search { 
-        margin: 0 20px;
-        font-size: 13px;        
-    }
 }
+*/
 
 /* Content Containers */
 
-@media (min-width: 768px) {
-    .monarch-container {
-        padding: 40px 0px 0px;
-        height: 100%;
-    }
+.wrapperforfooter .container-fluid.monarch-container {
+    padding: 40px 0px 0px;
+    height: 100%;
 }
+/**/
+
+/*
 @media (max-width: 768px) {
     .monarch-container {
         padding: 50px 0px 0px;
         height: 100%;
     }
-    
+
     .input-group-btn .btn {
         padding: 5px 10px;
         line-height: 26px;
         border-radius: 2px;
     }
 }
+*/
+
 .content {
     display: inline-block;
     height: 100%;
+    width: 100%;
+    padding: 0;
+    margin: 0;
+}
+
+.content-bottom {
+    padding: 0 30px 0 30px;
 }
 
 .toggleitems > .fewitems {
@@ -164,6 +225,7 @@ p {
 #monarch-logo {
     height: 45px;
     float: left;
+    margin-right: 20px;
 }
 #monarch-logo-horizontal {
     height: 50px;
@@ -186,7 +248,7 @@ p {
 /* This light brown color is used for jumbotron content related to disease pages.
  * For example, it is use for the disease spotlight on the disease main page and
  * for disease information on disease specific pages. */
-.monarch-disease-light {
+.monarch-container .monarch-disease-light {
     background-color: #ECE8E3;
 }
 /* This darker brown color is used for the buttons related to disease pages. */
@@ -246,6 +308,7 @@ p {
 /* These styles override some bootstrap button styles to make the buttons slimmer
  * and less skeuomorphic. */
 
+/*
 .btn {
     padding: 5px 15px;
 }
@@ -253,9 +316,20 @@ p {
     background-color: #53AED7;
     border-color: #53AED7;
 }
+*/
+
 .downloadline {
     display: inline-block;
+
 }
+
+img.downloadline {
+    margin-top: 10px !important;
+}
+h1.downloadline {
+    margin-top: 20px !important;
+}
+
 .btn.downloadline {
     padding: 5px 15px;
     margin-bottom: 10px;
@@ -301,7 +375,7 @@ p {
 }
 /* Get a spinner for jQuery autocomplete wait. */
 .ui-autocomplete-loading {
-    background: white url('/image/waiting_ac.gif') right center no-repeat !important;
+    background: white url('../image/waiting_ac.gif') 95% center no-repeat !important;
 }
 
 .ui-score-spinner {
@@ -312,8 +386,10 @@ p {
 .form-control {
     padding: 2px 10px;
     line-height: 13px;
+    height:28px;
     border-radius: 2px;
 }
+*/
 
 /* Analyze Page */
 
@@ -332,13 +408,14 @@ p {
 /* Alerts */
 /* This is the styling for alerts about development that appear at the tops of dev
  * pages throughout the Monarch site. */
- 
-.alert {
-    margin: 0px;
-    padding: 0px 20px;
+
+.monarch-container .top-alert {
     border: 1px solid black;
     border-radius: 0px 0px 3px 3px;
     border-top: none;
+    font-size: 1.4em;
+    padding: 0.4em;
+    margin: auto;
 }
 
 /*
@@ -349,21 +426,26 @@ p {
     height: 30px;
     width: 60px;
     margin: 0;
-    margin-top: -3px;
-    margin-left: -5px;
-    margin-right: 4px;
+    margin-top: -4px;
+    margin-left: -7px;
+    margin-right: 10px;
     padding: 0;
 }
 
-.navbar-brand {
+#navbar .navbar-brand {
+    height: 35px;
+    padding: 9px 25px 0px 14px;
     font-size: 18px;
-    margin-top: -2px;
+    font-weight: 500;
+    margin:0;
+    margin-left:-17px;
+    margin-top:-2px;
 }
 
 /* BS3 Pager from bbop.live_pager widget */
 .bs3pager .btn {
-	margin-right: 2px;
-	padding: 2px 12px;
+    margin-right: 2px;
+    padding: 2px 12px;
 }
 
 .bs3pager-bottom .btn {
@@ -399,7 +481,7 @@ p {
 
 /* BBOP overrides and additions */
 .bbop-js-ui-browse li {
-	margin-top: 2px;
+    margin-top: 2px;
 }
 
 .bbop-js-text-button-sim:hover {
@@ -411,18 +493,18 @@ p {
 }
 
 #overview .col-xs-12, #overview .col-sm-12, #overview .col-md-12, #overview .col-lg-4{
-	padding-left: 0px;
-	padding-top: 10px;
+    padding-left: 0px;
+    padding-top: 10px;
 }
 
 
 .sibling-form label {
-	font-weight: normal;
+    font-weight: normal;
 }
 
 /* Amigo Styling needed for golr views, need to update to fit the monarch site
  */
- 
+
 .hidden { visibility: hidden; }
 .odd_row { background: #ffffff; }
 .even_row { }
@@ -568,8 +650,7 @@ a:hover .hilite, a:active .hilite {
        container is not off. */
     width: auto;
 }
-.navbar { z-index: 100; } /* Default of 1000 interferes with popups etc. */
-.navbar { padding: 3px;}
+
 .page-header { text-align: center; }
 .page-header { text-align: center; }
 .page-header { text-align: center; }
@@ -596,11 +677,10 @@ a:hover .hilite, a:active .hilite {
     font-size: 16px;
 }
 
-
-
 .main-content {
   background-color:#EEEEEE;
 }
+
 
 #feedback-window-container .form-group {
   margin: 0;
@@ -672,7 +752,7 @@ a:hover .hilite, a:active .hilite {
     color: black;
 }
 
-#feedback-main {
+#navbar #feedback-main {
   border:4px solid darkgray !important;
   border-radius: 15px !important;
   padding:20px;
@@ -681,10 +761,9 @@ a:hover .hilite, a:active .hilite {
   background: #EEEEEE;
 }
 
-
 #navbar #feedback-trigger {
     height:30px;
-    margin-top: -1px;
+    margin-top: -2px;
     border:1px solid transparent;
     background-color: #222;
     color: #43A395;
@@ -695,25 +774,18 @@ a:hover .hilite, a:active .hilite {
     border:1px solid transparent;
 }
 
-
-#feedback-handle {
+#navbar #feedback-handle {
   margin: auto;
   padding: 0;
 }
 
 
-#feedback-window-container.dropdown ul.simple-menu {
+#navbar #feedback-window-container.dropdown ul.simple-menu {
   position: fixed;
   width: 90%;
   padding: 0 !important;
   margin:auto !important;;
-  top: 80px;
+  top: 50px;
   border: none;
   background: transparent;
 }
-
-.navbar .dropdown-menu {
-  border-radius: 0;
-  box-shadow: none;
-}
-

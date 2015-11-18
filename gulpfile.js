@@ -5,7 +5,6 @@
 ////
 
 var gulp = require('gulp');
-var jsdoc = require('gulp-jsdoc');
 var mocha = require('gulp-mocha');
 var uglify = require('gulp-uglify');
 var rename = require("gulp-rename");

@@ -3,9 +3,9 @@
 ////
 
 //
-if (!jQuery) {
-	var jQuery = require('jquery');
-}
+// if (!jQuery) {
+// 	var jQuery = require('jquery');
+// }
 if (!_) {
 	var _ = require('underscore');
 }
@@ -70,7 +70,7 @@ function MonarchCarousel(carousel_elt, tabber_elt, next_id, prev_id){
 	// costs almost nothing.
 	var strikes = 0;
 
-	// Double check carsousel/slide structure.
+	// Double check carousel/slide structure.
 	if( jQuery(celt).length && jQuery(telt).length &&
 	    (jQuery(celt).length == jQuery(telt).length) ){
 	    // Good.
@@ -223,15 +223,20 @@ function MonarchCarousel(carousel_elt, tabber_elt, next_id, prev_id){
     }
 }
 
+// Hack so that HomePage.js only executes this document.ready function
+// when actually on the home page.
+// The proper way to do this is to expose this function (e.g., InitHomePage()) and invoke it via
+// pup_tent's monarch_launchable feature.
 //
-if (location.pathname === '/') {
-jQuery(document).ready(function(){
+
+function InitHomePage(){
+	console.log('InitHomePage', jQuery);
 
     // Ready search form in corner, with non-standard names.
     // (Default should not load as the default ids do not exists here.)
     //navbar_search_init('home_search', 'home_search_form');
 
-    // Start carsousel.
+    // Start carousel.
     var mcid = '#' + "monarch-carousel"; // carousel series
     var mtid = '#' + "monarch-tabber"; // carousel tabber
     var nextid = '#' + "monarch-tabber-next"; // carousel tabber
@@ -241,6 +246,12 @@ jQuery(document).ready(function(){
 
     // Get explore popovers ready.
     jQuery('[data-toggle="popover"]').popover({'trigger':'hover'})
-});
 }
 
+
+if (typeof exports === 'object') {
+    exports.InitHomePage = InitHomePage;
+}
+if (typeof(loaderGlobals) === 'object') {
+    loaderGlobals.InitHomePage = InitHomePage;
+}

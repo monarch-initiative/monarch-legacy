@@ -1,7 +1,7 @@
 /* This script document is primarily used for tab behavior on pages relating to
  * specific diseases, phenotypes, genes, or genotypes. */
 
-jQuery(document).ready(function(){
+function InitTabs() {
 
     /* All Disease, Phenotype, Gene, & Genotype Specific Pages */
 
@@ -43,24 +43,24 @@ jQuery(document).ready(function(){
         jQuery(panel_id).show();
         jQuery(".query-tab").css({'color': 'white', 'background-color': '#999', 'border-bottom': '1px solid black'});
         jQuery(".results-tab").css({'color': 'white', 'background-color': '#999', 'border-bottom': '1px solid black'});
-        jQuery(".upload-tab").css({'color': 'black', 'background-color': 'white', 'border-bottom': '1px solid white'}); 
+        jQuery(".upload-tab").css({'color': 'black', 'background-color': 'white', 'border-bottom': '1px solid white'});
     });
-    
+
     // Since we're a tabby version, we're going to try and open
     // any tabs defined by fragments.
     if ( window && window.location && window.location.hash &&
         window.location.hash != "" && window.location.hash != "#" ){
         var fragname = window.location.hash;
-        
+
         jQuery('.first.category').hide();
         jQuery(fragname).show();
-        
+
         jQuery('.contenttab').css({'color': 'white', 'background-color': '#999', 'border-bottom': '1px solid black'});
-        jQuery('.tabcontainer a[href="' + fragname + '"]').children('.contenttab').css({'color': 'black', 'background-color': 'white', 'border-bottom': '1px solid white'}); 
+        jQuery('.tabcontainer a[href="' + fragname + '"]').children('.contenttab').css({'color': 'black', 'background-color': 'white', 'border-bottom': '1px solid white'});
     }
 
     /* Literature Tab */
-    
+
     /* This is used to display hidden authors on the literature tab (because only the
      * first three authors of a publications are currently displayed. */
     jQuery('.etal').click(function(event) {
@@ -77,4 +77,11 @@ jQuery(document).ready(function(){
         jQuery(this).parent().find('.etal').show();
     });
 
-});
+}
+
+if (typeof(loaderGlobals) === 'object') {
+    loaderGlobals.InitTabs = InitTabs;
+}
+if (typeof(global) === 'object') {
+    global.InitTabs = InitTabs;
+}

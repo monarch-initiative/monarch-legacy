@@ -3,26 +3,12 @@
  * and the content layout. */
 
 /* Main Spotlight */
-/* This overrides many Bootstrap jumbotron styles to make things take less height. */
 
-.jumbotron {
-    position: relative;
-    margin-top: 0px;
-    border-radius: 2px;
-    padding: 10px 30px 20px;
-}
-.jumbotron h1 {
-    font-size: 30px;
-    margin: 10px 0px;
-}
-.jumbotron p {
-    font-size: 16px;
-    line-height: 26px;
-    margin: 0px;
-}
-#monarch-logo {
+
+/*#monarch-logo {
     margin-right: 20px;
 }
+*/
 .btn-monarch-main {
     padding: 10px 15px;
     font-weight: 400;
@@ -32,13 +18,6 @@
 /* Rest of Content */
 /* This overrides Bootstrap content styles. */
 
-.col-lg-9 {
-    padding-left: 30px;
-    margin-top: -20px;
-}
-.col-lg-9 h1 {
-    font-size: 22px;
-}
 .ui-autocomplete {
     position:absolute;
     cursor:default;

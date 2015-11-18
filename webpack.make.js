@@ -48,11 +48,11 @@ module.exports = function makeWebpackConfig (options) {
   } else {
     config.output = {
       // Absolute output directory
-      path: __dirname + '/dist',
+      path: path.join(__dirname, '/dist'),
 
       // Output path from the view of the page
       // Uses webpack-dev-server in development
-      publicPath: BUILD ? '' : 'http://localhost:8081/',
+      publicPath: BUILD ? '/dist/' : 'http://localhost:8081/dist/',
 
       // Filename for entry points
       // Only adds hash in build mode
@@ -100,7 +100,13 @@ module.exports = function makeWebpackConfig (options) {
       // Transpile .js files using babel-loader
       // Compiles ES6 and ES7 into ES5 code
       test: /\.js$/,
-      loader: 'babel?optional=runtime',
+      // loader: 'babel?optional=runtime',
+      loader: 'babel',
+      query: {
+          // https://github.com/babel/babel-loader#options
+          cacheDirectory: true,
+          presets: ['es2015']
+      },
       exclude: /(node_modules|js\/d3\.min\.js|js\/jquery-.+)/
     },
 
@@ -211,7 +217,7 @@ module.exports = function makeWebpackConfig (options) {
     // Reference: https://github.com/webpack/extract-text-webpack-plugin
     // Extract css files
     // Disabled when in test mode or not in build mode
-    new ExtractTextPlugin('[name].[hash].css', {
+    new ExtractTextPlugin('[name].bundle.css', {    // '[name].[hash].css', {
       disable: !BUILD || TEST
     }),
     new webpack.ProvidePlugin({
@@ -261,16 +267,28 @@ module.exports = function makeWebpackConfig (options) {
     var BrowserSyncPlugin = require('browser-sync-webpack-plugin');
     config.plugins.push(
       new BrowserSyncPlugin({
-        proxy: 'localhost:8081'
+        proxy: 'localhost:8081',
+        files: ['templates/*.mustache', 'css/*.css'],
+        //tunnel: true,
+        ghostMode: {
+            clicks: false,
+            forms: false,
+            scroll: false
+        },
+        // logLevel: "debug",
+        // logConnections: true,
+        reloadOnRestart: true,
+        browser: ["google chrome"], // ["google chrome", "safari"]
+        files: ["serverStarted.dat"]
       }));
   }
 
   config.resolve = {
     modulesDirectories: ['node_modules', 'image'],
     alias: {
-        'bbop.min.js': path.join(__dirname, "node_modules/bbop.js"),
-        jquery: path.join(__dirname, "js/jquery-1.11.0.min.js"),
-        underscore: path.join(__dirname, "js/underscore-min.js"),
+        //'bbop.min.js': path.join(__dirname, "node_modules/bbop.js"),
+        //jquery: path.join(__dirname, "js/jquery-1.11.0.min.js"),
+        // underscore: path.join(__dirname, "js/underscore-min.js"),
         'ringo/httpclient': path.join(__dirname, "js/nop.js")
     }
   };

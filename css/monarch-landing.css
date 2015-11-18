@@ -1,5 +1,5 @@
 body {
-  padding-top: 50px; /* Body padding for fixed navbar */
+  /* padding-top: 50px; /* Body padding for fixed navbar */
 }
 
 .graph-container{
@@ -23,9 +23,10 @@ body {
     border-width:1px;
 }
 .dove-container{
-    position: relative;
+    /* position: relative; */
     border-style:solid;
     border-width:1px;
+    margin:0;padding:0;
 }
 .gene-disease-container{
     position: relative;

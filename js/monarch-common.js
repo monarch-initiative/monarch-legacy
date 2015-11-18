@@ -1,9 +1,10 @@
 /* This script document contains functions relating to general Monarch pages. */
 
-if (typeof bbop == 'undefined') { var bbop = {};}
-if (typeof bbop.monarch == 'undefined') { bbop.monarch = {};}
+function initMonarchPage(){
+    console.log('initMonarchPage');
 
-jQuery(document).ready(function(){
+    bbop.monarch.remove_equivalent_ids = remove_equivalent_ids;
+    bbop.monarch.filter_equivalents = filter_equivalents;
 
     // Feedback form
     $('#feedback-window-container #feedback-trigger').on('click', function(event) {
@@ -68,13 +69,13 @@ jQuery(document).ready(function(){
                 //         $("#alert_template span").remove();
                 //     },
                 //     13000);
-                $("#alert_template #feedback-response").text('Thanks for your feedback');
-                $('#alert_template').fadeIn('slow');
+                jQuery("#alert_template #feedback-response").text('Thanks for your feedback');
+                jQuery('#alert_template').fadeIn('slow');
             }
         });
     });
 
-    $("#feedback-window-container #simple-menu").draggable({
+    jQuery("#feedback-window-container #simple-menu").draggable({
         handle: "#feedback-handle"
     });
 
@@ -113,12 +114,9 @@ jQuery(document).ready(function(){
         jQuery(this).parent().find('.hideitems').hide();
         jQuery(this).parent().find('.fewitems').show();
     });
-
-
-});
+}
 
 function getAnnotationScore() {
-    
     var isLoading = false;
     jQuery('#categories a[href="#phenotypes"]').click(function(event) {
         if (isLoading == false){
@@ -356,6 +354,13 @@ function makeSpinnerDiv(args){
 }
 
 if (typeof exports === 'object') {
+    exports.initMonarchPage = initMonarchPage;
     exports.getAnnotationScore = getAnnotationScore;
+    exports.remove_equivalent_ids = remove_equivalent_ids;
+    exports.makeSpinnerDiv = makeSpinnerDiv;
 }
-
+if (typeof(loaderGlobals) === 'object') {
+    loaderGlobals.initMonarchPage = initMonarchPage;
+    loaderGlobals.remove_equivalent_ids = remove_equivalent_ids;
+    loaderGlobals.makeSpinnerDiv = makeSpinnerDiv;
+}

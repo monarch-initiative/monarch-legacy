@@ -10,6 +10,7 @@
  *                          value: 'phenotype"
  *                      }
  */
+
 function getTableFromSolr(id, golr_field, div, filter, personality, tab_anchor){
     if (tab_anchor != null){
         var isTabLoading = false;
@@ -261,7 +262,7 @@ function addDownloadButton(pager, manager){
                 header : "true"
         }
         
-        url = manager.get_download_url(field_list, args_hash);
+        var url = manager.get_download_url(field_list, args_hash);
         location.href = url;
     }
     
@@ -294,7 +295,7 @@ function getOntologyBrowser(id, label, root){
         success: function ( data ){
             var graph = new bbop.model.graph();
             graph.load_json(data);
-            node_list = [];
+            var node_list = [];
             node_list = graph.all_nodes();
             if (node_list.length > 1) {
                 // An error occurred, there can only be one
@@ -339,7 +340,6 @@ function getOntologyBrowser(id, label, root){
 }
 
 function getInteractiveOntologyBrowser(id, root){
-    
     // Conf
     // Global scigraph url passed in from webapp.js addCoreRenderers
     var srv = global_scigraph_url;
@@ -366,4 +366,13 @@ function getInteractiveOntologyBrowser(id, root){
     });
 
     b.init_browser(id);
+}
+
+if (typeof(loaderGlobals) === 'object') {
+    loaderGlobals.getTableFromSolr = getTableFromSolr;
+    loaderGlobals.getOntologyBrowser = getOntologyBrowser;
+}
+if (typeof(global) === 'object') {
+    global.getTableFromSolr = getTableFromSolr;
+    global.getOntologyBrowser = getOntologyBrowser;
 }
