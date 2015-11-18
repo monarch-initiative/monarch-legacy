@@ -1,3 +1,12 @@
+//
+//  requireconfig.js
+//
+//  This file is included when env variable USE_BUNDLE is not defined or not equal to '1',
+//  which we will call non-bundled or Legacy Mode.
+//  The Monarch UI uses [RequireJS](http://requirejs.org) in this case (non-bundled mode), to 
+//  load various JS files and modules, and to ensure they are loaded in the correct order.
+//
+
 console.log('requireconfig.js');
 
 require(['require', 'jquery'], function (_require, _jquery) {

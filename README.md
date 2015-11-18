@@ -72,11 +72,11 @@ You will need to have NodeJS and NPM installed. At the time of this writing, we 
 
     > npm version
         ...
-          npm: '3.3.10',
+          npm: '3.4.0,
         ...
-          node: '0.12.7',
+          node: '4.2.2',
 
-We will be migrating to NodeJS 4.x soon; 4.x is the successor to the 0.12.x version of NodeJS.
+About Node Versioning: Node 4.x is the immediate successor to the 0.12.x version of NodeJS. The version number jumped from 0.12.2 to 4.0.0 as a result of the NodeJS committee adjusting their version-numbering system recently. More information is in the [V4.0 Release Notes](https://nodejs.org/en/blog/release/v4.0.0/).
 
 
 ### Download and Install Monarch
@@ -156,7 +156,14 @@ See [bin/README.md](bin/README.md).
 
 ## Non-bundled use of `require.js`
 
-Talk about the `requireconfig.js` file.
+When env variable USE_BUNDLE is not defined or not equal to '1', which we will
+call non-bundled or Legacy Mode, the Monarch UI uses
+[RequireJS](http://requirejs.org) to load various JS files and modules, and to
+ensure they are loaded in the correct order.
+
+The file `requireconfig.js` is included via `monarch_base.mustache` by RequireJS and this file
+contains a set of `require` statements that include other JS files used by the Monarch front-end.
+
 
 ## New UI Tools and Bundling Instructions
 
