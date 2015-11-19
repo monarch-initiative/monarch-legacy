@@ -1,8 +1,6 @@
 // Phenogrid loader
 function loadPhenogrid(){
 
-    initPhenogrid();
-
     function initPhenogrid () {
         // Add spinner
         var spinner_div = makeSpinnerDiv();

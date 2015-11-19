@@ -1,7 +1,8 @@
-    {{{includes.navbar}}}
-    <div class="monarch-container">
+{{{includes.navbar}}}
+
+<div class="wrapperforfooter">
+    <div class="container-fluid monarch-container">
         <div class="content">
-            <div class="wrapperforfooter">
             <div class="jumbotron monarch-disease-light">
                 <div id="description">
                     {{#alerts}}
@@ -60,19 +61,19 @@
                                 {{aka}}
                             </div>
                         {{/hasAka}}
-                        
+
                         {{#hasTypes}}
                           <div class="ids">
                                 <b>Type:</b> {{{types}}}
-                            </div>  
+                            </div>
                         {{/hasTypes}}
-                        
+
                         {{#hasDef}}
                           <div class="ids">
                                 <b>Description:</b> {{definitions}}
-                            </div>  
+                            </div>
                         {{/hasDef}}
-                        
+
                         {{#hasXrefs}}
                             <div class="ids">
                                 <b>Cross References:</b> {{{xrefs}}}
@@ -91,8 +92,8 @@
                     {{{includes.genotype_table}}}
 
                 </div>
-        
-            </div> <!-- closes wrapperforfooter -->
-            {{{includes.footer}}}
         </div>
     </div>
+
+</div> <!-- closes wrapperforfooter -->
+{{{includes.footer}}}
