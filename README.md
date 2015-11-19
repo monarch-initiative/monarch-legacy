@@ -74,10 +74,11 @@ You will need to have NodeJS and NPM installed. At the time of this writing, we 
         ...
           npm: '3.4.0,
         ...
-          node: '4.2.2',
+          node: '0.12.2',
 
 About Node Versioning: Node 4.x is the immediate successor to the 0.12.x version of NodeJS. The version number jumped from 0.12.2 to 4.0.0 as a result of the NodeJS committee adjusting their version-numbering system recently. More information is in the [V4.0 Release Notes](https://nodejs.org/en/blog/release/v4.0.0/).
 
+We are currently holding at 0.12.2 and HapiJS 11.0.2 due to GCC version issues on some of our CentOS deployment nodes. When we are able to update these nodes to GCC 4.8, then we can update package.json to reflect Node 4.2.x and HapiJS 11.1.x, which are the current stable and supported versions of these packages.
 
 ### Download and Install Monarch
 
