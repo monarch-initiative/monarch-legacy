@@ -6,6 +6,7 @@ tests/behave/local
 tests/behave/.Python
 tests/behave/pip-selfcheck.json
 tests/behave/selenium/*
+tests/behave/webdriver.log
 
 ## Ignore npm libs.
 node_modules
@@ -31,3 +32,6 @@ templates/labs/jbrowse
 *.swp
 *.swo
 serverStarted.dat
+start-server.log
+npm-debug.log
+dist/
