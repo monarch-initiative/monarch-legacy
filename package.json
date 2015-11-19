@@ -27,8 +27,8 @@
     "url": "https://github.com/monarch-initiative/monarch-app"
   },
   "engines": {
-    "node": ">= 4.2.2",
-    "npm": ">= 3.3.12"
+    "node": ">= 0.12.2",
+    "npm": ">= 3.4.0"
   },
   "dependencies": {
     "async": "^1.5.0",
