@@ -268,7 +268,7 @@ module.exports = function makeWebpackConfig (options) {
     config.plugins.push(
       new BrowserSyncPlugin({
         proxy: 'localhost:8081',
-        files: ['templates/*.mustache', 'css/*.css'],
+        files: ['templates/*.mustache', 'css/*.css', 'serverStarted.dat'],
         //tunnel: true,
         ghostMode: {
             clicks: false,
@@ -278,8 +278,7 @@ module.exports = function makeWebpackConfig (options) {
         // logLevel: "debug",
         // logConnections: true,
         reloadOnRestart: true,
-        browser: ["google chrome"], // ["google chrome", "safari"]
-        files: ["serverStarted.dat"]
+        browser: ["google chrome"] // ["google chrome", "safari"]
       }));
   }
 

@@ -7,26 +7,26 @@ function initMonarchPage(){
     bbop.monarch.filter_equivalents = filter_equivalents;
 
     // Feedback form
-    $('#feedback-window-container #feedback-trigger').on('click', function(event) {
+    jQuery('#feedback-window-container #feedback-trigger').on('click', function(event) {
       event.preventDefault();
       event.stopPropagation();
-      $(this).parent().siblings().removeClass('open');
-      $(this).parent().toggleClass('open');
+      jQuery(this).parent().siblings().removeClass('open');
+      jQuery(this).parent().toggleClass('open');
 
-      if ($('#feedback-window-container').hasClass('open')) {
+      if (jQuery('#feedback-window-container').hasClass('open')) {
         jQuery('#alert_template button').click(function(e) {
-                $('#alert_template').fadeOut('slow');
+                jQuery('#alert_template').fadeOut('slow');
             });
 
-        $('#feedback-window-container .feedback-close').click(function(e) {
-          $('#feedback-window-container').removeClass('open');
+        jQuery('#feedback-window-container .feedback-close').click(function(e) {
+          jQuery('#feedback-window-container').removeClass('open');
         });
       }
       else {
       }
     });
 
-    $('#feedback-window-container #feedback-submit-button').click(function(){
+    jQuery('#feedback-window-container #feedback-submit-button').click(function(){
         var feedbackUrl = '/feedback';
         var goalText = jQuery('#feedback-window-container #feedback-goal').val();
         var improveText = jQuery('#feedback-window-container #feedback-improve').val();
@@ -65,8 +65,8 @@ function initMonarchPage(){
                 jQuery('#feedback-window-container').removeClass('open');
 
                 // window.setTimeout(function() {
-                //         $('#alert_template').fadeOut('slow');
-                //         $("#alert_template span").remove();
+                //         jQuery('#alert_template').fadeOut('slow');
+                //         jQuery("#alert_template span").remove();
                 //     },
                 //     13000);
                 jQuery("#alert_template #feedback-response").text('Thanks for your feedback');
