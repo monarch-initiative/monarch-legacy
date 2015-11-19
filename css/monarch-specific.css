@@ -32,6 +32,7 @@
 }
 .monarch-container .tabcontainer {
     display: inline-block;
+    line-height: 30px;
 }
 .monarch-container .tabhover {
     position: absolute;
