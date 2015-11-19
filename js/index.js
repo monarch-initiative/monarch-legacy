@@ -19,14 +19,7 @@ global.jQuery = jq;
 
 import '../image/home-splash.png';
 import '../image/partner-do.png';
-import '../css/monarch.less';
 // import '../node_modules/bootstrap/dist/css/bootstrap.min.css';
-
-import '../node_modules/jquery-ui/themes/trontastic/jquery-ui.css';
-import '../css/monarch-specific.css';
-import '../css/monarch-main.css';
-import '../css/monarch-home.css';
-import '../css/monarch-common.css';
 
 import 'underscore';
 import 'bootstrap';
@@ -38,6 +31,12 @@ import 'd3';
 import './search_form.js';
 import './search-results.js';
 import './monarch-tabs.js';
+
+import '../css/monarch.less';
+import '../css/monarch-specific.css';
+import '../css/monarch-main.css';
+import '../css/monarch-home.css';
+import '../css/monarch-common.css';
 
 //console.log('before import bbop:', Object.keys(bbop));
 import _bbop from 'bbop';
