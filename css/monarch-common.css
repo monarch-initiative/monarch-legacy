@@ -473,7 +473,7 @@ h1.downloadline {
     padding:5px;
 }
 
-.bs3filter .panel .panel-heading .panel-title{
+.bs3filter .panel .panel-heading .panel-title {
     font-size: 17px !important; 
 }
 
@@ -483,13 +483,15 @@ h1.downloadline {
 
 .bs3filter .panel .panel-body {
     margin: 0;
-    padding: 0 !important;
+    padding: 3px !important;
 }
 
-.bs3filter .panel .panel-collapse .panel-body {
-    padding: 0 !important;
-    padding-top: 30px;
+/*.bs3filter .panel .panel-body[id*="filter_ui_element_"] {
+    padding: 15px !important;
+    font-weight: 500;
+    color: red;
 }
+*/
 
 /* BBOP overrides and additions */
 .bbop-js-ui-browse li {
