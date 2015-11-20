@@ -397,6 +397,7 @@ monarch.dovechart.prototype.setGroupPositioning = function (histogram, data) {
 monarch.dovechart.prototype.setXYDomains = function (histogram, data, groups) {
     var self = this;
     //Set y0 domain
+    var groups = self.getGroups(data);
 
     histogram.y0.domain(data.map(function(d) { return d.id; }));
     
