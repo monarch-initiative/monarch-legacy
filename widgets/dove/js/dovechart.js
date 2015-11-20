@@ -26,15 +26,14 @@ monarch.dovechart = function(config, tree, html_div, tree_builder){
     self.setPolygonCoordinates();
     
     //Tooltip offsetting
-    self.config.arrowOffset = {height: 36, width: -68};
+    self.config.arrowOffset = {height: 21, width: -100};
     self.config.barOffset = {
                  grouped:{
-                    height: 110,
-                    width: 42
-                  },
-                  stacked:{
                     height: 95,
                     width: 10
+                  },
+                  stacked:{
+                    height: 80
                   }
     };
     
@@ -177,10 +176,10 @@ monarch.dovechart.prototype.makeLegend = function(histogram){
     var groups = self.groups;
     
     //Set legend
-    var legend = histogram.svg.selectAll(".legend")
+    var legend = histogram.svg.selectAll(".barchart")
        .data(groups.slice())
        .enter().append("g")
-       .attr("class", "legend")
+       .attr("class", function(d) {return "legend-"+d; })
        .attr("transform", function(d, i) { return "translate(0," + i * (config.legend.height+7) + ")"; });
 
     legend.append("rect")
@@ -289,7 +288,7 @@ monarch.dovechart.prototype.displaySubClassTip = function(tooltip, d3Selection){
     var w = coords[0];
     
     tooltip.style("display", "block")
-      .html("Click&nbsp;to&nbsp;see&nbsp;subclasses")
+      .html('Click&nbsp;to&nbsp;see&nbsp;subclasses')
       .style("top",h+config.margin.top+config.bread.height+
              config.arrowOffset.height+"px")
       .style("left",w+config.margin.left+config.arrowOffset.width+"px");
@@ -318,7 +317,7 @@ monarch.dovechart.prototype.displayCountTip = function(tooltip, value, name, d3S
                 config.margin.left+"px");
     } else if (barLayout == 'stacked'){
         tooltip.style("top",h+heightOffset+config.barOffset.stacked.height+"px")
-        .style("left",w+config.barOffset.stacked.width+widthOffset+
+        .style("left",w+config.barOffset.grouped.width+widthOffset+
                 config.margin.left+"px");
     }
 };
@@ -646,6 +645,10 @@ monarch.dovechart.prototype.drawGraph = function (histogram, isFromCrumb, parent
     
     var showTransition = false;
     if (isFirstGraph || isFromResize || isFromCrumb){
+        //Create legend
+        if (config.useLegend){
+            self.makeLegend(histogram);
+        }
         showTransition = true;
     }
     var bar = self.setBarConfigPerCheckBox(histogram,data,self.groups,barGroup,showTransition);
@@ -664,11 +667,6 @@ monarch.dovechart.prototype.drawGraph = function (histogram, isFromCrumb, parent
     histogram.setYAxisTextSpacing(0);
     //histogram.svg.selectAll("polygon.wedge").remove();
     
-    //Create legend
-    if (config.useLegend){
-        self.makeLegend(histogram);
-    }
-
     //Make first breadcrumb
     if (config.useCrumb && isFirstGraph && !isFromResize){
         self.makeBreadcrumb(histogram,self.tree.getRootLabel(),
