@@ -55,6 +55,7 @@ monarch.dovechart = function(config, tree, html_div, tree_builder){
     
     self.init = function(html_div, tree){
         var data = tree.getFirstSiblings();
+        data = self.sortDataByGroupCount(data);
         self.groups = self.getGroups(data);
         self.makeGraphDOM(html_div, data); 
         var histogram = new monarch.chart.barchart(config, html_div);
@@ -69,7 +70,7 @@ monarch.dovechart = function(config, tree, html_div, tree_builder){
 monarch.dovechart.prototype.makeGraphDOM = function(html_div, data){
       var self = this;
       var config = self.config;
-      var groups = self.getGroups(data);
+      var groups = self.groups;
       
       //Create html structure
       //Add graph title
@@ -606,7 +607,7 @@ monarch.dovechart.prototype.drawGraph = function (histogram, isFromCrumb, parent
     }
     
     data = self.getStackedStats(data);
-    data = self.sortDataByGroupCount(data, self.groups);
+    data = self.sortDataByGroupCount(data);
     
 
     if (!isFromCrumb){
@@ -1148,17 +1149,18 @@ monarch.dovechart.prototype.getStackedStats = function(data){
       return data;
 };
 
-monarch.dovechart.prototype.sortDataByGroupCount = function(data, groups){
+monarch.dovechart.prototype.sortDataByGroupCount = function(data){
     var self = this;
     //Check if total counts have been calculated via getStackedStats()
     if (!data[0] || !data[0].counts ||  !data[0].counts[0] || data[0].counts[0].x1 == null){
         data = self.getStackedStats(data);
     }
     
-    var lastElement = groups.length-1;
     data.sort(function(obj1, obj2) {
-        if ((obj2.counts[lastElement])&&(obj1.counts[lastElement])){
-            return obj2.counts[lastElement].x1 - obj1.counts[lastElement].x1;
+        var obj2LastElement = obj2.counts.length - 1;
+        var obj1LastElement = obj1.counts.length - 1;
+        if ((obj2.counts[obj2LastElement])&&(obj1.counts[obj1LastElement])){
+            return obj2.counts[obj2LastElement].x1 - obj1.counts[obj1LastElement].x1;
         } else {
             return 0;
         }
@@ -2068,7 +2070,7 @@ monarch.builder.tree_builder.prototype._getCountsForClass = function(id, parents
         if (typeof self.config.facet != 'undefined'){
             var facet_counts = golr_response.facet_field(self.config.facet);
             facet_counts.forEach(function(i){
-                if (typeof self.getTaxonMap()[i[0]] != 'undefined') {           
+                if (typeof self.getTaxonMap()[i[0]] != 'undefined') {
                     var index = counts.map(function(d){return d.name}).indexOf(self.getTaxonMap()[i[0]]);
                     if (index != -1){
                         counts[index]['value'] += i[1];
