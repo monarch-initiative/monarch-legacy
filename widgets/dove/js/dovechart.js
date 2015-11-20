@@ -26,14 +26,14 @@ monarch.dovechart = function(config, tree, html_div, tree_builder){
     self.setPolygonCoordinates();
     
     //Tooltip offsetting
-    self.config.arrowOffset = {height: 21, width: -100};
+    self.config.arrowOffset = {height: 36, width: -68};
     self.config.barOffset = {
                  grouped:{
-                    height: 95,
-                    width: 10
+                    height: 105,
+                    width: 42
                   },
                   stacked:{
-                    height: 80
+                    height: 95
                   }
     };
     
