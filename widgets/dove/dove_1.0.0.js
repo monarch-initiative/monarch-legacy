@@ -53,6 +53,8 @@ monarch.dovechart = function(config, tree, html_div, tree_builder){
         .append("div")
         .attr("class", "tip");
     
+    self.config.category_filter_list = ['Human'];
+    
     self.init = function(html_div, tree){
         var data = tree.getFirstSiblings();
         data = self.sortDataByGroupCount(data);
@@ -171,15 +173,56 @@ monarch.dovechart.prototype.makeGroupedStackedForm = function(html_div){
         "</form>");
 }
 
-monarch.dovechart.prototype.makeLegend = function(histogram){
-    var config = this.config;
-    var groups = self.groups;
+monarch.dovechart.prototype.makeLegend = function(histogram, barGroup){
+    var self = this;
+    var config = self.config;
+    var data = self.tree.getDescendants(self.parents);
     
     //Set legend
     var legend = histogram.svg.selectAll(".barchart")
-       .data(groups.slice())
+       .data(self.groups.slice())
        .enter().append("g")
        .attr("class", function(d) {return "legend-"+d; })
+       .style("opacity", function(d) {
+           if (self.config.category_filter_list.indexOf(d) > -1) {
+               return '.5';
+           } else {
+               return '1';
+           }
+       })
+       .on("mouseover", function(){
+           d3.select(this)
+             .style("cursor", "pointer")
+           d3.select(this).selectAll("rect")
+             .style("stroke", histogram.color)
+             .style("stroke-width", '2');
+           d3.select(this).selectAll("text")
+           .style('font-weight', 'bold');
+        })
+        .on("mouseout", function(){
+           d3.select(this).selectAll("rect")
+             .style("fill", histogram.color)
+             .style("stroke", 'none');
+           d3.select(this).selectAll("text")
+             .style('fill', 'black')
+             .style('font-weight', 'normal');
+        })
+        .on("click", function(d){
+            if (self.config.category_filter_list.indexOf(d) > -1) {
+                //Bring data back
+                var index = self.config.category_filter_list.indexOf(d);
+                self.config.category_filter_list.splice(index,1);
+                
+                self.transitionToNewGraph(histogram, data, barGroup);
+
+                d3.select(this).style("opacity", '1');
+                
+            } else {
+                self.config.category_filter_list.push(d);
+                self.transitionToNewGraph(histogram, data, barGroup);
+                d3.select(this).style("opacity", '.5');
+            }
+        })
        .attr("transform", function(d, i) { return "translate(0," + i * (config.legend.height+7) + ")"; });
 
     legend.append("rect")
@@ -239,6 +282,11 @@ monarch.dovechart.prototype.transitionToNewGraph = function(histogram, data, bar
     self.tooltip.style("display", "none");
     histogram.svg.selectAll(".tick").remove();
     
+    if (typeof bar === 'undefined') {
+        var barClass = '.bar' + (self.parents.length-1);
+        bar = d3.select(self.html_div).selectAll(barClass).selectAll('rect');
+    }
+    
     if (typeof parent != 'undefined'){
         self.level++;
         self.drawGraph(histogram, false, parent);
@@ -270,6 +318,14 @@ monarch.dovechart.prototype.removeSVGWithSelection = function(select, duration, 
 
 monarch.dovechart.prototype.removeSVGWithClass = function(histogram, htmlClass, duration, y, opacity){
     d3.select(self.html_div+'.barchart').selectAll(htmlClass).transition()
+        .duration(duration)
+        .attr("y", y)
+        .style("fill-opacity", opacity)
+        .remove();
+};
+
+monarch.dovechart.prototype.removeRectInGroup = function(histogram, barGroup, duration, y, opacity){
+    d3.select(self.html_div+'.barchart').selectAll(barGroup).selectAll("rect").transition()
         .duration(duration)
         .attr("y", y)
         .style("fill-opacity", opacity)
@@ -572,14 +628,18 @@ monarch.dovechart.prototype.drawGraph = function (histogram, isFromCrumb, parent
     }
     
     var data = self.tree.getDescendants(self.parents);
-    
-    //self.groups = self.getGroups(data);
 
     self.checkData(data);
     data = self.setDataPerSettings(data);
     
+    if (!isFromCrumb){
+        data = self.addEllipsisToLabel(data,config.maxLabelSize);
+    }
+    
     // Some updates to dynamically increase the size of the graph
-    //  This is a bit hacky and needs refactoring
+    // This is a bit hacky and needs refactoring
+    // To fix we need to remove the svg selection in 
+    // barchart.js (this should be decoupled and added in this class instead)
     if (data.length > 25 && self.config.height == self.config.initialHeight){
         self.config.height = data.length * 14.05;
         jQuery(self.html_div + ' .barchart').remove();
@@ -607,12 +667,12 @@ monarch.dovechart.prototype.drawGraph = function (histogram, isFromCrumb, parent
     }
     
     data = self.getStackedStats(data);
+    
+    if (self.config.category_filter_list.length > 0 ) {
+        data = self.removeCategories(data, self.config.category_filter_list);
+    }
     data = self.sortDataByGroupCount(data);
     
-
-    if (!isFromCrumb){
-        data = self.addEllipsisToLabel(data,config.maxLabelSize);
-    }
 
     if (self.groups.length == 1 && isFirstGraph && !isFromResize){
         config.barOffset.grouped.height = config.barOffset.grouped.height+8;
@@ -642,15 +702,16 @@ monarch.dovechart.prototype.drawGraph = function (histogram, isFromCrumb, parent
     
     //Create SVG:G element that holds groups
     var barGroup = self.setGroupPositioning(histogram,data);
-    
     var showTransition = false;
+    //Make legend
     if (isFirstGraph || isFromResize || isFromCrumb){
         //Create legend
         if (config.useLegend){
-            self.makeLegend(histogram);
+            self.makeLegend(histogram, barGroup);
         }
         showTransition = true;
     }
+
     var bar = self.setBarConfigPerCheckBox(histogram,data,self.groups,barGroup,showTransition);
     
     self.setYAxisText(histogram,data, barGroup, bar, yFontSize);
@@ -726,6 +787,10 @@ monarch.dovechart.prototype.changeScalePerSettings = function(histogram){
 
 monarch.dovechart.prototype.changeBarConfig = function(histogram, data, groups, bar){
     var self = this;
+    if (typeof bar === 'undefined') {
+        var barClass = '.bar' + (self.parents.length-1);
+        bar = d3.select(self.html_div).selectAll(barClass).selectAll('rect');
+    }
     if (self.getValueOfCheckbox('mode','grouped')){
         self.transitionGrouped(histogram,data,groups,bar);
     } else if (self.getValueOfCheckbox('mode','stacked')) {
@@ -752,7 +817,6 @@ monarch.dovechart.prototype.pickUpBreadcrumb = function(histogram, index, groups
     var self = this;
     var config = self.config;
     var isFromCrumb = true;
-    var rectClass = ".rect"+self.level;
     var barClass = ".bar"+self.level;
     //set global level
     self.level = index;
@@ -771,7 +835,7 @@ monarch.dovechart.prototype.pickUpBreadcrumb = function(histogram, index, groups
         d3.select(self.html_div).select(".bread"+i).remove();
     }
     self.removeSVGWithClass(histogram,barClass,750,60,1e-6);
-    self.removeSVGWithClass(histogram,rectClass,750,60,1e-6);     
+    self.removeRectInGroup(histogram,barClass,750,60,1e-6);
     
     //Deactivate top level crumb
     if (config.useCrumbShape){
@@ -1229,6 +1293,52 @@ monarch.dovechart.prototype.removeZeroCounts = function(data){
            });
           return (count > 0);
       });
+      return trimmedGraph;
+};
+
+/* Remove a category from the view
+ * removeCategory pushes the category to 
+ * the self.config.category_filter_list instance variable
+ */
+monarch.dovechart.prototype.removeCategory = function(data, category){
+      trimmedGraph = [];
+      trimmedGraph = data.map(function (r){
+          var group = JSON.parse(JSON.stringify(r)); //make copy
+          group.counts = r.counts.filter(function (i){
+               return (i.name !== category);
+           });
+          return group;
+      });
+      
+      if (trimmedGraph.length === 0) {
+          // Reset original as a backup
+          trimmedGraph = data;
+      }
+      //recalculate stacked stats
+      trimmedGraph = self.getStackedStats(trimmedGraph);
+      self.config.category_filter_list.push(category);
+      return trimmedGraph;
+};
+
+/*
+ * Remove a list of categories
+ * This is not simply a wrapper for removeCategory since
+ * we do not want to push these values to the 
+ * self.config.category_filter_list
+*/
+monarch.dovechart.prototype.removeCategories = function(data, categories){
+      trimmedGraph = [];
+      
+          trimmedGraph = data.map(function (r){
+              var group = JSON.parse(JSON.stringify(r)); //make copy
+              group.counts = r.counts.filter(function (i){
+                  return (categories.indexOf(i.name) === -1);
+              });
+              return group;
+          });
+      
+      //recalculate stacked stats
+      trimmedGraph = self.getStackedStats(trimmedGraph);
       return trimmedGraph;
 };
 
