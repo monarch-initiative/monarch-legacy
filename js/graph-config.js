@@ -4,6 +4,8 @@ if (typeof bbop.monarch == 'undefined') { bbop.monarch = {};}
 
 //Graph for phenotypeLandingPage
 bbop.monarch.phenotypeLandingConfig = {
+        // Starting filters
+        category_filter_list :['Human'],
         
         //override default
         arrowDim : "-19,-5, -10,0 -19,5",
@@ -59,17 +61,18 @@ bbop.monarch.phenotypeLandingConfig = {
         color : { 
             bars : {
                 human  : '#44A293',
-                fly : '#A4D6D4',
-                mouse : '#44B985',
-                zebrafish : '#CCBD00',
-                worm : '#50617F',
-                rat : '#4C8DFF',
-                pig : '#B9FF0D',
-                chicken : '#14B212',
-                monkey : '#277F26',
-                platypus : '#CC6414',
-                cow : '#4119FF',
-                frog : '#14CC7A'
+                mouse : '#A4D6D4',
+                zebrafish : '#44B985',
+                fly : '#D4DB68',
+                rat : '#A1C3FF',
+                dog : '#ACB5DF',
+                worm : '#B9FF82',
+                pig : '#14E082',
+                cow : '#3DB53C',
+                cat : '#EDC44E',
+                chicken : '#418BFF',
+                monkey : '#14CF7C',
+                other : '#B2E3AA'
             },
                    
                  yLabel : { 
@@ -125,7 +128,7 @@ bbop.monarch.phenotypeGenotypeGolrSettings = {
 
 //Graph for phenotypeLandingPage
 bbop.monarch.geneLandingConfig = {
-        
+        category_filter_list :['Human'],
         //override default
         arrowDim : "-19,-5, -10,0 -19,5",
         yOffset : "-1.3em",
@@ -180,17 +183,18 @@ bbop.monarch.geneLandingConfig = {
         color : { 
                  bars : {
                      human  : '#44A293',
-                     fly : '#A4D6D4',
-                     mouse : '#44B985',
-                     zebrafish : '#CCBD00',
-                     worm : '#50617F',
-                     rat : '#4C8DFF',
-                     pig : '#B9FF0D',
-                     chicken : '#14B212',
-                     monkey : '#277F26',
-                     platypus : '#CC6414',
-                     cow : '#4119FF',
-                     frog : '#14CC7A'
+                     mouse : '#A4D6D4',
+                     zebrafish : '#44B985',
+                     fly : '#D4DB68',
+                     rat : '#A1C3FF',
+                     dog : '#ACB5DF',
+                     worm : '#B9FF82',
+                     pig : '#14E082',
+                     cow : '#3DB53C',
+                     cat : '#EDC44E',
+                     chicken : '#418BFF',
+                     monkey : '#14CF7C',
+                     other : '#B2E3AA'
                  },
                    
                  yLabel : { 
@@ -220,7 +224,7 @@ bbop.monarch.geneLandingConfig = {
 
 //Graph for phenotypeLandingPage
 bbop.monarch.genotypeLandingConfig = {
-        
+        category_filter_list :['Human'],
         //override default
         arrowDim : "-19,-5, -10,0 -19,5",
         yOffset : "-1.3em",
@@ -275,17 +279,18 @@ bbop.monarch.genotypeLandingConfig = {
         color : { 
             bars : {
                 human  : '#44A293',
-                fly : '#A4D6D4',
-                mouse : '#44B985',
-                zebrafish : '#CCBD00',
-                worm : '#50617F',
-                rat : '#4C8DFF',
-                pig : '#B9FF0D',
-                chicken : '#14B212',
-                monkey : '#277F26',
-                platypus : '#CC6414',
-                cow : '#4119FF',
-                frog : '#14CC7A'
+                mouse : '#A4D6D4',
+                zebrafish : '#44B985',
+                fly : '#D4DB68',
+                rat : '#A1C3FF',
+                dog : '#ACB5DF',
+                worm : '#B9FF82',
+                pig : '#14E082',
+                cow : '#3DB53C',
+                cat : '#EDC44E',
+                chicken : '#418BFF',
+                monkey : '#14CF7C',
+                other : '#B2E3AA'
             },
                    
                  yLabel : { 
@@ -315,7 +320,7 @@ bbop.monarch.genotypeLandingConfig = {
 
 //Graph for disease landing page
 bbop.monarch.diseaseLandingConfig = {
-      
+      category_filter_list :['Human'],
       //override default
       arrowDim : "-19,-5, -10,0 -19,5",
       yOffset : "-1.3em",
@@ -370,17 +375,18 @@ bbop.monarch.diseaseLandingConfig = {
       color : { 
           bars : {
               human  : '#44A293',
-              fly : '#A4D6D4',
-              mouse : '#44B985',
-              zebrafish : '#CCBD00',
-              worm : '#50617F',
-              rat : '#4C8DFF',
-              pig : '#B9FF0D',
-              chicken : '#14B212',
-              monkey : '#277F26',
-              platypus : '#CC6414',
-              cow : '#4119FF',
-              frog : '#14CC7A'
+              mouse : '#A4D6D4',
+              zebrafish : '#44B985',
+              fly : '#D4DB68',
+              rat : '#A1C3FF',
+              dog : '#ACB5DF',
+              worm : '#B9FF82',
+              pig : '#14E082',
+              cow : '#3DB53C',
+              cat : '#EDC44E',
+              chicken : '#418BFF',
+              monkey : '#14CF7C',
+              other : '#B2E3AA'
           },
                  
                yLabel : { 
@@ -423,7 +429,7 @@ bbop.monarch.diseasePhenotypeGolrSettings = {
 
 //Graph for homepage
 bbop.monarch.homePageConfig = {
-        
+        category_filter_list :['Human'],
         //override default
         arrowDim : "-19,-5, -10,0 -19,5",
         yOffset : "-1.3em",
@@ -478,17 +484,18 @@ bbop.monarch.homePageConfig = {
         color : { 
             bars : {
                 human  : '#44A293',
-                fly : '#A4D6D4',
-                mouse : '#44B985',
-                zebrafish : '#CCBD00',
-                worm : '#50617F',
-                rat : '#4C8DFF',
-                pig : '#B9FF0D',
-                chicken : '#14B212',
-                monkey : '#277F26',
-                platypus : '#CC6414',
-                cow : '#4119FF',
-                frog : '#14CC7A'
+                mouse : '#A4D6D4',
+                zebrafish : '#44B985',
+                fly : '#D4DB68',
+                rat : '#A1C3FF',
+                dog : '#ACB5DF',
+                worm : '#B9FF82',
+                pig : '#14E082',
+                cow : '#3DB53C',
+                cat : '#EDC44E',
+                chicken : '#418BFF',
+                monkey : '#14CF7C',
+                other : '#B2E3AA'
             },
                    
                  yLabel : { 

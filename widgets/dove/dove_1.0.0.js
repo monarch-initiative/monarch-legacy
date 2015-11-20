@@ -52,9 +52,7 @@ monarch.dovechart = function(config, tree, html_div, tree_builder){
     self.tooltip = d3.select(self.html_div)
         .append("div")
         .attr("class", "tip");
-    
-    self.config.category_filter_list = ['Human'];
-    
+        
     self.init = function(html_div, tree){
         var data = tree.getFirstSiblings();
         data = self.sortDataByGroupCount(data);
@@ -397,6 +395,8 @@ monarch.dovechart.prototype.setGroupPositioning = function (histogram, data) {
 monarch.dovechart.prototype.setXYDomains = function (histogram, data, groups) {
     var self = this;
     //Set y0 domain
+    // TODO remove groups arg in favor of generating this dynamically
+    // for category faceting
     var groups = self.getGroups(data);
 
     histogram.y0.domain(data.map(function(d) { return d.id; }));
@@ -1553,6 +1553,8 @@ monarch.dovechart.prototype.setPolygonCoordinates = function(){
 monarch.dovechart.prototype.getDefaultConfig = function(){
     
     var defaultConfiguration = {
+            
+            category_filter_list :[],
             
             //Chart margins    
             margin : {top: 40, right: 140, bottom: 5, left: 255},
