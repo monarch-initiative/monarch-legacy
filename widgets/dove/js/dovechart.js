@@ -29,11 +29,12 @@ monarch.dovechart = function(config, tree, html_div, tree_builder){
     self.config.arrowOffset = {height: 36, width: -68};
     self.config.barOffset = {
                  grouped:{
-                    height: 105,
+                    height: 110,
                     width: 42
                   },
                   stacked:{
-                    height: 95
+                    height: 95,
+                    width: 10
                   }
     };
     
@@ -288,10 +289,10 @@ monarch.dovechart.prototype.displaySubClassTip = function(tooltip, d3Selection){
     var w = coords[0];
     
     tooltip.style("display", "block")
-    .html("Click&nbsp;to&nbsp;see&nbsp;subclasses")
-    .style("top",h+config.margin.top+config.bread.height+
-            config.arrowOffset.height+"px")
-    .style("left",w+config.margin.left+config.arrowOffset.width+"px");
+      .html("Click&nbsp;to&nbsp;see&nbsp;subclasses")
+      .style("top",h+config.margin.top+config.bread.height+
+             config.arrowOffset.height+"px")
+      .style("left",w+config.margin.left+config.arrowOffset.width+"px");
 };
 
 monarch.dovechart.prototype.getCountMessage = function(value, name){
@@ -317,7 +318,7 @@ monarch.dovechart.prototype.displayCountTip = function(tooltip, value, name, d3S
                 config.margin.left+"px");
     } else if (barLayout == 'stacked'){
         tooltip.style("top",h+heightOffset+config.barOffset.stacked.height+"px")
-        .style("left",w+config.barOffset.grouped.width+widthOffset+
+        .style("left",w+config.barOffset.stacked.width+widthOffset+
                 config.margin.left+"px");
     }
 };
