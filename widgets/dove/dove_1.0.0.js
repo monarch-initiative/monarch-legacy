@@ -288,7 +288,7 @@ monarch.dovechart.prototype.displaySubClassTip = function(tooltip, d3Selection){
     var w = coords[0];
     
     tooltip.style("display", "block")
-    .html("Click to see subclasses")
+    .html("Click&nbsp;to&nbsp;see&nbsp;subclasses")
     .style("top",h+config.margin.top+config.bread.height+
             config.arrowOffset.height+"px")
     .style("left",w+config.margin.left+config.arrowOffset.width+"px");
