@@ -465,19 +465,29 @@ h1.downloadline {
     padding: 0px 6px 2px 6px;
 }
 
-.bs3filter .panel-group .panel {
-    margin-bottom: 3px;
+.bs3filter .panel {
+    padding: 0;
 }
 
-.bs3filter .panel-group .panel .panel-heading{
-    margin: -15px -15px -15px;
+.bs3filter .panel .panel-heading{
+    padding:5px;
 }
 
-.bs3filter .panel-group .panel .panel-heading .panel-title{
-    font-size: 17px;
+.bs3filter .panel .panel-heading .panel-title{
+    font-size: 17px !important; 
 }
 
-.bs3filter .panel-group .panel .panel-collapse .panel-body{
+.bs3filter .panel .panel-heading .panel-title a {
+    color: #337ab7;
+}
+
+.bs3filter .panel .panel-body {
+    margin: 0;
+    padding: 0 !important;
+}
+
+.bs3filter .panel .panel-collapse .panel-body {
+    padding: 0 !important;
     padding-top: 30px;
 }
 
