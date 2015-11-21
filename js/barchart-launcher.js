@@ -67,6 +67,27 @@ function makeGenotypeLandingGraph(data){
     
 }
 
+function makeModelLandingGraph(data){
+    console.log('makeGeneDiseaseLandingGraph:', data);
+    var graphDiv = ".dove-container";
+    var tree = new monarch.model.tree(data);
+
+    // global_golr_conf, global_solr_url, and scigrap_url are global variables
+    // set in webapp.js using puptent
+    var builder = new monarch.builder.tree_builder(global_solr_url, global_scigraph_url, global_golr_conf,
+            tree, bbop.monarch.modelDiseaseGolrSettings);
+    
+    var initGraph = function(){
+        jQuery("#graph-loader").hide();
+        tree = builder.tree;
+        var graphObject = 
+            new monarch.dovechart(bbop.monarch.modelLandingConfig, tree, graphDiv, builder);
+        setMinHeightWidth(graphObject, graphDiv);
+    };
+    builder.build_tree(['DOID:4'], initGraph);
+    
+}
+
 function makeDiseaseLandingGraph(data){
 
     var graphDiv = ".dove-container";
@@ -230,10 +251,12 @@ if (typeof(loaderGlobals) === 'object') {
     loaderGlobals.makePhenotypeLandingGraph = makePhenotypeLandingGraph;
     loaderGlobals.makeGenotypeLandingGraph = makeGenotypeLandingGraph;
     loaderGlobals.makeGeneDiseaseLandingGraph = makeGeneDiseaseLandingGraph;
+    loaderGlobals.makeModelLandingGraph = makeModelLandingGraph;
 }
 if (typeof(global) === 'object') {
     global.makeDiseaseLandingGraph = makeDiseaseLandingGraph;
     global.makePhenotypeLandingGraph = makePhenotypeLandingGraph;
     global.makeGenotypeLandingGraph = makeGenotypeLandingGraph;
     global.makeGeneDiseaseLandingGraph = makeGeneDiseaseLandingGraph;
+    global.makeModelLandingGraph = makeModelLandingGraph;
 }
