@@ -5,19 +5,23 @@
 /* Main Spotlight */
 
 
-/*#monarch-logo {
+/*
+#monarch-logo {
     margin-right: 20px;
 }
 */
+/*
 .btn-monarch-main {
     padding: 10px 15px;
     font-weight: 400;
     font-size: 14px;
 }
+*/
 
 /* Rest of Content */
 /* This overrides Bootstrap content styles. */
 
+/*
 .ui-autocomplete {
     position:absolute;
     cursor:default;
@@ -26,3 +30,4 @@
 .bbop-js-ui-hoverable{
 	cursor: text;
 }
+*/

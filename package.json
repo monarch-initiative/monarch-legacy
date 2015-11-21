@@ -44,8 +44,6 @@
     "isarray": "^0.0.1",
     "jquery": "^2.1.4",
     "jquery-ui": "^1.10.5",
-    "lodash": "^3.10.1",
-    "lodash._isiterateecall": "^3.0.9",
     "mustache": "^2.2.0",
     "phenogrid": "^1.1.12",
     "pup-tent": "^0.9.10",

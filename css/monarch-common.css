@@ -33,10 +33,17 @@ p.bigfont {
     margin-top: 0px;
     margin-bottom: 20px;
     border:1px solid transparent;
-    border-radius: 2px;
+    border-radius: 0;
     border-bottom: black solid 1px;
     padding: 0px 30px 0px 30px;
 }
+
+#monarch-home-container.monarch-container .jumbotron {
+    margin: -3px;
+    margin-bottom: 20px;
+    border-radius: 6px;
+}
+
 .monarch-container .jumbotron h1 {
     font-size: 30px;
     margin: 10px 0px;
@@ -48,7 +55,11 @@ p.bigfont {
     padding: 0px;
 }
 
+.monarch-container .content-bottom .jumbotron {
+    margin: -15px -30px 0 -30px;
+}
 
+ 
 /* Navbar */
 /* These are navbar styles that depend heavily on media queries to determine the
  * width of the user's browser window. Make sure that you are adding styles to the
@@ -76,12 +87,14 @@ p.bigfont {
 
 #navbar .searchspace {
     margin: 0;
-    margin-top:5px;
+    margin-top:3px;
     padding: 0;
 }
 
 #search {
     margin: 0;
+    margin-left: 2px;
+    margin-right: 5px;
     width:180px;
     font-size: 13px;
     height:30px;
@@ -101,8 +114,8 @@ p.bigfont {
     padding: 0px 10px;
 }
 #navbar.navbar {
-    min-height: 40px;
-    max-height: 40px;
+    min-height: 36px;
+    max-height: 36px;
 }
 #navbar .nav>li>a {
     padding: 0px;
@@ -138,7 +151,7 @@ p.bigfont {
 }
 
 /*
-@media (max-width: 800px) {
+@media (max-width: 900px) {
     .navbar {
         min-height: 40px;
     }
@@ -148,8 +161,11 @@ p.bigfont {
     .navbar-brand {
         padding: 8px 5px 0px 20px;
     }
-}
-@media (max-width: 768px) {
+
+    .collapse.in{
+        display:block !important;
+    }
+
     .navbar-brand {
         padding: 15px;
     }
@@ -171,18 +187,78 @@ p.bigfont {
 }
 */
 
-/* Content Containers */
 
-.wrapperforfooter .container-fluid.monarch-container {
-    padding: 40px 0px 0px;
-    height: 100%;
-}
-/**/
+@media (max-width: 900px) {
+    #search {
+        margin-left: 0 !important;
+        margin-right: 5px;
+    }
 
-/*
-@media (max-width: 768px) {
+    #collapsed-navbar {
+        background-color: black;
+        height:100%;
+    }
+
+    .navbar-brand {
+        padding-top: 15px !important;
+        padding-left: 40% !important;
+        margin:auto !important;
+    }
+
+    .navbar-header {
+        float: none;
+    }
+    .navbar-left,.navbar-right {
+        float: none !important;
+    }
+
+    .navbar-toggle {
+        display: block;
+    }
+    .navbar-collapse {
+        border-top: 1px solid transparent;
+        box-shadow: inset 0 1px 0 rgba(255,255,255,0.1);
+    }
+    .navbar-fixed-top {
+        top: 0;
+        border-width: 0 0 1px;
+    }
+    .navbar-collapse.collapse {
+        display: none!important;
+    }
+    .navbar-nav {
+        float: none!important;
+        margin-top: 7.5px;
+        background-color: black !important;
+    }
+    .navbar-nav>li {
+        float: none;
+    }
+    .navbar-nav>li>a {
+        padding-top: 10px;
+        padding-bottom: 10px;
+    }
+    .collapse.in{
+        display:block !important;
+    }
+   .navbar-nav .open .dropdown-menu {
+       position: static;
+       float: none;
+       width: auto;
+       margin-top: 0;
+       background-color: transparent;
+       border: 0;
+       -webkit-box-shadow: none;
+       box-shadow: none;
+    }
+
+    .navbar {
+        min-height: 57px !important;
+        height: 57px !important;
+    }
+
     .monarch-container {
-        padding: 50px 0px 0px;
+        padding: 10px 0 0 0 !important;
         height: 100%;
     }
 
@@ -192,7 +268,15 @@ p.bigfont {
         border-radius: 2px;
     }
 }
-*/
+
+/* Content Containers */
+
+.wrapperforfooter .container-fluid.monarch-container {
+    padding: 36px 0px 0px;
+    height: 100%;
+}
+
+
 
 .content {
     display: inline-block;
@@ -203,7 +287,7 @@ p.bigfont {
 }
 
 .content-bottom {
-    padding: 0 30px 0 30px;
+    padding: 15px 30px 0 30px;
 }
 
 .toggleitems > .fewitems {
@@ -298,6 +382,14 @@ p.bigfont {
     background-color: #ffd700;
 }
 
+.downloadline.btn.btn-monarch-main {
+    padding: 5px 15px;
+    font-weight: 400;
+    font-size: 14px;
+    background-color: #474949;
+    color: #FFF;
+}
+
 /* This color is lighter than monarch-model-dark and is used for the feedback button
  * located throughout the site. */
 .downloadline.btn.btn-monarch-main.monarch-feedback-dark {
@@ -305,6 +397,22 @@ p.bigfont {
     color: #FFF;
     border:1px solid black;
 }
+
+
+/* Rest of Content */
+/* This overrides Bootstrap content styles. */
+
+.ui-autocomplete {
+    background: white;
+    position:absolute;
+    cursor:default;
+    z-index:4000 !important
+}
+.bbop-js-ui-hoverable{
+    cursor: text;
+}
+
+
 
 /* Buttons */
 /* These styles override some bootstrap button styles to make the buttons slimmer
@@ -370,13 +478,13 @@ h1.downloadline {
 
 /* Search Bar */
 
-.autocomplete-tag-item {
+.ui-autocomplete .autocomplete-tag-item {
     white-space: nowrap;
     font-size: 75%;
     color: #888888;
 }
 /* Get a spinner for jQuery autocomplete wait. */
-.ui-autocomplete-loading {
+.ui-autocomplete .ui-autocomplete-loading {
     background: white url('../image/waiting_ac.gif') 95% center no-repeat !important;
 }
 
@@ -483,15 +591,54 @@ h1.downloadline {
 
 .bs3filter .panel .panel-body {
     margin: 0;
-    padding: 3px !important;
+    padding: 3px;
 }
 
-/*.bs3filter .panel .panel-body[id*="filter_ui_element_"] {
-    padding: 15px !important;
-    font-weight: 500;
-    color: red;
-}
+
+/*
+    Begin Filter Hack
+
+    The following 4 styles are used to work around the facts:
+    1) Much of the Filter Results area of the #genes tab of the /phenotype page is constructed
+        within BBOP
+    2) CSS3 does not allow us to pick out a parent based upon its child.
+    3) There is no CSS class associated with the text 'No current user filters.' and we want to be able to pad this text.
+
+    So the hacky fix is to pad/widen/center the containing panel-body by default, so that when 'No current user filters.' and 'Nothing to filter.' are displayed they look right. But when they are replaced by <table> elements, there is an overriding style on the table that mostly undoes the effect of the pad/widen/center operation.
+
+    I can't believe this works and suspect it may not work on all browsers.
 */
+
+#results-area .bs3filter .panel.panel-default .panel-body[id*="filter_ui_element_"] {
+    padding: 5%;
+    width: 110%;
+    font-weight: 500;
+    text-align: center;
+}
+
+#results-area .bs3filter .panel.panel-default .panel-body[id*="filter_ui_element_"] > table {
+    margin: -5%;
+    font-weight: 400;
+    text-align: left;
+}
+
+#results-area .bs3filter .panel.panel-default .panel-body[id*="subject_taxon_label"] {
+    padding: 5%;
+    margin: 0;
+    width: 100%;
+    font-weight: 500;
+    text-align: center;
+}
+
+#results-area .bs3filter .panel.panel-default .panel-body[id*="subject_taxon_label"] > table {
+    margin: -5%;
+    min-width: 110% !important;
+    width: 110% !important;
+    font-weight: 400;
+    text-align: left;
+}
+
+/* End of Filter Hack */
 
 /* BBOP overrides and additions */
 .bbop-js-ui-browse li {
@@ -695,6 +842,9 @@ a:hover .hilite, a:active .hilite {
   background-color:#EEEEEE;
 }
 
+#feedback-window-container #simple-menu.dropdown-menu.simple-menu.modal.ui-draggable {
+  box-shadow: none;
+}
 
 #feedback-window-container .form-group {
   margin: 0;

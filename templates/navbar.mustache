@@ -170,17 +170,14 @@
                     </li>
                   </ul>
                 </li>
-
-
-
             </ul>
             {{#monarch_nav_search_p}}
             <form id="search_form" class="navbar-right navbar-form searchspace" action="/search" role="search">
                 <div class="form-group">
-                  <input id="search" type="text" class="form-control" placeholder="Search (e.g. Parkinson's)"/>
+                  <input id="search" type="text" class="col-xs-8 form-control" placeholder="Search (e.g. Parkinson's)"/>
+                  <button class="col-xs-4 btn btn-primary nav-search-btn"
+                      type="submit">Go</button>
                 </div>
-                <button class="btn btn-primary nav-search-btn"
-                    type="submit">Go</button>
             </form>
 
             {{/monarch_nav_search_p}}

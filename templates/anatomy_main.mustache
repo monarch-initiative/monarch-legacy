@@ -1,52 +1,26 @@
-<!DOCTYPE html>
-<html>
-<head>
-    <title>Monarch Organ Systems</title>
+{{{includes.navbar}}}
 
-    {{{includes.analytics}}}
-    
-    <!-- CSS. -->
-    {{#pup_tent_css_libraries}}
-    <link rel="stylesheet" type="text/css" href="{{{.}}}">
-    {{/pup_tent_css_libraries}}
-    
-    <!-- JS variables. -->
-    {{#pup_tent_js_variables}}
-    <script type="text/javascript">var {{name}} = {{{value}}};</script>
-    {{/pup_tent_js_variables}}
-    
-    <!-- JS libraries. -->
-    {{#pup_tent_js_libraries}}
-    <script type="text/javascript" src="{{{.}}}"></script>
-    {{/pup_tent_js_libraries}}
-    
-    <link rel="stylesheet" type="text/css" href="/monarch-main.css"/>
-    <link rel="icon" href="/image/favicon.ico" type="image/x-icon">
-    <meta charset="utf-8"/>
-</head>
-<body>
-    {{{includes.navbar}}}
-    <div class="monarch-container">
-        <div class="content">
-            <div class="wrapperforfooter">
-            <div class="jumbotron">
-                <img id="monarch-logo" class="downloadline" src="/image/logo.png"/>
-                <h1 class="downloadline">Organ system spotlight: Kidney</h1>
-                <a href="/anatomy/UBERON_0002113" class="downloadline downloadline-left btn btn-large btn-default btn-monarch-main">Find out more</a>
-                <a class="downloadline btn btn-large btn-default btn-monarch-main monarch-feedback-dark"
-                        href="mailto:info@monarchinitiative.org">Your feedback welcome!</a>
-                <p>A paired organ which has the production of urine as its primary function.</p>
-            </div>
-            <div class="col-lg-9">
-                <h1>Organ System List</h1>
-                <ul>
-                    <li><a href="/anatomy/UBERON_0002038">substantia nigra</a></li>
-                    <li><a href="/anatomy/UBERON_0004446">phalangeal epiphyses</a></li>
-                </ul>
-            </div>
-            </div> <!-- closes wrapperforfooter -->
-            {{{includes.footer}}}
-        </div>
+<div class="wrapperforfooter">
+  <div class="container-fluid monarch-container">
+
+    <div class="content">
+      <div class="jumbotron">
+          <img id="monarch-logo" class="downloadline" src="/image/logo.png"/>
+          <h1 class="downloadline">Organ system spotlight: Kidney</h1>
+          <a href="/anatomy/UBERON_0002113" class="downloadline downloadline-left btn btn-large btn-default btn-monarch-main">Find out more</a>
+          <a class="downloadline btn btn-large btn-default btn-monarch-main monarch-feedback-dark"
+                  href="mailto:info@monarchinitiative.org">Your feedback welcome!</a>
+          <p>A paired organ which has the production of urine as its primary function.</p>
+      </div>
+      <div class="col-lg-9">
+          <h1>Organ System List</h1>
+          <ul>
+              <li><a href="/anatomy/UBERON_0002038">substantia nigra</a></li>
+              <li><a href="/anatomy/UBERON_0004446">phalangeal epiphyses</a></li>
+          </ul>
+      </div>
     </div>
-</body>
-</html>
+  </div>
+
+</div> <!-- closes wrapperforfooter -->
+{{{includes.footer}}}
