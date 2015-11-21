@@ -668,12 +668,13 @@ monarch.dovechart.prototype.drawGraph = function (histogram, isFromCrumb, parent
     }
     
     data = self.getStackedStats(data);
+    // This needs to be above the removeCategories() call to avoid
+    // Y axis labels reordering when adding/removing categories
+    data = self.sortDataByGroupCount(data);
     
     if (self.config.category_filter_list.length > 0 ) {
         data = self.removeCategories(data, self.config.category_filter_list);
     }
-    data = self.sortDataByGroupCount(data);
-    
 
     if (self.groups.length == 1 && isFirstGraph && !isFromResize){
         config.barOffset.grouped.height = config.barOffset.grouped.height+8;
@@ -703,14 +704,19 @@ monarch.dovechart.prototype.drawGraph = function (histogram, isFromCrumb, parent
     
     //Create SVG:G element that holds groups
     var barGroup = self.setGroupPositioning(histogram,data);
+    
+    // showTransition controls if a new view results in bars expanding
+    // from zero to their respective positions
     var showTransition = false;
+    if (isFirstGraph || isFromCrumb) {
+        showTransition = true;
+    }
     //Make legend
     if (isFirstGraph || isFromResize || isFromCrumb){
         //Create legend
         if (config.useLegend){
             self.makeLegend(histogram, barGroup);
         }
-        showTransition = true;
     }
 
     var bar = self.setBarConfigPerCheckBox(histogram,data,self.groups,barGroup,showTransition);
@@ -1139,11 +1145,14 @@ monarch.dovechart.prototype.getDataAndTransitionOnClick = function(node, histogr
                 jQuery(self.html_div+" .leaf-msg").show().delay(3000).fadeOut();
                 self.activateYAxisText(histogram,data, barGroup, bar);
                 // Scroll to top of chart
-                jQuery('html, body').animate({ scrollTop: jQuery(self.html_div).offset().top - 50 }, 0);
+                if (jQuery(window).scrollTop() - jQuery(self.html_div).offset().top > 100) {
+                    jQuery('html, body').animate({ scrollTop: jQuery(self.html_div).offset().top - 50 }, 0);
+                }
             } else {
                 self.transitionToNewGraph(histogram, node, barGroup,bar, node.id);
-                // Scroll to top of chart
-                jQuery('html, body').animate({ scrollTop: jQuery(self.html_div).offset().top - 50 }, 0);
+                if (jQuery(window).scrollTop() - jQuery(self.html_div).offset().top > 100) {
+                    jQuery('html, body').animate({ scrollTop: jQuery(self.html_div).offset().top - 50 }, 0);
+                }
             }
         };
     
