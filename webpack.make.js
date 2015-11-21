@@ -307,7 +307,7 @@ module.exports = function makeWebpackConfig (options) {
     config.plugins.push(
       new BrowserSyncPlugin({
         proxy: 'localhost:8081',
-        files: ['templates/*.mustache', 'css/*.css', 'serverStarted.dat'],
+        files: ['templates/*.mustache', 'templates/page/*.mustache', 'css/*.css', 'serverStarted.dat'],
         //tunnel: true,
         ghostMode: {
             clicks: false,
