@@ -23,6 +23,11 @@ module.exports = function makeWebpackConfig (options) {
    */
   var config = {};
 
+  var nmDeps = [
+    'bootstrap/dist/js/bootstrap.min.js',
+    'underscore/underscore-min.js'
+  ];
+
   /**
    * Entry
    * Reference: http://webpack.github.io/docs/configuration.html#entry
@@ -30,11 +35,12 @@ module.exports = function makeWebpackConfig (options) {
    * Karma will set this when it's a test build
    */
   if (TEST) {
-    config.entry = {}
-  } else {
+    config.entry = {};
+  }
+  else {
     config.entry = {
       app: './js/index.js'
-    }
+    };
   }
 
   /**
@@ -44,8 +50,9 @@ module.exports = function makeWebpackConfig (options) {
    * Karma will handle setting it up for you when it's a test build
    */
   if (TEST) {
-    config.output = {}
-  } else {
+    config.output = {};
+  }
+  else {
     config.output = {
       // Absolute output directory
       path: path.join(__dirname, '/dist'),
@@ -63,7 +70,7 @@ module.exports = function makeWebpackConfig (options) {
       // Only adds hash in build mode
       // hash currently disabled for all builds
       chunkFilename: '[name].bundle.js'     // BUILD ? '[name].[hash].js' : '[name].bundle.js'
-    }
+    };
   }
 
   /**
@@ -85,6 +92,10 @@ module.exports = function makeWebpackConfig (options) {
    * List: http://webpack.github.io/docs/list-of-loaders.html
    * This handles most of the magic responsible for converting modules
    */
+
+  var monarchJSRoot = path.resolve(__dirname, 'js');
+  var monarchLibRoot = path.resolve(__dirname, 'lib/monarch');
+  var nmRoot = path.resolve(__dirname, 'node_modules');
 
   // Initialize module
   config.module = {
@@ -136,8 +147,36 @@ module.exports = function makeWebpackConfig (options) {
      //   exclude: /node_modules|js\/jquery.+/, // do not lint third-party code
      //   loader: 'jshint-loader'
      //  }
-   ]
+   ],
+
+    // don't parse some dependencies to speed up build.
+    // can probably do this non-AMD/CommonJS deps
+    noParse: [],
+    resolve: {
+      alias: {}
+    }
   };
+
+  // Run through deps and extract the first part of the path,
+  // as that is what you use to require the actual node modules
+  // in your code. Then use the complete path to point to the correct
+  // file and make sure webpack does not try to parse it
+  // From: https://christianalfoni.github.io/react-webpack-cookbook/Optimizing-development.html
+  //
+  nmDeps.forEach(function (dep) {
+    var depPath = path.resolve(nmRoot, dep);
+    config.module.resolve.alias[dep.split(path.sep)[0]] = depPath;
+    config.module.noParse.push(depPath);
+  });
+
+  // if (!TEST) {
+  //   config.module.loaders.push(
+  //     {
+  //       test: /\.js$/,
+  //       loader: 'eslint-loader',
+  //       include: [monarchJSRoot]
+  //     });
+  // }
 
   // ISPARTA LOADER
   // Reference: https://github.com/ColCh/isparta-instrumenter-loader
@@ -151,7 +190,7 @@ module.exports = function makeWebpackConfig (options) {
         /\.test\.js$/
       ],
       loader: 'isparta-instrumenter'
-    })
+    });
   }
 
   // CSS LOADER
@@ -174,7 +213,7 @@ module.exports = function makeWebpackConfig (options) {
   if (TEST) {
     // Reference: https://github.com/webpack/null-loader
     // Return an empty module
-    cssLoader.loader = 'null'
+    cssLoader.loader = 'null';
   }
 
   // Add cssLoader to the loader list
@@ -183,7 +222,7 @@ module.exports = function makeWebpackConfig (options) {
   // LESS LOADER
   var lessLoader = {
     test: /\.less$/,
-    loader: "style!css!less-loader?outputStyle=expanded&" + "includePaths[]=" + (path.resolve(__dirname, "./node_modules"))
+    loader: "style!css!less-loader?outputStyle=expanded&includePaths[]=" + (path.resolve(__dirname, "./node_modules"))
 //    loader: ExtractTextPlugin.extract('style', 'less?sourceMap!postcss')
   };
 
@@ -260,7 +299,7 @@ module.exports = function makeWebpackConfig (options) {
           warnings: false
         }
       })
-    )
+    );
   }
 
   if (!BUILD && !TEST) {
@@ -268,7 +307,7 @@ module.exports = function makeWebpackConfig (options) {
     config.plugins.push(
       new BrowserSyncPlugin({
         proxy: 'localhost:8081',
-        files: ['templates/*.mustache', 'css/*.css', 'serverStarted.dat'],
+        files: ['templates/*.mustache', 'templates/page/*.mustache', 'css/*.css', 'serverStarted.dat'],
         //tunnel: true,
         ghostMode: {
             clicks: false,

@@ -11,7 +11,8 @@
 .first {
     display: block;
 }
-.source {
+
+.monarch-container .content .source {
     height: 50px;
 }
 .inlinesource {

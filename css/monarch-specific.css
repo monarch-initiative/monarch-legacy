@@ -10,12 +10,12 @@
     margin-right: 20px;
 }
 */
-/*p {
+
+.monarch-container .content.monarch-bigtext p {
     font-size: 16px;
     line-height: 26px;
     margin-bottom: 0px;
 }
-*/
 
 .monarch-container .ids {
     margin-top: 5px;
@@ -46,6 +46,7 @@
     z-index: 10;
 }
 .monarch-container .tab {
+    line-height: 30px;
     display: inline-block;
     padding: 2px 12px;
     text-align: center;
@@ -62,6 +63,7 @@
     border-bottom: 1px solid white;
 }
 .monarch-container .contenttab {
+    line-height: 30px;
     background-color: #999;
     color: white;
 }
@@ -93,6 +95,10 @@
 
 /* Tables */
 
+.monarch-container .table-condensed {
+      padding: 1px;
+      margin: 1px;
+}
 .monarch-container .table-condensed thead>tr>th {
     padding: 5px 15px 5px 3px;
 }
@@ -261,6 +267,20 @@
 	padding-bottom: 30px;
 }
 
+.monarch-container #analyze-search {
+  padding: 0;
+  margin-left: -5px;
+}
+
+.monarch-container #search-form-group {
+  padding-right: 5px;
+}
+
+.monarch-container #analyze-compare {
+  padding-right: 0;
+  padding-left: 5px;
+}
+
 .monarch-container .pheno-radio-button {
 	width: 14%;
     margin: 0 auto;
@@ -353,10 +373,10 @@
 	margin: 0 5px 1px 0;
 }
 .monarch-container #analyze-submit{
-	margin: 5px 0 10px 0;
+  min-width:70px;
 }
 .monarch-container #reset{
-    padding: 5px 18px 5px 18px;
+  min-width:70px;
 }
 .monarch-container #upload-reset{
     margin: 0 0 1px 5px;

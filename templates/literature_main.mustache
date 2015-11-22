@@ -1,33 +1,8 @@
-<!DOCTYPE html>
-<html>
-<head>
-    <title>Monarch Literature</title>
-    
-    {{{includes.analytics}}}
-    
-    <!-- CSS. -->
-    {{#pup_tent_css_libraries}}
-    <link rel="stylesheet" type="text/css" href="{{{.}}}">
-    {{/pup_tent_css_libraries}}
-    
-    <!-- JS variables. -->
-    {{#pup_tent_js_variables}}
-    <script type="text/javascript">var {{name}} = {{{value}}};</script>
-    {{/pup_tent_js_variables}}
-    
-    <!-- JS libraries. -->
-    {{#pup_tent_js_libraries}}
-    <script type="text/javascript" src="{{{.}}}"></script>
-    {{/pup_tent_js_libraries}}
+{{{includes.navbar}}}
 
-    <link rel="icon" href="/image/favicon.ico" type="image/x-icon">
-    <meta charset="utf-8"/>
-</head>
-<body>
-    {{{includes.navbar}}}
-    <div class="monarch-container">
+<div class="wrapperforfooter">
+    <div class="container-fluid monarch-container">
         <div class="content">
-            <div class="wrapperforfooter">
             <div class="jumbotron monarch-literature-light">
                 <img id="monarch-logo" class="downloadline" src="/image/logo.png"/>
                 <h1 class="downloadline">Publication spotlight: modMine: flexible access to modENCODE data</h1>
@@ -47,9 +22,7 @@
                     <li><a href="/literature/">Some publication</a></li>
                 </ul>
             </div>
-            </div> <!-- closes wrapperforfooter -->
-            {{{includes.footer}}}
         </div>
     </div>
-</body>
-</html>
+</div> <!-- closes wrapperforfooter -->
+{{{includes.footer}}}

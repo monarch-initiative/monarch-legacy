@@ -311,10 +311,10 @@ function add_species_to_autocomplete(data, map, gene_ids) {
                 label = meta['synonym'][0];
             }
             label = label.replace(/\b[a-z]/g, function() {
-                return arguments[0].toUpperCase()
+                return arguments[0].toUpperCase();
             });
         }
-        for (i = 0; i < map.length; i++){
+        for (var i = 0; i < map.length; i++){
             if (map[i]['id'] == id) {
                 if (label) {
                     map[i]['tag'] = label;
@@ -358,9 +358,11 @@ if (typeof exports === 'object') {
     exports.getAnnotationScore = getAnnotationScore;
     exports.remove_equivalent_ids = remove_equivalent_ids;
     exports.makeSpinnerDiv = makeSpinnerDiv;
+    exports.add_species_to_autocomplete = add_species_to_autocomplete;
 }
 if (typeof(loaderGlobals) === 'object') {
     loaderGlobals.initMonarchPage = initMonarchPage;
     loaderGlobals.remove_equivalent_ids = remove_equivalent_ids;
     loaderGlobals.makeSpinnerDiv = makeSpinnerDiv;
+    loaderGlobals.add_species_to_autocomplete = add_species_to_autocomplete;
 }

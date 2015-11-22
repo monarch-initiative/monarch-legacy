@@ -71,6 +71,9 @@
 .monarch-carousel {
     position: relative;
     height:100% !important;
+    margin-left:-22px;
+    margin-right:-8px;
+    padding:0;
 }
 
 .monarch-carousel-item {

@@ -234,6 +234,3 @@ Note that your default web browser will open up automatically and you will be po
 2. Run app
 
     ./ringo-server.sh
-
-
-
