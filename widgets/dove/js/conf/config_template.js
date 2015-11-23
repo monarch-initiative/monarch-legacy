@@ -79,5 +79,10 @@ bbop.monarch.exampleConfig = {
     crumbFontSize : 10,
     
     //Turn on/off breadcrumb shapes
-    useCrumbShape : true
+    useCrumbShape : true,
+    
+    // Initial filter for categories
+    // Category will show as greyed out when loading
+    // But can be switched on by clicking
+    category_filter_list :[]
 };

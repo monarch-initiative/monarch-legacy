@@ -1,40 +1,14 @@
-<!DOCTYPE html>
-<html>
-  <head>
-    <title>Monarch Development Team</title>
-    
-    {{{includes.analytics}}}
-    
-    <!-- CSS. -->
-    {{#pup_tent_css_libraries}}
-    <link rel="stylesheet" type="text/css" href="{{{.}}}">
-    {{/pup_tent_css_libraries}}
-    
-    <!-- JS variables. -->
-    {{#pup_tent_js_variables}}
-    <script type="text/javascript">var {{name}} = {{{value}}};</script>
-    {{/pup_tent_js_variables}}
-    
-    <!-- JS libraries. -->
-    {{#pup_tent_js_libraries}}
-    <script type="text/javascript" src="{{{.}}}"></script>
-    {{/pup_tent_js_libraries}}
+{{{includes.navbar}}}
 
-    <link rel="stylesheet" type="text/css" href="/team.css"/>
-    <link rel="icon" href="/image/favicon.ico" type="image/x-icon">
-    <meta charset="utf-8"/> 
-  </head>
-  <body>
-    <div class="monarch-container">
-      {{{includes.navbar}}}
+<div class="wrapperforfooter">
+  <div class="container-fluid monarch-container">
 
-      <div class="content">
-        <div class="wrapperforfooter">
+    <div class="content content-bottom">
           <div class="title">Monarch Development Team</div>
 
 	  <!-- Participating orgs. -->
 	  <div class="team">
-            <div class="teamtochead">
+       	<div class="teamtochead">
 	      Participating Institutions
 	    </div>
 	    <div class="teamtoc">
@@ -105,9 +79,12 @@
 	    {{/people}}
 	  </div>
 	  {{/conf.monarch-team.institutions}}
-        </div> <!-- closes wrapperforfooter -->
-        {{{includes.footer}}}
       </div>
     </div>
-  </body>
-</html>
+<!-- Close top-level container. -->
+</div>
+</div>
+
+
+<!-- Footer. -->
+{{{includes.footer}}}

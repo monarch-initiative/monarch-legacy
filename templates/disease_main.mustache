@@ -1,5 +1,9 @@
 {{{includes.navbar}}}
-<div class="container-fluid" style="margin: 1em;">
+
+<div class="wrapperforfooter">
+  <div class="container-fluid monarch-container">
+
+    <div class="content content-bottom">
 
   <div class="text-center">
     <h1>
@@ -11,70 +15,76 @@
   <div class="row">
 
     <!-- Blurb. -->
-    <div class="col-xs-12 col-sm-12 col-md-12 col-lg-4">
+    <div class="col-xs-12 col-md-4">
       <div class="panel panel-default">
-	<p>
-	  Monarch <b>Disease</b> integrates information from a variety of
-	  sources. Each specific page includes identifiers,
-	  nomenclature, phenotypes, variations, curated and inferred
-	  animal models, pathways, aggregated literature, and
-	  external links to relevant resources.  Here we summarizes
-	  the phenotypically-curated disease data in the system.
-	</p>
-      </div>
-      
-          <!-- Disease spotlight -->
-      <div class="panel panel-default">
-        <h4>Disease Spotlight: {{{spotlight.link}}}</h4>
-        <div>
-          <p>{{spotlight.description}}</p>
-          <ul>
-            <li>Heritability: {{{spotlight.heritability}}}</li>
-            <li>Phenotypes: {{{spotlight.phenotypes}}}</li>
-            <li>Genes: {{{spotlight.genes}}}</li>
-            <li>Models: {{{spotlight.models}}} 
-              <!--({{spotlight.model_with_phenotype_count}} with phenotypes) -->
-            </li>
-            <li>Publications: {{{spotlight.publications}}}</li>
-          </ul>
+        <div class="panel-body">
+          <p>
+            Monarch <b>Disease</b> integrates information from a variety of
+            sources. Each specific page includes identifiers,
+            nomenclature, phenotypes, variations, curated and inferred
+            animal models, pathways, aggregated literature, and
+            external links to relevant resources.  Here we summarizes
+            the phenotypically-curated disease data in the system.
+          </p>
         </div>
       </div>
       
+      <!-- Disease spotlight -->
+      <div class="panel panel-default">
+        <div class="panel-body">
+          <h4>Disease Spotlight: {{{spotlight.link}}}</h4>
+          <div>
+            <p>{{spotlight.description}}</p>
+            <ul>
+              <li>Heritability: {{{spotlight.heritability}}}</li>
+              <li>Phenotypes: {{{spotlight.phenotypes}}}</li>
+              <li>Genes: {{{spotlight.genes}}}</li>
+              <li>Models: {{{spotlight.models}}} 
+                <!--({{spotlight.model_with_phenotype_count}} with phenotypes) -->
+              </li>
+              <li>Publications: {{{spotlight.publications}}}</li>
+            </ul>
+          </div>
+        </div>
+      </div>
       
     </div>
 
     <!-- Annotation Graph-->
-    <div class="col-xs-12 col-sm-12 col-md-12 col-lg-8">
+    <div class="col-xs-12 col-md-8">
       <div class="panel panel-default">
+        <div class="panel-body">
          <div class="dove-container">
         
-            <div id="graph-loader">
-                       <div class="graph-message">Loading Graph...</div>
-                       <div class="windcatcher-spinner spinner windcatcher">
-                         <div class="blade"></div>
-                         <div class="blade"></div>
-                         <div class="blade"></div>
-                         <div class="blade"></div>
-                         <div class="blade"></div>
-                         <div class="blade"></div>
-                         <div class="blade"></div>
-                         <div class="blade"></div>
-                       </div>
-                       </div>
-                    </div>
-	<p class="datagraph-caption">
-	  This <em>interactive graph</em> displays the number of
-	  disease-phenotype associations per major disease
-	  category. You can explore the distribution of disease
-	  subtypes by clicking on the Y axis labels, or visit the
-	  disease page itself by clicking on the corresponding bar. You can
-	  navigate back to less-specific disease categories by
-	  clicking on the breadcrumbs listed in the top left-hand
-	  corner.
-	</p>
+          <div id="graph-loader">
+             <div class="graph-message">Loading Graph...</div>
+             <div class="windcatcher-spinner spinner windcatcher">
+               <div class="blade"></div>
+               <div class="blade"></div>
+               <div class="blade"></div>
+               <div class="blade"></div>
+               <div class="blade"></div>
+               <div class="blade"></div>
+               <div class="blade"></div>
+               <div class="blade"></div>
+             </div>
+             </div>
+          </div>
+          <p class="datagraph-caption">
+            This <em>interactive graph</em> displays the number of
+            disease-phenotype associations per major disease
+            category. You can explore the distribution of disease
+            subtypes by clicking on the Y axis labels, or visit the
+            disease page itself by clicking on the corresponding bar. You can
+            navigate back to less-specific disease categories by
+            clicking on the breadcrumbs listed in the top left-hand
+            corner. Organisms can be added and removed from the graph by clicking
+            on the legend labels.
+          </p>
+        </div>
       </div>
     </div>
-    
+</div>
   </div>
 </div>
 

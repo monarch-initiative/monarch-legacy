@@ -1,11 +1,13 @@
-    {{{includes.navbar}}}
-    <div class="monarch-container">
-        <div class="content">
-            <div class="wrapperforfooter">
+{{{includes.navbar}}}
+
+<div class="wrapperforfooter">
+  <div class="container-fluid monarch-container">
+
+    <div class="content">
             <div class="jumbotron">
                 <div id="description">
                     {{#alerts}}
-                    <div class="alert">
+                    <div class="alert alert-warning alert-block top-alert">
                         {{{.}}}
                     </div>
                     {{/alerts}}
@@ -80,6 +82,13 @@ Morell et al. (1997) presented an update of the clinical findings in the family 
                     <div id="markedup" class="category">
                 {{/hasResults}}
                     <div id="markeduptext">{{{markedText}}}</div>
+                    <form role="form" action="/analyze/phenotype/" method="GET">
+                            <div><b>Phenotype Profile Size</b>: {{numPhenotypes}}</div>
+                            <input type="hidden" name="input_items" value="{{inputItems}}"/>
+                            <input type="hidden" name="target_species" value="all"/>
+                            <input type="hidden" name="mode" value="search"/>
+                            <button type="submit" class="btn btn-annotate btn-default btn-monarch-main monarch-blue">Search!</button>  
+                    </form>
                 </div>
                 <div id="listview" class="category">
                     {{#hasResults}}
@@ -90,6 +99,7 @@ Morell et al. (1997) presented an update of the clinical findings in the family 
                             <div><b>Phenotype Profile Size</b>: {{numPhenotypes}}</div>
                             <input type="hidden" name="input_items" value="{{inputItems}}"/>
                             <input type="hidden" name="target_species" value="all"/>
+                            <input type="hidden" name="mode" value="search"/>
                             <button type="submit" class="btn btn-annotate btn-default btn-monarch-main monarch-blue">Search!</button>  
                         </form>
                     {{/hasResults}}
@@ -98,7 +108,8 @@ Morell et al. (1997) presented an update of the clinical findings in the family 
                     {{/hasResults}}
                 </div>
             </div>
-            </div> <!-- closes wrapperforfooter -->
-            {{{includes.footer}}}
         </div>
     </div>
+
+</div> <!-- closes wrapperforfooter -->
+{{{includes.footer}}}

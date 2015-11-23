@@ -16,6 +16,32 @@ Feature: Analyze phenotypes is usable by the expected user interfaces
      when I submit analyze phenotype
      then the document should contain "ichthyosis vulgaris"
 
+@data
+ Scenario: adding "Microalbuminuria" and "microcephaly" to analyze phenotype results in "pru1"
+    Given I go to page "/analyze/phenotypes"
+     and I type "micro" into the phenotype analyze search
+     and I wait until "Microalbuminuria" appears in the autocomplete
+     and I click the autocomplete item "Microalbuminuria"
+     and I type "micro" into the phenotype analyze search
+     and I wait until "microcephaly" appears in the autocomplete
+     and I click the autocomplete item "microcephaly"
+     when I submit analyze phenotype
+     then the document should contain "pru1"
+
+@data
+ Scenario: compare phenotype with geneList
+    Given I go to page "/analyze/phenotypes"
+     and I type "micro" into the phenotype analyze search
+     and I wait until "Microalbuminuria" appears in the autocomplete
+     and I click the autocomplete item "Microalbuminuria"
+     and I click the "compare" radio button
+     and I input "NCBIGene:388552,NCBIGene:12166" into the textarea "gene-list"
+     when I submit analyze phenotype
+     and I wait for id "pg_svg_group"
+     then the document should contain "BLOC1S3"
+
+     
+     
  ## Example how you might do other forms.
  # @data
  # Scenario: user uses a random form page with 

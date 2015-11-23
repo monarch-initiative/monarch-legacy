@@ -1,11 +1,13 @@
-    {{{includes.navbar}}}
-    <div class="monarch-container">
-        <div class="content">
-            <div class="wrapperforfooter">
+{{{includes.navbar}}}
+
+<div class="wrapperforfooter">
+  <div class="container-fluid monarch-container">
+
+    <div class="content">
             <div class="jumbotron monarch-disease-light">
                 <div id="description">
                     {{#alerts}}
-                    <div class="alert">
+                    <div class="alert alert-warning alert-block top-alert">
                       {{{.}}}
                     </div>
                     {{/alerts}}
@@ -33,7 +35,6 @@
                     {{{includes.model_anchor}}}
                     {{{includes.gene_anchor}}}
                     {{{includes.variant_anchor}}}
-                    {{{includes.pathway_anchor}}}
                 </div>
             </div>
             <div id="complete-info">
@@ -74,7 +75,6 @@
                     {{{includes.model_table}}}
                     {{{includes.gene_table}}}
                     {{{includes.variant_table}}}
-                    {{{includes.pathway_table}}}
                     {{#hasPhenotypes}}
                     <div id="compare" class="first category">
                     {{/hasPhenotypes}}
@@ -84,8 +84,8 @@
                       <div id="phen_vis"></div>
                     </div>
                 </div>
-        
-            </div> <!-- closes wrapperforfooter -->
-            {{{includes.footer}}}
         </div>
     </div>
+
+</div> <!-- closes wrapperforfooter -->
+{{{includes.footer}}}

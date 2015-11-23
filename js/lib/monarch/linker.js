@@ -17,10 +17,6 @@
  * 
  */
 
-// Module and namespace checking.
-if (typeof bbop == 'undefined') { var bbop = {};}
-if (typeof bbop.monarch == 'undefined') { bbop.monarch = {};}
-
 /*
  * Constructor: linker
  * 
@@ -44,7 +40,7 @@ bbop.monarch.linker = function (){
     throw new Error('we are missing access to global_app_base!');
     }
     // Easy app base.
-    this.app_base = global_app_base;
+    this.app_base = ""; //use relative path
 
     // Categories for different special cases (internal links).
     this.generic_item = {
@@ -163,7 +159,7 @@ bbop.monarch.linker.prototype.img = function (id, xid, modifier, category){
                 var lc_src = src.toLowerCase();
                 var xref = global_xrefs_conf[lc_src];
                 if (xref && xref['image_path']){
-                    retval = '<img class="source" src="' + global_app_base 
+                    retval = '<img class="source" src="' + this.app_base 
                               + xref['image_path'] + '"/>';
                 }
             }

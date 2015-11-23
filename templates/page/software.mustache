@@ -1,39 +1,18 @@
-<!DOCTYPE html>
-<html>
-<head>
-    <title>Monarch Software</title>
-    
-    {{{includes.analytics}}}
-    
-     <!-- CSS. -->
-    {{#pup_tent_css_libraries}}
-    <link rel="stylesheet" type="text/css" href="{{{.}}}">
-    {{/pup_tent_css_libraries}}
-    
-    <!-- JS variables. -->
-    {{#pup_tent_js_variables}}
-    <script type="text/javascript">var {{name}} = {{{value}}};</script>
-    {{/pup_tent_js_variables}}
-    
-    <!-- JS libraries. -->
-    {{#pup_tent_js_libraries}}
-    <script type="text/javascript" src="{{{.}}}"></script>
-    {{/pup_tent_js_libraries}}
+{{{includes.navbar}}}
 
-    <link rel="icon" href="/image/favicon.ico" type="image/x-icon">
-    <meta charset="utf-8"/> 
-</head>
-<body>
-    {{{includes.navbar}}}
-    <div class="monarch-container">
-        <div class="content">
-            <div class="wrapperforfooter">
+<div class="wrapperforfooter">
+  <div class="container-fluid monarch-container">
+
+    <div class="content content-bottom">
             <div class="jumbotron">
                 <h2>Install Monarch Web Server</h2>
                 <p><i>Developers:</i> Install the monarch web server and
                 make local changes</p>
+                <br/>
                 <a href="https://github.com/cmungall/monarch-app"
                 class="btn btn-large btn-info">Clone the GitHub project!</a>
+                <br/>
+                <br/>
             </div>
             <div class="col-lg-9">
                 <h2>Monarch Software</h2>
@@ -107,9 +86,10 @@
                     for more details.
                     </p>
             </div>
-            </div> <!-- closes wrapperforfooter -->
-            {{{includes.footer}}}
         </div>
     </div>
-</body>
-</html>
+</div>
+
+
+<!-- Footer. -->
+{{{includes.footer}}}

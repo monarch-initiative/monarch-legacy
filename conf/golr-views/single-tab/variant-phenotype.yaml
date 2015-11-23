@@ -4,7 +4,9 @@ document_category: generic_association
 weight: 20
 
 ## Results table, horizontal
+#result_weights: subject^7.0 subject_taxon^6.5 subject_gene^6.2 relation^6.0  object^5.0 evidence^4.0 source^3.5 is_defined_by^3.0
 result_weights: subject^7.0 subject_taxon^6.5 relation^6.0  object^5.0 evidence^4.0 source^3.5 is_defined_by^3.0
+
 
 ## Ordering of facets, vertical
 filter_weights: subject_taxon_label^3.5
@@ -65,7 +67,35 @@ fields:
 
   - id: subject_taxon_closure_label
     description: "Labels for taxon_closure."
-    display_name: Variant Taxon
+    display_name: Species
+    type: string
+    cardinality: multi
+    property: []
+    searchable: true
+
+  - id: subject_gene
+    description: "Gene related to the subject."
+    display_name: Gene
+    type: string
+    property: []
+
+  - id: subject_gene_label
+    description: "Label of the gene."
+    display_name: Gene
+    type: string
+    property: []
+    searchable: true
+
+  - id: subject_gene_closure
+    description: "Reflexive closure of gene."
+    display_name: Gene
+    type: string
+    cardinality: multi
+    property: []
+
+  - id: subject_gene_closure_label
+    description: "Labels for gene_closure."
+    display_name: Gene
     type: string
     cardinality: multi
     property: []
@@ -101,27 +131,27 @@ fields:
 
   - id: object_taxon
     description: "Taxonomic class of the object. This is typically a CURIE of the form NCBITaxon:nnnn. This field may be unfilled when used with certain categories"
-    display_name: Phenotype Taxon
+    display_name: Species
     type: string
     property: []
 
   - id: object_taxon_label
     description: "Label of taxon."
-    display_name: Phenotype Taxon
+    display_name: Species
     type: string
     property: []
     searchable: true
 
   - id: object_taxon_closure
     description: "Reflexive closure of taxon. ALWAYS up SubClassOf."
-    display_name: Phenotype Taxon
+    display_name: Species
     type: string
     cardinality: multi
     property: []
 
   - id: object_taxon_closure_label
     description: "Labels for taxon_closure."
-    display_name: Phenotype Taxon
+    display_name: Species
     type: string
     cardinality: multi
     property: []

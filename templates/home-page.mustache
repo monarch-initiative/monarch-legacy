@@ -1,12 +1,9 @@
 
 <!-- Nav. -->
 {{{includes.navbar}}}
-<!-- And all between. -->
-<div class="wrapperforfooter">
 
 <!-- Top-level internal container. -->
-<!-- <div class="container-fluid" class="conflict-top-container-margin"> -->
-<div id="monarch-home-container" class="container-fluid" style="margin: 0.8em;margin-top:0.3em;padding:0;">
+<div id="monarch-home-container" class="container-fluid monarch-container">
 
   <div class="jumbotron monarch-home-splash">
     <span class="monarch-home-splash-text">
@@ -17,11 +14,12 @@
   <!-- Open first row section. -->
   <div class="row">
 
-    <div id="col-1" class="col-xs-12 col-sm-8 col-md-8 col-lg-8">
+    <div id="col-1" class="col-xs-12 col-sm-8">
       <!-- Quiet rollover. -->
       <!-- WARNING: There is an HTML/CSS trick in here--the largest -->
       <!-- item is in "relative" position and the rest are in "absolute". -->
-      <div class="panel-body" style="margin-top:-20px;">
+
+      <div class="xpanel-body" style="margin:0;margin-top:-10px;">
         <div id="monarch-tabber" class="monarch-tabber">
           <div class="row monarch-tabber-controls">
             <div class="monarch-tabber-control">
@@ -69,9 +67,7 @@
             </div>
           </div> <!-- monarch-tabber-controls -->
         </div> <!-- monarch-tabber -->
-      </div>
-
-      <hr class="monarch-home-carousel-separator-hr"/>
+      </div> <!-- panel-body -->
 
       <div class="panel-body">
         <div id="monarch-carousel" class="monarch-carousel">
@@ -87,8 +83,8 @@
             <!--</div>-->
 
             <a role="button" href="/page/about">
-              <div class="center-block text-center" style="clear:both;">
-                <img class="monarch-carousel-item-image" src="/image/carousel-overview.png"
+              <div class="center-block text-center">
+                <img class="img-responsive monarch-carousel-item-image" src="/image/carousel-overview.png"
                      class="img-responsive"
                      alt="Explore Monarch" />
               </div>
@@ -108,7 +104,7 @@
 
             <a role="button" href="/disease">
               <div class="center-block text-center" style="clear:both;">
-                <img class="monarch-carousel-item-image" src="/image/explore-graph-dis.png"
+                <img class="img-responsive monarch-carousel-item-image" src="/image/explore-graph-dis.png"
                      class="img-responsive"
                      alt="Explore Diseases" />
               </div>
@@ -128,7 +124,7 @@
 
             <a role="button" href="/phenotype">
               <div class="center-block text-center" style="clear:both;">
-                <img class="monarch-carousel-item-image" src="/image/explore-graph-phe.png"
+                <img class="img-responsive monarch-carousel-item-image" src="/image/explore-graph-phe.png"
                      class="img-responsive"
                      alt="Explore Phenotypes" />
               </div>
@@ -149,7 +145,7 @@
 
             <a role="button" href="/model">
               <div class="center-block text-center" style="clear:both;">
-                <img class="monarch-carousel-item-image" src="/image/explore-graph-mod.png"
+                <img class="img-responsive monarch-carousel-item-image" src="/image/explore-graph-mod.png"
                      class="img-responsive"
                      alt="Explore Models" />
               </div>
@@ -170,7 +166,7 @@
 
             <a role="button" href="/gene">
               <div class="center-block text-center" style="clear:both;">
-                <img class="monarch-carousel-item-image" src="/image/explore-graph-gen.png"
+                <img class="img-responsive monarch-carousel-item-image" src="/image/explore-graph-gen.png"
                      class="img-responsive"
                      alt="Explore Genes" />
               </div>
@@ -188,10 +184,172 @@
 
       </div> <!-- panel-body -->
 
+
+      <div id="cameocontainer" class="container">
+        <div class="row flex monarch-home-cameo-row">
+          <div class="col-xs-6">
+            <div class="panel panel-default">
+              <div class="panel-heading">
+                <h3 class="panel-title">
+                  Patient Variant Analysis
+                </h3>
+              </div>
+              <div class="panel-body">
+                <div class="row">
+                  <div class="monarch-home-cameo-text">
+                    Combine genotype and phenotype data across species for patient variant prioritization, functional annotation and pathogenicity determination.
+                  </div>
+
+                  <div class="center-block text-center">
+                    <a href="/page/exomes">
+                      <img
+                        src="./image/variation-cameo.png"
+                         class="img-responsive monarch-home-cameo-image"
+                         alt=""/>
+                    </a>
+                  </div>
+                </div>
+              </div>
+
+              <div class="panel-footer">
+                <div class="center-block text-center">
+                  <a class="btn btn-primary monarch-home-cameo-button" href="/page/exomes">
+                    Exome Tool Suite
+                  </a>
+                </div>
+                <br/>
+              </div>
+            </div>
+          </div>
+
+          <div class="col-xs-6">
+            <div class="panel panel-default">
+              <div class="panel-heading">
+                <h3 class="panel-title">
+                  Patient Archive
+                </h3>
+              </div>
+              <div class="panel-body">
+                <div class="row">
+                  <div class="monarch-home-cameo-text">
+                    Securely share &amp; discuss patients with colleagues all around the world.
+                    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+                    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+                    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+                    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+                    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+                    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+                    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+                    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+                    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+                  </div>
+
+                  <div class="center-block text-center">
+                    <a href="http://patientarchive.org/">
+                      <img
+                        src="./image/patient-archive-cameo.png"
+                         class="img-responsive monarch-home-cameo-image"
+                         alt=""/>
+                    </a>
+                  </div>
+                </div>
+              </div>
+              <div class="panel-footer">
+                <div class="center-block text-center">
+                  <a class="btn btn-primary monarch-home-cameo-button" href="http://patientarchive.org/">
+                    Patient Archive
+                  </a>
+                </div>
+                <br/>
+              </div>
+            </div>
+          </div>
+
+        </div>
+
+        <div class="row flex monarch-home-cameo-row">
+          <div class="col-xs-6">
+            <div class="panel panel-default">
+              <div class="panel-heading">
+                <h3 class="panel-title">
+                  Text Mining
+                </h3>
+              </div>
+              <div class="panel-body">
+                <div class="row">
+                  <div class="monarch-home-cameo-text">
+                    Use our text mining engines to annotate phenotypes/diseases in your free text. Then optionally compare those phenotypes across species to find candidate models of disease.
+                  </div>
+
+                  <div class="center-block text-center">
+                    <a href="/annotate/text">
+                      <img
+                        src="./image/text-mining-cameo.png"
+                         class="img-responsive monarch-home-cameo-image"
+                         alt=""/>
+                    </a>
+                  </div>
+                </div>
+              </div>
+              <div class="panel-footer">
+                <div class="center-block text-center">
+                  <a class="btn btn-primary monarch-home-cameo-button" href="/annotate/text">
+                    Text Mining
+                  </a>
+                </div>
+                <br/>
+              </div>
+            </div>
+          </div>
+
+          <div class="col-xs-6">
+            <div class="panel panel-default">
+              <div class="panel-heading">
+                <h3 class="panel-title">
+                  Literature
+                </h3>
+              </div>
+              <div class="panel-body">
+                <div class="row">
+                  <div class="monarch-home-cameo-text">
+                    Find literature relevant to a set of phenotypes of interest
+                    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+                    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+                    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+                    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+                    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+                    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+                    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+                    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+                    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+                  </div>
+
+                  <div class="center-block text-center">
+                    <a href="http://pubmed-browser.human-phenotype-ontology.org/">
+                      <img
+                        src="./image/literature-cameo.png"
+                         class="img-responsive monarch-home-cameo-image"
+                         alt=""/>
+                    </a>
+                  </div>
+                </div>
+              </div>
+              <div class="panel-footer">
+                <div class="center-block text-center">
+                  <a class="btn btn-primary monarch-home-cameo-button" href="http://pubmed-browser.human-phenotype-ontology.org/">
+                    Phenotype PubMed Browser
+                  </a>
+                </div>
+                <br/>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
     </div> <!-- column 1 -->
 
     <!-- Two-column layout, col. 2 -->
-    <div id="col-1" class="col-xs-12 col-sm-4 col-md-4 col-lg-4">
+    <div id="col-1" class="col-xs-12 col-sm-4">
 
       <!-- Search. -->
       <div class="panel panel-default"> <!-- style="padding-bottom: 0;"> -->
@@ -202,6 +360,7 @@
           <span class="">
             Find models and diseases similar to a set of abnormal phenotypes of interest and then visualize their overlap.
           </span>
+          <br/>
           <div class="center-block text-center" style="clear:both;">
             <a href="/analyze/phenotypes">
               <img src="/image/Phenogrid3Compare.png"
@@ -209,8 +368,9 @@
                    alt="Explore Diseases" />
             </a>
           </div>
+          <br/>
           <div class="center-block text-center">
-            <a class="btn btn-primary center-block monarch-home-phenotype-analysis" href="/analyze/phenotypes">
+            <a class="btn btn-primary monarch-home-phenotype-button" href="/analyze/phenotypes">
               Go to Phenotype Analysis
             </a>
           </div>
@@ -219,7 +379,7 @@
 
       <!-- News and twitter combo. -->
       <div class="row">
-        <div id="blog" class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
+        <div id="blog" class="col-xs-12">
 
           <div
             class="panel panel-default news-panel">
@@ -252,9 +412,8 @@
       </div> <!-- row -->
 
 
-
       <div class="row">
-        <div id="twitter" class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
+        <div id="twitter" class="col-xs-12">
           <a  class="twitter-timeline"
             href="https://twitter.com/search?q=%40MonarchInit+OR+%23raredisease+OR+%40GA4GH+OR+%40phenomecentral"
             data-widget-id="527567015918051328"
@@ -290,8 +449,6 @@
   </div> <!-- row -->
 
 </div> <!-- container-fluid -->
-<!-- Close top-level container. -->
-</div>
 
 <!-- Footer. -->
 <hr/>

@@ -1,0 +1,10 @@
+{
+  "colours": true,
+  "restartable": "rs",
+  "verbose": true,
+  "watch": [
+    "lib/monarch/"
+  ],
+  "ext": "js json"
+}
+

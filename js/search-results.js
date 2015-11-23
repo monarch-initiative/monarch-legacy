@@ -1,5 +1,5 @@
 ////
-//// Application-level code for creating the 
+//// Application-level code for creating the
 //// search results table from NIF
 ////
 
@@ -10,7 +10,7 @@ function search_results_init(term){
     jQuery.getJSON(query, function(data) {
         var results = data;
         $("#ajax-cube").hide();
-        
+
         if (results.otherResults.length > 0){
             var genResultsTable = function() {return genTableOfSearchDataResults(results.otherResults) };
             var resultsTable = genResultsTable();
@@ -18,10 +18,14 @@ function search_results_init(term){
             resultsTable = "<span class=\"no-results\">&nbsp;&nbsp;No results found</span>";
             $("#text-search").remove();
         }
-        
+
         $("#complete-info").append(resultsTable);
     });
-    
-    
-    
+}
+
+if (typeof exports === 'object') {
+    exports.search_results_init = search_results_init;
+}
+if (typeof(loaderGlobals) === 'object') {
+    loaderGlobals.search_results_init = search_results_init;
 }

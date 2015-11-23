@@ -1,45 +1,11 @@
-<!DOCTYPE html>
-<html>
-<head>
-    <title>Monarch Phenotype Grid Widget</title>
-    
-    {{{includes.analytics}}}
+{{{includes.navbar}}}
 
-    <!-- CSS. -->
-    {{#pup_tent_css_libraries}}
-    <link rel="stylesheet" type="text/css" href="{{{.}}}">
-    {{/pup_tent_css_libraries}}
-    
-    <!-- JS variables. -->
-    {{#pup_tent_js_variables}}
-    <script type="text/javascript">var {{name}} = {{{value}}};</script>
-    {{/pup_tent_js_variables}}
-    
-    <!-- JS libraries. -->
-    {{#pup_tent_js_libraries}}
-    <script type="text/javascript" src="{{{.}}}"></script>
-    {{/pup_tent_js_libraries}}
-    
-    <script type="text/javascript" src="/stupidtable.min.js"></script>
-    <script type="text/javascript" src="/tables.js"></script>
+  <div class="container-fluid monarch-container">
 
-	<link rel="stylesheet" type="text/css" href="/monarch-main.css"/>
-    <link rel="stylesheet" type="text/css" href="/monarch-specific.css"/>
-    <link rel="stylesheet" type="text/css" href="/imagehover.css"/>	
-    <meta name="viewport" content="width=device-width, initial-scale=1.0"/> 
-    <link rel="icon" href="/image/favicon.ico" type="image/x-icon">
-    <meta charset="utf-8"/> 
+    <div class="content content-bottom" id="about">
+	         <IFRAME src="../node_modules/phenogrid/index.html"
+	         style="position:absolute;left:0px;top:0;width:100%;height:100%;" frameBorder="0"></iframe>
+    </div>
+  </div>
 
-</head>
-<body id="phenogrid">
-    <div class="monarch-container">
-        {{{includes.navbar}}}
-        <div class="content">
-            <div class="wrapperforfooter">
-	         <IFRAME src="../node_modules/phenogrid/index.html" style="position:absolute;top:0px;width:100%;height:100vh;" frameBorder="0"></iframe>
-            </div> <!-- closes wrapperforfooter -->
-			{{{includes.footer}}}
-		</div>	
-	</div>	
-</body>
-</html>
+{{{includes.footer}}}

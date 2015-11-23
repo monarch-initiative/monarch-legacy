@@ -1,17 +1,38 @@
-    {{{includes.navbar}}}
-    <div class="monarch-container">
+{{{includes.navbar}}}
+
+<div class="wrapperforfooter">
+    <div class="container-fluid monarch-container">
         <div class="content">
-            <div class="wrapperforfooter">
             <div class="jumbotron">
                 <img id="monarch-logo" class="downloadline" src="/image/logo.png"/>
                 <h1 class="downloadline">Error</h1>
                 <p>Sorry. Something went wrong.</p>
+                {{#debug}}
+                <hr/>
+                <h5> Developer Error Message </h5>
+                <h6>
+                    <pre>
+                        {{message}}
+                    </pre>
+                </h6>
+                <hr/>
+                <h6> Stack Trace: </h6>
+                <h6>
+                    <pre>
+                        {{stackTrace}}
+                    </pre>
+                </h6>
+                {{/debug}}
+                {{^debug}}
                 <!-- Developer Error Message -->
                 <!-- {{message}} -->
                 <!-- Stack Trace: -->
                 <!-- {{stackTrace}} -->
+                {{/debug}}
+
             </div>
-            </div> <!-- closes wrapperforfooter -->
-            {{{includes.footer}}}
         </div>
     </div>
+
+</div> <!-- closes wrapperforfooter -->
+{{{includes.footer}}}

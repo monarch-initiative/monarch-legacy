@@ -45,27 +45,27 @@ fields:
 
   - id: subject_taxon
     description: "Taxonomic class of the subject. This is typically a CURIE of the form NCBITaxon:nnnn."
-    display_name: Model Taxon
+    display_name: Species
     type: string
     property: []
 
   - id: subject_taxon_label
     description: "Label of taxon."
-    display_name: Model Taxon
+    display_name: Species
     type: string
     property: []
     searchable: true
 
   - id: subject_taxon_closure
     description: "Reflexive closure of taxon. ALWAYS up SubClassOf."
-    display_name: Model Taxon
+    display_name: Species
     type: string
     cardinality: multi
     property: []
 
   - id: subject_taxon_closure_label
     description: "Labels for taxon_closure."
-    display_name: Model Taxon
+    display_name: Species
     type: string
     cardinality: multi
     property: []
@@ -101,27 +101,27 @@ fields:
 
   - id: object_taxon
     description: "Taxonomic class of the object. This is typically a CURIE of the form NCBITaxon:nnnn. This field may be unfilled when used with certain categories"
-    display_name: Phenotype Taxon
+    display_name: Species
     type: string
     property: []
 
   - id: object_taxon_label
     description: "Label of taxon."
-    display_name: Phenotype Taxon
+    display_name: Species
     type: string
     property: []
     searchable: true
 
   - id: object_taxon_closure
     description: "Reflexive closure of taxon. ALWAYS up SubClassOf."
-    display_name: Phenotype Taxon
+    display_name: Species
     type: string
     cardinality: multi
     property: []
 
   - id: object_taxon_closure_label
     description: "Labels for taxon_closure."
-    display_name: Phenotype Taxon
+    display_name: Species
     type: string
     cardinality: multi
     property: []

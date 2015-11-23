@@ -1,21 +1,21 @@
-<div class="navbar navbar-inverse navbar-fixed-top monarch-navbar" role="navigation">
-    <div class="container-fluid">
+<nav id="navbar" class="navbar navbar-inverse navbar-fixed-top monarch-navbar" role="navigation">
+    <div class="container-fluid monarch-navbar-container">
         <div class="navbar-header">
-            <button type="button" class="navbar-toggle" data-toggle="collapse"
+            <button type="button" class="navbar-toggle collapsed" data-toggle="collapse"
                     data-target="#collapsed-navbar">
                 <span class="icon-bar"></span>
                 <span class="icon-bar"></span>
                 <span class="icon-bar"></span>
             </button>
             <a class="navbar-brand" href="/">
-                <img class="branding-logo"
+                <img class="branding-logo pull-left"
                      src="/image/logo.png"
                      alt="Monarch Initiative logo"
-                     title="Monarch Initiative front page">
-                Monarch
+                     title="Monarch Initiative front page"/>
+                <span class="pull-right">Monarch</span>
             </a>
         </div>
-        <div id="collapsed-navbar" class="nav-collapse collapse">
+        <div id="collapsed-navbar" class="navbar-collapse collapse">
             <ul class="nav navbar-nav">
                 <li class="dropdown">
                     <a href="#" class="dropdown-toggle" data-toggle="dropdown">
@@ -25,7 +25,6 @@
                         <li><a href="/phenotype">Phenotypes</a></li>
                         <li><a href="/gene">Genes</a></li>
                         <li><a href="/model">Models</a></li>
-                        <!-- <li><a href="/literature/">Literature</a></li> -->
                     </ul>
                 </li>
                 <li class="dropdown">
@@ -42,7 +41,7 @@
                         <i class="icon-th-large"></i>About <b class="caret"></b></a>
                     <ul class="dropdown-menu">
                         <li><a href="/page/about">About Monarch</a></li>
-                        <li><a href="/sources">Data Sources</a></li>
+                        <li><a href="/about/sources">Data Sources</a></li>
                         <li><a href="/page/releases">Releases</a></li>
                         <li><a href="/page/team">Monarch Team</a></li>
 
@@ -70,11 +69,12 @@
                     href="#simple-menu"
                     data-backdrop="false"
                     data-toggle="modal"
-                    class="btn btn-inverse btn-default dropdown-toggle"
+                    class="btn dropdown-toggle"
                     role="button"
                     aria-haspopup="true"
                     aria-expanded="false">
-                    &nbsp;Feedback&nbsp;
+                    Feedback&nbsp;
+                    <i class="glyphicon glyphicon-pencil" aria-hidden="true"></i>
                   </button>
                   <ul id="simple-menu" class="dropdown-menu simple-menu modal">
                     <li id="feedback-handle" xclass="modal-dialog">
@@ -152,16 +152,16 @@
                           </div>
                         </div>
                         <div class="row">
-                          <div class="col-3">
+                          <div class="col-xs-3">
                               <a href="https://github.com/monarch-initiative/monarch-app/issues" target="_blank">Issue Tracker</a>
                           </div>
-                          <div class="col-3">
+                          <div class="col-xs-3">
                               <a href="mailto:info@monarchinitiative.org" target="_blank">Email Us</a>
                           </div>
-                          <div class="col-3">
+                          <div class="col-xs-3">
                               <a href="http://mail.monarchinitiative.org/mailman/listinfo/users" target="_blank">Join Listserve</a>
                           </div>
-                          <div class="col-3">
+                          <div class="col-xs-3">
                               <a href="https://twitter.com/MonarchInit" target="_blank">Follow us on Twitter</a>
                           </div>
                         </div>
@@ -170,25 +170,22 @@
                     </li>
                   </ul>
                 </li>
-
-
-
             </ul>
             {{#monarch_nav_search_p}}
-            <form id="search_form" class="navbar-form navbar-right searchspace" action="/search" role="search">
-                <div class="input-group">
-                <input id="search" type="text" class="form-control search-box" placeholder="Search (e.g. Parkinson's)"/>
-                <span class="input-group-btn nav-search-btn">
-                    <button class="btn btn-primary" type="submit">Go</button>
-                </span>
+            <form id="search_form" class="navbar-right navbar-form searchspace" action="/search" role="search">
+                <div class="form-group">
+                  <input id="search" type="text" class="col-xs-8 form-control" placeholder="Search (e.g. Parkinson's)"/>
+                  <button class="col-xs-4 btn btn-primary nav-search-btn"
+                      type="submit">Go</button>
                 </div>
             </form>
+
             {{/monarch_nav_search_p}}
         </div>
     </div>
-</div>
+</nav>
 
-<div style="position:fixed;z-index:100;top:50px;width:100%;">
+<div style="position:fixed;z-index:100;top:0;width:100%;">
     <div class="alert alert-success" id="alert_template" style="margin-left:20%;margin-right:20%;padding:20px;padding-right:30px;padding-top:-30px;display:none;">
     <button type="button" class="close" style="opacity:1.0;background-color:transparent;margin-top:-15px;" data-dismiss="alert">
         <span style="opacity:1.0;color:black;" aria-hidden="true">&times;</span>
@@ -196,4 +193,5 @@
     <h4><center><span id="feedback-response"></span></center></h4>
     </div>
 </div>
+
 

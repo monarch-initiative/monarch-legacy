@@ -1,11 +1,13 @@
- {{{includes.navbar}}}
-    <div class="monarch-container">
-        <div class="content">
-            <div class="wrapperforfooter">
+{{{includes.navbar}}}
+
+<div class="wrapperforfooter">
+  <div class="container-fluid monarch-container">
+
+    <div class="content">
             <div class="jumbotron monarch-disease-light">
                 <div id="description">
                     {{#alerts}}
-                    <div class="alert">
+                    <div class="alert alert-warning alert-block top-alert">
                       {{{.}}}
                     </div>
                     {{/alerts}}
@@ -120,7 +122,9 @@
 </div>
 
             </div>
-            </div> <!-- closes wrapperforfooter -->
-            {{{includes.footer}}}
         </div>
     </div>
+
+
+</div> <!-- closes wrapperforfooter -->
+{{{includes.footer}}}

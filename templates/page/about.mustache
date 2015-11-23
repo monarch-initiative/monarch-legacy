@@ -1,34 +1,9 @@
-<!DOCTYPE html>
-<html>
-<head>
-    <title>About Monarch</title>
-    
-    {{{includes.analytics}}}
-    
-    <!-- CSS. -->
-    {{#pup_tent_css_libraries}}
-    <link rel="stylesheet" type="text/css" href="{{{.}}}">
-	<link rel="stylesheet" type="text/css" href="/monarch-specific.css"/>
-    {{/pup_tent_css_libraries}}
-    
-    <!-- JS variables. -->
-    {{#pup_tent_js_variables}}
-    <script type="text/javascript">var {{name}} = {{{value}}};</script>
-    {{/pup_tent_js_variables}}
-    
-    <!-- JS libraries. -->
-    {{#pup_tent_js_libraries}}
-    <script type="text/javascript" src="{{{.}}}"></script>
-    {{/pup_tent_js_libraries}}
-    
-    <link rel="icon" href="/image/favicon.ico" type="image/x-icon">
-    <meta charset="utf-8"/> 
-</head>
-<body>
-    <div class="monarch-container">
-        {{{includes.navbar}}}
-        <div class="content" id="about">
-            <div class="wrapperforfooter">
+{{{includes.navbar}}}
+
+<div class="wrapperforfooter">
+  <div class="container-fluid monarch-container">
+
+    <div class="content content-bottom monarch-bigtext" id="about">
 				<div class="panel-group" id="accordion">
 					<div class="panel panel-default" id="goals" href="#goals">
 						<div class="panel-heading">
@@ -397,8 +372,12 @@
                 </div>
 
 -->
-            </div> <!-- closes wrapperforfooter -->
         </div>
     </div>
-</body>
-</html>
+
+<!-- Close top-level container. -->
+</div>
+
+
+<!-- Footer. -->
+{{{includes.footer}}}

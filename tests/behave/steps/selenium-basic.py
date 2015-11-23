@@ -25,7 +25,7 @@ def step_impl(context, page):
 def step_impl(context, page, id):
     #print(context.browser.title)
     context.browser.get(context.target + page)
-    #time.sleep(30)
+    time.sleep(5)
     element = WebDriverWait(context.browser, 200).until(EC.presence_of_element_located((By.ID, id)))
     # try:
     #     print(id)
@@ -33,6 +33,22 @@ def step_impl(context, page, id):
     # finally:
     #     print("FINALLY")
     #     #context.browser.quit()
+
+@given('I go to slow page "{page}" and wait for class "{cls}"')
+def step_impl(context, page, cls):
+    #print(context.browser.title)
+    context.browser.get(context.target + page)
+    element = WebDriverWait(context.browser, 200).until(EC.presence_of_element_located((By.CLASS_NAME, cls)))
+    # try:
+    #     print(id)
+    #     element = WebDriverWait(context.browser, 30).until(EC.presence_of_element_located((By.ID, id)))
+    # finally:
+    #     print("FINALLY")
+    #     #context.browser.quit()
+
+@when('I wait for id "{id}"')
+def step_impl(context, id):
+    element = WebDriverWait(context.browser, 200).until(EC.presence_of_element_located((By.ID, id)))
 
 
 ## URL Check
@@ -61,6 +77,7 @@ def step_impl(context, text):
     webelt = context.browser.find_element_by_tag_name('html')
     # print("###### text: %s" % text)
     # print("###### webelt.text: %s" % webelt.text)
+    # print("###### webelt.innerHTML: %s" % webelt.get_attribute('innerHTML'))
     # print("###### rfind: %d" % webelt.text.rfind(text))
     assert webelt.text.rfind(text) != -1
     # webelt = context.browser.find_element_by_tag_name('body')

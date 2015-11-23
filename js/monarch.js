@@ -1,3 +1,34 @@
+function InitMonarch() {
+    var jq = require('jquery');
+    if (typeof(globalUseBundle) === 'undefined' || !globalUseBundle) {
+        console.log('InitMonarch... using loaderGlobals bbop');
+        var bbop = loaderGlobals.bbop;
+    }
+    else {
+        console.log('InitMonarch... using require bbop');
+        var bbop = require('bbop');
+    }
+
+// Module and namespace checking.
+// if ( typeof bbop == "undefined" ){ var bbop = {}; }
+
+if ( typeof bbop.monarch == "undefined" ){ bbop.monarch = {}; }
+if ( typeof bbop.monarch.widget == "undefined" ){ bbop.monarch.widget = {}; }
+
+if (typeof(loaderGlobals) === 'object') {
+    loaderGlobals.bbop = bbop;
+}
+if (typeof(global) === 'object') {
+    global.bbop = bbop;
+}
+if( typeof(exports) != 'undefined' ) {
+    exports.bbop = bbop;
+}
+
+// This is a prefixing header fragment of a JS file. It opens up a function scope closed by 
+// the loaderFooter.js file.
+// These files sandwich the other files in scripts/release-file-map.txt
+//
 /* 
  * Package: handler.js
  * 
@@ -8,10 +39,6 @@
  * 
  * global_xrefs_conf: Xrefs conf file from conf/xrefs.json
  */
-
-// Module and namespace checking.
-if (typeof bbop == 'undefined') { var bbop = {};}
-if (typeof bbop.monarch == 'undefined') { bbop.monarch = {};}
 
 // The beginnings of a monarch specific handler, just a copy of amigo's
 // handler right now
@@ -163,10 +190,6 @@ bbop.monarch.handler.prototype.dispatch = function(data, name, context, fallback
  * 
  */
 
-// Module and namespace checking.
-if (typeof bbop == 'undefined') { var bbop = {};}
-if (typeof bbop.monarch == 'undefined') { bbop.monarch = {};}
-
 /*
  * Constructor: linker
  * 
@@ -190,7 +213,7 @@ bbop.monarch.linker = function (){
     throw new Error('we are missing access to global_app_base!');
     }
     // Easy app base.
-    this.app_base = global_app_base;
+    this.app_base = ""; //use relative path
 
     // Categories for different special cases (internal links).
     this.generic_item = {
@@ -309,7 +332,7 @@ bbop.monarch.linker.prototype.img = function (id, xid, modifier, category){
                 var lc_src = src.toLowerCase();
                 var xref = global_xrefs_conf[lc_src];
                 if (xref && xref['image_path']){
-                    retval = '<img class="source" src="' + global_app_base 
+                    retval = '<img class="source" src="' + this.app_base 
                               + xref['image_path'] + '"/>';
                 }
             }
@@ -450,10 +473,6 @@ bbop.monarch.linker.prototype.set_anchor = function(id, args, xid, modifier){
  *   
  */
 
-if ( typeof bbop == "undefined" ){ var bbop = {}; }
-if ( typeof bbop.monarch == "undefined" ){ bbop.monarch = {}; }
-if ( typeof bbop.monarch.widget == "undefined" ){ bbop.monarch.widget = {}; }
-
 /*
  * Constructor: browse
  * 
@@ -488,12 +507,15 @@ if ( typeof bbop.monarch.widget == "undefined" ){ bbop.monarch.widget = {}; }
  *  manager - a <bbop.rest.manager.jquery> object
  *  reference_id - starting ontology class ID
  *  interface_id - string id of the HTML element to build on
+ *  eq_id - string id of the original id (in cases in which we need to
+ *          use the clique leader to generate the view
+ *  eq_label - string label of the original label
  *  in_argument_hash - *[optional]* optional hash of optional arguments
  * 
  * Returns:
  *  this object
  */
-bbop.monarch.widget.browse = function(server, manager, reference_id, root, interface_id,
+bbop.monarch.widget.browse = function(server, manager, reference_id, root, interface_id, eq_id, eq_label,
                   in_argument_hash){
 
     // Per-UI logger.
@@ -537,6 +559,8 @@ bbop.monarch.widget.browse = function(server, manager, reference_id, root, inter
         root = "HP:0000118";
     }
     this._root = root;
+    this._eq_id = eq_id;
+    this._eq_label = eq_label;
 
     this.server = server;
     this.manager = manager;
@@ -685,6 +709,10 @@ bbop.monarch.widget.browse = function(server, manager, reference_id, root, inter
                       // it if we're current.
                       var nav_b = null;
                       if(anchor._current_acc == nid){
+                          if (typeof anchor._eq_id != 'undefined') {
+                              nid = anchor._eq_id;
+                              lbl = anchor._eq_label;
+                          }
                           var inact_attrs = {
                           'class': 'bbop-js-text-button-sim-inactive',
                           'title': 'Current term ( ' + nid + ' )',
@@ -906,7 +934,7 @@ bbop.monarch.widget.browse = function(server, manager, reference_id, root, inter
     
     bbop.model.bracket.graph.prototype.monarch_bracket_layout = function(term_acc, transitivity_graph){
         var anchor = this;
-        each = bbop.core.each;
+        var each = bbop.core.each;
         // First, lets just get our base bracket layout.
         var layout = anchor.bracket_layout(term_acc);
         var curr_acc;
@@ -934,7 +962,7 @@ bbop.monarch.widget.browse = function(server, manager, reference_id, root, inter
             // the one, we'll just use the defaults.
             if( curr_acc == term_acc ) {
                 // Try to get siblings here
-                unique_list = {};
+                var unique_list = {};
                 loop(anchor.get_parent_nodes(curr_acc), function (n) {
                     loop(anchor.get_child_nodes(n.id()), function (sibling) {
                         if (sibling.id() != term_acc 
@@ -985,7 +1013,7 @@ bbop.monarch.widget.browse = function(server, manager, reference_id, root, inter
             }
             if ( isChildOfTerm ) {
                 // Make sure the class with additional children is at the bottom of the list        
-                for (i=0; i < bracket.length; i++){
+                for (var i=0; i < bracket.length; i++){
                     if (anchor.get_child_nodes(bracket[i][0]).length > 0){
                         bracket.splice((bracket.length-1), 0, bracket.splice(i, 1)[0]);
                         break;
@@ -1042,9 +1070,6 @@ bbop.monarch.widget.browse = function(server, manager, reference_id, root, inter
  * Subclass of <bbop.html.tag>.
  */
 
-if ( typeof bbop == "undefined" ){ var bbop = {}; }
-if ( typeof bbop.monarch == "undefined" ){ bbop.monarch = {}; }
-if ( typeof bbop.monarch.widget == "undefined" ){ bbop.monarch.widget = {}; }
 if ( typeof bbop.monarch.widget.display == "undefined" ){ bbop.monarch.widget.display = {}; }
 
 /*
@@ -1467,3 +1492,17 @@ bbop.monarch.widget.display.results_table_by_class_conf_bs3.prototype.process_en
 	
     	return retval;
     };
+}	// Closes the InitMonarch function
+
+
+console.log('define InitMonarch');
+if (typeof(loaderGlobals) === 'object') {
+    loaderGlobals.InitMonarch = InitMonarch;
+    // console.log('define InitMonarch loaderGlobals', loaderGlobals);
+    // console.log('define InitMonarch bbop', bbop);
+    // console.log('define InitMonarch loaderGlobals.bbop', loaderGlobals.bbop);
+}
+if (typeof(global) === 'object') {
+    global.InitMonarch = InitMonarch;
+    console.log('define InitMonarch global');
+}

@@ -1,31 +1,32 @@
 /* This script document contains functions relating to general Monarch pages. */
 
-if (typeof bbop == 'undefined') { var bbop = {};}
-if (typeof bbop.monarch == 'undefined') { bbop.monarch = {};}
+function initMonarchPage(){
+    console.log('initMonarchPage');
 
-jQuery(document).ready(function(){
+    bbop.monarch.remove_equivalent_ids = remove_equivalent_ids;
+    bbop.monarch.filter_equivalents = filter_equivalents;
 
     // Feedback form
-    $('#feedback-window-container #feedback-trigger').on('click', function(event) {
+    jQuery('#feedback-window-container #feedback-trigger').on('click', function(event) {
       event.preventDefault();
       event.stopPropagation();
-      $(this).parent().siblings().removeClass('open');
-      $(this).parent().toggleClass('open');
+      jQuery(this).parent().siblings().removeClass('open');
+      jQuery(this).parent().toggleClass('open');
 
-      if ($('#feedback-window-container').hasClass('open')) {
+      if (jQuery('#feedback-window-container').hasClass('open')) {
         jQuery('#alert_template button').click(function(e) {
-                $('#alert_template').fadeOut('slow');
+                jQuery('#alert_template').fadeOut('slow');
             });
 
-        $('#feedback-window-container .feedback-close').click(function(e) {
-          $('#feedback-window-container').removeClass('open');
+        jQuery('#feedback-window-container .feedback-close').click(function(e) {
+          jQuery('#feedback-window-container').removeClass('open');
         });
       }
       else {
       }
     });
 
-    $('#feedback-window-container #feedback-submit-button').click(function(){
+    jQuery('#feedback-window-container #feedback-submit-button').click(function(){
         var feedbackUrl = '/feedback';
         var goalText = jQuery('#feedback-window-container #feedback-goal').val();
         var improveText = jQuery('#feedback-window-container #feedback-improve').val();
@@ -64,17 +65,17 @@ jQuery(document).ready(function(){
                 jQuery('#feedback-window-container').removeClass('open');
 
                 // window.setTimeout(function() {
-                //         $('#alert_template').fadeOut('slow');
-                //         $("#alert_template span").remove();
+                //         jQuery('#alert_template').fadeOut('slow');
+                //         jQuery("#alert_template span").remove();
                 //     },
                 //     13000);
-                $("#alert_template #feedback-response").text('Thanks for your feedback');
-                $('#alert_template').fadeIn('slow');
+                jQuery("#alert_template #feedback-response").text('Thanks for your feedback');
+                jQuery('#alert_template').fadeIn('slow');
             }
         });
     });
 
-    $("#feedback-window-container #simple-menu").draggable({
+    jQuery("#feedback-window-container #simple-menu").draggable({
         handle: "#feedback-handle"
     });
 
@@ -113,12 +114,9 @@ jQuery(document).ready(function(){
         jQuery(this).parent().find('.hideitems').hide();
         jQuery(this).parent().find('.fewitems').show();
     });
-
-
-});
+}
 
 function getAnnotationScore() {
-    
     var isLoading = false;
     jQuery('#categories a[href="#phenotypes"]').click(function(event) {
         if (isLoading == false){
@@ -209,7 +207,7 @@ function getAnnotationScore() {
  *
  * Returns: Updated map with equivalents filtered out
  */
-bbop.monarch.filter_equivalents = function (eq_graph, map) {
+function filter_equivalents(eq_graph, map) {
     var equivalent_graph = new bbop.model.graph();
     equivalent_graph.load_json(eq_graph);
     
@@ -259,15 +257,17 @@ bbop.monarch.filter_equivalents = function (eq_graph, map) {
             if (node_id) {
                 if (eq_node_list.indexOf(node_id) > -1){
                     
-                    // MESH terms have a lower priority
-                    if (/^MESH/.test(id)){
-                        map.splice(i,1)
-                        i--;
-                        break;
-                    } else {
+                    // cliqueLeaders have priority
+                    if ('types' in equivalent_graph.get_node(id).metadata() 
+                            && (equivalent_graph.get_node(id).metadata()['types'].indexOf('cliqueLeader') > -1)) {
                         map.splice(k, 1);
                         k--;
                         continue;
+                    }
+                    else {
+                        map.splice(i,1)
+                        i--;
+                        break;
                     }
                 }
             }
@@ -277,10 +277,11 @@ bbop.monarch.filter_equivalents = function (eq_graph, map) {
     return map;
 };
 
-bbop.monarch.remove_equivalent_ids = function (map, id_list, response) {
+function remove_equivalent_ids(map, id_list, response) {
     //TODO pass server in using puptent var
       var ids = id_list.join('&id=');
-      var qurl = "http://lurch.crbs.ucsd.edu:9000/scigraph/graph/neighbors?id=" 
+      // Global scigraph data url passed in from webapp.js addCoreRenderers
+      var qurl = global_scigraph_url + "graph/neighbors?id=" 
           + ids + "&depth=3&blankNodes=false&relationshipType=equivalentClass"
           + "&direction=BOTH&project=%2A";
       jQuery.ajax({
@@ -291,13 +292,77 @@ bbop.monarch.remove_equivalent_ids = function (map, id_list, response) {
               response(map);
           },
           success: function ( data ){
-              map = bbop.monarch.filter_equivalents(data, map);
+              map = filter_equivalents(data, map);
               response(map);  
           }
       });
 };
 
-if (typeof exports === 'object') {
-    exports.getAnnotationScore = getAnnotationScore;
+function add_species_to_autocomplete(data, map, gene_ids) {
+    var graph = new bbop.model.graph();
+    graph.load_json(data);
+    gene_ids.forEach(function (id) {
+        var label = '';
+        var taxon_list = graph.get_parent_nodes(id, 'http://purl.obolibrary.org/obo/RO_0002162');
+        if (taxon_list && taxon_list.length > 0){
+            label = taxon_list[0].label();
+            var meta = taxon_list[0].metadata();
+            if (meta && meta['synonym']){
+                label = meta['synonym'][0];
+            }
+            label = label.replace(/\b[a-z]/g, function() {
+                return arguments[0].toUpperCase();
+            });
+        }
+        for (var i = 0; i < map.length; i++){
+            if (map[i]['id'] == id) {
+                if (label) {
+                    map[i]['tag'] = label;
+                }
+            }
+        }
+    });
+    return map;
 }
 
+
+function makeSpinnerDiv(args){
+ // Details for spinner
+    
+    var default_args = {'generate_id': true,
+                        'class':
+                        'progress progress-striped active',
+                        'style': 'width: 3em; position:absolute; display:inline-block; margin-top:3px; margin-left:10px;'
+    };
+    if (!args){
+        args = default_args;
+    }
+    var inspan = new bbop.html.tag('span', {'class': 'sr-only'}, '...');
+    var indiv = new bbop.html.tag('div', {'class': 'progress-bar',
+                      'role': 'progressbar',
+                      'aria-valuenow': '100',
+                      'aria-valuemin': '0',
+                      'aria-valuemax': '100',
+                      'style': 'width: 100%;'},
+                  inspan);
+    var spinner_div =
+    new bbop.html.tag('div',
+              args,
+              indiv);
+    
+    return spinner_div;
+}
+
+if (typeof exports === 'object') {
+    exports.initMonarchPage = initMonarchPage;
+    exports.getAnnotationScore = getAnnotationScore;
+    exports.remove_equivalent_ids = remove_equivalent_ids;
+    exports.makeSpinnerDiv = makeSpinnerDiv;
+    exports.add_species_to_autocomplete = add_species_to_autocomplete;
+}
+if (typeof(loaderGlobals) === 'object') {
+    loaderGlobals.initMonarchPage = initMonarchPage;
+    loaderGlobals.remove_equivalent_ids = remove_equivalent_ids;
+    loaderGlobals.makeSpinnerDiv = makeSpinnerDiv;
+    loaderGlobals.add_species_to_autocomplete = add_species_to_autocomplete;
+}

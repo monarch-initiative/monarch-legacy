@@ -8,14 +8,14 @@ Feature: NodeJS and RingoJS pass all tests.
      then the document should contain "Search Results: twist"
 
 @ui
- Scenario: The "/sources" endpoint returns the correct HTML
-    Given I go to page "/sources"
+ Scenario: The "/about/sources" endpoint returns the correct HTML
+    Given I go to page "/about/sources"
      then the title should be "Data Sources"
      then the document should contain "Data Sources"
 
 @ui
- Scenario: The "/sources.json" endpoint returns the correct JSON
-    Given I go to page "/sources.json"
+ Scenario: The "/about/sources.json" endpoint returns the correct JSON
+    Given I go to page "/about/sources.json"
      then the document should contain '"resource_description":"BioGRID is'
 
 @ui
@@ -58,15 +58,17 @@ Feature: NodeJS and RingoJS pass all tests.
 @ui
  Scenario: The "/compare/" endpoint returns the correct JSON
     Given I go to page "/compare/OMIM:270400/NCBIGene:5156,OMIM:249000,OMIM:194050.json"
-     then the document should contain "Smith-Lemli-Opitz Syndrome"
      then the document should contain "PDGFRA"
      then the document should contain "Blue irides"
-     
+     then the document should contain "maxSumIC"
+     then the document should contain "meanMaxIC"
+
 @ui
  Scenario: The "/compare/" endpoint returns the correct JSON with invalid ID
     Given I go to page "/compare/HP:0012774+HP:0002650/1232413241234.json"
      then the document should contain "HP:0012774"
      then the document should contain "HP:0002650"
+     then the document should contain '"metric":"combinedScore"'
 
 @ui
 Scenario: The "/query/orthologs/" endpoint returns the correct JSON

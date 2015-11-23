@@ -1,38 +1,14 @@
-<!DOCTYPE html>
-<html>
-<head>
-    <title>Monarch Releases</title>
-   
-    {{{includes.analytics}}}
-    
-     <!-- CSS. -->
-    {{#pup_tent_css_libraries}}
-    <link rel="stylesheet" type="text/css" href="{{{.}}}">
-    {{/pup_tent_css_libraries}}
-    
-    <!-- JS variables. -->
-    {{#pup_tent_js_variables}}
-    <script type="text/javascript">var {{name}} = {{{value}}};</script>
-    {{/pup_tent_js_variables}}
-    
-    <!-- JS libraries. -->
-    {{#pup_tent_js_libraries}}
-    <script type="text/javascript" src="{{{.}}}"></script>
-    {{/pup_tent_js_libraries}}
-    
-    <link rel="icon" href="/image/favicon.ico" type="image/x-icon">
-    <meta charset="utf-8"/> 
-</head>
-<body>
-    <div class="monarch-container">
-        {{{includes.navbar}}}
-        <div class="content">
-            <div class="wrapperforfooter">
-              <div class="title">Monarch Releases</div>
+{{{includes.navbar}}}
+
+<div class="wrapperforfooter">
+  <div class="container-fluid monarch-container">
+
+    <div class="content content-bottom">
+      <div class="title">Monarch Releases</div>
 	      <div class="section">
-              <div class="sectiontitle">Monarch 1.0 Release (July 2014)</div>
+              <div class="sectiontitle">Monarch 1.0 Release (July 2015)</div>
 		    <div class="text">Our first official release went &quot;live&quot;
-                    on July 12, 2014. This release builds on the
+                    on July 12, 2015. This release builds on the
                     features provided in the sneak release, adding a
                     number of new data sources, including data from:
 		    <UL>
@@ -110,11 +86,12 @@
                     aid in prioritization of gene candidates.
                 </div>
             </div>
-
-
-            </div> <!-- closes wrapperforfooter -->
-            {{{includes.footer}}}
         </div>
     </div>
-</body>
-</html>
+
+
+<!-- Close top-level container. -->
+</div>
+
+<!-- Footer. -->
+{{{includes.footer}}}

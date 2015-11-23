@@ -45,27 +45,27 @@ fields:
 
   - id: subject_taxon
     description: "Taxonomic class of the subject. This is typically a CURIE of the form NCBITaxon:nnnn."
-    display_name: Genotype Taxon
+    display_name: Species
     type: string
     property: []
 
   - id: subject_taxon_label
     description: "Label of taxon."
-    display_name: Genotype Taxon
+    display_name: Species
     type: string
     property: []
     searchable: true
 
   - id: subject_taxon_closure
     description: "Reflexive closure of taxon. ALWAYS up SubClassOf."
-    display_name: Genotype Taxon
+    display_name: Species
     type: string
     cardinality: multi
     property: []
 
   - id: subject_taxon_closure_label
     description: "Labels for taxon_closure."
-    display_name: Genotype Taxon
+    display_name: Species
     type: string
     cardinality: multi
     property: []

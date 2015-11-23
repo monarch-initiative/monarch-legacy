@@ -2,6 +2,20 @@
  ** Additional CSS to make the home page specific things look nice.
  **/
 
+
+.test-image {
+    background-image: url(../image/partner-do.png) !important;
+    margin:0;
+    padding:0;
+    height:54px;
+    width:130px;
+    position:absolute;
+    top:80px;
+    left:10px;
+    z-index:9999;
+    border:5px solid green;
+}
+
 #monarch-home-container .panel-default {
     margin:0;
     margin-bottom: 7px;
@@ -25,7 +39,9 @@
  * Compact the news list just a little. Assumes dl.
  */
 .news-list {
-  margin: -15px;
+  margin:0;
+  margin-top: -15px;
+  padding-bottom: 0;
   padding-left: 12px;
   padding-right: 12px;
 }
@@ -55,6 +71,9 @@
 .monarch-carousel {
     position: relative;
     height:100% !important;
+    margin-left:-22px;
+    margin-right:-8px;
+    padding:0;
 }
 
 .monarch-carousel-item {
@@ -65,7 +84,7 @@
 }
 
 .monarch-home-carousel-separator-hr {
-    height: 1px;
+    height: 10px;
     margin: 0.3em;
     border: none;
     clear:both;
@@ -108,25 +127,97 @@
 }
 
 .monarch-carousel-item-image {
-    width: 90%;
-    //height: 100%;
-    padding: 10px;
-    margin: 0;
-    //margin-bottom:10%;
-    display:inline-block;
-    border:1px solid darkgray;
+  width: 100%;
+  height: auto;
+  padding: 0 35px 0 35px;
+  margin: 0;
+  margin-left:12px;
+  margin-top: -5px;
+  //margin-bottom:10%;
+  display:inline-block;
+  border:none;
+}
+
+
+
+/* CAMEO */
+
+
+div#cameocontainer {
+  width: 100%;
+  margin-right:-10px;
+}
+
+#cameocontainer .row.monarch-home-cameo-row {
+  padding: 0;
+  margin: 0;
+}
+
+#cameocontainer .monarch-home-cameo-image {
+  width: 100%;
+  height: 100%;
+  padding: 0;
+  margin: 0;
+}
+
+#cameocontainer .btn.btn-primary.monarch-home-cameo-button {
+  margin: 0;
+  padding: 2px;
+  padding-left:4px;
+  padding-right:4px;
+}
+
+#cameocontainer .monarch-home-cameo-text {
+  margin: 0;
+  padding: 0.5em;
+  margin-bottom: 0.3em;
+}
+
+
+#cameocontainer .flex > div[class*='col-'] {
+  margin: 0;
+  padding: 0;
+}
+
+#cameocontainer .flex,
+#cameocontainer .flex > div[class*='col-'] {
+    display: -webkit-box;
+    display: -moz-box;
+    display: -ms-flexbox;
+    display: -webkit-flex;
+    display: flex;
+    flex:1 0 auto;
+}
+
+#cameocontainer .flex .panel {
+  width: 100%;
+  margin: 3px;
+  padding: 0;
+  display: flex;
+  flex-direction:column;
+  align-content:stretch;
+}
+
+#cameocontainer .flex .panel-body {
+   display: flex;
+   flex-grow:1;
+   padding-bottom: 3px;
+}
+
+#cameocontainer .monarch-home-cameo-row .panel-footer {
+  border:none;
+   padding: 0;
+   margin: 0;
+   background: transparent;
 }
 
 .monarch-home-phenotype-image {
-    padding: 0;
-    margin: 0;
-    margin-top:4px;
-    margin-bottom:4px;
+  padding: 0;
+  margin: 0;
 }
 
-.monarch-home-phenotype-analysis {
+.monarch-home-phenotype-button {
   margin: 0;
-  margin-top: 1px;
   padding: 2px;
   padding-left:4px;
   padding-right:4px;
@@ -167,18 +258,16 @@
     border-bottom:3px solid darkgray;
 }
 
-.monarch-home-splash {
-    background-image: url('/image/home-splash.png');
+#monarch-home-container .monarch-home-splash {
+    background-image: url(../image/home-splash.png) !important;
     margin:0;
     margin-bottom: 17.5px;
-    padding-top: 40px;
-    padding-bottom: 40px;
+    padding:0;
+    padding-top: 35px;
+    padding-bottom: 15px;
     padding-left: 40px;
-    /* padding-right: 60px; */
-    margin:0;
-    margin-bottom: 17.5px;
-    padding-top:25px;
-    padding-bottom:25px;
+    padding-right: 60px;
+    height:114px;
 }
 .monarch-home-splash-text {
     color: #ffffff;
@@ -197,7 +286,6 @@
 
 .monarch-tabber {
     margin:0;
-    margin-top:10px;
     padding:0;
 }
 .monarch-tabber-controls {
@@ -213,6 +301,7 @@
 .monarch-tabber-control-btn {
     padding: 0;
     margin: 0;
+    font-size: 1.0em;
 }
 
 /* These are essentially overrides for btn-*. */
@@ -239,11 +328,10 @@
 a.monarch-tabber-control-prev, a.monarch-tabber-control-next {
     position: absolute;
     top:0;
-    left:-8px;
+    left:10px;
     z-index: 1;
     display: inline-block;
     padding: 0;
-    margin:0;
     color: #fff;
     text-decoration: none;
     opacity: 0.5;
@@ -258,7 +346,7 @@ a.monarch-tabber-control-prev {
 }
 a.monarch-tabber-control-next {
     left:initial;
-    right: -8px;
+    right: -12px;
 }
 
 .monarch-tabber-chevron {
