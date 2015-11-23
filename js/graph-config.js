@@ -422,7 +422,7 @@ bbop.monarch.modelLandingConfig = {
 
 //Graph for disease landing page
 bbop.monarch.diseaseLandingConfig = {
-
+      category_filter_list :[],
       //override default
       arrowDim : "-19,-5, -10,0 -19,5",
       yOffset : "-1.3em",
