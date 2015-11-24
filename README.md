@@ -38,10 +38,10 @@ below.
     - [Documentation on the Tooling](#documentation-on-the-tooling)
         - [BrowserSync](#browsersync)
 - [Installing NodeJS and NPM for Monarch](#installing-nodejs-and-npm-for-monarch)
-    - [Install via `nvm` (Node Version Manager)](#install-via-nvm-node-version-manager)
+    - [Install NodeJS via `nvm` (Node Version Manager)](#install-nodejs-via-nvm-node-version-manager)
         - [Installing `nvm` on MacOSX via HomeBrew](#installing-nvm-on-macosx-via-homebrew)
         - [Installing `nvm` on MacOSX or Unix via `wget`/`curl`](#installing-nvm-on-macosx-or-unix-via-wgetcurl)
-- [According to the `nvm` site, this script will mod](#according-to-the-nvm-site-this-script-will-mod)
+    - [Installing NodeJS via `n`](#installing-nodejs-via-n)
 - [Legacy RingoJS installation and launch instructions](#legacy-ringojs-installation-and-launch-instructions)
 
 <!-- /MarkdownTOC -->
@@ -234,14 +234,38 @@ Note that your default web browser will open up automatically and you will be po
 
 ## Installing NodeJS and NPM for Monarch
 
-Although your development machine may be running NodeJS and NPM currently, it is likely not the exact same version that Monarch is currently supporting (NodeJS 0.12.2 and NPM 3.4.0). The instructions below may help achieve the proper NodeJS version.
+Although your development machine may be running NodeJS and NPM currently, it is likely not the exact same version that Monarch is currently supporting (NodeJS 0.12.2 and NPM 3.4.0). The instructions below may help achieve the proper NodeJS and NPM versions. If you are not familiar with NodeJS and NPM, then this may help. Otherwise, use your ordinary technique for achieving NodeJS v0.12.2 and NPM v3.4.0 and skip the remainder of this section.
+
+If you are not running a current version of NodeJS, use the instructions below in:
+
+- [Install NodeJS via `nvm` (Node Version Manager)](#install-nodejs-via-nvm-node-version-manager)
+- [Installing NodeJS via `n`](#installing-nodejs-via-n)
+
+Once you have a correct NodeJS version running and selected as the current default for your shell (e.g., `nvm use v0.12.2`), then you can ensure that the correct NPM is installed by using the command:
+
+    > npm install -g npm@3.4.0
+
+Verify that you are running the correct versions by:
+
+    > npm version
+
+which should output something containing:
 
 
-#### Install via `nvm` (Node Version Manager)
 
-One of the easiest ways to install an alternative version of Node is to use the `nvm` tool available at [https://github.com/creationix/nvm](https://github.com/creationix/nvm).
+### Install NodeJS via `nvm` (Node Version Manager)
 
-##### Installing `nvm` on MacOSX via HomeBrew
+One of the easiest ways to install an alternative version of Node is to use the `nvm` tool available at [https://github.com/creationix/nvm](https://github.com/creationix/nvm). If you have `nvm` installed, you can use the following command to installed NodeJS v0.12.2:
+
+    > nvm install v0.12.2
+
+This will download, compile and install the 0.12.2 version of NodeJS into the `~/.nvm` directory, making it *available* for the next command:
+
+    >nvm use v0.12.2
+
+This command will change your current NVM environment so that it *sees* a v0.12.2 version of NodeJS.
+
+#### Installing `nvm` on MacOSX via HomeBrew
 
 If you have MacOSX, and you have [HomeBrew](http://brew.sh) installed, then the following command will be sufficient to install `nvm`:
 
@@ -260,7 +284,7 @@ Follow the instructions printed to your console after the above `brew install nv
 >     source $(brew --prefix nvm)/nvm.sh
 
 
-##### Installing `nvm` on MacOSX or Unix via `wget`/`curl`
+#### Installing `nvm` on MacOSX or Unix via `wget`/`curl`
 
 The instructions on the [`nvm` GitHub Site]() provide a way to install NVM easily; these have been adapted below.
 
@@ -278,12 +302,20 @@ Run the `install.sh` script
 
     > bash install.sh
 
-According to the `nvm` site, this script will mod
+According to the `nvm` site, this script will modify your `.bashrc` or `.bash_profile` automatically. See [Manual Install](https://github.com/creationix/nvm#manual-install) for more information if the above `install.sh` does not work.
+
+
+### Installing NodeJS via `n`
+
+There is a tool called `n` that may be useful for installing the proper NodeJS versions if the `nvm`-based solutions above do not work. You may have also adopted `n` for a different project, in which case it may be used for Monarch.
+
+The `n` tool is available from [https://github.com/tj/n](https://github.com/tj/n) where you can find the necessary instructions.
+
 ---
 
 ## Legacy RingoJS installation and launch instructions
 
-The RingoJS version of Monarch is currently deprecated as we are committed to making the NodeJS experience awesome. It is likely that the RingoJS support for Monarch will be eliminated in the near future. Until then, the following instructions should assist in running the RingoJS version.
+The RingoJS version of Monarch is currently deprecated as we are committed to making the Monarch NodeJS experience great. It is likely that the RingoJS support for Monarch will be eliminated in the near future. Until then, the following instructions should assist in running the RingoJS version.
 
 
 1. Install RingoJS - http://ringojs.org
