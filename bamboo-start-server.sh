@@ -27,7 +27,7 @@ if [ $PORT ]
    MARGS="--port 8080"
 fi
 
-source /var/home/bamboo/.nvm/nvm.sh || /home/bamboo/.nvm/nvm.sh
+source /var/home/bamboo/.nvm/nvm.sh || source /home/bamboo/.nvm/nvm.sh
 nvm install v0.12.2
 nvm use v0.12.2
 npm install -g npm@3.4.0
