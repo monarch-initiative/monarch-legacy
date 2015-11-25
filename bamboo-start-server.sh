@@ -27,10 +27,11 @@ if [ $PORT ]
    MARGS="--port 8080"
 fi
 
-ls -la /var/home/
-ls -la /var/home/bamboo/
 
-source /var/home/bamboo/.nvm/nvm.sh && nvm use v0.12.2
+curl https://raw.githubusercontent.com/creationix/nvm/v0.29.0/install.sh | bash
+source /var/home/bamboo/.nvm/nvm.sh
+nvm install v0.12.2
+nvm use v0.12.2
 
 export NODE_PATH=./lib/monarch
 node ./lib/monarch/web/webapp_launcher.js $MARGS $RUNENV 2>&1 | tee start-server.log
