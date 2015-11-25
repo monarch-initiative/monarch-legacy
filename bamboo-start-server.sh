@@ -47,6 +47,11 @@ NODE_NVM_PATH=$(which node)
 echo $NODE_NVM_PATH
 $NODE_NVM_PATH -v
 
+echo 'console.log("NODEVERSION:", process.version);' |$NODE_NVM_PATH
+
+echo 'checking aliases'
+alias
+
 export NODE_PATH=./lib/monarch
 $NODE_NVM_PATH ./lib/monarch/web/webapp_launcher.js $MARGS $RUNENV 2>&1 | tee start-server.log
 
