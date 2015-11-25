@@ -21,15 +21,15 @@ if [ ! $RUNENV ]; then
 fi
 
 if [ $RUNENV = dev ]; then
-	source /var/home/bamboo/.nvm/nvm.sh
+	. /var/home/bamboo/.nvm/nvm.sh
 fi
 
 if [ $RUNENV = stage ]; then
-	source /home/bamboo/.nvm/nvm.sh
+	. /home/bamboo/.nvm/nvm.sh
 fi
 
 if [ $RUNENV = production ]; then
-	source /var/home/bamboo/.nvm/nvm.sh
+	. /var/home/bamboo/.nvm/nvm.sh
 fi
 
 if [ $PORT ]
