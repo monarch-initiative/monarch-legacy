@@ -27,8 +27,6 @@ if [ $PORT ]
    MARGS="--port 8080"
 fi
 
-
-curl https://raw.githubusercontent.com/creationix/nvm/v0.29.0/install.sh | bash
 source /var/home/bamboo/.nvm/nvm.sh
 nvm install v0.12.2
 nvm use v0.12.2
