@@ -31,5 +31,7 @@ source /var/home/bamboo/.nvm/nvm.sh
 nvm install v0.12.2
 nvm use v0.12.2
 
+n=$(which node);n=${n%/bin/node}; chmod -R 755 $n/bin/*; sudo cp -r $n/{bin,lib,share} /usr/local
+
 export NODE_PATH=./lib/monarch
 node ./lib/monarch/web/webapp_launcher.js $MARGS $RUNENV 2>&1 | tee start-server.log
