@@ -28,6 +28,7 @@ if [ $PORT ]
 fi
 
 source /var/home/bamboo/.nvm/nvm.sh
+nvm uninstall v0.12.2
 nvm install v0.12.2
 nvm use v0.12.2
 
