@@ -27,6 +27,9 @@ if [ $PORT ]
    MARGS="--port 8080"
 fi
 
+ls -la /var/home/
+ls -la /var/home/bamboo/
+
 source /var/home/bamboo/.nvm/nvm.sh && nvm use v0.12.2
 
 export NODE_PATH=./lib/monarch
