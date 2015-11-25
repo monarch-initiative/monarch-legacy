@@ -33,6 +33,7 @@ nvm use v0.12.2
 
 NODE_NVM_PATH=$(which node)
 echo $NODE_NVM_PATH
+$NODE_NVM_PATH -v
 
 export NODE_PATH=./lib/monarch
 $NODE_NVM_PATH ./lib/monarch/web/webapp_launcher.js $MARGS $RUNENV 2>&1 | tee start-server.log
