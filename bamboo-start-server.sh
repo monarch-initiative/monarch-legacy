@@ -28,9 +28,9 @@ if [ $PORT ]
 fi
 
 source /var/home/bamboo/.nvm/nvm.sh
-nvm uninstall v0.12.2
 nvm install v0.12.2
 nvm use v0.12.2
+npm install -g npm@3.4.0
 
 NODE_NVM_PATH=$(which node)
 echo $NODE_NVM_PATH
@@ -38,3 +38,5 @@ $NODE_NVM_PATH -v
 
 export NODE_PATH=./lib/monarch
 $NODE_NVM_PATH ./lib/monarch/web/webapp_launcher.js $MARGS $RUNENV 2>&1 | tee start-server.log
+
+which node
