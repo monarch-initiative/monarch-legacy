@@ -31,7 +31,7 @@ source /var/home/bamboo/.nvm/nvm.sh
 nvm install v0.12.2
 nvm use v0.12.2
 
-NODE_NVM_PATH=$(which supervisor)
+NODE_NVM_PATH=$(which node)
 echo $NODE_NVM_PATH
 
 export NODE_PATH=./lib/monarch
