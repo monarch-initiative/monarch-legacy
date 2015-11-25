@@ -20,6 +20,18 @@ if [ ! $RUNENV ]; then
 	RUNENV=dev
 fi
 
+if [ $RUNENV = dev ]; then
+	source /var/home/bamboo/.nvm/nvm.sh
+fi
+
+if [ $RUNENV = stage ]; then
+	source /home/bamboo/.nvm/nvm.sh
+fi
+
+if [ $RUNENV = production ]; then
+	source /var/home/bamboo/.nvm/nvm.sh
+fi
+
 if [ $PORT ]
   then
    MARGS="--port $PORT"
@@ -27,9 +39,6 @@ if [ $PORT ]
    MARGS="--port 8080"
 fi
 
-source /var/home/bamboo/.nvm/nvm.sh
-# On stage nvm downloads to /home/bamboo instead
-source /home/bamboo/.nvm/nvm.sh
 nvm install v0.12.2
 nvm use v0.12.2
 npm install -g npm@3.4.0
