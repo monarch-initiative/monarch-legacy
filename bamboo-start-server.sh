@@ -27,7 +27,7 @@ if [ $PORT ]
    MARGS="--port 8080"
 fi
 
-source /var/home/bamboo/.nvm/nvm.sh
+#source /var/home/bamboo/.nvm/nvm.sh
 nvm install v0.12.2
 nvm use v0.12.2
 npm install -g npm@3.4.0
@@ -39,4 +39,5 @@ $NODE_NVM_PATH -v
 export NODE_PATH=./lib/monarch
 $NODE_NVM_PATH ./lib/monarch/web/webapp_launcher.js $MARGS $RUNENV 2>&1 | tee start-server.log
 
+echo 'Which node after start server'
 which node
