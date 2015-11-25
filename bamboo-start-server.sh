@@ -27,8 +27,7 @@ if [ $PORT ]
    MARGS="--port 8080"
 fi
 
-source /home/bamboo/.nvm/nvm.sh
-source /var/home/bamboo/.nvm/nvm.sh
-nvm use 0.12.2
+source /var/home/bamboo/.nvm/nvm.sh && nvm use v0.12.2
+
 export NODE_PATH=./lib/monarch
 node ./lib/monarch/web/webapp_launcher.js $MARGS $RUNENV 2>&1 | tee start-server.log
