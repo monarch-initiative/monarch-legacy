@@ -33,10 +33,9 @@ import './search-results.js';
 import './monarch-tabs.js';
 
 import '../css/monarch.less';
-import '../css/monarch-specific.css';
-import '../css/monarch-main.css';
-import '../css/monarch-home.css';
 import '../css/monarch-common.css';
+import '../css/monarch-specific.css';
+import '../css/monarch-home.css';
 
 //console.log('before import bbop:', Object.keys(bbop));
 import _bbop from 'bbop';
