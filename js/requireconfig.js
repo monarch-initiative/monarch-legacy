@@ -20,7 +20,7 @@ require(['require', 'jquery'], function (_require, _jquery) {
     window.require = _require;
     exports = {};
     _require(['jquery-ui', '/bootstrap.min.js', 'core', 'widget'], function () {
-        _require(['/d3.min.js', '/search_form.js', '/search-results.js', '/bbop.js'], function (a, b, c) {
+        _require(['/d3.min.js', '/search_form.js', '/bbop.js'], function (a, b, c) {
             bbop = exports.bbop;
             loaderGlobals.bbop = bbop;
             console.log('requireconfig exports:', bbop);

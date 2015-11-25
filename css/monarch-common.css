@@ -139,9 +139,6 @@ p.bigfont {
     margin-right: 5px;
 }
 
-
-
-
 .input-group {
     margin-bottom: 0px;
 }
@@ -149,43 +146,6 @@ p.bigfont {
     padding: 0px 10px;
     border-radius: 2px;
 }
-
-/*
-@media (max-width: 900px) {
-    .navbar {
-        min-height: 40px;
-    }
-    .monarch-navbar-container {
-        margin: 0px -3px;
-    }
-    .navbar-brand {
-        padding: 8px 5px 0px 20px;
-    }
-
-    .collapse.in{
-        display:block !important;
-    }
-
-    .navbar-brand {
-        padding: 15px;
-    }
-    .nav.navbar-nav {
-        margin: 0px 0 10px;
-    }
-    .nav>li>a {
-        padding: 5px 10px;
-        margin: 0 10px;
-        border-radius: 0px;
-    }
-    .navbar-nav>li>.dropdown-menu {
-        margin-top: 0px;
-        margin-left: 10px;
-    }
-    .navbar-form {
-        margin-top: 0px;
-    }
-}
-*/
 
 
 @media (max-width: 900px) {
@@ -275,8 +235,6 @@ p.bigfont {
     padding: 36px 0px 0px;
     height: 100%;
 }
-
-
 
 .content {
     display: inline-block;
@@ -398,22 +356,6 @@ p.bigfont {
     border:1px solid black;
 }
 
-
-/* Rest of Content */
-/* This overrides Bootstrap content styles. */
-
-.ui-autocomplete {
-    background: white;
-    position:absolute;
-    cursor:default;
-    z-index:4000 !important
-}
-.bbop-js-ui-hoverable{
-    cursor: text;
-}
-
-
-
 /* Buttons */
 /* These styles override some bootstrap button styles to make the buttons slimmer
  * and less skeuomorphic. */
@@ -478,14 +420,31 @@ h1.downloadline {
 
 /* Search Bar */
 
-.ui-autocomplete .autocomplete-tag-item {
+#monarch-body .ui-autocomplete {
+    position:absolute;
+    line-height: 22px;
+    cursor:default;
     white-space: nowrap;
-    font-size: 75%;
+    font-size: 100%;
+    color: #888888;
+    z-index:8000 !important;
+    padding: 0;
+    background: #DDD;
+    list-style-type: none;
+    text-decoration: none !important;
+}
+
+#monarch-body .form-control.ui-autocomplete-input.ui-autocomplete-loading {
+    background: white url('../image/waiting_ac.gif') 95% center no-repeat !important;
+}
+
+#monarch-body .ui-autocomplete .autocomplete-tag-item {
+    white-space: nowrap;
     color: #888888;
 }
-/* Get a spinner for jQuery autocomplete wait. */
-.ui-autocomplete .ui-autocomplete-loading {
-    background: white url('../image/waiting_ac.gif') 95% center no-repeat !important;
+
+.bbop-js-ui-hoverable{
+    cursor: text;
 }
 
 .ui-score-spinner {
@@ -499,7 +458,6 @@ h1.downloadline {
     height:28px;
     border-radius: 2px;
 }
-*/
 
 /* Analyze Page */
 
@@ -953,3 +911,206 @@ a:hover .hilite, a:active .hilite {
   border: none;
   background: transparent;
 }
+
+
+
+/*
+    Everything below is ripped from the jquery-ui-modified.js in the phenogrid
+    project. This is necessary because the phenogrid css pollutes the global
+    CSS namespace and Monarch has come to rely upon this variant CSS.
+
+    Phenogrid should be fixed so that it uses a similar jQueryUI version
+    as Monarch-app and that any customizations are qualified with a phenogrid-specific
+    class or id.
+*/
+
+
+/* Component containers
+----------------------------------*/
+#monarch-body .ui-widget {
+    font-family: Trebuchet MS,Tahoma,Verdana,Arial,sans-serif;
+    font-size: 1.1em;
+}
+#monarch-body .ui-widget .ui-widget {
+    font-size: 1em;
+}
+#monarch-body .ui-widget input,
+#monarch-body .ui-widget select,
+#monarch-body .ui-widget textarea,
+#monarch-body .ui-widget button {
+    font-family: Trebuchet MS,Tahoma,Verdana,Arial,sans-serif;
+    font-size: 1em;
+}
+#monarch-body .ui-widget-content {
+    border: 1px solid #dddddd;
+    background: #eeeeee;
+    color: #333333;
+}
+#monarch-body .ui-widget-content a {
+    color: #333333;
+    display: block;
+    text-decoration: none;
+    padding: 3px;
+}
+#monarch-body .ui-widget-header {
+    border: 1px solid #e78f08;
+    background: #f6a828;
+    color: #ffffff;
+    font-weight: bold;
+}
+#monarch-body .ui-widget-header a {
+    color: #ffffff;
+}
+
+/* Interaction states
+----------------------------------*/
+#monarch-body .ui-state-default,
+#monarch-body .ui-widget-content .ui-state-default,
+#monarch-body .ui-widget-header .ui-state-default {
+    border: 1px solid #cccccc;
+    background: #f6f6f6;
+    font-weight: bold;
+    color: #1c94c4;
+}
+#monarch-body .ui-state-default a,
+#monarch-body .ui-state-default a:link,
+#monarch-body .ui-state-default a:visited {
+    color: #1c94c4;
+    text-decoration: none;
+}
+#monarch-body .ui-state-hover,
+#monarch-body .ui-widget-content .ui-state-hover,
+#monarch-body .ui-widget-header .ui-state-hover,
+#monarch-body .ui-state-focus,
+#monarch-body .ui-widget-content .ui-state-focus,
+#monarch-body .ui-widget-header .ui-state-focus {
+    border: 1px solid #fbcb09;
+    background: #fdf5ce;
+    font-weight: bold;
+    color: #c77405;
+}
+#monarch-body .ui-state-hover a,
+#monarch-body .ui-state-hover a:hover,
+#monarch-body .ui-state-hover a:link,
+#monarch-body .ui-state-hover a:visited,
+#monarch-body .ui-state-focus a,
+#monarch-body .ui-state-focus a:hover,
+#monarch-body .ui-state-focus a:link,
+#monarch-body .ui-state-focus a:visited {
+    color: #c77405;
+    text-decoration: none;
+}
+#monarch-body .ui-state-active,
+#monarch-body .ui-widget-content .ui-state-active,
+#monarch-body .ui-widget-header .ui-state-active {
+    border: 1px solid #fbd850;
+    background: #ffffff;
+    font-weight: bold;
+    color: #eb8f00;
+}
+#monarch-body .ui-state-active a,
+#monarch-body .ui-state-active a:link,
+#monarch-body .ui-state-active a:visited {
+    color: #eb8f00;
+    text-decoration: none;
+}
+
+/* Interaction Cues
+----------------------------------*/
+#monarch-body .ui-state-highlight,
+#monarch-body .ui-widget-content .ui-state-highlight,
+#monarch-body .ui-widget-header .ui-state-highlight {
+    border: 1px solid #fed22f;
+    background: #ffe45c;
+    color: #363636;
+}
+#monarch-body .ui-state-highlight a,
+#monarch-body .ui-widget-content .ui-state-highlight a,
+#monarch-body .ui-widget-header .ui-state-highlight a {
+    color: #363636;
+}
+#monarch-body .ui-state-error,
+#monarch-body .ui-widget-content .ui-state-error,
+#monarch-body .ui-widget-header .ui-state-error {
+    border: 1px solid #cd0a0a;
+    background: #b81900;
+    color: #ffffff;
+}
+#monarch-body .ui-state-error a,
+#monarch-body .ui-widget-content .ui-state-error a,
+#monarch-body .ui-widget-header .ui-state-error a {
+    color: #ffffff;
+}
+#monarch-body .ui-state-error-text,
+#monarch-body .ui-widget-content .ui-state-error-text,
+#monarch-body .ui-widget-header .ui-state-error-text {
+    color: #ffffff;
+}
+#monarch-body .ui-priority-primary,
+#monarch-body .ui-widget-content .ui-priority-primary,
+#monarch-body .ui-widget-header .ui-priority-primary {
+    font-weight: bold;
+}
+#monarch-body .ui-priority-secondary,
+#monarch-body .ui-widget-content .ui-priority-secondary,
+#monarch-body .ui-widget-header .ui-priority-secondary {
+    opacity: .7;
+    filter:Alpha(Opacity=70); /* support: IE8 */
+    font-weight: normal;
+}
+#monarch-body .ui-state-disabled,
+#monarch-body .ui-widget-content .ui-state-disabled,
+#monarch-body .ui-widget-header .ui-state-disabled {
+    opacity: .35;
+    filter:Alpha(Opacity=35); /* support: IE8 */
+    background-image: none;
+}
+#monarch-body .ui-state-disabled .ui-icon {
+    filter:Alpha(Opacity=35); /* support: IE8 - See #6059 */
+}
+
+
+/* Misc visuals
+----------------------------------*/
+
+/* Corner radius */
+#monarch-body .ui-corner-all,
+#monarch-body .ui-corner-top,
+#monarch-body .ui-corner-left,
+#monarch-body .ui-corner-tl {
+    border-top-left-radius: 4px;
+}
+#monarch-body .ui-corner-all,
+#monarch-body .ui-corner-top,
+#monarch-body .ui-corner-right,
+#monarch-body .ui-corner-tr {
+    border-top-right-radius: 4px;
+}
+#monarch-body .ui-corner-all,
+#monarch-body .ui-corner-bottom,
+#monarch-body .ui-corner-left,
+#monarch-body .ui-corner-bl {
+    border-bottom-left-radius: 4px;
+}
+#monarch-body .ui-corner-all,
+#monarch-body .ui-corner-bottom,
+#monarch-body .ui-corner-right,
+#monarch-body .ui-corner-br {
+    border-bottom-right-radius: 4px;
+}
+
+/* Overlays */
+#monarch-body .ui-widget-overlay {
+    background: #666666;
+    opacity: .5;
+    filter: Alpha(Opacity=50); /* support: IE8 */
+}
+#monarch-body .ui-widget-shadow {
+    margin: -5px 0 0 -5px;
+    padding: 5px;
+    background: #000000;
+    opacity: .2;
+    filter: Alpha(Opacity=20); /* support: IE8 */
+    border-radius: 5px;
+}
+

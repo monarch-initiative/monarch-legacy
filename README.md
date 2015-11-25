@@ -37,6 +37,11 @@ below.
     - [Running Monarch with `webpack-dev-server`](#running-monarch-with-webpack-dev-server)
     - [Documentation on the Tooling](#documentation-on-the-tooling)
         - [BrowserSync](#browsersync)
+- [Installing NodeJS and NPM for Monarch](#installing-nodejs-and-npm-for-monarch)
+    - [Install NodeJS via `nvm` (Node Version Manager)](#install-nodejs-via-nvm-node-version-manager)
+        - [Installing `nvm` on MacOSX via HomeBrew](#installing-nvm-on-macosx-via-homebrew)
+        - [Installing `nvm` on MacOSX or Unix via `wget`/`curl`](#installing-nvm-on-macosx-or-unix-via-wgetcurl)
+    - [Installing NodeJS via `n`](#installing-nodejs-via-n)
 - [Legacy RingoJS installation and launch instructions](#legacy-ringojs-installation-and-launch-instructions)
 
 <!-- /MarkdownTOC -->
@@ -56,7 +61,7 @@ Monarch now uses up-to-date NPM modules to provide common libraries such as jQue
 
 The Monarch web application was designed to support the integration of diverse JavaScript libraries and HTML fragments. This was to encourage experimentation with different visualization frameworks and technology. The Monarch web application associates a given route (e.g., `/page/about`) with a handler that generates the correct webpage by assembling pieces via the server-side pup-tent library. This allows different web pages within the Monarch app to have completely different Javascript and CSS resources, and has been useful in the development of Monarch's features.
 
-Recently, we have been evolving the codebase to support modern web front-end tooling, including the use of preprocessors (e.g., LESS, JSHint), the bundling and minification of JS and CSS resources, and a more rapid development cycle. In the short term, we expect this will result in more effective and pleasant development experience, as well as a more efficient web application. In the longer term, we may choose to build Monarch as a single-page app, in which case this bundling is essential.
+Recently, we have been evolving the codebase to support modern web front-end tooling, including the use of preprocessors (e.g., LESS, JSHint), the bundling and minification of JS and CSS resources, and a more rapid development cycle. In the short term, we expect this will result in more effective and pleasant development experience, as well as a more efficient web application. In the longer term, this will enable us to build parts of the Monarch UI as a single-page app.
 
 Details on how to use the new tech are later in this document at [New UI Tools and Bundling Instructions](#new-ui-tools-and-bundling-instructions).
 
@@ -76,9 +81,12 @@ You will need to have NodeJS and NPM installed. At the time of this writing, we 
         ...
           node: '0.12.2',
 
-About Node Versioning: Node 4.x is the immediate successor to the 0.12.x version of NodeJS. The version number jumped from 0.12.2 to 4.0.0 as a result of the NodeJS committee adjusting their version-numbering system recently. More information is in the [V4.0 Release Notes](https://nodejs.org/en/blog/release/v4.0.0/).
+*About Node Versioning*: Node 4.x is the immediate successor to the 0.12.x version of NodeJS. The version number jumped from 0.12.2 to 4.0.0 as a result of the NodeJS committee adjusting their version-numbering system recently. More information is in the [V4.0 Release Notes](https://nodejs.org/en/blog/release/v4.0.0/).
 
 We are currently holding at 0.12.2 and HapiJS 11.0.2 due to GCC version issues on some of our CentOS deployment nodes. When we are able to update these nodes to GCC 4.8, then we can update package.json to reflect Node 4.2.x and HapiJS 11.1.x, which are the current stable and supported versions of these packages.
+
+Currently, we have been successfully using the `nvm` tool to configure and manage our NodeJS environment; `nvm` enables a user to associate a paritcular  NodeJS and NPM version with their Unix shell, allowing for each switching between NodeJS versions across different projects. If you need help in getting the Monarch-required NodeJS and NPM versions installed, please read the platform-specific instructions on installing NodeJS and NPM, see [Installing NodeJS and NPM for Monarch](#installing-nodejs-and-npm-for-monarch) below.
+
 
 ### Download and Install Monarch
 
@@ -223,9 +231,92 @@ Note that your default web browser will open up automatically and you will be po
 [`webpack-dev-server`](https://webpack.github.io/docs/webpack-dev-server.html) is a NodeJS server that integrates with WebPack to deliver bundled assets incrementally to a web browser during active development. It enables a developer to see the effect of their changes immediately in the browser, and then later they can perform the slower and more thorough `npm run build` operation.
 
 
+
+## Installing NodeJS and NPM for Monarch
+
+Although your development machine may be running NodeJS and NPM currently, it is likely not the exact same version that Monarch is currently supporting (NodeJS 0.12.2 and NPM 3.4.0). The instructions below may help achieve the proper NodeJS and NPM versions. If you are not familiar with NodeJS and NPM, then this may help. Otherwise, use your ordinary technique for achieving NodeJS v0.12.2 and NPM v3.4.0 and skip the remainder of this section.
+
+If you are not running a current version of NodeJS, use the instructions below in:
+
+- [Install NodeJS via `nvm` (Node Version Manager)](#install-nodejs-via-nvm-node-version-manager)
+- [Installing NodeJS via `n`](#installing-nodejs-via-n)
+
+Once you have a correct NodeJS version running and selected as the current default for your shell (e.g., `nvm use v0.12.2`), then you can ensure that the correct NPM is installed by using the command:
+
+    > npm install -g npm@3.4.0
+
+Verify that you are running the correct versions by:
+
+    > npm version
+
+which should output something containing:
+
+
+
+### Install NodeJS via `nvm` (Node Version Manager)
+
+One of the easiest ways to install an alternative version of Node is to use the `nvm` tool available at [https://github.com/creationix/nvm](https://github.com/creationix/nvm). If you have `nvm` installed, you can use the following command to installed NodeJS v0.12.2:
+
+    > nvm install v0.12.2
+
+This will download, compile and install the 0.12.2 version of NodeJS into the `~/.nvm` directory, making it *available* for the next command:
+
+    >nvm use v0.12.2
+
+This command will change your current NVM environment so that it *sees* a v0.12.2 version of NodeJS.
+
+#### Installing `nvm` on MacOSX via HomeBrew
+
+If you have MacOSX, and you have [HomeBrew](http://brew.sh) installed, then the following command will be sufficient to install `nvm`:
+
+    > brew install nvm
+
+Follow the instructions printed to your console after the above `brew install nvm`. The most important part of the instructions are:
+
+>   You should create NVM's working directory if it doesn't exist:
+>
+>     mkdir ~/.nvm
+>
+>   Add the following to ~/.bash_profile or your desired shell
+>   configuration file:
+>
+>     export NVM_DIR=~/.nvm
+>     source $(brew --prefix nvm)/nvm.sh
+
+
+#### Installing `nvm` on MacOSX or Unix via `wget`/`curl`
+
+The instructions on the [`nvm` GitHub Site]() provide a way to install NVM easily; these have been adapted below.
+
+Download `install.sh` via `curl`:
+
+    > cd /tmp
+    > curl -O https://raw.githubusercontent.com/creationix/nvm/v0.29.0/install.sh
+
+Alternatively, download `install.sh` via `wget`:
+
+    > cd /tmp
+    > curl -O https://raw.githubusercontent.com/creationix/nvm/v0.29.0/install.sh
+
+Run the `install.sh` script
+
+    > bash install.sh
+
+According to the `nvm` site, this script will modify your `.bashrc` or `.bash_profile` automatically. See [Manual Install](https://github.com/creationix/nvm#manual-install) for more information if the above `install.sh` does not work.
+
+
+### Installing NodeJS via `n`
+
+There is a tool called `n` that may be useful for installing the proper NodeJS versions if the `nvm`-based solutions above do not work. You may have also adopted `n` for a different project, in which case it may be used for Monarch.
+
+The `n` tool is available from [https://github.com/tj/n](https://github.com/tj/n) where you can find the necessary instructions.
+
 ---
 
 ## Legacy RingoJS installation and launch instructions
+
+The RingoJS version of Monarch is currently deprecated as we are committed to making the Monarch NodeJS experience great. It is likely that the RingoJS support for Monarch will be eliminated in the near future. Until then, the following instructions should assist in running the RingoJS version.
+
 
 1. Install RingoJS - http://ringojs.org
 

@@ -66,7 +66,6 @@
  * Make the ajax a little more pleasant if available.
  */
 .ui-autocomplete-loading {
-    border:1px solid green !important;
     background: white url('/images/waiting_ac.gif') right center no-repeat;
 }
 .ui-ajax-loading {

@@ -5032,6 +5032,17 @@
       "abbreviation" : "AnimalQTLdb",
       "datatype" : null,
       "image_path" : "/image/source-animalqtldb.png"
+   },
+   "monarch" : {
+      "object" : null,
+      "uri_prefix" : null,
+      "name" : "Monarch",
+      "database" : "The Monarch Initiative",
+      "description" : "us",
+      "generic_url" : "http://monarchinitiative.org",
+      "fullname" : "The Monarch Initiative",
+      "abbreviation" : "Monarch",
+      "datatype" : null,
+      "image_path" : "/image/logo.png"
    }
-
 }
