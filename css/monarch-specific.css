@@ -76,7 +76,8 @@
 /* This styles the content within tab categories. */
 
 .monarch-container #complete-info {
-    padding: 0px 30px;
+    padding: 0 30px;
+    min-height:500px;
 }
 .monarch-container .category {
     display: none;

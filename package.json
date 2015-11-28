@@ -10,8 +10,8 @@
     "start": "NODE_PATH=./lib/monarch node lib/monarch/web/webapp_launcher.js",
     "bstart": "USE_BUNDLE=1 NODE_PATH=./lib/monarch node lib/monarch/web/webapp_launcher.js",
     "rstart": "./ringo-server.sh",
-    "dev": "USE_LOG_FETCH=0 USE_BUNDLE=1 USE_WEBPACK=1 NODE_PATH=./lib/monarch nodemon -d 2 -V -- lib/monarch/web/webapp_launcher.js & node node_modules/.bin/webpack-dev-server --port 8081 --history-api-fallback --hot --inline --progress",
-    "corstest": "USE_LOG_FETCH=1 USE_BUNDLE=1 USE_WEBPACK=1 NODE_PATH=./lib/monarch nodemon -d 2 -V -- lib/monarch/web/webapp_launcher.js CORSTest & node node_modules/.bin/webpack-dev-server --port 8081 --history-api-fallback --hot --inline --progress",
+    "dev": "USE_LOG_FETCH=0 USE_BUNDLE=1 USE_WEBPACK=1 NODE_PATH=./lib/monarch nodemon -d 2 -V -- lib/monarch/web/webapp_launcher.js & node node_modules/.bin/webpack-dev-server --port 8081 --history-api-fallback --hot --inline",
+    "corstest": "USE_LOG_FETCH=1 USE_BUNDLE=1 USE_WEBPACK=1 NODE_PATH=./lib/monarch nodemon -d 2 -V -- lib/monarch/web/webapp_launcher.js CORSTest & node node_modules/.bin/webpack-dev-server --port 8081 --history-api-fallback --hot --inline",
     "test": "make test",
     "rtest": "make -f MakefileRingo test",
     "lint": "node_modules/.bin/eslint js/ lib/monarch || exit 0"
