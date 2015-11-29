@@ -698,6 +698,22 @@ div.bs3table {
 }
 
 
+#results-area .bs3table > table > thead > tr > th {
+    padding-left:5px;
+    padding-right:5px;
+}
+
+#results-area .bs3table > table > thead > tr > th:first-child {
+    min-width:280px;
+    width:280px;
+}
+
+#results-area .bs3table > table > thead > tr > th:last-child {
+    min-width:70px;
+    width:70px;
+}
+
+
 /* End of Filter Hack */
 
 /* BBOP overrides and additions */
