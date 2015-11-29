@@ -669,12 +669,16 @@ div.bs3table {
     text-align: left;
 }
 
+#results-area .bs3filter .panel.panel-default .panel-body[id*="subject_taxon_label"] > table > tbody {
+    font-size: 0.9em;
+}
+
 #results-area .bs3filter .panel.panel-default .panel-body[id*="subject_taxon_label"] > table > tbody > tr > td:first-child {
-    width:60%;
+    width:50%;
 }
 
 #results-area .bs3filter .panel.panel-default .panel-body[id*="subject_taxon_label"] > table > tbody > tr > td:nth-child(2) {
-    width:15%;
+    width:25%;
 }
 
 #results-area .bs3pager > div[id*="gen_id-bbop-html"] > div[id*="gen_id-bbop-html"]:first-child,
