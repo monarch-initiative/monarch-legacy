@@ -29,7 +29,6 @@ import 'jquery-ui';
 // import './jquery-ui-1.10.3.custom.min.js';
 import 'd3';
 import './search_form.js';
-import './search-results.js';
 import './monarch-tabs.js';
 
 import '../css/monarch.less';

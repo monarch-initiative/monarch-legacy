@@ -1,9 +1,8 @@
 {{{includes.navbar}}}
 
 <div class="wrapperforfooter">
-  <div class="container-fluid monarch-container">
-
-    <div class="content">
+    <div class="container-fluid monarch-container">
+        <div class="content">
             <div class="jumbotron monarch-disease-light">
                 <div id="description">
                     {{#alerts}}
@@ -45,46 +44,46 @@
                 <div id="overview" class="first category">
                 {{/hasPhenotypes}}
                     <h3>IDs</h3>
-                        <div class="ids">
-                            <b>URI:</b> <a href="{{{iri}}}">{{{iri}}}</a>
-                        </div>
-                        {{#hasAka}}
-                            <div class="ids">
-                                <b>AKA:</b>
-                                {{aka}}
-                            </div>
-                        {{/hasAka}}
-                        {{#hasXrefs}}
-                            <div class="ids">
-                                <b>Cross References:</b> {{{xrefs}}}
-                            </div>
-                        {{/hasXrefs}}
-                        {{#hasEqual}}
-                            <div class="ids">
-                                <b>Equivalent IDs:</b> {{{equal_ids}}}
-                            </div>
-                        {{/hasEqual}}
-                        {{#hasDef}}
-                          <div class="ids">
-                            <b>Description:</b> {{definitions}}
-                          </div>  
-                       {{/hasDef}}
+                    <div class="ids">
+                        <b>URI:</b> <a href="{{{iri}}}">{{{iri}}}</a>
                     </div>
-                    {{{includes.phenotype_table}}}
-                    {{{includes.disease_table}}}
-                    {{{includes.genotype_table}}}
-                    {{{includes.gene_table}}}
-                    {{{includes.variant_table}}}
-                    {{#hasPhenotypes}}
-                    <div id="compare" class="first category">
-                    {{/hasPhenotypes}}
-                    {{^hasPhenotypes}}
-                    <div id="compare" class="category">
-                    {{/hasPhenotypes}}
-                      <div id="phen_vis"></div>
+                    {{#hasAka}}
+                    <div class="ids">
+                        <b>AKA:</b>
+                        {{aka}}
                     </div>
+                    {{/hasAka}}
+                    {{#hasXrefs}}
+                    <div class="ids">
+                        <b>Cross References:</b> {{{xrefs}}}
+                    </div>
+                    {{/hasXrefs}}
+                    {{#hasEqual}}
+                    <div class="ids">
+                        <b>Equivalent IDs:</b> {{{equal_ids}}}
+                    </div>
+                    {{/hasEqual}}
+                    {{#hasDef}}
+                    <div class="ids">
+                        <b>Description:</b> {{definitions}}
+                    </div>
+                   {{/hasDef}}
                 </div>
+                {{{includes.phenotype_table}}}
+                {{{includes.disease_table}}}
+                {{{includes.genotype_table}}}
+                {{{includes.gene_table}}}
+                {{{includes.variant_table}}}
+                {{#hasPhenotypes}}
+                <div id="compare" class="first category">
+                {{/hasPhenotypes}}
+                {{^hasPhenotypes}}
+                <div id="compare" class="category">
+                {{/hasPhenotypes}}
+                <div id="phen_vis">
+                </div>
+            </div>
         </div>
     </div>
-</div> <!-- closes wrapperforfooter -->
+</div>
 {{{includes.footer}}}
