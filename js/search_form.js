@@ -50,8 +50,8 @@ function navbar_search_init(in_search_id, in_form_id){
 	var ac_args = {
 	    position : {
        		my: "right top",
-		at: "right bottom",
-		collision: "none"
+			at: "right bottom",
+			collision: "flip"
 	    },
 	    source: function(request, response) {
 		console.log("trying autocomplete on "+request.term);
