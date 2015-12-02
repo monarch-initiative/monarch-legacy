@@ -1,15 +1,22 @@
 # How to contribute code to the Monarch Initiative
 
-The guidelines here are intended for both internal Monarch developers and for the community of users, developers and supporters that help Monarch improve. Please read through this document to ensure the process is easy and effective for everyone involved. Monarch uses the basic [GitHub Workflow](http://guides.github.com/overviews/flow/) to make any changes to its codebase. Monarch adapts this GitHub Flow by asking its contributors to perform their development, testing, and review tasks in a personal Forked repo, prior to their changes being merged into the shared Monarch repository. The process described below is initially intended to be used in the `monarch-app` repository, although it may later be adopted by the other Monarch-related source code repositories, such as `phenogrid`.
+##### Audience
+These guidelines are for developers of Monarch software, whether internal or in the broader community. 
 
-The instructions presented here are derived from several sources. However, a very readable and complete article is [Using the Fork-and-Branch Git Workflow](http://blog.scottlowe.org/2015/01/27/using-fork-branch-git-workflow/). Note that the article doesn't make clear that certain steps like Forking are one-time setup steps, after which Branch-PullRequest-Merge steps are used; the instructions below will attempt to clarify this.
+## Basic principles of the Monarch-flavored [GitHub Workflow](http://guides.github.com/overviews/flow/)
 
-The basic principles used in the Monarch-adapted GitHub workflow are:
-
+##### Principle 1: Work from a personal fork 
 * Prior to adopting the workflow, a developer will perform a *one-time setup* to create a personal Fork of the appropriate shared repo (e.g., `monarch-app`) and will subsequently perform their development and testing on a task-specific branch within their forked repo. This forked repo will be associated with that developer's GitHub account, and is distinct from the shared repo managed by the Monarch Initiative.
+
+##### Principle 2: Commit to personal branches of that fork
 * Changes will never be committed directly to the master branch on the shared repo. Rather, they will be composed as branches within the developer's forked repo, where the developer can iterate and refine their code prior to submitting it for review.
-* Each set of changes will be developed as a task-specific *branch* in the developer's forked repo, and then a [pull request](github.com/government/best-practices/compare) will be created to develop and propose changes to the shared repo. This mechanism provides a way for developers to discuss, revise and ultimately merge changes from the forked repo into the shared Monarch repo.
-* Once a pull request has been merged, the task-specific branch is no longer needed and may be deleted or ignored. It is bad practice to reuse an existing branch once it has been merged. Instead, a subsequent branch and pull-request cycle should begin when a developer switches to a different coding task.
+
+##### Principle 3: Propose changes via pull request of personal branches
+*  Each set of changes will be developed as a task-specific *branch* in the developer's forked repo, and then a [pull request](github.com/government/best-practices/compare) will be created to develop and propose changes to the shared repo. This mechanism provides a way for developers to discuss, revise and ultimately merge changes from the forked repo into the shared Monarch repo.
+
+##### Principle 4: Delete or ignore stale branches, but don't recycle merged ones
+*  Once a pull request has been merged, the task-specific branch is no longer needed and may be deleted or ignored. It is bad practice to reuse an existing branch once it has been merged. Instead, a subsequent branch and pull-request cycle should begin when a developer switches to a different coding task. 
+*  You may create a pull request in order to get feedback, but if you wish to continue working on the branch, so state with "DO NOT MERGE YET".
 
 ## Table of contents
 
@@ -40,7 +47,7 @@ The basic principles used in the Monarch-adapted GitHub workflow are:
     - [Merge a pull request](#merge-a-pull-request)
     - [Celebrate and get back to work](#celebrate-and-get-back-to-work)
 - [GitHub Tricks and Tips](#github-tricks-and-tips)
-- [Related Documentation](#related-documentation)
+- [References and Documentation](#references-and-documentation)
 
 <!-- /MarkdownTOC -->
 
@@ -299,18 +306,15 @@ You have successfully gotten your code improvements into the shared repository. 
 - Add `?w=1` to a GitHub file compare URL to ignore whitespace differences.
 
 
-## Related Documentation
+## References and Documentation
 
-- A very readable and complete description of the basic GitHub flow is in [Using the Fork-and-Branch Git Workflow](http://blog.scottlowe.org/2015/01/27/using-fork-branch-git-workflow/).
+- The instructions presented here are derived from several sources. However, a very readable and complete article is [Using the Fork-and-Branch Git Workflow](http://blog.scottlowe.org/2015/01/27/using-fork-branch-git-workflow/). Note that the article doesn't make clear that certain steps like Forking are one-time setup steps, after which Branch-PullRequest-Merge steps are used; the instructions below will attempt to clarify this.
 
 - New to GitHub? The [GitHub Guides](http://guides.github.com) are a great place to start.
 
 - Advanced GitHub users might want to check out the [GitHub Cheat Sheet](https://github.com/tiimgreen/github-cheat-sheet/blob/master/README.md)
+- 
 
+## Notes
 
-
-
-
-
-
-
+The process described below is initially intended to be used in the `monarch-app` repository, although it may later be adopted by the other Monarch-related source code repositories, such as `phenogrid`.
