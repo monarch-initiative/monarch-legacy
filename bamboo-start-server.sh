@@ -29,7 +29,7 @@ if [ $RUNENV = stage ]; then
 fi
 
 if [ $RUNENV = production ]; then
-	source /var/home/bamboo/.nvm/nvm.sh
+	source /home/bamboo/.nvm/nvm.sh
 fi
 
 if [ $PORT ]
