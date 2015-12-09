@@ -31,10 +31,10 @@ install:
 
 before_script:
   - "export DISPLAY=:99.0"
-  - "npm run start &"
-  - "# npm run build"
-  - "# npm run bstart &"
-  - "sleep 25"
+  - "# npm run start &"
+  - "npm run build"
+  - "npm run bstart &"
+  - "sleep 600"
 
 after_success:
   - "cat ./webdriver.log"
