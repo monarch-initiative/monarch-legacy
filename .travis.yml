@@ -34,6 +34,7 @@ before_script:
   - "# npm run start &"
   - "npm run build"
   - "npm run bstart &"
+  - "curl -s http://whatismyip.akamai.com/"
   - "sleep 600"
 
 after_success:
@@ -47,12 +48,12 @@ after_failure:
 # command to run tests
 script:
   - "# ps auwx|grep webapp_launcher.js"
-  - "make test"
-  - "cd tests/behave"
+  - "# make test"
+  - "# cd tests/behave"
   - "# ps auwx|grep webapp_launcher.js"
   - "# curl -v http://localhost:8080"
   - "# curl -v http://localhost:8080/disease/DOID:3044.json"
-  - "TARGET=http://localhost:8080 behave"
+  - "# TARGET=http://localhost:8080 behave"
 
 # whitelist
 branches:
