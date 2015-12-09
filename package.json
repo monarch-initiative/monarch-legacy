@@ -5,6 +5,7 @@
   "description": "Monarch web application and API.",
   "main": "lib/monarch/web/webapp_launcher.js",
   "scripts": {
+    "brun": "npm run build && npm run bstart",
     "build": "rm -rf dist/* && webpack --config webpack.build.js --bail -p",
     "fastbuild": "webpack --config webpack.build.js --bail -d",
     "start": "NODE_PATH=./lib/monarch node lib/monarch/web/webapp_launcher.js",
