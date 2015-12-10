@@ -5,6 +5,8 @@ before_install:
   - "uname -a"
   - "gcc --version"
   - "lsb_release -a"
+  - "curl -s http://whatismyip.akamai.com/"
+  - "dig +short myip.opendns.com @resolver1.opendns.com"
   - "sudo add-apt-repository ppa:ubuntu-toolchain-r/test -y"
   - "sudo apt-get update -q"
   - "sudo apt-get install python-software-properties -y"
@@ -34,7 +36,6 @@ before_script:
   - "# npm run start &"
   - "npm run build"
   - "npm run bstart &"
-  - "curl -s http://whatismyip.akamai.com/"
   - "sleep 600"
 
 after_success:
