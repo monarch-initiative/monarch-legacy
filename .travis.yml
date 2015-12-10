@@ -5,6 +5,15 @@ before_install:
   - "uname -a"
   - "gcc --version"
   - "lsb_release -a"
+  - "echo \"`curl -s ifconfig.me`\""
+  - "echo \"`curl -s icanhazip.com`\""
+  - "echo \"`curl -s ident.me`\""
+  - "echo \"`curl -s ipecho.net/plain`\""
+  - "echo \"`curl -s whatismyip.akamai.com`\""
+  - "echo \"`curl -s tnx.nl/ip`\""
+  - "echo \"`curl -s myip.dnsomatic.com`\""
+  - "echo \"`curl -s ip.appspot.com`\""
+  - "echo \"`curl -s curlmyip.com`\""
   - "sudo add-apt-repository ppa:ubuntu-toolchain-r/test -y"
   - "sudo apt-get update -q"
   - "sudo apt-get install python-software-properties -y"
@@ -31,10 +40,10 @@ install:
 
 before_script:
   - "export DISPLAY=:99.0"
-  - "npm run start &"
-  - "# npm run build"
-  - "# npm run bstart &"
-  - "sleep 25"
+  - "# npm run start &"
+  - "npm run build"
+  - "npm run bstart &"
+  - "sleep 600"
 
 after_success:
   - "cat ./webdriver.log"
@@ -47,12 +56,12 @@ after_failure:
 # command to run tests
 script:
   - "# ps auwx|grep webapp_launcher.js"
-  - "make test"
-  - "cd tests/behave"
+  - "# make test"
+  - "# cd tests/behave"
   - "# ps auwx|grep webapp_launcher.js"
   - "# curl -v http://localhost:8080"
   - "# curl -v http://localhost:8080/disease/DOID:3044.json"
-  - "TARGET=http://localhost:8080 behave"
+  - "# TARGET=http://localhost:8080 behave"
 
 # whitelist
 branches:
