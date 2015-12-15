@@ -26,7 +26,7 @@ MONARCH_VERSION = 0.1.1
 ### Tests
 ###
 
-APITESTS = apitest literature-test class-info-test
+APITESTS = apitest class-info-test
 TESTS = $(APITESTS) urltester
 
 test: $(patsubst %, test-%, $(TESTS))
