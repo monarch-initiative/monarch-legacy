@@ -177,11 +177,11 @@ Git will not automatically sync your Forked repo with the original shared repo, 
 
 In the (likely) event that the *upstream* repo (the monarch-app shared repo) has changed since the developer last began a task, it is important to update the local copy of the upstream repo so that its changes can be incorporated into subsequent development.
 
-    > git fetch upstream        # Updates the local copy of shared repo
+    > git fetch upstream        # Updates the local copy of shared repo BUT does not affect the working directory, it simply makes the upstream code available locally for subsequent Git operations. See step 2.
 
 #### Step 2 - Ensure that 'master' is up to date
 
-The above `git fetch upstream` did not affect the working directory, it simply made the upstream code available locally for subsequent Git operations. Assuming that new development begins with branch 'master' (a good practice), then we want to make sure our local 'master' has all the recent changes from 'upstream'. This can be done as follows:
+Assuming that new development begins with branch 'master' (a good practice), then we want to make sure our local 'master' has all the recent changes from 'upstream'. This can be done as follows:
 
     > git checkout master
     > git reset --hard upstream/master
