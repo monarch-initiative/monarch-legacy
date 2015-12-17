@@ -31,10 +31,10 @@ install:
 
 before_script:
   - "export DISPLAY=:99.0"
-  - "npm run start &"
-  - "# npm run build"
-  - "# npm run bstart &"
-  - "sleep 25"
+  - "# npm run start &"
+  - "# install.sh does this instead... 'npm run build'"
+  - "NODE_PATH=./lib/monarch USE_BUNDLE=1 USE_LOG_FETCH=1 node ./lib/monarch/web/webapp_launcher.js &"
+  - "sleep 600"
 
 after_success:
   - "cat ./webdriver.log"
@@ -46,12 +46,9 @@ after_failure:
 
 # command to run tests
 script:
-  - "# ps auwx|grep webapp_launcher.js"
+  - "ps auwx|grep webapp_launcher.js"
   - "make test"
   - "cd tests/behave"
-  - "# ps auwx|grep webapp_launcher.js"
-  - "# curl -v http://localhost:8080"
-  - "# curl -v http://localhost:8080/disease/DOID:3044.json"
   - "TARGET=http://localhost:8080 behave"
 
 # whitelist

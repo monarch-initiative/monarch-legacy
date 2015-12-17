@@ -53,6 +53,8 @@ echo 'checking aliases'
 alias
 
 export NODE_PATH=./lib/monarch
+export USE_BUNDLE=1
+export USE_LOG_FETCH=1
 $NODE_NVM_PATH ./lib/monarch/web/webapp_launcher.js $MARGS $RUNENV
 
 echo 'Which node after start server'
