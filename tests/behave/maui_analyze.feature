@@ -37,7 +37,7 @@ Feature: Analyze phenotypes is usable by the expected user interfaces
      and I click the "compare" radio button
      and I input "NCBIGene:388552,NCBIGene:12166" into the textarea "gene-list"
      when I submit analyze phenotype
-     and I wait for id "pg_svg_group"
+     and I wait for id "phen_vis_svg_group"
      then the document should contain "BLOC1S3"
 
      
