@@ -6,8 +6,8 @@
   "main": "lib/monarch/web/webapp_launcher.js",
   "scripts": {
     "brun": "npm run build && npm run bstart",
-    "build": "rm -rf dist/* && webpack --config webpack.build.js --bail -p",
-    "fastbuild": "webpack --config webpack.build.js --bail -d",
+    "build": "rm -rf dist/* && ./node_modules/webpack/bin/webpack.js --config webpack.build.js --bail -p",
+    "fastbuild": "./node_modules/webpack/bin/webpack.js --config webpack.build.js --bail -d",
     "start": "NODE_PATH=./lib/monarch node lib/monarch/web/webapp_launcher.js",
     "bstart": "USE_BUNDLE=1 NODE_PATH=./lib/monarch node lib/monarch/web/webapp_launcher.js",
     "rstart": "./ringo-server.sh",
