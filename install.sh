@@ -22,4 +22,4 @@ echo "# Versions OK, continuing with installation."
 npm install
 ./node_modules/.bin/gulp assemble
 rm -rf dist/*
-webpack --config webpack.build.js --bail -p
+./node_modules/webpack/bin/webpack.js --config webpack.build.js --bail
