@@ -92,7 +92,7 @@ function navbar_search_init(in_search_id, in_form_id){
 		    for( var di = 0; di < data.length; di++ ){
 		        var datum = data[di];
 		        var datum_id = datum['id'];
-		        if( ! seen_ids[datum_id] ){
+		        if (!seen_ids[datum_id]){
 		            // Only add new ids to pared data list.
 		            pared_data.push(datum);
 		            
@@ -122,8 +122,8 @@ function navbar_search_init(in_search_id, in_form_id){
 		                console.log('could not get taxon for genes');
 		                remove_equivalent_ids(map, id_list, response);
 		            },
-		            success: function ( data ){
-		                map = add_species_to_autocomplete(data, map, gene_ids);
+		            success: function ( successData ){
+		                map = add_species_to_autocomplete(successData, map, gene_ids);
 		                remove_equivalent_ids(map, id_list, response);
 		            }
 
@@ -184,6 +184,6 @@ function navbar_search_init(in_search_id, in_form_id){
 if (typeof exports === 'object') {
     exports.navbar_search_init = navbar_search_init;
 }
-if (typeof(loaderGlobals) === 'object') {
+if (typeof loaderGlobals === 'object') {
     loaderGlobals.navbar_search_init = navbar_search_init;
 }

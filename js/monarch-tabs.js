@@ -79,9 +79,9 @@ function InitTabs() {
 
 }
 
-if (typeof(loaderGlobals) === 'object') {
+if (typeof loaderGlobals === 'object') {
     loaderGlobals.InitTabs = InitTabs;
 }
-if (typeof(global) === 'object') {
+if (typeof global === 'object') {
     global.InitTabs = InitTabs;
 }
