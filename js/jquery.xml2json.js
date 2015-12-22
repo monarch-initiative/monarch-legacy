@@ -98,6 +98,7 @@
      };//node.attributes.length>0
     };//node.attributes
     if(obj){
+      /* eslint no-new-wrappers: 0 */
      obj = $.extend( (txt!='' ? new String(txt) : {}),/* {text:txt},*/ obj || {}/*, att || {}*/);
      //txt = (obj.text) ? (typeof(obj.text)=='object' ? obj.text : [obj.text || '']).concat([txt]) : txt;
      txt = (obj.text) ? ([obj.text || '']).concat([txt]) : txt;
@@ -127,7 +128,7 @@
 				// - regexp modified to accept  comma as decimal mark (latin syntax : 25,24 )
 				// - regexp modified to reject if no number before decimal mark  : ".7" is not accepted
 				// - string is "trimmed", allowing to accept space at the beginning and end of string
-				var regexp=/^((-)?([0-9]+)(([\.\,]{0,1})([0-9]+))?$)/
+				var regexp=/^((-)?([0-9]+)(([\.\,]{0,1})([0-9]+))?$)/;
 				return (typeof s == "number") || regexp.test(String((s && typeof s == "string") ? jQuery.trim(s) : ''));
 			};
 			// OLD isNum function: (for reference only)
@@ -149,7 +150,7 @@
    if(typeof xml=='string') xml = $.text2xml(xml);
    
    // Quick fail if not xml (or if this is a node)
-   if(!xml.nodeType) return;
+   if(!xml.nodeType) return undefined;
    if(xml.nodeType == 3 || xml.nodeType == 4) return xml.nodeValue;
    
    // Find xml root node

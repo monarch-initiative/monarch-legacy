@@ -163,16 +163,18 @@ function getAnnotationScore() {
                     error: function(){
                         console.log('ERROR: looking at: ' + score_query);
                     },
-                    success: function(data) {
+                    success: function(successData) {
                         jQuery('.score-spinner').removeClass(spinner_class);
-                        var score = (5 * data.scaled_score);
+                        var score = (5 * successData.scaled_score);
                         jQuery(".stars").text(score);
                     
                         /* This displays the stars used to denote annotation sufficiency. For example,
                          * annotation sufficiency scores are currently located on the phenotype tab
                          * of the disease page. */
                         jQuery.fn.stars = function() {
-                            return this.each(function(i,e){jQuery(e).html(jQuery('<span/>').width(jQuery(e).text()*16));});
+                            return this.each(function(i,e){
+                                jQuery(e).html(jQuery('<span/>').width(jQuery(e).text()*16));
+                            });
                         };
                         jQuery('.stars').stars();
                         jQuery('.stars').show();

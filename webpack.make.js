@@ -7,7 +7,7 @@ var HtmlWebpackPlugin = require('html-webpack-plugin');
 var ExtractTextPlugin = require('extract-text-webpack-plugin');
 var path = require('path');
 
-module.exports = function makeWebpackConfig (options) {
+module.exports = function(options) { // makeWebpackConfig
   /**
    * Environment type
    * BUILD is for generating minified builds
@@ -15,6 +15,8 @@ module.exports = function makeWebpackConfig (options) {
    */
   var BUILD = !!options.BUILD;
   var TEST = !!options.TEST;
+  var BUILDHASH = false;
+  var LINT = false;
 
   /**
    * Config
@@ -22,8 +24,18 @@ module.exports = function makeWebpackConfig (options) {
    * This is the object where all configuration gets set
    */
   var config = {};
+  config.debug = true;
 
-  var nmDeps = [
+  config.eslint = {
+    configFile: './.eslintrc',
+    emitError: false,
+    emitWarning: false,
+    quiet: false,
+    failOnError: false,
+    failOnWarning: false
+  };
+
+  var deps = [
     'bootstrap/dist/js/bootstrap.min.js',
     'underscore/underscore-min.js'
   ];
@@ -64,12 +76,12 @@ module.exports = function makeWebpackConfig (options) {
       // Filename for entry points
       // Only adds hash in build mode
       // hash currently disabled for all builds
-      filename: '[name].bundle.js',         // BUILD ? '[name].[hash].js' : '[name].bundle.js',
+      filename: BUILDHASH ? '[name].[hash].js' : '[name].bundle.js',
 
       // Filename for non-entry points
       // Only adds hash in build mode
       // hash currently disabled for all builds
-      chunkFilename: '[name].bundle.js'     // BUILD ? '[name].[hash].js' : '[name].bundle.js'
+      chunkFilename: BUILDHASH ? '[name].[hash].js' : '[name].bundle.js'
     };
   }
 
@@ -81,7 +93,7 @@ module.exports = function makeWebpackConfig (options) {
   if (TEST) {
     config.devtool = 'inline-source-map';
   } else if (BUILD) {
-    config.devtool = 'source-map';
+    config.devtool = 'eval-cheap-source-map';  // Trying to speed up builds with 'eval', correct behavior is 'source-map';
   } else {
     config.devtool = 'eval';
   }
@@ -96,6 +108,7 @@ module.exports = function makeWebpackConfig (options) {
   var monarchJSRoot = path.resolve(__dirname, 'js');
   var monarchLibRoot = path.resolve(__dirname, 'lib/monarch');
   var nmRoot = path.resolve(__dirname, 'node_modules');
+  var fa = path.resolve(__dirname, 'node_modules/font-awesome');
 
   // Initialize module
   config.module = {
@@ -105,21 +118,52 @@ module.exports = function makeWebpackConfig (options) {
 
     preLoaders: [],
     loaders: [
-    {
-      // JS LOADER
-      // Reference: https://github.com/babel/babel-loader
-      // Transpile .js files using babel-loader
-      // Compiles ES6 and ES7 into ES5 code
-      test: /\.js$/,
-      // loader: 'babel?optional=runtime',
-      loader: 'babel',
-      query: {
-          // https://github.com/babel/babel-loader#options
-          cacheDirectory: true,
-          presets: ['es2015']
+      {
+        // JS LOADER
+        // Reference: https://github.com/babel/babel-loader
+        // Transpile .js files using babel-loader
+        // Compiles ES6 and ES7 into ES5 code
+        test: /\.js$/,
+        // loader: 'babel?optional=runtime',
+        loader: 'babel',
+        query: {
+            // https://github.com/babel/babel-loader#options
+            cacheDirectory: true,
+            presets: ['es2015']
+        },
+        include: [monarchJSRoot]
+        //exclude: /(node_modules|js\/d3\.min\.js|js\/jquery-.+)/
       },
-      exclude: /(node_modules|js\/d3\.min\.js|js\/jquery-.+)/
-    },
+
+      {
+        test: /\.woff(\?v=\d+\.\d+\.\d+)?$/,
+        loader: "url?limit=10000&mimetype=application/font-woff",
+        include: [fa]
+      },
+
+      {
+        test: /\.woff2(\?v=\d+\.\d+\.\d+)?$/,
+        loader: "url?limit=10000&mimetype=application/font-woff",
+        include: [fa]
+      },
+
+      {
+        test: /\.ttf(\?v=\d+\.\d+\.\d+)?$/,
+        loader: "url?limit=10000&mimetype=application/octet-stream",
+        include: [fa]
+      },
+
+      {
+        test: /\.eot(\?v=\d+\.\d+\.\d+)?$/,
+        loader: "file",
+        include: [fa]
+      },
+
+      {
+        test: /\.svg(\?v=\d+\.\d+\.\d+)?$/,
+        loader: "url?limit=10000&mimetype=image/svg+xml",
+        include: [fa]
+      },
 
     {
       // ASSET LOADER
@@ -138,6 +182,13 @@ module.exports = function makeWebpackConfig (options) {
       test: /\.html$/,
       loader: 'html'
 
+    },
+    {
+      // JSON LOADER
+      // Reference: https://github.com/webpack/json-loader
+      // json loader module for webpack
+      test: /\.json$/,
+      loader: 'json'
     }],
 
    postLoaders: [
@@ -151,7 +202,10 @@ module.exports = function makeWebpackConfig (options) {
 
     // don't parse some dependencies to speed up build.
     // can probably do this non-AMD/CommonJS deps
-    noParse: [],
+    noParse: [
+      // path.resolve(nmRoot, 'phenogrid/js/htmlnotes.json'),
+      // path.resolve(nmRoot, 'phenogrid/js/images.json')
+    ],
     resolve: {
       alias: {}
     }
@@ -163,32 +217,30 @@ module.exports = function makeWebpackConfig (options) {
   // file and make sure webpack does not try to parse it
   // From: https://christianalfoni.github.io/react-webpack-cookbook/Optimizing-development.html
   //
-  nmDeps.forEach(function (dep) {
+  deps.forEach(function (dep) {
     var depPath = path.resolve(nmRoot, dep);
     config.module.resolve.alias[dep.split(path.sep)[0]] = depPath;
     config.module.noParse.push(depPath);
   });
 
-  // if (!TEST) {
-  //   config.module.loaders.push(
-  //     {
-  //       test: /\.js$/,
-  //       loader: 'eslint-loader',
-  //       include: [monarchJSRoot]
-  //     });
-  // }
+  if (LINT && !TEST) {
+    config.module.loaders.push(
+      {
+        test: /\.js$/,
+        loader: 'eslint-loader',
+        exclude: [nmRoot]
+      });
+  }
+
 
   // ISPARTA LOADER
   // Reference: https://github.com/ColCh/isparta-instrumenter-loader
   // Instrument JS files with Isparta for subsequent code coverage reporting
   // Skips node_modules and files that end with .test.js
-  if (TEST) {
+  if (false && TEST) {
     config.module.preLoaders.push({
       test: /\.js$/,
-      exclude: [
-        /node_modules/,
-        /\.test\.js$/
-      ],
+      exclude: [nmRoot, /\.test\.js$/],
       loader: 'isparta-instrumenter'
     });
   }
@@ -256,9 +308,10 @@ module.exports = function makeWebpackConfig (options) {
     // Reference: https://github.com/webpack/extract-text-webpack-plugin
     // Extract css files
     // Disabled when in test mode or not in build mode
-    new ExtractTextPlugin('[name].bundle.css', {    // '[name].[hash].css', {
-      disable: !BUILD || TEST
-    }),
+    new ExtractTextPlugin(BUILDHASH ? '[name].[hash].css' : '[name].bundle.css',
+      {
+        disable: !BUILD || TEST
+      }),
     new webpack.ProvidePlugin({
         $: "jquery",
         jQuery: "jquery",
@@ -284,7 +337,7 @@ module.exports = function makeWebpackConfig (options) {
     config.plugins.push(
       // Reference: http://webpack.github.io/docs/list-of-plugins.html#noerrorsplugin
       // Only emit files when there are no errors
-      new webpack.NoErrorsPlugin(),
+      // new webpack.NoErrorsPlugin(),
 
       // Reference: http://webpack.github.io/docs/list-of-plugins.html#dedupeplugin
       // Dedupe modules in the output
@@ -316,8 +369,8 @@ module.exports = function makeWebpackConfig (options) {
         },
         // logLevel: "debug",
         // logConnections: true,
-        reloadOnRestart: true,
-        browser: ["google chrome"] // ["google chrome", "safari"]
+        reloadOnRestart: false,
+        browser: ["firefox"]
       }));
   }
 

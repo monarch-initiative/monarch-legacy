@@ -1,17 +1,3 @@
-// import angular from 'angular';
-// import uirouter from 'angular-ui-router';
-
-// import routing from './app.config';
-// import landing from './features/landing';
-// import about from './features/about';
-
-// import "./themes/default/index.less";
-
-// angular.module('app', [uirouter, landing, about])
-//   .config(routing);
-
-// require("babel-core/register");
-
 var jq = require('jquery');
 window.jQuery = jq;
 window.$ = jq;
@@ -31,6 +17,7 @@ import 'd3';
 import './search_form.js';
 import './monarch-tabs.js';
 
+import 'font-awesome/css/font-awesome.min.css';
 import '../css/monarch.less';
 import '../css/monarch-common.css';
 import '../css/monarch-specific.css';
@@ -58,7 +45,7 @@ global.makeGenotypeLandingGraph = bl.makeGenotypeLandingGraph;
 global.makeDiseaseLandingGraph = bl.makeDiseaseLandingGraph;
 global.bbop = bbop;
 console.log('index.js bbop:', bbop);
-if (typeof(loaderGlobals) === 'object') {
+if (typeof loaderGlobals === 'object') {
 	loaderGlobals.bbop = global.bbop;
 	loaderGlobals.InitTabs = global.InitTabs;
 	loaderGlobals.InitTables = global.InitTables;
