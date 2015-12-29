@@ -212,7 +212,7 @@ function CyPathDemoInit(){
 		return {
 		    label: item['completion'],
 		    tag: appendee,
-		    name: item['completion']
+		    name: item['completion']['curie']
 		};
 	    };
 	    var _on_success = function(data) {
@@ -220,25 +220,9 @@ function CyPathDemoInit(){
 		// Get the list out of the return.
 		if( data ){
 
-		    // // Pare out duplicates. Assume existance of structure.
-		    // var pared_data = [];
-		    // var seen_ids = {};
-		    // for( var di = 0; di < ldata.length; di++ ){
-		    // 	var datum = ldata[di];
-		    // 	var datum_id = datum['concept']['uri'];
-		    // 	if( ! seen_ids[datum_id] ){
-		    // 	    // Only add new ids to pared data list.
-		    // 	    pared_data.push(datum);
-			    
-		    // 	    // Block them in the future.
-		    // 	    seen_ids[datum_id] = true;
-		    // 	}
-		    // }
-
 		    // Map out into the display format.
 		    //var map = jQuery.map(pared_data, _parse_data_item);
 		    var map = jQuery.map(data, _parse_data_item);
-		    console.log(map);
 		    response(map);
 		}
 	    };
@@ -281,7 +265,7 @@ function CyPathDemoInit(){
 	event.preventDefault();
 	if (ui.item !== null) { 
 	    ll('got: ' + ui.item.name);
-	    jQuery(auto_1_input_elt).val(ui.item.name);
+	    jQuery(auto_1_input_elt).val(ui.item.label);
 	}
     };	
     var jac1 = jQuery(auto_1_input_elt).autocomplete(ac_args);
@@ -292,7 +276,7 @@ function CyPathDemoInit(){
 	event.preventDefault();
 	if (ui.item !== null) {
 	    ll('got: ' + ui.item.name);
-	    jQuery(auto_2_input_elt).val(ui.item.name);
+	    jQuery(auto_2_input_elt).val(ui.item.label);
 	}
     };	
     var jac2 = jQuery(auto_2_input_elt).autocomplete(ac_args);
