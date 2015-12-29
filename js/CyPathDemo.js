@@ -145,7 +145,7 @@ function CyPathDemoInit(){
 	focus_nodes[arg2] = true;
 
 	var base = 'http://kato.crbs.ucsd.edu:9000/scigraph/graph/paths/' + arg4;
-	var rsrc = base + '/' + arg1 + '/' + arg2 + '.jsonp?length=' + arg3;
+	var rsrc = base + '/' + arg1 + '/' + arg2 + '.json?length=' + arg3;
 	manager.resource(rsrc);
 	manager.method('get');
 	manager.use_jsonp(true);
@@ -162,7 +162,7 @@ function CyPathDemoInit(){
 
 	// Data call setup.
 	var base = 'http://kato.crbs.ucsd.edu:9000/scigraph/graph/neighbors/' +
-	    arg1 + '.jsonp';
+	    arg1 + '.json';
 	var rsrc = base + '?' + 'depth=' + desired_spread;
 	manager.resource(rsrc);
 	manager.method('get');
@@ -198,11 +198,11 @@ function CyPathDemoInit(){
 		    if( item['concept']['categories'] &&
 			! bbop.core.is_empty(item['concept']['categories']) ){
 			appendee = item['concept']['categories'].join(' ');
-		    }else if( item['concept']['fragment'] ){
+		    }else if( item['concept']['curie'] ){
 			// Get first split on '_'.
 			var fspl =
 			    bbop.core.first_split('_',
-						  item['concept']['fragment']);
+						  item['concept']['curie']);
 			if( fspl[0] ){
 			    appendee = fspl[0];
 			}
@@ -212,15 +212,13 @@ function CyPathDemoInit(){
 		return {
 		    label: item['completion'],
 		    tag: appendee,
-		    name: item['concept']['fragment']
+		    name: item['completion']
 		};
 	    };
 	    var _on_success = function(data) {
 
 		// Get the list out of the return.
-		if( data && data['list'] ){
-
-		    var ldata = data['list'];
+		if( data ){
 
 		    // // Pare out duplicates. Assume existance of structure.
 		    // var pared_data = [];
@@ -239,20 +237,18 @@ function CyPathDemoInit(){
 
 		    // Map out into the display format.
 		    //var map = jQuery.map(pared_data, _parse_data_item);
-		    var map = jQuery.map(data['list'], _parse_data_item);
+		    var map = jQuery.map(data, _parse_data_item);
+		    console.log(map);
 		    response(map);
 		}
 	    };
 
 	    // Define and run request on service.
 	    var query =
-		'http://kato.crbs.ucsd.edu:9000/scigraph/vocabulary/prefix/' +
-		request.term +
-		'.jsonp?limit=20&searchSynonyms=true';
+	        "/autocomplete/"+request.term+".json";
 	    jQuery.ajax({
 			    'url': query,
-			    'dataType': 'jsonp',
-			    'jsonp': 'callback',
+			    'dataType': 'json',
 			    'success': _on_success
 			});
 	},
