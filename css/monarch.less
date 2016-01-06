@@ -11,8 +11,14 @@
 // @body-bg:               red;
 // @link-color:            red;
 
-@screen-sm:                  925px;
+@screen-sm:                  875px;
 @screen-sm-min:              @screen-sm;
+
+//** Point at which the navbar becomes uncollapsed.
+@grid-float-breakpoint:     875px;
+//** Point at which the navbar begins collapsing.
+@grid-float-breakpoint-max: (@grid-float-breakpoint - 1);
+
 
 // bootstrap/less/variables.less included below for reference
 

@@ -1,7 +1,6 @@
 /* This script document contains functions relating to general Monarch pages. */
 
 function initMonarchPage(){
-
     bbop.monarch.remove_equivalent_ids = remove_equivalent_ids;
     bbop.monarch.filter_equivalents = filter_equivalents;
 

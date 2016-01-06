@@ -1,3 +1,7 @@
+/* eslint space-unary-ops: 0 */
+/* eslint no-redeclare: 0 */
+/* eslint no-eval: 0 */
+
 /*
  * Package: browse.js
  * 
@@ -8,6 +12,35 @@
  * 
  * This is a completely self-contained UI and manager.
  */
+
+
+function InitMonarchBBOPWidgetBrowse() {
+    var jq = require('jquery');
+    if (typeof(globalUseBundle) === 'undefined' || !globalUseBundle) {
+        console.log('InitMonarchBBOPWidgetBrowse... using loaderGlobals bbop');
+        var bbop = loaderGlobals.bbop;
+    }
+    else {
+        console.log('InitMonarchBBOPWidgetBrowse... using require bbop');
+        var bbop = require('bbop');
+    }
+
+    // Module and namespace checking.
+    // if ( typeof bbop == "undefined" ){ var bbop = {}; }
+
+    if ( typeof bbop.monarch == "undefined" ){ bbop.monarch = {}; }
+    if ( typeof bbop.monarch.widget == "undefined" ){ bbop.monarch.widget = {}; }
+
+    if (typeof(loaderGlobals) === 'object') {
+        loaderGlobals.bbop = bbop;
+    }
+    if (typeof(global) === 'object') {
+        global.bbop = bbop;
+    }
+    if( typeof(exports) != 'undefined' ) {
+        exports.bbop = bbop;
+    }
+
 
 /*
  * Note, this heavily based on the bbop browse widget, and is attempt
@@ -65,7 +98,8 @@ bbop.monarch.widget.browse = function(server, manager, reference_id, root, inter
 
     // Per-UI logger.
     var logger = new bbop.logger();
-    logger.DEBUG = true;
+    logger.DEBUG = false;
+    // logger.DEBUG = true;
     function ll(str){ logger.kvetch('B (widget): ' + str); }
 
     this._is_a = 'monarch.widget.browse';
@@ -607,3 +641,16 @@ bbop.monarch.widget.browse = function(server, manager, reference_id, root, inter
            return spinner_div;
        }
 };
+
+
+}
+
+
+console.log('define InitMonarchBBOPWidgetBrowse');
+if (typeof loaderGlobals === 'object') {
+    loaderGlobals.InitMonarchBBOPWidgetBrowse = InitMonarchBBOPWidgetBrowse;
+}
+if (typeof global === 'object') {
+    global.InitMonarchBBOPWidgetBrowse = InitMonarchBBOPWidgetBrowse;
+    console.log('define InitMonarchBBOPWidgetBrowse global');
+}

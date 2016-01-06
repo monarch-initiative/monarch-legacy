@@ -195,7 +195,7 @@ Here's one way to experiment with the bundled execution:
 Alternatively:
 
 	> rm -rf dist/*
-	> webpack --config webpack.build.js --bail -p
+	> webpack --config webpack.build.js --bail
 	> NODE_PATH=./lib/monarch node lib/monarch/web/webapp_launcher.js
 
 

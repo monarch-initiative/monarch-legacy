@@ -1,3 +1,5 @@
+/*
+
 }	// Closes the InitMonarch function
 
 
@@ -10,3 +12,5 @@ if (typeof(loaderGlobals) === 'object') {
 if (typeof(global) === 'object') {
     global.InitMonarch = InitMonarch;
 }
+
+*/

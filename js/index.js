@@ -16,6 +16,7 @@ import 'jquery-ui';
 import 'd3';
 import './search_form.js';
 import './monarch-tabs.js';
+import './lib/monarch/widget/facet-filters.js';
 
 import 'font-awesome/css/font-awesome.min.css';
 import '../css/monarch.less';
@@ -28,7 +29,16 @@ import _bbop from 'bbop';
 var bbop = _bbop;
 window.getAnnotationScore = require("exports?getAnnotationScore!./monarch-common.js");
 
-import './monarch.js';
+// import './monarch.js';
+
+// Core browser/server libraries
+import './lib/monarch/loaderHeader.js';
+import './lib/monarch/handler.js';
+import './lib/monarch/linker.js';
+import './lib/monarch/widget/browse.js';
+import './lib/monarch/widget/display/results_table_by_class_conf_bs3.js';
+import './lib/monarch/loaderFooter.js';
+
 import './jquery.cookie.js';
 import './jquery.xml2json.js';
 
@@ -49,7 +59,12 @@ if (typeof loaderGlobals === 'object') {
 	loaderGlobals.bbop = global.bbop;
 	loaderGlobals.InitTabs = global.InitTabs;
 	loaderGlobals.InitTables = global.InitTables;
-	loaderGlobals.InitMonarch = global.InitMonarch;
+	loaderGlobals.InitFacetFilters = global.InitFacetFilters;
+	loaderGlobals.InitMonarchBBOPHandler = global.InitMonarchBBOPHandler;
+	loaderGlobals.InitMonarchBBOPLinker = global.InitMonarchBBOPLinker;
+	loaderGlobals.InitMonarchBBOPWidgetBrowse = global.InitMonarchBBOPWidgetBrowse;
+	loaderGlobals.InitMonarchBBOPWidgetDisplay = global.InitMonarchBBOPWidgetDisplay;
+
 	loaderGlobals.makeDiseaseLandingGraph = global.makeDiseaseLandingGraph;
 	loaderGlobals.makePhenotypeLandingGraph = global.makePhenotypeLandingGraph;
 	loaderGlobals.makeGenotypeLandingGraph = global.makeGenotypeLandingGraph;

@@ -1,30 +1,60 @@
-/* 
+/* eslint space-unary-ops: 0 */
+/* eslint no-redeclare: 0 */
+/* eslint no-eval: 0 */
+
+/*
  * Package: handler.js
- * 
+ *
  * Namespace: bbop.monarch.handler
- * 
+ *
  * External inks generated with conf/xrefs.json
  * Global variables passed by PupTent in webapp.js:
- * 
+ *
  * global_xrefs_conf: Xrefs conf file from conf/xrefs.json
  */
 
-// The beginnings of a monarch specific handler, just a copy of amigo's
-// handler right now
+function InitMonarchBBOPHandler() {
+    var jq = require('jquery');
+    if (typeof(globalUseBundle) === 'undefined' || !globalUseBundle) {
+        console.log('InitMonarchBBOPHandler... using loaderGlobals bbop');
+        var bbop = loaderGlobals.bbop;
+    }
+    else {
+        console.log('InitMonarchBBOPHandler... using require bbop');
+        var bbop = require('bbop');
+    }
+
+    // Module and namespace checking.
+    // if ( typeof bbop == "undefined" ){ var bbop = {}; }
+
+    if ( typeof bbop.monarch == "undefined" ){ bbop.monarch = {}; }
+    if ( typeof bbop.monarch.widget == "undefined" ){ bbop.monarch.widget = {}; }
+
+    if (typeof(loaderGlobals) === 'object') {
+        loaderGlobals.bbop = bbop;
+    }
+    if (typeof(global) === 'object') {
+        global.bbop = bbop;
+    }
+    if( typeof(exports) != 'undefined' ) {
+        exports.bbop = bbop;
+    }
+
+
 
 /*
  * Constructor: handler
- * 
+ *
  * Create an object that will run functions in the namespace with a
  * specific profile.
- * 
+ *
  * These functions have a well defined interface so that other
  * packages can use them (for example, the results display in
  * LiveSearch.js).
- * 
+ *
  * Arguments:
  *  n/a
- * 
+ *
  * Returns:
  *  self
  */
@@ -47,27 +77,27 @@ bbop.monarch.handler = function (){
 
 /*
  * Function: dispatch
- * 
+ *
  * Return a string.
- * 
+ *
  * The fallback function is called if no match could be found in the
  * global_xrefs_conf. It is called with the name and context
  * arguments in the same order.
- * 
+ *
  * Arguments:
  *  data - the incoming thing to be handled
  *  name - the field name to be processed
  *  context - *[optional]* a string to add extra context to the call
  *  fallback - *[optional]* a fallback function to call in case nothing is found
- * 
+ *
  * Returns:
  *  string; null if it couldn't create anything
  */
 bbop.monarch.handler.prototype.dispatch = function(data, name, context, fallback){
-    
+
     // Aliases.
     var is_def = bbop.core.is_defined;
-    
+
     // First, get the specific id for this combination.
     var did = name || '';
     did += '_' + this.mangle;
@@ -78,7 +108,7 @@ bbop.monarch.handler.prototype.dispatch = function(data, name, context, fallback
     // If the combination is not already in the map, fill it in as
     // best we can.
     if(!is_def(this.string_to_function_map[did])){
-	
+
 	this.entries += 1;
 
 	// First, try and get the most specific.
@@ -88,7 +118,7 @@ bbop.monarch.handler.prototype.dispatch = function(data, name, context, fallback
 	    var field_hash = global_xrefs_conf[name];
 	    var function_string = null;
 
-	    if (is_def(field_hash['context']) 
+	    if (is_def(field_hash['context'])
                 && is_def(field_hash['context'][context])){
 		    // The most specific.
 		    function_string = field_hash['context'][context];
@@ -106,17 +136,17 @@ bbop.monarch.handler.prototype.dispatch = function(data, name, context, fallback
 	    if (function_string == null){
             throw new Error('global_xrefs_conf appears to be damaged!');
         }
-	    
+
 	    // We have a string. Pop it into existance with eval.
 	    var evalled_thing = eval(function_string);
 
 	    // Final test, make sure it is a function.
-	    if (! is_def(evalled_thing) 
-	            || evalled_thing == null 
+	    if (! is_def(evalled_thing)
+	            || evalled_thing == null
 	            || bbop.core.what_is(evalled_thing) != 'function'){
             throw new Error('"' + function_string + '" did not resolve!');
 	    } else {
-            this.string_to_function_map[did] = evalled_thing;		
+            this.string_to_function_map[did] = evalled_thing;
 	    }
 
 	} else if( is_def(fallback) ){
@@ -140,3 +170,15 @@ bbop.monarch.handler.prototype.dispatch = function(data, name, context, fallback
 
     return retval;
 };
+
+}
+
+
+console.log('define InitMonarchBBOPHandler');
+if (typeof loaderGlobals === 'object') {
+    loaderGlobals.InitMonarchBBOPHandler = InitMonarchBBOPHandler;
+}
+if (typeof global === 'object') {
+    global.InitMonarchBBOPHandler = InitMonarchBBOPHandler;
+    console.log('define InitMonarchBBOPHandler global');
+}
