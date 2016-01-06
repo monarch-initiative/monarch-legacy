@@ -131,8 +131,15 @@ module.exports = function(options) { // makeWebpackConfig
             cacheDirectory: true,
             presets: ['es2015']
         },
-        include: [monarchJSRoot]
-        //exclude: /(node_modules|js\/d3\.min\.js|js\/jquery-.+)/
+        exclude: [
+          nmRoot,
+          // The following files are excluded from babel processing
+          // because the transformation results in eslint violations.
+          // - jquery.cookie.js is obsoleted by js.cookie.js
+          // - I don't know where stupidtable comes from.
+          path.join(monarchJSRoot, 'jquery.cookie.js'),
+          path.join(monarchJSRoot, 'stupidtable.min.js')
+          ]
       },
 
       {
