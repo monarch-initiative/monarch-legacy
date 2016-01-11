@@ -23,7 +23,7 @@ if( typeof(exports) != 'undefined' ) {
     exports.bbop = bbop;
 }
 
-// This is a prefixing header fragment of a JS file. It opens up a function scope closed by 
+// This is a prefixing header fragment of a JS file. It opens up a function scope closed by
 // the loaderFooter.js file.
 // These files sandwich the other files in scripts/release-file-map.txt
 //
@@ -1495,6 +1495,9 @@ bbop.monarch.widget.display.results_table_by_class_conf_bs3.prototype.process_en
 
 if (typeof(loaderGlobals) === 'object') {
     loaderGlobals.InitMonarch = InitMonarch;
+    // console.log('define InitMonarch loaderGlobals', loaderGlobals);
+    // console.log('define InitMonarch bbop', bbop);
+    // console.log('define InitMonarch loaderGlobals.bbop', loaderGlobals.bbop);
 }
 if (typeof(global) === 'object') {
     global.InitMonarch = InitMonarch;
