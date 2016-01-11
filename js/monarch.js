@@ -1,11 +1,9 @@
 function InitMonarch() {
     var jq = require('jquery');
     if (typeof(globalUseBundle) === 'undefined' || !globalUseBundle) {
-        console.log('InitMonarch... using loaderGlobals bbop');
         var bbop = loaderGlobals.bbop;
     }
     else {
-        console.log('InitMonarch... using require bbop');
         var bbop = require('bbop');
     }
 
@@ -1495,14 +1493,9 @@ bbop.monarch.widget.display.results_table_by_class_conf_bs3.prototype.process_en
 }	// Closes the InitMonarch function
 
 
-console.log('define InitMonarch');
 if (typeof(loaderGlobals) === 'object') {
     loaderGlobals.InitMonarch = InitMonarch;
-    // console.log('define InitMonarch loaderGlobals', loaderGlobals);
-    // console.log('define InitMonarch bbop', bbop);
-    // console.log('define InitMonarch loaderGlobals.bbop', loaderGlobals.bbop);
 }
 if (typeof(global) === 'object') {
     global.InitMonarch = InitMonarch;
-    console.log('define InitMonarch global');
 }

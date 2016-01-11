@@ -5,17 +5,18 @@
   "description": "Monarch web application and API.",
   "main": "lib/monarch/web/webapp_launcher.js",
   "scripts": {
+    "analyze": "rm -rf dist/* && node_modules/webpack/bin/webpack.js --config webpack.build.js --bail --json | analyze-bundle-size",
     "brun": "npm run build && npm run bstart",
-    "build": "rm -rf dist/* && node_modules/webpack/bin/webpack.js --config webpack.build.js --bail -p",
+    "build": "rm -rf dist/* && node_modules/webpack/bin/webpack.js --config webpack.build.js --bail",
     "fastbuild": "node_modules/webpack/bin/webpack.js --config webpack.build.js --bail -d",
     "start": "NODE_PATH=lib/monarch node lib/monarch/web/webapp_launcher.js",
     "bstart": "USE_BUNDLE=1 NODE_PATH=lib/monarch node lib/monarch/web/webapp_launcher.js",
     "bstartp": "USE_BUNDLE=1 NODE_PATH=lib/monarch node lib/monarch/web/webapp_launcher.js production",
     "bstarts": "USE_BUNDLE=1 NODE_PATH=lib/monarch node lib/monarch/web/webapp_launcher.js stage",
     "rstart": "./ringo-server.sh",
-    "dev": "USE_BUNDLE=1 USE_WEBPACK=1 NODE_PATH=lib/monarch node_modules/nodemon/bin/nodemon.js -d 2 -V -- lib/monarch/web/webapp_launcher.js & node node_modules/.bin/webpack-dev-server --port 8081 --history-api-fallback --hot --inline",
-    "devp": "USE_BUNDLE=1 USE_WEBPACK=1 NODE_PATH=lib/monarch node_modules/nodemon/bin/nodemon.js -d 2 -V -- lib/monarch/web/webapp_launcher.js production & node node_modules/.bin/webpack-dev-server --port 8081 --history-api-fallback --hot --inline",
-    "corstest": "USE_LOG_FETCH=1 USE_BUNDLE=1 USE_WEBPACK=1 NODE_PATH=lib/monarch nodemon -d 2 -V -- lib/monarch/web/webapp_launcher.js CORSTest & node node_modules/.bin/webpack-dev-server --port 8081 --history-api-fallback --hot --inline",
+    "dev": "scripts/runWebpackDevServer.sh",
+    "devp": "scripts/runWebpackDevServer.sh production",
+    "corstest": "USE_LOG_FETCH=1 USE_BUNDLE=1 USE_WEBPACK=1 NODE_PATH=lib/monarch nodemon -d 2 -V -- lib/monarch/web/webapp_launcher.js CORSTest & node node_modules/.bin/webpack-dev-server --port 8081",
     "test": "make test",
     "rtest": "make -f MakefileRingo test",
     "lint": "node_modules/.bin/eslint js/ lib/monarch || exit 0"
@@ -62,6 +63,7 @@
     "xmlbuilder": "^4.1.0"
   },
   "devDependencies": {
+    "assets-webpack-plugin": "^3.2.0",
     "autoprefixer": "^6.1.0",
     "babel-core": "^6.2.1",
     "babel-eslint": "^4.1.5",

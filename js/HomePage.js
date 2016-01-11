@@ -240,8 +240,6 @@ function MonarchCarousel(carousel_elt, tabber_elt, next_id, prev_id){
 //
 
 function InitHomePage(){
-    console.log('InitHomePage', jQuery);
-
     // Ready search form in corner, with non-standard names.
     // (Default should not load as the default ids do not exists here.)
     //navbar_search_init('home_search', 'home_search_form');

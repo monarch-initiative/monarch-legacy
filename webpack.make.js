@@ -5,6 +5,7 @@ var webpack = require('webpack');
 var autoprefixer = require('autoprefixer');
 var HtmlWebpackPlugin = require('html-webpack-plugin');
 var ExtractTextPlugin = require('extract-text-webpack-plugin');
+var AssetsPlugin = require('assets-webpack-plugin');
 var path = require('path');
 
 module.exports = function(options) { // makeWebpackConfig
@@ -15,7 +16,7 @@ module.exports = function(options) { // makeWebpackConfig
    */
   var BUILD = !!options.BUILD;
   var TEST = !!options.TEST;
-  var BUILDHASH = false;
+  var BUILDHASH = true;
   var LINT = false;
 
   /**
@@ -37,7 +38,10 @@ module.exports = function(options) { // makeWebpackConfig
 
   var deps = [
     'bootstrap/dist/js/bootstrap.min.js',
-    'underscore/underscore-min.js'
+    'underscore/underscore-min.js',
+    'bootstrap/dist/js/bootstrap.min.js',
+    'd3/d3.min.js',
+    'jquery/dist/jquery.min.js'
   ];
 
   /**
@@ -93,7 +97,7 @@ module.exports = function(options) { // makeWebpackConfig
   if (TEST) {
     config.devtool = 'inline-source-map';
   } else if (BUILD) {
-    config.devtool = 'eval-cheap-source-map';  // Trying to speed up builds with 'eval', correct behavior is 'source-map';
+    config.devtool = 'source-map';
   } else {
     config.devtool = 'eval';
   }
@@ -311,6 +315,9 @@ module.exports = function(options) { // makeWebpackConfig
    * List: http://webpack.github.io/docs/list-of-plugins.html
    */
   config.plugins = [
+    // https://github.com/sporto/assets-webpack-plugin
+    new AssetsPlugin(),
+
     // Reference: https://github.com/webpack/extract-text-webpack-plugin
     // Extract css files
     // Disabled when in test mode or not in build mode
@@ -329,11 +336,40 @@ module.exports = function(options) { // makeWebpackConfig
   // if (!TEST) {
   //   // Reference: https://github.com/ampedandwired/html-webpack-plugin
   //   // Render index.html
+  //   var minifyOpts = {};
+  //   if (BUILD) {
+  //     minifyOpts = {
+  //       removeComments: true,
+  //       // removeCommentsFromCDATA: true,
+  //       // removeCDATASectionsFromCDATA: true,
+  //       collapseWhitespace: true,
+  //       conservativeCollapse: true,
+  //       preserveLineBreaks: true,
+  //       collapseBooleanAttributes: false,
+  //       removeAttributeQuotes: false,
+  //       removeRedundantAttributes: false,
+  //       // useShortDoctype: true,
+  //       removeEmptyAttributes: false,
+  //       removeEmptyElements: false,
+  //       removeOptionalTags: false,
+  //       removeIgnored: false,
+  //       removeScriptTypeAttributes: false,
+  //       removeStyleLinkTypeAttributes: false,
+  //       caseSensitive: true,
+  //       // keepClosingSlash: true,
+  //       minifyJS: true,
+  //       processScripts: ['text/javascript'],
+  //       minifyCSS: true,
+  //       minifyURLs: false,
+  //       lint: false,
+  //       maxLineLength: 50
+  //     };
+  //   }
   //   config.plugins.push(
   //     new HtmlWebpackPlugin({
-  //       template: './src/index.html',
+  //       template: './ui/index.html',
   //       inject: 'body',
-  //       minify: BUILD
+  //       minify: {}  // minifyOpts
   //     })
   //   );
   // }
@@ -341,6 +377,7 @@ module.exports = function(options) { // makeWebpackConfig
   // Add build specific plugins
   if (BUILD) {
     config.plugins.push(
+
       // Reference: http://webpack.github.io/docs/list-of-plugins.html#noerrorsplugin
       // Only emit files when there are no errors
       // new webpack.NoErrorsPlugin(),
@@ -352,7 +389,7 @@ module.exports = function(options) { // makeWebpackConfig
       // Reference: http://webpack.github.io/docs/list-of-plugins.html#uglifyjsplugin
       // Minify all javascript, switch loaders to minimizing mode
       ,new webpack.optimize.UglifyJsPlugin({
-        sourceMap: true,
+        sourceMap: false,
         mangle: false,
         compress: {
           warnings: false
@@ -396,6 +433,8 @@ module.exports = function(options) { // makeWebpackConfig
    * Reference: http://webpack.github.io/docs/webpack-dev-server.html
    */
   config.devServer = {
+    historyApiFallback: true,
+    // hot: true,
     contentBase: './dist',
     /* Send API requests on localhost to API server get around CORS */
     // proxy: {
