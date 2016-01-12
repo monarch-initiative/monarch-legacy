@@ -390,7 +390,9 @@ module.exports = function(options) { // makeWebpackConfig
       // Minify all javascript, switch loaders to minimizing mode
       ,new webpack.optimize.UglifyJsPlugin({
         sourceMap: false,
-        mangle: false,
+        mangle: {
+          except: []
+        },
         compress: {
           warnings: false
         }
