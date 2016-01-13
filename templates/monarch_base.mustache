@@ -8,6 +8,10 @@
 
     {{{includes.analytics}}}
 
+    {{#bundleCSS}}
+        <link rel="stylesheet" type="text/css" href="{{{.}}}">
+    {{/bundleCSS}}
+
     <!-- CSS. -->
     {{#pup_tent_css_libraries}}
         <link rel="stylesheet" type="text/css" href="{{{.}}}">
@@ -22,14 +26,16 @@
 {{^useBundle}}
     globalUseBundle = useBundle = window.useBundle = false;
 {{/useBundle}}
-
-    console.log('USE_BUNDLE: ', useBundle);
     </script>
 
     <!-- JS variables. -->
     {{#pup_tent_js_variables}}
         <script type="text/javascript">var {{name}} = {{{value}}};</script>
     {{/pup_tent_js_variables}}
+
+    {{#bundleJS}}
+        <script type="text/javascript" src="{{{.}}}"></script>
+    {{/bundleJS}}
 
     <!-- JS libraries. -->
     {{#pup_tent_js_libraries}}

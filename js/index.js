@@ -44,7 +44,7 @@ global.makePhenotypeLandingGraph = bl.makePhenotypeLandingGraph;
 global.makeGenotypeLandingGraph = bl.makeGenotypeLandingGraph;
 global.makeDiseaseLandingGraph = bl.makeDiseaseLandingGraph;
 global.bbop = bbop;
-console.log('index.js bbop:', bbop);
+
 if (typeof loaderGlobals === 'object') {
 	loaderGlobals.bbop = global.bbop;
 	loaderGlobals.InitTabs = global.InitTabs;
