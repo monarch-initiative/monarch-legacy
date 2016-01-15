@@ -165,7 +165,7 @@ See [bin/README.md](bin/README.md).
 
 ## Non-bundled use of `require.js`
 
-When env variable USE_BUNDLE is not defined or not equal to '1', which we will
+When env variable USE_BUNDLE is set to the value '0', which we will
 call non-bundled or Legacy Mode, the Monarch UI uses
 [RequireJS](http://requirejs.org) to load various JS files and modules, and to
 ensure they are loaded in the correct order.
@@ -173,14 +173,15 @@ ensure they are loaded in the correct order.
 The file `requireconfig.js` is included via `monarch_base.mustache` by RequireJS and this file
 contains a set of `require` statements that include other JS files used by the Monarch front-end.
 
+The default (as of Jan 15, 2016) is that Monarch operates in Bundled Mode unless `USE_BUNDLE=0`.
 
 ## New UI Tools and Bundling Instructions
 
-By default, when you run the Monarch server via `./start-server.sh`, Monarch will operate in non-bundled mode. This means that when the web server delivers a page (e.g., `/page/about`), it will invoke a particular handler in `lib/monarch/web/webapp.js` and that handler (`pageByPageHandler`, in this example) will generate a custom HTML page by expanding a set Mustache templates and streaming the result back to the web browser. The custom HTML page includes CSS and JS file references that support the particular page being delivered.
+By default, when you run the Monarch server via `./start-server.sh`, Monarch will operate in bundled mode. This means that when the web server delivers a page (e.g., `/page/about`), it will invoke a particular handler in `lib/monarch/web/webapp.js` and that handler (`pageByPageHandler`, in this example) will generate a custom HTML page by expanding a set Mustache templates and streaming the result back to the web browser. The custom HTML page includes CSS and JS file references that support the particular page being delivered.
 
 One of the things that Monarch has relied on up to this point is the ability for different handlers to present different CSS and JS files to the browser, enabling us to experiment with diverse libraries and frameworks as we extend and integrate Monarch. Unfortunately, this technique is at odds with many of the goals of delivering a high-performance modern website, which encourages bundling, minification and caching of assets (CSS, JS) in the browser.
 
-We have improved our front-end page generation pipeline to accommodate the current on-the-fly page composition technique as well as to allow for the use of modern tooling to bundle and minify CSS and JS assets for efficient delivery and caching. This bundled mode is disabled by default when Monarch is invoked by `./start-server.sh`, but it can be easily used to speed up front-end development and for the Monarch developers to get an understanding of any pros and cons associated with the bundling and tooling.
+We have improved our front-end page generation pipeline to accommodate the current on-the-fly page composition technique as well as to allow for the use of modern tooling to bundle and minify CSS and JS assets for efficient delivery and caching. This bundled mode is enabled by default when Monarch is invoked by `./start-server.sh`.
 
 ### Running Monarch in Bundled Mode, without `webpack-dev-server`
 
@@ -189,13 +190,13 @@ The bundle behavior is currently controlled via the environment variable `USE_BU
 Here's one way to experiment with the bundled execution:
 
 	> npm run build    # This takes a minute or so, generates dist/app.bundle.* and other dist/*
-	> npm run bstart   # defines USE_BUNDLE=1, then runs webapp_launcher.js
+	> npm run start    # Runs webapp_launcher.js
 
 Alternatively:
 
 	> rm -rf dist/*
 	> webpack --config webpack.build.js --bail -p
-	> USE_BUNDLE=1 NODE_PATH=./lib/monarch node lib/monarch/web/webapp_launcher.js
+	> NODE_PATH=./lib/monarch node lib/monarch/web/webapp_launcher.js
 
 
 ### Running Monarch with `webpack-dev-server`
