@@ -1,7 +1,7 @@
 {
     "type" : "production",
 
-    "app_base" : "http://0.0.0.0:8080",
+    "app_base" : "http://monarch1-1.cslu.ohsu.edu/",
 
     "ontology_services_url" : "http://nif-services-stage.neuinfo.org/ontoquest-lamhdi/",
 
@@ -20,5 +20,5 @@
     "owlsim_services_url" : "http://monarch1-1.cslu.ohsu.edu/owlsim",
 
     "analytics_id" : "UA-41803362-1"
-        
+
 }
