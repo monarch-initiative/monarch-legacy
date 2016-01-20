@@ -1,7 +1,7 @@
 {
     "type" : "production",
 
-    "app_base" : "http://monarch1-1.cslu.ohsu.edu/",
+    "app_base" : "http://monarch1-1.cslu.ohsu.edu",
 
     "ontology_services_url" : "http://nif-services-stage.neuinfo.org/ontoquest-lamhdi/",
 
