@@ -45,7 +45,7 @@
     "jquery": "^2.1.4",
     "jquery-ui": "^1.10.5",
     "mustache": "^2.2.0",
-    "phenogrid": "^1.2.5",
+    "phenogrid": "^1.2.6",
     "pup-tent": "^0.9.10",
     "querystring": "^0.2.0",
     "request": "^2.65.0",
