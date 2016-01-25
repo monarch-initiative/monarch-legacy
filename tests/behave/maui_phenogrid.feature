@@ -18,7 +18,7 @@ Scenario: Documentation example phenogrid appears
 #Phenogrid's index.html demo respects the current environment.
 # @ui
 # Scenario: Loading the iframe content for Monarch Phenotype Grid Widget loads a page with the correct title
-#    Given I go to slow page "/node_modules/phenogrid/index.html" and wait for id "phenogrid_container1_svg"
+#    Given I go to slow page "/node_modules/phenogrid/index.html" and wait for id "phenogrid_container_svg"
 #      then the title should be "Monarch Phenotype Grid Widget"
 #      and the document should contain "Phenogrid is a Javascript component that visualizes"
 #      and the document should contain "Phenotype Similarity Comparison"
