@@ -19,12 +19,13 @@ require(['require', 'jquery'], function (_require, _jquery) {
     require = _require;
     window.require = _require;
     exports = {};
-    _require(['jquery-ui', '/bootstrap.min.js', 'core', 'widget'], function () {
+    _require(['jquery-ui', '/bootstrap.min.js', 'underscore', 'core', 'widget'], function () {
         _require(['/d3.min.js', '/search_form.js', '/bbop.js'], function (a, b, c) {
             bbop = exports.bbop;
             loaderGlobals.bbop = bbop;
             console.log('requireconfig exports:', bbop);
-            _require(['/monarch-common.js', '/monarch.js'], function () {
+            _require(['/monarch-common.js',
+                '/linker.js', '/handler.js', '/browse.js', '/results_table_by_class_conf_bs3.js', '/facet-filters.js'], function () {
                 _require(['/search_form.js', '/monarch-tabs.js',
                          '/jquery.cookie.js', '/jquery.xml2json.js', '/HomePage.js', '/stupidtable.min.js', '/tables.js',
                          '/dove.min.js', '/golr-table.js'], function () {

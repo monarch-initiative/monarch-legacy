@@ -67,7 +67,7 @@ target/%.ttl: conf/rdf-mapping/%-map.json conf/monarch-context.jsonld
 	NODE_PATH=$(NODE_PATH) $(NODE_BIN) bin/generate-triples-from-nif.js -c conf/server_config_$(SERVERCONF).json $<
 
 target/%.owl: target/%.ttl
-	owltools $< --set-ontology-id http://purl.obolibrary.org/obo/upheno/data/$*.owl -o -f ofn target/$*.owl 
+	owltools $< --set-ontology-id http://purl.obolibrary.org/obo/upheno/data/$*.owl -o -f ofn target/$*.owl
 
 # TEMP
 #conf/rdf-mapping/%.yaml: conf/rdf-mapping/%.json
@@ -110,7 +110,9 @@ docs:
 
 .PHONY: bundle
 bundle:
-	./scripts/release-js.pl -v -i scripts/release-file-map.txt -o js/monarch.js -n monarch -d js -r $(MONARCH_VERSION)
+	./scripts/release-js.pl -u -v -i scripts/release-file-map.txt -o js/monarch.js -n monarch -d js -r $(MONARCH_VERSION)
+	rm -f js/monarch.js
+	rm -f js/monarch_$(MONARCH_VERSION).js
 
 ###
 ### Deployment.

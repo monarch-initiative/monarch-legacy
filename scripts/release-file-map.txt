@@ -1,7 +1,1 @@
 // Core browser/server libraries
-js/lib/monarch/loaderHeader.js
-js/lib/monarch/handler.js
-js/lib/monarch/linker.js
-js/lib/monarch/widget/browse.js
-js/lib/monarch/widget/display/results_table_by_class_conf_bs3.js
-js/lib/monarch/loaderFooter.js

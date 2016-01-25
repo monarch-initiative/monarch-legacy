@@ -61,8 +61,11 @@ remove_equivalent_ids = loaderGlobals.remove_equivalent_ids;
 makeSpinnerDiv = loaderGlobals.makeSpinnerDiv;
 add_species_to_autocomplete = loaderGlobals.add_species_to_autocomplete;
 
-            loaderGlobals.InitMonarch();
-            loaderGlobals.initMonarchPage();
+            loaderGlobals.InitFacetFilters();
+            loaderGlobals.InitMonarchBBOPHandler();
+            loaderGlobals.InitMonarchBBOPLinker();
+            loaderGlobals.InitMonarchBBOPWidgetBrowse();
+            loaderGlobals.InitMonarchBBOPWidgetDisplay();
             loaderGlobals.InitTabs();
 
             {{#monarch_launchable}}

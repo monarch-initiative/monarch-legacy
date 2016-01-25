@@ -1,5 +1,5 @@
+<div id="{{{href}}}" class="row category">
 
-<div id="{{{href}}}" class="category">
   <div id="r3" class="col-xs-12">
     {{#isPhenotypeTable}}
     {{#isLeafNode}}
@@ -19,15 +19,82 @@
     {{/isLeafNode}}
     {{/isPhenotypeTable}}
 
-    <div id="results-area" xclass="row">
-      <div id="{{{div}}}-pager-top" class="row bs3pager">
+
+    <div id="results-area">
+      <div class="results-area-pager">
+
+        {{#filter}}
+        <button type="button"
+          class="btn btn-default btn-sm"
+          style="position:absolute;margin:0;top:13px;right:2px;"
+          data-toggle="collapse"
+          data-target="#{{{div}}}-filter-area">
+          <span style="color:black;" aria-hidden="true">
+            Filters&nbsp;&nbsp;<i class="fa fa-bars fa-fw"></i>
+          </span>
+        </button>
+
+        <div id="{{{div}}}-filter-area"
+          class="collapse filter-area"
+          style="position:absolute;z-index:100;height:100%;right:0;width:40%;min-width:400px;max-width:600px;top:45px;margin:0;xborder-radius:5px;">
+
+          <div
+            id="{{{div}}}-filter-handle"
+            style="display:inline-block;padding:0;margin:0;width:100%;">
+
+            <div class=results-area-filter" style="margin:0;padding:0;width:100%;">
+              <button type="button"
+                class="btn btn-default pull-right close query-filter-close"
+                style="margin:4px 5px 0 20px;opacity:1.0;background-color:transparent;"
+                data-toggle="collapse"
+                data-target="#{{{div}}}-filter-area">
+                <span style="opacity:1.0;color:black;" aria-hidden="true">
+                  <i class="fa fa-times fa-fw"></i>
+                </span>
+              </button>
+
+              <button type="button"
+                id="{{{div}}}-filter-none"
+                class="btn btn-default pull-right"
+                style="margin:4px 5px 0 5px;padding:2px 5px;opacity:1.0;background-color:aliceblue;">
+                <span style="opacity:1.0;color:black;" aria-hidden="true">
+                  None&nbsp;
+                  <i class="fa fa-square-o fa-fw"></i>
+                </span>
+              </button>
+
+              <button type="button"
+                id="{{{div}}}-filter-all"
+                class="btn btn-default pull-right"
+                style="margin:4px 5px 0 5px;padding:2px 5px;opacity:1.0;background-color:aliceblue;">
+                <span style="opacity:1.0;color:black;" aria-hidden="true">
+                  All&nbsp;
+                  <i class="fa fa-check-square-o fa-fw"></i>
+                </span>
+              </button>
+
+              <div id="{{{div}}}-filter" class="clearfix bs3filter" style="margin:3px 3px -28px 3px;padding:0;">
+                  Loading...
+              </div>
+            </div>
+          </div>
+        </div>
+        {{/filter}}
+
+        <div id="{{{div}}}-filter-pager-top" class="bs3pager">
+        </div>
       </div>
-      <div id="{{{div}}}" class="row">
+    </div>
+
+    <div>
+      <div id="{{{div}}}" class="bs3table">
         &nbsp;&nbsp;&nbsp;&nbsp;<br>
         &nbsp;&nbsp;&nbsp;&nbsp;
       </div>
-      <div id="{{{div}}}-pager-bottom" class="row bs3pager-bottom">
+
+      <div id="{{{div}}}-filter-pager-bottom" class="bs3pager-bottom">
       </div>
     </div>
+
   </div>
 </div>

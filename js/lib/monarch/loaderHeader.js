@@ -1,3 +1,5 @@
+/*
+
 function InitMonarch() {
     var jq = require('jquery');
     if (typeof(globalUseBundle) === 'undefined' || !globalUseBundle) {
@@ -27,3 +29,6 @@ if( typeof(exports) != 'undefined' ) {
 // the loaderFooter.js file.
 // These files sandwich the other files in scripts/release-file-map.txt
 //
+
+
+*/

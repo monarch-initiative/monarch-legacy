@@ -1,33 +1,78 @@
-/* 
+/* eslint space-unary-ops: 0 */
+/* eslint no-redeclare: 0 */
+/* eslint no-eval: 0 */
+
+/*
  * Package: linker.js
- * 
+ *
  * Namespace: bbop.monarch.linker
- * 
+ *
+ * External inks generated with conf/xrefs.json
+ * Global variables passed by PupTent in webapp.js:
+ *
+ * global_xrefs_conf: Xrefs conf file from conf/xrefs.json
+ */
+
+function InitMonarchBBOPLinker() {
+    var jq = require('jquery');
+    if (typeof(globalUseBundle) === 'undefined' || !globalUseBundle) {
+        console.log('InitMonarchBBOPLinker... using loaderGlobals bbop');
+        var bbop = loaderGlobals.bbop;
+    }
+    else {
+        console.log('InitMonarchBBOPLinker... using require bbop');
+        var bbop = require('bbop');
+    }
+
+    // Module and namespace checking.
+    // if ( typeof bbop == "undefined" ){ var bbop = {}; }
+
+    if ( typeof bbop.monarch == "undefined" ){ bbop.monarch = {}; }
+    if ( typeof bbop.monarch.widget == "undefined" ){ bbop.monarch.widget = {}; }
+
+    if (typeof(loaderGlobals) === 'object') {
+        loaderGlobals.bbop = bbop;
+    }
+    if (typeof(global) === 'object') {
+        global.bbop = bbop;
+    }
+    if( typeof(exports) != 'undefined' ) {
+        exports.bbop = bbop;
+    }
+
+
+
+
+/*
+ * Package: linker.js
+ *
+ * Namespace: bbop.monarch.linker
+ *
  * Generic Monarch link generator
- * 
+ *
  * Server information generated from conf/server_config*
  * files
- * 
+ *
  * External inks generated with conf/xrefs.json
- * 
+ *
  * Global variables passed by PupTent in webapp.js:
- * 
+ *
  * global_app_base: App host address from conf/server_config*
  * global_xrefs_conf: Xrefs conf file from conf/xrefs.json
- * 
+ *
  */
 
 /*
  * Constructor: linker
- * 
+ *
  * Create an object that can make URLs and/or anchors.
- * 
+ *
  * These functions have a well defined interface so that other
  * packages can use it.
- * 
+ *
  * Arguments:
  *  n/a
- * 
+ *
  * Returns:
  *  self
  */
@@ -51,19 +96,19 @@ bbop.monarch.linker = function (){
 
 /*
  * Function: url
- * 
+ *
  * Return a url string.
- * 
+ *
  * Arguments:
  *  args - id
  *  xid - *[optional]* an internal transformation id
  *  modifier - *[optional]* modify xid; only used with xid
- * 
+ *
  * Returns:
  *  string (url); null if it couldn't create anything
  */
 bbop.monarch.linker.prototype.url = function (id, xid, modifier, category){
-    
+
     var retval = null;
 
     ///
@@ -85,20 +130,20 @@ bbop.monarch.linker.prototype.url = function (id, xid, modifier, category){
                 }
             }
         }
-    
+
         // Since we couldn't find anything with our explicit local
         // transformation set, drop into the great abyss of the xref data.
         if(!retval && id && id != ''){ // not internal, but still has an id
             if(!global_xrefs_conf){
                 throw new Error('global_xrefs_conf is missing!');
             }
-    
+
             // First, extract the probable source and break it into parts.
             var full_id_parts = bbop.core.first_split(':', id);
             if(full_id_parts && full_id_parts[0] && full_id_parts[1]){
                 var src = full_id_parts[0];
                 var sid = full_id_parts[1];
-        
+
                 // Now, check to see if it is indeed in our store.
                 var lc_src = src.toLowerCase();
                 var xref = global_xrefs_conf[lc_src];
@@ -114,19 +159,19 @@ bbop.monarch.linker.prototype.url = function (id, xid, modifier, category){
 
 /*
  * Function: img
- * 
+ *
  * Return a html img string.
- * 
+ *
  * Arguments:
  *  args - id
  *  xid - *[optional]* an internal transformation id
  *  modifier - *[optional]* modify xid; only used with xid
- * 
+ *
  * Returns:
  *  string (img tag); null if it couldn't create anything
  */
 bbop.monarch.linker.prototype.img = function (id, xid, modifier, category){
-    
+
     var retval = null;
 
     ///
@@ -145,21 +190,21 @@ bbop.monarch.linker.prototype.img = function (id, xid, modifier, category){
             if (/^http/.test(id)){
                 src = id.replace(/.*\/(\w+)\.ttl/, "$1");
             } else {
-    
+
                 // First, extract the probable source and break it into parts.
                 var full_id_parts = bbop.core.first_split(':', id);
                 if(full_id_parts && full_id_parts[0] && full_id_parts[1]){
                     src = full_id_parts[0];
                 }
             }
-            
+
             if (src) {
-                
+
                 // Now, check to see if it is indeed in our store.
                 var lc_src = src.toLowerCase();
                 var xref = global_xrefs_conf[lc_src];
                 if (xref && xref['image_path']){
-                    retval = '<img class="source" src="' + this.app_base 
+                    retval = '<img class="source" src="' + this.app_base
                               + xref['image_path'] + '"/>';
                 }
             }
@@ -171,22 +216,22 @@ bbop.monarch.linker.prototype.img = function (id, xid, modifier, category){
 
 /*
  * Function: anchor
- * 
+ *
  * Return a link as a chunk of HTML, all ready to consume in a
  * display.
- * 
+ *
  * If args['id'] is a list then iterate over this.set_anchor()
- * 
+ *
  * Arguments:
  *  args - hash--'id' required; 'label' and 'hilite' are inferred if not extant
  *  xid - *[optional]* an internal transformation id
  *  rest - *[optional]* modify xid; only used with xid
- * 
+ *
  * Returns:
  *  string (link); null if it couldn't create anything
  */
 bbop.monarch.linker.prototype.anchor = function(args, xid, modifier){
-    
+
     var anchor = this;
     var retval = null;
 
@@ -200,10 +245,10 @@ bbop.monarch.linker.prototype.anchor = function(args, xid, modifier){
             retval = '';
             for (var i = 0, l = id.length; i < l; i++){
                 var anchor_tag = this.set_anchor(id[i], args, xid, modifier);
-                
+
                 if (anchor_tag){
                     retval = retval + ((retval) ? ', ' + anchor_tag : anchor_tag);
-                } 
+                }
             }
             if (retval === ''){
                 retval = null;
@@ -216,24 +261,24 @@ bbop.monarch.linker.prototype.anchor = function(args, xid, modifier){
 
 /*
  * Function: set_anchor
- * 
+ *
  * Return a link as a chunk of HTML, all ready to consume in a
  * display.
  */
 bbop.monarch.linker.prototype.set_anchor = function(id, args, xid, modifier){
-    
+
     var retval = null;
     var label = args['label'];
-    if (!label){ 
-        label = id; 
+    if (!label){
+        label = id;
     }
-    
+
     // Infer hilite from label if not present.
     var hilite = args['hilite'];
     if (!hilite){ hilite = label; }
-    
+
     var category = args['category'];
-    
+
     // See if the URL is legit. If it is, make something for it.
     var url = this.url(id, xid, modifier, category);
     var img = this.img(id, xid, modifier, category);
@@ -255,7 +300,7 @@ bbop.monarch.linker.prototype.set_anchor = function(id, args, xid, modifier){
             // should probably break out into function
             hilite = hilite.replace(/\>/g,'&gt;');
             hilite = hilite.replace(/\</g,'&lt;');
-            
+
             retval = '<a title="' + id +
             ' (go to the page for ' + label +
             ')" href="' + url + '">' + hilite + '</a>';
@@ -277,6 +322,16 @@ bbop.monarch.linker.prototype.set_anchor = function(id, args, xid, modifier){
         }
     }
     return retval;
-}
-    
+};
 
+}
+
+
+console.log('define InitMonarchBBOPLinker');
+if (typeof loaderGlobals === 'object') {
+    loaderGlobals.InitMonarchBBOPLinker = InitMonarchBBOPLinker;
+}
+if (typeof global === 'object') {
+    global.InitMonarchBBOPLinker = InitMonarchBBOPLinker;
+    console.log('define InitMonarchBBOPLinker global');
+}
