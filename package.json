@@ -86,7 +86,7 @@
     "html-loader": "^0.3.0",
     "html-webpack-plugin": "^1.6.2",
     "isparta-instrumenter-loader": "^1.0.0",
-    "js-yaml": "^3.4.3",
+    "js-yaml": "^3.5.2",
     "jshint": "^2.8.0",
     "jshint-loader": "^0.8.3",
     "json-loader": "^0.5.4",

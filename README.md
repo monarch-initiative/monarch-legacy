@@ -61,12 +61,12 @@ Monarch now uses up-to-date NPM modules to provide common libraries such as jQue
 
 The Monarch web application was designed to support the integration of diverse JavaScript libraries and HTML fragments. This was to encourage experimentation with different visualization frameworks and technology. The Monarch web application associates a given route (e.g., `/page/about`) with a handler that generates the correct webpage by assembling pieces via the server-side pup-tent library. This allows different web pages within the Monarch app to have completely different Javascript and CSS resources, and has been useful in the development of Monarch's features.
 
-Recently, we have been evolving the codebase to support modern web front-end tooling, including the use of preprocessors (e.g., LESS, JSHint), the bundling and minification of JS and CSS resources, and a more rapid development cycle. In the short term, we expect this will result in more effective and pleasant development experience, as well as a more efficient web application. In the longer term, this will enable us to build parts of the Monarch UI as a single-page app.
+Recently, we have been evolving the codebase to support modern web front-end tooling, including the use of preprocessors (e.g., LESS, ESLint), the bundling and minification of JS and CSS resources, and a more rapid development cycle. In the short term, we expect this will result in more effective and pleasant development experience, as well as a more efficient web application. In the longer term, this will enable us to build parts of the Monarch UI as a single-page app.
 
 Details on how to use the new tech are later in this document at [New UI Tools and Bundling Instructions](#new-ui-tools-and-bundling-instructions).
 
 
-*As of November, 2015, we are making the new tooling available to developers of Monarch, but are preserving the non-bundled version of Monarch for production use. Once we get everyone familiar and confident in the performance and behavior of the bundled version of Monarch, then we will migrate completely to that version.*
+*As of January, 2016, we have changed the default build behavior to use the new bundling via WebPack. The existing, unbundled behavior may be obtained by defining the environment variable `USE_BUNDLE=0` prior to running the application, or by using the convenience task: `npm run oldstart`*
 
 
 ## Quickstart
@@ -100,7 +100,7 @@ This will install the required modules, including NPM-based modules such as `gul
 
 After installation completes, start the server:
 
-    > ./start-server.sh
+    > npm run start
 
 You're done! You now have a running Monarch Initiative web application.
 
@@ -122,11 +122,11 @@ Or view a particular disease, e.g:
 Typically, the web application is started with:
 
     > cd monarch-app
-    > ./start-server.sh
+    > npm run start
 
-which can take an optional environment name parameter of: 'dev', 'stage', or 'production'. The 'dev' environment is the default. For example:
+which can take an optional environment name parameter of: 'dev', 'stage', or 'production'. The 'dev' environment is the default. Note that you will need to separate the environment name parameter from the `npm` command by using `--` (otherwise, the argument will be consumed by `npm` instead of the web application. For example:
 
-    > ./start-server.sh stage
+    > npm run start -- stage
 
 This `start-server.sh` script is a thin veneer upon the underlying command:
 
