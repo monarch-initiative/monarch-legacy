@@ -9,7 +9,7 @@
 
     "golr_url" : "http://solr-dev.monarchinitiative.org/solr/golr/",
 
-    "owlsim_services_url" : "http://beta.monarchinitiative.org/owlsim",
+    "owlsim_services_url" : "http://monarch-app-beta.monarchinitiative.org/owlsim",
     
     "analytics_id" : ""
 }
