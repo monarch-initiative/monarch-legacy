@@ -33,7 +33,7 @@ before_script:
   - "export DISPLAY=:99.0"
   - "# npm run start &"
   - "# install.sh does this instead... 'npm run build'"
-  - "NODE_PATH=./lib/monarch USE_BUNDLE=1 USE_LOG_FETCH=1 node ./lib/monarch/web/webapp_launcher.js stage &"
+  - "NODE_PATH=./lib/monarch USE_BUNDLE=1 USE_LOG_FETCH=1 node ./lib/monarch/web/webapp_launcher.js &"
   - "sleep 20"
 
 after_success:
