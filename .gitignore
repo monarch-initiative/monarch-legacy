@@ -35,3 +35,4 @@ serverStarted.dat
 start-server.log
 npm-debug.log
 dist/
+webpack-assets.json
