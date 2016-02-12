@@ -1,0 +1,46 @@
+{{{includes.navbar}}}
+
+<div class="wrapperforfooter">
+    <div class="container-fluid monarch-container">
+
+        <div class="container">
+            <h2>Monarch Services</h2>
+            <table class="table table-striped">
+                <thead>
+                    <tr>
+                        <th>Service</th>
+                        <th>URL</th>
+                        <th>Status</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td>SciGraph Ontology</td>
+                        <td>{{{scigraph_url.url}}}</td>
+                        <td>{{{scigraph_url.status}}}</td>
+                    </tr>
+                    <tr>
+                        <td>SciGraph Data</td>
+                        <td>{{{scigraph_data_url.url}}}</td>
+                        <td>{{{scigraph_data_url.status}}}</td>
+                    </tr>
+                    <tr>
+                        <td>Golr</td>
+                        <td>{{{golr_url.url}}}</td>
+                        <td>{{{golr_url.status}}}</td>
+                    </tr>
+                    <tr>
+                        <td>Owlsim</td>
+                        <td>{{{owlsim_services_url.url}}}</td>
+                        <td>{{{owlsim_services_url.status}}}</td>
+                    </tr>
+                </tbody>
+            </table>
+            <button class="btn btn-primary" onClick="document.location.reload(true)"><span class="glyphicon glyphicon-refresh"></span> Refresh</button> 
+        </div>
+
+    </div>
+</div>
+
+<!-- Footer. -->
+{{{includes.footer}}}
