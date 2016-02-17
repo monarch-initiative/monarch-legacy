@@ -13,14 +13,23 @@ var jsyaml = require('js-yaml');
 var fs = require('fs');
 var us = require('underscore');
 var map = require('map-stream');
+var shell = require('gulp-shell');
 
 var paths = {
     // tests: ['tests/*.test.js'],
     // docable: ['lib/*.js']
-    yaml_confs: ['conf/monarch-team.yaml']
+    yaml_confs: ['conf/monarch-team.yaml'],
+    tab_confs: ['conf/golr-views/single-tab/*yaml'],
+    golr_confs: ['conf/golr-views/*yaml']
 };
 
+
+gulp.task('set_up', ['make-tmp-dir']);
 gulp.task('assemble', ['yaml-confs-to-json']);
+gulp.task('make-golr-conf', ['golr-yaml-to-json', 'golr-json-merge', 'golr-json-cat']);
+gulp.task('tear_down', ['rm-tmp-dir']);
+gulp.task('tear_down', ['rm-tmp-dir']);
+
 
 // Micro gulp plugin for turning streamed YAML files to JSON files.
 var yaml_to_json = function yaml_to_json(file, cb){
@@ -53,6 +62,28 @@ gulp.task('yaml-confs-to-json', function() {
 });
 
 
+// Make temp directory
+gulp.task('make-tmp-dir', shell.task(['mkdir ./conf/tmp',
+                                      'mkdir ./conf/tmp/json',
+                                      'mkdir ./conf/tmp/yaml']));
+
+//Make golr conf
+gulp.task('golr-yaml-to-json', function() {
+    
+});
+
+gulp.task('golr-json-merge',['golr-yaml-to-json'], function() {
+    
+});
+
+gulp.task('golr-json-cat',['golr-json-merge'], function() {
+    
+});
+
+//Remove temp directory
+gulp.task('rm-tmp-dir',['make-tmp-dir'], shell.task('rm -rf ./conf/tmp'));
+
+
 // The default task (called when you run `gulp` from cli)
 //gulp.task('default', ['watch', 'scripts', 'images']);
-gulp.task('default', ['assemble']);
+gulp.task('default', ['set_up', 'assemble', 'make-golr-conf', 'tear_down']);
