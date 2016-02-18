@@ -36,5 +36,5 @@ start-server.log
 npm-debug.log
 dist/
 webpack-assets.json
-conf/golr-conf.json
-conf/monarch-team.json
+./conf/golr-conf.json
+./conf/monarch-team.json

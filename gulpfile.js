@@ -9,6 +9,7 @@ var mocha = require('gulp-mocha');
 var uglify = require('gulp-uglify');
 var rename = require("gulp-rename");
 var concat = require('gulp-concat');
+var jsoncombine = require("gulp-jsoncombine");
 var merge = require('gulp-merge-json');
 var del = require('del');
 var jsyaml = require('js-yaml');
@@ -136,12 +137,19 @@ gulp.task('golr-json-merge',['golr-yaml-to-json', 'golr-tab-to-json'], function(
 
 gulp.task('golr-json-cat',['golr-json-merge'], function() {
     return gulp.src('./conf/tmp/*json')
-       .pipe(merge('golr-conf.json'))
+       .pipe(jsoncombine('golr-conf.json', function(data){
+           var golr_conf = {};
+           Object.keys(data).forEach(function(i) {
+                var id = data[i]["id"];
+                golr_conf[id] = data[i];
+           });
+           return new Buffer(JSON.stringify(golr_conf));
+       }))
        .pipe(gulp.dest('./conf/'));
 });
 
 //Remove temp directory
-gulp.task('rm-tmp-dir',['golr-json-cat'], shell.task(''));
+gulp.task('rm-tmp-dir',['golr-json-cat'], shell.task('rm -rf ./conf/tmp'));
 
 // The default task (called when you run `gulp` from cli)
 gulp.task('default', ['build']);
