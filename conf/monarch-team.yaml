@@ -147,7 +147,7 @@ institutions:
   - id: charite
     name: Charité - Universitätsmedizin Berlin
     logo: /image/team-charite.png
-    website: http://charite.de/en/charite/
+    website: http://compbio.charite.de
     people:
       - name: Peter Robinson
         title: Clinical Bioinformatician
@@ -157,6 +157,7 @@ institutions:
       - name: Sebastian Köhler
         alumni: false
         title: Bioinformatician & Developer
+        picture: /image/team/kohler.jpeg
         bio: Dr. Sebastian Köhler has a B.Sc., M.Sc., and Ph.D. in bioinformatics from the Freie Universität in Berlin, Germany. He has been working mostly on developing and validating computational methods for network and ontology based research on gene-to-phenotype relations. He is one of the developers of the Human Phenotype Ontology and cross-species phenotype resources.
   - id: sanger
     name: Sanger Institute
