@@ -100,87 +100,12 @@ addGolrTable() function in webapp.js function as the 6th parameter.
 
 There are many cases where we want to use a GOlr view as a base and update the filters,
 column names, order, description, etc.  To do this, create a new yaml file with properties
-that you would like to override and then merge using the MergeYamlConf.pl script.  Or simply
-add the new yaml file to the [single-tab directory](https://github.com/monarch-initiative/monarch-app/tree/master/conf/golr-views/single-tab)
-and run the shell wrapper merge-all-config.sh
+that you would like to override and then merge into a base configuration.
 
 For example, see the [disease-phenotype.yaml](https://github.com/monarch-initiative/monarch-app/blob/master/conf/golr-views/single-tab/disease-phenotype.yaml)
 which overrides values in the [oban-config.yaml file](https://github.com/monarch-initiative/monarch-app/blob/master/conf/golr-views/oban-config.yaml)
 These are merged by running:
 
-        perl ./MergeYamlConf.pl --input ../conf/golr-views/single-tab/disease-phenotype.yaml.yaml --reference ../conf/golr-views/oban-config.yaml --output ../conf/golr-views/disease-phenotype-oban-config.yaml
-
-
-## Adding new datatypes
-
-### Note: the "Adding new datatypes" section applies to legacy pages and will be deprecated with the next release
-
-Let's say we have ingested a new resource and created a new view using
-the NIF DISCO system. We wish to expose this in the app, let's say in
-the disease page.
-
-### Extend the API
-
-We first add a new low-level API call to api.js. Clone an existing
-method (e.g. fetchOmimDiseasePhenotypeAsAssocations), and modify:
-
- * The ID of the view (e.g. nlx_12345_1)
- * The callback function used to translate the flat tuple into a nested json object
-
-Then add a call to your new method to fetchDiseaseInfo (assuming the
-new view provides disease related data), or to any of the other
-high-level API calls.
-
-### Map to RDF (optional)
-
-Currently this is not required as the application is not driven by the
-RDF, but it is good practice to ensure that the JSON model you come up
-with in the API is extensible, uses good ID practice and easily mapped
-to RDF.
-
-The mapping is achieved by editing the JSON-LD @context tag. See
-getJsonLdContext() at the end of api.js. Currently there is one
-monolithic context for all of Monarch but in future this may be
-modularized.
-
-## Create a widget
-
-Open widgets.js and create a new widget for displaying your data. This
-is typically a table but could be anything. Clone an existing function.
-
-### Register the widget
-
-In webapp.js, find the relevant path (e.g. /disease/:id) and register.
-
-Let's say you are adding "stuff" to the disease page, and the widget
-you created is called genTableOfMyStuff, and your API extension adds
-an extra associative array or list to the disease object keyed by
-'stuff':
-
-    info.myStuff = function() {return genTableOfMyStuff(info.stuff)} ;
-
-### Modify the template
-
-Assuming you are adding to the disease page, add an html div like the
-following:
-
-   <div id="stuff"
-    <table>
-     {{{myStuff}}}
-    </table>
-   </div>
-
-If you want to add a download json/rdf button, see other examples in
-the template.
-
-### Restart the server
-
-Kill the server and restart:
-
-    ./start-server.sh
-
-That's it!
-
-
-
-
+        gulp build
+        
+Note that gulp merges all tab yaml files with the oban configuration.  If using a different reference schema we will need to update the task appropriately.

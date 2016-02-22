@@ -90,7 +90,9 @@ bbop.monarch.linker = function (){
     // Categories for different special cases (internal links).
     this.generic_item = {
         'subject': true,
-        'object': true
+        'object': true,
+        'subject_gene': true,
+        'object_gene': true
     };
 };
 
@@ -123,9 +125,15 @@ bbop.monarch.linker.prototype.url = function (id, xid, modifier, category){
         // function--either data urls or searches.
         if(id && id != ''){
             if(this.generic_item[xid]){
-                if (typeof category === 'undefined'){
+                if (category == null
+                     && (xid === 'subject_gene' 
+                         || xid === 'object_gene')) {
+                    category = 'gene';
+                }
+                if (category == null){
                     throw new Error('category is missing!');
                 } else if (category != 'pathway' && !(/^_/.test(id))){
+                    console.log(xid);
                     retval = this.app_base + '/' + category + '/' + id;
                 }
             }
