@@ -206,9 +206,7 @@ function CyExploreDemoInit(){
 	    var _on_success = function(data) {
 
 		// Get the list out of the return.
-		if( data && data['list'] ){
-
-		    var ldata = data['list'];
+		if( data){
 
 		    // // Pare out duplicates. Assume existance of structure.
 		    // var pared_data = [];
@@ -227,22 +225,19 @@ function CyExploreDemoInit(){
 
 		    // Map out into the display format.
 		    //var map = jQuery.map(pared_data, _parse_data_item);
-		    var map = jQuery.map(data['list'], _parse_data_item);
+		    var map = jQuery.map(data, _parse_data_item);
 		    response(map);
 		}
 	    };
 
 	    // Define and run request on service.
 	    var query =
-		'http://kato.crbs.ucsd.edu:9000/scigraph/vocabulary/autocomplete/' +
-		request.term +
-		'.json?limit=20&searchSynonyms=true';
-	    jQuery.ajax({
-			    'url': query,
-			    'dataType': 'jsonp',
-			    'jsonp': 'callback',
-			    'success': _on_success
-			});
+            "/autocomplete/"+request.term+".json";
+        jQuery.ajax({
+                'url': query,
+                'dataType': 'json',
+                'success': _on_success
+            });
 	},
 	messages: {
             noResults: '',
@@ -308,8 +303,9 @@ function CyExploreDemoInit(){
     ll('Done ready!');
 };
 
-// jQuery gets to bootstrap everything.
-jQuery(document).ready(
-    function(){
-	CyExploreDemoInit();
-    });
+if (typeof(loaderGlobals) === 'object') {
+    loaderGlobals.CyExploreDemoInit = CyExploreDemoInit;
+}
+if (typeof(global) === 'object') {
+    global.CyExploreDemoInit = CyExploreDemoInit;
+}

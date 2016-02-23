@@ -14,14 +14,12 @@ Scenario: Documentation example phenogrid appears
    Given I go to page "/page/phenogrid"
     then the title should be "Monarch Phenotype Grid Widget"
 
-#This test disabled until either beta.monarchinitiative.org is working again, or until
-#Phenogrid's index.html demo respects the current environment.
-# @ui
-# Scenario: Loading the iframe content for Monarch Phenotype Grid Widget loads a page with the correct title
-#    Given I go to slow page "/node_modules/phenogrid/index.html" and wait for id "phenogrid_container_svg"
-#      then the title should be "Monarch Phenotype Grid Widget"
-#      and the document should contain "Phenogrid is a Javascript component that visualizes"
-#      and the document should contain "Phenotype Similarity Comparison"
-#      and the document should contain "Homo sapiens"
-#      and the document should contain "Danio rerio"
-# 
+@ui
+ Scenario: Loading the iframe content for Monarch Phenotype Grid Widget loads a page with the correct title
+    Given I go to slow page "/node_modules/phenogrid/index.html" and wait for id "phenogrid_container_svg"
+      then the title should be "Monarch Phenotype Grid Widget"
+      and the document should contain "Phenogrid is a Javascript component that visualizes"
+      and the document should contain "Phenotype Similarity Comparison"
+      and the document should contain "Homo sapiens"
+      and the document should contain "Danio rerio"
+ 

@@ -377,7 +377,7 @@ fields:
     type: string
     cardinality: multi
     property: []
-    searchable: tru
+    searchable: true
 
   - id: object_class_secondary_closure
     description: "Optional. This is similar to object_class_closure, but allows for the scenario whereby a different (more inclusive, or exclusive) closure is used. The exact OPs used will depend on the association type. This would ideally be communicating from loader conf through to the client somehow"

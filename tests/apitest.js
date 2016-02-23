@@ -121,7 +121,7 @@ if (require.main == module) {
     }
 
     setup = options.setup;
-    var conf = "conf/server_config_dev.json";
+    var conf = "conf/server_config_beta.json";
     var golrConf = "conf/golr-conf.json";
 
     if (setup != null) {

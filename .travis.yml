@@ -33,7 +33,7 @@ before_script:
   - "export DISPLAY=:99.0"
   - "# npm run start &"
   - "# install.sh does this instead... 'npm run build'"
-  - "NODE_PATH=./lib/monarch USE_BUNDLE=1 USE_LOG_FETCH=1 node ./lib/monarch/web/webapp_launcher.js &"
+  - "NODE_PATH=./lib/monarch USE_BUNDLE=1 USE_LOG_FETCH=1 node ./lib/monarch/web/webapp_launcher.js beta &"
   - "sleep 20"
 
 after_success:
@@ -47,7 +47,7 @@ after_failure:
 # command to run tests
 script:
   - "ps auwx|grep webapp_launcher.js"
-  - "make test"
+  - "unset NODE_PATH && USE_LOG_FETCH=1 make test"
   - "cd tests/behave"
   - "TARGET=http://localhost:8080 behave"
 
