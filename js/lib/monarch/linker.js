@@ -133,7 +133,6 @@ bbop.monarch.linker.prototype.url = function (id, xid, modifier, category){
                 if (category == null){
                     throw new Error('category is missing!');
                 } else if (category != 'pathway' && !(/^_/.test(id))){
-                    console.log(xid);
                     retval = this.app_base + '/' + category + '/' + id;
                 }
             }

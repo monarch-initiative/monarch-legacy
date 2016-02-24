@@ -30,6 +30,7 @@ function getTableFromSolr(id, golr_field, div, filter, personality, tab_anchor){
     }
 
     function getTable(id, golr_field, div, filter, personality) {
+        fetchPubmedSummary('25081398')
         // console.log('getTable(', id, golr_field, div, filter, personality);
         if (golr_field == null) {
             golr_field = 'object_closure';

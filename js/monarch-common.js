@@ -325,6 +325,56 @@ function add_species_to_autocomplete(data, map, gene_ids) {
     return map;
 }
 
+// Fetch abstract from eutils efetch
+function fetchPubmedAbstract(id) {
+    var base_url = 'http://eutils.ncbi.nlm.nih.gov/entrez/eutils/efetch.fcgi?';
+    var opts = {
+            'db' : 'pubmed',
+            'retmode' : 'xml',
+            'rettype' : 'abstract',
+            'id' : id
+    };
+    
+    jQuery.ajax({
+        url: base_url,
+        dataType: "xml",
+        data: opts,
+        error: function (){
+            console.log('error fetching abstract');
+        },
+        success: function ( data ){
+            var abstractElt = jQuery(data).find('AbstractText');
+            var abstractText = abstractText.text();
+        }
+    });
+    return abstractText;
+}
+
+//Fetch abstract from eutils esummary
+function fetchPubmedSummary(ids) {
+    var base_url = 'http://eutils.ncbi.nlm.nih.gov/entrez/eutils/esummary.fcgi?';
+    var opts = {
+            'db' : 'pubmed',
+            'retmode' : 'json',
+            'id' : ids
+    };
+    var summary;
+    
+    jQuery.ajax({
+        type: "POST",
+        url: base_url,
+        dataType: "json",
+        data: opts,
+        error: function (){
+            console.log('error fetching esummary');
+        },
+        success: function ( data ){
+            summary = data;
+        }
+    });
+    return summary;
+}
+
 
 function makeSpinnerDiv(args){
  // Details for spinner
@@ -359,10 +409,14 @@ if (typeof exports === 'object') {
     exports.remove_equivalent_ids = remove_equivalent_ids;
     exports.makeSpinnerDiv = makeSpinnerDiv;
     exports.add_species_to_autocomplete = add_species_to_autocomplete;
+    exports.fetchPubmedAbstract = fetchPubmedAbstract;
+    exports.fetchPubmedSummary = fetchPubmedSummary;
 }
 if (typeof(loaderGlobals) === 'object') {
     loaderGlobals.initMonarchPage = initMonarchPage;
     loaderGlobals.remove_equivalent_ids = remove_equivalent_ids;
     loaderGlobals.makeSpinnerDiv = makeSpinnerDiv;
     loaderGlobals.add_species_to_autocomplete = add_species_to_autocomplete;
+    loaderGlobals.fetchPubmedAbstract = fetchPubmedAbstract;
+    loaderGlobals.fetchPubmedSummary = fetchPubmedSummary;
 }
