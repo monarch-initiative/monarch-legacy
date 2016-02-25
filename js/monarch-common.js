@@ -1,5 +1,7 @@
 /* This script document contains functions relating to general Monarch pages. */
 
+var eSummary = require('./esummary.js');
+
 function initMonarchPage(){
     bbop.monarch.remove_equivalent_ids = remove_equivalent_ids;
     bbop.monarch.filter_equivalents = filter_equivalents;
@@ -342,7 +344,7 @@ function fetchPubmedAbstract(id) {
         error: function (){
             console.log('error fetching abstract');
         },
-        success: function ( data ){
+        success: function (data){
             var abstractElt = jQuery(data).find('AbstractText');
             var abstractText = abstractText.text();
         }
@@ -359,7 +361,6 @@ function fetchPubmedSummary(ids) {
             'id' : ids
     };
     var summary;
-    
     jQuery.ajax({
         type: "POST",
         url: base_url,
@@ -368,8 +369,8 @@ function fetchPubmedSummary(ids) {
         error: function (){
             console.log('error fetching esummary');
         },
-        success: function ( data ){
-            summary = data;
+        success: function (data){
+            summary = new eSummary.eSummaryResponse(data, ids);
         }
     });
     return summary;
