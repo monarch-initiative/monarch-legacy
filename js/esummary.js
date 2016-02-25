@@ -34,6 +34,16 @@ function eSummaryResponse(data) {
     } else {
         throw new Error('unable to deal with incoming: ' + typeof(data));
     }
+    
+    if (response.hasOwnProperty('result') 
+            && response['result'].hasOwnProperty('uids')){
+        this.idList = response.result.uids;
+    }
+    this._authorTable = this._makeAuthorTable;
+    this._journalMap = this._makeJournalMap;
+    this._titleMap = this._makeTitleMap;
+    this._dateMap = this._makeDateMap;
+    
 };
 
 /**
@@ -41,8 +51,53 @@ function eSummaryResponse(data) {
  * 
  * @returns {object} raw
  */
-eSummaryResponse.prototype.raw = function(){
+eSummaryResponse.prototype.raw = function() {
     return this._raw;
+};
+
+/**
+ * Returns a pointer to uid list
+ * 
+ * @returns {array} idList
+ */
+eSummaryResponse.prototype.getIDList = function() {
+    return this.idList;
+};
+
+/**
+ * Returns a pointer to author table
+ * 
+ * @returns {object} authorTable
+ */
+eSummaryResponse.prototype.getAuthorTable = function() {
+    return this._authorTable;
+};
+
+/**
+ * Returns a pointer to journal map
+ * 
+ * @returns {object} JournalMap
+ */
+eSummaryResponse.prototype.getJournalMap = function() {
+    return this._journalMap;
+};
+
+/**
+ * Returns a pointer to title map
+ * 
+ * @returns {array} titleMap
+ */
+eSummaryResponse.prototype.getTitleMap = function() {
+    return this._titleMap
+};
+
+/**
+ * Returns a pointer to title map
+ * 
+ * @returns {array} dateMap
+ */
+eSummaryResponse.prototype.getDateMap = function() {
+    return this._dateMap;
 };
 
 
@@ -61,29 +116,20 @@ eSummaryResponse.prototype.raw = function(){
  *      ]
  *  }
  *  
- * @returns {array} authorList
+ * @returns {object} authors
  */
-eSummaryResponse.prototype._getAuthors = function() {
+eSummaryResponse.prototype._makeAuthorTable = function() {
     var self = this;
     var authors = {};
     
-    /*if (self.idList.length === 0) {
-        throw new Error('fetching author list requires ids');
-    }*/
-    
     var response = self.raw();
-    console.log(response);
-    var idList = [];
     
-    if (response.hasOwnProperty('result') 
-            && response['result'].hasOwnProperty('uids')){
-        idList = response.result.uids;
-    }
+    var idList = self.getIDList();
     
     idList.forEach( function(id) {
         if (response.hasOwnProperty('result') 
                 && response['result'].hasOwnProperty(id)) {
-            authors[id] = response['result'][id];
+            authors[id] = response['result'][id]['authors'];
         }
     });
     
@@ -91,14 +137,93 @@ eSummaryResponse.prototype._getAuthors = function() {
 };
 
 /**
+ * Getter for journal object
+ * 
+ * Returns journal object, for example:
+ * 
+ *  { '1234' : 'Science (New York, N.Y.)'" }
+ *  
+ * @returns {object} journals
+ */
+eSummaryResponse.prototype._makeJournalMap = function() {
+    var self = this;
+    var journals = {};
+    
+    var response = self.raw();
+    var idList = self.getIDList();
+    
+    idList.forEach( function(id) {
+        if (response.hasOwnProperty('result') 
+                && response['result'].hasOwnProperty(id)) {
+            journals[id] = journals['result'][id]['fulljournalname'];
+        }
+    });
+    
+    return journals;
+};
+
+/**
+ * Getter for title object
+ * 
+ * Returns title object, for example:
+ * 
+ *  { '1234' : 'The genome of the...'" }
+ *  
+ * @returns {object} titles
+ */
+eSummaryResponse.prototype._makeTitleMap = function() {
+    var self = this;
+    var titles = {};
+    
+    var response = self.raw();
+    var idList = self.getIDList();
+    
+    idList.forEach( function(id) {
+        if (response.hasOwnProperty('result') 
+                && response['result'].hasOwnProperty(id)) {
+            titles[id] = journals['result'][id]['title'];
+        }
+    });
+    
+    return titles;
+};
+
+/**
+ * Getter for title object
+ * 
+ * Returns title object, for example:
+ * 
+ *  { '1234' : '2014 Jul-Aug'" }
+ *  
+ * @returns {object} titles
+ */
+eSummaryResponse.prototype._makeDateMap = function() {
+    var self = this;
+    var dates = {};
+    
+    var response = self.raw();
+    var idList = self.getIDList();
+    
+    idList.forEach( function(id) {
+        if (response.hasOwnProperty('result') 
+                && response['result'].hasOwnProperty(id)) {
+            dates[id] = journals['result'][id]['pubdate'];
+        }
+    });
+    
+    return dates;
+};
+
+/**
  * Getter for journal title
  * 
- *  
+ * 
  * @returns {string} journal
  */
-eSummaryResponse.prototype.getJournal = function() {
+eSummaryResponse.prototype.getJournal = function(id) {
     var self = this;
     var journal = '';
+    var journaMap = self.getJournalMap();
     
     return journal;
 };
@@ -108,20 +233,23 @@ eSummaryResponse.prototype.getJournal = function() {
  * 
  * @returns {string} title
  */
-eSummaryResponse.prototype.getTitle = function() {
+eSummaryResponse.prototype.getTitle = function(id) {
     var self = this;
     var title = '';
+    var titleMap = self.getTitleMap();
     return title;
 };
 
 /**
- * Getter for pub year
+ * Getter for pub date
  * 
- * @returns {string} year
+ * @returns {string} date
  */
-eSummaryResponse.prototype.getYear = function() {
+eSummaryResponse.prototype.getDate = function(id) {
     var self = this;
-    var year = '';
+    var date = '';
+    var dataMap = self.getDateMap();
+    //response.hasOwnProperty('result') 
     
     return year;
 };
@@ -136,6 +264,7 @@ eSummaryResponse.prototype.getYear = function() {
 eSummaryResponse.prototype.getAuthorList = function(id) {
     var self = this;
     var authorList = [];
+    var authorTable = self.getAuthorTable();
     
     return authorList;
 };
