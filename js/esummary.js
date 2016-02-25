@@ -18,7 +18,7 @@
  * @param {array} idList- the list of ids used to make the request
  * @returns {this} new eSummaryResponse
  */
-function eSummaryResponse(data, idList) {
+function eSummaryResponse(data) {
     
     this._isA = 'eSummaryResponse';
     
@@ -33,16 +33,6 @@ function eSummaryResponse(data, idList) {
         this._raw = data;
     } else {
         throw new Error('unable to deal with incoming: ' + typeof(data));
-    }
-    
-    if (typeof idList !== 'undefined') {
-        if (typeof idList === 'string') {
-            this.idList = [idList];
-        } else {
-            this.idList = idList;
-        }
-    } else {
-        this.idList = [];
     }
 };
 
@@ -77,11 +67,25 @@ eSummaryResponse.prototype._getAuthors = function() {
     var self = this;
     var authors = {};
     
-    if (self.idList.length === 0) {
+    /*if (self.idList.length === 0) {
         throw new Error('fetching author list requires ids');
+    }*/
+    
+    var response = self.raw();
+    console.log(response);
+    var idList = [];
+    
+    if (response.hasOwnProperty('result') 
+            && response['result'].hasOwnProperty('uids')){
+        idList = response.result.uids;
     }
     
-    
+    idList.forEach( function(id) {
+        if (response.hasOwnProperty('result') 
+                && response['result'].hasOwnProperty(id)) {
+            authors[id] = response['result'][id];
+        }
+    });
     
     return authors;
 };

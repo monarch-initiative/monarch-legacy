@@ -360,7 +360,7 @@ function fetchPubmedSummary(ids) {
             'retmode' : 'json',
             'id' : ids
     };
-    var summary;
+    
     jQuery.ajax({
         type: "POST",
         url: base_url,
@@ -370,10 +370,13 @@ function fetchPubmedSummary(ids) {
             console.log('error fetching esummary');
         },
         success: function (data){
-            summary = new eSummary.eSummaryResponse(data, ids);
+            var summary = new eSummary.eSummaryResponse(data);
+            summary._getAuthors();
+            return summary;
         }
     });
-    return summary;
+    
+    
 }
 
 
