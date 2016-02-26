@@ -45,6 +45,7 @@ import './jquery.xml2json.js';
 import './HomePage.js';
 import '../css/bbop.css';
 import './golr-table.js';
+import './overview.js';
 import './stupidtable.min.js';
 window.InitTables = require("exports?InitTables!./tables.js");
 

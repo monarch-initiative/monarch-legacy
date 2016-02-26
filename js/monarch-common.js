@@ -1,6 +1,6 @@
 /* This script document contains functions relating to general Monarch pages. */
 
-var eSummary = require('./esummary.js');
+var eSummary = require('../lib/monarch/esummary.js');
 
 function initMonarchPage(){
     bbop.monarch.remove_equivalent_ids = remove_equivalent_ids;
@@ -328,7 +328,7 @@ function add_species_to_autocomplete(data, map, gene_ids) {
 }
 
 // Fetch abstract from eutils efetch
-function fetchPubmedAbstract(id) {
+function fetchPubmedAbstract(id, callback) {
     var base_url = 'http://eutils.ncbi.nlm.nih.gov/entrez/eutils/efetch.fcgi?';
     var opts = {
             'db' : 'pubmed',
@@ -345,15 +345,14 @@ function fetchPubmedAbstract(id) {
             console.log('error fetching abstract');
         },
         success: function (data){
-            var abstractElt = jQuery(data).find('AbstractText');
-            var abstractText = abstractText.text();
+            callback(data);
         }
     });
     return abstractText;
 }
 
 //Fetch abstract from eutils esummary
-function fetchPubmedSummary(ids) {
+function fetchPubmedSummary(ids, callback) {
     var base_url = 'http://eutils.ncbi.nlm.nih.gov/entrez/eutils/esummary.fcgi?';
     var opts = {
             'db' : 'pubmed',
@@ -370,13 +369,23 @@ function fetchPubmedSummary(ids) {
             console.log('error fetching esummary');
         },
         success: function (data){
-            var summary = new eSummary.eSummaryResponse(data);
-            summary._getAuthors();
-            return summary;
+            callback(data);
         }
     });
-    
-    
+}
+
+/**
+ * Make hide/show button with label "et al" for author lists
+ * @param {array} authorList
+ * @returns {string} authorSpan - html as string
+ */
+function makeAuthorSpan(authorList) {
+    var authorSpan = authorList.slice(0, 5).join(", ");
+        if (authorList.length > 5) {
+            authorSpan += ", <span class=\"littabmoreauthors\"><span class=\"etal\">et al</span><span class=\"moreauthors\">"
+            authorSpan += authorList.slice(5).join(", ") + ", " + "</span><span class=\"hideauthors\">hide</span></span>";
+        }
+    return authorSpan;
 }
 
 
@@ -415,6 +424,7 @@ if (typeof exports === 'object') {
     exports.add_species_to_autocomplete = add_species_to_autocomplete;
     exports.fetchPubmedAbstract = fetchPubmedAbstract;
     exports.fetchPubmedSummary = fetchPubmedSummary;
+    exports.makeAuthorSpan = makeAuthorSpan;
 }
 if (typeof(loaderGlobals) === 'object') {
     loaderGlobals.initMonarchPage = initMonarchPage;
@@ -423,4 +433,5 @@ if (typeof(loaderGlobals) === 'object') {
     loaderGlobals.add_species_to_autocomplete = add_species_to_autocomplete;
     loaderGlobals.fetchPubmedAbstract = fetchPubmedAbstract;
     loaderGlobals.fetchPubmedSummary = fetchPubmedSummary;
+    loaderGlobals.makeAuthorSpan = makeAuthorSpan;
 }
