@@ -47,62 +47,7 @@ function eSummaryResponse(data) {
 };
 
 /**
- * Returns a pointer to the initial response object
- * 
- * @returns {object} raw
- */
-eSummaryResponse.prototype.raw = function() {
-    return this._raw;
-};
-
-/**
- * Returns a pointer to uid list
- * 
- * @returns {array} idList
- */
-eSummaryResponse.prototype.getIDList = function() {
-    return this.idList;
-};
-
-/**
- * Returns a pointer to author table
- * 
- * @returns {object} authorTable
- */
-eSummaryResponse.prototype.getAuthorTable = function() {
-    return this._authorTable;
-};
-
-/**
- * Returns a pointer to journal map
- * 
- * @returns {object} JournalMap
- */
-eSummaryResponse.prototype.getJournalMap = function() {
-    return this._journalMap;
-};
-
-/**
- * Returns a pointer to title map
- * 
- * @returns {array} titleMap
- */
-eSummaryResponse.prototype.getTitleMap = function() {
-    return this._titleMap
-};
-
-/**
- * Returns a pointer to title map
- * 
- * @returns {array} dateMap
- */
-eSummaryResponse.prototype.getDateMap = function() {
-    return this._dateMap;
-};
-
-
-/**
- * Getter for author list object
+ * makes author list object
  * 
  * Returns object of author objects, for example:
  * 
@@ -122,14 +67,10 @@ eSummaryResponse.prototype._makeAuthorTable = function() {
     var self = this;
     var authors = {};
     
-    var response = self.raw();
-    
-    var idList = self.getIDList();
-    
-    idList.forEach( function(id) {
-        if (response.hasOwnProperty('result') 
-                && response['result'].hasOwnProperty(id)) {
-            authors[id] = response['result'][id]['authors'];
+    self.idList.forEach( function(id) {
+        if (self._raw;.hasOwnProperty('result') 
+                && self._raw;['result'].hasOwnProperty(id)) {
+            authors[id] = self._raw;['result'][id]['authors'];
         }
     });
     
@@ -137,7 +78,7 @@ eSummaryResponse.prototype._makeAuthorTable = function() {
 };
 
 /**
- * Getter for journal object
+ * makes journal object
  * 
  * Returns journal object, for example:
  * 
@@ -149,12 +90,9 @@ eSummaryResponse.prototype._makeJournalMap = function() {
     var self = this;
     var journals = {};
     
-    var response = self.raw();
-    var idList = self.getIDList();
-    
-    idList.forEach( function(id) {
-        if (response.hasOwnProperty('result') 
-                && response['result'].hasOwnProperty(id)) {
+    self.idList.forEach( function(id) {
+        if (self._raw;.hasOwnProperty('result') 
+                && self._raw;['result'].hasOwnProperty(id)) {
             journals[id] = journals['result'][id]['fulljournalname'];
         }
     });
@@ -163,7 +101,7 @@ eSummaryResponse.prototype._makeJournalMap = function() {
 };
 
 /**
- * Getter for title object
+ * makes title object
  * 
  * Returns title object, for example:
  * 
@@ -175,12 +113,9 @@ eSummaryResponse.prototype._makeTitleMap = function() {
     var self = this;
     var titles = {};
     
-    var response = self.raw();
-    var idList = self.getIDList();
-    
-    idList.forEach( function(id) {
-        if (response.hasOwnProperty('result') 
-                && response['result'].hasOwnProperty(id)) {
+    self.idList.forEach( function(id) {
+        if (self._raw;.hasOwnProperty('result') 
+                && self._raw;['result'].hasOwnProperty(id)) {
             titles[id] = journals['result'][id]['title'];
         }
     });
@@ -189,24 +124,21 @@ eSummaryResponse.prototype._makeTitleMap = function() {
 };
 
 /**
- * Getter for title object
+ * makes data object
  * 
- * Returns title object, for example:
+ * Returns date object, for example:
  * 
  *  { '1234' : '2014 Jul-Aug'" }
  *  
- * @returns {object} titles
+ * @returns {object} dates
  */
 eSummaryResponse.prototype._makeDateMap = function() {
     var self = this;
     var dates = {};
     
-    var response = self.raw();
-    var idList = self.getIDList();
-    
-    idList.forEach( function(id) {
-        if (response.hasOwnProperty('result') 
-                && response['result'].hasOwnProperty(id)) {
+    self.idList.forEach( function(id) {
+        if (self._raw;.hasOwnProperty('result') 
+                && self._raw;['result'].hasOwnProperty(id)) {
             dates[id] = journals['result'][id]['pubdate'];
         }
     });
@@ -223,8 +155,9 @@ eSummaryResponse.prototype._makeDateMap = function() {
 eSummaryResponse.prototype.getJournal = function(id) {
     var self = this;
     var journal = '';
-    var journaMap = self.getJournalMap();
-    
+    if (self._journalMap.hasOwnProperty(id) {
+        journal = self._journalMap(id);
+    }
     return journal;
 };
 
@@ -236,7 +169,9 @@ eSummaryResponse.prototype.getJournal = function(id) {
 eSummaryResponse.prototype.getTitle = function(id) {
     var self = this;
     var title = '';
-    var titleMap = self.getTitleMap();
+    if (self._titleMap.hasOwnProperty(id) {
+        title = self._titleMap(id);
+    }
     return title;
 };
 
@@ -248,10 +183,10 @@ eSummaryResponse.prototype.getTitle = function(id) {
 eSummaryResponse.prototype.getDate = function(id) {
     var self = this;
     var date = '';
-    var dataMap = self.getDateMap();
-    //response.hasOwnProperty('result') 
-    
-    return year;
+    if (self._dateMap.hasOwnProperty(id) {
+        journal = self._dateMap(id);
+    }
+    return date;
 };
 
 /**
@@ -264,7 +199,7 @@ eSummaryResponse.prototype.getDate = function(id) {
 eSummaryResponse.prototype.getAuthorList = function(id) {
     var self = this;
     var authorList = [];
-    var authorTable = self.getAuthorTable();
+    //var authorTable = self.getAuthorTable();
     
     return authorList;
 };
