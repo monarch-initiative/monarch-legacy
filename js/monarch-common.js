@@ -328,7 +328,7 @@ function add_species_to_autocomplete(data, map, gene_ids) {
 }
 
 // Fetch abstract from eutils efetch
-function fetchPubmedAbstract(id, callback) {
+function fetchPubmedAbstract(id, successCallback, errorCallback) {
     var base_url = 'http://eutils.ncbi.nlm.nih.gov/entrez/eutils/efetch.fcgi?';
     var opts = {
             'db' : 'pubmed',
@@ -343,16 +343,17 @@ function fetchPubmedAbstract(id, callback) {
         data: opts,
         error: function (){
             console.log('error fetching abstract');
+            errorCallback();
         },
         success: function (data){
-            callback(data);
+            //callback(data);
+            successCallback(data);
         }
     });
-    return abstractText;
 }
 
 //Fetch abstract from eutils esummary
-function fetchPubmedSummary(ids, callback) {
+function fetchPubmedSummary(ids, succesCallback, errorCallback) {
     var base_url = 'http://eutils.ncbi.nlm.nih.gov/entrez/eutils/esummary.fcgi?';
     var opts = {
             'db' : 'pubmed',

@@ -6,7 +6,7 @@
  * 
  * @module overview
  */
-
+var monarchCommon = require('./monarch-common.js');
 
 function launchBrowser(id, root, reference_id, reference_label) {
 
@@ -76,12 +76,49 @@ function getOntologyBrowser(id, label, root){
     });
 }
 
+function fetchLiteratureOverview(id) {
+    console.log('fetching lit');
+    var spinner = makeSpinnerDiv();
+    jQuery('#overview').append(spinner.to_string());
+    
+    var successCallback = function (data) {
+        jQuery('#'+spinner.get_id()).remove();
+        var xml = jQuery(data);
+        
+        //Get abstract text and add to DOM
+        var abstractText = xml.find( "AbstractText" );
+        var abstractElt = '<p><span style=\"font-weight:bold\">Abstract</span>: '
+            + abstractText.text() + '</p>';
+        jQuery("#overview").append(abstractElt);
+        
+        //get MESH term description
+        var meshHeadings = xml.find("MeshHeading");
+        //console.log(meshHeadings);
+        var meshTerms = [];
+        meshHeadings.each( function (i, heading) {
+            var headXML = jQuery(heading);
+            meshTerms.push(headXML.children("DescriptorName").text());
+        });
+        var meshTermsAsString = meshTerms.join(', ');
+        var meshElt = '</br><p><span style=\"font-weight:bold\">Mesh Terms</span>: '
+            + meshTermsAsString + '</p>';
+        jQuery("#overview").append(meshElt);
+    };
+    var errorCallback = function (data) {
+        jQuery('#'+spinner.get_id()).remove();
+    };
+    
+    monarchCommon.fetchPubmedAbstract(id, successCallback, errorCallback);
+    
+}
 
 if (typeof(loaderGlobals) === 'object') {
     loaderGlobals.getOntologyBrowser = getOntologyBrowser;
     loaderGlobals.launchBrowser = launchBrowser;
+    loaderGlobals.fetchLiteratureOverview = fetchLiteratureOverview;
 }
 if (typeof(global) === 'object') {
     global.getOntologyBrowser = getOntologyBrowser;
     global.launchBrowser = launchBrowser;
+    global.fetchLiteratureOverview = fetchLiteratureOverview;
 }

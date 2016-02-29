@@ -1,9 +1,10 @@
 {{{includes.navbar}}}
 
 <div class="wrapperforfooter">
-    <div class="container-fluid monarch-container">
-        <div class="content">
-            <div class="jumbotron monarch-literature-light">
+  <div class="container-fluid monarch-container">
+
+    <div class="content">
+           <div class="jumbotron">
                 <div id="description">
                     {{#alerts}}
                     <div class="alert alert-warning alert-block top-alert">
@@ -11,64 +12,35 @@
                     </div>
                     {{/alerts}}
                     <img id="monarch-logo" class="downloadline" src="/image/logo.png"/>
-                    <h1 class="downloadline">Literature: {{label}}</h1>
-                    <a class="downloadline btn btn-large btn-default btn-monarch-main monarch-feedback-dark"
-                            href="mailto:info@monarchinitiative.org">Your feedback welcome!</a>
+                    <h1 class="downloadline">{{journalTitle}}</h1>
                     <p>
-                        <b>Authors</b>: {{{authorList}}}</br>
+                        <b>Authors</b>: {{{authorSpan}}}</br>
                         <b>Journal</b>: {{journal}} ({{year}})
                     </p>
                 </div>
                 <div id="categories">
-                    <div class="tabcontainer">
-                        <a href="#overview"><div id="initialtab" class="tab contenttab">Overview</div></a>
-                    </div>
-                    <div class="tabcontainer">
-                        <div class="tabhover">View genes mentioned in this publication</div>
-                        {{#hasGenes}}
-                            <a href="#genes"><div class="tab contenttab">Genes ({{genesNum}})</div></a>
-                        {{/hasGenes}}
-                        {{^hasGenes}}
-                            <div class="tab greyed-out">Genes (0)</div>
-                        {{/hasGenes}}
-                    </div>
-                    <div class="tabcontainer">
-                        <div class="tabhover">View similar papers related to this publication</div>
-                        {{#hasSimilar}}
-                            <a href="#similarpapers"><div class="tab contenttab">Similar Papers ({{similarNum}})</div></a>
-                        {{/hasSimilar}}
-                        {{^hasSimilar}}
-                            <div class="tab greyed-out">Similar Papers (0)</div>
-                        {{/hasSimilar}}
-                    </div>
+                    <a href="#overview">
+                    <div id="initialtab" class="tab contenttab">Overview</div>
+                    </a>
+                    {{{includes.disease_anchor}}}
+                    {{{includes.phenotype_anchor}}}
+                    {{{includes.gene_anchor}}}
+                    {{{includes.genotype_anchor}}}
+                    {{{includes.model_anchor}}}
+                    {{{includes.variant_anchor}}}
                 </div>
             </div>
             <div id="complete-info">
-                <div id="overview" class="first category">
-                    <p>
-                        <b>Mesh Terms</b>: {{{meshTerms}}}</br>
-                        {{#hasAbstract}}
-                        <b>Abstract</b>: {{abstract}}
-                        {{/hasAbstract}}
-                    </p>
+               <div id="overview" class="first category">
                 </div>
-                {{#hasGenes}}
-                <div id="genes" class="category">
-                    <table class="{{css.table}}">
-                        {{{genesTable}}}
-                    </table>
-                </div>
-                {{/hasGenes}}
-                {{#hasSimilar}}
-                <div id="similarpapers" class="category">
-                    <table class="{{css.table}}">
-                        {{{similarPapersTable}}}
-                    </table>
-                </div>
-                {{/hasSimilar}}
+                {{{includes.disease_table}}}
+                {{{includes.phenotype_table}}}
+                {{{includes.gene_table}}}
+                {{{includes.genotype_table}}}
+                {{{includes.model_table}}}
+                {{{includes.variant_table}}}
             </div>
         </div>
     </div>
-
 </div> <!-- closes wrapperforfooter -->
 {{{includes.footer}}}

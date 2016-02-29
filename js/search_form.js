@@ -83,7 +83,6 @@ function navbar_search_init(in_search_id, in_form_id){
 		    };
 		};
 		var _on_success = function(data) {
-			console.log('success:', data);
 		    // Pare out duplicates. Assume existence of 'id'
 		    // field. Would really be nice to have bbop.core in
 		    // here...

@@ -4,10 +4,10 @@ document_category: generic_association
 weight: 20
 
 ## Results table, horizontal
-result_weights: subject^7.0 subject_label^6.5 is_defined_by^3.0
+result_weights: object^6.5 is_defined_by^3.0
 
 ## Ordering of facets, vertical
-filter_weights: relation_closure_label^6.5 evidence_closure_label^6.0 subject_closure_label^4.5 object_closure_label^4.0 subject_taxon_closure_label^3.5 object_taxon_closure_label^3.0
+filter_weights: object_taxon_closure_label^3.0
 
 ## SOLR FIELD DEFINITIONS
 
