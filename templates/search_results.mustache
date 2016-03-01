@@ -10,12 +10,16 @@
                 </div>
             </div>
             <div id="complete-info">
+                {{#hasResults}}
                 <h3>Exact Match</h3>
                 {{{description}}}
                 <table>
                     {{{resultsTable}}}
                 </table>
-
+                {{/hasResults}}
+                {{^hasResults}}
+                    {{{suggestSpan}}}
+                {{/hasResults}}
             </div>
         </div>
       </div>
