@@ -30,9 +30,14 @@ institutions:
         bio: Julie specializes in ontology-aware tools that facilitate synthesis research. She holds a BA in Biology (Rhode Island College), with post-bac training in Computer Science (Harvard Extension School), as well as Immunology & Virology (Brown University). She holds a MSc in Public Health from the University of London.
       - name: Kent Shefchek
         picture: /image/team/KentShefchek.jpg
-        title: Bioinfomatics Software Engineer
+        title: Bioinformatics Software Engineer
         alumni: false
         bio: Kent is a Software Engineer for the OHSU ontology development group where he develops the Monarch API, front end visualizations, and the data ingest pipeline. Kent has a BS in Biology from the University of Maryland, College Park and a MS in Biotechnology with a specialization in Bioinformatics from the University of Maryland, University College.
+      - name: Dan Keith
+        picture: /image/team/DanKeith.jpg
+        title: Research Software Engineer
+        alumni: false
+        bio: Dan is a Software Engineer for the Monarch Initiative, within the OHSU Ontology Development Group. He works on the Monarch Initiative Portal and WebPhenote web applications, as well as helping with tooling and infrastructure. Dan has a BS in Computer Science from Northwestern University and a MS and PhD in Computer Science from University of Oregon, specializing in programming language metatheory, scientific workflow, and program analysis.
       - name: Shahim Essaid
         picture: /image/team/ShahimEssaid.jpg
         title: Ontologist
@@ -157,7 +162,7 @@ institutions:
       - name: Sebastian Köhler
         alumni: false
         title: Bioinformatician & Developer
-        picture: /image/team/kohler.jpeg
+        picture: /image/team/SebastianKohler.jpg
         bio: Dr. Sebastian Köhler has a B.Sc., M.Sc., and Ph.D. in bioinformatics from the Freie Universität in Berlin, Germany. He has been working mostly on developing and validating computational methods for network and ontology based research on gene-to-phenotype relations. He is one of the developers of the Human Phenotype Ontology and cross-species phenotype resources.
   - id: sanger
     name: Sanger Institute
