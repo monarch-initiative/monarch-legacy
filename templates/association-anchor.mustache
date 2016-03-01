@@ -1,0 +1,9 @@
+<div class="tabcontainer"> 
+  <div class="tabhover">Associations with {{{id}}} as a source</div>
+  {{#resultNum}}
+  <a href="#{{{href}}}"><div class="tab contenttab">{{{type}}} ({{resultNum}})</div></a>
+  {{/resultNum}}
+  {{^resultNum}}
+  <div class="tab greyed-out">{{{type}}} (0)</div>
+  {{/resultNum}}
+</div>

@@ -64,7 +64,11 @@ function getTableFromSolr(id, golr_field, div, filter, personality, tab_anchor){
         if (filter != null && filter instanceof Array && filter.length > 0){
             filter.forEach( function (val) {
                 if (val != null && val.field && val.value){
-                    golr_manager.add_query_filter(val.field, val.value, ['*']);
+                    if (val.hasOwnProperty("plist")) {
+                        golr_manager.add_query_filter(val.field, val.value, val.plist);
+                    } else {
+                        golr_manager.add_query_filter(val.field, val.value, ['*']);
+                    }
                 }
             });
         }
