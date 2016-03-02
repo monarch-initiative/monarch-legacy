@@ -6,7 +6,8 @@
  * 
  * @module overview
  */
-var monarchCommon = require('./monarch-common.js');
+var Q = require('q');
+var MonarchCommon = require('./monarch-common.js');
 
 function launchBrowser(id, root, reference_id, reference_label) {
 
@@ -81,7 +82,7 @@ function fetchLiteratureOverview(id) {
     var spinner = makeSpinnerDiv();
     jQuery('#overview').append(spinner.to_string());
     
-    var successCallback = function (data) {
+    var parseEFetch = function (data) {
         jQuery('#'+spinner.get_id()).remove();
         var xml = jQuery(data);
         
@@ -104,11 +105,12 @@ function fetchLiteratureOverview(id) {
             + meshTermsAsString + '</p>';
         jQuery("#overview").append(meshElt);
     };
-    var errorCallback = function (data) {
+    var onError = function (data) {
         jQuery('#'+spinner.get_id()).remove();
+        console.log("Error fetching from ncbi EFetch Service");
     };
     
-    monarchCommon.fetchPubmedAbstract(id, successCallback, errorCallback);
+    Q(MonarchCommon.fetchPubmedAbstract(id)).then(parseEFetch, onError);
     
 }
 

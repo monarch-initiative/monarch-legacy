@@ -337,19 +337,12 @@ function fetchPubmedAbstract(id, successCallback, errorCallback) {
             'id' : id
     };
     
-    jQuery.ajax({
+    var ajax = jQuery.ajax({
         url: base_url,
         dataType: "xml",
-        data: opts,
-        error: function (){
-            console.log('error fetching abstract');
-            errorCallback();
-        },
-        success: function (data){
-            //callback(data);
-            successCallback(data);
-        }
+        data: opts
     });
+    return ajax;
 }
 
 //Fetch abstract from eutils esummary
@@ -361,18 +354,13 @@ function fetchPubmedSummary(ids, succesCallback, errorCallback) {
             'id' : ids
     };
     
-    jQuery.ajax({
+    var ajax = jQuery.ajax({
         type: "POST",
         url: base_url,
         dataType: "json",
-        data: opts,
-        error: function (){
-            console.log('error fetching esummary');
-        },
-        success: function (data){
-            callback(data);
-        }
+        data: opts
     });
+    return ajax;
 }
 
 /**
