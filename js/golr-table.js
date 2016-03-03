@@ -1,5 +1,10 @@
 // Module to launch solr driven tables
-var Q = require('q');
+//var Q = require('q');
+var golr_conf = require('golr-conf');
+var golr_response = require('bbop-response-golr');
+var golr_manager = require('bbop-manager-golr');
+var jquery_engine = require('bbop-rest-manager').jquery;
+var jQuery = require('jquery');
 
 /*
  * Arguments: - id: An identifier. One of: IRI string, OBO-style ID
@@ -48,28 +53,30 @@ function getTableFromSolr(id, golr_field, div, filter, personality, tab_anchor){
 
         // Conf.
         // Global golr and solr urls passed in from webapp.js addGolrStaticFiles
-        var gconf = new bbop.golr.conf(global_golr_conf);
+        var gconf = new golr_conf.conf(global_golr_conf);
+        var engine = new jquery_engine(golr_response);
+        engine.JQ = jQuery;
         var srv = global_solr_url;
         var handler = new bbop.monarch.handler();
         var linker = new bbop.monarch.linker();
         var confc = gconf.get_class(personality);
 
         // Other widget tests; start with manager.
-        var golr_manager = new bbop.golr.manager.jquery(srv, gconf);
+        var molr_manager = new golr_manager(srv, gconf, engine, 'async');
 
-        golr_manager.set_personality(personality);
-        //golr_manager.add_query_filter('document_category', 'annotation', ['*']);
-        golr_manager.add_query_filter(golr_field, id, ['*']);
-        golr_manager.query_variants['facet.method'] = 'enum';
+        molr_manager.set_personality(personality);
+        //molr_manager.add_query_filter('document_category', 'annotation', ['*']);
+        molr_manager.add_query_filter(golr_field, id, ['*']);
+        molr_manager.query_variants['facet.method'] = 'enum';
 
 
         if (filter != null && filter instanceof Array && filter.length > 0){
             filter.forEach( function (val) {
                 if (val != null && val.field && val.value){
                     if (val.hasOwnProperty("plist")) {
-                        golr_manager.add_query_filter(val.field, val.value, val.plist);
+                        molr_manager.add_query_filter(val.field, val.value, val.plist);
                     } else {
-                        golr_manager.add_query_filter(val.field, val.value, ['*']);
+                        molr_manager.add_query_filter(val.field, val.value, ['*']);
                     }
                 }
             });
@@ -83,9 +90,9 @@ function getTableFromSolr(id, golr_field, div, filter, personality, tab_anchor){
                 'display_accordion_p': true
         };
 
-        // var filters = new bbop.widget.live_filters(pager_filter, golr_manager, gconf, f_opts);
+        // var filters = new bbop.widget.live_filters(pager_filter, molr_manager, gconf, f_opts);
         /* eslint new-cap: 0 */
-        var filters = new bbop.widget.facet_filters(pager_filter, golr_manager, gconf, f_opts);
+        var filters = new bbop.widget.facet_filters(pager_filter, molr_manager, gconf, f_opts);
         filters.establish_display();
 
         //Remove sticky filter
@@ -113,8 +120,8 @@ function getTableFromSolr(id, golr_field, div, filter, personality, tab_anchor){
         var pager_opts = {
                 'selection_counts': [10, 25, 50, 100, 5000]
         };
-        var pager = new bbop.widget.live_pager(pager_top_div, golr_manager, pager_opts);
-        var pager_bottom = new bbop.widget.live_pager(pager_bot_div, golr_manager, pager_opts);
+        var pager = new bbop.widget.live_pager(pager_top_div, molr_manager, pager_opts);
+        var pager_bottom = new bbop.widget.live_pager(pager_bot_div, molr_manager, pager_opts);
         // Add results.
         var results_opts = {
                 //'callback_priority': -200,
@@ -125,10 +132,10 @@ function getTableFromSolr(id, golr_field, div, filter, personality, tab_anchor){
 
     bbop.widget.display.results_table_by_class_conf_b3 = bbop.monarch.widget.display.results_table_by_class_conf_bs3;
     bbop.widget.display.results_table_by_class_conf_b3.prototype.process_entry = process_entry;
-    var results = new bbop.widget.live_results(div, golr_manager, confc,
+    var results = new bbop.widget.live_results(div, molr_manager, confc,
                        handler, linker, results_opts);
 
-    addDownloadButton(pager, golr_manager);
+    addDownloadButton(pager, molr_manager);
 
 
     // Details for spinner
@@ -137,18 +144,18 @@ function getTableFromSolr(id, golr_field, div, filter, personality, tab_anchor){
     jQuery('#'+pager_top_div).prepend(spinner_top_div.to_string());
 
     // Add pre and post run spinner (borrow filter's for now).
-    golr_manager.register('prerun', 'pre', function(){
+    molr_manager.register('prerun', 'pre', function(){
         filters.spin_up();
         jQuery('#'+pager.button_span_id()).append(spinner_top_div.to_string());
         jQuery('#'+pager_bottom.button_span_id()).append(spinner_bot_div.to_string());
     });
-    golr_manager.register('postrun', 'post', function(){
+    molr_manager.register('postrun', 'post', function(){
         filters.spin_down();
         open_species_filter();
     });
 
     // Initial run.
-    golr_manager.search();
+    molr_manager.search();
 
     jQuery('#'+pager_top_div).on('change', function() {
         var val = jQuery('#'+pager_top_div).find('select').val();

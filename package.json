@@ -56,7 +56,11 @@
     "wait.for": "^0.6.6",
     "xml2js": "^0.4.15",
     "xmlbuilder": "^4.1.0",
-    "q": "^1.4.1"
+    "q": "^1.4.1",
+    "bbop-manager-golr": "^0.0.4",
+    "bbop-response-golr": "^0.0.5",
+    "golr-conf": "^0.0.3",
+    "bbop-rest-manager": "^0.0.9"
   },
   "devDependencies": {
     "assets-webpack-plugin": "^3.2.0",

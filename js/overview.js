@@ -114,12 +114,12 @@ function fetchLiteratureOverview(id) {
     
 }
 
-if (typeof(loaderGlobals) === 'object') {
+if (typeof (loaderGlobals) === 'object') {
     loaderGlobals.getOntologyBrowser = getOntologyBrowser;
     loaderGlobals.launchBrowser = launchBrowser;
     loaderGlobals.fetchLiteratureOverview = fetchLiteratureOverview;
 }
-if (typeof(global) === 'object') {
+if (typeof (global) === 'object') {
     global.getOntologyBrowser = getOntologyBrowser;
     global.launchBrowser = launchBrowser;
     global.fetchLiteratureOverview = fetchLiteratureOverview;

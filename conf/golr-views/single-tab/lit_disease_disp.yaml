@@ -1,4 +1,4 @@
-id: literature_disease
+id: lit_disease_disp
 schema_generating: true
 document_category: generic_association
 weight: 20
