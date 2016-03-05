@@ -78,7 +78,6 @@ function getOntologyBrowser(id, label, root){
 }
 
 function fetchLiteratureOverview(id) {
-    console.log('fetching lit');
     var spinner = makeSpinnerDiv();
     jQuery('#overview').append(spinner.to_string());
     
