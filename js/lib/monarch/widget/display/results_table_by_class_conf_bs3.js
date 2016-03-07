@@ -215,6 +215,7 @@ function InitMonarchBBOPWidgetDisplay() {
             headers_display.push(hinp.to_string());
         }
         var results_order = cclass.field_order_by_weight('result');
+        var filters = cclass.field_order_by_weight('filter');
         var headerColumns = [];
         each(results_order, function(fid) {
             // Store the raw headers/fid for future use.
@@ -241,9 +242,16 @@ function InitMonarchBBOPWidgetDisplay() {
 
             var filterAreaSelector = '#' + elt_id + '-filter-area';
             var filterArea = jQuery(filterAreaSelector);
-
+            
+            /* Note this is an addition for the monarch-app
+             * and could be removed via some better abstraction
+             * in the bbop codebase
+             */
+            
+            // Check if header is filter-able
             var addMenuButton = filterArea.length > 0
-                    && (fid === 'subject_taxon');
+                    && ((filters.indexOf(fid) > -1)
+                    || (filters.indexOf(fid+ '_label') > -1));
             if (addMenuButton) {
                 head_span_attrs.class += ' ';
                 head_span_attrs['data-toggle'] = 'collapse';
@@ -256,15 +264,18 @@ function InitMonarchBBOPWidgetDisplay() {
             // console.log('#TH head_span_attrs:', head_span_attrs);
             // More aggressive link version.
             // var head_span = new bbop.html.anchor(fdname, head_span_attrs);
+            
             var head_span;
 
             if (addMenuButton) {
                 var menuButtonAttrs = {
-                    class : 'fa fa-bars fa-fw'
+                    'class' : 'fa fa-sort-desc fa-fw',
+                    'style' : 'display:inline-block;' +
+                              'vertical-align:top; padding-top:2px;'
                 };
                 var menuButton = new bbop.html.tag('i', menuButtonAttrs, '');
                 head_span = new bbop.html.span(fdname, head_span_attrs);
-                var space = new bbop.html.span('&nbsp;&nbsp;&nbsp;', {}, '');
+                var space = new bbop.html.span('&nbsp;', {}, '');
                 head_span.add_to(space);
                 head_span.add_to(menuButton);
             } else {
@@ -277,6 +288,7 @@ function InitMonarchBBOPWidgetDisplay() {
 
             headers_display.push(head_span.to_string());
         });
+        // End monarch-app addition
 
         // /
         // / Render the documents.
@@ -326,6 +338,9 @@ function InitMonarchBBOPWidgetDisplay() {
                         }
                     }
                     // Terrible hack to add qualifier when relation is null
+                    /* This is an addition for the monarch-app, we should be using
+                     * the handler class instead and remove this
+                     */
                     if (fid == 'relation' && bits.length == 0) {
                         if (doc['qualifier']) {
                             var qual_field = cclass.get_field('qualifier');
@@ -338,6 +353,8 @@ function InitMonarchBBOPWidgetDisplay() {
                             }
                         }
                     }
+                    //End monarch-app addition
+                    
                     // Render each of the bits.
                     var tmp_buff = [];
                     each(bits, function(bit) {
@@ -347,12 +364,16 @@ function InitMonarchBBOPWidgetDisplay() {
                     });
                     // Join it, trim/store it, push to to output.
                     var joined;
-                    // Terrible hack to remove breaks for images
+                    /*
+                     * Addition for monarch-app, remove in favor of
+                     * using handler class
+                     */
                     if (img_regexp.test(tmp_buff)) {
                         joined = tmp_buff.join('&nbsp;&nbsp;');
                     } else {
                         joined = tmp_buff.join('<br />');
                     }
+                    // End monarch app addition
 
                     entry_buff.push(_trim_and_store(joined));
                 }
