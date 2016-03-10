@@ -228,7 +228,12 @@ function InitMonarchBBOPWidgetDisplay() {
             // headers_display.push(field.display_name());
             var fdname = field.display_name();
             var fdesc = field.description() || '???';
-            var head_column_id = 'TH-' + elt_id + '-' + fdname;
+            var head_column_id = 'TH-' + elt_id + '-';
+            if (filters.indexOf(fid) > -1) {
+                head_column_id += fid;
+            } else if (filters.indexOf(fid+ '_label') > -1) {
+                head_column_id += fid + '_label';
+            }
             var head_span_attrs = {
                 // TODO/NOTE: to make the tooltip work properly, since the
                 // table headers are being created each time,
@@ -253,9 +258,11 @@ function InitMonarchBBOPWidgetDisplay() {
                     && ((filters.indexOf(fid) > -1)
                     || (filters.indexOf(fid+ '_label') > -1));
             if (addMenuButton) {
-                head_span_attrs.class += ' ';
+                head_span_attrs['class'] += ' monarch-filterable';
                 head_span_attrs['data-toggle'] = 'collapse';
                 head_span_attrs['data-target'] = filterAreaSelector;
+                head_span_attrs['style'] = 'display: block;' +
+                                           'white-space:nowrap;';
             }
 
             // console.log('#TH field:', field);
@@ -269,13 +276,11 @@ function InitMonarchBBOPWidgetDisplay() {
 
             if (addMenuButton) {
                 var menuButtonAttrs = {
-                    'class' : 'fa fa-sort-desc fa-fw',
-                    'style' : 'display:inline-block;' +
-                              'vertical-align:top; padding-top:2px;'
+                        'class': 'fa fa-bars fa-fw'
                 };
                 var menuButton = new bbop.html.tag('i', menuButtonAttrs, '');
                 head_span = new bbop.html.span(fdname, head_span_attrs);
-                var space = new bbop.html.span('&nbsp;', {}, '');
+                var space = new bbop.html.span('&nbsp;&nbsp;', {}, '');
                 head_span.add_to(space);
                 head_span.add_to(menuButton);
             } else {

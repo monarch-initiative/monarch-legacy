@@ -561,6 +561,8 @@ h1.downloadline {
 .bs3filter .panel {
     padding: 0;
     border:3px solid lightgray;
+    margin-bottom: 0px;
+    margin-top: .08em !important;
 }
 
 .bs3filter .panel .panel-heading{
@@ -579,7 +581,6 @@ h1.downloadline {
     margin: 0;
     padding: 3px;
 }
-
 
 div.bs3filter {
 }

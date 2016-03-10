@@ -85,7 +85,7 @@ function getTableFromSolr(id, golr_field, div, filter, personality, tab_anchor){
 
         // var filters = new bbop.widget.live_filters(pager_filter, golr_manager, gconf, f_opts);
         /* eslint new-cap: 0 */
-        var filters = new bbop.widget.facet_filters(pager_filter, golr_manager, gconf, f_opts);
+        var filters = new bbop.widget.facet_filters(pager_filter, golr_manager, gconf, f_opts, div);
         filters.establish_display();
 
         //Remove sticky filter
@@ -108,6 +108,16 @@ function getTableFromSolr(id, golr_field, div, filter, personality, tab_anchor){
                 .removeClass('collapse')
                 .addClass('in');
         };
+        
+        var headerOnClick = function () {
+            jQuery('.monarch-filterable').click( function() {
+                var spanID = jQuery(this).attr("id");
+                spanID = spanID.replace("TH-association-table-", "");
+                jQuery('#'+ 'collapsible-' + spanID + '-' + div)
+                    .removeClass('collapse')
+                    .addClass('in');
+            });
+        }
 
         // Attach pager.
         var pager_opts = {
@@ -144,7 +154,8 @@ function getTableFromSolr(id, golr_field, div, filter, personality, tab_anchor){
     });
     golr_manager.register('postrun', 'post', function(){
         filters.spin_down();
-        open_species_filter();
+        //open_species_filter();
+        headerOnClick();
     });
     //TODO change arg order for new golr-manager
     golr_manager.register('search', 'literature-search', addLiteratureInfo, '1');
