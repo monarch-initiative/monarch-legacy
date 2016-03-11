@@ -140,7 +140,7 @@ function getTableFromSolr(id, golr_field, div, filter, personality, tab_anchor){
     var results = new bbop.widget.live_results(div, golr_manager, confc,
                        handler, linker, results_opts);
     
-    var makeResultsTable = results.draw_table;
+    //var makeResultsTable = results.draw_table;
 
     addDownloadButton(pager, golr_manager);
 
@@ -157,6 +157,12 @@ function getTableFromSolr(id, golr_field, div, filter, personality, tab_anchor){
         jQuery('#'+pager_bottom.button_span_id()).append(spinner_bot_div.to_string());
     });
     
+    golr_manager.register('postrun', 'post', function(){
+        filters.spin_down();
+         //open_species_filter();
+        headerOnClick();
+    });
+
     function addLiteratureInfo(solrResponse){
         var pubmedIDs = [];
         solrResponse.documents().forEach(function(doc) {
@@ -165,48 +171,45 @@ function getTableFromSolr(id, golr_field, div, filter, personality, tab_anchor){
                 pubmedIDs.push(doc.subject.replace(/^PMID:/,'','g'));
             }
         });
+        //foo = pubmedIDs
+        return pubmedIDs;
+    }
 
-        var parseESummary = function (sumResponse) {
-            //jQuery('#'+pager.button_span_id()).append(spinner_top_div.to_string());
+      function parseESummary (solrResponse, sumResponse, bar, f) {
+          console.log(solrResponse);
+            // jQuery(#'+pager.button_span_id()).append(spinner_top_div.to_string());
             var summary = new eSummary.eSummaryResponse(sumResponse);
             solrResponse.documents().forEach(function(doc) {
                 // check for PMID: prefix
                 if (/^PMID:/.test(doc.subject)) {
                     var pubmedID  = doc.subject.replace(/^PMID:/,'','g');
-                    //doc.subject_label = summary
+                    // doc.subject_label = summary
                     doc.subject_label = summary.getTitle(pubmedID);
                 }
             });
             return solrResponse;
-        };
-        
-        var onESummaryError = function () {
-            console.log("Error fetching from ncbi ESummary Service");
-        };
-        Q(MonarchCommon.fetchPubmedSummary(pubmedIDs))
-            .then(parseESummary, onESummaryError)
-            .then(makeResultsTable)
-            .then(function () {
-                
-                filters.spin_down();
-                headerOnClick();
-                jQuery('#'+ spinner_top_div).hide();
-            });
-    }
+        }
+
+      
 
     //TODO change arg order for new golr-manager
     if (/lit/.test(personality)) {
-        golr_manager.register('search', 'literature-search', addLiteratureInfo, '100');
-    } else {
-        golr_manager.register('search', 'literature-search', makeResultsTable, '-200');
-        
-        golr_manager.register('postrun', 'post', function(){
-            filters.spin_down();
-             //open_species_filter();
-            headerOnClick();
+        golr_manager.register('search', 'literature-search-foo', function (solrResponse){
+        var pubmedIDs = [];
+        solrResponse.documents().forEach(function(doc) {
+            // check for PMID: prefix
+            if (/^PMID:/.test(doc.subject)) {
+                pubmedIDs.push(doc.subject.replace(/^PMID:/,'','g'));
+            }
+            
         });
+        return pubmedIDs;
         
-    }
+        }, '300');
+        golr_manager.register('search', 'literature-search', MonarchCommon.fetchPubmedSummary, '2');
+        golr_manager.register('search', 'literature-search', parseESummary, '1');
+
+    } 
 
     // Initial run.
     golr_manager.search();

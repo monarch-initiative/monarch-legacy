@@ -348,6 +348,10 @@ function fetchPubmedAbstract(id) {
 //Fetch abstract from eutils esummary
 function fetchPubmedSummary(ids) {
     var base_url = 'http://eutils.ncbi.nlm.nih.gov/entrez/eutils/esummary.fcgi?';
+    
+    if (ids.constructor === Array) {
+        ids = ids.join(",");
+    }
     var opts = {
             'db' : 'pubmed',
             'retmode' : 'json',
