@@ -329,7 +329,7 @@ function add_species_to_autocomplete(data, map, gene_ids) {
 
 // Fetch abstract from eutils efetch
 function fetchPubmedAbstract(id) {
-    var base_url = 'http://eutils.ncbi.nlm.nih.gov/entrez/eutils/efetch.fcgi?';
+    var base_url = 'https://eutils.ncbi.nlm.nih.gov/entrez/eutils/efetch.fcgi?';
     var opts = {
             'db' : 'pubmed',
             'retmode' : 'xml',
@@ -347,7 +347,7 @@ function fetchPubmedAbstract(id) {
 
 //Fetch abstract from eutils esummary
 function fetchPubmedSummary(ids) {
-    var base_url = 'http://eutils.ncbi.nlm.nih.gov/entrez/eutils/esummary.fcgi?';
+    var base_url = 'https://eutils.ncbi.nlm.nih.gov/entrez/eutils/esummary.fcgi?';
     
     if (ids.constructor === Array) {
         ids = ids.join(",");
