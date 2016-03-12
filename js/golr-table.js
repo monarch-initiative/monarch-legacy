@@ -1,7 +1,5 @@
 // Module to launch solr driven tables
 var Q = require('q');
-var MonarchCommon = require('./monarch-common.js');
-var eSummary = require('../lib/monarch/esummary.js');
 
 /*
  * Arguments: - id: An identifier. One of: IRI string, OBO-style ID
@@ -129,7 +127,7 @@ function getTableFromSolr(id, golr_field, div, filter, personality, tab_anchor){
         var pager_bottom = new bbop.widget.live_pager(pager_bot_div, golr_manager, pager_opts);
         // Add results.
         var results_opts = {
-                'callback_priority': -200,
+                //'callback_priority': -200,
                 // 'user_buttons_div_id': pager.button_span_id(),
                 'user_buttons': [],
                 'selectable_p' : false
@@ -139,8 +137,6 @@ function getTableFromSolr(id, golr_field, div, filter, personality, tab_anchor){
     bbop.widget.display.results_table_by_class_conf_b3.prototype.process_entry = process_entry;
     var results = new bbop.widget.live_results(div, golr_manager, confc,
                        handler, linker, results_opts);
-    
-    var makeResultsTable = results.draw_table;
 
     addDownloadButton(pager, golr_manager);
 
@@ -156,57 +152,13 @@ function getTableFromSolr(id, golr_field, div, filter, personality, tab_anchor){
         jQuery('#'+pager.button_span_id()).append(spinner_top_div.to_string());
         jQuery('#'+pager_bottom.button_span_id()).append(spinner_bot_div.to_string());
     });
-    
-    function addLiteratureInfo(solrResponse){
-        var pubmedIDs = [];
-        solrResponse.documents().forEach(function(doc) {
-            // check for PMID: prefix
-            if (/^PMID:/.test(doc.subject)) {
-                pubmedIDs.push(doc.subject.replace(/^PMID:/,'','g'));
-            }
-        });
-
-        var parseESummary = function (sumResponse) {
-            //jQuery('#'+pager.button_span_id()).append(spinner_top_div.to_string());
-            var summary = new eSummary.eSummaryResponse(sumResponse);
-            solrResponse.documents().forEach(function(doc) {
-                // check for PMID: prefix
-                if (/^PMID:/.test(doc.subject)) {
-                    var pubmedID  = doc.subject.replace(/^PMID:/,'','g');
-                    //doc.subject_label = summary
-                    doc.subject_label = summary.getTitle(pubmedID);
-                }
-            });
-            return solrResponse;
-        };
-        
-        var onESummaryError = function () {
-            console.log("Error fetching from ncbi ESummary Service");
-        };
-        Q(MonarchCommon.fetchPubmedSummary(pubmedIDs))
-            .then(parseESummary, onESummaryError)
-            .then(makeResultsTable)
-            .then(function () {
-                
-                filters.spin_down();
-                headerOnClick();
-                jQuery('#'+ spinner_top_div).hide();
-            });
-    }
-
+    golr_manager.register('postrun', 'post', function(){
+        filters.spin_down();
+        //open_species_filter();
+        headerOnClick();
+    });
     //TODO change arg order for new golr-manager
-    if (/lit/.test(personality)) {
-        golr_manager.register('search', 'literature-search', addLiteratureInfo, '100');
-    } else {
-        golr_manager.register('search', 'literature-search', makeResultsTable, '-200');
-        
-        golr_manager.register('postrun', 'post', function(){
-            filters.spin_down();
-             //open_species_filter();
-            headerOnClick();
-        });
-        
-    }
+    golr_manager.register('search', 'literature-search', addLiteratureInfo, '1');
 
     // Initial run.
     golr_manager.search();
@@ -284,6 +236,17 @@ function addDownloadButton(pager, manager){
 
     jQuery('#' + button.get_id()).click(forwardToDownload);
     }
+}
+
+function addLiteratureInfo(resp){
+    var pubmedIDs = [];
+    resp.documents().forEach(function(doc) {
+        // check for PMID: prefix
+        if (/^PMID:/.test(doc.subject)) {
+            pubmedIDs.push(doc.subject.replace(/^PMID:/,'','g'));
+        }
+    });
+    console.log(pubmedIDs);
 }
 
 //Overrides bbop.widget.display.results_table_by_class_conf_b3.prototype.process_entry
