@@ -1,15 +1,15 @@
 {
     "type" : "production",
 
-    "app_base" : "http://monarchinitiative.org",
+    "app_base" : "https://monarchinitiative.org",
 
-    "scigraph_url" : "http://scigraph-ontology.monarchinitiative.org/scigraph/",
+    "scigraph_url" : "https://scigraph-ontology.monarchinitiative.org/scigraph/",
 
-    "scigraph_data_url" : "http://scigraph-data.monarchinitiative.org/scigraph/",
+    "scigraph_data_url" : "https://scigraph-data.monarchinitiative.org/scigraph/",
 
-    "golr_url" : "http://solr.monarchinitiative.org/solr/golr/",
+    "golr_url" : "https://solr.monarchinitiative.org/solr/golr/",
 
-    "owlsim_services_url" : "http://monarchinitiative.org/owlsim",
+    "owlsim_services_url" : "https://monarchinitiative.org/owlsim",
 
     "analytics_id" : "UA-41803362-1"
 
