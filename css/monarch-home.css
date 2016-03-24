@@ -211,10 +211,35 @@ div#cameocontainer {
    background: transparent;
 }
 
+
+.monarch-home-hpo-logo-image {
+  width:81px;
+  height:81px;
+  vertical-align: text-top;
+  display:inline-block;
+  padding:0;
+  margin:-3px -3px 0 5px;
+}
+
+
+.monarch-home-hpo-image {
+  padding:0;
+  margin:0;
+}
+
+
+.monarch-home-hpo-button {
+  margin: 0;
+  padding: 2px;
+  padding-left:6px;
+  padding-right:6px;
+}
+
 .monarch-home-phenotype-image {
   padding: 0;
   margin: 0;
 }
+
 
 .monarch-home-phenotype-button {
   margin: 0;
