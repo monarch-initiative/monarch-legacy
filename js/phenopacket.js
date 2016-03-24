@@ -14,18 +14,16 @@ class PhenoPacket {
     constructor({packet_id = "", title = "", entities = [], variants = [],
                 persons = [], organisms = [], phenotype_profile = [],
                 diagnosis_profile = [], environment_profile = []}) {
-
-        self = this;
         
-        self.id = packet_id;
-        self.title = title;
-        self.entities = entities;
-        self.variants = variants;
-        self.persons = persons;
-        self.organisms = organisms;
-        self.phenotype_profile = phenotype_profile;
-        self.diagnosis_profile = diagnosis_profile;
-        self.environment_profile = environment_profile;
+        this.id = packet_id;
+        this.title = title;
+        this.entities = entities;
+        this.variants = variants;
+        this.persons = persons;
+        this.organisms = organisms;
+        this.phenotype_profile = phenotype_profile;
+        this.diagnosis_profile = diagnosis_profile;
+        this.environment_profile = environment_profile;
     }
 }
 /**
@@ -34,29 +32,29 @@ class PhenoPacket {
  */
 class ClassInstance {
     constructor({types = [], negated_types = [], description = ""}){
-        var self = this;
-        self.types = types;
-        self.negated_types = negated_types;
-        self.description = description;
+        
+        this.types = types;
+        this.negated_types = negated_types;
+        this.description = description;
     }
 }
 
 
 class OntologyClass {
     constructor({class_id = "", label = ""}){
-        var self = this;
-        self.id = class_id;
-        self.label = label;
+        
+        this.id = class_id;
+        this.label = label;
     }
 }
 
 
 class PropertyValue {
     constructor({property = "", filler = ""}){
-        var self = this;
+        
         // Filler can be an object or string
-        self.property = property;
-        self.filler = filler;
+        this.property = property;
+        this.filler = filler;
     }
 }
 
@@ -67,16 +65,15 @@ class PropertyValue {
 class Entity extends ClassInstance {
 
     //Holding off on implementing an enum class/check
-
     constructor({types = [], negated_types = [], description = "",
                 entity_id = "", entity_label = "",
                 entity_type = ""}) {
 
         super(types, negated_types, description);
-        var self = this;
-        self.id = entity_id;
-        self.label = entity_label;
-        self.entity_type = entity_type;
+        
+        this.id = entity_id;
+        this.label = entity_label;
+        this.entity_type = entity_type;
     }
 }
 
@@ -90,9 +87,9 @@ class Entity extends ClassInstance {
 class Association {
 
     constructor({entity = {}, evidence_list = []}) {
-        var self = this;
-        self.entity = entity;
-        self.evidence_list = evidence_list;
+        
+        this.entity = entity;
+        this.evidence_list = evidence_list;
     }
 }
 
@@ -106,19 +103,18 @@ class Evidence extends ClassInstance {
                  supporting_entities = [], source = []}) {
 
         super(types, negated_types, description);
-        var self = this;
-        self.supporting_entities = supporting_entities;
-        self.source = source;
+        
+        this.supporting_entities = supporting_entities;
+        this.source = source;
     }
 }
 
 
 class Publication {
-
+    
     constructor({pub_id = "", title = ""}) {
-        var self =  this;
-        self.id = pub_id;
-        self.title = title;
+        this.id = pub_id;
+        this.title = title;
     }
 }
 
@@ -131,8 +127,8 @@ class GenomicEntity extends Entity {
 
         super(types, negated_types, description,
               entity_id, entity_label, entity_type);
-        var self = this;
-        self.taxon = taxon;
+        
+        this.taxon = taxon;
     }
 }
 
@@ -146,8 +142,8 @@ class Variant extends GenomicEntity {
 
         super(types, negated_types, description,
               entity_id, entity_label, entity_type, taxon);
-        var self = this;
-        self.description_hgvs = description_hgvs;
+        
+        this.description_hgvs = description_hgvs;
     }
 }
 
@@ -162,11 +158,11 @@ class Organism extends Entity {
     
         super(types, negated_types, description,
               entity_id, entity_label, entity_type);
-        var self = this;
-        self.taxon = taxon;
-        self.strain = strain;
-        self.sex = sex;
-        self.date_of_birth = date_of_birth;
+        
+        this.taxon = taxon;
+        this.strain = strain;
+        this.sex = sex;
+        this.date_of_birth = date_of_birth;
     }
 }
 
@@ -205,16 +201,13 @@ class Condition extends ClassInstance {
     constructor({types = [], negated_types = [], description = "",
                  has_location = "", onset = {},
                  offset = {}, severity = {}, environment = {} }) {
-        
     
         super(types, negated_types, description);
-
-        var self = this;
-        self.has_location = has_location;
-        self.onset = onset;
-        self.offset = offset;
-        self.severity = severity;
-        self.environment = environment;
+        this.has_location = has_location;
+        this.onset = onset;
+        this.offset = offset;
+        this.severity = severity;
+        this.environment = environment;
     }
 }
 
@@ -249,8 +242,8 @@ class DiseaseOccurrence extends Condition {
 
         super(types, negated_types, description, has_location,
               onset, offset, severity, environment);
-        var self = this;
-        self.stage = stage;
+        
+        this.stage = stage;
     }
 }
 
@@ -259,8 +252,8 @@ class DiseaseOccurrenceAssociation extends Association {
 
     constructor({ entity = {}, evidence_list = [], disease = {}}) {
         super(entity, evidence_list);
-        var self = this;
-        self.disease = disease;
+        
+        this.disease = disease;
     } 
 }
 
@@ -270,10 +263,9 @@ class Measurement extends ClassInstance {
     constructor({types = [], negated_types = [], description = "",
                  unit = {}, magnitude = ""}) {
         super(types, negated_types, description);
-
-        var self = this;
-        self.unit = unit;
-        self.magnitude = magnitude;
+     
+        this.unit = unit;
+        this.magnitude = magnitude;
     }
 }
 
@@ -301,8 +293,8 @@ class Phenotype extends Condition {
 
         super(types, negated_types, description, has_location,
               onset, offset, severity, environment);
-        var self = this;
-        self.measurements = measurements;
+        
+        this.measurements = measurements;
     }
 }
 
@@ -311,8 +303,8 @@ class PhenotypeAssociation extends Association {
 
     constructor({entity = {}, evidence_list = [],phenotype: {}}) {
         super().__init__(entity, evidence_list);
-        var self = this;
-        self.phenotype = phenotype;
+        
+        this.phenotype = phenotype;
     }
 }
 
@@ -322,8 +314,8 @@ class TemporalRegion extends ClassInstance {
     constructor({types = [], negated_types = [], description = "",
                  start_time = "", end_time = ""}) {
         super(types, negated_types, description);
-        var self = this;
-        self.start_time = start_time;
-        self.end_time = end_time;
+        
+        this.start_time = start_time;
+        this.end_time = end_time;
     }
 }
