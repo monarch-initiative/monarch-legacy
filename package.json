@@ -36,7 +36,6 @@
     "bootstrap": "^3.3.5",
     "core-util-is": "^1.0.1",
     "d3": "^3.5.9",
-    "eslint": "^1.9.0",
     "events": "^1.1.0",
     "font-awesome": "^4.5.0",
     "hapi": "11.0.2",
