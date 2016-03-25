@@ -1,6 +1,3 @@
-var PhenoPacketBuilder = require('./phenopacket-builder.js');
-
-
 /**
  * Arguments: - id: An identifier. One of: IRI string, OBO-style ID
  *            - field: GOlr field in which to filter on the id
@@ -264,15 +261,17 @@ function addPhenoPacketButton(pager, manager, id){
         
         jQuery('#' + span).append(button.to_string());
         jQuery(button_elt).attr('title', title);
-   /*doing away with all of this
+   /*doing away with all of this*/
         jQuery('#' + button.get_id()).click( function() {
-            manager.push_excursion();
+            var solrParams = manager.get_filter_query_string();
+            solrParams = solrParams.replace('sfq=', 'fq=', 'g');
+            console.log(solrParams);
             manager.set("start", 0);
             manager.set_results_count(5);
             var qurl = manager.get_query_url();
             //var qurl = qurl + "&json.wrf=?";
             manager.pop_excursion();
-            
+            /*
             jQuery.ajax({
                 url : qurl,
                 data : "json.wrf=?",
@@ -283,8 +282,8 @@ function addPhenoPacketButton(pager, manager, id){
                 success: function(response) {
                     buildPhenoPacket(manager, response);
                 }
-            });
-        });*/
+            });*/
+        });
     }
 }
 
@@ -307,9 +306,7 @@ function addDownloadButton(pager, manager){
         var button = new bbop.html.button(label, button_props);
         var button_elt = '#' + button.get_id();
 
-        jQuery('#' + span).addClass("btn-group");
-        jQuery('#' + span).append(
-                '' + button.to_string());
+        jQuery('#' + span).append(button.to_string());
         jQuery(button_elt).attr('title', title);
 
         // Get fields from personality
