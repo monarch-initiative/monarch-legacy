@@ -221,33 +221,12 @@ function addPhenoPacketButton(pager, manager, id){
 
     var fun_id = bbop.core.uuid();
     manager.register('search', fun_id, _drawPhenoPacketBtn, '-3');
-    
-    // delete this
-    /*var buildPhenoPacket = function(manager, response) {
-        
-        var packet = PhenoPacketBuilder.buildPhenoPacket(manager, response);
-        var data = "Content-disposition: attachment; filename=fname.ext;text/json;charset=utf-8," + encodeURIComponent(JSON.stringify(packet));
-        
-        // Create anchor that forwards to download
-        //var a = document.createElement('a');
-        var ref = 'data:' + data;
-        //var formatted_id = id.replace(':','_');
-       // a.download = formatted_id + '-phenopacket' + '.json';
-        window.open(ref);
-        /*
-        var span = pager.button_span_id();
-        jQuery('#' + span).append(a);
-        jQuery('#' + span).find('a').trigger('click');        
-    };*/
-
-    
-
+   
     function _drawPhenoPacketBtn() {
         
         // Make download button
         var span = pager.button_span_id();
 
-       
         // / Add button to DOM.
         var button_props = {
             'generate_id' : true,
@@ -261,28 +240,15 @@ function addPhenoPacketButton(pager, manager, id){
         
         jQuery('#' + span).append(button.to_string());
         jQuery(button_elt).attr('title', title);
-   /*doing away with all of this*/
+
         jQuery('#' + button.get_id()).click( function() {
             var solrParams = manager.get_filter_query_string();
             solrParams = solrParams.replace('sfq=', 'fq=', 'g');
-            console.log(solrParams);
-            manager.set("start", 0);
-            manager.set_results_count(5);
-            var qurl = manager.get_query_url();
-            //var qurl = qurl + "&json.wrf=?";
-            manager.pop_excursion();
-            /*
-            jQuery.ajax({
-                url : qurl,
-                data : "json.wrf=?",
-                dataType: "jsonp",
-                error: function(){
-                    console.log('ERROR: looking at solr');
-                },
-                success: function(response) {
-                    buildPhenoPacket(manager, response);
-                }
-            });*/
+            var personality = manager.get_personality();
+            var personalityParam = "&personality="+personality
+            var qurl = global_app_base + '/phenopacket?' + solrParams
+                       + personalityParam;
+            location.href = qurl;
         });
     }
 }
