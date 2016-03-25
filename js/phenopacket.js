@@ -11,11 +11,11 @@
 
 // Top level phenopacket container
 class PhenoPacket {
-    constructor({packet_id = "", title = "", entities = [], variants = [],
+    constructor({id = "", title = "", entities = [], variants = [],
                 persons = [], organisms = [], phenotype_profile = [],
                 diagnosis_profile = [], environment_profile = []}) {
         
-        this.id = packet_id;
+        this.id = id;
         this.title = title;
         this.entities = entities;
         this.variants = variants;
@@ -318,4 +318,55 @@ class TemporalRegion extends ClassInstance {
         this.start_time = start_time;
         this.end_time = end_time;
     }
+}
+
+if (typeof exports === 'object') {
+    exports.PhenoPacket = PhenoPacket;
+    exports.ClassInstance = ClassInstance;
+    exports.OntologyClass = OntologyClass;
+    exports.PropertyValue = PropertyValue;
+    exports.Entity  = Entity; 
+    exports.Association = Association;
+    exports.Evidence  = Evidence; 
+    exports.Publication = Publication;
+    exports.GenomicEntity  = GenomicEntity; 
+    exports.Variant  = Variant; 
+    exports.Organism  = Organism; 
+    exports.Person  = Person;
+    exports.Assay  = Assay; 
+    exports.Condition  = Condition; 
+    exports.ConditionSeverity  = ConditionSeverity; 
+    exports.DiseaseStage  = DiseaseStage; 
+    exports.DiseaseOccurrence  = DiseaseOccurrence; 
+    exports.DiseaseOccurrenceAssociation  = DiseaseOccurrenceAssociation; 
+    exports.Measurement  = Measurement; 
+    exports.OrganismalSite  = OrganismalSite; 
+    exports.Phenotype  = Phenotype; 
+    exports.PhenotypeAssociation  = PhenotypeAssociation; 
+    exports.TemporalRegion  = TemporalRegion; 
+}
+if (typeof (loaderGlobals) === 'object') {
+    loaderGlobals.PhenoPacket = PhenoPacket;
+    loaderGlobals.ClassInstance = ClassInstance;
+    loaderGlobals.OntologyClass = OntologyClass;
+    loaderGlobals.PropertyValue = PropertyValue;
+    loaderGlobals.Entity  = Entity; 
+    loaderGlobals.Association = Association;
+    loaderGlobals.Evidence  = Evidence;
+    loaderGlobals.Publication = Publication;
+    loaderGlobals.GenomicEntity  = GenomicEntity; 
+    loaderGlobals.Variant  = Variant;
+    loaderGlobals.Organism  = Organism; 
+    loaderGlobals.Person  = Person; 
+    loaderGlobals.Assay  = Assay; 
+    loaderGlobals.Condition  = Condition; 
+    loaderGlobals.ConditionSeverity  = ConditionSeverity; 
+    loaderGlobals.DiseaseStage  = DiseaseStage; 
+    loaderGlobals.DiseaseOccurrence  = DiseaseOccurrence; 
+    loaderGlobals.DiseaseOccurrenceAssociation  = DiseaseOccurrenceAssociation; 
+    loaderGlobals.Measurement  = Measurement; 
+    loaderGlobals.OrganismalSite  = OrganismalSite; 
+    loaderGlobals.Phenotype  = Phenotype; 
+    loaderGlobals.PhenotypeAssociation  = PhenotypeAssociation; 
+    loaderGlobals.TemporalRegion  = TemporalRegion; 
 }

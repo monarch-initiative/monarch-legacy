@@ -1,4 +1,7 @@
-/*
+var PhenoPacketBuilder = require('./phenopacket-builder.js');
+
+
+/**
  * Arguments: - id: An identifier. One of: IRI string, OBO-style ID
  *            - field: GOlr field in which to filter on the id
  *            - div: div ID to put results table
@@ -177,6 +180,10 @@ function getTableFromSolr(id, golr_field, div, filter, personality, tab_anchor){
 
     addDownloadButton(pager, golr_manager);
 
+    //Hardcode for now
+    if (personality === 'variant_phenotype') {
+        addPhenoPacketButton(pager, golr_manager, id);
+    }
 
     // Details for spinner
     var spinner_top_div = makeSpinnerDiv();
@@ -213,62 +220,146 @@ function getTableFromSolr(id, golr_field, div, filter, personality, tab_anchor){
     }
 }
 
+function addPhenoPacketButton(pager, manager, id){
+
+    var fun_id = bbop.core.uuid();
+    manager.register('search', fun_id, _drawPhenoPacketBtn, '-3');
+    
+    var buildPhenoPacket = function(manager, response) {
+        
+        var packet = PhenoPacketBuilder.buildPhenoPacket(manager, response);
+        var data = "Content-disposition: attachment; filename=fname.ext;text/json;charset=utf-8," + encodeURIComponent(JSON.stringify(packet));
+        
+        // Create anchor that forwards to download
+        //var a = document.createElement('a');
+        var ref = 'data:' + data;
+        //var formatted_id = id.replace(':','_');
+       // a.download = formatted_id + '-phenopacket' + '.json';
+        window.open(ref);
+        /*
+        var span = pager.button_span_id();
+        jQuery('#' + span).append(a);
+        jQuery('#' + span).find('a').trigger('click');*/
+        
+    };
+    
+
+    function _drawPhenoPacketBtn() {
+        
+        
+        //Transform golr response to phenopacket
+        //var packet = PhenoPacketBuilder.buildPhenoPacket(manager);
+        //var data = "text/json;charset=utf-8," + encodeURIComponent(JSON.stringify(packet));
+        
+        // Make download button
+        var span = pager.button_span_id();
+        // Create anchor that forwards to download
+        // Ref http://stackoverflow.com/questions/19721439/download-json-object-as-a-file-from-browser
+       /* var a = document.createElement('a');
+        a.href = 'data:' + data;
+        var formatted_id = id.replace(':','_');
+        a.download = formatted_id + '-phenopacket' + '.json';*/
+       
+        // / Add button to DOM.
+        var button_props = {
+            'generate_id' : true,
+            'class' : 'btn btn-warning',
+            'style': 'position:absolute; margin-left:15px;'
+        };
+        var label = 'PhenoPacket';
+        var title = 'Download PhenoPacket';
+        var button = new bbop.html.button(label, button_props);
+        var button_elt = '#' + button.get_id();
+
+       /* jQuery('#' + span).append(a);
+        jQuery('#' + span + ' a').append(button.to_string());*/
+        
+        jQuery(button_elt).attr('title', title);
+        jQuery('#' + span).append(button.to_string());
+   
+        jQuery('#' + button.get_id()).click( function() {
+            manager.push_excursion();
+            manager.set("start", 0);
+            manager.set_results_count(5);
+            var qurl = manager.get_query_url();
+            //var qurl = qurl + "&json.wrf=?";
+            manager.pop_excursion();
+            
+            jQuery.ajax({
+                url : qurl,
+                data : "json.wrf=?",
+                dataType: "jsonp",
+                error: function(){
+                    console.log('ERROR: looking at solr');
+                },
+                success: function(response) {
+                    buildPhenoPacket(manager, response);
+                }
+            });
+        });
+    }
+}
+
 function addDownloadButton(pager, manager){
 
     var fun_id = bbop.core.uuid();
     manager.register('search', fun_id, _drawDownloadButton, '-2');
 
-    function _drawDownloadButton(){
+    function _drawDownloadButton() {
 
-    var span = pager.button_span_id();
-    /// Add button to DOM.
-    var button_props = {
-    'generate_id': true,
-    'class': 'btn btn-success'
-    };
-    var label = 'TSV';
-    var title = 'Download data (up to 100,000 rows)';
-    var button = new bbop.html.button(label, button_props);
-    var button_elt = '#' + button.get_id();
+        var span = pager.button_span_id();
+        // / Add button to DOM.
+        var button_props = {
+            'generate_id' : true,
+            'class' : 'btn btn-success'
+        };
+        var label = 'TSV';
+        var title = 'Download data (up to 100,000 rows)';
+        var button = new bbop.html.button(label, button_props);
+        var button_elt = '#' + button.get_id();
 
-    jQuery('#' + span).append('&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;'+button.to_string());
-    jQuery(button_elt).attr('title',title);
+        jQuery('#' + span).append(
+                '&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;' + button.to_string());
+        jQuery(button_elt).attr('title', title);
 
-    // Get fields from personality
-    var fields_without_labels = ['source', 'is_defined_by', 'qualifier'];
+        // Get fields from personality
+        var fields_without_labels = [ 'source', 'is_defined_by', 'qualifier' ];
 
-    var personality = manager.get_personality();
+        var personality = manager.get_personality();
 
-    // We have a bbop.golr.conf api that may be able to replace this
-    // Global scigraph url passed in from webapp.js addGolrStaticFiles
-    var result_weights = global_golr_conf[personality]['result_weights'].split(/\s+/);
-    result_weights = result_weights.map( function (i) { return i.replace(/\^.+$/, ''); });
+        // We have a bbop.golr.conf api that may be able to replace this
+        // Global scigraph url passed in from webapp.js addGolrStaticFiles
+        var result_weights = global_golr_conf[personality]['result_weights']
+                .split(/\s+/);
+        result_weights = result_weights.map(function(i) {
+            return i.replace(/\^.+$/, '');
+        });
 
-    var fields = result_weights.slice();
-    var splice_index = 1;
-    result_weights.forEach( function (val, index) {
-        if (fields_without_labels.indexOf(val) === -1) {
-            var result_label = val + '_label';
-            fields.splice(index+splice_index, 0, result_label);
-            splice_index++;
+        var fields = result_weights.slice();
+        var splice_index = 1;
+        result_weights.forEach(function(val, index) {
+            if (fields_without_labels.indexOf(val) === -1) {
+                var result_label = val + '_label';
+                fields.splice(index + splice_index, 0, result_label);
+                splice_index++;
+            }
+        });
+        if (fields.indexOf('qualifier') == -1) {
+            fields.push('qualifier');
         }
-    });
-    if (fields.indexOf('qualifier') == -1) {
-        fields.push('qualifier');
-    }
 
-    var forwardToDownload = function(){
-        var field_list = fields;
-        var args_hash = {
+        var forwardToDownload = function() {
+            var field_list = fields;
+            var args_hash = {
                 rows : '100000',
                 header : "true"
+            };
+
+            var url = manager.get_download_url(field_list, args_hash);
+            location.href = url;
         };
 
-        var url = manager.get_download_url(field_list, args_hash);
-        location.href = url;
-    };
-
-    jQuery('#' + button.get_id()).click(forwardToDownload);
+        jQuery('#' + button.get_id()).click(forwardToDownload);
     }
 
 }
