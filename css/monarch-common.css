@@ -724,7 +724,7 @@ div.bs3table {
 
 #results-area .bs3pager > div[id*="gen_id-bbop-html"] > div[id*="gen_id-bbop-html"]:nth-child(2),
 #results-area .bs3pager-bottom > div[id*="gen_id-bbop-html"] > div[id*="gen_id-bbop-html"]:nth-child(2) {
-    width: 360px;
+    /*width: 360px;*/
     padding: 10px 0 5px 10px;
     font-weight: 500;
 }

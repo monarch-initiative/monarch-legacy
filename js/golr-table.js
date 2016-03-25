@@ -225,7 +225,8 @@ function addPhenoPacketButton(pager, manager, id){
     var fun_id = bbop.core.uuid();
     manager.register('search', fun_id, _drawPhenoPacketBtn, '-3');
     
-    var buildPhenoPacket = function(manager, response) {
+    // delete this
+    /*var buildPhenoPacket = function(manager, response) {
         
         var packet = PhenoPacketBuilder.buildPhenoPacket(manager, response);
         var data = "Content-disposition: attachment; filename=fname.ext;text/json;charset=utf-8," + encodeURIComponent(JSON.stringify(packet));
@@ -239,44 +240,31 @@ function addPhenoPacketButton(pager, manager, id){
         /*
         var span = pager.button_span_id();
         jQuery('#' + span).append(a);
-        jQuery('#' + span).find('a').trigger('click');*/
-        
-    };
+        jQuery('#' + span).find('a').trigger('click');        
+    };*/
+
     
 
     function _drawPhenoPacketBtn() {
         
-        
-        //Transform golr response to phenopacket
-        //var packet = PhenoPacketBuilder.buildPhenoPacket(manager);
-        //var data = "text/json;charset=utf-8," + encodeURIComponent(JSON.stringify(packet));
-        
         // Make download button
         var span = pager.button_span_id();
-        // Create anchor that forwards to download
-        // Ref http://stackoverflow.com/questions/19721439/download-json-object-as-a-file-from-browser
-       /* var a = document.createElement('a');
-        a.href = 'data:' + data;
-        var formatted_id = id.replace(':','_');
-        a.download = formatted_id + '-phenopacket' + '.json';*/
+
        
         // / Add button to DOM.
         var button_props = {
             'generate_id' : true,
             'class' : 'btn btn-warning',
-            'style': 'position:absolute; margin-left:15px;'
+            'style': 'margin-left:15px;'
         };
         var label = 'PhenoPacket';
         var title = 'Download PhenoPacket';
         var button = new bbop.html.button(label, button_props);
         var button_elt = '#' + button.get_id();
-
-       /* jQuery('#' + span).append(a);
-        jQuery('#' + span + ' a').append(button.to_string());*/
         
-        jQuery(button_elt).attr('title', title);
         jQuery('#' + span).append(button.to_string());
-   
+        jQuery(button_elt).attr('title', title);
+   /*doing away with all of this
         jQuery('#' + button.get_id()).click( function() {
             manager.push_excursion();
             manager.set("start", 0);
@@ -296,7 +284,7 @@ function addPhenoPacketButton(pager, manager, id){
                     buildPhenoPacket(manager, response);
                 }
             });
-        });
+        });*/
     }
 }
 
@@ -311,15 +299,17 @@ function addDownloadButton(pager, manager){
         // / Add button to DOM.
         var button_props = {
             'generate_id' : true,
-            'class' : 'btn btn-success'
+            'class' : 'btn btn-success',
+            'style': 'margin-left:15px;margin-right:5px;'
         };
         var label = 'TSV';
         var title = 'Download data (up to 100,000 rows)';
         var button = new bbop.html.button(label, button_props);
         var button_elt = '#' + button.get_id();
 
+        jQuery('#' + span).addClass("btn-group");
         jQuery('#' + span).append(
-                '&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;' + button.to_string());
+                '' + button.to_string());
         jQuery(button_elt).attr('title', title);
 
         // Get fields from personality
