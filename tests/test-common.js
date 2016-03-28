@@ -10,7 +10,6 @@ else {
     var WaitFor = require('wait.for');
 }
 
-var assert = require("assert");
 var fs = require('fs');
 var setup;
 if (typeof bbop == 'undefined') { var bbop = {};}

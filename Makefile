@@ -34,22 +34,17 @@ apitest: $(patsubst %, test-%, $(APITESTS))
 production-test: $(patsubst %, production-test-%, $(TESTS))
 
 test-%:
-	NODE_PATH=$(NODE_PATH) $(NODE_BIN) tests/$*.js
+	NODE_PATH=$(NODE_PATH) $(NODE_BIN) --harmony_destructuring tests/$*.js
 
 production-test-%:
 	NODE_PATH=$(NODE_PATH) $(NODE_BIN) tests/$*.js -s production
 
-nif-production-url-test:
-	NODE_PATH=$(NODE_PATH) $(NODE_BIN) tests/urltester.js -s production -c vocabulary,ontoquest,federation,monarch
+production-url-test:
+	NODE_PATH=$(NODE_PATH) $(NODE_BIN) tests/urltester.js -s production -c monarch
 
-nif-production-federation-tests:
-	NODE_PATH=$(NODE_PATH) $(NODE_BIN) tests/urltester.js -s production -c federation
-
-nif-production-scigraph-tests:
+production-scigraph-tests:
 	NODE_PATH=$(NODE_PATH) $(NODE_BIN) tests/urltester.js -s production -c scigraph
 
-nif-production-federation-search-tests:
-	NODE_PATH=$(NODE_PATH) $(NODE_BIN) tests/urltester.js -s production -c federation-search
 
 D2T_YAMLS = $(wildcard conf/rdf-mapping/*.yaml)
 D2T_JSONS = $(D2T_YAMLS:.yaml=.json)
