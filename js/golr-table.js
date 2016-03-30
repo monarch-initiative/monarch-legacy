@@ -239,6 +239,10 @@ function addPhenoPacketButton(pager, manager, id){
         var button_elt = '#' + button.get_id();
         
         jQuery('#' + span).append(button.to_string());
+        jQuery(button_elt).append("<span class=\"badge beta-badge\">BETA</span>");
+        //var infoIcon = "<i class=\"fa fa-info-circle pheno-info\"></i>";
+        //jQuery('#' + span).append(infoIcon);
+
         jQuery(button_elt).attr('title', title);
 
         jQuery('#' + button.get_id()).click( function() {
