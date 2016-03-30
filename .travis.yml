@@ -14,8 +14,8 @@ before_install:
   - "gcc --version"
   - "/sbin/start-stop-daemon --start --quiet --pidfile /tmp/custom_xvfb_99.pid --make-pidfile --background --exec /usr/bin/Xvfb -- :99 -ac -screen 0 1280x1024x16"
   - "npm cache clean -f"
-  - "nvm install v0.12.2"
-  - "nvm use v0.12.2"
+  - "nvm install v4.4.1"
+  - "nvm use v4.4.1"
   - "npm version"
   - "npm install -g npm@3.4.0"
   - "npm version"
@@ -33,7 +33,7 @@ before_script:
   - "export DISPLAY=:99.0"
   - "# npm run start &"
   - "# install.sh does this instead... 'npm run build'"
-  - "NODE_PATH=./lib/monarch USE_BUNDLE=1 USE_LOG_FETCH=1 node ./lib/monarch/web/webapp_launcher.js beta &"
+  - "NODE_PATH=./lib/monarch USE_BUNDLE=1 USE_LOG_FETCH=1 node --harmony_destructuring ./lib/monarch/web/webapp_launcher.js beta &"
   - "sleep 20"
 
 after_success:
