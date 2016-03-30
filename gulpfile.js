@@ -15,6 +15,7 @@ var fs = require('fs');
 var us = require('underscore');
 var map = require('map-stream');
 var shell = require('gulp-shell');
+var download = require("gulp-download");
 
 
 var paths = {
@@ -29,7 +30,7 @@ var paths = {
 
 
 gulp.task('set_up', ['make-tmp-dir']);
-gulp.task('assemble', ['yaml-confs-to-json']);
+gulp.task('assemble', ['yaml-confs-to-json', 'download-phenopacket-schema']);
 gulp.task('make-golr-conf', ['golr-tab-to-json', 'golr-yaml-to-json', 'golr-json-merge', 'golr-json-cat']);
 gulp.task('tear_down', ['rm-tmp-dir']);
 
@@ -199,6 +200,13 @@ gulp.task('golr-json-cat',['golr-json-merge'], function() {
            return new Buffer(JSON.stringify(golr_conf));
        }))
        .pipe(gulp.dest('./conf/'));
+});
+
+gulp.task('download-phenopacket-schema', function() {
+    var url = "https://raw.githubusercontent.com/phenopackets/" +
+    		  "phenopacket-format/master/schema/phenopacket-schema.json";
+    download(url)
+        .pipe(gulp.dest("./tests/resources/"));
 });
 
 //Remove temp directory

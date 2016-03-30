@@ -28,4 +28,4 @@ if [ $PORT ]
 fi
 
 export NODE_PATH=./lib/monarch
-node ./lib/monarch/web/webapp_launcher.js $MARGS $RUNENV 2>&1 | tee start-server.log
+node --harmony_destructuring ./lib/monarch/web/webapp_launcher.js $MARGS $RUNENV 2>&1 | tee start-server.log

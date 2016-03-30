@@ -26,15 +26,15 @@ MONARCH_VERSION = 0.1.1
 ### Tests
 ###
 
-APITESTS = apitest class-info-test
-TESTS = $(APITESTS) urltester
+APITESTS = apitest class-info-test phenopacket-test
+TESTS = $(APITESTS)
 
 test: $(patsubst %, test-%, $(TESTS))
 apitest: $(patsubst %, test-%, $(APITESTS))
 production-test: $(patsubst %, production-test-%, $(TESTS))
 
 test-%:
-	NODE_PATH=$(NODE_PATH) $(NODE_BIN) tests/$*.js
+	NODE_PATH=$(NODE_PATH) $(NODE_BIN) --harmony_destructuring tests/$*.js
 
 production-test-%:
 	NODE_PATH=$(NODE_PATH) $(NODE_BIN) tests/$*.js -s production
