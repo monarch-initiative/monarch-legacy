@@ -1,7 +1,7 @@
 {
     "type" : "beta",
     
-    "app_base" : "https://monarchinitiative.org",
+    "app_base" : "https://beta.monarchinitiative.org",
     
     "scigraph_url" : "https://scigraph-ontology.monarchinitiative.org/scigraph/",
 
