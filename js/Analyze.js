@@ -783,6 +783,14 @@ function AnalyzeInit(uploaded_data){
         
 
         var phenotypes  = text.split(/[\s,]+/);
+        
+        // Need to convert each phenotype ID into an object {id: "HP:0004388"} - Zhou
+        var phenotype_list = [];
+        for (var i = 0; i < phenotypes.length; i++) {
+            var phenotype_obj = {"id": phenotypes[i]};
+            phenotype_list.push(phenotype_obj);
+        }
+        
         // New data schema since Phenogrid 1.3.0 input - Zhou
         var gridSkeletonData = {
             "title": null,
@@ -808,12 +816,8 @@ function AnalyzeInit(uploaded_data){
                     "groupName": "Caenorhabditis elegans"
                 }
             ],
-            "yAxis": phenotypes
-        };
-        console.log(phenotypes);  
-        
-        
-        
+            "yAxis": phenotype_list
+        };        
         
     console.log('before window.onload in Analyze.js');
 
@@ -821,7 +825,6 @@ function AnalyzeInit(uploaded_data){
         console.log('before Phenogrid.createPhenogridForElement in Analyze.js');
 		Phenogrid.createPhenogridForElement(document.getElementById('phen_vis'), {
 			gridSkeletonData: gridSkeletonData,
-            //phenotypeData: phenotypes,
 			serverURL: global_app_base,
 			targetSpecies: species,
             searchResultLimit: limit,
