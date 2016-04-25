@@ -63,7 +63,7 @@ function loadPhenogrid(){
 
                 var phenogridOpts = {
                                         gridSkeletonData: gridSkeletonData,
-                                        serverURL: "https://beta.monarchinitiative.org"//global_app_base
+                                        serverURL: global_app_base
                                     };
                 Phenogrid.createPhenogridForElement(phenogridContainer, phenogridOpts);
             }

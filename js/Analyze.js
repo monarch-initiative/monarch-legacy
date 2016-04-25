@@ -783,21 +783,50 @@ function AnalyzeInit(uploaded_data){
         
 
         var phenotypes  = text.split(/[\s,]+/);
-
+        // New data schema since Phenogrid 1.3.0 input - Zhou
+        var gridSkeletonData = {
+            "title": null,
+            "xAxis": [
+                {
+                    "groupId": "9606",
+                    "groupName": "Homo sapiens"
+                },
+                {
+                    "groupId": "10090",
+                    "groupName": "Mus musculus"
+                },
+                {
+                    "groupId": "7955",
+                    "groupName": "Danio rerio"
+                },
+                {
+                    "groupId": "7227",
+                    "groupName": "Drosophila melanogaster"
+                },
+                {
+                    "groupId": "6239",
+                    "groupName": "Caenorhabditis elegans"
+                }
+            ],
+            "yAxis": phenotypes
+        };
+        console.log(phenotypes);  
+        
+        
+        
+        
     console.log('before window.onload in Analyze.js');
-        // New way - Zhou
-        // Phenogrid will remove the duplicated phenotypes in this monarch-app returned phenotype_list
-        // before sending the ajax POST to simsearch - Zhou
+
 	// window.onload = function() {
         console.log('before Phenogrid.createPhenogridForElement in Analyze.js');
 		Phenogrid.createPhenogridForElement(document.getElementById('phen_vis'), {
-			phenotypeData: phenotypes,
+			gridSkeletonData: gridSkeletonData,
+            //phenotypeData: phenotypes,
 			serverURL: global_app_base,
 			targetSpecies: species,
             searchResultLimit: limit,
 			owlSimFunction: urlParams.mode,
-			geneList: urlParams.geneList, // geneList is only used when in compare mode - Zhou
-			providedData: urlParams.user_input
+			geneList: urlParams.geneList // geneList is only used when in compare mode - Zhou
 		});
 	// };
     }
