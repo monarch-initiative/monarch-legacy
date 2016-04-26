@@ -1,13 +1,13 @@
 
 function AnalyzeInit(uploaded_data){
-    // hide the limit field under search section 
+    // hide the limit field under search section
     // since the selected target species is 'all' by default - Zhou
     jQuery('#analyze-limit').hide();
-    
+
     var DEFAULT_LIMIT = 100;
     var DEBUG = false;
     //var DEBUG = true;
-    
+
     var urlParams = {};
 
     ///
@@ -20,17 +20,17 @@ function AnalyzeInit(uploaded_data){
     var analyze_auto_target_elt = '#' + analyze_auto_target_id;
     var analyze_auto_list_id = 'analyze_auto_list';
     var analyze_auto_list_elt = '#' + analyze_auto_list_id;
-    
+
     //Control instructions show/hide href
     $("#instructions-toggle").click(function(e){
         e.preventDefault();
-        $("#instructions").toggle(400); 
+        $("#instructions").toggle(400);
     });
 
     ///
     /// Gunna go crazy without bbop-js, so adding a few things
     /// here: (stripped) logger and iterator.
-    /// 
+    ///
 
     var ll = function(str){
 		if( DEBUG && console && console.log ){
@@ -59,7 +59,7 @@ function AnalyzeInit(uploaded_data){
 	    }
 		return retval;
     };
-    
+
     var is_hash = function(in_thing){
 		var retval = false;
 		if( in_thing &&
@@ -71,7 +71,7 @@ function AnalyzeInit(uploaded_data){
     };
 
     var get_keys = function (arg_hash){
-	
+
 		if( ! arg_hash ){ arg_hash = {}; }
 		var out_keys = [];
 		for (var out_key in arg_hash) {
@@ -79,7 +79,7 @@ function AnalyzeInit(uploaded_data){
 				out_keys.push(out_key);
 	        }
 		}
-		
+
 		return out_keys;
     };
 
@@ -146,26 +146,26 @@ function AnalyzeInit(uploaded_data){
     				search_set[url_phenotypes[urn]] = "Phenotype_"+(urn+1);
     			}
     		}
-        } 
-        
+        }
+
         switch(parameterName[0]){
-        
+
             case 'mode':
                 urlParams.mode = parameterName[1];
                 break;
             case 'gene_list':
-                urlParams.geneList = 
+                urlParams.geneList =
                     add_gene_list_as_string(urlParams.geneList, parameterName[1]);
                 jQuery('#gene-list').val(decodeURIComponent(parameterName[1].replace(/\+/g, ' ')));
                 break;
             case 'ortholog_list':
-                urlParams.geneList = 
+                urlParams.geneList =
                     add_gene_list_as_string(urlParams.geneList, parameterName[1]);
                 jQuery('#ortholog-text-area').show();
                 jQuery('#ortholog-list').val(decodeURIComponent(parameterName[1].replace(/\+/g, ' ')));
                 break;
             case 'paralog_list':
-                urlParams.geneList = 
+                urlParams.geneList =
                     add_gene_list_as_string(urlParams.geneList, parameterName[1]);
                 jQuery('#paralog-text-area').show();
                 jQuery('#paralog-list').val(decodeURIComponent(parameterName[1].replace(/\+/g, ' ')));
@@ -183,16 +183,16 @@ function AnalyzeInit(uploaded_data){
                 break;
         }
     }
-    
+
     if (typeof urlParams.geneList !== 'undefined'){
         var decode = decodeURIComponent(urlParams.geneList.replace(/\+/g, ' '));
         urlParams.geneList = parse_text_area(decode);
     }
-    
+
     if (jQuery('#analyze_limit_input').val() == ''){
         jQuery('#analyze_limit_input').val(DEFAULT_LIMIT);
     }
-    
+
     if (urlParams.mode == 'compare'){
         //jQuery("#srch").removeAttr('clicked');
         jQuery('#compare').prop('checked', true);
@@ -203,7 +203,7 @@ function AnalyzeInit(uploaded_data){
         disable_compare_form();
         enable_search_form();
     }
-    
+
     //Check if we're coming from a POST with user entered data
     if (uploaded_data != null){
         try {
@@ -215,9 +215,9 @@ function AnalyzeInit(uploaded_data){
         urlParams.mode = 'exomiser';
         jQuery('#user-results').val(uploaded_data);
     }
-    
+
     redraw_form_list();
-    
+
     //add these items to the list on the "Table View" tab
     var result_list = jQuery('#result-table');
     var term_list = '';
@@ -228,35 +228,35 @@ function AnalyzeInit(uploaded_data){
     if (typeof urlParams.user_input == 'undefined'){
         result_list.prepend('<h3>Search Terms</h3> ' + term_list.substring(0, term_list.length-2) + '<br/>');
     }
-    
-    
+
+
     //Settings
     var homologs = {};
-    
+
     jQuery('#gene-list').on('change', function() {
         homologs = {};
     });
-    
+
     // Disable search form when compare radio button selected
     // and enable compare
     jQuery('#compare').click(function(){
         disable_search_form();
         enable_compare_form();
     });
-    
+
     // Disable compare form when compare radio button selected
     // Re-enable search form
-    jQuery('#srch').click(function(){   
+    jQuery('#srch').click(function(){
         disable_compare_form();
         enable_search_form();
     });
-    
-    jQuery('#reset').click(function(){   
+
+    jQuery('#reset').click(function(){
         disable_compare_form();
         enable_search_form();
-        jQuery('#analyze_limit_input').val(DEFAULT_LIMIT);  
+        jQuery('#analyze_limit_input').val(DEFAULT_LIMIT);
     });
-    
+
     jQuery('#target').on('change', function() {
         set_target_type(this.value);
         // hide the limit field for all species
@@ -267,7 +267,7 @@ function AnalyzeInit(uploaded_data){
             jQuery('#analyze-limit').show();
         }
     });
-    
+
     jQuery('#ortholog').click(function(){
         if (typeof homologs.orthologs !== 'undefined'){
             jQuery("#gene-list").val(homologs.input.join(', '));
@@ -285,7 +285,7 @@ function AnalyzeInit(uploaded_data){
         disable_compare_form();
         jQuery("#reset").prop('disabled', true);
         jQuery("#srch").prop("disabled", true);
-        
+
         jQuery.getJSON(query, function(data) {
             jQuery("#ajax-spinner").hide();
             enable_compare_form();
@@ -299,17 +299,17 @@ function AnalyzeInit(uploaded_data){
             jQuery("#srch").prop("disabled", false);
             scroll_to_bottom('ortholog-list');
         })
-        .error(function() { 
+        .error(function() {
             jQuery("#ajax-spinner").hide();
             enable_compare_form();
             jQuery("#reset").prop('disabled', false);
             jQuery("#srch").prop("disabled", false);
             jQuery("#error-msg").show().delay(3000).fadeOut();
         });
-        
-        
+
+
     });
-    
+
     jQuery('#paralog').click(function(){
         if (typeof homologs.paralogs !== 'undefined'){
             jQuery("#gene-list").val(homologs.input.join(', '));
@@ -327,7 +327,7 @@ function AnalyzeInit(uploaded_data){
         disable_compare_form();
         jQuery("#reset").prop('disabled', true);
         jQuery("#srch").prop("disabled", true);
-        
+
         jQuery.getJSON(query, function(data) {
             jQuery("#ajax-spinner").hide();
             enable_compare_form();
@@ -340,8 +340,8 @@ function AnalyzeInit(uploaded_data){
             jQuery("#paralog-list").prop("disabled", false);
             jQuery("#srch").prop("disabled", false);
             scroll_to_bottom('paralog-list');
-        })   
-        .error(function() { 
+        })
+        .error(function() {
             jQuery("#ajax-spinner").hide();
             enable_compare_form();
             jQuery("#reset").prop('disabled', false);
@@ -350,29 +350,29 @@ function AnalyzeInit(uploaded_data){
         });
 ;
     });
-    
+
     /*
      * Function: parse_text_area
-     * 
-     * Returns: list of value from text area 
+     *
+     * Returns: list of value from text area
      * split by comma, comma\s, or \n
      */
     function parse_text_area(text){
         var gene_list = text.split(/\,\s|\,|\s\n|\n/);
         return gene_list;
     }
-    
+
     function scroll_to_bottom(id){
         var textarea = document.getElementById(id);
         textarea.scrollTop = textarea.scrollHeight;
     }
-    
-    function disable_search_form(){       
+
+    function disable_search_form(){
         jQuery("#search-form-group input").prop("disabled", true);
         jQuery("#search-form-group select").prop("disabled", true);
         jQuery(".search-text").css("opacity", ".5");
     }
-    
+
     function disable_compare_form(){
         jQuery("#compare-form-group button").prop("disabled", true);
         jQuery("#compare-form-group textarea").prop("disabled", true);
@@ -380,11 +380,11 @@ function AnalyzeInit(uploaded_data){
         //Not sure why the above does not work for the following
         jQuery("#ortholog-list").prop("disabled", true);
         jQuery("#paralog-list").prop("disabled", true);
-        
+
         //Dim text
         jQuery(".compare-text").css("opacity", ".5");
     }
-    
+
     function enable_compare_form(){
         jQuery("#compare-form-group button").prop('disabled', false);
         jQuery("#compare-form-group textarea").prop('disabled', false);
@@ -393,7 +393,7 @@ function AnalyzeInit(uploaded_data){
         jQuery("#paralog-list").prop("disabled", false);
         jQuery(".compare-text").css("opacity", "1.0");
     }
-    
+
     function enable_search_form(){
         jQuery("#search-form-group input").prop('disabled', false);
         jQuery("#search-form-group select").prop('disabled', false);
@@ -401,9 +401,9 @@ function AnalyzeInit(uploaded_data){
         jQuery("#type").prop('disabled', true);
         jQuery(".search-text").css("opacity", "1.0");
     }
-    
+
     function set_target_type(value){
-        
+
         if (value === '9606'){
             jQuery("#type option[value=gene]").prop('disabled', true);
             jQuery("#type option[value=all]").prop('disabled', true);
@@ -426,8 +426,8 @@ function AnalyzeInit(uploaded_data){
             jQuery('#type').val('all');
         }
     }
-    
-    
+
+
     function add_gene_list_as_string(geneList, newGenes){
         if (typeof geneList == 'undefined'){
             return newGenes;
@@ -437,7 +437,7 @@ function AnalyzeInit(uploaded_data){
             return geneList;
         }
     }
-    
+
     function add_gene_from_autocomplete(id){
         var current_list = jQuery("#gene-list").val();
         var new_list;
@@ -453,7 +453,7 @@ function AnalyzeInit(uploaded_data){
         jQuery("#gene-list").val(new_list);
         homologs = {};
     }
-    
+
     function add_metadata(obj){
     	obj.metadata = {
                 "maxSumIC": "6070.04276",
@@ -474,7 +474,7 @@ function AnalyzeInit(uploaded_data){
         };
 		return obj;
     }
-    
+
     //Upload file
     jQuery('#upload-file').on('change', function() {
         var file_name = jQuery(this).val();
@@ -513,7 +513,7 @@ function AnalyzeInit(uploaded_data){
 		    // Placeholder when there is nothing.
 		    jQuery(analyze_auto_list_elt).append('<li class="list-group-item">Empty: Add items using the input above.</li>');
 		}else{
-		    jQuery(analyze_auto_list_elt).append(draw_cache.join(''));	
+		    jQuery(analyze_auto_list_elt).append(draw_cache.join(''));
 		}
 
 
@@ -537,7 +537,7 @@ function AnalyzeInit(uploaded_data){
 
 		// Update.
 		update_form_value();
-		redraw_form_list();	
+		redraw_form_list();
     }
 
     // Action to perform when an item is selected from the dropdown
@@ -547,7 +547,7 @@ function AnalyzeInit(uploaded_data){
 
 		// Add the item.
 		search_set[id] = label;
-	    
+
 		// Update.
 		update_form_value();
 		redraw_form_list();
@@ -591,7 +591,7 @@ function AnalyzeInit(uploaded_data){
                     });
 					if (map.length > 0) {
 					    var id_list = map.map( function(i) { return i.id; });
-					    remove_equivalent_ids(map, id_list, response);   
+					    remove_equivalent_ids(map, id_list, response);
 					} else {
 					    response(map);
 					}
@@ -599,7 +599,7 @@ function AnalyzeInit(uploaded_data){
 				});
 		},
 		select: function(event, ui){
-		    
+
 		    // Get the selected input.
 		    var id = null;
 		    var lbl = null;
@@ -616,7 +616,7 @@ function AnalyzeInit(uploaded_data){
 		    return false;
 		}
     };
-    
+
     var auto_gene_args = {
         source: function(request, response) {
             var query = "/autocomplete/gene/" + request.term + ".json";
@@ -641,7 +641,7 @@ function AnalyzeInit(uploaded_data){
                         var ids = gene_ids.join('&id=');
                         if (gene_ids.length > 0) {
                             //TODO pass server in using puptent var
-                            var qurl = global_scigraph_data_url+"graph/neighbors?id=" 
+                            var qurl = global_scigraph_data_url+"graph/neighbors?id="
                             + ids + "&depth=1&blankNodes=false&relationshipType=http%3A%2F%2Fpurl.obolibrary.org%2Fobo%2FRO_0002162"
                             + "&direction=BOTH&project=%2A";
                             jQuery.ajax({
@@ -663,7 +663,7 @@ function AnalyzeInit(uploaded_data){
             });
         },
         select: function(event, ui){
-        
+
             // Get the selected input.
             var id = null;
             var lbl = null;
@@ -689,18 +689,18 @@ function AnalyzeInit(uploaded_data){
         li.append('<a alt="'+ item.name +'" title="'+ item.name +'">' +
               '<span class="autocomplete-main-item">' +
               item.label +
-              '</span>' + 
-              '&nbsp;' + 
+              '</span>' +
+              '&nbsp;' +
               '<span class="autocomplete-tag-item">' +
               item.tag +
-              '</span>' + 
+              '</span>' +
               '</a>');
         li.appendTo(ul);
         return li;
     };
-    
+
     var example_exomiser = '{"input_terms":{"id":"hiPhive specified phenotypes","phenotype_list":["HP:0001156","HP:0001363","HP:0011304","HP:0010055"]},"matches":[{"b":[{"id":"OMIM:101600","label":"Craniofacial-skeletal-dermatologic dysplasia","type":"gene","matches":[{"b":{"id":"HP:0001156","label":"Brachydactyly syndrome","IC":0.0},"a":{"id":"HP:0001156","label":"Brachydactyly syndrome","IC":0.0},"lcs":{"id":"HP:0001156","label":"Brachydactyly syndrome","IC":4.19562}},{"b":{"id":"HP:0004440","label":"Coronal craniosynostosis","IC":0.0},"a":{"id":"HP:0001363","label":"Craniosynostosis","IC":0.0},"lcs":{"id":"HP:0001363","label":"Craniosynostosis","IC":5.962614}},{"b":{"id":"HP:0010055","label":"Broad hallux","IC":0.0},"a":{"id":"HP:0010055","label":"Broad hallux","IC":0.0},"lcs":{"id":"HP:0010055","label":"Broad hallux","IC":7.868505}},{"b":{"id":"HP:0011304","label":"Broad thumb","IC":0.0},"a":{"id":"HP:0011304","label":"Broad thumb","IC":0.0},"lcs":{"id":"HP:0011304","label":"Broad thumb","IC":7.561576}}],"score":{"metric":"hiPhive","score":87,"rank":0},"taxon":{"id":"NCBITaxon:9606","label":"Homo sapiens"}},{"id":"OMIM:113000","label":"Brachydactyly, type B1","type":"gene","matches":[{"b":{"id":"HP:0005831","label":"Type B brachydactyly","IC":0.0},"a":{"id":"HP:0001156","label":"Brachydactyly syndrome","IC":0.0},"lcs":{"id":"HP:0001156","label":"Brachydactyly syndrome","IC":4.19562}},{"b":{"id":"HP:0000270","label":"Delayed cranial suture closure","IC":0.0},"a":{"id":"HP:0001363","label":"Craniosynostosis","IC":0.0},"lcs":{"id":"HP:0011329","label":"Abnormality of cranial sutures","IC":4.960614}},{"b":{"id":"HP:0001841","label":"Preaxial foot polydactyly","IC":0.0},"a":{"id":"HP:0010055","label":"Broad hallux","IC":0.0},"lcs":{"id":"HP:0001844","label":"Abnormality of the hallux","IC":5.866505}},{"b":{"id":"HP:0011304","label":"Broad thumb","IC":0.0},"a":{"id":"HP:0011304","label":"Broad thumb","IC":0.0},"lcs":{"id":"HP:0011304","label":"Broad thumb","IC":7.561576}}],"score":{"metric":"hiPhive","score":83,"rank":1},"taxon":{"id":"NCBITaxon:9606","label":"Homo sapiens"}},{"id":"OMIM:608091","label":"Joubert syndrome 2","type":"gene","matches":[{"b":{"id":"HP:0000268","label":"Dolichocephaly","IC":0.0},"a":{"id":"HP:0001363","label":"Craniosynostosis","IC":0.0},"lcs":{"id":"HP:0002648","label":"Abnormality of calvarial morphology","IC":3.371649}},{"b":{"id":"HP:0001760","label":"Abnormality of the foot","IC":0.0},"a":{"id":"HP:0010055","label":"Broad hallux","IC":0.0},"lcs":{"id":"HP:0001760","label":"Abnormality of the foot","IC":2.688579}},{"b":{"id":"HP:0001162","label":"Postaxial hand polydactyly","IC":0.0},"a":{"id":"HP:0011304","label":"Broad thumb","IC":0.0},"lcs":{"id":"HP:0005918","label":"Abnormality of phalanx of finger","IC":3.415293}}],"score":{"metric":"hiPhive","score":48,"rank":21},"taxon":{"id":"NCBITaxon:9606","label":"Homo sapiens"}},{"id":"ORPHANET:96147","label":"Kleefstra Syndrome Due To 9q34 Microdeletion","type":"gene","matches":[{"b":{"id":"HP:0002648","label":"Abnormality of calvarial morphology","IC":0.0},"a":{"id":"HP:0001363","label":"Craniosynostosis","IC":0.0},"lcs":{"id":"HP:0002648","label":"Abnormality of calvarial morphology","IC":3.371649}}],"score":{"metric":"hiPhive","score":41,"rank":24},"taxon":{"id":"NCBITaxon:9606","label":"Homo sapiens"}}],"a":["HP:0001156","HP:0001363","HP:0010055","HP:0011304"],"cutoff":10},{"b":[{"id":"MGI:95523","label":"Fgfr2","type":"gene","matches":[{"b":{"id":"MP:0000157","label":"abnormal sternum morphology","IC":0.0},"a":{"id":"HP:0001156","label":"Brachydactyly syndrome","IC":0.0},"lcs":{"id":"HP:0002817","label":"Abnormality of the upper limb","IC":2.9923516799420047}},{"b":{"id":"MP:0000081","label":"premature suture closure","IC":0.0},"a":{"id":"HP:0001363","label":"Craniosynostosis","IC":0.0},"lcs":{"id":"MP:0000081","label":"premature suture closure","IC":7.262130933869157}},{"b":{"id":"MP:0000157","label":"abnormal sternum morphology","IC":0.0},"a":{"id":"HP:0010055","label":"Broad hallux","IC":0.0},"lcs":{"id":"HP:0002817","label":"Abnormality of the upper limb","IC":2.9923516799420047}},{"b":{"id":"MP:0000157","label":"abnormal sternum morphology","IC":0.0},"a":{"id":"HP:0011304","label":"Broad thumb","IC":0.0},"lcs":{"id":"HP:0002817","label":"Abnormality of the upper limb","IC":2.9923516799420047}}],"score":{"metric":"hiPhive","score":79,"rank":0},"taxon":{"id":"NCBITaxon:10090","label":"Mus musculus"}},{"id":"MGI:1347521","label":"Ror2","type":"gene","matches":[{"b":{"id":"MP:0002544","label":"brachydactyly","IC":0.0},"a":{"id":"HP:0001156","label":"Brachydactyly syndrome","IC":0.0},"lcs":{"id":"MP:0002544","label":"brachydactyly","IC":5.178556408761554}},{"b":{"id":"MP:0002896","label":"abnormal bone mineralization","IC":0.0},"a":{"id":"HP:0001363","label":"Craniosynostosis","IC":0.0},"lcs":{"id":"MP:0008271","label":"abnormal bone ossification","IC":4.612912842187128}},{"b":{"id":"MP:0002544","label":"brachydactyly","IC":0.0},"a":{"id":"HP:0010055","label":"Broad hallux","IC":0.0},"lcs":{"id":"HP:0001780","label":"Abnormality of toe","IC":4.531274162650655}},{"b":{"id":"MP:0002543","label":"brachyphalangia","IC":0.0},"a":{"id":"HP:0011304","label":"Broad thumb","IC":0.0},"lcs":{"id":"MP:0002543","label":"brachyphalangia","IC":6.155542032591956}}],"score":{"metric":"hiPhive","score":68,"rank":1},"taxon":{"id":"NCBITaxon:10090","label":"Mus musculus"}},{"id":"MGI:104627","label":"Dst","type":"gene","matches":[{"b":{"id":"MP:0000333","label":"decreased bone marrow cell number","IC":0.0},"a":{"id":"HP:0001363","label":"Craniosynostosis","IC":0.0},"lcs":{"id":"MP:0003795","label":"abnormal bone structure","IC":3.4844338981188643}}],"score":{"metric":"hiPhive","score":25,"rank":59},"taxon":{"id":"NCBITaxon:10090","label":"Mus musculus"}}],"a":["HP:0001156","HP:0001363","HP:0010055","HP:0011304"],"cutoff":10},{"b":[{"id":"ZDB-GENE-990706-8","label":"gli2a","type":"gene","matches":[{"b":{"id":"ZP:0000646","label":"abnormal(ly) fused with trabecula cranii towards trabecula cranii","IC":0.0},"a":{"id":"HP:0001363","label":"Craniosynostosis","IC":0.0},"lcs":{"id":null,"label":"UBERON:0001703PHENOTYPE","IC":3.1410619680611025}},{"b":{"id":"ZP:0005395","label":"abnormal(ly) hypoplastic floor plate","IC":0.0},"a":{"id":"HP:0011304","label":"Broad thumb","IC":0.0},"lcs":{"id":null,"label":"UBERON:0002513PHENOTYPE","IC":2.675369817163234}}],"score":{"metric":"hiPhive","score":30,"rank":0},"taxon":{"id":"NCBITaxon:7955","label":"Danio rerio"}},{"id":"ZDB-GENE-040724-172","label":"enpp1","type":"gene","matches":[{"b":{"id":"ZP:0006782","label":"abnormal(ly) nodular cleithrum","IC":0.0},"a":{"id":"HP:0001156","label":"Brachydactyly syndrome","IC":0.0},"lcs":{"id":null,"label":"UBERON:0011582PHENOTYPE","IC":3.0900304386859347}},{"b":{"id":"ZP:0006781","label":"abnormal(ly) increased process quality bone mineralization","IC":0.0},"a":{"id":"HP:0001363","label":"Craniosynostosis","IC":0.0},"lcs":{"id":"MP:0008271","label":"abnormal bone ossification","IC":4.634488795231343}},{"b":{"id":"ZP:0006782","label":"abnormal(ly) nodular cleithrum","IC":0.0},"a":{"id":"HP:0010055","label":"Broad hallux","IC":0.0},"lcs":{"id":"HP:0002817","label":"Abnormality of the upper limb","IC":2.571065720233295}},{"b":{"id":"ZP:0006782","label":"abnormal(ly) nodular cleithrum","IC":0.0},"a":{"id":"HP:0011304","label":"Broad thumb","IC":0.0},"lcs":{"id":null,"label":"UBERON:0010741PHENOTYPE","IC":3.4819346510173244}}],"score":{"metric":"hiPhive","score":40,"rank":1},"taxon":{"id":"NCBITaxon:7955","label":"Danio rerio"}},{"id":"ZDB-GENE-030131-9511","label":"dcaf7","type":"gene","matches":[{"b":{"id":"ZP:0001147","label":"abnormal(ly) aplastic mandibular arch skeleton","IC":0.0},"a":{"id":"HP:0001156","label":"Brachydactyly syndrome","IC":0.0},"lcs":{"id":"HP:0009115","label":"Aplasia/hypoplasia involving the skeleton","IC":2.993545064357974}},{"b":{"id":"ZP:0004599","label":"abnormal(ly) morphology mandibular arch skeleton cartilaginous joint","IC":0.0},"a":{"id":"HP:0001363","label":"Craniosynostosis","IC":0.0},"lcs":{"id":null,"label":"UBERON:0011134PHENOTYPE","IC":5.282941889613182}},{"b":{"id":"ZP:0000268","label":"abnormal(ly) decreased size symplectic","IC":0.0},"a":{"id":"HP:0011304","label":"Broad thumb","IC":0.0},"lcs":{"id":null,"label":"UBERON:0002513PHENOTYPE","IC":2.675369817163234}}],"score":{"metric":"hiPhive","score":37,"rank":2},"taxon":{"id":"NCBITaxon:7955","label":"Danio rerio"}},{"id":"ZDB-GENE-990603-9","label":"smad5","type":"gene","matches":[{"b":{"id":"ZP:0001981","label":"abnormal(ly) decreased length trabecula cranii","IC":0.0},"a":{"id":"HP:0001363","label":"Craniosynostosis","IC":0.0},"lcs":{"id":null,"label":"UBERON:0001703PHENOTYPE","IC":3.1410619680611025}}],"score":{"metric":"hiPhive","score":31,"rank":3},"taxon":{"id":"NCBITaxon:7955","label":"Danio rerio"}},{"id":"ZDB-GENE-021212-1","label":"ddx55","type":"gene","matches":[{"b":{"id":"ZP:0002916","label":"abnormal(ly) bent ceratohyal cartilage","IC":0.0},"a":{"id":"HP:0001363","label":"Craniosynostosis","IC":0.0},"lcs":{"id":null,"label":"UBERON:0004755PHENOTYPE","IC":3.0686708582452824}}],"score":{"metric":"hiPhive","score":21,"rank":4},"taxon":{"id":"NCBITaxon:7955","label":"Danio rerio"}},{"id":"ZDB-GENE-081119-3","label":"frem2a","type":"gene","matches":[{"b":{"id":"ZP:0004697","label":"abnormal(ly) has fewer parts of type pectoral fin towards lepidotrichium","IC":0.0},"a":{"id":"HP:0001156","label":"Brachydactyly syndrome","IC":0.0},"lcs":{"id":"HP:0002817","label":"Abnormality of the upper limb","IC":2.571065720233295}},{"b":{"id":"ZP:0004697","label":"abnormal(ly) has fewer parts of type pectoral fin towards lepidotrichium","IC":0.0},"a":{"id":"HP:0010055","label":"Broad hallux","IC":0.0},"lcs":{"id":"HP:0002817","label":"Abnormality of the upper limb","IC":2.571065720233295}},{"b":{"id":"ZP:0004697","label":"abnormal(ly) has fewer parts of type pectoral fin towards lepidotrichium","IC":0.0},"a":{"id":"HP:0011304","label":"Broad thumb","IC":0.0},"lcs":{"id":"HP:0002817","label":"Abnormality of the upper limb","IC":2.571065720233295}}],"score":{"metric":"hiPhive","score":32,"rank":5},"taxon":{"id":"NCBITaxon:7955","label":"Danio rerio"}}],"a":["HP:0001156","HP:0001363","HP:0010055","HP:0011304"],"cutoff":10}]}';
-    
+
     var example_json =  ['{"b":[{"id":"NCBIGene:8928","label":"FOXH1","type":null,"matches"',
     ':[{"b":{"id":"HP:0006988","IC":13.714898549158372,"label":"Alobar holoprosencephaly"},',
     '"a":{"id":"HP:0000238","IC":5.880408498213997,"label":"Hydrocephalus"},"lcs":',
@@ -737,11 +737,11 @@ function AnalyzeInit(uploaded_data){
     '"metric_stats":{"metric":"combinedScore","maxscore":"100","avgscore":"60","stdevscore":"4.32",',
     '"comment":"These stats are approximations for this release"}},"resource":{"label":"OwlSim Server: http://owlsim.crbs.ucsd.edu/"},',
     '"a":{"id":"HP_0000238","label":"Hydrocephalus","type":"phenotype","taxon":{"id":"","label":"Not Specified"},"id_list":["HP:0000238"]}}'].join('\n');
-    
+
     jQuery('#example-one').click(function(){
         jQuery('#user-results').val(example_exomiser);
     });
-    
+
     jQuery('#example-two').click(function(){
         jQuery('#user-results').val(example_json);
     });
@@ -752,10 +752,10 @@ function AnalyzeInit(uploaded_data){
         var text = jQuery("#analyze_auto_target").val();
         var species = jQuery("#target").val();
         var limit = jQuery("#analyze_limit_input").val();
-        
-        if (typeof urlParams.user_input != 'undefined' 
+
+        if (typeof urlParams.user_input != 'undefined'
                 && typeof urlParams.user_input.matches != 'undefined'){
-        
+
             console.log(urlParams.user_input);
 
             flattened_user_input = flatten_json(urlParams.user_input);
@@ -763,7 +763,7 @@ function AnalyzeInit(uploaded_data){
             console.log("flat");
             console.log(flattened_user_input);
             console.log(JSON.stringify(flattened_user_input));
-            
+
             // HACK to add gene ID prefixes, will make
             // it work but will forward people to the wrong gene!!
             flattened_user_input.b.forEach(function(attribute,index){
@@ -774,23 +774,23 @@ function AnalyzeInit(uploaded_data){
                     flattened_user_input.b[index].type = "disease";
                 }
             });
-            
+
             // Obviously an Exomiser call
             urlParams.mode = "exomiser"
 
             urlParams.user_input = flattened_user_input
         }
-        
+
 
         var phenotypes  = text.split(/[\s,]+/);
-        
+
         // Need to convert each phenotype ID into an object {id: "HP:0004388"} - Zhou
         var phenotype_list = [];
         for (var i = 0; i < phenotypes.length; i++) {
             var phenotype_obj = {"id": phenotypes[i]};
             phenotype_list.push(phenotype_obj);
         }
-        
+
         // New data schema since Phenogrid 1.3.0 input - Zhou
         var gridSkeletonData = {
             "title": null,
@@ -810,15 +810,16 @@ function AnalyzeInit(uploaded_data){
                 {
                     "groupId": "7227",
                     "groupName": "Drosophila melanogaster"
-                },
-                {
-                    "groupId": "6239",
-                    "groupName": "Caenorhabditis elegans"
                 }
+                //,
+                //{
+                //    "groupId": "6239",
+                //    "groupName": "Caenorhabditis elegans"
+                //}
             ],
             "yAxis": phenotype_list
-        };        
-        
+        };
+
     console.log('before window.onload in Analyze.js');
 
 	// window.onload = function() {
@@ -840,7 +841,7 @@ function AnalyzeInit(uploaded_data){
          if(toFlatten != undefined && toFlatten.length != 0) {
             var ref = _.head(toFlatten) // Takes the first as template
             var onlyBs = _.map(_.tail(toFlatten), function(el){  // collect the rest of the Bs
-                return el.b; 
+                return el.b;
             });
             ref.b = _.flatten(ref.b.concat(onlyBs)); // injecting the Bs in the reference
             ref.metadata = json.metadata;
@@ -849,5 +850,5 @@ function AnalyzeInit(uploaded_data){
             return {};
          }
     }
-    
+
 }

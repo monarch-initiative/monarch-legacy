@@ -11,9 +11,9 @@ function loadPhenogrid(){
         disease_id = disease_id.substring(slash_idx+1);
         var phenotype_list = [];
         var phenogridContainer = document.getElementById('phen_vis');
-        
-        
-        
+
+
+
         var gridSkeletonData = {
                 "title": null,
                 "xAxis": [
@@ -32,16 +32,17 @@ function loadPhenogrid(){
                     {
                         "groupId": "7227",
                         "groupName": "Drosophila melanogaster"
-                    },
-                    {
-                        "groupId": "6239",
-                        "groupName": "Caenorhabditis elegans"
                     }
+                    //,
+                    //{
+                    //    "groupId": "6239",
+                    //    "groupName": "Caenorhabditis elegans"
+                    //}
                 ],
                 "yAxis": phenotype_list
             };
-        
-        
+
+
         jQuery.ajax({
             url : '/' + disease_id + '/phenotype_list.json', // Fetching this list takes several seconds which causes empty page conten - Zhou
             async : true,
