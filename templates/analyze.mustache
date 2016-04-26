@@ -19,8 +19,8 @@
                     {{#isPhenotype}}
                     <p style="font-size:15px">
 					The Phenotype Analysis Tool enables you search our database using the <a href="http://owlsim.org">
-					OwlSim</a> Semantic Similarity analysis engine to find phenotypically similar diseases or        
-                    genes in a variety of organisms, then visualize their overlap. 
+					OwlSim</a> Semantic Similarity analysis engine to find phenotypically similar diseases or
+                    genes in a variety of organisms, then visualize their overlap.
 					(<a href="/page/about">Read more</a> if you want to understand how this works.)
 					</p>
 
@@ -43,7 +43,7 @@
                               populated enabling you to iterate and refine your lists. You can start over by
                               hitting Reset.</li>
 					    </ul>
-					    
+
                         <!--
                         <li><i>Upload</i></li>
 					      <ul>
@@ -52,36 +52,36 @@
                         -->
 					  </ul>
 					</div>
-						
+
                     {{/isPhenotype}}
                 </div>
                 <div id="categories">
                     {{#isFileError}}
                     <a href="#query"><div  class="tab contenttab second query-tab">Search</div></a>
-                    
+
                     <!--
                     <a href="#upload"><div id="initialtab" class="tab contenttab second upload-tab">Upload</div></a>
                     -->
-                    
+
                     <div class="tab greyed-out">Results</div>
                     {{/isFileError}}
                     {{^isFileError}}
                       {{^hasInputItems}}
                       <a href="#query"><div id="initialtab" class="tab contenttab second query-tab">Search</div></a>
-                      
+
                       <!--
                       <a href="#upload"><div class="tab contenttab second upload-tab">Upload</div></a>
                       -->
-                      
+
                       <div class="tab greyed-out">Results</div>
                       {{/hasInputItems}}
                       {{#hasInputItems}}
                       <a href="#query"><div class="tab contenttab second query-tab">Search</div></a>
-                      
+
                       <!--
                       <a href="#upload"><div class="tab contenttab second upload-tab">Upload</div></a>
                       -->
-                      
+
                       <a href="#result"><div id="initialtab" class="tab contenttab results-tab">Results</div></a>
                       {{/hasInputItems}}
                     {{/isFileError}}
@@ -111,7 +111,7 @@
                         <div id="analyze-searchlist" class="form-group">
                           <label for="analyze_auto_input"><h4>Create a phenotype profile:</h4></label>
                           {{#isPhenotype}}
-                          <div class="small phenotype-auto-desc">Select one or more phenotypes by using the autocomplete. 
+                          <div class="small phenotype-auto-desc">Select one or more phenotypes by using the autocomplete.
                               Each will get added to a list at the bottom of the section.</div>
                           {{/isPhenotype}}
                           <input id="analyze_auto_input" type="text" class="form-control"
@@ -150,12 +150,14 @@
                                     <option value="10090">Mus musculus (genes)</option>
                                     <option value="7955">Danio rerio (genes)</option>
                                     <option value="9606">Homo sapiens (diseases)</option>
+                                    <option value="7227">Drosophila melanogaster (genes)</option>
+                                    <!-- <option value="6239">Caenorhabditis elegans (genes)</option> -->
                                   </select>
                                 </div>
                               </div>
                             </div>
-                           
-                           <!-- 
+
+                           <!--
                             <div class="form-group" id="analyze-type">
                               <div class="row">
                                 <label for="type" class="col-xs-6 control-label search-label search-text">Target Type:</label>
@@ -170,19 +172,19 @@
                               </div>
                             </div>
                             -->
-                            
+
                             <div id="analyze-limit" class="form-group">
                               <div class="row">
                                 <label for="analyze_limit_input" class="col-xs-6 control-label search-label search-text">Maximum number of results:</label>
                                 <div class="col-xs-6">
                                   <input class="form-control" id="analyze_limit_input" name="limit" type="text" value="{{limit}}"></input>
                                 </div>
-                              </div> 
+                              </div>
                             </div>
                           </div>
                       </div>
-                    
-                    
+
+
                       <div id="analyze-compare" class="col-xs-6">
                         <div class="pheno-radio-button">
                           <label id="pheno-compare">
@@ -201,8 +203,8 @@
                           placeholder="e.g. LHX1" disabled>
                           <div id="gene-text-area" class="compare-text">Gene IDs:
                           </div>
-                       
-                          <textarea id="gene-list" class="form-control" rows="3" placeholder="e.g. NCBIGene:3975, ENSEMBL:ENSG00000108753 " 
+
+                          <textarea id="gene-list" class="form-control" rows="3" placeholder="e.g. NCBIGene:3975, ENSEMBL:ENSG00000108753 "
                                     name="gene_list" disabled></textarea>
                           <div id="gene-shortcuts" class="compare-text">Add More Genes:<br>
                               <span class="small compare-text">
@@ -266,20 +268,20 @@
                 {{/isFileError}}
                   <div class="col-xs-6">
 					<p>
-						If you have a phenotype-comparison formatted JSON file (such as from Exomiser), 
+						If you have a phenotype-comparison formatted JSON file (such as from Exomiser),
 						you can visualize it with
                         our Phenogrid by uploading or pasting the contents into the form.
                         We also provide several examples for you to play with.
 					</p>
 					<br />
 					<p style="font-size:13px; line-height: 100%">
-					The <a href="https://www.sanger.ac.uk/resources/software/exomiser/">Exomiser</a> is a Java program 
-					that functionally annotates variants from whole-exome sequencing data starting 
-					from a VCF file, and leverages variant frequency, pathogenicity, quality, 
-					inheritance pattern, and phenotype data for prioritization. <i>Coming soon in 
-					Exomiser 7.0</i>, you will be able to export a phenogrid-ready file to 
-					visualize the phenotypic evidence for candidate variants. 
-					Use the examples at the right to test this feature.</p> 
+					The <a href="https://www.sanger.ac.uk/resources/software/exomiser/">Exomiser</a> is a Java program
+					that functionally annotates variants from whole-exome sequencing data starting
+					from a VCF file, and leverages variant frequency, pathogenicity, quality,
+					inheritance pattern, and phenotype data for prioritization. <i>Coming soon in
+					Exomiser 7.0</i>, you will be able to export a phenogrid-ready file to
+					visualize the phenotypic evidence for candidate variants.
+					Use the examples at the right to test this feature.</p>
 				  </div>
                   <div class="col-xs-6">
                     <div class="row row-fluid">
