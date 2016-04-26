@@ -32,7 +32,14 @@ function loadPhenogrid(){
 
                 var phenogridOpts = {
                                         phenotypeData: phenotype_list,
-                                        serverURL: global_app_base
+                                        serverURL: global_app_base,
+                                        targetGroupList: [
+                                            {name: "Homo sapiens", taxon: "9606", crossComparisonView: true, active: true},
+                                            {name: "Mus musculus", taxon: "10090", crossComparisonView: true, active: true},
+                                            {name: "Danio rerio", taxon: "7955", crossComparisonView: true, active: true},
+                                            {name: "Drosophila melanogaster", taxon: "7227", crossComparisonView: true, active: true}
+                                           // {name: "Caenorhabditis elegans", taxon: "6239", crossComparisonView: true, active: true}
+                                        ]
                                     };
                 Phenogrid.createPhenogridForElement(phenogridContainer, phenogridOpts);
             }
