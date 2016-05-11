@@ -5,7 +5,7 @@ Feature: Analyze phenotypes is usable by the expected user interfaces
  ## No Background necessary.
 
  @data
- Scenario: adding "allergy" and "asthma" to analyze phenotype results in "Ichthyosis Vulgaris"
+ Scenario: adding "allergy" and "asthma" to analyze phenotype results in "Lta4h"
     Given I go to page "/analyze/phenotypes"
      and I type "aller" into the phenotype analyze search
      and I wait until "Allergy" appears in the autocomplete
@@ -14,7 +14,7 @@ Feature: Analyze phenotypes is usable by the expected user interfaces
      and I wait until "Asthma" appears in the autocomplete
      and I click the autocomplete item "Asthma"
      when I submit analyze phenotype
-     then the document should contain "ichthyosis vulgaris"
+     then the document should contain "Lta4h"
 
 @data
  Scenario: adding "Microalbuminuria" and "microcephaly" to analyze phenotype results in "pru1"
