@@ -251,12 +251,6 @@ function AnalyzeInit(uploaded_data){
         enable_search_form();
     });
 
-    jQuery('#reset').click(function(){
-        disable_compare_form();
-        enable_search_form();
-        jQuery('#analyze_limit_input').val(DEFAULT_LIMIT);
-    });
-
     jQuery('#target').on('change', function() {
         set_target_type(this.value);
         // hide the limit field for all species
@@ -325,13 +319,11 @@ function AnalyzeInit(uploaded_data){
         var query = '/query/orthologs/'+genes+'.json'
         jQuery("#ajax-spinner").show();
         disable_compare_form();
-        jQuery("#reset").prop('disabled', true);
         jQuery("#srch").prop("disabled", true);
 
         jQuery.getJSON(query, function(data) {
             jQuery("#ajax-spinner").hide();
             enable_compare_form();
-            jQuery("#reset").prop('disabled', false);
             //Set global homologs to reuse if needed
             homologs = data;
             jQuery("#gene-list").val(homologs.input.join(', '));
@@ -344,7 +336,6 @@ function AnalyzeInit(uploaded_data){
         .error(function() {
             jQuery("#ajax-spinner").hide();
             enable_compare_form();
-            jQuery("#reset").prop('disabled', false);
             jQuery("#srch").prop("disabled", false);
             jQuery("#error-msg").show().delay(3000).fadeOut();
         });
