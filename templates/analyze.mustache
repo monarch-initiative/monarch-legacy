@@ -126,26 +126,25 @@
                       </div>
                     </div>
                   </div>
+                  
+                  
                   <div class="col-xs-6">
                     <div class="panel panel-default">
                       <div class="panel-heading">
                         <h4 class="panel-title text-center">Step 2: Search Against</h4>
                       </div>
-                      <div class="panel-body" style="padding-right:0;">
-                        <div id="analyze-search" class="col-xs-6">
+                      <div class="panel-body">
+                        <div id="analyze-search">
                           <div class="pheno-radio-button">
-                            <label id="pheno-search">
-                              <input id="srch" type="radio" checked="checked" value="search" name="mode"> Search</label>
+                            <label id="pheno-search"><input id="srch" type="radio" checked="checked" value="search" name="mode"> Target Groups</label>
                           </div>
-                          <div class="explain search-text">
-                            Refine your search space by taxon or target type (disease or gene)
-                          </div>
+
                           <div id="search-form-group">
                             <div class="row">
-                              <div class="form-group" id="analyze-target">
-                                <label for="target" class="col-xs-6 control-label search-label search-text">Target Species:</label>
-                                <div class="col-xs-6">
-                                  <select id="target" name="target_species">
+                              <div class="form-group col-xs-6" id="analyze-target">
+                                <label for="target" class="control-label search-label search-text">Target Groups:</label>
+                                <div>
+                                  <select id="target" class="form-control" name="target_species">
                                     <option value="all" selected="selected" >All</option>
                                     <option value="10090">Mus musculus (genes)</option>
                                     <option value="7955">Danio rerio (genes)</option>
@@ -155,6 +154,18 @@
                                   </select>
                                 </div>
                               </div>
+                              
+                              
+                              <div id="analyze-limit" class="form-group col-xs-6">
+                          
+                                <label for="analyze_limit_input" class="control-label search-label search-text">Limit of results:</label>
+                                <div>
+                                  <input class="form-control" id="analyze_limit_input" name="limit" type="text" value="{{limit}}"></input>
+                                </div>
+          
+                              </div>
+                              
+                              
                             </div>
 
                            <!--
@@ -173,25 +184,15 @@
                             </div>
                             -->
 
-                            <div id="analyze-limit" class="form-group">
-                              <div class="row">
-                                <label for="analyze_limit_input" class="col-xs-6 control-label search-label search-text">Maximum number of results:</label>
-                                <div class="col-xs-6">
-                                  <input class="form-control" id="analyze_limit_input" name="limit" type="text" value="{{limit}}"></input>
-                                </div>
-                              </div>
-                            </div>
+                            
                           </div>
                       </div>
 
-
-                      <div id="analyze-compare" class="col-xs-6">
+                      <hr>
+                      
+                       <div id="analyze-compare">
                         <div class="pheno-radio-button">
-                          <label id="pheno-compare">
-                            <input id="compare" type="radio" value="compare" name="mode"> Compare</label>
-                        </div>
-                        <div class="explain compare-text">
-                            Enter a specific set of genes to compare against your query.
+                          <label id="pheno-compare"><input id="compare" type="radio" value="compare" name="mode"> A Specific Set of Genes</label>
                         </div>
                         <p class="small example compare-instructions compare-text">
                          Select genes using either the autocomplete and/or enter gene IDs directly using the text box.
@@ -248,9 +249,16 @@
                             <textarea id="paralog-list" class="form-control" rows="2" placeholder="" name="paralog_list" disabled></textarea>
                         </div>
                       </div>
+                      
+                      
+                      
                      </div>
                    </div>
                   </div>
+                  
+                  
+                  
+                  
                   <div class="col-xs-1">
                       <button id="analyze-submit" type="submit" class="btn btn-primary">Submit</button>
                       <br/>

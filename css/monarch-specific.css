@@ -251,9 +251,7 @@
 .monarch-container #settings-header {
     text-align: center;
 }
-.monarch-container #analyze-compare {
-    border-left: 1px solid #e8e8e8;
-}
+
 .monarch-container .search-label {
 	font-weight: normal;
     font-size: 15px;
@@ -264,13 +262,10 @@
     width:100%;
 }
 
-.monarch-container #analyze-target {
-	padding-bottom: 30px;
-}
 
 .monarch-container #analyze-search {
   padding: 0;
-  margin-left: -5px;
+  margin-left: 5px;
 }
 
 .monarch-container #search-form-group {
@@ -283,7 +278,6 @@
 }
 
 .monarch-container .pheno-radio-button {
-	width: 14%;
     margin: 0 auto;
     padding-bottom: 10px;
 }
