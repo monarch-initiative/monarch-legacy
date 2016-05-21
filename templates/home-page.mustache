@@ -456,34 +456,67 @@
 
 
       <div class="row">
+        <!-- https://dev.twitter.com/web/embedded-timelines/parameters -->
         <div id="twitter" class="col-xs-12">
-          <a  class="twitter-timeline"
-            href="https://twitter.com/search?q=%40MonarchInit+OR+%23raredisease+OR+%40GA4GH+OR+%40phenomecentral"
-            data-widget-id="527567015918051328"
-            data-chrome=""
-            height="340"
-            width="520">
-            Loading Tweets about "@MonarchInit OR #raredisease OR @GA4GH OR @phenomecentral"
-          </a>
+
+          <div
+            class="panel panel-default news-panel">
+            <div class="panel-heading">
+              <h3 class="panel-title">Tweets</h3>
+            </div>
+            <div class="panel-body news-list">
+
+
+              <a class="twitter-timeline"
+                href="https://twitter.com/search?q=%40MonarchInit+OR+%23raredisease+OR+%40GA4GH+OR+%40phenomecentral"
+                data-widget-id="527567015918051328"
+                data-chrome="noheader nofooter nobxorders noscrollbar transparent"
+                xdata-theme="dark"
+                xdata-tweet-limit="1"
+                data-preview=""
+                height="320"
+                width="520">
+                Loading Tweets about "@MonarchInit OR #raredisease OR @GA4GH OR @phenomecentral"
+              </a>
+            </div>
+          </div>
 
           <script>
+
           // From https://dev.twitter.com/web/javascript/loading - 7/26/2015
+          !(function(d, s, id) {
 
-          window.twttr = (function(d, s, id) {
-            var js, fjs = d.getElementsByTagName(s)[0],
-              t = window.twttr || {};
-            if (d.getElementById(id)) return t;
-            js = d.createElement(s);
-            js.id = id;
-            js.src = "https://platform.twitter.com/widgets.js";
-            fjs.parentNode.insertBefore(js, fjs);
+            var js,
+                fjs=d.getElementsByTagName(s)[0],
+                p=/^http:/.test(d.location)?'http':'https';
+            if(!d.getElementById(id)){
+              js=d.createElement(s);
+              js.id=id;
+              js.src=p+"://platform.twitter.com/widgets.js";
+              fjs.parentNode.insertBefore(js,fjs);
+            }
 
-            t._e = [];
-            t.ready = function(f) {
-              t._e.push(f);
+            // https://twittercommunity.com/t/auto-expand-photos-always-on-for-embedded-timeline/62510/48
+
+            var hideRecursive = false;
+            var hideTweetMedia = function() {
+              var container = jQuery("#twitter").find(".twitter-timeline").contents().find(".timeline-Tweet-media");
+                container.css("display", "none");
+                jQuery("#twitter").css("height", "100%");
+                container.css("border", "3px solid red");
+                if (!hideRecursive) {
+                  jQuery("#twitter").find(".twitter-timeline").contents().find(".timeline-TweetList").bind('DOMSubtreeModified propertychange',
+                    function() {
+                      hideTweetMedia(this);
+                      hideRecursive = true;
+                    }
+                  );
+                }
             };
-
-            return t;
+            hideTweetMedia();
+            jQuery('#twitter').on('DOMSubtreeModified propertychange',"#twitter-widget-0", function() {
+                hideTweetMedia();
+            });
           }(document, "script", "twitter-wjs"));
           </script>
         </div>
