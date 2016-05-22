@@ -17,11 +17,9 @@
 function InitMonarchBBOPWidgetBrowse() {
     var jq = require('jquery');
     if (typeof(globalUseBundle) === 'undefined' || !globalUseBundle) {
-        console.log('InitMonarchBBOPWidgetBrowse... using loaderGlobals bbop');
         var bbop = loaderGlobals.bbop;
     }
     else {
-        console.log('InitMonarchBBOPWidgetBrowse... using require bbop');
         var bbop = require('bbop');
     }
 
@@ -646,11 +644,9 @@ bbop.monarch.widget.browse = function(server, manager, reference_id, root, inter
 }
 
 
-console.log('define InitMonarchBBOPWidgetBrowse');
 if (typeof loaderGlobals === 'object') {
     loaderGlobals.InitMonarchBBOPWidgetBrowse = InitMonarchBBOPWidgetBrowse;
 }
 if (typeof global === 'object') {
     global.InitMonarchBBOPWidgetBrowse = InitMonarchBBOPWidgetBrowse;
-    console.log('define InitMonarchBBOPWidgetBrowse global');
 }

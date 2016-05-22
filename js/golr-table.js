@@ -94,7 +94,6 @@ function getTableFromSolr(id, golr_field, div, filter, personality, tab_anchor){
 
         //open species filter
         var open_species_filter = function(){
-            console.log('open_species_filter');
             jQuery('#'+pager_filter+' div')
                 .filter(function() {
                     return this.id.match(/^collapsible-subject_taxon_label/);

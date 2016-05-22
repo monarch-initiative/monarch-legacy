@@ -493,13 +493,11 @@ bbop.monarch.widget.display.results_table_by_class_conf_bs3.prototype.process_en
 }
 
 
-console.log('define InitMonarchBBOPWidgetDisplay');
 if (typeof loaderGlobals === 'object') {
     loaderGlobals.InitMonarchBBOPWidgetDisplay = InitMonarchBBOPWidgetDisplay;
 }
 if (typeof global === 'object') {
     global.InitMonarchBBOPWidgetDisplay = InitMonarchBBOPWidgetDisplay;
-    console.log('define InitMonarchBBOPWidgetDisplay global');
 }
 
 
