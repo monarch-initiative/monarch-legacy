@@ -887,11 +887,9 @@ bbop.widget.facet_filters = function(interface_id, manager, golr_conf_obj, in_ar
 }
 
 
-console.log('define InitFacetFilters');
 if (typeof loaderGlobals === 'object') {
     loaderGlobals.InitFacetFilters = InitFacetFilters;
 }
 if (typeof global === 'object') {
     global.InitFacetFilters = InitFacetFilters;
-    console.log('define InitFacetFilters global');
 }

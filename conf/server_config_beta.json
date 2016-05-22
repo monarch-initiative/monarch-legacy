@@ -1,8 +1,8 @@
 {
     "type" : "beta",
-    
-    "app_base" : "https://monarchinitiative.org",
-    
+
+    "app_base" : "https://beta.monarchinitiative.org",
+
     "scigraph_url" : "https://scigraph-ontology.monarchinitiative.org/scigraph/",
 
     "scigraph_data_url" : "https://scigraph-data.monarchinitiative.org/scigraph/",
@@ -12,5 +12,5 @@
     "owlsim_services_url" : "https://monarchinitiative.org/owlsim",
 
     "analytics_id" : ""
-        
+
 }
