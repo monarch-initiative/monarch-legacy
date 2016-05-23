@@ -496,6 +496,19 @@ h1.downloadline {
     margin-bottom: 0px;
 }
 
+/* Collaboration Page */
+@media (min-width: 800px) {
+    #collab-spectrum img {
+	    display:block;
+	    margin:10px auto 20px;
+	    width:80%;
+    }
+}
+@media (max-width: 800px) {
+	#collab-spectrum img {
+        width:90%;
+    }
+}
 /* Alerts */
 /* This is the styling for alerts about development that appear at the tops of dev
  * pages throughout the Monarch site. */
