@@ -135,11 +135,11 @@
 {
   "resource_description": "The PANTHER (Protein ANalysis THrough Evolutionary Relationships) Classification System was designed to classify proteins (and their genes) according to evolutionary family/subfamily, molecular function, biological process, and pathway. The PANTHER Classifications are the result of human curation as well as sophisticated    bioinformatics algorithms.",
   "ontologies_or_vocabularies": "RO",
-  "taxa": "arabidopsis, budding yeast, chicken, chimp, dog, fission yeast, fruitfly, green lizzard, horse, human, macaque, mouse, opossum, pig, platypus, rat, slime mold, worm, zebrafish",
+  "taxa": "arabidopsis, budding yeast, chicken, chimp, dog, fission yeast, fruitfly, green lizard, horse, human, macaque, mouse, opossum, pig, platypus, rat, slime mold, worm, zebrafish",
   "resource": "PANTHER",
   "id":"nlx_84521",
   "data_categories": "orthology",
-  "monarch_use": "We currently utilize the 12 RefGenome species, as well as HUGO HCOP species, to seed the orthology calls.  Species currently include:  arabidopsis, budding yeast, chicken, chimp, dog, fission yeast, fruitfly, green lizzard, horse, human, macaque, mouse, opossum, pig, platypus, rat, slime mold, worms, zebrafish.  We use the orthology calls to populate the orthologs tabs for genes, as well as to infer disease-model associations via homology."
+  "monarch_use": "We currently utilize the 12 RefGenome species, as well as HUGO HCOP species, to seed the orthology calls.  Species currently include:  arabidopsis, budding yeast, chicken, chimp, dog, fission yeast, fruitfly, green lizard, horse, human, macaque, mouse, opossum, pig, platypus, rat, slime mold, worms, zebrafish.  We use the orthology calls to populate the orthologs tabs for genes, as well as to infer disease-model associations via homology."
 },
 {
   "resource_description": "WormBase is an international consortium dedicated to providing the research community with accurate, current, accessible information concerning the genetics, genomics and biology of C. elegans and related nematodes. ",
