@@ -404,6 +404,13 @@
 }
 
 
+#selected_inputs{
+border:1px solid #ddd;
+margin-bottom:20px;
+padding:10px;
+font-size:12px;
+}
+
 
 @media (max-width: 840px) {
 

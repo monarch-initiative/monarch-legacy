@@ -215,18 +215,26 @@ function AnalyzeInit(uploaded_data){
         urlParams.mode = 'exomiser';
         jQuery('#user-results').val(uploaded_data);
     }
-
+ 
     redraw_form_list();
 
     //add these items to the list on the "Table View" tab
-    var result_list = jQuery('#result-table');
+    var result_list = jQuery('#phen_vis');
     var term_list = '';
+    
+    if (urlParams.mode === 'search') {
+        var selected_target_group_option = jQuery('#target').val();
+        var selected_comparables = jQuery('#target option[value='+ selected_target_group_option +']').text();
+    } else {
+        var selected_comparables = jQuery('#gene-list').val();
+    }
+
     var select_terms = jQuery('.list-group-item');
     jQuery.each(select_terms, function(key, value) {
     	term_list += (value.textContent.substring(0,value.textContent.length-1) + ', ');
     });
     if (typeof urlParams.user_input == 'undefined'){
-        result_list.prepend('<h3>Search Terms</h3> ' + term_list.substring(0, term_list.length-2) + '<br/>');
+        result_list.prepend('<div id="selected_inputs"><h4>Selected Phenotypes:</h4> ' + term_list.substring(0, term_list.length-2) + '<br/>' + '<h4>Selected Comparables:</h4> ' + selected_comparables + '</div>');
     }
 
 
