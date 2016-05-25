@@ -104,12 +104,11 @@
                   <div class="col-xs-5">
                     <div id="search-phenotypes" class="panel panel-default">
                       <div class="panel-heading">
-                        <h4 class="panel-title text-center">Step 1: Input Phenotypes</h4>
+                        <h4 class="panel-title text-center">Step 1: Select Phenotypes</h4>
                       </div>
                       <div class="panel-body">
                         <input id="analyze_auto_target" name="input_items" value="{{input_items}}" type="hidden"/>
                         <div id="analyze-searchlist" class="form-group">
-                          <label for="analyze_auto_input"><h4>Create a phenotype profile:</h4></label>
                           {{#isPhenotype}}
                           <div class="small phenotype-auto-desc">Select phenotypes by using the autocomplete.
                               Each will get added to the list below.</div>
@@ -118,7 +117,7 @@
                           placeholder="Enter {{datatype}} here"/>
                         </div>
                         <div id="analyze-profile" class="form-group">
-                            <label for="analyze_auto_list"><h4>Search list / {{datatype}} profile</h4></label>
+                            <label for="analyze_auto_list">Selected {{datatype}}:</label>
                             <ul id="analyze_auto_list" class="list-group">
                             <li id="analyze-empty-item" class="list-group-item">Empty: Add items using the input above.</li>
                             </ul>
@@ -128,10 +127,10 @@
                   </div>
                   
                   
-                  <div class="col-xs-6">
+                  <div class="col-xs-5">
                     <div class="panel panel-default">
                       <div class="panel-heading">
-                        <h4 class="panel-title text-center">Step 2: Search Against</h4>
+                        <h4 class="panel-title text-center">Step 2: Select Comparables</h4>
                       </div>
                       <div class="panel-body">
                         <div id="analyze-search">
@@ -259,8 +258,10 @@
                   
                   
                   
-                  <div class="col-xs-1">
+                  <div class="col-xs-2">
+  
                       <button id="analyze-submit" type="submit" class="btn btn-primary">Submit</button>
+
                   </div>
                 </form>
                 </div>
