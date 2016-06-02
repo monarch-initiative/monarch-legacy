@@ -328,13 +328,13 @@ function add_species_to_autocomplete(data, map, gene_ids) {
     // Sort by the common taxa
     var temp_map = [];
     temp_map = temp_map.concat(map.filter( function (i){
+        return i.tag == 'Human' })
+    );
+    temp_map = temp_map.concat(map.filter( function (i){
         return i.tag == 'Mouse' })
     );
     temp_map = temp_map.concat(map.filter( function (i){
         return i.tag == 'Zebra Fish' })
-    );
-    temp_map = temp_map.concat(map.filter( function (i){
-        return i.tag == 'Human' })
     );
     temp_map = temp_map.concat(map.filter( function (i){
         return i.tag == 'Fruit Fly' })
