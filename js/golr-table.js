@@ -1,6 +1,3 @@
-// Module to launch solr driven tables
-var Q = require('q');
-
 /**
  * Arguments: - id: An identifier. One of: IRI string, OBO-style ID
  *            - field: GOlr field in which to filter on the id
@@ -13,6 +10,7 @@ var Q = require('q');
  *                          value: 'phenotype"
  *                      }
  */
+
 function getTableFromSolr(id, golr_field, div, filter, personality, tab_anchor){
     if (tab_anchor != null){
         var isTabLoading = false;
@@ -66,11 +64,7 @@ function getTableFromSolr(id, golr_field, div, filter, personality, tab_anchor){
         if (filter != null && filter instanceof Array && filter.length > 0){
             filter.forEach( function (val) {
                 if (val != null && val.field && val.value){
-                    if (val.hasOwnProperty("plist")) {
-                        golr_manager.add_query_filter(val.field, val.value, val.plist);
-                    } else {
-                        golr_manager.add_query_filter(val.field, val.value, ['*']);
-                    }
+                    golr_manager.add_query_filter(val.field, val.value, ['*']);
                 }
             });
         }
@@ -85,7 +79,7 @@ function getTableFromSolr(id, golr_field, div, filter, personality, tab_anchor){
 
         // var filters = new bbop.widget.live_filters(pager_filter, golr_manager, gconf, f_opts);
         /* eslint new-cap: 0 */
-        var filters = new bbop.widget.facet_filters(pager_filter, golr_manager, gconf, f_opts, div);
+        var filters = new bbop.widget.facet_filters(pager_filter, golr_manager, gconf, f_opts);
         filters.establish_display();
 
         //Remove sticky filter
@@ -107,16 +101,6 @@ function getTableFromSolr(id, golr_field, div, filter, personality, tab_anchor){
                 .removeClass('collapse')
                 .addClass('in');
         };
-        
-        var headerOnClick = function () {
-            jQuery('.monarch-filterable').click( function() {
-                var spanID = jQuery(this).attr("id");
-                spanID = spanID.replace("TH-association-table-", "");
-                jQuery('#'+ 'collapsible-' + spanID + '-' + div)
-                    .removeClass('collapse')
-                    .addClass('in');
-            });
-        }
 
         // Attach pager.
         var pager_opts = {
@@ -133,7 +117,60 @@ function getTableFromSolr(id, golr_field, div, filter, personality, tab_anchor){
         };
 
     bbop.widget.display.results_table_by_class_conf_b3 = bbop.monarch.widget.display.results_table_by_class_conf_bs3;
-    bbop.widget.display.results_table_by_class_conf_b3.prototype.process_entry = process_entry;
+    bbop.widget.display.results_table_by_class_conf_b3.prototype.process_entry = function(bit, field_id, document, display_context){
+        var anchor = this;
+
+        // First, allow the handler to take a whack at it. Forgive
+        // the local return. The major difference that we'll have here
+        // is between standard fields and special handler fields. If
+        // the handler resolves to null, fall back onto standard.
+        var out = anchor._handler.dispatch(bit, field_id, display_context);
+        if( bbop.core.is_defined(out) && out != null ){
+            return out;
+        }
+
+        // Otherwise, use the rest of the context to try and render
+        // the item.
+        var retval = '';
+        var did = document['id'];
+
+        // Get a label instead if we can.
+        var ilabel = anchor._golr_response.get_doc_label(did, field_id, bit);
+        if( !ilabel ){
+            ilabel = bit;
+        }
+        if (ilabel != null) {
+            ilabel = ilabel.replace(/\>/g,'&gt;');
+            ilabel = ilabel.replace(/\</g,'&lt;');
+        }
+
+        // Extract highlighting if we can from whatever our "label"
+        // was.
+        var hl = anchor._golr_response.get_doc_highlight(did, field_id, ilabel);
+        if (hl != null) {
+            hl = hl.replace(/\>/g,'&gt;');
+            hl = hl.replace(/\</g,'&lt;');
+        }
+
+        //Get cateogry
+        var category = anchor._golr_response.get_doc_field(did, field_id+'_category');
+
+        // See what kind of link we can create from what we got.
+        var ilink =
+            anchor._linker.anchor({id:bit, label:ilabel, hilite:hl, category:category}, field_id);
+
+        // See what we got, in order of how much we'd like to have it.
+        if( ilink ){
+            retval = ilink;
+        }else if( ilabel ){
+            retval = ilabel;
+        }else{
+            retval = bit;
+        }
+
+        return retval;
+    };
+
     var results = new bbop.widget.live_results(div, golr_manager, confc,
                        handler, linker, results_opts);
 
@@ -157,11 +194,8 @@ function getTableFromSolr(id, golr_field, div, filter, personality, tab_anchor){
     });
     golr_manager.register('postrun', 'post', function(){
         filters.spin_down();
-        //open_species_filter();
-        headerOnClick();
+        open_species_filter();
     });
-    //TODO change arg order for new golr-manager
-    golr_manager.register('search', 'literature-search', addLiteratureInfo, '1');
 
     // Initial run.
     golr_manager.search();
@@ -283,74 +317,8 @@ function addDownloadButton(pager, manager){
 
         jQuery('#' + button.get_id()).click(forwardToDownload);
     }
+
 }
-
-function addLiteratureInfo(resp){
-    var pubmedIDs = [];
-    resp.documents().forEach(function(doc) {
-        // check for PMID: prefix
-        if (/^PMID:/.test(doc.subject)) {
-            pubmedIDs.push(doc.subject.replace(/^PMID:/,'','g'));
-        }
-    });
-    console.log(pubmedIDs);
-}
-
-//Overrides bbop.widget.display.results_table_by_class_conf_b3.prototype.process_entry
-var process_entry = function (bit, field_id, document, display_context){
-    var anchor = this;
-
-    // First, allow the handler to take a whack at it. Forgive
-    // the local return. The major difference that we'll have here
-    // is between standard fields and special handler fields. If
-    // the handler resolves to null, fall back onto standard.
-    var out = anchor._handler.dispatch(bit, field_id, display_context);
-    if( bbop.core.is_defined(out) && out != null ){
-        return out;
-    }
-
-    // Otherwise, use the rest of the context to try and render
-    // the item.
-    var retval = '';
-    var did = document['id'];
-
-    // Get a label instead if we can.
-    var ilabel = anchor._golr_response.get_doc_label(did, field_id, bit);
-    if( !ilabel ){
-        ilabel = bit;
-    }
-    if (ilabel != null) {
-        ilabel = ilabel.replace(/\>/g,'&gt;');
-        ilabel = ilabel.replace(/\</g,'&lt;');
-    }
-
-    // Extract highlighting if we can from whatever our "label"
-    // was.
-    var hl = anchor._golr_response.get_doc_highlight(did, field_id, ilabel);
-    if (hl != null) {
-        hl = hl.replace(/\>/g,'&gt;');
-        hl = hl.replace(/\</g,'&lt;');
-    }
-
-    //Get cateogry
-    var category = anchor._golr_response.get_doc_field(did, field_id+'_category');
-
-    // See what kind of link we can create from what we got.
-    var ilink =
-        anchor._linker.anchor({id:bit, label:ilabel, hilite:hl, category:category}, field_id);
-
-    // See what we got, in order of how much we'd like to have it.
-    if( ilink ){
-        retval = ilink;
-    }else if( ilabel ){
-        retval = ilabel;
-    }else{
-        retval = bit;
-    }
-
-    return retval;
-};
-
 
 if (typeof(loaderGlobals) === 'object') {
     loaderGlobals.getTableFromSolr = getTableFromSolr;

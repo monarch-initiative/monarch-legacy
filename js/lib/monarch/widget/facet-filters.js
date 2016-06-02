@@ -58,7 +58,7 @@ if ( typeof bbop.widget == "undefined" ){ bbop.widget = {}; }
  * Returns:
  *  this object
  */
-bbop.widget.facet_filters = function(interface_id, manager, golr_conf_obj, in_argument_hash, elt_id) {
+bbop.widget.facet_filters = function(interface_id, manager, golr_conf_obj, in_argument_hash) {
   this._is_a = 'bbop.widget.facet_filters';
 
   var anchor = this;
@@ -200,8 +200,6 @@ bbop.widget.facet_filters = function(interface_id, manager, golr_conf_obj, in_ar
    *
    * Helper function called when anchor.fullFacet has been changed (due to Checkbox action or All/None action).
    * Updates the existing GOLR query and reissues it.
-   * 
-   * TODO update with bbop-logic library
    *
    * Parameters:
    *  n/a
@@ -253,7 +251,6 @@ bbop.widget.facet_filters = function(interface_id, manager, golr_conf_obj, in_ar
     // error.
     var personality = manager.get_personality();
     var cclass = golr_conf_obj.get_class(personality);
-    var filters = cclass.field_order_by_weight('filter');
     if( !personality || !cclass ){
       ll('ERROR: no usable personality set');
       throw new Error('ERROR: no useable personality set');
@@ -328,103 +325,7 @@ bbop.widget.facet_filters = function(interface_id, manager, golr_conf_obj, in_ar
       var filter_accordion_attrs = {
         id: filters_div_id
       };
-
       filter_accordion_widget = new bbop.html.collapsible([], filter_accordion_attrs);
-      
-      /* Override bbop.html.collapsible.add_to so we can add the
-       * all/none and X buttons
-       * 
-       * We're also giving a predictable name to collapsible panels instead of
-       * coll_id = 'collapsible-' + section_id + '-'
-                        + bbop.core.randomness(20);
-       * 
-       * Note we're using fucntion scope to access elt_id here which seems wrong
-       */
-      filter_accordion_widget.add_to = function(section_info, content_blob) {
-          
-          // If section_info isn't an object, assume it is a string
-          // and
-          // use it for everything.
-          var section_id = null;
-          var section_label = null;
-          var section_desc = null;
-          if (typeof section_info != 'object') { // is a string
-              section_id = section_info;
-              section_label = section_info;
-              } else {
-                  if (section_info['id']) {
-                      section_id = section_info['id'];
-                      }
-                  if (section_info['label']) {
-                      section_label = section_info['label'];
-                      }
-                  if (section_info['description']) {
-                      section_desc = section_info['description'];
-                      }
-                  }
-
-          // Section ID and bookkeeping.
-          var coll_id = 'collapsible-' + section_id + '-'
-                        + elt_id;
-          var cont_id = 'content-' + section_id + '-'
-                        + bbop.core.randomness(20);
-          this._section_id_to_content_id[section_id] = cont_id;
-
-          // Inner-most header structure: label.
-          // <a data-toggle="collapse" data-parent="#this._cid"
-          // href="#cont_id">
-          var title_a_attrs = {
-                  'data-toggle' : 'collapse',
-                  'data-parent' : '#' + this._cid,
-                  'href' : '#' + coll_id
-          };
-          // Cannot be null in assembly.
-          if (section_desc) {
-              title_a_attrs['title'] = section_desc;
-          }
-          var title_a = new bbop.html.tag('a', title_a_attrs, section_label);
-
-          // <h4 class="panel-title">
-          var h4_attrs = {
-                  'class' : 'panel-title'
-          };
-          var h4 = new bbop.html.tag('h4', h4_attrs, title_a);
-
-          // Complete the panel heading.
-          // <div class="panel-heading">
-          var divh_attrs = {
-                  'class' : 'panel-heading'
-          };
-          var divh = new bbop.html.tag('div', divh_attrs, h4);
-
-          // Add the panel body.
-          // <div class="panel-body">
-          var body_attrs = {
-                  'class' : 'panel-body',
-                  'style' : 'overflow-x: auto;', // emergency overflow
-                  // scrolling
-                  'id' : cont_id
-          };
-          var body = new bbop.html.tag('div', body_attrs, content_blob);
-
-          // Add the collapsing frame around the panel body.
-          // <div id="collapseOne" class="panel-collapse collapse in">
-          var divb_attrs = {
-                  'class' : 'panel-collapse collapse',
-                  'id' : coll_id
-          };
-          var divb = new bbop.html.tag('div', divb_attrs, body);
-
-          // Add both to the local panel container.
-          // <div class="panel panel-default">
-          var divp_attrs = {
-                  'class' : 'panel panel-default'
-          };
-          var divp = new bbop.html.tag('div', divp_attrs, [ divh, divb ]);
-
-          //
-          this._div_stack.add_to(divp);
-      };
 
       // Add the sections with no contents as a skeleton to be
       // filled by draw_accordion.
@@ -454,7 +355,6 @@ bbop.widget.facet_filters = function(interface_id, manager, golr_conf_obj, in_ar
       jQuery('#' + query_filter_all_id).click(
         function(e) {
           var tid = e.target.id;
-          console.log(e);
           var call_field = 'subject_taxon_label';
 
           var facet = anchor.fullFacet[call_field];
