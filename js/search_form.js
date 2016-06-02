@@ -54,7 +54,7 @@ function navbar_search_init(in_search_id, in_form_id){
 			collision: "flip"
 	    },
 	    source: function(request, response) {
-		console.log("trying autocomplete on "+request.term);
+		//console.log("trying autocomplete on "+request.term);
 
 		// Argument response from source gets map as argument.
 		var _parse_data_item = function(item){
@@ -83,7 +83,7 @@ function navbar_search_init(in_search_id, in_form_id){
 		    };
 		};
 		var _on_success = function(data) {
-			console.log('success:', data);
+			//console.log('success:', data);
 		    // Pare out duplicates. Assume existence of 'id'
 		    // field. Would really be nice to have bbop.core in
 		    // here...
@@ -139,7 +139,7 @@ function navbar_search_init(in_search_id, in_form_id){
 		};
 
 		var query = "/autocomplete/"+request.term+".json";
-		console.log('about to do query:', query);
+		//console.log('about to do query:', query);
 		jQuery.ajax({
 		    url: query,
 		    dataType:"json",
