@@ -54,7 +54,7 @@ function navbar_search_init(in_search_id, in_form_id){
 			collision: "flip"
 	    },
 	    source: function(request, response) {
-		console.log("trying autocomplete on "+request.term);
+		//console.log("trying autocomplete on "+request.term);
 
 		// Argument response from source gets map as argument.
 		var _parse_data_item = function(item){
@@ -83,6 +83,7 @@ function navbar_search_init(in_search_id, in_form_id){
 		    };
 		};
 		var _on_success = function(data) {
+			//console.log('success:', data);
 		    // Pare out duplicates. Assume existence of 'id'
 		    // field. Would really be nice to have bbop.core in
 		    // here...
@@ -110,8 +111,7 @@ function navbar_search_init(in_search_id, in_form_id){
 		        //var gene_ids = id_list;
 		        var ids = gene_ids.join('&id=');
                 if (gene_ids.length > 0) {
-		        //TODO pass server in using puptent var
-		        var qurl = global_scigraph_data_url+"graph/neighbors?id=" 
+		        var qurl = global_scigraph_url+"graph/neighbors?id=" 
 		            + ids + "&depth=1&blankNodes=false&relationshipType=http%3A%2F%2Fpurl.obolibrary.org%2Fobo%2FRO_0002162"
 		            + "&direction=BOTH&project=%2A";
 		        jQuery.ajax({
@@ -119,24 +119,27 @@ function navbar_search_init(in_search_id, in_form_id){
 		            dataType:"json",
 		            error: function (){
 		                console.log('could not get taxon for genes');
-		                remove_equivalent_ids(map, id_list, response);
+		                //remove_equivalent_ids(map, id_list, response);
+		                response(map);
 		            },
 		            success: function ( successData ){
 		                map = add_species_to_autocomplete(successData, map, gene_ids);
-		                remove_equivalent_ids(map, id_list, response);
+		                //remove_equivalent_ids(map, id_list, response);
+		                response(map);
 		            }
 
 		        });
-		    } else {
-		        remove_equivalent_ids(map, id_list, response);
-		    }
+		        } else {
+		            response(map);
+		            //remove_equivalent_ids(map, id_list, response);
+		        }
 		    } else {
 		        response(map);
 		    }
 		};
 
 		var query = "/autocomplete/"+request.term+".json";
-		console.log('about to do query:', query);
+		//console.log('about to do query:', query);
 		jQuery.ajax({
 		    url: query,
 		    dataType:"json",
