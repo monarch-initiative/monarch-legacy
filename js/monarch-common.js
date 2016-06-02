@@ -318,10 +318,34 @@ function add_species_to_autocomplete(data, map, gene_ids) {
             if (map[i]['id'] == id) {
                 if (label) {
                     map[i]['tag'] = label;
+                    if (label == 'Man') {
+                        map[i]['tag'] = 'Human'
+                    }
                 }
             }
         }
     });
+    // Sort by the common taxa
+    var temp_map = [];
+    temp_map = temp_map.concat(map.filter( function (i){
+        return i.tag == 'Human' })
+    );
+    temp_map = temp_map.concat(map.filter( function (i){
+        return i.tag == 'Mouse' })
+    );
+    temp_map = temp_map.concat(map.filter( function (i){
+        return i.tag == 'Zebra Fish' })
+    );
+    temp_map = temp_map.concat(map.filter( function (i){
+        return i.tag == 'Fruit Fly' })
+    );
+    map = temp_map.concat(map.filter( function (i){
+        return ((i.tag != 'Mouse') 
+              && (i.tag != 'Human')
+              && (i.tag != 'Fruit Fly')
+              && (i.tag != 'Zebra Fish'))
+        })
+    );
     return map;
 }
 
