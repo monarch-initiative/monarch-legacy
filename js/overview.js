@@ -113,13 +113,62 @@ function fetchLiteratureOverview(id) {
     
 }
 
+function fetchGeneDescription(id) {
+    //https://mygene.info/v2/query?q=6469&fields=summary
+    var spinner = makeSpinnerDiv();
+    jQuery('#overview').append(spinner.to_string());
+    
+    var serviceURL = 'https://mygene.info/v2/query';
+    //Format, see http://docs.mygene.info/en/latest/doc/query_service.html#available-fields
+    if (id.match(/^NCBIGene/)) {
+        id = id.replace(/\S+:(\d+)/, '$1');
+    } else if (id.match(/^OMIM/)) {
+        id = id.replace(/\S+:(\d+)/, 'mim:$1');
+    } else if (id.match(/^MGI/)) {
+        id = id.replace(/\S+:(\d+)/, 'mgi:MGI\\\\:$1');
+    } else if (id.match(/^FlyBase/)) {
+        id = id.replace(/\S+:(\d+)/, 'flybase:$1');
+    } else if (id.match(/^Wormbase/)) {
+        id = id.replace(/\S+:(\d+)/, 'wormbase:$1');
+    }
+    var params = {
+            'q' : id,
+            'fields': 'summary',
+            'species': 'all'
+    };
+    
+    jQuery.ajax({
+        url: serviceURL,
+        dataType:"json",
+        data: params,
+        error: function (){
+            console.log('error fetching info from mygene');
+            jQuery('#'+spinner.get_id()).remove();
+        },
+        success: function ( data ){
+            jQuery('#'+spinner.get_id()).remove();
+            if (data.hits.length > 0 
+                    && 'summary' in data.hits[0]) {
+                console.log('foo')
+                var summary = data.hits[0].summary;
+                var descriptionElt = '<div class="ids"><b>Description: </b>';
+                var summaryElt = descriptionElt + "<span>" + summary + ' [Retrieved from '+
+                '<a href="https://mygene.info/">Mygene.info</a>]</span></div>'
+                jQuery('#overview').append(summaryElt);
+            }
+        }
+    });
+}
+
 if (typeof (loaderGlobals) === 'object') {
     loaderGlobals.getOntologyBrowser = getOntologyBrowser;
     loaderGlobals.launchBrowser = launchBrowser;
     loaderGlobals.fetchLiteratureOverview = fetchLiteratureOverview;
+    loaderGlobals.fetchGeneDescription = fetchGeneDescription;
 }
 if (typeof (global) === 'object') {
     global.getOntologyBrowser = getOntologyBrowser;
     global.launchBrowser = launchBrowser;
     global.fetchLiteratureOverview = fetchLiteratureOverview;
+    global.fetchGeneDescription = fetchGeneDescription;
 }
