@@ -16,7 +16,7 @@
                     <h1 class="downloadline">Monarch Phenotype Profile Analysis</h1>
                     <a class="downloadline downloadline-left btn btn-large btn-default btn-monarch-main monarch-feedback-dark"
                             href="mailto:info@monarchinitiative.org">Your feedback welcome!</a>
-                    {{#isPhenotype}}
+
                     <p style="font-size:15px">
 					The Phenotype Analysis Tool enables you search our database using the <a href="http://owlsim.org">
 					OwlSim</a> Semantic Similarity analysis engine to find phenotypically similar diseases or
@@ -41,80 +41,45 @@
 
 					  </ul>
 					</div>
-
-                    {{/isPhenotype}}
                 </div>
-                <div id="categories">
-                    {{#isFileError}}
-                    <a href="#query"><div  class="tab contenttab second query-tab">Search</div></a>
-
-                    <div class="tab greyed-out">Results</div>
-                    {{/isFileError}}
-                    {{^isFileError}}
-                      {{^hasInputItems}}
-                      <a href="#query"><div id="initialtab" class="tab contenttab second query-tab">Search</div></a>
-
-                      <div class="tab greyed-out">Results</div>
-                      {{/hasInputItems}}
-                      {{#hasInputItems}}
-                      <a href="#query"><div class="tab contenttab second query-tab">Search</div></a>
-
-                      <a href="#result"><div id="initialtab" class="tab contenttab results-tab">Results</div></a>
-                      {{/hasInputItems}}
-                    {{/isFileError}}
-                </div>
+                
             </div>
+            
             <div id="complete-info">
-              {{#isFileError}}
-                <div id="query" class="category analyze-query">
-              {{/isFileError}}
-              {{^isFileError}}
-                {{^hasInputItems}}
-                <div id="query" class="first category analyze-query">
-                {{/hasInputItems}}
-                {{#hasInputItems}}
-                <div id="query" class="category analyze-query">
-                {{/hasInputItems}}
-              {{/isFileError}}
+
                 <div class="row row-fluid">
-                 <form role="form" action="/analyze/{{datatype}}/" method="GET">
-                  <div class="col-xs-5">
+                 <form class="form">
+               
                     <div id="search-phenotypes" class="panel panel-default">
                       <div class="panel-heading">
-                        <h4 class="panel-title text-center">Step 1: Select Phenotypes</h4>
+                        <h4 class="text-center">Step 1: Select Phenotypes</h4>
                       </div>
                       <div class="panel-body">
                         <input id="analyze_auto_target" name="input_items" value="{{input_items}}" type="hidden"/>
                         <div id="analyze-searchlist" class="form-group">
-                          {{#isPhenotype}}
-                          <div class="small phenotype-auto-desc">Select phenotypes by using the autocomplete.
-                              Each will get added to the list below.</div>
-                          {{/isPhenotype}}
-                          <input id="analyze_auto_input" type="text" class="form-control" placeholder="Enter {{datatype}} here"/>
+                              <input id="analyze_auto_input" type="text" class="form-control" placeholder="Enter phenotype name into this autocomplete search"/>
                         </div>
+                        
                         <div id="analyze-profile" class="form-group">
-                            <label for="analyze_auto_list">Selected {{datatype}}:</label>
                             <ul id="analyze_auto_list" class="list-group">
-                            <li id="analyze-empty-item" class="list-group-item">Empty: Add items using the input above.</li>
+                                <li id="analyze-empty-item" class="list-group-item">Empty: Add items using the input above.</li>
                             </ul>
                         </div>
                       </div>
                     </div>
-                  </div>
-                  
-                  
-                  <div class="col-xs-5">
-                    <div class="panel panel-default">
+    
+                  <div class="panel panel-default">
                       <div class="panel-heading">
-                        <h4 class="panel-title text-center">Step 2: Select Comparables</h4>
+                        <h4 class="text-center">Step 2: Select Comparables</h4>
                       </div>
                       <div class="panel-body">
                         <div id="analyze-search">
                           <div class="pheno-radio-button">
-                            <label id="pheno-search"><input id="srch" type="radio" checked="checked" value="search" name="mode"> Target Groups</label>
+                            <label id="pheno-search"><input id="srch" type="radio" checked="checked" value="search" name="mode"> Predefined Target Groups: Homo sapiens (diseases), Mus musculus (genes), Danio rerio (genes), and Drosophila melanogaster (genes)</label>
+
                           </div>
 
-                          <div id="search-form-group">
+                          <div id="search-form-group" style="display:none;">
                             <div class="row">
                               <div class="form-group col-xs-8" id="analyze-target">
                                 <label for="target" class="control-label search-label search-text">Target Groups:</label>
@@ -144,27 +109,29 @@
                             </div>
 
                           </div>
+                          
+                          
+                          
                       </div>
 
                       <hr>
                       
                        <div id="analyze-compare">
                         <div class="pheno-radio-button">
-                          <label id="pheno-compare"><input id="compare" type="radio" value="compare" name="mode"> A Specific Set of Genes</label>
+                          <label id="pheno-compare"><input id="compare" type="radio" value="compare" name="mode"> Select genes using either the autocomplete and/or enter gene IDs directly using the text box</label>
                         </div>
-                        <p class="small example compare-instructions compare-text">
-                         Select genes using either the autocomplete and/or enter gene IDs directly using the text box.
-                          Expand your list of genes using the convenience buttons at the bottom. </p>
                         <div id="compare-form-group">
-                          <div id="gene-autocomplete" class="compare-text">Enter Gene Symbol:
+                          <div id="gene-autocomplete" class="compare-text">
+                              <input id="auto_gene_input" type="text" class="form-control" placeholder="Enter Gene Symbol here, e.g. LHX1" disabled>
                           </div>
-                          <input id="auto_gene_input" type="text" class="form-control"
-                          placeholder="e.g. LHX1" disabled>
-                          <div id="gene-text-area" class="compare-text">Gene IDs:
+                          
+                          <div id="gene-text-area" class="compare-text">
+                              Gene IDs:
                           </div>
 
-                          <textarea id="gene-list" class="form-control" rows="3" placeholder="e.g. NCBIGene:3975, ENSEMBL:ENSG00000108753 "
-                                    name="gene_list" disabled></textarea>
+                          <textarea id="gene-list" class="form-control" rows="3" placeholder="e.g. NCBIGene:3975, ENSEMBL:ENSG00000108753" name="gene_list" disabled></textarea>
+                          
+                          <!--
                           <div id="gene-shortcuts" class="compare-text">Add More Genes:<br>
                               <span class="small compare-text">
                                 Given the above list of genes, include additional genes
@@ -175,6 +142,8 @@
                             <button id="ortholog" type="button" class="col-xs-offset-1 col-xs-4 btn monarch-btn" disabled>Orthologs</button>
                             <button id="paralog" type="button" class="col-xs-offset-2 col-xs-4 btn monarch-btn" disabled>Paralogs</button>
                           </div>
+                          -->
+                          
                         </div>
                         <div id="ajax-spinner">
                           <div class="ortholog-spinner" >
@@ -212,91 +181,21 @@
                       
                      </div>
                    </div>
-                  </div>
                   
-                  
-                  
-                  
-                  <div class="col-xs-2">
-                      <button id="analyze-submit" type="submit" class="btn btn-primary">Submit</button>
-                  </div>
+
+                      <button id="analyze-submit" type="submit" class="btn btn-primary">Submit and view Phenogrid and Data Table</button>
+
                   
                 </form>
                 </div>
-                </div>
-                {{#isFileError}}
-                <div id="upload" class="first category">
-                {{/isFileError}}
-                {{^isFileError}}
-                <div id="upload" class="category">
-                {{/isFileError}}
-                  <div class="col-xs-6">
-					<p>
-						If you have a phenotype-comparison formatted JSON file (such as from Exomiser),
-						you can visualize it with
-                        our Phenogrid by uploading or pasting the contents into the form.
-                        We also provide several examples for you to play with.
-					</p>
-					<br />
-					<p style="font-size:13px; line-height: 100%">
-					The <a href="https://www.sanger.ac.uk/resources/software/exomiser/">Exomiser</a> is a Java program
-					that functionally annotates variants from whole-exome sequencing data starting
-					from a VCF file, and leverages variant frequency, pathogenicity, quality,
-					inheritance pattern, and phenotype data for prioritization. <i>Coming soon in
-					Exomiser 7.0</i>, you will be able to export a phenogrid-ready file to
-					visualize the phenotypic evidence for candidate variants.
-					Use the examples at the right to test this feature.</p>
-				  </div>
-                  <div class="col-xs-6">
-                    <div class="row row-fluid">
-                    <div class="panel panel-default">
-                      <h4>Upload Results</h4>
-                      <form role="form" enctype="multipart/form-data" action="/analyze/{{datatype}}/" method="POST">
-                        <div id="browse">
-                          <div id="choose-file">
-                           Choose File: <span id="file-name"></span>
-                          </div>
-                          <div id="upload-btn">
-                            <span class="btn btn-file monarch-btn">
-                              Browse...<input id="upload-file" type="file" name="upload_file">
-                            </span>
-                          </div>
-                          <div id="file-error">
-                            {{#doesFileExceedMax}}
-                            File size exceeds limit of 50 Mb
-                            {{/doesFileExceedMax}}
-                            {{#isJSONIllegal}}
-                            JSON {{jsonError}}
-                            {{/isJSONIllegal}}
-                          </div>
-                        <button type="submit" class="btn btn-primary">Upload</button>
-                        </div>
-                      </form>
-                      </div>
-                      </div>
-                      <div id="separator">
-                        <span id="separator-text">&nbsp;&nbsp;Or&nbsp;&nbsp;</span>
-                      </div>
-                      <hr></hr>
-                      <div class="row row-fluid">
-                          <form role="form" action="/analyze/{{datatype}}/" method="POST">
-                            <div class="form-group">
-                              <h4>Paste similarity data below:</h4>
-                              <div id="paste-buttons">
-                              <button id="example-one" type="button" class="btn monarch-btn example-similarity">Example 1</button>
-                              <button id="example-two" type="button" class="btn monarch-btn example-similarity">Example 2</button>
-                              <button id="upload-reset" class="btn btn-warning" type="reset">Reset</button>
-                              </div>
-                              <textarea id="user-results" class="form-control" rows="14" placeholder="" name="user_results"></textarea>
-                            </div>
-                            <button type="submit" class="btn btn-primary">Visualize</button>
-                          </form>
-                      </div>
-                    </div>
-                </div>
-                {{#hasInputItems}}
-                <div id="result" class="first category">
+            
+            <div id="resultSection"></div>
+            
+            {{#hasInputItems}}
+               <div class="row row-fluid">
+                <div id="result" class="panel panel-default">
                     <div id ="phen_vis"></div>
+                    
                     <div id="result-table">
                       {{#hasTable}}
                         <h3 class="downloadline">Results</h3>
@@ -305,9 +204,9 @@
                           {{#singleSpecies}}
                             <p>Species: {{{speciesHref}}}</p>
                           {{/singleSpecies}}
-                          <input id="analyze_auto_species" name="current_target_species" value="{{target_filter.species}}" type="hidden"/>
-                          {{{resultsTable}}}
-                          </table>
+
+                              <div>{{{resultsTable}}}</div>
+                          
                         {{/hasResults}}
                         {{^hasResults}}
                         <div class="text">Unfortunately, your search produced no results.</div>
@@ -315,8 +214,14 @@
                       {{/hasTable}}
                     </div>
                 </div>
-                <div id="splitLabels" style="display:none">{{splitLabels}}</div>
-                {{/hasInputItems}}
+                <div id="splitLabels" style="display:none;">{{splitLabels}}</div>
+                </div>
+            {{/hasInputItems}}
+            </div>
+
+                
+                
+                
             </div>
         </div>
     </div>
