@@ -33,23 +33,12 @@
                           <li><b>Step 1</b>: create a Phenotype Profile by entering a set of phenotypes.</li>
                           <li><b>Step 2</b>: modify the settings for how to perform the comparison: <i>search</i> against the entire database
                               or <i>compare</i> against a selected set of genes.</li>
-                          <li><b>Step 3</b>: Submit and view your results in the Results tab.
-                              <!--
-                              (If you want to visualize preformatted <a href="https://www.sanger.ac.uk/resources/software/exomiser/">Exomiser</a> output,
-                              jump over to the <a id="internal-link" href="#upload">upload tab</a>.)
-                              -->
-                              </li>
+                          <li><b>Step 3</b>: Submit and view your results in the Results tab.</li>
                           <li><b>Step 4</b>: Repeat.  The list of phenotypes and genes stay
                               populated enabling you to iterate and refine your lists. You can start over by
                               hitting Reset.</li>
 					    </ul>
 
-                        <!--
-                        <li><i>Upload</i></li>
-					      <ul>
-					        <li>Upload or Paste your preformatted phenotype-comparison output to visualize in the Phenogrid.</li>
-					      </ul>
-                        -->
 					  </ul>
 					</div>
 
@@ -59,28 +48,16 @@
                     {{#isFileError}}
                     <a href="#query"><div  class="tab contenttab second query-tab">Search</div></a>
 
-                    <!--
-                    <a href="#upload"><div id="initialtab" class="tab contenttab second upload-tab">Upload</div></a>
-                    -->
-
                     <div class="tab greyed-out">Results</div>
                     {{/isFileError}}
                     {{^isFileError}}
                       {{^hasInputItems}}
                       <a href="#query"><div id="initialtab" class="tab contenttab second query-tab">Search</div></a>
 
-                      <!--
-                      <a href="#upload"><div class="tab contenttab second upload-tab">Upload</div></a>
-                      -->
-
                       <div class="tab greyed-out">Results</div>
                       {{/hasInputItems}}
                       {{#hasInputItems}}
                       <a href="#query"><div class="tab contenttab second query-tab">Search</div></a>
-
-                      <!--
-                      <a href="#upload"><div class="tab contenttab second upload-tab">Upload</div></a>
-                      -->
 
                       <a href="#result"><div id="initialtab" class="tab contenttab results-tab">Results</div></a>
                       {{/hasInputItems}}
@@ -166,23 +143,6 @@
                               
                             </div>
 
-                           <!--
-                            <div class="form-group" id="analyze-type">
-                              <div class="row">
-                                <label for="type" class="col-xs-6 control-label search-label search-text">Target Type:</label>
-                                <div class="col-xs-6">
-                                  <select id="type" name="target_type" disabled>
-                                    <option value="all" selected="selected" disabled>All</option>
-                                    <option value="disease" disabled>Disease</option>
-                                    <option value="gene" disabled>Gene</option>
-                                    <option value="genotype" disabled>Genotype</option>
-                                  </select>
-                                </div>
-                              </div>
-                            </div>
-                            -->
-
-                            
                           </div>
                       </div>
 
@@ -258,10 +218,9 @@
                   
                   
                   <div class="col-xs-2">
-  
                       <button id="analyze-submit" type="submit" class="btn btn-primary">Submit</button>
-
                   </div>
+                  
                 </form>
                 </div>
                 </div>
