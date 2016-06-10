@@ -94,7 +94,6 @@ function getTableFromSolr(id, golr_field, div, filter, personality, tab_anchor){
 
         //open species filter
         var open_species_filter = function(){
-            console.log('open_species_filter');
             jQuery('#'+pager_filter+' div')
                 .filter(function() {
                     return this.id.match(/^collapsible-subject_taxon_label/);
@@ -321,108 +320,9 @@ function addDownloadButton(pager, manager){
 
 }
 
-function getOntologyBrowser(id, label, root){
-
-    var spinner_args = {'generate_id': true,
-            'class':
-            'progress progress-striped active',
-            'style': 'width: 3em; display:inline-block; margin-top:3px; margin-left:10px;'
-    };
-    var spinner = makeSpinnerDiv(spinner_args);
-
-    jQuery('#brw').append(spinner.to_string());
-
-    //Determine if ID is clique leader
-    var qurl = global_scigraph_url + "dynamic/cliqueLeader/" + id + ".json";
-
-    jQuery.ajax({
-        url: qurl,
-        dataType:"json",
-        error: function (){
-            console.log('error fetching clique leader');
-            launch_browser(id, root);
-        },
-        success: function ( data ){
-            var graph = new bbop.model.graph();
-            graph.load_json(data);
-            var node_list = [];
-            node_list = graph.all_nodes();
-            if (node_list.length > 1) {
-                // An error occurred, there can only be one
-                launch_browser(id, root);
-            } else {
-                var leader_id = node_list[0].id();
-                launch_browser(leader_id, root, id, label);
-            }
-
-        }
-    });
-
-    function launch_browser(id, root, reference_id, reference_label) {
-
-        // Conf
-        // Global scigraph url passed in from webapp.js addCoreRenderers
-        var srv = global_scigraph_url;
-
-        var manager = new bbop.rest.manager.jquery(bbop.rest.response.json);
-
-        if (!root){
-            root = "HP:0000118";
-        }
-
-        // Browser.
-        var browser = new bbop.monarch.widget.browse(srv, manager, id, root, 'brw', reference_id, reference_label, {
-            'info_icon': 'info',
-            'current_icon': 'current_term',
-            'base_icon_url': '/image',
-            'image_type': 'gif',
-            'info_button_callback':
-                function(term_acc, term_doc){
-                    // // Local form.
-                    // shield.draw(term_doc);
-                    // Remote form (works).
-                    //shield.draw(term_acc);
-                }
-        });
-
-        browser.init_browser(id);
-    }
-}
-
-function getInteractiveOntologyBrowser(id, root){
-    // Conf
-    // Global scigraph url passed in from webapp.js addCoreRenderers
-    var srv = global_scigraph_url;
-
-    var manager = new bbop.rest.manager.jquery(bbop.rest.response.json);
-
-    if (!root){
-        root = "HP:0000118";
-    }
-
-    // Browser.
-    var b = new bbop.monarch.widget.interactive_browse(srv, manager, id, root, 'brw', {
-        'info_icon': 'info',
-        'current_icon': 'current_term',
-        'base_icon_url': '/image',
-        'image_type': 'gif',
-        'info_button_callback':
-            function(term_acc, term_doc){
-                // // Local form.
-                // shield.draw(term_doc);
-                // Remote form (works).
-                //shield.draw(term_acc);
-            }
-    });
-
-    b.init_browser(id);
-}
-
 if (typeof(loaderGlobals) === 'object') {
     loaderGlobals.getTableFromSolr = getTableFromSolr;
-    loaderGlobals.getOntologyBrowser = getOntologyBrowser;
 }
 if (typeof(global) === 'object') {
     global.getTableFromSolr = getTableFromSolr;
-    global.getOntologyBrowser = getOntologyBrowser;
 }

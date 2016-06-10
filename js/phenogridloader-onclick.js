@@ -24,6 +24,35 @@ function loadPhenogrid(){
         disease_id = disease_id.substring(slash_idx+1);
         var phenotype_list = [];
         var phenogridContainer = document.getElementById('phen_vis');
+        
+        var gridSkeletonData = {
+            "title": null,
+            "xAxis": [
+                {
+                    "groupId": "9606",
+                    "groupName": "Homo sapiens"
+                },
+                {
+                    "groupId": "10090",
+                    "groupName": "Mus musculus"
+                },
+                {
+                    "groupId": "7955",
+                    "groupName": "Danio rerio"
+                },
+                {
+                    "groupId": "7227",
+                    "groupName": "Drosophila melanogaster"
+                }
+                //,
+                //{
+                //    "groupId": "6239",
+                //    "groupName": "Caenorhabditis elegans"
+                //}
+            ],
+            "yAxis": phenotype_list
+        };
+        
         jQuery.ajax({
             url : '/' + disease_id + '/phenotype_list.json',
             async : true,
@@ -32,17 +61,17 @@ function loadPhenogrid(){
             error : function(jqXHR, textStatus, errorThrown) {
                 jQuery('#' + spinner_div.get_id()).remove();
                 var phenogridOpts = {
-                                        phenotypeData: phenotype_list,
+                                        gridSkeletonData: gridSkeletonData,
                                         serverURL: global_app_base
                                     };
                 Phenogrid.createPhenogridForElement(phenogridContainer, phenogridOpts);
             },
             success : function(data) {
                 jQuery('#' + spinner_div.get_id()).remove();
-                phenotype_list = data.phenotype_list;
+                gridSkeletonData.yAxis = data.phenotype_list;
 
                 var phenogridOpts = {
-                                        phenotypeData: phenotype_list,
+                                        gridSkeletonData: gridSkeletonData,
                                         serverURL: global_app_base
                                     };
                 Phenogrid.createPhenogridForElement(phenogridContainer, phenogridOpts);

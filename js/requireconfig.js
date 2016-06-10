@@ -28,7 +28,7 @@ require(['require', 'jquery'], function (_require, _jquery) {
                 '/linker.js', '/handler.js', '/browse.js', '/results_table_by_class_conf_bs3.js', '/facet-filters.js'], function () {
                 _require(['/search_form.js', '/monarch-tabs.js',
                          '/jquery.cookie.js', '/jquery.xml2json.js', '/HomePage.js', '/stupidtable.min.js', '/tables.js',
-                         '/dove.min.js', '/golr-table.js'], function () {
+                         '/dove.min.js', '/golr-table.js', '/overview.js'], function () {
                     _require(['/barchart-launcher.js'], function (bl) {
                         loader();
                     });

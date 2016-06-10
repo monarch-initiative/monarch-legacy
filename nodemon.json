@@ -3,8 +3,9 @@
   "restartable": "rs",
   "verbose": true,
   "watch": [
-    "lib/monarch/"
+    "lib/monarch/",
+    "conf/golr-views/single-tab/"
   ],
-  "ext": "js json"
+  "ext": "js json yaml"
 }
 
