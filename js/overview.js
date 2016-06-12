@@ -149,7 +149,6 @@ function fetchGeneDescription(id) {
             jQuery('#'+spinner.get_id()).remove();
             if (data.hits.length > 0 
                     && 'summary' in data.hits[0]) {
-                console.log('foo')
                 var summary = data.hits[0].summary;
                 var descriptionElt = '<div class="ids"><b>Description: </b>';
                 var summaryElt = descriptionElt + "<span>" + summary + ' [Retrieved from '+
