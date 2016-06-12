@@ -18,8 +18,8 @@ Feature: Basic autocomplete works
  Scenario: "food" in the navbar search with a click goes to a details page
     Given I go to page "/"
      and I type "food a" into the navbar search
-     and I wait until "food allergy" appears in the autocomplete 
-     and I click the autocomplete item "food allergy"
+     and I wait until "Food Allergies" appears in the autocomplete 
+     and I click the autocomplete item "Food Allergies"
      then the title should be "Monarch Disease: food allergy (DOID:3044)"
 
 #Commenting out so tests pass in all server versions
