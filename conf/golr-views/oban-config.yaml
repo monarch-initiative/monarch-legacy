@@ -226,7 +226,7 @@ fields:
     property: []
 
   - id: qualifier
-    description: "Association qualifier. TBD: NEGATION should probably be handled differently somehow"
+    description: "Association qualifier." # TBD: NEGATION should probably be handled differently somehow
     display_name: Qualifier
     type: string
     cardinality: multi
@@ -435,7 +435,7 @@ fields:
 
 
   - id: source
-    description: "TBD: ALIGN GO AND DC TERMINOLOGY. Source of association. The association may be derived from multiple source, but this should be the 'outer' source, if applicable"
+    description: "References provided as evidence for a single association in the assertion chain. The assertion may be derived from connecting data from multiple sources, or multiple sources may corroborate the same assertion. References are collected from each source used in this chain when available."
     display_name: Reference
     type: string
     cardinality: multi
@@ -471,7 +471,7 @@ fields:
     property: []
 
   - id: assigned_by
-    description: "TBD: ALIGN GO AND DC TERMINOLOGY. Source of association. The association may be derived from multiple source, but this should be the 'outer' source, if applicable"
+    description: "Source of association. The association may be derived from multiple source, but this should be the 'outer' source, if applicable"
     display_name: Assigned by
     type: string
     property: []
@@ -489,7 +489,7 @@ fields:
     property: []
 
   - id: evidence
-    description: "Evidence type. In Monarch we may have a graph/chain. This is always the 'outer' evidence OR a list of all evidence types used?"
+    description: "Evidence type. In Monarch we may have a chain of assertions that link two entites/terms. This is a list of all evidence types used in that chain."
     display_name: Evidence type
     type: string
     cardinality: multi
@@ -566,7 +566,7 @@ fields:
     property: []
 
   - id: is_defined_by
-    description: "Associations are obtained from the source(s) listed. More than one source indicates the association leveraged information from each."
+    description: "Associations are obtained from the source(s) listed. More than one source indicates the association may be derived from connecting data from multiple sources, or multiple sources have corroborated the same assertion."
     display_name: Source
     type: string
     cardinality: multi

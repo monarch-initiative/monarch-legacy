@@ -126,7 +126,7 @@ Scenario: Going to the page /Bogus:123 will produce a Page Not Found error
     Given I go to page "/RRID:Coriell:ND24213"
      then the url will be "/model/Coriell:ND24213"
      
- @ui
- Scenario: Ontology viewer works for OMIM Ids
-    Given I go to slow page "/disease/OMIM:105830#overview" and wait for class "bbop-js-ui-browse"
-     then the "Overview" tab should contain "Happy Puppet"
+ #@ui
+ #Scenario: Ontology viewer works for OMIM Ids
+ #   Given I go to slow page "/disease/OMIM:105830#overview" and wait for class "bbop-js-ui-browse"
+ #    then the "Overview" tab should contain "Happy Puppet"
