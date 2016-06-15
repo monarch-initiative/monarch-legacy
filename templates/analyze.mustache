@@ -184,7 +184,7 @@
                    </div>
                   
 
-                      <button id="analyze-submit" type="submit" class="btn btn-primary " style="margin:5px auto; padding:20px 0; font-size:16px; font-weight:bold; width:100%;">Submit and view Phenogrid and Data Table Below <span class="glyphicon glyphicon-arrow-down"></span></button>
+                      <button id="analyze-submit" type="submit" class="btn btn-primary " style="margin:5px auto; padding:20px 0; font-size:16px; font-weight:bold; width:100%;">Submit and view Phenogrid and Results Table Below <span class="glyphicon glyphicon-arrow-down"></span></button>
 
                   
                 </form>
@@ -192,18 +192,19 @@
             
 
             {{#hasInputItems}}
-               <div class="row row-fluid">
+            <div class="row row-fluid">
                 <div id="result" class="panel panel-default" style="margin-top:20px;">
-                    <div id ="phen_vis"></div>
                     
-                    <div id="result-table">
+                    
+                    
                       {{#hasTable}}
+                      <div id ="phen_vis" style="padding:20px;"></div>
+
+                      <div id="result-table">
                         <h3 class="downloadline">Results</h3>
                         <a href="{{{downloadURL}}}" class="btn btn-default downloadline downloadline-left monarch-blue">JSON</a>
+                        
                         {{#hasResults}}
-                          {{#singleSpecies}}
-                            <p>Species: {{{speciesHref}}}</p>
-                          {{/singleSpecies}}
 
                               <div>{{{resultsTable}}}</div>
                           
@@ -211,11 +212,13 @@
                         {{^hasResults}}
                         <div class="text">Unfortunately, your search produced no results.</div>
                         {{/hasResults}}
+                      </div>
                       {{/hasTable}}
-                    </div>
+                    
                 </div>
-                <div id="splitLabels" style="display:none;">{{splitLabels}}</div>
             </div>
+            <!-- this splitLabels shows the selected phenotyps -->
+            <div id="splitLabels" style="display:none">{{splitLabels}}</div>
             {{/hasInputItems}}
             
 

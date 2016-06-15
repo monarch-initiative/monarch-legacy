@@ -471,6 +471,9 @@ function AnalyzeInit(uploaded_data){
 		var vals_str = vals.join(' ');
 		ll("Vals_Str: "+vals_str);
 		jQuery(analyze_auto_target_elt).val(vals_str);
+
+        // Hide the phenogrid and results table
+        jQuery('#result').fadeOut();
     }
 
     function redraw_form_list(){
@@ -509,6 +512,7 @@ function AnalyzeInit(uploaded_data){
 			     }
 			 );
 		     });
+
     }
 
     function delete_item(id){
@@ -681,11 +685,6 @@ function AnalyzeInit(uploaded_data){
         return li;
     };
 
-
-    // Hide the results if one phenotype gets removed
-    jQuery(".analyze-delete-button").click(function() {
-        jQuery('#result').hide();
-    });
 
 
     if (jQuery("#analyze_auto_target").val() !== null) {
