@@ -1,7 +1,7 @@
 {{{includes.navbar}}}
 
 <div class="wrapperforfooter">
-  <div class="container-fluid monarch-container">
+<div class="container-fluid monarch-container">
 
 <div class="content">
 
@@ -75,11 +75,11 @@
                       <div class="panel-body">
                         <div id="analyze-search">
                           <div class="pheno-radio-button">
-                            <label id="pheno-search"><input id="srch" type="radio" checked="checked" value="search" name="mode"> Predefined Target Groups: Homo sapiens (diseases), Mus musculus (genes), Danio rerio (genes), and Drosophila melanogaster (genes)</label>
+                            <label id="pheno-search"><input id="srch" type="radio" checked="checked" value="search" name="mode"> Predefined Target Groups</label>
 
                           </div>
 
-                          <div id="search-form-group" style="display:none;">
+                          <div id="search-form-group">
                             <div class="row">
                               <div class="form-group col-xs-8" id="analyze-target">
                                 <label for="target" class="control-label search-label search-text">Target Groups:</label>
@@ -184,17 +184,16 @@
                    </div>
                   
 
-                      <button id="analyze-submit" type="submit" class="btn btn-primary">Submit and view Phenogrid and Data Table</button>
+                      <button id="analyze-submit" type="submit" class="btn btn-primary " style="margin:5px auto; padding:20px 0; font-size:16px; font-weight:bold; width:100%;">Submit and view Phenogrid and Data Table Below <span class="glyphicon glyphicon-arrow-down"></span></button>
 
                   
                 </form>
                 </div>
             
-            <div id="resultSection"></div>
-            
+
             {{#hasInputItems}}
                <div class="row row-fluid">
-                <div id="result" class="panel panel-default">
+                <div id="result" class="panel panel-default" style="margin-top:20px;">
                     <div id ="phen_vis"></div>
                     
                     <div id="result-table">
@@ -216,16 +215,14 @@
                     </div>
                 </div>
                 <div id="splitLabels" style="display:none;">{{splitLabels}}</div>
-                </div>
+            </div>
             {{/hasInputItems}}
-            </div>
+            
 
-                
-                
-                
-            </div>
-        </div>
-    </div>
+
+</div>
+
+</div>
 
 </div> <!-- closes wrapperforfooter -->
 {{{includes.footer}}}

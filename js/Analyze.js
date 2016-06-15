@@ -7,6 +7,7 @@ function AnalyzeInit(uploaded_data){
     // Hide the orthologs and paralogs by default
     jQuery('#add_more_genes').hide();
 
+
     var DEFAULT_LIMIT = 100;
     var DEBUG = false;
     //var DEBUG = true;
@@ -132,6 +133,7 @@ function AnalyzeInit(uploaded_data){
 		ll('In jQuery: '+textFix);
     	return textFix;
 	});
+
 //added CDB to extract current phenotype list
 	var URLVariables = window.location.search.substring(1).split('&');
     var splitLabel = jQuery('#splitLabels').text();
@@ -244,6 +246,7 @@ function AnalyzeInit(uploaded_data){
             jQuery('#analyze-limit').show();
         }
     });
+
 
     jQuery('#ortholog').click(function(){
         if (typeof homologs.orthologs !== 'undefined'){
@@ -677,6 +680,12 @@ function AnalyzeInit(uploaded_data){
         li.appendTo(ul);
         return li;
     };
+
+
+    // Hide the results if one phenotype gets removed
+    jQuery(".analyze-delete-button").click(function() {
+        jQuery('#result').hide();
+    });
 
 
     if (jQuery("#analyze_auto_target").val() !== null) {
