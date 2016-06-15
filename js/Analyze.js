@@ -4,6 +4,9 @@ function AnalyzeInit(uploaded_data){
     // since the selected target species is 'all' by default - Zhou
     jQuery('#analyze-limit').hide();
 
+    // Hide the orthologs and paralogs by default
+    jQuery('#add_more_genes').hide();
+
     var DEFAULT_LIMIT = 100;
     var DEBUG = false;
     //var DEBUG = true;
@@ -352,6 +355,9 @@ function AnalyzeInit(uploaded_data){
         jQuery("#ortholog-list").prop("disabled", true);
         jQuery("#paralog-list").prop("disabled", true);
 
+        // Hide the orthologs and paralogs 
+        jQuery('#add_more_genes').hide();
+
         //Dim text
         jQuery(".compare-text").css("opacity", ".5");
     }
@@ -363,6 +369,9 @@ function AnalyzeInit(uploaded_data){
         jQuery("#ortholog-list").prop("disabled", false);
         jQuery("#paralog-list").prop("disabled", false);
         jQuery(".compare-text").css("opacity", "1.0");
+
+        // Show the orthologs and paralogs 
+        jQuery('#add_more_genes').show();
     }
 
     function enable_search_form(){
