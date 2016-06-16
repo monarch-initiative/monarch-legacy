@@ -3,7 +3,7 @@
 <div class="wrapperforfooter">
 <div class="container-fluid monarch-container">
 
-<div class="content">
+<div class="content"><!-- 1 -->
 
             <div class="jumbotron">
                 <div id="description">
@@ -44,45 +44,88 @@
                 </div>
                 
             </div>
-            
-            <div id="complete-info">
 
-                <div class="row row-fluid">
-                 <form class="form">
+
+
+
+
+
+
+
+
+ 
+                 <form id="complete-info" class="form">
                
-                    <div id="search-phenotypes" class="panel panel-default">
-                      <div class="panel-heading">
-                        <h4 class="text-center">Step 1: Select Phenotypes</h4>
+                    <div id="search-phenotypes" style="border:1px solid #ccc; margin-bottom:20px; padding:20px;">
+                      
+<div class="row row-fluid">
+                      <div class="col-xs-4">
+                        <h4>Step 1: Create A Profile of Phenotypes</h4>
                       </div>
-                      <div class="panel-body">
+
+
+       
                         <input id="analyze_auto_target" name="input_items" value="{{input_items}}" type="hidden"/>
-                        <div id="analyze-searchlist" class="form-group">
+                        
+                        <div id="analyze-searchlist" class="col-xs-8">
                               <input id="analyze_auto_input" type="text" class="form-control" placeholder="Enter phenotype name into this autocomplete search"/>
                         </div>
                         
-                        <div id="analyze-profile" class="form-group">
+</div>
+
+<div class="row row-fluid">
+
+                        <div id="analyze-profile">
                             <ul id="analyze_auto_list" class="list-group">
                                 <li id="analyze-empty-item" class="list-group-item">Empty: Add items using the input above.</li>
                             </ul>
                         </div>
-                      </div>
+ </div>        
+
+
+
                     </div>
     
-                  <div class="panel panel-default">
-                      <div class="panel-heading">
-                        <h4 class="text-center">Step 2: Select Comparables</h4>
+
+
+
+
+
+
+
+
+
+                  <div style="border:1px solid #ccc; margin-bottom:20px; padding:20px;">
+                      
+<div class="row row-fluid">
+                      
+                      <div class="col-xs-4">
+                        <h4 style="margin-left:0;">Step 2: Select Comparables</h4>
                       </div>
-                      <div class="panel-body">
-                        <div id="analyze-search">
-                          <div class="pheno-radio-button">
+
+                          
+                          <div class="col-xs-4 pheno-radio-button" style="display:inline-block;">
                             <label id="pheno-search"><input id="srch" type="radio" checked="checked" value="search" name="mode"> Predefined Target Groups</label>
 
                           </div>
 
-                          <div id="search-form-group">
-                            <div class="row">
+
+
+
+                        
+                        <div class="col-xs-4 pheno-radio-button" style="display:inline-block;">
+                          <label id="pheno-compare"><input id="compare" type="radio" value="compare" name="mode"> Self-defined Genes</label>
+                        </div>
+ 
+
+</div>
+
+
+<div id="analyze-search" class="row row-fluid">
+
+                           <div id="search-form-group">
                               <div class="form-group col-xs-8" id="analyze-target">
-                                <label for="target" class="control-label search-label search-text">Target Groups:</label>
+                                <label for="target" class="control-label search-label">Target Groups:</label>
                                 <div>
                                   <select id="target" class="form-control" name="target_species">
                                     <option value="all" selected="selected" >All Species</option>
@@ -94,54 +137,50 @@
                                   </select>
                                 </div>
                               </div>
-                              
-                              
+                              </div> 
+
+
                               <div id="analyze-limit" class="form-group col-xs-4">
                           
-                                <label for="analyze_limit_input" class="control-label search-label search-text">Limit of results:</label>
+                                <label for="analyze_limit_input" class="control-label search-label">Limit of results:</label>
                                 <div>
                                   <input class="form-control" id="analyze_limit_input" name="limit" type="text" value="{{limit}}"></input>
                                 </div>
           
-                              </div>
+                              </div> 
+    
                               
                               
-                            </div>
 
-                          </div>
-                          
-                          
-                          
-                      </div>
 
-                      <hr>
-                      
-                       <div id="analyze-compare">
-                        <div class="pheno-radio-button">
-                          <label id="pheno-compare"><input id="compare" type="radio" value="compare" name="mode"> Select genes using either the autocomplete and/or enter gene IDs directly using the text box</label>
-                        </div>
+</div>
+
+<div id="analyze-compare" class="row row-fluid" style="display:none;">
+
                         <div id="compare-form-group">
-                          <div id="gene-autocomplete" class="compare-text">
-                              <input id="auto_gene_input" type="text" class="form-control" placeholder="Enter Gene Symbol here, e.g. LHX1" disabled>
+                          <div id="gene-autocomplete">
+                              <input id="auto_gene_input" type="text" class="form-control" placeholder="Enter Gene Symbol here, e.g. LHX1">
                           </div>
                           
-                          <div id="gene-text-area" class="compare-text">
+                          <div id="gene-text-area">
                               Gene IDs:
                           </div>
 
-                          <textarea id="gene-list" class="form-control" rows="3" placeholder="e.g. NCBIGene:3975, ENSEMBL:ENSG00000108753" name="gene_list" disabled></textarea>
+                          <textarea id="gene-list" class="form-control" rows="3" placeholder="e.g. NCBIGene:3975, ENSEMBL:ENSG00000108753" name="gene_list"></textarea>
                           
                           <div id="add_more_genes">
-                          <div id="gene-shortcuts" class="compare-text">
-                              <span class="small compare-text">
+                          <div id="gene-shortcuts">
+                              <span class="small">
                                 Given the above list of genes, include additional genes
                                 based on relationship:
                               </span>
+
+                              <input type="checkbox" id="ortholog" name="ortholog"> Orthologs
+                              <input type="checkbox" id="paralog" name="paralog"> Paralogs
                           </div>
-                          <div class="row">
-                            <button id="ortholog" type="button" class="col-xs-offset-1 col-xs-4 btn monarch-btn" disabled>Orthologs</button>
-                            <button id="paralog" type="button" class="col-xs-offset-2 col-xs-4 btn monarch-btn" disabled>Paralogs</button>
-                          </div>
+
+                            
+
                           </div>
                           
                           
@@ -170,32 +209,39 @@
                           <div id='fetching'>Fetching Genes...</div>
                         </div>
                         <div id='error-msg'>Error Fetching Genes</div>
-                        <div id="ortholog-text-area" class="compare-text">Orthologs:<br>
+                        <div id="ortholog-text-area">Orthologs:<br>
                             <textarea id="ortholog-list" class="form-control" rows="2" placeholder="" name="ortholog_list" disabled></textarea>
                         </div>
-                        <div id="paralog-text-area" class="compare-text">Paralogs:<br>
+                        <div id="paralog-text-area">Paralogs:<br>
                             <textarea id="paralog-list" class="form-control" rows="2" placeholder="" name="paralog_list" disabled></textarea>
                         </div>
+
+
+</div>
+
+
+
+                          
+                          
+                          
+                          
                       </div>
-                      
-                      
+
                       
                      </div>
                    </div>
                   
+                   <div style="margin:5px auto; width:200px;">
+                      <button id="analyze-submit" type="submit" class="btn btn-primary" style="padding:10px 20px; font-size:18px; font-weight:bold;">Analyze <span class="glyphicon glyphicon-arrow-down"></span></button>
 
-                      <button id="analyze-submit" type="submit" class="btn btn-primary " style="margin:5px auto; padding:20px 0; font-size:16px; font-weight:bold; width:100%;">Submit and view Phenogrid and Results Table Below <span class="glyphicon glyphicon-arrow-down"></span></button>
-
-                  
+                  </div>
                 </form>
-                </div>
-            
+
+
 
             {{#hasInputItems}}
             <div class="row row-fluid">
                 <div id="result" class="panel panel-default" style="margin-top:20px;">
-                    
-                    
                     
                       {{#hasTable}}
                       <div id ="phen_vis" style="padding:20px;"></div>
@@ -223,9 +269,10 @@
             
 
 
-</div>
+</div> <!-- 1 -->
 
 </div>
 
 </div> <!-- closes wrapperforfooter -->
+
 {{{includes.footer}}}

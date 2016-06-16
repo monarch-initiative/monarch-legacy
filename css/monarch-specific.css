@@ -77,7 +77,6 @@
 
 .monarch-container #complete-info {
     padding: 0 30px;
-    min-height:500px;
 }
 .monarch-container .category {
     display: none;
@@ -241,12 +240,6 @@
 
 /* Analyze */
 
-.monarch-container .compare-text{
-	opacity: .5;
-}
-.monarch-container .search-text{
-	opacity: 1.0;
-}
 
 .monarch-container #settings-header {
     text-align: center;

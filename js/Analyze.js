@@ -4,9 +4,6 @@ function AnalyzeInit(uploaded_data){
     // since the selected target species is 'all' by default - Zhou
     jQuery('#analyze-limit').hide();
 
-    // Hide the orthologs and paralogs by default
-    jQuery('#add_more_genes').hide();
-
 
     var DEFAULT_LIMIT = 100;
     var DEBUG = false;
@@ -345,44 +342,19 @@ function AnalyzeInit(uploaded_data){
     }
 
     function disable_search_form(){
-        jQuery("#search-form-group input").prop("disabled", true);
-        jQuery("#search-form-group select").prop("disabled", true);
-        jQuery(".search-text").css("opacity", ".5");
+        jQuery("#analyze-search").hide();
     }
 
     function disable_compare_form(){
-        jQuery("#compare-form-group button").prop("disabled", true);
-        jQuery("#compare-form-group textarea").prop("disabled", true);
-        jQuery("#compare-form-group input").prop("disabled", true);
-        //Not sure why the above does not work for the following
-        jQuery("#ortholog-list").prop("disabled", true);
-        jQuery("#paralog-list").prop("disabled", true);
-
-        // Hide the orthologs and paralogs 
-        jQuery('#add_more_genes').hide();
-
-        //Dim text
-        jQuery(".compare-text").css("opacity", ".5");
+        jQuery("#analyze-compare").hide();
     }
 
     function enable_compare_form(){
-        jQuery("#compare-form-group button").prop('disabled', false);
-        jQuery("#compare-form-group textarea").prop('disabled', false);
-        jQuery("#compare-form-group input").prop("disabled", false);
-        jQuery("#ortholog-list").prop("disabled", false);
-        jQuery("#paralog-list").prop("disabled", false);
-        jQuery(".compare-text").css("opacity", "1.0");
-
-        // Show the orthologs and paralogs 
-        jQuery('#add_more_genes').show();
+        jQuery("#analyze-compare").show();
     }
 
     function enable_search_form(){
-        jQuery("#search-form-group input").prop('disabled', false);
-        jQuery("#search-form-group select").prop('disabled', false);
-        //Not yet implemented
-        jQuery("#type").prop('disabled', true);
-        jQuery(".search-text").css("opacity", "1.0");
+        jQuery("#analyze-search").show();
     }
 
     function set_target_type(value){
