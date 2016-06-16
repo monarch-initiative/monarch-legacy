@@ -46,15 +46,7 @@
             </div>
 
 
-
-
-
-
-
-
-
- 
-                 <form id="complete-info" class="form">
+                 <form class="form" style="padding: 0 30px;">
                
                     <div id="search-phenotypes" style="border:1px solid #ccc; margin-bottom:20px; padding:20px;">
                       
@@ -240,19 +232,20 @@
 
 
             {{#hasInputItems}}
-            <div class="row row-fluid">
-                <div id="result" class="panel panel-default" style="margin-top:20px;">
+            <div style="border:1px solid #ccc; margin:20px 0; padding: 0 30px;">
+                <div class="row row-fluid">
+                <div id="result" class="col-xs-12">
                     
                       {{#hasTable}}
-                      <div id ="phen_vis" style="padding:20px;"></div>
+                      <div id ="phen_vis"></div>
 
                       <div id="result-table">
                         <h3 class="downloadline">Results</h3>
                         <a href="{{{downloadURL}}}" class="btn btn-default downloadline downloadline-left monarch-blue">JSON</a>
                         
                         {{#hasResults}}
-
-                              <div>{{{resultsTable}}}</div>
+                              <input id="analyze_auto_species" name="current_target_species" value="{{target_filter.species}}" type="hidden"/>
+                              <div>{{{resultsTable}}}</table></div>
                           
                         {{/hasResults}}
                         {{^hasResults}}
@@ -261,6 +254,7 @@
                       </div>
                       {{/hasTable}}
                     
+                </div>
                 </div>
             </div>
             <!-- this splitLabels shows the selected phenotyps -->

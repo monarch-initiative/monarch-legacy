@@ -75,9 +75,6 @@
 /* Rest of Content */
 /* This styles the content within tab categories. */
 
-.monarch-container #complete-info {
-    padding: 0 30px;
-}
 .monarch-container .category {
     display: none;
 }
