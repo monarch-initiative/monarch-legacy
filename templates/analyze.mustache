@@ -241,28 +241,28 @@
 
 
             {{#hasInputItems}}
-            <div style="border:1px solid #ccc; margin:20px 0; padding: 0 30px;">
+            <div id="resultSection" style="padding:0 30px;">
+                <div style="border:1px solid #ccc; margin:20px 0;">
                 <div class="row row-fluid">
                 <div id="result" class="col-xs-12">
-                    
-                      {{#hasTable}}
-                      <div id ="phen_vis"></div>
+                     <!-- always show phenogrid -->
+                      <div id ="phen_vis" style="padding:20px;"></div>
 
-                      <div id="result-table">
+                      {{#hasResults}}
+                      <div id="result-table" style="padding:20px;">
                         <h3 class="downloadline">Results</h3>
                         <a href="{{{downloadURL}}}" class="btn btn-default downloadline downloadline-left monarch-blue">JSON</a>
-                        
-                        {{#hasResults}}
+
                               <input id="analyze_auto_species" name="current_target_species" value="{{target_filter.species}}" type="hidden"/>
-                              <div>{{{resultsTable}}}</table></div>
-                          
-                        {{/hasResults}}
-                        {{^hasResults}}
-                        <div class="text">Unfortunately, your search produced no results.</div>
-                        {{/hasResults}}
+                             
+                                  <div>{{{resultsTable}}}</table></div>
+                              
                       </div>
-                      {{/hasTable}}
-                    
+                      {{/hasResults}}
+                      {{^hasResults}}
+                        <div class="text">Unfortunately, your search produced no results.</div>
+                      {{/hasResults}}
+                </div>
                 </div>
                 </div>
             </div>

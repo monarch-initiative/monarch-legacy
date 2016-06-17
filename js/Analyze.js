@@ -445,7 +445,7 @@ function AnalyzeInit(uploaded_data){
 		jQuery(analyze_auto_target_elt).val(vals_str);
 
         // Hide the phenogrid and results table
-        jQuery('#result').fadeOut();
+        jQuery('#resultSection').fadeOut();
     }
 
     function redraw_form_list(){
