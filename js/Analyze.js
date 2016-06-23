@@ -475,11 +475,11 @@ function AnalyzeInit(uploaded_data){
     function refreshResults() {
         if (typeof(urlParams.mode) !== 'undefined') {
             // Gray out the phenogrid and results table
-            jQuery('#resultContainer').css('background-color', 'gray');
-            jQuery('#resultContainer').css('opacity', '.7');
-
-            // Change the button text
+            jQuery('#resultContainer').css('opacity', '.3');
+            
+            // Change the button color and text
             jQuery('#analyze-submit').html('Refresh');
+            jQuery('#analyze-submit').addClass('btn-warning');
         }
     }
 
