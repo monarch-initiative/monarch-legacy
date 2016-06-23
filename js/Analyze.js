@@ -328,7 +328,15 @@ function AnalyzeInit(uploaded_data){
             jQuery("#srch").prop("disabled", false);
             jQuery("#error-msg").show().delay(3000).fadeOut();
         });
-;
+
+    });
+
+    // Prevent submit if not gene ID added
+    jQuery('#analyze-submit').click(function(event){
+        if (jQuery('#gene-list').text() === '') {
+            event.preventDefault();
+            alert('Please specify the Gene IDs');
+        }
     });
 
     /*
