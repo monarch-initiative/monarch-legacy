@@ -343,7 +343,7 @@ function AnalyzeInit(uploaded_data){
             event.preventDefault();
             alert('Please specify the Phenotypes at Step 1.');
         } else {
-            if (comparable_mode === 'compare' && jQuery('#gene-list').text() === '') {
+            if (comparable_mode === 'compare' && jQuery('#gene-list').val() === '') {
                 event.preventDefault();
                 alert('Please specify the Gene IDs at Step 2.');
             }
