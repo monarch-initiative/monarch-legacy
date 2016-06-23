@@ -469,6 +469,10 @@ function AnalyzeInit(uploaded_data){
 		ll("Vals_Str: "+vals_str);
 		jQuery(analyze_auto_target_elt).val(vals_str);
 
+        refreshResults();
+    }
+
+    function refreshResults() {
         // Gray out the phenogrid and results table
         jQuery('#resultContainer').css('background-color', 'gray');
         jQuery('#resultContainer').css('opacity', '.7');
