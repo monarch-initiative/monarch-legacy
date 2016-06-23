@@ -341,11 +341,11 @@ function AnalyzeInit(uploaded_data){
     jQuery('#analyze-submit').click(function(event){
         if (jQuery('#analyze_auto_target').val() === '') {
             event.preventDefault();
-            alert('Please specify the Phenotypes at Sept 1.');
+            alert('Please specify the Phenotypes at Step 1.');
         } else {
             if (comparable_mode === 'compare' && jQuery('#gene-list').text() === '') {
                 event.preventDefault();
-                alert('Please specify the Gene IDs');
+                alert('Please specify the Gene IDs at Step 2.');
             }
         }  
     });
@@ -473,12 +473,14 @@ function AnalyzeInit(uploaded_data){
     }
 
     function refreshResults() {
-        // Gray out the phenogrid and results table
-        jQuery('#resultContainer').css('background-color', 'gray');
-        jQuery('#resultContainer').css('opacity', '.7');
+        if (typeof(urlParams.mode) !== 'undefined') {
+            // Gray out the phenogrid and results table
+            jQuery('#resultContainer').css('background-color', 'gray');
+            jQuery('#resultContainer').css('opacity', '.7');
 
-        // Change the button text
-        jQuery('#analyze-submit').html('Refresh');
+            // Change the button text
+            jQuery('#analyze-submit').html('Refresh');
+        }
     }
 
     function redraw_form_list(){
@@ -644,6 +646,7 @@ function AnalyzeInit(uploaded_data){
                                 },
                                 success: function ( data ){
                                     map = add_species_to_autocomplete(data, map, gene_ids);
+
                                     response(map);
                                 }
                             });
