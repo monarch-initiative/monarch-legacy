@@ -337,12 +337,17 @@ function AnalyzeInit(uploaded_data){
 
     });
 
-    // Prevent submit if not gene ID added
+    // Prevent submit if no phenotype or gene ID added
     jQuery('#analyze-submit').click(function(event){
-        if (comparable_mode === 'compare' && jQuery('#gene-list').text() === '') {
+        if (jQuery('#analyze_auto_target').val() === '') {
             event.preventDefault();
-            alert('Please specify the Gene IDs');
-        }
+            alert('Please specify the Phenotypes at Sept 1.');
+        } else {
+            if (comparable_mode === 'compare' && jQuery('#gene-list').text() === '') {
+                event.preventDefault();
+                alert('Please specify the Gene IDs');
+            }
+        }  
     });
 
     /*
