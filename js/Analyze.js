@@ -4,6 +4,8 @@ function AnalyzeInit(uploaded_data){
     // since the selected target species is 'all' by default - Zhou
     jQuery('#analyze-limit').hide();
 
+    // Default mode is search
+    var comparable_mode = 'search';
 
     var DEFAULT_LIMIT = 100;
     var DEBUG = false;
@@ -227,6 +229,8 @@ function AnalyzeInit(uploaded_data){
  
         disable_search_form();
         enable_compare_form();
+
+        comparable_mode = 'compare';
     });
 
     // Disable compare form when compare radio button selected
@@ -237,6 +241,8 @@ function AnalyzeInit(uploaded_data){
 
         disable_compare_form();
         enable_search_form();
+
+        comparable_mode = 'search';
     });
 
     jQuery('#target').on('change', function() {
@@ -333,7 +339,7 @@ function AnalyzeInit(uploaded_data){
 
     // Prevent submit if not gene ID added
     jQuery('#analyze-submit').click(function(event){
-        if (jQuery('#gene-list').text() === '') {
+        if (comparable_mode === 'compare' && jQuery('#gene-list').text() === '') {
             event.preventDefault();
             alert('Please specify the Gene IDs');
         }
