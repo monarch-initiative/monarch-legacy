@@ -33,11 +33,11 @@ function loadPhenogrid(){
                         "groupId": "7227",
                         "groupName": "Drosophila melanogaster"
                     }
-                    //,
-                    //{
-                    //    "groupId": "6239",
-                    //    "groupName": "Caenorhabditis elegans"
-                    //}
+                    ,
+                    {
+                        "groupId": "6239",
+                        "groupName": "Caenorhabditis elegans"
+                    }
                 ],
                 "yAxis": phenotype_list
             };

@@ -1128,6 +1128,7 @@
       "fullname" : null,
       "id" : null,
       "abbreviation" : "GO",
+      "image_path": "/image/partner-go.png",
       "url_syntax" : "http://amigo.geneontology.org/cgi-bin/amigo/term-details.cgi?term=GO:[example_id]",
       "datatype" : null
    },

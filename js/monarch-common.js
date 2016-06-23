@@ -341,10 +341,14 @@ function add_species_to_autocomplete(data, map, gene_ids) {
     temp_map = temp_map.concat(map.filter( function (i){
         return i.tag == 'Fruit Fly' })
     );
+    temp_map = temp_map.concat(map.filter( function (i){
+        return i.tag == 'Roundworm' })
+    );
     map = temp_map.concat(map.filter( function (i){
         return ((i.tag != 'Mouse') 
               && (i.tag != 'Human')
               && (i.tag != 'Fruit Fly')
+              && (i.tag != 'Roundworm')
               && (i.tag != 'Zebra Fish'))
         })
     );

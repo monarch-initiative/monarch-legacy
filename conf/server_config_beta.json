@@ -3,7 +3,7 @@
 
     "app_base" : "https://beta.monarchinitiative.org",
 
-       "scigraph_url" : "https://scigraph-ontology-dev.monarchinitiative.org/scigraph/",
+    "scigraph_url" : "https://scigraph-ontology-dev.monarchinitiative.org/scigraph/",
 
     "scigraph_data_url" : "https://scigraph-data-dev.monarchinitiative.org/scigraph/",
 

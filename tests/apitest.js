@@ -52,12 +52,13 @@ var geneIds =
 //Test fetchAssociations
 exports.testFetchAssociations = function() {
     var testFailed = false;
-    var filter = {field: 'object_category', value: 'phenotype'};
+    var filter = [{field: 'object_category', value: 'phenotype'},
+                  {field: 'subject_category', value: 'disease'}];
 
     diseaseIds.forEach(
             function(id) {
                 console.log("Fetching:"+id);
-                var golrResponse = engine.fetchAssociations(id, 'subject_closure', filter, 1000);
+                var golrResponse = engine.fetchAssociations(id, 'subject_closure', filter, 10);
 
                 var thisTestSucceeded = testCommon.assert(
                     "golrResponse._is_a === 'bbop.golr.response'",

@@ -764,6 +764,10 @@ console.log(item);
                 {
                     "groupId": "6239",
                     "groupName": "Caenorhabditis elegans"
+                },
+                {
+                    "groupId": "6239",
+                    "groupName": "Caenorhabditis elegans"
                 }
             ],
             "yAxis": phenotype_list
