@@ -222,6 +222,9 @@ function AnalyzeInit(uploaded_data){
     // Disable search form when compare radio button selected
     // and enable compare
     jQuery('#compare').click(function(){
+        // Hide the phenogrid and results table
+        jQuery('#resultSection').hide();
+ 
         disable_search_form();
         enable_compare_form();
     });
@@ -229,6 +232,9 @@ function AnalyzeInit(uploaded_data){
     // Disable compare form when compare radio button selected
     // Re-enable search form
     jQuery('#srch').click(function(){
+        // Hide the phenogrid and results table
+        jQuery('#resultSection').hide();
+
         disable_compare_form();
         enable_search_form();
     });
@@ -646,6 +652,7 @@ function AnalyzeInit(uploaded_data){
         var li = jQuery('<li>');
         
 console.log(item);
+
         li.append('<a alt="'+ item.name +'" title="'+ item.name +'">' +
               '<span class="autocomplete-main-item">' +
               item.label +
