@@ -644,6 +644,8 @@ function AnalyzeInit(uploaded_data){
     var jac = jQuery('#auto_gene_input').autocomplete(auto_gene_args);
     jac.data('ui-autocomplete')._renderItem = function(ul, item){
         var li = jQuery('<li>');
+        
+console.log(item);
         li.append('<a alt="'+ item.name +'" title="'+ item.name +'">' +
               '<span class="autocomplete-main-item">' +
               item.label +
@@ -721,12 +723,11 @@ function AnalyzeInit(uploaded_data){
                 {
                     "groupId": "7227",
                     "groupName": "Drosophila melanogaster"
+                },
+                {
+                    "groupId": "6239",
+                    "groupName": "Caenorhabditis elegans"
                 }
-                //,
-                //{
-                //    "groupId": "6239",
-                //    "groupName": "Caenorhabditis elegans"
-                //}
             ],
             "yAxis": phenotype_list
         };
