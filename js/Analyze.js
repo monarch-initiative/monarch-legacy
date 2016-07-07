@@ -669,23 +669,8 @@ function AnalyzeInit(uploaded_data){
                         }
 
                         var map = jQuery.map(pared_data, _parse_data_item);
+                        var gene_ids = map.map(function(i) { return i.id; });
 
-/*
-                        var map = jQuery.map(data,
-                                function(item) {
-                                    return {
-                                        'label': item.label,
-                                        'id': item.id
-                                    };
-                        });
-*/
-                        var id_list = map.map( function(i) { return i.id; });
-
-                        //var filtered_list = map.filter(function(i) { return i.category === 'gene'; });
-                        var gene_ids = id_list.map(function(i) { return i.id; });
-
-
-                        //var gene_ids = map.map(function(i) { return i.id; });
                         //var gene_ids = id_list;
                         var ids = gene_ids.join('&id=');
                         if (gene_ids.length > 0) {
@@ -702,13 +687,13 @@ function AnalyzeInit(uploaded_data){
                                 },
                                 success: function ( data ){
                                     map = add_species_to_autocomplete(data, map, gene_ids);
-                                    remove_equivalent_ids(map, id_list, response);
+                                    remove_equivalent_ids(map, gene_ids, response);
                                     //response(map);
                                 }
                             });
                         } else {
                             //response(map);
-                            remove_equivalent_ids(map, id_list, response);
+                            remove_equivalent_ids(map, gene_ids, response);
                         }
                     }
             });
