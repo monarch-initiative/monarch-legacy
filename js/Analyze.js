@@ -641,7 +641,7 @@ function AnalyzeInit(uploaded_data){
 
 
 
-            var query = "/autocomplete/" + request.term + ".json";
+            var query = "/autocomplete/gene/" + request.term + ".json";
             jQuery.ajax({
                     url: query,
                     dataType: 'json',
@@ -681,8 +681,8 @@ function AnalyzeInit(uploaded_data){
 */
                         var id_list = map.map( function(i) { return i.id; });
 
-                        var filtered_list = map.filter(function(i) { return i.category === 'gene'; });
-                        var gene_ids = filtered_list.map(function(i) { return i.id; });
+                        //var filtered_list = map.filter(function(i) { return i.category === 'gene'; });
+                        var gene_ids = id_list.map(function(i) { return i.id; });
 
 
                         //var gene_ids = map.map(function(i) { return i.id; });
