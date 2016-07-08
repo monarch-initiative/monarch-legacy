@@ -207,6 +207,9 @@ bbop.monarch.linker.prototype.img = function (id, xid, modifier, category){
 
                 // Now, check to see if it is indeed in our store.
                 var lc_src = src.toLowerCase();
+                if (/_slim$/.test(lc_src)) {
+                    lc_src = lc_src.replace(/_slim$/, '');
+                }
                 var xref = global_xrefs_conf[lc_src];
                 if (xref && xref['image_path']){
                     retval = '<img class="source" src="' + this.app_base
@@ -316,7 +319,11 @@ bbop.monarch.linker.prototype.set_anchor = function(id, args, xid, modifier){
         if (/^http/.test(id)){
             var src = id.replace(/.*\/(\w+)\.ttl/, "$1");
             var lc_src = src.toLowerCase();
+            if (/_slim$/.test(lc_src)) {
+                lc_src = lc_src.replace(/_slim$/, '');
+            }
             var xref = global_xrefs_conf[lc_src];
+           
             if (xref && xref['database']){
                 title = xref['database'];
             }
