@@ -75,10 +75,6 @@
 /* Rest of Content */
 /* This styles the content within tab categories. */
 
-.monarch-container #complete-info {
-    padding: 0 30px;
-    min-height:500px;
-}
 .monarch-container .category {
     display: none;
 }
@@ -241,19 +237,11 @@
 
 /* Analyze */
 
-.monarch-container .compare-text{
-	opacity: .5;
-}
-.monarch-container .search-text{
-	opacity: 1.0;
-}
 
 .monarch-container #settings-header {
     text-align: center;
 }
-.monarch-container #analyze-compare {
-    border-left: 1px solid #e8e8e8;
-}
+
 .monarch-container .search-label {
 	font-weight: normal;
     font-size: 15px;
@@ -264,26 +252,12 @@
     width:100%;
 }
 
-.monarch-container #analyze-target {
-	padding-bottom: 30px;
-}
-
-.monarch-container #analyze-search {
-  padding: 0;
-  margin-left: -5px;
-}
-
-.monarch-container #search-form-group {
-  padding-right: 5px;
-}
-
 .monarch-container #analyze-compare {
   padding-right: 0;
   padding-left: 5px;
 }
 
 .monarch-container .pheno-radio-button {
-	width: 14%;
     margin: 0 auto;
     padding-bottom: 10px;
 }
@@ -374,7 +348,7 @@
 	margin: 0 5px 1px 0;
 }
 .monarch-container #analyze-submit{
-  min-width:70px;
+  
 }
 .monarch-container #reset{
   min-width:70px;
@@ -408,6 +382,13 @@
     font-weight: normal;
 }
 
+
+#selected_inputs{
+border:1px solid #ddd;
+margin-bottom:20px;
+padding:10px;
+font-size:12px;
+}
 
 
 @media (max-width: 840px) {
@@ -482,6 +463,7 @@
 	margin-top: -20px;
 	-moz-transform: scale(.9999);
   }
+
 }
 
 /* File upload credit http://www.abeautifulsite.net/whipping-file-inputs-into-shape-with-bootstrap-3/ */
