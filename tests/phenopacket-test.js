@@ -19,7 +19,7 @@ var validator = require('is-my-json-valid');
 exports.testPhenoPacketBuilder = function() {
 
     var test_params = {};
-    test_params.fq =["subject_closure:\"ClinVarVariant:156137\"",
+    test_params.fq =["subject_closure:\"ClinVarVariant:91577\"",
                      "object_category:\"phenotype\""];
     test_params.q = "*:*";
     test_params.personality = "variant_phenotype";
