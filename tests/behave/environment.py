@@ -99,7 +99,7 @@ def before_all(context):
     # Set a 30 second implicit wait - http://selenium-python.readthedocs.org/en/latest/waits.html#implicit-waits
     # Once set, the implicit wait is set for the life of the WebDriver object instance.
     #
-    context.browser.set_window_size(1200, 900)
+    context.browser.set_window_size(2000, 1500)
     context.browser.implicitly_wait(30) # seconds
 
 ## Do this after completing everything.
@@ -112,7 +112,7 @@ def after_all(context):
 # gets smaller and hides the navbar search field.
 #
 def before_scenario(context, scenario):
-    context.browser.set_window_size(1100, 800)
+    context.browser.set_window_size(2000, 1500)
     time.sleep(1)
 
 def after_scenario(context, scenario):
