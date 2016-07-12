@@ -60,7 +60,7 @@
                         <input id="analyze_auto_target" name="input_items" value="{{input_items}}" type="hidden"/>
                         
                         <div id="analyze-searchlist" class="col-xs-8">
-                              <input id="analyze_auto_input" type="text" class="form-control" placeholder="Enter phenotype name into this autocomplete search"/>
+                              <input id="analyze_auto_input" type="text" class="form-control" placeholder="Start typing a phenotype label (eg. Resting tremor); select form menu. Repeat as desired to build up a profile."/>
                         </div>
                         
 </div>
@@ -159,16 +159,20 @@
 
                         <div id="compare-form-group" class="col-xs-12">
                           
-                          Select genes using either the autocomplete and/or enter gene IDs directly using the text box.
+                          <h5>Select gene labels and/or gene IDs</h5>
+                          
+                          <div>
+                              Gene labels:
+                          </div>
                           <div id="gene-autocomplete">
-                              <input id="auto_gene_input" type="text" class="form-control" placeholder="Keyword to search">
+                              <input id="auto_gene_input" type="text" class="form-control" placeholder="Type a gene label (eg. LHX1); select from menu">
                           </div>
                           
                           <div id="gene-text-area">
                               Gene IDs (<a href="https://github.com/monarch-initiative/dipper#identifiers" target="_blank">more details...</a>):
                           </div>
 
-                          <textarea id="gene-list" class="form-control" rows="3" placeholder="e.g. NCBIGene:3975, ENSEMBL:ENSG00000108753" name="gene_list"></textarea>
+                          <textarea id="gene-list" class="form-control" rows="3" placeholder="Paste comma-separated accessions (eg. NCBIGene:3975, ENSEMBL:ENSG00000273706)" name="gene_list"></textarea>
                           
                           <div id="add_more_genes">
                           <div id="gene-shortcuts">
