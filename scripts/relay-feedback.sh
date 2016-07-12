@@ -11,16 +11,17 @@
 #       SHELL=/bin/bash
 #       MAILTO=""
 #       # m h dom mon dow usercommand
-#       * * * * * /opt/monarch-app/scripts/relay-feedback.sh        # Runs every minute
-#       */5 * * * * /opt/monarch-app/scripts/relay-feedback.sh      # Runs every 5 minutes
-#       0 */2 * * * /opt/monarch-app/scripts/relay-feedback.sh      # Runs every two hours
-#       0 */6 * * * /opt/monarch-app/scripts/relay-feedback.sh      # Runs every six hours (recommended)
+#       # * * * * * /opt/monarch-app/scripts/relay-feedback.sh        # Runs every minute
+#       # */5 * * * * /opt/monarch-app/scripts/relay-feedback.sh      # Runs every 5 minutes
+#       */30 * * * * /opt/monarch-app/scripts/relay-feedback.sh      # Runs every 30 minutes (enabled)
+#       # 0 */2 * * * /opt/monarch-app/scripts/relay-feedback.sh      # Runs every two hours
+#       # 0 */6 * * * /opt/monarch-app/scripts/relay-feedback.sh      # Runs every six hours
 #
 
 FEEDBACKFILE=/opt/monarch-app/feedback.txt
 HOST=$(hostname)
 TIMESTAMP=$(date "+%Y.%m.%d-%H.%M.%S")
-TARGETHOST=monarch4-2.cslu.ohsu.edu
+TARGETHOST=monarch-access.monarchinitiative.org
 TARGETUSER=dkeith
 TARGETFILE=feedback/${HOST}-${TIMESTAMP}.txt
 TARGETSCP=${TARGETUSER}@${TARGETHOST}:${TARGETFILE}
