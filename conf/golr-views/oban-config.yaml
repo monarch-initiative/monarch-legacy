@@ -196,6 +196,14 @@ fields:
     type: string
     searchable: true
     property: []
+    
+
+  - id: subject_ortholog_closure
+    description: "Reflexive closure of orthology."
+    display_name: Ortholog
+    type: string
+    cardinality: multi
+    property: []
 
 ## RELATIONSHIP BETWEEN SUBJECT AND OBJECT
 
