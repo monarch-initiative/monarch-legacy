@@ -52,7 +52,6 @@ function initMonarchPage(){
             }
         };
 
-        console.log('FEEDBACK:', params);
         jQuery.ajax({
             type : 'POST',
             url : feedbackUrl,
