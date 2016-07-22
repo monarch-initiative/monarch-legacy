@@ -3,13 +3,13 @@
 
     "app_base" : "https://beta.monarchinitiative.org",
 
-    "scigraph_url" : "https://scigraph-ontology-dev.monarchinitiative.org/scigraph/",
+    "scigraph_url" : "https://scigraph-ontology.monarchinitiative.org/scigraph/",
 
-    "scigraph_data_url" : "https://scigraph-data-dev.monarchinitiative.org/scigraph/",
+    "scigraph_data_url" : "https://scigraph-data.monarchinitiative.org/scigraph/",
 
-    "golr_url" : "https://solr-dev.monarchinitiative.org/solr/golr/",
+    "golr_url" : "https://solr.monarchinitiative.org/solr/golr/",
 
-    "owlsim_services_url" : "https://beta.monarchinitiative.org/owlsim",
+    "owlsim_services_url" : "https://monarchinitiative.org/owlsim",
 
     "analytics_id" : ""
 
