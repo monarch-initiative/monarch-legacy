@@ -4,7 +4,7 @@ document_category: generic_association
 weight: 20
 
 ## Results table, horizontal
-result_weights: object^5.0
+result_weights: subject^6.0 object^5.0
 
 ## Ordering of facets, vertical
 filter_weights: subject_taxon_closure_label^3.5 object_taxon_closure_label^3.0
@@ -17,27 +17,27 @@ fields:
 
   - id: subject
     description: "The CURIE for oban:association_has_subject. May be disease, variant, gene, person, ...."
-    display_name: Model
+    display_name: Case
     type: string
     property: []
 
   - id: subject_label
     description: "Label for association_subject. This will always be rdfs:label. Conventions may vary as to what goes in the label. For genes will be symbol, but we may choose to uniquify by prefixing with species"
-    display_name: Model
+    display_name: Case
     type: string
     property: []
     searchable: true
 
   - id: subject_closure
     description: "Reflexive closure of association_has_subject. A list of CURIEs. If an individual, first traverse rdf:tpye. The default closure is subclass, but other may optionally be added depending on what type of association this is and what the class is. E.g. for expression associations, the object is an anatomy class, and the closure will include part_of"
-    display_name: Model
+    display_name: Case
     type: string
     cardinality: multi
     property: []
 
   - id: subject_closure_label
     description: "Labels for subject_closure."
-    display_name: Model
+    display_name: Case
     type: string
     cardinality: multi
     property: []
