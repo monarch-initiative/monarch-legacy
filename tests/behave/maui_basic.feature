@@ -17,10 +17,13 @@ Feature: Monarch-app UI basic pages display okay
     | /analyze/phenotypes | Monarch Analysis              |
     | /annotate/text      | Annotation                    |
     | /page/exomes        | Monarch Exomes                |
+<<<<<<< HEAD
 <<<<<<< c40234f775287e6bd29c3e4f984edfacbc9302e3
     | /page/about         | About Monarch                 |
     | /about/sources      | Data Sources                  |
 =======
+=======
+>>>>>>> 4cc763d9c3072a096a39b9cce30826b23253218a
     | /page/about         | About Monarch                 |    
     | /page/disclaimer    | Monarch Disclaimer            |
     | /sources            | Data Sources                  |
