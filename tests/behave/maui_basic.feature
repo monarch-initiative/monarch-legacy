@@ -17,8 +17,14 @@ Feature: Monarch-app UI basic pages display okay
     | /analyze/phenotypes | Monarch Analysis              |
     | /annotate/text      | Annotation                    |
     | /page/exomes        | Monarch Exomes                |
+<<<<<<< c40234f775287e6bd29c3e4f984edfacbc9302e3
     | /page/about         | About Monarch                 |
     | /about/sources      | Data Sources                  |
+=======
+    | /page/about         | About Monarch                 |    
+    | /page/disclaimer    | Monarch Disclaimer            |
+    | /sources            | Data Sources                  |
+>>>>>>> adding disclaimer to the pages, navbar, and basic tests
     | /page/releases      | Monarch Releases              |
     | /page/software      | Monarch Software              |
     | /page/services      | Monarch Services              |
