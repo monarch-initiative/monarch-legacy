@@ -17,7 +17,7 @@ fields:
 ## SUBJECT
 
   - id: subject
-    description: "The CURIE for oban:association_has_subject. May be disease, variant, gene, person, ...."
+    description: "The CURIE for oban:association_has_subject. May be disease, variant, gene, case, ...."
     display_name: Variant
     type: string
     property: []
