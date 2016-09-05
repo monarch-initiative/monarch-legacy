@@ -20,7 +20,6 @@
 .monarch-container .ids {
     margin-top: 5px;
     font-size: 15px;
-    line-height: 22px;
 }
 
 /* Category Tabs */
@@ -32,7 +31,7 @@
 }
 .monarch-container .tabcontainer {
     display: inline-block;
-    line-height: 30px;
+    line-height: 20px;
 }
 .monarch-container .tabhover {
     position: absolute;
@@ -46,16 +45,16 @@
     z-index: 10;
 }
 .monarch-container .tab {
-    line-height: 30px;
+    line-height: 20px;
     display: inline-block;
-    padding: 2px 12px;
+    padding: 2px 10px;
     text-align: center;
     font-weight: 400;
     cursor: pointer;
     font-size: 14px;
-    border: 1px solid black;
+    border: 1px solid darkgray;
     border-radius: 5px 5px 0px 0px;
-    margin-right: 2px;
+    margin:0 1px 0 0;
 }
 .monarch-container #initialtab {
     color: black;
@@ -63,7 +62,6 @@
     border-bottom:1px solid transparent;
 }
 .monarch-container .contenttab {
-    line-height: 30px;
     background-color: #999;
     color: white;
 }
@@ -87,7 +85,9 @@
 
 .monarch-container .category {
     display: none;
+    margin: 5px 1px 0 1px;
 }
+
 .monarch-container .first {
     display: block;
 }
@@ -122,8 +122,15 @@
  * tab of the disease specific pages. */
 
 .monarch-container #annotationscore {
+    margin: 0;
     margin-bottom: 10px;
-    position: relative;
+    position: absolute;
+    top: 5px;
+    right: 5px;
+    padding: 0 25px 0 5px;
+    background: #EEE;
+    border-radius: 3px;
+    height: 22px;
 }
 .monarch-container #annotationscore > span.annotatetext {
     margin-right: 10px;
@@ -135,21 +142,32 @@
     width: 80px;
     height: 16px;
 }
-.monarch-container span.stars > *{
+
+.monarch-container span.stars {
+    margin: 2px 0 0 0;
+}
+.monarch-container span.stars > * {
     max-width:80px;
     background-position: 0 0;
 }
+
+
 .monarch-container #annotationscore > span.annotatequestion {
-    margin-left: 10px;
-    padding: 1px 6px;
-    background-color: #53AED7;
-    color: white;
-    border-radius: 2px;
+  position: absolute;
+  top: 1px;
+  right: 0;
+  padding: 1px 5px;
+  margin: 0;
+  height: 20px;
+  background-color: #53AED7;
+  color: white;
+  border-radius: 2px;
 }
+
 .monarch-container #annotationscore > span.annotatehelp {
     position: absolute;
-    left: 285px;
-    top: -5px;
+    right: 25px;
+    top: 25px;
     font-size: 12px;
     line-height: 12px;
     background-color: white;

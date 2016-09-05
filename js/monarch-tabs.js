@@ -18,8 +18,8 @@ function InitTabs() {
     });
 
     /* This changes the color and style of tabs upon click. */
-    jQuery('.contenttab').click(function() {
-        jQuery('.contenttab').css({'color': 'white', 'background-color': '#999', 'border-bottom': '1px solid black'});
+    jQuery('.contenttab').click(function(e) {
+        jQuery('.contenttab').css({'color': 'white', 'background-color': '#999', 'border-bottom': '1px solid darkgray'});
         jQuery(this).css({'color': 'black', 'background-color': 'white', 'border-bottom': '1px solid white'});
     });
 
@@ -32,17 +32,20 @@ function InitTabs() {
             loadJBrowseFrame();
         }
         event.preventDefault();
+        event.stopPropagation();
         jQuery('.category').hide();
-        jQuery(panel_id).show();
+        jQuery(panel_id + '-panel').show();
+        window.location.hash = panel_id;
     });
     //HACK TO GET THE ANALYZE PAGE TO WORK, REFACTOR OUT
     jQuery('#internal-link').click(function(event) {
+        console.log('internal-link');
         var panel_id = jQuery(this).attr('href');
         event.preventDefault();
         jQuery('.category').hide();
         jQuery(panel_id).show();
-        jQuery(".query-tab").css({'color': 'white', 'background-color': '#999', 'border-bottom': '1px solid black'});
-        jQuery(".results-tab").css({'color': 'white', 'background-color': '#999', 'border-bottom': '1px solid black'});
+        jQuery(".query-tab").css({'color': 'white', 'background-color': '#999', 'border-bottom': '1px solid darkgray'});
+        jQuery(".results-tab").css({'color': 'white', 'background-color': '#999', 'border-bottom': '1px solid darkgray'});
         jQuery(".upload-tab").css({'color': 'black', 'background-color': 'white', 'border-bottom': '1px solid white'});
     });
 
@@ -52,11 +55,13 @@ function InitTabs() {
         window.location.hash != "" && window.location.hash != "#" ){
         var fragname = window.location.hash;
 
-        jQuery('.first.category').hide();
-        jQuery(fragname).show();
+        if (fragname !== '#overview') {
+            jQuery('.first.category').hide();
+            jQuery(fragname).show();
 
-        jQuery('.contenttab').css({'color': 'white', 'background-color': '#999', 'border-bottom': '1px solid black'});
-        jQuery('.tabcontainer a[href="' + fragname + '"]').children('.contenttab').css({'color': 'black', 'background-color': 'white', 'border-bottom': '1px solid white'});
+            jQuery('.contenttab').css({'color': 'white', 'background-color': '#999', 'border-bottom': '1px solid darkgray'});
+            jQuery('.tabcontainer a[href="' + fragname + '"]').children('.contenttab').css({'color': 'black', 'background-color': 'white', 'border-bottom': '1px solid white'});
+        }
     }
 
     /* Literature Tab */

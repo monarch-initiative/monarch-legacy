@@ -38,7 +38,7 @@ below.
     - [Documentation on the Tooling](#documentation-on-the-tooling)
         - [BrowserSync](#browsersync)
 - [Installing NodeJS and NPM for Monarch](#installing-nodejs-and-npm-for-monarch)
-    - [Install NodeJS via `nvm` (Node Version Manager)](#install-nodejs-via-nvm-node-version-manager)
+    - [Install NodeJS via `nvm` \(Node Version Manager\)](#install-nodejs-via-nvm-node-version-manager)
         - [Installing `nvm` on MacOSX via HomeBrew](#installing-nvm-on-macosx-via-homebrew)
         - [Installing `nvm` on MacOSX or Unix via `wget`/`curl`](#installing-nvm-on-macosx-or-unix-via-wgetcurl)
     - [Installing NodeJS via `n`](#installing-nodejs-via-n)
@@ -77,15 +77,15 @@ You will need to have NodeJS and NPM installed. At the time of this writing, we 
 
     > npm version
         ...
-          npm: '3.4.0,
+          npm: '3.10.8',
         ...
-          node: '0.12.2',
+          node: '4.5.0',
 
-*About Node Versioning*: Node 4.x is the immediate successor to the 0.12.x version of NodeJS. The version number jumped from 0.12.2 to 4.0.0 as a result of the NodeJS committee adjusting their version-numbering system recently. More information is in the [V4.0 Release Notes](https://nodejs.org/en/blog/release/v4.0.0/).
-
-We are currently holding at 0.12.2 and HapiJS 11.0.2 due to GCC version issues on some of our CentOS deployment nodes. When we are able to update these nodes to GCC 4.8, then we can update package.json to reflect Node 4.2.x and HapiJS 11.1.x, which are the current stable and supported versions of these packages.
+These versions do not have to be exact, and NPM version 2.15.x will likely work as well.
 
 Currently, we have been successfully using the `nvm` tool to configure and manage our NodeJS environment; `nvm` enables a user to associate a paritcular  NodeJS and NPM version with their Unix shell, allowing for each switching between NodeJS versions across different projects. If you need help in getting the Monarch-required NodeJS and NPM versions installed, please read the platform-specific instructions on installing NodeJS and NPM, see [Installing NodeJS and NPM for Monarch](#installing-nodejs-and-npm-for-monarch) below.
+
+*About Node Versioning*: Node 4.x is the immediate successor to the 0.12.x version of NodeJS. The version number jumped from 0.12.2 to 4.0.0 as a result of the NodeJS committee adjusting their version-numbering system recently. More information is in the [V4.0 Release Notes](https://nodejs.org/en/blog/release/v4.0.0/).
 
 
 ### Download and Install Monarch
@@ -235,36 +235,38 @@ Note that your default web browser will open up automatically and you will be po
 
 ## Installing NodeJS and NPM for Monarch
 
-Although your development machine may be running NodeJS and NPM currently, it is likely not the exact same version that Monarch is currently supporting (NodeJS 0.12.2 and NPM 3.4.0). The instructions below may help achieve the proper NodeJS and NPM versions. If you are not familiar with NodeJS and NPM, then this may help. Otherwise, use your ordinary technique for achieving NodeJS v0.12.2 and NPM v3.4.0 and skip the remainder of this section.
+Although your development machine may be running NodeJS and NPM currently, it is likely not the exact same version that Monarch is currently supporting (NodeJS 4.5.0 and NPM 3.10.8). The instructions below may help achieve the proper NodeJS and NPM versions. If you are not familiar with NodeJS and NPM, then this may help. Otherwise, use your ordinary technique for achieving NodeJS 4.5.0 and NPM 3.10.8 and skip the remainder of this section.
 
 If you are not running a current version of NodeJS, use the instructions below in:
 
 - [Install NodeJS via `nvm` (Node Version Manager)](#install-nodejs-via-nvm-node-version-manager)
 - [Installing NodeJS via `n`](#installing-nodejs-via-n)
 
-Once you have a correct NodeJS version running and selected as the current default for your shell (e.g., `nvm use v0.12.2`), then you can ensure that the correct NPM is installed by using the command:
+Once you have a correct NodeJS version running and selected as the current default for your shell (e.g., `nvm use 4.5.0`), then you can ensure that the correct NPM is installed by using the command:
 
-    > npm install -g npm@3.4.0
+    > npm install -g npm@latest
 
 Verify that you are running the correct versions by:
 
     > npm version
 
-which should output something containing:
+which should output something like:
 
-
+    > ...
+    > npm: '3.10.8',
+    > ...
 
 ### Install NodeJS via `nvm` (Node Version Manager)
 
-One of the easiest ways to install an alternative version of Node is to use the `nvm` tool available at [https://github.com/creationix/nvm](https://github.com/creationix/nvm). If you have `nvm` installed, you can use the following command to installed NodeJS v0.12.2:
+One of the easiest ways to install an alternative version of Node is to use the `nvm` tool available at [https://github.com/creationix/nvm](https://github.com/creationix/nvm). If you have `nvm` installed, you can use the following command to installed NodeJS v4.5.0:
 
-    > nvm install v0.12.2
+    > nvm install v4.5.0
 
-This will download, compile and install the 0.12.2 version of NodeJS into the `~/.nvm` directory, making it *available* for the next command:
+This will download, compile and install the 4.5.0 version of NodeJS into the `~/.nvm` directory, making it *available* for the next command:
 
-    >nvm use v0.12.2
+    >nvm use v4.5.0
 
-This command will change your current NVM environment so that it *sees* a v0.12.2 version of NodeJS.
+This command will change your current NVM environment so that it *sees* a v4.5.0 version of NodeJS.
 
 #### Installing `nvm` on MacOSX via HomeBrew
 

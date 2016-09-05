@@ -1,25 +1,6 @@
-<div id="{{{href}}}" class="row category">
+<div id="{{{href}}}-panel" class="row category">
 
   <div id="r3" class="col-xs-12">
-    {{#isPhenotypeTable}}
-    {{#isLeafNode}}
-    <div id="annotationscore">
-      <span class="annotatetext">Annotation Sufficiency:</span>
-      <span class="score-spinner"></span>
-      <span class="stars"></span>
-      <span class="annotatequestion">?</span>
-      <span class="annotatehelp">
-           The annotation score reflects how the breadth and depth of
-           annotations for this disease compares to all of the other phenotypic
-           profiles in our corpus. A high score means that the disease is richly
-           annotated, both across a diverse set of phenotypic categories,
-           as well as in the number and specificity of each of the phenotypes.
-      </span>
-    </div>
-    {{/isLeafNode}}
-    {{/isPhenotypeTable}}
-
-
     <div id="results-area">
       <div class="results-area-pager">
 
@@ -83,10 +64,26 @@
 
         <div id="{{{div}}}-filter-pager-top" class="bs3pager">
         </div>
-      </div>
-    </div>
 
-    <div>
+        {{#isPhenotypeTable}}
+        {{#isLeafNode}}
+        <div id="annotationscore" class="pull-right">
+          <span class="annotatetext">Annotation Sufficiency:</span>
+          <span class="score-spinner"></span>
+          <span class="stars"></span>
+          <span class="annotatequestion">?</span>
+          <span class="annotatehelp">
+               The annotation score reflects how the breadth and depth of
+               annotations for this disease compares to all of the other phenotypic
+               profiles in our corpus. A high score means that the disease is richly
+               annotated, both across a diverse set of phenotypic categories,
+               as well as in the number and specificity of each of the phenotypes.
+          </span>
+        </div>
+        {{/isLeafNode}}
+        {{/isPhenotypeTable}}
+      </div>
+
       <div id="{{{div}}}" class="bs3table">
         &nbsp;&nbsp;&nbsp;&nbsp;<br>
         &nbsp;&nbsp;&nbsp;&nbsp;

@@ -1,9 +1,9 @@
-/** 
+/**
  * Module to generate overview tabs
- * 
+ *
  * Initial goals are to replace mustache with jquery
  * Longer term we want to replace jquery with angular
- * 
+ *
  * @module overview
  */
 var Q = require('q');
@@ -65,7 +65,7 @@ function getOntologyBrowser(id, label, root){
             graph.load_json(data);
             var node_list = [];
             node_list = graph.all_nodes();
-            if (node_list.length > 1) {
+            if (node_list.length !== 1) {
                 // An error occurred, there can only be one
                 launchBrowser(id, root);
             } else {
@@ -80,17 +80,17 @@ function getOntologyBrowser(id, label, root){
 function fetchLiteratureOverview(id) {
     var spinner = makeSpinnerDiv();
     jQuery('#overview').append(spinner.to_string());
-    
+
     var parseEFetch = function (data) {
         jQuery('#'+spinner.get_id()).remove();
         var xml = jQuery(data);
-        
+
         //Get abstract text and add to DOM
         var abstractText = xml.find( "AbstractText" );
         var abstractElt = '<p><span style=\"font-weight:bold\">Abstract</span>: '
             + abstractText.text() + '</p>';
         jQuery("#overview").append(abstractElt);
-        
+
         //get MESH term description
         var meshHeadings = xml.find("MeshHeading");
         //console.log(meshHeadings);
@@ -108,16 +108,21 @@ function fetchLiteratureOverview(id) {
         jQuery('#'+spinner.get_id()).remove();
         console.log("Error fetching from ncbi EFetch Service");
     };
-    
+
     Q(MonarchCommon.fetchPubmedAbstract(id)).then(parseEFetch, onError);
-    
+
 }
 
 function fetchGeneDescription(id) {
     //https://mygene.info/v2/query?q=6469&fields=summary
-    var spinner = makeSpinnerDiv();
-    jQuery('#overview').append(spinner.to_string());
-    
+    var spinner_args = {'generate_id': true,
+            'class': 'progress progress-striped active',
+            'style': 'width: 3em;display:inline-block; margin:0;'
+    };
+    var spinner = makeSpinnerDiv(spinner_args);
+    jQuery('#mygene-container').show();
+    jQuery('#mygene-container .node-description').append(spinner.to_string());
+
     var serviceURL = 'https://mygene.info/v2/query';
     //Format, see http://docs.mygene.info/en/latest/doc/query_service.html#available-fields
     if (id.match(/^NCBIGene/)) {
@@ -136,24 +141,30 @@ function fetchGeneDescription(id) {
             'fields': 'summary',
             'species': 'all'
     };
-    
+
     jQuery.ajax({
         url: serviceURL,
         dataType:"json",
         data: params,
-        error: function (){
-            console.log('error fetching info from mygene');
+        error: function () {
+            console.log('fetchGeneDescription. Error fetching info from mygene');
+            jQuery('#mygene-container').hide();
             jQuery('#'+spinner.get_id()).remove();
         },
-        success: function ( data ){
+        success: function (data) {
             jQuery('#'+spinner.get_id()).remove();
-            if (data.hits.length > 0 
-                    && 'summary' in data.hits[0]) {
+            if (data.hits.length > 0 && 'summary' in data.hits[0]) {
                 var summary = data.hits[0].summary;
-                var descriptionElt = '<div class="ids"><b>Description: </b>';
-                var summaryElt = descriptionElt + "<span>" + summary + ' [Retrieved from '+
-                '<a href="https://mygene.info/">Mygene.info</a>]</span></div>'
-                jQuery('#overview').append(summaryElt);
+                var summaryElt = "<span>" + summary + ' [Retrieved from '+
+                '<a href="' +
+                    serviceURL + '?q=' + id + '&fields=summary&species=all' +
+                    '">Mygene.info</a>]</span>';
+                jQuery('#mygene-description').append(summaryElt);
+            }
+            else {
+                console.log('fetchGeneDescription. No Summary fetching info from mygene');
+                jQuery('#mygene-container').hide();
+                jQuery('#'+spinner.get_id()).remove();
             }
         }
     });

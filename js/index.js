@@ -11,8 +11,6 @@ import 'underscore';
 import 'bootstrap';
 // '/bootstrap-theme.css',
 import 'jquery-ui';
-// import './jquery-1.11.0.min.js';
-// import './jquery-ui-1.10.3.custom.min.js';
 import 'd3';
 import './search_form.js';
 import './monarch-tabs.js';
