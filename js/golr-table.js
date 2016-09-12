@@ -123,7 +123,7 @@ function getTableFromSolr(id, golr_field, div, filter, personality, tab_anchor){
                 'selectable_p' : false
         };
 
-    /*bbop_widgets.display.results_table_by_class_conf = bbop_widgets.display.results_table_by_class_conf;*/
+    bbop_widgets.display.results_table_by_class_conf = bbop.monarch.widget.display.results_table_by_class_conf_bs3;
     bbop_widgets.display.results_table_by_class_conf.prototype.process_entry = function(bit, field_id, document, display_context){
         var anchor = this;
 
