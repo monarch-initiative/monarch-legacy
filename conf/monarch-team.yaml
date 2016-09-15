@@ -38,6 +38,10 @@ institutions:
         title: Research Software Engineer
         alumni: false
         bio: Dan is a Software Engineer for the Monarch Initiative, within the OHSU Ontology Development Group. He works on the Monarch Initiative Portal and WebPhenote web applications, as well as helping with tooling and infrastructure. Dan has a BS in Computer Science from Northwestern University and a MS and PhD in Computer Science from University of Oregon, specializing in programming language metatheory, scientific workflow, and program analysis.
+      - name: Tom Conlin
+        title: Bioinformaticist
+        alumni: false
+        bio: Tom holds a BS in Mathematics and Computer Science and Computer Science, Specialization in Parallel and Distributed Computing with Bioinformatics, University of Oregon. Experienced in large scale data exchanges and in model organism databases, Tom works primarily on the Monarch data ingest pipeline (Dipper) and on issues related to identifiers.
       - name: Shahim Essaid
         picture: /image/team/ShahimEssaid.jpg
         title: Ontologist
@@ -175,6 +179,7 @@ institutions:
     website: http://www.qmul.ac.uk/
     people:
       - name: Damian Smedley
+        picture: /image/team/DamianSmedley.jpg
         alumni: false
         title: Senior Scientific Manager
         bio: Dr. Smedley has a BSc in Biochemistry from the University of Bristol and a Ph.D. from the University of Cambridge, also in Biochemistry. His lab research focused on the effect of mutation on protein structure and function and the identification and characterisation of cancer-associated chromosomal changes. He switched to a purely computational approach after completing an MSc in Bioinformatics from Birbeck College and was a developer of the BioMart distributed data integration solution. He currently leads a team investigating the use of model organism phenotype data to better understand the role of gene mutation in human disease.
