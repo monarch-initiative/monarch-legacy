@@ -62,11 +62,6 @@ institutions:
         title: Genomics
         alumni: false
         bio: Suzi has an MS in Biology and MS in Computer Science. She is a scientist and Principal Investigator at the Berkeley Bioinformatics Open-source Project (BBOP) based at Lawrence Berkeley National Laboratory. She is one of the pioneers of developing open standards and software for genome annotation and ontologies.
-      - name: Nicole Washington
-        picture: /image/team/NicoleWashington.jpeg
-        title: Lead Bioinformatician
-        alumni: true
-        bio: Dr. Washington has a BS in Biology from Harvey Mudd College and a Ph.D. in Molecular and Cellular Biology from The University of Arizona where she focused on the study of the C. elegans as a model for human disease. She is interested in the intersection of computers with biological research, in particular making tools to realize hidden connections in diverse types of biological data and integrating large-scale experiments.
       - name: Seth Carbon
         title: Software Engineer
         alumni: false
@@ -90,6 +85,11 @@ institutions:
       #     twitter: http://twitter.com
       #     facebook: http://facebook.com
       #     website: https://en.wikipedia.org/wiki/Rocky_the_Flying_Squirrel
+      - name: Nicole Washington
+        picture: /image/team/NicoleWashington.jpeg
+        title: Lead Bioinformatician
+        alumni: true
+        bio: Dr. Washington has a BS in Biology from Harvey Mudd College and a Ph.D. in Molecular and Cellular Biology from The University of Arizona where she focused on the study of the C. elegans as a model for human disease. She is interested in the intersection of computers with biological research, in particular making tools to realize hidden connections in diverse types of biological data and integrating large-scale experiments.
       - name: Sarah Kim
         title: Web Developer/Designer
         alumni: true
