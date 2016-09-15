@@ -20,7 +20,6 @@ Feature: Monarch-app UI basic pages display okay
     | /page/about         | About Monarch                 |
     | /about/sources      | Data Sources                  |
     | /page/disclaimer    | Monarch Disclaimer            |
-    | /sources            | Data Sources                  |
     | /page/releases      | Monarch Releases              |
     | /page/software      | Monarch Software              |
     | /page/services      | Monarch Services              |
