@@ -49,7 +49,7 @@ institutions:
         bio: Bryan has a BA from Reed College in Biology, post-bac training in MIS from Oregon Institute of Technology, and is currently a Master’s student in Bioinformatics &amp; Computational Biology at Oregon Health &amp; Science University. He is currently a Data Wrangler for the Monarch Initiative, assisting with data ingestion.
   - id: lbnl
     name: Lawrence Berkeley National Laboratory
-    logo: /image/team-lbnl.svg
+    logo: /image/team-lbnl.jpeg
     website: http://lbl.gov
     people:
       - name: Chris Mungall
@@ -65,7 +65,7 @@ institutions:
       - name: Nicole Washington
         picture: /image/team/NicoleWashington.jpeg
         title: Lead Bioinformatician
-        alumni: false
+        alumni: true
         bio: Dr. Washington has a BS in Biology from Harvey Mudd College and a Ph.D. in Molecular and Cellular Biology from The University of Arizona where she focused on the study of the C. elegans as a model for human disease. She is interested in the intersection of computers with biological research, in particular making tools to realize hidden connections in diverse types of biological data and integrating large-scale experiments.
       - name: Seth Carbon
         title: Software Engineer
@@ -179,6 +179,7 @@ institutions:
         title: Senior Scientific Manager
         bio: Dr. Smedley has a BSc in Biochemistry from the University of Bristol and a Ph.D. from the University of Cambridge, also in Biochemistry. His lab research focused on the effect of mutation on protein structure and function and the identification and characterisation of cancer-associated chromosomal changes. He switched to a purely computational approach after completing an MSc in Bioinformatics from Birbeck College and was a developer of the BioMart distributed data integration solution. He currently leads a team investigating the use of model organism phenotype data to better understand the role of gene mutation in human disease.
       - name: Jules Jacobsen
+        picture: /image/team/JulesJacobsen.jpg
         alumni: false
         title: Bioinformatician
         bio: Dr. Jacobsen has a BSc in Biochemistry from the Imperial College, London and a Ph.D. from the University of Cambridge, in Structural Biology. He has developed several tools for investigating the use of model organism phenotype data to better understand the role of gene mutation in human disease.
