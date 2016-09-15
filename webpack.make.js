@@ -26,6 +26,10 @@ module.exports = function(options) { // makeWebpackConfig
    */
   var config = {};
   config.debug = true;
+  config.amd = {
+      jQuery: true
+  };
+
 
   config.eslint = {
     configFile: './.eslintrc',

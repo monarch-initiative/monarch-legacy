@@ -421,7 +421,7 @@ bbop.widget.facet_filters = function(interface_id, manager, golr_conf_obj, in_ar
     };
     if( true || this._display_meta_p ) {
       // We do this to inhibit BBOP's default meta drawing
-      manager.register('search', 'meta_first', this.draw_meta, -1);
+      manager.register('search', this.draw_meta, -1, 'meta_first');
     }
 
     // Detect whether or not a keyboard event is ignorable.
@@ -748,7 +748,7 @@ bbop.widget.facet_filters = function(interface_id, manager, golr_conf_obj, in_ar
       };
 
     if( this._display_accordion_p ){
-      manager.register('search', 'accrdn_first', this.draw_accordion, 1);
+      manager.register('search', this.draw_accordion, 1, 'accrdn_first');
     }
 
     /*
@@ -768,12 +768,12 @@ bbop.widget.facet_filters = function(interface_id, manager, golr_conf_obj, in_ar
       alert("Runtime error: " + error_message);
       _spin_down();
     };
-    manager.register('error', 'error_first', this.draw_error, 0);
+    manager.register('error', this.draw_error, 0, 'error_first');
 
     function spin_down_wait(){
       _spin_down();
     }
-    manager.register('search', 'donedonedone', spin_down_wait, -100);
+    manager.register('search', spin_down_wait, -100, 'donedonedone');
 
     // Start the ball with a reset event.
     //manager.search();
