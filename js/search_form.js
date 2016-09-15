@@ -166,6 +166,10 @@ function navbar_search_init(in_search_id, in_form_id){
     // http://jqueryui.com/autocomplete/#custom-data
     var jac = jQuery(search_elt).autocomplete(ac_args);
     jac.data('ui-autocomplete')._renderItem = function(ul, item){
+        var cleanTaxon = item.taxon;
+        if(cleanTaxon == null || cleanTaxon == undefined) {
+            cleanTaxon = "";
+        }
         var li = jQuery('<li>');
         li.append('<a alt="'+ item.id +'" title="'+ item.id +'">' +
               '<span class="autocomplete-main-item">' +
@@ -173,7 +177,7 @@ function navbar_search_init(in_search_id, in_form_id){
               '</span>' +
               '&nbsp;' +
               '<span class="autocomplete-tag-item">' +
-              item.taxon +
+              cleanTaxon +
               '</span>' +
               '</a>');
         li.appendTo(ul);
