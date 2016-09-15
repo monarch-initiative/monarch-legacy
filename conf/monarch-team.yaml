@@ -179,6 +179,7 @@ institutions:
         title: Senior Scientific Manager
         bio: Dr. Smedley has a BSc in Biochemistry from the University of Bristol and a Ph.D. from the University of Cambridge, also in Biochemistry. His lab research focused on the effect of mutation on protein structure and function and the identification and characterisation of cancer-associated chromosomal changes. He switched to a purely computational approach after completing an MSc in Bioinformatics from Birbeck College and was a developer of the BioMart distributed data integration solution. He currently leads a team investigating the use of model organism phenotype data to better understand the role of gene mutation in human disease.
       - name: Jules Jacobsen
+        picture: /image/team/JulesJacobsen.jpg
         alumni: false
         title: Bioinformatician
         bio: Dr. Jacobsen has a BSc in Biochemistry from the Imperial College, London and a Ph.D. from the University of Cambridge, in Structural Biology. He has developed several tools for investigating the use of model organism phenotype data to better understand the role of gene mutation in human disease.
