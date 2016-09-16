@@ -24,7 +24,7 @@ document_category: monarch_search
 weight: 1
 
 ## For search
-boost_weights: label_searchable^1.0 definition_searchable^1.0 synonym_searchable^1.0 iri_searchable^1.0 id_searchable^1.0 id^2 iri^2 equivalent_iri^2 equivalent_curie^2 equivalent_iri_searchable equivalent_curie_searchable taxon_searchable
+boost_weights: label_searchable^1.0 definition_searchable^1.0 synonym_searchable^1.0 iri_searchable^1.0 id_searchable^1.0 id^2 iri^2 equivalent_iri^2 equivalent_curie^2 equivalent_iri_searchable^1.0 equivalent_curie_searchable^1.0 taxon_searchable^1.0
 
 ## Results table, horizontal
 result_weights: id^1.0
