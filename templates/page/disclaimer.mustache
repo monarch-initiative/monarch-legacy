@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Monarch Disclaimer</title>
+   
+    {{{includes.analytics}}}
+    
+     <!-- CSS. -->
+    {{#pup_tent_css_libraries}}
+    <link rel="stylesheet" type="text/css" href="{{{.}}}">
+    {{/pup_tent_css_libraries}}
+    
+    <!-- JS variables. -->
+    {{#pup_tent_js_variables}}
+    <script type="text/javascript">var {{name}} = {{{value}}};</script>
+    {{/pup_tent_js_variables}}
+    
+    <!-- JS libraries. -->
+    {{#pup_tent_js_libraries}}
+    <script type="text/javascript" src="{{{.}}}"></script>
+    {{/pup_tent_js_libraries}}
+    
+    <link rel="icon" href="/image/favicon.ico" type="image/x-icon">
+    <meta charset="utf-8"/> 
+</head>
+<body>
+    <div class="monarch-container">
+        {{{includes.navbar}}}
+        <div class="content">
+            <div class="wrapperforfooter">
+              <div class="title">Monarch Disclaimer</div>
+	      <div class="section">
+              <div class="sectiontitle">Intended use</div>
+		    <div class="text">MonarchInitiative.org is not intended for direct diagnostic use or medical decision-making. If you have any health questions about the information contained on this website, please contact a medical professional.
+		    </div>
+			  <div class="sectiontitle">Variant interpretation</div>
+		    <div class="text">The Monarch Initiative sources variant interpretations as provided by the original source, with no consolidation of results, and always has a link out to the original reference.
+		    </div>  
+		    <div class="text">While we display the variants and interpretations as originally reported in the variant databases, some variants in the same genes have been reported on different transcripts. Whenever possible, Monarch will attempt to map all variants in a particular gene to a common transcript to aid in viewing and organizing the variants. However, to aid in variant searches, we will also continue to report the original mapping information.
+		    </div>
+		    <div class="text">All interpretations were performed by the original submitters and have not been modified in any way. As such, there might be discordant interpretations for the same variant from different archives. For further information or to request a review of the variant, please contact the submitter of the original reference.
+		    </div>
+		    <div class="text">Variant interpretations are not static as they are based on the current understanding of the variant at the time it was observed in a patient or in the literature. Any reported interpretation may not be up-to-date, and some information may not be reported. Many interpretations will change over time as more information about the variant becomes available. If you have any questions about a variant interpretation or would like use any variant interpretations for publication purposes, please contact the submitter of the original reference.
+</div>
+		    <div class="text">
+		      As always, we value your feedback. Please
+		      <A HREF="mailto:info@monarchinitiative.org">email
+		      us</a> if you have any problems, concerns, or
+		      suggestions.
+		    </div>
+
+            </div>
+	      <div class="clear"></div>
+
+            </div> <!-- closes wrapperforfooter -->
+            {{{includes.footer}}}
+        </div>
+    </div>
+</body>
+</html>
