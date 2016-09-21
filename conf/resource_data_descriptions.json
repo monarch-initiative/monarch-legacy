@@ -91,7 +91,7 @@
   "updated": "August 26, 2016"
 },
 {
-  "resource_description": "The PANTHER (Protein ANalysis THrough Evolutionary Relationships) Classification System was designed to classify proteins (and their genes) according to evolutionary family/subfamily, molecular function, biological process, and pathway. The PANTHER Classifications are the result of human curation as well as sophisticated    bioinformatics algorithms.",
+  "resource_description": "The PANTHER (Protein ANalysis THrough Evolutionary Relationships) Classification System was designed to classify proteins (and their genes) according to evolutionary family/subfamily, molecular function, biological process, and pathway. The PANTHER Classifications are the result of human curation as well as sophisticated bioinformatics algorithms.",
   "ontologies_or_vocabularies": "RO",
   "taxa": "arabidopsis, budding yeast, chicken, chimp, dog, fission yeast, fruitfly, green lizard, horse, human, macaque, mouse, opossum, pig, platypus, rat, slime mold, worm, zebrafish",
   "resource": "PANTHER",
@@ -139,7 +139,7 @@
   "resource_description": "MyGene.info provides a simple-to-use REST web services to query/retrieve gene annotation data.",
   "ontologies_or_vocabularies": "",
   "taxa": "all",
-  "resource": "MyGene.info",
+  "resource": "mygene",
   "data_categories": "gene definition",
   "monarch_use": "We use mygene.info's REST-services to fetch and display curated RefSeq gene descriptions.",
   "updated": "August 26, 2016"
@@ -164,7 +164,7 @@
 {
   "resource_description": "The NHGRI-EBI Catalog of published genome-wide association studies.",
   "ontologies_or_vocabularies": "RO, EFO, ECO",
-  "resource": "GWAS Catalog",
+  "resource": "GWASCatalog",
   "data_categories": "variant-phenotype variant-disease associations",
   "monarch_use": "Monarch links the variants recorded here to the curated EFO-classes",
   "updated": "August 26, 2016"
@@ -172,7 +172,7 @@
 {
   "resource_description": "The Animal Quantitative Trait Loci (QTL) database (Animal QTLdb) is designed to house publicly all available QTL and single-nucleotide polymorphism/gene association data on livestock animal species.",
   "ontologies_or_vocabularies": "RO, ECO",
-  "resource": "Animal QTL Database",
+  "resource": "animalqtldb",
   "data_categories": "qtl-trait associations",
   "monarch_use": "Monarch uses the QTL genetic maps and their computed genomic locations to create associations between the QTLs and their traits.  The traits come in their internal Animal Trait ontology vocabulary, which they further map to [Vertebrate Trait](http://bioportal.bioontology.org/ontologies/VT), Product Trait, and Clinical Measurement Ontology vocabularies.",
   "updated": "August 26, 2016"
@@ -188,7 +188,7 @@
 {
   "resource_description": "The GO defines concepts/classes used to describe gene function, and relationships between these concepts.",
   "ontologies_or_vocabularies": "RO",
-  "resource": "Gene Ontology",
+  "resource": "GO",
   "data_categories": "gene-process/function/subcellular/location",
   "monarch_use": "Monarch processes gene-process/function/subcellular/location associations.",
   "updated": "August 26, 2016"
@@ -233,7 +233,4 @@
   "monarch_use": "Monarch stores phenotypes for each case and variants of interest",
   "updated": "August 26, 2016"
 }
-
-
-
 ]

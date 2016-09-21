@@ -108,7 +108,6 @@ exports.testGeneCategory = function() {
 // Make sure all genes have labels, see 
 // https://github.com/monarch-initiative/monarch-app/issues/1341
 exports.testGeneLabels = function() {
-    var hasLabel = true;
     var gene = "NCBIGene:4609";
     var filter = [{field: 'object_category', value: 'pathway'}];
     var golrResponse = engine.fetchAssociations(gene, 'subject_closure', filter, 50);
@@ -120,7 +119,6 @@ exports.testGeneLabels = function() {
 // Check that genes are showing up for variants on disease pages
 // See https://github.com/monarch-initiative/monarch-app/issues/1343
 exports.testVariantGeneOnDiseasePage = function() {
-    var hasLabel = true;
     var disease = "OMIM:182212";
     var filter = [{field: 'subject_category', value: 'variant'}];
     var golrResponse = engine.fetchAssociations(disease, 'object_closure', filter, 50);
