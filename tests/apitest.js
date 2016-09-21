@@ -113,7 +113,7 @@ exports.testGeneLabels = function() {
     var filter = [{field: 'object_category', value: 'pathway'}];
     var golrResponse = engine.fetchAssociations(gene, 'subject_closure', filter, 50);
     var documents = golrResponse.documents();
-    gene_labels = documents.filter(function(val){return val['subject_label'] != "";});
+    gene_labels = documents.filter(function(doc){return 'subject_label' in doc});
     return testCommon.assertEqual(gene_labels.length, documents.length);  
 };
 
@@ -125,7 +125,7 @@ exports.testVariantGeneOnDiseasePage = function() {
     var filter = [{field: 'subject_category', value: 'variant'}];
     var golrResponse = engine.fetchAssociations(disease, 'object_closure', filter, 50);
     var documents = golrResponse.documents();
-    docsWithGene = documents.filter(function(val){return val['subject_gene'] != "";});
+    docsWithGene = documents.filter(function(doc){return 'subject_gene' in doc;});
     return testCommon.assertEqual(docsWithGene.length, documents.length);  
 };
 
