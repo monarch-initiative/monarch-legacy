@@ -576,7 +576,8 @@
       "abbreviation" : "REACT",
       "id" : null,
       "url_syntax" : "http://www.reactome.org/cgi-bin/eventbrowser_st_id?ST_ID=REACT_[example_id]",
-      "datatype" : null
+      "datatype" : null,
+      "image_path" : "/image/source-reactome.png"
    },
    "pfamb" : {
       "object" : "Accession",
@@ -4467,7 +4468,8 @@
       "id" : null,
       "abbreviation" : "Reactome",
       "url_syntax" : "http://www.reactome.org/cgi-bin/eventbrowser_st_id?ST_ID=[example_id]",
-      "datatype" : null
+      "datatype" : null,
+      "image_path" : "/image/source-reactome.png"
    },
    "wp" : {
       "object" : "Identifier",
@@ -5040,10 +5042,22 @@
       "name" : "Monarch",
       "database" : "The Monarch Initiative",
       "description" : "us",
-      "generic_url" : "http://monarchinitiative.org",
+      "generic_url" : "https://monarchinitiative.org",
       "fullname" : "The Monarch Initiative",
       "abbreviation" : "Monarch",
       "datatype" : null,
       "image_path" : "/image/logo.png"
+   },
+   "udp" : {
+      "object" : null,
+      "uri_prefix" : null,
+      "name" : "UDP",
+      "database" : "Undiagnosed Diseases Program (UDP)",
+      "description" : "us",
+      "generic_url" : "https://www.genome.gov/27544402/the-undiagnosed-diseases-program/",
+      "fullname" : "Undiagnosed Diseases Program (UDP)",
+      "abbreviation" : "UDP",
+      "datatype" : null,
+      "image_path" : "/image/partner-udp.png"
    }
 }
