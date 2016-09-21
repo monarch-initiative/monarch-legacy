@@ -97,6 +97,23 @@ function returnAssert(str, val) {
     return val;
 }
 
+function returnAssertTrue(val) {
+    if (!val) {
+        console.log('#AssertionFailed');
+    }
+    return val;
+}
+function returnAssertEqual(ref, query) {
+    isEqual = true;
+    if (ref !== query) {
+        console.log('#AssertionFailed');
+        isEqual = false;
+    }
+    return isEqual;
+}
+
 exports.assert = returnAssert;
+exports.assertTrue = returnAssertTrue;
+exports.assertEqual = returnAssertEqual;
 exports.getTestEngine = getTestEngine;
 exports.runTests = runTests;
