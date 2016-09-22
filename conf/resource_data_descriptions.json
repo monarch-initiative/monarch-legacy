@@ -14,7 +14,7 @@
   "taxa": "zebrafish",
   "resource": "ZFIN",
   "data_categories": "genotype-phenotype association, experimental reagents (morpholinos)",
-  "monarch_use": "We integrate the curated genotype-phenotype data, including experimentally derived fish (such as via application of morpholions), and links to the literature as evidence.",
+  "monarch_use": "We integrate the curated genotype-phenotype data, including experimentally derived fish (such as via application of morpholinos), and links to the literature as evidence.",
   "updated": "August 26, 2016"
 },
 {
