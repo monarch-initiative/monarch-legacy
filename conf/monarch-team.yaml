@@ -41,7 +41,7 @@ institutions:
       - name: Tom Conlin
         title: Bioinformaticist
         alumni: false
-        bio: Tom holds a BS in Mathematics and Computer Science and Computer Science, Specialization in Parallel and Distributed Computing with Bioinformatics, University of Oregon. Experienced in large scale data exchanges and in model organism databases, Tom works primarily on the Monarch data ingest pipeline (Dipper) and on issues related to identifiers.
+        bio: Tom holds a BS in Mathematics and Computer Science, Specialization in Parallel and Distributed Computing with Bioinformatics, University of Oregon. Experienced in large scale data exchanges and in model organism databases, Tom works primarily on the Monarch data ingest pipeline (Dipper) and on issues related to identifiers.
       - name: Shahim Essaid
         picture: /image/team/ShahimEssaid.jpg
         title: Ontologist
