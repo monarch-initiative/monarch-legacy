@@ -11,13 +11,13 @@
  *                      }
  */
 
-function getTableFromSolr(id, golr_field, div, filter, personality, tab_anchor){
+function getTableFromSolr(id, golr_field, div, filter, personality, tab_anchor, is_leaf){
     if (tab_anchor != null){
         var isTabLoading = false;
         jQuery('#categories a[href="'+tab_anchor+'"]').click(function(event) {
             if (!(jQuery('#'+div+' .table').length) && !isTabLoading){
                 isTabLoading = true;
-                getTable(id, golr_field, div, filter, personality);
+                getTable(id, golr_field, div, filter, personality, is_leaf);
             }
         });
         // Trigger a click event if we're loading the page on an href
@@ -26,11 +26,10 @@ function getTableFromSolr(id, golr_field, div, filter, personality, tab_anchor){
             jQuery('#categories a[href="'+window.location.hash+'"]').click();
         }
     } else {
-        getTable(id, golr_field, div, filter, personality);
+        getTable(id, golr_field, div, filter, personality, is_leaf);
     }
 
-    function getTable(id, golr_field, div, filter, personality) {
-        // console.log('getTable(', id, golr_field, div, filter, personality);
+    function getTable(id, golr_field, div, filter, personality, is_leaf) {
         if (golr_field == null) {
             golr_field = 'object_closure';
         }
@@ -49,12 +48,20 @@ function getTableFromSolr(id, golr_field, div, filter, personality, tab_anchor){
         var gconf = new bbop.golr.conf(global_golr_conf);
         var srv = global_solr_url;
         var handler = new bbop.monarch.handler();
+        //
+        // Ugly hack to pass important info through the many layers of bbop so our
+        // code can know what to do. See results_table_by_class_conf_bs3 and look for 'skipFields'
+        //
+        handler.golr_field = golr_field;
+        handler.is_leaf = is_leaf;
+
         var linker = new bbop.monarch.linker();
         var confc = gconf.get_class(personality);
 
         // Other widget tests; start with manager.
         var golr_manager = new bbop.golr.manager.jquery(srv, gconf);
-
+        golr_manager.default_rows = 25;
+        golr_manager.reset_results_count();
         golr_manager.set_personality(personality);
         //golr_manager.add_query_filter('document_category', 'annotation', ['*']);
         golr_manager.add_query_filter(golr_field, id, ['*']);
@@ -104,7 +111,7 @@ function getTableFromSolr(id, golr_field, div, filter, personality, tab_anchor){
 
         // Attach pager.
         var pager_opts = {
-                'selection_counts': [10, 25, 50, 100, 5000]
+            'selection_counts': [25, 50, 100, 5000]
         };
         var pager = new bbop.widget.live_pager(pager_top_div, golr_manager, pager_opts);
         var pager_bottom = new bbop.widget.live_pager(pager_bot_div, golr_manager, pager_opts);
@@ -154,6 +161,10 @@ function getTableFromSolr(id, golr_field, div, filter, personality, tab_anchor){
 
         //Get cateogry
         var category = anchor._golr_response.get_doc_field(did, field_id+'_category');
+
+        if (field_id === 'evidence') {
+            ilabel = '&bull;&nbsp;' + ilabel;
+        }
 
         // See what kind of link we can create from what we got.
         var ilink =
@@ -206,13 +217,13 @@ function getTableFromSolr(id, golr_field, div, filter, personality, tab_anchor){
     });
 
     function disableBottomPager(value){
-        if (value <= 10){
+        if (value <= 10){ 
             jQuery('#'+pager_bot_div).hide();
         } else {
             jQuery('#'+pager_bot_div).show(2000);
         }
     }
-    jQuery('#'+pager_bot_div).hide();
+    // jQuery('#'+pager_bot_div).hide();
     }
 }
 

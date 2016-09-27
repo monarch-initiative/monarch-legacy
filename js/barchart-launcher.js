@@ -26,7 +26,6 @@ function makePhenotypeLandingGraph(data){
 }
 
 function makeGeneDiseaseLandingGraph(data){
-    console.log('makeGeneDiseaseLandingGraph:', data);
     var graphDiv = ".gene-disease-container";
     var tree = new monarch.model.tree(data);
 
@@ -68,7 +67,6 @@ function makeGenotypeLandingGraph(data){
 }
 
 function makeModelLandingGraph(data){
-    console.log('makeGeneDiseaseLandingGraph:', data);
     var graphDiv = ".dove-container";
     var tree = new monarch.model.tree(data);
 

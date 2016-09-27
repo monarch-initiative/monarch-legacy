@@ -418,6 +418,20 @@ bbop.widget.facet_filters = function(interface_id, manager, golr_conf_obj, in_ar
         jQuery('#' + pager_top_id).empty();
         jQuery('#' + pager_bottom_id).empty();
       }
+      else {
+        var selectedItem = jQuery('#' + pager_top_id + ' select option:selected');
+        if (selectedItem.length === 0) {
+          jQuery('#' + pager_top_id + ' select option:eq(0)').prop('selected', 'selected');
+          jQuery('#' + pager_bottom_id + ' select option:eq(0)').prop('selected', 'selected');
+        }
+      }
+
+      if (total_c <= 25) {
+        jQuery('#' + pager_bottom_id).hide();
+      }
+      else {
+        jQuery('#' + pager_bottom_id).show();
+      }
     };
     if( true || this._display_meta_p ) {
       // We do this to inhibit BBOP's default meta drawing
@@ -520,7 +534,6 @@ bbop.widget.facet_filters = function(interface_id, manager, golr_conf_obj, in_ar
           }
           else {
               facet_bd = anchor.fullFacet[in_field].facet_bd;
-              console.log('### overriding facet_bd:', facet_bd);
           }
           if( bbop.core.is_empty(facet_bd) ){
            // No filters means nothing in the box.

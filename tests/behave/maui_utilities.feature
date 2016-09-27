@@ -31,7 +31,7 @@ Feature: NodeJS and RingoJS pass all tests.
 @ui
  Scenario: The "/variant/ClinVarVariant:30599" endpoint returns the correct page
     Given I go to page "/variant/ClinVarVariant:30599"
-     then the document should contain "Variant: NM_017882.2(CLN6):c.200T>C (p.Leu67Pro)"
+     then the document should contain "NM_017882.2(CLN6):c.200T>C (p.Leu67Pro)"
      then the title should be "Monarch Variant: NM_017882.2(CLN6):c.200T>C (p.Leu67Pro) (ClinVarVariant:30599)"
 
 @ui

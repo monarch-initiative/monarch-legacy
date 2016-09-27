@@ -9,7 +9,7 @@ function AnalyzeInit(uploaded_data){
 
     var DEFAULT_LIMIT = 100;
     var DEBUG = false;
-    //var DEBUG = true;
+    // var DEBUG = true;
 
     var urlParams = {};
 
@@ -722,8 +722,6 @@ function AnalyzeInit(uploaded_data){
     var jac = jQuery('#auto_gene_input').autocomplete(auto_gene_args);
     jac.data('ui-autocomplete')._renderItem = function(ul, item){
         var li = jQuery('<li>');
-        
-console.log(item);
 
         li.append('<a alt="'+ item.name +'" title="'+ item.name +'">' +
               '<span class="autocomplete-main-item">' +
@@ -811,9 +809,6 @@ console.log(item);
             "yAxis": phenotype_list
         };
 
-    console.log('before window.onload in Analyze.js');
-
-	// window.onload = function() {
         console.log('before Phenogrid.createPhenogridForElement in Analyze.js');
 		Phenogrid.createPhenogridForElement(document.getElementById('phen_vis'), {
 			gridSkeletonData: gridSkeletonData,
@@ -823,7 +818,6 @@ console.log(item);
 			owlSimFunction: urlParams.mode,
 			geneList: urlParams.geneList // geneList is only used when in compare mode - Zhou
 		});
-	// };
     }
 
     // Flatten JSON output from Exomiser

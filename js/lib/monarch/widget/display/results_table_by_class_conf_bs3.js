@@ -58,8 +58,16 @@ bbop.monarch.widget.display.results_table_by_class_conf_bs3 = function(cclass,
                     selectable_p,
                     select_toggle_id,
                     select_item_name){
+    // console.log('rtbccb:',
+    //   handler.golr_field,
+    //   golr_resp,
+    //   cclass.display_name(),
+    //   cclass.document_category(),
+    //   cclass.id(),
+    //   cclass.description(),
+    //   cclass.display_name(),
+    //   selectable_p, select_toggle_id, select_item_name);
 
-    //
     var anchor = this;
 
     // Temp logger.
@@ -221,6 +229,26 @@ bbop.monarch.widget.display.results_table_by_class_conf_bs3 = function(cclass,
     }
     var results_order = cclass.field_order_by_weight('result');
     var headerColumns = [];
+    var skipFields = [];
+    var hideRedundantFields = true;
+    if (hideRedundantFields && handler.is_leaf) {
+        skipFields = ['subject', 'relation']; // , 'subject_taxon'
+        if (handler.golr_field === 'object_closure') {
+          skipFields = ['object', 'relation']; // , 'object_taxon'
+        }
+    }
+
+    var prunedRO = [];
+    for (var ro = 0; ro < results_order.length; ++ro) {
+      var fid = results_order[ro];
+      if (skipFields.indexOf(fid) >= 0) {
+        // console.log('skip[' + ro + ']', fid);
+      }
+      else {
+        prunedRO.push(fid);
+      }
+    }
+    results_order = prunedRO;
     each(results_order,
    function(fid){
       // Store the raw headers/fid for future use.
@@ -294,7 +322,7 @@ bbop.monarch.widget.display.results_table_by_class_conf_bs3 = function(cclass,
     var table_buff = [];
     var docs = golr_resp.documents();
     each(docs, function(doc){
-
+      // console.log('doc', doc, headers);
   // Well, they had better be in here, so we're just gunna cycle
   // through all the headers/fids.
   var entry_buff = [];
@@ -319,35 +347,39 @@ bbop.monarch.widget.display.results_table_by_class_conf_bs3 = function(cclass,
     // Not "score", so let's figure out what we can
     // automatically.
     var field = cclass.get_field(fid);
-
-    // Make sure that something is there and that we can
-    // iterate over whatever it is.
-    var bits = [];
-    if( doc[fid] ){
-        if( field.is_multi() ){
-      //ll("Is multi: " + fid);
-      bits = doc[fid];
-        }else{
-      //ll("Is single: " + fid);
-      bits = [doc[fid]];
-        }
+    if (skipFields.indexOf(fid) >= 0) {
+      // console.log('SKIP:', fid, field, skipFields, doc[fid]);
     }
-    // Render each of the bits.
-    var tmp_buff = [];
-    each(bits, function(bit){
-        var out = anchor.process_entry(bit, fid, doc, display_context);
-        tmp_buff.push(out);
-    });
-    // Join it, trim/store it, push to to output.
-        var joined;
-    //Terrible hack to remove breaks for images
-    if (img_regexp.test(tmp_buff)){
-        joined = tmp_buff.join('&nbsp;&nbsp;');
-    } else {
-        joined = tmp_buff.join('<br />');
-    }
+    else {
+      // Make sure that something is there and that we can
+      // iterate over whatever it is.
+      var bits = [];
+      if( doc[fid] ){
+          if( field.is_multi() ){
+        //ll("Is multi: " + fid);
+        bits = doc[fid];
+          }else{
+        //ll("Is single: " + fid);
+        bits = [doc[fid]];
+          }
+      }
+      // Render each of the bits.
+      var tmp_buff = [];
+      each(bits, function(bit){
+          var out = anchor.process_entry(bit, fid, doc, display_context);
+          tmp_buff.push(out);
+      });
+      // Join it, trim/store it, push to to output.
+          var joined;
+      //Terrible hack to remove breaks for images
+      if (img_regexp.test(tmp_buff)){
+          joined = tmp_buff.join('&nbsp;&nbsp;');
+      } else {
+          joined = tmp_buff.join('<br />');
+      }
 
-    entry_buff.push(_trim_and_store(joined));
+      entry_buff.push(_trim_and_store(joined));
+    }
       }
   });
   table_buff.push(entry_buff);
@@ -402,83 +434,7 @@ bbop.monarch.widget.display.results_table_by_class_conf_bs3 = function(cclass,
   });
     }
 };
-
-/*
- * Function: process_entry
- *
- * The function used to render a single entry in a cell in the results
- * table. It can be overridden to specify special behaviour. There may
- * be multiple entries within a cell, but they will all have this
- * function individually run over them.
- *
- * This function can access this._golr_response (a
- * <bbop.golr.response>), this._linker (a <bbop.linker>), and
- * this._handler (a <bbop.handler>).
- *
- * Arguments:
- *  bit - string (?) for the one entry in the cell
- *  field_id - string for the field under consideration
- *  document - the single document for this item from the solr response
- *
- * Returns:
- *  string or empty string ('')
- */
-bbop.monarch.widget.display.results_table_by_class_conf_bs3.prototype.process_entry =
-    function(bit, field_id, document, display_context){
-
-      var anchor = this;
-
-  // First, allow the hanndler to take a whack at it. Forgive
-  // the local return. The major difference that we'll have here
-  // is between standard fields and special handler fields. If
-  // the handler resolves to null, fall back onto standard.
-  //ll('! B:' + bit + ', F:' + fid + ', D:' + display_context);
-  var out = anchor._handler.dispatch(bit, field_id, display_context);
-  if( bbop.core.is_defined(out) && out != null ){
-      return out;
-  }
-
-  // Otherwise, use the rest of the context to try and render
-  // the item.
-      var retval = '';
-      var did = document['id'];
-
-      // BUG/TODO: First see if the filed will be multi or not.
-      // If not multi, follow the first path. If multi, break it
-      // down and try again.
-
-      // Get a label instead if we can.
-      var ilabel = anchor._golr_response.get_doc_label(did, field_id, bit);
-      if( ! ilabel ){
-          ilabel = bit;
-      }
-
-      // Extract highlighting if we can from whatever our "label"
-      // was.
-      var hl = anchor._golr_response.get_doc_highlight(did, field_id, ilabel);
-
-      // See what kind of link we can create from what we got.
-      var ilink =
-          anchor._linker.anchor({id:bit, label:ilabel, hilite:hl}, field_id);
-
-      //ll('processing: ' + [field_id, ilabel, bit].join(', '));
-      //ll('ilink: ' + ilink);
-
-      // See what we got, in order of how much we'd like to have it.
-      if( ilink ){
-          retval = ilink;
-      }else if( ilabel ){
-          retval = ilabel;
-      }else{
-          retval = bit;
-      }
-
-      return retval;
-    };
-
-
 }
-
 
 if (typeof loaderGlobals === 'object') {
     loaderGlobals.InitMonarchBBOPWidgetDisplay = InitMonarchBBOPWidgetDisplay;
