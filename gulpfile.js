@@ -23,7 +23,7 @@ var paths = {
     // docable: ['lib/*.js']
     yaml_confs: ['conf/monarch-team.yaml'],
     tab_confs: ['conf/golr-views/single-tab/*yaml'],
-    golr_confs: ['conf/golr-views/*yaml'],
+    golr_confs: ['conf/golr-views/*yaml', 'conf/golr-views/ontology/*yaml'],
     tab_tmp: 'conf/tmp/tab/*json',
     schema_ref: 'conf/tmp/oban-config.json'
 };

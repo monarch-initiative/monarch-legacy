@@ -1,0 +1,45 @@
+####
+#### The generic that will as as the general landing search.
+####
+#### For GO, this is currently added in:
+#### GAFSolrDocumentLoader (not optional, gene products)
+#### PANTHERGeneralSolrDocumentLoader (optional, panther families)
+#### OntologyGeneralSolrDocumentLoader (optional, ontology terms) 
+####
+id: general
+schema_generating: true
+description: A generic search document to get a general overview of everything.
+display_name: General
+document_category: general
+weight: 0
+boost_weights: entity^3.0 entity_label^3.0 general_blob^3.0
+result_weights: entity^3.0 category^1.0
+filter_weights: category^4.0
+fields:
+  - id: id
+    description: The mangled internal ID for this entity.
+    display_name: Internal ID
+    type: string
+    property: []
+  - id: entity
+    description: The ID/label for this entity.
+    display_name: Entity
+    type: string
+    property: []
+  - id: entity_label
+    description: The label for this entity.
+    display_name: Enity label
+    type: string
+    property: []
+    searchable: true
+  - id: category
+    description: The document category that this enitity belongs to.
+    display_name: Document category
+    type: string
+    property: []
+  - id: general_blob
+    description: A hidden searchable blob document to access this item. It should contain all the goodies that we want to search for, like species(?), synonyms, etc.
+    display_name: Generic blob
+    type: string
+    property: []
+    searchable: true

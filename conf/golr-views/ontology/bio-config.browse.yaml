@@ -1,0 +1,60 @@
+####
+#### The bioentity description file for GOlr and AmiGO.
+####
+id: bioentity_for_browser
+schema_generating: false
+description: Special schema for certain ontology browser widget\'s filters.
+display_name: Genes and gene products (BROWSER)
+document_category: bioentity
+weight: -130
+boost_weights: taxon_subset_closure_label^1.0 type^1.0
+result_weights: taxon_subset_closure_label^8.0 type^6.0
+filter_weights: taxon_subset_closure_label^8.0 type^6.0
+fields:
+  - id: type
+    description: "Type class."
+    display_name: Type
+    type: string
+    property: []
+  - id: taxon
+    description: "Taxonomic group"
+    display_name: Taxon
+    type: string
+    property: []
+  - id: taxon_label
+    description: "Taxonomic group"
+    display_name: Taxon
+    type: string
+    property: []
+    searchable: true
+  - id: taxon_closure
+    description: "Taxonomic group and ancestral groups."
+    display_name: Taxon
+    type: string
+    cardinality: multi
+    property: []
+  - id: taxon_closure_label
+    description: "Taxonomic group and ancestral groups."
+    display_name: Taxon
+    type: string
+    cardinality: multi
+    property: []
+    searchable: true
+  - id: taxon_subset_closure
+    description: "Taxonomic group (direct) and ancestral groups that are within the specified subset (e.g mammalia, eukaryota)."
+    display_name: Organism
+    type: string
+    cardinality: multi
+    property: []
+  - id: taxon_subset_closure_label
+    description: "Labels for taxonomic group (direct) and ancestral groups that are within the specified subset."
+    display_name: Organism
+    type: string
+    cardinality: multi
+    property: []
+    searchable: true
+  - id: source
+    description: "Database source."
+    display_name: Source
+    type: string
+    property: []

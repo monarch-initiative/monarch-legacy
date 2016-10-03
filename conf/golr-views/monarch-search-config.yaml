@@ -1,21 +1,3 @@
-##
-## The Golr config that will be used for the majority of associations in Monarch
-##
-## The model is roughly OBAN: https://github.com/jamesmalone/OBAN
-##
-## Note: initial implementation - fields will change in future
-##
-## This schema is a generalization of the one used for GO/AmiGO 2. See: https://github.com/geneontology/amigo/blob/master/metadata/ann-config.yaml
-## A few points are worth bearing in mind when aligning the schema:
-##
-##  * GO sometimes uses standard terms like 'source' a little differently than standards like DC
-##  * The OBAN 'subject' is always a bioentity (e.g. gene/product, complex, phylo tree node) in GO
-##  * The OBAN 'object' is always a class in GO
-##  * GO uses various ad-hoc fields such as 'secondary taxon' that would not be applicable here
-##
-##
-##
-##
 id: monarch_search
 schema_generating: true
 description: Monarch search
