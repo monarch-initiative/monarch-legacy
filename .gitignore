@@ -39,3 +39,4 @@ dist/
 webpack-assets.json
 conf/golr-conf.json
 conf/monarch-team.json
+hide/**

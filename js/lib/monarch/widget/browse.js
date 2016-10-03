@@ -148,7 +148,6 @@ bbop.monarch.widget.browse = function(server, manager, reference_id, root, inter
 
     // Recursively draw a rich layout using nested uls.
     function draw_rich_layout(resp){
-        
         var topo_graph = new bbop.model.bracket.graph();
         topo_graph.load_json(resp._raw);
         
@@ -369,17 +368,15 @@ bbop.monarch.widget.browse = function(server, manager, reference_id, root, inter
                           icon = '[???]';
                           }
                       }
-                      var spinner = makeSpinnerDiv();
                       // Stack the info, with the additional
                       // spaces, into the div.
                       if (nid != anchor._root){
                           top_level.add_to(spaces,
                                   //info_b.to_string(),
                                   icon,
-                                  nav_b.to_string(),
-                                  '&nbsp;', spinner);
+                                  nav_b.to_string());
                       } else {
-                          top_level.add_to(spaces,  nav_b.to_string(), '&nbsp;', spinner); 
+                          top_level.add_to(spaces,  nav_b.to_string()); 
                       }
                       }); 
                  spaces = spaces + spacing;
@@ -618,26 +615,6 @@ bbop.monarch.widget.browse = function(server, manager, reference_id, root, inter
         });
         return bracket_list;
     };
-    function makeSpinnerDiv(){
-        // Details for spinner
-           var inspan = new bbop.html.tag('span', {'class': 'sr-only'}, '...');
-           var indiv = new bbop.html.tag('div', {'class': 'progress-bar',
-                             'role': 'progressbar',
-                             'aria-valuenow': '100',
-                             'aria-valuemin': '0',
-                             'aria-valuemax': '100',
-                             'style': 'width: 100%;'},
-                         inspan);
-           var spinner_div =
-           new bbop.html.tag('div',
-                     {'generate_id': true,
-                      'class':
-                      'progress progress-striped active',
-                      'style': 'width: 3em; position:absolute; display:inline-block; display:none; margin-bottom:3px;'},
-                     indiv);
-           
-           return spinner_div;
-       }
 };
 
 

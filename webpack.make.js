@@ -248,6 +248,7 @@ module.exports = function(options) { // makeWebpackConfig
 
 
   // ISPARTA LOADER
+  // UNUSED and out-of-date. Use isparta-loader
   // Reference: https://github.com/ColCh/isparta-instrumenter-loader
   // Instrument JS files with Isparta for subsequent code coverage reporting
   // Skips node_modules and files that end with .test.js
@@ -410,7 +411,8 @@ module.exports = function(options) { // makeWebpackConfig
       new BrowserSyncPlugin({
         proxy: 'localhost:8081',
         files: [
-          // 'js/**/*.js',
+          'js/Analyze.js',
+          'js/phenogridloader-onclick.js',
           'templates/*.mustache',
           'templates/page/*.mustache',
           'css/*.css',
@@ -424,7 +426,7 @@ module.exports = function(options) { // makeWebpackConfig
         // logLevel: "debug",
         // logConnections: true,
         reloadOnRestart: false,
-        browser: ["firefox"]
+        browser: ['safari'] // , 'firefox']
       }));
   }
 
@@ -451,18 +453,29 @@ module.exports = function(options) { // makeWebpackConfig
     // proxy: {
     //   '/*': 'http://localhost:8080'
     // },
+      // proxy: {
+      //   '*.json': {
+      //     target: 'http://localhost:8080'
+      //   },
+      //   '/status': {
+      //     target: 'http://localhost:8080'
+      //   },
+      //   '/': {
+      //     target: 'http://localhost:8080'
+      //   }
+      // },
     proxy: [
         {
             path: /(.*)\.json/,
-            target: "http://localhost:8080"
+            target: "http://localhost:8080/"
         },
         {
             path: /\/status/,
-            target: "http://localhost:8080"
+            target: "http://localhost:8080/"
         },
         {
             path: /\/.*/,
-            target: "http://localhost:8080"
+            target: "http://localhost:8080/"
         }
       ],
 

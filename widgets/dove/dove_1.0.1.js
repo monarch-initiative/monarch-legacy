@@ -1552,10 +1552,11 @@ monarch.dovechart.prototype.setPolygonCoordinates = function(){
         this.config.yOffset = "-1.48em";
     }
     
-    //Check that breadcrumb width is valid
-    /*if (this.config.bcWidth > this.config.width+this.config.margin.right+this.config.margin.left){
-        this.config.bcWidth = this.config.bread.width+(this.config.bread.offset*5)+5;
-    }*/
+    //
+    // This is a hack to keep the breadcrumbs area from being too large, which 
+    // causes horizontal scrolling.
+    //
+    this.config.bcWidth = this.config.bread.width + 9 * (this.config.bread.offset + this.config.bread.space);
 };
 
 //dovechart default configurations
