@@ -165,8 +165,7 @@ function navbar_search_init(in_search_id, in_form_id){
     // nicer to look at (as minor data).
     // http://jqueryui.com/autocomplete/#custom-data
     var jac = jQuery(search_elt).autocomplete(ac_args);
-    jac.data('ui-autocomplete')._renderItem = function(ul, item){
-        console.log(item);
+    jac.data('ui-autocomplete')._renderItem = function(ul, item) {
         var taxonOrCategory = item.taxon;
         if(taxonOrCategory == "" || taxonOrCategory == null || taxonOrCategory == undefined) {
             taxonOrCategory = item.category;
