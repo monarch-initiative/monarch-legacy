@@ -7,7 +7,9 @@
 
     "scigraph_data_url" : "https://scigraph-data.monarchinitiative.org/scigraph/",
 
-    "golr_url" : "https://solr.monarchinitiative.org/solr/golr/",
+    "golr_url" : "http://monarch-solr6-prod.monarchinitiative.org/solr/golr/",
+
+    "search_url" : "http://monarch-solr6-prod.monarchinitiative.org/solr/search/",
 
     "owlsim_services_url" : "https://monarchinitiative.org/owlsim",
 
