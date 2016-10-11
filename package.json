@@ -24,8 +24,8 @@
     "url": "https://github.com/monarch-initiative/monarch-app"
   },
   "engines": {
-    "node": ">= 4.4",
-    "npm": ">= 2.15"
+    "node": ">= 4.4.1",
+    "npm": ">= 3.4.0"
   },
   "dependencies": {
     "async": "^2.0.1",
@@ -57,7 +57,15 @@
     "underscore": "^1.8.3",
     "wait.for": "^0.6.6",
     "xml2js": "^0.4.17",
-    "xmlbuilder": "^8.2.2"
+    "xmlbuilder": "^8.2.2",
+    "q": "^1.4.1",
+    "bbop-manager-golr": "^0.0.11",
+    "bbop-response-golr": "^0.0.6",
+    "golr-conf": "^0.0.3",
+    "bbop-rest-manager": "^0.0.11",
+    "bbop-widget-set": "^2.5.3",
+    "bbop-graph": "^0.0.19",
+    "bbop-registry": "^0.0.3"
   },
   "devDependencies": {
     "assets-webpack-plugin": "^3.4.0",

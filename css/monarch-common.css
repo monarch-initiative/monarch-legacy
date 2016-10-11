@@ -870,13 +870,17 @@ div.bs3table {
 .nowrap { white-space: nowrap; }
 .dark-cell { background-color: #cddcf3; }
 .light-cell { background-color: #ffffff; }
-.hilite {
+em.hilite {
+    font-weight: bold;
+    font-style: normal;
+}
+/*.hilite {
     border: 1px dotted #000;
     color: #000;
     background: #A9FFA1;
-    /* background: #ff0; */
+    // background: #ff0;
     padding: 0 1px;
-}
+}*/
 .qualifier-not {
     padding: 2px;
     /* background: #fff; */
@@ -884,11 +888,11 @@ div.bs3table {
     color: #F00;
     font-weight: bold;
 }
-a:hover .hilite, a:active .hilite {
+/*a:hover .hilite, a:active .hilite {
     color: #fff;
     background: #3875D7;
-/* border: none; border: 1px solid #3875D7; */
-}
+ //border: none; border: 1px solid #3875D7; 
+}*/
 
 /* Sideways...really? You bet! */
 /* In order: FF, Safari, IE, Opera */

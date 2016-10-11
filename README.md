@@ -77,9 +77,13 @@ You will need to have NodeJS and NPM installed. At the time of this writing, we 
 
     > npm version
         ...
-          npm: '3.10.8',
-        ...
           node: '4.5.0',
+        ...
+          
+
+*About Node Versioning*: Node 4.x is the immediate successor to the 0.12.x version of NodeJS. The version number jumped from 4.4.1 to 4.0.0 as a result of the NodeJS committee adjusting their version-numbering system recently. More information is in the [V4.0 Release Notes](https://nodejs.org/en/blog/release/v4.0.0/).
+
+We are currently holding at 4.5.0 and HapiJS 11.0.2 due to GCC version issues on some of our CentOS deployment nodes. When we are able to update these nodes to GCC 4.8, then we can update package.json to reflect Node 4.2.x and HapiJS 11.1.x, which are the current stable and supported versions of these packages.
 
 These versions do not have to be exact, and NPM version 2.15.x will likely work as well.
 
@@ -264,7 +268,7 @@ One of the easiest ways to install an alternative version of Node is to use the 
 
 This will download, compile and install the 4.5.0 version of NodeJS into the `~/.nvm` directory, making it *available* for the next command:
 
-    >nvm use v4.5.0
+    > nvm use v4.5.0
 
 This command will change your current NVM environment so that it *sees* a v4.5.0 version of NodeJS.
 

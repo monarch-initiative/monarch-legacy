@@ -1,0 +1,256 @@
+####
+#### The bioentity description file for GOlr and AmiGO.
+####
+id: bioentity
+schema_generating: true
+description: Genes and gene products associated with GO terms.
+display_name: Genes and gene products
+document_category: bioentity
+weight: 30
+boost_weights: bioentity^2.0 bioentity_label^2.0 bioentity_name^1.0 bioentity_internal_id^1.0 synonym^1.0 isa_partof_closure_label^1.0 regulates_closure^1.0 regulates_closure_label^1.0 panther_family^1.0 panther_family_label^1.0 taxon_label^1.0
+result_weights: bioentity^8.0 bioentity_name^7.0 taxon^6.0 panther_family^5.0 type^4.0 source^3.0 synonym^1.0
+filter_weights: source^7.0 taxon_subset_closure_label^6.0 type^5.0 panther_family_label^4.0 annotation_class_list_label^3.0 regulates_closure_label^2.0
+fields:
+  - id: id
+    description: "Gene of gene product ID."
+    display_name: Acc
+    type: string
+    property: []
+  - id: bioentity
+    description: "Gene or gene product identifiers."
+    display_name: Gene/product
+    type: string
+    property: []
+  - id: bioentity_label
+    description: "Gene or gene product identifiers."
+    display_name: Gene/product
+    type: string
+    property: []
+    searchable: true
+  - id: bioentity_name
+    description: "The full name of the gene or gene product."
+    display_name: Gene/product name
+    type: string
+    property: []
+    searchable: true
+  - id: bioentity_internal_id
+    description: "The bioentity ID used at the database of origin."
+    display_name: This should not be displayed
+    type: string
+    property: []
+    indexed: false
+  - id: type
+    description: "Type class."
+    display_name: Type
+    type: string
+    property: []
+#   - id: type_label
+#     description: "Column 12: type class label."
+#     display_name: Type class label
+#     type: string
+#     property: []
+#   - id: type_closure
+#     description: "Derived from c12 + SO."
+#     display_name: Type closure
+#     type: string
+#     cardinality: multi
+#     property: []
+#   - id: type_closure_label
+#     description: "Derived from c12 + SO."
+#     display_name: Type label closure
+#     type: string
+#     cardinality: multi
+#     property: []
+  - id: taxon
+    description: "Taxonomic group"
+    display_name: Organism
+    type: string
+    property: []
+  - id: taxon_label
+    description: "Taxonomic group"
+    display_name: Organism
+    type: string
+    property: []
+    searchable: true
+  - id: taxon_closure
+    description: "Taxonomic group and ancestral groups."
+    display_name: Organism
+    type: string
+    cardinality: multi
+    property: []
+  - id: taxon_closure_label
+    description: "Taxonomic group and ancestral groups."
+    display_name: Organism
+    type: string
+    cardinality: multi
+    property: []
+    searchable: true
+  - id: taxon_subset_closure
+    description: "Taxonomic group (direct) and ancestral groups that are within the specified subset (e.g mammalia, eukaryota)."
+    display_name: Organism
+    type: string
+    cardinality: multi
+    property: []
+  - id: taxon_subset_closure_label
+    description: "Labels for taxonomic group (direct) and ancestral groups that are within the specified subset."
+    display_name: Organism
+    type: string
+    cardinality: multi
+    property: []
+    searchable: true
+  - id: isa_partof_closure
+    description: "Closure of ids/accs over isa and partof."
+    display_name: Involved in
+    type: string
+    cardinality: multi
+    property: []
+  - id: isa_partof_closure_label
+    description: "Closure of labels over isa and partof."
+    display_name: Involved in
+    type: string
+    cardinality: multi
+    property: []
+    searchable: true
+  - id: regulates_closure
+    description: "Bioentities associated with this term or its children (over regulates)."
+    display_name: Inferred annotation
+    type: string
+    cardinality: multi
+    property: []
+  - id: regulates_closure_label
+    description: "Bioentities associated with this term or its children (over regulates)."
+    display_name: Inferred annotation
+    type: string
+    cardinality: multi
+    property: []
+    searchable: true
+  - id: source
+    description: "Database source."
+    display_name: Source
+    type: string
+    property: []
+  - id: annotation_class_list
+    description: "Direct annotations."
+    display_name: Direct annotation
+    type: string
+    cardinality: multi
+    property: []
+  - id: annotation_class_list_label
+    description: "Direct annotations."
+    display_name: Direct annotation
+    type: string
+    cardinality: multi
+    property: []
+  - id: synonym
+    description: "Gene product synonyms."
+    display_name: Synonyms
+    type: string
+    cardinality: multi
+    property: []
+  - id: panther_family
+    description: PANTHER families that are associated with this entity.
+    display_name: PANTHER family
+    type: string
+    searchable: true
+    property: []
+  - id: panther_family_label
+    description: PANTHER families that are associated with this entity.
+    display_name: PANTHER family
+    type: string
+    searchable: true
+    property: []
+  - id: phylo_graph_json
+    description: JSON blob form of the phylogenic tree.
+    display_name: This should not be displayed
+    type: string
+    property: []
+    indexed: false
+  - id: database_xref
+    description: Database cross-reference.
+    display_name: DB xref
+    type: string
+    property: []
+    cardinality: multi
+## TODO: Sleeping for now, but will re-add when the right
+## experimental GAFs start getting loaded as well.
+# - id: phylo_ancestor_closure
+#   description: All phylogenic ancestor annotations to this entity.
+#   display_name: Ancestor annotations
+#   type: string
+#   cardinality: multi
+#   property: []
+# - id: phylo_descendant_closure
+#   description: All phylogenic descendant annotations to this entity.
+#   display_name: Descendant annotations
+#   type: string
+#   cardinality: multi
+#   property: []
+#   - id: descriptive_name
+#     description: Full name or name.
+#     display_name: Full name
+#     type: string
+#     property: []
+#     searchable: true
+#   - id: alternate_id
+#     description: Any alternaitve id.
+#     display_name: Alt id
+#     type: string
+#     cardinality: multi
+#     property: []
+#   - id: description
+#     description: Definition.
+#     display_name: Definition
+#     type: string
+#     property: []
+#     searchable: true
+#   - id: subset
+#     description: Member of these named subsets.
+#     display_name: Subset
+#     type: string
+#     cardinality: multi
+#     property: []
+#   - id: is_obsolete
+#     description: Is this obsolete?
+#     display_name: Obsolete
+#     type: integer
+#     property: []
+#   - id: comment
+#     description: Comment.
+#     display_name: comment
+#     type: string
+# #    cardinality: multi
+#     property: []
+#     searchable: true
+#   - id: definition_xref
+#     description: DBXref for definitions.
+#     display_name: Def dbxref
+#     type: string
+#     cardinality: multi
+#     property: []
+#   - id: axiom
+#     description: "Each ontology entity (class or property) can be associated with multiple OWL axioms. We cache them in the index so that advanced OWL-aware clients can pull relevant information quickly. Axioms are stored in functional syntax."
+#     display_name: Axiom
+#     type: string
+#     cardinality: multi
+#     property: []
+#   - id: bioentity_alternate_label
+#     description: Alternate label.
+#     display_name: Alternate label
+#     type: string
+#     cardinality: multi
+#     property: []
+#   - id: secondary_taxon
+#     description: Acts on taxon.
+#     display_name: Secondary taxon
+#     type: string
+#     property: []
+#   - id: secondary_taxon_label
+#     description: Acts on taxon.
+#     display_name: Secondary taxon label
+#     type: string
+#     property: []
+#   - id: reference
+#     description: ???
+#     display_name: Reference
+#     type: string
+#     property: []

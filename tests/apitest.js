@@ -61,8 +61,9 @@ exports.testFetchAssociations = function() {
                 var golrResponse = engine.fetchAssociations(id, 'subject_closure', filter, 10);
 
                 var thisTestSucceeded = testCommon.assert(
-                    "golrResponse._is_a === 'bbop.golr.response'",
-                     golrResponse._is_a === 'bbop.golr.response');
+                    "golrResponse._is_a === 'bbop-response-golr'",
+                     golrResponse._is_a === 'bbop-response-golr');
+                     console.log(golrResponse._is_a);
                 testFailed |= !thisTestSucceeded;
                 if (thisTestSucceeded) {
                     var firstDoc = golrResponse.documents()[0];

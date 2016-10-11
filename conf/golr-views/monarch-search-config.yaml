@@ -1,0 +1,97 @@
+id: monarch_search
+schema_generating: true
+description: Monarch search
+display_name: Monarch_search
+document_category: monarch_search
+weight: 1
+
+## For search
+boost_weights: label_searchable^1.0 definition_searchable^1.0 synonym_searchable^1.0 iri_searchable^1.0 id_searchable^1.0 id^2 iri^2 equivalent_iri^2 equivalent_curie^2 equivalent_iri_searchable^1.0 equivalent_curie_searchable^1.0 taxon_searchable^1.0
+
+## Results table, horizontal
+result_weights: id^1.0
+
+## Ordering of facets, vertical
+filter_weights: id^1.0
+
+## SOLR FIELD DEFINITIONS
+
+fields:
+
+  - id: id
+    description: "A unique identifier (CURIE if exists, or IRI as fallback)."
+    display_name: id
+    type: string
+    property: []
+    searchable: true
+
+  - id: iri
+    description: "The IRI."
+    display_name: iri
+    type: string
+    property: []
+    searchable: true
+
+  - id: label
+    description: "The labels."
+    display_name: label
+    type: string
+    cardinality: multi
+    property: []
+    searchable: true
+
+  - id: synonym
+    description: "The synonyms."
+    display_name: synonym
+    type: string
+    cardinality: multi
+    property: []
+    searchable: true
+
+  - id: definition
+    description: "The definitions."
+    display_name: definition
+    type: string
+    cardinality: multi
+    property: []
+    searchable: true
+
+  - id: taxon
+    description: "The taxons."
+    display_name: taxon
+    type: string
+    cardinality: multi
+    property: []
+    searchable: true
+
+  - id: category
+    description: "The categories."
+    display_name: category
+    type: string
+    cardinality: multi
+    property: []
+    searchable: true
+
+  - id: equivalent_iri
+    description: "The equivalent IRIs."
+    display_name: equivalentIri
+    type: string
+    cardinality: multi
+    property: []
+    searchable: true
+
+  - id: equivalent_curie
+    description: "The equivalent CURIE."
+    display_name: equivalentCurie
+    type: string
+    cardinality: multi
+    property: []
+    searchable: true
+
+  - id: leaf
+    description: "Is leaf node?"
+    display_name: leaf
+    type: boolean
+    cardinality: single
+    property: []
+    searchable: false

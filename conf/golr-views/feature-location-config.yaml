@@ -1,0 +1,249 @@
+
+id: feature_location
+schema_generating: true
+description: Feature location core
+display_name: feature_location
+document_category: feature_location
+weight: 1
+
+## For search
+boost_weights: id^1.0
+
+## Results table, horizontal
+result_weights: id^1.0
+
+## Ordering of facets, vertical
+filter_weights: id^1.0
+
+## SOLR FIELD DEFINITIONS
+
+fields:
+
+  - id: id
+    description: "The id."
+    display_name: id
+    type: string
+    property: []
+    searchable: true
+
+  - id: assembly_uri
+    description: "The assembly uri."
+    display_name: assembly_uri
+    type: string
+    property: []
+
+  - id: assembly_label
+    description: "The assembly label."
+    display_name: assembly_label
+    type: string
+    property: []
+
+  - id: start
+    description: "The start."
+    display_name: start
+    type: long
+    property: []
+
+  - id: evidence_graph
+    description: "The evidence_graph."
+    display_name: evidence_graph
+    type: string
+    property: []
+    searchable: false
+    indexed: false
+
+  - id: evidence
+    description: "The evidence."
+    display_name: evidence
+    type: string
+    cardinality: multi
+    property: []
+
+  - id: evidence_closure
+    description: "The evidence closure."
+    display_name: evidence_closure
+    type: string
+    cardinality: multi
+    property: []
+
+  - id: evidence_label
+    description: "The evidence label."
+    display_name: evidence_label
+    type: string
+    cardinality: multi
+    property: []
+
+  - id: evidence_closure_label
+    description: "The evidence closure label."
+    display_name: evidence_closure_label
+    type: string
+    cardinality: multi
+    property: []
+
+  - id: evidence_object
+    description: "The evidence object."
+    display_name: evidence_object
+    type: string
+    cardinality: multi
+    property: []
+
+  - id: evidence_object_closure
+    description: "The evidence object closure"
+    display_name: evidence_object_closure
+    type: string
+    cardinality: multi
+    property: []
+
+  - id: evidence_object_label
+    description: "The evidence object label"
+    display_name: evidence_object_label
+    type: string
+    cardinality: multi
+    property: []
+
+  - id: evidence_object_closure_label
+    description: "The evidence object closure label."
+    display_name: evidence_object_closure_label
+    type: string
+    cardinality: multi
+    property: []
+
+  - id: disease
+    description: "The disease."
+    display_name: disease
+    type: string
+    cardinality: multi
+    property: []
+
+  - id: disease_label
+    description: "The disease label."
+    display_name: disease_label
+    type: string
+    cardinality: multi
+    property: []
+
+  - id: disease_closure
+    description: "The disease closure."
+    display_name: disease_closure
+    type: string
+    cardinality: multi
+    property: []
+
+  - id: disease_closure_label
+    description: "The disease closure label."
+    display_name: disease_closure_label
+    type: string
+    cardinality: multi
+    property: []
+
+  - id: phenotype
+    description: "The phenotype."
+    display_name: phenotype
+    type: string
+    cardinality: multi
+    property: []
+
+  - id: phenotype_label
+    description: "The phenotype label."
+    display_name: phenotype_label
+    type: string
+    cardinality: multi
+    property: []
+
+  - id: phenotype_closure
+    description: "The phenotype closure."
+    display_name: phenotype_closure
+    type: string
+    cardinality: multi
+    property: []
+
+  - id: phenotype_closure_label
+    description: "The phenotype closure label."
+    display_name: phenotype_closure_label
+    type: string
+    cardinality: multi
+    property: []
+
+  - id: taxon
+    description: "The taxon."
+    display_name: taxon
+    type: string
+    cardinality: multi
+    property: []
+
+  - id: taxon_label
+    description: "The taxon label."
+    display_name: taxon_label
+    type: string
+    cardinality: multi
+    property: []
+
+  - id: taxon_closure
+    description: "The taxon closure."
+    display_name: taxon_closure
+    type: string
+    cardinality: multi
+    property: []
+
+  - id: taxon_closure_label
+    description: "The taxon closure label."
+    display_name: taxon_closure_label
+    type: string
+    cardinality: multi
+    property: []
+
+  - id: chromosome
+    description: "The chromosome."
+    display_name: chromosome
+    type: string
+    cardinality: multi
+    property: []
+
+  - id: chromosome_label
+    description: "The chromosome label."
+    display_name: chromosome_label
+    type: string
+    cardinality: multi
+    property: []
+
+  - id: chromosome_closure
+    description: "The chromosome closure."
+    display_name: chromosome_closure
+    type: string
+    cardinality: multi
+    property: []
+
+  - id: chromosome_closure_label
+    description: "The chromosome closure label."
+    display_name: chromosome_closure_label
+    type: string
+    cardinality: multi
+    property: []
+
+  - id: feature
+    description: "The feature."
+    display_name: feature
+    type: string
+    cardinality: multi
+    property: []
+
+  - id: feature_label
+    description: "The feature label."
+    display_name: feature_label
+    type: string
+    cardinality: multi
+    property: []
+
+  - id: feature_closure
+    description: "The feature closure."
+    display_name: feature_closure
+    type: string
+    cardinality: multi
+    property: []
+
+  - id: feature_closure_label
+    description: "The feature closure label."
+    display_name: feature_closure_label
+    type: string
+    cardinality: multi
+    property: []

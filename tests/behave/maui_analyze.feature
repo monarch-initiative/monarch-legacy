@@ -23,8 +23,8 @@ Feature: Analyze phenotypes is usable by the expected user interfaces
      and I wait until "Microalbuminuria" appears in the autocomplete
      and I click the autocomplete item "Microalbuminuria"
      and I type "micro" into the phenotype analyze search
-     and I wait until "microcephaly" appears in the autocomplete
-     and I click the autocomplete item "microcephaly"
+     and I wait until "Microcephaly" appears in the autocomplete
+     and I click the autocomplete item "Microcephaly"
      when I submit analyze phenotype
      then the document should contain "pru1"
 
