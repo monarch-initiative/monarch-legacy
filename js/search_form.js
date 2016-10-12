@@ -42,7 +42,8 @@ function navbar_search_init(in_search_id, in_form_id){
         event.preventDefault();
 
         var val = jQuery(search_elt).val();
-        var newurl = "/search/"+val;
+        var newurl = "/search/"+ encodeURIComponent(val);
+
         window.location.href = newurl;
         });
 
