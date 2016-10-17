@@ -30,9 +30,12 @@
   "dependencies": {
     "async": "^2.0.1",
     "bbop": "^2.4.3",
+    "bbop-graph": "^0.0.19",
     "bbop-manager-golr": "^0.0.11",
+    "bbop-registry": "^0.0.3",
     "bbop-response-golr": "^0.0.6",
     "bbop-rest-manager": "^0.0.11",
+    "bbop-widget-set": "^2.5.3",
     "binary": "^0.3.0",
     "bootstrap": "^3.3.7",
     "core-util-is": "^1.0.2",
@@ -43,6 +46,7 @@
     "hapi": "15.0.3",
     "inert": "^4.0.2",
     "isarray": "^1.0.0",
+    "isotope-layout": "^3.0.1",
     "jquery": "^2.2.4",
     "jquery-ui": "1.10.5",
     "mustache": "^2.2.1",
@@ -57,15 +61,7 @@
     "underscore": "^1.8.3",
     "wait.for": "^0.6.6",
     "xml2js": "^0.4.17",
-    "xmlbuilder": "^8.2.2",
-    "q": "^1.4.1",
-    "bbop-manager-golr": "^0.0.11",
-    "bbop-response-golr": "^0.0.6",
-    "golr-conf": "^0.0.3",
-    "bbop-rest-manager": "^0.0.11",
-    "bbop-widget-set": "^2.5.3",
-    "bbop-graph": "^0.0.19",
-    "bbop-registry": "^0.0.3"
+    "xmlbuilder": "^8.2.2"
   },
   "devDependencies": {
     "assets-webpack-plugin": "^3.4.0",
