@@ -12,32 +12,25 @@
             <div id="complete-info">
                 {{#hasResults}}
 
+                <h2>Combination Filters</h2>
 
+                <div class="filters">
 
+                  <div class="search-results-ui-group">
+                    <strong>Species</strong>
+                    {{{resultsSpeciesFilter}}}
+                  </div>
 
+                  <div class="search-results-ui-group">
+                    <strong>Category</strong>
+                    {{{resultsCategoryFilter}}}
+                  </div>
 
+                </div>
 
-<h2>Combination Filters</h2>
-
-<div class="filters">
-
-  <div class="search-results-ui-group">
-    <strong>Species</strong>
-    {{{resultsSpeciesFilter}}}
-  </div>
-
-  <div class="search-results-ui-group">
-    <strong>Category</strong>
-    {{{resultsCategoryFilter}}}
-  </div>
-
-</div>
-
-<div class="search-results-grid">
-  {{{resultsOutput}}}
-</div>
-
-
+                <div class="search-results-grid">
+                  {{{resultsOutput}}}
+                </div>
 
                 {{/hasResults}}
                 {{^hasResults}}
