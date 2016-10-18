@@ -11,104 +11,34 @@
             </div>
             <div id="complete-info">
                 {{#hasResults}}
-                <h3>Exact Match</h3>
-                {{{description}}}
 
 
 
 
 
 
-<h1>Isotope - combination filters</h1>
+<h2>Combination Filters</h2>
 
 <div class="filters">
 
   <div class="search-results-ui-group">
-    <h3>Species</h3>
-    <div class="search-results-button-group js-radio-button-group" data-filter-group="species">
-      <button class="search-results-button is-checked" data-filter="">any</button>
-      <button class="search-results-button" data-filter=".homo">Homo sapiens</button>
-      <button class="search-results-button" data-filter=".drosophila">Drosophila melanogaster</button>
-      <button class="search-results-button" data-filter=".mus">Mus musculus</button>
-    </div>
+    <strong>Species</strong>
+    {{{resultsSpeciesFilter}}}
   </div>
 
   <div class="search-results-ui-group">
-    <h3>Category</h3>
-    <div class="search-results-button-group js-radio-button-group" data-filter-group="category">
-      <button class="search-results-button is-checked" data-filter="">any</button>
-      <button class="search-results-button" data-filter=".disease">disease</button>
-      <button class="search-results-button" data-filter=".gene">gene</button>
-      <button class="search-results-button" data-filter=".phenotype">phenotype</button>
-    </div>
+    <strong>Category</strong>
+    {{{resultsCategoryFilter}}}
   </div>
 
 </div>
 
 <div class="search-results-grid">
-  <div class="search-result-box homo gene">
-  <ul>
-  <li>Term: <a href="#">TP53I11</a></li>
-  <li>Category: gene</li>
-  <li>Taxon: Homo sapiens</li>
-  <li>Matching String: Any phenotype involving signal transduction by <em class=\"hilite\">p53</em> class mediator.</li>
-  </ul>
-  </div>
-
-  <div class="search-result-box homo disease">
-  <ul>
-  <li>Term: <a href="#">TP53I11</a></li>
-  <li>Category: gene</li>
-  <li>Taxon: Homo sapiens</li>
-  <li>Matching String: Any phenotype involving signal transduction by <em class=\"hilite\">p53</em> class mediator.</li>
-  </ul>
-  </div>
-
-  <div class="search-result-box drosophila gene">
-  <ul>
-  <li>Term: <a href="#">TP53I11</a></li>
-  <li>Category: gene</li>
-  <li>Taxon: Homo sapiens</li>
-  <li>Matching String: Any phenotype involving signal transduction by <em class=\"hilite\">p53</em> class mediator.</li>
-  </ul>
-  </div>
-
-  <div class="search-result-box mus gene">
-  <ul>
-  <li>Term: <a href="#">TP53I11</a></li>
-  <li>Category: gene</li>
-  <li>Taxon: Homo sapiens</li>
-  <li>Matching String: Any phenotype involving signal transduction by <em class=\"hilite\">p53</em> class mediator.</li>
-  </ul>
-  </div>
+  {{{resultsOutput}}}
 </div>
 
 
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-                <table>
-                    {{{resultsTable}}}
-                </table>
                 {{/hasResults}}
                 {{^hasResults}}
                     {{{suggestSpan}}}
