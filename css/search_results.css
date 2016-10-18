@@ -59,13 +59,13 @@
 
 /* ---- isotope ---- */
 
-.grid {
+.search-results-grid {
   background: #EEE;
   max-width: 1200px;
 }
 
 /* clear fix */
-.grid:after {
+.search-results-grid:after {
   content: '';
   display: block;
   clear: both;
@@ -73,11 +73,11 @@
 
 /* ui group */
 
-.ui-group {
+.search-results-ui-group {
   display: inline-block;
 }
 
-.ui-group h3 {
+.search-results-ui-group h3 {
   display: inline-block;
   vertical-align: top;
   line-height: 32px;
@@ -85,31 +85,16 @@
   font-size: 16px;
 }
 
-.ui-group .button-group {
+.search-results-ui-group ..search-results-button-group {
   display: inline-block;
   margin-right: 20px;
 }
 
-/* color-shape */
+/* search-result-box */
 
-.color-shape {
-  width: 70px;
-  height: 70px;
+.search-result-box {
+  width: 200px;
+  border:1px solid #207de5;
   margin: 5px;
   float: left;
 }
- 
-.color-shape.round {
-  border-radius: 35px;
-}
- 
-.color-shape.big.round {
-  border-radius: 75px;
-}
- 
-.color-shape.red { background: red; }
-.color-shape.blue { background: blue; }
-.color-shape.yellow { background: yellow; }
- 
-.color-shape.wide, .color-shape.big { width: 150px; }
-.color-shape.tall, .color-shape.big { height: 150px; }

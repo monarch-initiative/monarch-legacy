@@ -17,8 +17,8 @@ console.log(groupsByTaxon);
 $( document ).ready(function() {
     
     // init Isotope
-    var $grid = $('.grid').isotope({
-      itemSelector: '.color-shape'
+    var $grid = $('.search-results-grid').isotope({
+      itemSelector: '.search-result-box'
     });
 
     // store filter for each group
@@ -38,7 +38,7 @@ $( document ).ready(function() {
     });
 
     // change is-checked class on buttons
-    $('.button-group').each( function( i, buttonGroup ) {
+    $('.search-results-button-group').each( function( i, buttonGroup ) {
       var $buttonGroup = $( buttonGroup );
       $buttonGroup.on( 'click', 'button', function() {
         $buttonGroup.find('.is-checked').removeClass('is-checked');
