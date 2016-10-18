@@ -89,14 +89,14 @@ width: 240px;
 border:1px solid #ccc;
 background-color:#efefef;
 margin: 5px;
-padding: 5px;
+padding: 10px 5px;
 float: left;
 font-size:.9em;
 }
 
-
 .search-result-box ul{
 padding-left:15px;
+margin-bottom:0;
 }
 
 /* overwrite the default CSS */
