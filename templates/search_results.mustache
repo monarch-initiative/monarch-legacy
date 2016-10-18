@@ -23,63 +23,64 @@
 
 <div class="filters">
 
-  <div class="ui-group">
-    <h3>Color</h3>
-    <div class="search-results-button-group js-radio-button-group" data-filter-group="color">
+  <div class="search-results-ui-group">
+    <h3>Species</h3>
+    <div class="search-results-button-group js-radio-button-group" data-filter-group="species">
       <button class="search-results-button is-checked" data-filter="">any</button>
-      <button class="search-results-button" data-filter=".red">red</button>
-      <button class="search-results-button" data-filter=".blue">blue</button>
-      <button class="search-results-button" data-filter=".yellow">yellow</button>
+      <button class="search-results-button" data-filter=".homo">Homo sapiens</button>
+      <button class="search-results-button" data-filter=".drosophila">Drosophila melanogaster</button>
+      <button class="search-results-button" data-filter=".mus">Mus musculus</button>
     </div>
   </div>
 
-  <div class="ui-group">
-    <h3>Size</h3>
-    <div class="search-results-button-group js-radio-button-group" data-filter-group="size">
+  <div class="search-results-ui-group">
+    <h3>Category</h3>
+    <div class="search-results-button-group js-radio-button-group" data-filter-group="category">
       <button class="search-results-button is-checked" data-filter="">any</button>
-      <button class="search-results-button" data-filter=".small">small</button>
-      <button class="search-results-button" data-filter=".wide">wide</button>
-      <button class="search-results-button" data-filter=".big">big</button>
-      <button class="search-results-button" data-filter=".tall">tall</button>
-    </div>
-  </div>
-
-  <div class="ui-group">
-    <h3>Shape</h3>
-    <div class="search-results-button-group js-radio-button-group" data-filter-group="shape">
-      <button class="search-results-button is-checked" data-filter="">any</button>
-      <button class="search-results-button" data-filter=".round">round</button>
-      <button class="search-results-button" data-filter=".square">square</button>
+      <button class="search-results-button" data-filter=".disease">disease</button>
+      <button class="search-results-button" data-filter=".gene">gene</button>
+      <button class="search-results-button" data-filter=".phenotype">phenotype</button>
     </div>
   </div>
 
 </div>
 
-<div class="grid">
-  <div class="color-shape small round red"></div>
-  <div class="color-shape small round blue"></div>
-  <div class="color-shape small round yellow"></div>
-  <div class="color-shape small square red"></div>
-  <div class="color-shape small square blue"></div>
-  <div class="color-shape small square yellow"></div>
-  <div class="color-shape wide round red"></div>
-  <div class="color-shape wide round blue"></div>
-  <div class="color-shape wide round yellow"></div>
-  <div class="color-shape wide square red"></div>
-  <div class="color-shape wide square blue"></div>
-  <div class="color-shape wide square yellow"></div>
-  <div class="color-shape big round red"></div>
-  <div class="color-shape big round blue"></div>
-  <div class="color-shape big round yellow"></div>
-  <div class="color-shape big square red"></div>
-  <div class="color-shape big square blue"></div>
-  <div class="color-shape big square yellow"></div>
-  <div class="color-shape tall round red"></div>
-  <div class="color-shape tall round blue"></div>
-  <div class="color-shape tall round yellow"></div>
-  <div class="color-shape tall square red"></div>
-  <div class="color-shape tall square blue"></div>
-  <div class="color-shape tall square yellow"></div>
+<div class="search-results-grid">
+  <div class="search-result-box homo gene">
+  <ul>
+  <li>Term: <a href="#">TP53I11</a></li>
+  <li>Category: gene</li>
+  <li>Taxon: Homo sapiens</li>
+  <li>Matching String: Any phenotype involving signal transduction by <em class=\"hilite\">p53</em> class mediator.</li>
+  </ul>
+  </div>
+
+  <div class="search-result-box homo disease">
+  <ul>
+  <li>Term: <a href="#">TP53I11</a></li>
+  <li>Category: gene</li>
+  <li>Taxon: Homo sapiens</li>
+  <li>Matching String: Any phenotype involving signal transduction by <em class=\"hilite\">p53</em> class mediator.</li>
+  </ul>
+  </div>
+
+  <div class="search-result-box drosophila gene">
+  <ul>
+  <li>Term: <a href="#">TP53I11</a></li>
+  <li>Category: gene</li>
+  <li>Taxon: Homo sapiens</li>
+  <li>Matching String: Any phenotype involving signal transduction by <em class=\"hilite\">p53</em> class mediator.</li>
+  </ul>
+  </div>
+
+  <div class="search-result-box mus gene">
+  <ul>
+  <li>Term: <a href="#">TP53I11</a></li>
+  <li>Category: gene</li>
+  <li>Taxon: Homo sapiens</li>
+  <li>Matching String: Any phenotype involving signal transduction by <em class=\"hilite\">p53</em> class mediator.</li>
+  </ul>
+  </div>
 </div>
 
 
