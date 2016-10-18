@@ -102,5 +102,6 @@ margin-bottom:0;
 /* overwrite the default CSS */
 .search-result-box .hilite{
 color:#b94a48;
+font-weight: normal;
 background-color:#f2dede;
 }
