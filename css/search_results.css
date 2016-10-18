@@ -1,9 +1,5 @@
-#description {
-    padding-bottom: 5px;
-}
 
-
-/* ---- button ---- */
+/* ---- filter button ---- */
 
 .search-results-button {
   display: inline-block;
@@ -14,7 +10,7 @@
   background-image: linear-gradient( to bottom, hsla(0, 0%, 0%, 0), hsla(0, 0%, 0%, 0.2) );
   color: #222;
   font-family: sans-serif;
-  font-size: 16px;
+  font-size: 13px;
   text-shadow: 0 1px white;
   cursor: pointer;
 }
@@ -60,8 +56,7 @@
 /* ---- isotope ---- */
 
 .search-results-grid {
-  background: #EEE;
-  max-width: 1200px;
+
 }
 
 /* clear fix */
@@ -93,8 +88,16 @@
 /* search-result-box */
 
 .search-result-box {
-  width: 200px;
-  border:1px solid #207de5;
+  width: 240px;
+  border:1px solid #ccc;
+  background-color:#efefef;
   margin: 5px;
+  padding: 5px;
   float: left;
+  font-size:.9em;
+}
+
+
+.search-result-box ul{
+padding-left:15px;
 }
