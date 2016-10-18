@@ -103,7 +103,7 @@ padding-left:15px;
 }
 
 /* overwrite the default CSS */
-.hilite{
+.search-result-box .hilite{
 color:#b94a48;
 background-color:#f2dede;
 }
