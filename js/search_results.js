@@ -16,16 +16,15 @@ $( document ).ready(function() {
 
       // E.g. {species: "danio_rerio", category: "gene"}
       console.log(filters);
-console.log(filters.species);
-
+      
+      // combine filters
+      var filterValue = concatValues( filters );
+console.log(filterValue);
       // show only filtered groups
-      var results = $('.search-result-item');
-      results.filter(function(index){
-        return $(this).hasClass(filters.species);
-      }).show();
+      $('.search-result-item'+ filterValue).show();
+      $('.search-result-item:not(' + filterValue +')').hide();
 
-
-      results.not('.' + filters.species).hide();
+      // Will need to reapply the table striped tr highlighting
     });
 
 
@@ -46,7 +45,14 @@ console.log(filters.species);
     });
 
 
-
+    // flatten object by concatting values
+    function concatValues( obj ) {
+      var value = '';
+      for ( var prop in obj ) {
+        value += obj[ prop ];
+      }
+      return value;
+    }
     
 
 });
