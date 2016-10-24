@@ -305,18 +305,9 @@
     -webkit-transform: scale(1.0);
   }
 }
-
-@media (max-width: 1000px) {
-  .legend-checkbox {
-    transform: scale(1.2);
-    margin: 3px 3px 3px 0 !important;
-    vertical-align: middle;
-  }
-}
-@media (min-width: 1000px) {	
-  .legend-checkbox {
-    transform: scale(.8);
-    margin: 0 0 1px 0 !important;
-    vertical-align: middle;
-  }
+	
+.legend-checkbox {
+  transform: scale(.8);
+  margin: 0 0 1px 0 !important;
+  vertical-align: middle;
 }
