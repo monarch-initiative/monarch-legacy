@@ -20,9 +20,16 @@ $( document ).ready(function() {
       // combine filters
       var filterValue = concatValues( filters );
 console.log(filterValue);
-      // show only filtered groups
-      $('.search-result-item'+ filterValue).show();
-      $('.search-result-item:not(' + filterValue +')').hide();
+
+      if (filterValue !== '') {
+          // show only filtered groups
+        $('.search-result-item'+ filterValue).show();
+        $('.search-result-item:not(' + filterValue +')').hide();
+      } else {
+        // show all
+        $('.search-result-item').show();
+      }
+      
 
       // Will need to reapply the table striped tr highlighting
     });
