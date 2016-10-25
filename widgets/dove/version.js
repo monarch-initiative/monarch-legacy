@@ -24,4 +24,4 @@ dove.version.revision = "1.0.2";
  *
  * Partial version for this library: release (date-like) information.
  */
-dove.version.release = "20161024";
+dove.version.release = "20161025";
