@@ -9,7 +9,10 @@
 
                 {{#hasResults}}
 
-                <div class="filters">
+<div class="row">
+<div class="col-xs-12 col-md-3">
+
+<div class="filters">
 
                   <div class="search-results-ui-group">
                     <strong>Species</strong>
@@ -23,9 +26,18 @@
 
                 </div>
 
-                <div class="search-results-rows">
+</div>
+
+<div class="col-xs-12 col-md-9">
+
+<div class="search-results-rows">
                   {{{resultsOutput}}}
                 </div>
+
+</div>
+</div>
+
+
 
                 {{/hasResults}}
                 {{^hasResults}}
