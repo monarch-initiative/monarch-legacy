@@ -1,4 +1,10 @@
 
+.search-results-count{
+margin-left:5px;
+margin-bottom:10px;
+font-weight:bold;
+}
+
 /* ---- filter button ---- */
 
 .search-results-button {
