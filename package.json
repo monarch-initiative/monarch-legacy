@@ -39,7 +39,6 @@
     "hapi": "15.0.3",
     "inert": "^4.0.2",
     "isarray": "^1.0.0",
-    "isotope-layout": "^3.0.1",
     "jquery": "^2.2.4",
     "jquery-ui": "1.10.5",
     "mustache": "^2.2.1",
