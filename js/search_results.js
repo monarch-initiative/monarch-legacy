@@ -30,8 +30,6 @@ console.log(filterValue);
         $('.search-result-item').show();
       }
       
-
-      // Will need to reapply the table striped tr highlighting
     });
 
 
@@ -48,6 +46,7 @@ console.log(filterValue);
         // Highlight selected button
         $buttonGroup.find('.is-checked').removeClass('is-checked');
         $(this).addClass('is-checked');
+
       });
     });
 
