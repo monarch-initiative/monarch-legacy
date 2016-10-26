@@ -16,7 +16,7 @@ bbop.monarch.phenotypeLandingConfig = {
         bread : {width:70, height: 25, offset:60, space: 1},
 
         //Chart margins
-        margin : {top: 35, right: 63, bottom: 5, left: 175},
+        margin : {top: 35, right: 103, bottom: 5, left: 175},
 
         width : 250,
         height : 300,
@@ -60,19 +60,18 @@ bbop.monarch.phenotypeLandingConfig = {
         //Colors set in the order they appear in the JSON object
         color : {
             bars : {
-                human  : '#44A293',
-                mouse : '#A4D6D4',
-                zebrafish : '#44B985',
-                fly : '#D4DB68',
-                rat : '#A1C3FF',
-                dog : '#ACB5DF',
-                worm : '#94CC68',
-                pig : '#14E082',
-                cow : '#3DB53C',
-                cat : '#EDC44E',
-                chicken : '#418BFF',
-                monkey : '#14CF7C',
-                other : '#B2E3AA'
+                human  : '#a6cee3',
+                mouse : '#1f78b4',
+                zebrafish : '#b2df8a',
+                fly : '#33a02c',
+                rat : '#ff7f00',
+                dog : '#fdbf6f',
+                worm : '#6a3d9a',
+                pig : '#cab2d6',
+                cow : '#e31a1c',
+                cat : '#ffff99',
+                chicken : 'grey',
+                other : '#fb9a99'
             },
 
                  yLabel : {
@@ -145,7 +144,7 @@ bbop.monarch.geneLandingConfig = {
         bread : {width:70, height: 25, offset:60, space: 1},
 
         //Chart margins
-        margin : {top: 35, right: 63, bottom: 5, left: 175},
+        margin : {top: 35, right: 103, bottom: 5, left: 175},
 
         width : 250,
         height : 300,
@@ -188,21 +187,20 @@ bbop.monarch.geneLandingConfig = {
 
         //Colors set in the order they appear in the JSON object
         color : {
-                 bars : {
-                     human  : '#44A293',
-                     mouse : '#A4D6D4',
-                     zebrafish : '#44B985',
-                     fly : '#D4DB68',
-                     rat : '#A1C3FF',
-                     dog : '#ACB5DF',
-                     worm : '#94CC68',
-                     pig : '#14E082',
-                     cow : '#3DB53C',
-                     cat : '#EDC44E',
-                     chicken : '#418BFF',
-                     monkey : '#14CF7C',
-                     other : '#B2E3AA'
-                 },
+            bars : {
+                human  : '#a6cee3',
+                mouse : '#1f78b4',
+                zebrafish : '#b2df8a',
+                fly : '#33a02c',
+                rat : '#ff7f00',
+                dog : '#fdbf6f',
+                worm : '#6a3d9a',
+                pig : '#cab2d6',
+                cow : '#e31a1c',
+                cat : '#ffff99',
+                chicken : 'grey',
+                other : '#fb9a99'
+            },
 
                  yLabel : {
                    fill  : '#000000',
@@ -241,7 +239,7 @@ bbop.monarch.genotypeLandingConfig = {
         bread : {width:70, height: 25, offset:60, space: 1},
 
         //Chart margins
-        margin : {top: 35, right: 63, bottom: 5, left: 175},
+        margin : {top: 35, right: 103, bottom: 5, left: 175},
 
         width : 250,
         height : 300,
@@ -285,19 +283,18 @@ bbop.monarch.genotypeLandingConfig = {
         //Colors set in the order they appear in the JSON object
         color : {
             bars : {
-                human  : '#44A293',
-                mouse : '#A4D6D4',
-                zebrafish : '#44B985',
-                fly : '#D4DB68',
-                rat : '#A1C3FF',
-                dog : '#ACB5DF',
-                worm : '#94CC68',
-                pig : '#14E082',
-                cow : '#3DB53C',
-                cat : '#EDC44E',
-                chicken : '#418BFF',
-                monkey : '#14CF7C',
-                other : '#B2E3AA'
+                human  : '#a6cee3',
+                mouse : '#1f78b4',
+                zebrafish : '#b2df8a',
+                fly : '#33a02c',
+                rat : '#ff7f00',
+                dog : '#fdbf6f',
+                worm : '#6a3d9a',
+                pig : '#cab2d6',
+                cow : '#e31a1c',
+                cat : '#ffff99',
+                chicken : 'grey',
+                other : '#fb9a99'
             },
 
                  yLabel : {
@@ -336,7 +333,7 @@ bbop.monarch.modelLandingConfig = {
         bread : {width:70, height: 25, offset:60, space: 1},
 
         //Chart margins
-        margin : {top: 35, right: 63, bottom: 5, left: 175},
+        margin : {top: 35, right: 103, bottom: 5, left: 175},
 
         width : 250,
         height : 300,
@@ -380,19 +377,18 @@ bbop.monarch.modelLandingConfig = {
         //Colors set in the order they appear in the JSON object
         color : {
             bars : {
-                human  : '#44A293',
-                mouse : '#A4D6D4',
-                zebrafish : '#44B985',
-                fly : '#D4DB68',
-                rat : '#A1C3FF',
-                dog : '#ACB5DF',
-                worm : '#94CC68',
-                pig : '#14E082',
-                cow : '#3DB53C',
-                cat : '#EDC44E',
-                chicken : '#418BFF',
-                monkey : '#14CF7C',
-                other : '#B2E3AA'
+                human  : '#a6cee3',
+                mouse : '#1f78b4',
+                zebrafish : '#b2df8a',
+                fly : '#33a02c',
+                rat : '#ff7f00',
+                dog : '#fdbf6f',
+                worm : '#6a3d9a',
+                pig : '#cab2d6',
+                cow : '#e31a1c',
+                cat : '#ffff99',
+                chicken : 'grey',
+                other : '#fb9a99'
             },
 
                  yLabel : {
@@ -432,7 +428,7 @@ bbop.monarch.diseaseLandingConfig = {
       bread : {width:70, height: 25, offset:60, space: 1},
 
       //Chart margins
-      margin : {top: 35, right: 63, bottom: 5, left: 175},
+      margin : {top: 35, right: 103, bottom: 5, left: 175},
 
       width : 250,
       height : 300,
@@ -476,19 +472,18 @@ bbop.monarch.diseaseLandingConfig = {
       //Colors set in the order they appear in the JSON object
       color : {
           bars : {
-              human  : '#44A293',
-              mouse : '#A4D6D4',
-              zebrafish : '#44B985',
-              fly : '#D4DB68',
-              rat : '#A1C3FF',
-              dog : '#ACB5DF',
-              worm : '#94CC68',
-              pig : '#14E082',
-              cow : '#3DB53C',
-              cat : '#EDC44E',
-              chicken : '#418BFF',
-              monkey : '#14CF7C',
-              other : '#B2E3AA'
+              human  : '#a6cee3',
+              mouse : '#1f78b4',
+              zebrafish : '#b2df8a',
+              fly : '#33a02c',
+              rat : '#ff7f00',
+              dog : '#fdbf6f',
+              worm : '#6a3d9a',
+              pig : '#cab2d6',
+              cow : '#e31a1c',
+              cat : '#ffff99',
+              chicken : 'grey',
+              other : '#fb9a99'
           },
 
                yLabel : {
@@ -541,7 +536,7 @@ bbop.monarch.homePageConfig = {
         bread : {width:70, height: 25, offset:60, space: 1},
 
         //Chart margins
-        margin : {top: 35, right: 63, bottom: 5, left: 175},
+        margin : {top: 35, right: 103, bottom: 5, left: 175},
 
         width : 250,
         height : 300,
@@ -585,19 +580,18 @@ bbop.monarch.homePageConfig = {
         //Colors set in the order they appear in the JSON object
         color : {
             bars : {
-                human  : '#44A293',
-                mouse : '#A4D6D4',
-                zebrafish : '#44B985',
-                fly : '#D4DB68',
-                rat : '#A1C3FF',
-                dog : '#ACB5DF',
-                worm : '#94CC68',
-                pig : '#14E082',
-                cow : '#3DB53C',
-                cat : '#EDC44E',
-                chicken : '#418BFF',
-                monkey : '#14CF7C',
-                other : '#B2E3AA'
+                human  : '#a6cee3',
+                mouse : '#1f78b4',
+                zebrafish : '#b2df8a',
+                fly : '#33a02c',
+                rat : '#ff7f00',
+                dog : '#fdbf6f',
+                worm : '#6a3d9a',
+                pig : '#cab2d6',
+                cow : '#e31a1c',
+                cat : '#ffff99',
+                chicken : 'grey',
+                other : '#fb9a99'
             },
 
                  yLabel : {
