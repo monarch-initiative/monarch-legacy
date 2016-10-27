@@ -16,20 +16,35 @@ $( document ).ready(function() {
 
       // E.g. {species: "danio_rerio", category: "gene"}
       console.log(filters);
-      
-      // combine filters
-      var filterValue = concatValues( filters );
-console.log(filterValue);
 
-      if (filterValue !== '') {
-          // show only filtered groups
-        $('.search-result-item'+ filterValue).show();
-        $('.search-result-item:not(' + filterValue +')').hide();
-      } else {
-        // show all
-        $('.search-result-item').show();
-      }
-      
+var url = 'http://localhost:8080/searchfiltering/' + searchTerm + '/' + filters.category + '/' + filters.species;
+console.log(url);
+
+      // fire the new search call and update table
+      // Separate the ajax request with callbacks
+        var jqxhr = $.ajax({
+            url: url,
+            method: 'GET', 
+            async : true,
+            dataType : 'json'
+        });
+        
+        jqxhr.done(function(data) {
+            console.log(data);
+            
+            if (typeof(data) !== 'undefined') {
+              // update the table with this new table content
+              $('.search-results-rows').html(data.table);
+
+              // Update the total count number
+              $('#totalCount').html(data.count);
+            }
+        });
+        
+        jqxhr.fail(function () { 
+            console.log('Ajax error')
+        });
+
     });
 
 
@@ -49,17 +64,6 @@ console.log(filterValue);
 
       });
     });
-
-
-    // flatten object by concatting values
-    function concatValues( obj ) {
-      var value = '';
-      for ( var prop in obj ) {
-        value += obj[ prop ];
-      }
-      return value;
-    }
-    
 
 });
 

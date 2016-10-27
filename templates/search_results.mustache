@@ -4,7 +4,7 @@
         <div class="content">
 
             <div id="complete-info">
-                <h2 class="downloadline">{{count}} Search Results for {{term}}</h2>
+                <h2 class="downloadline"><span id="totalCount">{{count}}</span> Search Results for {{term}}</h2>
                 <a href="{{{download.json}}}" target="_blank" class="downloadline btn btn-info">JSON</a>
 
                 {{#hasResults}}
@@ -34,7 +34,7 @@
 
 <div class="search-results-rows">
                   {{{resultsOutput}}}
-                </div>
+</div>
 
 </div>
 </div>
