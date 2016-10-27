@@ -4,7 +4,7 @@ console.log(searchResults);
 
 $( document ).ready(function() {
     // store filter for each group
-    var filters = {};
+    var filters = {category: "all", species: "all"};
 
     $('.filters').on( 'click', '.search-results-button', function() {
       var $this = $(this);
@@ -14,7 +14,7 @@ $( document ).ready(function() {
       // set filter for group
       filters[filterGroup] = $this.attr('data-filter');
 
-      // E.g. {species: "danio_rerio", category: "gene"}
+      // E.g. {category: "gene", species: "Danio rerio"}
       console.log(filters);
 
 var url = 'http://localhost:8080/searchfiltering/' + searchTerm + '/' + filters.category + '/' + filters.species;
