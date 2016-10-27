@@ -175,6 +175,7 @@ fields:
     display_name: Synonym
     type: string
     cardinality: multi
+    searchable: true
     property: []
 #   - id: alternate_id
 #     description: Any alternaitve id.

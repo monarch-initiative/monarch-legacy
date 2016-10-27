@@ -146,6 +146,7 @@ fields:
     display_name: Synonyms
     type: string
     cardinality: multi
+    searchable: true
     property: []
   - id: panther_family
     description: PANTHER families that are associated with this entity.
