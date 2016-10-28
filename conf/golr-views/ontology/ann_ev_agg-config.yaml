@@ -51,6 +51,7 @@ fields:
     type: string
     cardinality: multi
     property: []
+    searchable: true
   - id: taxon
     description: "Column 13: taxon."
     display_name: Taxon
