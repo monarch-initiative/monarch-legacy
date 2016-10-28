@@ -4,20 +4,37 @@ console.log(searchResults);
 
 $( document ).ready(function() {
     // store filter for each group
-    var filters = {category: "all", species: "all"};
+    var filters = {category: [], taxon_label: []};
 
     $('.filters').on( 'click', '.search-results-button', function() {
       var $this = $(this);
+
       // get group key
       var $buttonGroup = $this.parents('.search-results-button-group');
       var filterGroup = $buttonGroup.attr('data-filter-group');
-      // set filter for group
-      filters[filterGroup] = $this.attr('data-filter');
 
-      // E.g. {category: "gene", species: "Danio rerio"}
-      console.log(filters);
+      if (filterGroup === 'category') {
+          if ($this.attr('data-filter') === '') {
+              filters.category = [];
+          } else {
+              filters.category = [$this.attr('data-filter')];
+          }
+      }
 
-var url = 'http://localhost:8080/searchfiltering/' + searchTerm + '/' + filters.category + '/' + filters.species;
+      if (filterGroup === 'taxon_label') {
+          if ($this.attr('data-filter') === '') {
+              filters.taxon_label = [];
+          } else {
+              filters.taxon_label = [$this.attr('data-filter')];
+          }
+      }
+
+      // Convert object to JSON string
+      // E.g. {"category": ["gene"], "taxon_label": ["Danio rerio"]}
+      var filtersJson = JSON.stringify(filters)
+      console.log(filtersJson);
+
+var url = 'http://localhost:8080/searchfiltering/' + searchTerm + '/' + filtersJson;
 console.log(url);
 
       // fire the new search call and update table
