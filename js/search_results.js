@@ -5,9 +5,13 @@ console.log(searchResults);
 $( document ).ready(function() {
     // store filter for each group
     var filters = {category: [], taxon_label: []};
+    var pageNum = 1;
 
     $('.filters').on( 'click', '.search-results-button', function() {
       var $this = $(this);
+
+      // Always set pageNum to 1
+      pageNum = 1;
 
       // get group key
       var $buttonGroup = $this.parents('.search-results-button-group');
@@ -31,11 +35,8 @@ $( document ).ready(function() {
 
       // Convert object to JSON string
       // E.g. {"category": ["gene"], "taxon_label": ["Danio rerio"]}
-      var filtersJson = JSON.stringify(filters)
-      console.log(filtersJson);
-
-var url = 'http://localhost:8080/searchfiltering/' + searchTerm + '/' + filtersJson;
-console.log(url);
+      var url = 'http://localhost:8080/searchfiltering/' + searchTerm + '/' + JSON.stringify(filters) + '/' + pageNum;
+      console.log(url);
 
       // fire the new search call and update table
       // Separate the ajax request with callbacks
@@ -59,14 +60,44 @@ console.log(url);
         });
         
         jqxhr.fail(function () { 
-            console.log('Ajax error')
+            console.log('Ajax error!')
         });
 
     });
 
 
+    // Load more content
+    $('#more').click(function(){
+        // Increase the page number
+        pageNum++;
+console.log(pageNum);
 
+        // Convert object to JSON string
+        // E.g. {"category": ["gene"], "taxon_label": ["Danio rerio"]}
+        var url = 'http://localhost:8080/searchfiltering/' + searchTerm + '/' + JSON.stringify(filters) + '/' + pageNum;
 
+        // fire the new search call and update table
+        // Separate the ajax request with callbacks
+        var jqxhr = $.ajax({
+            url: url,
+            method: 'GET', 
+            async : true,
+            dataType : 'json'
+        });
+        
+        jqxhr.done(function(data) {
+            console.log(data);
+            
+            if (typeof(data) !== 'undefined') {
+              // append new table content
+              $('.search-results-rows').append(data.table);
+            }
+        });
+        
+        jqxhr.fail(function () { 
+            console.log('Ajax error to fetch more results!')
+        });
+    });
 
 
 
