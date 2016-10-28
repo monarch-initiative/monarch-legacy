@@ -8,16 +8,15 @@ font-weight:bold;
 /* ---- filter button ---- */
 
 .search-results-button {
-width:200px;
+width:220px;
 display: block;
-padding: 0.5em;
+padding: 5px 10px;
 background: #EEE;
 border: none;
 border-radius: 7px;
 background-image: linear-gradient( to bottom, hsla(0, 0%, 0%, 0), hsla(0, 0%, 0%, 0.2) );
 color: #222;
 font-family: sans-serif;
-font-size: 13px;
 text-align:left;
 text-shadow: 0 1px white;
 cursor: pointer;
