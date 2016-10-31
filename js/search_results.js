@@ -56,6 +56,13 @@ $( document ).ready(function() {
 
               // Update the total count number
               $('#totalCount').html(data.count);
+
+              if (data.loadMoreBtn === false) {
+                  // Hide the load mroe button
+                  $('#more').hide();
+              } else {
+                  $('#more').show();
+              }
             }
         });
         
@@ -91,6 +98,13 @@ console.log(pageNum);
             if (typeof(data) !== 'undefined') {
               // append new table content
               $('.search-results-rows').append(data.table);
+            }
+
+            if (data.loadMoreBtn === false) {
+                // Hide the load mroe button
+                $('#more').hide();
+            } else {
+                $('#more').show();
             }
         });
         
