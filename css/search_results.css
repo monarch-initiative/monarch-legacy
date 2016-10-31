@@ -66,7 +66,7 @@ width:100%;
 
 /* overwrite the default CSS */
 .search-result-item .hilite{
-color:#b94a48;
+color:#d9534f;
 font-weight: normal;
 background-color:#f2dede;
 }
@@ -76,9 +76,9 @@ margin:10px 0 20px;
 }
 
 #totalCount{
-color:#b94a48;
+color:#d9534f;
 }
 
 .searchTerm{
-color:#b94a48;
+color:#d9534f;
 }
