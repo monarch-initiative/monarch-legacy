@@ -12,11 +12,12 @@ font-weight:bold;
 display: inline-block;
 margin-left:5px;
 margin-bottom:10px;
-margin-top:5px;
 }
 
-.search-results-ui-group strong {
+.search-results-ui-group h3 {
 font-size: 14px;
+font-weight:bold;
+margin-top:10px;
 }
 
 .search-results-ui-group .search-results-button-group {
