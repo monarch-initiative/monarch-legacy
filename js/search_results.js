@@ -18,39 +18,40 @@ $( document ).ready(function() {
       var filterGroup = $buttonGroup.attr('data-filter-group');
 
       if (filterGroup === 'category') {
-          if ($this.attr('data-filter') === '') {
-              filters.category = [];
-          } else {
-              filters.category = [$this.attr('data-filter')];
-          }
+        if ($this.attr('data-filter') === '') {
+          filters.category = [];
+        } else {
+          filters.category = [$this.attr('data-filter')];
+        }
       }
 
       if (filterGroup === 'taxon_label') {
-          if ($this.attr('data-filter') === '') {
-              filters.taxon_label = [];
-          } else {
-              filters.taxon_label = [$this.attr('data-filter')];
-          }
+        if ($this.attr('data-filter') === '') {
+          filters.taxon_label = [];
+        } else {
+          filters.taxon_label = [$this.attr('data-filter')];
+        }
       }
 
       // Convert object to JSON string
       // E.g. {"category": ["gene"], "taxon_label": ["Danio rerio"]}
-      var url = 'http://localhost:8080/searchfiltering/' + searchTerm + '/' + JSON.stringify(filters) + '/' + pageNum;
+      // Must use "/" at the beginning of the URL
+      var url = '/searchfiltering/' + searchTerm + '/' + JSON.stringify(filters) + '/' + pageNum;
       console.log(url);
 
       // fire the new search call and update table
       // Separate the ajax request with callbacks
-        var jqxhr = $.ajax({
-            url: url,
-            method: 'GET', 
-            async : true,
-            dataType : 'json'
-        });
+      var jqxhr = $.ajax({
+        url: url,
+        method: 'GET', 
+        async : true,
+        dataType : 'json'
+      });
+      
+      jqxhr.done(function(data) {
+        console.log(data);
         
-        jqxhr.done(function(data) {
-            console.log(data);
-            
-            if (typeof(data) !== 'undefined') {
+        if (typeof(data) !== 'undefined') {
               // update the table with this new table content
               $('.search-results-rows').html(data.table);
 
@@ -60,15 +61,15 @@ $( document ).ready(function() {
               if (data.loadMoreBtn === false) {
                   // Hide the load mroe button
                   $('#more').hide();
-              } else {
+                } else {
                   $('#more').show();
+                }
               }
-            }
-        });
-        
-        jqxhr.fail(function () { 
-            console.log('Ajax error!')
-        });
+            });
+      
+      jqxhr.fail(function () { 
+        console.log('Ajax error!')
+      });
 
     });
 
@@ -77,25 +78,26 @@ $( document ).ready(function() {
     $('#more').click(function(){
         // Increase the page number
         pageNum++;
-console.log(pageNum);
+        console.log(pageNum);
 
         // Convert object to JSON string
         // E.g. {"category": ["gene"], "taxon_label": ["Danio rerio"]}
-        var url = 'http://localhost:8080/searchfiltering/' + searchTerm + '/' + JSON.stringify(filters) + '/' + pageNum;
+        // Must use "/" at the beginning of the URL
+        var url = '/searchfiltering/' + searchTerm + '/' + JSON.stringify(filters) + '/' + pageNum;
 
         // fire the new search call and update table
         // Separate the ajax request with callbacks
         var jqxhr = $.ajax({
-            url: url,
-            method: 'GET', 
-            async : true,
-            dataType : 'json'
+          url: url,
+          method: 'GET', 
+          async : true,
+          dataType : 'json'
         });
         
         jqxhr.done(function(data) {
-            console.log(data);
-            
-            if (typeof(data) !== 'undefined') {
+          console.log(data);
+          
+          if (typeof(data) !== 'undefined') {
               // append new table content
               $('.search-results-rows').append(data.table);
             }
@@ -103,15 +105,15 @@ console.log(pageNum);
             if (data.loadMoreBtn === false) {
                 // Hide the load mroe button
                 $('#more').hide();
-            } else {
+              } else {
                 $('#more').show();
-            }
-        });
+              }
+            });
         
         jqxhr.fail(function () { 
-            console.log('Ajax error to fetch more results!')
+          console.log('Ajax error to fetch more results!')
         });
-    });
+      });
 
 
 
@@ -127,5 +129,5 @@ console.log(pageNum);
       });
     });
 
-});
+  });
 
