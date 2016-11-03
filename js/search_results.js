@@ -3,6 +3,9 @@
 
 
 $( document ).ready(function() {
+    // variable searchTerm is available to use directly here
+    $('#search').val(searchTerm);
+
     // store filter for each group
     var filters = {category: [], taxon_label: []};
     var pageNum = 1;
