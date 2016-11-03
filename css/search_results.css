@@ -25,10 +25,6 @@ font-weight:bold;
 margin-top:10px;
 }
 
-.search-results-ui-group .search-results-button-group {
-display: inline-block;
-}
-
 /* ---- filter button ---- */
 
 .search-results-button {
@@ -47,7 +43,7 @@ background-color: #8CF;
 }
 
 .search-results-button.is-checked {
-background-color: #d9534f;
+background-color:#337ab7;
 color: #fff;
 }
 
@@ -86,7 +82,7 @@ width:200px;
 #more-spinner{
 display:none;
 width:45px;
-margin-top:22px;
+margin-top:15px;
 }
 
 #totalCount{
