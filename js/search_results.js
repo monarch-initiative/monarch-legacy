@@ -8,6 +8,9 @@ $( document ).ready(function() {
     var pageNum = 1;
 
     $('.filters').on( 'click', '.search-results-button', function() {
+      // Show loading indicator
+      $('#loading-indicator').show();
+
       var $this = $(this);
 
       // Always set pageNum to 1
@@ -51,6 +54,9 @@ $( document ).ready(function() {
       jqxhr.done(function(data) {
         //console.log(data);
 
+        // Hide the loading indicator
+        $('#loading-indicator').hide();
+
         if (typeof(data) !== 'undefined') {
           // update the table with this new table content
           $('.search-results-rows').html(data.table);
@@ -76,6 +82,9 @@ $( document ).ready(function() {
 
     // Load more content
     $('#more').click(function(){
+      // Show loading spinner
+      $('#more-spinner').show();
+
       // Increase the page number
       pageNum++;
       //console.log(pageNum);
@@ -96,6 +105,9 @@ $( document ).ready(function() {
       
       jqxhr.done(function(data) {
         //console.log(data);
+
+        // Hide more spinner
+        $('#more-spinner').hide();
 
         if (typeof(data) !== 'undefined') {
           // append new table content

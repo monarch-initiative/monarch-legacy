@@ -4,49 +4,72 @@
         <div class="content">
 
           <div id="complete-info">
-            <h2 class="downloadline"><span id="totalCount">{{count}}</span> items found for <span class="searchTerm">"{{term}}"</span></h2>
-            <a href="{{{download.json}}}" target="_blank" class="downloadline btn btn-info">JSON</a>
 
-            {{#hasResults}}
             <div class="row">
-              <div class="col-xs-12 col-md-3">
-
-                <div class="filters">
-
-                  <div class="search-results-ui-group">
-                    <h3>Category</h3>
-                    {{{resultsCategoryFilter}}}
-                  </div>
-
-                  <div class="search-results-ui-group">
-                    <h3>Taxon</h3>
-                    {{{resultsSpeciesFilter}}}
-                  </div>
-
-                </div>
-
+              <div class="col-xs-12 col-md-4">
+                <h2 class="downloadline"><span id="totalCount">{{count}}</span> items found for <span class="searchTerm">"{{term}}"</span></h2>
+                <a href="{{{download.json}}}" target="_blank" class="downloadline btn btn-info">JSON</a>
               </div>
 
-              <div class="col-xs-12 col-md-9">
-
-                <div class="search-results-rows">
-                  {{{resultsOutput}}}
-                </div>
-
-                {{#loadMoreBtn}}
-                <div id="more">
-                  <button type="button" class="btn btn-primary btn-lg btn-block"><span class="glyphicon glyphicon-menu-down" aria-hidden="true"></span> Load more</button>
-                </div>
-                {{/loadMoreBtn}}
-
+              <div class="col-xs-12 col-md-8">
+               <div id="loading-indicator" class="progress">
+                <div class="progress-bar progress-bar-striped active" role="progressbar" aria-valuenow="40" aria-valuemin="0" aria-valuemax="100" style="width:100%"></div>
               </div>
             </div>
-            {{/hasResults}}
-            {{^hasResults}}
-            {{{suggestSpan}}}
-            {{/hasResults}}
+
           </div>
+
+          {{#hasResults}}
+          <div class="row">
+            <div class="col-xs-12 col-md-3">
+
+              <div class="filters">
+
+                <div class="search-results-ui-group">
+                  <h3>Category</h3>
+                  {{{resultsCategoryFilter}}}
+                </div>
+
+                <div class="search-results-ui-group">
+                  <h3>Taxon</h3>
+                  {{{resultsSpeciesFilter}}}
+                </div>
+
+              </div>
+
+            </div>
+
+            <div class="col-xs-12 col-md-9">
+
+              <div class="search-results-rows">
+                {{{resultsOutput}}}
+              </div>
+
+              {{#loadMoreBtn}}
+
+              <div class="row">
+                <div class="col-xs-12 col-md-3">
+                  <div id="more">
+                    <button type="button" class="btn btn-primary btn-lg btn-block">Load more</button>
+                  </div>
+                </div>
+                <div class="col-xs-12 col-md-2">
+                  <div id="more-spinner" class="progress">
+                    <div class="progress-bar progress-bar-striped active" role="progressbar" aria-valuenow="40" aria-valuemin="0" aria-valuemax="100" style="width:100%"></div>
+                  </div>
+                </div>
+              </div>
+
+              {{/loadMoreBtn}}
+
+            </div>
+          </div>
+          {{/hasResults}}
+          {{^hasResults}}
+          {{{suggestSpan}}}
+          {{/hasResults}}
         </div>
       </div>
-    </div> <!-- closes wrapperforfooter -->
-    {{{includes.footer}}}
+    </div>
+  </div> <!-- closes wrapperforfooter -->
+  {{{includes.footer}}}
