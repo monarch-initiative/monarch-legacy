@@ -10,9 +10,6 @@ margin-bottom:10px;
 font-weight:bold;
 }
 
-
-/* ui group */
-
 .search-results-ui-group {
 display: inline-block;
 margin-left:5px;
@@ -25,17 +22,25 @@ font-weight:bold;
 margin-top:10px;
 }
 
-/* ---- filter button ---- */
+.search-results-button-group{
+border:1px solid #ddd;
+}
 
 .search-results-button {
 width:220px;
 display: block;
 padding: 3px 10px;
-background: #EEE;
+background: #fff;
 border: none;
 color: #222;
 text-align:left;
 cursor: pointer;
+}
+
+.search-results-button:before {
+content:  "- ";
+color:#337ab7;
+font-weight:bold;
 }
 
 .search-results-button:hover {
@@ -43,8 +48,8 @@ background-color: #8CF;
 }
 
 .search-results-button.is-checked {
-background-color:#4B515D;
 color: #fff;
+background: #337ab7;
 }
 
 .search-results-button.is-checked:before {
