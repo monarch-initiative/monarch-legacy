@@ -26,11 +26,15 @@ margin-top:10px;
 border:1px solid #ddd;
 }
 
+.filters{
+width:260px;
+}
+
 .search-results-button {
 width:220px;
 display: block;
 padding: 3px 10px;
-background: #fff;
+background: #fafafa;
 border: none;
 color: #222;
 text-align:left;
@@ -44,7 +48,7 @@ font-weight:bold;
 }
 
 .search-results-button:hover {
-background-color: #8CF;
+background-color: #5cb85c;
 }
 
 .search-results-button.is-checked {
@@ -54,7 +58,7 @@ background: #337ab7;
 
 .search-results-button.is-checked:before {
 content:  "\2713 ";
-color:#00C851;
+color:#5cb85c;
 font-weight:bold;
 }
 

@@ -73,6 +73,9 @@ $( document ).ready(function() {
           } else {
             $('#more').show();
           }
+
+          // Scroll to top
+          $(window).scrollTop(0);
         }
       });
 
