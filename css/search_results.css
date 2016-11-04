@@ -35,7 +35,7 @@ width:220px;
 display: block;
 padding: 3px 10px;
 background: #fafafa;
-border: none;
+border:1px solid #fff;
 color: #222;
 text-align:left;
 cursor: pointer;
@@ -49,11 +49,13 @@ font-weight:bold;
 
 .search-results-button:hover {
 background-color: #5cb85c;
+border:1px solid #fff;
 }
 
 .search-results-button.is-checked {
 color: #fff;
 background: #337ab7;
+border:1px solid #fff;
 }
 
 .search-results-button.is-checked:before {
