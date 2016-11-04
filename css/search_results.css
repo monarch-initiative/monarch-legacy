@@ -43,10 +43,15 @@ background-color: #8CF;
 }
 
 .search-results-button.is-checked {
-background-color:#337ab7;
+background-color:#4B515D;
 color: #fff;
 }
 
+.search-results-button.is-checked:before {
+content:  "\2713 ";
+color:#00C851;
+font-weight:bold;
+}
 
 .search-results-table{
 margin-top:5px;
