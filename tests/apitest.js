@@ -61,8 +61,9 @@ exports.testFetchAssociations = function() {
                 var golrResponse = engine.fetchAssociations(id, 'subject_closure', filter, 10);
 
                 var thisTestSucceeded = testCommon.assert(
-                    "golrResponse._is_a === 'bbop.golr.response'",
-                     golrResponse._is_a === 'bbop.golr.response');
+                    "golrResponse._is_a === 'bbop-response-golr'",
+                     golrResponse._is_a === 'bbop-response-golr');
+                     console.log(golrResponse._is_a);
                 testFailed |= !thisTestSucceeded;
                 if (thisTestSucceeded) {
                     var firstDoc = golrResponse.documents()[0];
@@ -95,6 +96,37 @@ exports.testFetchAssociations = function() {
     return !testFailed;
 };
 
+// Test that NCBIGene:2989 is not a disease,
+// see https://github.com/monarch-initiative/dipper/issues/356
+exports.testGeneCategory = function() {
+    var gene = "NCBIGene:2989";
+    var filter = [{field: 'subject_category', value: 'disease'}];
+    var golrResponse = engine.fetchAssociations(gene, 'subject_closure', filter, 10);
+    var documents = golrResponse.documents();
+    return testCommon.assertEqual(documents.length, 0);
+};
+
+// Make sure all genes have labels, see 
+// https://github.com/monarch-initiative/monarch-app/issues/1341
+exports.testGeneLabels = function() {
+    var gene = "NCBIGene:4609";
+    var filter = [{field: 'object_category', value: 'pathway'}];
+    var golrResponse = engine.fetchAssociations(gene, 'subject_closure', filter, 50);
+    var documents = golrResponse.documents();
+    gene_labels = documents.filter(function(doc){return 'subject_label' in doc});
+    return testCommon.assertEqual(gene_labels.length, documents.length);  
+};
+
+// Check that genes are showing up for variants on disease pages
+// See https://github.com/monarch-initiative/monarch-app/issues/1343
+exports.testVariantGeneOnDiseasePage = function() {
+    var disease = "OMIM:182212";
+    var filter = [{field: 'subject_category', value: 'variant'}];
+    var golrResponse = engine.fetchAssociations(disease, 'object_closure', filter, 50);
+    var documents = golrResponse.documents();
+    docsWithGene = documents.filter(function(doc){return 'subject_gene' in doc;});
+    return testCommon.assertEqual(docsWithGene.length, documents.length);  
+};
 
 if (require.main == module) {
     if (env.isRingoJS()) {

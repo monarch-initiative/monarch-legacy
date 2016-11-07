@@ -1,0 +1,60 @@
+####
+#### The bioentity description file for GOlr and AmiGO.
+####
+id: family
+schema_generating: true
+description: Information about protein (PANTHER) families.
+display_name: Protein families
+document_category: family
+weight: 5
+boost_weights: panther_family^2.0 panther_family_label^2.0 bioentity_list^1.0 bioentity_list_label^1.0
+result_weights: panther_family^5.0 bioentity_list^4.0
+filter_weights: bioentity_list_label^1.0
+fields:
+  - id: id
+    description: Family ID.
+    display_name: Acc
+    type: string
+    property: []
+  - id: panther_family
+    description: PANTHER family IDs that are associated with this entity.
+    display_name: PANTHER family
+    type: string
+    searchable: true
+    property: []
+  - id: panther_family_label
+    description: PANTHER families that are associated with this entity.
+    display_name: PANTHER family
+    type: string
+    searchable: true
+    property: []
+  - id: phylo_graph_json
+    description: JSON blob form of the phylogenic tree.
+    display_name: This should not be displayed
+    type: string
+    property: []
+    indexed: false
+  # - id: annotation_class_list
+  #   description: "Terms directly annotated with this protein family."
+  #   display_name: Annotations 
+  #   type: string
+  #   cardinality: multi
+  #   property: []
+  # - id: annotation_class_list_label
+  #   description: "Terms directly annotated with this protein family."
+  #   display_name: Annotations
+  #   type: string
+  #   cardinality: multi
+  #   property: []
+  - id: bioentity_list
+    description: "Gene/products annotated with this protein family."
+    display_name: Gene/products
+    type: string
+    cardinality: multi
+    property: []
+  - id: bioentity_list_label
+    description: "Gene/products annotated with this protein family."
+    display_name: Gene/products
+    type: string
+    cardinality: multi
+    property: []

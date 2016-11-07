@@ -6,30 +6,30 @@ if (typeof bbop.monarch == 'undefined') { bbop.monarch = {};}
 bbop.monarch.phenotypeLandingConfig = {
         // Starting filters
         category_filter_list :['Human'],
-        
+
         //override default
         arrowDim : "-19,-5, -10,0 -19,5",
         yOffset : "-1.3em",
-        
-        firstCr : "0,1 0,26 50,26 60,12.5 50,1",
-        trailCrumbs : "0,1 10,12.5, 0,26 50,26 60,12.5 50,1",
-        bread : {width:60, height: 25, offset:50, space: 1},
-        
-        //Chart margins    
-        margin : {top: 35, right: 63, bottom: 5, left: 175},
-        
+
+        firstCr : "0,1 0,26 60,26 70,12.5 60,1",
+        trailCrumbs : "0,1 10,12.5, 0,26 60,26 70,12.5 60,1",
+        bread : {width:70, height: 25, offset:60, space: 1},
+
+        //Chart margins
+        margin : {top: 35, right: 103, bottom: 5, left: 175},
+
         width : 250,
         height : 300,
-        
+
         //X Axis Label
         xAxisLabel : "",
         xAxisPos : {dx:"15em",y:"-22"},
         xLabelFontSize : "12px",
         xFontSize : "9px",
-        
+
         //Chart title and first breadcrumb
         chartTitle : "Number of Phenotype Gene Associations Per Species",
-        
+
         //Title size/font settings
         title : {
                   'text-align': 'none',
@@ -39,43 +39,42 @@ bbop.monarch.phenotypeLandingConfig = {
                   'background-color' : '#f5f5f5',
                   'border-bottom-color' : '#ddd'
         },
-        
+
         //Yaxis links
         yFontSize : 11,
         isYLabelURL : true,
         yLabelBaseURL : "/phenotype/",
-        
+
         //font sizes
         legendFontSize : 10,
         settingsFontSize : '11px',
-        
+
         maxLabelSize : 26,
-        
+
         //Turn on/off legend
         useLegend : true,
         //Legend dimensions
         legend : {width:10,height:10},
         legendText : {height:".01em"},
-        
+
         //Colors set in the order they appear in the JSON object
-        color : { 
+        color : {
             bars : {
-                human  : '#44A293',
-                mouse : '#A4D6D4',
-                zebrafish : '#44B985',
-                fly : '#D4DB68',
-                rat : '#A1C3FF',
-                dog : '#ACB5DF',
-                worm : '#94CC68',
-                pig : '#14E082',
-                cow : '#3DB53C',
-                cat : '#EDC44E',
-                chicken : '#418BFF',
-                monkey : '#14CF7C',
-                other : '#B2E3AA'
+                human  : '#a6cee3',
+                mouse : '#1f78b4',
+                zebrafish : '#b2df8a',
+                fly : '#33a02c',
+                rat : '#ff7f00',
+                dog : '#fdbf6f',
+                worm : '#6a3d9a',
+                pig : '#cab2d6',
+                cow : '#e31a1c',
+                cat : '#ffff99',
+                chicken : 'grey',
+                other : '#fb9a99'
             },
-                   
-                 yLabel : { 
+
+                 yLabel : {
                    fill  : '#000000',
                    hover : '#EA763B'
                  },
@@ -139,26 +138,26 @@ bbop.monarch.geneLandingConfig = {
         //override default
         arrowDim : "-19,-5, -10,0 -19,5",
         yOffset : "-1.3em",
-        
-        firstCr : "0,1 0,26 50,26 60,12.5 50,1",
-        trailCrumbs : "0,1 10,12.5, 0,26 50,26 60,12.5 50,1",
-        bread : {width:60, height: 25, offset:50, space: 1},
-        
-        //Chart margins    
-        margin : {top: 35, right: 63, bottom: 5, left: 175},
-        
+
+        firstCr : "0,1 0,26 60,26 70,12.5 60,1",
+        trailCrumbs : "0,1 10,12.5, 0,26 60,26 70,12.5 60,1",
+        bread : {width:70, height: 25, offset:60, space: 1},
+
+        //Chart margins
+        margin : {top: 35, right: 103, bottom: 5, left: 175},
+
         width : 250,
         height : 300,
-        
+
         //X Axis Label
         xAxisLabel : "",
         xAxisPos : {dx:"15em",y:"-22"},
         xLabelFontSize : "12px",
         xFontSize : "9px",
-        
+
         //Chart title and first breadcrumb
         chartTitle : "Number of Gene Disease Associations Per Species",
-        
+
         //Title size/font settings
         title : {
                   'text-align': 'none',
@@ -168,43 +167,42 @@ bbop.monarch.geneLandingConfig = {
                   'background-color' : '#f5f5f5',
                   'border-bottom-color' : '#ddd'
         },
-        
+
         //Yaxis links
         yFontSize : 11,
         isYLabelURL : true,
         yLabelBaseURL : "/disease/",
-        
+
         //font sizes
         legendFontSize : 10,
         settingsFontSize : '11px',
-        
+
         maxLabelSize : 26,
-        
+
         //Turn on/off legend
         useLegend : true,
         //Legend dimensions
         legend : {width:10,height:10},
         legendText : {height:".01em"},
-        
+
         //Colors set in the order they appear in the JSON object
-        color : { 
-                 bars : {
-                     human  : '#44A293',
-                     mouse : '#A4D6D4',
-                     zebrafish : '#44B985',
-                     fly : '#D4DB68',
-                     rat : '#A1C3FF',
-                     dog : '#ACB5DF',
-                     worm : '#94CC68',
-                     pig : '#14E082',
-                     cow : '#3DB53C',
-                     cat : '#EDC44E',
-                     chicken : '#418BFF',
-                     monkey : '#14CF7C',
-                     other : '#B2E3AA'
-                 },
-                   
-                 yLabel : { 
+        color : {
+            bars : {
+                human  : '#a6cee3',
+                mouse : '#1f78b4',
+                zebrafish : '#b2df8a',
+                fly : '#33a02c',
+                rat : '#ff7f00',
+                dog : '#fdbf6f',
+                worm : '#6a3d9a',
+                pig : '#cab2d6',
+                cow : '#e31a1c',
+                cat : '#ffff99',
+                chicken : 'grey',
+                other : '#fb9a99'
+            },
+
+                 yLabel : {
                    fill  : '#000000',
                    hover : '#EA763B'
                  },
@@ -235,26 +233,26 @@ bbop.monarch.genotypeLandingConfig = {
         //override default
         arrowDim : "-19,-5, -10,0 -19,5",
         yOffset : "-1.3em",
-        
-        firstCr : "0,1 0,26 50,26 60,12.5 50,1",
-        trailCrumbs : "0,1 10,12.5, 0,26 50,26 60,12.5 50,1",
-        bread : {width:60, height: 25, offset:50, space: 1},
-        
-        //Chart margins    
-        margin : {top: 35, right: 63, bottom: 5, left: 175},
-        
+
+        firstCr : "0,1 0,26 60,26 70,12.5 60,1",
+        trailCrumbs : "0,1 10,12.5, 0,26 60,26 70,12.5 60,1",
+        bread : {width:70, height: 25, offset:60, space: 1},
+
+        //Chart margins
+        margin : {top: 35, right: 103, bottom: 5, left: 175},
+
         width : 250,
         height : 300,
-        
+
         //X Axis Label
         xAxisLabel : "",
         xAxisPos : {dx:"15em",y:"-22"},
         xLabelFontSize : "12px",
         xFontSize : "9px",
-        
+
         //Chart title and first breadcrumb
         chartTitle : "Number of Phenotype Genotype Associations Per Species",
-        
+
         //Title size/font settings
         title : {
                   'text-align': 'none',
@@ -264,43 +262,42 @@ bbop.monarch.genotypeLandingConfig = {
                   'background-color' : '#f5f5f5',
                   'border-bottom-color' : '#ddd'
         },
-        
+
         //Yaxis links
         yFontSize : 11,
         isYLabelURL : true,
         yLabelBaseURL : "/phenotype/",
-        
+
         //font sizes
         legendFontSize : 10,
         settingsFontSize : '11px',
-        
+
         maxLabelSize : 26,
-        
+
         //Turn on/off legend
         useLegend : true,
         //Legend dimensions
         legend : {width:10,height:10},
         legendText : {height:".01em"},
-        
+
         //Colors set in the order they appear in the JSON object
-        color : { 
+        color : {
             bars : {
-                human  : '#44A293',
-                mouse : '#A4D6D4',
-                zebrafish : '#44B985',
-                fly : '#D4DB68',
-                rat : '#A1C3FF',
-                dog : '#ACB5DF',
-                worm : '#94CC68',
-                pig : '#14E082',
-                cow : '#3DB53C',
-                cat : '#EDC44E',
-                chicken : '#418BFF',
-                monkey : '#14CF7C',
-                other : '#B2E3AA'
+                human  : '#a6cee3',
+                mouse : '#1f78b4',
+                zebrafish : '#b2df8a',
+                fly : '#33a02c',
+                rat : '#ff7f00',
+                dog : '#fdbf6f',
+                worm : '#6a3d9a',
+                pig : '#cab2d6',
+                cow : '#e31a1c',
+                cat : '#ffff99',
+                chicken : 'grey',
+                other : '#fb9a99'
             },
-                   
-                 yLabel : { 
+
+                 yLabel : {
                    fill  : '#000000',
                    hover : '#EA763B'
                  },
@@ -330,26 +327,26 @@ bbop.monarch.modelLandingConfig = {
         //override default
         arrowDim : "-19,-5, -10,0 -19,5",
         yOffset : "-1.3em",
-        
-        firstCr : "0,1 0,26 50,26 60,12.5 50,1",
-        trailCrumbs : "0,1 10,12.5, 0,26 50,26 60,12.5 50,1",
-        bread : {width:60, height: 25, offset:50, space: 1},
-        
-        //Chart margins    
-        margin : {top: 35, right: 63, bottom: 5, left: 175},
-        
+
+        firstCr : "0,1 0,26 60,26 70,12.5 60,1",
+        trailCrumbs : "0,1 10,12.5, 0,26 60,26 70,12.5 60,1",
+        bread : {width:70, height: 25, offset:60, space: 1},
+
+        //Chart margins
+        margin : {top: 35, right: 103, bottom: 5, left: 175},
+
         width : 250,
         height : 300,
-        
+
         //X Axis Label
         xAxisLabel : "",
         xAxisPos : {dx:"15em",y:"-22"},
         xLabelFontSize : "12px",
         xFontSize : "9px",
-        
+
         //Chart title and first breadcrumb
         chartTitle : "Number of Models Per Disease Category",
-        
+
         //Title size/font settings
         title : {
                   'text-align': 'none',
@@ -359,43 +356,42 @@ bbop.monarch.modelLandingConfig = {
                   'background-color' : '#f5f5f5',
                   'border-bottom-color' : '#ddd'
         },
-        
+
         //Yaxis links
         yFontSize : 11,
         isYLabelURL : true,
         yLabelBaseURL : "/phenotype/",
-        
+
         //font sizes
         legendFontSize : 10,
         settingsFontSize : '11px',
-        
+
         maxLabelSize : 26,
-        
+
         //Turn on/off legend
         useLegend : true,
         //Legend dimensions
         legend : {width:10,height:10},
         legendText : {height:".01em"},
-        
+
         //Colors set in the order they appear in the JSON object
-        color : { 
+        color : {
             bars : {
-                human  : '#44A293',
-                mouse : '#A4D6D4',
-                zebrafish : '#44B985',
-                fly : '#D4DB68',
-                rat : '#A1C3FF',
-                dog : '#ACB5DF',
-                worm : '#94CC68',
-                pig : '#14E082',
-                cow : '#3DB53C',
-                cat : '#EDC44E',
-                chicken : '#418BFF',
-                monkey : '#14CF7C',
-                other : '#B2E3AA'
+                human  : '#a6cee3',
+                mouse : '#1f78b4',
+                zebrafish : '#b2df8a',
+                fly : '#33a02c',
+                rat : '#ff7f00',
+                dog : '#fdbf6f',
+                worm : '#6a3d9a',
+                pig : '#cab2d6',
+                cow : '#e31a1c',
+                cat : '#ffff99',
+                chicken : 'grey',
+                other : '#fb9a99'
             },
-                   
-                 yLabel : { 
+
+                 yLabel : {
                    fill  : '#000000',
                    hover : '#EA763B'
                  },
@@ -426,26 +422,26 @@ bbop.monarch.diseaseLandingConfig = {
       //override default
       arrowDim : "-19,-5, -10,0 -19,5",
       yOffset : "-1.3em",
-      
-      firstCr : "0,1 0,26 50,26 60,12.5 50,1",
-      trailCrumbs : "0,1 10,12.5, 0,26 50,26 60,12.5 50,1",
-      bread : {width:60, height: 25, offset:50, space: 1},
-      
-      //Chart margins    
-      margin : {top: 35, right: 63, bottom: 5, left: 175},
-      
+
+      firstCr : "0,1 0,26 60,26 70,12.5 60,1",
+      trailCrumbs : "0,1 10,12.5, 0,26 60,26 70,12.5 60,1",
+      bread : {width:70, height: 25, offset:60, space: 1},
+
+      //Chart margins
+      margin : {top: 35, right: 103, bottom: 5, left: 175},
+
       width : 250,
       height : 300,
-      
+
       //X Axis Label
       xAxisLabel : "",
       xAxisPos : {dx:"15em",y:"-22"},
       xLabelFontSize : "12px",
       xFontSize : "9px",
-      
+
       //Chart title and first breadcrumb
       chartTitle : "Number of Disease Phenotype Associations",
-      
+
       //Title size/font settings
       title : {
                 'text-align': 'none',
@@ -455,43 +451,42 @@ bbop.monarch.diseaseLandingConfig = {
                 'background-color' : '#f5f5f5',
                 'border-bottom-color' : '#ddd'
       },
-      
+
       //Yaxis links
       yFontSize : 11,
       isYLabelURL : true,
       yLabelBaseURL : "/disease/",
-      
+
       //font sizes
       legendFontSize : 10,
       settingsFontSize : '11px',
-      
+
       maxLabelSize : 26,
-      
+
       //Turn on/off legend
       useLegend : false,
       //Legend dimensions
       legend : {width:10,height:10},
       legendText : {height:".01em"},
-      
+
       //Colors set in the order they appear in the JSON object
-      color : { 
+      color : {
           bars : {
-              human  : '#44A293',
-              mouse : '#A4D6D4',
-              zebrafish : '#44B985',
-              fly : '#D4DB68',
-              rat : '#A1C3FF',
-              dog : '#ACB5DF',
-              worm : '#94CC68',
-              pig : '#14E082',
-              cow : '#3DB53C',
-              cat : '#EDC44E',
-              chicken : '#418BFF',
-              monkey : '#14CF7C',
-              other : '#B2E3AA'
+              human  : '#a6cee3',
+              mouse : '#1f78b4',
+              zebrafish : '#b2df8a',
+              fly : '#33a02c',
+              rat : '#ff7f00',
+              dog : '#fdbf6f',
+              worm : '#6a3d9a',
+              pig : '#cab2d6',
+              cow : '#e31a1c',
+              cat : '#ffff99',
+              chicken : 'grey',
+              other : '#fb9a99'
           },
-                 
-               yLabel : { 
+
+               yLabel : {
                  fill  : '#000000',
                  hover : '#EA763B'
                },
@@ -535,26 +530,26 @@ bbop.monarch.homePageConfig = {
         //override default
         arrowDim : "-19,-5, -10,0 -19,5",
         yOffset : "-1.3em",
-        
-        firstCr : "0,1 0,26 50,26 60,12.5 50,1",
-        trailCrumbs : "0,1 10,12.5, 0,26 50,26 60,12.5 50,1",
-        bread : {width:60, height: 25, offset:50, space: 1},
-        
-        //Chart margins    
-        margin : {top: 35, right: 63, bottom: 5, left: 175},
-        
+
+        firstCr : "0,1 0,26 60,26 70,12.5 60,1",
+        trailCrumbs : "0,1 10,12.5, 0,26 60,26 70,12.5 60,1",
+        bread : {width:70, height: 25, offset:60, space: 1},
+
+        //Chart margins
+        margin : {top: 35, right: 103, bottom: 5, left: 175},
+
         width : 250,
         height : 300,
-        
+
         //X Axis Label
         xAxisLabel : "",
         xAxisPos : {dx:"15em",y:"-22"},
         xLabelFontSize : "12px",
         xFontSize : "9px",
-        
+
         //Chart title and first breadcrumb
         chartTitle : "Number of Phenotype Gene Associations Per Species",
-        
+
         //Title size/font settings
         title : {
                   'text-align': 'none',
@@ -564,43 +559,42 @@ bbop.monarch.homePageConfig = {
                   'background-color' : '#f5f5f5',
                   'border-bottom-color' : '#ddd'
         },
-        
+
         //Yaxis links
         yFontSize : 11,
         isYLabelURL : true,
         yLabelBaseURL : "/labs/golr/",
-        
+
         //font sizes
         legendFontSize : 10,
         settingsFontSize : '11px',
-        
+
         maxLabelSize : 26,
-        
+
         //Turn on/off legend
         useLegend : true,
         //Legend dimensions
         legend : {width:10,height:10},
         legendText : {height:".01em"},
-        
+
         //Colors set in the order they appear in the JSON object
-        color : { 
+        color : {
             bars : {
-                human  : '#44A293',
-                mouse : '#A4D6D4',
-                zebrafish : '#44B985',
-                fly : '#D4DB68',
-                rat : '#A1C3FF',
-                dog : '#ACB5DF',
-                worm : '#94CC68',
-                pig : '#14E082',
-                cow : '#3DB53C',
-                cat : '#EDC44E',
-                chicken : '#418BFF',
-                monkey : '#14CF7C',
-                other : '#B2E3AA'
+                human  : '#a6cee3',
+                mouse : '#1f78b4',
+                zebrafish : '#b2df8a',
+                fly : '#33a02c',
+                rat : '#ff7f00',
+                dog : '#fdbf6f',
+                worm : '#6a3d9a',
+                pig : '#cab2d6',
+                cow : '#e31a1c',
+                cat : '#ffff99',
+                chicken : 'grey',
+                other : '#fb9a99'
             },
-                   
-                 yLabel : { 
+
+                 yLabel : {
                    fill  : '#000000',
                    hover : '#EA763B'
                  },

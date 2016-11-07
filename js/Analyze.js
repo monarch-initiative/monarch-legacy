@@ -9,7 +9,7 @@ function AnalyzeInit(uploaded_data){
 
     var DEFAULT_LIMIT = 100;
     var DEBUG = false;
-    //var DEBUG = true;
+    // var DEBUG = true;
 
     var urlParams = {};
 
@@ -576,18 +576,19 @@ function AnalyzeInit(uploaded_data){
 				    },
 				    success: function(data) {
 					ll("auto success");
-					var map = jQuery.map(data, function(item) {
-                        return {
-                            'label': item.label,
-                            'id': item.id
-                        };
-                    });
-					if (map.length > 0) {
-					    var id_list = map.map( function(i) { return i.id; });
-					    remove_equivalent_ids(map, id_list, response);
-					} else {
-					    response(map);
-					}
+                    return response(data);
+//					var map = jQuery.map(data, function(item) {
+//                        return {
+//                            'label': item.label,
+//                            'id': item.id
+//                        };
+//                    });
+//					if (map.length > 0) {
+//					    var id_list = map.map( function(i) { return i.id; });
+//					    remove_equivalent_ids(map, id_list, response);
+//					} else {
+//					    response(map);
+//					}
 				    }
 				});
 		},
@@ -597,7 +598,7 @@ function AnalyzeInit(uploaded_data){
 		    var id = null;
 		    var lbl = null;
 		    if( ui.item && ui.item.id ){ id = ui.item.id; }
-		    if( ui.item && ui.item.label ){ lbl = ui.item.label; }
+		    if( ui.item && ui.item.completion ){ lbl = ui.item.completion; }
 
 		    // If okay, do whatever...?
 		    if( ! id || ! lbl ){
@@ -612,32 +613,32 @@ function AnalyzeInit(uploaded_data){
 
     var auto_gene_args = {
         source: function(request, response) {
-            // Ported from https://github.com/monarch-initiative/monarch-app/blob/master/js/search_form.js#L60
-            var _parse_data_item = function(item){
-            
-                // If has a category, append that; if not try to use
-                // namespace; otherwise, nothing.
-                var appendee = '';
-                if( item ){
-                    if( item['concept']['categories'][0] ){
-                        appendee = item['concept']['categories'][0];
-                    }else if( item['id'] ){
-                        // Get first split on '_'.
-                        var fspl = first_split(/_|:/, item['id']);
-                        if( fspl[0] ){
-                        appendee = fspl[0];
-                        }
-                    }
-                }
-
-                return {
-                    label: item.completion,
-                    id : item.id,
-                    category : item.concept.categories[0],
-                    tag: appendee,
-                    name: item.id
-                };
-            };
+//            // Ported from https://github.com/monarch-initiative/monarch-app/blob/master/js/search_form.js#L60
+//            var _parse_data_item = function(item){
+//            
+//                // If has a category, append that; if not try to use
+//                // namespace; otherwise, nothing.
+//                var appendee = '';
+//                if( item ){
+//                    if( item['concept']['categories'][0] ){
+//                        appendee = item['concept']['categories'][0];
+//                    }else if( item['id'] ){
+//                        // Get first split on '_'.
+//                        var fspl = first_split(/_|:/, item['id']);
+//                        if( fspl[0] ){
+//                        appendee = fspl[0];
+//                        }
+//                    }
+//                }
+//
+//                return {
+//                    label: item.completion,
+//                    id : item.id,
+//                    category : item.concept.categories[0],
+//                    tag: appendee,
+//                    name: item.id
+//                };
+//            };
 
 
 
@@ -651,50 +652,52 @@ function AnalyzeInit(uploaded_data){
                     success: function(data) {
                         ll("auto success");
                         
-                        // Pare out duplicates. Assume existence of 'id'
-                        // field. Would really be nice to have bbop.core in
-                        // here...
-                        var pared_data = [];
-                        var seen_ids = {};
-                        for( var di = 0; di < data.length; di++ ){
-                            var datum = data[di];
-                            var datum_id = datum['id'];
-                            if (!seen_ids[datum_id]){
-                                // Only add new ids to pared data list.
-                                pared_data.push(datum);
-                                
-                                // Block them in the future.
-                                seen_ids[datum_id] = true;
-                            }
-                        }
-
-                        var map = jQuery.map(pared_data, _parse_data_item);
-                        var gene_ids = map.map(function(i) { return i.id; });
-
-                        //var gene_ids = id_list;
-                        var ids = gene_ids.join('&id=');
-                        if (gene_ids.length > 0) {
-                            //TODO pass server in using puptent var
-                            var qurl = global_scigraph_url+"graph/neighbors?id="
-                            + ids + "&depth=1&blankNodes=false&relationshipType=http%3A%2F%2Fpurl.obolibrary.org%2Fobo%2FRO_0002162"
-                            + "&direction=BOTH&project=%2A";
-                            jQuery.ajax({
-                                url: qurl,
-                                dataType:"json",
-                                error: function (){
-                                    console.log('could not get taxon for genes');
-                                    response(map);
-                                },
-                                success: function ( data ){
-                                    map = add_species_to_autocomplete(data, map, gene_ids);
-                                    remove_equivalent_ids(map, gene_ids, response);
-                                    //response(map);
-                                }
-                            });
-                        } else {
-                            //response(map);
-                            remove_equivalent_ids(map, gene_ids, response);
-                        }
+                        return response(data);
+                        
+//                        // Pare out duplicates. Assume existence of 'id'
+//                        // field. Would really be nice to have bbop.core in
+//                        // here...
+//                        var pared_data = [];
+//                        var seen_ids = {};
+//                        for( var di = 0; di < data.length; di++ ){
+//                            var datum = data[di];
+//                            var datum_id = datum['id'];
+//                            if (!seen_ids[datum_id]){
+//                                // Only add new ids to pared data list.
+//                                pared_data.push(datum);
+//                                
+//                                // Block them in the future.
+//                                seen_ids[datum_id] = true;
+//                            }
+//                        }
+//
+//                        var map = jQuery.map(pared_data, _parse_data_item);
+//                        var gene_ids = map.map(function(i) { return i.id; });
+//
+//                        //var gene_ids = id_list;
+//                        var ids = gene_ids.join('&id=');
+//                        if (gene_ids.length > 0) {
+//                            //TODO pass server in using puptent var
+//                            var qurl = global_scigraph_url+"graph/neighbors?id="
+//                            + ids + "&depth=1&blankNodes=false&relationshipType=http%3A%2F%2Fpurl.obolibrary.org%2Fobo%2FRO_0002162"
+//                            + "&direction=BOTH&project=%2A";
+//                            jQuery.ajax({
+//                                url: qurl,
+//                                dataType:"json",
+//                                error: function (){
+//                                    console.log('could not get taxon for genes');
+//                                    response(map);
+//                                },
+//                                success: function ( data ){
+//                                    map = add_species_to_autocomplete(data, map, gene_ids);
+//                                    remove_equivalent_ids(map, gene_ids, response);
+//                                    //response(map);
+//                                }
+//                            });
+//                        } else {
+//                           //response(map);
+//                            remove_equivalent_ids(map, gene_ids, response);
+//                        }
                     }
             });
         },
@@ -716,22 +719,42 @@ function AnalyzeInit(uploaded_data){
             return false;
         }
     };
-    jQuery(analyze_auto_input_elt).autocomplete(auto_args);
-
-    //  Add species for gene autocomplete
-    var jac = jQuery('#auto_gene_input').autocomplete(auto_gene_args);
-    jac.data('ui-autocomplete')._renderItem = function(ul, item){
+    var jacp = jQuery(analyze_auto_input_elt).autocomplete(auto_args);
+    jacp.data('ui-autocomplete')._renderItem = function(ul, item) {
+        var taxonOrCategory = item.taxon;
+        if(taxonOrCategory == "" || taxonOrCategory == null || taxonOrCategory == undefined) {
+            taxonOrCategory = item.category;
+        }
         var li = jQuery('<li>');
-        
-console.log(item);
-
-        li.append('<a alt="'+ item.name +'" title="'+ item.name +'">' +
+        li.append('<a alt="'+ item.id +'" title="'+ item.id +'">' +
               '<span class="autocomplete-main-item">' +
-              item.label +
+              item.completion +
               '</span>' +
               '&nbsp;' +
               '<span class="autocomplete-tag-item">' +
-              item.tag +
+              taxonOrCategory +
+              '</span>' +
+              '</a>');
+        li.appendTo(ul);
+        return li;
+    };
+
+    //  Add species for gene autocomplete
+    var jac = jQuery('#auto_gene_input').autocomplete(auto_gene_args);
+    jac.data('ui-autocomplete')._renderItem = function(ul, item) {
+        console.log(item);
+        var taxonOrCategory = item.taxon;
+        if(taxonOrCategory == "" || taxonOrCategory == null || taxonOrCategory == undefined) {
+            taxonOrCategory = item.category;
+        }
+        var li = jQuery('<li>');
+        li.append('<a alt="'+ item.id +'" title="'+ item.id +'">' +
+              '<span class="autocomplete-main-item">' +
+              item.completion +
+              '</span>' +
+              '&nbsp;' +
+              '<span class="autocomplete-tag-item">' +
+              taxonOrCategory +
               '</span>' +
               '</a>');
         li.appendTo(ul);
@@ -811,9 +834,6 @@ console.log(item);
             "yAxis": phenotype_list
         };
 
-    console.log('before window.onload in Analyze.js');
-
-	// window.onload = function() {
         console.log('before Phenogrid.createPhenogridForElement in Analyze.js');
 		Phenogrid.createPhenogridForElement(document.getElementById('phen_vis'), {
 			gridSkeletonData: gridSkeletonData,
@@ -823,7 +843,6 @@ console.log(item);
 			owlSimFunction: urlParams.mode,
 			geneList: urlParams.geneList // geneList is only used when in compare mode - Zhou
 		});
-	// };
     }
 
     // Flatten JSON output from Exomiser

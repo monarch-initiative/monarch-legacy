@@ -109,10 +109,6 @@ p.bigfont {
     margin-left:-3px;
 }
 
-#navbar .monarch-navbar-container {
-    background-color: #222; /* @navbar-inverse-bg */
-}
-
 #navbar.navbar {
     min-height: 36px;
     max-height: 36px;
@@ -147,10 +143,18 @@ p.bigfont {
     border-radius: 2px;
 }
 
+.navbar-nav .open .dropdown-menu {
+   margin-top: 1px;
+}
 
-@media (max-width: 875px) {
+@media (max-width: 840px) {
+    #navbar.monarch-navbar {
+        height:48px !important;
+        min-height:48px !important;
+    }
+
     #navbar .collapse.in #feedback-trigger {
-        margin:2px 0 6px -3px;
+        margin:2px 0 6px 9px;
     }
 
     #navbar #search {
@@ -257,6 +261,12 @@ p.bigfont {
 
 .container-fluid.monarch-navbar-container {
     padding-right:5px;
+    background-color: #222 !important;
+}
+
+#collapsed-navbar.navbar-collapse.collapse .nav.navbar-nav {
+    overflow-y: visible;
+    background-color: #222 !important;
 }
 
 .content {
@@ -268,8 +278,20 @@ p.bigfont {
 }
 
 .content-bottom {
-    padding: 15px 30px 0 30px;
+    padding: 0 15px;
+    margin: 0;
 }
+
+div.content-bottom > div.text-center > h2 {
+    margin: 10px;
+}
+
+@media (max-width: 840px) {
+    .content {
+        margin-top: 45px;
+    }
+}
+
 
 .toggleitems > .fewitems {
     color: #EA763B;
@@ -395,15 +417,70 @@ p.bigfont {
 
 .downloadline {
     display: inline-block;
-
 }
 
-img.downloadline {
-    margin-top: 10px !important;
+/*
+ node.mustache support
+*/
+
+#monarch-node .monarch-node-jumbotron {
+    padding: 10px 15px 0 15px;
+    margin: 0;
 }
-h1.downloadline {
-    margin-top: 20px !important;
+
+
+#monarch-node img.node-logo {
+    margin: 0 0 0 0;
+    padding: 0;
+    height: 30px !important;
 }
+
+#monarch-node .node-type-label {
+    margin: 5px 0 0 0;
+    font-weight: 300;
+    font-size: 1.1em;
+    white-space: nowrap;
+    padding: 0;
+}
+
+#monarch-node .node-label {
+    margin: 0;
+    padding: 0;
+    font-weight: 400;
+    font-size: 1.7em;
+}
+
+#monarch-node .node-content {
+    display: block;
+    height: 100%;
+    width: 100%;
+    margin:0;
+}
+
+#monarch-node .node-description {
+    background: #f0f0f0;
+    border-radius:3px;
+    padding: 8px;
+    margin: 5px 0;
+    font-size: 1.1em;
+    font-weight: 400;
+}
+
+#monarch-node .node-info {
+    margin: 0;
+    padding: 0 15px;
+}
+
+div#mygene-container {
+    display: none;  /* hidden by default, revealed if data is obtained by fetchGeneDescription */
+}
+
+@media (max-width: 840px) {
+#monarch-node .node-content {
+    margin-top: 40px;
+}
+}
+
 
 .btn.downloadline {
     padding: 5px 15px;
@@ -504,12 +581,11 @@ h1.downloadline {
 {
     position:absolute;
     right:5px;
-    top:0;
-    border: 1px solid black;
-    border-radius: 0px 0px 3px 3px;
-    border-top: none;
+    top:-1px;
+    border: none;
     font-size: 0.8em;
-    padding: 2px 10px 2px 10px;
+    line-height: 0.9em;
+    padding: 1px 10px 1px 10px;
     margin: auto;
 }
 
@@ -620,7 +696,7 @@ div.bs3table {
 
 .monarch-container div#r3 {
   word-wrap:break-word;
-  margin: 0;
+  margin: 2px 0 0 0;
   padding: 0;
 }
 
@@ -713,12 +789,11 @@ div.bs3table {
 #results-area .bs3filter .panel.panel-default .panel-body[id*="subject_taxon_label"] > table > tbody > tr > td:nth-child(2) {
     width:25%;
 }
-
 #results-area .bs3pager > div[id*="gen_id-bbop-html"] > div[id*="gen_id-bbop-html"]:first-child,
 #results-area .bs3pager-bottom > div[id*="gen_id-bbop-html"] > div[id*="gen_id-bbop-html"]:first-child {
     width: 360px;
     margin: 0;
-    padding: 0 20px 3px 10px;
+    padding: 4px;
     font-weight: 500;
 }
 
@@ -726,26 +801,39 @@ div.bs3table {
 #results-area .bs3pager > div[id*="gen_id-bbop-html"] > div[id*="gen_id-bbop-html"]:nth-child(2),
 #results-area .bs3pager-bottom > div[id*="gen_id-bbop-html"] > div[id*="gen_id-bbop-html"]:nth-child(2) {
     /*width: 360px;*/
-    padding: 10px 0 5px 10px;
+    padding: 5px;
     font-weight: 500;
 }
 
+
+#results-area .bs3table > table > tbody > tr > td {
+    line-height: 1.3em;
+}
+
+#results-area .bs3table > table > tbody > tr > td:nth-last-child(2) {
+    font-size: 0.9em;
+}
 
 #results-area .bs3table > table > thead > tr > th {
     padding-left:5px;
     padding-right:5px;
 }
 
+/*
 #results-area .bs3table > table > thead > tr > th:first-child {
     min-width:280px;
     width:280px;
 }
+*/
 
-#results-area .bs3table > table > thead > tr > th:last-child {
-    min-width:70px;
-    width:70px;
+#results-area .bs3table > table > thead > tr > th:nth-last-child(2) {
+    min-width:110px;
+    width:110px;
 }
-
+#results-area .bs3table > table > thead > tr > th:last-child {
+    min-width:60px;
+    width:60px;
+}
 
 /* End of Filter Hack */
 
@@ -782,13 +870,17 @@ div.bs3table {
 .nowrap { white-space: nowrap; }
 .dark-cell { background-color: #cddcf3; }
 .light-cell { background-color: #ffffff; }
-.hilite {
+em.hilite {
+    font-weight: bold;
+    font-style: normal;
+}
+/*.hilite {
     border: 1px dotted #000;
     color: #000;
     background: #A9FFA1;
-    /* background: #ff0; */
+    // background: #ff0;
     padding: 0 1px;
-}
+}*/
 .qualifier-not {
     padding: 2px;
     /* background: #fff; */
@@ -796,11 +888,11 @@ div.bs3table {
     color: #F00;
     font-weight: bold;
 }
-a:hover .hilite, a:active .hilite {
+/*a:hover .hilite, a:active .hilite {
     color: #fff;
     background: #3875D7;
-/* border: none; border: 1px solid #3875D7; */
-}
+ //border: none; border: 1px solid #3875D7; 
+}*/
 
 /* Sideways...really? You bet! */
 /* In order: FF, Safari, IE, Opera */
@@ -1036,8 +1128,8 @@ a:hover .hilite, a:active .hilite {
 
 #navbar #feedback-trigger {
     height:30px;
-    margin-top: -2px;
-    padding-left:0;
+    margin: 0;
+    padding: 0;
     border:1px solid transparent;
     background-color: #222;
     color: #43A395;

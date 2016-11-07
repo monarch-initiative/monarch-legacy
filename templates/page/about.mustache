@@ -184,8 +184,7 @@
 								<h5>Data modeling, transformation, and curation</h5>
 							<p>
 							We import data from a variety of data sources in formats including databases, 
-							spreadsheets, delimited text files, XML, JSON, and Web APIs, on a monthly schedule, 
-							which is placed into a Postgres database (hosted by the <a href="http://neuinfo.org">NIF</a>).  
+							spreadsheets, delimited text files, XML, JSON, and Web APIs, on a continual basis.  
 							Our curation team semantically maps each 
 							resource into our data model, primarily using ontologies.  This involves both typing 
 							relevant columns, mappings between columns (such as between identifier and labels, but 
@@ -211,15 +210,14 @@
 							</figure>
 							<p>
 								Once curated, we generate views and semantically index them into a Solr instance, 
-								and the data is served via REST services through NIF.  That way when a user is 
+								and the data is served via REST services.  That way when a user is 
 								interested in exploring <a href="/Phenotype/HP_0000598">abnormalities of the ear</a>,
 								a single query can retrieve all relevant data from the system.  
-								Our web application wraps <a href="http://nif-services.neuinfo.org/servicesv1/">NIF’s REST services</a>.  
 							</p>
 							<p>
-							Since all of our data is curated using ontologies, we are currently exploring the 
-							use of a graph database (based on Neo4j) to serve up all our data and ontologies.  
-							This will have the side benefit of providing the community our semantically mapped data in RDF. 
+							Since all of our data is curated using ontologies, we are currently using SciGraph, 
+							a graph database (based on Neo4j) to serve up all our data and ontologies.  
+							This has the side benefit of providing the community our semantically mapped data in RDF. 
 							</p>
 						</div> <!-- text -->
 						<div class="text">
@@ -342,8 +340,6 @@
                                    <tr>
                                         <td><a href="http://www.geneontology.org"><img src="/image/partner-go.png" alt="Gene Ontology"></a></td>
                                         <td><a href="http://www.disease-ontology.org"><img src="/image/partner-do.png" alt="Disease Ontology"></a></td>
-                                        <td><a href="http://www.neuinfo.org"><img src="/image/partner-nif.png" alt="Neuroscience Information Framework"></a></td>
-                                        <td><a href="http://scicrunch.com/resources"><img src="/image/partner-rii.png" alt="Resource Identification Initiative"></a></td>
                                         <td><a href="https://www.force11.org"><img src="/image/partner-force11.png" alt="Force11"></a></td>
                                     </tr>
                                     <tr>

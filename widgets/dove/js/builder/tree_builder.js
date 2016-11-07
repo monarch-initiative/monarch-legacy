@@ -388,7 +388,7 @@ monarch.builder.tree_builder.prototype.getTaxonMap = function(){
         "NCBITaxon:6239" : "Worm",
         "NCBITaxon:7227" : "Fly",
         //"NCBITaxon:8364" : "Frog",
-        "NCBITaxon:9544" : "Monkey",
+        //"NCBITaxon:9544" : "Monkey",
         "NCBITaxon:9258" : "Platypus",
         "NCBITaxon:9685" : "Cat",
         //"NCBITaxon:9986" : "Rabit",

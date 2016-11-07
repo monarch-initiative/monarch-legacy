@@ -9,6 +9,8 @@
 
     "golr_url" : "https://solr.monarchinitiative.org/solr/golr/",
 
+    "search_url" : "https://solr.monarchinitiative.org/solr/search/",
+
     "owlsim_services_url" : "https://monarchinitiative.org/owlsim",
 
     "analytics_id" : "UA-41803362-1"

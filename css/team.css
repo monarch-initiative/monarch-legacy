@@ -1,14 +1,15 @@
 /* Content */
 .title {
-    font-size: 50px;
+    font-size: 32px;
     font-weight: 500;
-    line-height: 50px;
+    line-height: 32px;
+    padding:10px;
 }
 .team {
     background-color: #EEE;
     padding-left: 20px;
     padding-right: 20px;
-    margin-top: 20px;
+    margin-top: 5px;
     border: #AAA solid 1px;
 }
 .teamname {

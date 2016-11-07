@@ -11,11 +11,14 @@
 // @body-bg:               red;
 // @link-color:            red;
 
-@screen-sm:                  875px;
+@screen-sm:                  840px;
 @screen-sm-min:              @screen-sm;
 
+// @screen-md:                  840px;
+// @screen-md-min:              @screen-md;
+
 //** Point at which the navbar becomes uncollapsed.
-@grid-float-breakpoint:     875px;
+@grid-float-breakpoint:     (@screen-sm - 1);
 //** Point at which the navbar begins collapsing.
 @grid-float-breakpoint-max: (@grid-float-breakpoint - 1);
 

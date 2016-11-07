@@ -181,62 +181,56 @@ monarch.dovechart.prototype.makeLegend = function(histogram, barGroup){
        .data(self.groups.slice())
        .enter().append("g")
        .attr("class", function(d) {return "legend-"+d; })
-       .style("opacity", function(d) {
-           if (self.config.category_filter_list.indexOf(d) > -1) {
-               return '.5';
-           } else {
-               return '1';
-           }
-       })
-       .on("mouseover", function(){
-           d3.select(this)
-             .style("cursor", "pointer")
-           d3.select(this).selectAll("rect")
-             .style("stroke", histogram.color)
-             .style("stroke-width", '2');
-           d3.select(this).selectAll("text")
-           .style('font-weight', 'bold');
-        })
-        .on("mouseout", function(){
-           d3.select(this).selectAll("rect")
-             .style("fill", histogram.color)
-             .style("stroke", 'none');
-           d3.select(this).selectAll("text")
-             .style('fill', 'black')
-             .style('font-weight', 'normal');
-        })
-        .on("click", function(d){
-            if (self.config.category_filter_list.indexOf(d) > -1) {
-                //Bring data back
-                var index = self.config.category_filter_list.indexOf(d);
-                self.config.category_filter_list.splice(index,1);
-                
-                self.transitionToNewGraph(histogram, data, barGroup);
-
-                d3.select(this).style("opacity", '1');
-                
-            } else {
-                self.config.category_filter_list.push(d);
-                self.transitionToNewGraph(histogram, data, barGroup);
-                d3.select(this).style("opacity", '.5');
-            }
-        })
-       .attr("transform", function(d, i) { return "translate(0," + i * (config.legend.height+7) + ")"; });
+       .attr("transform", function(d, i) { return "translate(" + config.width + "," + i * (config.legend.height+7) + ")"; });
 
     legend.append("rect")
-       .attr("x", config.width+config.legend.width+45)//HARDCODE
+       .attr("x", config.legend.width+45)//HARDCODE
        .attr("y", 6)
        .attr("width", config.legend.width)
        .attr("height", config.legend.height)
        .style("fill", histogram.color);
 
     legend.append("text")
-       .attr("x", config.width+config.legend.width+40)
+       .attr("x", config.legend.width+40)
        .attr("y", 14)
        .attr("dy", config.legendText.height)
        .attr("font-size",config.legendFontSize)
        .style("text-anchor", "end")
        .text(function(d) { return d; });
+    
+    legend.append("foreignObject")
+      .attr("width", config.margin.right - 15)
+      .attr("height", 20)
+      .append("xhtml:div")
+      .style("position", "fixed")
+      .style("right", "0")
+      .style("top", "0")
+      .style("float", "right")
+      .append("xhtml:form")
+      .attr("class", "legend-form")
+      .append("xhtml:input")
+      .attr("type", "checkbox")
+      .attr("class", "legend-checkbox")
+      .attr("checked", function(d) {
+          if (self.config.category_filter_list.indexOf(d) > -1) {
+              return null;
+          } else {
+              return 'checked';
+          }
+       })
+      .on("click", function(d){
+          if (self.config.category_filter_list.indexOf(d) > -1) {
+              //Bring data back
+              var index = self.config.category_filter_list.indexOf(d);
+              self.config.category_filter_list.splice(index,1);
+            
+              self.transitionToNewGraph(histogram, data, barGroup);
+            
+          } else {
+              self.config.category_filter_list.push(d);
+              self.transitionToNewGraph(histogram, data, barGroup);
+          }
+      });
 };
 
 monarch.dovechart.prototype.makeNavArrow = function(data, navigate, triangleDim, barGroup, bar, histogram){
@@ -1552,10 +1546,11 @@ monarch.dovechart.prototype.setPolygonCoordinates = function(){
         this.config.yOffset = "-1.48em";
     }
     
-    //Check that breadcrumb width is valid
-    /*if (this.config.bcWidth > this.config.width+this.config.margin.right+this.config.margin.left){
-        this.config.bcWidth = this.config.bread.width+(this.config.bread.offset*5)+5;
-    }*/
+    //
+    // This is a hack to keep the breadcrumbs area from being too large, which 
+    // causes horizontal scrolling.
+    //
+    this.config.bcWidth = this.config.bread.width + 9 * (this.config.bread.offset + this.config.bread.space);
 };
 
 //dovechart default configurations
@@ -2328,7 +2323,7 @@ monarch.builder.tree_builder.prototype.getTaxonMap = function(){
         "NCBITaxon:6239" : "Worm",
         "NCBITaxon:7227" : "Fly",
         //"NCBITaxon:8364" : "Frog",
-        "NCBITaxon:9544" : "Monkey",
+        //"NCBITaxon:9544" : "Monkey",
         "NCBITaxon:9258" : "Platypus",
         "NCBITaxon:9685" : "Cat",
         //"NCBITaxon:9986" : "Rabit",

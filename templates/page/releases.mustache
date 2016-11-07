@@ -6,46 +6,72 @@
     <div class="content content-bottom">
       <div class="title">Monarch Releases</div>
 	      <div class="section">
+	      <div class="sectiontitle">Fall 2016</div>
+		    <div class="text">The Monarch interface, data, ontologies, and API are rapidly evolving. 
+		    All of our repositories are on GitHub at <a href="https://github.com/monarch-initiative">https://github.com/monarch-initiative</a>.
+		    A cross-repo view of all recent issues, open and closed can be found 
+		    <a href=https://github.com/issues?q=is:issue+user:monarch-initiative+sort:updated-desc>here</a>.
+		    Recent issues specifically related to the Monarch Web App can be found
+		    <a href=https://github.com/monarch-initiative/monarch-app/issues?q=is:issue:sort:updated-desc>here</a>.
+		    As always, we value your feedback. If you have any problems, concerns, or 
+		    suggestions, please 
+		    <a href="https://github.com/monarch-initiative/monarch-app/issues/new">log a new GitHub issue</a>, 
+		    comment on an existing one, or 
+		    <a href="mailto:info@monarchinitiative.org">email us</a> anytime.
+		    </div>
+          </div>
+          
+          <div class="section">
+          <div class="sectiontitle">August 2016 Data Release</div>
+            <div class="text">The Monarch Database was updated in August to include
+            the latest data from our <a href="/about/sources">sources</a>.
+            
+            This release includes bug fixes and improvements, including:
+            <ul>
+            <li>OWLSim and Phenogrid 1.3.8 now with fruit fly and nematode data</li>
+            <li>New and improved <a href="/analyze/phenotypes"> analyze phenotypes widget</a></li>
+            <li>Ortholog-phenotype association data tabs, which is useful when data for a human gene is unavailable, for example for the <a href="/NCBIGene:144195#ortholog-phenotypes"> SLC2A14 gene</a>.</li>
+            <li>Improved modeling of genotypes in the <a href="https://github.com/monarch-initiative/GENO-ontology"> GENO Ontology</a>, and merging of multiple disease ontologies with the <a href="https://github.com/monarch-initiative/monarch-disease-ontology"> Monarch Disease Ontology</a>.</li>
+            </ul>
+           
+            </div>
+          </div>
+          
+          <div class="section">
               <div class="sectiontitle">Monarch 1.0 Release (July 2015)</div>
 		    <div class="text">Our first official release went &quot;live&quot;
                     on July 12, 2015. This release builds on the
                     features provided in the sneak release, adding a
                     number of new data sources, including data from:
-		    <UL>
-		      <LI> <A HREF="http://wwww.flybase.org">Flybase</a></LI>
-		      <LI> <A HREF="http://www.wormbase.org">Wormbase</a></LI>
-		      <LI> <A HREF="http://www.zfin.org">Zebrafish
-		      Information Network</a></LI>
-		      <LI> <A HREF="http://rgd.mcw.edu">Rat Genome
-			  Databse</a></LI>
-		      <LI> <A
-			      HREF="http://www.ncbi.nlm.nih.gov/clinvar/">ClinVar</a></LI>
-		      <LI>Phenotypes from
-		      the <A HREF="http://rarediseases.info.nih.gov/research/pages/27/undiagnosed-diseases-program">NIH
-			  Undiagnosed Disease Program</a></LI>
-		      <LI><A HREF="http://bgee.unil.ch/bgee/bgee">Bgee
-			  gene expression data</A></LI>
-		    </UL>
+		    <ul>
+              <li> <a href="http://www.informatics.jax.org/">MGI</a></li>
+		      <li> <a href="http://wwww.flybase.org">Flybase</a></li>
+		      <li> <a href="http://www.wormbase.org">Wormbase</a></li>
+		      <li> <a href="http://www.zfin.org">Zebrafish
+		      Information Network</a></li>
+		      <li> <a href="http://www.ncbi.nlm.nih.gov/clinvar/">ClinVar</a></li>
+		    </ul>
 		    </div>
 
 		    <div class="text">
 		      The 1.0 release also includes the first
 		      production release
-		      of <A HREF="http://www.monarchinitiative.org/page/phenogrid">Phenogrid</a>
+		      of <a href="http://www.monarchinitiative.org/page/phenogrid">Phenogrid</a>
 		      - our tool for visualizing the relationships
 		      between phenotype profiles and model
 		      systems. Phenogrid is available from disease
 		      pages under the &quot;compare&quot;
 		      tag. The Phenogrid widget is written as a
 		      jQuery widget, suitable for inclusion on
-		      third-party web sites. See the <A HREF="http://www.monarchinitiative.org/page/phenogrid">Phenogrid
+		      third-party web sites. 
+		      See the <a href="http://www.monarchinitiative.org/page/phenogrid">Phenogrid
 		      documentation</a> for information on how to
 		      download and configure the widget.
 		    </div>
 
 		    <div class="text">
 		      As always, we value your feedback. Please
-		      <A HREF="mailto:info@monarchinitiative.org">email
+		      <a href="mailto:info@monarchinitiative.org">email
 		      us</a> if you have any problems, concerns, or
 		      suggestions.
 		    </div>
@@ -56,8 +82,8 @@
                 <div class="sectiontitle">Sneak Peek Release (April 2014)</div>
                 <div class="text">
                     We welcome user testers! please use the <a href="mailto:info@monarchinitiative.org">feedback button</a>,
-                    email info@monarchinitiative.org, or use the <a href="https://github.com/monarch-initiative/monarch-app/issues">git tracker</a>
-                    to relay your suggestions.
+                    email info@monarchinitiative.org, or use the <a href="https://github.com/monarch-initiative/monarch-app/issues">
+                    	git tracker</a> to relay your suggestions.
                 </div>
                 <div class="text">
                     Why are we calling this a Sneak Peek? Because we plan to incrementally add
@@ -66,7 +92,8 @@
                 <div class="text">
                     The Sneak Peek currently includes data from human, mouse, and zebrafish.
                     The system allows comparison of phenotype profiles (either a disease related
-                    set or a user-defined set) across organisms using the <a href="https://code.google.com/p/owltools/wiki/OwlSim">OWLsim algorithm</a>
+                    set or a user-defined set) across organisms using the 
+                    <a href="https://code.google.com/p/owltools/wiki/OwlSim">OWLsim algorithm</a>
                     and a suite of integrated phenotype, and disease ontologies, all of which
                     have been enhanced for this purpose.
                 </div>

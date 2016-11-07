@@ -7,9 +7,9 @@ description: Gene Ontology Term, Synonym, or Definition.
 display_name: Ontology
 document_category: ontology_class
 weight: 40
-boost_weights: annotation_class^3.0 annotation_class_label^5.5 description^1.0 comment^0.5 synonym^1.0 alternate_id^1.0 regulates_closure^1.0 regulates_closure_label^1.0
-result_weights: annotation_class^8.0 description^6.0 source^4.0 synonym^3.0 alternate_id^2.0
-filter_weights: source^4.0 subset^3.0 regulates_closure_label^1.0 is_obsolete^0.0
+boost_weights: annotation_class^3.0 annotation_class_label^5.5 description^1.0 synonym^1.0 alternate_id^1.0
+result_weights: annotation_class^8.0 description^6.0 source^4.0 idspace^3.5 synonym^3.0 alternate_id^2.0
+filter_weights: source^4.0 idspace^3.5 subset^3.0 is_obsolete^0.0
 fields:
   - id: id
     description: Term identifier.
@@ -45,19 +45,23 @@ fields:
     display_name: Ontology source
     type: string
     property: [getNamespace]
+  - id: idspace
+    description: "Term ID space."
+    display_name: Ontology ID space
+    type: string
+    property: [getIdSpace]
   - id: is_obsolete
     description: Is the term obsolete?
     display_name: Obsoletion
     type: boolean
     property: [getIsObsoleteBinaryString]
   - id: comment
-    description: Term comment.
-    display_name: Comment
+    description: Term comments.
+    display_name: Comments
     type: string
-    property: [getComment]
+    property: [getComments]
+    cardinality: multi
     searchable: true
-## looks like single in OWLGraphWrapper API
-#    cardinality: multi
   - id: synonym
     description: Term synonyms.
     display_name: Synonyms
@@ -175,32 +179,80 @@ fields:
       - "RO:0002215"
       - "RO:0002216"
     indexed: false
+  - id: neighborhood_graph_json
+    description: "JSON blob form of all immediate neighbors of the term."
+    display_name: Term neighborhood graph (JSON)
+    type: string
+    property:
+      - "getNeighborsJSON"
+    indexed: false
+  - id: neighborhood_limited_graph_json
+    description: "JSON blob form of all immediate neighbors of the term; in the case that there are too many neighbors to transport, the number will be artificially reduced."
+    display_name: Term neighborhood limited graph (JSON)
+    type: string
+    property:
+      - "getNeighborsLimitedJSON"
+    indexed: false
+  ## TODO/BUG: These are currently populated by junk functions.
+  ## https://github.com/geneontology/amigo/issues/56
   - id: only_in_taxon
     description: "Only in taxon."
     display_name: Only in taxon
     type: string
-    property: [getIdentifier]
+    property: [getDummyString]
     searchable: true
   - id: only_in_taxon_label
     description: "Only in taxon label."
     display_name: Only in taxon
     type: string
-    property: [getLabel]
+    property: [getDummyString]
     searchable: true
   - id: only_in_taxon_closure
     description: "Only in taxon closure."
     display_name: Only in taxon (IDs)
     type: string
     cardinality: multi
-    property:
-      - "getRelationLabelClosure"
-      - "RO:0002160"
+    property: [getDummyStrings]
   - id: only_in_taxon_closure_label
     description: "Only in taxon label closure."
     display_name: Only in taxon
     type: string
     cardinality: multi
-    property:
-      - "getRelationLabelClosure"
-      - "RO:0002160"
+    property: [getDummyStrings]
     searchable: true
+  ## TODO/BUG: These are currently populated by junk functions.
+  ## Next items are defined in https://github.com/geneontology/amigo/issues/249
+  - id: annotation_extension_owl_json
+    description: "A non-lossy representation of conjunctions and disjunctions in c16 (JSON)."
+    display_name: Annotation extension
+    type: string
+    property: [getDummyString]
+  - id: annotation_relation
+    description: "This is equivalent to the relation field in GPAD."
+    display_name: Annotation relation
+    type: string
+    property: [getDummyString]
+  - id: annotation_relation_label
+    description: "This is equivalent to the relation field in GPAD."
+    display_name: Annotation relation
+    type: string
+    property: [getDummyString]
+    searchable: true
+  - id: equivalent_class_expressions_json
+    description: "For any class document C, this will contain json(CE) for all axioms of form EquivalentClasses(C ... CE ....)."
+    display_name: Eq class expressions
+    type: string
+    property: [getDummyString]
+  - id: disjoint_class_list
+    description: "Disjoint classes."
+    display_name: Disjoint classes
+    type: string
+    cardinality: multi
+    property: [getDummyStrings]
+  - id: disjoint_class_list_label
+    description: "Disjoint classes."
+    display_name: Disjoint classes
+    type: string
+    cardinality: multi
+    searchable: true
+    property: [getDummyStrings]
