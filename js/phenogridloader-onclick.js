@@ -24,8 +24,8 @@ function loadPhenogrid(phenogrid_conf, view) {
         var phenogridContainer = document.getElementById('phen_vis');
         var gridSkeletonData = {};
         
-        if (typeof(phenogrid_conf[view]) !== 'undefined') {
-            console.log("made it here");
+        if (typeof(view) !== 'undefined'
+                && typeof(phenogrid_conf[view]) !== 'undefined') {
             gridSkeletonData = phenogrid_conf[view];
             gridSkeletonData.yAxis = phenotype_list;
         } else {
