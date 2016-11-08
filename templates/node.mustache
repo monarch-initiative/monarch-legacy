@@ -59,15 +59,21 @@
                         </div>
                     </div>
                     {{/hasDef}}
+                    
+                    {{#hasDisclaimer}}
+                    
 
-                    <div id="mygene-container">
+                    <div id="disclaimer-container">
                         <div class="row">
                             <div class="col-xs-12">
-                                <div class="node-description" id="mygene-description">
+                                <div class="node-description">
+                                {{{includes.disclaimer}}}
                                 </div>
                             </div>
                         </div>
                     </div>
+                    
+                    {{/hasDisclaimer}}
 
                     {{#hasAka}}
                     <div class="ids">
