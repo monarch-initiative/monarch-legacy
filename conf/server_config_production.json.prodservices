@@ -1,0 +1,18 @@
+{
+    "type" : "production",
+
+    "app_base" : "https://monarchinitiative.org",
+
+    "scigraph_url" : "https://scigraph-ontology.monarchinitiative.org/scigraph/",
+
+    "scigraph_data_url" : "https://scigraph-data.monarchinitiative.org/scigraph/",
+
+    "golr_url" : "https://solr.monarchinitiative.org/solr/golr/",
+
+    "search_url" : "https://solr.monarchinitiative.org/solr/search/",
+
+    "owlsim_services_url" : "https://monarchinitiative.org/owlsim",
+
+    "analytics_id" : "UA-41803362-1"
+
+}
