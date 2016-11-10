@@ -19,7 +19,7 @@ Feature: Analyze phenotypes is usable by the expected user interfaces
 @data
  Scenario: adding "Microalbuminuria" and "microcephaly" to analyze phenotype results in "pru1"
     Given I go to page "/analyze/phenotypes"
-     and I type "micro" into the phenotype analyze search
+     and I type "microa" into the phenotype analyze search
      and I wait until "Microalbuminuria" appears in the autocomplete
      and I click the autocomplete item "Microalbuminuria"
      and I type "micro" into the phenotype analyze search
@@ -31,7 +31,7 @@ Feature: Analyze phenotypes is usable by the expected user interfaces
 @data
  Scenario: compare phenotype with geneList
     Given I go to page "/analyze/phenotypes"
-     and I type "micro" into the phenotype analyze search
+     and I type "microa" into the phenotype analyze search
      and I wait until "Microalbuminuria" appears in the autocomplete
      and I click the autocomplete item "Microalbuminuria"
      and I click the "compare" radio button
