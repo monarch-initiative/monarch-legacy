@@ -814,33 +814,7 @@ function AnalyzeInit(phenogrid_conf, view){
             gridSkeletonData = phenogrid_conf[view];
             gridSkeletonData.yAxis = phenotype_list;
         } else {
-            // Default configuration
-            gridSkeletonData = {
-                "title": null,
-                "xAxis": [
-                    {
-                        "groupId": "9606",
-                        "groupName": "Homo sapiens"
-                    },
-                    {
-                        "groupId": "10090",
-                        "groupName": "Mus musculus"
-                    },
-                    {
-                        "groupId": "7955",
-                        "groupName": "Danio rerio"
-                    },
-                    {
-                        "groupId": "7227",
-                        "groupName": "Drosophila melanogaster"
-                    },
-                    {
-                        "groupId": "6239",
-                        "groupName": "Caenorhabditis elegans"
-                    }
-                ],
-                "yAxis": phenotype_list
-            };
+            throw new Error("No configuration defined for gridSkeletonData");
         }
 
         console.log('before Phenogrid.createPhenogridForElement in Analyze.js');
