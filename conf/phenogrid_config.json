@@ -26,7 +26,7 @@
       "yAxis": null
   },
   "cases": {
-      "title": null,
+      "title": "Phenotype Similarity of Diseases, Cases, and Model Genes",
       "xAxis": [
           {
               "groupId": "9606",
