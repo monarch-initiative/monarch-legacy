@@ -5,7 +5,13 @@ Feature: NodeJS and RingoJS pass all tests.
  Scenario: The "/search" endpoint returns the correct JSON
     Given I go to page "/search/twist"
      then the title should be "Search Results: twist"
-     then the document should contain "Search Results: twist"
+     then the document should contain "Category"
+
+@ui
+ Scenario: The "/search" endpoint returns the correct JSON
+    Given I go to page "/search/p53"
+     then the title should be "Search Results: p53"
+     then the document should contain "Taxon"
 
 @ui
  Scenario: The "/about/sources" endpoint returns the correct HTML

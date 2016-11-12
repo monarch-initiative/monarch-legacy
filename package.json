@@ -55,7 +55,7 @@
     "xmlbuilder": "^8.2.2",
     "q": "^1.4.1",
     "bbop-manager-golr": "^0.0.12",
-    "bbop-response-golr": "^0.0.6",
+    "bbop-response-golr": "^0.0.8",
     "golr-conf": "^0.0.3",
     "bbop-rest-manager": "^0.0.11",
     "bbop-widget-set": "^2.5.3",
