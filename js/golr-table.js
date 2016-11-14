@@ -204,7 +204,7 @@ function getTableFromSolr(id, golr_field, div, filter, personality, tab_anchor, 
 
     //Hardcode for now
     if (personality === 'variant_phenotype') {
-        addPhenoPacketButton(pager, molr_manager, id);
+        addPhenoPacketButton(pager.button_span_id(), molr_manager);
     }
 
     // Details for spinner
@@ -242,15 +242,12 @@ function getTableFromSolr(id, golr_field, div, filter, personality, tab_anchor, 
     }
 }
 
-function addPhenoPacketButton(pager, manager, id){
+function addPhenoPacketButton(pager_span, manager){
 
     var fun_id = bbop.core.uuid();
     manager.register('search', _drawPhenoPacketBtn, '-3', fun_id);
    
     function _drawPhenoPacketBtn() {
-        
-        // Make download button
-        var span = pager.button_span_id();
 
         // / Add button to DOM.
         var button_props = {
@@ -263,7 +260,7 @@ function addPhenoPacketButton(pager, manager, id){
         var button = new bbop.html.button(label, button_props);
         var button_elt = '#' + button.get_id();
         
-        jQuery('#' + span).append(button.to_string());
+        jQuery('#' + pager_span).append(button.to_string());
         jQuery(button_elt).append("<span class=\"badge beta-badge\">BETA</span>");
         //var infoIcon = "<i class=\"fa fa-info-circle pheno-info\"></i>";
         //jQuery('#' + span).append(infoIcon);
@@ -272,7 +269,7 @@ function addPhenoPacketButton(pager, manager, id){
 
         jQuery('#' + button.get_id()).click( function() {
             var solrParams = manager.get_filter_query_string();
-            solrParams = solrParams.replace('sfq=', 'fq=', 'g');
+            solrParams = solrParams.replace(/sfq=/g, 'fq=');
             var personality = manager.get_personality();
             var personalityParam = "&personality="+personality
             var qurl = global_app_base + '/phenopacket?' + solrParams

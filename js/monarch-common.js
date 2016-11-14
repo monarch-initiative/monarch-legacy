@@ -187,6 +187,7 @@ function getAnnotationScore() {
 
 /*
  * Function: filter_equivalents
+ * Status: Deprecated
  * 
  * Arguments: 
  *    : eq_graph - raw json in the structure of a bbop.model.graph
@@ -278,6 +279,7 @@ function filter_equivalents(eq_graph, map) {
     return map;
 };
 
+// Deprecated
 function remove_equivalent_ids(map, id_list, response) {
     //TODO pass server in using puptent var
       var ids = id_list.join('&id=');
@@ -299,6 +301,7 @@ function remove_equivalent_ids(map, id_list, response) {
       });
 };
 
+// Deprecated
 function add_species_to_autocomplete(data, map, gene_ids) {
     var graph = new bbop.model.graph();
     graph.load_json(data);
