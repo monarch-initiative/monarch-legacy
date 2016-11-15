@@ -22,17 +22,18 @@ font-weight:bold;
 margin-top:10px;
 }
 
-.search-results-button-group{
-border:1px solid #ddd;
+.search-results-ui-group{
+width:100%;
 }
 
-.filters{
-width:260px;
+.search-results-button-group{
+border:1px solid #ddd;
+padding:0;
+margin:0;
+list-style-type: none;
 }
 
 .search-results-button {
-width:220px;
-display: block;
 padding: 3px 10px;
 background: #fafafa;
 border:1px solid #fff;
