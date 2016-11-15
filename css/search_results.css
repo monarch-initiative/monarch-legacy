@@ -85,9 +85,7 @@ width:100%;
 
 /* overwrite the default CSS */
 .search-result-item .hilite{
-color:#d9534f;
-font-weight: normal;
-background-color:#f2dede;
+font-weight: bold;
 }
 
 #more{
