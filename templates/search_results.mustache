@@ -2,25 +2,73 @@
     <div class="wrapperforfooter">
       <div class="container-fluid monarch-container">
         <div class="content">
-            <div class="jumbotron">
-                <div id="description">
-                    <img id="monarch-logo" class="downloadline" src="/image/logo.png"/>
-                    <h1 class="downloadline">Search Results: {{term}}</h1>
-                    <a href="{{{download.json}}}" class="downloadline btn btn-info">JSON</a>
+
+          <div id="complete-info">
+
+            <div class="row">
+              <div class="col-xs-12 col-md-6">
+                <h2><span class="searchTerm">"{{term}}"</span> we found <span id="totalCount">{{count}}</span> matches</h2>
+              </div>
+
+              <div class="col-xs-12 col-md-6">
+               <div id="loading-indicator" class="progress">
+                <div class="progress-bar progress-bar-striped active" role="progressbar" aria-valuenow="40" aria-valuemin="0" aria-valuemax="100" style="width:100%"></div>
+              </div>
+            </div>
+
+          </div>
+
+          {{#hasResults}}
+          <div class="row">
+            <div class="col-xs-12 col-md-3">
+
+              <div class="filters">
+
+                <div class="search-results-ui-group">
+                  <h3>Category</h3>
+                  {{{resultsCategoryFilter}}}
                 </div>
+
+                <div class="search-results-ui-group">
+                  <h3>Taxon</h3>
+                  {{{resultsSpeciesFilter}}}
+                </div>
+
+              </div>
+
             </div>
-            <div id="complete-info">
-                {{#hasResults}}
-                <h3>Exact Match</h3>
-                {{{description}}}
-                <table>
-                    {{{resultsTable}}}
-                </table>
-                {{/hasResults}}
-                {{^hasResults}}
-                    {{{suggestSpan}}}
-                {{/hasResults}}
+
+            <div class="col-xs-12 col-md-9">
+
+              <div class="search-results-rows">
+                {{{resultsOutput}}}
+              </div>
+
+              {{#loadMoreBtn}}
+
+              <div class="row">
+                <div class="col-xs-12 col-md-4">
+                  <div id="more">
+                    <button type="button" class="btn btn-primary btn-block">Load more</button>
+                  </div>
+                </div>
+                <div class="col-xs-12 col-md-2">
+                  <div id="more-spinner" class="progress">
+                    <div class="progress-bar progress-bar-striped active" role="progressbar" aria-valuenow="40" aria-valuemin="0" aria-valuemax="100" style="width:100%"></div>
+                  </div>
+                </div>
+              </div>
+
+              {{/loadMoreBtn}}
+
             </div>
+          </div>
+          {{/hasResults}}
+          {{^hasResults}}
+          {{{suggestSpan}}}
+          {{/hasResults}}
         </div>
       </div>
-    </div> <!-- closes wrapperforfooter -->
+    </div>
+  </div> <!-- closes wrapperforfooter -->
+  {{{includes.footer}}}

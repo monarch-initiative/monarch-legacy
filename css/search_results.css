@@ -1,0 +1,109 @@
+#loading-indicator{
+display:none;
+width:45px;
+margin-top:22px;
+}
+
+.search-results-count{
+margin-left:5px;
+margin-bottom:10px;
+font-weight:bold;
+}
+
+.search-results-ui-group {
+display: inline-block;
+margin-left:5px;
+margin-bottom:10px;
+}
+
+.search-results-ui-group h3 {
+font-size: 14px;
+font-weight:bold;
+margin-top:10px;
+}
+
+.search-results-ui-group{
+width:100%;
+}
+
+.search-results-button-group{
+border:1px solid #ddd;
+padding:0;
+margin:0;
+list-style-type: none;
+}
+
+.search-results-button {
+padding: 3px 10px;
+background: #fafafa;
+border:1px solid #fff;
+color: #222;
+text-align:left;
+cursor: pointer;
+}
+
+.search-results-button:before {
+content:  "- ";
+color:#337ab7;
+font-weight:bold;
+}
+
+.search-results-button:hover {
+background-color: #5cb85c;
+border:1px solid #fff;
+}
+
+.search-results-button.is-checked {
+color: #fff;
+background: #337ab7;
+border:1px solid #fff;
+}
+
+.search-results-button.is-checked:before {
+content:  "\2713 ";
+color:#5cb85c;
+font-weight:bold;
+}
+
+.search-results-table{
+margin-top:5px;
+}
+
+/* clear fix */
+.search-results-table:after {
+content: '';
+display: block;
+clear: both;
+}
+
+
+/* search-result-item */
+
+.search-result-item {
+width:100%;
+}
+
+
+/* overwrite the default CSS */
+.search-result-item .hilite{
+font-weight: bold;
+}
+
+#more{
+margin:10px 0 20px;
+width:200px;
+}
+
+#more-spinner{
+display:none;
+width:45px;
+margin-top:15px;
+}
+
+#totalCount{
+color:#d9534f;
+}
+
+.searchTerm{
+color:#d9534f;
+}
