@@ -73,15 +73,7 @@ function getTableFromSolr(id, golr_field, div, filter, personality, tab_anchor, 
         molr_manager.set_personality(personality);
         molr_manager.add_query_filter(golr_field, id, ['*']);
         molr_manager.query_variants['facet.method'] = 'enum';
-        
-//       var golr_manager = new bbop.golr.manager.jquery(srv, gconf);
-//        golr_manager.default_rows = 25;
-//        golr_manager.reset_results_count();
-//        golr_manager.set_personality(personality);
-//        //golr_manager.add_query_filter('document_category', 'annotation', ['*']);
-//        golr_manager.add_query_filter(golr_field, id, ['*']);
-//        golr_manager.query_variants['facet.method'] = 'enum';
-
+        molr_manager.set_results_count(25);
 
         if (filter != null && filter instanceof Array && filter.length > 0){
             filter.forEach( function (val) {
