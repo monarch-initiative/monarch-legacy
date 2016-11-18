@@ -323,7 +323,8 @@ function addDownloadButton(pager, manager){
             var field_list = fields;
             var args_hash = {
                 rows : '100000',
-                header : "true"
+                header : 'true',
+                encapsulator: '0'
             };
 
             var url = manager.get_download_url(field_list, args_hash);

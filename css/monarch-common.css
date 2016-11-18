@@ -401,6 +401,13 @@ div.content-bottom > div.text-center > h2 {
     border:1px solid black;
 }
 
+.download-btn {
+	margin-bottom: 7px;
+}
+.button-container{
+    width: 150px;
+}
+
 /* Buttons */
 /* These styles override some bootstrap button styles to make the buttons slimmer
  * and less skeuomorphic. */
