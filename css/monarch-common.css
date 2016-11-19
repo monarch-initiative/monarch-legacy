@@ -403,8 +403,12 @@ div.content-bottom > div.text-center > h2 {
 
 .download-btn {
 	margin-bottom: 7px;
+	text-align: left;
 }
 .button-container{
+    width: 150px;
+}
+.btn-variant{
     width: 150px;
 }
 

@@ -1,3 +1,9 @@
 <div>
-  <a class="btn download-btn btn-block {{button_class}}" href="{{href}}" role="button">{{text}}</a>
+  <a class="btn download-btn btn-block {{button_class}}" href="{{href}}" role="button">
+  {{#icon}}
+  <img class="node-logo" src="{{icon}}"> <span>{{text}}</span></a>
+  {{/icon}}
+  {{^icon}}
+  {{text}}
+  {{/icon}}
 </div>
