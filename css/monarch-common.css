@@ -401,6 +401,17 @@ div.content-bottom > div.text-center > h2 {
     border:1px solid black;
 }
 
+.download-btn {
+	margin-bottom: 7px;
+	text-align: left;
+}
+.button-container{
+    width: 150px;
+}
+.btn-variant{
+    width: 150px;
+}
+
 /* Buttons */
 /* These styles override some bootstrap button styles to make the buttons slimmer
  * and less skeuomorphic. */
@@ -814,7 +825,16 @@ div.bs3table {
     font-size: 0.9em;
 }
 
-#results-area .bs3table > table > thead > tr > th {
+#results-area #case-variant-table > table > tbody > tr > td:nth-last-child(2) {
+    font-size: 14px !important;
+}
+
+#results-area #case-variant-table > table > thead > tr > th:nth-last-child(2) {
+    min-width:60px !important;
+    width:60px !important;
+}
+
+#results-area #case-variant-table > table > thead > tr > th {
     padding-left:5px;
     padding-right:5px;
 }

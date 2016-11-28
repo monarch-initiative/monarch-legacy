@@ -37,33 +37,33 @@ function InitTabs() {
         jQuery(panel_id + '-panel').show();
         window.location.hash = panel_id;
     });
-    //HACK TO GET THE ANALYZE PAGE TO WORK, REFACTOR OUT
-    jQuery('#internal-link').click(function(event) {
-        console.log('internal-link');
-        var panel_id = jQuery(this).attr('href');
-        event.preventDefault();
-        jQuery('.category').hide();
-        jQuery(panel_id).show();
-        jQuery(".query-tab").css({'color': 'white', 'background-color': '#999', 'border-bottom': '1px solid darkgray'});
-        jQuery(".results-tab").css({'color': 'white', 'background-color': '#999', 'border-bottom': '1px solid darkgray'});
-        jQuery(".upload-tab").css({'color': 'black', 'background-color': 'white', 'border-bottom': '1px solid white'});
-    });
+    
+    function adjustTabColor(panel_id) {
+        // Since we're a tabby version, we're going to try and open
+           // any tabs defined by fragments.
+           if ( window && window.location && window.location.hash &&
+               window.location.hash != "" && window.location.hash != "#" ){
 
-    // Since we're a tabby version, we're going to try and open
-    // any tabs defined by fragments.
-    if ( window && window.location && window.location.hash &&
-        window.location.hash != "" && window.location.hash != "#" ){
-        var fragname = window.location.hash;
+               if (panel_id !== '#overview') {
+                   jQuery('.first.category').hide();
+                   jQuery(panel_id).show();
 
-        if (fragname !== '#overview') {
-            jQuery('.first.category').hide();
-            jQuery(fragname).show();
-
-            jQuery('.contenttab').css({'color': 'white', 'background-color': '#999', 'border-bottom': '1px solid darkgray'});
-            jQuery('.tabcontainer a[href="' + fragname + '"]').children('.contenttab').css({'color': 'black', 'background-color': 'white', 'border-bottom': '1px solid white'});
-        }
+                   jQuery('.contenttab').css({'color': 'white', 'background-color': '#999', 'border-bottom': '1px solid darkgray'});
+                   jQuery('.tabcontainer a[href="' + panel_id + '"]').children('.contenttab').css({'color': 'black', 'background-color': 'white', 'border-bottom': '1px solid white'});
+               }
+           }
     }
-
+    
+    //Hack to get links to internal html anchors to work
+    jQuery('#internal-link').click(function(event) {
+        var panel_id = jQuery(this).attr('href');
+        jQuery('#categories a[href="'+panel_id+'"]').click();
+        adjustTabColor(panel_id);
+        
+    });
+    
+    adjustTabColor(window.location.hash);
+    
     /* Literature Tab */
 
     /* This is used to display hidden authors on the literature tab (because only the

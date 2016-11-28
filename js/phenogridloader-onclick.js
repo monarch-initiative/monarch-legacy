@@ -1,9 +1,9 @@
-function loadPhenogrid() {
+function loadPhenogrid(phenogrid_conf, view) {
     var isGridLoading = false;
     jQuery('#categories a[href="#compare"]').click(function(event) {
         if (!(jQuery('#pg_svg_container').length)  && isGridLoading === false){
             isGridLoading = true;
-            initPhenogrid();
+            initPhenogrid(phenogrid_conf, view);
         }
     });
     // Trigger a click event if we're loading the page on an href
@@ -12,7 +12,7 @@ function loadPhenogrid() {
         jQuery('#categories a[href="#compare"]').click();
     }
 
-    function initPhenogrid () {
+    function initPhenogrid (phenogrid_conf, view) {
         // Add spinner
         var spinner_div = makeSpinnerDiv();
         jQuery('#compare-panel').append(spinner_div.to_string());
@@ -22,34 +22,15 @@ function loadPhenogrid() {
         disease_id = disease_id.substring(slash_idx+1);
         var phenotype_list = [];
         var phenogridContainer = document.getElementById('phen_vis');
-
-        var gridSkeletonData = {
-            "title": null,
-            "xAxis": [
-                {
-                    "groupId": "9606",
-                    "groupName": "Homo sapiens"
-                },
-                {
-                    "groupId": "10090",
-                    "groupName": "Mus musculus"
-                },
-                {
-                    "groupId": "7955",
-                    "groupName": "Danio rerio"
-                },
-                {
-                    "groupId": "7227",
-                    "groupName": "Drosophila melanogaster"
-                }
-                ,
-                {
-                    "groupId": "6239",
-                    "groupName": "Caenorhabditis elegans"
-                }
-            ],
-            "yAxis": phenotype_list
-        };
+        var gridSkeletonData = {};
+        
+        if (typeof(view) !== 'undefined'
+                && typeof(phenogrid_conf[view]) !== 'undefined') {
+            gridSkeletonData = phenogrid_conf[view];
+            gridSkeletonData.yAxis = phenotype_list;
+        } else {
+            throw new Error("No configuration defined for gridSkeletonData");
+        }
 
         jQuery.ajax({
             url : '/' + disease_id + '/phenotype_list.json',

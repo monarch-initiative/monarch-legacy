@@ -1,5 +1,5 @@
 
-function AnalyzeInit(uploaded_data){
+function AnalyzeInit(phenogrid_conf, view){
     // hide the limit field under search section
     // since the selected target species is 'all' by default - Zhou
     jQuery('#analyze-limit').hide();
@@ -807,32 +807,15 @@ function AnalyzeInit(uploaded_data){
         }
 
         // New data schema since Phenogrid 1.3.0 input - Zhou
-        var gridSkeletonData = {
-            "title": null,
-            "xAxis": [
-                {
-                    "groupId": "9606",
-                    "groupName": "Homo sapiens"
-                },
-                {
-                    "groupId": "10090",
-                    "groupName": "Mus musculus"
-                },
-                {
-                    "groupId": "7955",
-                    "groupName": "Danio rerio"
-                },
-                {
-                    "groupId": "7227",
-                    "groupName": "Drosophila melanogaster"
-                },
-                {
-                    "groupId": "6239",
-                    "groupName": "Caenorhabditis elegans"
-                }
-            ],
-            "yAxis": phenotype_list
-        };
+        var gridSkeletonData = {};
+        
+        if (typeof(view) !== 'undefined'
+                && typeof(phenogrid_conf[view]) !== 'undefined') {
+            gridSkeletonData = phenogrid_conf[view];
+            gridSkeletonData.yAxis = phenotype_list;
+        } else {
+            throw new Error("No configuration defined for gridSkeletonData");
+        }
 
         console.log('before Phenogrid.createPhenogridForElement in Analyze.js');
 		Phenogrid.createPhenogridForElement(document.getElementById('phen_vis'), {
