@@ -59,7 +59,7 @@ bbop.monarch.widget.display.results_table_by_class_conf_bs3 = function(cclass,
                     select_toggle_id,
                     select_item_name){
     // console.log('rtbccb:',
-    //   handler.golr_field,
+    //   handler.query_field,
     //   golr_resp,
     //   cclass.display_name(),
     //   cclass.document_category(),
@@ -232,9 +232,9 @@ bbop.monarch.widget.display.results_table_by_class_conf_bs3 = function(cclass,
     var skipFields = [];
     var hideRedundantFields = true;
     if (hideRedundantFields && handler.is_leaf) {
-        skipFields = ['subject', 'relation']; // , 'subject_taxon'
-        if (handler.golr_field === 'object_closure') {
-          skipFields = ['object', 'relation']; // , 'object_taxon'
+        skipFields = ['subject', 'subject_taxon', 'subject_gene']; // , 'subject_taxon'
+        if (handler.query_field === 'object_closure') {
+          skipFields = ['object', 'object_taxon']; // , 'object_taxon'
         }
     }
 

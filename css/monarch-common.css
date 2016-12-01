@@ -851,7 +851,7 @@ div.bs3table {
     width:110px;
 }
 #results-area .bs3table > table > thead > tr > th:last-child {
-    min-width:60px;
+    min-width:70px;
     width:60px;
 }
 
