@@ -7,7 +7,7 @@ weight: 20
 result_weights: subject^6.0 object^5.0
 
 ## Ordering of facets, vertical
-filter_weights: subject_taxon_closure_label^3.5 object_taxon_closure_label^3.0
+filter_weights:
 
 ## SOLR FIELD DEFINITIONS
 
