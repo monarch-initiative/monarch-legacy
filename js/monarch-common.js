@@ -154,6 +154,7 @@ function getAnnotationScore() {
                 var score_query = '/score';
                 var profile = JSON.stringify({features:data.phenotype_list});
                 var params = {'annotation_profile' : profile};
+                console.log('POSTing /score');
                 jQuery.ajax({
                     type : 'POST',
                     url : score_query,
