@@ -6,6 +6,7 @@
 #### The institution/people information is now stored in conf/monarch-team.yaml. 
 #### For now, it needs to be changed into JSON to be used by webapp.js, so:
 #### npm install
+#### From monarch-app/ execute the following:
 #### ./node_modules/.bin/js-yaml ./conf/monarch-team.yaml > ./conf/monarch-team.json
 #### The first command only needs to be run the first time. If you have some other YAML to JSON tool, that's fine too. 
 #### People can also check that the YAML file is correct with kwalify and conf/monarch-team.schema.yaml.
