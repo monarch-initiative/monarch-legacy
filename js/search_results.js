@@ -39,6 +39,7 @@ $( document ).ready(function() {
         }
       }
 
+      // TODO change that to a POST request (Jeremy)
       // Convert object to JSON string
       // E.g. {"category": ["gene"], "taxon_label": ["Danio rerio"]}
       // Must use "/" at the beginning of the URL
@@ -62,13 +63,19 @@ $( document ).ready(function() {
 
         if (typeof(data) !== 'undefined') {
           // update the table with this new table content
-          $('.search-results-rows').html(data.table);
+          $('#search-results-rows').html(data.table);
+
+          // update the category filter
+          $('#category-filter').html(data.categoryFilter);
+
+          // update the species filter
+          $('#species-filter').html(data.speciesFilter);
 
           // Update the total count number
           $('#totalCount').html(data.count);
 
           if (data.loadMoreBtn === false) {
-            // Hide the load mroe button
+            // Hide the load more button
             $('#more').hide();
           } else {
             $('#more').show();
