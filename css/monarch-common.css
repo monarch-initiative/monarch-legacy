@@ -852,7 +852,7 @@ div.bs3table {
 }
 #results-area .bs3table > table > thead > tr > th:last-child {
     min-width:70px;
-    width:60px;
+    width:70px;
 }
 
 /* End of Filter Hack */
