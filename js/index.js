@@ -43,6 +43,7 @@ import '../css/bbop.css';
 import './golr-table.js';
 import './overview.js';
 import './stupidtable.min.js';
+import './Cluster.js';
 window.InitTables = require("exports?InitTables!./tables.js");
 
 var bl = require("exports?makeDiseaseLandingGraph,makePhenotypeLandingGraph,makeDiseaseLandingGraph,makeGeneDiseaseLandingGraph,makeGenotypeLandingGraph!./barchart-launcher.js");
