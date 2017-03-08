@@ -51,17 +51,6 @@ Feature: NodeJS and RingoJS pass all tests.
      then the document should contain "User-agent: *"
 
 @ui
- Scenario Outline: the documentation pages exist
-   Given I go to page "<page>"
-    then the title should be "<title>"
-    and the document should contain "<content>"
-   Examples: doc pages
-    | page                              | title             | content                       |
-    | /docs/index.html                  | monarch.api       | fetchDiseaseInfo              |
-    | /docs/files/web/webapp-js.html    | webapp            | Monarch REST URLs for retrieving web pages, JSON and HTML|
-    | /docs/files/web/webapp-js.html#webapp.simsearch    | webapp            | Performs OwlSim search|
-
-@ui
  Scenario: The "/compare/" endpoint returns the correct JSON
     Given I go to page "/compare/OMIM:270400/NCBIGene:5156,OMIM:249000,OMIM:194050.json"
      then the document should contain "PDGFRA"
