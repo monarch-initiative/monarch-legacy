@@ -11,7 +11,7 @@ Feature: Analyze phenotypes is usable by the expected user interfaces
      and I wait until "Allergy" appears in the autocomplete
      and I click the autocomplete item "Allergy"
      and I type "asth" into the phenotype analyze search
-     and I wait until "Asthma" appears in the autocomplete
+     and I wait until "Bronchial asthma" appears in the autocomplete
      and I click the autocomplete item "Bronchial asthma"
      when I submit analyze phenotype
      then the document should contain "Asthma, Susceptibility to"
