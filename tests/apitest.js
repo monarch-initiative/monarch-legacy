@@ -128,7 +128,8 @@ exports.testVariantGeneOnDiseasePage = function() {
     var disease = "OMIM:182212";
     var filter = [
                   {field: 'object_closure', value: disease},
-                  {field: 'subject_category', value: 'variant'}
+                  {field: 'subject_category', value: 'variant'},
+                  {field: 'relation_closure', value: 'RO:0003303'}
     ];
     var golrResponse = engine.fetchAssociations(filter, 50);
     var documents = golrResponse.documents();
