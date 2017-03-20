@@ -21,12 +21,9 @@ Feature: Monarch-app UI basic pages display okay
     | /about/sources      | Data Sources                  |
     | /page/disclaimer    | Monarch Disclaimer            |
     | /page/releases      | Monarch Releases              |
-    | /page/software      | Monarch Software              |
     | /page/services      | Monarch Services              |
-    | /docs/index.html    | monarch.api                   |
     | /page/phenogrid     | Monarch Phenotype Grid Widget |
     | /page/pubs          | Monarch Publications          |
-    | /page/glossary      | Monarch Glossary              |
     | /page/team          | Monarch Development Team      |
     
  @ui
