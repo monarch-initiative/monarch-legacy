@@ -7,7 +7,7 @@
 
             <div class="row">
               <div class="col-xs-12 col-md-6">
-                <h2><span class="searchTerm">"{{term}}"</span> we found <span id="totalCount">{{count}}</span> matches</h2>
+                <h2><span class="searchTerm">"{{term}}"</span> has <span id="totalCount">{{count}}</span> matches</h2>
               </div>
 
               <div class="col-xs-12 col-md-6">
@@ -26,12 +26,16 @@
 
                 <div class="search-results-ui-group">
                   <h3>Category</h3>
-                  {{{resultsCategoryFilter}}}
+                  <div id="category-filter">
+                    {{{resultsCategoryFilter}}}
+                  </div>
                 </div>
 
                 <div class="search-results-ui-group">
                   <h3>Taxon</h3>
-                  {{{resultsSpeciesFilter}}}
+                  <div id="species-filter">
+                    {{{resultsSpeciesFilter}}}
+                  </div>
                 </div>
 
               </div>
@@ -40,7 +44,7 @@
 
             <div class="col-xs-12 col-md-9">
 
-              <div class="search-results-rows">
+              <div id="search-results-rows" class="search-results-rows">
                 {{{resultsOutput}}}
               </div>
 
