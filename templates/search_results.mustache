@@ -1,5 +1,5 @@
     {{{includes.navbar}}}
-    <div class="wrapperforfooter">
+    <div class="wrapperforfooter" id="vue-app">
       <div class="container-fluid monarch-container">
         <div class="content">
 
@@ -7,7 +7,7 @@
 
             <div class="row">
               <div class="col-xs-12 col-md-6">
-                <h2><span class="searchTerm">"{{term}}"</span> we found <span id="totalCount">{{count}}</span> matches</h2>
+                <h2><span class="searchTerm">{{term}}</span> has <span id="totalCount">{[{numFound}]}</span> matches</h2>
               </div>
 
               <div class="col-xs-12 col-md-6">
@@ -18,20 +18,20 @@
 
           </div>
 
-          {{#hasResults}}
-          <div class="row">
+          <div class="row" v-if="numFound != 0">
             <div class="col-xs-12 col-md-3">
-
               <div class="filters">
 
-                <div class="search-results-ui-group">
-                  <h3>Category</h3>
-                  {{{resultsCategoryFilter}}}
-                </div>
-
-                <div class="search-results-ui-group">
-                  <h3>Taxon</h3>
-                  {{{resultsSpeciesFilter}}}
+                <div class="search-results-ui-group" v-for="facet in facets">
+                  <h3>{[{beautifyFacetTitle(Object.keys(facet)[0])}]}</h3>
+                  <ul class="search-results-button-group">
+                    <li class="search-results-button" v-on:click="updateFacets($event, Object.keys(facet)[0], 'all')" v-bind:class="{'is-checked': user_facets[Object.keys(facet)[0]] == undefined}">
+                      Select all
+                    </li>
+                    <li class="search-results-button" v-for="filter in facet[Object.keys(facet)[0]]" v-on:click="updateFacets($event, Object.keys(facet)[0], filter[0])" v-bind:class="{'is-checked': user_facets[Object.keys(facet)[0]] == filter[0]}">
+                      {[{filter[0]}]} ({[{filter[1]}]})
+                    </li>
+                  </ul>
                 </div>
 
               </div>
@@ -39,17 +39,25 @@
             </div>
 
             <div class="col-xs-12 col-md-9">
-
               <div class="search-results-rows">
-                {{{resultsOutput}}}
+                <table class="search-results-table table table-striped table-condensed simpletable">
+                  <thead><tr><th width="25%">Term</th><th width="15%">Category</th><th width="25%">Taxon</th><th>Matching String</th></tr></thead>
+                  <tbody>
+                    <tr class="search-result-item" v-for="(result, index) in results">
+                      <td><a v-bind:href="'/' + result.category[0].toLowerCase() + '/' + result.id" v-html="result.label[0]"></a></td>
+                      <td>{[{result.category.join(',')}]}</td>
+                      <td>{[{result.taxon_label}]}</td>
+                      <td v-html="highlight[result.id]"></td>
+                    </tr>
+                  </tbody>
+                </table>
+
               </div>
 
-              {{#loadMoreBtn}}
-
               <div class="row">
-                <div class="col-xs-12 col-md-4">
+                <div class="col-xs-12 col-md-4" v-if="numRowsDisplayed < numFound">
                   <div id="more">
-                    <button type="button" class="btn btn-primary btn-block">Load more</button>
+                    <button type="button" class="btn btn-primary btn-block" v-on:click="fetchMore()">Load more</button>
                   </div>
                 </div>
                 <div class="col-xs-12 col-md-2">
@@ -59,16 +67,23 @@
                 </div>
               </div>
 
-              {{/loadMoreBtn}}
-
             </div>
           </div>
-          {{/hasResults}}
-          {{^hasResults}}
-          {{{suggestSpan}}}
-          {{/hasResults}}
+
+          <div v-if="numFound == 0">
+            <h4>No results found.</h4>
+            <div v-if="suggestions.length != 0">
+              Did you mean: <br/>
+              <span v-for="suggestion in suggestions">
+                <a v-bind:href="'/search/' + suggestion[1]"> {[{suggestion[0]}]} </a><br/>
+              </span>
+            </div>
+          </div>
+
         </div>
       </div>
     </div>
   </div> <!-- closes wrapperforfooter -->
+  <script src="https://unpkg.com/vue@2.2.6"></script>
+  <script src="https://unpkg.com/axios@0.16.1/dist/axios.min.js"></script>
   {{{includes.footer}}}
