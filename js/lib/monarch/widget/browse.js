@@ -171,7 +171,7 @@ bbop.monarch.widget.browse = function(server, manager, reference_id, root, inter
             /// instead of out internal method bbop.json.parse.
             ///
 
-            var nodes_to_exclude = ['MESH:C', 'MESH:D035583', 'http://www.w3.org/2002/07/owl#Thing', 'HP:0000001'];
+            var nodes_to_exclude = ['MESH:C', 'MESH:D035583', 'owl:Thing', 'HP:0000001'];
             
             var clean_graph = new bbop.model.bracket.graph();
             

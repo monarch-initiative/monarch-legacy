@@ -5059,5 +5059,18 @@
       "abbreviation" : "UDP",
       "datatype" : null,
       "image_path" : "/image/partner-udp.png"
+   },
+   "string" : {
+      "object" : "Identifier",
+      "name" : null,
+      "uri_prefix" : null,
+      "name": "STRING",
+      "database" : "STRING",
+      "generic_url" : "http://string-db.org",
+      "fullname" : null,
+      "abbreviation" : "STRING",
+      "id" : null,
+      "datatype" : null,
+      "image_path" : "/image/source-string.png"
    }
 }
