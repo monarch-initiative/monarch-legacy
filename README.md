@@ -10,6 +10,7 @@ The vast majority of the work we do is in GitHub, though spread across dozens of
 - [Monarch Initiative](https://github.com/monarch-initiative)
 - [SciGraph](https://github.com/scigraph)
 - [Biolink](https://github.com/biolink)
+- [INCA tools](https://github.com/incatools)
 - [NCATS Translator - Tangerine team](https://github.com/NCATS-Tangerine)
 - [OBO Phenotype](https://github.com/obophenotype)
 - [BioDatasets](https://github.com/BioDatasets)
