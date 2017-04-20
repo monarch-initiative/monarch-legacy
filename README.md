@@ -8,6 +8,7 @@ The Monarch Institute philosophy is based on the premise that we want to make al
 The vast majority of the work we do is in GitHub, though spread across dozens of repositories and not even necessarily all under this GitHub organization ([Monarch Initiative](https://github.com/monarch-initiative)). The GitHub organizations that contain the overall work done by the Monarch Initiative team include:
 
 - [Monarch Initiative](https://github.com/monarch-initiative)
+- [SciGraph](https://github.com/scigraph)
 - [Biolink](https://github.com/biolink)
 - [NCATS Translator - Tangerine team](https://github.com/NCATS-Tangerine)
 - [OBO Phenotype](https://github.com/obophenotype)
