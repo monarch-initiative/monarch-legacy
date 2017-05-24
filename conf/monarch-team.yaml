@@ -183,6 +183,11 @@ institutions:
         picture: /image/team/CarmodyLeigh_headshot_Nov2016.jpg
         alumni: false
         bio:  Leigh Carmody, Ph.D., obtained her doctorate of philosophy in Molecular Physiology & Biophysics from Vanderbilt University in Spring 2007 where she studied targeting of signaling molecules to F-actin cytoskeleton/dendritic spines. Dr. Carmody continued her studies as a postdoctoral fellow at Massachusetts Institute of Technology where she investigated the role of Rac1 in dendritic spine motility. Late 2008, she joined the Broad Institute of MIT & Harvard as a Scientist where she aided in early-stage drug discovery efforts to identify chemical leads directed at cancer targets and neglected parasitic infections.  Dr. Carmody joined Jackson Laboratory in 2015 as a Project Manager, and is currently a Scientific Curator annotating phenotyping and genomics data for the human phenotype ontology (HPO) database.
+      - name: Hannah Blau
+        title: Research Software Engineer
+        picture: /image/team/HannahBlau.jpg
+        alumni: false
+        bio:  Hannah Blau holds the Ph.D. in Computer Science from the University of Massachusetts Amherst, M.S.E. in Computer and Information Science from the University of Pennsylvania, and B.A. in French from Yale University. She worked as an AI Engineer/Research Scientist at the Artificial Intelligence Center of the Bull Corporation (Louveciennes, France), the Machine Learning Group of the Daimler-Benz Research Centre (Ulm, Germany), and the Automated Reasoning Group of the Honeywell Technology Center (Minneapolis, Minnesota). While in the Ph.D. program she served as data scientist for Professor M. Darby Dyar, Chair of Astronomy at Mount Holyoke College (South Hadley, Massachusetts).
   - id: charite
     name: Charité - Universitätsmedizin Berlin
     logo: /image/team-charite.png
