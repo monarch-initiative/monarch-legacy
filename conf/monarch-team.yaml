@@ -213,6 +213,10 @@ institutions:
         alumni: false
         title: Bioinformatician
         bio: Dr. Jacobsen has a BSc in Biochemistry from the Imperial College, London and a Ph.D. from the University of Cambridge, in Structural Biology. He has developed several tools for investigating the use of model organism phenotype data to better understand the role of gene mutation in human disease.
+      - name: Tomasz Konopka
+        alumni: false
+        title: Bioinformatician
+        bio: Dr. Konopka has a PhD in physics from the University of Waterloo. Since turning to bioinformatics, he has developed computational methods for sequence-data analysis and contributed to characterizations of molecular signatures due to genetic mutations. He is interested in the mechanisms, uncertainties, and ambiguities associated with linking genotypes to phenotypes.
   - id: garvan
     name: Garvan Institute
     logo: /image/team-garvan.png
