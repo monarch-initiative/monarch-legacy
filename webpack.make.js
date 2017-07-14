@@ -426,7 +426,7 @@ module.exports = function(options) { // makeWebpackConfig
         // logLevel: "debug",
         // logConnections: true,
         reloadOnRestart: false,
-        browser: ['safari'] // , 'firefox']
+        browser: ['firefox'] // , 'firefox']
       }));
   }
 
