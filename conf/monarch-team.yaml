@@ -237,3 +237,13 @@ institutions:
         picture: /image/team/EdwinZhang.jpg
         title: Developer
         bio: Edwin is a Software Engineer in the Phenomics Team at the Kinghorn Centre for Clinical Genomics. He is in charge with the development of the backend of the collaborative knowledge curation platform PhenoDisquss. Edwin is an expert in data structures, algorithms and big data and has a BS in Telecommunication Engineering from Nanjing Institute of Technology and two MS - one in Computer Science (University of Wollongong) and one in Information Technology (University of Technology Sydney).
+  - id: renci
+    name: Renaissance Computing Institute, University of North Carolina at Chapel Hill
+    logo: /image/team-renci.png
+    website: http://renci.org/
+    people:
+      - name: Jim Balhoff
+        picture: /image/team/JimBalhoff.jpg
+        title: Senior Research Scientist
+        alumni: false
+        bio: "Dr. Balhoff has a PhD in Biology from Duke University. He is interested in the application of ontologies and automated reasoning to facilitate the use and integration of biological data."
