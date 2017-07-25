@@ -362,7 +362,7 @@ prefix is as established by convention or as registered. eg. NCBIGene:3827).
 
 For each prefix we display in Monarch, we have [documented a 1-to-1 relationship with a resolving namespace](https://scigraph-data.monarchinitiative.org/scigraph/cypher/curies),
 and the prefixed notation (aka CURIE) is usually hyperlinked to its HTTP URI.
-For more information regarding identifiers terminology and notation, see McMurry et al. https://zenodo.org/record/31765.
+For more information regarding identifiers terminology and notation, see McMurry et al. https://doi.org/10.1371/journal.pbio.2001414.
 
 More detailed identifier documentation for Monarch is a work in progress, available [here:](https://docs.google.com/document/d/1jJHM0c358T5h2W2qLbpm9fGNcOsTSfhMPmmXQhI8n9Q/edit)
 Please feel free to pose any questions or concerns to info@monarchinitiative.org.
