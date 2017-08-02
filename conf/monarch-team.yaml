@@ -217,6 +217,10 @@ institutions:
         alumni: false
         title: Bioinformatician
         bio: Dr. Konopka has a PhD in physics from the University of Waterloo. Since turning to bioinformatics, he has developed computational methods for sequence-data analysis and contributed to characterizations of molecular signatures due to genetic mutations. He is interested in the mechanisms, uncertainties, and ambiguities associated with linking genotypes to phenotypes.
+      - name: Pilar Cacheiro
+        alumni: false
+        title: Computational Biologist
+        bio: Dr. Cacheiro holds a BSc in Biology, a MSc in Statistics, and a PhD in Molecular Medicine. Pilar performs computational and statistical analyses of model organism data to assist identification and characterization of human disease-associated genes.
   - id: garvan
     name: Garvan Institute
     logo: /image/team-garvan.png
