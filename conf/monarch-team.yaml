@@ -221,7 +221,6 @@ institutions:
         alumni: false
         title: Computational Biologist
         bio: Dr. Cacheiro holds a BSc in Biology, a MSc in Statistics, and a PhD in Molecular Medicine. Pilar performs computational and statistical analyses of model organism data to assist identification and characterization of human disease-associated genes.
-        
   - id: garvan
     name: Garvan Institute
     logo: /image/team-garvan.png
