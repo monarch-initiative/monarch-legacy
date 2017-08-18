@@ -23,11 +23,10 @@ These guidelines are for developers of Monarch software, whether internal or in 
 <!-- MarkdownTOC -->
 
 - [One Time Setup - Forking a Shared Repo](#one-time-setup---forking-a-shared-repo)
-    - [Step 1 - Backup your existing repo (optional)](#step-1---backup-your-existing-repo-optional)
-    - [Step 2 - Fork `monarch-app` via the Web](#step-2---fork-monarch-app-via-the-web)
-    - [Step 3 - Clone the Fork Locally](#step-3---clone-the-fork-locally)
-    - [Step 4 - Configure the local forked repo](#step-4---configure-the-local-forked-repo)
-    - [Step 5 - Configure  `.bashrc` to show current branch (optional)](#step-5---configure--bashrc-to-show-current-branch-optional)
+    - [Step 1 - Fork `monarch-app` via the Web](#step-1---fork-monarch-app-via-the-web)
+    - [Step 2 - Clone the Fork Locally](#step-3---clone-the-fork-locally)
+    - [Step 3 - Configure the local forked repo](#step-4---configure-the-local-forked-repo)
+    - [Step 4 - Configure  `.bashrc` to show current branch (optional)](#step-5---configure--bashrc-to-show-current-branch-optional)
 - [Typical Development Cycle](#typical-development-cycle)
     - [Refresh and clean up local environment](#refresh-and-clean-up-local-environment)
         - [Step 1 - Fetch remotes](#step-1---fetch-remotes)
@@ -59,21 +58,7 @@ The official shared Monarch repositories (e.g., `monarch-app`, `phenogrid`) are 
 
 Typically, a developer will fork a shared repo once, which creates a personal copy of the repo that is associated with the developer's GitHub account. Subsequent pull requests are developed as branches within this personal forked repo. The repo need never be forked again, although each pull request will be based upon a new named branch within this forked repo.
 
-### Step 1 - Backup your existing repo (optional)
-
-The Monarch team has recently adopted the workflow described in this document. Many developers will have an existing clone of the shared repo that they have been using for development. This cloned local directory must be *moved aside* so that a proper clone of the forked repo can be used instead.
-
-*If you do not have an existing local copy of the shared repo, then skip to [Step 2](#step-2---fork-monarch-app-via-the-web) below.*
-
-Because there may be valuable files stored in the developer's local directory but not stored in GitHub, we recommend that the developer keep this copy around for a few weeks until they are confident any useful information has been migrated. The following instructions should be effective at moving your existing `monarch-app` directory aside. Adapt these for use with `phenogrid` and other Monarch repos.
-
-    > cd .../monarch-app                # Your local copy of the shared repo.
-    > rm -rf ./node_modules             # You won't need this anymore. Free up disk
-    > cd ..
-    > mv monarch-app monarch-app.old    # Keep dir around, but avoid accidental use
-
-
-### Step 2 - Fork `monarch-app` via the Web
+### Step 1 - Fork `monarch-app` via the Web
 
 The easiest way to fork the `monarch-app` repository is via the GitHub web interface:
 
@@ -86,7 +71,7 @@ The easiest way to fork the `monarch-app` repository is via the GitHub web inter
 ![](docs/images/githubForkTarget.png)
 - *If you accidentally click the number, you will be on the Network Graphs page and should go back.*
 
-### Step 3 - Clone the Fork Locally
+### Step 2 - Clone the Fork Locally
 
 At this point, you will have a fork of the shared repo (e.g., monarch-app) stored within GitHub, but it is not yet available on your local development machine. This is done as follows:
 
@@ -101,7 +86,7 @@ Notice that we are using the SSH transport to clone this repo, rather than the H
 
 *Note: If you encounter difficulties with the above `git clone`, you may need to associate your local public SSH key with your GitHub account. See [Which remote URL should I use?](https://help.github.com/articles/which-remote-url-should-i-use/) for information.*
 
-### Step 4 - Configure the local forked repo
+### Step 3 - Configure the local forked repo
 
 The `git clone` above copied the forked repo locally, and configured the symbolic name 'origin' to point back to the *remote* GitHub fork. We will need to create an additional *remote* name to point back to the shared version of the repo (the one that we forked in Step 2). The following should work:
 
@@ -117,7 +102,7 @@ Verify that remotes are configured correctly by using the command `git remote -v
     origin  git@github.com:MarieCurie/monarch-app.git (push)
 
 
-### Step 5 - Configure  `.bashrc` to show current branch (optional)
+### Step 4 - Configure  `.bashrc` to show current branch (optional)
 
 One of the important things when using Git is to know what branch your working directory is tracking. This can be easily done with the `git status` command, but checking your branch periodically can get tedious. It is easy to configure your `bash` environment so that your current git branch is always displayed in your bash prompt.
 
