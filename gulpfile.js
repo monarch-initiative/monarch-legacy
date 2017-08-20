@@ -5,8 +5,6 @@
 ////
 
 var gulp = require('gulp');
-var mocha = require('gulp-mocha');
-var uglify = require('gulp-uglify');
 var rename = require("gulp-rename");
 var jsoncombine = require("gulp-jsoncombine");
 var del = require('del');

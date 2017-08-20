@@ -1,7 +1,7 @@
 {
-  "name": "webpack-babel-starter",
-  "version": "2.0.1",
-  "description": "Webpack Babel Starter Kit",
+  "name": "monarch-app",
+  "version": "3.0.0",
+  "description": "Monarch web application and API",
   "scripts": {
     "clean": "npm run oldclean",
     "dev": "npm run olddev",
@@ -35,71 +35,71 @@
     "test"
   ],
   "keywords": [
-    "Webpack",
-    "Babel",
-    "ES6",
-    "Sass",
-    "Eslint",
-    "Starter Kit",
-    "boilerplate"
+    "Monarch Initiative"
   ],
-  "author": "Christophe Rosset <tophe@topheman.com> (http://labs.topheman.com/)",
+  "author": "Monarch Initiative <info@monarchinitiative.org>",
+  "homepage": "http://monarchinitiative.org/",
   "repository": {
     "type": "git",
-    "url": "https://github.com/topheman/webpack-babel-starter.git"
+    "url": "https://github.com/monarch-initiative/monarch-app"
+  },
+  "engines": {
+    "node": ">= 6.11.2",
+    "npm": ">= 5.3.0"
   },
   "bugs": {
-    "url": "https://github.com/topheman/webpack-babel-starter/issues"
+    "url": "https://github.com/monarch-initiative/monarch-app/issues"
   },
-  "license": "MIT",
+  "license": "BSD-3-Clause",
   "devDependencies": {
     "assets-webpack-plugin": "^3.5.1",
-    "babel-core": "^6.5.2",
+    "babel-core": "^6.26.0",
     "babel-eslint": "^7.2.3",
-    "babel-loader": "^6.4.1",
+    "babel-loader": "^7.1.2",
     "babel-plugin-syntax-dynamic-import": "^6.18.0",
-    "babel-preset-es2015": "^6.5.0",
+    "babel-preset-es2015": "^6.24.1",
     "browser-sync-webpack-plugin": "^1.2.0",
-    "chai": "^4.0.2",
-    "css-loader": "^0.28.4",
-    "del": "^2.2.0",
+    "chai": "^4.1.1",
+    "css-loader": "^0.28.5",
+    "del": "^3.0.0",
     "eslint": "4",
-    "eslint-config-airbnb-base": "^11.2.0",
+    "eslint-config-airbnb-base": "^11.3.1",
     "eslint-loader": "^1.9.0",
-    "eslint-plugin-import": "^2.3.0",
+    "eslint-plugin-import": "^2.7.0",
     "eslint-plugin-react": "7",
     "exports-loader": "^0.6.4",
-    "extract-text-webpack-plugin": "2",
+    "extract-text-webpack-plugin": "3",
     "file-loader": "^0.11.2",
-    "git-rev-sync": "^1.4.0",
+    "git-rev-sync": "^1.9.1",
     "gulp": "^3.9.1",
     "gulp-download": "0.0.1",
     "gulp-jsoncombine": "^1.0.3",
-    "gulp-mocha": "^4.3.1",
     "gulp-rename": "^1.2.2",
     "gulp-shell": "^0.6.3",
-    "gulp-uglify": "^3.0.0",
-    "html-webpack-plugin": "^2.9.0",
+    "html-webpack-plugin": "^2.30.1",
     "json-loader": "^0.5.7",
+    "less": "^2.7.2",
     "less-loader": "^4.0.5",
-    "lodash.template": "^4.2.2",
-    "mocha": "^3.4.2",
-    "moment": "^2.11.2",
+    "lodash.template": "^4.4.0",
+    "mocha": "^3.5.0",
+    "moment": "^2.18.1",
     "my-local-ip": "^1.0.0",
     "node-sass": "^4.5.3",
     "nodemon": "^1.11.0",
-    "npmlog": "^2.0.2",
+    "npmlog": "^4.1.2",
     "postcss-loader": "^2.0.6",
-    "pre-commit": "^1.1.2",
+    "pre-commit": "^1.2.2",
     "raw-loader": "^0.5.1",
     "sass-loader": "^6.0.6",
-    "serve": "^1.4.0",
+    "serve": "^6.0.6",
     "style-loader": "^0.18.2",
-    "url-loader": "^0.5.7",
-    "webpack": "^2.6.1",
+    "uglify-js": "^2.8.29",
+    "uglifyjs-webpack-plugin": "^0.4.6",
+    "url-loader": "^0.5.9",
+    "webpack": "^2.7.0",
     "webpack-browser-plugin": "^1.0.20",
     "webpack-bundle-analyzer": "^2.9.0",
-    "webpack-dev-server": "^2.4.5"
+    "webpack-dev-server": "^2.7.1"
   },
   "private": true,
   "dependencies": {
@@ -124,6 +124,6 @@
     "request": "^2.81.0",
     "underscore": "^1.8.3",
     "wait.for": "^0.6.6",
-    "xml2js": "^0.4.17"
+    "xml2js": "^0.4.18"
   }
 }

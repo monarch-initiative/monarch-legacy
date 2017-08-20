@@ -1,3 +1,7 @@
+#
+# https://docs.travis-ci.com/user/reference/trusty/#Image-differences-from-Precise
+#
+
 dist: trusty
 sudo: required
 
@@ -7,6 +11,11 @@ before_install:
   - "uname -a"
   - "gcc --version"
   - "lsb_release -a"
+  - "npm version"
+  - "nvm install v6.11.2"
+  - "nvm use v6.11.2"
+  - "npm version"
+  - "npm install -g npm@latest"
   - "npm version"
   # - "sudo add-apt-repository ppa:ubuntu-toolchain-r/test -y"
   # - "sudo apt-get update -q"
@@ -26,7 +35,7 @@ before_install:
 
 # command to install dependencies
 install:
-  - "# rm -rf node_modules/"
+  - "rm -rf node_modules/"
   - "./install.sh"
   - "sudo pip install selenium"
   - "sudo pip install behave"
