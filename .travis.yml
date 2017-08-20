@@ -46,21 +46,7 @@ before_install:
   - "sudo mv geckodriver /usr/local/bin/"
   - "firefox -v"
   - "popd"
-  # - "sudo add-apt-repository ppa:ubuntu-toolchain-r/test -y"
-  # - "sudo apt-get update -q"
-  # - "sudo apt-get install python-software-properties -y"
-  # - "sudo apt-get install gcc-4.8 -y --force-yes"
-  # - "sudo apt-get install g++-4.8 -y --force-yes"
-  # - "sudo update-alternatives --install /usr/bin/gcc gcc /usr/bin/gcc-4.8 60 --slave /usr/bin/g++ g++ /usr/bin/g++-4.8"
-  # - "gcc --version"
   # - "/sbin/start-stop-daemon --start --quiet --pidfile /tmp/custom_xvfb_99.pid --make-pidfile --background --exec /usr/bin/Xvfb -- :99 -ac -screen 0 1280x1024x16"
-  # - "npm cache clean -f"
-  # - "nvm install v4.5.0"
-  # - "nvm use v4.5.0"
-  # - "npm version"
-  # - "npm install -g npm@latest"
-  # - "npm version"
-  # - "which npm"
 
 # command to install dependencies
 install:
@@ -72,7 +58,6 @@ install:
 
 before_script:
   - "export DISPLAY=:99.0"
-  - "export PATH=/u"
   - "# npm run start &"
   - "# install.sh does this instead... 'npm run build'"
   - "NODE_PATH=./lib/monarch USE_BUNDLE=1 USE_LOG_FETCH=1 node ./lib/monarch/web/webapp_launcher.js beta &"
@@ -92,7 +77,12 @@ script:
   - "unset NODE_PATH && USE_LOG_FETCH=1 make test"
   - "cd tests/behave"
   - "source bin/activate"
-  - "TARGET=http://localhost:8080 xBROWSER=phantomjs behave"
+  - "echo '\n\n\n--- Testing with Default Firefox ---\n\n\n'"
+  - "firefox -v"
+  - "TARGET=http://localhost:8080 behave"
+  - "echo '\n\n\n--- Testing with PhantomJS ---\n\n\n'"
+  - "phantomjs -v"
+  - "TARGET=http://localhost:8080 BROWSER=phantomjs behave"
 
 # whitelist
 branches:
