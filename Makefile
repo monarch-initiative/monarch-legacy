@@ -34,7 +34,7 @@ apitest: $(patsubst %, test-%, $(APITESTS))
 production-test: $(patsubst %, production-test-%, $(TESTS))
 
 test-%:
-	NODE_PATH=$(NODE_PATH) $(NODE_BIN) --harmony_destructuring tests/$*.js
+	NODE_PATH=$(NODE_PATH) $(NODE_BIN) tests/$*.js
 
 production-test-%:
 	NODE_PATH=$(NODE_PATH) $(NODE_BIN) tests/$*.js -s production

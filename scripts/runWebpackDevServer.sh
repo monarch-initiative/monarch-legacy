@@ -23,5 +23,5 @@ echo "#Found webpack-assets.json"
 jobs
 
 USE_BUNDLE=1 USE_WEBPACK=1 NODE_PATH=lib/monarch \
-	node_modules/nodemon/bin/nodemon.js -d 2 -V --harmony_destructuring -- \
+	node_modules/nodemon/bin/nodemon.js -d 2 -V -- \
 	lib/monarch/web/webapp_launcher.js ${environmentName}
