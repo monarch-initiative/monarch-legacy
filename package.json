@@ -31,9 +31,6 @@
     "wbs-contributing-install": "./wpcontributing/bin/contributing-install.sh",
     "wbs-contributing-test": "./wpcontributing/bin/contributing-test.sh"
   },
-  "pre-commit": [
-    "test"
-  ],
   "keywords": [
     "Monarch Initiative"
   ],

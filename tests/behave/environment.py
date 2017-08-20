@@ -35,7 +35,6 @@ def before_all(context):
         # d['binary'] = '/Applications/Firefox.app/Contents/MacOS/firefox-bin'
         d['loggingPrefs'] = {'browser': 'ALL', 'client': 'ALL', 'driver': 'ALL', 'performance': 'ALL', 'server': 'ALL'}
 
-        # fp = webdriver.FirefoxProfile()
         # fp.set_preference('javascript.options.showInConsole', True)
         # fp.set_preference('browser.dom.window.dump.enabled', True)
         # fp.set_preference('devtools.chrome.enabled', True)
@@ -64,8 +63,9 @@ def before_all(context):
         # fp.set_preference("webdriver.firefox.logfile", os.getcwd() + "/firefox.log")
         # fp.update_preferences()
 
-        context.browser = webdriver.Firefox(capabilities=d, executable_path='/usr/local/bin/geckodriver')
-        # context.browser = webdriver.Firefox(capabilities=d, firefox_profile=fp, executable_path='/usr/local/bin/geckodriver')
+        fp = webdriver.FirefoxProfile()
+        fp.set_preference('devtools.jsonview.enabled', False)
+        context.browser = webdriver.Firefox(capabilities=d, firefox_profile=fp, executable_path='/usr/local/bin/geckodriver')
         context.browser._is_remote = False
 
     #

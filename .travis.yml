@@ -76,7 +76,6 @@ script:
   - "ps auwx|grep webapp_launcher.js"
   - "unset NODE_PATH && USE_LOG_FETCH=1 make test"
   - "cd tests/behave"
-  - "source bin/activate"
   - "# Testing with Default Firefox"
   - "firefox -v"
   - "TARGET=http://localhost:8080 behave"
