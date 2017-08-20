@@ -12,7 +12,6 @@ from behave import *
 def step_impl(context, id):
     webelt = context.browser.find_element_by_id(id)
     webelt.click()
-    context.browser.implicitly_wait(30)
 
 ###
 ### Submission.
@@ -23,13 +22,6 @@ def step_impl(context, id):
 def step_impl(context):
     webelt = context.browser.find_element_by_id('analyze-submit')
     webelt.click()
-
-## Submit home search.
-@given('I submit home search')
-def step_impl(context):
-    #print(context.browser.title)
-    webelt = context.browser.find_element_by_id('home_search_form')
-    webelt.submit()
 
 ## Submit navbar search.
 @given('I submit navbar search')

@@ -1,6 +1,7 @@
-/* This script document contains functions relating to general Monarch pages. */
-
-var eSummary = require('../lib/monarch/esummary.js');
+/* global jQuery */
+/* global bbop */
+/* global window */
+/* global loaderGlobals */
 
 function initMonarchPage(){
     bbop.monarch.remove_equivalent_ids = remove_equivalent_ids;
@@ -74,7 +75,8 @@ function initMonarchPage(){
         });
     });
 
-    jQuery("#feedback-window-container #simple-menu").draggable({
+    var handle = jQuery("#feedback-window-container #simple-menu");
+    handle.draggable({
         handle: "#feedback-handle"
     });
 

@@ -27,29 +27,28 @@ def step_impl(context, page, id):
     context.browser.get(context.target + page)
     time.sleep(5)
     element = WebDriverWait(context.browser, 200).until(EC.presence_of_element_located((By.ID, id)))
-    # try:
-    #     print(id)
-    #     element = WebDriverWait(context.browser, 30).until(EC.presence_of_element_located((By.ID, id)))
-    # finally:
-    #     print("FINALLY")
-    #     #context.browser.quit()
 
 @given('I go to slow page "{page}" and wait for class "{cls}"')
 def step_impl(context, page, cls):
     #print(context.browser.title)
     context.browser.get(context.target + page)
     element = WebDriverWait(context.browser, 200).until(EC.presence_of_element_located((By.CLASS_NAME, cls)))
-    # try:
-    #     print(id)
-    #     element = WebDriverWait(context.browser, 30).until(EC.presence_of_element_located((By.ID, id)))
-    # finally:
-    #     print("FINALLY")
-    #     #context.browser.quit()
 
 @when('I wait for id "{id}"')
 def step_impl(context, id):
-    element = WebDriverWait(context.browser, 200).until(EC.presence_of_element_located((By.ID, id)))
+    # time.sleep(5)
+    try:
+        # print("\n#######Wait for ", id, "\n")
+        element = WebDriverWait(context.browser, 200).until(EC.presence_of_element_located((By.ID, id)))
+        # print("\n#######Found ", id, element, "\n")
 
+        # webelt = context.browser.find_element_by_tag_name('html')
+        # print("###### webelt.text: %s" % webelt.text)
+        # print("###### webelt.innerHTML: %s" % webelt.get_attribute('innerHTML'))
+        # print("\n\n")
+    except:
+        print("\n#######Not Found ", id, "\n")
+        #context.browser.quit()
 
 ## URL Check
 @then('the url will be "{url}"')
@@ -60,8 +59,8 @@ def step_impl(context, url):
 ## Title check.
 @then('the title should be "{title}"')
 def step_impl(context, title):
-    print(context.browser.title)
-    print(title)
+    # print('\n\n\n\n#####context.browser.title', context.browser.title)
+    # print('#####title\n\n\n\n', title, '\n\n\n\n')
     assert context.browser.title == title
 
 ## The empty title check, a bit of a special case for known "bad" page
@@ -73,7 +72,7 @@ def step_impl(context):
 ## The document body should contain a certain piece of text.
 @then('the document should contain "{text}"')
 def step_impl(context, text):
-    print(context.browser.title)
+    # print(context.browser.title)
     webelt = context.browser.find_element_by_tag_name('html')
     # print("###### text: %s" % text)
     # print("###### webelt.text: %s" % webelt.text)
@@ -87,9 +86,9 @@ def step_impl(context, text):
 ## The document body should contain a certain piece of text.
 @then("the document should contain '{text}'")
 def step_impl(context, text):
-    print(context.browser.title)
+    # print(context.browser.title)
     webelt = context.browser.find_element_by_tag_name('html')
-    print(webelt.text)
+    # print(webelt.text)
     assert webelt.text.rfind(text) != -1
 
 ## The document body should not contain a hyperlink with text.
@@ -126,7 +125,7 @@ def step_impl(context, clss, text):
 ## A given tab should contain a given piece of text/content.
 @then('the "{tabname}" tab should contain "{text}"')
 def step_impl(context, tabname, text):
-    # print(context.browser.title)
+    #  print(context.browser.title, tabname, text)
     webelts = context.browser.find_elements_by_class_name("tab")
     found_tab = False
     for w in webelts:
@@ -135,7 +134,7 @@ def step_impl(context, tabname, text):
             parent = w.find_element_by_xpath("..")
             tab_href = parent.get_attribute("href")
             url = urlparse(tab_href)
-            tab_id = url.fragment
+            tab_id = url.fragment + '-panel';
             # print(tab_id)
             tab_area_elt = context.browser.find_element_by_id(tab_id)
             # print(tab_area_elt.text)

@@ -1,30 +1,58 @@
+#
+# https://docs.travis-ci.com/user/reference/trusty/#Image-differences-from-Precise
+#
+
+dist: trusty
+sudo: required
+
 language: javascript
 
+addons:
+  firefox: "latest"
 
 before_install:
   - "uname -a"
   - "gcc --version"
   - "lsb_release -a"
-  - "sudo add-apt-repository ppa:ubuntu-toolchain-r/test -y"
-  - "sudo apt-get update -q"
-  - "sudo apt-get install python-software-properties -y"
-  - "sudo apt-get install gcc-4.8 -y --force-yes"
-  - "sudo apt-get install g++-4.8 -y --force-yes"
-  - "sudo update-alternatives --install /usr/bin/gcc gcc /usr/bin/gcc-4.8 60 --slave /usr/bin/g++ g++ /usr/bin/g++-4.8"
-  - "gcc --version"
-  - "/sbin/start-stop-daemon --start --quiet --pidfile /tmp/custom_xvfb_99.pid --make-pidfile --background --exec /usr/bin/Xvfb -- :99 -ac -screen 0 1280x1024x16"
-  - "npm cache clean -f"
-  - "nvm install v4.5.0"
-  - "nvm use v4.5.0"
+  - "npm version"
+  - "nvm install v6.11.2"
+  - "nvm use v6.11.2"
   - "npm version"
   - "npm install -g npm@latest"
   - "npm version"
-  - "which npm"
+  - "phantomjs --version"
+  - "sudo apt-get update -q"
+  - "sudo apt-get install build-essential chrpath libssl-dev libxft-dev -y"
+  - "sudo apt-get install libfreetype6 libfreetype6-dev -y"
+  - "sudo apt-get install libfontconfig1 libfontconfig1-dev -y"
+  - "pushd ~"
+  - "echo $PATH"
+  - "export PHANTOM_JS=\"phantomjs-2.1.1-linux-x86_64\""
+  - "wget https://bitbucket.org/ariya/phantomjs/downloads/${PHANTOM_JS}.tar.bz2"
+  - "sudo tar xvjf ${PHANTOM_JS}.tar.bz2"
+  - "which phantomjs"
+  - "ls -R /usr/local/phantomjs/"
+  - "sudo mv /usr/local/phantomjs /usr/local/phantomjs_old"
+  - "sudo mv ${PHANTOM_JS} /usr/local/phantomjs"
+  - "sudo ln -sf /usr/local/phantomjs/bin/phantomjs /usr/local/bin"
+  - "sudo ln -sf /usr/local/phantomjs/bin/phantomjs /usr/local/phantomjs/phantomjs"
+  - "/usr/local/phantomjs/phantomjs --version"
+  - "/usr/local/bin/phantomjs --version"
+  - "phantomjs --version"
+  - "which phantomjs"
+  - "wget https://github.com/mozilla/geckodriver/releases/download/v0.18.0/geckodriver-v0.18.0-linux64.tar.gz"
+  - "tar -xvzf geckodriver-v0.18.0-linux64.tar.gz"
+  - "chmod +x geckodriver"
+  - "sudo mv geckodriver /usr/local/bin/"
+  - "firefox -v"
+  - "popd"
+  - "/sbin/start-stop-daemon --start --quiet --pidfile /tmp/custom_xvfb_99.pid --make-pidfile --background --exec /usr/bin/Xvfb -- :99 -ac -screen 0 1280x1024x16"
 
 # command to install dependencies
 install:
-  - "# rm -rf node_modules/"
+  - "rm -rf node_modules/"
   - "./install.sh"
+  - "ls -lhS dist/"
   - "sudo pip install selenium"
   - "sudo pip install behave"
   - "sudo pip install jsonpath-rw"
@@ -32,8 +60,14 @@ install:
 before_script:
   - "export DISPLAY=:99.0"
   - "# npm run start &"
-  - "# install.sh does this instead... 'npm run build'"
-  - "NODE_PATH=./lib/monarch USE_BUNDLE=1 USE_LOG_FETCH=1 node --harmony_destructuring ./lib/monarch/web/webapp_launcher.js beta &"
+  - "# install.sh does 'npm run build'"
+  - "# Size with legacy build"
+  - "ls -lhS dist/"
+  - "# # WBS build"
+  - "# npm run wbs-build-prod"
+  - "# # Size with WBS build"
+  - "# ls -lhS dist/"
+  - "NODE_PATH=./lib/monarch USE_BUNDLE=1 USE_LOG_FETCH=1 node ./lib/monarch/web/webapp_launcher.js beta &"
   - "sleep 20"
 
 after_success:
@@ -48,8 +82,14 @@ after_failure:
 script:
   - "ps auwx|grep webapp_launcher.js"
   - "unset NODE_PATH && USE_LOG_FETCH=1 make test"
-  - "cd tests/behave"
-  - "TARGET=http://localhost:8080 BROWSER=phantomjs behave"
+  - "pushd tests/behave"
+  - "# Testing with Default Firefox"
+  - "firefox -v"
+  - "TARGET=http://localhost:8080 behave --no-capture"
+  - "# Testing with PhantomJS"
+  - "phantomjs -v"
+  - "TARGET=http://localhost:8080 BROWSER=phantomjs behave --no-capture"
+  - "popd"
 
 # whitelist
 branches:
@@ -60,4 +100,5 @@ branches:
 
 notifications:
   email:
+    - keitda@ohsu.edu
     - kshefchek@gmail.com

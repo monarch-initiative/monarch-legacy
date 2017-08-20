@@ -14,6 +14,7 @@ Feature: Analyze phenotypes is usable by the expected user interfaces
      and I wait until "Bronchial asthma" appears in the autocomplete
      and I click the autocomplete item "Bronchial asthma"
      when I submit analyze phenotype
+     and I wait for id "phen_vis_svg"
      then the document should contain "Asthma, Susceptibility to"
 
 @data
@@ -26,6 +27,7 @@ Feature: Analyze phenotypes is usable by the expected user interfaces
      and I wait until "Microcephaly" appears in the autocomplete
      and I click the autocomplete item "Microcephaly"
      when I submit analyze phenotype
+     and I wait for id "phen_vis_svg"
      then the document should contain "pru1"
 
 @data
@@ -37,7 +39,7 @@ Feature: Analyze phenotypes is usable by the expected user interfaces
      and I click the "compare" radio button
      and I input "NCBIGene:388552,NCBIGene:3586" into the textarea "gene-list"
      when I submit analyze phenotype
-     and I wait for id "phen_vis_svg_group"
+     and I wait for id "phen_vis_svg"
      then the document should contain "IL10"
 
  ## Example how you might do other forms.
