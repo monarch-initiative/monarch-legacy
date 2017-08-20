@@ -46,7 +46,7 @@ before_install:
   - "sudo mv geckodriver /usr/local/bin/"
   - "firefox -v"
   - "popd"
-  # - "/sbin/start-stop-daemon --start --quiet --pidfile /tmp/custom_xvfb_99.pid --make-pidfile --background --exec /usr/bin/Xvfb -- :99 -ac -screen 0 1280x1024x16"
+  - "/sbin/start-stop-daemon --start --quiet --pidfile /tmp/custom_xvfb_99.pid --make-pidfile --background --exec /usr/bin/Xvfb -- :99 -ac -screen 0 1280x1024x16"
 
 # command to install dependencies
 install:
@@ -77,10 +77,10 @@ script:
   - "unset NODE_PATH && USE_LOG_FETCH=1 make test"
   - "cd tests/behave"
   - "source bin/activate"
-  - "echo '\n\n\n--- Testing with Default Firefox ---\n\n\n'"
+  - "# Testing with Default Firefox"
   - "firefox -v"
   - "TARGET=http://localhost:8080 behave"
-  - "echo '\n\n\n--- Testing with PhantomJS ---\n\n\n'"
+  - "# Testing with PhantomJS"
   - "phantomjs -v"
   - "TARGET=http://localhost:8080 BROWSER=phantomjs behave"
 
