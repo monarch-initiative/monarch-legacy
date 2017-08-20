@@ -30,9 +30,13 @@ before_install:
   - "export PHANTOM_JS=\"phantomjs-2.1.1-linux-x86_64\""
   - "wget https://bitbucket.org/ariya/phantomjs/downloads/${PHANTOM_JS}.tar.bz2"
   - "sudo tar xvjf ${PHANTOM_JS}.tar.bz2"
-  - "sudo mv ${PHANTOM_JS} /usr/local/share"
-  - "sudo ln -sf /usr/local/share/$PHANTOM_JS/bin/phantomjs /usr/local/bin"
+  - "which phantomjs"
+  - "sudo mv /usr/local/phantomjs /usr/local/phantomjs_old"
+  - "sudo mv ${PHANTOM_JS} /usr/local/phantomjs"
+  - "sudo ln -sf /usr/local/phantomjs/bin/phantomjs /usr/local/bin"
+  - "/usr/local/bin/phantomjs --version"
   - "phantomjs --version"
+  - "which phantomjs"
   - "wget https://github.com/mozilla/geckodriver/releases/download/v0.18.0/geckodriver-v0.18.0-linux64.tar.gz"
   - "tar -xvzf geckodriver-v0.18.0-linux64.tar.gz"
   - "chmod +x geckodriver"
@@ -65,6 +69,7 @@ install:
 
 before_script:
   - "export DISPLAY=:99.0"
+  - "export PATH=/u"
   - "# npm run start &"
   - "# install.sh does this instead... 'npm run build'"
   - "NODE_PATH=./lib/monarch USE_BUNDLE=1 USE_LOG_FETCH=1 node ./lib/monarch/web/webapp_launcher.js beta &"
@@ -83,6 +88,7 @@ script:
   - "ps auwx|grep webapp_launcher.js"
   - "unset NODE_PATH && USE_LOG_FETCH=1 make test"
   - "cd tests/behave"
+  - "source bin/activate"
   - "TARGET=http://localhost:8080 xBROWSER=phantomjs behave"
 
 # whitelist

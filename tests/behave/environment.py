@@ -32,7 +32,7 @@ def before_all(context):
     else:
         d = DesiredCapabilities.FIREFOX
         d['marionette'] = True
-        d['binary'] = '/Applications/Firefox.app/Contents/MacOS/firefox-bin'
+        # d['binary'] = '/Applications/Firefox.app/Contents/MacOS/firefox-bin'
         d['loggingPrefs'] = {'browser': 'ALL', 'client': 'ALL', 'driver': 'ALL', 'performance': 'ALL', 'server': 'ALL'}
 
         # fp = webdriver.FirefoxProfile()
