@@ -10,6 +10,7 @@ Feature: Basic autocomplete works
     Given I go to page "/"
      and I type "food" into the navbar search
      and I submit navbar search
+     when I wait for id "selenium_id_loaded"
      then the title should be "Search Results: food"
      and the document should contain "food allergy"
      and the document should contain "botulism"
@@ -20,6 +21,7 @@ Feature: Basic autocomplete works
      and I type "food all" into the navbar search
      and I wait until "Allergies, Food" appears in the autocomplete 
      and I click the autocomplete item "Allergies, Food"
+     when I wait for id "overview-panel"
      then the title should be "Monarch Disease: food allergy (DOID:3044)"
 
 #Commenting out so tests pass in all server versions

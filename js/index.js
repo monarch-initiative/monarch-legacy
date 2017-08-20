@@ -11,6 +11,9 @@ import 'underscore';
 import 'bootstrap';
 // '/bootstrap-theme.css',
 import 'jquery-ui';
+import 'jquery-ui/ui/widgets/autocomplete';
+import 'jquery-ui/ui/widgets/draggable';
+
 import 'd3';
 import './search_form.js';
 import './monarch-tabs.js';
@@ -25,7 +28,7 @@ import '../css/monarch-home.css';
 //console.log('before import bbop:', Object.keys(bbop));
 import _bbop from 'bbop';
 var bbop = _bbop;
-window.getAnnotationScore = require("exports?getAnnotationScore!./monarch-common.js");
+window.getAnnotationScore = require("exports-loader?getAnnotationScore!./monarch-common.js");
 
 // import './monarch.js';
 
@@ -44,9 +47,9 @@ import './golr-table.js';
 import './overview.js';
 import './stupidtable.min.js';
 import './Cluster.js';
-window.InitTables = require("exports?InitTables!./tables.js");
+window.InitTables = require("exports-loader?InitTables!./tables.js");
 
-var bl = require("exports?makeDiseaseLandingGraph,makePhenotypeLandingGraph,makeDiseaseLandingGraph,makeGeneDiseaseLandingGraph,makeGenotypeLandingGraph!./barchart-launcher.js");
+var bl = require("exports-loader?makeDiseaseLandingGraph,makePhenotypeLandingGraph,makeDiseaseLandingGraph,makeGeneDiseaseLandingGraph,makeGenotypeLandingGraph!./barchart-launcher.js");
 global.makeDiseaseLandingGraph = bl.makeDiseaseLandingGraph;
 global.makePhenotypeLandingGraph = bl.makePhenotypeLandingGraph;
 global.makeGenotypeLandingGraph = bl.makeGenotypeLandingGraph;

@@ -25,20 +25,20 @@ module.exports = function(options) { // makeWebpackConfig
    * This is the object where all configuration gets set
    */
   var config = {};
-  config.debug = true;
+  // config.debug = true;
   config.amd = {
       jQuery: true
   };
 
 
-  config.eslint = {
-    configFile: './.eslintrc',
-    emitError: false,
-    emitWarning: false,
-    quiet: false,
-    failOnError: false,
-    failOnWarning: false
-  };
+  // config.eslint = {
+  //   configFile: './.eslintrc',
+  //   emitError: false,
+  //   emitWarning: false,
+  //   quiet: false,
+  //   failOnError: false,
+  //   failOnWarning: false
+  // };
 
   var deps = [
     'bootstrap/dist/js/bootstrap.min.js',
@@ -62,6 +62,10 @@ module.exports = function(options) { // makeWebpackConfig
       app: './js/index.js'
     };
   }
+
+  config.resolve = {
+      alias: {}
+    };
 
   /**
    * Output
@@ -124,8 +128,8 @@ module.exports = function(options) { // makeWebpackConfig
     //     emitErrors: false
     // },
 
-    preLoaders: [],
-    loaders: [
+    // preLoaders: [],
+    rules: [
       {
         // JS LOADER
         // Reference: https://github.com/babel/babel-loader
@@ -133,7 +137,7 @@ module.exports = function(options) { // makeWebpackConfig
         // Compiles ES6 and ES7 into ES5 code
         test: /\.js$/,
         // loader: 'babel?optional=runtime',
-        loader: 'babel',
+        loader: 'babel-loader',
         query: {
             // https://github.com/babel/babel-loader#options
             cacheDirectory: true,
@@ -150,32 +154,8 @@ module.exports = function(options) { // makeWebpackConfig
       },
 
       {
-        test: /\.woff(\?v=\d+\.\d+\.\d+)?$/,
-        loader: "url?limit=10000&mimetype=application/font-woff",
-        include: [fa]
-      },
-
-      {
-        test: /\.woff2(\?v=\d+\.\d+\.\d+)?$/,
-        loader: "url?limit=10000&mimetype=application/font-woff",
-        include: [fa]
-      },
-
-      {
-        test: /\.ttf(\?v=\d+\.\d+\.\d+)?$/,
-        loader: "url?limit=10000&mimetype=application/octet-stream",
-        include: [fa]
-      },
-
-      {
-        test: /\.eot(\?v=\d+\.\d+\.\d+)?$/,
-        loader: "file",
-        include: [fa]
-      },
-
-      {
-        test: /\.svg(\?v=\d+\.\d+\.\d+)?$/,
-        loader: "url?limit=10000&mimetype=image/svg+xml",
+        test: /\.(woff(2)?|ttf|eot|svg)(\?v=\d+\.\d+\.\d+)?$/,
+        loader: 'file-loader?limit=10000',
         include: [fa]
       },
 
@@ -187,14 +167,14 @@ module.exports = function(options) { // makeWebpackConfig
       // Pass along the updated reference to your code
       // You can add here any file extension you want to get copied to your output
       test: /\.(png|jpg|jpeg|gif|svg|woff|woff2|ttf|eot)$/,
-      loader: 'file'
+      loader: 'file-loader'
     },
     {
       // HTML LOADER
       // Reference: https://github.com/webpack/raw-loader
       // Allow loading html through js
       test: /\.html$/,
-      loader: 'html'
+      loader: 'html-loader'
 
     },
     {
@@ -202,27 +182,24 @@ module.exports = function(options) { // makeWebpackConfig
       // Reference: https://github.com/webpack/json-loader
       // json loader module for webpack
       test: /\.json$/,
-      loader: 'json'
+      loader: 'json-loader'
     }],
 
-   postLoaders: [
-     // {
-     //   emitErrors: false,
-     //   test: /\.js$/,
-     //   exclude: /node_modules|js\/jquery.+/, // do not lint third-party code
-     //   loader: 'jshint-loader'
-     //  }
-   ],
+   // postLoaders: [
+   //   // {
+   //   //   emitErrors: false,
+   //   //   test: /\.js$/,
+   //   //   exclude: /node_modules|js\/jquery.+/, // do not lint third-party code
+   //   //   loader: 'jshint-loader'
+   //   //  }
+   // ],
 
     // don't parse some dependencies to speed up build.
     // can probably do this non-AMD/CommonJS deps
     noParse: [
       // path.resolve(nmRoot, 'phenogrid/js/htmlnotes.json'),
       // path.resolve(nmRoot, 'phenogrid/js/images.json')
-    ],
-    resolve: {
-      alias: {}
-    }
+    ]
   };
 
   // Run through deps and extract the first part of the path,
@@ -233,12 +210,12 @@ module.exports = function(options) { // makeWebpackConfig
   //
   deps.forEach(function (dep) {
     var depPath = path.resolve(nmRoot, dep);
-    config.module.resolve.alias[dep.split(path.sep)[0]] = depPath;
+    config.resolve.alias[dep.split(path.sep)[0]] = depPath;
     config.module.noParse.push(depPath);
   });
 
   if (LINT && !TEST) {
-    config.module.loaders.push(
+    config.module.rules.push(
       {
         test: /\.js$/,
         loader: 'eslint-loader',
@@ -273,7 +250,10 @@ module.exports = function(options) { // makeWebpackConfig
     //
     // Reference: https://github.com/webpack/style-loader
     // Use style-loader in development for hot-loading
-    loader: ExtractTextPlugin.extract('style', 'css?sourceMap!postcss')
+    loader: 'style-loader!css-loader'
+
+    // ExtractTextPlugin.extract('style', 'css?sourceMap!postcss')
+      // ExtractTextPlugin.extract({ fallback: 'style-loader', use: 'css-loader' })
   };
 
   // Skip loading css in test mode
@@ -284,12 +264,12 @@ module.exports = function(options) { // makeWebpackConfig
   }
 
   // Add cssLoader to the loader list
-  config.module.loaders.push(cssLoader);
+  config.module.rules.push(cssLoader);
 
   // LESS LOADER
   var lessLoader = {
     test: /\.less$/,
-    loader: "style!css!less-loader?outputStyle=expanded&includePaths[]=" + (path.resolve(__dirname, "./node_modules"))
+    loader: "style-loader!css-loader!less-loader?outputStyle=expanded&includePaths[]=" + (path.resolve(__dirname, "./node_modules"))
 //    loader: ExtractTextPlugin.extract('style', 'less?sourceMap!postcss')
   };
 
@@ -301,18 +281,18 @@ module.exports = function(options) { // makeWebpackConfig
   }
 
   // Add lessLoader to the loader list
-  config.module.loaders.push(lessLoader);
+  config.module.rules.push(lessLoader);
 
   /**
    * PostCSS
    * Reference: https://github.com/postcss/autoprefixer
    * Add vendor prefixes to your css
    */
-  config.postcss = [
-    autoprefixer({
-      browsers: ['last 2 version']
-    })
-  ];
+  // config.postcss = [
+  //   autoprefixer({
+  //     browsers: ['last 2 version']
+  //   })
+  // ];
 
   /**
    * Plugins
@@ -326,10 +306,13 @@ module.exports = function(options) { // makeWebpackConfig
     // Reference: https://github.com/webpack/extract-text-webpack-plugin
     // Extract css files
     // Disabled when in test mode or not in build mode
-    new ExtractTextPlugin(BUILDHASH ? '[name].[hash].css' : '[name].bundle.css',
-      {
-        disable: !BUILD || TEST
-      }),
+
+    // ExtractTextPlugin.extract({ fallback: 'style-loader', use: 'css-loader' }),
+
+    // new ExtractTextPlugin(BUILDHASH ? '[name].[hash].css' : '[name].bundle.css',
+    //   {
+    //     disable: !BUILD || TEST
+    //   }),
     new webpack.ProvidePlugin({
         $: "jquery",
         jQuery: "jquery",
@@ -387,14 +370,10 @@ module.exports = function(options) { // makeWebpackConfig
       // Only emit files when there are no errors
       // new webpack.NoErrorsPlugin(),
 
-      // Reference: http://webpack.github.io/docs/list-of-plugins.html#dedupeplugin
-      // Dedupe modules in the output
-      new webpack.optimize.DedupePlugin()
-
       // Reference: http://webpack.github.io/docs/list-of-plugins.html#uglifyjsplugin
       // Minify all javascript, switch loaders to minimizing mode
-      ,new webpack.optimize.UglifyJsPlugin({
-        sourceMap: false,
+      new webpack.optimize.UglifyJsPlugin({
+        sourceMap: 'cheap-source-map',
         mangle: {
           except: []
         },
@@ -431,7 +410,7 @@ module.exports = function(options) { // makeWebpackConfig
   }
 
   config.resolve = {
-    modulesDirectories: ['node_modules', 'image'],
+    modules: ['node_modules', 'image'],
     alias: {
         //'bbop.min.js': path.join(__dirname, "node_modules/bbop.js"),
         //jquery: path.join(__dirname, "js/jquery-1.11.0.min.js"),
@@ -453,31 +432,31 @@ module.exports = function(options) { // makeWebpackConfig
     // proxy: {
     //   '/*': 'http://localhost:8080'
     // },
-      // proxy: {
-      //   '*.json': {
-      //     target: 'http://localhost:8080'
-      //   },
-      //   '/status': {
-      //     target: 'http://localhost:8080'
-      //   },
-      //   '/': {
-      //     target: 'http://localhost:8080'
-      //   }
-      // },
-    proxy: [
-        {
-            path: /(.*)\.json/,
-            target: "http://localhost:8080/"
-        },
-        {
-            path: /\/status/,
-            target: "http://localhost:8080/"
-        },
-        {
-            path: /\/.*/,
-            target: "http://localhost:8080/"
-        }
-      ],
+    proxy: {
+      '*.json': {
+        target: 'http://localhost:8080'
+      },
+      '/status': {
+        target: 'http://localhost:8080'
+      },
+      '/': {
+        target: 'http://localhost:8080'
+      }
+    },
+    // proxy: [
+    //     {
+    //         path: /(.*)\.json/,
+    //         target: "http://localhost:8080/"
+    //     },
+    //     {
+    //         path: /\/status/,
+    //         target: "http://localhost:8080/"
+    //     },
+    //     {
+    //         path: /\/.*/,
+    //         target: "http://localhost:8080/"
+    //     }
+    //   ],
 
     stats: {
       modules: false,

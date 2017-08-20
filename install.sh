@@ -21,5 +21,6 @@ echo "npm: $npmv  node: $nodev"
 #./installRingo.sh
 npm install
 ./node_modules/.bin/gulp
-rm -rf dist/*
-./node_modules/webpack/bin/webpack.js --config webpack.build.js --bail
+npm run clean
+# ./node_modules/webpack/bin/webpack.js --config webpack.build.js --bail
+npm run build

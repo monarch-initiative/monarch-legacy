@@ -48,8 +48,19 @@ def step_impl(context, page, cls):
 
 @when('I wait for id "{id}"')
 def step_impl(context, id):
-    element = WebDriverWait(context.browser, 200).until(EC.presence_of_element_located((By.ID, id)))
+    # time.sleep(5)
+    try:
+        # print("\n#######Wait for ", id, "\n")
+        element = WebDriverWait(context.browser, 200).until(EC.presence_of_element_located((By.ID, id)))
+        # print("\n#######Found ", id, element, "\n")
 
+        # webelt = context.browser.find_element_by_tag_name('html')
+        # print("###### webelt.text: %s" % webelt.text)
+        # print("###### webelt.innerHTML: %s" % webelt.get_attribute('innerHTML'))
+        # print("\n\n")
+    finally:
+        print("\n#######Not Found ", id, "\n")
+        #context.browser.quit()
 
 ## URL Check
 @then('the url will be "{url}"')
@@ -73,7 +84,7 @@ def step_impl(context):
 ## The document body should contain a certain piece of text.
 @then('the document should contain "{text}"')
 def step_impl(context, text):
-    print(context.browser.title)
+    # print(context.browser.title)
     webelt = context.browser.find_element_by_tag_name('html')
     # print("###### text: %s" % text)
     # print("###### webelt.text: %s" % webelt.text)
@@ -87,9 +98,9 @@ def step_impl(context, text):
 ## The document body should contain a certain piece of text.
 @then("the document should contain '{text}'")
 def step_impl(context, text):
-    print(context.browser.title)
+    # print(context.browser.title)
     webelt = context.browser.find_element_by_tag_name('html')
-    print(webelt.text)
+    # print(webelt.text)
     assert webelt.text.rfind(text) != -1
 
 ## The document body should not contain a hyperlink with text.

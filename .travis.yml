@@ -1,25 +1,28 @@
-language: javascript
+dist: trusty
+sudo: required
 
+language: javascript
 
 before_install:
   - "uname -a"
   - "gcc --version"
   - "lsb_release -a"
-  - "sudo add-apt-repository ppa:ubuntu-toolchain-r/test -y"
-  - "sudo apt-get update -q"
-  - "sudo apt-get install python-software-properties -y"
-  - "sudo apt-get install gcc-4.8 -y --force-yes"
-  - "sudo apt-get install g++-4.8 -y --force-yes"
-  - "sudo update-alternatives --install /usr/bin/gcc gcc /usr/bin/gcc-4.8 60 --slave /usr/bin/g++ g++ /usr/bin/g++-4.8"
-  - "gcc --version"
-  - "/sbin/start-stop-daemon --start --quiet --pidfile /tmp/custom_xvfb_99.pid --make-pidfile --background --exec /usr/bin/Xvfb -- :99 -ac -screen 0 1280x1024x16"
-  - "npm cache clean -f"
-  - "nvm install v4.5.0"
-  - "nvm use v4.5.0"
   - "npm version"
-  - "npm install -g npm@latest"
-  - "npm version"
-  - "which npm"
+  # - "sudo add-apt-repository ppa:ubuntu-toolchain-r/test -y"
+  # - "sudo apt-get update -q"
+  # - "sudo apt-get install python-software-properties -y"
+  # - "sudo apt-get install gcc-4.8 -y --force-yes"
+  # - "sudo apt-get install g++-4.8 -y --force-yes"
+  # - "sudo update-alternatives --install /usr/bin/gcc gcc /usr/bin/gcc-4.8 60 --slave /usr/bin/g++ g++ /usr/bin/g++-4.8"
+  # - "gcc --version"
+  # - "/sbin/start-stop-daemon --start --quiet --pidfile /tmp/custom_xvfb_99.pid --make-pidfile --background --exec /usr/bin/Xvfb -- :99 -ac -screen 0 1280x1024x16"
+  # - "npm cache clean -f"
+  # - "nvm install v4.5.0"
+  # - "nvm use v4.5.0"
+  # - "npm version"
+  # - "npm install -g npm@latest"
+  # - "npm version"
+  # - "which npm"
 
 # command to install dependencies
 install:
@@ -60,4 +63,5 @@ branches:
 
 notifications:
   email:
+    - keitda@ohsu.edu
     - kshefchek@gmail.com

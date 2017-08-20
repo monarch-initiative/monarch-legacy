@@ -4,12 +4,14 @@ Feature: NodeJS and RingoJS pass all tests.
 @ui
  Scenario: The "/search" endpoint returns the correct JSON
     Given I go to page "/search/twist"
+     when I wait for id "more"
      then the title should be "Search Results: twist"
      then the document should contain "Category"
 
 @ui
  Scenario: The "/search" endpoint returns the correct JSON
     Given I go to page "/search/p53"
+     when I wait for id "more"
      then the title should be "Search Results: p53"
      then the document should contain "Taxon"
 

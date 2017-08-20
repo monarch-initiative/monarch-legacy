@@ -14,11 +14,12 @@ $( document ).ready(function() {
         suggestions: {},
         page: 0,
         numFound: 0,
-        numRowsDisplayed: 0
+        numRowsDisplayed: 0,
+        selenium_id: ''
       },
       methods: {
         fetchResults: function () {
-          //console.log("=== FETCH " + this.page + " " + JSON.stringify(this.user_facets));
+          // console.log("=== FETCH " + this.page + " " + JSON.stringify(this.user_facets));
           var anchor = this;
           axios.get('/searchapi/'+searchTerm, {params: this.user_facets})
             .then(function (response) {
@@ -26,7 +27,8 @@ $( document ).ready(function() {
               anchor.numRowsDisplayed = response.data.response.docs.length;
               anchor.results = response.data.response.docs;
               anchor.highlight = {};
-              if(anchor.numFound == 0) {
+              anchor.selenium_id = 'loaded';
+              if (anchor.numFound == 0) {
                 anchor.fetchSuggestions();
               }
               // Take the first highilited field and massage it in a more convenient data structure
@@ -71,7 +73,7 @@ $( document ).ready(function() {
         fetchMore: function() {
           this.page += 1;
           var anchor = this;
-          //console.log("=== FETCH MORE " + this.page + " " + JSON.stringify(this.user_facets));
+          console.log("=== FETCH MORE " + this.page + " " + JSON.stringify(this.user_facets));
           var params = jQuery.extend(true, {}, this.user_facetst); // deep copy
           params['p'] = this.page;
           axios.get('/searchapi/'+searchTerm, {params: params})
