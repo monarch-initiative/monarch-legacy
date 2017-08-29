@@ -85,14 +85,18 @@ institutions:
         title: Software Engineer
         alumni: false
         bio: Seth is an occasional software engineer for the Monarch Initiative. He specializes in tools for science and education and has participated in projects in a broad range of fields, including Bioinformatics, Planetary Science, Geology, and Linguistics. His current focus is on capturing and making use of ontology and annotation data. His educational background is undergraduate degrees in Mathematics and Computer Science (UCSC).
-      - name: Jeremy Nguyen Xuan
-        title: Software Engineer
-        alumni: true
-        bio: Jeremy has a MS in Computer Science from the École polytechnique fédérale de Lausanne (EPFL). After spending three years at CERN in the Beams department and a year in a finance company, he joined LBNL in 2015.
       - name: Nathan Dunn
         picture: /image/team/NathanDunn.jpg
         title: Software Engineer
         alumni: false
+      - name: Eric Douglass
+        picture: /image/team/EricDouglass.jpg
+        title: Software Engineer
+        alumni: false
+      - name: Jeremy Nguyen Xuan
+        title: Software Engineer
+        alumni: true
+        bio: Jeremy has a MS in Computer Science from the École polytechnique fédérale de Lausanne (EPFL). After spending three years at CERN in the Beams department and a year in a finance company, he joined LBNL in 2015.
         bio: Nathan Dunn has a a MS in Chemical Engineering from the University of Washington and a PhD in Computer Science from the University of Oregon where he focused on using artifical neural networks to model the C. elegans nervous system. Since then he has worked in various capacities supporting scientific research.  His current focus is on development of collaborative genomic editing tools.
       # - name: Rocket J. Squirrel
       #   title: Lead Moose Foil
@@ -113,33 +117,7 @@ institutions:
         title: Web Developer/Designer
         alumni: true
         bio: Sarah is currently a undergraduate Computer Science student at UC Berkeley. She is working on the front-end of the Monarch website.
-  - id: pitt
-    name: University of Pittsburgh
-    logo: /image/team-pitt.png
-    website: http://pitt.edu
-    people:
-      - name: Harry Hochheiser
-        picture: /image/team/HarryHochheiser.jpg
-        alumni: true
-        title: Monarch PI
-        bio: Dr. Hochheiser is currently a PI of the Monarch Initiative. He has BS and MS in Computer Science and Engineering from MIT and a Ph.D. in Computer Science from University of Maryland. His research interests lie at the intersection of biomedical informatics and human-computer interaction (HCI). His ongoing research efforts involve the application of contextual inquiry, human-centered design, information visualization, and other HCI techniques to challenges in collaborative bioinformatics and clinical informatics.
-      - name: Michael Davis
-        alumni: true
-        title: Software Developer
-        bio: Michael is a Software Engineer for the Department of Biomedical Informatics (DBMI) at the University of Pittsburgh where he works on the development of Phenogrid.  He has an MS in Information Science from the University of Pittsburgh. He has worked for several years developing oncology-based database applications at UPMC CancerCenter. His current interest is the development and integration of analytical tools to support big data repositories in research.
-      - name: Zhou Yuan
-        picture: /image/team/ZhouYuan.jpg
-        alumni: true
-        title: Web Application Developer
-        bio: Zhou is a Web Application Developer working on the development of Phenogrid in the Department of Biomedical Informatics (DBMI) at the University of Pittsburgh. He has an MS in Information Science from the University of Pittsburgh. He is also the creator of InfoPotao, Quotagger, PotatoPy, and PotatoGuide. He works as an enthusiastic web developer who tries to create detailed designs to balance the aesthetics, web standards, security, usability, and accessibility aspects in support of biomedical research.
-      - name: Chuck Borromeo
-        alumni: true
-        title: Interface Architect
-        bio: Chuck is a programmer on a wide range of projects (e.g. FaceBase, Monarch, Ontology for Craniofacial Development and Malformations) in the Department of Biomedical Informatics. His responsibilities include leading the FaceBase development team and providing technical solutions on other projects. In the past, Chuck led the development of the Resource Discovery System (RDS) an application tracking 1500 scientific resources from several NIH research programs.
-      - name: Jeremy Espino
-        alumni: true
-        title: Senior Research Scientist, Department of Biomedical Informatics
-        bio: Jeremy is trained in General Medicine, Medical Informatics and Intelligent Systems.  His claim to fame is programming the first real-time disease surveillance system in 1999—the Real-time Outbreak and Disease Surveillance System (RODS).  RODS and its open source derivatives have subsequently been deployed in over 16 states and a couple of countries.  He has also managed the IT infrastructure of the National Retail Monitor which provides over-the-counter medication sales data from over 33,000 retail stores to health departments across the U.S..  In his free time he enjoys hacking micro controllers, piano and 3d printing.
+  
   - id: jax
     name: The Jackson Laboratory
     logo: /image/team-jackson.png
@@ -211,7 +189,7 @@ institutions:
         title: Developer
         bio: Craig is a UX & front-end engineer in the Phenomics Team at the Kinghorn Centre for Clinical Genomics, where he is leading the front-end development of several components, including PhenoDisquss and the Patient Archive. Craig is an expert in UX design and testing, as well as development using AngularJS, and has a double degree in Software Engineering and Multimedia Design from the University of Queensland.
       - name: Edwin Zhang
-        alumni: false
+        alumni: true
         picture: /image/team/EdwinZhang.jpg
         title: Developer
         bio: Edwin is a Software Engineer in the Phenomics Team at the Kinghorn Centre for Clinical Genomics. He is in charge with the development of the backend of the collaborative knowledge curation platform PhenoDisquss. Edwin is an expert in data structures, algorithms and big data and has a BS in Telecommunication Engineering from Nanjing Institute of Technology and two MS - one in Computer Science (University of Wollongong) and one in Information Technology (University of Technology Sydney).
@@ -224,4 +202,31 @@ institutions:
         picture: /image/team/JimBalhoff.jpg
         title: Senior Research Scientist
         alumni: false
-        bio: "Dr. Balhoff has a PhD in Biology from Duke University. He is interested in the application of ontologies and automated reasoning to facilitate the use and integration of biological data."
+        bio: "Dr. Balhoff has a PhD in Biology from Duke University. He is interested in the application of ontologies and automated reasoning to facilitate the use and integration of biological data."  
+- id: pitt
+    name: University of Pittsburgh
+    logo: /image/team-pitt.png
+    website: http://pitt.edu
+    people:
+      - name: Harry Hochheiser
+        picture: /image/team/HarryHochheiser.jpg
+        alumni: true
+        title: Monarch PI
+        bio: Dr. Hochheiser is currently a PI of the Monarch Initiative. He has BS and MS in Computer Science and Engineering from MIT and a Ph.D. in Computer Science from University of Maryland. His research interests lie at the intersection of biomedical informatics and human-computer interaction (HCI). His ongoing research efforts involve the application of contextual inquiry, human-centered design, information visualization, and other HCI techniques to challenges in collaborative bioinformatics and clinical informatics.
+      - name: Michael Davis
+        alumni: true
+        title: Software Developer
+        bio: Michael is a Software Engineer for the Department of Biomedical Informatics (DBMI) at the University of Pittsburgh where he works on the development of Phenogrid.  He has an MS in Information Science from the University of Pittsburgh. He has worked for several years developing oncology-based database applications at UPMC CancerCenter. His current interest is the development and integration of analytical tools to support big data repositories in research.
+      - name: Zhou Yuan
+        picture: /image/team/ZhouYuan.jpg
+        alumni: true
+        title: Web Application Developer
+        bio: Zhou is a Web Application Developer working on the development of Phenogrid in the Department of Biomedical Informatics (DBMI) at the University of Pittsburgh. He has an MS in Information Science from the University of Pittsburgh. He is also the creator of InfoPotao, Quotagger, PotatoPy, and PotatoGuide. He works as an enthusiastic web developer who tries to create detailed designs to balance the aesthetics, web standards, security, usability, and accessibility aspects in support of biomedical research.
+      - name: Chuck Borromeo
+        alumni: true
+        title: Interface Architect
+        bio: Chuck is a programmer on a wide range of projects (e.g. FaceBase, Monarch, Ontology for Craniofacial Development and Malformations) in the Department of Biomedical Informatics. His responsibilities include leading the FaceBase development team and providing technical solutions on other projects. In the past, Chuck led the development of the Resource Discovery System (RDS) an application tracking 1500 scientific resources from several NIH research programs.
+      - name: Jeremy Espino
+        alumni: true
+        title: Senior Research Scientist, Department of Biomedical Informatics
+        bio: Jeremy is trained in General Medicine, Medical Informatics and Intelligent Systems.  His claim to fame is programming the first real-time disease surveillance system in 1999—the Real-time Outbreak and Disease Surveillance System (RODS).  RODS and its open source derivatives have subsequently been deployed in over 16 states and a couple of countries.  He has also managed the IT infrastructure of the National Retail Monitor which provides over-the-counter medication sales data from over 33,000 retail stores to health departments across the U.S..  In his free time he enjoys hacking micro controllers, piano and 3d printing.
