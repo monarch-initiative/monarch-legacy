@@ -89,6 +89,7 @@ institutions:
         picture: /image/team/NathanDunn.jpg
         title: Software Engineer
         alumni: false
+        bio: Nathan Dunn has a a MS in Chemical Engineering from the University of Washington and a PhD in Computer Science from the University of Oregon where he focused on using artifical neural networks to model the C. elegans nervous system. Since then he has worked in various capacities supporting scientific research.  His current focus is on development of collaborative genomic editing tools.
       - name: Eric Douglass
         picture: /image/team/EricDouglass.jpg
         title: Software Engineer
@@ -97,7 +98,6 @@ institutions:
         title: Software Engineer
         alumni: true
         bio: Jeremy has a MS in Computer Science from the École polytechnique fédérale de Lausanne (EPFL). After spending three years at CERN in the Beams department and a year in a finance company, he joined LBNL in 2015.
-        bio: Nathan Dunn has a a MS in Chemical Engineering from the University of Washington and a PhD in Computer Science from the University of Oregon where he focused on using artifical neural networks to model the C. elegans nervous system. Since then he has worked in various capacities supporting scientific research.  His current focus is on development of collaborative genomic editing tools.
       # - name: Rocket J. Squirrel
       #   title: Lead Moose Foil
       #   alumni: false
@@ -203,7 +203,7 @@ institutions:
         title: Senior Research Scientist
         alumni: false
         bio: "Dr. Balhoff has a PhD in Biology from Duke University. He is interested in the application of ontologies and automated reasoning to facilitate the use and integration of biological data."  
-- id: pitt
+  - id: pitt
     name: University of Pittsburgh
     logo: /image/team-pitt.png
     website: http://pitt.edu
