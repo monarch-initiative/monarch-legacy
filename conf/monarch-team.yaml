@@ -87,7 +87,7 @@ institutions:
         bio: Seth is an occasional software engineer for the Monarch Initiative. He specializes in tools for science and education and has participated in projects in a broad range of fields, including Bioinformatics, Planetary Science, Geology, and Linguistics. His current focus is on capturing and making use of ontology and annotation data. His educational background is undergraduate degrees in Mathematics and Computer Science (UCSC).
       - name: Jeremy Nguyen Xuan
         title: Software Engineer
-        alumni: false
+        alumni: true
         bio: Jeremy has a MS in Computer Science from the École polytechnique fédérale de Lausanne (EPFL). After spending three years at CERN in the Beams department and a year in a finance company, he joined LBNL in 2015.
       - name: Nathan Dunn
         picture: /image/team/NathanDunn.jpg
