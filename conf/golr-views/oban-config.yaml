@@ -42,6 +42,20 @@ fields:
     type: string
     property: []
 
+  - id: onset
+    description: "Classes that describe typical modifiers of clinical symptoms. For example the speed of progression, the variablity or the onset. "
+    display_name: Clinical Modifier
+    type: string
+    property: []
+    searchable: true
+
+  - id: frequency
+    description: "Frequency with that patients do show a particular clinical feature."
+    display_name: Frequency
+    type: string
+    property: []
+    searchable: true
+
 ## SUBJECT
 
   - id: subject
