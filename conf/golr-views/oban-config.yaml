@@ -42,19 +42,6 @@ fields:
     type: string
     property: []
 
-  - id: onset
-    description: "Classes that describe typical modifiers of clinical symptoms. For example the speed of progression, the variablity or the onset. "
-    display_name: Clinical Modifier
-    type: string
-    property: []
-    searchable: true
-
-  - id: frequency
-    description: "Frequency with that patients do show a particular clinical feature."
-    display_name: Frequency
-    type: string
-    property: []
-    searchable: true
 
 ## SUBJECT
 
@@ -592,6 +579,58 @@ fields:
   - id: is_defined_by
     description: "Associations are obtained from the source(s) listed. More than one source indicates the association may be derived from connecting data from multiple sources, or multiple sources have corroborated the same assertion."
     display_name: Source
+    type: string
+    cardinality: multi
+    property: []
+
+  - id: onset
+    description: "Classes that describe typical modifiers of clinical symptoms. For example the speed of progression, the variablity or the onset. "
+    display_name: Clinical Modifier
+    type: string
+    property: []
+
+  - id: onset_label
+    description: "Classes that describe typical modifiers of clinical symptoms. For example the speed of progression, the variablity or the onset. "
+    display_name: Clinical Modifier
+    type: string
+    property: []
+
+  - id: onset_closure
+    description: "Classes that describe typical modifiers of clinical symptoms. For example the speed of progression, the variablity or the onset. "
+    display_name: Clinical Modifier
+    type: string
+    cardinality: multi
+    property: []
+
+  - id: onset_closure_label
+    description: "Classes that describe typical modifiers of clinical symptoms. For example the speed of progression, the variablity or the onset. "
+    display_name: Clinical Modifier
+    type: string
+    cardinality: multi
+    property: []
+
+  - id: frequency
+    description: "Frequency with that patients do show a particular clinical feature."
+    display_name: Frequency
+    type: string
+    property: []
+
+  - id: frequency_label
+    description: "Frequency with that patients do show a particular clinical feature."
+    display_name: Frequency
+    type: string
+    property: []
+
+  - id: frequency_closure
+    description: "Frequency with that patients do show a particular clinical feature."
+    display_name: Frequency
+    type: string
+    cardinality: multi
+    property: []
+
+  - id: frequency_closure_label
+    description: "Frequency with that patients do show a particular clinical feature."
+    display_name: Frequency
     type: string
     cardinality: multi
     property: []
