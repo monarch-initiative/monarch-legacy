@@ -60,7 +60,13 @@ install:
 before_script:
   - "export DISPLAY=:99.0"
   - "# npm run start &"
-  - "# install.sh does this instead... 'npm run build'"
+  - "# install.sh does 'npm run build'"
+  - "# Size with default build"
+  - "ls -lhS dist/"
+  - "# WBS build"
+  - "npm run wbs-build-prod"
+  - "# Size with WBS build"
+  - "ls -lhS dist/"
   - "NODE_PATH=./lib/monarch USE_BUNDLE=1 USE_LOG_FETCH=1 node ./lib/monarch/web/webapp_launcher.js beta &"
   - "sleep 20"
 
@@ -76,24 +82,14 @@ after_failure:
 script:
   - "ps auwx|grep webapp_launcher.js"
   - "unset NODE_PATH && USE_LOG_FETCH=1 make test"
-  - "cd tests/behave"
+  - "pushd tests/behave"
   - "# Testing with Default Firefox"
   - "firefox -v"
   - "TARGET=http://localhost:8080 behave"
   - "# Testing with PhantomJS"
   - "phantomjs -v"
   - "TARGET=http://localhost:8080 BROWSER=phantomjs behave"
-  - "# Size with default build"
-  - "ls -lhS dist/"
-  - "# WBS build"
-  - "npm run wbs-build-prod"
-  - "# Size with WBS build"
-  - "ls -lhS dist/"
-  - "TARGET=http://localhost:8080 behave"
-  - "# Testing with PhantomJS"
-  - "NODE_PATH=./lib/monarch USE_BUNDLE=1 USE_LOG_FETCH=1 node ./lib/monarch/web/webapp_launcher.js --port 8282 beta &"
-  - "phantomjs -v"
-  - "TARGET=http://localhost:8282 BROWSER=phantomjs behave"
+  - "popd"
 
 # whitelist
 branches:
