@@ -71,8 +71,8 @@ def step_impl(context, url):
 ## Title check.
 @then('the title should be "{title}"')
 def step_impl(context, title):
-    print(context.browser.title)
-    print(title)
+    # print('\n\n\n\n#####context.browser.title', context.browser.title)
+    # print('#####title\n\n\n\n', title)
     assert context.browser.title == title
 
 ## The empty title check, a bit of a special case for known "bad" page
@@ -137,7 +137,7 @@ def step_impl(context, clss, text):
 ## A given tab should contain a given piece of text/content.
 @then('the "{tabname}" tab should contain "{text}"')
 def step_impl(context, tabname, text):
-    # print(context.browser.title)
+    #  print(context.browser.title, tabname, text)
     webelts = context.browser.find_elements_by_class_name("tab")
     found_tab = False
     for w in webelts:
@@ -146,7 +146,7 @@ def step_impl(context, tabname, text):
             parent = w.find_element_by_xpath("..")
             tab_href = parent.get_attribute("href")
             url = urlparse(tab_href)
-            tab_id = url.fragment
+            tab_id = url.fragment + '-panel';
             # print(tab_id)
             tab_area_elt = context.browser.find_element_by_id(tab_id)
             # print(tab_area_elt.text)

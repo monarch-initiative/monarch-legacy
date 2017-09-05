@@ -9,10 +9,10 @@ Scenario: Phenotype Analysis Phenogrid works
       then the title should be "Monarch Disease: Angelman syndrome (OMIM:105830)"
       and the document should contain "Phenotype Similarity Comparison"
 
-# @ui
-# Scenario: Documentation example phenogrid appears
-#    Given I go to page "/page/phenogrid"
-#     then the title should be "Monarch Phenotype Grid Widget"
+@ui
+Scenario: Documentation example phenogrid appears
+   Given I go to page "/page/phenogrid"
+    then the title should be "Monarch Phenotype Grid Widget"
 
 # @ui
 #  Scenario: Loading the iframe content for Monarch Phenotype Grid Widget loads a page with the # correct title

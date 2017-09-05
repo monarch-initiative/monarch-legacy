@@ -73,7 +73,6 @@ $( document ).ready(function() {
         fetchMore: function() {
           this.page += 1;
           var anchor = this;
-          console.log("=== FETCH MORE " + this.page + " " + JSON.stringify(this.user_facets));
           var params = jQuery.extend(true, {}, this.user_facetst); // deep copy
           params['p'] = this.page;
           axios.get('/searchapi/'+searchTerm, {params: params})

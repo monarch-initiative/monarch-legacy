@@ -1,3 +1,5 @@
+/* global window */
+
 var jq = require('jquery');
 window.jQuery = jq;
 window.$ = jq;

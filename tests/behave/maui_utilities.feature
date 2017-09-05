@@ -2,14 +2,14 @@ Feature: NodeJS and RingoJS pass all tests.
  Monarch-app JSON blobs behave as expected for various data.
 
 @ui
- Scenario: The "/search" endpoint returns the correct JSON
+ Scenario: The "/search" endpoint displays the correct results
     Given I go to page "/search/twist"
      when I wait for id "more"
      then the title should be "Search Results: twist"
      then the document should contain "Category"
 
 @ui
- Scenario: The "/search" endpoint returns the correct JSON
+ Scenario: The "/search" endpoint displays the correct results
     Given I go to page "/search/p53"
      when I wait for id "more"
      then the title should be "Search Results: p53"
@@ -27,7 +27,7 @@ Feature: NodeJS and RingoJS pass all tests.
      then the document should contain '"resource_description":"BioGRID is'
 
 @ui
- Scenario: The "/admin/introspect" endpoint returns the correct JSON
+ Scenario: The "/admin/introspect" endpoint returns the correct HTML
     Given I go to page "/admin/introspect"
      then the document should contain '"config":'
 
@@ -78,7 +78,6 @@ Scenario: The "/query/orthologs/" endpoint returns the correct JSON
     Given I go to page "/annotate/text"
      then the document should contain "Text Annotator"
      then the title should be "Annotation"
-
 
 @ui
  Scenario: The "/annotate/text" endpoint returns the correct results page

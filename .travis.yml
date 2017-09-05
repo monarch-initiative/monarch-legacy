@@ -52,6 +52,7 @@ before_install:
 install:
   - "rm -rf node_modules/"
   - "./install.sh"
+  - "ls -lhS dist/"
   - "sudo pip install selenium"
   - "sudo pip install behave"
   - "sudo pip install jsonpath-rw"
@@ -82,6 +83,17 @@ script:
   - "# Testing with PhantomJS"
   - "phantomjs -v"
   - "TARGET=http://localhost:8080 BROWSER=phantomjs behave"
+  - "# Size with default build"
+  - "ls -lhS dist/"
+  - "# WBS build"
+  - "npm run wbs-build-prod"
+  - "# Size with WBS build"
+  - "ls -lhS dist/"
+  - "TARGET=http://localhost:8080 behave"
+  - "# Testing with PhantomJS"
+  - "NODE_PATH=./lib/monarch USE_BUNDLE=1 USE_LOG_FETCH=1 node ./lib/monarch/web/webapp_launcher.js --port 8282 beta &"
+  - "phantomjs -v"
+  - "TARGET=http://localhost:8282 BROWSER=phantomjs behave"
 
 # whitelist
 branches:
