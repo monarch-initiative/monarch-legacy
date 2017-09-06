@@ -74,7 +74,8 @@ function initMonarchPage(){
         });
     });
 
-    jQuery("#feedback-window-container #simple-menu").draggable({
+    var handle = jQuery("#feedback-window-container #simple-menu");
+    handle.draggable({
         handle: "#feedback-handle"
     });
 

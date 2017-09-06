@@ -93,9 +93,13 @@ def step_impl(context, item):
     #     print('-----------i.get_attribute(innerHTML)----------------')
     #     print(i.get_attribute('innerHTML'))
     #     print('----------------------------')
-
+    # links = context.browser.find_elements_by_tag_name('a')
+    # for link in links:
+    #     href = link.get_attribute('href')
+    #     text = link.get_attribute('text')
+    #     if item in text:
+    #         break
     webelt = context.browser.find_element_by_partial_link_text(item)
-    # print(webelt.text)
 
 @given('I click the autocomplete item "{item}"')
 def step_impl(context, item):
@@ -106,6 +110,13 @@ def step_impl(context, item):
 @given('I click the autocomplete dropdown item "{item}" with category "{category}"')
 def step_impl(context, item, category):
     link = item + ' ' + category;
-    webelt = context.browser.find_element_by_link_text(link)
-    webelt.click()
+
+    links = context.browser.find_elements_by_tag_name('a')
+    for link in links:
+        href = link.get_attribute('href')
+        text = link.get_attribute('text')
+        if item in text and category in text:
+            link.click()
+            break
+    pass
 

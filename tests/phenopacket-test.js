@@ -3,7 +3,7 @@
    Tests that our phenopackets conform to schema
    
    To run:
-   NODE_PATH=./node-modules:./modules:./lib/monarch node --harmony_destructuring tests/phenopacket-test.js
+   NODE_PATH=./node-modules:./modules:./lib/monarch node tests/phenopacket-test.js
 
  */
 

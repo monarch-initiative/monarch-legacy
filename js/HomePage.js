@@ -34,7 +34,6 @@ function MonarchCarousel(carousel_elt, tabber_elt, next_id, prev_id){
         _cancel_timers();
         var count = self.get_count();
         var current = self.get_current();
-        console.log('count:', count, ' current:', current);
         var new_index = (current === count) ? 1 : (current + 1);
         self.update_carousel_to(new_index, function(){
                 self.update_tabber_to(new_index);
@@ -139,17 +138,18 @@ function MonarchCarousel(carousel_elt, tabber_elt, next_id, prev_id){
             if( from_pos != to_pos ){
             var curr_ref =
                 celt + ' .monarch-carousel-item:nth-child(' + from_pos + ')';
+
             if( jQuery(curr_ref).css('opacity') != '0' &&
                 jQuery(curr_ref).css('opacity') != '0.0' ){
                 jQuery(curr_ref).fadeTo('slow', '0.0');
-                jQuery(curr_ref).zIndex('0');
+                jQuery(curr_ref).css('zIndex', '0');
             }
             }
         });
         // Bring up next one.
         var next_ref = celt +' .monarch-carousel-item:nth-child('+ to_pos +')';
         jQuery(next_ref).fadeTo('slow', '1.0', function(){
-            jQuery(next_ref).zIndex('1');
+            jQuery(next_ref).css('zIndex', '1');
             if( run_at_end_fun ){
                 run_at_end_fun();
             }
@@ -242,7 +242,6 @@ function MonarchCarousel(carousel_elt, tabber_elt, next_id, prev_id){
 function InitHomePage(){
     // Ready search form in corner, with non-standard names.
     // (Default should not load as the default ids do not exists here.)
-    //navbar_search_init('home_search', 'home_search_form');
 
     // Start carousel.
     var mcid = "#monarch-carousel"; // carousel series
