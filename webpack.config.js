@@ -231,7 +231,7 @@ const config = {
     // 'bundle': './ui/bootstrap.js',
     // 'main': './ui/style/main.scss'
     'app': './js/index.js',
-    'main': './ui/style/main.scss'
+    // 'main': './ui/style/main.scss'
   },
   output: {
     publicPath: '/dist/',
