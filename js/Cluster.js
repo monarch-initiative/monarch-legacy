@@ -1,4 +1,4 @@
-var Plotly = require('plotly.js');
+var Plotly = {};    // require('plotly.js');
 
 function loadClusterPlot(){
 

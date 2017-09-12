@@ -1,3 +1,6 @@
+/* global jQuery */
+/* global $ */
+/* eslint-disable */
 
 function AnalyzeInit(phenogrid_conf, view){
     // hide the limit field under search section
