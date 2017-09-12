@@ -44,7 +44,7 @@
                   <thead><tr><th width="25%">Term</th><th width="15%">Category</th><th width="25%">Taxon</th><th>Matching String</th></tr></thead>
                   <tbody>
                     <tr class="search-result-item" v-for="(result, index) in results">
-                      <td><a v-bind:href="'/' + result.category[0].toLowerCase() + '/' + result.id" v-html="result.label[0]"></a></td>
+                      <td><a v-bind:href="'/' + result.category_std[0].toLowerCase() + '/' + result.id" v-html="result.label[0]"></a></td>
                       <td v-html="result.category.join(',')"></td>
                       <td v-html="typeof result.taxon_label === 'object' ? result.taxon_label.join(',') : result.taxon_label"></td>
                       <td v-html="highlight[result.id]"></td>

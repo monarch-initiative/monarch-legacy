@@ -85,3 +85,14 @@ Scenario: The "/query/orthologs/" endpoint returns the correct JSON
      then the document should contain "Marked Up Text"
      then the title should be "Annotation"
 
+@ui
+  Scenario: The "/search" endpoint displays valid links
+    Given I go to page "/search/disease%20musculus"
+      when I wait for id "more"
+      then the title should be "Search Results: disease musculus"
+      then the document should contain "Category"
+      when I click the link "Oguchi disease 2"
+      then the url will be "/disease/OMIM:613411"
+      then the title should be "Monarch Disease: Oguchi disease-2 (OMIM:613411)"
+
+

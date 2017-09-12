@@ -141,3 +141,9 @@ def step_impl(context, tabname, text):
             assert tab_area_elt and tab_area_elt.text.rfind(text) != -1
     assert found_tab
 
+@when('I click the link "{item}"')
+def step_impl(context, item):
+    #print(context.browser.title)
+    webelt = context.browser.find_element_by_partial_link_text(item)
+    webelt.click()
+
