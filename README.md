@@ -37,7 +37,6 @@ below.
 <!-- MarkdownTOC -->
 
 - [Recent Changes](#recent-changes)
-    - [Transitioned RingoJS vs NodeJS](#transitioned-ringojs-vs-nodejs)
     - [Updated front-end modules](#updated-front-end-modules)
     - [Improved UI Tooling and Bundling](#improved-ui-tooling-and-bundling)
 - [Quickstart](#quickstart)
@@ -61,16 +60,12 @@ below.
         - [Installing `nvm` on MacOSX via HomeBrew](#installing-nvm-on-macosx-via-homebrew)
         - [Installing `nvm` on MacOSX or Unix via `wget`/`curl`](#installing-nvm-on-macosx-or-unix-via-wgetcurl)
     - [Installing NodeJS via `n`](#installing-nodejs-via-n)
-- [Legacy RingoJS installation and launch instructions](#legacy-ringojs-installation-and-launch-instructions)
+- [Identifiers](#identifiers)
 
 <!-- /MarkdownTOC -->
 
 
 ## Recent Changes
-
-### Transitioned RingoJS vs NodeJS
-
-The Monarch Initiative web application server has been migrated from the RingoJS server-side Javascript framework to the NodeJS framework. Previous production versions of Monarch prior to October 2015 were based upon RingoJS, which uses the Rhino Javascript engine within a Java Virtual Machine. The same Javascript source code that implements Monarch is now running under NodeJS. The instructions herein refer to the NodeJS implementation unless otherwise clarified as RingoJS-specific.
 
 ### Updated front-end modules
 
@@ -339,20 +334,9 @@ The `n` tool is available from [https://github.com/tj/n](https://github.com/tj/n
 
 ---
 
-## Legacy RingoJS installation and launch instructions
-
-The RingoJS version of Monarch is currently deprecated as we are committed to making the Monarch NodeJS experience great. It is likely that the RingoJS support for Monarch will be eliminated in the near future. Until then, the following instructions should assist in running the RingoJS version.
-
-
-1. Install RingoJS - http://ringojs.org
-
-    ./installRingo.sh
-
-2. Run app
-
-    ./ringo-server.sh
 
 ## Identifiers
+
 Throughout the Monarch web application, we display external entities using their human-friendly labels
 (eg. ontology term label 'polydactyly' or gene symbol 'KNG1') as issued by the original data sources;
 however, while such labels aid human understanding, they often overlap between sources.
