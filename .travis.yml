@@ -59,15 +59,9 @@ install:
 
 before_script:
   - "export DISPLAY=:99.0"
-  - "# npm run start &"
-  - "# install.sh does 'npm run build'"
-  - "# Size with legacy build"
   - "ls -lhS dist/"
-  - "# # WBS build"
-  - "# npm run wbs-build-prod"
-  - "# # Size with WBS build"
-  - "# ls -lhS dist/"
-  - "NODE_PATH=./lib/monarch USE_BUNDLE=1 USE_LOG_FETCH=1 node ./lib/monarch/web/webapp_launcher.js beta &"
+  - "USE_LOG_FETCH=1 npm run startbeta &"
+  - "# NODE_PATH=./lib/monarch USE_BUNDLE=1 USE_LOG_FETCH=1 node ./lib/monarch/web/webapp_launcher.js beta &"
   - "sleep 20"
 
 after_success:
@@ -81,14 +75,14 @@ after_failure:
 # command to run tests
 script:
   - "ps auwx|grep webapp_launcher.js"
-  - "unset NODE_PATH && USE_LOG_FETCH=1 make test"
+  - "USE_LOG_FETCH=1 make test"
   - "pushd tests/behave"
-  - "# Testing with Default Firefox"
+  - "# Testing with Firefox"
   - "firefox -v"
   - "TARGET=http://localhost:8080 behave --no-capture"
   - "# Testing with PhantomJS"
-  - "phantomjs -v"
-  - "TARGET=http://localhost:8080 BROWSER=phantomjs behave --no-capture"
+  - "# phantomjs -v"
+  - "# TARGET=http://localhost:8080 BROWSER=phantomjs behave --no-capture"
   - "popd"
 
 # whitelist

@@ -16,6 +16,8 @@ from selenium.webdriver.common.desired_capabilities import DesiredCapabilities
 ###
 ### Simple (but somewhat excessive for the data parts) environment.
 ###
+window_width = 1200
+window_height = 900
 
 ## Run this before anything else.
 def before_all(context):
@@ -72,7 +74,7 @@ def before_all(context):
     # Set a 30 second implicit wait - http://selenium-python.readthedocs.org/en/latest/waits.html#implicit-waits
     # Once set, the implicit wait is set for the life of the WebDriver object instance.
     #
-    context.browser.set_window_size(2000, 1500)
+    context.browser.set_window_size(window_width, window_height)
     context.browser.implicitly_wait(30) # seconds
     #time.sleep(15)
 
@@ -88,7 +90,7 @@ def after_all(context):
 def before_scenario(context, scenario):
     # Dimensions should be smaller than those /usr/bin/Xvfb config in .travis.yml
     # Currently .travis.yml uses 1280x1024x16
-    context.browser.set_window_size(2000, 1500)
+    context.browser.set_window_size(window_width, window_height)
     # time.sleep(1)
     pass
 

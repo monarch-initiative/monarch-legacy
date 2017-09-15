@@ -123,15 +123,6 @@ deploy: origin-push heroku-deploy
 origin-push:
 	git push origin master
 
-## cjm: http://secret-harbor-1370.herokuapp.com/
-heroku-create:
-	heroku create --stack cedar --buildpack https://github.com/cmungall/heroku-buildpack-ringojs-jdk7.git --remote monarch-heroku
-heroku-deploy:
-	git push monarch-heroku master
-
-app-engine:
-	ringo-admin create --google-appengine gae
-
 dependencies:
 	sh ./update_dependencies.sh
 

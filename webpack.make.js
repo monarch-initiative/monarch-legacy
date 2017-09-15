@@ -161,11 +161,11 @@ config.module = {
         ]
     },
 
-    {
-      test: /\.(woff(2)?|ttf|eot|svg)(\?v=\d+\.\d+\.\d+)?$/,
-      loader: 'file-loader?limit=10000',
-      include: [fa]
-    },
+    // {
+    //   test: /\.(woff(2)?|ttf|eot|svg)(\?v=\d+\.\d+\.\d+)?$/,
+    //   loader: 'file-loader?limit=10000',
+    //   include: [fa]
+    // },
 
   {
     // ASSET LOADER

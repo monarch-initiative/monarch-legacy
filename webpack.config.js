@@ -234,7 +234,7 @@ const config = {
     // 'main': './ui/style/main.scss'
   },
   output: {
-    publicPath: MODE_DEV_SERVER ? '' : '/dist/',
+    publicPath: MODE_DEV_SERVER ? '/' : '/dist/',
     filename: `[name]${hash}.bundle.js`,
     chunkFilename: `[id]${hash}.chunk.js`,
     path: path.join(__dirname, BUILD_DIR, DIST_DIR)
