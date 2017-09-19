@@ -839,20 +839,13 @@ div.bs3table {
     padding-right:5px;
 }
 
-/*
-#results-area .bs3table > table > thead > tr > th:first-child {
-    min-width:280px;
-    width:280px;
-}
-*/
-
 #results-area .bs3table > table > thead > tr > th:nth-last-child(2) {
-    min-width:110px;
-    width:110px;
+    min-width:120px;
+    width:120px;
 }
 #results-area .bs3table > table > thead > tr > th:last-child {
     min-width:70px;
-    width:60px;
+    width:70px;
 }
 
 /* End of Filter Hack */
