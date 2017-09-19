@@ -18,6 +18,8 @@ from selenium.webdriver.common.desired_capabilities import DesiredCapabilities
 ###
 window_width = 1200
 window_height = 900
+implicit_wait_seconds = 30
+
 
 ## Run this before anything else.
 def before_all(context):
@@ -75,7 +77,7 @@ def before_all(context):
     # Once set, the implicit wait is set for the life of the WebDriver object instance.
     #
     context.browser.set_window_size(window_width, window_height)
-    context.browser.implicitly_wait(30) # seconds
+    context.browser.implicitly_wait(implicit_wait_seconds) # seconds
     #time.sleep(15)
 
 ## Do this after completing everything.

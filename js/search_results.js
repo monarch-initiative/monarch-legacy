@@ -1,9 +1,15 @@
 // searchResults is an array
 //console.log(searchResults);
+/* global $ */
+/* global document */
+/* global Vue */
+/* global axios */
+/* global searchTerm */
 
-$( document ).ready(function() {
+/* eslint indent: 0 */
 
-    var vueapp = new Vue({
+$(document).ready(function() {
+    const vueapp = new Vue({
       delimiters: ['{[{', '}]}'], // ugly, but otherwise it'll clash with puptent template mechanism
       el: '#vue-app',
       data: {
@@ -15,20 +21,27 @@ $( document ).ready(function() {
         page: 0,
         numFound: 0,
         numRowsDisplayed: 0,
-        selenium_id: ''
+        selenium_id: '',
+        searching: true
       },
       methods: {
-        fetchResults: function () {
+        fetchResults: function() {
           // console.log("=== FETCH " + this.page + " " + JSON.stringify(this.user_facets));
-          var anchor = this;
-          axios.get('/searchapi/'+searchTerm, {params: this.user_facets})
+          const anchor = this;
+          anchor.searching = true;
+          axios.get(
+            `/searchapi/${searchTerm}`,
+            {
+              params: this.user_facets
+            })
             .then(function (response) {
+              anchor.searching = false;
               anchor.numFound = response.data.response.numFound;
               anchor.numRowsDisplayed = response.data.response.docs.length;
               anchor.results = response.data.response.docs;
               anchor.highlight = {};
               anchor.selenium_id = 'loaded';
-              if (anchor.numFound == 0) {
+              if (anchor.numFound === 0) {
                 anchor.fetchSuggestions();
               }
               // Take the first highilited field and massage it in a more convenient data structure
@@ -67,16 +80,19 @@ $( document ).ready(function() {
               }
             })
             .catch(function (error) {
+              anchor.searching = false;
               console.log(error);
           });
         },
         fetchMore: function() {
           this.page += 1;
           var anchor = this;
+          anchor.searching = true;
           var params = jQuery.extend(true, {}, this.user_facetst); // deep copy
           params['p'] = this.page;
           axios.get('/searchapi/'+searchTerm, {params: params})
             .then(function (response) {
+              anchor.searching = false;
               anchor.numRowsDisplayed += response.data.response.docs.length;
               anchor.results = anchor.results.concat(response.data.response.docs);
               Object.keys(response.data.highlighting).forEach(function(key) {
@@ -85,6 +101,7 @@ $( document ).ready(function() {
               });
             })
             .catch(function (error) {
+              anchor.searching = false;
               console.log(error);
           });
         },
@@ -106,18 +123,20 @@ $( document ).ready(function() {
         fetchSuggestions: function() {
           //console.log("=== FETCH SUGGESTIONS");
           var anchor = this;
+          anchor.searching = true;
           axios.get('/suggestapi/'+searchTerm)
             .then(function (response) {
               anchor.suggestions = response.data;
+              anchor.searching = false;
             })
             .catch(function (error) {
               console.log(error);
+              anchor.searching = false;
           });
         }
       }
-    })
+    });
 
     // initial call
     vueapp.fetchResults();
-
   });

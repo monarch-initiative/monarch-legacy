@@ -39,7 +39,7 @@ def step_impl(context, id):
     # time.sleep(5)
     try:
         # print("\n#######Wait for ", id, "\n")
-        element = WebDriverWait(context.browser, 200).until(EC.presence_of_element_located((By.ID, id)))
+        element = WebDriverWait(context.browser, 30).until(EC.presence_of_element_located((By.ID, id)))
         # print("\n#######Found ", id, element, "\n")
 
         # webelt = context.browser.find_element_by_tag_name('html')

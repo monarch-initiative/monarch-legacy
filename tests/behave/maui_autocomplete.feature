@@ -28,10 +28,10 @@ Scenario: "food" in the navbar search with a click goes to a details page
 Scenario: "ZRS" in the navbar search with a click goes to a gene page
    Given I go to page "/"
     and I type "ZRS" into the navbar search
-    and I wait until "ZRSR2" appears in the autocomplete
-    and I click the autocomplete dropdown item "ZRSR2" with category "Gallus gallus"
+    and I wait until "ZRSR1" appears in the autocomplete
+    and I click the autocomplete dropdown item "ZRSR1" with category "Homo sapiens"
     when I wait for id "monarch-node"
-    then the title should be "Monarch Gene: ZRSR2 (NCBIGene:428002)"
+    then the title should be "Monarch Gene: ZRSR1 (NCBIGene:7310)"
 
 @ui
 Scenario: "hyper-be" in the navbar search with a click goes to a disease page
