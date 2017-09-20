@@ -1,7 +1,3 @@
-if (typeof bbop == 'undefined') { var bbop = {};}
-if (typeof bbop.monarch == 'undefined') { bbop.monarch = {};}
-
-
 //Graph for phenotypeLandingPage
 bbop.monarch.phenotypeLandingConfig = {
         // Starting filters

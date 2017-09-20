@@ -1,12 +1,9 @@
 /* global window */
 /* global jQuery */
-/* global loaderGlobals */
 
-if (!_) {
-    var _ = require('underscore');
-}
+const _ = require('underscore');
 
-function MonarchCarousel(carousel_elt, tabber_elt, next_id, prev_id){
+function MonarchCarousel(carousel_elt, tabber_elt, next_id, prev_id) {
 
     var self = this;
 
@@ -251,9 +248,4 @@ function InitHomePage(){
     jQuery('[data-toggle="popover"]').popover({'trigger':'hover'});
 }
 
-if (typeof exports === 'object') {
-    exports.InitHomePage = InitHomePage;
-}
-if (typeof loaderGlobals === 'object') {
-    loaderGlobals.InitHomePage = InitHomePage;
-}
+exports.InitHomePage = InitHomePage;

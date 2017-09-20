@@ -4,28 +4,6 @@
 function InitFacetFilters() {
   var _ = require('underscore');
   var jq = require('jquery');
-  if (typeof(globalUseBundle) === 'undefined' || !globalUseBundle) {
-    var bbop = loaderGlobals.bbop;
-  }
-  else {
-    var bbop = require('bbop');
-  }
-
-  // Module and namespace checking.
-  // if ( typeof bbop == "undefined" ){ var bbop = {}; }
-
-  if ( typeof bbop.monarch == "undefined" ){ bbop.monarch = {}; }
-  if ( typeof bbop.monarch.widget == "undefined" ){ bbop.monarch.widget = {}; }
-
-  if (typeof(loaderGlobals) === 'object') {
-      loaderGlobals.bbop = bbop;
-  }
-  if (typeof(global) === 'object') {
-      global.bbop = bbop;
-  }
-  if( typeof(exports) != 'undefined' ) {
-      exports.bbop = bbop;
-  }
 
 /*
  * Package: facet_filters.js
@@ -36,9 +14,6 @@ function InitFacetFilters() {
  *
  * This class is a drop-in replacement for live_filters
  */
-
-if ( typeof bbop == "undefined" ){ var bbop = {}; }
-if ( typeof bbop.widget == "undefined" ){ bbop.widget = {}; }
 
 /*
  * Constructor: facet_filters
@@ -799,10 +774,4 @@ bbop.widget.facet_filters = function(interface_id, manager, golr_conf_obj, in_ar
 
 }
 
-
-if (typeof loaderGlobals === 'object') {
-    loaderGlobals.InitFacetFilters = InitFacetFilters;
-}
-if (typeof global === 'object') {
-    global.InitFacetFilters = InitFacetFilters;
-}
+exports.InitFacetFilters = InitFacetFilters;

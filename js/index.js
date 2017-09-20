@@ -17,9 +17,9 @@ import 'jquery-ui/ui/widgets/autocomplete';
 import 'jquery-ui/ui/widgets/draggable';
 
 import 'd3';
-import './search_form';
-import './monarch-tabs';
-import './lib/monarch/widget/facet-filters';
+
+import {navbar_search_init} from './search_form';
+window.navbar_search_init = navbar_search_init;
 
 import 'font-awesome/css/font-awesome.min.css';
 import '../css/monarch.less';
@@ -27,52 +27,92 @@ import '../css/monarch-common.css';
 import '../css/monarch-specific.css';
 import '../css/monarch-home.css';
 
-//console.log('before import bbop:', Object.keys(bbop));
-import _bbop from 'bbop';
-var bbop = _bbop;
-window.getAnnotationScore = require('exports-loader?getAnnotationScore!./monarch-common');
-
+import bbop from 'bbop';
+window.bbop = bbop;
+if (bbop.monarch) {
+	console.log('Unexpected monarch field in imported bbop', bbop);
+}
+else {
+	bbop.monarch = {
+		widget: {}
+	}
+}
 
 // Core browser/server libraries
-import './lib/monarch/handler';
-import './lib/monarch/linker';
-import './lib/monarch/widget/browse';
-import './lib/monarch/widget/display/results_table_by_class_conf_bs3';
+import {InitMonarchBBOPHandler} from './lib/monarch/handler';
+window.InitMonarchBBOPHandler = InitMonarchBBOPHandler;
+
+import {InitMonarchBBOPLinker} from './lib/monarch/linker';
+window.InitMonarchBBOPLinker = InitMonarchBBOPLinker;
+
+import {InitMonarchBBOPWidgetBrowse} from './lib/monarch/widget/browse';
+window.InitMonarchBBOPWidgetBrowse = InitMonarchBBOPWidgetBrowse;
+
+import {InitMonarchBBOPWidgetDisplay} from './lib/monarch/widget/display/results_table_by_class_conf_bs3';
+window.InitMonarchBBOPWidgetDisplay = InitMonarchBBOPWidgetDisplay;
 
 import './jquery.cookie';
 import './jquery.xml2json';
 
-import './HomePage';
+import {InitHomePage} from './HomePage';
+window.InitHomePage = InitHomePage;
+
+import {
+	InitMonarchPage,
+	getAnnotationScore,
+	remove_equivalent_ids,
+	makeSpinnerDiv,
+	add_species_to_autocomplete,
+	fetchPubmedAbstract,
+	fetchPubmedSummary,
+	makeAuthorSpan,
+} from './monarch-common';
+window.InitMonarchPage = InitMonarchPage;
+window.getAnnotationScore = getAnnotationScore;
+window.remove_equivalent_ids = remove_equivalent_ids;
+window.makeSpinnerDiv = makeSpinnerDiv;
+window.add_species_to_autocomplete = add_species_to_autocomplete;
+window.fetchPubmedAbstract = fetchPubmedAbstract;
+window.fetchPubmedSummary = fetchPubmedSummary;
+window.makeAuthorSpan = makeAuthorSpan;
+
 import '../css/bbop.css';
-import './golr-table';
-import './overview';
+import {getTableFromSolr} from './golr-table';
+window.getTableFromSolr = getTableFromSolr;
+
+import
+{
+	getOntologyBrowser,
+	launchBrowser,
+	fetchLiteratureOverview,
+	fetchGeneDescription,
+} from './overview';
+window.getOntologyBrowser = getOntologyBrowser;
+window.launchBrowser = launchBrowser;
+window.fetchLiteratureOverview = fetchLiteratureOverview;
+window.fetchGeneDescription = fetchGeneDescription;
+
+
 import './stupidtable.min';
-import './Cluster';
-window.InitTables = require('exports-loader?InitTables!./tables');
 
-var bl = require('exports-loader?makeDiseaseLandingGraph,makePhenotypeLandingGraph,makeDiseaseLandingGraph,makeGeneDiseaseLandingGraph,makeGenotypeLandingGraph!./barchart-launcher.js');
-global.makeDiseaseLandingGraph = bl.makeDiseaseLandingGraph;
-global.makePhenotypeLandingGraph = bl.makePhenotypeLandingGraph;
-global.makeGenotypeLandingGraph = bl.makeGenotypeLandingGraph;
-global.makeDiseaseLandingGraph = bl.makeDiseaseLandingGraph;
-global.bbop = bbop;
+import {InitTables} from './tables';
+window.InitTables = InitTables;
 
-/* global loaderGlobals */
+import {InitTabs} from './monarch-tabs';
+window.InitTabs = InitTabs;
 
-if (typeof loaderGlobals === 'object') {
-	loaderGlobals.bbop = global.bbop;
-	loaderGlobals.InitTabs = global.InitTabs;
-	loaderGlobals.InitTables = global.InitTables;
-	loaderGlobals.InitFacetFilters = global.InitFacetFilters;
-	loaderGlobals.InitMonarchBBOPHandler = global.InitMonarchBBOPHandler;
-	loaderGlobals.InitMonarchBBOPLinker = global.InitMonarchBBOPLinker;
-	loaderGlobals.InitMonarchBBOPWidgetBrowse = global.InitMonarchBBOPWidgetBrowse;
-	loaderGlobals.InitMonarchBBOPWidgetDisplay = global.InitMonarchBBOPWidgetDisplay;
+import FacetFilters from './lib/monarch/widget/facet-filters';
+window.InitFacetFilters = FacetFilters.InitFacetFilters;
 
-	loaderGlobals.makeDiseaseLandingGraph = global.makeDiseaseLandingGraph;
-	loaderGlobals.makePhenotypeLandingGraph = global.makePhenotypeLandingGraph;
-	loaderGlobals.makeGenotypeLandingGraph = global.makeGenotypeLandingGraph;
-	loaderGlobals.makeGeneDiseaseLandingGraph = global.makeGeneDiseaseLandingGraph;
-	loaderGlobals.getTableFromSolr = global.getTableFromSolr;
-	loaderGlobals.getOntologyBrowser = global.getOntologyBrowser;
-}
+import {
+	makeDiseaseLandingGraph,
+	makePhenotypeLandingGraph,
+	makeGenotypeLandingGraph,
+	makeGeneDiseaseLandingGraph,
+	makeModelLandingGraph,
+} from './barchart-launcher.js';
+window.makeDiseaseLandingGraph = makeDiseaseLandingGraph;
+window.makePhenotypeLandingGraph = makePhenotypeLandingGraph;
+window.makeGenotypeLandingGraph = makeGenotypeLandingGraph;
+window.makeGeneDiseaseLandingGraph = makeGeneDiseaseLandingGraph;
+window.makeModelLandingGraph = makeModelLandingGraph;

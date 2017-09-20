@@ -244,17 +244,8 @@ function setMinHeightWidth (graphObject, div){
 }
 
 
-if (typeof(loaderGlobals) === 'object') {
-    loaderGlobals.makeDiseaseLandingGraph = makeDiseaseLandingGraph;
-    loaderGlobals.makePhenotypeLandingGraph = makePhenotypeLandingGraph;
-    loaderGlobals.makeGenotypeLandingGraph = makeGenotypeLandingGraph;
-    loaderGlobals.makeGeneDiseaseLandingGraph = makeGeneDiseaseLandingGraph;
-    loaderGlobals.makeModelLandingGraph = makeModelLandingGraph;
-}
-if (typeof(global) === 'object') {
-    global.makeDiseaseLandingGraph = makeDiseaseLandingGraph;
-    global.makePhenotypeLandingGraph = makePhenotypeLandingGraph;
-    global.makeGenotypeLandingGraph = makeGenotypeLandingGraph;
-    global.makeGeneDiseaseLandingGraph = makeGeneDiseaseLandingGraph;
-    global.makeModelLandingGraph = makeModelLandingGraph;
-}
+exports.makeDiseaseLandingGraph = makeDiseaseLandingGraph;
+exports.makePhenotypeLandingGraph = makePhenotypeLandingGraph;
+exports.makeGenotypeLandingGraph = makeGenotypeLandingGraph;
+exports.makeGeneDiseaseLandingGraph = makeGeneDiseaseLandingGraph;
+exports.makeModelLandingGraph = makeModelLandingGraph;

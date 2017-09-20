@@ -17,17 +17,6 @@
         <link rel="stylesheet" type="text/css" href="{{{.}}}">
     {{/pup_tent_css_libraries}}
 
-    <!-- JS launcher. -->
-    <script type="text/javascript">
-        loaderGlobals = {};
-{{#useBundle}}
-    globalUseBundle = useBundle = window.useBundle = true;
-{{/useBundle}}
-{{^useBundle}}
-    globalUseBundle = useBundle = window.useBundle = false;
-{{/useBundle}}
-    </script>
-
     <!-- JS variables. -->
     {{#pup_tent_js_variables}}
         <script type="text/javascript">var {{name}} = {{{value}}};</script>
@@ -45,37 +34,13 @@
     <!-- JS launcher. -->
     <script type="text/javascript">
         function loaderBody() {
-makeDiseaseLandingGraph = loaderGlobals.makeDiseaseLandingGraph;
-makeGenotypeLandingGraph = loaderGlobals.makeGenotypeLandingGraph;
-makePhenotypeLandingGraph = loaderGlobals.makePhenotypeLandingGraph;
-makeDiseaseLandingGraph = loaderGlobals.makeDiseaseLandingGraph;
-makeGeneDiseaseLandingGraph = loaderGlobals.makeGeneDiseaseLandingGraph;
-makeModelLandingGraph = loaderGlobals.makeModelLandingGraph;
-getTableFromSolr = loaderGlobals.getTableFromSolr;
-getOntologyBrowser = loaderGlobals.getOntologyBrowser;
-bbop = loaderGlobals.bbop;
-navbar_search_init = loaderGlobals.navbar_search_init;
-InitHomePage = loaderGlobals.InitHomePage;
-InitTables = loaderGlobals.InitTables;
-remove_equivalent_ids = loaderGlobals.remove_equivalent_ids;
-makeSpinnerDiv = loaderGlobals.makeSpinnerDiv;
-add_species_to_autocomplete = loaderGlobals.add_species_to_autocomplete;
-CyPathDemoInit = loaderGlobals.CyPathDemoInit;
-CyExploreDemoInit = loaderGlobals.CyExploreDemoInit;
-fetchPubmedAbstract = loaderGlobals.fetchPubmedAbstract;
-fetchPubmedSummary = loaderGlobals.fetchPubmedSummary;
-fetchLiteratureOverview = loaderGlobals.fetchLiteratureOverview;
-fetchGeneDescription = loaderGlobals.fetchGeneDescription;
-loadClusterPlot = loaderGlobals.loadClusterPlot;
-
-
-            loaderGlobals.InitFacetFilters();
-            loaderGlobals.InitMonarchBBOPHandler();
-            loaderGlobals.InitMonarchBBOPLinker();
-            loaderGlobals.InitMonarchBBOPWidgetBrowse();
-            loaderGlobals.InitMonarchBBOPWidgetDisplay();
-            loaderGlobals.initMonarchPage();
-            loaderGlobals.InitTabs();
+            InitMonarchBBOPHandler();
+            InitMonarchBBOPLinker();
+            InitMonarchBBOPWidgetBrowse();
+            InitMonarchBBOPWidgetDisplay();
+            InitMonarchPage();
+            InitTabs();
+            InitFacetFilters();
 
             {{#monarch_launchable}}
                 {{.}};
@@ -108,21 +73,7 @@ function loader() {
 <body
 {{/home_page}}
     id="monarch-body"
-{{#useBundle}}
-onload="loaderBody()"
-{{/useBundle}}
->
-
-{{#useBundle}}
-<script>
-//loader();
-</script>
-{{/useBundle}}
-
-{{^useBundle}}
-<script src="/require.js" data-main="/requireconfig"></script>
-{{/useBundle}}
-
+onload="loaderBody()">
 
 {{&pup_tent_content}}
 

@@ -94,9 +94,4 @@ function loadClusterPlot(){
   });
 }
 
-if (typeof(loaderGlobals) === 'object') {
-    loaderGlobals.loadClusterPlot = loadClusterPlot;
-}
-if (typeof(global) === 'object') {
-    global.loadClusterPlot = loadClusterPlot;
-}
+exports.loadClusterPlot = loadClusterPlot;
