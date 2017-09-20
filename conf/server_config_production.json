@@ -5,7 +5,7 @@
 
     "scigraph_url" : "https://scigraph-ontology.monarchinitiative.org/scigraph/",
 
-    "scigraph_data_url" : "https://scigraph-data-dev.monarchinitiative.org/scigraph/",
+    "scigraph_data_url" : "https://scigraph-data.monarchinitiative.org/scigraph/",
 
     "golr_url" : "https://solr.monarchinitiative.org/solr/golr/",
 
