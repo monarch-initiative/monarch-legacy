@@ -39,4 +39,5 @@ Scenario: "hyper-be" in the navbar search with a click goes to a disease page
     and I type "Hyper-bet" into the navbar search
     and I wait until "HYPER-BETA-ALANINEMIA" appears in the autocomplete
     and I click the autocomplete item "HYPER-BETA-ALANINEMIA"
+    when I wait for id "monarch-node"
     then the title should be "Monarch Disease: Hyper-beta-alaninemia (OMIM:237400)"

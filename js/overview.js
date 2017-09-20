@@ -174,15 +174,8 @@ function fetchGeneDescription(geneID) {
     });
 }
 
-if (typeof (loaderGlobals) === 'object') {
-    loaderGlobals.getOntologyBrowser = getOntologyBrowser;
-    loaderGlobals.launchBrowser = launchBrowser;
-    loaderGlobals.fetchLiteratureOverview = fetchLiteratureOverview;
-    loaderGlobals.fetchGeneDescription = fetchGeneDescription;
-}
-if (typeof (global) === 'object') {
-    global.getOntologyBrowser = getOntologyBrowser;
-    global.launchBrowser = launchBrowser;
-    global.fetchLiteratureOverview = fetchLiteratureOverview;
-    global.fetchGeneDescription = fetchGeneDescription;
-}
+exports.getOntologyBrowser = getOntologyBrowser;
+exports.launchBrowser = launchBrowser;
+exports.fetchLiteratureOverview = fetchLiteratureOverview;
+exports.fetchGeneDescription = fetchGeneDescription;
+

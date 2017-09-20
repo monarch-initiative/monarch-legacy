@@ -15,30 +15,6 @@
 
 function InitMonarchBBOPHandler() {
     var jq = require('jquery');
-    if (typeof(globalUseBundle) === 'undefined' || !globalUseBundle) {
-        var bbop = loaderGlobals.bbop;
-    }
-    else {
-        var bbop = require('bbop');
-    }
-
-    // Module and namespace checking.
-    // if ( typeof bbop == "undefined" ){ var bbop = {}; }
-
-    if ( typeof bbop.monarch == "undefined" ){ bbop.monarch = {}; }
-    if ( typeof bbop.monarch.widget == "undefined" ){ bbop.monarch.widget = {}; }
-
-    if (typeof(loaderGlobals) === 'object') {
-        loaderGlobals.bbop = bbop;
-    }
-    if (typeof(global) === 'object') {
-        global.bbop = bbop;
-    }
-    if( typeof(exports) != 'undefined' ) {
-        exports.bbop = bbop;
-    }
-
-
 
 /*
  * Constructor: handler
@@ -171,10 +147,4 @@ bbop.monarch.handler.prototype.dispatch = function(data, name, context, fallback
 
 }
 
-
-if (typeof loaderGlobals === 'object') {
-    loaderGlobals.InitMonarchBBOPHandler = InitMonarchBBOPHandler;
-}
-if (typeof global === 'object') {
-    global.InitMonarchBBOPHandler = InitMonarchBBOPHandler;
-}
+exports.InitMonarchBBOPHandler = InitMonarchBBOPHandler;
