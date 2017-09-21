@@ -115,7 +115,7 @@ function fetchLiteratureOverview(id) {
 
 function fetchGeneDescription(id) {
     //https://mygene.info/v2/query?q=6469&fields=summary
-    var spinner_args = {'generate_id': true,
+    var spinner_args = {'id': 'my-gene-spinner',
             'class': 'progress progress-striped active',
             'style': 'width: 3em;display:inline-block; margin:0;'
     };

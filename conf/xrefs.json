@@ -134,6 +134,21 @@
       "url_syntax" : "http://purl.obolibrary.org/obo/RO_[example_id]",
       "datatype" : null
    },
+   "geno" : {
+      "object" : null,
+      "uri_prefix" : null,
+      "name" : null,
+      "url_example" : "http://purl.obolibrary.org/obo/GENO_0002211",
+      "description" : "Ontology that represents the levels of genetic variation specified in genotypes",
+      "database" : "OBO GENO Ontology Ontology",
+      "example_id" : "GENO:0002211",
+      "generic_url" : "http://purl.obolibrary.org/obo/geno",
+      "fullname" : null,
+      "id" : null,
+      "abbreviation" : "GENO",
+      "url_syntax" : "http://purl.obolibrary.org/obo/GENO_[example_id]",
+      "datatype" : null
+   },
    "rnamdb" : {
       "object" : "Identifier",
       "name" : null,
@@ -177,7 +192,8 @@
       "id" : null,
       "abbreviation" : "RGD",
       "url_syntax" : "http://rgd.mcw.edu/generalSearch/RgdSearch.jsp?quickSearch=1&searchKeyword=[example_id]",
-      "datatype" : null
+      "datatype" : null,
+      "image_path" : "/image/source-rgd.gif"
    },
    "ncbitaxon" : {
       "object" : "Identifier",
@@ -5062,7 +5078,6 @@
    },
    "string" : {
       "object" : "Identifier",
-      "name" : null,
       "uri_prefix" : null,
       "name": "STRING",
       "database" : "STRING",
@@ -5072,5 +5087,18 @@
       "id" : null,
       "datatype" : null,
       "image_path" : "/image/source-string.png"
+   },
+   "rgdref" : {
+      "object" : "Identifier",
+      "uri_prefix" : null,
+      "name": "RGD",
+      "database" : "Rat Genome Database",
+      "generic_url" : "http://rgd.mcw.edu/",
+      "fullname" : null,
+      "abbreviation" : "RGD",
+      "id" : null,
+      "datatype" : null,
+      "url_syntax" : "http://rgd.mcw.edu/rgdweb/report/reference/main.html?id=[example_id]",
+      "image_path" : "/image/source-rgd.gif"
    }
 }
