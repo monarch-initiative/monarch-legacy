@@ -30,12 +30,12 @@ import '../css/monarch-home.css';
 import bbop from 'bbop';
 window.bbop = bbop;
 if (bbop.monarch) {
-	console.log('Unexpected monarch field in imported bbop', bbop);
+  console.log('Unexpected monarch field in imported bbop', bbop);
 }
 else {
-	bbop.monarch = {
-		widget: {}
-	}
+  bbop.monarch = {
+    widget: {}
+  }
 }
 
 // Core browser/server libraries
@@ -58,14 +58,14 @@ import {InitHomePage} from './HomePage';
 window.InitHomePage = InitHomePage;
 
 import {
-	InitMonarchPage,
-	getAnnotationScore,
-	remove_equivalent_ids,
-	makeSpinnerDiv,
-	add_species_to_autocomplete,
-	fetchPubmedAbstract,
-	fetchPubmedSummary,
-	makeAuthorSpan,
+  InitMonarchPage,
+  getAnnotationScore,
+  remove_equivalent_ids,
+  makeSpinnerDiv,
+  add_species_to_autocomplete,
+  fetchPubmedAbstract,
+  fetchPubmedSummary,
+  makeAuthorSpan,
 } from './monarch-common';
 window.InitMonarchPage = InitMonarchPage;
 window.getAnnotationScore = getAnnotationScore;
@@ -82,16 +82,15 @@ window.getTableFromSolr = getTableFromSolr;
 
 import
 {
-	getOntologyBrowser,
-	launchBrowser,
-	fetchLiteratureOverview,
-	fetchGeneDescription,
+  getOntologyBrowser,
+  launchBrowser,
+  fetchLiteratureOverview,
+  fetchGeneDescription,
 } from './overview';
 window.getOntologyBrowser = getOntologyBrowser;
 window.launchBrowser = launchBrowser;
 window.fetchLiteratureOverview = fetchLiteratureOverview;
 window.fetchGeneDescription = fetchGeneDescription;
-
 
 import './stupidtable.min';
 
@@ -105,12 +104,12 @@ import FacetFilters from './lib/monarch/widget/facet-filters';
 window.InitFacetFilters = FacetFilters.InitFacetFilters;
 
 import {
-	makeDiseaseLandingGraph,
-	makePhenotypeLandingGraph,
-	makeGenotypeLandingGraph,
-	makeGeneDiseaseLandingGraph,
-	makeModelLandingGraph,
-} from './barchart-launcher.js';
+  makeDiseaseLandingGraph,
+  makePhenotypeLandingGraph,
+  makeGenotypeLandingGraph,
+  makeGeneDiseaseLandingGraph,
+  makeModelLandingGraph,
+} from 'imports-loader?monarch=>monarch!./barchart-launcher.js';
 window.makeDiseaseLandingGraph = makeDiseaseLandingGraph;
 window.makePhenotypeLandingGraph = makePhenotypeLandingGraph;
 window.makeGenotypeLandingGraph = makeGenotypeLandingGraph;

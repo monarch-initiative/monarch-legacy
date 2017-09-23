@@ -270,7 +270,7 @@ monarch.dovechart.prototype.makeNavArrow = function(data, navigate, triangleDim,
 
 monarch.dovechart.prototype.transitionToNewGraph = function(histogram, data, barGroup, bar, parent){
     self = this;
-    config = self.config;
+    var config = self.config;
     self.tooltip.style("display", "none");
     histogram.svg.selectAll(".tick").remove();
     
@@ -962,6 +962,7 @@ monarch.dovechart.prototype.makeBreadcrumb = function(histogram, label, groups, 
                 words[1]=words[1]+"...";
             }
             len = words.length;
+            var i;
             for (i = 0;i < len; i++) {
                 if (words[i].length > 12){
                     fontSize = ((1/words[i].length)*150);
@@ -1031,7 +1032,7 @@ monarch.dovechart.prototype.setBarConfigPerCheckBox = function(histogram, data, 
 
 monarch.dovechart.prototype.setYAxisText = function(histogram, data, barGroup, bar, yFont){
     var self = this;
-    config = self.config;
+    var config = self.config;
     
     histogram.svg.select(".y.axis")
     .selectAll("text")
@@ -1071,7 +1072,7 @@ monarch.dovechart.prototype.setYAxisText = function(histogram, data, barGroup, b
 
 monarch.dovechart.prototype.disableYAxisText = function(histogram, data, barGroup, bar){
     self = this;
-    config = self.config;
+    var config = self.config;
     
     histogram.svg.select(".y.axis")
     .selectAll("text")
@@ -1090,7 +1091,7 @@ monarch.dovechart.prototype.disableYAxisText = function(histogram, data, barGrou
 
 monarch.dovechart.prototype.activateYAxisText = function(histogram, data, barGroup, bar){
     self = this;
-    config = self.config;
+    var config = self.config;
     
     histogram.svg.select(".y.axis")
     .selectAll("text")
@@ -1192,7 +1193,7 @@ monarch.dovechart.prototype.getYMax = function(data){
 };
   
 monarch.dovechart.prototype.checkForChildren = function(data){
-     for (i = 0;i < data.length; i++) {
+     for (var i = 0;i < data.length; i++) {
           if ((Object.keys(data[i]).indexOf('children') >= 0 ) &&
              ( typeof data[i]['children'][0] != 'undefined' )){
               return true;
@@ -1289,8 +1290,7 @@ monarch.dovechart.prototype.checkData = function(data){
   
 //remove zero length bars
 monarch.dovechart.prototype.removeZeroCounts = function(data){
-      trimmedGraph = [];
-      trimmedGraph = data.filter(function (r){
+      var trimmedGraph = data.filter(function (r){
           var count = 0;
           r.counts.forEach(function (i){
                count += i.value;
@@ -1305,8 +1305,7 @@ monarch.dovechart.prototype.removeZeroCounts = function(data){
  * the self.config.category_filter_list instance variable
  */
 monarch.dovechart.prototype.removeCategory = function(data, category){
-      trimmedGraph = [];
-      trimmedGraph = data.map(function (r){
+      var trimmedGraph = data.map(function (r){
           var group = JSON.parse(JSON.stringify(r)); //make copy
           group.counts = r.counts.filter(function (i){
                return (i.name !== category);
@@ -1331,9 +1330,7 @@ monarch.dovechart.prototype.removeCategory = function(data, category){
  * self.config.category_filter_list
 */
 monarch.dovechart.prototype.removeCategories = function(data, categories){
-      trimmedGraph = [];
-      
-          trimmedGraph = data.map(function (r){
+      var trimmedGraph = data.map(function (r){
               var group = JSON.parse(JSON.stringify(r)); //make copy
               group.counts = r.counts.filter(function (i){
                   return (categories.indexOf(i.name) === -1);
@@ -1348,8 +1345,7 @@ monarch.dovechart.prototype.removeCategories = function(data, categories){
 
 //remove classes without labels, see https://github.com/monarch-initiative/monarch-app/issues/894
 monarch.dovechart.prototype.removeIdWithoutLabel = function(data){
-      trimmedGraph = [];
-      trimmedGraph = data.filter(function (r){
+      var trimmedGraph = data.filter(function (r){
           return (r.label != null && r.id != r.label);
       });
       return trimmedGraph;
@@ -1390,7 +1386,7 @@ monarch.dovechart.prototype.getGroupID = function (id, data){
 monarch.dovechart.prototype.getIDLabel = function (id, data){
     for (var i=0, len=data.length; i < len; i++){
         if (data[i].id === id){
-            label = data[i].label;
+            var label = data[i].label;
             return label;
         }
     }
@@ -2376,7 +2372,7 @@ monarch.chart.barchart = function(config, html_div){
         .range([self.x0, config.width]);
   
     //Bar colors
-    barColors = config.color.bars;
+    var barColors = config.color.bars;
     self.color = d3.scale.ordinal()
         .range(Object.keys(barColors).map(function(k) { return barColors[k] }));
 
@@ -2475,3 +2471,5 @@ monarch.chart.barchart.prototype.setYAxisTextSpacing = function(dx){
       .selectAll("text")
       .attr("dx", dx);
 };
+
+exports.monarch = monarch;

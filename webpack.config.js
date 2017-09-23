@@ -44,7 +44,7 @@ const LOCALHOST = process.env.LOCALHOST ? JSON.parse(process.env.LOCALHOST) : tr
 const ASSETS_LIMIT = typeof process.env.ASSETS_LIMIT !== 'undefined' ? parseInt(process.env.ASSETS_LIMIT, 10) : 5000;// limit bellow the assets will be inlines
 const hash = ''; // (NODE_ENV === 'production' && DEVTOOLS ? '-devtools' : '') + (NODE_ENV === 'production' ? '-[hash]' : '');
 const TEST = false;
-const LEGACY = true;
+const LEGACY = false;
 
 /** integrity checks */
 
@@ -80,8 +80,9 @@ plugins.push(new webpack.ProvidePlugin({
 
 if (!LEGACY) {
   plugins.push(new HtmlWebpackPlugin({
-    title: 'Topheman - Webpack Babel Starter Kit',
+    title: 'Monarch',
     template: 'ui/index.ejs', // Load a custom template
+    filename: 'spa.html',
     inject: MODE_DEV_SERVER, // inject scripts in dev-server mode - in build mode, use the template tags
     MODE_DEV_SERVER: MODE_DEV_SERVER,
     DEVTOOLS: DEVTOOLS,
@@ -227,12 +228,16 @@ const config = {
     jQuery: true
   },
   bail: FAIL_ON_ERROR,
-  entry: {
-    // 'bundle': './ui/bootstrap.js',
-    // 'main': './ui/style/main.scss'
-    'app': './js/index.js',
-    // 'main': './ui/style/main.scss'
-  },
+  entry:  (LEGACY ?
+            {
+              'app': './js/index.js'
+            } :
+            {
+              'spa': './ui/bootstrap.js',
+              'spastyle': './ui/style/main.scss',
+              'app': './js/index.js'
+            }
+          ),
   output: {
     publicPath: MODE_DEV_SERVER ? '/' : '/dist/',
     filename: `[name]${hash}.bundle.js`,
@@ -328,7 +333,7 @@ if (MODE_DEV_SERVER) {
     host: LOCALHOST ? 'localhost' : myLocalIp(),
     watchContentBase: true,
   };
-  if (LEGACY) {
+  if (true || LEGACY) {
     config.devServer.hot = true;
     config.devServer.hotOnly = true;
     config.devServer.inline = true;
@@ -346,7 +351,13 @@ if (MODE_DEV_SERVER) {
         target: 'http://localhost:8080'
       },
       '/': {
-        target: 'http://localhost:8080'
+        target: 'http://localhost:8080',
+        bypass: function(req, res, proxyOptions) {
+          if (req.url === '/spa' || req.url === '/spa/') {
+            // console.log('bypass', req, req.headers);
+            return "/spa.html";
+          }
+        }
       }
     };
   }
