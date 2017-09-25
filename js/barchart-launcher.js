@@ -276,3 +276,5 @@ exports.makePhenotypeLandingGraph = makePhenotypeLandingGraph;
 exports.makeGenotypeLandingGraph = makeGenotypeLandingGraph;
 exports.makeGeneDiseaseLandingGraph = makeGeneDiseaseLandingGraph;
 exports.makeModelLandingGraph = makeModelLandingGraph;
+exports.monarch = monarch;
+

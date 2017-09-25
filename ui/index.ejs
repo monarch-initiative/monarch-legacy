@@ -7,7 +7,7 @@
     name="viewport"
     content="initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0, user-scalable=no">
   <title>
-    Welcome to <%= htmlWebpackPlugin.options.title %> NG
+    Welcome to <%= htmlWebpackPlugin.options.title %> SPA
   </title>
   <% if (!htmlWebpackPlugin.options.MODE_DEV_SERVER) { %>
     <link
@@ -19,38 +19,15 @@
     <script type="text/javascript">
 
 
-function pathLoaded(sourceText, path) {
-  var dom = document.getElementById('monarch-content-fragment');
-  if (dom) {
-    dom.innerHTML = sourceText;
-    var launchablesScript = document.getElementById('monarch-launchables');
-    var text = launchablesScript.text;
-    if (text.indexOf('/* monarch-launchable-safety-check */') === 0) {
-      eval(text);
-    }
-  }
-}
-
-function loadPathContent(path) {
-  var oReq = new XMLHttpRequest();
-  oReq.addEventListener('load', function () {
-    pathLoaded(this.responseText, path);
-  });
-
-  console.log('loadPathContent', path);
-  oReq.open('GET', path);
-  oReq.send();
-}
-
 function loaderBody() {
   console.log('loaderBody()');
   InitMonarchBBOPHandler();
   InitMonarchBBOPLinker();
   InitMonarchBBOPWidgetBrowse();
   InitMonarchBBOPWidgetDisplay();
-  InitMonarchPage();
-  InitTabs();
-  InitFacetFilters();
+  // InitMonarchPage();
+  // InitTabs();
+  // InitFacetFilters();
 }
     </script>
 </head>
@@ -68,7 +45,7 @@ function loaderBody() {
           <span class="icon-bar"></span>
           <span class="icon-bar"></span>
         </button>
-        <a class="navbar-brand" href="#" onclick="loadPathContent('/?spa=1')">
+        <a data-navigo class="navbar-brand" href="/">
                 <img class="branding-logo pull-left"
                      src="/image/logo.png"
                      alt="Monarch Initiative logo"
@@ -82,10 +59,10 @@ function loaderBody() {
               <a href="#" class="dropdown-toggle" data-toggle="dropdown">
                   <i class="icon-th-large"></i>Browse <b class="caret"></b></a>
               <ul class="dropdown-menu">
-                  <li><a href="#" onclick="loadPathContent('/disease?spa=1')">Diseases SPA</a></li>
-                  <li><a href="/phenotype">Phenotypes</a></li>
-                  <li><a href="/gene">Genes</a></li>
-                  <li><a href="/model">Models</a></li>
+                  <li><a data-navigo href="/disease">Diseases SPA</a></li>
+                  <li><a data-navigo href="/phenotype">Phenotypes</a></li>
+                  <li><a data-navigo href="/gene">Genes</a></li>
+                  <li><a data-navigo href="/model">Models</a></li>
               </ul>
           </li>
 
@@ -103,26 +80,22 @@ function loaderBody() {
           </li>
         </ul>
         <ul class="nav navbar-nav navbar-right">
-          <li class="active"><a href="#">Here</span></a></li>
-          <li><a href="#">Everywhere</a></li>
-          <li><a href="#">There</a></li>
+          <li><a data-navigo href="/">/</span></a></li>
+          <li><a data-navigo href="/home">/home</span></a></li>
+          <li><a data-navigo href="/disease">/disease</span></a></li>
+          <li><a data-navigo href="/disease/DOID:331">/disease/DOID:331</span></a></li>
         </ul>
       </div><!--/.nav-collapse -->
     </div>
   </nav>
 
-  <br>
-  <br>
-  <br>
-
-  <h1>Welcome to the SPA</h1>
-  <p>This is an experiment in adding SPA (Single-Page Application) capabilities to the MonarchClassic application.</p>
-
-  <div id="monarch-content-fragment">
-
+  <div
+    id="monarch-content-fragment"
+    style="border:1px solid green;margin: 50px 0 0 0; padding: 5px 0;">
+    LOADING
   </div>
-  <hr>
-  <div class="babel">
+
+  <div class="babel" style="background:rgba(254, 254, 254, 0.2); border:2px solid lightgray;position:absolute;top:400px;z-index:500;">
     <p>
       <img src="<%= require('./assets/images/webpack-logo.png') %>" class="size-full aligncenter logo" alt="webpack-logo" />
     </p>

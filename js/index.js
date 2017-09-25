@@ -109,7 +109,10 @@ import {
   makeGenotypeLandingGraph,
   makeGeneDiseaseLandingGraph,
   makeModelLandingGraph,
+  monarch
 } from 'imports-loader?monarch=>monarch!./barchart-launcher.js';
+window.monarch = monarch;
+
 window.makeDiseaseLandingGraph = makeDiseaseLandingGraph;
 window.makePhenotypeLandingGraph = makePhenotypeLandingGraph;
 window.makeGenotypeLandingGraph = makeGenotypeLandingGraph;

@@ -1,9 +1,14 @@
+<!-- JS libraries. -->
+{{#pup_tent_js_libraries}}
+    <script type="text/javascript" src="{{{.}}}"></script>
+{{/pup_tent_js_libraries}}
+
 <script id="monarch-launchables" type="text/javascript">/* monarch-launchable-safety-check */
 	console.log('monarch-launchables');
 
     // pup_tent_js_variables
     {{#pup_tent_js_variables}}
-	{{name}} = {{{value}}};
+	window.{{name}} = {{{value}}};
     {{/pup_tent_js_variables}}
 
     // monarch_launchable

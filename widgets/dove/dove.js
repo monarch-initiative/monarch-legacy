@@ -380,7 +380,13 @@ monarch.dovechart.prototype.setGroupPositioning = function (histogram, data) {
        .attr("transform", function(d) { return "translate(0," + histogram.y0(d.id) + ")"; })
        .on("click", function(d){
            if (self.config.isYLabelURL){
-               document.location.href = self.config.yLabelBaseURL + d.id;
+              const url = self.config.yLabelBaseURL + d.id;
+              if (monarch.dovechart.locationChangeHack) {
+                monarch.dovechart.locationChangeHack(url);
+              }
+              else {
+                document.location.href = url;
+              }
            }
        });
     return groupPos;

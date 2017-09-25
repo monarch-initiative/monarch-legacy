@@ -2,7 +2,6 @@
  * specific diseases, phenotypes, genes, or genotypes. */
 
 function InitTabs() {
-
     /* All Disease, Phenotype, Gene, & Genotype Specific Pages */
 
     /* This displays the tooltips that display upon hover over tabs on disease,
