@@ -85,7 +85,11 @@
                             </div>
                         </div>
                     </div>
-
+                    {{#hasHeritability}}
+                        <div class="ids">
+                            <b>Heritability:</b>&nbsp;&nbsp;{{inheritance}}
+                        </div>
+                    {{/hasHeritability}}
                     {{#hasAka}}
                     <div class="ids">
                         <b>AKA:</b>&nbsp;&nbsp;{{aka}}
@@ -109,11 +113,6 @@
                         <b>Comment:</b>&nbsp;&nbsp;{{comment}}
                     </div>
                     {{/hasComment}}
-                    {{#hasHeritability}}
-                    <div class="ids">
-                        <b>Heritability:</b>&nbsp;&nbsp;{{heritability}}
-                    </div>
-                    {{/hasHeritability}}
                     {{#hasEqual}}
                     <div class="ids">
                         <b>Equivalent IDs:</b>&nbsp;&nbsp;{{{equivalentClasses}}}
