@@ -113,45 +113,49 @@ function fetchLiteratureOverview(id) {
 
 }
 
-function fetchGeneDescription(id) {
+function fetchGeneDescription(geneID) {
     //https://mygene.info/v2/query?q=6469&fields=summary
-    var spinner_args = {'id': 'my-gene-spinner',
-            'class': 'progress progress-striped active',
-            'style': 'width: 3em;display:inline-block; margin:0;'
+    const spinnerArgs = {
+        id: 'my-gene-spinner',
+        class: 'progress progress-striped active',
+        style: 'width: 3em;display:inline-block; margin:0;'
     };
-    var spinner = makeSpinnerDiv(spinner_args);
+    const spinner = MonarchCommon.makeSpinnerDiv(spinnerArgs);
     jQuery('#mygene-container').show();
     jQuery('#mygene-container .node-description').append(spinner.to_string());
 
-    var serviceURL = 'https://mygene.info/v2/query';
+    const serviceURL = 'https://mygene.info/v2/query';
+    let formattedID = ''
     //Format, see http://docs.mygene.info/en/latest/doc/query_service.html#available-fields
-    if (id.match(/^NCBIGene/)) {
-        id = id.replace(/\S+:(\d+)/, '$1');
-    } else if (id.match(/^OMIM/)) {
-        id = id.replace(/\S+:(\d+)/, 'mim:$1');
-    } else if (id.match(/^MGI/)) {
-        id = id.replace(/\S+:(\d+)/, 'mgi:MGI\\\\:$1');
-    } else if (id.match(/^FlyBase/)) {
-        id = id.replace(/\S+:(\d+)/, 'flybase:$1');
-    } else if (id.match(/^Wormbase/)) {
-        id = id.replace(/\S+:(\d+)/, 'wormbase:$1');
+    if (geneID.match(/^NCBIGene/)) {
+        formattedID = geneID.replace(/\S+:(\d+)/, '$1');
+    } else if (geneID.match(/^OMIM/)) {
+        formattedID = geneID.replace(/\S+:(\d+)/, 'mim:$1');
+    } else if (geneID.match(/^MGI/)) {
+        formattedID = geneID.replace(/\S+:(\d+)/, 'mgi:MGI\\\\:$1');
+    } else if (geneID.match(/^FlyBase/)) {
+        formattedID = geneID.replace(/\S+:(\d+)/, 'flybase:$1');
+    } else if (geneID.match(/^Wormbase/)) {
+        formattedID = geneID.replace(/\S+:(\d+)/, 'wormbase:$1');
+    } else {
+        formattedID = geneID
     }
-    var params = {
-            'q' : id,
-            'fields': 'summary',
-            'species': 'all'
+    const params = {
+        q: geneID,
+        fields: 'summary',
+        species: 'all'
     };
 
     jQuery.ajax({
         url: serviceURL,
-        dataType:"json",
+        dataType: 'json',
         data: params,
-        error: function () {
+        error() {
             console.log('fetchGeneDescription. Error fetching info from mygene');
             jQuery('#mygene-container').hide();
-            jQuery('#'+spinner.get_id()).remove();
+            jQuery('#' + spinner.get_id()).remove();
         },
-        success: function (data) {
+        success(data) {
             jQuery('#'+spinner.get_id()).remove();
             if (data.hits.length > 0 && 'summary' in data.hits[0]) {
                 var summary = data.hits[0].summary;
@@ -164,7 +168,7 @@ function fetchGeneDescription(id) {
             else {
                 console.log('fetchGeneDescription. No Summary fetching info from mygene');
                 jQuery('#mygene-container').hide();
-                jQuery('#'+spinner.get_id()).remove();
+                jQuery('#' + spinner.get_id()).remove();
             }
         }
     });

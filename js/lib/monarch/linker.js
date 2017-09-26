@@ -128,8 +128,10 @@ bbop.monarch.linker.prototype.url = function (id, xid, modifier, category){
                          || xid === 'object_gene')) {
                     category = 'gene';
                 }
-                if (category == null){
+                if (category == null) {
                     throw new Error('category is missing!');
+                } else if (category === 'anatomical entity') {
+                    retval = this.app_base + '/anatomy/' + id;
                 } else if (category != 'pathway' && category != 'individual' && !(/^:\./.test(id))){
                     retval = this.app_base + '/' + category + '/' + id;
                 }
