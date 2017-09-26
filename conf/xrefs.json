@@ -5100,5 +5100,17 @@
       "datatype" : null,
       "url_syntax" : "http://rgd.mcw.edu/rgdweb/report/reference/main.html?id=[example_id]",
       "image_path" : "/image/source-rgd.gif"
+   },
+   "bgee" : {
+      "object" : "Identifier",
+      "uri_prefix" : null,
+      "name": "Bgee",
+      "database" : "Gene expression data in animals",
+      "generic_url" : "http://bgee.org/",
+      "fullname" : null,
+      "abbreviation" : "bgee",
+      "id" : null,
+      "datatype" : null,
+      "image_path" : "/image/source-bgee.png"
    }
 }
