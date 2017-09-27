@@ -161,7 +161,7 @@ function fetchGeneDescription(geneID) {
                 var summary = data.hits[0].summary;
                 var summaryElt = "<span>" + summary + ' [Retrieved from '+
                 '<a href="' +
-                    serviceURL + '?q=' + id + '&fields=summary&species=all' +
+                    serviceURL + '?q=' + formattedID + '&fields=summary&species=all' +
                     '">Mygene.info</a>]</span>';
                 jQuery('#mygene-description').append(summaryElt);
             }
