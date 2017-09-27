@@ -77,9 +77,4 @@ function InitTables() {
     });
 }
 
-if (typeof(loaderGlobals) === 'object') {
-    loaderGlobals.InitTables = InitTables;
-}
-if (typeof(global) === 'object') {
-    global.InitTables = InitTables;
-}
+exports.InitTables = InitTables;

@@ -16,29 +16,6 @@
 
 function InitMonarchBBOPWidgetBrowse() {
     var jq = require('jquery');
-    if (typeof(globalUseBundle) === 'undefined' || !globalUseBundle) {
-        var bbop = loaderGlobals.bbop;
-    }
-    else {
-        var bbop = require('bbop');
-    }
-
-    // Module and namespace checking.
-    // if ( typeof bbop == "undefined" ){ var bbop = {}; }
-
-    if ( typeof bbop.monarch == "undefined" ){ bbop.monarch = {}; }
-    if ( typeof bbop.monarch.widget == "undefined" ){ bbop.monarch.widget = {}; }
-
-    if (typeof(loaderGlobals) === 'object') {
-        loaderGlobals.bbop = bbop;
-    }
-    if (typeof(global) === 'object') {
-        global.bbop = bbop;
-    }
-    if( typeof(exports) != 'undefined' ) {
-        exports.bbop = bbop;
-    }
-
 
 /*
  * Note, this heavily based on the bbop browse widget, and is attempt
@@ -620,10 +597,5 @@ bbop.monarch.widget.browse = function(server, manager, reference_id, root, inter
 
 }
 
+exports.InitMonarchBBOPWidgetBrowse = InitMonarchBBOPWidgetBrowse;
 
-if (typeof loaderGlobals === 'object') {
-    loaderGlobals.InitMonarchBBOPWidgetBrowse = InitMonarchBBOPWidgetBrowse;
-}
-if (typeof global === 'object') {
-    global.InitMonarchBBOPWidgetBrowse = InitMonarchBBOPWidgetBrowse;
-}
