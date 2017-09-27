@@ -40,6 +40,8 @@
                     {{{includes.genotype_anchor}}}
                     {{{includes.model_anchor}}}
                     {{{includes.variant_anchor}}}
+                    {{{includes.function_anchor}}}
+                    {{{includes.anatomy_anchor}}}
                     {{{includes.homolog_anchor}}}
                     {{{includes.ortholog_phenotype_anchor}}}
                     {{{includes.ortholog_disease_anchor}}}
@@ -76,7 +78,25 @@
                     </div>
                     
                     {{/hasDisclaimer}}
-
+                    
+                    <div id="mygene-container">
+                        <div class="row">
+                            <div class="col-xs-12">
+                                <div class="node-description" id="mygene-description">
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    {{#hasHeritability}}
+                        <div class="ids">
+                            <b>Heritability:</b>&nbsp;&nbsp;{{inheritance}}
+                        </div>
+                    {{/hasHeritability}}
+                    {{#hasModifier}}
+                        <div class="ids">
+                            <b>Clinical Modifiers:</b>&nbsp;&nbsp;{{modifier}}
+                        </div>
+                    {{/hasModifier}}
                     {{#hasAka}}
                     <div class="ids">
                         <b>AKA:</b>&nbsp;&nbsp;{{aka}}
@@ -100,11 +120,6 @@
                         <b>Comment:</b>&nbsp;&nbsp;{{comment}}
                     </div>
                     {{/hasComment}}
-                    {{#hasHeritability}}
-                    <div class="ids">
-                        <b>Heritability:</b>&nbsp;&nbsp;{{heritability}}
-                    </div>
-                    {{/hasHeritability}}
                     {{#hasEqual}}
                     <div class="ids">
                         <b>Equivalent IDs:</b>&nbsp;&nbsp;{{{equivalentClasses}}}
@@ -163,6 +178,8 @@
                 {{{includes.model_table}}}
                 {{{includes.variant_table}}}
                 {{{includes.homolog_table}}}
+                {{{includes.function_table}}}
+                {{{includes.anatomy_table}}}
                 {{{includes.ortholog_phenotype_table}}}
                 {{{includes.ortholog_disease_table}}}
                 {{{includes.pathway_table}}}

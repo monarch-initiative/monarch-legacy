@@ -51,6 +51,11 @@ Feature: Monarch-app UI basic pages display okay
     Given I go to page "/resolve/OMIM_600669"
      then the url will be "/disease/OMIM:600669"
 
+ @ui
+ Scenario: Going to the page /resolve/UBERON:0000477 will forward to /anatomy/UBERON:0000477
+    Given I go to page "/resolve/UBERON:0000477"
+     then the url will be "/anatomy/UBERON:0000477"
+
 @ui
 Scenario: Going to the page /resolve/Bogus:123 will produce a Page Not Found error
     Given I go to page "/resolve/Bogus:123"

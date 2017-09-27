@@ -28,6 +28,11 @@ def step_impl(context, page, id):
     time.sleep(5)
     element = WebDriverWait(context.browser, 200).until(EC.presence_of_element_located((By.ID, id)))
 
+@given('I go to page "{page}" and wait for id "{id}" to be hidden')
+def step_impl(context, page, id):
+    context.browser.get(context.target + page)
+    element = WebDriverWait(context.browser, 5).until(EC.invisibility_of_element_located((By.ID, id)))
+
 @given('I go to slow page "{page}" and wait for class "{cls}"')
 def step_impl(context, page, cls):
     #print(context.browser.title)
