@@ -53,7 +53,7 @@ Feature: Monarch-app UI basic pages display okay
 
  @ui
  Scenario: Going to the page /resolve/UBERON:0000477 will forward to /anatomy/UBERON:0000477
-    Given I go to page "/resolve/UBERON:0000477
+    Given I go to page "/resolve/UBERON:0000477"
      then the url will be "/anatomy/UBERON:0000477"
 
 @ui

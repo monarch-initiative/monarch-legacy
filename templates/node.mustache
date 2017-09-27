@@ -92,6 +92,11 @@
                             <b>Heritability:</b>&nbsp;&nbsp;{{inheritance}}
                         </div>
                     {{/hasHeritability}}
+                    {{#hasModifier}}
+                        <div class="ids">
+                            <b>Clinical Modifiers:</b>&nbsp;&nbsp;{{modifier}}
+                        </div>
+                    {{/hasModifier}}
                     {{#hasAka}}
                     <div class="ids">
                         <b>AKA:</b>&nbsp;&nbsp;{{aka}}
