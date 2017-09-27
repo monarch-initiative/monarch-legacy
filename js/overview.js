@@ -124,7 +124,7 @@ function fetchGeneDescription(geneID) {
     jQuery('#mygene-container').show();
     jQuery('#mygene-container .node-description').append(spinner.to_string());
 
-    const serviceURL = 'https://mygene.info/v2/query';
+    const serviceURL = 'https://mygene.info/v3/query';
     let formattedID = ''
     //Format, see http://docs.mygene.info/en/latest/doc/query_service.html#available-fields
     if (geneID.match(/^NCBIGene/)) {
@@ -141,7 +141,7 @@ function fetchGeneDescription(geneID) {
         formattedID = geneID
     }
     const params = {
-        q: geneID,
+        q: formattedID,
         fields: 'summary',
         species: 'all'
     };
