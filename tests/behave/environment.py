@@ -17,7 +17,7 @@ from selenium.webdriver.common.desired_capabilities import DesiredCapabilities
 ### Simple (but somewhat excessive for the data parts) environment.
 ###
 window_width = 1200
-window_height = 900
+window_height = 825
 implicit_wait_seconds = 30
 
 

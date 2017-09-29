@@ -1381,3 +1381,12 @@ em.hilite {
     border-radius: 5px;
 }
 
+.links-page .section {
+    padding-top: 0;
+}
+
+
+.links-page .section th,
+.links-page .section td {
+    padding: 3px 5px;
+}

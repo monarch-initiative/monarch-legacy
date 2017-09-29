@@ -31,7 +31,8 @@ def step_impl(context, page, id):
 @given('I go to page "{page}" and wait for id "{id}" to be hidden')
 def step_impl(context, page, id):
     context.browser.get(context.target + page)
-    element = WebDriverWait(context.browser, 5).until(EC.invisibility_of_element_located((By.ID, id)))
+    element = WebDriverWait(context.browser, 30).until(EC.presence_of_element_located((By.ID, id)))
+    element = WebDriverWait(context.browser, 30).until(EC.invisibility_of_element_located((By.ID, id)))
 
 @given('I go to slow page "{page}" and wait for class "{cls}"')
 def step_impl(context, page, cls):
@@ -140,9 +141,13 @@ def step_impl(context, tabname, text):
             tab_href = parent.get_attribute("href")
             url = urlparse(tab_href)
             tab_id = url.fragment + '-panel';
-            # print(tab_id)
+            #print(tab_id)
             tab_area_elt = context.browser.find_element_by_id(tab_id)
-            # print(tab_area_elt.text)
+            #print("\n\n\n\n\n-------------\n\n\n\n\n")
+            #print(tab_area_elt.text)
+            #print(text)
+            #print(tab_area_elt.text.rfind(text))
+            #print("\n\n\n\n\n-------------\n\n\n\n\n")
             assert tab_area_elt and tab_area_elt.text.rfind(text) != -1
     assert found_tab
 
