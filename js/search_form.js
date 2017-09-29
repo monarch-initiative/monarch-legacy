@@ -185,9 +185,4 @@ function navbar_search_init(in_search_id, in_form_id){
     }
 }
 
-if (typeof exports === 'object') {
-    exports.navbar_search_init = navbar_search_init;
-}
-if (typeof loaderGlobals === 'object') {
-    loaderGlobals.navbar_search_init = navbar_search_init;
-}
+exports.navbar_search_init = navbar_search_init;

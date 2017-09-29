@@ -1,9 +1,5 @@
-if (typeof bbop == 'undefined') { var bbop = {};}
-if (typeof bbop.monarch == 'undefined') { bbop.monarch = {};}
-
-
 //Graph for phenotypeLandingPage
-bbop.monarch.phenotypeLandingConfig = {
+exports.phenotypeLandingConfig = {
         // Starting filters
         category_filter_list :['Human'],
 
@@ -101,14 +97,14 @@ bbop.monarch.phenotypeLandingConfig = {
 /*
  * GOlr configurations for the graph widget
  */
-bbop.monarch.phenotypeGeneGolrSettings = {
+exports.phenotypeGeneGolrSettings = {
         id_field : 'object_closure',
         personality : 'dovechart',
         filter : [{ field: 'subject_category', value: 'gene' }],
         facet : 'subject_taxon'
 };
 
-bbop.monarch.diseaseGeneGolrSettings = {
+exports.diseaseGeneGolrSettings = {
         id_field : 'object_closure',
         personality : 'dovechart',
         filter : [
@@ -118,14 +114,14 @@ bbop.monarch.diseaseGeneGolrSettings = {
         facet : 'subject_taxon'
 };
 
-bbop.monarch.phenotypeGenotypeGolrSettings = {
+exports.phenotypeGenotypeGolrSettings = {
         id_field : 'object_closure',
         personality : 'dovechart',
         filter : [{ field: 'subject_category', value: 'genotype' }],
         facet : 'subject_taxon'
 };
 
-bbop.monarch.modelDiseaseGolrSettings = {
+exports.modelDiseaseGolrSettings = {
         id_field : 'object_closure',
         personality : 'dovechart',
         filter : [{ field: 'subject_category', value: 'model' }],
@@ -133,7 +129,7 @@ bbop.monarch.modelDiseaseGolrSettings = {
 };
 
 //Graph for phenotypeLandingPage
-bbop.monarch.geneLandingConfig = {
+exports.geneLandingConfig = {
         category_filter_list :['Human'],
         //override default
         arrowDim : "-19,-5, -10,0 -19,5",
@@ -228,7 +224,7 @@ bbop.monarch.geneLandingConfig = {
 
 
 //Graph for phenotypeLandingPage
-bbop.monarch.genotypeLandingConfig = {
+exports.genotypeLandingConfig = {
         category_filter_list :['Human'],
         //override default
         arrowDim : "-19,-5, -10,0 -19,5",
@@ -322,7 +318,7 @@ bbop.monarch.genotypeLandingConfig = {
  };
 
 //Graph for Model landing page
-bbop.monarch.modelLandingConfig = {
+exports.modelLandingConfig = {
         category_filter_list :[],
         //override default
         arrowDim : "-19,-5, -10,0 -19,5",
@@ -417,7 +413,7 @@ bbop.monarch.modelLandingConfig = {
 
 
 //Graph for disease landing page
-bbop.monarch.diseaseLandingConfig = {
+exports.diseaseLandingConfig = {
       category_filter_list :[],
       //override default
       arrowDim : "-19,-5, -10,0 -19,5",
@@ -513,7 +509,7 @@ bbop.monarch.diseaseLandingConfig = {
 /*
  * GOlr configurations for the graph widget
  */
-bbop.monarch.diseasePhenotypeGolrSettings = {
+exports.diseasePhenotypeGolrSettings = {
         id_field : 'subject_closure',
         personality : 'dovechart',
         filter : [{ field: 'object_category', value: 'phenotype' }],
@@ -525,7 +521,7 @@ bbop.monarch.diseasePhenotypeGolrSettings = {
  */
 
 //Graph for homepage
-bbop.monarch.homePageConfig = {
+exports.homePageConfig = {
         category_filter_list :['Human'],
         //override default
         arrowDim : "-19,-5, -10,0 -19,5",

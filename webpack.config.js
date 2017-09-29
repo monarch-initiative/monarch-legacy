@@ -33,6 +33,7 @@ log.info('webpack', 'Launched in ' + (MODE_DEV_SERVER ? 'dev-server' : 'build') 
 const BUILD_DIR = '';
 const DIST_DIR = process.env.DIST_DIR || 'dist';// relative to BUILD_DIR
 const NODE_ENV = process.env.NODE_ENV ? process.env.NODE_ENV.toLowerCase() : 'development';
+const USE_SPA = process.env.USE_SPA ? process.env.USE_SPA : 0;
 const DEVTOOLS = process.env.DEVTOOLS ? JSON.parse(process.env.DEVTOOLS) : null;// can be useful in case you have web devtools (null by default to differentiate from true or false)
 const ANALYZE = process.env.ANALYZE ? JSON.parse(process.env.ANALYZE) : false;
 // optimize in production by default - otherwize, override with OPTIMIZE=false flag (if not optimized, sourcemaps will be generated)
@@ -44,7 +45,6 @@ const LOCALHOST = process.env.LOCALHOST ? JSON.parse(process.env.LOCALHOST) : tr
 const ASSETS_LIMIT = typeof process.env.ASSETS_LIMIT !== 'undefined' ? parseInt(process.env.ASSETS_LIMIT, 10) : 5000;// limit bellow the assets will be inlines
 const hash = ''; // (NODE_ENV === 'production' && DEVTOOLS ? '-devtools' : '') + (NODE_ENV === 'production' ? '-[hash]' : '');
 const TEST = false;
-const LEGACY = true;
 
 /** integrity checks */
 
@@ -78,10 +78,11 @@ plugins.push(new webpack.ProvidePlugin({
       "window.jQuery": "jquery"
   }));
 
-if (!LEGACY) {
+if (USE_SPA) {
   plugins.push(new HtmlWebpackPlugin({
-    title: 'Topheman - Webpack Babel Starter Kit',
+    title: 'Monarch',
     template: 'ui/index.ejs', // Load a custom template
+    filename: 'spa.html',
     inject: MODE_DEV_SERVER, // inject scripts in dev-server mode - in build mode, use the template tags
     MODE_DEV_SERVER: MODE_DEV_SERVER,
     DEVTOOLS: DEVTOOLS,
@@ -227,12 +228,16 @@ const config = {
     jQuery: true
   },
   bail: FAIL_ON_ERROR,
-  entry: {
-    // 'bundle': './ui/bootstrap.js',
-    // 'main': './ui/style/main.scss'
-    'app': './js/index.js',
-    // 'main': './ui/style/main.scss'
-  },
+  entry:  (USE_SPA ?
+            {
+              'app': './js/index.js',
+              'spa': './ui/bootstrap.js',
+              'spastyle': './ui/style/main.scss'
+            } :
+            {
+              'app': './js/index.js'
+            }
+          ),
   output: {
     publicPath: MODE_DEV_SERVER ? '/' : '/dist/',
     filename: `[name]${hash}.bundle.js`,
@@ -327,29 +332,58 @@ if (MODE_DEV_SERVER) {
   config.devServer = {
     host: LOCALHOST ? 'localhost' : myLocalIp(),
     watchContentBase: true,
-  };
-  if (LEGACY) {
-    config.devServer.hot = true;
-    config.devServer.hotOnly = true;
-    config.devServer.inline = true;
-    config.devServer.contentBase = './';
-    config.devServer.historyApiFallback = true;
-    config.devServer.headers = {
+    hot: true,
+    hotOnly: true,
+    inline: true,
+    contentBase: './',
+    historyApiFallback: true,
+    headers: {
       "Access-Control-Allow-Origin": "http://localhost:8080",
       "Access-Control-Allow-Credentials": "true"
+    }
+  };
+  config.devServer.proxy = {
+    '*.json': {
+      target: 'http://localhost:8080'
+    },
+    '/status': {
+      target: 'http://localhost:8080'
+    }
+  };
+
+  if (!USE_SPA) {
+    config.devServer.proxy['/'] = {
+      target: 'http://localhost:8080'
     };
-    config.devServer.proxy = {
-      '*.json': {
-        target: 'http://localhost:8080'
-      },
-      '/status': {
-        target: 'http://localhost:8080'
-      },
-      '/': {
-        target: 'http://localhost:8080'
+  }
+  else {
+    config.devServer.proxy['/home'] = {
+      target: 'http://localhost:8080/',
+      pathRewrite: {"^/home" : ""}
+    };
+    // config.devServer.proxy['/home'] = {
+    //   pathRewrite: function (path, req) {
+    //     return '/';
+    //   }
+    // };
+    // config.devServer.proxy['/home'] = {
+    //   bypass: function(req, res, proxyOptions) {
+    //     console.log('bypass /home', req.url, req.headers.referer);
+    //     return '/';
+    //   }
+    // };
+    config.devServer.proxy['/'] = {
+      target: 'http://localhost:8080',
+      bypass: function(req, res, proxyOptions) {
+        const referer = req.headers.referer || '';
+        console.log('bypass3', req.url, referer);
+        if (req.url === '/' && !referer) {
+          console.log(' ... bypassing');
+          return '/spa.html';
+        }
       }
     };
   }
-};
+}
 
 module.exports = config;

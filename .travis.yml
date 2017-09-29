@@ -40,8 +40,8 @@ before_install:
   - "#disabledForNow# /usr/local/bin/phantomjs --version"
   - "#disabledForNow# phantomjs --version"
   - "#disabledForNow# which phantomjs"
-  - "wget https://github.com/mozilla/geckodriver/releases/download/v0.18.0/geckodriver-v0.18.0-linux64.tar.gz"
-  - "tar -xvzf geckodriver-v0.18.0-linux64.tar.gz"
+  - "wget https://github.com/mozilla/geckodriver/releases/download/v0.19.0/geckodriver-v0.19.0-linux64.tar.gz"
+  - "tar -xvzf geckodriver-v0.19.0-linux64.tar.gz"
   - "chmod +x geckodriver"
   - "sudo mv geckodriver /usr/local/bin/"
   - "firefox -v"
@@ -54,6 +54,7 @@ install:
   - "./install.sh"
   - "ls -lhS dist/"
   - "sudo pip install selenium"
+  - "sudo pip install --upgrade selenium"
   - "sudo pip install behave"
   - "sudo pip install jsonpath-rw"
 
@@ -61,7 +62,6 @@ before_script:
   - "export DISPLAY=:99.0"
   - "ls -lhS dist/"
   - "USE_LOG_FETCH=1 npm run startbeta &"
-  - "# NODE_PATH=./lib/monarch USE_BUNDLE=1 USE_LOG_FETCH=1 node ./lib/monarch/web/webapp_launcher.js beta &"
   - "sleep 20"
 
 after_success:

@@ -343,9 +343,4 @@ function addDownloadButton(pager, manager){
 
 }
 
-if (typeof(loaderGlobals) === 'object') {
-    loaderGlobals.getTableFromSolr = getTableFromSolr;
-}
-if (typeof(global) === 'object') {
-    global.getTableFromSolr = getTableFromSolr;
-}
+exports.getTableFromSolr = getTableFromSolr;

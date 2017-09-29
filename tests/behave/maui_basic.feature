@@ -131,5 +131,5 @@ Scenario: Going to the page /Bogus:123 will produce a Page Not Found error
 
 @ui
 Scenario: Ontology viewer works for OMIM Ids
-   Given I go to slow page "/disease/OMIM:105830#overview" and wait for class "bbop-js-ui-browse"
+   Given I go to slow page "/disease/OMIM:105830#overview" and wait for id "monarch-node"
     then the "Overview" tab should contain "Happy Puppet"

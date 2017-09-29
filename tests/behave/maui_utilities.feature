@@ -92,7 +92,6 @@ Scenario: The "/query/orthologs/" endpoint returns the correct JSON
       then the title should be "Search Results: disease musculus"
       then the document should contain "Category"
       when I click the link "Oguchi disease 2"
+      when I wait for id "monarch-node"
       then the url will be "/disease/OMIM:613411"
       then the title should be "Monarch Disease: Oguchi disease-2 (OMIM:613411)"
-
-

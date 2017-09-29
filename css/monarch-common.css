@@ -69,23 +69,23 @@ p.bigfont {
  * browser width to smaller (e.g. smartphone browsers). */
 
 
-#navbar .navbar { z-index: 100; } /* Default of 1000 interferes with popups etc. */
-#navbar .navbar { padding: 3px;}
+#monarch-navbar .navbar { z-index: 100; } /* Default of 1000 interferes with popups etc. */
+#monarch-navbar .navbar { padding: 3px;}
 
 
-#navbar .navbar-nav .dropdown-menu {
+#monarch-navbar .navbar-nav .dropdown-menu {
   border-radius: 0;
   box-shadow: none;
 }
 
-#navbar .navbar.monarch-navbar {
+#monarch-navbar .navbar.monarch-navbar {
     padding:0;
     padding-left: 5px;
     padding-right: 5px;
     margin:0;
 }
 
-#navbar .searchspace {
+#monarch-navbar .searchspace {
     margin: 0;
     margin-top:3px;
     padding: 0;
@@ -100,7 +100,7 @@ p.bigfont {
     height:30px;
 }
 
-#navbar .nav-search-btn {
+#monarch-navbar .nav-search-btn {
     padding: 0px 10px;
     font-weight:500;
     width:40px;
@@ -109,26 +109,26 @@ p.bigfont {
     margin-left:-3px;
 }
 
-#navbar.navbar {
+#monarch-navbar.navbar {
     min-height: 36px;
     max-height: 36px;
 }
-#navbar .nav>li>a {
+#monarch-navbar .nav>li>a {
     padding: 0px;
 }
-#navbar .dropdown-toggle {
+#monarch-navbar .dropdown-toggle {
     margin: 5px 10px 5px 10px;
 }
-#navbar .dropdown {
+#monarch-navbar .dropdown {
     padding: 4px 0px 0px;
 }
-#navbar .navbar-brand {
+#monarch-navbar .navbar-brand {
     padding: 8px 20px 0px 20px;
 }
-#navbar .navbar-link {
+#monarch-navbar .navbar-link {
     font-size: 14px;
 }
-#navbar .navbar-text {
+#monarch-navbar .navbar-text {
     margin-top: 2px;
     margin-bottom: 2px;
     font-weight: 400;
@@ -148,21 +148,21 @@ p.bigfont {
 }
 
 @media (max-width: 840px) {
-    #navbar.monarch-navbar {
+    #monarch-navbar.monarch-navbar {
         height:48px !important;
         min-height:48px !important;
     }
 
-    #navbar .collapse.in #feedback-trigger {
+    #monarch-navbar .collapse.in #feedback-trigger {
         margin:2px 0 6px 9px;
     }
 
-    #navbar #search {
+    #monarch-navbar #search {
         width:250px;
         margin:5px 0 5px 15px;
     }
 
-    #navbar .nav-search-btn {
+    #monarch-navbar .nav-search-btn {
         margin:5px 0 0 5px;
     }
 
@@ -614,7 +614,7 @@ div#mygene-container {
     padding: 0;
 }
 
-#navbar .navbar-brand {
+#monarch-navbar .navbar-brand {
     height: 35px;
     padding: 9px 10px 0px 14px;
     font-size: 18px;
@@ -1130,7 +1130,7 @@ em.hilite {
     color: black;
 }
 
-#navbar #feedback-main {
+#monarch-navbar #feedback-main {
   border:4px solid darkgray !important;
   border-radius: 15px !important;
   padding:20px;
@@ -1139,7 +1139,7 @@ em.hilite {
   background: #EEEEEE;
 }
 
-#navbar #feedback-trigger {
+#monarch-navbar #feedback-trigger {
     height:30px;
     margin: 0;
     padding: 0;
@@ -1148,18 +1148,18 @@ em.hilite {
     color: #43A395;
     font-weight: 500;
 }
-#navbar #feedback-trigger:hover {
+#monarch-navbar #feedback-trigger:hover {
     color: #FFF;
     border:1px solid transparent;
 }
 
-#navbar #feedback-handle {
+#monarch-navbar #feedback-handle {
   margin: auto;
   padding: 0;
 }
 
 
-#navbar #feedback-window-container.dropdown ul.simple-menu {
+#monarch-navbar #feedback-window-container.dropdown ul.simple-menu {
   position: fixed;
   width: 90%;
   padding: 0 !important;
@@ -1381,3 +1381,12 @@ em.hilite {
     border-radius: 5px;
 }
 
+.links-page .section {
+    padding-top: 0;
+}
+
+
+.links-page .section th,
+.links-page .section td {
+    padding: 3px 5px;
+}

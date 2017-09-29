@@ -1,9 +1,8 @@
 /* global jQuery */
 /* global bbop */
 /* global window */
-/* global loaderGlobals */
 
-function initMonarchPage(){
+function InitMonarchPage(){
     bbop.monarch.remove_equivalent_ids = remove_equivalent_ids;
     bbop.monarch.filter_equivalents = filter_equivalents;
 
@@ -441,22 +440,11 @@ function makeSpinnerDiv(args){
     return spinner_div;
 }
 
-if (typeof exports === 'object') {
-    exports.initMonarchPage = initMonarchPage;
-    exports.getAnnotationScore = getAnnotationScore;
-    exports.remove_equivalent_ids = remove_equivalent_ids;
-    exports.makeSpinnerDiv = makeSpinnerDiv;
-    exports.add_species_to_autocomplete = add_species_to_autocomplete;
-    exports.fetchPubmedAbstract = fetchPubmedAbstract;
-    exports.fetchPubmedSummary = fetchPubmedSummary;
-    exports.makeAuthorSpan = makeAuthorSpan;
-}
-if (typeof(loaderGlobals) === 'object') {
-    loaderGlobals.initMonarchPage = initMonarchPage;
-    loaderGlobals.remove_equivalent_ids = remove_equivalent_ids;
-    loaderGlobals.makeSpinnerDiv = makeSpinnerDiv;
-    loaderGlobals.add_species_to_autocomplete = add_species_to_autocomplete;
-    loaderGlobals.fetchPubmedAbstract = fetchPubmedAbstract;
-    loaderGlobals.fetchPubmedSummary = fetchPubmedSummary;
-    loaderGlobals.makeAuthorSpan = makeAuthorSpan;
-}
+exports.InitMonarchPage = InitMonarchPage;
+exports.getAnnotationScore = getAnnotationScore;
+exports.remove_equivalent_ids = remove_equivalent_ids;
+exports.makeSpinnerDiv = makeSpinnerDiv;
+exports.add_species_to_autocomplete = add_species_to_autocomplete;
+exports.fetchPubmedAbstract = fetchPubmedAbstract;
+exports.fetchPubmedSummary = fetchPubmedSummary;
+exports.makeAuthorSpan = makeAuthorSpan;
