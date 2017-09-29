@@ -142,7 +142,7 @@ function fetchGeneDescription(geneID) {
     }
     const params = {
         q: formattedID,
-        fields: 'summary',
+        fields: 'summary,genomic_pos,name,symbol,taxid',
         species: 'all'
     };
 
@@ -157,17 +157,40 @@ function fetchGeneDescription(geneID) {
         },
         success(data) {
             jQuery('#'+spinner.get_id()).remove();
+            if(data.hits.length > 0 && 'genomic_pos' in data.hits[0]){
+                var hit = data.hits[0];
+                var symbol = hit.symbol ;
+                var locationObj = hit.genomic_pos;
+                if(locationObj){
+                    var thisSpecies ='Drosophila melanogaster' ; // TODO: note mapping
+                    var defaultTrackName = 'All Genes'; // this is the generic track name
+                    var locationString = locationObj.chr+ ':' + locationObj.start+ '..' + locationObj.end;
+                    var apolloServerPrefix = 'https://agr-apollo.berkeleybop.io/apollo/';
+                    var trackDataPrefix = apolloServerPrefix + 'track/' + encodeURI(thisSpecies) + '/' + defaultTrackName + '/' + encodeURI(locationString) + '.json';
+                    var trackDataWithHighlight = trackDataPrefix + '?name=' + symbol;
+                    var trackDataElt = '<a href="' + trackDataWithHighlight +'">link</a>';
+                    jQuery('#mygene-feature').append(trackDataElt);
+                }
+            }
+            else{
+                console.log('fetchGeneDescription. No Genome Features fetched from mygene');
+                jQuery('#mygene-feature').hide();
+                jQuery('#' + spinner.get_id()).remove();
+            }
+
             if (data.hits.length > 0 && 'summary' in data.hits[0]) {
-                var summary = data.hits[0].summary;
+                var hit = data.hits[0];
+                var summary = hit.summary;
                 var summaryElt = "<span>" + summary + ' [Retrieved from '+
                 '<a href="' +
                     serviceURL + '?q=' + formattedID + '&fields=summary&species=all' +
                     '">Mygene.info</a>]</span>';
                 jQuery('#mygene-description').append(summaryElt);
+
             }
             else {
                 console.log('fetchGeneDescription. No Summary fetching info from mygene');
-                jQuery('#mygene-container').hide();
+                jQuery('#mygene-description').hide();
                 jQuery('#' + spinner.get_id()).remove();
             }
         }
