@@ -1,12 +1,9 @@
 /* global window */
 /* global jQuery */
-/* global loaderGlobals */
 
-if (!_) {
-    var _ = require('underscore');
-}
+const _ = require('underscore');
 
-function MonarchCarousel(carousel_elt, tabber_elt, next_id, prev_id){
+function MonarchCarousel(carousel_elt, tabber_elt, next_id, prev_id) {
 
     var self = this;
 
@@ -124,7 +121,6 @@ function MonarchCarousel(carousel_elt, tabber_elt, next_id, prev_id){
 
     // Fade the current, move to the next.
     self.update_carousel_to = function(to_pos, run_at_end_fun){
-
         // Since they are piled on top of eachother, just fade in
         // and out. Also, need positions, not indexes here, so +1.
         // There can be a race condition with the timer, so fade
@@ -171,24 +167,27 @@ function MonarchCarousel(carousel_elt, tabber_elt, next_id, prev_id){
     };
 
     // This is a step in the timed loop.
-    function _step(){
+    function _step() {
+        var carousel = document.getElementById(celt.slice(1));
+        if (carousel) {
+            // First, determine how many items and which is currently
+            // visible.
+            var stepCount = self.get_count();
+            var current = self.get_current();
         
-        // First, determine how many items and which is currently
-        // visible.
-        var stepCount = self.get_count();
-        var current = self.get_current();
-    
-        // Get new numbers.
-        var next = (current % stepCount) + 1;
+            // Get new numbers.
+            var next = (current % stepCount) + 1;
+            
+            //
+            self.update_carousel_to(next, function(){
+                // Fresh the indicator to the new status.
+                self.update_tabber_to(next);
+            });
         
-        //
-        self.update_carousel_to(next, function(){
-            // Fresh the indicator to the new status.
-            self.update_tabber_to(next);
-        });
-    
-        // Wait to run this again in timing ms.
-        step_timer = window.setTimeout(_step, timing);
+            // Wait to run this again in timing ms.
+            step_timer = window.setTimeout(_step, timing);
+        }
+
     }
 
     self.start_cycle = function(tcount){
@@ -251,9 +250,4 @@ function InitHomePage(){
     jQuery('[data-toggle="popover"]').popover({'trigger':'hover'});
 }
 
-if (typeof exports === 'object') {
-    exports.InitHomePage = InitHomePage;
-}
-if (typeof loaderGlobals === 'object') {
-    loaderGlobals.InitHomePage = InitHomePage;
-}
+exports.InitHomePage = InitHomePage;

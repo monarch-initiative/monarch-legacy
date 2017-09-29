@@ -308,11 +308,5 @@ function CyPathDemoInit(){
     ll('Done ready!');
 };
 
+exports.CyPathDemoInit = CyPathDemoInit
 
-
-if (typeof(loaderGlobals) === 'object') {
-    loaderGlobals.CyPathDemoInit = CyPathDemoInit;
-}
-if (typeof(global) === 'object') {
-    global.CyPathDemoInit = CyPathDemoInit;
-}

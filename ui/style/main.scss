@@ -1,0 +1,56 @@
+@import "variables";
+
+@import "footer";
+@import "logos";
+@import "primary-logo-animation";
+
+html {
+  font-family: Arial,sans-serif;
+  background: aliceblue;
+}
+
+h1,
+h2,
+h3,
+h5,
+h6 {
+  color: $brand-primary;
+}
+
+a {
+  color: $brand-primary;
+}
+
+img.aligncenter {
+  display: block;
+  margin: 5px auto;
+}
+
+img.size-full {
+  height: auto;
+  max-width: 100%;
+}
+
+@media screen and (min-width:$break-point) {
+  p.crop {
+    width: 90%;
+  }
+  img.logo {
+    transition: opacity 0.5s;
+  }
+  img.logo:hover {
+    opacity: 0.4;
+  }
+}
+
+.clearfix {
+  clear: both;
+}
+
+code {
+  padding: 2px 4px;
+  font-size: 90%;
+  color: #c7254e;
+  background-color: #f9f2f4;
+  border-radius: 4px;
+}

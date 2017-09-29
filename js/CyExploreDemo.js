@@ -303,9 +303,4 @@ function CyExploreDemoInit(){
     ll('Done ready!');
 };
 
-if (typeof(loaderGlobals) === 'object') {
-    loaderGlobals.CyExploreDemoInit = CyExploreDemoInit;
-}
-if (typeof(global) === 'object') {
-    global.CyExploreDemoInit = CyExploreDemoInit;
-}
+exports.CyExploreDemoInit = CyExploreDemoInit;

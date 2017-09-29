@@ -436,11 +436,4 @@ bbop.monarch.widget.display.results_table_by_class_conf_bs3 = function(cclass,
 };
 }
 
-if (typeof loaderGlobals === 'object') {
-    loaderGlobals.InitMonarchBBOPWidgetDisplay = InitMonarchBBOPWidgetDisplay;
-}
-if (typeof global === 'object') {
-    global.InitMonarchBBOPWidgetDisplay = InitMonarchBBOPWidgetDisplay;
-}
-
-
+exports.InitMonarchBBOPWidgetDisplay = InitMonarchBBOPWidgetDisplay;
