@@ -14,19 +14,12 @@ from selenium.webdriver.support import expected_conditions as EC # available sin
 ## The basic and critical "go to page".
 @given('I go to page "{page}"')
 def step_impl(context, page):
-    #print(context.browser.title)
     context.browser.get(context.target + page)
-    # time.sleep(10)
-    # from selenium.webdriver.support import expected_conditions as EC
-    # wait = WebDriverWait(driver, 10)
-    # element = wait.until(EC.element_to_be_clickable((By.ID,'someid')))
 
 @given('I go to slow page "{page}" and wait for id "{id}"')
 def step_impl(context, page, id):
-    #print(context.browser.title)
     context.browser.get(context.target + page)
-    time.sleep(5)
-    element = WebDriverWait(context.browser, 200).until(EC.presence_of_element_located((By.ID, id)))
+    element = WebDriverWait(context.browser, 30).until(EC.presence_of_element_located((By.ID, id)))
 
 @given('I go to page "{page}" and wait for id "{id}" to be hidden')
 def step_impl(context, page, id):
@@ -38,11 +31,10 @@ def step_impl(context, page, id):
 def step_impl(context, page, cls):
     #print(context.browser.title)
     context.browser.get(context.target + page)
-    element = WebDriverWait(context.browser, 200).until(EC.presence_of_element_located((By.CLASS_NAME, cls)))
+    element = WebDriverWait(context.browser, 30).until(EC.presence_of_element_located((By.CLASS_NAME, cls)))
 
 @when('I wait for id "{id}"')
 def step_impl(context, id):
-    # time.sleep(5)
     try:
         # print("\n#######Wait for ", id, "\n")
         element = WebDriverWait(context.browser, 30).until(EC.presence_of_element_located((By.ID, id)))
@@ -143,12 +135,14 @@ def step_impl(context, tabname, text):
             tab_id = url.fragment + '-panel';
             #print(tab_id)
             tab_area_elt = context.browser.find_element_by_id(tab_id)
-            #print("\n\n\n\n\n-------------\n\n\n\n\n")
-            #print(tab_area_elt.text)
-            #print(text)
-            #print(tab_area_elt.text.rfind(text))
-            #print("\n\n\n\n\n-------------\n\n\n\n\n")
-            assert tab_area_elt and tab_area_elt.text.rfind(text) != -1
+            found = tab_area_elt.text.rfind(text);
+            if found == -1:
+                print("\n\n\n\n\n------- tab content not found ------\n\n\n\n\n")
+                print(text)
+                print(found)
+                print(tab_area_elt.text)
+                print("\n\n\n\n\n-------------\n\n\n\n\n")
+            assert tab_area_elt and found != -1
     assert found_tab
 
 @when('I click the link "{item}"')

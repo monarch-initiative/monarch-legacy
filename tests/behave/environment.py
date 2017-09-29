@@ -99,7 +99,10 @@ def before_scenario(context, scenario):
 def after_scenario(context, scenario):
     # dump_log(context, scenario.name)
     # time.sleep(1)
-    pass
+    try:
+        context.browser.get('http://localhost:1/bogus_url_to_clear_page')
+    except:
+        pass
 
 def dump_log(context, scenarioName):
     log = context.browser.get_log("browser")
