@@ -125,25 +125,38 @@ function fetchGeneDescription(geneID) {
     jQuery('#mygene-container .node-description').append(spinner.to_string());
 
     const serviceURL = 'https://mygene.info/v3/query';
-    let formattedID = ''
+    let formattedID = '';
+    // http://docs.mygene.info/en/latest/doc/data.html#species
     //Format, see http://docs.mygene.info/en/latest/doc/query_service.html#available-fields
+    var speciesParam = 'all';
+    // http://docs.mygene.info/en/latest/doc/data.html#species
     if (geneID.match(/^NCBIGene/)) {
         formattedID = geneID.replace(/\S+:(\d+)/, '$1');
     } else if (geneID.match(/^OMIM/)) {
         formattedID = geneID.replace(/\S+:(\d+)/, 'mim:$1');
+        speciesParam = 'Homo sapiens'
     } else if (geneID.match(/^MGI/)) {
         formattedID = geneID.replace(/\S+:(\d+)/, 'mgi:MGI\\\\:$1');
+        speciesParam = 'Mus musculus'
     } else if (geneID.match(/^FlyBase/)) {
         formattedID = geneID.replace(/\S+:(\d+)/, 'flybase:$1');
+        speciesParam = 'Drosophila melanogaster'
     } else if (geneID.match(/^Wormbase/)) {
         formattedID = geneID.replace(/\S+:(\d+)/, 'wormbase:$1');
+        speciesParam = 'Caenorhabditis elegans'
+    } else if (geneID.match(/^ZFIN/)) {
+        formattedID = geneID.replace(/\S+:(\d+)/, 'zfin:$1');
+        speciesParam = 'Danio rerio'
+    } else if (geneID.match(/^RGD/)) {
+        formattedID = geneID.replace(/\S+:(\d+)/, 'rgd:$1');
+        speciesParam = 'Rattus norvegicus'
     } else {
         formattedID = geneID
     }
     const params = {
         q: formattedID,
         fields: 'summary,genomic_pos,name,symbol,taxid',
-        species: 'all'
+        species: speciesParam
     };
 
     jQuery.ajax({
@@ -162,7 +175,7 @@ function fetchGeneDescription(geneID) {
                 var symbol = hit.symbol ;
                 var locationObj = hit.genomic_pos;
                 if(locationObj){
-                    var thisSpecies ='Drosophila melanogaster' ; // TODO: note mapping
+                    var thisSpecies = speciesParam;
                     var defaultTrackName = 'All Genes'; // this is the generic track name
                     var locationString = locationObj.chr+ ':' + locationObj.start+ '..' + locationObj.end;
                     var apolloServerPrefix = 'https://agr-apollo.berkeleybop.io/apollo/';
