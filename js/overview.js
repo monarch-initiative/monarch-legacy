@@ -254,27 +254,24 @@ function fetchGeneDescription(geneID) {
                 let locationObj = hit.genomic_pos;
                 let taxid = hit.taxid ;
                 if (locationObj) {
-                    
                     // sometimes data is not on the genomic position
                     if(!taxid){
                         taxid = locationObj.taxid;
                     }
                     // use this mapping: http://docs.mygene.info/en/latest/doc/data.html#species
                     let thisSpecies = getSpeciesFromTaxId(taxid);
-                    console.log(taxid + ' -> ' + thisSpecies);
                     if(!thisSpecies){
-                        console.log('Species not found from mygene.info, ignoring.');
+                        console.log('Species not found from mygene.info.  Not showing genome features.');
                         hideGeneDescription(spinner);
                         return ;
                     }
+
                     let defaultTrackName = 'All Genes'; // this is the generic track name
                     let locationString = locationObj.chr + ':' + locationObj.start + '..' + locationObj.end;
                     let apolloServerPrefix = 'https://agr-apollo.berkeleybop.io/apollo/';
                     let trackDataPrefix = apolloServerPrefix + 'track/' + encodeURI(thisSpecies) + '/' + defaultTrackName + '/' + encodeURI(locationString) + '.json';
                     let trackDataWithHighlight = trackDataPrefix + '?name=' + symbol;
-                    // var trackDataElt = '<a href="' + trackDataWithHighlight + '">link</a>';
-                    // jQuery('#mygene-feature').append(trackDataElt);
-                    
+
 
                     jQuery.ajax({
                         url: trackDataWithHighlight,
@@ -283,9 +280,13 @@ function fetchGeneDescription(geneID) {
                             console.log('Failed to fetch the genome feature data');
                         },
                         success(data) {
+                            // http://jbrowse.alliancegenome.org/jbrowse/index.html?data=data%2FDanio rerio&tracks=All Genes&highlight=&lookupSymbol=sox9b
+                            let externalUrl = 'http://jbrowse.alliancegenome.org/jbrowse/index.html?data=data%2F'+thisSpecies+'&tracks=All Genes&loc='+encodeURI(locationString);
                             let svgDataElt = '' +
+                                '<a href="'+externalUrl+'">' +
                                 '<svg id="genome-feature">' +
-                                +'</svg>';
+                                +'</svg>'
+                            +'</a>';
                             jQuery('#mygene-feature').append(svgDataElt);
 
 
@@ -331,8 +332,6 @@ function fetchGeneDescription(geneID) {
                                 .append('g')
                                 .attr('transform', 'translate(' + margin.left + ',' + margin.top + ')');
 
-                            console.log(data);
-
                             let isoform_count = 0;
                             let MAX_ISOFORMS = 10;
                             for (let i in data) {
@@ -340,13 +339,9 @@ function fetchGeneDescription(geneID) {
                                 let feature = data[i];
                                 let featureChildren = feature.children;
                                 let selected = feature.selected;
-                                console.log(featureChildren.length);
 
-                                // http://jbrowse.alliancegenome.org/jbrowse/index.html?data=data%2FDanio rerio&tracks=All Genes&highlight=&lookupSymbol=sox9b
-                                let externalUrl = 'http://jbrowse.alliancegenome.org/jbrowse/index.html?data=data%2F'+thisSpecies+'&tracks=All Genes&loc='+encodeURI(locationString);
                                 featureChildren.forEach(function (featureChild) {
                                     let featureType = featureChild.type;
-                                    console.log(featureType);
                                     if (featureType == 'mRNA') {
                                         if (isoform_count < MAX_ISOFORMS) {
                                             isoform_count += 1;
