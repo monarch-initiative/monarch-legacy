@@ -185,6 +185,12 @@ function getSpeciesFromTaxId(taxid) {
     
 }
 
+function hideGeneDescription(spinner) {
+    console.log('fetchGeneDescription. No Genome Features fetched from mygene');
+    jQuery('#mygene-feature').hide();
+    jQuery('#' + spinner.get_id()).remove();
+}
+
 function fetchGeneDescription(geneID) {
     //https://mygene.info/v2/query?q=6469&fields=summary
     const spinnerArgs = {
@@ -251,7 +257,11 @@ function fetchGeneDescription(geneID) {
                     // use this mapping: http://docs.mygene.info/en/latest/doc/data.html#species
                     let taxid = locationObj.taxid;
                     let thisSpecies = getSpeciesFromTaxId(taxid);
-                    console.log(taxid + ' -> ' + thisSpecies);
+                    if(!thisSpecies){
+                        console.log('Species not found from mygene.info, ignoring.');
+                        hideGeneDescription(spinner);
+                        return ;
+                    }
                     let defaultTrackName = 'All Genes'; // this is the generic track name
                     let locationString = locationObj.chr + ':' + locationObj.start + '..' + locationObj.end;
                     let apolloServerPrefix = 'https://agr-apollo.berkeleybop.io/apollo/';
@@ -443,9 +453,7 @@ function fetchGeneDescription(geneID) {
                 }
             }
             else {
-                console.log('fetchGeneDescription. No Genome Features fetched from mygene');
-                jQuery('#mygene-feature').hide();
-                jQuery('#' + spinner.get_id()).remove();
+                hideGeneDescription(spinner);
             }
 
             if (data.hits.length > 0 && 'summary' in data.hits[0]) {
