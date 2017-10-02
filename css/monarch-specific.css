@@ -698,14 +698,10 @@ font-size:12px;
     stroke: black;
 }
 
-.GF.five_prime_UTR, .GF.three_prime_UTR {
-    fill-opacity: 0.1;
-    fill: red;
-}
-
 .GF.UTR{
-    fill-opacity: 0.7;
-    fill: #7E82BF;
+    fill-opacity: 1.0;
+    fill: white;
+    stroke: black;
 }
 
 .GF.CDS{

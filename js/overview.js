@@ -298,10 +298,21 @@ function fetchGeneDescription(geneID) {
                             let isoform_height = 40; // height for each isoform
                             let isoform_view_height = 20; // height for each isoform
                             let isoform_title_height = 0; // height for each isoform
-                            let utr_height = 4; // this is the height of the isoform running all of the way through
+                            let utr_height = 10 ; // this is the height of the isoform running all of the way through
+                            let transcript_backbone_height = 4; // this is the height of the isoform running all of the way through
                             let arrow_height = 20;
                             let arrow_width = 10;
                             let arrow_points = '0,0 0,' + arrow_height + ' ' + arrow_width + ',' + arrow_width;
+                            let sortWeight = {
+                                'exon': 100
+                                , 'UTR': 200
+                                , 'five_prime_UTR': 200
+                                , 'three_prime_UTR': 200
+                                , 'CDS': 1000
+                            };
+
+
+
                             let calculatedHeight = '600px';
                             let numberIsoforms = countIsoforms(data);
                             if (numberIsoforms > this.MAX_ISOFORMS) {
@@ -339,6 +350,11 @@ function fetchGeneDescription(geneID) {
                                 let feature = data[i];
                                 let featureChildren = feature.children;
                                 let selected = feature.selected;
+                                featureChildren = featureChildren.sort(function (a, b) {
+                                    if (a.name < b.name) return -1;
+                                    if (a.name > b.name) return 1;
+                                    return a - b;
+                                });
 
                                 featureChildren.forEach(function (featureChild) {
                                     let featureType = featureChild.type;
@@ -359,12 +375,12 @@ function fetchGeneDescription(geneID) {
                                                 });
 
                                             viewer.append('rect')
-                                                .attr('class', 'GF UTR')
-                                                .attr('x', x(feature.fmin))
+                                                .attr('class', 'GF transcript_backbone')
+                                                .attr('x', x(featureChild.fmin))
                                                 .attr('y', isoform_height * isoform_count + isoform_title_height)
-                                                .attr('transform', 'translate(0,' + ( (isoform_view_height / 2.0) - (utr_height / 2.0)) + ')')
-                                                .attr('height', utr_height)
-                                                .attr('width', x(feature.fmax) - x(feature.fmin));
+                                                .attr('transform', 'translate(0,' + ( (isoform_view_height / 2.0) - (transcript_backbone_height / 2.0)) + ')')
+                                                .attr('height', transcript_backbone_height)
+                                                .attr('width', x(featureChild.fmax) - x(featureChild.fmin));
 
                                             viewer.append('text')
                                                 .attr('class', 'GF transcriptLabel')
@@ -377,14 +393,16 @@ function fetchGeneDescription(geneID) {
 
                                             // have to sort this so we draw the exons BEFORE the CDS
                                             featureChild.children = featureChild.children.sort(function (a, b) {
-                                                if (a.type == 'exon' && b.type != 'exon') {
-                                                    return -1;
-                                                }
-                                                else if (a.type == 'CDS' && b.type != 'CDS') {
-                                                    return 1;
+
+                                                let sortAValue = sortWeight[a.type];
+                                                let sortBValue = sortWeight[b.type];
+
+                                                if (typeof sortAValue == 'number' && typeof sortBValue == 'number') {
+                                                    return sortAValue - sortBValue;
                                                 }
                                                 else {
-                                                    return a - b;
+                                                    // NOTE: type not found and weighted
+                                                    return a.type - b.type;
                                                 }
                                             });
 
@@ -408,6 +426,16 @@ function fetchGeneDescription(geneID) {
                                                         .attr('transform', 'translate(0,' + ( (isoform_view_height / 2.0) - (cds_height / 2.0)) + ')')
                                                         .attr('z-index', 20)
                                                         .attr('height', cds_height)
+                                                        .attr('width', x(innerChild.fmax) - x(innerChild.fmin));
+                                                }
+                                                else if (innerType == 'UTR' || innerType == 'five_prime_UTR' || innerType == 'three_prime_UTR') {
+                                                    viewer.append('rect')
+                                                        .attr('class', 'GF UTR')
+                                                        .attr('x', x(innerChild.fmin))
+                                                        .attr('y', isoform_height * isoform_count + isoform_title_height)
+                                                        .attr('transform', 'translate(0,' + ( (isoform_view_height / 2.0) - (utr_height / 2.0)) + ')')
+                                                        .attr('z-index', 20)
+                                                        .attr('height', utr_height)
                                                         .attr('width', x(innerChild.fmax) - x(innerChild.fmin));
                                                 }
                                             });
