@@ -252,11 +252,16 @@ function fetchGeneDescription(geneID) {
                 let hit = data.hits[0];
                 let symbol = hit.symbol;
                 let locationObj = hit.genomic_pos;
+                let taxid = hit.taxid ;
                 if (locationObj) {
                     
+                    // sometimes data is not on the genomic position
+                    if(!taxid){
+                        taxid = locationObj.taxid;
+                    }
                     // use this mapping: http://docs.mygene.info/en/latest/doc/data.html#species
-                    let taxid = locationObj.taxid;
                     let thisSpecies = getSpeciesFromTaxId(taxid);
+                    console.log(taxid + ' -> ' + thisSpecies);
                     if(!thisSpecies){
                         console.log('Species not found from mygene.info, ignoring.');
                         hideGeneDescription(spinner);
@@ -337,7 +342,8 @@ function fetchGeneDescription(geneID) {
                                 let selected = feature.selected;
                                 console.log(featureChildren.length);
 
-                                let externalUrl = 'http://abcd.com';
+                                // http://jbrowse.alliancegenome.org/jbrowse/index.html?data=data%2FDanio rerio&tracks=All Genes&highlight=&lookupSymbol=sox9b
+                                let externalUrl = 'http://jbrowse.alliancegenome.org/jbrowse/index.html?data=data%2F'+thisSpecies+'&tracks=All Genes&loc='+encodeURI(locationString);
                                 featureChildren.forEach(function (featureChild) {
                                     let featureType = featureChild.type;
                                     console.log(featureType);
