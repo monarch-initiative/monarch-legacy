@@ -153,6 +153,37 @@ function findRange(data) {
     };
 }
 
+// http://docs.mygene.info/en/latest/doc/data.html#species
+function getSpeciesFromTaxId(taxid) {
+
+    switch(taxid){
+        case 9606:
+            return 'Homo sapiens';
+        case 10090:
+            return 'Mus musculus';
+        case 10116:
+            return 'Rattus norvegicus';
+        case 7227:
+            return 'Drosophila melanogaster';
+        case 6239:
+            return 'Caenorhabditis elegans';
+        case 7955:
+            return 'Danio rerio';
+        // unsupported
+        // case 3702:
+        //     return 'Arabidopsis thaliana';
+        // case 8364:
+        //     return 'Xenopus tropicalis';
+        // case 9823:
+        //     return 'Sus scrofa';
+        default:
+            return null;
+    }
+
+
+
+    
+}
 
 function fetchGeneDescription(geneID) {
     //https://mygene.info/v2/query?q=6469&fields=summary
@@ -170,7 +201,7 @@ function fetchGeneDescription(geneID) {
     // http://docs.mygene.info/en/latest/doc/data.html#species
     //Format, see http://docs.mygene.info/en/latest/doc/query_service.html#available-fields
     var speciesParam = 'all';
-    // http://docs.mygene.info/en/latest/doc/data.html#species
+
     if (geneID.match(/^NCBIGene/)) {
         formattedID = geneID.replace(/\S+:(\d+)/, '$1');
     } else if (geneID.match(/^OMIM/)) {
@@ -212,18 +243,23 @@ function fetchGeneDescription(geneID) {
         success(data) {
             jQuery('#' + spinner.get_id()).remove();
             if (data.hits.length > 0 && 'genomic_pos' in data.hits[0]) {
-                var hit = data.hits[0];
-                var symbol = hit.symbol;
-                var locationObj = hit.genomic_pos;
+                let hit = data.hits[0];
+                let symbol = hit.symbol;
+                let locationObj = hit.genomic_pos;
                 if (locationObj) {
-                    var thisSpecies = speciesParam;
-                    var defaultTrackName = 'All Genes'; // this is the generic track name
-                    var locationString = locationObj.chr + ':' + locationObj.start + '..' + locationObj.end;
-                    var apolloServerPrefix = 'https://agr-apollo.berkeleybop.io/apollo/';
-                    var trackDataPrefix = apolloServerPrefix + 'track/' + encodeURI(thisSpecies) + '/' + defaultTrackName + '/' + encodeURI(locationString) + '.json';
-                    var trackDataWithHighlight = trackDataPrefix + '?name=' + symbol;
+                    
+                    // use this mapping: http://docs.mygene.info/en/latest/doc/data.html#species
+                    let taxid = locationObj.taxid;
+                    let thisSpecies = getSpeciesFromTaxId(taxid);
+                    console.log(taxid + ' -> ' + thisSpecies);
+                    let defaultTrackName = 'All Genes'; // this is the generic track name
+                    let locationString = locationObj.chr + ':' + locationObj.start + '..' + locationObj.end;
+                    let apolloServerPrefix = 'https://agr-apollo.berkeleybop.io/apollo/';
+                    let trackDataPrefix = apolloServerPrefix + 'track/' + encodeURI(thisSpecies) + '/' + defaultTrackName + '/' + encodeURI(locationString) + '.json';
+                    let trackDataWithHighlight = trackDataPrefix + '?name=' + symbol;
                     // var trackDataElt = '<a href="' + trackDataWithHighlight + '">link</a>';
                     // jQuery('#mygene-feature').append(trackDataElt);
+                    
 
                     jQuery.ajax({
                         url: trackDataWithHighlight,
@@ -232,7 +268,7 @@ function fetchGeneDescription(geneID) {
                             console.log('Failed to fetch the genome feature data');
                         },
                         success(data) {
-                            var svgDataElt = '' +
+                            let svgDataElt = '' +
                                 '<svg id="genome-feature">' +
                                 +'</svg>';
                             jQuery('#mygene-feature').append(svgDataElt);
