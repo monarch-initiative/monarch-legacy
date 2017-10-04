@@ -284,7 +284,7 @@ function fetchGeneDescription(geneID) {
                             let externalUrl = 'http://jbrowse.alliancegenome.org/jbrowse/index.html?data=data%2F'+thisSpecies+'&tracks=All Genes&loc='+encodeURI(locationString);
                             let svgDataElt = '' +
                                 '<a href="'+externalUrl+'">' +
-                                '<svg id="genome-feature">' +
+                                '<svg id="genome-feature" width="80%">' +
                                 +'</svg>'
                             +'</a>';
                             jQuery('#mygene-feature').append(svgDataElt);
@@ -367,10 +367,10 @@ function fetchGeneDescription(geneID) {
                                                 .attr('points', arrow_points)
                                                 .attr('transform', function () {
                                                     if (feature.strand > 0) {
-                                                        return 'translate(' + Number(x(feature.fmax)) + ',' + Number((isoform_view_height / 2.0) - (arrow_height / 2.0) + (isoform_height * isoform_count) + isoform_title_height) + ')';
+                                                        return 'translate(' + Number(x(featureChild.fmax)) + ',' + Number((isoform_view_height / 2.0) - (arrow_height / 2.0) + (isoform_height * isoform_count) + isoform_title_height) + ')';
                                                     }
                                                     else {
-                                                        return 'translate(' + Number(x(feature.fmin)) + ',' + Number((isoform_view_height / 2.0) + (arrow_height / 2.0) + (isoform_height * isoform_count) + isoform_title_height) + ') rotate(180)';
+                                                        return 'translate(' + Number(x(featureChild.fmin)) + ',' + Number((isoform_view_height / 2.0) + (arrow_height / 2.0) + (isoform_height * isoform_count) + isoform_title_height) + ') rotate(180)';
                                                     }
                                                 });
 
