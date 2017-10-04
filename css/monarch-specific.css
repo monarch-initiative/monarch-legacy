@@ -686,3 +686,51 @@ font-size:12px;
     -webkit-transform: scale(1.0);
   }
 }
+
+
+.GF.trans_arrow{
+    fill: 'black'
+}
+
+.GF.exon{
+    fill-opacity: 1.0;
+    fill: white;
+    stroke: black;
+}
+
+.GF.UTR{
+    fill-opacity: 1.0;
+    fill: white;
+    stroke: black;
+}
+
+.GF.CDS{
+    fill: #3E82BF;
+    fill-opacity: 1.0;
+}
+
+.GF.axis{
+    fill: #609C9C;
+}
+
+.GF.viewer{
+    fill: gray;
+}
+
+.GF.gene{
+    fill: blue;
+}
+
+.GF.geneLabel{
+    stroke: 2px;
+    color: black;
+    font-style: italic;
+}
+
+.GF.transcriptLabel{
+    stroke: 1px;
+    color: black;
+}
+
+.GF.axis { font: 14px sans-serif; }
+
