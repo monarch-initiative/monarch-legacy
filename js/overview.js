@@ -281,12 +281,16 @@ function fetchGeneDescription(geneID) {
                         },
                         success(data) {
                             // http://jbrowse.alliancegenome.org/jbrowse/index.html?data=data%2FDanio rerio&tracks=All Genes&highlight=&lookupSymbol=sox9b
-                            let externalUrl = 'http://jbrowse.alliancegenome.org/jbrowse/index.html?data=data%2F'+thisSpecies+'&tracks=All Genes&loc='+encodeURI(locationString);
+                           /* let externalUrl = 'http://jbrowse.alliancegenome.org/jbrowse/index.html?data=data%2F'+thisSpecies+'&tracks=All Genes&loc='+encodeURI(locationString);
                             let svgDataElt = '' +
                                 '<a href="'+externalUrl+'">' +
                                 '<svg id="genome-feature" width="80%">' +
                                 +'</svg>'
                             +'</a>';
+                            jQuery('#mygene-feature').append(svgDataElt);*/
+                            let svgDataElt =
+                                '<svg id="genome-feature" width="80%">' +
+                                +'</svg>'
                             jQuery('#mygene-feature').append(svgDataElt);
 
 
