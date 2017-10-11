@@ -2,11 +2,11 @@
 /* global document */
 /* global Vue */
 /* global axios */
-/* global variantID */
+/* global globalID */
 
 /* eslint indent: 0 */
 
-$(document).ready(function() {
+function createMyVariantTable(globalID) {
     const vueapp = new Vue({
         delimiters: ['{[{', '}]}'], // ugly, but otherwise it'll clash with puptent template mechanism
         el: '#myvariant-widget',
@@ -20,7 +20,7 @@ $(document).ready(function() {
                 const anchor = this;
                 anchor.searching = true;
                 const myVariantInfo = 'http://myvariant.info/v1/query';
-                const [prefix, id] = variantID.split(':');
+                const [prefix, id] = globalID.split(':');
                 let params = {};
                 switch (prefix) {
                     case ('ClinVarVariant'):
@@ -30,7 +30,7 @@ $(document).ready(function() {
                         break;
                     case ('dbSNP'):
                         params = {
-                            q: 'dbsnp.rsid:rs58991260:' + id
+                            q: 'dbsnp.rsid:' + id
                         };
                         break;
                     default:
@@ -61,4 +61,7 @@ $(document).ready(function() {
         }
     });
     vueapp.fetchResults();
-});
+};
+
+exports.createMyVariantTable = createMyVariantTable;
+
