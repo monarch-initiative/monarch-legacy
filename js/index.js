@@ -118,3 +118,6 @@ window.makePhenotypeLandingGraph = makePhenotypeLandingGraph;
 window.makeGenotypeLandingGraph = makeGenotypeLandingGraph;
 window.makeGeneDiseaseLandingGraph = makeGeneDiseaseLandingGraph;
 window.makeModelLandingGraph = makeModelLandingGraph;
+
+import {createMyVariantTable} from './myvariant-widget.js';
+window.createMyVariantTable = createMyVariantTable;

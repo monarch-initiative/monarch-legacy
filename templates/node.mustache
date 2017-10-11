@@ -133,6 +133,7 @@
                         <b>Source:</b>&nbsp;&nbsp;{{{source}}}
                     </div>
                     {{/hasSource}}
+                    {{#isGene}}
                     <div id="mytrack-container">
                         <div class="row">
                             <div class="col-xs-12">
@@ -141,6 +142,25 @@
                             </div>
                         </div>
                     </div>
+                    {{/isGene}}
+                    {{#isVariant}}
+                        <div id="myvariant-widget" v-cloak>
+                            <div class="col-xs-12 col-md-9">
+                            <div class="search-results-rows">
+                                <table v-bind:id="'selenium_id_' + selenium_id" class="search-results-table table table-striped table-condensed simpletable">
+                                    <thead><tr><th width="10%">Database</th><th width="15%">ID</th><th width="15%">Frequency</th></tr></thead>
+                                    <tbody>
+                                    <tr class="search-result-item" v-for="(result, index) in results">
+                                        <td v-html="result.db"></td>
+                                        <td v-html="result.id"></td>
+                                        <td v-html="result.frequency"></td>
+                                    </tr>
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+                        </div>
+                    {{/isVariant}}
                     {{#hasDownloads}}
                     <div class="downloads">
                       <div class="row">
@@ -199,6 +219,9 @@
             </div>
         </div>
     </div>
+    <script src="https://cdn.polyfill.io/v2/polyfill.min.js"></script>
+    <script src="https://unpkg.com/vue@2.4.2/dist/vue.min.js"></script>
+    <script src="https://unpkg.com/axios@0.16.1/dist/axios.min.js"></script>
     <!-- closes wrapperforfooter -->
     {{{includes.footer}}}
 
