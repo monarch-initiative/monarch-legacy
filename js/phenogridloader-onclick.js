@@ -58,3 +58,4 @@ function loadPhenogrid(phenogrid_conf, view) {
         });
     }
 }
+exports.loadPhenogrid = loadPhenogrid;

@@ -1,8 +1,9 @@
+/* xeslint-disable */
+
 /* This is how you use the environments variables passed by the webpack.DefinePlugin */
 
-import 'jquery';
-import 'bootstrap';
-import 'bootstrap-sass';
+// import 'jquery';
+// import 'bootstrap-sass';
 import Navigo from 'navigo';
 
 /**
@@ -34,19 +35,30 @@ if (process.env.DEVTOOLS && process.env.NODE_ENV !== 'production') {
   console.info(`You're on DEVTOOLS mode, you may have access to tools enhancing developer experience - off to you to choose to disable them in production ...`);
 }
 
-var router = null;
+let router = null;
+let progressTimer = null;
+
 function pathLoaded(sourceText, path) {
-  var dom = document.getElementById('monarch-content-fragment');
+  console.log('###pathLoaded', path, sourceText.slice(100, 300));
+  if (progressTimer) {
+    clearTimeout(progressTimer);
+    progressTimer = null;
+  }
+
+  /* global document */
+  const dom = document.getElementById('monarch-content-fragment');
   if (dom) {
     dom.innerHTML = sourceText;
     if (router) {
       router.updatePageLinks();
     }
-    var launchablesScript = document.getElementById('monarch-launchables');
+    const launchablesScript = document.getElementById('monarch-launchables');
     if (launchablesScript) {
-      var text = launchablesScript.text;
+      const text = launchablesScript.text;
+      console.log('path launchables', text);
       if (text) {
         if (text.indexOf('/* monarch-launchable-safety-check */') === 0) {
+          /* eslint no-eval: 0 */
           eval(text);
         }
       }
@@ -60,25 +72,65 @@ function pathLoaded(sourceText, path) {
   }
 }
 
+
 function loadPathContent(path) {
-  var oReq = new XMLHttpRequest();
-  oReq.addEventListener('load', function () {
+  if (progressTimer) {
+    console.log('leftover progressTimer');
+  }
+  else {
+    const dom = document.getElementById('monarch-content-fragment');
+    dom.innerHTML = '';
+    progressTimer = setTimeout(function timeout() {
+      if (dom && dom.innerHTML === '') {
+        progressTimer = null;
+        dom.innerHTML =
+`<br>
+<br>
+<br>
+<div class="progress">
+  <div
+    class="progress-bar progress-bar-striped active"
+    role="progressbar"
+    aria-valuenow="40"
+    aria-valuemin="0"
+    aria-valuemax="100"
+    style="width:100%;margin:auto;">Loading <b>${path}</b>
+  </div>
+</div>
+`;
+      }
+    }, 500);
+  }
+
+  /* global XMLHttpRequest */
+  const oReq = new XMLHttpRequest();
+  oReq.addEventListener('load', function load() {
     pathLoaded(this.responseText, path);
   });
 
-  console.log('loadPathContent', path);
-  oReq.open('GET', path);
+  console.log('##loadPathContent', path);
+  let refinedPath = path;
+  if (refinedPath === '/spa') {
+    refinedPath = '/';
+  }
+  refinedPath += '?stripme';
+  oReq.open('GET', refinedPath);
   oReq.send();
 }
+/* global window */
 window.loadPathContent = loadPathContent;
 
-window.addEventListener('popstate', function(event) {
+window.addEventListener('popstate', function pop(event) {
   console.log('popstate fired!');
   console.log('location: ' + document.location + ', state: ' + JSON.stringify(event.state));
 });
 
+
 const main = () => {
   console.log('monarch', monarch);
+  window.monarch.locationChangeHack = function(url) {
+    loadPathContent(url);
+  };
   window.monarch.dovechart.locationChangeHack = function(url) {
     loadPathContent(url);
   };
@@ -88,51 +140,79 @@ const main = () => {
   var hash = '#!'; // Defaults to: '#'
   router = new Navigo(root);  // , useHash, hash);
   // https://github.com/krasimir/navigo
+
+  window.routerNavigo = router;
+
+  router.hooks({
+    before: function (done, params) {
+      console.log('#before', params);
+      done();
+    },
+    after: function (params) {
+      console.log('#after', params);
+    },
+    leave: function (params) {
+      console.log('#leave', params);
+    }
+  });
+  router.getLinkPath = function(link) {
+    console.log('#getLinkPath', link, link.pathname, link.getAttribute('href'));
+    var result = link.pathname || link.getAttribute('href');
+    if (result === '/') {
+      result = '/home';
+    }
+    return result;
+  };
   router
     .on(function () {
-      console.log('router: show home page here');
-      loadPathContent('/home');
+      let path = window.location.pathname;
+      // if (path === '') {
+      //   path = '/home';
+      // }
+      console.log('router: path: ', path);
+      loadPathContent(path);
     })
     .resolve();
 
   router
-    .on('/home', function () {
-      console.log('router: /home');
-      loadPathContent('/home');
-    })
-    .resolve();
-
-  router
-    .on('/disease', function () {
-      console.log('router: /disease');
-      loadPathContent('/disease');
-    })
-    .resolve();
-
-  router
-    .on('/disease/:id', function (params) {
-      console.log('router: /disease/:id', params);
-      loadPathContent(`/disease/${params.id}`);
+    .on('*', function (params, query) {
+      let url = router.lastRouteResolved().url;
+      console.log('router: *:', router, this, params, query, url);
+      if (url === '' || url === '/home') {
+        url = '/';
+      }
+      router.pause();
+      router.navigate(url, true);
+      router.resume();
+      loadPathContent(url);
     })
     .resolve();
 
   // router
-  //   .on('/spa', function () {
-  //     console.log('router: /spa');
-  //     loadPathContent('/');
-  //   })
-  //   .resolve();
-  // router
-  //   .on('/spa/disease', function () {
-  //     console.log('router: spa/disease');
-  //     loadPathContent('/disease?spa=1');
+  //   .on('/home', function () {
+  //     console.log('router: /home');
+  //     loadPathContent('/home');
   //   })
   //   .resolve();
 
   // router
-  //   .on('/spa/disease/:id', function (params) {
-  //     console.log('router: /spa/disease/:id', params);
-  //     loadPathContent(`/disease/${params.id}?spa=1`);
+  //   .on('/disease', function () {
+  //     console.log('router: /disease');
+  //     loadPathContent('/disease');
+  //   })
+  //   .resolve();
+
+  // router
+  //   .on('/analyze/:id', function (params) {
+  //     console.log('router: /analyze/:id', params);
+  //     loadPathContent(`/analyze/${params.id}`);
+  //   })
+  //   .resolve();
+
+  // router
+  //   .on('/disease/:id', function (params) {
+  //     console.log('router: /disease/:id', params);
+  //     loadPathContent(`/disease/${params.id}`);
   //   })
   //   .resolve();
 
@@ -144,17 +224,7 @@ const main = () => {
   const { document } = global;
   if (document && document.querySelector) {
     const testRequireEnsureLink = document.querySelector('.test-require-ensure');
-    const logo = global.document.querySelector('.logo');
-
-    /** display logos */
-    const cssClasses = ['babel', 'npm', 'eslint', 'sass'];
-    let current = 0;
-    logo.addEventListener('mouseover', () => {
-      const body = document.getElementsByTagName('body')[0];
-      cssClasses.forEach(name => body.classList.remove(name));
-      current = (current + 1) % cssClasses.length;
-      body.classList.add(cssClasses[current]);
-    });
+    const logos = global.document.querySelectorAll('.fidget-spinner');
 
     testRequireEnsureLink.addEventListener('click', () => {
       console.log('testRequireEnsureLink');
@@ -163,7 +233,8 @@ const main = () => {
       import('./scripts/css-utils.js')
         .then(module => {
           const { toggleCssClassName } = module;
-          toggleCssClassName(logo, 'rotate');
+          toggleCssClassName(logos[0], 'rotate');
+          toggleCssClassName(logos[1], 'rotate');
           toggleCssClassName(testRequireEnsureLink, 'active');
         })
         .catch(error => console.error('Chunk loading failed', error));

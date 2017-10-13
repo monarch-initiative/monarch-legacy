@@ -20,6 +20,7 @@ function getTableFromSolr(query_field, div, filter, personality, tab_anchor, is_
     if (tab_anchor != null){
         var isTabLoading = false;
         jQuery('#categories a[href="'+tab_anchor+'"]').click(function(event) {
+            console.log('getTableFromSolr click', tab_anchor);
             if (!(jQuery('#'+div+' .table').length) && !isTabLoading){
                 isTabLoading = true;
                 getTable(query_field, div, filter, personality, is_leaf, orFilter);
@@ -187,6 +188,9 @@ function getTableFromSolr(query_field, div, filter, personality, tab_anchor, is_
         // See what we got, in order of how much we'd like to have it.
         if( ilink ){
             retval = ilink;
+            if (window.routerNavigo) {
+                retval = '<a data-navigo' + retval.slice(2);
+            }
         }else if( ilabel ){
             retval = ilabel;
         }else{

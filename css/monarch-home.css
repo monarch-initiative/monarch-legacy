@@ -31,9 +31,6 @@
   font-size:14px;
 }
 
-#monarch-home-container .container {
-    max-width:100%;
-}
 /*
  * Compact the news list just a little. Assumes dl.
  */
@@ -70,8 +67,7 @@
 .monarch-carousel {
     position: relative;
     height:100% !important;
-    margin-left:-22px;
-    margin-right:-8px;
+    margin-top: 10px;
     padding:0;
 }
 
@@ -271,44 +267,44 @@ div#cameocontainer {
 }
 
 .monarch-nav-item-title {
-    text-align:center;
-    margin:auto;
-    padding:0;
-    width: 100%;
-    color:black;
-    font-weight: 500;
-    border:3px solid transparent;
+  text-align:center;
+  margin:auto;
+  padding:0;
+  width: 100%;
+  color:black;
+  font-weight: 500;
+  border:3px solid transparent;
 }
 
 .monarch-tabber-on-item .monarch-nav-item-title {
     border-bottom:3px solid darkgray;
 }
 
-#monarch-home-container .monarch-home-splash {
-    background-image: url(../image/home-splash.png) !important;
-    margin:0;
-    margin-bottom: 17.5px;
-    padding:0;
-    padding-top: 35px;
-    padding-bottom: 15px;
-    padding-left: 40px;
-    padding-right: 60px;
-    height:114px;
+
+#monarch-home-container.monarch-container {
 }
+
+#monarch-home-container.monarch-container #col-2 {
+}
+
+#monarch-home-container.monarch-container .monarch-home-splash.jumbotron {
+  background-image: url(../image/home-splash.png) !important;
+  height:114px;
+  border-radius: 6px;
+}
+
 .monarch-home-splash-text {
+    margin: 35px 60px 15px 40px;
     color: #ffffff;
     font-size: 30px;
     font-weight: 500;
-    /* Attempt at outline. */
-   /* -webkit-text-fill-color: white; */
-   /* -webkit-text-stroke-width: 1px; */
-   /* -webkit-text-stroke-color: black; */
-  text-shadow:
-   -1px -1px 0 #000,
-    1px -1px 0 #000,
-    -1px 1px 0 #000,
-     1px 1px 0 #000;
+    text-shadow:
+     -1px -1px 0 #000,
+      1px -1px 0 #000,
+      -1px 1px 0 #000,
+       1px 1px 0 #000;
 }
+
 
 .monarch-tabber {
     margin:0;
@@ -352,17 +348,17 @@ div#cameocontainer {
 
 
 a.monarch-tabber-control-prev, a.monarch-tabber-control-next {
-    position: absolute;
-    top:0;
-    left:10px;
-    z-index: 1;
-    display: inline-block;
-    padding: 0;
-    color: #fff;
-    text-decoration: none;
-    opacity: 0.5;
-    cursor: pointer;
-    width:25px;
+  position: absolute;
+  top:0;
+  left:10px;
+  z-index: 1;
+  display: inline-block;
+  padding: 0;
+  color: #fff;
+  text-decoration: none;
+  opacity: 0.5;
+  cursor: pointer;
+  width:25px;
 }
 a.monarch-tabber-control-prev:hover, a.monarch-tabber-control-next:hover {
     opacity: 1;

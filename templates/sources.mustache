@@ -1,26 +1,18 @@
 {{{includes.navbar}}}
 
 <div class="wrapperforfooter">
-  <div class="container-fluid monarch-container">
+  <div class="container-fluid monarch-container sources-container">
+    <div class="content content-bottom">
+      <h1 class="text-center">Data Sources</h1>
+      <p>
+      Monarch integrates a variety of externally curated data sources, primarily focused on genotype-phenotype and disease-phenotype associations.  The following are a list of the sources currently integrated and available for browsing in our website.
+      We are continually adding new sources...if there is a data source you wish to be incorporated into our site, please contact us.
+      </p>
+      {{{sourcesTable}}}
+    </div>
+  </div>
+</div>
 
-    <div class="content">
-            <div class="jumbotron">
-                <div id="description">
-                    <img id="monarch-logo" class="downloadline" src="/image/logo.png"/>
-                    <h1 class="downloadline">Data Sources</h1>
-                    <p>
-                    Monarch integrates a variety of externally curated data sources, primarily focused on genotype- and disease-phenotype associations.  The following are a list of the sources currently integrated and available for browsing in our website.
-                    We are continually adding new sources...if there is a data source you wish to be incorporated into our site, please contact us.
-                    </p>
-                </div>
-            </div>
-            <div id="complete-info">
-                <table class="{{css.table}}">
-                    {{{sourcesTable}}}
-                </table>
-            </div>
-        </div> <!-- closes content -->
-    </div> <!-- closes monarch-container -->
+<!-- Footer. -->
 
-</div> <!-- closes wrapperforfooter -->
 {{{includes.footer}}}

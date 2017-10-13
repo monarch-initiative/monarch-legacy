@@ -1,15 +1,16 @@
+This README.txt file is mostly obsolete. Several of the CSS files have been obviated by the use of Bootstrap, or to provide more consistency between pages.
+
 monarch-common.css
     This file controls the elements common to all monarch pages. Every webpage
     references this file.
-    
+
     - General styles like fonts and clear div
     - Navbar styles that helps with responsive design using media queries
     - Content containers
     - Standardizes logos, colors, and button styles
     - Footer style
 
-monarch-main.css
-    This file controls all the main pages:
+    This file ALSO controls all the main pages:
         (1) Diseases
         (2) Phenotypes
         (3) Genes
@@ -27,7 +28,7 @@ monarch-specific.css
 The remaining CSS files are page type specific.
     main.css
         This controls the home page (landing page).
-    search.css
+    search_results.css
         This controls all search result pages.
     team.css
         This is a unique file for the Monarch Development Team

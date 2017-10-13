@@ -419,6 +419,9 @@ bbop.monarch.widget.display.results_table_by_class_conf_bs3 = function(cclass,
   });
     });
 
+    if (window.routerNavigo) {
+        window.routerNavigo.updatePageLinks();
+    }
 
     // Since we already added to the DOM in the table, now add the
     // group toggle if the optional checkboxes are defined.

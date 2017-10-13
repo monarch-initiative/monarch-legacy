@@ -5,30 +5,23 @@
 
 <div class="content"><!-- 1 -->
 
-            <div class="jumbotron">
-                <div id="description">
-                    {{#alerts}}
-                    <div class="alert alert-warning alert-block top-alert">
-                        {{{.}}}
-                    </div>
-                    {{/alerts}}
-                    <img id="monarch-logo" class="downloadline" src="/image/logo.png"/>
-                    <h1 class="downloadline">Monarch Phenotype Profile Analysis</h1>
-                    <a class="downloadline downloadline-left btn btn-large btn-default btn-monarch-main monarch-feedback-dark"
-                            href="mailto:info@monarchinitiative.org">Your feedback welcome!</a>
+  {{#alerts}}
+  <div class="alert alert-warning alert-block top-alert">
+      {{{.}}}
+  </div>
+  {{/alerts}}
+  <h1 class="text-center">Monarch Phenotype Profile Analysis</h1>
 
-                    <p style="font-size:15px">
+  <p class="lead">
 					The Phenotype Analysis Tool enables you search our database using the <a href="http://owlsim.org">
 					OwlSim</a> Semantic Similarity analysis engine to find phenotypically similar diseases or
                     genes in a variety of organisms, then visualize their overlap.
 					(<a href="/page/about">Read more</a> if you want to understand how this works.)
 					</p>
 
-					<p style="font-size:15px">
+  <p class="lead">
 					<b>Instructions:   <a id="instructions-toggle" href="#instructions" style="font-weight:normal">Show/Hide</a> </b>
 					<div id="instructions" style="display:none">
-					  <ul style="font-size:15px; line-height:110%">
-					    <li><i>Search</i></li>
 					    <ul>
                           <li><b>Step 1</b>: create a Phenotype Profile by entering a set of phenotypes.</li>
                           <li><b>Step 2</b>: modify the settings for how to perform the comparison: <i>search</i> against the entire database
@@ -38,91 +31,60 @@
                               populated enabling you to iterate and refine your lists. You can start over by
                               hitting Reset.</li>
 					    </ul>
-
-					  </ul>
 					</div>
-                </div>
-                
-            </div>
-
 
                  <form class="form" style="padding: 0 30px;">
-               
-                    <div id="search-phenotypes" style="border:1px solid #ccc; background:#eee;margin-bottom:20px; padding:20px;">
-                      
-<div class="row row-fluid">
-                      <div class="col-xs-4">
-                        <h4>Step 1: Create A Profile of Phenotypes</h4>
+
+                    <div id="search-phenotypes" style="border:1px solid #ccc; margin-bottom:20px; padding:20px;">
+                      <div class="row row-fluid">
+                        <div class="col-xs-4">
+                          <h4>Step 1: Create A Profile of Phenotypes</h4>
+                        </div>
+
+                        <input id="analyze_auto_target" name="input_items" value="{{input_items}}" type="hidden"/>
+
+                        <div id="analyze-searchlist" class="col-xs-8">
+                              <input id="analyze_auto_input" type="text" class="form-control" placeholder="Start typing a phenotype label (eg. Resting tremor); select from menu. Repeat as desired to build up a profile."/>
+                        </div>
                       </div>
 
+                      <div style="border-bottom:1px dotted #bbb; margin:10px 0 15px;"></div>
 
-       
-                        <input id="analyze_auto_target" name="input_items" value="{{input_items}}" type="hidden"/>
-                        
-                        <div id="analyze-searchlist" class="col-xs-8">
-                              <input id="analyze_auto_input" type="text" class="form-control" placeholder="Start typing a phenotype label (eg. Resting tremor); select form menu. Repeat as desired to build up a profile."/>
-                        </div>
-                        
-</div>
-
-<div style="border-bottom:1px dotted #bbb; margin:10px 0 15px;"></div>
-
-<div class="row row-fluid">
-
+                      <div class="row row-fluid">
                         <div id="analyze-profile" class="col-xs-12">
                             <ul id="analyze_auto_list" class="list-group">
                                 <li id="analyze-empty-item" class="list-group-item">Empty: Add items using the input above.</li>
                             </ul>
                         </div>
- </div>        
-
-
-
+                      </div>
                     </div>
-    
 
+                  <div style="border:1px solid #ccc; margin-bottom:20px; padding:20px;">
 
+                    <div class="row row-fluid">
 
-
-
-
-
-
-
-                  <div style="border:1px solid #ccc; margin-bottom:20px; background:#eee; padding:20px;">
-                      
-<div class="row row-fluid">
-                      
                       <div class="col-xs-4">
                         <h4 style="margin-left:0;">Step 2: Select Comparables</h4>
                       </div>
 
-                          
-                          <div class="col-xs-4 pheno-radio-button" style="display:inline-block;">
-                            <label id="pheno-search"><input id="srch" type="radio" checked="checked" value="search" name="mode"> Choose From Predefined Target Groups</label>
 
-                          </div>
+                      <div class="col-xs-4 pheno-radio-button" style="display:inline-block;">
+                        <label id="pheno-search"><input id="srch" type="radio" checked="checked" value="search" name="mode"> Choose From Predefined Target Groups</label>
+                      </div>
 
+                      <div class="col-xs-4 pheno-radio-button" style="display:inline-block;">
+                        <label id="pheno-compare"><input id="compare" type="radio" value="compare" name="mode"> Enter A Specific Set of Genes</label>
+                      </div>
 
+                    </div>
 
+                    <div style="border-bottom:1px dotted #bbb; margin:10px 0 15px;"></div>
 
-                        
-                        <div class="col-xs-4 pheno-radio-button" style="display:inline-block;">
-                          <label id="pheno-compare"><input id="compare" type="radio" value="compare" name="mode"> Enter A Specific Set of Genes</label>
-                        </div>
-
-
- 
-
-</div>
-
-<div style="border-bottom:1px dotted #bbb; margin:10px 0 15px;"></div>
-
-<div id="analyze-search" class="row row-fluid">
+                    <div id="analyze-search" class="row row-fluid">
 
                               <div class="col-xs-2">
                                 <label for="target" class="control-label search-label">Target Groups:</label>
-                              </div> 
+                              </div>
 
                               <div class="col-xs-5">
                                   <select id="target" class="form-control" name="target_species">
@@ -135,10 +97,8 @@
                                   </select>
                               </div>
 
-
-
                               <div id="analyze-limit">
-                          
+
                                 <div class="col-xs-2">
                                 <label for="analyze_limit_input" class="control-label search-label class="col-xs-2">Limit of results:</label>
                                 </div>
@@ -146,50 +106,41 @@
                                 <div class="col-xs-3">
                                   <input class="form-control" id="analyze_limit_input" name="limit" type="text" value="{{limit}}">
                                 </div>
-          
-                              </div> 
-    
-                              
-                              
 
+                              </div>
 
-</div>
+                    </div>
 
-<div id="analyze-compare" class="row row-fluid" style="display:none;">
+                    <div id="analyze-compare" class="row row-fluid" style="display:none;">
 
                         <div id="compare-form-group" class="col-xs-12">
-                          
+
                           <h5>Select gene labels and/or gene IDs</h5>
-                          
+
                           <div>
                               Gene labels:
                           </div>
                           <div id="gene-autocomplete">
                               <input id="auto_gene_input" type="text" class="form-control" placeholder="Type a gene label (eg. LHX1); select from menu">
                           </div>
-                          
+
                           <div id="gene-text-area">
                               Gene IDs (<a href="https://github.com/monarch-initiative/dipper#identifiers" target="_blank">more details...</a>):
                           </div>
 
                           <textarea id="gene-list" class="form-control" rows="3" placeholder="Paste comma-separated accessions (eg. NCBIGene:3975, ENSEMBL:ENSG00000273706)" name="gene_list"></textarea>
-                          
+
                           <div id="add_more_genes">
-                          <div id="gene-shortcuts">
-                              <span class="small">
-                                Given the above list of genes, include additional genes
-                                based on relationship:
-                              </span>
+                            <div id="gene-shortcuts">
+                                <span class="small">
+                                  Given the above list of genes, include additional genes
+                                  based on relationship:
+                                </span>
 
-                              <input type="checkbox" id="ortholog" name="ortholog"> Orthologs
-                              <input type="checkbox" id="paralog" name="paralog"> Paralogs
+                                <input type="checkbox" id="ortholog" name="ortholog"> Orthologs
+                                <input type="checkbox" id="paralog" name="paralog"> Paralogs
+                            </div>
                           </div>
-
-                            
-
-                          </div>
-                          
-                          
                         </div>
 
                         <div id="ajax-spinner">
@@ -224,24 +175,10 @@
                         </div>
 
 
-</div>
-
-
-
-                          
-                          
-                          
-                          
-                      </div>
-
-                      
-                     </div>
-                   </div>
-                  
-                   <div style="margin:5px auto; width:200px;">
-                      <button id="analyze-submit" type="submit" class="btn btn-primary" style="padding:10px 20px; font-size:18px; font-weight:bold;">Analyze</button>
-
+                    </div>
                   </div>
+
+                  <button id="analyze-submit" type="submit" class="btn btn-primary center-block">Analyze</button>
                 </form>
 
 
@@ -260,9 +197,9 @@
                         <a href="{{{downloadURL}}}" class="btn btn-default downloadline downloadline-left monarch-blue">JSON</a>
 
                               <input id="analyze_auto_species" name="current_target_species" value="{{target_filter.species}}" type="hidden"/>
-                             
+
                                   <div>{{{resultsTable}}}</table></div>
-                              
+
                       </div>
                       {{/hasResults}}
                       {{^hasResults}}
@@ -275,7 +212,7 @@
             <!-- this splitLabels shows the selected phenotyps -->
             <div id="splitLabels" style="display:none">{{splitLabels}}</div>
             {{/hasInputItems}}
-            
+
 
 
 </div> <!-- 1 -->

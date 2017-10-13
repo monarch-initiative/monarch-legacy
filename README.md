@@ -28,7 +28,7 @@ Monarch Initiative web application and associated tools.
 You can build and run the web application yourself via the instructions below
 in [Quickstart](#quickstart), or you can use the production version of the
 Monarch Initiative web interface at
-[http://monarchinitiative.org](http://monarchinitiative.org).
+[https://monarchinitiative.org](https://monarchinitiative.org).
 
 The audience for this README is primarily developers and integrators of the
 Monarch technology. The Monarch web application has its own user-level

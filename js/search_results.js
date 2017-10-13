@@ -8,7 +8,10 @@
 
 /* eslint indent: 0 */
 
-$(document).ready(function() {
+import Vue from 'vue';
+import axios from 'axios';
+
+function InitSearchResults() {
     const vueapp = new Vue({
       delimiters: ['{[{', '}]}'], // ugly, but otherwise it'll clash with puptent template mechanism
       el: '#vue-app',
@@ -35,6 +38,7 @@ $(document).ready(function() {
               params: this.user_facets
             })
             .then(function (response) {
+              // console.log('response', response);
               anchor.searching = false;
               anchor.numFound = response.data.response.numFound;
               anchor.numRowsDisplayed = response.data.response.docs.length;
@@ -76,6 +80,12 @@ $(document).ready(function() {
                     }
                   });
 
+                });
+              }
+
+              if (window.routerNavigo) {
+                anchor.$nextTick(function () {
+                  window.routerNavigo.updatePageLinks();
                 });
               }
             })
@@ -121,7 +131,7 @@ $(document).ready(function() {
           return cleanTitle.charAt(0).toUpperCase() + cleanTitle.slice(1);
         },
         fetchSuggestions: function() {
-          //console.log("=== FETCH SUGGESTIONS");
+          // console.log("=== FETCH SUGGESTIONS");
           var anchor = this;
           anchor.searching = true;
           axios.get('/suggestapi/'+searchTerm)
@@ -139,4 +149,9 @@ $(document).ready(function() {
 
     // initial call
     vueapp.fetchResults();
-  });
+  }
+
+module.exports = {
+  InitSearchResults: InitSearchResults
+};
+
