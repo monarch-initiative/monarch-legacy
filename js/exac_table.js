@@ -35,7 +35,7 @@ function createExacTable(var_id) {
                         this.allele_counts = exacData1.ac;
                         this.allele_numbers = exacData1.an;
                         this.homozygotes = exacData1.hom;
-                        const exacURL ='http://exac.broadinstitute.org/variant/';
+                        const exacURL ='https://exac.broadinstitute.org/variant/';
                         this.exacID = exacURL + [exacData1.chrom, exacData1.pos, exacData1.ref, exacData1.alt, ].join('-') ;
                         console.log(this.exacID);
                     })
