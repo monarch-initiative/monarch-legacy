@@ -17,6 +17,7 @@ function createExacTable(var_id) {
             allele_numbers: '',
             homozygotes: '',
             exacID: '',
+            isClinVar: '',
         },
         methods: {
             round(value, decimals) {
@@ -24,24 +25,31 @@ function createExacTable(var_id) {
                 return Number(Math.round(value + 'e' + decimals) + 'e-' + decimals);
             },
             hitMyVarient(id) {
-                const baseURL = 'https://myvariant.info/v1/query?q=';
-                const endpoint = 'clinvar.allele_id:';
-                const finalID = id.replace('ClinVarVariant:', '');
-                const url = baseURL + endpoint + finalID;
-                // eslint-disable-next-line
-                axios.get(url)
-                    .then((resp) => {
-                        const exacData1 = resp.data.hits[0].exac;
-                        this.allele_counts = exacData1.ac;
-                        this.allele_numbers = exacData1.an;
-                        this.homozygotes = exacData1.hom;
-                        const exacURL ='https://exac.broadinstitute.org/variant/';
-                        this.exacID = exacURL + [exacData1.chrom, exacData1.pos, exacData1.ref, exacData1.alt, ].join('-') ;
-                    })
-                    .catch((err) => {
-                        // eslint-disable-next-line
-                        console.log(err);
-                    });
+                if (id.includes('ClinVarVariant' )) {
+                    this.isClinVar = true;
+                    const baseURL = 'https://myvariant.info/v1/query?q=';
+                    const endpoint = 'clinvar.allele_id:';
+
+                    const finalID = id.replace('ClinVarVariant:', '');
+                    const url = baseURL + endpoint + finalID;
+                    // eslint-disable-next-line
+                    axios.get(url)
+                        .then((resp) => {
+                            const exacData1 = resp.data.hits[0].exac;
+                            this.allele_counts = exacData1.ac;
+                            this.allele_numbers = exacData1.an;
+                            this.homozygotes = exacData1.hom;
+                            const exacURL = 'https://exac.broadinstitute.org/variant/';
+                            this.exacID = exacURL + [exacData1.chrom, exacData1.pos, exacData1.ref, exacData1.alt,].join('-');
+                        })
+                        .catch((err) => {
+                            // eslint-disable-next-line
+                            console.log(err);
+                        });
+                }
+                else{
+                    this.isClinVar = false;
+                }
             },
         },
     });
