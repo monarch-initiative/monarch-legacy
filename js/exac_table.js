@@ -37,7 +37,6 @@ function createExacTable(var_id) {
                         this.homozygotes = exacData1.hom;
                         const exacURL ='https://exac.broadinstitute.org/variant/';
                         this.exacID = exacURL + [exacData1.chrom, exacData1.pos, exacData1.ref, exacData1.alt, ].join('-') ;
-                        console.log(this.exacID);
                     })
                     .catch((err) => {
                         // eslint-disable-next-line
