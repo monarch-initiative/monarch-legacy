@@ -24,7 +24,7 @@ function createExacTable(var_id) {
                 return Number(Math.round(value + 'e' + decimals) + 'e-' + decimals);
             },
             hitMyVarient(id) {
-                const baseURL = 'http://myvariant.info/v1/query?q=';
+                const baseURL = 'https://myvariant.info/v1/query?q=';
                 const endpoint = 'clinvar.allele_id:';
                 const finalID = id.replace('ClinVarVariant:', '');
                 const url = baseURL + endpoint + finalID;
