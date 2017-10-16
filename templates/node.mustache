@@ -1,13 +1,14 @@
 {{{includes.navbar}}}
+
 <div id="monarch-node" class="wrapperforfooter">
     <div class="container-fluid monarch-container">
         <div class="node-content">
             <div class="jumbotron monarch-node-jumbotron">
                 <div id="description">
                     {{#alerts}}
-                        <div class="alert alert-warning alert-block top-alert">
-                            {{{.}}}
-                        </div>
+                    <div class="alert alert-warning alert-block top-alert">
+                        {{{.}}}
+                    </div>
                     {{/alerts}}
                     <div class="row">
                         <div class="col-xs-3 col-sm-2">
@@ -15,15 +16,15 @@
                                 <img class="node-logo" src="{{{node_logo}}}"/>
                                 {{node_label}}
                                 {{^isLeafNode}}
-                                    Group
+                                Group
                                 {{/isLeafNode}}
                             </div>
                         </div>
                         <div class="col-xs-9 col-sm-10">
                             <div class="node-label">{{label}}
-                                {{#taxon}}
-                                    &nbsp;({{{taxon.label}}})
-                                {{/taxon}}
+                    {{#taxon}}
+                            &nbsp;({{{taxon.label}}})
+                    {{/taxon}}
                             </div>
                         </div>
                     </div>
@@ -54,30 +55,30 @@
             <div class="node-info">
                 <div id="overview-panel" class="first category">
                     {{#hasDef}}
+                    <div class="row">
+                        <div class="col-xs-12">
+                            <div class="node-description">
+                            {{definitions}}
+                            </div>
+                        </div>
+                    </div>
+                    {{/hasDef}}
+                    
+                    {{#hasDisclaimer}}
+                    
+
+                    <div id="disclaimer-container">
                         <div class="row">
                             <div class="col-xs-12">
                                 <div class="node-description">
-                                    {{definitions}}
+                                {{{includes.disclaimer}}}
                                 </div>
                             </div>
                         </div>
-                    {{/hasDef}}
-
-                    {{#hasDisclaimer}}
-
-
-                        <div id="disclaimer-container">
-                            <div class="row">
-                                <div class="col-xs-12">
-                                    <div class="node-description">
-                                        {{{includes.disclaimer}}}
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-
+                    </div>
+                    
                     {{/hasDisclaimer}}
-
+                    
                     <div id="mygene-container">
                         <div class="row">
                             <div class="col-xs-12">
@@ -97,40 +98,40 @@
                         </div>
                     {{/hasModifier}}
                     {{#hasAka}}
-                        <div class="ids">
-                            <b>AKA:</b>&nbsp;&nbsp;{{aka}}
-                        </div>
+                    <div class="ids">
+                        <b>AKA:</b>&nbsp;&nbsp;{{aka}}
+                    </div>
                     {{/hasAka}}
 
                     {{#hasXrefs}}
-                        <div class="ids">
-                            <b>References:</b>&nbsp;&nbsp;{{{xrefs}}}
-                        </div>
+                    <div class="ids">
+                        <b>References:</b>&nbsp;&nbsp;{{{xrefs}}}
+                    </div>
                     {{/hasXrefs}}
 
                     {{#hasTypes}}
-                        <div class="ids">
+                      <div class="ids">
                             <b>Type:</b> {{{types}}}
                         </div>
                     {{/hasTypes}}
 
                     {{#hasComment}}
-                        <div class="ids">
-                            <b>Comment:</b>&nbsp;&nbsp;{{comment}}
-                        </div>
+                    <div class="ids">
+                        <b>Comment:</b>&nbsp;&nbsp;{{comment}}
+                    </div>
                     {{/hasComment}}
                     {{#hasEqual}}
-                        <div class="ids">
-                            <b>Equivalent IDs:</b>&nbsp;&nbsp;{{{equivalentClasses}}}
-                        </div>
+                    <div class="ids">
+                        <b>Equivalent IDs:</b>&nbsp;&nbsp;{{{equivalentClasses}}}
+                    </div>
                     {{/hasEqual}}
                     <div class="ids">
                         <b>URI:</b>&nbsp;&nbsp;<a href="{{{iri}}}">{{{iri}}}</a>
                     </div>
                     {{#hasSource}}
-                        <div class="ids">
-                            <b>Source:</b>&nbsp;&nbsp;{{{source}}}
-                        </div>
+                    <div class="ids">
+                        <b>Source:</b>&nbsp;&nbsp;{{{source}}}
+                    </div>
                     {{/hasSource}}
                     <div id="mytrack-container">
                         <div class="row">
@@ -140,47 +141,42 @@
                             </div>
                         </div>
                     </div>
-
-                    {{#hasVariant}}
-                        {{{includes.exac_table}}}
-                    {{/hasVariant}}
-
                     {{#hasDownloads}}
-                        <div class="downloads">
-                            <div class="row">
-                                <br>
-                                <div class="col-xs-12">
-                                    <h3>Downloads</h3>
-                                    <div class="button-container">
-                                        {{{includes.downloads}}}
-                                    </div>
-                                </div>
-                            </div>
+                    <div class="downloads">
+                      <div class="row">
+                        <br>
+                        <div class="col-xs-12">
+                        <h3>Downloads</h3>
+                        <div class = "button-container">
+                        {{{includes.downloads}}}
                         </div>
+                        </div>
+                       </div>
+                    </div>
                     {{/hasDownloads}}
                     {{#hasBrw}}
-                        <div class="row">
-                            <br>
-                            <div class="col-xs-12">
-                                <div class="panel panel-default">
-                                    <div class="panel-heading" style="padding:5px 10px 7px 10px;">
-                                        <h5 class="panel-title">{{node_label}} Classification
-                                            <a
-                                                    class="pull-right"
-                                                    target="_blank"
-                                                    href="{{{classificationBrowserURL}}}">
-                                                <i class="fa fa-info-circle fa-lg fa-fw" style="color:darkgray;">
-                                                </i>
-                                            </a>
-                                        </h5>
-                                    </div>
-                                    <div class="panel-body" style="margin:0;padding:5px 0;">
-                                        <div id="brw">
-                                        </div>
+                    <div class="row">
+                        <br>
+                        <div class="col-xs-12">
+                            <div class="panel panel-default">
+                                <div class="panel-heading" style="padding:5px 10px 7px 10px;">
+                                  <h5 class="panel-title">{{node_label}} Classification
+                                    <a
+                                      class="pull-right"
+                                      target="_blank"
+                                      href="{{{classificationBrowserURL}}}">
+                                      <i class="fa fa-info-circle fa-lg fa-fw" style="color:darkgray;">
+                                      </i>
+                                    </a>
+                                  </h5>
+                                </div>
+                                <div class="panel-body" style="margin:0;padding:5px 0;">
+                                    <div id="brw">
                                     </div>
                                 </div>
                             </div>
                         </div>
+                    </div>
                     {{/hasBrw}}
                 </div>
                 {{{includes.phenotype_table}}}
@@ -197,12 +193,12 @@
                 {{{includes.pathway_table}}}
                 {{{includes.interaction_table}}}
                 <div id="compare-panel" class="category">
-                    <div id="phen_vis"></div>
+                  <div id="phen_vis"></div>
+                </div>
                 </div>
             </div>
         </div>
     </div>
-</div>
-<!-- closes wrapperforfooter -->
-{{{includes.footer}}}
+    <!-- closes wrapperforfooter -->
+    {{{includes.footer}}}
 
