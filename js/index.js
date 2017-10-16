@@ -118,3 +118,6 @@ window.makePhenotypeLandingGraph = makePhenotypeLandingGraph;
 window.makeGenotypeLandingGraph = makeGenotypeLandingGraph;
 window.makeGeneDiseaseLandingGraph = makeGeneDiseaseLandingGraph;
 window.makeModelLandingGraph = makeModelLandingGraph;
+
+import {createExacTable} from './exac_table.js';
+window.createExacTable = createExacTable;
