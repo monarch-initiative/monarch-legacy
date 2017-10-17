@@ -1,4 +1,4 @@
-<div v-show="proceed" style="border-radius: 10px; border: solid darkgray 1px" class="col-md-8" id="vue-exac">
+<div id="vue-exac" v-show="show_table" class="col-md-8" >
     <table class="table table-hover">
         <caption><h2>Exac Population Frequencies</h2></caption>
         <thead>
@@ -117,7 +117,17 @@
         </tr>
         </tbody>
     </table>
-    <div style="text-align: right; margin-bottom: 10px"><a v-bind:href="exacID" class="glyphicon glyphicon-link"></a></div>
+    <div id="exac-link"><a v-bind:href="exacID" class="glyphicon glyphicon-link"></a></div>
 </div>
+<style>
+    #vue-exac {
+        border-radius: 10px;
+        border: solid darkgray 1px;
+    }
+    #exac-link {
+        text-align: right;
+        margin-bottom: 10px;
+    }
+</style>
 <script src="https://unpkg.com/vue@2.4.2/dist/vue.min.js"></script>
 <script src="https://unpkg.com/axios@0.16.1/dist/axios.min.js"></script>
