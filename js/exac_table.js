@@ -10,51 +10,61 @@
 /* eslint indent: 0 */
 function createExacTable(var_id) {
     const vueapp = new Vue({
-        delimiters: ['{[{', '}]}'], // ugly, but otherwise it'll clash with puptent template mechanism
+        delimiters: ['{[{', '}]}'],
         el: '#vue-exac',
         data: {
             allele_counts: '',
             allele_numbers: '',
             homozygotes: '',
             exacID: '',
-            isClinVar: '',
+            show_table: false,
         },
         methods: {
             round(value, decimals) {
-                // eslint-disable-next-line
-                return Number(Math.round(value + 'e' + decimals) + 'e-' + decimals);
+                return Number(Math.round(`${value}e${decimals}`) + `e-${decimals}`);
             },
             hitMyVarient(id) {
-                if (id.includes('ClinVarVariant' )) {
-                    this.isClinVar = true;
-                    const baseURL = 'https://myvariant.info/v1/query?q=';
+                if (id.includes('ClinVarVariant')) {
+                    // Example API Call: http://myvariant.info/v1/query?q=clinvar.allele_id:251469&fields=exac
+                    const baseURL = 'https://myvariant.info/v1/query';
                     const endpoint = 'clinvar.allele_id:';
-
                     const finalID = id.replace('ClinVarVariant:', '');
-                    const url = baseURL + endpoint + finalID;
-                    // eslint-disable-next-line
-                    axios.get(url)
+                    axios.get(baseURL, {
+                            params: {
+                                q: `${endpoint}${finalID}`,
+                                fields: 'exac',
+                            }
+                        })
                         .then((resp) => {
-                            const exacData1 = resp.data.hits[0].exac;
-                            this.allele_counts = exacData1.ac;
-                            this.allele_numbers = exacData1.an;
-                            this.homozygotes = exacData1.hom;
-                            const exacURL = 'https://exac.broadinstitute.org/variant/';
-                            this.exacID = exacURL + [exacData1.chrom, exacData1.pos, exacData1.ref, exacData1.alt,].join('-');
+                            if (resp.data.total === 1) {
+                                const exacData = resp.data.hits[0].exac;
+                                this.allele_counts = exacData.ac;
+                                this.allele_numbers = exacData.an;
+                                this.homozygotes = exacData.hom;
+                                const exacURL = 'https://exac.broadinstitute.org/variant/';
+                                const exacIDParams = [
+                                    exacData.chrom,
+                                    exacData.pos,
+                                    exacData.ref,
+                                    exacData.alt,
+                                ].join('-');
+                                this.exacID = `${exacURL}${exacIDParams}`;
+                                this.show_table = true;
+                            } else {
+                                this.show_table = false;
+                            }
                         })
                         .catch((err) => {
                             // eslint-disable-next-line
                             console.log(err);
                         });
                 }
-                else{
-                    this.isClinVar = false;
+                else {
+                    this.show_table = false;
                 }
             },
         },
     });
     vueapp.hitMyVarient(var_id);
 };
-// initial call
-
 exports.createExacTable = createExacTable;
