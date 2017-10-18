@@ -118,7 +118,7 @@ exports.testGeneLabels = function() {
 // Check that genes are showing up for variants on disease pages
 // See https://github.com/monarch-initiative/monarch-app/issues/1343
 exports.testVariantGeneOnDiseasePage = function() {
-    var disease = "OMIM:182212";
+    var disease = "OMIM:309520";
     var filter = [
                   {field: 'object_closure', value: disease},
                   {field: 'subject_category', value: 'variant'},
