@@ -100,7 +100,7 @@ def after_scenario(context, scenario):
     # dump_log(context, scenario.name)
     # time.sleep(1)
     try:
-        context.browser.get('http://localhost:1/bogus_url_to_clear_page')
+        context.browser.get('data:,Clearing%20previous%20page')
     except:
         pass
 

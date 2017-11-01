@@ -61,6 +61,11 @@ def step_impl(context, title):
     # print('#####title\n\n\n\n', title, '\n\n\n\n')
     assert context.browser.title == title
 
+## Title check.
+@then('the title should start with "{prefix}"')
+def step_impl(context, prefix):
+    assert context.browser.title.startswith(prefix)
+
 ## The empty title check, a bit of a special case for known "bad" page
 ## titles.
 @then('the title should be ""')
