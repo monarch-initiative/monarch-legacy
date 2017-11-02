@@ -1,0 +1,45 @@
+$icon-font-path: "~bootstrap-sass/assets/fonts/bootstrap/";
+
+$navbar-height: 34px;
+$grid-float-breakpoint: 920px;
+
+@import "themes/monarchclassic/_variables.scss";
+@import "~bootstrap-sass/assets/stylesheets/bootstrap";
+@import "themes/monarchclassic/_bootswatch.scss";
+
+// Themes:
+// 		monarchclassic
+//
+// 		cerulean
+// 		cosmo
+// 		cyborg
+// 		darkly
+// 		flatly
+// 		journal
+// 		lumen
+// 		paper
+// 		readable
+// 		sandstone
+// 		simplex
+// 		slate
+// 		solar
+// 		spacelab
+// 		superhero
+// 		united
+// 		yeti
+
+
+@import '~jquery-ui/themes/base/autocomplete.css';
+@import '~jquery-ui/themes/base/draggable.css';
+
+@import "navbar.scss";
+
+.wrapperforfooter {
+    min-height: 100%;
+}
+
+.wrapperforfooter .container-fluid.monarch-container {
+    margin: ($navbar-height + 3) 2px 2px 2px;
+	height: 100%;
+}
+

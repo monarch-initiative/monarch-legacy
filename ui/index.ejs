@@ -13,13 +13,23 @@
     <link
       href="<%= webpackConfig.output.publicPath + webpack.assetsByChunkName['spastyle'][1] %>"
       rel="stylesheet">
+    <link
+      href="<%= webpackConfig.output.publicPath + webpack.assetsByChunkName['app'][1] %>"
+      rel="stylesheet">
     <% } %>
 
+    <style>
+    body.monarch-cloak {
+      display: none;
+    }
+    </style>
     <!-- Legacy JS launcher. -->
     <script type="text/javascript">
 
 
 function loaderBody() {
+  var bodyDOM = document.getElementById('monarch-body');
+  bodyDOM.classList.remove('monarch-cloak');
   console.log('loaderBody()');
   InitMonarchBBOPHandler();
   InitMonarchBBOPLinker();
@@ -34,10 +44,14 @@ function loaderBody() {
 
 <body
   id="monarch-body"
+  class="monarch-cloak"
   onload="loaderBody()">
-  <!-- Fixed navbar -->
-  <nav class="navbar navbar-inverse navbar-fixed-top">
-    <div class="container">
+
+<nav
+  id="monarch-navbar"
+  class="navbar navbar-inverse navbar-fixed-top"
+  role="navigation">
+    <div class="container-fluid monarch-navbar-container">
       <div class="navbar-header">
         <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#navbar" aria-expanded="false" aria-controls="navbar">
           <span class="sr-only">Toggle navigation</span>
@@ -54,61 +68,200 @@ function loaderBody() {
         </a>
       </div>
       <div id="navbar" class="navbar-collapse collapse">
-        <ul class="nav navbar-nav">
-          <li class="dropdown">
-              <a href="#" class="dropdown-toggle" data-toggle="dropdown">
-                  <i class="icon-th-large"></i>Browse <b class="caret"></b></a>
-              <ul class="dropdown-menu">
-                  <li><a data-navigo href="/disease">Diseases SPA</a></li>
-                  <li><a data-navigo href="/phenotype">Phenotypes</a></li>
-                  <li><a data-navigo href="/gene">Genes</a></li>
-                  <li><a data-navigo href="/model">Models</a></li>
-              </ul>
-          </li>
 
-          <li class="dropdown">
-            <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">Dropdown <span class="caret"></span></a>
-            <ul class="dropdown-menu">
-              <li><a href="#">Action</a></li>
-              <li><a href="#">Another action</a></li>
-              <li><a href="#">Something else here</a></li>
-              <li role="separator" class="divider"></li>
-              <li class="dropdown-header">Nav header</li>
-              <li><a href="#">Separated link</a></li>
-              <li><a href="#">One more separated link</a></li>
-            </ul>
-          </li>
+        <ul class="nav navbar-nav">
+            <li class="dropdown">
+                <a href="#" class="dropdown-toggle" data-toggle="dropdown">
+                    <i class="icon-th-large"></i>Browse <b class="caret"></b></a>
+                <ul class="dropdown-menu">
+                    <li><a data-navigo href="/disease">Diseases</a></li>
+                    <li><a data-navigo href="/phenotype">Phenotypes</a></li>
+                    <li><a data-navigo href="/gene">Genes</a></li>
+                    <li><a data-navigo href="/model">Models</a></li>
+                </ul>
+            </li>
+            <li class="dropdown">
+                <a href="#" class="dropdown-toggle" data-toggle="dropdown">
+                    <i class="icon-th-large"></i>Analyze <b class="caret"></b></a>
+                <ul class="dropdown-menu">
+                    <li><a data-navigo href="/analyze/phenotypes">Phenotypes</a></li>
+                    <li><a data-navigo href="/annotate/text">Annotate Text</a></li>
+                    <li><a data-navigo href="/page/exomes">Exomes</a></li>
+                </ul>
+            </li>
+            <li class="dropdown">
+                <a href="#" class="dropdown-toggle" data-toggle="dropdown">
+                    <i class="icon-th-large"></i>About <b class="caret"></b></a>
+                <ul class="dropdown-menu">
+                    <li><a data-navigo href="/page/about">About Monarch</a></li>
+                    <li><a data-navigo href="/about/sources">Data Sources</a></li>
+                    <li><a data-navigo href="/page/releases">Releases</a></li>
+                    <li><a data-navigo href="/page/team">Monarch Team</a></li>
+                    <li><a data-navigo href="/page/disclaimer">Monarch Disclaimer</a></li>
+                    <li role="separator" class="divider"></li>
+                    <li><a data-navigo href="/page/services">Monarch Web Services and APIs</a></li>
+                    <li><a target="_blank" href="https://archive.monarchinitiative.org/latest ">Data Downloads</a></li>
+                </ul>
+            </li>
+            <li class="dropdown">
+                <a href="#" class="dropdown-toggle" data-toggle="dropdown">
+                    <i class="icon-th-large"></i>Documentation<b class="caret"></b></a>
+                <ul class="dropdown-menu">
+                    <li><a data-navigo href="/page/phenogrid">Monarch Phenotype Grid Widget</a></li>
+                    <li><a data-navigo href="http://monarch-initiative.blogspot.com/2015/01/how-to-annotate-patients-phenotypic.html">Phenotype Curation Guidelines</a></li>
+                    <li><a data-navigo href="https://github.com/monarch-initiative">GitHub Organization</a></li>
+                    <li><a data-navigo href="https://github.com/obophenotype/upheno">Phenotype Ontologies Project</a></li>
+                    <li><a data-navigo href="/page/pubs">Publications</a></li>
+                    <li><a data-navigo href="/page/links">Link To Us</a></li>
+                </ul>
+            </li>
+
+            <li id="feedback-window-container" class="dropdown">
+              <button
+                id="feedback-trigger"
+                href="#simple-menu"
+                data-backdrop="false"
+                data-toggle="modal"
+                class="btn dropdown-toggle"
+                role="button"
+                aria-haspopup="true"
+                aria-expanded="false">
+                Feedback&nbsp;
+                <i class="glyphicon glyphicon-pencil" aria-hidden="true"></i>
+              </button>
+              <ul id="simple-menu" class="dropdown-menu simple-menu modal">
+                <li id="feedback-handle" xclass="modal-dialog">
+                  <div id="feedback-main">
+                    <button class="close feedback-close"
+                      data-dismiss="modal" xdata-target="#simple-menu">
+                      <i class="glyphicon glyphicon-remove-circle" aria-hidden="true"></i>
+                    </button>
+
+                    <div class="feedback-drag-instructions">
+                        This window may be moved by dragging here
+                    </div>
+                    <form style="padding:0;">
+                      <h5>
+                      Specific feedback from users like you is essential to guide future development and improvement of the Monarch experience. We welcome you to answer the questions below and/or contact us via links below.
+                      </h5>
+
+                      <div class="form-group">
+                        <label for="goal">What did you come to the Monarch site to do?</label>
+                        <textarea class="form-control" rows="2" id="feedback-goal"></textarea>
+                      </div>
+
+                      <div class="form-group">
+                        <label for="improve">What could we improve to make this task easier for you?</label>
+                        <textarea class="form-control" rows="2" id="feedback-improve"></textarea>
+                      </div>
+
+                      <br/>
+
+                      <div class="form-group form-inline">
+                        <div class="checkbox">
+                          <label>
+                            <input type="checkbox" id="feedback-OKQuote">
+                            <span>&nbsp;It is OK to quote my feedback</span>
+                          </label>
+                        </div>
+                      </div>
+
+                      <div class="form-group form-inline">
+                        <div class="checkbox">
+                          <label>
+                            <input type="checkbox" id="feedback-OKFollowup">
+                            <span>&nbsp;It is OK to follow up with me about my feedback</span>
+                          </label>
+                        </div>
+                      </div>
+
+
+                      <div class="form-group form-inline">
+                        <label for="feedback-email" style="padding-right:20px;">
+                          E-mail (optional)
+                        </label>
+                        <input class="form-control" style="border:1px solid black;" type="text" id="feedback-email" value="">
+                      </div>
+
+                      <div class="form-group">
+                        <label for="feedback-additional">Any additional comments?</label>
+                        <textarea class="form-control" rows="2" id="feedback-additional"></textarea>
+                      </div>
+
+                      <hr style="border:1px solid transparent;margin:5px;padding:0;"/>
+
+                      <div class="form-group">
+                        <div style="width:35%;margin:auto;">
+                          <input id="feedback-submit-button" class="btn btn-primary btn-sm btn-block" type="button" name="submit" value="Submit Feedback" />
+                        </div>
+                      </div>
+                    </form>
+
+                    <hr style="border-top-color:darkgray;margin:0;margin-top:15px;margin-bottom:0;padding:0;"/>
+
+                    <div class="row">
+                      <div class="col-12 text-center">
+                        <h5 class="text-center">More Ways to Contact Monarch</h5>
+                      </div>
+                    </div>
+                    <div class="row">
+                      <div class="col-xs-3">
+                          <a href="https://github.com/monarch-initiative/monarch-app/issues" target="_blank">Issue Tracker</a>
+                      </div>
+                      <div class="col-xs-3">
+                          <a href="mailto:info@monarchinitiative.org" target="_blank">Email Us</a>
+                      </div>
+                      <div class="col-xs-3">
+                          <a href="https://bit.ly/monarchcommunity" target="_blank">Sign Up</a>
+                      </div>
+                      <div class="col-xs-3">
+                          <a href="https://twitter.com/MonarchInit" target="_blank">Follow us on Twitter</a>
+                      </div>
+                    </div>
+                  </div>
+
+                </li>
+              </ul>
+            </li>
         </ul>
-        <ul class="nav navbar-nav navbar-right">
-          <li><a data-navigo href="/">/</span></a></li>
-          <li><a data-navigo href="/home">/home</span></a></li>
-          <li><a data-navigo href="/disease">/disease</span></a></li>
-          <li><a data-navigo href="/disease/DOID:331">/disease/DOID:331</span></a></li>
-        </ul>
+
+
+        <form id="search_form" class="navbar-right navbar-form searchspace"
+            action="/search" role="search">
+            <div class="form-group">
+              <input id="search" type="text" class="col-xs-8 form-control" placeholder="Search (e.g. Parkinson's)"/>
+              <button class="col-xs-4 btn btn-primary nav-search-btn"
+                  type="submit">Go</button>
+            </div>
+        </form>
       </div><!--/.nav-collapse -->
     </div>
   </nav>
 
   <div
-    id="monarch-content-fragment"
-    style="border:1px solid green;margin: 50px 0 0 0; padding: 5px 0;">
+    id="monarch-content-fragment">
     LOADING
   </div>
 
-  <div class="babel" style="background:rgba(254, 254, 254, 0.2); border:2px solid lightgray;position:absolute;top:400px;z-index:500;">
-    <p>
-      <img src="<%= require('./assets/images/monarch-logo.png') %>" class="size-full aligncenter logo" alt="webpack-logo" />
-    </p>
+  <div class="dynamic-import-test">
     <p class="require-ensure">
-      <span class="test-require-ensure">Just click here</span> to see an example.
+      <span class="test-require-ensure">
+        <img
+          src="<%= require('./assets/images/monarch-logo.png') %>"
+          class="fidget-spinner left"
+          alt="monarch-logo"/>
+        <img
+          src="<%= require('./assets/images/monarch-logo.png') %>"
+          class="fidget-spinner right"
+          alt="monarch-logo"/>
+      </span>
     </p>
   </div>
 
-  <footer>
-    <h1>FOOTER</h1>
-  </footer>
   <!-- keep the following lines -->
   <% if (!htmlWebpackPlugin.options.MODE_DEV_SERVER) { %>
+    <script
+      src="<%= webpackConfig.output.publicPath + (Object.prototype.toString.call(webpack.assetsByChunkName['app']) === '[object Array]' ? webpack.assetsByChunkName['app'][0] : webpack.assetsByChunkName['app']) %>"></script>
     <script
       src="<%= webpackConfig.output.publicPath + (Object.prototype.toString.call(webpack.assetsByChunkName['spa']) === '[object Array]' ? webpack.assetsByChunkName['spa'][0] : webpack.assetsByChunkName['spa']) %>"></script>
   <% } %>

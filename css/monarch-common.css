@@ -25,115 +25,6 @@ p.bigfont {
     font-size: 18px;
 }
 
-/* This overrides many Bootstrap jumbotron styles to make things take less height. */
-
-.monarch-container .jumbotron {
-    position: relative;
-    margin:0;
-    margin-top: 0px;
-    margin-bottom: 20px;
-    border:1px solid transparent;
-    border-radius: 0;
-    xborder-bottom: 1px solid none;
-    padding: 0px 30px 0 30px;
-}
-
-#monarch-home-container.monarch-container .jumbotron {
-    margin: -3px;
-    margin-bottom: 20px;
-    border-radius: 6px;
-}
-
-.monarch-container .jumbotron h1 {
-    font-size: 30px;
-    margin: 10px 0px;
-}
-.monarch-container .jumbotron p {
-    font-size: 16px;
-    line-height: 20px;
-    margin: 0px;
-    padding: 0px;
-}
-
-.monarch-container .content-bottom .jumbotron {
-    margin: -15px -30px 0 -30px;
-}
-
-
-/* Navbar */
-/* These are navbar styles that depend heavily on media queries to determine the
- * width of the user's browser window. Make sure that you are adding styles to the
- * correct media query section.
- *
- * The default Bootstrap behavior makes the navbar quite different from regular
- * browser width to smaller (e.g. smartphone browsers). */
-
-
-#monarch-navbar .navbar { z-index: 100; } /* Default of 1000 interferes with popups etc. */
-#monarch-navbar .navbar { padding: 3px;}
-
-
-#monarch-navbar .navbar-nav .dropdown-menu {
-  border-radius: 0;
-  box-shadow: none;
-}
-
-#monarch-navbar .navbar.monarch-navbar {
-    padding:0;
-    padding-left: 5px;
-    padding-right: 5px;
-    margin:0;
-}
-
-#monarch-navbar .searchspace {
-    margin: 0;
-    margin-top:3px;
-    padding: 0;
-}
-
-#search {
-    margin: 0;
-    margin-left: 2px;
-    margin-right: 5px;
-    width:180px;
-    font-size: 13px;
-    height:30px;
-}
-
-#monarch-navbar .nav-search-btn {
-    padding: 0px 10px;
-    font-weight:500;
-    width:40px;
-    height: 30px;
-    margin:0;
-    margin-left:-3px;
-}
-
-#monarch-navbar.navbar {
-    min-height: 36px;
-    max-height: 36px;
-}
-#monarch-navbar .nav>li>a {
-    padding: 0px;
-}
-#monarch-navbar .dropdown-toggle {
-    margin: 5px 10px 5px 10px;
-}
-#monarch-navbar .dropdown {
-    padding: 4px 0px 0px;
-}
-#monarch-navbar .navbar-brand {
-    padding: 8px 20px 0px 20px;
-}
-#monarch-navbar .navbar-link {
-    font-size: 14px;
-}
-#monarch-navbar .navbar-text {
-    margin-top: 2px;
-    margin-bottom: 2px;
-    font-weight: 400;
-    margin-right: 5px;
-}
 
 .input-group {
     margin-bottom: 0px;
@@ -141,155 +32,6 @@ p.bigfont {
 .input-group-btn .btn {
     padding: 0px 10px;
     border-radius: 2px;
-}
-
-.navbar-nav .open .dropdown-menu {
-   margin-top: 1px;
-}
-
-@media (max-width: 840px) {
-    #monarch-navbar.monarch-navbar {
-        height:48px !important;
-        min-height:48px !important;
-    }
-
-    #monarch-navbar .collapse.in #feedback-trigger {
-        margin:2px 0 6px 9px;
-    }
-
-    #monarch-navbar #search {
-        width:250px;
-        margin:5px 0 5px 15px;
-    }
-
-    #monarch-navbar .nav-search-btn {
-        margin:5px 0 0 5px;
-    }
-
-    #collapsed-navbar {
-        background-color: #222; /* @navbar-inverse-bg */
-        height:100%;
-        padding:1px;
-    }
-
-    .navbar-brand {
-        padding-top: 15px !important;
-        padding-left: 40% !important;
-        margin:auto !important;
-    }
-
-    .navbar-header {
-        float: none;
-    }
-    .navbar-left,.navbar-right {
-        float: none !important;
-    }
-
-    .navbar-toggle {
-        display: block;
-    }
-    .navbar-collapse {
-        border-top: 1px solid transparent;
-        box-shadow: inset 0 1px 0 rgba(255,255,255,0.1);
-        background-color: #222; /* @navbar-inverse-bg */
-    }
-    .navbar-fixed-top {
-        top: 0;
-        border-width: 0 0 1px;
-    }
-
-    .navbar-collapse.collapse {
-        display: none!important;
-    }
-    .navbar-nav {
-        float: none!important;
-        background-color: transparent !important;
-        margin: 0 5px 0 5px;
-    }
-    .navbar .navbar-right.navbar-form {
-        margin: 0;
-    }
-    .navbar .navbar-right.navbar-form#search_form {
-        border: none;
-        margin: 0;
-    }
-    .navbar-nav>li {
-        float: none;
-    }
-    .navbar-nav>li>a {
-        padding-top: 10px;
-        padding-bottom: 10px;
-    }
-    .collapse.in{
-        display:block !important;
-      overflow: visible;
-    }
-   .navbar-nav .open .dropdown-menu {
-       position: static;
-       float: none;
-       width: auto;
-       margin-top: 0;
-       background-color: transparent;
-       border: 0;
-       -webkit-box-shadow: none;
-       box-shadow: none;
-    }
-
-    .navbar {
-        min-height: 57px !important;
-        height: 57px !important;
-    }
-
-    .monarch-container {
-        padding: 10px 0 0 0 !important;
-        height: 100%;
-    }
-
-    .input-group-btn .btn {
-        padding: 5px 10px;
-        line-height: 26px;
-        border-radius: 2px;
-    }
-}
-
-/* Content Containers */
-
-.wrapperforfooter .container-fluid.monarch-container {
-    padding: 36px 0px 0px;
-    height: 100%;
-}
-
-.container-fluid.monarch-navbar-container {
-    padding-right:5px;
-    background-color: #222 !important;
-}
-
-#collapsed-navbar.navbar-collapse.collapse .nav.navbar-nav {
-    overflow-y: visible;
-    background-color: #222 !important;
-}
-
-.content {
-    display: inline-block;
-    height: 100%;
-    width: 100%;
-    padding: 0;
-    margin: 0;
-}
-
-.content-bottom {
-    padding: 0 15px;
-    margin: 0;
-}
-
-div.content-bottom > div.text-center > h2 {
-    margin: 10px;
-}
-
-@media (max-width: 840px) {
-    .content {
-        margin-top: 45px;
-    }
 }
 
 
@@ -402,8 +144,8 @@ div.content-bottom > div.text-center > h2 {
 }
 
 .download-btn {
-	margin-bottom: 7px !important;
-	text-align: left !important;
+    margin-bottom: 7px !important;
+    text-align: left !important;
 }
 .button-container{
     width: 150px;
@@ -506,12 +248,35 @@ div#mygene-container {
 /* Footer */
 
 #footer {
-    clear: both;
-    padding: 10px 40px 10px;
-    text-align: center;
+    color: #333;
+    padding: 5px 10px;
+    margin: 1px;
+    text-align: left;
     font-weight: 200;
     font-size: 12px;
-    color: #777;
+    color: black;
+    line-height:1.3em;
+    border-top:1px solid lightgray;
+    background: #FAFAFA;
+}
+
+#footer div {
+    clear: both;
+    margin: 0;
+    padding: 0;
+}
+#footer ul {
+    margin: 0;
+    padding: 0;
+}
+
+#footer ul li {
+    margin: 0;
+    padding-left: 20px;
+    width: 50%;
+    float:left;
+    display:inline;
+    font-weight: 300;
 }
 
 #footer.fadeable {
@@ -523,10 +288,6 @@ div#mygene-container {
 
 #footer.fadeable:hover {
     color: #777;
-}
-
-.wrapperforfooter {
-    min-height: 100%;
 }
 
 /* Search Bar */
@@ -612,16 +373,6 @@ div#mygene-container {
     margin-left: -7px;
     margin-right: 5px;
     padding: 0;
-}
-
-#monarch-navbar .navbar-brand {
-    height: 35px;
-    padding: 9px 10px 0px 14px;
-    font-size: 18px;
-    font-weight: 500;
-    margin:0;
-    margin-left:-17px;
-    margin-top:-2px;
 }
 
 /* BS3 Pager from bbop.live_pager widget */
@@ -887,13 +638,8 @@ em.hilite {
     font-weight: bold;
     font-style: normal;
 }
-/*.hilite {
-    border: 1px dotted #000;
-    color: #000;
-    background: #A9FFA1;
-    // background: #ff0;
-    padding: 0 1px;
-}*/
+
+
 .qualifier-not {
     padding: 2px;
     /* background: #fff; */
@@ -901,38 +647,6 @@ em.hilite {
     color: #F00;
     font-weight: bold;
 }
-/*a:hover .hilite, a:active .hilite {
-    color: #fff;
-    background: #3875D7;
- //border: none; border: 1px solid #3875D7; 
-}*/
-
-/* Sideways...really? You bet! */
-/* In order: FF, Safari, IE, Opera */
-/* .climbing { */
-/*     -moz-transform: rotate(-90deg); */
-/*     -webkit-transform: rotate(-90deg); */
-/*     filter: progid:DXImageTransform.Microsoft.BasicImage(rotation=3); */
-/*     -o-transform: rotate(-90deg); */
-/* } */
-
-/* Cart. */
-/* .cart-rules { */
-/*     font-weight: bold; */
-/*     position: fixed; */
-/*     right: -2.5em; */
-/*     bottom: 2em; */
-/*     background-color: #cddcf3; */
-/*     border-style: solid; */
-/*     border-width: 2px; */
-/*     border-color: #3875d7; */
-/*     padding: 0.5em; */
-/*     padding-bottom: 3em; */
-/* } */
-/* .cart-image { */
-/*     width: 32px; */
-/*     height: 25px; */
-/* } */
 
 .amigo-logo-img-link {
     float: left;
@@ -1056,330 +770,17 @@ em.hilite {
   background-color:#EEEEEE;
 }
 
-#feedback-window-container #simple-menu.dropdown-menu.simple-menu.modal.ui-draggable {
-  box-shadow: none;
-}
-
-#feedback-window-container .form-group {
-  margin: 0;
-  padding: 0;
-}
-
-#feedback-window-container .form-group label {
-  margin: 0;
-  padding: 0;
-  padding-top: 5px;
-}
-
-#feedback-window-container .form-group textarea {
-  margin: 0;
-  //padding: 0;
-  border:1px solid black;
-}
-
-#feedback-window-container .form-group .checkbox label {
-  margin: 0;
-  padding: 0;
-}
-
-
-#feedback-window-container .form-group .checkbox span {
-  margin: 0;
-  padding: 0;
-}
-
-.feedback-close {
-  margin-top:3px;
-  margin-right:-15px;
-}
-
-.feedback-drag-instructions {
-    margin:0;
-    margin-left:20% !important;
-    margin-right:20% !important;
-    font-size:0.8em;
-    font-weight:500;
-    font-style: italic;
-    text-align:center;
-    margin:auto;
-    //background-color: white;
-}
-
-#feedback-window-container .modal
-{
-    overflow: hidden;
-}
-
-#feedback-window-container .modal-dialog{
-    position:relative;
-    margin: auto;
-    margin-right: 0;
-    margin-left: 0;
-    width:100%;
-    border:none;
-}
-
-#alert_template {
-    border:2px solid darkgray;
-    border-radius: 10px;
-}
-
-#alert_template #feedback-response {
-    text-align: center;
-    font-weight: 500;
-    color: black;
-}
-
-#monarch-navbar #feedback-main {
-  border:4px solid darkgray !important;
-  border-radius: 15px !important;
-  padding:20px;
-  padding-top: 0;
-  margin: auto;
-  background: #EEEEEE;
-}
-
-#monarch-navbar #feedback-trigger {
-    height:30px;
-    margin: 0;
-    padding: 0;
-    border:1px solid transparent;
-    background-color: #222;
-    color: #43A395;
-    font-weight: 500;
-}
-#monarch-navbar #feedback-trigger:hover {
-    color: #FFF;
-    border:1px solid transparent;
-}
-
-#monarch-navbar #feedback-handle {
-  margin: auto;
-  padding: 0;
-}
-
-
-#monarch-navbar #feedback-window-container.dropdown ul.simple-menu {
-  position: fixed;
-  width: 90%;
-  padding: 0 !important;
-  margin:auto !important;
-  top: 50px;
-  border: none;
-  background: transparent;
-}
 
 .beta-badge {
-	margin-left: 5px;
-	font-size: 10px;
-	color: #d9534f !important;
+    margin-left: 5px;
+    font-size: 10px;
+    color: #d9534f !important;
 }
 
 .pheno-info {
     vertical-align:text-top;
 }
 
-
-
-/*
-    Everything below is ripped from the jquery-ui-modified.js in the phenogrid
-    project. This is necessary because the phenogrid css pollutes the global
-    CSS namespace and Monarch has come to rely upon this variant CSS.
-
-    Phenogrid should be fixed so that it uses a similar jQueryUI version
-    as Monarch-app and that any customizations are qualified with a phenogrid-specific
-    class or id.
-*/
-
-
-/* Component containers
-----------------------------------*/
-#monarch-body .ui-widget {
-    font-family: Trebuchet MS,Tahoma,Verdana,Arial,sans-serif;
-    font-size: 1.1em;
-}
-#monarch-body .ui-widget .ui-widget {
-    font-size: 1em;
-}
-#monarch-body .ui-widget input,
-#monarch-body .ui-widget select,
-#monarch-body .ui-widget textarea,
-#monarch-body .ui-widget button {
-    font-family: Trebuchet MS,Tahoma,Verdana,Arial,sans-serif;
-    font-size: 1em;
-}
-#monarch-body .ui-widget-content {
-    border: 1px solid #dddddd;
-    background: #eeeeee;
-    color: #333333;
-}
-#monarch-body .ui-widget-content a {
-    color: #333333;
-    display: block;
-    text-decoration: none;
-    padding: 3px;
-}
-#monarch-body .ui-widget-header {
-    border: 1px solid #e78f08;
-    background: #f6a828;
-    color: #ffffff;
-    font-weight: bold;
-}
-#monarch-body .ui-widget-header a {
-    color: #ffffff;
-}
-
-/* Interaction states
-----------------------------------*/
-#monarch-body .ui-state-default,
-#monarch-body .ui-widget-content .ui-state-default,
-#monarch-body .ui-widget-header .ui-state-default {
-    border: 1px solid #cccccc;
-    background: #f6f6f6;
-    font-weight: bold;
-    color: #1c94c4;
-}
-#monarch-body .ui-state-default a,
-#monarch-body .ui-state-default a:link,
-#monarch-body .ui-state-default a:visited {
-    color: #1c94c4;
-    text-decoration: none;
-}
-#monarch-body .ui-state-hover,
-#monarch-body .ui-widget-content .ui-state-hover,
-#monarch-body .ui-widget-header .ui-state-hover,
-#monarch-body .ui-state-focus,
-#monarch-body .ui-widget-content .ui-state-focus,
-#monarch-body .ui-widget-header .ui-state-focus {
-    border: 1px solid #fbcb09;
-    background: #fdf5ce;
-    font-weight: bold;
-    color: #c77405;
-}
-#monarch-body .ui-state-hover a,
-#monarch-body .ui-state-hover a:hover,
-#monarch-body .ui-state-hover a:link,
-#monarch-body .ui-state-hover a:visited,
-#monarch-body .ui-state-focus a,
-#monarch-body .ui-state-focus a:hover,
-#monarch-body .ui-state-focus a:link,
-#monarch-body .ui-state-focus a:visited {
-    color: #c77405;
-    text-decoration: none;
-}
-#monarch-body .ui-state-active,
-#monarch-body .ui-widget-content .ui-state-active,
-#monarch-body .ui-widget-header .ui-state-active {
-    border: 1px solid #fbd850;
-    background: #ffffff;
-    font-weight: bold;
-    color: #eb8f00;
-}
-#monarch-body .ui-state-active a,
-#monarch-body .ui-state-active a:link,
-#monarch-body .ui-state-active a:visited {
-    color: #eb8f00;
-    text-decoration: none;
-}
-
-/* Interaction Cues
-----------------------------------*/
-#monarch-body .ui-state-highlight,
-#monarch-body .ui-widget-content .ui-state-highlight,
-#monarch-body .ui-widget-header .ui-state-highlight {
-    border: 1px solid #fed22f;
-    background: #ffe45c;
-    color: #363636;
-}
-#monarch-body .ui-state-highlight a,
-#monarch-body .ui-widget-content .ui-state-highlight a,
-#monarch-body .ui-widget-header .ui-state-highlight a {
-    color: #363636;
-}
-#monarch-body .ui-state-error,
-#monarch-body .ui-widget-content .ui-state-error,
-#monarch-body .ui-widget-header .ui-state-error {
-    border: 1px solid #cd0a0a;
-    background: #b81900;
-    color: #ffffff;
-}
-#monarch-body .ui-state-error a,
-#monarch-body .ui-widget-content .ui-state-error a,
-#monarch-body .ui-widget-header .ui-state-error a {
-    color: #ffffff;
-}
-#monarch-body .ui-state-error-text,
-#monarch-body .ui-widget-content .ui-state-error-text,
-#monarch-body .ui-widget-header .ui-state-error-text {
-    color: #ffffff;
-}
-#monarch-body .ui-priority-primary,
-#monarch-body .ui-widget-content .ui-priority-primary,
-#monarch-body .ui-widget-header .ui-priority-primary {
-    font-weight: bold;
-}
-#monarch-body .ui-priority-secondary,
-#monarch-body .ui-widget-content .ui-priority-secondary,
-#monarch-body .ui-widget-header .ui-priority-secondary {
-    opacity: .7;
-    filter:Alpha(Opacity=70); /* support: IE8 */
-    font-weight: normal;
-}
-#monarch-body .ui-state-disabled,
-#monarch-body .ui-widget-content .ui-state-disabled,
-#monarch-body .ui-widget-header .ui-state-disabled {
-    opacity: .35;
-    filter:Alpha(Opacity=35); /* support: IE8 */
-    background-image: none;
-}
-#monarch-body .ui-state-disabled .ui-icon {
-    filter:Alpha(Opacity=35); /* support: IE8 - See #6059 */
-}
-
-
-/* Misc visuals
-----------------------------------*/
-
-/* Corner radius */
-#monarch-body .ui-corner-all,
-#monarch-body .ui-corner-top,
-#monarch-body .ui-corner-left,
-#monarch-body .ui-corner-tl {
-    border-top-left-radius: 4px;
-}
-#monarch-body .ui-corner-all,
-#monarch-body .ui-corner-top,
-#monarch-body .ui-corner-right,
-#monarch-body .ui-corner-tr {
-    border-top-right-radius: 4px;
-}
-#monarch-body .ui-corner-all,
-#monarch-body .ui-corner-bottom,
-#monarch-body .ui-corner-left,
-#monarch-body .ui-corner-bl {
-    border-bottom-left-radius: 4px;
-}
-#monarch-body .ui-corner-all,
-#monarch-body .ui-corner-bottom,
-#monarch-body .ui-corner-right,
-#monarch-body .ui-corner-br {
-    border-bottom-right-radius: 4px;
-}
-
-/* Overlays */
-#monarch-body .ui-widget-overlay {
-    background: #666666;
-    opacity: .5;
-    filter: Alpha(Opacity=50); /* support: IE8 */
-}
-#monarch-body .ui-widget-shadow {
-    margin: -5px 0 0 -5px;
-    padding: 5px;
-    background: #000000;
-    opacity: .2;
-    filter: Alpha(Opacity=20); /* support: IE8 */
-    border-radius: 5px;
-}
 
 .links-page .section {
     padding-top: 0;
@@ -1389,4 +790,17 @@ em.hilite {
 .links-page .section th,
 .links-page .section td {
     padding: 3px 5px;
+}
+
+
+.graph-container,
+.disease-gene-container,
+.disease-pheno-container,
+.pheno-geno-container,
+.gene-disease-container,
+.dove-container
+ {
+    position: relative;
+    border:1px solid lightgray;
+    border-radius: 4px;
 }

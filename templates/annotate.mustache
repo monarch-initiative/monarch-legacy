@@ -4,21 +4,15 @@
   <div class="container-fluid monarch-container">
 
     <div class="content">
-            <div class="jumbotron">
-                <div id="description">
                     {{#alerts}}
                     <div class="alert alert-warning alert-block top-alert">
                         {{{.}}}
                     </div>
                     {{/alerts}}
-                    <img id="monarch-logo" class="downloadline" src="/image/logo.png"/>
-                    <h1 class="downloadline">Text Annotator</h1>
-                    <a class="downloadline btn btn-large btn-default btn-monarch-main monarch-feedback-dark"
-                            href="mailto:info@monarchinitiative.org">Your feedback welcome!</a>
+                    <h1 class="text-center">Text Annotator</h1>
                     <p>
                         Provided by the <a href="https://github.com/SciGraph/SciGraph">SciGraph</a> Annotation Service
                     </p>
-                </div>
                 <div id="categories">
                     <div class="tabcontainer">
                         {{#hasResults}}
@@ -45,7 +39,7 @@
                         {{/hasResults}}
                     </div>
                 </div>
-            </div>
+
             <div id="complete-info">
                 {{#hasResults}}
                     <div id="query" class="category">
@@ -72,7 +66,7 @@ Morell et al. (1997) presented an update of the clinical findings in the family 
                         {{#longestOnly}} checked="true" {{/longestOnly}}
                         value="true">Always use longest match</input>
                         </br>
-                        <button type="submit" class="btn btn-annotate btn-default btn-monarch-main monarch-blue">Search</button>  
+                        <button type="submit" class="btn btn-primary center-block">Search</button>  
                     </form>
                 </div>
                 {{#hasResults}}

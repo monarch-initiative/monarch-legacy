@@ -8,7 +8,7 @@ function InitTabs() {
      * phenotype, gene, and genotype pages. */
     jQuery('.tabcontainer').hover(function() {
         jQuery(this).on('mousemove', function(e) {
-            jQuery(this).find('.tabhover').css({'top': e.pageY - 20, 'left': e.pageX});
+            jQuery(this).find('.tabhover').css({'top': e.pageY + 20, 'left': e.pageX + 10});
             jQuery(this).find('.tabhover').show();
         });
     }, function(){

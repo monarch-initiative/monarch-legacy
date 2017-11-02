@@ -7,14 +7,12 @@ global.jQuery = jq;
 
 import '../image/home-splash.png';
 import '../image/partner-do.png';
-// import '../node_modules/bootstrap/dist/css/bootstrap.min.css';
 
 import 'underscore';
-import 'bootstrap';
-// '/bootstrap-theme.css',
 import 'jquery-ui';
 import 'jquery-ui/ui/widgets/autocomplete';
 import 'jquery-ui/ui/widgets/draggable';
+import 'bootstrap-sass';
 
 import 'd3';
 
@@ -22,10 +20,14 @@ import {navbar_search_init} from './search_form';
 window.navbar_search_init = navbar_search_init;
 
 import 'font-awesome/css/font-awesome.min.css';
-import '../css/monarch.less';
+
+import '../css/monarch.scss';
 import '../css/monarch-common.css';
 import '../css/monarch-specific.css';
 import '../css/monarch-home.css';
+import '../css/team.css';
+import '../css/sources.css';
+import '../css/search_results.css';
 
 import bbop from 'bbop';
 window.bbop = bbop;
@@ -35,10 +37,13 @@ if (bbop.monarch) {
 else {
   bbop.monarch = {
     widget: {}
-  }
+  };
 }
 
-// Core browser/server libraries
+
+import {InitSearchResults} from './search_results.js';
+window.InitSearchResults = InitSearchResults;
+
 import {InitMonarchBBOPHandler} from './lib/monarch/handler';
 window.InitMonarchBBOPHandler = InitMonarchBBOPHandler;
 
@@ -76,7 +81,6 @@ window.fetchPubmedAbstract = fetchPubmedAbstract;
 window.fetchPubmedSummary = fetchPubmedSummary;
 window.makeAuthorSpan = makeAuthorSpan;
 
-import '../css/bbop.css';
 import {getTableFromSolr} from './golr-table';
 window.getTableFromSolr = getTableFromSolr;
 
@@ -92,16 +96,30 @@ window.launchBrowser = launchBrowser;
 window.fetchLiteratureOverview = fetchLiteratureOverview;
 window.fetchGeneDescription = fetchGeneDescription;
 
+import {AnalyzeInit} from './Analyze';
+window.AnalyzeInit = AnalyzeInit;
+
 import './stupidtable.min';
 
 import {InitTables} from './tables';
 window.InitTables = InitTables;
+
+import {InitStyles} from './styles';
+window.InitStyles = InitStyles;
 
 import {InitTabs} from './monarch-tabs';
 window.InitTabs = InitTabs;
 
 import FacetFilters from './lib/monarch/widget/facet-filters';
 window.InitFacetFilters = FacetFilters.InitFacetFilters;
+
+import 'phenogrid';
+// import '../node_modules/phenogrid/dist/phenogrid-bundle.css';
+
+import '../node_modules/phenogrid/css/phenogrid.css';
+
+import {loadPhenogrid} from './phenogridloader-onclick';
+window.loadPhenogrid = loadPhenogrid;
 
 import {
   makeDiseaseLandingGraph,

@@ -448,7 +448,7 @@ function fetchGeneDescription(geneID) {
                                             ++isoform_count;
                                             viewer.append('a')
                                                 .attr('class', 'GF transcriptLabel')
-                                                .attr('xlink:href', externalUrl)
+                                                // .attr('xlink:href', externalUrl)
                                                 .attr('xlink:show', 'new')
                                                 .append('text')
                                                 .attr('x', x(feature.fmin) + 30)

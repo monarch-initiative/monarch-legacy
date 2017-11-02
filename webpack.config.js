@@ -46,6 +46,7 @@ const ASSETS_LIMIT = typeof process.env.ASSETS_LIMIT !== 'undefined' ? parseInt(
 const hash = ''; // (NODE_ENV === 'production' && DEVTOOLS ? '-devtools' : '') + (NODE_ENV === 'production' ? '-[hash]' : '');
 const TEST = false;
 
+
 /** integrity checks */
 
 if (/^\w+/.test(DIST_DIR) === false || /\/$/.test(DIST_DIR) === true) { // @todo make a better regexp that accept valid unicode leading chars
@@ -54,6 +55,9 @@ if (/^\w+/.test(DIST_DIR) === false || /\/$/.test(DIST_DIR) === true) { // @todo
 }
 
 log.info('webpack', `${NODE_ENV.toUpperCase()} mode`);
+if (USE_SPA) {
+  log.info('webpack', 'USE_SPA active');
+}
 if (DEVTOOLS) {
   log.info('webpack', 'DEVTOOLS active');
 }
@@ -105,7 +109,8 @@ plugins.push(new webpack.DefinePlugin({
   'process.env': {
     NODE_ENV: JSON.stringify(NODE_ENV),
     DEVTOOLS: DEVTOOLS, // You can rely on this var in your code to enable specific features only related to development (that are not related to NODE_ENV)
-    LINTER: LINTER // You can choose to log a warning in dev if the linter is disabled
+    LINTER: LINTER, // You can choose to log a warning in dev if the linter is disabled
+    USE_SPA: USE_SPA,
   }
 }));
 
@@ -183,42 +188,6 @@ else {
   log.info('webpack', 'LINTER DISABLED');
 }
 
-/* NOTUSED
-var cssLoader = {
-  test: /\.css$/,
-  // Reference: https://github.com/webpack/extract-text-webpack-plugin
-  // Extract css files in production builds
-  //
-  // Reference: https://github.com/webpack/style-loader
-  // Use style-loader in development for hot-loading
-  loader: 'style-loader!css-loader'
-
-  // ExtractTextPlugin.extract('style', 'css?sourceMap!postcss')
-    // ExtractTextPlugin.extract({ fallback: 'style-loader', use: 'css-loader' })
-};
-
-// Skip loading css in test mode
-if (TEST) {
-  // Reference: https://github.com/webpack/null-loader
-  // Return an empty module
-  cssLoader.loader = 'null';
-}
-
-
-// LESS LOADER
-var lessLoader = {
-  test: /\.less$/,
-  loader: "style-loader!css-loader!less-loader?outputStyle=expanded&includePaths[]=" + (path.resolve(__dirname, "./node_modules"))
-//    loader: ExtractTextPlugin.extract('style', 'less?sourceMap!postcss')
-};
-
-// Skip loading less in test mode
-if (TEST) {
-  // Reference: https://github.com/webpack/null-loader
-  // Return an empty module
-  lessLoader.loader = 'null';
-}
-*/
 
 
 /** webpack config */
@@ -242,15 +211,14 @@ const config = {
     publicPath: MODE_DEV_SERVER ? '/' : '/dist/',
     filename: `[name]${hash}.bundle.js`,
     chunkFilename: `[id]${hash}.chunk.js`,
-    path: path.join(__dirname, BUILD_DIR, DIST_DIR)
+    path: path.resolve(__dirname, BUILD_DIR, DIST_DIR)
   },
   cache: true,
   devtool: OPTIMIZE ? false : 'sourcemap',
   module: {
     rules: [
       ...preLoaders,
-      // NOTUSED cssLoader,
-      // NOTUSED lessLoader,
+
       {
         test: /\.js$/,
         exclude: /node_modules/,
@@ -261,24 +229,6 @@ const config = {
         use: extractSass.extract({
           use: [{
             loader: 'css-loader',
-            query: JSON.stringify({
-              sourceMap: true
-            })
-          }],
-          // use style-loader in development
-          fallback: 'style-loader'
-        })
-      },
-      {
-        test: /\.less$/,
-        use: extractSass.extract({
-          use: [{
-            loader: 'css-loader',
-            query: JSON.stringify({
-              sourceMap: true
-            })
-          }, {
-            loader: 'less-loader',
             query: JSON.stringify({
               sourceMap: true
             })
@@ -305,12 +255,18 @@ const config = {
           fallback: 'style-loader'
         })
       },
-      { test: /\.(png|gif)$/, loader: 'url-loader?limit=' + ASSETS_LIMIT + '&name=[hash].[ext]' },
-      { test: /\.woff(\?v=\d+\.\d+\.\d+)?$/, loader: 'url-loader?limit=' + ASSETS_LIMIT + '&mimetype=application/font-woff&name=[hash].[ext]' },
-      { test: /\.woff2(\?v=\d+\.\d+\.\d+)?$/, loader: 'url-loader?limit=' + ASSETS_LIMIT + '&mimetype=application/font-woff&name=[hash].[ext]' },
-      { test: /\.ttf(\?v=\d+\.\d+\.\d+)?$/, loader: 'url-loader?limit=' + ASSETS_LIMIT + '&mimetype=application/octet-stream&name=[hash].[ext]' },
-      { test: /\.eot(\?v=\d+\.\d+\.\d+)?$/, loader: 'file-loader?&name=[hash].[ext]' },
-      { test: /\.svg(\?v=\d+\.\d+\.\d+)?$/, loader: 'url-loader?limit=' + ASSETS_LIMIT + '&mimetype=image/svg+xml&&name=[hash].[ext]' }
+      {
+        test: /\.(svg|woff|woff2|ttf|eot)$/,
+        loader: 'file-loader'
+      },
+      { test: /\.(png|jpg|jpeg|gif)$/, loader: 'url-loader?limit=' + ASSETS_LIMIT + '&name=[hash].[ext]' },
+
+      // { test: /\.(png|gif)$/, loader: 'url-loader?limit=' + ASSETS_LIMIT + '&name=[hash].[ext]' },
+      // { test: /\.woff(\?v=\d+\.\d+\.\d+)?$/, loader: 'url-loader?limit=' + ASSETS_LIMIT + '&mimetype=application/font-woff&name=[hash].[ext]' },
+      // { test: /\.woff2(\?v=\d+\.\d+\.\d+)?$/, loader: 'url-loader?limit=' + ASSETS_LIMIT + '&mimetype=application/font-woff&name=[hash].[ext]' },
+      // { test: /\.ttf(\?v=\d+\.\d+\.\d+)?$/, loader: 'url-loader?limit=' + ASSETS_LIMIT + '&mimetype=application/octet-stream&name=[hash].[ext]' },
+      // { test: /\.eot(\?v=\d+\.\d+\.\d+)?$/, loader: 'file-loader?&name=[hash].[ext]' },
+      // { test: /\.svg(\?v=\d+\.\d+\.\d+)?$/, loader: 'url-loader?limit=' + ASSETS_LIMIT + '&mimetype=image/svg+xml&&name=[hash].[ext]' }
     ]
   },
   plugins: plugins,
@@ -323,7 +279,9 @@ const config = {
   resolve: {
     modules: ['node_modules'],
     alias: {
-        'ringo/httpclient': path.join(__dirname, "js/nop.js")
+        'vue$': 'vue/dist/vue.min.js',  // 'vue/dist/vue.esm.js',
+        'ringo/httpclient': path.join(__dirname, "js/nop.js"),
+        'phenogrid': path.join(__dirname, 'node_modules/phenogrid/js/phenogrid.js')
     }
   }
 };
@@ -332,8 +290,8 @@ if (MODE_DEV_SERVER) {
   config.devServer = {
     host: LOCALHOST ? 'localhost' : myLocalIp(),
     watchContentBase: true,
-    hot: true,
-    hotOnly: true,
+    hot: false,
+    hotOnly: false,
     inline: true,
     contentBase: './',
     historyApiFallback: true,
@@ -346,9 +304,18 @@ if (MODE_DEV_SERVER) {
     '*.json': {
       target: 'http://localhost:8080'
     },
-    '/status': {
-      target: 'http://localhost:8080'
-    }
+    // '/status': {
+    //   target: 'http://localhost:8080'
+    // },
+    // '/simsearch': {
+    //   target: 'http://localhost:8080'
+    // },
+    // '/image': {
+    //   target: 'http://localhost:8080'
+    // },
+    // '/searchapi': {
+    //   target: 'http://localhost:8080'
+    // }
   };
 
   if (!USE_SPA) {
@@ -357,10 +324,10 @@ if (MODE_DEV_SERVER) {
     };
   }
   else {
-    config.devServer.proxy['/home'] = {
-      target: 'http://localhost:8080/',
-      pathRewrite: {"^/home" : ""}
-    };
+    // config.devServer.proxy['/home'] = {
+    //   target: 'http://localhost:8080/',
+    //   pathRewrite: {"^/home" : ""}
+    // };
     // config.devServer.proxy['/home'] = {
     //   pathRewrite: function (path, req) {
     //     return '/';
@@ -374,16 +341,37 @@ if (MODE_DEV_SERVER) {
     // };
     config.devServer.proxy['/'] = {
       target: 'http://localhost:8080',
+      pathRewrite: function(path, req) {
+        console.log('pathRewrite', path);
+        return path.replace('?stripme', '');
+      },
       bypass: function(req, res, proxyOptions) {
         const referer = req.headers.referer || '';
-        console.log('bypass3', req.url, referer);
-        if (req.url === '/' && !referer) {
-          console.log(' ... bypassing');
+        console.log('bypass?', req.url, referer);
+        // if (req.url === '/' && referer === '') {
+        if ((referer === '') ||
+            (req.url === '/') ||
+            (req.url !== '/' && referer.endsWith(req.url))) {
+          console.log('#... spa.html');
           return '/spa.html';
         }
       }
     };
+
+
+    config.devServer.proxy['/analyze/phenotypes'] = {
+      target: 'http://localhost:8080',
+      bypass: function(req, res, proxyOptions) {
+        if (req.url === '/analyze/phenotypes') {
+       	  console.log('bypass', req.url);
+          return '/index.html';
+        }
+      }
+    };
+
   }
 }
+
+console.log('config.output', config.output);
 
 module.exports = config;

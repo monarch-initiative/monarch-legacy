@@ -1,23 +1,16 @@
-#description {
-    padding-bottom: 5px;
+.sources-container .content table {
+	width: 100%;
+	table-layout: fixed;
 }
 
-#complete-info {
-    padding: 0px 30px;
-}
-.category {
-    display: none;
-}
-.first {
-    display: block;
-}
 
-.monarch-container .content .source {
-    height: 50px;
+.sources-container .content table td {
+	padding: 5px;
 }
-.inlinesource {
-    display: inline-block;
-    margin-right: 5px;
-    margin-bottom: 5px;
+.sources-container .content img.source {
+	max-width: 100px;
+	width: 100px;
+	height: auto;
+	margin: auto;
+	display: block;
 }
-

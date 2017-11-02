@@ -1,12 +1,13 @@
 @import "variables";
 
+/*
+
 @import "footer";
 @import "logos";
-@import "primary-logo-animation";
+
 
 html {
   font-family: Arial,sans-serif;
-  background: aliceblue;
 }
 
 h1,
@@ -19,16 +20,6 @@ h6 {
 
 a {
   color: $brand-primary;
-}
-
-img.aligncenter {
-  display: block;
-  margin: 5px auto;
-}
-
-img.size-full {
-  height: auto;
-  max-width: 100%;
 }
 
 @media screen and (min-width:$break-point) {
@@ -54,3 +45,11 @@ code {
   background-color: #f9f2f4;
   border-radius: 4px;
 }
+*/
+
+#monarch-content-fragment {
+  margin: 0;
+  padding: 0;
+}
+
+@import "primary-logo-animation";

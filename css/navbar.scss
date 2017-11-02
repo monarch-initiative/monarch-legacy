@@ -1,0 +1,154 @@
+#monarch-navbar .searchspace {
+    margin: 0;
+    margin-top:3px;
+    padding: 0;
+}
+
+#search {
+    margin: 0;
+    margin-left: 2px;
+    margin-right: 5px;
+    width:180px;
+    font-size: 13px;
+    height:30px;
+}
+
+#monarch-navbar .nav-search-btn {
+    padding: 0px 10px;
+    font-weight:500;
+    width:40px;
+    height: 30px;
+    margin:0;
+    margin-left:-3px;
+}
+
+
+#feedback-window-container {
+
+}
+
+#feedback-window-container #simple-menu.dropdown-menu.simple-menu.modal.ui-draggable {
+  box-shadow: none;
+}
+
+#feedback-window-container .form-group {
+  margin: 0;
+  padding: 0;
+}
+
+#feedback-window-container .form-group label {
+  margin: 0;
+  padding: 0;
+  padding-top: 5px;
+}
+
+#feedback-window-container .form-group textarea {
+  margin: 0;
+  //padding: 0;
+  border:1px solid black;
+}
+
+#feedback-window-container .form-group .checkbox label {
+  margin: 0;
+  padding: 0;
+}
+
+
+#feedback-window-container .form-group .checkbox span {
+  margin: 0;
+  padding: 0;
+}
+
+.feedback-close {
+  margin-top:3px;
+  margin-right:-15px;
+}
+
+.feedback-drag-instructions {
+    margin:0;
+    margin-left:20% !important;
+    margin-right:20% !important;
+    font-size:0.8em;
+    font-weight:500;
+    font-style: italic;
+    text-align:center;
+    margin:auto;
+    //background-color: white;
+}
+
+#feedback-window-container .modal
+{
+    overflow: hidden;
+}
+
+#feedback-window-container .modal-dialog{
+    position:relative;
+    margin: auto;
+    margin-right: 0;
+    margin-left: 0;
+    width:100%;
+    border:none;
+}
+
+#alert_template {
+    border:2px solid darkgray;
+    border-radius: 10px;
+}
+
+#alert_template #feedback-response {
+    text-align: center;
+    font-weight: 500;
+    color: black;
+}
+
+/*#monarch-navbar .navbar-brand {
+    height: 35px;
+    padding: 9px 10px 0px 14px;
+    font-size: 18px;
+    font-weight: 500;
+    margin:0;
+    margin-left:-17px;
+    margin-top:-2px;
+}
+*/
+
+#monarch-navbar #feedback-main {
+  border:4px solid darkgray !important;
+  border-radius: 15px !important;
+  padding:20px;
+  padding-top: 0;
+  margin: auto;
+  background: #EEEEEE;
+}
+
+#monarch-navbar #feedback-trigger {
+  // height:30px;
+  // margin: 0;
+  // padding: 0;
+  background: transparent;
+  xcolor: #43A395;
+  font-weight: 500;
+}
+
+#monarch-navbar #feedback-trigger:hover {
+  xcolor: #FFF;
+}
+
+
+#monarch-navbar #feedback-handle {
+  margin: auto;
+  padding: 0;
+}
+
+
+#monarch-navbar #feedback-window-container.dropdown ul.simple-menu {
+  position: fixed;
+  width: 90%;
+  padding: 0 !important;
+  margin:auto !important;
+  top: 50px;
+  border: none;
+  background: transparent;
+}
+
+

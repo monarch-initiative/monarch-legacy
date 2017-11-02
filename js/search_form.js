@@ -44,7 +44,12 @@ function navbar_search_init(in_search_id, in_form_id){
         var val = jQuery(search_elt).val();
         var newurl = "/search/"+ encodeURIComponent(val);
 
-        window.location.href = newurl;
+        if (monarch.locationChangeHack) {
+          monarch.locationChangeHack(newurl);
+        }
+        else {
+          window.location.href = newurl;
+        }
         });
 
     // Arguments for autocomplete box.
@@ -155,7 +160,12 @@ function navbar_search_init(in_search_id, in_form_id){
         if (ui.item !== null) {
             var newurl = "http://"+window.location.host+"/"+ui.item.category+"/"
                 +encodeURIComponent(ui.item.id);
-            window.location.href = newurl;
+            if (monarch.locationChangeHack) {
+              monarch.locationChangeHack(newurl);
+            }
+            else {
+              window.location.href = newurl;
+            }
         }
         }
     };

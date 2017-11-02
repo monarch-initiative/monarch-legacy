@@ -745,7 +745,6 @@ function AnalyzeInit(phenogrid_conf, view){
     //  Add species for gene autocomplete
     var jac = jQuery('#auto_gene_input').autocomplete(auto_gene_args);
     jac.data('ui-autocomplete')._renderItem = function(ul, item) {
-        console.log(item);
         var taxonOrCategory = item.taxon;
         if(taxonOrCategory == "" || taxonOrCategory == null || taxonOrCategory == undefined) {
             taxonOrCategory = item.category;
@@ -820,7 +819,6 @@ function AnalyzeInit(phenogrid_conf, view){
             throw new Error("No configuration defined for gridSkeletonData");
         }
 
-        console.log('before Phenogrid.createPhenogridForElement in Analyze.js');
 		Phenogrid.createPhenogridForElement(document.getElementById('phen_vis'), {
 			gridSkeletonData: gridSkeletonData,
 			serverURL: global_app_base,
@@ -848,3 +846,7 @@ function AnalyzeInit(phenogrid_conf, view){
     }
 
 }
+
+module.exports = {
+  AnalyzeInit: AnalyzeInit
+};

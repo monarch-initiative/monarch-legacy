@@ -2,24 +2,16 @@
  * CSS for items still in labs.
  */
 
-.bbop-js-spinner {
-    height: 18px;
-}
-.bbop-js-spinner-hidden {
-    visibility: hidden;
-    display: none;
-}
-
 #main-container {
     width: 1000px;
     margin: 0px auto;
 }
 
-.graph{
+#main-container .graph{
     padding-top:20px;
 }
 
-.dove-container{
+#main-container .dove-container{
     position: relative;
     float:left;
     width: 700px;
@@ -27,21 +19,14 @@
     border-width:1px;
 }
 
-.graph-container{
+#main-container .graph-container{
     position: relative;
     float:left;
     border-style:solid;
     border-width:1px;
 }
-.disease-gene-container{
-    position: relative;
-    width: 467px;
-    float:left;
-    border-style:solid;
-    border-top:none;
-    border-width:1px;
-}
-.disease-pheno-container{
+
+#main-container .disease-gene-container{
     position: relative;
     width: 467px;
     float:left;
@@ -49,14 +34,25 @@
     border-top:none;
     border-width:1px;
 }
-.pheno-geno-container{
+
+#main-container .disease-pheno-container{
+    position: relative;
+    width: 467px;
+    float:left;
+    border-style:solid;
+    border-top:none;
+    border-width:1px;
+}
+
+#main-container .pheno-geno-container{
     position: relative;
     float:left;
     border-style:solid;
     border-top:none;
     border-width:1px;
 }
-.pheno-gene-container{
+
+#main-container .pheno-gene-container{
     position: relative;
     float:left;
     border-style:solid;
@@ -67,17 +63,10 @@
 /*
  * Fighting with monarch-common.css: it has a global setting for nav
  * elements, which affects tabs. This is to add the padding back to them.
- */
-.conflict-tab-padding > li > a {
+
+Seems to be ununused. SHould delete this.
+
+#main-container .conflict-tab-padding > li > a {
     padding: 7px;
 }
-
-/*
- * This help to prevent the horizontal scrolling on the new home page.
- * Like a fight with something in monarch-common.css or some misuse of
- * structure.
  */
-/* DOES NOT WORK!? */
-/* .conflict-top-container-margin { */
-/*     margin: 1.001em; */
-/* } */
