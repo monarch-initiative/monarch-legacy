@@ -1,7 +1,18 @@
-.teamlogo {
+.well.well-sm.team {
+    padding: 0;
+}
+
+.well.well-sm.team h3 {
+    padding: 0;
+    xmargin: 0;
+}
+
+img.teamlogo {
     display: inline-block;
-    float: right;
     height: 50px;
+    position: relative;
+    top: -15px;
+    float: right;
 }
 
 .teammember {

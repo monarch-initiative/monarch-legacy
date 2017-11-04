@@ -381,8 +381,8 @@ monarch.dovechart.prototype.setGroupPositioning = function (histogram, data) {
        .on("click", function(d){
            if (self.config.isYLabelURL){
               const url = self.config.yLabelBaseURL + d.id;
-              if (monarch.dovechart.locationChangeHack) {
-                monarch.dovechart.locationChangeHack(url);
+              if (window.vueRouter) {
+                window.vueRouter.push(url);
               }
               else {
                 document.location.href = url;

@@ -57,9 +57,9 @@ function createExacTable(var_id) {
                                     this.exacID = `${exacURL}${exacIDParams}`;
                                     this.show_table = true;
                                     // console.log('showtable', this, anchor);
-                                    if (window.routerNavigo) {
+                                    if (window.vueRouter) {
                                       anchor.$nextTick(function () {
-                                        window.routerNavigo.updatePageLinks();
+                                        window.vueRouter.updatePageLinks();
                                       });
                                     }
                                 }

@@ -33,7 +33,7 @@ log.info('webpack', 'Launched in ' + (MODE_DEV_SERVER ? 'dev-server' : 'build') 
 const BUILD_DIR = '';
 const DIST_DIR = process.env.DIST_DIR || 'dist';// relative to BUILD_DIR
 const NODE_ENV = process.env.NODE_ENV ? process.env.NODE_ENV.toLowerCase() : 'development';
-const USE_SPA = process.env.USE_SPA ? process.env.USE_SPA : 0;
+const USE_SPA = (process.env.USE_SPA ? process.env.USE_SPA : 0);
 const DEVTOOLS = process.env.DEVTOOLS ? JSON.parse(process.env.DEVTOOLS) : null;// can be useful in case you have web devtools (null by default to differentiate from true or false)
 const ANALYZE = process.env.ANALYZE ? JSON.parse(process.env.ANALYZE) : false;
 // optimize in production by default - otherwize, override with OPTIMIZE=false flag (if not optimized, sourcemaps will be generated)
@@ -45,6 +45,7 @@ const LOCALHOST = process.env.LOCALHOST ? JSON.parse(process.env.LOCALHOST) : tr
 const ASSETS_LIMIT = typeof process.env.ASSETS_LIMIT !== 'undefined' ? parseInt(process.env.ASSETS_LIMIT, 10) : 5000;// limit bellow the assets will be inlines
 const hash = ''; // (NODE_ENV === 'production' && DEVTOOLS ? '-devtools' : '') + (NODE_ENV === 'production' ? '-[hash]' : '');
 const TEST = false;
+
 
 
 /** integrity checks */
@@ -85,12 +86,13 @@ plugins.push(new webpack.ProvidePlugin({
 if (USE_SPA) {
   plugins.push(new HtmlWebpackPlugin({
     title: 'Monarch',
-    template: 'ui/index.ejs', // Load a custom template
+    template: 'ui/index.ejs',
     filename: 'spa.html',
     inject: MODE_DEV_SERVER, // inject scripts in dev-server mode - in build mode, use the template tags
     MODE_DEV_SERVER: MODE_DEV_SERVER,
     DEVTOOLS: DEVTOOLS,
-    BANNER_HTML: BANNER_HTML
+    BANNER_HTML: BANNER_HTML,
+    USE_SPA: USE_SPA
   }));
 }
 
@@ -110,7 +112,7 @@ plugins.push(new webpack.DefinePlugin({
     NODE_ENV: JSON.stringify(NODE_ENV),
     DEVTOOLS: DEVTOOLS, // You can rely on this var in your code to enable specific features only related to development (that are not related to NODE_ENV)
     LINTER: LINTER, // You can choose to log a warning in dev if the linter is disabled
-    USE_SPA: USE_SPA,
+    USE_SPA: USE_SPA
   }
 }));
 
@@ -197,16 +199,9 @@ const config = {
     jQuery: true
   },
   bail: FAIL_ON_ERROR,
-  entry:  (USE_SPA ?
-            {
-              'app': './js/index.js',
-              'spa': './ui/bootstrap.js',
-              'spastyle': './ui/style/main.scss'
-            } :
-            {
+  entry:    {
               'app': './js/index.js'
-            }
-          ),
+            },
   output: {
     publicPath: MODE_DEV_SERVER ? '/' : '/dist/',
     filename: `[name]${hash}.bundle.js`,
@@ -218,6 +213,11 @@ const config = {
   module: {
     rules: [
       ...preLoaders,
+
+      {
+        test: /\.vue$/,
+        loader: 'vue-loader'
+      },
 
       {
         test: /\.js$/,
@@ -286,6 +286,14 @@ const config = {
   }
 };
 
+if (USE_SPA) {
+  config.entry.spa = './ui/main.js';
+  config.entry.spastyle = './ui/style/main.scss';
+  config.resolve.extensions = ['.js', '.vue', '.json'];
+  config.resolve.alias['vue$'] = 'vue/dist/vue.esm.js';
+  config.resolve.alias['@'] = path.resolve('ui');
+}
+
 if (MODE_DEV_SERVER) {
   config.devServer = {
     host: LOCALHOST ? 'localhost' : myLocalIp(),
@@ -313,9 +321,12 @@ if (MODE_DEV_SERVER) {
     // '/image': {
     //   target: 'http://localhost:8080'
     // },
-    // '/searchapi': {
-    //   target: 'http://localhost:8080'
-    // }
+    '/autocomplete': {
+      target: 'http://localhost:8080'
+    },
+    '/searchapi': {
+      target: 'http://localhost:8080'
+    }
   };
 
   if (!USE_SPA) {
@@ -339,22 +350,43 @@ if (MODE_DEV_SERVER) {
     //     return '/';
     //   }
     // };
-    config.devServer.proxy['/'] = {
+    config.devServer.proxy['/image'] = {
+      target: 'http://localhost:8080'
+    };
+
+    config.devServer.proxy['/legacy'] = {
       target: 'http://localhost:8080',
       pathRewrite: function(path, req) {
-        console.log('pathRewrite', path);
-        return path.replace('?stripme', '');
-      },
+        path = path.slice('/legacy'.length);
+        console.log('legacy pathRewrite', path);
+        return path;
+      }
+    };
+    config.devServer.proxy['/'] = {
+      target: 'http://localhost:8080',
+      // pathRewrite: function(path, req) {
+      //   if (path.endsWith('?stripme')) {
+      //     path = path.replace(/\?stripme$/, '');
+      //     console.log('pathRewrite', path);
+      //   }
+      //   return path;
+      // },
+      // bypass: function(req, res, proxyOptions) {
+      //   const referer = req.headers.referer || '';
+      //   console.log('bypass?', req.url, referer);
+      //   let path = req.url;
+      //   if (path.indexOf('?stripme') >= 0) {
+      //   }
+      //   else if (true || (referer === '') ||
+      //       (path === '/')
+      //        // || (path !== '/' && referer.endsWith(path))
+      //       ) {
+      //     console.log('#... spa.html');
+      //     return '/spa.html';
+      //   }
+      // }
       bypass: function(req, res, proxyOptions) {
-        const referer = req.headers.referer || '';
-        console.log('bypass?', req.url, referer);
-        // if (req.url === '/' && referer === '') {
-        if ((referer === '') ||
-            (req.url === '/') ||
-            (req.url !== '/' && referer.endsWith(req.url))) {
-          console.log('#... spa.html');
-          return '/spa.html';
-        }
+        return '/spa.html';
       }
     };
 

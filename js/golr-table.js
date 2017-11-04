@@ -4,6 +4,30 @@ var golr_manager = require('bbop-manager-golr');
 var jquery_engine = require('bbop-rest-manager').jquery;
 var bbop_widgets = require('bbop-widget-set');
 
+//
+// If the anchor is a site-relative link, then make it a <router-link>
+// Otherwise, leave it alone
+//
+
+function convertLinkToVueRouterLink(old) {
+    var result = old;
+
+    var re = /^<a(.+)href="(.+)"(.*)>(.*)<\/a>$/;
+    var match = re.exec(result);
+
+    if (match) {
+        if (match[2].startsWith('/')) {
+            result = `<a data-monarch-legacy href="${match[2]}"${match[1]}>${match[4]}</a>`;
+        }
+        else {
+            result = `<a target="_blank" href="${match[2]}"${match[1]}>${match[4]}</a>`;
+        }
+    }
+
+    return result;
+}
+
+
 /**
  * Arguments: - id: An identifier. One of: IRI string, OBO-style ID
  *            - field: GOlr field in which to filter on the id
@@ -20,7 +44,6 @@ function getTableFromSolr(query_field, div, filter, personality, tab_anchor, is_
     if (tab_anchor != null){
         var isTabLoading = false;
         jQuery('#categories a[href="'+tab_anchor+'"]').click(function(event) {
-            console.log('getTableFromSolr click', tab_anchor);
             if (!(jQuery('#'+div+' .table').length) && !isTabLoading){
                 isTabLoading = true;
                 getTable(query_field, div, filter, personality, is_leaf, orFilter);
@@ -188,8 +211,8 @@ function getTableFromSolr(query_field, div, filter, personality, tab_anchor, is_
         // See what we got, in order of how much we'd like to have it.
         if( ilink ){
             retval = ilink;
-            if (window.routerNavigo) {
-                retval = '<a data-navigo' + retval.slice(2);
+            if (window.vueRouter) {
+                retval = convertLinkToVueRouterLink(retval);
             }
         }else if( ilabel ){
             retval = ilabel;
@@ -235,7 +258,7 @@ function getTableFromSolr(query_field, div, filter, personality, tab_anchor, is_
     });
 
     function disableBottomPager(value){
-        if (value <= 10){ 
+        if (value <= 10){
             jQuery('#'+pager_bot_div).hide();
         } else {
             jQuery('#'+pager_bot_div).show(2000);
@@ -249,7 +272,7 @@ function addPhenoPacketButton(pager_span, manager){
 
     var fun_id = bbop.core.uuid();
     manager.register('search', _drawPhenoPacketBtn, '-3', fun_id);
-   
+
     function _drawPhenoPacketBtn() {
 
         // / Add button to DOM.
@@ -262,7 +285,7 @@ function addPhenoPacketButton(pager_span, manager){
         var title = 'Download PhenoPacket';
         var button = new bbop.html.button(label, button_props);
         var button_elt = '#' + button.get_id();
-        
+
         jQuery('#' + pager_span).append(button.to_string());
         jQuery(button_elt).append("<span class=\"badge beta-badge\">BETA</span>");
         //var infoIcon = "<i class=\"fa fa-info-circle pheno-info\"></i>";

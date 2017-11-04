@@ -91,7 +91,7 @@ institutions:
         alumni: false
         bio: Nathan Dunn has a a MS in Chemical Engineering from the University of Washington and a PhD in Computer Science from the University of Oregon where he focused on using artifical neural networks to model the C. elegans nervous system. Since then he has worked in various capacities supporting scientific research.  His current focus is on development of collaborative genomic editing tools.
       - name: Eric Douglass
-        picture: /image/team/EricDouglass.jpg
+        picture: /image/person-unknown.png
         title: Software Engineer
         alumni: false
       - name: Jeremy Nguyen Xuan
@@ -164,7 +164,7 @@ institutions:
         title: Bioinformatician
         bio: Dr. Jacobsen has a BSc in Biochemistry from the Imperial College, London and a Ph.D. from the University of Cambridge, in Structural Biology. He has developed several tools for investigating the use of model organism phenotype data to better understand the role of gene mutation in human disease.
       - name: Tomasz Konopka
-        picture: /image/team/TomaszKonopka.jpg
+        picture: /image/person-unknown.png
         alumni: false
         title: Bioinformatician
         bio: Dr. Konopka has a PhD in physics from the University of Waterloo. Since turning to bioinformatics, he has developed computational methods for sequence-data analysis and contributed to characterizations of molecular signatures due to genetic mutations. He is interested in the mechanisms, uncertainties, and ambiguities associated with linking genotypes to phenotypes.

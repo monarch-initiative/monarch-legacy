@@ -38,7 +38,7 @@ function InitSearchResults() {
               params: this.user_facets
             })
             .then(function (response) {
-              // console.log('response', response);
+              console.log('response', response);
               anchor.searching = false;
               anchor.numFound = response.data.response.numFound;
               anchor.numRowsDisplayed = response.data.response.docs.length;
@@ -83,9 +83,9 @@ function InitSearchResults() {
                 });
               }
 
-              if (window.routerNavigo) {
+              if (window.vueRouter) {
                 anchor.$nextTick(function () {
-                  window.routerNavigo.updatePageLinks();
+                  window.vueRouter.updatePageLinks();
                 });
               }
             })
