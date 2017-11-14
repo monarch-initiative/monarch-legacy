@@ -139,3 +139,6 @@ window.makeModelLandingGraph = makeModelLandingGraph;
 
 import {createExacTable} from './exac_table.js';
 window.createExacTable = createExacTable;
+
+import {createExaxGeneSummaryTable} from './exac_gene_summary.js';
+window.createExaxGeneSummaryTable = createExaxGeneSummaryTable;
