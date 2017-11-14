@@ -37,6 +37,7 @@ function createExaxGeneSummaryTable(varID) {
                 })
                     .then((resp) => {
                         // eslint-disable-next-line
+                        console.log(resp.request.responseURL);
                         const hits = resp.data.hits[0];
                         if (hits.exac) {
                             this.showGeneExac = true;
@@ -51,6 +52,7 @@ function createExaxGeneSummaryTable(varID) {
                             exp_lof: hits.exac.all.exp_lof,
                             n_lof: hits.exac.all.n_lof,
                             p_li: hits.exac.all.p_li,
+                            link: resp.request.responseURL,
                         };
                         console.log(this.exacGene);
                     })

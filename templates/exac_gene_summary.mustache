@@ -30,15 +30,29 @@
         </tr>
         </tbody>
     </table>
-    <div id="exac-link"><a target="_blank"  class="glyphicon glyphicon-link"></a></div>
+    <div class="row">
+        <div class="col-md-6" id="mgi-link">
+            [Retrieved from <a target="_blank" v-bind:href="exacGene.link">MyGene.info</a>]
+        </div>
+        <div class="col-md-6" id="exac-link"><a target="_blank" href="http://exac.broadinstitute.org/"
+                               class="glyphicon glyphicon-link"></a>
+        </div>
+    </div>
 </div>
 <style>
     #exacGene {
         border-radius: 10px;
         border: solid darkgray 1px;
     }
+
+    #mgi-link {
+        text-align: left;
+        margin-bottom: 4px;
+    }
+
     #exac-link {
         text-align: right;
-        margin-bottom: 10px;
+        margin-bottom: 4px;
     }
+
 </style>
