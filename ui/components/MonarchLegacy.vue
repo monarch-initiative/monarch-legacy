@@ -65,7 +65,7 @@ export default {
       contentBody: '',
       progressTimer: null,
       progressPath: null,
-      fullPath: null
+      path: null
     }
   },
   created() {
@@ -85,7 +85,7 @@ export default {
       // within the loaded MonarchLegacy component.
 
       // console.log('$route', to, from);
-      if (to.path !== this.fullPath) {
+      if (to.path !== this.path) {
         this.fetchData();
       }
     }
@@ -108,7 +108,7 @@ export default {
     fetchData() {
       const that = this;
       const path = that.$route.fullPath;
-      this.fullPath = path;
+      this.path = that.$route.path;
 
       if (that.progressTimer) {
         console.log('leftover progressTimer');
@@ -148,14 +148,11 @@ export default {
 
             if (that.contentScript) {
               eval(that.contentScript);
+              window.vueRouter.updatePageLinks();
             }
           });
         }
       });
-    },
-    routeInfo() {
-      // console.log('routeInfo', this.$route);
-      return this.$route.fullPath;
     }
   }
 }

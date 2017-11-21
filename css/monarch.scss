@@ -34,14 +34,16 @@ $grid-float-breakpoint: 900px;
 @import "navbar.scss";
 
 .wrapperforfooter {
-    min-height: 100%;
+	width: 100%;
     margin: ($navbar-height + 3) 0 2px 0;
     padding: 0;
 }
 
 .wrapperforfooter .container-fluid.monarch-container {
 	height: 100%;
+	width: 100%;
 	margin: 0;
+    padding: 0;
 }
 
 [v-cloak] {

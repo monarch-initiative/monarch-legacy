@@ -183,11 +183,6 @@
 
 
 @media (max-width: $grid-float-breakpoint) {
-    // #monarch-navbar.monarch-navbar {
-    //     height:48px !important;
-    //     min-height:48px !important;
-    // }
-
     #monarch-navbar .collapse.in #feedback-trigger {
         margin:2px 0 6px 9px;
     }
@@ -208,7 +203,6 @@
     }
 
     .navbar-brand {
-        // padding-top: 15px !important;
         padding-left: 40% !important;
         margin:auto !important;
     }
@@ -269,20 +263,4 @@
        -webkit-box-shadow: none;
        box-shadow: none;
     }
-
-    // .navbar {
-    //     min-height: 57px !important;
-    //     height: 57px !important;
-    // }
-
-    // .monarch-container {
-    //     padding: 10px 0 0 0 !important;
-    //     height: 100%;
-    // }
-
-    // .input-group-btn .btn {
-    //     padding: 5px 10px;
-    //     line-height: 26px;
-    //     border-radius: 2px;
-    // }
 }

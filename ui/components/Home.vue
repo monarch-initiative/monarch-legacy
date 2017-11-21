@@ -26,7 +26,7 @@
       <div class="col-xs-12">
         <div class="center-block text-center">
           <img
-            class="img-responsive"
+            class="center-block text-center img-responsive"
             src="/image/carousel-overview.png"
             alt="Explore Monarch" />
         </div>

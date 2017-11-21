@@ -5,7 +5,8 @@ var jquery_engine = require('bbop-rest-manager').jquery;
 var bbop_widgets = require('bbop-widget-set');
 
 //
-// If the anchor is a site-relative link, then make it a <router-link>
+// If the anchor is a site-relative link, then annotate with
+//  'data-monarch-legacy' attribute
 // Otherwise, leave it alone
 //
 

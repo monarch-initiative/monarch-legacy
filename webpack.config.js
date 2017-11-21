@@ -315,9 +315,12 @@ if (MODE_DEV_SERVER) {
     // '/status': {
     //   target: 'http://localhost:8080'
     // },
-    // '/simsearch': {
-    //   target: 'http://localhost:8080'
-    // },
+    '/simsearch/phenotype': {
+      target: 'http://localhost:8080'
+    },
+    '/score': {
+      target: 'http://localhost:8080'
+    },
     // '/image': {
     //   target: 'http://localhost:8080'
     // },
@@ -351,6 +354,10 @@ if (MODE_DEV_SERVER) {
     //   }
     // };
     config.devServer.proxy['/image'] = {
+      target: 'http://localhost:8080'
+    };
+
+    config.devServer.proxy['/**/phenotype_list.json'] = {
       target: 'http://localhost:8080'
     };
 
@@ -391,15 +398,15 @@ if (MODE_DEV_SERVER) {
     };
 
 
-    config.devServer.proxy['/analyze/phenotypes'] = {
-      target: 'http://localhost:8080',
-      bypass: function(req, res, proxyOptions) {
-        if (req.url === '/analyze/phenotypes') {
-       	  console.log('bypass', req.url);
-          return '/index.html';
-        }
-      }
-    };
+    // config.devServer.proxy['/analyze/phenotypes'] = {
+    //   target: 'http://localhost:8080',
+    //   bypass: function(req, res, proxyOptions) {
+    //     if (req.url === '/analyze/phenotypes') {
+    //    	  console.log('bypass', req.url);
+    //       return '/spa.html';
+    //     }
+    //   }
+    // };
 
   }
 }
