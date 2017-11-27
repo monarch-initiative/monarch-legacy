@@ -36,7 +36,7 @@ function InitTabs() {
         jQuery(panel_id + '-panel').show();
         window.location.hash = panel_id;
     });
-    
+
     function adjustTabColor(panel_id) {
         // Since we're a tabby version, we're going to try and open
            // any tabs defined by fragments.
@@ -52,17 +52,17 @@ function InitTabs() {
                }
            }
     }
-    
+
     //Hack to get links to internal html anchors to work
     jQuery('#internal-link').click(function(event) {
         var panel_id = jQuery(this).attr('href');
         jQuery('#categories a[href="'+panel_id+'"]').click();
         adjustTabColor(panel_id);
-        
+
     });
-    
+
     adjustTabColor(window.location.hash);
-    
+
     /* Literature Tab */
 
     /* This is used to display hidden authors on the literature tab (because only the

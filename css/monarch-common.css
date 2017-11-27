@@ -1,10 +1,10 @@
-/* This file controls the elements common to all monarch pages. Every webpage
- * references this file. Use it to style the navbar, buttons, colors. */
-
-/* General Styles */
-
 html, body {
     height: 100%;
+}
+
+body#monarch-body {
+    margin:0;
+    padding:0;
 }
 p {
     font-family: Helvetica, Arial, sans-serif;
@@ -24,16 +24,6 @@ p.bigfont {
     color: #428bca;
     font-size: 18px;
 }
-
-
-.input-group {
-    margin-bottom: 0px;
-}
-.input-group-btn .btn {
-    padding: 0px 10px;
-    border-radius: 2px;
-}
-
 
 .toggleitems > .fewitems {
     color: #EA763B;
@@ -59,114 +49,6 @@ p.bigfont {
 #monarch-logo-horizontal {
     height: 50px;
 }
-
-/* Colors */
-
-/* This blue color is used on Monarch pages and buttons that are _not_ related to the
- * four core types of pages: diseases, phenotypes, genes, and genotypes.
- * For example, the analyze phenotypes page's search button uses monarch-blue. */
-.monarch-blue {
-    background-color: #53AED7;
-}
-/* This monarch-blue-light is an alternative blue color that is lighter and used for
- * non-category specific pages/buttons. */
-.monarch-blue-light {
-    background-color: #acd8ec;
-}
-
-/* This light brown color is used for jumbotron content related to disease pages.
- * For example, it is use for the disease spotlight on the disease main page and
- * for disease information on disease specific pages. */
-.monarch-container .monarch-disease-light {
-    background-color: #ECE8E3;
-}
-/* This darker brown color is used for the buttons related to disease pages. */
-.monarch-disease-dark {
-    background-color: #d0bda1;
-}
-
-/* This light blue color is used for jumbotron content related to phenotype pages.
- * For example, it is use for the phenotype spotlight on the phenotype main page and
- * for phenotype information on phenotype specific pages. */
-.monarch-phenotype-light {
-    background-color: #dcf7f9;
-}
-/* This darker blue color is used for the buttons related to phenotype pages. */
-.monarch-phenotype-dark {
-    background-color: #72d5f5;
-}
-
-/* This light green color is used for jumbotron content related to gene pages.
- * For example, it is use for the gene spotlight on the gene main page and for gene
- * information on gene specific pages. */
-.monarch-gene-light {
-    background-color: #dbebe8;
-}
-/* This darker green color is used for the buttons related to gene pages. */
-.monarch-gene-dark {
-    background-color: #44A293;
-}
-
-/* This light orange color is used for jumbotron content related to genotype/model pages.
- * For example, it is use for the model spotlight on the model main page and for model
- * information on model specific pages. */
-.monarch-model-light {
-    background-color: #F4EEEB;
-}
-/* This darker orange color is used for the buttons related to model pages. */
-.monarch-model-dark {
-    background-color: #EA763B;
-}
-
-/* This light color is used for jumbotron content related to literature pages. */
-.monarch-literature-light {
-    background-color: #fff6c4;
-}
-/* This darker color is used for the buttons related to literature pages. */
-.monarch-literature-dark {
-    background-color: #ffd700;
-}
-
-.downloadline.btn.btn-monarch-main {
-    padding: 5px 15px;
-    font-weight: 400;
-    font-size: 14px;
-    background-color: #474949;
-    color: #FFF;
-}
-
-/* This color is lighter than monarch-model-dark and is used for the feedback button
- * located throughout the site. */
-.downloadline.btn.btn-monarch-main.monarch-feedback-dark {
-    background-color: #AAA;
-    color: #FFF;
-    border:1px solid black;
-}
-
-.download-btn {
-    margin-bottom: 7px !important;
-    text-align: left !important;
-}
-.button-container{
-    width: 150px;
-}
-.btn-variant{
-    width: 150px;
-}
-
-/* Buttons */
-/* These styles override some bootstrap button styles to make the buttons slimmer
- * and less skeuomorphic. */
-
-/*
-.btn {
-    padding: 5px 15px;
-}
-.btn-info {
-    background-color: #53AED7;
-    border-color: #53AED7;
-}
-*/
 
 .downloadline {
     display: inline-block;
@@ -322,13 +204,6 @@ div#mygene-container {
 .ui-score-spinner {
     background: white url('/image/waiting_ac.gif') right center no-repeat;
     padding-right: 15px;
-}
-
-.form-control {
-    padding: 2px 10px;
-    line-height: 13px;
-    height:28px;
-    border-radius: 2px;
 }
 
 /* Analyze Page */
@@ -602,6 +477,12 @@ div.bs3table {
 /* End of Filter Hack */
 
 /* BBOP overrides and additions */
+.bbop-js-ui-browse {
+    list-style-type: none;
+    /* margin: 5px; */
+    padding-left: 0;
+}
+
 .bbop-js-ui-browse li {
     margin-top: 2px;
 }
@@ -803,4 +684,48 @@ em.hilite {
     position: relative;
     border:1px solid lightgray;
     border-radius: 4px;
+}
+
+
+
+/* jqueryUI autocomplete widget control
+ */
+
+#monarch-body .ui-widget-content {
+    border: 1px solid #dddddd;
+    background: #eeeeee;
+    color: #333333;
+    padding: 1px;
+}
+#monarch-body .ui-widget-content a {
+    color: black;
+    display: block;
+    text-decoration: none;
+    padding: 0 3px;
+}
+
+#monarch-body .ui-state-active,
+#monarch-body .ui-widget-content .ui-state-active,
+#monarch-body .ui-widget-header .ui-state-active {
+    border: 1px solid lightblue;
+    background: ghostwhite;
+}
+
+
+/* phenogrid Info Box */
+
+#monarch-body .ui-widget-content {
+    border: 1px solid #dddddd;
+    background: white;
+    color: #333333;
+}
+
+#monarch-body .ui-widget-header {
+    border: 1px solid #e78f08;
+    background: #f6a828;
+    color: #ffffff;
+    font-weight: bold;
+}
+#monarch-body .ui-widget-header a {
+    color: #ffffff;
 }

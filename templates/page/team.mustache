@@ -2,36 +2,39 @@
 
 <div class="wrapperforfooter">
   <div class="container-fluid monarch-container">
-
     <div class="content content-bottom">
-      <h1 class="text-center xteamtitle">Monarch Development Team</h1>
+      <h1 class="text-center">Monarch Development Team</h1>
 
-    <div class="well well-sm">
-      <h3>
-        Participating Institutions
-      </h3>
-      <div class="teamtoc">
-        <dl>
-          {{#conf.monarch-team.institutions}}
-          <dt><a href="#{{id}}">{{name}}</a></dt>
-          <dd>
-            {{#people}}
-            {{^alumni}}
-            {{name}}&nbsp;
-            {{/alumni}}
-            {{/people}}
-          </dd>
-          {{/conf.monarch-team.institutions}}
-        </dl>
+      <div class="well well-sm">
+        <h3>
+          Participating Institutions
+        </h3>
+        <div class="teamtoc">
+          <dl>
+            {{#conf.monarch-team.institutions}}
+            <dt><a href="#{{id}}">{{name}}</a></dt>
+            <dd>
+              {{#people}}
+              {{^alumni}}
+              {{name}}&nbsp;
+              {{/alumni}}
+              {{/people}}
+            </dd>
+            {{/conf.monarch-team.institutions}}
+          </dl>
+        </div>
       </div>
-    </div>
+
 
     {{#conf.monarch-team.institutions}}
-      <div id="{{id}}" class="well well-sm">
-        <h3 class="teamname">
-        <a href="{{website}}">{{name}}</a>
-      </h3>
-      <img class="teamlogo" src="{{logo}}" />
+      <div id="{{id}}" class="well well-sm team">
+        <h3>
+          <a href="{{{website}}}" target="_blank">
+            <img class="teamlogo" src="{{{logo}}}">
+            {{name}}
+          </a>
+        </h3>
+
       {{#people}}
       {{^alumni}}
       <div class="teammember">
@@ -41,7 +44,7 @@
         </div>
         <!-- <div class=""> -->
         {{#picture}}
-        <img class="memberpicture" src="{{picture}}" />
+        <img class="memberpicture" src="{{{picture}}}" />
         {{/picture}}
         {{^picture}}
         <!-- <img class="memberpicture" src="/image/person-unknown.png" /> -->
@@ -54,16 +57,16 @@
         {{#contact}}
         <div class="membercontact">
     {{#email}}
-    <a title="email" href="mailto:{{email}}"><img class="contactlogo" src="/image/logo-email.png" /></a>
+    <a title="email" href="mailto:{{email}}" target="_blank"><img class="contactlogo" src="/image/logo-email.png" /></a>
     {{/email}}
     {{#website}}
-    <a title="website" href="{{website}}"><img class="contactlogo" src="/image/logo-website.png" /></a>
+    <a title="website" href="{{{website}}}" target="_blank"><img class="contactlogo" src="/image/logo-website.png" /></a>
     {{/website}}
     {{#twitter}}
-    <a title="twitter" href="{{twitter}}"><img class="contactlogo" src="/image/logo-twitter.png" /></a>
+    <a title="twitter" href="{{{twitter}}}" target="_blank"><img class="contactlogo" src="/image/logo-twitter.png" /></a>
     {{/twitter}}
     {{#facebook}}
-    <a title="facebook" href="{{facebook}}"><img class="contactlogo" src="/image/logo-facebook.png" /></a>
+    <a title="facebook" href="{{{facebook}}}" target="_blank"><img class="contactlogo" src="/image/logo-facebook.png" /></a>
     {{/facebook}}
         </div>
         {{/contact}}
@@ -75,9 +78,10 @@
       </div>
       {{/alumni}}
       {{/people}}
+
     </div>
     {{/conf.monarch-team.institutions}}
-      </div>
+
     </div>
   </div>
 </div>

@@ -1,3 +1,7 @@
+.monarch-container .content {
+    padding: 0 20px;
+}
+
 .monarch-container .content.monarch-bigtext p {
     font-size: 16px;
     line-height: 26px;

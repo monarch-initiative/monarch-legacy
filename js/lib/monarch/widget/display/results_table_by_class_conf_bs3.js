@@ -419,8 +419,8 @@ bbop.monarch.widget.display.results_table_by_class_conf_bs3 = function(cclass,
   });
     });
 
-    if (window.routerNavigo) {
-        window.routerNavigo.updatePageLinks();
+    if (window.window.vueRouter) {
+        window.window.vueRouter.updatePageLinks();
     }
 
     // Since we already added to the DOM in the table, now add the

@@ -39,17 +39,18 @@ function navbar_search_init(in_search_id, in_form_id){
     // Override form submission and bump to search page.
     jQuery(form_elt).submit(
         function(event){
-        event.preventDefault();
+            event.preventDefault();
+            event.stopPropagation();
 
-        var val = jQuery(search_elt).val();
-        var newurl = "/search/"+ encodeURIComponent(val);
+            var val = jQuery(search_elt).val();
+            var newurl = "/search/"+ encodeURIComponent(val);
 
-        if (monarch.locationChangeHack) {
-          monarch.locationChangeHack(newurl);
-        }
-        else {
-          window.location.href = newurl;
-        }
+            if (window.vueRouter) {
+              window.vueRouter.push(newurl);
+            }
+            else {
+              window.location.href = newurl;
+            }
         });
 
     // Arguments for autocomplete box.
@@ -158,10 +159,10 @@ function navbar_search_init(in_search_id, in_form_id){
             },
         select: function(event,ui) {
         if (ui.item !== null) {
-            var newurl = "http://"+window.location.host+"/"+ui.item.category+"/"
+            var newurl = "/"+ui.item.category+"/"
                 +encodeURIComponent(ui.item.id);
-            if (monarch.locationChangeHack) {
-              monarch.locationChangeHack(newurl);
+            if (window.vueRouter) {
+              window.vueRouter.push(newurl);
             }
             else {
               window.location.href = newurl;
@@ -180,7 +181,7 @@ function navbar_search_init(in_search_id, in_form_id){
             taxonOrCategory = item.category;
         }
         var li = jQuery('<li>');
-        li.append('<a alt="'+ item.id +'" title="'+ item.id +'">' +
+        li.append('<a data-monarch-legacy alt="'+ item.id +'" title="'+ item.id +'">' +
               '<span class="autocomplete-main-item">' +
               item.completion +
               '</span>' +

@@ -2,62 +2,59 @@
 
 <div class="wrapperforfooter">
   <div class="container-fluid monarch-container">
-
-<div class="content content-bottom">
-  <div class="text-center">
-    <h2>
-      Explore Models of Disease
-    </h2>
-  </div>
-
-  <div class="row">
-    <div class="col-xs-12 col-md-4">
-      <div class="panel panel-default">
-        <div class="panel-body">
-        	<p>
-        	  Monarch <b>Model</b> integrates information from a variety
-        	  of sources. Each specific page includes the abnormal genes
-        	  and variations, phenotypes, and aggregated literature, with
-        	  external links to relevant resources. Here we summarizes
-        	  the curated model-disease data in the system.
-        	</p>
-        </div>
+    <div class="content content-bottom">
+      <div class="text-center">
+        <h2>
+          Explore Models of Disease
+        </h2>
       </div>
 
-      <div class="panel panel-default">
-        <div class="panel-body">
-          <h4>Model Spotlight: {{{spotlight.link}}}</h4>
-          <div>
-            <p>{{spotlight.description}}</p>
-            <ul>
+      <div class="row">
+        <div class="col-xs-12 col-md-4">
+          <div class="panel panel-default">
+            <div class="panel-body">
+              <p>
+                Monarch <b>Model</b> integrates information from a variety
+                of sources. Each specific page includes the abnormal genes
+                and variations, phenotypes, and aggregated literature, with
+                external links to relevant resources. Here we summarizes
+                the curated model-disease data in the system.
+              </p>
+            </div>
+          </div>
+
+          <div class="panel panel-default">
+            <div class="panel-body">
+              <h4>Model Spotlight: {{{spotlight.link}}}</h4>
+              <div>
+                <p>{{spotlight.description}}</p>
+                <ul>
               <li>Taxon: {{spotlight.taxon}} </li>
               <li>Genes: {{{spotlight.genes}}} </li>
               <li>Phenotypes: {{{spotlight.phenotypes}}}</li>
               <li>Publications: {{{spotlight.publications}}}</li>
-            </ul>
-          </div>
-        </div>
-      </div>
-
-    </div>
-
-    <!-- Annotation Graph-->
-    <div class="col-xs-12 col-md-8">
-        <div class="dove-namespace dove-container">
-          <div id="graph-loader">
-            <div class="graph-message">Loading Graph...</div>
-            <div class="windcatcher-spinner spinner windcatcher">
-               <div class="blade"></div>
-               <div class="blade"></div>
-               <div class="blade"></div>
-               <div class="blade"></div>
-               <div class="blade"></div>
-               <div class="blade"></div>
-               <div class="blade"></div>
-               <div class="blade"></div>
+                </ul>
+              </div>
             </div>
           </div>
         </div>
+
+        <div class="col-xs-12 col-md-8">
+          <div class="dove-namespace dove-container">
+            <div id="graph-loader">
+              <div class="graph-message">Loading Graph...</div>
+              <div class="windcatcher-spinner spinner windcatcher">
+                <div class="blade"></div>
+                <div class="blade"></div>
+                <div class="blade"></div>
+                <div class="blade"></div>
+                <div class="blade"></div>
+                <div class="blade"></div>
+                <div class="blade"></div>
+                <div class="blade"></div>
+              </div>
+            </div>
+          </div>
           <p class="datagraph-caption">
             This <em>interactive graph</em> displays the number of
             models per major
@@ -69,11 +66,11 @@
             corner. Organisms can be added and removed from the graph by clicking
             on the legend labels.
           </p>
+        </div>
       </div>
     </div>
   </div>
 </div>
 
-<!-- Footer. -->
-<hr/>
 {{{includes.footer}}}
+
