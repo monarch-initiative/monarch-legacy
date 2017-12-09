@@ -212,22 +212,22 @@ function fetchGeneDescription(geneID) {
         formattedID = geneID.replace(/\S+:(\d+)/, '$1');
     } else if (geneID.match(/^OMIM/)) {
         formattedID = geneID.replace(/\S+:(\d+)/, 'mim:$1');
-        speciesParam = 'Homo sapiens'
+        speciesParam = 9606
     } else if (geneID.match(/^MGI/)) {
         formattedID = geneID.replace(/\S+:(\d+)/, 'mgi:MGI\\\\:$1');
-        speciesParam = 'Mus musculus'
+        speciesParam = 10090
     } else if (geneID.match(/^FlyBase/)) {
         formattedID = geneID.replace(/\S+:(\d+)/, 'flybase:$1');
-        speciesParam = 'Drosophila melanogaster'
+        speciesParam = 7227
     } else if (geneID.match(/^Wormbase/)) {
         formattedID = geneID.replace(/\S+:(\d+)/, 'wormbase:$1');
-        speciesParam = 'Caenorhabditis elegans'
+        speciesParam = 6239
     } else if (geneID.match(/^ZFIN/)) {
         formattedID = geneID.replace(/\S+:(\d+)/, 'zfin:$1');
-        speciesParam = 'Danio rerio'
+        speciesParam = 7955
     } else if (geneID.match(/^RGD/)) {
         formattedID = geneID.replace(/\S+:(\d+)/, 'rgd:$1');
-        speciesParam = 'Rattus norvegicus'
+        speciesParam = 10116
     } else {
         formattedID = geneID
     }
