@@ -269,6 +269,7 @@ function fetchGeneDescription(geneID) {
                     let defaultTrackName = 'All Genes'; // this is the generic track name
                     let locationString = locationObj.chr + ':' + locationObj.start + '..' + locationObj.end;
                     let apolloServerPrefix = 'https://agr-apollo.berkeleybop.io/apollo/';
+                    let externalUrl = 'http://jbrowse.alliancegenome.org/jbrowse/index.html?data=data/'+encodeURI(thisSpecies) + '&loc='+encodeURI(locationString);
                     let trackDataPrefix = apolloServerPrefix + 'track/' + encodeURI(thisSpecies) + '/' + defaultTrackName + '/' + encodeURI(locationString) + '.json';
                     let trackDataWithHighlight = trackDataPrefix + '?name=' + symbol;
 
@@ -290,7 +291,7 @@ function fetchGeneDescription(geneID) {
                             jQuery('#mygene-feature').append(svgDataElt);*/
                             let svgDataElt =
                                 '<svg id="genome-feature" width="80%">' +
-                                +'</svg>'
+                                +'</svg>';
                             jQuery('#mygene-feature').append(svgDataElt);
 
 
@@ -344,6 +345,8 @@ function fetchGeneDescription(geneID) {
                             let viewer = select('#genome-feature')
                                 .attr('width', width + margin.left + margin.right)
                                 .attr('height', height + margin.top + margin.bottom)
+                                .append('a')
+                                .attr('xlink:href', externalUrl)
                                 .append('g')
                                 .attr('transform', 'translate(' + margin.left + ',' + margin.top + ')');
 
@@ -444,12 +447,12 @@ function fetchGeneDescription(geneID) {
                                                 }
                                             });
                                         }
-                                        else if (isoform_count == MAX_ISOFORMS) {
+                                        else if (isoform_count > MAX_ISOFORMS) {
                                             ++isoform_count;
                                             viewer.append('a')
                                                 .attr('class', 'GF transcriptLabel')
-                                                // .attr('xlink:href', externalUrl)
-                                                .attr('xlink:show', 'new')
+                                                .attr('xlink:href', externalUrl)
+                                                // .attr('xlink:show', 'new')
                                                 .append('text')
                                                 .attr('x', x(feature.fmin) + 30)
                                                 .attr('y', isoform_height * isoform_count + isoform_title_height)
