@@ -9,6 +9,7 @@ from behave import *
 from selenium.webdriver.common.by import By
 from selenium.webdriver.support.ui import WebDriverWait
 from selenium.webdriver.support import expected_conditions as EC
+from common import *
 
 ###
 ### Helper functions.
@@ -99,13 +100,15 @@ def step_impl(context, item):
     #     text = link.get_attribute('text')
     #     if item in text:
     #         break
-    webelt = context.browser.find_element_by_partial_link_text(item)
+    webelt = WebDriverWait(context.browser, 30).until(EC.element_to_be_clickable((By.PARTIAL_LINK_TEXT, item)))
+    # webelt = context.browser.find_element_by_partial_link_text(item)
 
 @given('I click the autocomplete item "{item}"')
 def step_impl(context, item):
     #print(context.browser.title)
     webelt = context.browser.find_element_by_partial_link_text(item)
     webelt.click()
+    ensure_content_loaded(context)
 
 @given('I click the autocomplete dropdown item "{item}" with category "{category}"')
 def step_impl(context, item, category):
@@ -117,6 +120,7 @@ def step_impl(context, item, category):
         text = link.get_attribute('text')
         if item in text and category in text:
             link.click()
+            ensure_content_loaded(context)
             break
     pass
 

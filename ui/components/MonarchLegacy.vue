@@ -20,7 +20,7 @@
     </div>
  -->
 
-    <div v-if="contentBody" v-html="contentBody" xv-bind="$props">
+    <div id="selenium_id_content" v-if="contentBody" v-html="contentBody" xv-bind="$props">
     </div>
 
   </div>
@@ -84,7 +84,7 @@ export default {
       // hash changes are currently handled by monarch-tabs.js
       // within the loaded MonarchLegacy component.
 
-      // console.log('$route', to, from);
+      console.log('$route', to, from, to.path, this.path);
       if (to.path !== this.path) {
         this.fetchData();
       }
@@ -124,7 +124,7 @@ export default {
       // console.log('fetchData', path);
       const scriptHeaderPrefix = '+++++++++++++++monarch-script';
       const scriptHeaderSuffix = '---------------monarch-script';
-      window.loadPathContentAsync(path, function(content) {
+      window.loadPathContentAsync(path, function(content, responseURL) {
         const scriptHeaderBegin = content.indexOf(scriptHeaderPrefix);
         const scriptHeaderEnd = content.indexOf(scriptHeaderSuffix);
         if (scriptHeaderBegin !== 0 ||
@@ -146,6 +146,22 @@ export default {
             }
             that.progressPath = null;
 
+            responseURL = responseURL.replace(window.location.origin, '');
+            responseURL = responseURL.replace(/\/legacy/g, '');
+            console.log('#responseURL', responseURL, window.location.origin, path);
+            if (responseURL !== path) {
+              console.log('path/responseURL', window.location.origin, path, responseURL);
+              var hashIndex = path.indexOf('#');
+              if (hashIndex >= 0) {
+                responseURL += path.slice(hashIndex);
+              }
+              window.vueRouter.push(responseURL, function() {
+                console.log('pushed', that.$route.path);
+                that.path = that.$route.path;
+              });
+            }
+
+            console.log('that.contentScript', that.contentScript.slice(0, 50));
             if (that.contentScript) {
               eval(that.contentScript);
               window.vueRouter.updatePageLinks();

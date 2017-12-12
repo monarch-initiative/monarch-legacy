@@ -15,7 +15,7 @@ Feature: Analyze phenotypes is usable by the expected user interfaces
      and I click the autocomplete item "Bronchial asthma"
      when I submit analyze phenotype
      and I wait for id "phen_vis_svg"
-     then the document should contain "Asthma, Susceptibility to"
+     then the document should contain "Asthma,"
 
 @data
  Scenario: adding "Microalbuminuria" and "microcephaly" to analyze phenotype results in "pru1"

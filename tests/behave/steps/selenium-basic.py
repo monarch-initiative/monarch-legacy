@@ -10,20 +10,28 @@ from selenium import webdriver
 from selenium.webdriver.common.by import By
 from selenium.webdriver.support.ui import WebDriverWait # available since 2.4.0
 from selenium.webdriver.support import expected_conditions as EC # available since 2.26.0
+from common import *
 
 ## The basic and critical "go to page".
 @given('I go to page "{page}"')
+def step_impl(context, page):
+    context.browser.get(context.target + page)
+    ensure_content_loaded(context)
+
+@given('I go to json page "{page}"')
 def step_impl(context, page):
     context.browser.get(context.target + page)
 
 @given('I go to slow page "{page}" and wait for id "{id}"')
 def step_impl(context, page, id):
     context.browser.get(context.target + page)
+    ensure_content_loaded(context)
     element = WebDriverWait(context.browser, 30).until(EC.presence_of_element_located((By.ID, id)))
 
 @given('I go to page "{page}" and wait for id "{id}" to be hidden')
 def step_impl(context, page, id):
     context.browser.get(context.target + page)
+    ensure_content_loaded(context)
     element = WebDriverWait(context.browser, 30).until(EC.presence_of_element_located((By.ID, id)))
     element = WebDriverWait(context.browser, 30).until(EC.invisibility_of_element_located((By.ID, id)))
 
@@ -31,6 +39,7 @@ def step_impl(context, page, id):
 def step_impl(context, page, cls):
     #print(context.browser.title)
     context.browser.get(context.target + page)
+    ensure_content_loaded(context)
     element = WebDriverWait(context.browser, 30).until(EC.presence_of_element_located((By.CLASS_NAME, cls)))
 
 @when('I wait for id "{id}"')
@@ -57,13 +66,14 @@ def step_impl(context, url):
 ## Title check.
 @then('the title should be "{title}"')
 def step_impl(context, title):
-    # print('\n\n\n\n#####context.browser.title', context.browser.title)
-    # print('#####title\n\n\n\n', title, '\n\n\n\n')
+    if context.browser.title != title:
+        print('\n\n\n\n#####context.browser.title/title', context.browser.title, title, "\n\n\n\n\n")
     assert context.browser.title == title
 
 ## Title check.
 @then('the title should start with "{prefix}"')
 def step_impl(context, prefix):
+    # print('\n\n\n\n#####context.browser.title/title', context.browser.title, prefix, "\n\n\n")
     assert context.browser.title.startswith(prefix)
 
 ## The empty title check, a bit of a special case for known "bad" page
@@ -154,5 +164,5 @@ def step_impl(context, tabname, text):
 def step_impl(context, item):
     #print(context.browser.title)
     webelt = context.browser.find_element_by_partial_link_text(item)
-    webelt.click()
+    click_and_ensure_content_loaded(context, webelt)
 

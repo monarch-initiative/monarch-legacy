@@ -42,12 +42,12 @@ if (process.env.DEVTOOLS && process.env.NODE_ENV !== 'production') {
 
 let router = null;
 
-function pathLoadedAsync(sourceText, path, done) {
+function pathLoadedAsync(sourceText, responseURL, path, done) {
   if (done) {
-    done(sourceText);
+    done(sourceText, responseURL);
   }
   else {
-    console.log('pathLoadedAsync', path, sourceText.slice(0, 100));
+    console.log('pathLoadedAsync', responseURL, path, sourceText.slice(0, 100));
   }
 }
 
@@ -56,7 +56,8 @@ function loadPathContentAsync(path, done) {
   /* global XMLHttpRequest */
   const oReq = new XMLHttpRequest();
   oReq.addEventListener('load', function load() {
-    pathLoadedAsync(this.responseText, path, done);
+    console.log('loadPathContentAsync', path, this);
+    pathLoadedAsync(this.responseText, this.responseURL, path, done);
   });
 
   let refinedPath = path;

@@ -312,12 +312,21 @@ if (MODE_DEV_SERVER) {
     '*.json': {
       target: 'http://localhost:8080'
     },
-    // '/status': {
-    //   target: 'http://localhost:8080'
-    // },
+    '/status': {
+      target: 'http://localhost:8080'
+    },
+    '/admin/introspect': {
+      target: 'http://localhost:8080'
+    },
     '/simsearch/phenotype': {
       target: 'http://localhost:8080'
     },
+    '/robots.txt': {
+      target: 'http://localhost:8080'
+    },
+    // '/resolve': {
+    //   target: 'http://localhost:8080'
+    // },
     '/score': {
       target: 'http://localhost:8080'
     },
@@ -328,6 +337,9 @@ if (MODE_DEV_SERVER) {
       target: 'http://localhost:8080'
     },
     '/searchapi': {
+      target: 'http://localhost:8080'
+    },
+    '/node_modules/phenogrid/': {
       target: 'http://localhost:8080'
     }
   };
@@ -357,7 +369,7 @@ if (MODE_DEV_SERVER) {
       target: 'http://localhost:8080'
     };
 
-    config.devServer.proxy['/**/phenotype_list.json'] = {
+    config.devServer.proxy['/**/*.json'] = {
       target: 'http://localhost:8080'
     };
 
