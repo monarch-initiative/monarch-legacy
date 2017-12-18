@@ -1,4 +1,4 @@
-Feature: NodeJS and RingoJS pass all tests.
+Feature: NodeJS passes all tests.
  Monarch-app JSON blobs behave as expected for various data.
 
 @ui
