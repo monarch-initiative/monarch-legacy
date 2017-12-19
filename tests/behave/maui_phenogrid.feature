@@ -3,10 +3,16 @@ Feature: Phenogrid Works
 
  ## No Background necessary.
 
+#@ui
+#Scenario: Phenotype Analysis Phenogrid works
+#    Given I go to slow page "/disease/OMIM:105830#compare" and wait for id "phen_vis_svg"
+#      then the title should be "Monarch Disease: Angelman syndrome (OMIM:105830)"
+#      and the document should contain "Phenotype Similarity Comparison"
+
 @ui
 Scenario: Phenotype Analysis Phenogrid works
-    Given I go to slow page "/disease/OMIM:105830#compare" and wait for id "phen_vis_svg"
-      then the title should be "Monarch Disease: Angelman syndrome (OMIM:105830)"
+    Given I go to slow page "/disease/MONDO:0007113#compare" and wait for id "phen_vis_svg"
+      then the title should be "Monarch Disease: Angelman syndrome (MONDO:0007113)"
       and the document should contain "Phenotype Similarity Comparison"
 
 @ui
