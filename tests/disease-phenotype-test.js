@@ -4,7 +4,7 @@ var engine;
 // feel free to add more here...
 var diseaseIds =
     [
-        "DOID:14330", // PD
+        "MONDO:0005180", // PD
         //"OMIM:270400", // SLO
     ];
 

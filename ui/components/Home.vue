@@ -1,5 +1,5 @@
 <template>
-<div>
+<div id="selenium_id_content">
 <div class="wrapperforfooter">
   <div id="monarch-home-container" class="container-fluid monarch-container">
     <div class="row">

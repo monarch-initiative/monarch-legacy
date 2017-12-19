@@ -26,7 +26,7 @@ var setup;
 // feel free to add more here...
 var diseaseIds =
     [
-        "DOID:14330", // PD
+        "MONDO:0005180", // PD
         "OMIM:270400", // SLO
     ];
 
@@ -61,7 +61,7 @@ exports.testFetchAssociations = function() {
                 testFailed |= !thisTestSucceeded;
                 if (thisTestSucceeded) {
                     var firstDoc = golrResponse.documents()[0];
-                    if (id === "DOID:14330") {
+                    if (id === "MONDO:0005180") {
                         testFailed |= !testCommon.assert(
                                         "firstDoc.subject_category === 'disease'",
                                         firstDoc.subject_category === 'disease');

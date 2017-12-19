@@ -8,7 +8,7 @@ Feature: Monarch-app's JSON service is sane
 
  @data
  Scenario: User attempts to use consume the JSON for a disease
-    Given I collect data at path "/disease/DOID:3044.json"
+    Given I collect data at path "/disease/MONDO:0002497.json"
      then the content type should be "application/json"
       and the content should contain "relationships"
     when the content is converted to JSON

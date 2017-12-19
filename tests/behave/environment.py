@@ -18,7 +18,7 @@ from selenium.webdriver.common.desired_capabilities import DesiredCapabilities
 ###
 window_width = 1200
 window_height = 825
-implicit_wait_seconds = 30
+implicit_wait_seconds = 0   # 30
 
 
 ## Run this before anything else.
@@ -69,6 +69,25 @@ def before_all(context):
 
         fp = webdriver.FirefoxProfile()
         fp.set_preference('devtools.jsonview.enabled', False)
+        fp.set_preference('javascript.options.showInConsole', True)
+        fp.set_preference('browser.dom.window.dump.enabled', True)
+        fp.set_preference('devtools.chrome.enabled', True)
+        fp.set_preference("devtools.webconsole.persistlog", True)
+
+        fp.set_preference("devtools.browserconsole.filter.jslog", True)
+        fp.set_preference("devtools.browserconsole.filter.jswarn", True)
+        fp.set_preference("devtools.browserconsole.filter.error", True)
+        fp.set_preference("devtools.browserconsole.filter.warn", True)
+        fp.set_preference("devtools.browserconsole.filter.info", True)
+        fp.set_preference("devtools.browserconsole.filter.log", True)
+
+        fp.set_preference("devtools.webconsole.filter.jslog", True)
+        fp.set_preference("devtools.webconsole.filter.jswarn", True)
+        fp.set_preference("devtools.webconsole.filter.error", True)
+        fp.set_preference("devtools.webconsole.filter.warn", True)
+        fp.set_preference("devtools.webconsole.filter.info", True)
+        fp.set_preference("devtools.webconsole.filter.log", True)
+
         context.browser = webdriver.Firefox(capabilities=d, firefox_profile=fp, executable_path='/usr/local/bin/geckodriver')
         context.browser._is_remote = False
 
@@ -101,6 +120,7 @@ def after_scenario(context, scenario):
     # time.sleep(1)
     try:
         context.browser.get('data:,Clearing%20previous%20page')
+        pass
     except:
         pass
 

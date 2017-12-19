@@ -19,10 +19,10 @@ Scenario: "food" in the navbar search with submit goes to a search page
 Scenario: "food" in the navbar search with a click goes to a details page
    Given I go to page "/"
     and I type "food all" into the navbar search
-    and I wait until "Allergies, Food" appears in the autocomplete
-    and I click the autocomplete item "Allergies, Food"
+    and I wait until "food hypersensitivity" appears in the autocomplete
+    and I click the autocomplete item "food hypersensitivity"
     when I wait for id "overview-panel"
-    then the title should be "Monarch Disease: food allergy (DOID:3044)"
+    then the title should be "Monarch Disease: food allergy (MONDO:0002497)"
 
 @ui
 Scenario: "ZRS" in the navbar search with a click goes to a gene page
@@ -40,4 +40,4 @@ Scenario: "hyper-be" in the navbar search with a click goes to a disease page
     and I wait until "HYPER-BETA-ALANINEMIA" appears in the autocomplete
     and I click the autocomplete item "HYPER-BETA-ALANINEMIA"
     when I wait for id "monarch-node"
-    then the title should be "Monarch Disease: Hyper-beta-alaninemia (OMIM:237400)"
+    then the title should be "Monarch Disease: hyper-beta-alaninemia (MONDO:0009378)"

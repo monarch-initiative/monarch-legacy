@@ -1,4 +1,4 @@
-Feature: NodeJS and RingoJS pass all tests.
+Feature: NodeJS passes all tests.
  Monarch-app JSON blobs behave as expected for various data.
 
 @ui
@@ -23,17 +23,17 @@ Feature: NodeJS and RingoJS pass all tests.
 
 @ui
  Scenario: The "/about/sources.json" endpoint returns the correct JSON
-    Given I go to page "/about/sources.json"
+    Given I go to json page "/about/sources.json"
      then the document should contain '"resource_description":"BioGRID is'
 
 @ui
  Scenario: The "/admin/introspect" endpoint returns the correct HTML
-    Given I go to page "/admin/introspect"
+    Given I go to json page "/admin/introspect"
      then the document should contain '"config":'
 
 @ui
  Scenario: The "/admin/introspect.json" endpoint returns the correct JSON
-    Given I go to page "/admin/introspect.json"
+    Given I go to json page "/admin/introspect.json"
      then the document should contain '"config":'
 
 @ui
@@ -44,17 +44,17 @@ Feature: NodeJS and RingoJS pass all tests.
 
 @ui
  Scenario: The "/status" endpoint returns the correct JSON
-    Given I go to page "/status"
+    Given I go to json page "/status"
      then the document should contain '"name":"Monarch Application"'
 
 @ui
  Scenario: The "/robots.txt" endpoint returns the correct JSON
-    Given I go to page "/robots.txt"
+    Given I go to json page "/robots.txt"
      then the document should contain "User-agent: *"
 
 @ui
  Scenario: The "/compare/" endpoint returns the correct JSON
-    Given I go to page "/compare/OMIM:270400/NCBIGene:5156,OMIM:249000,OMIM:194050.json"
+    Given I go to json page "/compare/OMIM:270400/NCBIGene:5156,OMIM:249000,OMIM:194050.json"
      then the document should contain "PDGFRA"
      then the document should contain "Sclerocornea"
      then the document should contain "maxSumIC"
@@ -62,14 +62,14 @@ Feature: NodeJS and RingoJS pass all tests.
 
 @ui
  Scenario: The "/compare/" endpoint returns the correct JSON with invalid ID
-    Given I go to page "/compare/HP:0012774+HP:0002650/1232413241234.json"
+    Given I go to json page "/compare/HP:0012774+HP:0002650/1232413241234.json"
      then the document should contain "HP:0012774"
      then the document should contain "HP:0002650"
      then the document should contain '"metric":"combinedScore"'
 
 @ui
 Scenario: The "/query/orthologs/" endpoint returns the correct JSON
-   Given I go to page "/query/orthologs/NCBIGene:6469.json"
+   Given I go to json page "/query/orthologs/NCBIGene:6469.json"
    then the document should contain "NCBIGene:6469"
    then the document should contain "MGI:98297"
 
@@ -87,11 +87,11 @@ Scenario: The "/query/orthologs/" endpoint returns the correct JSON
 
 @ui
   Scenario: The "/search" endpoint displays valid links
-    Given I go to page "/search/disease%20musculus"
+    Given I go to page "/search/disease%20oguchi"
       when I wait for id "more"
-      then the title should be "Search Results: disease musculus"
+      then the title should be "Search Results: disease oguchi"
       then the document should contain "Category"
-      when I click the link "Oguchi disease 2"
+      when I click the link "Oguchi disease-2"
       when I wait for id "monarch-node"
-      then the url will be "/disease/OMIM:613411"
-      then the title should be "Monarch Disease: Oguchi disease-2 (OMIM:613411)"
+      then the url will be "/disease/MONDO:0013259"
+      then the title should be "Monarch Disease: Oguchi disease-2 (MONDO:0013259)"
