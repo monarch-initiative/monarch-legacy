@@ -7,15 +7,15 @@ Feature: Analyze phenotypes is usable by the expected user interfaces
  @data
  Scenario: adding "allergy" and "asthma" to analyze phenotype results in "Ichthyosis Vulgaris"
     Given I go to page "/analyze/phenotypes"
-     and I type "aller" into the phenotype analyze search
-     and I wait until "Allergy" appears in the autocomplete
-     and I click the autocomplete item "Allergy"
-     and I type "asth" into the phenotype analyze search
-     and I wait until "Bronchial asthma" appears in the autocomplete
-     and I click the autocomplete item "Bronchial asthma"
+     and I type "Tremor" into the phenotype analyze search
+     and I wait until "Tremor" appears in the autocomplete
+     and I click the autocomplete item "Tremor"
+     and I type "Parkinsonism" into the phenotype analyze search
+     and I wait until "Parkinsonism" appears in the autocomplete
+     and I click the autocomplete item "Parkinsonism"
      when I submit analyze phenotype
      and I wait for id "phen_vis_svg"
-     then the document should contain "Asthma,"
+     then the document should contain "Parkinson"
 
 @data
  Scenario: adding "Microalbuminuria" and "microcephaly" to analyze phenotype results in "pru1"
@@ -37,10 +37,10 @@ Feature: Analyze phenotypes is usable by the expected user interfaces
      and I wait until "Microalbuminuria" appears in the autocomplete
      and I click the autocomplete item "Microalbuminuria"
      and I click the "compare" radio button
-     and I input "NCBIGene:388552,NCBIGene:3586" into the textarea "gene-list"
+     and I input "NCBIGene:3651,MGI:1890773" into the textarea "gene-list"
      when I submit analyze phenotype
      and I wait for id "phen_vis_svg"
-     then the document should contain "IL10"
+     then the document should contain "PDX1"
 
  ## Example how you might do other forms.
  # @data

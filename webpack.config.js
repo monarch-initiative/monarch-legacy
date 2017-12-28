@@ -7,6 +7,7 @@
 
 const path = require('path');
 const log = require('npmlog');
+const nodeSass = require("node-sass");
 
 log.level = 'silly';
 const webpack = require('webpack');
@@ -87,7 +88,7 @@ if (USE_SPA) {
   plugins.push(new HtmlWebpackPlugin({
     title: 'Monarch',
     template: 'ui/index.ejs',
-    filename: 'spa.html',
+    filename: 'index.html',
     inject: MODE_DEV_SERVER, // inject scripts in dev-server mode - in build mode, use the template tags
     MODE_DEV_SERVER: MODE_DEV_SERVER,
     DEVTOOLS: DEVTOOLS,
@@ -216,7 +217,28 @@ const config = {
 
       {
         test: /\.vue$/,
-        loader: 'vue-loader'
+        loader: 'vue-loader',
+
+        options: {
+          esModule: true,
+          loaders: {
+            scss: [ 'vue-style-loader',
+                    'css-loader',
+                    {
+                        loader: 'sass-loader',
+                        options: {
+                            // data: '@import "variables";',
+                            includePaths: [
+                              path.resolve(__dirname, 'node_modules/patternfly/dist/sass'),
+                              path.resolve(__dirname, 'node_modules/bootstrap-sass/assets/stylesheets/bootstrap'),
+                              path.resolve(__dirname, 'node_modules/bootstrap-sass/assets/stylesheets'),
+                              path.resolve(__dirname, 'node_modules/font-awesome/scss'),
+                            ]
+                        },
+                    },
+                  ]
+          }
+        },
       },
 
       {
@@ -240,16 +262,45 @@ const config = {
       {
         test: /\.scss$/,
         use: extractSass.extract({
-          use: [{
+          use: [
+          {
             loader: 'css-loader',
             query: JSON.stringify({
               sourceMap: true
             })
-          }, {
+          },
+          {
             loader: 'sass-loader',
-            query: JSON.stringify({
-              sourceMap: true
-            })
+            options: {
+              includePaths: [
+                // path.join(__dirname, 'node_modules'),
+                path.join(__dirname, 'node_modules/patternfly/dist/sass'),
+                path.resolve(__dirname, 'node_modules/font-awesome/scss'),
+                path.join(__dirname, 'node_modules/bootstrap-sass/assets/stylesheets'),
+                // path.join(__dirname, 'node_modules/bootstrap-sass/assets/stylesheets/bootstrap')
+              ],
+              sourceMap: true,
+              // importer: [
+              //   // // url will be the string passed to @import
+              //   // // prev is the file where the import was encountered
+              //   (url, prev) => {
+              //     // console.log('###importer', url, prev);
+              //     if (url.indexOf('bootstrap/') === 0) {
+              //       return {
+              //         file: path.join(__dirname, 'node_modules/bootstrap-sass/assets/stylesheets/' + url)
+              //       };
+              //     }
+              //     else if (url.indexOf('font-awesome') === 0) {
+              //       return {
+              //         file: path.join(__dirname, 'node_modules/font-awesome/scss/' + url)
+              //       };
+              //     }
+              //     else {
+              //       return nodeSass.types.Null();
+              //     }
+              //   }
+              // ]
+            }
           }],
           // use style-loader in development
           fallback: 'style-loader'
@@ -260,13 +311,6 @@ const config = {
         loader: 'file-loader'
       },
       { test: /\.(png|jpg|jpeg|gif)$/, loader: 'url-loader?limit=' + ASSETS_LIMIT + '&name=[hash].[ext]' },
-
-      // { test: /\.(png|gif)$/, loader: 'url-loader?limit=' + ASSETS_LIMIT + '&name=[hash].[ext]' },
-      // { test: /\.woff(\?v=\d+\.\d+\.\d+)?$/, loader: 'url-loader?limit=' + ASSETS_LIMIT + '&mimetype=application/font-woff&name=[hash].[ext]' },
-      // { test: /\.woff2(\?v=\d+\.\d+\.\d+)?$/, loader: 'url-loader?limit=' + ASSETS_LIMIT + '&mimetype=application/font-woff&name=[hash].[ext]' },
-      // { test: /\.ttf(\?v=\d+\.\d+\.\d+)?$/, loader: 'url-loader?limit=' + ASSETS_LIMIT + '&mimetype=application/octet-stream&name=[hash].[ext]' },
-      // { test: /\.eot(\?v=\d+\.\d+\.\d+)?$/, loader: 'file-loader?&name=[hash].[ext]' },
-      // { test: /\.svg(\?v=\d+\.\d+\.\d+)?$/, loader: 'url-loader?limit=' + ASSETS_LIMIT + '&mimetype=image/svg+xml&&name=[hash].[ext]' }
     ]
   },
   plugins: plugins,
@@ -279,9 +323,12 @@ const config = {
   resolve: {
     modules: ['node_modules'],
     alias: {
-        'vue$': 'vue/dist/vue.min.js',  // 'vue/dist/vue.esm.js',
-        'ringo/httpclient': path.join(__dirname, "js/nop.js"),
-        'phenogrid': path.join(__dirname, 'node_modules/phenogrid/js/phenogrid.js')
+      'monarchSCSS': (USE_SPA ? '../css/monarch-patternfly.scss' : '../css/monarch.scss'),
+      // 'patternfly$': 'patternfly/dist/sass/patternfly',
+      'bootstrap$': path.join(__dirname, 'node_modules/bootstrap-sass/assets/stylesheets/bootstrap/'),
+      'vue$': 'vue/dist/vue.min.js',  // 'vue/dist/vue.esm.js',
+      'ringo/httpclient': path.join(__dirname, "js/nop.js"),
+      'phenogrid': path.join(__dirname, 'node_modules/phenogrid/js/phenogrid.js')
     }
   }
 };
@@ -324,15 +371,12 @@ if (MODE_DEV_SERVER) {
     '/robots.txt': {
       target: 'http://localhost:8080'
     },
-    // '/resolve': {
-    //   target: 'http://localhost:8080'
-    // },
     '/score': {
       target: 'http://localhost:8080'
     },
-    // '/image': {
-    //   target: 'http://localhost:8080'
-    // },
+    '/compare': {
+      target: 'http://localhost:8080'
+    },
     '/autocomplete': {
       target: 'http://localhost:8080'
     },
@@ -350,21 +394,6 @@ if (MODE_DEV_SERVER) {
     };
   }
   else {
-    // config.devServer.proxy['/home'] = {
-    //   target: 'http://localhost:8080/',
-    //   pathRewrite: {"^/home" : ""}
-    // };
-    // config.devServer.proxy['/home'] = {
-    //   pathRewrite: function (path, req) {
-    //     return '/';
-    //   }
-    // };
-    // config.devServer.proxy['/home'] = {
-    //   bypass: function(req, res, proxyOptions) {
-    //     console.log('bypass /home', req.url, req.headers.referer);
-    //     return '/';
-    //   }
-    // };
     config.devServer.proxy['/image'] = {
       target: 'http://localhost:8080'
     };
@@ -375,51 +404,13 @@ if (MODE_DEV_SERVER) {
 
     config.devServer.proxy['/legacy'] = {
       target: 'http://localhost:8080',
-      pathRewrite: function(path, req) {
-        path = path.slice('/legacy'.length);
-        console.log('legacy pathRewrite', path);
-        return path;
-      }
     };
     config.devServer.proxy['/'] = {
       target: 'http://localhost:8080',
-      // pathRewrite: function(path, req) {
-      //   if (path.endsWith('?stripme')) {
-      //     path = path.replace(/\?stripme$/, '');
-      //     console.log('pathRewrite', path);
-      //   }
-      //   return path;
-      // },
-      // bypass: function(req, res, proxyOptions) {
-      //   const referer = req.headers.referer || '';
-      //   console.log('bypass?', req.url, referer);
-      //   let path = req.url;
-      //   if (path.indexOf('?stripme') >= 0) {
-      //   }
-      //   else if (true || (referer === '') ||
-      //       (path === '/')
-      //        // || (path !== '/' && referer.endsWith(path))
-      //       ) {
-      //     console.log('#... spa.html');
-      //     return '/spa.html';
-      //   }
-      // }
       bypass: function(req, res, proxyOptions) {
-        return '/spa.html';
+        return '/index.html';
       }
     };
-
-
-    // config.devServer.proxy['/analyze/phenotypes'] = {
-    //   target: 'http://localhost:8080',
-    //   bypass: function(req, res, proxyOptions) {
-    //     if (req.url === '/analyze/phenotypes') {
-    //    	  console.log('bypass', req.url);
-    //       return '/spa.html';
-    //     }
-    //   }
-    // };
-
   }
 }
 

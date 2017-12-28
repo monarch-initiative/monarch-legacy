@@ -1,3 +1,22 @@
+#monarch-navbar.navbar.navbar-inverse.navbar-fixed-top {
+  height: $navbar-height;
+  max-height: $navbar-height;
+  margin: 0;
+}
+
+#monarch-navbar .monarch-navbar-container .navbar-header {
+  height: $navbar-height;
+  border: none;
+}
+
+#monarch-navbar .monarch-navbar-container .navbar-collapse {
+  height: $navbar-height;
+}
+
+#monarch-navbar .monarch-navbar-container {
+  height: $navbar-height;
+}
+
 #monarch-navbar .searchspace {
     margin: 0;
     margin-top:3px;
@@ -23,8 +42,8 @@
 }
 
 #monarch-navbar.navbar {
-    min-height: 36px;
-    max-height: 36px;
+    min-height: $navbar-height;
+    max-height: $navbar-height;
 }
 #monarch-navbar .nav>li>a {
     padding: 0px;
@@ -37,6 +56,7 @@
 }
 #monarch-navbar .navbar-brand {
     padding: 8px 20px 0px 20px;
+    height: $navbar-height;
 }
 #monarch-navbar .navbar-link {
     font-size: 14px;
@@ -49,6 +69,7 @@
 }
 
 
+/*
 
 #feedback-window-container {
 
@@ -128,16 +149,6 @@
     color: black;
 }
 
-/*#monarch-navbar .navbar-brand {
-    height: 35px;
-    padding: 9px 10px 0px 14px;
-    font-size: 18px;
-    font-weight: 500;
-    margin:0;
-    margin-left:-17px;
-    margin-top:-2px;
-}
-*/
 
 #monarch-navbar #feedback-main {
   border:4px solid darkgray !important;
@@ -164,7 +175,6 @@
 
 }
 
-
 #monarch-navbar #feedback-handle {
   margin: auto;
   padding: 0;
@@ -186,11 +196,24 @@
     #monarch-navbar .collapse.in #feedback-trigger {
         margin:2px 0 6px 9px;
     }
+}
+*/
 
+
+@media (max-width: $grid-float-breakpoint) {
     #monarch-navbar #search {
         width:250px;
         margin:5px 0 5px 15px;
     }
+
+    #monarch-navbar .monarch-navbar-container {
+      height: unset;
+    }
+
+    #monarch-navbar .monarch-navbar-container .navbar-collapse {
+      height: unset;
+    }
+
 
     #monarch-navbar .nav-search-btn {
         margin:5px 0 0 5px;

@@ -13,5 +13,6 @@ Feature: Disease page description
 @ui
 Scenario: text based description of the disease appears in a user-friendly way
    Given I go to slow page "/disease/MONDO:0008199#overview" and wait for id "monarch-node"
-    then the "Overview" tab should contain "Progressive, Insidious onset"
+    then the "Overview" tab should contain "Insidious onset"
+    then the "Overview" tab should contain "Progressive"
 
