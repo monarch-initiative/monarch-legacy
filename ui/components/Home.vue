@@ -3,7 +3,6 @@
 <div class="wrapperforfooter">
   <div id="monarch-home-container" class="container-fluid monarch-container">
     <div class="row">
-      <br>
       <div class="col-xs-12">
 
         <form id="home_search_form" class="searchspace"

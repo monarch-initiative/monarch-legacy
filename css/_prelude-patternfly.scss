@@ -1,0 +1,15 @@
+$navbar-height: 32px !default;
+
+@import '~patternfly/dist/sass/patternfly/_color-variables.scss';
+
+$img-path: "~patternfly/dist/img/" !default;
+$font-path: "~patternfly/dist/fonts/" !default;
+$icon-font-path: "~patternfly/dist/fonts/" !default;
+$fa-font-path:   "~patternfly/dist/fonts/" !default;
+
+$grid-float-breakpoint: 900px;
+$font-size-base: 14px !default;
+$font-family-base: "Helvetica Neue", Helvetica, Arial, sans-serif !default;
+$navbar-pf-bg-color: $color-pf-black !default;
+$navbar-pf-border-color: $color-pf-black !default;
+// $body-bg: $color-pf-cyan-100 !default;

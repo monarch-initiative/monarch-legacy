@@ -13,14 +13,12 @@ use_spa = (os.environ['USE_SPA'] == '1') if ('USE_SPA' in os.environ) else False
 def ensure_content_loaded(context):
 	if use_spa:
 	    try:
-	        element = WebDriverWait(context.browser, 30).until(EC.presence_of_element_located((By.ID, "selenium_id_content")))
+	        element = WebDriverWait(context.browser, 60).until(EC.presence_of_element_located((By.ID, "selenium_id_content")))
 	    except:
-	        print("ensure_content_loaded failed to find id=selenium_id_content. Non-fatal")
+	        print("\n\n\n\nensure_content_loaded failed to find id=selenium_id_content. Non-fatal\n\n\n\n")
 	        pass
 	else:
 		pass
-
-
 
 def click_and_ensure_content_loaded(context, webelt):
 	if use_spa:

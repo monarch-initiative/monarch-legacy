@@ -2,14 +2,19 @@
 
 // The Vue build version to load with the `import` command
 // (runtime-only or standalone) has been set in webpack.base.conf with an alias.
-import Vue from 'vue'
-import App from './App'
-import Home from '@/components/Home'
-import Navbar from '@/components/Navbar'
-import About from '@/components/About'
-import Router from 'vue-router'
-import MonarchLegacy from '@/components/MonarchLegacy'
+import Vue from 'vue';
+import Router from 'vue-router';
+import VueGoodTable from 'vue-good-table';
+import JsonTree from 'vue-json-tree';
+Vue.component('json-tree', JsonTree);
 
+import App from './App.vue';
+import Home from '@/components/Home.vue';
+import Navbar from '@/components/Navbar.vue';
+import About from '@/components/About.vue';
+import Node from '@/components/Node.vue';
+import NodeCard from '@/components/NodeCard.vue';
+import MonarchLegacy from '@/components/MonarchLegacy.vue';
 
 /**
  * The linter can be disabled via LINTER=false env var
@@ -56,7 +61,7 @@ function loadPathContentAsync(path, done) {
   /* global XMLHttpRequest */
   const oReq = new XMLHttpRequest();
   oReq.addEventListener('load', function load() {
-    console.log('loadPathContentAsync', path, this);
+    // console.log('loadPathContentAsync', path, this);
     pathLoadedAsync(this.responseText, this.responseURL, path, done);
   });
 
@@ -87,16 +92,14 @@ window.loadPathContentAsync = loadPathContentAsync;
 
 
 const main = () => {
-  // console.log('monarch', monarch);
+  Vue.config.productionTip = false;
+  Vue.use(Router);
+  Vue.use(VueGoodTable);
 
-  var root = null;
+  Vue.component('monarch-navbar', Navbar);
+  Vue.component('node-card', NodeCard);
 
-  Vue.config.productionTip = false
-  Vue.use(Router)
-
-  Vue.component('my-navbar', Navbar);
-
-  var router = new Router({
+  router = new Router({
     mode: 'history',
     routes: [
       {
@@ -110,6 +113,26 @@ const main = () => {
         component: About
       },
       {
+        path: '/disease/:id',
+        name: 'DiseaseNode',
+        component: Node
+      },
+      {
+        path: '/phenotype/:id',
+        name: 'PhenotypeNode',
+        component: Node
+      },
+      {
+        path: '/gene/:id',
+        name: 'GeneNode',
+        component: Node
+      },
+      {
+        path: '/model/:id',
+        name: 'ModelNode',
+        component: Node
+      },
+      {
         path: '/*',
         name: 'MonarchLegacy',
         component: MonarchLegacy
@@ -119,7 +142,7 @@ const main = () => {
 
 
   router.locationChangeHack = function(url) {
-    console.log('locationChangeHack', )
+    console.log('locationChangeHack loadPathContentAsync', url);
     loadPathContentAsync(url);
   };
 
@@ -143,7 +166,6 @@ const main = () => {
       return link.pathname || link.getAttribute('href');
     }
 
-    console.log('updatePageLinks');
     var self = this;
 
     findLinks().forEach(link => {
