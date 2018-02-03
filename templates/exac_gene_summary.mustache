@@ -1,0 +1,58 @@
+<div id="exacGene" class="col-md-6" v-show="showGeneExac">
+    <h4>Exac Population Frequencies</h4>
+    <table class="table table-hover">
+        <thead>
+        <tr>
+            <th>Constraint from ExAC</th>
+            <th>Expected no. variants</th>
+            <th>Observed no. variants</th>
+            <th>Constraint Metric</th>
+        </tr>
+        </thead>
+        <tbody>
+        <tr>
+            <th scope="row">Synonymous</th>
+            <td>{[{ round(exacGene.exp_syn, 1) }]}</td>
+            <td>{[{ round(exacGene.n_syn, 1) }]}</td>
+            <td>z = {[{ round(exacGene.syn_z, 2) }]}</td>
+        </tr>
+        <tr>
+            <th scope="row">Missense</th>
+            <td>{[{ round(exacGene.exp_mis, 1) }]}</td>
+            <td>{[{ round(exacGene.n_mis, 1) }]}</td>
+            <td>z = {[{ round(exacGene.mis_z, 2) }]}</td>
+        </tr>
+        <tr>
+            <th scope="row">LoF</th>
+            <td>{[{ round(exacGene.exp_lof, 1) }]}</td>
+            <td>{[{ round(exacGene.n_lof, 1)}]}</td>
+            <td>pLI = {[{ round(exacGene.p_li, 2) }]}</td>
+        </tr>
+        </tbody>
+    </table>
+    <div class="row">
+        <div class="col-md-6" id="mgi-link">
+            [Retrieved from <a target="_blank" v-bind:href="exacGene.link">MyGene.info</a>]
+        </div>
+        <div class="col-md-6" id="exac-link"><a target="_blank" href="http://exac.broadinstitute.org/"
+                               class="glyphicon glyphicon-link"></a>
+        </div>
+    </div>
+</div>
+<style>
+    #exacGene {
+        border-radius: 10px;
+        border: solid darkgray 1px;
+    }
+
+    #mgi-link {
+        text-align: left;
+        margin-bottom: 4px;
+    }
+
+    #exac-link {
+        text-align: right;
+        margin-bottom: 4px;
+    }
+
+</style>
