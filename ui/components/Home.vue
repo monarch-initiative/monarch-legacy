@@ -19,7 +19,18 @@
       </div>
     </div>
 
-    <br>
+    <div class="row">
+      <div class="col-xs-3">
+        <router-link to="disease/MONDO:0007947">
+          Marfan syndrome MONDO:0007947
+        </router-link>
+      </div>
+      <div class="col-xs-3">
+        <router-link to="disease/OMIA:000628-9913">
+          Marfan syndrome OMIA:000628-9913
+        </router-link>
+      </div>
+    </div>
 
     <div class="row">
       <div class="col-xs-12">

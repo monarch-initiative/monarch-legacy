@@ -8,19 +8,15 @@
       <div class="card-pf-top-element">
           <img class="card-pf-icon-circle" :src="cardIcon"/>
       </div>
-      <h2 class="card-pf-title text-center">
+      <h4 class="text-center">
         {{cardLabel}}
-      </h2>
-      <slot>This will only be displayed if no content is inserted</slot>
+      </h4>
       <div class="card-pf-items text-center">
         <div class="card-pf-item">
-          <span class="pficon pficon-screen"></span>
+          <span class="pficon pficon-folder-open"></span>
           <span class="card-pf-item-text">{{cardCount}}</span>
         </div>
       </div>
-    </div>
-    <div class="card-pf-view-checkbox">
-      <input type="checkbox">
     </div>
   </div>
 </div>
@@ -29,22 +25,6 @@
 
 
 <script>
-
-
-const icons = {
-  disease: require('../../image/carousel-diseases.png'),
-  gene: require('../../image/carousel-genes.png'),
-  phenotype: require('../../image/carousel-phenotypes.png'),
-  model: require('../../image/carousel-models.png'),
-};
-
-
-const labels = {
-  disease: 'Disease',
-  gene: 'Gene',
-  phenotype: 'Phenotype',
-  model: 'Model'
-};
 
 export default {
   name: 'NodeCard',
@@ -57,35 +37,17 @@ export default {
   ],
 
   created() {
-    console.log('created', this.parentNodeId);
   },
 
   updated() {
-    console.log('updated', this.parentNodeId);
   },
 
   destroyed() {
-    console.log('destroyed', this.parentNodeId);
   },
 
   mounted() {
-    console.log('mounted', this.cardType, this.parentNodeId, this.parentNode);
-    this.cardIcon = icons[this.cardType];
-    this.cardLabel = labels[this.cardType];
-  },
-
-  watch: {
-    '$route' (to, from) {
-      // Only fetchData if the path is different.
-      // hash changes are currently handled by monarch-tabs.js
-      // within the loaded MonarchLegacy component.
-
-      console.log('$route', to, from, to.path, this.path);
-      if (to.path !== this.path) {
-        console.log('$route fetchData', to.path, this.path);
-        this.fetchData();
-      }
-    }
+    this.cardIcon = this.$parent.icons[this.cardType];
+    this.cardLabel = this.$parent.labels[this.cardType];
   },
 
   data () {
@@ -112,5 +74,18 @@ export default {
 
 <style lang="scss">
 @import "../../css/_prelude-patternfly.scss";
+
+$card-height: 150px;
+
+.card-pf {
+  border:2px solid blue;
+  height: $card-height;
+  max-height: $card-height;
+}
+
+.card-pf-view .card-pf-top-element img.card-pf-icon-circle {
+  width:40px;
+  height:40px;
+}
 
 </style>
