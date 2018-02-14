@@ -1,30 +1,52 @@
 <template>
 <div id="selenium_id_content">
 
-<a
-  target="_blank"
-  v-bind:href="'http://beta.monarchinitiative.org' + path">
-  <img class="node-logo" :src="nodeIcon"/>
-</a>
+<div class="layout-pf layout-pf-fixed">
+  <div class="nav-pf-vertical nav-pf-vertical-with-sub-menus">
+    <ul class="list-group">
+      <li class="list-group-item">
+        <button
+          id="sidebarCollapse"
+          v-on:click="toggleSidebar()"
+          class="btn btn-default btn-sm btn-sidebar">
+            <i class="fa fa-2x fa-crosshairs"></i>
+        </button>
+      </li>
+
+      <li class="list-group-item"
+        v-bind:class="{ active: !expandedCard }">
+        <a
+          v-on:click="expandCard(null)"
+          href="#0">
+          <i class="fa fa-2x fa-th-large"></i>
+          <span class="list-group-item-value">Overview</span>
+        </a>
+      </li>
+
+      <li class="list-group-item"
+        v-bind:class="{ active: expandedCard === cardType }"
+        v-for="cardType in nonEmptyCards"
+        :key="cardType">
+        <a href="#0"
+          v-on:click="expandCard(cardType)">
+          <img class="entity-type-icon" :src="icons[cardType]"/>
+          <span class="list-group-item-value">{{labels[cardType]}} ({{counts[cardType]}})</span>
+        </a>
+      </li>
+
+    </ul>
+
+  </div>
+
+</div>
 
 
-<!-- <pre>
-{{JSON.stringify(node, null, 2)}}
-</pre>
- -->
+<div class="container-fluid container-cards-pf container-pf-nav-pf-vertical">
 <div class="wrapper">
   <div
     class="overlay"
     v-bind:class="{ active: isActive }"
     v-on:click="toggleSidebar()">
-  </div>
-  <div id="sidebar-header">
-    <button
-      id="sidebarCollapse"
-      v-on:click="toggleSidebar()"
-      class="btn btn-default btn-sm btn-sidebar">
-        <i class="fa fa-2x fa-crosshairs"></i>
-    </button>
   </div>
   <nav id="sidebar" v-bind:class="{ active: isActive }">
     <div class="sidebar-content">
@@ -61,115 +83,92 @@
   </nav>
 
   <div
-    v-if="node != null"
+    v-if="node"
+    class="title-bar">
+    <span><b>{{nodeLabel}}</b> ({{node.id}})</span>
+    <a
+      target="_blank"
+      class="node-icon"
+      v-bind:href="'http://beta.monarchinitiative.org' + path">
+      <img :src="nodeIcon"/>
+    </a>
+    <br>
+    <span><b>AKA:</b>&nbsp;</span>
+    <small><i v-for="s in synonyms">{{s}}&nbsp;</i></small>
+  </div>
+
+  <div
     class="container-fluid node-container">
 
-    <div class="row node-title">
-      <div class="col-xs-12">
-        <span><b>{{nodeLabel}}</b> ({{node.id}})</span>
-      </div>
-      <div class="col-xs-12">
-        <b>AKA:</b>&nbsp;
-        <b v-for="s in synonyms">{{s}}&nbsp;</b>
-      </div>
+    <div
+      v-if="!expandedCard"
+      class="description-bar">
+      {{nodeDefinition}}
     </div>
 
+    <div
+      class="cards-pf">
+      <div
+        v-if="!expandedCard"
+        class="row row-cards-pf">
+        <node-card
+          v-for="cardType in nonEmptyCards"
+          :key="cardType"
+          class="col-lg-3 col-xs-6"
+          :card-type="cardType"
+          :card-count="counts[cardType]"
+          :parent-node="node"
+          :parent-node-id="nodeID"
+          v-on:expandCard="expandCard(cardType)">
+        </node-card>
+      </div>
 
-    <div class="row">
-      <div class="col-xs-12">
-        <h5>{{nodeDefinition}}</h5>
+      <div
+        v-if="expandedCard"
+        class="expanded-card-view">
+        <h3 class="text-center">{{expandedCard}} Associations</h3>
+        <table
+          class="fake-table-view">
+          <thead>
+            <th v-for="colName in Array.from('ABCDEFGH')">{{colName}}</th>
+          </thead>
+          <tbody>
+            <tr v-for="rowNumber in Array.from('0123456789')">
+              <td v-for="colData in Array.from('ABCDEFGH')">({{rowNumber}}, {{colData}})</td>
+            </tr>
+            <tr v-for="rowNumber in Array.from('0123456789')">
+              <td v-for="colData in Array.from('ABCDEFGH')">({{rowNumber}}, {{colData}})</td>
+            </tr>
+            <tr v-for="rowNumber in Array.from('0123456789')">
+              <td v-for="colData in Array.from('ABCDEFGH')">({{rowNumber}}, {{colData}})</td>
+            </tr>
+          </tbody>
+        </table>
       </div>
     </div>
-
-    <br>
-<div class="cards-pf">
-
-
-<div class="container-fluid container-cards-pf">
-  <div class="row row-cards-pf">
-
-    <node-card
-      class="col-xs-12 col-sm-4"
-      card-type="phenotype"
-      :card-count="counts.phenotype"
-      :parent-node="node"
-      :parent-node-id="nodeID"
-      v-on:expandCard="expandCard">
-      <h4>I'm in a Phenotype for {{nodeID}}</h4>
-    </node-card>
-
-    <node-card
-      class="col-xs-12 col-sm-4"
-      card-type="gene"
-      :card-count="counts.gene"
-      :parent-node="node"
-      :parent-node-id="nodeID"
-      v-on:expandCard="expandCard">
-      <h4>I'm in a Gene for {{nodeID}}</h4>
-    </node-card>
-
-    <node-card
-      class="col-xs-12 col-sm-4"
-      card-type="model"
-      :card-count="counts.model"
-      :parent-node="node"
-      :parent-node-id="nodeID"
-      v-on:expandCard="expandCard">
-      <h4>I'm in a Model for {{nodeID}}</h4>
-    </node-card>
-
-  </div>
-</div>
-
-</div>
-
-</div>
-    <br>
-
 <!--
-    <div class="row" v-for="equivalentClass in equivalentClasses">
-      <div class="col-xs-8">
-        {{equivalentClass.label}}
-      </div>
-      <div class="col-xs-4">
-        ({{equivalentClass.id}})
-      </div>
-    </div>
-
-
-    <div class="row" v-if="node.relationships">
-      <vue-good-table
-        class="table table-stripped table-bordered condensed"
-        title="Relationships"
-        :defaultSortBy="{field: 'property.id', type: 'asc'}"
-        :columns="relationshipsColumns"
-        :rows="node.relationships"
-        :paginate="false"
-        :lineNumbers="false">
-
-        <template slot="table-row" slot-scope="props">
-          <td class="fancy">{{ props.row.subject.label }} ({{ props.row.subject.id }})</td>
-          <td class="fancy">{{ props.row.property.label }} ({{ props.row.property.id }})</td>
-          <td class="fancy">{{ props.row.object.label }} ({{ props.row.object.id }})</td>
-          <td class="has-text-right">{{ props.row.source }}</td>
-        </template>
-      </vue-good-table>
-    </div>
-
-
     <br>
     <br>
     <br>
+    <br>
+
     <div class="row pre-scrollable">
       <div class="col-xs-12">
         <json-tree :data="node" :level="1"></json-tree>
       </div>
     </div>
-
 -->
   </div>
 </div>
+<!--
+<button
+  v-on:click="getHierarchy()"
+  class="btn btn-default btn-sm">
+    Get Hierarchy
+</button>
+ -->
 
+</div>
 </div>
 </template>
 
@@ -212,9 +211,22 @@ function loadPathContentAsync(path, done) {
 
 const icons = {
   disease: require('../../image/carousel-diseases.png'),
-  gene: require('../../image/carousel-genes.png'),
   phenotype: require('../../image/carousel-phenotypes.png'),
+  gene: require('../../image/carousel-genes.png'),
+  variant: require('../../image/carousel-genes.png'),
   model: require('../../image/carousel-models.png'),
+  pathway: require('../../image/carousel-anatomy.png'),
+  cellline: require('../../image/carousel-anatomy.png'),
+};
+
+const labels = {
+  disease: 'Disease',
+  phenotype: 'Phenotype',
+  gene: 'Gene',
+  variant: 'Variant',
+  model: 'Model',
+  pathway: 'Pathway',
+  cellline: 'Cell Line'
 };
 
 export default {
@@ -293,20 +305,35 @@ export default {
       progressTimer: null,
       progressPath: null,
       path: null,
+      icons: icons,
+      labels: labels,
       nodeID: null,
       nodeDefinition: null,
       nodeCategory: null,
       nodeLabel: null,
       nodeIcon: null,
       nodeCategory: null,
+      availableCards: [
+        'disease',
+        'phenotype',
+        'gene',
+        'variant',
+        'model',
+        'pathway',
+        'cellline'
+      ],
+      nonEmptyCards: [],
+      expandedCard: null,
       counts: {
+        disease: 0,
         phenotype: 0,
         gene: 0,
-        genotype: 0,
-        model: 0,
         variant: 0,
+        model: 0,
         pathway: 0,
         literature: 0,
+        cellline: 0,
+        genotype: 0,
       },
       relationshipsColumns: [
         {
@@ -331,8 +358,8 @@ export default {
 
 
   methods: {
-    expandCard(arg) {
-      console.log('expandCard', arg);
+    expandCard(cardType) {
+      this.expandedCard = cardType;
     },
 
     toggleSidebar() {
@@ -378,17 +405,27 @@ export default {
       this.nodeDefinition = this.node.definitions ? this.node.definitions[0] : '???definitions???';
       this.nodeLabel = this.node.labels ? this.node.labels[0] : '???labels???';
       this.nodeCategory = this.node.categories ? this.node.categories[0].toLowerCase() : '???categories???';
-      this.nodeIcon = icons[this.nodeCategory];
-      this.phenotypeIcon = icons.phenotype;
-      this.geneIcon = icons.gene;
-      this.modelIcon = icons.model;
-      this.counts.phenotype = this.node.phenotypeNum;
-      this.counts.gene = this.node.geneNum;
-      this.counts.genotype = this.node.genotypeNum;
-      this.counts.model = this.node.modelNum;
-      this.counts.variant = this.node.variantNum;
-      this.counts.pathway = this.node.pathwayNum;
-      this.literature = this.node.literatureNum;
+      this.nodeIcon = this.icons[this.nodeCategory];
+      this.phenotypeIcon = this.icons.phenotype;
+      this.geneIcon = this.icons.gene;
+      this.modelIcon = this.icons.model;
+
+      var nonEmptyCards = [];
+      this.availableCards.forEach(cardType => {
+        const count = that.node[cardType + 'Num'];
+        that.counts[cardType] = count;
+        if (count > 0) {
+          nonEmptyCards.push(cardType);
+        }
+      });
+      this.nonEmptyCards = nonEmptyCards;
+      // this.counts.phenotype = this.node.phenotypeNum;
+      // this.counts.gene = this.node.geneNum;
+      // this.counts.genotype = this.node.genotypeNum;
+      // this.counts.model = this.node.modelNum;
+      // this.counts.variant = this.node.variantNum;
+      // this.counts.pathway = this.node.pathwayNum;
+      // this.literature = this.node.literatureNum;
     },
 
     fetchData() {
@@ -424,6 +461,52 @@ export default {
           that.progressPath = null;
         });
       });
+    },
+
+    xloadPathContentAsync(path, done) {
+      console.log('xloadPathContentAsync', path);
+      /* global XMLHttpRequest */
+      const oReq = new XMLHttpRequest();
+      oReq.addEventListener('load', function load() {
+        console.log('xloadPathContentAsync', path, this);
+        var responseJSON = this.responseText;
+        var response = JSON.parse(responseJSON);
+        done(response, this.responseURL, path);
+      });
+
+      let refinedPath = path;
+
+      // const hashIndex = refinedPath.indexOf('#');
+      // if (hashIndex >= 0) {
+      //   refinedPath = refinedPath.slice(0, hashIndex) + '?stripme' + refinedPath.slice(hashIndex);
+      // }
+      // else {
+      //   refinedPath += '?stripme';
+      // }
+      oReq.open('GET', refinedPath);
+      oReq.send();
+    },
+
+    getHierarchy() {
+      //Determine if ID is clique leader
+      console.log('qurl', this.node);
+      var qurl = this.node.global_scigraph_data_url + "dynamic/cliqueLeader/" + this.nodeID + ".json";
+      this.xloadPathContentAsync(qurl,
+        function(response, responseURL, path) {
+          console.log('xpathLoadedAsync', response, responseURL, path);
+
+          var graph = new bbop.model.graph();
+          graph.load_json(response);
+          var nodeList = graph.all_nodes();
+          console.log('nodeList', nodeList);
+          if (nodeList.length !== 1) {
+            console.log('nodeList ERROR too many entries', nodeList);
+          }
+          else {
+            var leaderId = nodeList[0].id();
+            console.log('leaderId', leaderId);
+          }
+        });
     }
   }
 
@@ -458,7 +541,7 @@ $sidebar-button-width: 32px;
   left: (-$sidebar-width);
   xheight: 80vh;
   min-height: 40px;
-  z-index: 50;
+  z-index: 1050;
   xcolor: #fff;
   transition: all 0.3s;
   overflow-y: auto;
@@ -617,16 +700,46 @@ $sidebar-button-width: 32px;
 }
 
 .node-container {
-  margin-left: $sidebar-button-width;
-  min-height: 100vh;
+  margin: 100px 0 0 0;
+  padding: 3px 5px;
   transition: all 0.3s;
+  width: 100%;
+  height:100%;
 }
 
-img.node-logo {
+.expanded-card-view {
+  margin:0;
+  padding:0;
+  width:100%;
+  height:100%;
+}
+
+a.node-icon {
+  top: 5px;
+  right: 5px;
   position: absolute;
-  margin: 0 0 0 0;
-  padding: 0;
+}
+
+a.node-icon > img {
   height: 30px !important;
+}
+
+
+
+li.list-group-item {
+  margin: 0;
+  padding: 0;
+}
+.nav-pf-vertical li.list-group-item > a {
+  margin: 0;
+  padding: 10px 0 0 10px;
+}
+
+
+img.entity-type-icon {
+  margin: 0 5px 0 0;
+  padding: 0;
+  height: 40px !important;
 }
 
 .node-container .node-title {
@@ -639,8 +752,86 @@ img.node-logo {
   align-items: stretch;
   min-height: 100%;
   width: 100%;
-  margin: ($navbar-height + 1) 0 2px 0;
+  margin: 0;
   padding: 0;
+}
+
+
+div.container-cards-pf.container-pf-nav-pf-vertical {
+  padding: 0;
+  margin: $navbar-height 0 0 0;
+}
+
+div.panel.panel-default {
+  margin-bottom: 0;
+}
+
+.nav-pf-vertical {
+  top: ($navbar-height + 1);
+  z-index: 1000;
+}
+
+
+div.container-fluid.container-cards-pf.container-pf-nav-pf-vertical {
+}
+
+div.container-fluid.container-cards-pf.container-pf-nav-pf-vertical .cards-pf {
+  margin: 0 5px 0 0;
+}
+
+.title-bar {
+  background: ivory;
+  position: fixed;
+  height: 100px;
+  max-height: 100px;
+  overflow-y: auto;
+  font-size: 1.0em;
+  line-height: 1.1em;
+  top: $navbar-height;
+  left: 200px;
+  right: 0;
+  padding: 10px;
+  z-index: 1;
+}
+
+table.fake-table-view {
+  border:1px solid black;
+  width: 100%;
+  height: 100%;
+  margin: 0;
+}
+
+table.fake-table-view th,
+table.fake-table-view td
+{
+  border:1px solid lightgray;
+  padding: 3px;
+}
+
+
+$collapsed-sidebar-width: 65px;
+
+@media (max-width: $grid-float-breakpoint) {
+  .nav-pf-vertical {
+    width: $collapsed-sidebar-width;
+  }
+
+  .nav-pf-vertical li.list-group-item > a .list-group-item-value {
+    display: none;
+  }
+
+  div.container-fluid.container-cards-pf.container-pf-nav-pf-vertical {
+    margin-left: $collapsed-sidebar-width;
+  }
+
+  .title-bar {
+    left: $collapsed-sidebar-width;
+  }
+
+  .nav-pf-vertical li.list-group-item > a {
+    margin: 0;
+    padding: 10px 0 0 10px;
+  }
 }
 
 </style>
