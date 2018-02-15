@@ -215,7 +215,6 @@ const labels = {
 };
 
 export default {
-    components: {TableView},
     name: 'home',
   created() {
     // console.log('created', this.nodeID);
