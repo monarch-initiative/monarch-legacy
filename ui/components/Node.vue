@@ -127,23 +127,7 @@
         v-if="expandedCard"
         class="expanded-card-view">
         <h3 class="text-center">{{expandedCard}} Associations</h3>
-        <table
-          class="fake-table-view">
-          <thead>
-            <th v-for="colName in Array.from('ABCDEFGH')">{{colName}}</th>
-          </thead>
-          <tbody>
-            <tr v-for="rowNumber in Array.from('0123456789')">
-              <td v-for="colData in Array.from('ABCDEFGH')">({{rowNumber}}, {{colData}})</td>
-            </tr>
-            <tr v-for="rowNumber in Array.from('0123456789')">
-              <td v-for="colData in Array.from('ABCDEFGH')">({{rowNumber}}, {{colData}})</td>
-            </tr>
-            <tr v-for="rowNumber in Array.from('0123456789')">
-              <td v-for="colData in Array.from('ABCDEFGH')">({{rowNumber}}, {{colData}})</td>
-            </tr>
-          </tbody>
-        </table>
+        <table-view :nodeType="nodeCategory" :cardType="expandedCard" :identifier="nodeID"></table-view>
       </div>
     </div>
 <!--
@@ -175,6 +159,7 @@
 <script>
 
 import _ from 'underscore';
+import TableView from "./TableView.vue";
 
 function pathLoadedAsync(sourceText, responseURL, path, done) {
   if (done) {
@@ -230,7 +215,8 @@ const labels = {
 };
 
 export default {
-  name: 'home',
+    components: {TableView},
+    name: 'home',
   created() {
     // console.log('created', this.nodeID);
   },
