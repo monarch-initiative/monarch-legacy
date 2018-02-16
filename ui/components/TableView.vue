@@ -1,6 +1,6 @@
 <template>
     <div id="TableView">
-        <div v-cloak>
+        <div v-if="rows.length > 0">
             <vue-good-table
                     @pageChanged="onPageChange"
                     id="table-style"
@@ -10,6 +10,7 @@
                     :lineNumbers="true"
                     styleClass="table condensed table-bordered"/>
         </div>
+        <div v-else>Loading...</div>
     </div>
 </template>
 <script>
@@ -19,7 +20,6 @@
         props: ['identifier', 'cardType', 'nodeType'],
         data() {
             return {
-                curieMap: '',
                 rows: [],
                 columns: [
                     {
@@ -48,10 +48,17 @@
                 ],
             };
         },
-        created() {
+//        will need to add watch or updated
+        mounted() {
             this.fetchData(1);
-            this.removeS('things');
         },
+        watch: {
+            cardType: function () {
+                this.rows = [];
+                this.fetchData(1);
+            }
+        },
+
         methods: {
             onPageChange: function (evt) {
                 // { currentPage: 1, currentPerPage: 10, total: 5 }
@@ -75,7 +82,6 @@
                     _this.dataPacket = resp;
                     resp.data.associations.forEach(function (element) {
                         const refs = [];
-                        const sources = [];
                         const objectCurie = element.object.id;
                         if (element.publications) {
                             element.publications.forEach(function (data) {

@@ -127,7 +127,11 @@
         v-if="expandedCard"
         class="expanded-card-view">
         <h3 class="text-center">{{expandedCard}} Associations</h3>
-        <table-view :nodeType="nodeCategory" :cardType="expandedCard" :identifier="nodeID"></table-view>
+        <table-view
+                :nodeType="nodeCategory"
+                :cardType="expandedCard"
+                :identifier="nodeID">
+        </table-view>
       </div>
     </div>
 <!--
