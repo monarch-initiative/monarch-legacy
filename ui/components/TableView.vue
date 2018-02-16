@@ -89,7 +89,7 @@
                             });
                         }
                         _this.rows.push({
-                            annoType: `<a href='/${_this.removeS(annotationType)}/${objectCurie}'>${element.object.label}</a>`,
+                            annoType: `<a href='/${annotationType}/${objectCurie}'>${element.object.label}</a>`,
                             evidenceType: 'TODO',
                             reference: refs.join('\n'),
                             source: 'TODO',
@@ -102,9 +102,6 @@
             },
             firstCap(val) {
                 return val.charAt(0).toUpperCase() + val.slice(1);
-            },
-            removeS(val) {
-                return val.slice(0, -1);
             },
         },
     };
