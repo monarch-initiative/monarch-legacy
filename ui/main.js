@@ -15,6 +15,7 @@ import About from '@/components/About.vue';
 import Node from '@/components/Node.vue';
 import NodeCard from '@/components/NodeCard.vue';
 import MonarchLegacy from '@/components/MonarchLegacy.vue';
+import TableView from '@/components/TableView.vue';
 
 /**
  * The linter can be disabled via LINTER=false env var
@@ -98,6 +99,8 @@ const main = () => {
 
   Vue.component('monarch-navbar', Navbar);
   Vue.component('node-card', NodeCard);
+  Vue.component('table-view', TableView);
+
 
   router = new Router({
     mode: 'history',
