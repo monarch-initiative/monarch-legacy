@@ -1,6 +1,6 @@
 <template>
     <div id="TableView">
-        <div v-if="rows.length > 0">
+        <div v-if="dataFetched">
             <vue-good-table
                     @pageChanged="onPageChange"
                     id="table-style"
@@ -20,7 +20,8 @@
         props: ['identifier', 'cardType', 'nodeType'],
         data() {
             return {
-                rows: [],
+                dataFetched: false,
+                rows: null,
                 columns: [
                     {
                         label: this.firstCap(this.cardType),
@@ -54,7 +55,7 @@
         },
         watch: {
             cardType: function () {
-                this.rows = [];
+                this.rows = null;
                 this.fetchData(1);
             }
         },
@@ -63,22 +64,24 @@
             onPageChange: function (evt) {
                 // { currentPage: 1, currentPerPage: 10, total: 5 }
                 this.fetchData(evt.currentPage * evt.currentPerPage);
+                console.log(evt);
             },
             fetchData(start) {
                 const _this = this;
                 const nodeType = _this.nodeType;
                 const entity_curie = _this.identifier;
                 const annotationType = _this.cardType;
-                console.log(annotationType);
                 const baseURL = `https://api-dev.monarchinitiative.org/api/bioentity/${nodeType}/${entity_curie}/${annotationType}s/`;
                 const params = {
                     fetch_objects: true,
                     rows: 1000,
-                    start: start,
+//                    start: start, vue-good-table does not support providing the total number of hits right now
                 };
                 axios.get(baseURL, {
                     params: params,
                 }).then((resp) => {
+                    const preRows = [];
+                    const numFound = resp.data.objects.length;
                     _this.dataPacket = resp;
                     resp.data.associations.forEach(function (element) {
                         const refs = [];
@@ -88,13 +91,15 @@
                                 refs.push(`<a href='http://www.ncbi.nlm.nih.gov/pubmed/${data.id}'>${data.id}</a></br>`);
                             });
                         }
-                        _this.rows.push({
+                        preRows.push({
                             annoType: `<a href='/${annotationType}/${objectCurie}'>${element.object.label}</a>`,
                             evidenceType: 'TODO',
                             reference: refs.join('\n'),
                             source: 'TODO',
                         })
-                    })
+                    });
+                    _this.dataFetched = true;
+                    _this.rows = preRows;
                 })
                     .catch((err) => {
                         console.log(err);
