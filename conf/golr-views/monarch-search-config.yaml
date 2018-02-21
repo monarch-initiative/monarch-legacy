@@ -120,7 +120,7 @@ fields:
     property: []
     searchable: false
 
- - id: edges
+  - id: edges
     description: "Number of edges connected to entity"
     display_name: edges
     type: integer
