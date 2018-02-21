@@ -111,3 +111,19 @@ fields:
     cardinality: single
     property: []
     searchable: false
+    
+   - id: prefix
+    description: "Curie prefix"
+    display_name: prefix
+    type: string
+    cardinality: single
+    property: []
+    searchable: false
+
+  - id: edges
+    description: "Number of edges connected to entity"
+    display_name: edges
+    type: integer
+    cardinality: single
+    property: []
+    searchable: false
