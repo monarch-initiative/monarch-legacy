@@ -1,23 +1,23 @@
 <template>
 <div id="selenium_id_content">
 
-<div class="layout-pf layout-pf-fixed">
+<div xclass="layout-pf layout-pf-fixed">
   <div class="nav-pf-vertical nav-pf-vertical-with-sub-menus">
     <ul class="list-group">
-      <li class="list-group-item">
-        <button
-          id="sidebarCollapse"
+      <li class="list-group-item list-group-item-squat">
+        <a
           v-on:click="toggleSidebar()"
-          class="btn btn-default btn-sm btn-sidebar">
-            <i class="fa fa-2x fa-crosshairs"></i>
-        </button>
+          href="#">
+          <i class="fa fa-2x fa-crosshairs"></i>
+          <span class="list-group-item-value">Neighbors</span>
+        </a>
       </li>
 
-      <li class="list-group-item"
+      <li class="list-group-item list-group-item-squat"
         v-bind:class="{ active: !expandedCard }">
         <a
           v-on:click="expandCard(null)"
-          href="#0">
+          href="#">
           <i class="fa fa-2x fa-th-large"></i>
           <span class="list-group-item-value">Overview</span>
         </a>
@@ -27,7 +27,8 @@
         v-bind:class="{ active: expandedCard === cardType }"
         v-for="cardType in nonEmptyCards"
         :key="cardType">
-        <a href="#0"
+        <a
+          :href="'#' + cardType"
           v-on:click="expandCard(cardType)">
           <img class="entity-type-icon" :src="icons[cardType]"/>
           <span class="list-group-item-value">{{labels[cardType]}} ({{counts[cardType]}})</span>
@@ -50,11 +51,6 @@
   </div>
   <nav id="sidebar" v-bind:class="{ active: isActive }">
     <div class="sidebar-content">
-      <div class="row sidebar-title">
-        <div class="col-xs-12">
-          <b>Neighborhood</b>
-        </div>
-      </div>
       <div class="row superclass" v-for="c in superclasses">
         <div class="col-xs-12">
           <router-link :to="'/' + nodeCategory + '/' + c.id">
@@ -64,11 +60,8 @@
       </div>
 
       <div class="row currentclass">
-        <div class="col-xs-8">
+        <div class="col-xs-12">
           {{nodeLabel}}
-        </div>
-        <div class="col-xs-4">
-          ({{nodeID}})
         </div>
       </div>
 
@@ -83,33 +76,46 @@
   </nav>
 
   <div
-    v-if="node"
     class="title-bar">
-    <span><b>{{nodeLabel}}</b> ({{node.id}})</span>
-    <a
-      target="_blank"
-      class="node-icon"
-      v-bind:href="'http://beta.monarchinitiative.org' + path">
-      <img :src="nodeIcon"/>
-    </a>
-    <br>
-    <span><b>AKA:</b>&nbsp;</span>
-    <small><i v-for="s in synonyms">{{s}}&nbsp;</i></small>
-  </div>
-
-  <div
-    class="container-fluid node-container">
-
     <div
-      v-if="!expandedCard"
-      class="description-bar">
-      {{nodeDefinition}}
+      v-if="!node">
+      <h4 class="text-center">Loading Data…</h4>
     </div>
 
     <div
+      v-if="node">
+
+      <span><b>{{nodeLabel}}</b> ({{node.id}})</span>
+      <a
+        target="_blank"
+        class="node-icon"
+        v-bind:href="'http://beta.monarchinitiative.org' + path">
+        <img :src="nodeIcon"/>
+      </a>
+      <br>
+      <span><b>AKA:</b>&nbsp;</span>
+      <span class="synonym" v-for="s in synonyms">{{s}}</span>
+    </div>
+  </div>
+
+  <div
+    v-if="node"
+    class="container-fluid node-container">
+
+    <div
+      v-if="!expandedCard && nodeDefinition"
+      class="row">
+      <div class="col-xs-12">
+        <div class="node-description">
+          {{nodeDefinition}}
+        </div>
+      </div>
+    </div>
+
+    <div
+      v-if="!expandedCard"
       class="cards-pf">
       <div
-        v-if="!expandedCard"
         class="row row-cards-pf">
         <node-card
           v-for="cardType in nonEmptyCards"
@@ -122,18 +128,19 @@
           v-on:expandCard="expandCard(cardType)">
         </node-card>
       </div>
-
-      <div
-        v-if="expandedCard"
-        class="expanded-card-view">
-        <h3 class="text-center">{{expandedCard}} Associations</h3>
-        <table-view
-                :nodeType="nodeCategory"
-                :cardType="expandedCard"
-                :identifier="nodeID">
-        </table-view>
-      </div>
     </div>
+
+    <div
+      v-if="expandedCard"
+      class="expanded-card-view">
+      <h3 class="text-center">{{labels[expandedCard]}} Associations</h3>
+      <table-view
+              :nodeType="nodeCategory"
+              :cardType="expandedCard"
+              :identifier="nodeID">
+      </table-view>
+    </div>
+
 <!--
     <br>
     <br>
@@ -146,6 +153,7 @@
       </div>
     </div>
 -->
+
   </div>
 </div>
 <!--
@@ -155,6 +163,7 @@
     Get Hierarchy
 </button>
  -->
+
 
 </div>
 </div>
@@ -176,47 +185,72 @@ function pathLoadedAsync(sourceText, responseURL, path, done) {
 
 
 function loadPathContentAsync(path, done) {
-  console.log('loadPathContentAsync', path);
+  // console.log('loadPathContentAsync', path);
   /* global XMLHttpRequest */
   const oReq = new XMLHttpRequest();
   oReq.addEventListener('load', function load() {
-    console.log('loadPathContentAsync', path, this);
+    // console.log('loadPathContentAsync', path, this);
     pathLoadedAsync(this.responseText, this.responseURL, path, done);
   });
 
-  let refinedPath = path;
-
-  // const hashIndex = refinedPath.indexOf('#');
-  // if (hashIndex >= 0) {
-  //   refinedPath = refinedPath.slice(0, hashIndex) + '?stripme' + refinedPath.slice(hashIndex);
-  // }
-  // else {
-  //   refinedPath += '?stripme';
-  // }
-  oReq.open('GET', refinedPath);
+  oReq.open('GET', path);
   oReq.send();
 }
 
+const availableCardTypes = [
+  'anatomy',
+  'cellline',
+  'disease',
+  'function',
+  'gene',
+  'genotype',
+  'homolog',
+  'interaction',
+  'literature',
+  'model',
+  'ortholog-phenotype',
+  'ortholog-disease',
+  'pathway',
+  'phenotype',
+  'variant',
+];
 
 const icons = {
-  disease: require('../../image/carousel-diseases.png'),
-  phenotype: require('../../image/carousel-phenotypes.png'),
-  gene: require('../../image/carousel-genes.png'),
-  variant: require('../../image/carousel-genes.png'),
-  model: require('../../image/carousel-models.png'),
-  pathway: require('../../image/carousel-anatomy.png'),
+  anatomy: require('../../image/carousel-anatomy.png'),
   cellline: require('../../image/carousel-anatomy.png'),
+  disease: require('../../image/carousel-diseases.png'),
+  function: require('../../image/carousel-anatomy.png'),
+  gene: require('../../image/carousel-genes.png'),
+  genotype: require('../../image/carousel-anatomy.png'),
+  homolog: require('../../image/carousel-anatomy.png'),
+  interaction: require('../../image/carousel-anatomy.png'),
+  literature: require('../../image/carousel-anatomy.png'),
+  model: require('../../image/carousel-models.png'),
+  'ortholog-disease': require('../../image/carousel-anatomy.png'),
+  'ortholog-phenotype': require('../../image/carousel-anatomy.png'),
+  pathway: require('../../image/carousel-anatomy.png'),
+  phenotype: require('../../image/carousel-phenotypes.png'),
+  variant: require('../../image/carousel-genes.png'),
 };
 
 const labels = {
+  anatomy: 'Anatomy',
+  cellline: 'Cell Line',
   disease: 'Disease',
-  phenotype: 'Phenotype',
+  function: 'Function',
   gene: 'Gene',
-  variant: 'Variant',
+  genotype: 'Genotype',
+  homolog: 'Homolog',
+  interaction: 'Interaction',
+  literature: 'Literature',
   model: 'Model',
+  'ortholog-phenotype': 'Ortholog Phenotype',
+  'ortholog-disease': 'Ortholog Disease',
   pathway: 'Pathway',
-  cellline: 'Cell Line'
+  phenotype: 'Phenotype',
+  variant: 'Variant',
 };
+
 
 export default {
     name: 'home',
@@ -233,33 +267,6 @@ export default {
   },
 
   mounted() {
-    // $(".row-cards-pf > [class*='col'] > .card-pf > .card-pf-body").matchHeight();
-    // Card Single Select
-    var that = this;
-    // that.$nextTick(function() {
-    //   console.log('qsa', document.querySelectorAll('.card-pf-view-single-select'));
-    //   $('.card-pf-view-single-select').click(function() {
-    //     console.log('click');
-    //     if ($(this).hasClass('active'))
-    //     { $(this).removeClass('active'); }
-    //     else
-    //     { $('.card-pf-view-single-select').removeClass('active'); $(this).addClass('active'); }
-    //   });
-    // });
-
-    // $('#dismiss, .overlay').on('click', function () {
-    //     $('#sidebar').removeClass('active');
-    //     $('.overlay').fadeOut();
-    // });
-
-    // $('#sidebarCollapse').on('click', function () {
-    //     $('#sidebar').addClass('active');
-    //     $('.overlay').fadeIn();
-    //     $('.collapse.in').toggleClass('in');
-    //     $('a[aria-expanded=true]').attr('aria-expanded', 'false');
-    // });
-
-    console.log('mounted fetchData', this.nodeID);
     this.fetchData();
   },
   watch: {
@@ -268,9 +275,7 @@ export default {
       // hash changes are currently handled by monarch-tabs.js
       // within the loaded MonarchLegacy component.
 
-      console.log('$route', to, from, to.path, this.path);
       if (to.path !== this.path) {
-        console.log('$route fetchData', to.path, this.path);
         this.fetchData();
       }
     }
@@ -302,15 +307,7 @@ export default {
       nodeLabel: null,
       nodeIcon: null,
       nodeCategory: null,
-      availableCards: [
-        'disease',
-        'phenotype',
-        'gene',
-        'variant',
-        'model',
-        'pathway',
-        'cellline'
-      ],
+      availableCards: availableCardTypes,
       nonEmptyCards: [],
       expandedCard: null,
       counts: {
@@ -392,8 +389,8 @@ export default {
 
       this.synonyms = this.node.synonyms;
       this.nodeDefinition = this.node.definitions ? this.node.definitions[0] : '???definitions???';
-      this.nodeLabel = this.node.labels ? this.node.labels[0] : '???labels???';
-      this.nodeCategory = this.node.categories ? this.node.categories[0].toLowerCase() : '???categories???';
+      this.nodeLabel = this.node.label;
+      this.nodeCategory = this.node.categories ? this.node.categories[0].toLowerCase() : this.nodeType;
       this.nodeIcon = this.icons[this.nodeCategory];
       this.phenotypeIcon = this.icons.phenotype;
       this.geneIcon = this.icons.gene;
@@ -422,7 +419,12 @@ export default {
       const path = that.$route.fullPath;
       this.path = that.$route.path;
       this.nodeID = this.$route.params.id;
-      console.log('fetchData', path, this.$route.params, this.$route.params.id);
+      this.nodeType = this.path.split('/')[1];
+      this.expandedCard = null;
+      this.nonEmptyCards = [];
+      this.isActive = false;
+
+      // console.log('fetchData', path, this.$route.params, this.$route.params.id, this.nodeType);
 
       if (that.progressTimer) {
         console.log('leftover progressTimer');
@@ -436,12 +438,9 @@ export default {
         }, 500);
       }
       that.node = null;
-      // var url = `${that.path}.json`;
       var url = `/node${that.path}.json`;
-      console.log('url', url);
       loadPathContentAsync(url, function(content, responseURL) {
         that.parseNodeContent(content);
-        console.log('that.node', that.node);
         that.$nextTick(function() {
           if (that.progressTimer) {
             clearTimeout(that.progressTimer);
@@ -457,7 +456,7 @@ export default {
       /* global XMLHttpRequest */
       const oReq = new XMLHttpRequest();
       oReq.addEventListener('load', function load() {
-        console.log('xloadPathContentAsync', path, this);
+        // console.log('xloadPathContentAsync', path, this);
         var responseJSON = this.responseText;
         var response = JSON.parse(responseJSON);
         done(response, this.responseURL, path);
@@ -506,8 +505,11 @@ export default {
 <style lang="scss">
 @import "../../css/_prelude-patternfly.scss";
 
-$sidebar-width: 600px;
+$sidebar-content-width: 500px;
+$sidebar-width: 200px;
+$collapsed-sidebar-width: 55px;
 $sidebar-button-width: 32px;
+$title-bar-height: 70px;
 
 #sidebar a,
 #sidebar a:hover,
@@ -524,19 +526,18 @@ $sidebar-button-width: 32px;
 }
 
 #sidebar {
-  width: $sidebar-width;
+  width: $sidebar-content-width;
   position: fixed;
-  top: ($navbar-height + 110);
-  left: (-$sidebar-width);
-  xheight: 80vh;
+  top: ($navbar-height + 45);
+  left: (-$sidebar-content-width);
   min-height: 40px;
   z-index: 1050;
   xcolor: #fff;
   transition: all 0.3s;
   overflow-y: auto;
   overflow-x: hidden;
-  background: ivory;
-  padding-left: $sidebar-button-width;
+  background: ghostwhite;
+  xpadding-left: $sidebar-button-width;
 }
 
 #sidebar.active {
@@ -544,26 +545,10 @@ $sidebar-button-width: 32px;
   box-shadow: 3px 3px 3px rgba(0, 0, 0, 0.2);
 }
 
-#sidebar-header {
-  position: fixed;
-  top: ($navbar-height + 110);
-  height: 100%;
-  z-index:999;
-}
-
-#sidebar-header #sidebarCollapse {
-  padding: 0 4px;
-}
-
 
 #sidebar .sidebar-content {
-  width: ($sidebar-width - $sidebar-button-width);
+  width: ($sidebar-content-width - $sidebar-button-width);
   margin: 0;
-}
-
-#sidebar .sidebar-content .sidebar-title {
-  text-align: center;
-  background: lightgray;
 }
 
 
@@ -689,7 +674,7 @@ $sidebar-button-width: 32px;
 }
 
 .node-container {
-  margin: 100px 0 0 0;
+  margin: $title-bar-height 25px 0 0;
   padding: 3px 5px;
   transition: all 0.3s;
   width: 100%;
@@ -715,15 +700,30 @@ a.node-icon > img {
 
 
 
-li.list-group-item {
+.nav-pf-vertical li.list-group-item {
   margin: 0;
   padding: 0;
 }
 .nav-pf-vertical li.list-group-item > a {
   margin: 0;
-  padding: 10px 0 0 10px;
+  padding: 3px 0 0 8px;
+  height: 45px;
 }
 
+.nav-pf-vertical li.list-group-item.list-group-item-squat > a {
+}
+
+.nav-pf-vertical li.list-group-item.list-group-item-squat > a .list-group-item-value {
+  padding: 2px 2px;
+}
+
+
+.nav-pf-vertical li.list-group-item.list-group-item-squat > a {
+  height: 35px;
+}
+.nav-pf-vertical li.list-group-item > a .list-group-item-value {
+  padding: 4px 5px;
+}
 
 img.entity-type-icon {
   margin: 0 5px 0 0;
@@ -734,6 +734,13 @@ img.entity-type-icon {
 .node-container .node-title {
   background: #4B4B4B;
   color: white;
+}
+
+.node-container .node-description {
+  margin: 5px 0;
+  padding: 5px;
+  border:1px solid lightgray;
+  line-height: 1.15em;
 }
 
 .wrapper {
@@ -756,7 +763,7 @@ div.panel.panel-default {
 }
 
 .nav-pf-vertical {
-  top: ($navbar-height + 1);
+  top: ($navbar-height + 6);
   z-index: 1000;
 }
 
@@ -769,18 +776,25 @@ div.container-fluid.container-cards-pf.container-pf-nav-pf-vertical .cards-pf {
 }
 
 .title-bar {
-  background: ivory;
+  border-bottom:1px solid lightgray;
+  background: aliceblue;
   position: fixed;
-  height: 100px;
-  max-height: 100px;
+  height: $title-bar-height;
+  max-height: $title-bar-height;
   overflow-y: auto;
-  font-size: 1.0em;
+  xfont-size: 1.0em;
   line-height: 1.1em;
-  top: $navbar-height;
-  left: 200px;
+  top: ($navbar-height + 6);
+  left: $sidebar-width;
   right: 0;
-  padding: 10px;
+  padding: 5px 10px;
   z-index: 1;
+}
+
+.title-bar .synonym {
+  border:1px solid lightgray;
+  padding: 0 5px;
+  font-size: 0.9em;
 }
 
 table.fake-table-view {
@@ -797,10 +811,15 @@ table.fake-table-view td
   padding: 3px;
 }
 
-
-$collapsed-sidebar-width: 65px;
+.btn-sidebar {
+  border:1px solid red;
+}
 
 @media (max-width: $grid-float-breakpoint) {
+  .node-container {
+    margin-left: 0;
+  }
+
   .nav-pf-vertical {
     width: $collapsed-sidebar-width;
   }
@@ -815,11 +834,6 @@ $collapsed-sidebar-width: 65px;
 
   .title-bar {
     left: $collapsed-sidebar-width;
-  }
-
-  .nav-pf-vertical li.list-group-item > a {
-    margin: 0;
-    padding: 10px 0 0 10px;
   }
 }
 

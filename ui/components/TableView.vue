@@ -1,6 +1,7 @@
 <template>
     <div id="TableView">
-        <div v-if="dataFetched">
+        <div
+            v-if="dataFetched">
             <vue-good-table
                     @pageChanged="onPageChange"
                     id="table-style"
@@ -10,7 +11,19 @@
                     :lineNumbers="true"
                     styleClass="table condensed table-bordered"/>
         </div>
-        <div v-else>Loading...</div>
+        <div
+            v-else-if="dataError">
+            <h3>BioLink Error</h3>
+            <div class="row">
+              <div class="col-xs-12 pre-scrollable">
+                <json-tree :data="dataError.response" :level="1"></json-tree>
+              </div>
+            </div>
+        </div>
+        <div
+            v-else>
+            Loading...
+        </div>
     </div>
 </template>
 <script>
@@ -21,6 +34,7 @@
         data() {
             return {
                 dataFetched: false,
+                dataError: false,
                 rows: null,
                 columns: [
                     {
@@ -55,7 +69,10 @@
         },
         watch: {
             cardType: function () {
-                this.rows = null;
+                this.dataFetched = false;
+                this.dataError = false;
+                this.rows = [];
+                this.columns[0].label = this.firstCap(this.cardType);
                 this.fetchData(1);
             }
         },
@@ -71,7 +88,8 @@
                 const nodeType = _this.nodeType;
                 const entity_curie = _this.identifier;
                 const annotationType = _this.cardType;
-                const baseURL = `https://api-dev.monarchinitiative.org/api/bioentity/${nodeType}/${entity_curie}/${annotationType}s/`;
+                const biolinkAnnotationSuffix = this.getBiolinkAnnotation(annotationType);
+                const baseURL = `https://api-dev.monarchinitiative.org/api/bioentity/${nodeType}/${entity_curie}/${biolinkAnnotationSuffix}`;
                 const params = {
                     fetch_objects: true,
                     rows: 1000,
@@ -83,6 +101,8 @@
                     const preRows = [];
                     const numFound = resp.data.objects.length;
                     _this.dataPacket = resp;
+                    // console.log('resp.data', baseURL, resp.data,
+                    //     this.identifier, this.cardType, this.nodeType);
                     resp.data.associations.forEach(function (element) {
                         const refs = [];
                         const objectCurie = element.object.id;
@@ -101,18 +121,23 @@
                     _this.dataFetched = true;
                     _this.rows = preRows;
                 })
-                    .catch((err) => {
-                        console.log(err);
-                    });
+                .catch((err) => {
+                    _this.dataError = err;
+                    console.log('BioLink Error', baseURL, err);
+                });
             },
             firstCap(val) {
                 return val.charAt(0).toUpperCase() + val.slice(1);
+            },
+            getBiolinkAnnotation(val) {
+                let result = `${val}s/`;
+                if (val === 'anatomy') {
+                    result = 'expression/anatomy';
+                }
+                return result;
             },
         },
     };
 </script>
 <style scoped>
-    [v-cloak] > {
-        display: none
-    }
 </style>
