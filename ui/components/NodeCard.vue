@@ -1,5 +1,5 @@
 <template>
-<div>
+<div class="node-card">
   <div
     class="card-pf card-pf-view card-pf-view-select card-pf-view-single-select"
     v-bind:class="{ active: isSelected }"
@@ -77,13 +77,12 @@ export default {
 
 $card-height: 150px;
 
-.card-pf {
-  border:2px solid blue;
+.node-card .card-pf {
   height: $card-height;
   max-height: $card-height;
 }
 
-.card-pf-view .card-pf-top-element img.card-pf-icon-circle {
+.node-card .card-pf-view .card-pf-top-element img.card-pf-icon-circle {
   width:40px;
   height:40px;
 }

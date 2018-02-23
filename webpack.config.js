@@ -324,6 +324,7 @@ const config = {
     modules: ['node_modules'],
     alias: {
       'monarchSCSS': (USE_SPA ? '../css/monarch-patternfly.scss' : '../css/monarch.scss'),
+      'monarchHomeCSS': (USE_SPA ? '../css/empty.css' : '../css/monarch-home.css'),
       // 'patternfly$': 'patternfly/dist/sass/patternfly',
       'bootstrap$': path.join(__dirname, 'node_modules/bootstrap-sass/assets/stylesheets/bootstrap/'),
       'vue$': 'vue/dist/vue.min.js',  // 'vue/dist/vue.esm.js',

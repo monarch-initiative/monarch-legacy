@@ -101,10 +101,37 @@ const main = () => {
   Vue.component('node-card', NodeCard);
   Vue.component('table-view', TableView);
 
+  const availableCardTypes = [
+    'anatomy',
+    'cellline',
+    'disease',
+    'function',
+    'gene',
+    'genotype',
+    'homolog',
+    'interaction',
+    'literature',
+    'model',
+    'ortholog-phenotype',
+    'ortholog-disease',
+    'pathway',
+    'phenotype',
+    'variant',
+  ];
+
+  const nodeRoutes = availableCardTypes.map(nodeType =>
+    {
+      return {
+        path: `/${nodeType}/:id`,
+        name: `/Node${nodeType}`,
+        component: Node
+      };
+    });
 
   router = new Router({
     mode: 'history',
     routes: [
+      ...nodeRoutes,
       {
         path: '/',
         name: 'Home',
@@ -114,26 +141,6 @@ const main = () => {
         path: '/page/aboutSPA',
         name: 'AboutSPA',
         component: About
-      },
-      {
-        path: '/disease/:id',
-        name: 'DiseaseNode',
-        component: Node
-      },
-      {
-        path: '/phenotype/:id',
-        name: 'PhenotypeNode',
-        component: Node
-      },
-      {
-        path: '/gene/:id',
-        name: 'GeneNode',
-        component: Node
-      },
-      {
-        path: '/model/:id',
-        name: 'ModelNode',
-        component: Node
       },
       {
         path: '/*',

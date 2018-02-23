@@ -41,8 +41,9 @@ function navbar_search_init(in_search_id, in_form_id){
         function(event){
             event.preventDefault();
             event.stopPropagation();
-
-            var val = jQuery(search_elt).val();
+            var element = jQuery(search_elt);
+            var val = element.val();
+            element.autocomplete('close');
             var newurl = "/search/"+ encodeURIComponent(val);
 
             if (window.vueRouter) {

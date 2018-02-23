@@ -28,7 +28,7 @@
 
 
 function loaderBody() {
-  var bodyDOM = document.getElementById('monarch-body');
+  var bodyDOM = document.getElementsByTagName('body')[0];
   bodyDOM.classList.remove('monarch-cloak');
   InitMonarchBBOPHandler();
   InitMonarchBBOPLinker();
@@ -39,9 +39,6 @@ function loaderBody() {
   // InitFacetFilters();
 }
     </script>
-<!--   <link rel="stylesheet" type="text/css" href="https://cdnjs.cloudflare.com/ajax/libs/patternfly/3.24.0/css/patternfly.min.css">
-  <link rel="stylesheet" type="text/css" href="https://cdnjs.cloudflare.com/ajax/libs/patternfly/3.24.0/css/patternfly-additions.min.css">
- -->
 </head>
 
 <body
