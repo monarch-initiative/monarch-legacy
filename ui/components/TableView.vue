@@ -1,129 +1,181 @@
 <template>
     <div id="TableView">
-        <div
-            v-if="dataFetched">
+        <div v-if="dataFetched">
             <vue-good-table
-                    @pageChanged="onPageChange"
                     id="table-style"
                     :columns="columns"
                     :rows="rows"
                     :paginate="true"
                     :lineNumbers="true"
-                    styleClass="table condensed table-bordered"/>
+                    styleClass="table condensed table-bordered table-striped">
+                <template slot="table-row" slot-scope="props">
+                    <td>
+                        <router-link :to="'/' + props.row.objectCurie">
+                            {{props.row.objectLabel}}
+                        </router-link>
+                    </td>
+                    <td>{{ props.row.evidenceType }}</td>
+                    <td>
+                        <div v-if="props.row.references && props.row.references.length === 1"
+                             class="row">
+                            <div class="col-md-2">(1)</div>
+                            <div class="col-md-8">
+                                <a v-bind:href="props.row.references[0].id | pubHref">
+                                    {{ props.row.references[0].id }}
+                                </a>
+                            </div>
+                            <div class="col-md-2"></div>
+                        </div>
+                        <div v-else-if="props.row.references && props.row.references.length > 1"
+                             class="row">
+                            <div class="col-md-2">({{props.row.references.length}})</div>
+                            <div class="col-md-8">
+                                <div v-if="refExpanded && currentRow === props.index">
+                                    <a v-for="ref in props.row.references"
+                                       v-bind:href="ref.id | pubHref">
+                                        {{ref.id }}
+                                    </a>
+                                </div>
+                                <div v-else>
+                                    <a v-bind:href="props.row.references[0].id | pubHref">
+                                        {{ props.row.references[0].id }}
+                                    </a>
+                                </div>
+                            </div>
+                            <div class="col-md-2">
+                                <div v-on:click="expandReferences(props.index)" class="glyphicon"
+                                     v-bind:class="{
+                                        'glyphicon-chevron-right': !refExpanded,
+                                        'glyphicon-chevron-down': refExpanded && currentRow === props.index,
+                                        }"
+                                >
+                                </div>
+                            </div>
+                        </div>
+                        <div v-else
+                             class="row">
+                            <div class="col-md-2">(0)</div>
+                            <div class="col-md-8"></div>
+                            <div class="col-md-2"></div>
+                        </div>
+                    </td>
+                    <td>{{ props.row.source }}</td>
+                </template>
+            </vue-good-table>
         </div>
-        <div
-            v-else-if="dataError">
+        <div v-else-if="dataError">
             <h3>BioLink Error</h3>
             <div class="row">
-              <div class="col-xs-12 pre-scrollable">
-                <json-tree :data="dataError.response" :level="1"></json-tree>
-              </div>
+                <div class="col-md-12 pre-scrollable">
+                    <json-tree :data="dataError.response" :level="1"></json-tree>
+                </div>
             </div>
         </div>
-        <div
-            v-else>
+        <div v-else>
             Loading...
         </div>
     </div>
 </template>
+
+
 <script>
     import axios from 'axios';
+    import VueGoodTable from "../../node_modules/vue-good-table/src/components/Table.vue";
+
     export default {
+        components: {VueGoodTable},
         name: 'TableView',
         props: ['identifier', 'cardType', 'nodeType'],
         data() {
             return {
+                currentRow: null,
+                refExpanded: false,
+                dataPacket: '',
                 dataFetched: false,
                 dataError: false,
-                rows: null,
+                rows: [],
                 columns: [
                     {
                         label: this.firstCap(this.cardType),
                         field: 'annoType',
-                        html: true,
                         width: '40%',
                     },
                     {
                         label: 'Evidence Type',
                         field: 'evidenceType',
-                        width: '20%',
+                        width: '15%',
                     },
                     {
                         label: 'Reference',
                         field: 'reference',
-                        html: true,
-                        width: '20%',
+                        width: '30%',
                     },
                     {
                         label: 'Source',
                         field: 'source',
-                        html: true,
-                        width: '20%',
+                        width: '15%',
                     },
                 ],
             };
         },
 //        will need to add watch or updated
         mounted() {
-            this.fetchData(1);
+            this.fetchData();
         },
         watch: {
-            cardType: function () {
+            cardType () {
                 this.dataFetched = false;
                 this.dataError = false;
-                this.rows = [];
                 this.columns[0].label = this.firstCap(this.cardType);
-                this.fetchData(1);
-            }
-        },
-
-        methods: {
-            onPageChange: function (evt) {
-                // { currentPage: 1, currentPerPage: 10, total: 5 }
-                this.fetchData(evt.currentPage * evt.currentPerPage);
-                console.log(evt);
+                this.fetchData();
             },
-            fetchData(start) {
-                const _this = this;
-                const nodeType = _this.nodeType;
-                const entity_curie = _this.identifier;
-                const annotationType = _this.cardType;
-                const biolinkAnnotationSuffix = this.getBiolinkAnnotation(annotationType);
-                const baseURL = `https://api-dev.monarchinitiative.org/api/bioentity/${nodeType}/${entity_curie}/${biolinkAnnotationSuffix}`;
+            dataPacket () {
+                this.populateRows();
+            },
+        },
+        filters: {
+            pubHref: function (curie) {
+                const identifier = curie.split(/[:]+/).pop();
+                return `https://www.ncbi.nlm.nih.gov/pubmed/${identifier}`;
+            },
+        },
+        methods: {
+            expandReferences: function (index) {
+                this.currentRow = index;
+                this.refExpanded = !this.refExpanded;
+            },
+            fetchData() {
+                const biolinkAnnotationSuffix = this.getBiolinkAnnotation(this.cardType);
+                const baseURL = `https://api-dev.monarchinitiative.org/api/bioentity/${this.nodeType}/${this.identifier}/${biolinkAnnotationSuffix}`;
                 const params = {
                     fetch_objects: true,
                     rows: 1000,
-//                    start: start, vue-good-table does not support providing the total number of hits right now
                 };
+                const _this = this;
                 axios.get(baseURL, {
                     params: params,
                 }).then((resp) => {
-                    const preRows = [];
-                    const numFound = resp.data.objects.length;
                     _this.dataPacket = resp;
-                    // console.log('resp.data', baseURL, resp.data,
-                    //     this.identifier, this.cardType, this.nodeType);
-                    resp.data.associations.forEach(function (element) {
-                        const refs = [];
-                        const objectCurie = element.object.id;
-                        if (element.publications) {
-                            element.publications.forEach(function (data) {
-                                refs.push(`<a href='http://www.ncbi.nlm.nih.gov/pubmed/${data.id}'>${data.id}</a></br>`);
-                            });
-                        }
-                        preRows.push({
-                            annoType: `<a href='/${annotationType}/${objectCurie}'>${element.object.label}</a>`,
-                            evidenceType: 'TODO',
-                            reference: refs.join('\n'),
-                            source: 'TODO',
-                        })
-                    });
                     _this.dataFetched = true;
-                    _this.rows = preRows;
                 })
-                .catch((err) => {
-                    _this.dataError = err;
-                    console.log('BioLink Error', baseURL, err);
+                    .catch((err) => {
+                        _this.dataError = err;
+                        console.log('BioLink Error', baseURL, err);
+                    });
+            },
+            populateRows() {
+                const _this = this;
+                _this.rows = [];
+                this.dataPacket.data.associations.forEach(function (element) {
+                    const objectCurie = element.object.id;
+                    _this.rows.push({
+                        references: element.publications,
+                        annotationType: _this.cardType,
+                        evidenceType: 'TODO',
+                        objectCurie: objectCurie,
+                        source: 'TODO',
+                        objectLabel: element.object.label,
+                    })
                 });
             },
             firstCap(val) {
