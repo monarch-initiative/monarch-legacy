@@ -7,7 +7,7 @@
                     :rows="rows"
                     :paginate="true"
                     :lineNumbers="true"
-                    styleClass="table condensed table-bordered table-striped">
+                    styleClass="table condensed table-bordered">
                 <template slot="table-row" slot-scope="props">
                     <td>
                         <router-link :to="'/' + props.row.objectCurie">
