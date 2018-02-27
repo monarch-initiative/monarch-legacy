@@ -8,58 +8,77 @@
                     :paginate="true"
                     :lineNumbers="true"
                     styleClass="table condensed table-bordered">
-                <template slot="table-row" slot-scope="props">
+                <template slot="table-row"
+                          slot-scope="props"
+                >
                     <td>
-                        <router-link :to="'/' + props.row.objectCurie">
-                            {{props.row.objectLabel}}
-                        </router-link>
-                    </td>
-                    <td>{{ props.row.evidenceType }}</td>
-                    <td>
-                        <div v-if="props.row.references && props.row.references.length === 1"
-                             class="row">
-                            <div class="col-md-2">(1)</div>
-                            <div class="col-md-8">
-                                <a v-bind:href="props.row.references[0].id | pubHref">
-                                    {{ props.row.references[0].id }}
-                                </a>
-                            </div>
-                            <div class="col-md-2"></div>
+                        <div v-bind:class="{
+                        'td-collapsed': currentRow != props.index,
+                        }">
+                            <router-link :to="'/' + props.row.objectCurie">
+                                {{props.row.objectLabel}}
+                            </router-link>
                         </div>
-                        <div v-else-if="props.row.references && props.row.references.length > 1"
-                             class="row">
-                            <div class="col-md-2">({{props.row.references.length}})</div>
-                            <div class="col-md-8">
-                                <div v-if="refExpanded && currentRow === props.index">
-                                    <a v-for="ref in props.row.references"
-                                       v-bind:href="ref.id | pubHref">
-                                        {{ref.id }}
-                                    </a>
-                                </div>
-                                <div v-else>
-                                    <a v-bind:href="props.row.references[0].id | pubHref">
-                                        {{ props.row.references[0].id }}
+                    </td>
+                    <td>
+                        <div v-bind:class="{'td-collapsed': currentRow != props.index}"
+                             v-if="props.row.evidenceType">
+                            <div>
+                                ({{props.row.evidenceType.length}})
+                                <div style="float:right; margin-right:10px"
+                                     v-for="evidence in props.row.evidenceType">
+                                    <a v-bind:href="evidence.id | eviHref">
+                                        {{ evidence.id }}
                                     </a>
                                 </div>
                             </div>
-                            <div class="col-md-2">
-                                <div v-on:click="expandReferences(props.index)" class="glyphicon"
-                                     v-bind:class="{
-                                        'glyphicon-chevron-right': !refExpanded,
-                                        'glyphicon-chevron-down': refExpanded && currentRow === props.index,
-                                        }"
-                                >
+                        </div>
+                        <div v-else>
+                            (0)
+                        </div>
+                    </td>
+                    <td>
+                        <div v-bind:class="{'td-collapsed': currentRow != props.index}"
+                             v-if="props.row.references">
+                            <div>
+                                ({{props.row.references.length}})
+                                <div style="float:right"
+                                     v-for="ref in props.row.references">
+                                    <div style="width:120px; text-align: left">
+                                        <a v-bind:href="ref.id | pubHref">
+                                            {{ref.id }}
+                                        </a>
+                                    </div>
                                 </div>
                             </div>
                         </div>
-                        <div v-else
-                             class="row">
-                            <div class="col-md-2">(0)</div>
-                            <div class="col-md-8"></div>
-                            <div class="col-md-2"></div>
+                        <div v-else>
+                            (0)
                         </div>
                     </td>
-                    <td>{{ props.row.source }}</td>
+                    <td>
+                        <div v-bind:class="{'td-collapsed': currentRow != props.index}"
+                             v-if="props.row.source">
+                            <div>
+                                ({{props.row.source.length}})
+                                <div style="float:right"
+                                     v-for="source in props.row.source">
+                                    <a v-bind:href="source">
+                                        {{source | sourceHref}}
+                                    </a>
+                                </div>
+                            </div>
+                        </div>
+                    </td>
+                    <td>
+                        <div class="glyphicon td-collapsed"
+                             v-on:click="expandRow(props.index)"
+                             v-bind:class="{
+                                 'glyphicon-expand': props.index !== currentRow && !rowExpanded,
+                                 'glyphicon-collapse-down': props.index == currentRow && rowExpanded,
+                             }"
+                        ></div>
+                    </td>
                 </template>
             </vue-good-table>
         </div>
@@ -80,16 +99,14 @@
 
 <script>
     import axios from 'axios';
-    import VueGoodTable from "../../node_modules/vue-good-table/src/components/Table.vue";
 
     export default {
-        components: {VueGoodTable},
         name: 'TableView',
         props: ['identifier', 'cardType', 'nodeType'],
         data() {
             return {
                 currentRow: null,
-                refExpanded: false,
+                rowExpanded: false,
                 dataPacket: '',
                 dataFetched: false,
                 dataError: false,
@@ -98,38 +115,37 @@
                     {
                         label: this.firstCap(this.cardType),
                         field: 'annoType',
-                        width: '40%',
+                        width: '50%',
                     },
                     {
                         label: 'Evidence Type',
                         field: 'evidenceType',
-                        width: '15%',
+                        width: '18%',
                     },
                     {
                         label: 'Reference',
                         field: 'reference',
-                        width: '30%',
+                        width: '20%',
                     },
                     {
                         label: 'Source',
                         field: 'source',
-                        width: '15%',
+                        width: '12%',
                     },
                 ],
             };
         },
-//        will need to add watch or updated
         mounted() {
             this.fetchData();
         },
         watch: {
-            cardType () {
+            cardType() {
                 this.dataFetched = false;
                 this.dataError = false;
                 this.columns[0].label = this.firstCap(this.cardType);
                 this.fetchData();
             },
-            dataPacket () {
+            dataPacket() {
                 this.populateRows();
             },
         },
@@ -137,6 +153,15 @@
             pubHref: function (curie) {
                 const identifier = curie.split(/[:]+/).pop();
                 return `https://www.ncbi.nlm.nih.gov/pubmed/${identifier}`;
+            },
+            eviHref: function (curie) {
+                const identifier = curie.split(/[:]+/).pop();
+                return `http://purl.obolibrary.org/obo/ECO_${identifier}`;
+            },
+            sourceHref: function (url) {
+                const file = url.split(/[/]+/).pop();
+                const name = file.split(/[.]+/)[0];
+                return name.toUpperCase();
             },
         },
         methods: {
@@ -167,13 +192,12 @@
                 const _this = this;
                 _this.rows = [];
                 this.dataPacket.data.associations.forEach(function (element) {
-                    const objectCurie = element.object.id;
                     _this.rows.push({
                         references: element.publications,
                         annotationType: _this.cardType,
-                        evidenceType: 'TODO',
-                        objectCurie: objectCurie,
-                        source: 'TODO',
+                        evidenceType: _this.parseEvidence(element.evidence_graph.nodes),
+                        objectCurie: element.object.id,
+                        source: element.provided_by,
                         objectLabel: element.object.label,
                     })
                 });
@@ -188,8 +212,32 @@
                 }
                 return result;
             },
+            parseEvidence(evidenceList) {
+                if (evidenceList) {
+                    let evidence = evidenceList.filter(elem => elem.id.includes('ECO'));
+                    return evidence;
+                } else {
+                    return null;
+                }
+
+            },
+            expandRow(index) {
+                this.rowExpanded = !this.rowExpanded;
+                if (this.currentRow || this.currentRow === 0) {
+                    console.log(index);
+                    this.currentRow = null;
+                }
+                else {
+                    this.currentRow = index;
+                }
+            },
         },
     };
 </script>
 <style scoped>
+    .td-collapsed {
+        height: 20px;
+        overflow: hidden;
+    }
+
 </style>
