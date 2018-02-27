@@ -2,7 +2,7 @@
     <div id="TableView">
         <div v-if="dataFetched">
             <vue-good-table
-                    id="table-style"
+                    :onClick="expandRow"
                     :columns="columns"
                     :rows="rows"
                     :paginate="true"
@@ -23,15 +23,14 @@
                     <td>
                         <div v-bind:class="{'td-collapsed': currentRow != props.index}"
                              v-if="props.row.evidenceType">
-                            <div>
-                                ({{props.row.evidenceType.length}})
-                                <div style="float:right; margin-right:10px"
-                                     v-for="evidence in props.row.evidenceType">
+                            <span class="evi-length">({{props.row.evidenceType.length}})</span>
+                            <ul class="evi-list">
+                                <li v-for="evidence in props.row.evidenceType">
                                     <a v-bind:href="evidence.id | eviHref">
-                                        {{ evidence.id }}
+                                        {{ evidence.lbl }}
                                     </a>
-                                </div>
-                            </div>
+                                </li>
+                            </ul>
                         </div>
                         <div v-else>
                             (0)
@@ -42,9 +41,9 @@
                              v-if="props.row.references">
                             <div>
                                 ({{props.row.references.length}})
-                                <div style="float:right"
+                                <div class="float-right"
                                      v-for="ref in props.row.references">
-                                    <div style="width:120px; text-align: left">
+                                    <div class="ref-id">
                                         <a v-bind:href="ref.id | pubHref">
                                             {{ref.id }}
                                         </a>
@@ -61,7 +60,7 @@
                              v-if="props.row.source">
                             <div>
                                 ({{props.row.source.length}})
-                                <div style="float:right"
+                                <div class="source-div"
                                      v-for="source in props.row.source">
                                     <a v-bind:href="source">
                                         {{source | sourceHref}}
@@ -70,22 +69,13 @@
                             </div>
                         </div>
                     </td>
-                    <td>
-                        <div class="glyphicon td-collapsed"
-                             v-on:click="expandRow(props.index)"
-                             v-bind:class="{
-                                 'glyphicon-expand': props.index !== currentRow && !rowExpanded,
-                                 'glyphicon-collapse-down': props.index == currentRow && rowExpanded,
-                             }"
-                        ></div>
-                    </td>
                 </template>
             </vue-good-table>
         </div>
         <div v-else-if="dataError">
             <h3>BioLink Error</h3>
             <div class="row">
-                <div class="col-md-12 pre-scrollable">
+                <div class="col-xs-12 pre-scrollable">
                     <json-tree :data="dataError.response" :level="1"></json-tree>
                 </div>
             </div>
@@ -95,7 +85,6 @@
         </div>
     </div>
 </template>
-
 
 <script>
     import axios from 'axios';
@@ -115,12 +104,12 @@
                     {
                         label: this.firstCap(this.cardType),
                         field: 'annoType',
-                        width: '50%',
+                        width: '34%',
                     },
                     {
                         label: 'Evidence Type',
                         field: 'evidenceType',
-                        width: '18%',
+                        width: '34%',
                     },
                     {
                         label: 'Reference',
@@ -150,26 +139,26 @@
             },
         },
         filters: {
-            pubHref (curie) {
+            pubHref(curie) {
                 const identifier = curie.split(/[:]+/).pop();
                 return `https://www.ncbi.nlm.nih.gov/pubmed/${identifier}`;
             },
-            eviHref (curie) {
+            eviHref(curie) {
                 const identifier = curie.split(/[:]+/).pop();
                 return `http://purl.obolibrary.org/obo/ECO_${identifier}`;
             },
-            sourceHref (url) {
+            sourceHref(url) {
                 const file = url.split(/[/]+/).pop();
                 const name = file.split(/[.]+/)[0];
                 return name.toUpperCase();
             },
         },
         methods: {
-            expandReferences (index) {
+            expandReferences(index) {
                 this.currentRow = index;
                 this.refExpanded = !this.refExpanded;
             },
-            fetchData () {
+            fetchData() {
                 const biolinkAnnotationSuffix = this.getBiolinkAnnotation(this.cardType);
                 const baseURL = `https://api-dev.monarchinitiative.org/api/bioentity/${this.nodeType}/${this.identifier}/${biolinkAnnotationSuffix}`;
                 const params = {
@@ -188,7 +177,7 @@
                         console.log('BioLink Error', baseURL, err);
                     });
             },
-            populateRows () {
+            populateRows() {
                 const _this = this;
                 _this.rows = [];
                 this.dataPacket.data.associations.forEach(function (element) {
@@ -202,17 +191,17 @@
                     })
                 });
             },
-            firstCap (val) {
+            firstCap(val) {
                 return val.charAt(0).toUpperCase() + val.slice(1);
             },
-            getBiolinkAnnotation (val) {
+            getBiolinkAnnotation(val) {
                 let result = `${val}s/`;
                 if (val === 'anatomy') {
                     result = 'expression/anatomy';
                 }
                 return result;
             },
-            parseEvidence (evidenceList) {
+            parseEvidence(evidenceList) {
                 if (evidenceList) {
                     let evidence = evidenceList.filter(elem => elem.id.includes('ECO'));
                     return evidence;
@@ -221,7 +210,7 @@
                 }
 
             },
-            expandRow (index) {
+            expandRow(row, index) {
                 this.rowExpanded = !this.rowExpanded;
                 if (this.currentRow || this.currentRow === 0) {
                     console.log(index);
@@ -240,4 +229,27 @@
         overflow: hidden;
     }
 
+    .evi-length {
+        width: 5%;
+    }
+
+    .evi-list {
+        text-align: left;
+        width: 90%;
+        float: right;
+    }
+
+    .float-right {
+        float: right;
+    }
+
+    .ref-id {
+        width: 120px;
+        text-align: left;
+    }
+
+    .source-div {
+        float: right;
+        margin-right: 5px;
+    }
 </style>
