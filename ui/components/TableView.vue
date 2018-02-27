@@ -150,26 +150,26 @@
             },
         },
         filters: {
-            pubHref: function (curie) {
+            pubHref (curie) {
                 const identifier = curie.split(/[:]+/).pop();
                 return `https://www.ncbi.nlm.nih.gov/pubmed/${identifier}`;
             },
-            eviHref: function (curie) {
+            eviHref (curie) {
                 const identifier = curie.split(/[:]+/).pop();
                 return `http://purl.obolibrary.org/obo/ECO_${identifier}`;
             },
-            sourceHref: function (url) {
+            sourceHref (url) {
                 const file = url.split(/[/]+/).pop();
                 const name = file.split(/[.]+/)[0];
                 return name.toUpperCase();
             },
         },
         methods: {
-            expandReferences: function (index) {
+            expandReferences (index) {
                 this.currentRow = index;
                 this.refExpanded = !this.refExpanded;
             },
-            fetchData() {
+            fetchData () {
                 const biolinkAnnotationSuffix = this.getBiolinkAnnotation(this.cardType);
                 const baseURL = `https://api-dev.monarchinitiative.org/api/bioentity/${this.nodeType}/${this.identifier}/${biolinkAnnotationSuffix}`;
                 const params = {
@@ -188,7 +188,7 @@
                         console.log('BioLink Error', baseURL, err);
                     });
             },
-            populateRows() {
+            populateRows () {
                 const _this = this;
                 _this.rows = [];
                 this.dataPacket.data.associations.forEach(function (element) {
@@ -202,17 +202,17 @@
                     })
                 });
             },
-            firstCap(val) {
+            firstCap (val) {
                 return val.charAt(0).toUpperCase() + val.slice(1);
             },
-            getBiolinkAnnotation(val) {
+            getBiolinkAnnotation (val) {
                 let result = `${val}s/`;
                 if (val === 'anatomy') {
                     result = 'expression/anatomy';
                 }
                 return result;
             },
-            parseEvidence(evidenceList) {
+            parseEvidence (evidenceList) {
                 if (evidenceList) {
                     let evidence = evidenceList.filter(elem => elem.id.includes('ECO'));
                     return evidence;
@@ -221,7 +221,7 @@
                 }
 
             },
-            expandRow(index) {
+            expandRow (index) {
                 this.rowExpanded = !this.rowExpanded;
                 if (this.currentRow || this.currentRow === 0) {
                     console.log(index);
