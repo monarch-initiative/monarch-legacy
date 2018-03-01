@@ -105,6 +105,8 @@ const extractSass = new ExtractTextPlugin({
 });
 plugins.push(extractSass);
 plugins.push(new webpack.BannerPlugin(BANNER));
+plugins.push(new webpack.HotModuleReplacementPlugin());
+plugins.push(new webpack.NamedModulesPlugin()); // HMR shows correct file names in console on update
 plugins.push(new webpack.DefinePlugin({
   // Lots of library source code (like React) are based on process.env.NODE_ENV
   // (all development related code is wrapped inside a conditional that can be dropped if equal to "production"
@@ -142,10 +144,10 @@ if (NODE_ENV !== 'production') {
 if (MODE_DEV_SERVER) {
   // webpack-dev-server mode
   if(LOCALHOST) {
-    log.info('webpack', 'Check http://localhost:8088');
+    log.info('webpack', 'Check http://localhost:8081');
   }
   else {
-    log.info('webpack', 'Check http://' + myLocalIp() + ':8088');
+    log.info('webpack', 'Check http://' + myLocalIp() + ':8081');
   }
 
   // https://github.com/1337programming/webpack-browser-plugin
@@ -175,7 +177,7 @@ else {
 
 const preLoaders = [];
 
-if (LINTER) {
+if (LINTER && !ANALYZE) {
   log.info('webpack', 'LINTER ENABLED');
   preLoaders.push({
     test: /\.js$/,
@@ -212,13 +214,24 @@ const config = {
   cache: true,
   devtool: OPTIMIZE ? false : 'sourcemap',
   module: {
+    noParse: [
+      path.resolve(__dirname, 'gen/bbop.min.js'),
+      path.resolve(__dirname, 'node_modules/bootstrap/dist/js/bootstrap.min.js'),
+      path.resolve(__dirname, 'node_modules/underscore/underscore-min.js'),
+      path.resolve(__dirname, 'node_modules/d3/d3.min.js'),
+      path.resolve(__dirname, 'node_modules/jquery/dist/jquery.min.js'),
+      // path.resolve(__dirname, 'node_modules/phenogrid/dist/phenogrid-bundle.js'),
+      path.resolve(__dirname, 'gen/phenogrid.min.js'),
+    ],
     rules: [
       ...preLoaders,
 
       {
         test: /\.vue$/,
         loader: 'vue-loader',
-
+        include: [
+          path.resolve('ui'),
+          path.resolve('node_modules/vue-json-tree/src/')],
         options: {
           esModule: true,
           loaders: {
@@ -243,7 +256,12 @@ const config = {
 
       {
         test: /\.js$/,
-        exclude: /node_modules/,
+        // exclude: /node_modules/,
+        include: [
+          path.resolve('ui'),
+          path.resolve('js'),
+          path.resolve('node_modules/q'),
+          path.resolve('node_modules/webpack-dev-server/client')],
         loader: 'babel-loader'
       },
       {
@@ -323,38 +341,69 @@ const config = {
   resolve: {
     modules: ['node_modules'],
     alias: {
+      'bbop': path.join(__dirname, 'gen/bbop.min.js'),
+      'jquery': path.join(__dirname, 'node_modules/jquery/dist/jquery.min.js'),
+      'jquery-ui': path.join(__dirname, 'node_modules/jquery-ui/'),
+      'd3': path.join(__dirname, 'node_modules/d3/d3.min.js'),
       'monarchSCSS': (USE_SPA ? '../css/monarch-patternfly.scss' : '../css/monarch.scss'),
       'monarchHomeCSS': (USE_SPA ? '../css/empty.css' : '../css/monarch-home.css'),
       // 'patternfly$': 'patternfly/dist/sass/patternfly',
       'bootstrap$': path.join(__dirname, 'node_modules/bootstrap-sass/assets/stylesheets/bootstrap/'),
       'vue$': 'vue/dist/vue.min.js',  // 'vue/dist/vue.esm.js',
+      'vue-good-table$': 'vue-good-table/dist/vue-good-table.min.js',
       'ringo/httpclient': path.join(__dirname, "js/nop.js"),
-      'phenogrid': path.join(__dirname, 'node_modules/phenogrid/js/phenogrid.js')
+      'phenogrid': path.join(__dirname, 'gen/phenogrid.min.js'),
+      // 'phenogrid': path.join(__dirname, 'node_modules/phenogrid/js/phenogrid.js')
+      // 'phenogrid': path.join(__dirname, 'node_modules/phenogrid/dist/phenogrid-bundle.js')
     }
   }
 };
+
+
 
 if (USE_SPA) {
   config.entry.spa = './ui/main.js';
   config.entry.spastyle = './ui/style/main.scss';
   config.resolve.extensions = ['.js', '.vue', '.json'];
-  config.resolve.alias['vue$'] = 'vue/dist/vue.esm.js';
+  // config.resolve.alias['vue$'] = 'vue/dist/vue.esm.js';
   config.resolve.alias['@'] = path.resolve('ui');
 }
 
 if (MODE_DEV_SERVER) {
   config.devServer = {
-    host: LOCALHOST ? 'localhost' : myLocalIp(),
-    watchContentBase: true,
-    hot: false,
-    hotOnly: false,
-    inline: true,
-    contentBase: './',
+    clientLogLevel: 'info', // 'warning',
     historyApiFallback: true,
+    hot: true,
+    inline: true,
+    contentBase: false, // since we use CopyWebpackPlugin.
+    compress: true,
+    host: LOCALHOST ? 'localhost' : myLocalIp(),
+    open: false,
+    overlay: true,  // { warnings: false, errors: true },
+    publicPath: '/',
+    quiet: true, // necessary for FriendlyErrorsPlugin
+    watchOptions: {
+      poll: false,
+    },
     headers: {
       "Access-Control-Allow-Origin": "http://localhost:8080",
       "Access-Control-Allow-Credentials": "true"
     }
+
+
+
+    // clientLogLevel: 'warning',
+    // host: LOCALHOST ? 'localhost' : myLocalIp(),
+    // watchContentBase: true,
+    // hot: false,
+    // hotOnly: false,
+    // inline: true,
+    // contentBase: './',
+    // historyApiFallback: true,
+    // headers: {
+    //   "Access-Control-Allow-Origin": "http://localhost:8080",
+    //   "Access-Control-Allow-Credentials": "true"
+    // }
   };
   config.devServer.proxy = {
     '*.json': {

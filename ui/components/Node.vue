@@ -1,9 +1,20 @@
 <template>
 <div id="selenium_id_content">
 
-<div xclass="layout-pf layout-pf-fixed">
+<div>
   <div class="nav-pf-vertical nav-pf-vertical-with-sub-menus">
     <ul class="list-group">
+      <li class="list-group-item list-group-item-node">
+        <a
+          target="_blank"
+          v-bind:href="'http://beta.monarchinitiative.org' + path">
+          <img
+            class="entity-type-icon"
+            :src="icons[nodeType]"/>
+          <span class="list-group-item-value">{{labels[nodeType]}}</span>
+        </a>
+      </li>
+
       <li class="list-group-item list-group-item-squat">
         <a
           v-on:click="toggleSidebar()"
@@ -49,11 +60,14 @@
     v-bind:class="{ active: isActive }"
     v-on:click="toggleSidebar()">
   </div>
-  <nav id="sidebar" v-bind:class="{ active: isActive }">
+  <nav
+    id="sidebar"
+    v-bind:class="{ active: isActive }">
     <div class="sidebar-content">
       <div class="row superclass" v-for="c in superclasses">
         <div class="col-xs-12">
-          <router-link :to="'/' + nodeCategory + '/' + c.id">
+          <router-link
+            :to="'/' + nodeCategory + '/' + c.id">
             {{c.label}}
           </router-link>
         </div>
@@ -67,7 +81,8 @@
 
       <div class="row subclass" v-for="c in subclasses">
         <div class="col-xs-12">
-          <router-link :to="'/' + nodeCategory + '/' + c.id">
+          <router-link
+            :to="'/' + nodeCategory + '/' + c.id">
             {{c.label}}
           </router-link>
         </div>
@@ -79,19 +94,13 @@
     class="title-bar">
     <div
       v-if="!node">
-      <h4 class="text-center">Loading Data…</h4>
+      <h4 class="text-center">Loading Data for {{labels[nodeType]}}: {{nodeID}}</h4>
     </div>
 
     <div
-      v-if="node">
+      v-else>
 
       <span><b>{{nodeLabel}}</b> ({{node.id}})</span>
-      <a
-        target="_blank"
-        class="node-icon"
-        v-bind:href="'http://beta.monarchinitiative.org' + path">
-        <img :src="nodeIcon"/>
-      </a>
       <br>
       <span><b>AKA:</b>&nbsp;</span>
       <span class="synonym" v-for="s in synonyms">{{s}}</span>
@@ -110,6 +119,64 @@
           {{nodeDefinition}}
         </div>
       </div>
+
+      <div class="col-xs-12">
+        <b>References:</b>&nbsp;
+        <span
+          v-for="r in xrefs">
+          <router-link
+            v-if="r.url.indexOf('/') === 0"
+            :to="r.url">
+            {{r.label}}
+          </router-link>
+
+          <a
+            v-else-if="r.url && r.blank"
+            :href="r.url"
+            target="_blank">
+            {{r.label}}
+          </a>
+          <a
+            v-else-if="r.url"
+            :href="r.url">
+            {{r.label}}
+          </a>
+
+          <span
+            v-else>
+            {{r.label}}
+          </span>
+        </span>
+        <br>
+        <span
+          v-if="inheritance">
+          <b>Heritability:</b>&nbsp;{{inheritance}}
+        </span>
+      </div>
+
+      <div class="col-xs-12">
+        <b>Equivalent IDs:</b>&nbsp;
+
+        <span
+          v-for="r in equivalentClasses">
+          <router-link
+            v-if="r.id"
+            :to="'/resolve/' + r.id">
+            {{r.label || r.id}}
+          </router-link>
+
+          <span
+            v-else>
+            {{r.label}}
+          </span>
+        </span>
+        <br>
+        <span
+          v-if="inheritance">
+          <b>Heritability:</b>&nbsp;{{inheritance}}
+        </span>
+      </div>
+
     </div>
 
     <div
@@ -294,6 +361,7 @@ export default {
       superclasses: null,
       subclasses: null,
       synonyms: null,
+      inheritance: null,
       contentScript: '',
       contentBody: '',
       progressTimer: null,
@@ -303,7 +371,6 @@ export default {
       labels: labels,
       nodeID: null,
       nodeDefinition: null,
-      nodeCategory: null,
       nodeLabel: null,
       nodeIcon: null,
       nodeCategory: null,
@@ -355,6 +422,8 @@ export default {
     parseNodeContent(content) {
       var that = this;
       this.node = JSON.parse(content);
+      // console.log('parseNodeContent', this.node);
+
       var equivalentClasses = [];
       var superclasses = [];
       var subclasses = [];
@@ -388,6 +457,8 @@ export default {
       });
 
       this.synonyms = this.node.synonyms;
+      this.xrefs = this.node.xrefs;
+      this.inheritance = this.node.inheritance ? this.node.inheritance[0] : null;
       this.nodeDefinition = this.node.definitions ? this.node.definitions[0] : '???definitions???';
       this.nodeLabel = this.node.label;
       this.nodeCategory = this.node.categories ? this.node.categories[0].toLowerCase() : this.nodeType;
@@ -528,7 +599,7 @@ $title-bar-height: 70px;
 #sidebar {
   width: $sidebar-content-width;
   position: fixed;
-  top: ($navbar-height + 45);
+  top: ($navbar-height + 80);
   left: (-$sidebar-content-width);
   min-height: 40px;
   z-index: 1050;
@@ -688,17 +759,11 @@ $title-bar-height: 70px;
   height:100%;
 }
 
-a.node-icon {
-  top: 5px;
-  right: 5px;
-  position: absolute;
+img.entity-type-icon {
+  margin: 0 5px 0 0;
+  padding: 0;
+  height: 40px;
 }
-
-a.node-icon > img {
-  height: 30px !important;
-}
-
-
 
 .nav-pf-vertical li.list-group-item {
   margin: 0;
@@ -710,7 +775,27 @@ a.node-icon > img {
   height: 45px;
 }
 
+
+.nav-pf-vertical li.list-group-item.list-group-item-node {
+  background: black;
+}
+
+.nav-pf-vertical li.list-group-item.list-group-item-node > a {
+  text-transform: uppercase;
+  vertical-align: bottom;
+  height: 35px;
+}
+
+.nav-pf-vertical li.list-group-item.list-group-item-node img.entity-type-icon {
+  margin: 0;
+  height: 32px;
+}
+
+.nav-pf-vertical li.list-group-item.list-group-item-squat {
+}
+
 .nav-pf-vertical li.list-group-item.list-group-item-squat > a {
+  padding: 0;
 }
 
 .nav-pf-vertical li.list-group-item.list-group-item-squat > a .list-group-item-value {
@@ -721,15 +806,15 @@ a.node-icon > img {
 .nav-pf-vertical li.list-group-item.list-group-item-squat > a {
   height: 35px;
 }
-.nav-pf-vertical li.list-group-item > a .list-group-item-value {
-  padding: 4px 5px;
+
+.nav-pf-vertical li.list-group-item.list-group-item-squat > a > i {
+  margin: 5px 0 0 5px;
 }
 
-img.entity-type-icon {
-  margin: 0 5px 0 0;
-  padding: 0;
-  height: 40px !important;
+.nav-pf-vertical li.list-group-item > a .list-group-item-value {
+  margin: 2px 0 0 5px;
 }
+
 
 .node-container .node-title {
   background: #4B4B4B;

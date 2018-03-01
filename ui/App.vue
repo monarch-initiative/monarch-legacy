@@ -12,4 +12,7 @@ export default {
 </script>
 
 <style>
+#app {
+	xborder:5px solid red;
+}
 </style>
