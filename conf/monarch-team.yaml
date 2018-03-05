@@ -25,9 +25,9 @@ institutions:
         bio: Dr. Haendel is currently a PI of the Monarch Initiative. She has a BA from Reed College in Chemistry and a Ph.D. in Neuroscience from the University of Wisconsin, Madison. She is currently a PI of the Monarch Initiative, with the aim of providing integrated access to model systems phenotype-genotype data for the purposes of disease hypothesis exploration. She also participates in development of the eagle-i and CTSAconnect ontologies, designed to collect and disseminate information about biomedical resources and enable research profiling. Her research interests are in using ontologies to promote synthetic science though connections within biomedical data, to utilize information science during the course of research and its publication, and to enable scientific reproducibility.
       - name: Nicole Vasilevsky
         picture: /image/team/NicoleVasilevsky.jpg
-        title: Project Manager
+        title: Lead Biocurator
         alumni: false
-        bio: Dr. Vasilevsky has a BA in Biology from Reed College and a Ph.D. in Cell Biology from OHSU. Nicole is the project manager of the OHSU Ontology Development Group and works on the Monarch project as the project manager and as a data curator. In addition, Nicole works on the eagle-i Network and the CTSAconnect project.
+        bio: Dr. Vasilevsky has a BA in Biology from Reed College and a Ph.D. in Cell Biology from OHSU. Nicole is the lead biocurator for the Monarch project and contributes to ontology development.
       - name: Matthew Brush
         picture: /image/team/MatthewBrush.jpg
         title: Ontologist
@@ -129,7 +129,7 @@ institutions:
         alumni: false
         bio:  Dr. Robinson has a BA in Mathematics as well as an M.S. in computer science from Columbia University, and an MD from University of Pennsylvania. He worked as a clinician and researcher at the Charité Universitätsmedizin Berlin, Germany, between 1996 and 2016, and achieved certification (“Facharzt”) in pediatrics, as well as a Habilitation (“Privatdozent”) in Human Genetics. He was Professor for Medical Genomics at the Charité until August, 2016, when he relocated to the Jackson Laboratory for Genomic Medicine in Farmington, CT, USA. Much of Peter’s work has involved the development of computational resources and algorithms for the study of human hereditary diseases, including the development of the Human Phenotype Ontology (HPO) as well as the bioinformatics analysis of next-generation sequencing data including exome, genome, RNA-Seq, ChIP-Seq, and TCR sequencing experiments. Wetlab highlights include the identification of the disease genes CA8, PIGV, PIGO, and PGAP2 as well as investigations of treatment strategies for Marfan syndrome related to inhibition of a class of GxxPG-containing fragments of the extracellular matrix.
       - name: Leigh Carmody
-        title: Monarch PI
+        title: Scientific Curator
         picture: /image/team/CarmodyLeigh_headshot_Nov2016.jpg
         alumni: false
         bio:  Leigh Carmody, Ph.D., obtained her doctorate of philosophy in Molecular Physiology & Biophysics from Vanderbilt University in Spring 2007 where she studied targeting of signaling molecules to F-actin cytoskeleton/dendritic spines. Dr. Carmody continued her studies as a postdoctoral fellow at Massachusetts Institute of Technology where she investigated the role of Rac1 in dendritic spine motility. Late 2008, she joined the Broad Institute of MIT & Harvard as a Scientist where she aided in early-stage drug discovery efforts to identify chemical leads directed at cancer targets and neglected parasitic infections.  Dr. Carmody joined Jackson Laboratory in 2015 as a Project Manager, and is currently a Scientific Curator annotating phenotyping and genomics data for the human phenotype ontology (HPO) database.
