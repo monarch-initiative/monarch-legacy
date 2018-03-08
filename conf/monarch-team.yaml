@@ -94,6 +94,11 @@ institutions:
         picture: /image/person-unknown.png
         title: Software Engineer
         alumni: false
+      - name: Deepak Unni
+        picture: /image/team/DeepakUnni.jpg
+        title: Bioinformatics Software Developer
+        alumni: false
+        bio: Deepak Unni has an MS in Bioinformatics from Georgia Tech and has previously worked on NGS data analysis, genomic data integration, and the development of Apollo - a manual collaborative genome annotation editing tool. He joined Berkeley Bioinformatics Open-source Projects (BBOP), at LBNL, in 2018.
       - name: Jeremy Nguyen Xuan
         title: Software Engineer
         alumni: true
