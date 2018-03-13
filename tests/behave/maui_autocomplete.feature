@@ -37,7 +37,7 @@ Scenario: "ZRS" in the navbar search with a click goes to a gene page
 Scenario: "hyper-be" in the navbar search with a click goes to a disease page
    Given I go to page "/"
     and I type "Hyper-bet" into the navbar search
-    and I wait until "Hyper-beta-alaninemia" appears in the autocomplete
-    and I click the autocomplete item "Hyper-beta-alaninemia"
+    and I wait until "HYPER-BETA-ALANINEMIA" appears in the autocomplete
+    and I click the autocomplete item "HYPER-BETA-ALANINEMIA"
     when I wait for id "monarch-node"
     then the title should be "Monarch Disease: hyper-beta-alaninemia (MONDO:0009378)"
