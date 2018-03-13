@@ -61,7 +61,7 @@ install:
 before_script:
   - "export DISPLAY=:99.0"
   - "ls -lhS dist/"
-  - "USE_LOG_FETCH=1 npm run startbeta &"
+  - "USE_LOG_FETCH=1 npm run startprod &"
   - "sleep 20"
 
 after_success:
