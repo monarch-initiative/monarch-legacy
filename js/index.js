@@ -1,5 +1,6 @@
 /* global window */
 
+
 var jq = require('jquery');
 window.jQuery = jq;
 window.$ = jq;
@@ -13,14 +14,16 @@ import 'jquery-ui';
 import 'jquery-ui/ui/widgets/autocomplete';
 import 'jquery-ui/ui/widgets/draggable';
 
-import 'd3';
+import d3 from 'd3';
+console.log('d3 version(s)', d3.version, window.d3.version);
+// window.d3 = d3;
 
 import {navbar_search_init} from './search_form';
 window.navbar_search_init = navbar_search_init;
 
 import 'bootstrap-sass';
 import 'patternfly/dist/js/patternfly.min.js';
-// import 'font-awesome/css/font-awesome.min.css';
+import 'font-awesome/css/font-awesome.min.css';
 
 import 'monarchSCSS';
 import 'monarchHomeCSS';
@@ -117,9 +120,7 @@ window.InitFacetFilters = FacetFilters.InitFacetFilters;
 
 import 'phenogrid';
 // import '../node_modules/phenogrid/dist/phenogrid-bundle.css';
-
 import '../node_modules/phenogrid/css/phenogrid.css';
-
 import {loadPhenogrid} from './phenogridloader-onclick';
 window.loadPhenogrid = loadPhenogrid;
 

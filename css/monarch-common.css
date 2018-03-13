@@ -1,6 +1,6 @@
 html {
-    width: 100%;
-    height: 100%;
+    width: auto;
+    height: auto;
 }
 
 body#monarch-body {
@@ -8,9 +8,6 @@ body#monarch-body {
     padding:0;
     width: 100%;
     height: 100%;
-    xfont-family: "Lora","Helvetica Neue",Helvetica,Arial,sans-serif;
-    xcolor: white;
-    xbackground-color: black;
 }
 
 p {

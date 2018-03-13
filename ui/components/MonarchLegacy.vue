@@ -151,7 +151,7 @@ export default {
             responseURL = responseURL.replace(/\/legacy/g, '');
             // console.log('#responseURL', responseURL, window.location.origin, path);
             if (responseURL !== path) {
-              console.log('path/responseURL', window.location.origin, path, responseURL);
+              // console.log('path/responseURL', window.location.origin, path, responseURL);
               var hashIndex = path.indexOf('#');
               if (hashIndex >= 0) {
                 responseURL += path.slice(hashIndex);
