@@ -1,82 +1,82 @@
 <template>
-    <div id="TableView">
-        <div v-if="dataFetched">
-            <vue-good-table
-                    :onClick="expandRow"
-                    :columns="columns"
-                    :rows="rows"
-                    :paginate="true"
-                    :lineNumbers="true"
-                    styleClass="table table-bordered">
-                <template slot="table-row"
-                          slot-scope="props"
-                >
-                    <td>
-                        <div v-bind:class="{
+  <div id="TableView">
+    <div v-if="dataFetched">
+      <vue-good-table
+        :onClick="expandRow"
+        :columns="columns"
+        :rows="rows"
+        :paginate="true"
+        :lineNumbers="true"
+        styleClass="table table-bordered">
+        <template slot="table-row"
+                  slot-scope="props"
+        >
+          <td>
+            <div v-bind:class="{
                         'td-collapsed': currentRow != props.index,
                         }">
-                            <strong>
-                                <router-link :to="'/' + cardType + '/' + props.row.objectCurie">
-                                    {{props.row.objectLabel}}
-                                </router-link>
-                            </strong>
-                        </div>
-                    </td>
-                    <td>
-                        <div v-bind:class="{'td-collapsed': currentRow != props.index}"
-                             v-if="props.row.evidenceType">
-                            <span class="evi-length">({{props.row.evidenceType.length}})</span>
-                            <ul class="evi-list"
-                                v-bind:class="{
+              <strong>
+                <router-link :to="'/' + cardType + '/' + props.row.objectCurie">
+                  {{props.row.objectLabel}}
+                </router-link>
+              </strong>
+            </div>
+          </td>
+          <td>
+            <div v-bind:class="{'td-collapsed': currentRow != props.index}"
+                 v-if="props.row.evidenceType">
+              <span class="evi-length">({{props.row.evidenceType.length}})</span>
+              <ul class="evi-list"
+                  v-bind:class="{
                                  'list-display':currentRow != props.index,
                             }">
-                                <li v-for="evidence in props.row.evidenceType">
-                                    <a v-bind:href="evidence.id | eviHref">
-                                        {{ evidence.lbl }}
-                                    </a>
-                                </li>
-                            </ul>
-                        </div>
-                        <div v-else>
-                            (0)
-                        </div>
-                    </td>
-                    <td>
-                        <div v-bind:class="{'td-collapsed': currentRow != props.index}"
-                             v-if="props.row.references">
-                            <div>
-                                ({{props.row.references.length}})
-                                <div class="float-right"
-                                     v-for="ref in props.row.references">
-                                    <div class="ref-id">
-                                        <a v-bind:href="ref.id | pubHref">
-                                            {{ref.id }}
-                                        </a>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                        <div v-else>
-                            (0)
-                        </div>
-                    </td>
-                    <td>
-                        <div v-bind:class="{'td-collapsed': currentRow != props.index}"
-                             v-if="props.row.source">
-                            <div>
-                                ({{props.row.source.length}})
-                                <div class="source-div"
-                                     v-for="source in props.row.source">
-                                    <a v-bind:href="source">
-                                        {{source | sourceHref}}
-                                    </a>
-                                </div>
-                            </div>
-                        </div>
-                    </td>
-                    <td>
-                        <div class="glyphicon"
-                             v-bind:class="{
+                <li v-for="evidence in props.row.evidenceType">
+                  <a v-bind:href="evidence.id | eviHref">
+                    {{ evidence.lbl }}
+                  </a>
+                </li>
+              </ul>
+            </div>
+            <div v-else>
+              (0)
+            </div>
+          </td>
+          <td>
+            <div v-bind:class="{'td-collapsed': currentRow != props.index}"
+                 v-if="props.row.references">
+              <div>
+                ({{props.row.references.length}})
+                <div class="float-right"
+                     v-for="ref in props.row.references">
+                  <div class="ref-id">
+                    <a v-bind:href="ref.id | pubHref">
+                      {{ref.id }}
+                    </a>
+                  </div>
+                </div>
+              </div>
+            </div>
+            <div v-else>
+              (0)
+            </div>
+          </td>
+          <td>
+            <div v-bind:class="{'td-collapsed': currentRow != props.index}"
+                 v-if="props.row.source">
+              <div>
+                ({{props.row.source.length}})
+                <div class="source-div"
+                     v-for="source in props.row.source">
+                  <a v-bind:href="source">
+                    {{source | sourceHref}}
+                  </a>
+                </div>
+              </div>
+            </div>
+          </td>
+          <td>
+            <div class="glyphicon"
+                 v-bind:class="{
                                         'glyphicon-chevron-right': currentRow != props.index &&
                                         props.row.evidence && props.row.evidenceType.length > 1 ||
                                         props.row.source && props.row.source.length > 1 ||
@@ -86,23 +86,23 @@
 
                                     }">
 
-                        </div>
-                    </td>
-                </template>
-            </vue-good-table>
-        </div>
-        <div v-else-if="dataError">
-            <h3>BioLink Error</h3>
-            <div class="row">
-                <div class="col-xs-12 pre-scrollable">
-                    <json-tree :data="dataError.response" :level="1"></json-tree>
-                </div>
             </div>
-        </div>
-        <div v-else>
-            Loading...
-        </div>
+          </td>
+        </template>
+      </vue-good-table>
     </div>
+    <div v-else-if="dataError">
+      <h3>BioLink Error</h3>
+      <div class="row">
+        <div class="col-xs-12 pre-scrollable">
+          <json-tree :data="dataError.response" :level="1"></json-tree>
+        </div>
+      </div>
+    </div>
+    <div v-else>
+      Loading...
+    </div>
+  </div>
 </template>
 
 <script>
@@ -342,7 +342,7 @@
             .forEach(
               ([key, value]) => {
                 if (value) {
-                rowData.forEach(function(data){
+                  rowData.forEach(function (data) {
                     if (data.objectTaxon === facetMap[key]) {
                       _this.rows.push(data);
                     }
@@ -356,41 +356,41 @@
   };
 </script>
 <style scoped>
-    a {
-        color: #404040;
-    }
+  a {
+    color: #404040;
+  }
 
-    .td-collapsed {
-        height: 20px;
-        overflow: hidden;
-    }
+  .td-collapsed {
+    height: 20px;
+    overflow: hidden;
+  }
 
-    .evi-length {
-        width: 5%;
-    }
+  .evi-length {
+    width: 5%;
+  }
 
-    .evi-list {
-        text-align: left;
-        width: 90%;
-        float: right;
-        list-style-type: square;
-    }
+  .evi-list {
+    text-align: left;
+    width: 90%;
+    float: right;
+    list-style-type: square;
+  }
 
-    .list-display {
-        list-style-type: none;
-    }
+  .list-display {
+    list-style-type: none;
+  }
 
-    .float-right {
-        float: right;
-    }
+  .float-right {
+    float: right;
+  }
 
-    .ref-id {
-        width: 120px;
-        text-align: left;
-    }
+  .ref-id {
+    width: 120px;
+    text-align: left;
+  }
 
-    .source-div {
-        float: right;
-        margin-right: 5px;
-    }
+  .source-div {
+    float: right;
+    margin-right: 5px;
+  }
 </style>
