@@ -68,7 +68,7 @@ function makeGeneDiseaseLandingGraph(data){
             new monarch.dovechart(geneLandingConfig, tree, graphDiv, builder);
         setMinHeightWidth(graphObject, graphDiv);
     };
-    builder.build_tree(['DOID:4'], initGraph);
+    builder.build_tree(['MONDO:0000001'], initGraph);
     
 }
 
@@ -109,15 +109,15 @@ function makeModelLandingGraph(data){
             new monarch.dovechart(modelLandingConfig, tree, graphDiv, builder);
         setMinHeightWidth(graphObject, graphDiv);
     };
-    builder.build_tree(['DOID:4'], initGraph);
+    builder.build_tree(['MONDO:0000001'], initGraph);
     
 }
 
 function makeDiseaseLandingGraph(data){
 
     var graphDiv = ".dove-container";
-    var tree = new monarch.model.tree(data);
 
+    var tree = new monarch.model.tree(data);
     
     // global_golr_conf, global_solr_url, and scigrap_url are global variables
     // set in webapp.js using puptent
@@ -131,7 +131,7 @@ function makeDiseaseLandingGraph(data){
             new monarch.dovechart(diseaseLandingConfig, tree, graphDiv, builder);
         setMinHeightWidth(graphObject,graphDiv);
     };
-    builder.build_tree(['DOID:4'], initGraph);
+    builder.build_tree(['MONDO:0000001'], initGraph);
     
 }
 
