@@ -1,12 +1,12 @@
 <template>
-    <div>
-        <div v-for="(value, key) in facetObject">
-            <label>
-                <input type="checkbox" v-model="facetObject[key]">
-                <i>{{ key | keyMap }}</i>
-            </label>
-        </div>
+  <div>
+    <div v-for="(value, key) in facetObject">
+      <label>
+        <input type="checkbox" v-model="facetObject[key]">
+        <i>{{ key | keyMap }}</i>
+      </label>
     </div>
+  </div>
 </template>
 <script>
   export default {
@@ -46,10 +46,10 @@
   };
 </script>
 <style scoped>
-    .panel-body {
-        color: white;
-        background: #6d7fcc;
-    }
+  .panel-body {
+    color: white;
+    background: #6d7fcc;
+  }
 
 </style>
 
