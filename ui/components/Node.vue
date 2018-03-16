@@ -55,7 +55,6 @@
                             <!--<h3>Systems</h3>-->
                             <!--<assoc-facets v-model="facetObject.systems"></assoc-facets>-->
                         </div>
-                        <pre style="text-align: left">{{facetObject}}</pre>
                     </li>
                 </ul>
 
