@@ -84,12 +84,9 @@ monarch.dovechart.prototype.makeGraphDOM = function(html_div, data){
               "; >"+config.chartTitle+"</div>" );
       jQuery(html_div).append( "<div class=interaction></div>" );
       jQuery(html_div+" .interaction").append( "<li></li>" );
-         
-      //Override breadcrumb config if subgraphs exist
-      config.useCrumb = self.checkForChildren(data);
-      
-      //add breadcrumb div
-      if (config.useCrumb){
+
+      //add breadcrumb div, Override breadcrumb config if subgraphs exist
+      if (config.useCrumb || self.checkForChildren(data) ){
           jQuery(html_div+" .interaction li").append("<div class=breadcrumbs></div>");
           d3.select(html_div).select(".breadcrumbs")
               .append("svg")
