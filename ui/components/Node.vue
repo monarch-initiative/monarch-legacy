@@ -1,250 +1,250 @@
 <template>
-    <div id="selenium_id_content">
+  <div id="selenium_id_content">
+    <div>
+      <div class="nav-pf-vertical nav-pf-vertical-with-sub-menus">
+        <ul class="list-group">
+          <li class="list-group-item list-group-item-node">
+            <a
+              target="_blank"
+              v-bind:href="'http://beta.monarchinitiative.org' + path">
+              <img
+                class="entity-type-icon"
+                :src="icons[nodeType]"/>
+              <span class="list-group-item-value">{{labels[nodeType]}}</span>
+            </a>
+          </li>
 
-        <div>
-            <div class="nav-pf-vertical nav-pf-vertical-with-sub-menus">
-                <ul class="list-group">
-                    <li class="list-group-item list-group-item-node">
-                        <a
-                                target="_blank"
-                                v-bind:href="'http://beta.monarchinitiative.org' + path">
-                            <img
-                                    class="entity-type-icon"
-                                    :src="icons[nodeType]"/>
-                            <span class="list-group-item-value">{{labels[nodeType]}}</span>
-                        </a>
-                    </li>
+          <li class="list-group-item list-group-item-squat">
+            <a
+              v-on:click="toggleSidebar()"
+              href="#">
+              <i class="fa fa-2x fa-crosshairs"></i>
+              <span class="list-group-item-value">Neighbors</span>
+            </a>
+          </li>
 
-                    <li class="list-group-item list-group-item-squat">
-                        <a
-                                v-on:click="toggleSidebar()"
-                                href="#">
-                            <i class="fa fa-2x fa-crosshairs"></i>
-                            <span class="list-group-item-value">Neighbors</span>
-                        </a>
-                    </li>
+          <li class="list-group-item list-group-item-squat"
+              v-bind:class="{ active: !expandedCard }">
+            <a
+              v-on:click="expandCard(null)"
+              href="#">
+              <i class="fa fa-2x fa-th-large"></i>
+              <span class="list-group-item-value">Overview</span>
+            </a>
+          </li>
 
-                    <li class="list-group-item list-group-item-squat"
-                        v-bind:class="{ active: !expandedCard }">
-                        <a
-                                v-on:click="expandCard(null)"
-                                href="#">
-                            <i class="fa fa-2x fa-th-large"></i>
-                            <span class="list-group-item-value">Overview</span>
-                        </a>
-                    </li>
+          <li class="list-group-item"
+              v-bind:class="{ active: expandedCard === cardType }"
+              v-for="cardType in nonEmptyCards"
+              :key="cardType">
+            <a
+              :href="'#' + cardType"
+              v-on:click="expandCard(cardType)">
+              <img class="entity-type-icon" :src="icons[cardType]"/>
+              <span class="list-group-item-value">{{labels[cardType]}} ({{counts[cardType]}})</span>
+            </a>
+          </li>
+          <li class="list-group-item list-group-item-squat">
+            <a href="#"><span class="list-group-item-value">Association Filters</span></a>
+            <div style="padding:15px; background: #363636; color:white" class="panel">
+              <h3>Species</h3>
+              <assoc-facets v-model="facetObject.species"></assoc-facets>
+              <!--<h3>Evidence</h3>-->
+              <!--<assoc-facets v-model="facetObject.evidence"></assoc-facets>-->
+              <!--<h3>Systems</h3>-->
+              <!--<assoc-facets v-model="facetObject.systems"></assoc-facets>-->
+            </div>
+            <pre style="text-align: left">{{facetObject}}</pre>
+          </li>
+        </ul>
 
-                    <li class="list-group-item"
-                        v-bind:class="{ active: expandedCard === cardType }"
-                        v-for="cardType in nonEmptyCards"
-                        :key="cardType">
-                        <a
-                                :href="'#' + cardType"
-                                v-on:click="expandCard(cardType)">
-                            <img class="entity-type-icon" :src="icons[cardType]"/>
-                            <span class="list-group-item-value">{{labels[cardType]}} ({{counts[cardType]}})</span>
-                        </a>
-                    </li>
-                    <li class="list-group-item list-group-item-squat">
-                        <a href="#"><span class="list-group-item-value">Association Filters</span></a>
-                        <div style="padding:15px; background: #363636; color:white" class="panel">
-                            <h3>Species</h3>
-                            <assoc-facets v-model="facetObject.species"></assoc-facets>
-                            <!--<h3>Evidence</h3>-->
-                            <!--<assoc-facets v-model="facetObject.evidence"></assoc-facets>-->
-                            <!--<h3>Systems</h3>-->
-                            <!--<assoc-facets v-model="facetObject.systems"></assoc-facets>-->
-                        </div>
-                    </li>
-                </ul>
+      </div>
 
+    </div>
+
+
+    <div class="container-fluid container-cards-pf container-pf-nav-pf-vertical">
+      <div class="wrapper">
+        <div
+          class="overlay"
+          v-bind:class="{ active: isActive }"
+          v-on:click="toggleSidebar()">
+        </div>
+        <nav
+          id="sidebar"
+          v-bind:class="{ active: isActive }">
+          <div class="sidebar-content">
+            <div class="row superclass" v-for="c in superclasses">
+              <div class="col-xs-12">
+                <router-link
+                  :to="'/' + nodeCategory + '/' + c.id">
+                  {{c.label}}
+                </router-link>
+              </div>
             </div>
 
+            <div class="row currentclass">
+              <div class="col-xs-12">
+                {{nodeLabel}}
+              </div>
+            </div>
+
+            <div class="row subclass" v-for="c in subclasses">
+              <div class="col-xs-12">
+                <router-link
+                  :to="'/' + nodeCategory + '/' + c.id">
+                  {{c.label}}
+                </router-link>
+              </div>
+            </div>
+          </div>
+        </nav>
+
+        <div
+          class="title-bar">
+          <div
+            v-if="!node">
+            <h4 class="text-center">Loading Data for {{labels[nodeType]}}: {{nodeID}}</h4>
+          </div>
+
+          <div
+            v-else>
+
+            <span><b>{{nodeLabel}}</b> ({{node.id}})</span>
+            <br>
+            <span><b>AKA:</b>&nbsp;</span>
+            <span class="synonym" v-for="s in synonyms">{{s}}</span>
+          </div>
         </div>
 
+        <div
+          v-if="node"
+          class="container-fluid node-container">
 
-        <div class="container-fluid container-cards-pf container-pf-nav-pf-vertical">
-            <div class="wrapper">
-                <div
-                        class="overlay"
-                        v-bind:class="{ active: isActive }"
-                        v-on:click="toggleSidebar()">
-                </div>
-                <nav
-                        id="sidebar"
-                        v-bind:class="{ active: isActive }">
-                    <div class="sidebar-content">
-                        <div class="row superclass" v-for="c in superclasses">
-                            <div class="col-xs-12">
-                                <router-link
-                                        :to="'/' + nodeCategory + '/' + c.id">
-                                    {{c.label}}
-                                </router-link>
-                            </div>
-                        </div>
+          <div
+            v-if="!expandedCard && nodeDefinition"
+            class="row">
+            <div class="col-xs-12">
+              <div class="node-description">
+                {{nodeDefinition}}
+              </div>
+            </div>
 
-                        <div class="row currentclass">
-                            <div class="col-xs-12">
-                                {{nodeLabel}}
-                            </div>
-                        </div>
-
-                        <div class="row subclass" v-for="c in subclasses">
-                            <div class="col-xs-12">
-                                <router-link
-                                        :to="'/' + nodeCategory + '/' + c.id">
-                                    {{c.label}}
-                                </router-link>
-                            </div>
-                        </div>
-                    </div>
-                </nav>
-
-                <div
-                        class="title-bar">
-                    <div
-                            v-if="!node">
-                        <h4 class="text-center">Loading Data for {{labels[nodeType]}}: {{nodeID}}</h4>
-                    </div>
-
-                    <div
-                            v-else>
-
-                        <span><b>{{nodeLabel}}</b> ({{node.id}})</span>
-                        <br>
-                        <span><b>AKA:</b>&nbsp;</span>
-                        <span class="synonym" v-for="s in synonyms">{{s}}</span>
-                    </div>
-                </div>
-
-                <div
-                        v-if="node"
-                        class="container-fluid node-container">
-
-                    <div
-                            v-if="!expandedCard && nodeDefinition"
-                            class="row">
-                        <div class="col-xs-12">
-                            <div class="node-description">
-                                {{nodeDefinition}}
-                            </div>
-                        </div>
-
-                        <div class="col-xs-12">
-                            <b>References:</b>&nbsp;
-                            <span
-                                    v-for="r in xrefs">
+            <div class="col-xs-12">
+              <b>References:</b>&nbsp;
+              <span
+                v-for="r in xrefs">
           <router-link
-                  v-if="r.url.indexOf('/') === 0"
-                  :to="r.url">
+            v-if="r.url.indexOf('/') === 0"
+            :to="r.url">
             {{r.label}}
           </router-link>
 
           <a
-                  v-else-if="r.url && r.blank"
-                  :href="r.url"
-                  target="_blank">
+            v-else-if="r.url && r.blank"
+            :href="r.url"
+            target="_blank">
             {{r.label}}
           </a>
           <a
-                  v-else-if="r.url"
-                  :href="r.url">
+            v-else-if="r.url"
+            :href="r.url">
             {{r.label}}
           </a>
 
           <span
-                  v-else>
+            v-else>
             {{r.label}}
           </span>
         </span>
-                            <br>
-                            <span
-                                    v-if="inheritance">
+              <br>
+              <span
+                v-if="inheritance">
           <b>Heritability:</b>&nbsp;{{inheritance}}
         </span>
-                        </div>
+            </div>
 
-                        <div class="col-xs-12">
-                            <b>Equivalent IDs:</b>&nbsp;
+            <div class="col-xs-12">
+              <b>Equivalent IDs:</b>&nbsp;
 
-                            <span
-                                    v-for="r in equivalentClasses">
+              <span
+                v-for="r in equivalentClasses">
           <router-link
-                  v-if="r.id"
-                  :to="'/resolve/' + r.id">
+            v-if="r.id"
+            :to="'/resolve/' + r.id">
             {{r.label || r.id}}
           </router-link>
 
           <span
-                  v-else>
+            v-else>
             {{r.label}}
           </span>
         </span>
-                            <br>
-                            <span
-                                    v-if="inheritance">
+              <br>
+              <span
+                v-if="inheritance">
           <b>Heritability:</b>&nbsp;{{inheritance}}
         </span>
-                        </div>
-
-                    </div>
-
-                    <div
-                            v-if="!expandedCard"
-                            class="cards-pf">
-                        <div
-                                class="row row-cards-pf">
-                            <node-card
-                                    v-for="cardType in nonEmptyCards"
-                                    :key="cardType"
-                                    class="col-lg-3 col-xs-6"
-                                    :card-type="cardType"
-                                    :card-count="counts[cardType]"
-                                    :parent-node="node"
-                                    :parent-node-id="nodeID"
-                                    v-on:expandCard="expandCard(cardType)">
-                            </node-card>
-                        </div>
-                    </div>
-
-                    <div
-                            v-if="expandedCard"
-                            class="expanded-card-view">
-                        <h3 class="text-center">{{labels[expandedCard]}} Associations</h3>
-                        <table-view
-                                :facets="facetObject"
-                                :nodeType="nodeCategory"
-                                :cardType="expandedCard"
-                                :identifier="nodeID">
-                        </table-view>
-                    </div>
-
-                    <!--
-                        <br>
-                        <br>
-                        <br>
-                        <br>
-
-                        <div class="row pre-scrollable">
-                          <div class="col-xs-12">
-                            <json-tree :data="node" :level="1"></json-tree>
-                          </div>
-                        </div>
-                    -->
-
-                </div>
             </div>
-            <!--
-            <button
-              v-on:click="getHierarchy()"
-              class="btn btn-default btn-sm">
-                Get Hierarchy
-            </button>
-             -->
 
+          </div>
+
+          <div
+            v-if="!expandedCard"
+            class="cards-pf">
+            <div
+              class="row row-cards-pf">
+              <node-card
+                v-for="cardType in nonEmptyCards"
+                :key="cardType"
+                class="col-lg-3 col-xs-6"
+                :card-type="cardType"
+                :card-count="counts[cardType]"
+                :parent-node="node"
+                :parent-node-id="nodeID"
+                v-on:expandCard="expandCard(cardType)">
+              </node-card>
+            </div>
+          </div>
+
+          <div
+            v-if="expandedCard"
+            class="expanded-card-view">
+            <h3 class="text-center">{{labels[expandedCard]}} Associations</h3>
+            <table-view
+              :facets="facetObject"
+              :nodeType="nodeCategory"
+              :cardType="expandedCard"
+              :identifier="nodeID">
+            </table-view>
+          </div>
+
+          <!--
+              <br>
+              <br>
+              <br>
+              <br>
+
+              <div class="row pre-scrollable">
+                <div class="col-xs-12">
+                  <json-tree :data="node" :level="1"></json-tree>
+                </div>
+              </div>
+          -->
 
         </div>
+      </div>
+      <!--
+      <button
+        v-on:click="getHierarchy()"
+        class="btn btn-default btn-sm">
+          Get Hierarchy
+      </button>
+       -->
+
+
     </div>
+  </div>
 </template>
 
 <script>
@@ -362,7 +362,7 @@
       return {
         facetObject: {
           species: {
-            human: true,
+
             zebrafish: true,
             chimpanzee: true,
             mouse: true,
@@ -637,346 +637,346 @@
 </script>
 
 <style lang="scss">
-    @import "../../css/_prelude-patternfly.scss";
+  @import "../../css/_prelude-patternfly.scss";
 
-    $sidebar-content-width: 500px;
-    $sidebar-width: 200px;
-    $collapsed-sidebar-width: 55px;
-    $sidebar-button-width: 32px;
-    $title-bar-height: 70px;
+  $sidebar-content-width: 500px;
+  $sidebar-width: 200px;
+  $collapsed-sidebar-width: 55px;
+  $sidebar-button-width: 32px;
+  $title-bar-height: 70px;
 
-    #sidebar a,
-    #sidebar a:hover,
-    #sidebar a:focus {
-        color: inherit;
-        text-decoration: none;
-        transition: all 0.3s;
-    }
+  #sidebar a,
+  #sidebar a:hover,
+  #sidebar a:focus {
+    color: inherit;
+    text-decoration: none;
+    transition: all 0.3s;
+  }
 
-    #sidebar a img.sidebar-logo {
-        margin: 0 0 0 0;
-        padding: 0;
-        height: 30px !important;
-    }
+  #sidebar a img.sidebar-logo {
+    margin: 0 0 0 0;
+    padding: 0;
+    height: 30px !important;
+  }
 
-    #sidebar {
-        width: $sidebar-content-width;
-        position: fixed;
-        top: ($navbar-height + 80);
-        left: (-$sidebar-content-width);
-        min-height: 40px;
-        z-index: 1050;
-        xcolor: #fff;
-        transition: all 0.3s;
-        overflow-y: auto;
-        overflow-x: hidden;
-        background: ghostwhite;
-        xpadding-left: $sidebar-button-width;
-    }
+  #sidebar {
+    width: $sidebar-content-width;
+    position: fixed;
+    top: ($navbar-height + 80);
+    left: (-$sidebar-content-width);
+    min-height: 40px;
+    z-index: 1050;
+    xcolor: #fff;
+    transition: all 0.3s;
+    overflow-y: auto;
+    overflow-x: hidden;
+    background: ghostwhite;
+    xpadding-left: $sidebar-button-width;
+  }
 
-    #sidebar.active {
-        left: 0;
-        box-shadow: 3px 3px 3px rgba(0, 0, 0, 0.2);
-    }
+  #sidebar.active {
+    left: 0;
+    box-shadow: 3px 3px 3px rgba(0, 0, 0, 0.2);
+  }
 
-    #sidebar .sidebar-content {
-        width: ($sidebar-content-width - $sidebar-button-width);
-        margin: 0;
-    }
+  #sidebar .sidebar-content {
+    width: ($sidebar-content-width - $sidebar-button-width);
+    margin: 0;
+  }
 
-    #sidebar.active .sidebar-content {
-        xdisplay: block;
-    }
+  #sidebar.active .sidebar-content {
+    xdisplay: block;
+  }
 
-    #sidebar .sidebar-content .superclass {
-        margin-left: 0;
-    }
+  #sidebar .sidebar-content .superclass {
+    margin-left: 0;
+  }
 
-    #sidebar .sidebar-content .currentclass {
-        font-weight: 600;
-        margin-left: 15px;
-    }
+  #sidebar .sidebar-content .currentclass {
+    font-weight: 600;
+    margin-left: 15px;
+  }
 
-    #sidebar .sidebar-content .subclass {
-        margin-left: 30px;
-    }
+  #sidebar .sidebar-content .subclass {
+    margin-left: 30px;
+  }
 
-    .overlay {
-        position: fixed;
-        width: 100vw;
-        height: 100vh;
-        background: rgba(0, 0, 0, 0.3);
-        z-index: 50;
-        display: none;
-    }
+  .overlay {
+    position: fixed;
+    width: 100vw;
+    height: 100vh;
+    background: rgba(0, 0, 0, 0.3);
+    z-index: 50;
+    display: none;
+  }
 
-    .overlay.active {
-        display: initial;
-    }
+  .overlay.active {
+    display: initial;
+  }
 
-    #sidebar ul li a {
-        text-align: left;
-    }
+  #sidebar ul li a {
+    text-align: left;
+  }
 
-    #sidebar.active ul li a {
-        padding: 20px 10px;
-        text-align: center;
-        font-size: 0.85em;
-    }
+  #sidebar.active ul li a {
+    padding: 20px 10px;
+    text-align: center;
+    font-size: 0.85em;
+  }
 
-    #sidebar.active ul li a i {
-        margin-right: 0;
-        display: block;
-        font-size: 1.8em;
-        margin-bottom: 5px;
-    }
+  #sidebar.active ul li a i {
+    margin-right: 0;
+    display: block;
+    font-size: 1.8em;
+    margin-bottom: 5px;
+  }
 
-    #sidebar.active ul ul a {
-        padding: 10px !important;
-    }
+  #sidebar.active ul ul a {
+    padding: 10px !important;
+  }
 
-    #sidebar.active a[aria-expanded="false"]::before,
-    #sidebar.active a[aria-expanded="true"]::before {
-        top: auto;
-        bottom: 5px;
-        right: 50%;
-        -webkit-transform: translateX(50%);
-        -ms-transform: translateX(50%);
-        transform: translateX(50%);
-    }
+  #sidebar.active a[aria-expanded="false"]::before,
+  #sidebar.active a[aria-expanded="true"]::before {
+    top: auto;
+    bottom: 5px;
+    right: 50%;
+    -webkit-transform: translateX(50%);
+    -ms-transform: translateX(50%);
+    transform: translateX(50%);
+  }
 
-    #sidebar ul.components {
-        padding: 20px 0;
-        border-bottom: 1px solid #47748b;
-    }
+  #sidebar ul.components {
+    padding: 20px 0;
+    border-bottom: 1px solid #47748b;
+  }
 
-    #sidebar ul li a {
-        padding: 10px;
-        font-size: 1.1em;
-        display: block;
-    }
+  #sidebar ul li a {
+    padding: 10px;
+    font-size: 1.1em;
+    display: block;
+  }
 
-    #sidebar ul li a:hover {
-        color: #7386D5;
-        background: #fff;
-    }
+  #sidebar ul li a:hover {
+    color: #7386D5;
+    background: #fff;
+  }
 
-    #sidebar ul li a i {
-        margin-right: 10px;
-    }
+  #sidebar ul li a i {
+    margin-right: 10px;
+  }
 
-    #sidebar ul li.active > a,
-    #sidbar a[aria-expanded="true"] {
-        color: #fff;
-        background: #6d7fcc;
-    }
+  #sidebar ul li.active > a,
+  #sidbar a[aria-expanded="true"] {
+    color: #fff;
+    background: #6d7fcc;
+  }
 
-    #sidebar a[data-toggle="collapse"] {
-        position: relative;
-    }
+  #sidebar a[data-toggle="collapse"] {
+    position: relative;
+  }
 
-    #sidebar a[aria-expanded="false"]::before,
-    #sidebar a[aria-expanded="true"]::before {
-        content: '\e259';
-        display: block;
-        position: absolute;
-        right: 20px;
-        font-family: 'Glyphicons Halflings';
-        font-size: 0.6em;
-    }
+  #sidebar a[aria-expanded="false"]::before,
+  #sidebar a[aria-expanded="true"]::before {
+    content: '\e259';
+    display: block;
+    position: absolute;
+    right: 20px;
+    font-family: 'Glyphicons Halflings';
+    font-size: 0.6em;
+  }
 
-    #sidebar a[aria-expanded="true"]::before {
-        content: '\e260';
-    }
+  #sidebar a[aria-expanded="true"]::before {
+    content: '\e260';
+  }
 
-    #sidebar ul ul a {
-        font-size: 0.9em !important;
-        padding-left: 30px !important;
-        background: #6d7fcc;
-    }
+  #sidebar ul ul a {
+    font-size: 0.9em !important;
+    padding-left: 30px !important;
+    background: #6d7fcc;
+  }
 
-    #sidebar a.download {
-        background: #fff;
-        color: #7386D5;
-    }
+  #sidebar a.download {
+    background: #fff;
+    color: #7386D5;
+  }
 
-    #sidebar a.article,
-    #sidebar a.article:hover {
-        background: #6d7fcc !important;
-        color: #fff !important;
-    }
+  #sidebar a.article,
+  #sidebar a.article:hover {
+    background: #6d7fcc !important;
+    color: #fff !important;
+  }
 
+  .node-container {
+    margin: $title-bar-height 25px 0 0;
+    padding: 3px 5px;
+    transition: all 0.3s;
+    width: 100%;
+    height: 100%;
+  }
+
+  .expanded-card-view {
+    margin: 0;
+    padding: 0;
+    width: 100%;
+    height: 100%;
+  }
+
+  img.entity-type-icon {
+    margin: 0 5px 0 0;
+    padding: 0;
+    height: 40px;
+  }
+
+  .nav-pf-vertical li.list-group-item {
+    margin: 0;
+    padding: 0;
+  }
+
+  .nav-pf-vertical li.list-group-item > a {
+    margin: 0;
+    padding: 3px 0 0 8px;
+    height: 45px;
+  }
+
+  .nav-pf-vertical li.list-group-item.list-group-item-node {
+    background: black;
+  }
+
+  .nav-pf-vertical li.list-group-item.list-group-item-node > a {
+    text-transform: uppercase;
+    vertical-align: bottom;
+    height: 35px;
+  }
+
+  .nav-pf-vertical li.list-group-item.list-group-item-node img.entity-type-icon {
+    margin: 0;
+    height: 32px;
+  }
+
+  .nav-pf-vertical li.list-group-item.list-group-item-squat {
+  }
+
+  .nav-pf-vertical li.list-group-item.list-group-item-squat > a {
+    padding: 0;
+  }
+
+  .nav-pf-vertical li.list-group-item.list-group-item-squat > a .list-group-item-value {
+    padding: 2px 2px;
+  }
+
+  .nav-pf-vertical li.list-group-item.list-group-item-squat > a {
+    height: 35px;
+  }
+
+  .nav-pf-vertical li.list-group-item.list-group-item-squat > a > i {
+    margin: 5px 0 0 5px;
+  }
+
+  .nav-pf-vertical li.list-group-item > a .list-group-item-value {
+    margin: 2px 0 0 5px;
+  }
+
+  .node-container .node-title {
+    background: #4B4B4B;
+    color: white;
+  }
+
+  .node-container .node-description {
+    margin: 5px 0;
+    padding: 5px;
+    border: 1px solid lightgray;
+    line-height: 1.15em;
+  }
+
+  .wrapper {
+    display: flex;
+    align-items: stretch;
+    min-height: 100%;
+    width: 100%;
+    margin: 0;
+    padding: 0;
+  }
+
+  div.container-cards-pf.container-pf-nav-pf-vertical {
+    padding: 0;
+    margin: $navbar-height 0 0 0;
+  }
+
+  div.panel.panel-default {
+    margin-bottom: 0;
+  }
+
+  .nav-pf-vertical {
+    top: ($navbar-height + 6);
+    z-index: 1000;
+  }
+
+  div.container-fluid.container-cards-pf.container-pf-nav-pf-vertical {
+  }
+
+  div.container-fluid.container-cards-pf.container-pf-nav-pf-vertical .cards-pf {
+    margin: 0 5px 0 0;
+  }
+
+  .title-bar {
+    border-bottom: 1px solid lightgray;
+    background: aliceblue;
+    position: fixed;
+    height: $title-bar-height;
+    max-height: $title-bar-height;
+    overflow-y: auto;
+    xfont-size: 1.0em;
+    line-height: 1.1em;
+    top: ($navbar-height + 6);
+    left: $sidebar-width;
+    right: 0;
+    padding: 5px 10px;
+    z-index: 1;
+  }
+
+  .title-bar .synonym {
+    border: 1px solid lightgray;
+    padding: 0 5px;
+    font-size: 0.9em;
+  }
+
+  table.fake-table-view {
+    border: 1px solid black;
+    width: 100%;
+    height: 100%;
+    margin: 0;
+  }
+
+  table.fake-table-view th,
+  table.fake-table-view td {
+    border: 1px solid lightgray;
+    padding: 3px;
+  }
+
+  .btn-sidebar {
+    border: 1px solid red;
+  }
+
+  @media (max-width: $grid-float-breakpoint) {
     .node-container {
-        margin: $title-bar-height 25px 0 0;
-        padding: 3px 5px;
-        transition: all 0.3s;
-        width: 100%;
-        height: 100%;
-    }
-
-    .expanded-card-view {
-        margin: 0;
-        padding: 0;
-        width: 100%;
-        height: 100%;
-    }
-
-    img.entity-type-icon {
-        margin: 0 5px 0 0;
-        padding: 0;
-        height: 40px;
-    }
-
-    .nav-pf-vertical li.list-group-item {
-        margin: 0;
-        padding: 0;
-    }
-
-    .nav-pf-vertical li.list-group-item > a {
-        margin: 0;
-        padding: 3px 0 0 8px;
-        height: 45px;
-    }
-
-    .nav-pf-vertical li.list-group-item.list-group-item-node {
-        background: black;
-    }
-
-    .nav-pf-vertical li.list-group-item.list-group-item-node > a {
-        text-transform: uppercase;
-        vertical-align: bottom;
-        height: 35px;
-    }
-
-    .nav-pf-vertical li.list-group-item.list-group-item-node img.entity-type-icon {
-        margin: 0;
-        height: 32px;
-    }
-
-    .nav-pf-vertical li.list-group-item.list-group-item-squat {
-    }
-
-    .nav-pf-vertical li.list-group-item.list-group-item-squat > a {
-        padding: 0;
-    }
-
-    .nav-pf-vertical li.list-group-item.list-group-item-squat > a .list-group-item-value {
-        padding: 2px 2px;
-    }
-
-    .nav-pf-vertical li.list-group-item.list-group-item-squat > a {
-        height: 35px;
-    }
-
-    .nav-pf-vertical li.list-group-item.list-group-item-squat > a > i {
-        margin: 5px 0 0 5px;
-    }
-
-    .nav-pf-vertical li.list-group-item > a .list-group-item-value {
-        margin: 2px 0 0 5px;
-    }
-
-    .node-container .node-title {
-        background: #4B4B4B;
-        color: white;
-    }
-
-    .node-container .node-description {
-        margin: 5px 0;
-        padding: 5px;
-        border: 1px solid lightgray;
-        line-height: 1.15em;
-    }
-
-    .wrapper {
-        display: flex;
-        align-items: stretch;
-        min-height: 100%;
-        width: 100%;
-        margin: 0;
-        padding: 0;
-    }
-
-    div.container-cards-pf.container-pf-nav-pf-vertical {
-        padding: 0;
-        margin: $navbar-height 0 0 0;
-    }
-
-    div.panel.panel-default {
-        margin-bottom: 0;
+      margin-left: 0;
     }
 
     .nav-pf-vertical {
-        top: ($navbar-height + 6);
-        z-index: 1000;
+      width: $collapsed-sidebar-width;
+    }
+
+    .nav-pf-vertical li.list-group-item > a .list-group-item-value {
+      display: none;
     }
 
     div.container-fluid.container-cards-pf.container-pf-nav-pf-vertical {
-    }
-
-    div.container-fluid.container-cards-pf.container-pf-nav-pf-vertical .cards-pf {
-        margin: 0 5px 0 0;
+      margin-left: $collapsed-sidebar-width;
     }
 
     .title-bar {
-        border-bottom: 1px solid lightgray;
-        background: aliceblue;
-        position: fixed;
-        height: $title-bar-height;
-        max-height: $title-bar-height;
-        overflow-y: auto;
-        xfont-size: 1.0em;
-        line-height: 1.1em;
-        top: ($navbar-height + 6);
-        left: $sidebar-width;
-        right: 0;
-        padding: 5px 10px;
-        z-index: 1;
+      left: $collapsed-sidebar-width;
     }
-
-    .title-bar .synonym {
-        border: 1px solid lightgray;
-        padding: 0 5px;
-        font-size: 0.9em;
-    }
-
-    table.fake-table-view {
-        border: 1px solid black;
-        width: 100%;
-        height: 100%;
-        margin: 0;
-    }
-
-    table.fake-table-view th,
-    table.fake-table-view td {
-        border: 1px solid lightgray;
-        padding: 3px;
-    }
-
-    .btn-sidebar {
-        border: 1px solid red;
-    }
-
-    @media (max-width: $grid-float-breakpoint) {
-        .node-container {
-            margin-left: 0;
-        }
-
-        .nav-pf-vertical {
-            width: $collapsed-sidebar-width;
-        }
-
-        .nav-pf-vertical li.list-group-item > a .list-group-item-value {
-            display: none;
-        }
-
-        div.container-fluid.container-cards-pf.container-pf-nav-pf-vertical {
-            margin-left: $collapsed-sidebar-width;
-        }
-
-        .title-bar {
-            left: $collapsed-sidebar-width;
-        }
-    }
+  }
 
 </style>
