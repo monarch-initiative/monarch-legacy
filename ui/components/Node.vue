@@ -45,7 +45,13 @@
           <span class="list-group-item-value">{{labels[cardType]}} ({{counts[cardType]}})</span>
         </a>
       </li>
-
+      <li class="list-group-item list-group-item-squat">
+        <a href="#"><span class="list-group-item-value">Association Filters</span></a>
+        <div style="padding:15px; background: #363636; color:white" class="panel">
+          <h3>Species</h3>
+          <assoc-facets v-model="facetObject.species"></assoc-facets>
+        </div>
+      </li>
     </ul>
 
   </div>
@@ -202,6 +208,7 @@
       class="expanded-card-view">
       <h3 class="text-center">{{labels[expandedCard]}} Associations</h3>
       <table-view
+              :facets="facetObject"
               :nodeType="nodeCategory"
               :cardType="expandedCard"
               :identifier="nodeID">
@@ -349,6 +356,58 @@ export default {
   },
   data () {
     return {
+      facetObject: {
+          species: {
+              human: true,
+              zebrafish: true,
+              chimpanzee: true,
+              mouse: true,
+              opposum: true,
+              horse: true,
+              rat: true,
+              macaque: true,
+              chicken: true,
+              cow: true,
+              anole: true,
+              frog: true,
+              boar: true,
+              fly: true,
+              arabidopsis: true,
+              platypus: true,
+              worm: true,
+              yeast: true,
+          },
+          evidence: {
+              IEA: true,
+          },
+          systems: {
+              'Skeletal system': true,
+              'Limbs': true,
+              'Nervous system': true,
+              'Head or neck': true,
+              'Metabolism/homeostasis': true,
+              'Cardiovascular system': true,
+              'Integument': true,
+              'Genitourinary system': true,
+              'Eye': true,
+              'Musculature': true,
+              'Neoplasm': true,
+              'Digestive system': true,
+              'Immune System': true,
+              'Blood and blood-forming tissues': true,
+              'Endocrine': true,
+              'Respiratory system': true,
+              'Ear': true,
+              'Connective tissue': true,
+              'Prenatal development or birth': true,
+              'Growth': true,
+              'Constitutional': true,
+              'Thoracic cavity': true,
+              'Breast': true,
+              'Voice': true,
+              'Cellular': true,
+          },
+      },
       isActive: false,
       isSelected: {
         phenotypes: false,
