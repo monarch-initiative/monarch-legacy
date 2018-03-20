@@ -74,6 +74,7 @@
                             </div>
                         </div>
                     </td>
+<!--
                     <td>
                         <div class="glyphicon"
                              v-bind:class="{
@@ -86,6 +87,7 @@
 
                         </div>
                     </td>
+ -->
                 </template>
             </vue-good-table>
         </div>

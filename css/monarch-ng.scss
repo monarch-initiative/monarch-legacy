@@ -1,7 +1,9 @@
-@import "_prelude-patternfly.scss";
+// @import "monarch.scss";
+@import "_prelude-ng.scss";
+@import "_prelude.scss";
+@import "../ui/style/main.scss";
 
-@import "~patternfly/dist/sass/_patternfly.scss";
-@import "~patternfly/dist/css/patternfly-additions.min.css";
+@import "~bootstrap/scss/bootstrap";
 
 @import '~jquery-ui/themes/base/all.css';
 

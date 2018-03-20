@@ -21,8 +21,7 @@ console.log('d3 version(s)', d3.version, window.d3.version);
 import {navbar_search_init} from './search_form';
 window.navbar_search_init = navbar_search_init;
 
-import 'bootstrap-sass';
-import 'patternfly/dist/js/patternfly.min.js';
+import 'bootstrap';
 import 'font-awesome/css/font-awesome.min.css';
 
 import 'monarchSCSS';
@@ -145,3 +144,5 @@ window.createExacTable = createExacTable;
 
 import {createExaxGeneSummaryTable} from './exac_gene_summary.js';
 window.createExaxGeneSummaryTable = createExaxGeneSummaryTable;
+
+import 'monarchNGMain';

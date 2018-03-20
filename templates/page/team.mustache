@@ -4,8 +4,7 @@
   <div class="container-fluid monarch-container">
     <div class="content">
       <h1 class="text-center">Monarch Development Team</h1>
-
-      <div class="well well-sm">
+      <div class="card p-3 bg-light">
         <h3>
           Participating Institutions
         </h3>
@@ -14,77 +13,54 @@
             {{#conf.monarch-team.institutions}}
             <dt><a href="#{{id}}">{{name}}</a></dt>
             <dd>
-              {{#people}}
-              {{^alumni}}
-              {{name}}&nbsp;
-              {{/alumni}}
-              {{/people}}
+              {{#people}} {{^alumni}} {{name}}&nbsp; {{/alumni}} {{/people}}
             </dd>
             {{/conf.monarch-team.institutions}}
           </dl>
         </div>
       </div>
-
-
-    {{#conf.monarch-team.institutions}}
-      <div id="{{id}}" class="well well-sm team">
+      {{#conf.monarch-team.institutions}}
+      <div id="{{id}}" class="card py-2 team">
         <h3>
           <a href="{{{website}}}" target="_blank">
             <img class="teamlogo" src="{{{logo}}}">
             {{name}}
           </a>
-        </h3>
-
-      {{#people}}
-      {{^alumni}}
-      <div class="teammember">
-        <div class="memberhead">
-    <div class="membername">{{name}}</div>
-    <div class="membertitle">{{title}}</div>
+        </h3> {{#people}} {{^alumni}}
+        <div class="teammember">
+          <div class="memberhead">
+            <div class="membername">{{name}}</div>
+            <div class="membertitle">{{title}}</div>
+          </div>
+          <!-- <div class=""> -->
+          {{#picture}}
+          <img class="memberpicture" src="{{{picture}}}" /> {{/picture}} {{^picture}}
+          <!-- <img class="memberpicture" src="/image/person-unknown.png" /> -->
+          {{/picture}}
+          <!-- </div> -->
+          <div class="clear"></div>
+          <div class="memberbio">
+            {{bio}}
+          </div>
+          {{#contact}}
+          <div class="membercontact">
+            {{#email}}
+            <a title="email" href="mailto:{{email}}" target="_blank"><img class="contactlogo" src="/image/logo-email.png" /></a> {{/email}} {{#website}}
+            <a title="website" href="{{{website}}}" target="_blank"><img class="contactlogo" src="/image/logo-website.png" /></a> {{/website}} {{#twitter}}
+            <a title="twitter" href="{{{twitter}}}" target="_blank"><img class="contactlogo" src="/image/logo-twitter.png" /></a> {{/twitter}} {{#facebook}}
+            <a title="facebook" href="{{{facebook}}}" target="_blank"><img class="contactlogo" src="/image/logo-facebook.png" /></a> {{/facebook}}
+          </div>
+          {{/contact}}
         </div>
-        <!-- <div class=""> -->
-        {{#picture}}
-        <img class="memberpicture" src="{{{picture}}}" />
-        {{/picture}}
-        {{^picture}}
-        <!-- <img class="memberpicture" src="/image/person-unknown.png" /> -->
-        {{/picture}}
-        <!-- </div> -->
-        <div class="clear"></div>
-        <div class="memberbio">
-    {{bio}}
+        {{/alumni}} {{#alumni}}
+        <div class="teammember">
+          <div class="membername">{{name}} (alumni {{title}})</div>
         </div>
-        {{#contact}}
-        <div class="membercontact">
-    {{#email}}
-    <a title="email" href="mailto:{{email}}" target="_blank"><img class="contactlogo" src="/image/logo-email.png" /></a>
-    {{/email}}
-    {{#website}}
-    <a title="website" href="{{{website}}}" target="_blank"><img class="contactlogo" src="/image/logo-website.png" /></a>
-    {{/website}}
-    {{#twitter}}
-    <a title="twitter" href="{{{twitter}}}" target="_blank"><img class="contactlogo" src="/image/logo-twitter.png" /></a>
-    {{/twitter}}
-    {{#facebook}}
-    <a title="facebook" href="{{{facebook}}}" target="_blank"><img class="contactlogo" src="/image/logo-facebook.png" /></a>
-    {{/facebook}}
-        </div>
-        {{/contact}}
+        {{/alumni}} {{/people}}
       </div>
-      {{/alumni}}
-      {{#alumni}}
-      <div class="teammember">
-        <div class="membername">{{name}} (alumni {{title}})</div>
-      </div>
-      {{/alumni}}
-      {{/people}}
-
-    </div>
-    {{/conf.monarch-team.institutions}}
-
+      {{/conf.monarch-team.institutions}}
     </div>
   </div>
 </div>
-
 
 {{{includes.footer}}}
