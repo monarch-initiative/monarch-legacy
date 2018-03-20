@@ -10,7 +10,7 @@
   </div>
 
   <div class="row">
-    <div id="col-1" class="col-xs-12 col-sm-8">
+    <div id="col-1" class="col-xs-12 col-md-8">
       <div id="monarch-tabber" class="monarch-tabber">
         <div class="row monarch-tabber-controls">
           <div class="monarch-tabber-control">
@@ -63,8 +63,7 @@
         <div class="monarch-carousel-item monarch-carousel-item-selected">
           <a role="button" href="/page/about">
             <div class="center-block text-center">
-              <img class="img-responsive monarch-carousel-item-image" src="/image/carousel-overview.png"
-                   class="img-responsive"
+              <img class="img-fluid monarch-carousel-item-image" src="/image/carousel-overview.png"
                    alt="Explore Monarch" />
             </div>
           </a>
@@ -73,8 +72,7 @@
         <div class="monarch-carousel-item monarch-carousel-item-unselected">
           <a role="button" href="/disease">
             <div class="center-block text-center" style="clear:both;">
-              <img class="img-responsive monarch-carousel-item-image" src="/image/explore-graph-dis.png"
-                   class="img-responsive"
+              <img class="img-fluid monarch-carousel-item-image" src="/image/explore-graph-dis.png"
                    alt="Explore Diseases" />
             </div>
           </a>
@@ -83,8 +81,7 @@
         <div class="monarch-carousel-item monarch-carousel-item-unselected">
           <a role="button" href="/phenotype">
             <div class="center-block text-center" style="clear:both;">
-              <img class="img-responsive monarch-carousel-item-image" src="/image/explore-graph-phe.png"
-                   class="img-responsive"
+              <img class="img-fluid monarch-carousel-item-image" src="/image/explore-graph-phe.png"
                    alt="Explore Phenotypes" />
             </div>
           </a>
@@ -93,8 +90,7 @@
         <div class="monarch-carousel-item monarch-carousel-item-unselected">
           <a role="button" href="/model">
             <div class="center-block text-center" style="clear:both;">
-              <img class="img-responsive monarch-carousel-item-image" src="/image/explore-graph-mod.png"
-                   class="img-responsive"
+              <img class="img-fluid monarch-carousel-item-image" src="/image/explore-graph-mod.png"
                    alt="Explore Models" />
             </div>
           </a>
@@ -103,8 +99,7 @@
         <div class="monarch-carousel-item monarch-carousel-item-largest monarch-carousel-item-unselected">
           <a role="button" href="/gene">
             <div class="center-block text-center" style="clear:both;">
-              <img class="img-responsive monarch-carousel-item-image" src="/image/explore-graph-gen.png"
-                   class="img-responsive"
+              <img class="img-fluid monarch-carousel-item-image" src="/image/explore-graph-gen.png"
                    alt="Explore Genes" />
             </div>
           </a>
@@ -120,15 +115,15 @@
       </div>
 
       <div id="cameocontainer" class="container">
-        <div class="row flex monarch-home-cameo-row">
-          <div class="col-xs-6">
-            <div class="panel panel-default">
-              <div class="panel-heading">
-                <h3 class="panel-title">
+        <div class="row flex xmonarch-home-cameo-row">
+          <div class="col-xs-6 col-for-card">
+            <div class="card">
+              <div class="card-header">
+                <h3 class="card-title">
                   Patient Variant Analysis
                 </h3>
               </div>
-              <div class="panel-body">
+              <div class="card-body">
                 <div class="row">
                   <div class="monarch-home-cameo-text">
                     Combine genotype and phenotype data across species for patient variant prioritization, functional annotation and pathogenicity determination.
@@ -138,14 +133,14 @@
                     <a href="/page/exomes">
                       <img
                         src="./image/variation-cameo.png"
-                         class="img-responsive monarch-home-cameo-image"
+                         class="img-fluid monarch-home-cameo-image"
                          alt=""/>
                     </a>
                   </div>
                 </div>
               </div>
 
-              <div class="panel-footer">
+              <div class="card-footer">
                 <div class="center-block text-center">
                   <a class="btn btn-primary monarch-home-cameo-button" href="/page/exomes">
                     Exome Tool Suite
@@ -156,14 +151,14 @@
             </div>
           </div>
 
-          <div class="col-xs-6">
-            <div class="panel panel-default">
-              <div class="panel-heading">
-                <h3 class="panel-title">
+          <div class="col-xs-6 col-for-card">
+            <div class="card">
+              <div class="card-header py-0">
+                <h4 class="card-title">
                   Patient Archive
-                </h3>
+                </h4>
               </div>
-              <div class="panel-body">
+              <div class="card-body">
                 <div class="row">
                   <div class="monarch-home-cameo-text">
                     Securely share &amp; discuss patients with colleagues all around the world.
@@ -182,13 +177,13 @@
                     <a href="http://patientarchive.org/">
                       <img
                         src="./image/patient-archive-cameo.png"
-                         class="img-responsive monarch-home-cameo-image"
+                         class="img-fluid monarch-home-cameo-image"
                          alt=""/>
                     </a>
                   </div>
                 </div>
               </div>
-              <div class="panel-footer">
+              <div class="card-footer">
                 <div class="center-block text-center">
                   <a class="btn btn-primary monarch-home-cameo-button" href="http://patientarchive.org/">
                     Patient Archive
@@ -202,14 +197,14 @@
         </div>
 
         <div class="row flex monarch-home-cameo-row">
-          <div class="col-xs-6">
-            <div class="panel panel-default">
-              <div class="panel-heading">
-                <h3 class="panel-title">
+          <div class="col-xs-6 col-for-card">
+            <div class="card">
+              <div class="card-header">
+                <h3 class="card-title">
                   Text Mining
                 </h3>
               </div>
-              <div class="panel-body">
+              <div class="card-body">
                 <div class="row">
                   <div class="monarch-home-cameo-text">
                     Use our text mining engines to annotate phenotypes/diseases in your free text. Then optionally compare those phenotypes across species to find candidate models of disease.
@@ -219,13 +214,13 @@
                     <a href="/annotate/text">
                       <img
                         src="./image/text-mining-cameo.png"
-                         class="img-responsive monarch-home-cameo-image"
+                         class="img-fluid monarch-home-cameo-image"
                          alt=""/>
                     </a>
                   </div>
                 </div>
               </div>
-              <div class="panel-footer">
+              <div class="card-footer">
                 <div class="center-block text-center">
                   <a class="btn btn-primary monarch-home-cameo-button" href="/annotate/text">
                     Text Mining
@@ -236,14 +231,14 @@
             </div>
           </div>
 
-          <div class="col-xs-6">
-            <div class="panel panel-default">
-              <div class="panel-heading">
-                <h3 class="panel-title">
+          <div class="col-xs-6 col-for-card">
+            <div class="card">
+              <div class="card-header">
+                <h3 class="card-title">
                   Literature
                 </h3>
               </div>
-              <div class="panel-body">
+              <div class="card-body">
                 <div class="row">
                   <div class="monarch-home-cameo-text">
                     Find literature relevant to a set of phenotypes of interest
@@ -262,13 +257,13 @@
                     <a href="http://pubmed-browser.human-phenotype-ontology.org/">
                       <img
                         src="./image/literature-cameo.png"
-                         class="img-responsive monarch-home-cameo-image"
+                         class="img-fluid monarch-home-cameo-image"
                          alt=""/>
                     </a>
                   </div>
                 </div>
               </div>
-              <div class="panel-footer">
+              <div class="card-footer">
                 <div class="center-block text-center">
                   <a class="btn btn-primary monarch-home-cameo-button" href="http://pubmed-browser.human-phenotype-ontology.org/">
                     Phenotype PubMed Browser
@@ -282,22 +277,22 @@
       </div>
     </div>
 
-    <div id="col-2" class="col-xs-12 col-sm-4">
-      <div id="hpo-panel" class="panel panel-default">
-        <div class="panel-heading">
-          <h3 class="panel-title">
+    <div id="col-2" class="col-xs-12 col-md-4">
+      <div id="hpo-panel" class="card">
+        <div class="card-header">
+          <h5 class="card-title">
             <a
               href="http://monarch-initiative.blogspot.com/2016/03/finally-medical-terminology-that.html"
               target="_blank">
               Plain language for describing human diseases
             </a>
-          </h3>
+          </h5>
         </div>
-        <div class="panel-body">
+        <div class="card-body">
           <a target="_blank" href="http://human-phenotype-ontology.github.io">
           <img
             src="/image/hpo-logo.jpg"
-            class="pull-right img-responsive monarch-home-hpo-logo-image"
+            class="pull-right img-fluid monarch-home-hpo-logo-image"
             alt="Human Phenotype Ontology" />
           </a>
 
@@ -310,7 +305,7 @@
               target="_blank">
               <img
                 src="/image/hpo-apert-cameo.png"
-                class="img-responsive monarch-home-hpo-image"
+                class="img-fluid monarch-home-hpo-image"
                 alt="HPO" />
             </a>
           </div>
@@ -325,11 +320,11 @@
       </div>
 
 
-      <div class="panel panel-default">
-        <div class="panel-heading">
-          <h3 class="panel-title">Compare Phenotypes</h3>
+      <div class="card">
+        <div class="card-header">
+          <h5 class="card-title">Compare Phenotypes</h5>
         </div>
-        <div class="panel-body">
+        <div class="card-body">
           <span class="">
             Find models and diseases similar to a set of abnormal phenotypes of interest and then visualize their overlap.
           </span>
@@ -337,7 +332,7 @@
           <div class="center-block text-center" style="clear:both;">
             <a data-monarch-legacy href="/analyze/phenotypes">
               <img src="/image/Phenogrid3Compare.png"
-                   class="img-responsive monarch-home-phenotype-image"
+                   class="img-fluid monarch-home-phenotype-image"
                    alt="Explore Diseases" />
             </a>
           </div>
@@ -354,11 +349,11 @@
         <div id="blog" class="col-xs-12">
 
           <div
-            class="panel panel-default news-panel">
-            <div class="panel-heading">
-              <h3 class="panel-title">News and Events</h3>
+            class="card news-panel">
+            <div class="card-header">
+              <h3 class="card-title">News and Events</h3>
             </div>
-            <div class="panel-body news-list">
+            <div class="card-body news-list">
               <p>
                 <a href="https://medium.com/@MonarchInit/tailoring-the-nci-thesaurus-for-semantic-interoperability-21305ccfe3a6">
                   <br /> March 2, 2018: <b>Tailoring the NCI Thesaurus...</b><br /><br />
@@ -400,11 +395,11 @@
         <div id="twitter" class="col-xs-12">
 
           <div
-            class="panel panel-default news-panel">
-            <div class="panel-heading">
-              <h3 class="panel-title">Tweets</h3>
+            class="card news-panel">
+            <div class="card-header">
+              <h5 class="card-title">Tweets</h5>
             </div>
-            <div class="panel-body news-list">
+            <div class="card-body news-list">
 
 
               <a class="twitter-timeline"

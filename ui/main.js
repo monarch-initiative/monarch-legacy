@@ -233,5 +233,6 @@ const main = () => {
   }
 };
 
+console.log('about to main()');
 main();
 

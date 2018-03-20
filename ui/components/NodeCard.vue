@@ -1,21 +1,20 @@
 <template>
+
 <div class="node-card">
+
   <div
-    class="card-pf card-pf-view card-pf-view-select card-pf-view-single-select"
+    class="card"
     v-bind:class="{ active: isSelected }"
     v-on:click="toggleSelected()">
-    <div class="card-pf-body">
-      <div class="card-pf-top-element">
-          <img class="card-pf-icon-circle" :src="cardIcon"/>
-      </div>
-      <h4 class="text-center">
-        {{cardLabel}}
-      </h4>
-      <div class="card-pf-items text-center">
-        <div class="card-pf-item">
-          <span class="pficon pficon-folder-open"></span>
-          <span class="card-pf-item-text">{{cardCount}}</span>
-        </div>
+    <h6 class="card-title card-header text-center py-0">
+      {{cardLabel}}
+      <img class="card-img-top" :src="cardIcon"/>
+    </h6>
+    <div class="card-header text-center py-0">
+    </div>
+    <div class="card-body">
+      <div class="card-text text-center">
+        {{cardCount}}
       </div>
     </div>
   </div>
@@ -77,14 +76,17 @@ export default {
 
 $card-height: 150px;
 
-.node-card .card-pf {
+.node-card {
   height: $card-height;
   max-height: $card-height;
+  min-width: ($card-height);
+  max-width: (2 * $card-height);
 }
 
-.node-card .card-pf-view .card-pf-top-element img.card-pf-icon-circle {
+.node-card .card-img-top {
   width:40px;
   height:40px;
 }
+
 
 </style>

@@ -1,3 +1,17 @@
+#col-1 {
+}
+
+#col-2 {
+}
+
+#cameocontainer .card {
+}
+
+#cameocontainer .col-xs-6.col-for-card {
+  width: 50%;
+}
+
+
 .test-image {
     background-image: url(../image/partner-do.png) !important;
     margin:0;
@@ -61,7 +75,6 @@
 
 .monarch-carousel {
     position: relative;
-    height:100% !important;
     margin-top: 10px;
     padding:0;
 }

@@ -1,22 +1,24 @@
 $navbar-height: 28px !default;
 
-$img-path: "~patternfly/dist/img/" !default;
-$font-path: "~patternfly/dist/fonts/" !default;
-$icon-font-path: "~patternfly/dist/fonts/" !default;
-$fa-font-path:   "~patternfly/dist/fonts/" !default;
+// $img-path: "~patternfly/dist/img/" !default;
+// $font-path: "~patternfly/dist/fonts/" !default;
+// $icon-font-path: "~patternfly/dist/fonts/" !default;
+// $fa-font-path:   "~patternfly/dist/fonts/" !default;
 
-$font-size-base: 14px !default;
+$font-size-base: 0.875rem;		// 14px !default;
 $font-family-base: "Helvetica Neue", Helvetica, Arial, sans-serif !default;
 
-@import '~patternfly/dist/sass/patternfly/_variables.scss';
-@import 'bootstrap/variables';
-// $grid-float-breakpoint: 700px;
+// @import '~patternfly/dist/sass/patternfly/_variables.scss';
+// @import 'bootstrap/variables';
+$grid-float-breakpoint: 700px;
+
+$link-color: #0088ce;
 
 // @import 'bootstrap/mixins';
 // @import '~patternfly/dist/sass/patternfly/_bootstrap-mixin-overrides.scss';
 // @import '~patternfly/dist/sass/patternfly/_color-variables.scss';
 
 
-$navbar-pf-bg-color: $color-pf-black !default;
-$navbar-pf-border-color: $color-pf-black !default;
-$body-bg: $color-pf-cyan-100 !default;
+// $navbar-pf-bg-color: $color-pf-black !default;
+// $navbar-pf-border-color: $color-pf-black !default;
+// $body-bg: $color-pf-cyan-100 !default;

@@ -2,7 +2,7 @@
 <div id="selenium_id_content">
 
 <div>
-  <div class="nav-pf-vertical nav-pf-vertical-with-sub-menus">
+  <div class="nav-pf-vertical">
     <ul class="list-group">
       <li class="list-group-item list-group-item-node">
         <a
@@ -59,7 +59,7 @@
 </div>
 
 
-<div class="container-fluid container-cards-pf container-pf-nav-pf-vertical">
+<div class="xcontainer container-cards-pf">
 <div class="wrapper">
   <div
     class="overlay"
@@ -97,7 +97,7 @@
   </nav>
 
   <div
-    class="title-bar">
+    class="container-fluid title-bar">
     <div
       v-if="!node">
       <h4 class="text-center">Loading Data for {{labels[nodeType]}}: {{nodeID}}</h4>
@@ -119,7 +119,7 @@
 
     <div
       v-if="!expandedCard && nodeDefinition"
-      class="row">
+      class="xrow cards-pf">
       <div class="col-xs-12">
         <div class="node-description">
           {{nodeDefinition}}
@@ -189,11 +189,11 @@
       v-if="!expandedCard"
       class="cards-pf">
       <div
-        class="row row-cards-pf">
+        class="row">
         <node-card
           v-for="cardType in nonEmptyCards"
           :key="cardType"
-          class="col-lg-3 col-xs-6"
+          class="col-4"
           :card-type="cardType"
           :card-count="counts[cardType]"
           :parent-node="node"
@@ -671,7 +671,7 @@ $title-bar-height: 70px;
 }
 
 #sidebar.active {
-  left: 0;
+  left: 10px;
   box-shadow: 3px 3px 3px rgba(0, 0, 0, 0.2);
 }
 
@@ -804,7 +804,7 @@ $title-bar-height: 70px;
 }
 
 .node-container {
-  margin: $title-bar-height 25px 0 0;
+  margin: $title-bar-height 5px 5px 5px;
   padding: 3px 5px;
   transition: all 0.3s;
   width: 100%;
@@ -824,15 +824,59 @@ img.entity-type-icon {
   height: 40px;
 }
 
+
 .nav-pf-vertical li.list-group-item {
   margin: 0;
   padding: 0;
+  background-color: transparent;
+  border-color: #030303;
+
 }
+
 .nav-pf-vertical li.list-group-item > a {
+  background-color: transparent;
+  color: #d1d1d1;
+  cursor: pointer;
+  display: block;
+  font-size: 16px;
+  font-weight: 400;
+  height: 63px;
+  line-height: 26px;
+  padding: 17px 20px 17px 25px;
+  position: relative;
+  white-space: nowrap;
+  width: $sidebar-width;
+  text-decoration: none;
   margin: 0;
   padding: 3px 0 0 8px;
   height: 45px;
 }
+
+
+.nav-pf-vertical li.list-group-item > a:hover {
+  color: #fff;
+  font-weight: 600
+}
+
+
+
+.nav-pf-vertical li.list-group-item.active > a {
+  background-color: #393f44;
+  color: #fff;
+  font-weight: 600
+}
+
+.nav-pf-vertical li.list-group-item.active > a:before {
+  background: #39a5dc;
+content: " ";
+height: 100%;
+left: 0;
+position: absolute;
+top: 0;
+width: 3px;
+}
+
+
 
 
 .nav-pf-vertical li.list-group-item.list-group-item-node {
@@ -857,8 +901,14 @@ img.entity-type-icon {
   padding: 0;
 }
 
+.nav-pf-vertical li.list-group-item.list-group-item-squat > a i.fa {
+  margin: 2px 8px 0 12px;
+  padding: 0;
+}
+
 .nav-pf-vertical li.list-group-item.list-group-item-squat > a .list-group-item-value {
-  padding: 2px 2px;
+  padding: 0;
+  vertical-align:text-bottom;
 }
 
 
@@ -893,30 +943,37 @@ img.entity-type-icon {
   min-height: 100%;
   width: 100%;
   margin: 0;
-  padding: 0;
+  padding: 5px;
 }
 
-
-div.container-cards-pf.container-pf-nav-pf-vertical {
-  padding: 0;
-  margin: $navbar-height 0 0 0;
-}
 
 div.panel.panel-default {
   margin-bottom: 0;
 }
 
 .nav-pf-vertical {
+  background: #292e34;
+  border-right: 1px solid #292e34;
+  bottom: 0;
+  left: 0;
+  overflow-x: hidden;
+  overflow-y: auto;
+  position: fixed;
+  width: $sidebar-width;
   top: ($navbar-height + 6);
   z-index: 1000;
 }
 
 
-div.container-fluid.container-cards-pf.container-pf-nav-pf-vertical {
+
+div.container-cards-pf {
+  width: unset;
+  padding: 0;
+  margin: $navbar-height 0 0 $sidebar-width;
 }
 
-div.container-fluid.container-cards-pf.container-pf-nav-pf-vertical .cards-pf {
-  margin: 0 5px 0 0;
+div.container-cards-pf .cards-pf {
+  margin: 0;
 }
 
 .title-bar {
@@ -972,7 +1029,7 @@ table.fake-table-view td
     display: none;
   }
 
-  div.container-fluid.container-cards-pf.container-pf-nav-pf-vertical {
+  div.container-cards-pf {
     margin-left: $collapsed-sidebar-width;
   }
 
