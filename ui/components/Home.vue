@@ -8,11 +8,11 @@
     <div class="intro-body">
       <div class="container">
         <div class="row">
-          <div class="col-md-8 col-md-offset-2">
+          <div class="col-md-8 offset-md-2">
 
             <h1 class="brand-heading">
               <img
-                class="center-block text-center img-responsive"
+                class="center-block text-center img-fluid"
                 style="max-height:150px;"
                 src="../assets/images/monarch-logo-white-stacked.png"/>
             </h1>
@@ -22,24 +22,21 @@
             </p>
 
 
-            <div class="row">
-              <div class="col-xs-12">
-                <form
-                  id="home_search_form"
-                  class="searchspace"
-                  action="/search"
-                  role="search">
-                  <div class="input-group">
-                    <span class="input-group-addon" id="sizing-addon1">
-                      <i class="fa fa-search fa-fw"></i>
-                    </span>
-                    <input
-                      autofocus
-                      id="home_search" type="text" class="form-control" placeholder="Search for...">
-                  </div>
-                </form>
+            <form
+              id="home_search_form"
+              class="searchspace"
+              action="/search"
+              role="search">
+
+              <div class="input-group">
+                <span class="input-group-prepend">
+                  <div class="input-group-text"><i class="fa fa-search fa-fw"></i></div>
+                </span>
+                <input
+                  autofocus
+                  id="home_search" type="text" class="form-control" placeholder="Search for...">
               </div>
-            </div>
+            </form>
 
             <p class="search-examples-text">
               Examples: <i>Marfan Syndrome</i> <i>sox3</i>
@@ -95,7 +92,7 @@
 
   <section id="about" class="container content-section text-center">
     <div class="row">
-      <div class="col-lg-8 col-lg-offset-2">
+      <div class="col-lg-8 offset-lg-2">
         <h2>The Monarch Initiative</h2>
         <p>Our philosophy is based on the premise that we want to make all the data count. Monarch isn’t just another database that slurps data from the typical places and renders it in a different format. We are driven to truly integrate biological information using semantics, and present it in a novel way, leveraging phenotypes to bridge the knowledge gap.</p>
       </div>
@@ -107,7 +104,7 @@
   <section id="features" class="content-section text-center">
     <div class="features-section">
       <div class="container">
-        <div class="col-lg-8 col-lg-offset-2">
+        <div class="col-lg-8 offset-lg-2">
           <ul style="list-style-type:none;">
             <li>Integrate, align, and re-distribute cross-species gene, genotype, variant, disease, and phenotype data</li>
             <li>Provide a portal for exploration of phenotype-based similarity</li>
@@ -131,7 +128,7 @@
   <section id="partners" class="partners-section text-center">
     <h1>Partners</h1>
     <img
-      class="center-block text-center img-responsive"
+      class="center-block text-center img-fluid"
       src="../assets/images/partners.png"/>
   </section>
 
@@ -140,7 +137,7 @@
 
   <section id="contact" class="container content-section text-center">
     <div class="row">
-      <div class="col-xs-10 col-xs-offset-1">
+      <div class="col-xs-10 offset-xs-1">
         <h2>Contact Us</h2>
 
         <ul class="list-inline banner-social-buttons">
@@ -164,7 +161,7 @@
 
   <section id="footer-fake" class="footer-section text-center">
     <img
-      class="center-block text-center img-responsive"
+      class="center-block text-center img-fluid"
       src="../assets/images/footer.png"/>
   </section>
 

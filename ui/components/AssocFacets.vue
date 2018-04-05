@@ -1,5 +1,6 @@
 <template>
-  <div>
+  <div
+    class="assoc-facets-wrapper">
     <div v-for="(value, key) in facetObject">
       <label>
         <input type="checkbox" v-model="facetObject[key]">
@@ -46,11 +47,12 @@
   };
 </script>
 <style scoped>
-  .panel-body {
-    color: white;
-    background: #6d7fcc;
-  }
-
+.assoc-facets-wrapper {
+  height: 200px;
+  overflow-y: scroll;
+  padding: 0;
+  margin: 0;
+}
 </style>
 
 

@@ -245,6 +245,11 @@ div#mygene-container {
     margin: auto;
 }
 
+.monarch-container .content h2 {
+    font-weight: 300;
+    padding: 10px;
+    margin: 0;
+}
 /*
  * This is a common setting for the new BS3 base attempt.
  */

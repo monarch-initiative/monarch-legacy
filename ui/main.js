@@ -11,7 +11,6 @@ Vue.component('json-tree', JsonTree);
 import App from './App.vue';
 import Home from '@/components/Home.vue';
 import Navbar from '@/components/Navbar.vue';
-import About from '@/components/About.vue';
 import Node from '@/components/Node.vue';
 import NodeCard from '@/components/NodeCard.vue';
 import MonarchLegacy from '@/components/MonarchLegacy.vue';
@@ -140,11 +139,6 @@ const main = () => {
         component: Home
       },
       {
-        path: '/page/aboutSPA',
-        name: 'AboutSPA',
-        component: About
-      },
-      {
         path: '/*',
         name: 'MonarchLegacy',
         component: MonarchLegacy
@@ -233,5 +227,6 @@ const main = () => {
   }
 };
 
+console.log('about to main()');
 main();
 

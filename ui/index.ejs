@@ -11,10 +11,10 @@
   </title>
   <% if (!htmlWebpackPlugin.options.MODE_DEV_SERVER) { %>
     <link
-      href="<%= webpackConfig.output.publicPath + webpack.assetsByChunkName['spastyle'][1] %>"
+      href="<%= webpackConfig.output.publicPath + (Object.prototype.toString.call(webpack.assetsByChunkName['app']) === '[object Array]' ? webpack.assetsByChunkName['app'][1] : webpack.assetsByChunkName['app']) %>"
       rel="stylesheet">
     <link
-      href="<%= webpackConfig.output.publicPath + webpack.assetsByChunkName['app'][1] %>"
+      href="<%= webpackConfig.output.publicPath + (Object.prototype.toString.call(webpack.assetsByChunkName['spa']) === '[object Array]' ? webpack.assetsByChunkName['spa'][1] : webpack.assetsByChunkName['spa']) %>"
       rel="stylesheet">
     <% } %>
 
@@ -43,7 +43,7 @@ function loaderBody() {
 
 <body
   id="monarch-body"
-  class="monarch-cloak layout-pf layout-pf-fixed"
+  class="monarch-cloak"
   onload="loaderBody()">
 
   <div

@@ -1,215 +1,87 @@
 <nav
   id="monarch-navbar"
-  class="navbar navbar-inverse navbar-fixed-top"
-  role="navigation">
-    <div class="container-fluid monarch-navbar-container">
-        <div class="navbar-header">
-            <button type="button" class="navbar-toggle collapsed" data-toggle="collapse"
-                    data-target="#collapsed-navbar">
-                <span class="icon-bar"></span>
-                <span class="icon-bar"></span>
-                <span class="icon-bar"></span>
-            </button>
-            <a class="navbar-brand" href="/">
-                <img class="branding-logo pull-left"
-                     src="/image/logo.png"
-                     alt="Monarch Initiative logo"
-                     title="Monarch Initiative front page"/>
-                <span class="pull-right">Monarch</span>
-            </a>
+  class="navbar fixed-top navbar-expand-lg navbar-dark bg-dark">
+
+  <a class="navbar-brand" href="/">
+      <img class="branding-logo pull-left"
+           src="/image/logo.png"
+           alt="Monarch Initiative logo"
+           title="Monarch Initiative front page"/>
+      <span class="pull-right">Monarch</span>
+  </a>
+
+  <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarTogglerDemo02" aria-controls="navbarTogglerDemo02" aria-expanded="false" aria-label="Toggle navigation">
+    <span class="navbar-toggler-icon"></span>
+  </button>
+
+  <div class="my-0 py-0 bg-dark collapse navbar-collapse" id="navbarTogglerDemo02">
+    <ul class="navbar-nav mr-auto my-0">
+      <li class="nav-item dropdown">
+        <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown1" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+          Browse
+        </a>
+        <div class="dropdown-menu" aria-labelledby="navbarDropdown1">
+          <a class="dropdown-item" href="/disease">Diseases</a>
+          <a class="dropdown-item" href="/phenotype">Phenotypes</a>
+          <a class="dropdown-item" href="/gene">Genes</a>
+          <a class="dropdown-item" href="/model">Models</a>
         </div>
-        <div id="collapsed-navbar" class="navbar-collapse collapse">
-            <ul class="nav navbar-nav">
-                <li class="dropdown">
-                    <a href="#" class="dropdown-toggle" data-toggle="dropdown">
-                        <i class="icon-th-large"></i>Browse <b class="caret"></b></a>
-                    <ul class="dropdown-menu">
-                        <li><a href="/disease">Diseases</a></li>
-                        <li><a href="/phenotype">Phenotypes</a></li>
-                        <li><a href="/gene">Genes</a></li>
-                        <li><a href="/model">Models</a></li>
-                    </ul>
-                </li>
-                <li class="dropdown">
-                    <a href="#" class="dropdown-toggle" data-toggle="dropdown">
-                        <i class="icon-th-large"></i>Analyze <b class="caret"></b></a>
-                    <ul class="dropdown-menu">
-                        <li><a href="/analyze/phenotypes">Phenotypes</a></li>
-                        <li><a href="/annotate/text">Annotate Text</a></li>
-                        <li><a href="/page/exomes">Exomes</a></li>
-                        {{#monarch_use_styles}}
-                        <li role="separator" class="divider"></li>
-                        <li>
-                          <a href="/page/styles" class="dropdown-toggle">
-                            Styles Test&nbsp;<i class="fa fa-tasks fa-fw"></i>
-                          </a>
-                        </li>
-                        {{/monarch_use_styles}}
-                    </ul>
-                </li>
-                <li class="dropdown">
-                    <a href="#" class="dropdown-toggle" data-toggle="dropdown">
-                        <i class="icon-th-large"></i>About <b class="caret"></b></a>
-                    <ul class="dropdown-menu">
-                        <li><a href="/page/about">About Monarch</a></li>
-                        <li><a href="/about/sources">Data Sources</a></li>
-                        <li><a href="/page/releases">Releases</a></li>
-                        <li><a href="/page/team">Monarch Team</a></li>
-                        <li><a href="/page/disclaimer">Monarch Disclaimer</a></li>
-                        <li role="separator" class="divider"></li>
-                        <li><a href="/page/services">Monarch Web Services and APIs</a></li>
-                        <li><a target="_blank" href="https://archive.monarchinitiative.org/latest ">Data Downloads</a></li>
-                    </ul>
-                </li>
-                <li class="dropdown">
-                    <a href="#" class="dropdown-toggle" data-toggle="dropdown">
-                        <i class="icon-th-large"></i>Documentation<b class="caret"></b></a>
-                    <ul class="dropdown-menu">
-                        <li><a href="/page/phenogrid">Monarch Phenotype Grid Widget</a></li>
-                        <li><a target="_blank" href="http://monarch-initiative.blogspot.com/2015/01/how-to-annotate-patients-phenotypic.html">Phenotype Curation Guidelines</a></li>
-                        <li><a target="_blank" href="https://github.com/monarch-initiative">GitHub Organization</a></li>
-                        <li><a target="_blank" href="https://github.com/obophenotype/upheno">Phenotype Ontologies Project</a></li>
-                        <li><a href="/page/pubs">Publications</a></li>
-                        <li><a href="/page/links">Link To Us</a></li>
-                    </ul>
-                </li>
+      </li>
 
-<!--
-                <li id="feedback-window-container" class="dropdown">
-                  <a
-                    navbar-btn
-                    id="feedback-trigger"
-                    href="#simple-menu"
-                    data-backdrop="false"
-                    data-toggle="modal"
-                    class="dropdown-toggle"
-                    role="button"
-                    aria-haspopup="true"
-                    aria-expanded="false">
-                    Feedback&nbsp;
-                    <i class="glyphicon glyphicon-pencil" aria-hidden="true"></i>
-                  </a>
-                  <ul id="simple-menu" class="dropdown-menu simple-menu modal">
-                    <li id="feedback-handle" xclass="modal-dialog">
-                      <div id="feedback-main">
-                        <button class="close feedback-close"
-                          data-dismiss="modal" xdata-target="#simple-menu">
-                          <i class="glyphicon glyphicon-remove-circle" aria-hidden="true"></i>
-                        </button>
-
-                        <div class="feedback-drag-instructions">
-                            This window may be moved by dragging here
-                        </div>
-                        <form style="padding:0;">
-                          <h5>
-                          Specific feedback from users like you is essential to guide future development and improvement of the Monarch experience. We welcome you to answer the questions below and/or contact us via links below.
-                          </h5>
-
-                          <div class="form-group">
-                            <label for="goal">What did you come to the Monarch site to do?</label>
-                            <textarea class="form-control" rows="2" id="feedback-goal"></textarea>
-                          </div>
-
-                          <div class="form-group">
-                            <label for="improve">What could we improve to make this task easier for you?</label>
-                            <textarea class="form-control" rows="2" id="feedback-improve"></textarea>
-                          </div>
-
-                          <br/>
-
-                          <div class="form-group form-inline">
-                            <div class="checkbox">
-                              <label>
-                                <input type="checkbox" id="feedback-OKQuote">
-                                <span>&nbsp;It is OK to quote my feedback</span>
-                              </label>
-                            </div>
-                          </div>
-
-                          <div class="form-group form-inline">
-                            <div class="checkbox">
-                              <label>
-                                <input type="checkbox" id="feedback-OKFollowup">
-                                <span>&nbsp;It is OK to follow up with me about my feedback</span>
-                              </label>
-                            </div>
-                          </div>
-
-
-                          <div class="form-group form-inline">
-                            <label for="feedback-email" style="padding-right:20px;">
-                              E-mail (optional)
-                            </label>
-                            <input class="form-control" style="border:1px solid black;" type="text" id="feedback-email" value="">
-                          </div>
-
-                          <div class="form-group">
-                            <label for="feedback-additional">Any additional comments?</label>
-                            <textarea class="form-control" rows="2" id="feedback-additional"></textarea>
-                          </div>
-
-                          <hr style="border:1px solid transparent;margin:5px;padding:0;"/>
-
-                          <div class="form-group">
-                            <div style="width:35%;margin:auto;">
-                              <input id="feedback-submit-button" class="btn btn-primary btn-sm btn-block" type="button" name="submit" value="Submit Feedback" />
-                            </div>
-                          </div>
-                        </form>
-
-                        <hr style="border-top-color:darkgray;margin:0;margin-top:15px;margin-bottom:0;padding:0;"/>
-
-                        <div class="row">
-                          <div class="col-12 text-center">
-                            <h5 class="text-center">More Ways to Contact Monarch</h5>
-                          </div>
-                        </div>
-                        <div class="row">
-                          <div class="col-xs-3">
-                              <a href="https://github.com/monarch-initiative/monarch-app/issues" target="_blank">Issue Tracker</a>
-                          </div>
-                          <div class="col-xs-3">
-                              <a href="mailto:info@monarchinitiative.org" target="_blank">Email Us</a>
-                          </div>
-                          <div class="col-xs-3">
-                              <a href="https://bit.ly/monarchcommunity" target="_blank">Sign Up</a>
-                          </div>
-                          <div class="col-xs-3">
-                              <a href="https://twitter.com/MonarchInit" target="_blank">Follow us on Twitter</a>
-                          </div>
-                        </div>
-                      </div>
-
-                    </li>
-                  </ul>
-                </li>
--->
-
-            </ul>
-            {{#monarch_nav_search_p}}
-            <form id="search_form" class="navbar-right navbar-form searchspace"
-                action="/search" role="search">
-                <div class="form-group">
-                  <input id="search" type="text" class="col-xs-8 form-control" placeholder="Search (e.g. Parkinson's)"/>
-                  <button class="col-xs-4 btn btn-primary nav-search-btn"
-                      type="submit">Go</button>
-                </div>
-            </form>
-            {{/monarch_nav_search_p}}
+      <li class="nav-item dropdown">
+        <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown2" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+          Analyze
+        </a>
+        <div class="dropdown-menu" aria-labelledby="navbarDropdown2">
+          <a class="dropdown-item" href="/analyze/phenotypes">Phenotypes</a>
+          <a class="dropdown-item" href="/annotate/text">Annotate Text</a>
+          <a class="dropdown-item" href="/page/exomes">Exomes</a>
         </div>
-    </div>
+      </li>
+
+
+      <li class="nav-item dropdown">
+        <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown3" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+          About
+        </a>
+        <div class="dropdown-menu" aria-labelledby="navbarDropdown3">
+          <a class="dropdown-item" href="/page/about">About Monarch</a>
+          <a class="dropdown-item" href="/about/sources">Data Sources</a>
+          <a class="dropdown-item" href="/page/releases">Releases</a>
+          <a class="dropdown-item" href="/page/team">Monarch Team</a>
+          <div class="dropdown-divider"></div>
+          <a class="dropdown-item" href="/page/disclaimer">Monarch Disclaimer</a>
+          <a class="dropdown-item" href="/page/services">Monarch Web Services and APIs</a>
+          <a class="dropdown-item" target="_blank" href="https://archive.monarchinitiative.org/latest ">Data Downloads</a>
+        </div>
+      </li>
+
+      <li class="nav-item dropdown">
+        <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown4" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+          Documentation
+        </a>
+        <div class="dropdown-menu" aria-labelledby="navbarDropdown4">
+          <a class="dropdown-item" href="/page/phenogrid">Monarch Phenotype Grid Widget</a>
+          <a class="dropdown-item" target="_blank" href="http://monarch-initiative.blogspot.com/2015/01/how-to-annotate-patients-phenotypic.html">Phenotype Curation Guidelines</a>
+          <a class="dropdown-item" target="_blank" href="https://github.com/monarch-initiative">GitHub Organization</a>
+          <a class="dropdown-item" target="_blank" href="https://github.com/obophenotype/upheno">Phenotype Ontologies Project</a>
+          <a class="dropdown-item" href="/page/pubs">Publications</a>
+          <a class="dropdown-item" href="/page/links">Link To Us</a>
+        </div>
+      </li>
+
+    </ul>
+
+    {{#monarch_nav_search_p}}
+    <form
+      id="search_form"
+      class="form-inline my-0 py-0 searchspace"
+        action="/search" role="search">
+          <input id="search" type="text" class="form-control" placeholder="Search (e.g. Parkinson's)"/>
+          <button class="btn btn-primary nav-search-btn"
+              type="submit">Go</button>
+    </form>
+    {{/monarch_nav_search_p}}
+
+  </div>
 </nav>
-
-<!--
-<div style="position:fixed;z-index:100;top:50px;width:100%;">
-    <div class="alert alert-success" id="alert_template" style="margin-left:20%;margin-right:20%;padding:20px;padding-right:30px;padding-top:-30px;display:none;">
-    <button type="button" class="close" style="opacity:0.5;background-color:transparent;margin:-15px -25px 0 0;"
-    data-dismiss="alert">
-      <i class="glyphicon glyphicon-remove-circle" aria-hidden="true"></i>
-    </button>
-    <h4 style="margin:0;padding:0;"><center><span id="feedback-response"></span></center></h4>
-    </div>
-</div>
--->
-
-

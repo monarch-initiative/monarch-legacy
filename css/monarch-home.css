@@ -1,3 +1,13 @@
+#col-1 {
+}
+
+#col-2 {
+}
+
+#cameocontainer .card {
+}
+
+
 .test-image {
     background-image: url(../image/partner-do.png) !important;
     margin:0;
@@ -10,19 +20,19 @@
     z-index:9999;
 }
 
-#monarch-home-container .panel-default {
+#monarch-home-container .card {
     margin:0;
     margin-bottom: 7px;
     margin-left:auto;
     margin-right:auto;
 }
 
-#monarch-home-container .panel-heading {
+#monarch-home-container .card-header {
     padding: 5px;
     padding-left: 10px;
 }
 
-#monarch-home-container .panel-title {
+#monarch-home-container .card-title {
   font-size:14px;
 }
 
@@ -61,7 +71,6 @@
 
 .monarch-carousel {
     position: relative;
-    height:100% !important;
     margin-top: 10px;
     padding:0;
 }
@@ -188,13 +197,13 @@ div#cameocontainer {
   align-content:stretch;
 }
 
-#cameocontainer .flex .panel-body {
+#cameocontainer .flex .card-body {
    display: flex;
    flex-grow:1;
    padding-bottom: 3px;
 }
 
-#cameocontainer .monarch-home-cameo-row .panel-footer {
+#cameocontainer .monarch-home-cameo-row .card-footer {
   border:none;
    padding: 0;
    margin: 0;
