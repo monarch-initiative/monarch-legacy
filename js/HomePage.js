@@ -247,7 +247,7 @@ function InitHomePage(){
     car.start_cycle();
 
     // Get explore popovers ready.
-    jQuery('[data-toggle="popover"]').popover({'trigger':'hover'});
+    // jQuery('[data-toggle="popover"]').popover({'trigger':'hover'});
 }
 
 exports.InitHomePage = InitHomePage;

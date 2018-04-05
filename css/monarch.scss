@@ -1,6 +1,8 @@
 @import "_prelude.scss";
 
-@import "~bootstrap-sass/assets/stylesheets/bootstrap";
+@import "~bootstrapSCSS";
+
+@import "bs3_kludges";
 
 @import '~jquery-ui/themes/base/all.css';
 

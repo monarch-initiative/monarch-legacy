@@ -60,7 +60,6 @@ font-weight:bold;
 }
 
 .search-results-table{
-margin-top:5px;
 }
 
 /* clear fix */
@@ -74,13 +73,13 @@ clear: both;
 /* search-result-item */
 
 .search-result-item {
-width:100%;
+	width:100%;
 }
 
 
 /* overwrite the default CSS */
 .search-result-item .hilite{
-font-weight: bold;
+	font-weight: bold;
 }
 
 #more{

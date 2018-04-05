@@ -242,9 +242,8 @@ const config = {
                         options: {
                             // data: '@import "variables";',
                             includePaths: [
-                              path.resolve(__dirname, 'node_modules/patternfly/dist/sass'),
-                              path.resolve(__dirname, 'node_modules/bootstrap-sass/assets/stylesheets/bootstrap'),
-                              path.resolve(__dirname, 'node_modules/bootstrap-sass/assets/stylesheets'),
+                              path.resolve(__dirname, 'node_modules/bootstrap/scss/bootstrap'),
+                              path.resolve(__dirname, 'node_modules/bootstrap/scss'),
                               path.resolve(__dirname, 'node_modules/font-awesome/scss'),
                             ]
                         },
@@ -292,9 +291,8 @@ const config = {
             options: {
               includePaths: [
                 // path.join(__dirname, 'node_modules'),
-                path.join(__dirname, 'node_modules/patternfly/dist/sass'),
                 path.resolve(__dirname, 'node_modules/font-awesome/scss'),
-                path.join(__dirname, 'node_modules/bootstrap-sass/assets/stylesheets'),
+                path.join(__dirname, 'node_modules/bootstrap/scss'),
                 // path.join(__dirname, 'node_modules/bootstrap-sass/assets/stylesheets/bootstrap')
               ],
               sourceMap: true,
@@ -345,10 +343,11 @@ const config = {
       'jquery': path.join(__dirname, 'node_modules/jquery/dist/jquery.min.js'),
       'jquery-ui': path.join(__dirname, 'node_modules/jquery-ui/'),
       'd3': path.join(__dirname, 'node_modules/d3/d3.min.js'),
-      'monarchSCSS': (USE_SPA ? '../css/monarch-patternfly.scss' : '../css/monarch.scss'),
+      'monarchNGMain': (USE_SPA ? '../ui/main.js' : path.join(__dirname, "js/nop.js")),
+      'monarchSCSS': (USE_SPA ? '../css/monarch-ng.scss' : '../css/monarch.scss'),
       'monarchHomeCSS': (USE_SPA ? '../css/empty.css' : '../css/monarch-home.css'),
-      // 'patternfly$': 'patternfly/dist/sass/patternfly',
-      'bootstrap$': path.join(__dirname, 'node_modules/bootstrap-sass/assets/stylesheets/bootstrap/'),
+      'bootstrap$': path.join(__dirname, 'node_modules/bootstrap/'),
+      'bootstrapSCSS$': path.join(__dirname, 'node_modules/bootstrap/scss/bootstrap.scss'),
       'vue$': 'vue/dist/vue.min.js',  // 'vue/dist/vue.esm.js',
       'vue-good-table$': 'vue-good-table/dist/vue-good-table.min.js',
       'ringo/httpclient': path.join(__dirname, "js/nop.js"),
@@ -362,8 +361,8 @@ const config = {
 
 
 if (USE_SPA) {
-  config.entry.spa = './ui/main.js';
-  config.entry.spastyle = './ui/style/main.scss';
+  // config.entry.spa = './ui/main.js';
+  // config.entry.spastyle = './ui/style/main.scss';
   config.resolve.extensions = ['.js', '.vue', '.json'];
   // config.resolve.alias['vue$'] = 'vue/dist/vue.esm.js';
   config.resolve.alias['@'] = path.resolve('ui');
