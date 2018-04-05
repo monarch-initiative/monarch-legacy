@@ -344,7 +344,7 @@ const config = {
       'jquery-ui': path.join(__dirname, 'node_modules/jquery-ui/'),
       'd3': path.join(__dirname, 'node_modules/d3/d3.min.js'),
       'monarchNGMain': (USE_SPA ? '../ui/main.js' : path.join(__dirname, "js/nop.js")),
-      'monarchSCSS': (USE_SPA ? '../css/monarch-patternfly.scss' : '../css/monarch.scss'),
+      'monarchSCSS': (USE_SPA ? '../css/monarch-ng.scss' : '../css/monarch.scss'),
       'monarchHomeCSS': (USE_SPA ? '../css/empty.css' : '../css/monarch-home.css'),
       'bootstrap$': path.join(__dirname, 'node_modules/bootstrap/'),
       'bootstrapSCSS$': path.join(__dirname, 'node_modules/bootstrap/scss/bootstrap.scss'),

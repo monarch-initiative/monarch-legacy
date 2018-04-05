@@ -72,7 +72,7 @@ export default {
 </script>
 
 <style lang="scss">
-@import "../../css/_prelude-patternfly.scss";
+@import "../../css/_prelude-ng.scss";
 
 $card-height: 150px;
 

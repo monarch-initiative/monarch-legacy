@@ -2,7 +2,7 @@
 <div id="selenium_id_content">
 
 <div>
-  <div class="nav-pf-vertical">
+  <div class="nav-sidebar-vertical">
     <ul class="list-group">
       <li class="list-group-item list-group-item-node">
         <a
@@ -45,12 +45,12 @@
           <span class="list-group-item-value">{{labels[cardType]}} ({{counts[cardType]}})</span>
         </a>
       </li>
-      <li class="list-group-item list-group-item-squat">
-        <a href="#"><span class="list-group-item-value">Association Filters</span></a>
-        <div style="padding:15px; background: #363636; color:white" class="panel">
-          <h3>Species</h3>
-          <assoc-facets v-model="facetObject.species"></assoc-facets>
-        </div>
+      <li
+        class="node-filter-section">
+        <h5>Species</h5>
+        <assoc-facets
+          v-model="facetObject.species">
+        </assoc-facets>
       </li>
     </ul>
 
@@ -59,7 +59,7 @@
 </div>
 
 
-<div class="xcontainer container-cards-pf">
+<div class="xcontainer container-cards">
 <div class="wrapper">
   <div
     class="overlay"
@@ -119,7 +119,7 @@
 
     <div
       v-if="!expandedCard && nodeDefinition"
-      class="xrow cards-pf">
+      class="node-content-section">
       <div class="col-xs-12">
         <div class="node-description">
           {{nodeDefinition}}
@@ -187,7 +187,7 @@
 
     <div
       v-if="!expandedCard"
-      class="cards-pf">
+      class="node-content-section">
       <div
         class="row">
         <node-card
@@ -633,7 +633,7 @@ export default {
 </script>
 
 <style lang="scss">
-@import "../../css/_prelude-patternfly.scss";
+@import "../../css/_prelude-ng.scss";
 
 $sidebar-content-width: 500px;
 $sidebar-width: 200px;
@@ -818,22 +818,14 @@ $title-bar-height: 70px;
   height:100%;
 }
 
-img.entity-type-icon {
-  margin: 0 5px 0 0;
-  padding: 0;
-  height: 40px;
-}
-
-
-.nav-pf-vertical li.list-group-item {
+.nav-sidebar-vertical li.list-group-item {
   margin: 0;
   padding: 0;
   background-color: transparent;
   border-color: #030303;
-
 }
 
-.nav-pf-vertical li.list-group-item > a {
+.nav-sidebar-vertical li.list-group-item > a {
   background-color: transparent;
   color: #d1d1d1;
   cursor: pointer;
@@ -848,79 +840,85 @@ img.entity-type-icon {
   width: $sidebar-width;
   text-decoration: none;
   margin: 0;
-  padding: 3px 0 0 8px;
-  height: 45px;
+  padding: 2px 0 0 6px;
+  height: 35px;
 }
 
 
-.nav-pf-vertical li.list-group-item > a:hover {
+.nav-sidebar-vertical li.list-group-item > a:hover {
   color: #fff;
   font-weight: 600
 }
 
 
 
-.nav-pf-vertical li.list-group-item.active > a {
+.nav-sidebar-vertical li.list-group-item.active > a {
   background-color: #393f44;
   color: #fff;
   font-weight: 600
 }
 
-.nav-pf-vertical li.list-group-item.active > a:before {
+.nav-sidebar-vertical li.list-group-item.active > a:before {
   background: #39a5dc;
-content: " ";
-height: 100%;
-left: 0;
-position: absolute;
-top: 0;
-width: 3px;
+  content: " ";
+  height: 100%;
+  left: 0;
+  position: absolute;
+  top: 0;
+  width: 3px;
+}
+
+.nav-sidebar-vertical li.list-group-item > a img.entity-type-icon {
+  margin: 0 5px;
+  padding: 0;
+  height: 30px;
 }
 
 
 
-
-.nav-pf-vertical li.list-group-item.list-group-item-node {
+.nav-sidebar-vertical li.list-group-item.list-group-item-node {
   background: black;
 }
 
-.nav-pf-vertical li.list-group-item.list-group-item-node > a {
+.nav-sidebar-vertical li.list-group-item.list-group-item-node > a {
   text-transform: uppercase;
   vertical-align: bottom;
-  height: 35px;
+  height: 30px;
 }
 
-.nav-pf-vertical li.list-group-item.list-group-item-node img.entity-type-icon {
+.nav-sidebar-vertical li.list-group-item.list-group-item-node img.entity-type-icon {
   margin: 0;
-  height: 32px;
+  height: 28px;
 }
 
-.nav-pf-vertical li.list-group-item.list-group-item-squat {
+
+.nav-sidebar-vertical li.list-group-item.list-group-item-squat {
 }
 
-.nav-pf-vertical li.list-group-item.list-group-item-squat > a {
+.nav-sidebar-vertical li.list-group-item.list-group-item-squat > a {
   padding: 0;
 }
 
-.nav-pf-vertical li.list-group-item.list-group-item-squat > a i.fa {
+.nav-sidebar-vertical li.list-group-item.list-group-item-squat > a i.fa {
   margin: 2px 8px 0 12px;
   padding: 0;
 }
 
-.nav-pf-vertical li.list-group-item.list-group-item-squat > a .list-group-item-value {
+.nav-sidebar-vertical li.list-group-item.list-group-item-squat > a .list-group-item-value {
   padding: 0;
   vertical-align:text-bottom;
 }
 
 
-.nav-pf-vertical li.list-group-item.list-group-item-squat > a {
+.nav-sidebar-vertical li.list-group-item.list-group-item-squat > a {
   height: 35px;
 }
 
-.nav-pf-vertical li.list-group-item.list-group-item-squat > a > i {
+.nav-sidebar-vertical li.list-group-item.list-group-item-squat > a > i {
   margin: 5px 0 0 5px;
 }
 
-.nav-pf-vertical li.list-group-item > a .list-group-item-value {
+.nav-sidebar-vertical li.list-group-item > a .list-group-item-value {
   margin: 2px 0 0 5px;
 }
 
@@ -951,7 +949,7 @@ div.panel.panel-default {
   margin-bottom: 0;
 }
 
-.nav-pf-vertical {
+.nav-sidebar-vertical {
   background: #292e34;
   border-right: 1px solid #292e34;
   bottom: 0;
@@ -966,13 +964,13 @@ div.panel.panel-default {
 
 
 
-div.container-cards-pf {
+div.container-cards {
   width: unset;
   padding: 0;
   margin: $navbar-height 0 0 $sidebar-width;
 }
 
-div.container-cards-pf .cards-pf {
+div.container-cards .node-content-section {
   margin: 0;
 }
 
@@ -1016,20 +1014,26 @@ table.fake-table-view td
   border:1px solid red;
 }
 
+li.node-filter-section {
+  margin: 0;
+  padding: 0 0 0 10px;
+  background: white;
+}
+
 @media (max-width: $grid-float-breakpoint) {
   .node-container {
     margin-left: 0;
   }
 
-  .nav-pf-vertical {
+  .nav-sidebar-vertical {
     width: $collapsed-sidebar-width;
   }
 
-  .nav-pf-vertical li.list-group-item > a .list-group-item-value {
+  .nav-sidebar-vertical li.list-group-item > a .list-group-item-value {
     display: none;
   }
 
-  div.container-cards-pf {
+  div.container-cards {
     margin-left: $collapsed-sidebar-width;
   }
 
