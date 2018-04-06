@@ -231,7 +231,8 @@ const config = {
         loader: 'vue-loader',
         include: [
           path.resolve('ui'),
-          path.resolve('node_modules/vue-json-tree/src/')],
+          path.resolve('node_modules/vue-json-tree/src/')
+        ],
         options: {
           esModule: true,
           loaders: {

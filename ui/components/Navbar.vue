@@ -1,6 +1,6 @@
 <template>
 <nav
-  id="xmonarch-navbar"
+  id="monarchng-navbar"
   class="navbar fixed-top navbar-expand-lg navbar-dark bg-dark">
 
   <router-link to="/" class="navbar-brand">
@@ -15,7 +15,7 @@
   </button>
 
   <div class="collapse navbar-collapse" id="navbarTogglerDemo02">
-    <ul class="navbar-nav mr-auto mt-2 mt-lg-0">
+    <ul class="navbar-nav mr-auto">
       <li class="nav-item dropdown">
         <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown1" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
           Browse
@@ -84,10 +84,11 @@
       </li>
     </ul>
     <div v-if="this.$route.path !== '/'"
-         class="nav-ac py-1">
-      <monarch-autocomplete
-      ></monarch-autocomplete>
+         class="nav-ac">
+      <monarch-autocomplete>
+      </monarch-autocomplete>
     </div>
+
   </div>
 </nav>
 
@@ -119,50 +120,51 @@ export default {
 <style lang="scss">
 @import "../../css/_prelude-ng.scss";
 
-nav#monarch-navbar.navbar.navbar-default .navbar-brand {
+nav#monarchng-navbar.navbar .navbar-brand {
   height: $navbar-height;
-  max-height: $navbar-height;
-  padding: 1px;
-  margin: 1px 5px;
+  padding: 0;
+  margin: -1px 20px 0 0;
 }
 
-nav#monarch-navbar.navbar.navbar-default .navbar-toggle {
+nav#monarchng-navbar.navbar .navbar-brand .branding-logo {
+  height: 26px;
+  width: auto;
+  margin: 0;
+  padding: 0;
+}
+
+nav#monarchng-navbar.navbar .navbar-collapse > .navbar-nav {
+}
+
+nav#monarchng-navbar.navbar .navbar-collapse > .navbar-nav > .nav-item {
+  xvertical-align:middle;
+}
+
+
+nav#monarchng-navbar.navbar .navbar-collapse > .navbar-nav > .nav-item > .nav-link {
+  xpadding:0;
+  xmargin:0;
+}
+
+nav#monarchng-navbar.navbar .navbar-toggle {
   margin: 2px 35px 0 10px;
   padding: 1px;
 }
 
-nav#monarch-navbar.navbar.navbar-default .navbar-toggle .icon-bar {
+nav#monarchng-navbar.navbar .navbar-toggle .icon-bar {
   margin: 3px;
 }
 
-.branding-logo {
-  height: 22px;
-  width: auto;
-  margin: 0 0 0 10px;
-  xfloat: left;
-}
 
-.branding-name {
-  margin: 2px 10px 0 10px;
-  float: right;
-}
-
-#monarch-navbar {
+#monarchng-navbar {
   background-image: -webkit-linear-gradient(left, #0B556B 0%, #232733 100%) !important;
   background-image: linear-gradient(to right, #0B556B 0%, #232733 100%) !important;
   background-repeat: repeat-x !important;
   filter: progid:DXImageTransform.Microsoft.gradient(startColorstr='#ffffffff', endColorstr='#ffdfdfdf', GradientType=0) !important;
 }
 
-
-
-@media (max-width: ($grid-float-breakpoint + 60)) {
-  .branding-name {
-    display: none;
-  }
+.nav-ac {
+  margin:1px 25px 1px 0;
+  height: 30px;
 }
-
-  .nav-ac{
-    margin-right: 25px;
-  }
 </style>
