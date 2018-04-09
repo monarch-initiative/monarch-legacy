@@ -223,6 +223,7 @@ export default {
   watch: {
     // eslint-disable-next-line
     value: function () {
+      this.suggestions = [];
       if (!this.value) {
         this.open = false;
       }
