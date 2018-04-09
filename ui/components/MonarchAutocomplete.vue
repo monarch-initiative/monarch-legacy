@@ -21,12 +21,10 @@
         <div v-if="catDropDown" class="dropdown-menu list-group dropCatList px-4">
           <div>
             <div class="form-group">
-              <b-form-group label="Plain inline checkboxes">
                 <b-form-checkbox-group plain
                                        stacked
                                        v-model="selected"
                                        :options="options" />
-              </b-form-group>
             </div>
           </div>
         </div>
