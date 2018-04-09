@@ -85,9 +85,10 @@
       <li></li>
     </ul>
     <div v-if="this.$route.path !== '/'"
-         class="nav-ac py-1"><monarch-autocomplete
-            v-on:value="handleSelection"
-    ></monarch-autocomplete></div>
+         class="nav-ac py-1">
+      <monarch-autocomplete
+      ></monarch-autocomplete>
+    </div>
   </div>
 </nav>
 
@@ -111,12 +112,6 @@ export default {
   methods: {
     searchSubmit() {
       console.log('searchSubmit');
-    },
-    handleSelection(payload) {
-      const category = payload.value.category[0];
-      const curie = payload.value.id;
-      console.log(category, curie);
-      this.$router.push({ path: `/${category}/${curie}` })
     },
   }
 }

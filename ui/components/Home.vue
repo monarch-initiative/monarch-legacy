@@ -22,7 +22,6 @@
             </p>
             <monarch-autocomplete
                     homeSearch="true"
-                    v-on:value="handleSelection"
             ></monarch-autocomplete>
             <!--<p class="search-examples-text">-->
               <!--Examples: <i>Marfan Syndrome</i> <i>sox3</i>-->
@@ -212,19 +211,6 @@ export default {
     }
   },
   methods: {
-    handleSelection(payload) {
-      const category = this.categoryMap(payload.value.category);
-      const curie = payload.value.id;
-      this.$router.push({ path: `/${category}/${curie}` })
-    },
-    categoryMap(catList) {
-      let cat1 = new Set(catList);
-      let cat2 = new Set(['Phenotype', 'gene', 'variant', 'model', 'disease']);
-      let intersection = new Set(
-        [...cat1].filter(x => cat2.has(x)));
-      const intArray = Array.from(intersection);
-      return intArray[0]
-    },
   },
 }
 </script>
