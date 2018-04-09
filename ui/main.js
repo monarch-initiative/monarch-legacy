@@ -5,6 +5,8 @@
 import Vue from 'vue';
 import Router from 'vue-router';
 import VueGoodTable from 'vue-good-table';
+import BootstrapVue from 'bootstrap-vue/dist/bootstrap-vue.esm';
+import 'bootstrap-vue/dist/bootstrap-vue.css';
 import JsonTree from 'vue-json-tree';
 Vue.component('json-tree', JsonTree);
 
@@ -16,6 +18,8 @@ import NodeCard from '@/components/NodeCard.vue';
 import MonarchLegacy from '@/components/MonarchLegacy.vue';
 import TableView from '@/components/TableView.vue';
 import AssocFacets from '@/components/AssocFacets.vue';
+import MonarchAutocomplete from '@/components/MonarchAutocomplete.vue';
+
 
 /**
  * The linter can be disabled via LINTER=false env var
@@ -96,11 +100,13 @@ const main = () => {
   Vue.config.productionTip = false;
   Vue.use(Router);
   Vue.use(VueGoodTable);
+  Vue.use(BootstrapVue);
 
   Vue.component('monarch-navbar', Navbar);
   Vue.component('node-card', NodeCard);
   Vue.component('table-view', TableView);
   Vue.component('assoc-facets', AssocFacets);
+  Vue.component('monarch-autocomplete', MonarchAutocomplete);
 
   const availableCardTypes = [
     'anatomy',

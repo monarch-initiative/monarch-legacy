@@ -20,27 +20,13 @@
             <p class="intro-text">
               Advancing translational science by semantically integrating biological information across species.
             </p>
-
-
-            <form
-              id="home_search_form"
-              class="searchspace"
-              action="/search"
-              role="search">
-
-              <div class="input-group">
-                <span class="input-group-prepend">
-                  <div class="input-group-text"><i class="fa fa-search fa-fw"></i></div>
-                </span>
-                <input
-                  autofocus
-                  id="home_search" type="text" class="form-control" placeholder="Search for...">
-              </div>
-            </form>
-
-            <p class="search-examples-text">
-              Examples: <i>Marfan Syndrome</i> <i>sox3</i>
-            </p>
+            <monarch-autocomplete
+                    homeSearch="true"
+                    v-on:value="handleSelection"
+            ></monarch-autocomplete>
+            <!--<p class="search-examples-text">-->
+              <!--Examples: <i>Marfan Syndrome</i> <i>sox3</i>-->
+            <!--</p>-->
 
             <a href="#footer-fake" class="btn btn-circle page-scroll">
               <i class="fa fa-angle-double-down animated"></i>
@@ -224,7 +210,22 @@ export default {
   data () {
     return {
     }
-  }
+  },
+  methods: {
+    handleSelection(payload) {
+      const category = this.categoryMap(payload.value.category);
+      const curie = payload.value.id;
+      this.$router.push({ path: `/${category}/${curie}` })
+    },
+    categoryMap(catList) {
+      let cat1 = new Set(catList);
+      let cat2 = new Set(['Phenotype', 'gene', 'variant', 'model', 'disease']);
+      let intersection = new Set(
+        [...cat1].filter(x => cat2.has(x)));
+      const intArray = Array.from(intersection);
+      return intArray[0]
+    },
+  },
 }
 </script>
 
