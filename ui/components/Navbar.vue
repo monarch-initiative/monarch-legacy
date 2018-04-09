@@ -82,7 +82,6 @@
           <router-link class="dropdown-item" to="/page/links">Link To Us</router-link>
         </div>
       </li>
-      <li></li>
     </ul>
     <div v-if="this.$route.path !== '/'"
          class="nav-ac py-1">
