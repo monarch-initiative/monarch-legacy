@@ -39,8 +39,6 @@
           <router-link class="dropdown-item" to="/page/exomes">Exomes</router-link>
         </div>
       </li>
-
-
       <li class="nav-item dropdown">
         <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown3" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
           About
@@ -84,19 +82,12 @@
           <router-link class="dropdown-item" to="/page/links">Link To Us</router-link>
         </div>
       </li>
-
     </ul>
-
-    <form
-      id="search_form"
-      class="searchspace-ng my-2 my-lg-0"
-        action="/search" role="search">
-        <input id="search" type="text" class="col-xs-8 form-control" placeholder="Search (e.g. Parkinson's)"/>
-        <button
-          id="search-button"
-          class="btn btn-primary"
-          type="submit">Go</button>
-    </form>
+    <div v-if="this.$route.path !== '/'"
+         class="nav-ac py-1">
+      <monarch-autocomplete
+      ></monarch-autocomplete>
+    </div>
   </div>
 </nav>
 
@@ -120,7 +111,7 @@ export default {
   methods: {
     searchSubmit() {
       console.log('searchSubmit');
-    }
+    },
   }
 }
 </script>
@@ -163,32 +154,7 @@ nav#monarch-navbar.navbar.navbar-default .navbar-toggle .icon-bar {
   filter: progid:DXImageTransform.Microsoft.gradient(startColorstr='#ffffffff', endColorstr='#ffdfdfdf', GradientType=0) !important;
 }
 
-#search_form {
-  margin: 0 30px 0 0;
-  padding: 3px 0 0 0;
-  height: 32px;
-}
 
-
-#search {
-  height: 25px;
-  width: 200px;
-  margin: -1px 0 1px 0;
-  padding: 0;
-  display: inline;
-}
-
-
-#search_form #search-button {
-  padding: 0;
-  font-weight:500;
-  width:35px;
-  height: 24px;
-  color: #fff;
-  background: #337ab7;
-  border-color: #2e6da4;
-  display: inline;
-}
 
 @media (max-width: ($grid-float-breakpoint + 60)) {
   .branding-name {
@@ -196,4 +162,7 @@ nav#monarch-navbar.navbar.navbar-default .navbar-toggle .icon-bar {
   }
 }
 
+  .nav-ac{
+    margin-right: 25px;
+  }
 </style>

@@ -207,12 +207,12 @@
       v-if="expandedCard"
       class="expanded-card-view">
       <h3 class="text-center">{{labels[expandedCard]}} Associations</h3>
-      <table-view
+      <assoc-table
               :facets="facetObject"
               :nodeType="nodeCategory"
               :cardType="expandedCard"
               :identifier="nodeID">
-      </table-view>
+      </assoc-table>
     </div>
 
 <!--
