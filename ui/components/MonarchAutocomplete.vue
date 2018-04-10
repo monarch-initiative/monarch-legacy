@@ -24,7 +24,9 @@
                 <b-form-checkbox-group plain
                                        stacked
                                        v-model="selected"
-                                       :options="options" />
+                                       :options="options">
+
+                </b-form-checkbox-group>
             </div>
           </div>
         </div>
@@ -37,20 +39,17 @@
              @keydown.enter='enter'
              @keydown.down='down'
              @keydown.up='up'
-             placeholder="search..."
-      >
+             placeholder="search...">
     </div>
     <div v-if="open"
-         class="dropdown-menu list-group dropList px-4"
-    >
+         class="dropdown-menu list-group dropList px-4">
         <div v-for="(suggestion, index) in suggestions" :key="index"
             @click="suggestionClick(index)"
             v-bind:class="{'active': isActive(index)}"
             v-on:mouseover="mouseOver(index)"
             class="dropList border-bottom px-1"
             :title="suggestion.definition"
-            style="margin-right: 25px"
-        >
+            style="margin-right: 25px">
           <div class="row p-0">
             <div class="col-5"><strong>{{ ...suggestion.label }}</strong></div>
             <div class="col-4"><i>{{ suggestion.taxon }}</i></div>
@@ -61,15 +60,14 @@
         </div>
       <div class="row">
         <div v-if="suggestions.length > 0"
-             class="btn btn-outline-secondary col m-2"
-             v-on:click="showMore"
-        >
+             class="btn btn-outline-success col m-2"
+             v-on:click="showMore">
           Show all results for '{{value}}'
         </div>
         <div v-if="suggestions.length === 0" class="btn col m-2">
           No results for '{{value}}'
         </div>
-        <div  class="btn btn-outline-info col m-2" @click="clearSearch">Clear Search</div>
+        <div  class="btn btn-outline-warning col m-2" @click="clearSearch">Clear Search</div>
       </div>
     </div>
   </div>
@@ -93,11 +91,11 @@ export default {
     return {
       selected: [],
       options: [
-        { text: 'Phenotype', value: 'Phenotype' },
         { text: 'Gene', value: 'gene' },
+        { text: 'Genotype', value: 'genotype' },
+        { text: 'Phenotype', value: 'Phenotype' },
         { text: 'Disease', value: 'disease' },
-        { text: 'Variant', value: 'variant' },
-        { text: 'Model', value: 'model' },
+        // { text: 'Variant', value: 'variant' },
       ],
       catDropDown: false,
       value: '',
@@ -118,7 +116,7 @@ export default {
       function () {
         this.fetchData();
       }, 500, { leading: false, trailing: true }),
-    fetchData(){
+    fetchData() {
       if (this.value) {
         const that = this;
         this.loading = true;
@@ -159,12 +157,10 @@ export default {
       }
     },
     enter() {
-      this.value = '';
       const currentData = this.suggestions[this.current];
-      this.$emit('value', { value: this.suggestions[this.current] });
+      // this.$emit('value', { value: this.suggestions[this.current] });
       this.$router.push({ path: `/${currentData.category}/${currentData.curie}` });
-      // Needs to be done here, and in suggestionClick() rather than in template because of multiple
-      // event types that can trigger the selection
+      this.value = '';
       this.open = false;
       this.suggestions = [];
     },
@@ -189,13 +185,11 @@ export default {
     },
     // When one of the suggestion is clicked
     suggestionClick(index) {
+      const currentData = this.suggestions[index];
+      this.$router.push({ path: `/${currentData.category}/${currentData.curie}` });
+      // this.$emit('value', { value: this.suggestions[index] });
       this.value = '';
       this.open = false;
-      const currentData = this.suggestions[this.current];
-      // Needs to be done here, and in enter() rather than in template because of multiple event types that can trigger
-      // the selection
-      this.$router.push({ path: `/${currentData.category}/${currentData.curie}` });
-      this.$emit('value', { value: this.suggestions[index] });
       this.suggestions = [];
     },
     showMore() {
@@ -214,7 +208,7 @@ export default {
       return intArray[0]
     },
     checkTaxon(taxon){
-      if(typeof taxon === 'string'){
+      if (typeof taxon === 'string') {
         return taxon;
       }
 
@@ -251,11 +245,11 @@ export default {
     background-position: 99%;
     background-repeat: no-repeat;
   }
-  .dropList{
+  .dropList {
     width:100%;
     border-radius: 2px;
   }
-  .dropCatList{
+  .dropCatList {
     border-radius: 2px;
     padding-left: 2px;
     padding-right: 2px;
@@ -264,7 +258,7 @@ export default {
     background-color: cornflowerblue;
     color: white;
   }
-  .active{
+  .active {
     background-color: cornflowerblue;
     color: white;
   }

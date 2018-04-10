@@ -20,9 +20,8 @@
             <p class="intro-text">
               Advancing translational science by semantically integrating biological information across species.
             </p>
-            <monarch-autocomplete
-                    homeSearch="true"
-            ></monarch-autocomplete>
+            <monarch-autocomplete homeSearch="true">
+            </monarch-autocomplete>
             <!--<p class="search-examples-text">-->
               <!--Examples: <i>Marfan Syndrome</i> <i>sox3</i>-->
             <!--</p>-->
