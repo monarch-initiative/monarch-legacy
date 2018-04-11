@@ -19,7 +19,6 @@ import MonarchLegacy from '@/components/MonarchLegacy.vue';
 import TableView from '@/components/TableView.vue';
 import AssocFacets from '@/components/AssocFacets.vue';
 import MonarchAutocomplete from '@/components/MonarchAutocomplete.vue';
-import AssocTable from '@/components/AssocTable.vue';
 
 
 /**
@@ -108,7 +107,6 @@ const main = () => {
   Vue.component('table-view', TableView);
   Vue.component('assoc-facets', AssocFacets);
   Vue.component('monarch-autocomplete', MonarchAutocomplete);
-  Vue.component('assoc-table', AssocTable);
 
   const availableCardTypes = [
     'anatomy',
