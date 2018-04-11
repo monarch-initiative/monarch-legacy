@@ -52,7 +52,7 @@
               <span v-html="suggestion.highlight"></span>
             </div>
             <div class="col-5" v-else>
-              <strong>{{suggestion.label}}</strong>
+              <strong>{{suggestion.match}}</strong>
             </div>
             <div class="col-4"><i>{{ suggestion.taxon }}</i></div>
             <div class="col-3 text-align-right">
@@ -141,7 +141,7 @@ export default {
           .then((resp) => {
             resp.data.docs.forEach(elem => {
               const resultPacket = {
-                label: elem.match,
+                match: elem.match,
                 category: that.categoryMap(elem.category),
                 taxon: that.checkTaxon(elem.taxon_label),
                 curie: elem.id,
