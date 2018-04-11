@@ -127,6 +127,10 @@ export default {
         const params = new URLSearchParams();
         params.append('rows', 10);
         params.append('start', 0);
+        params.append('highlight_class', 'hilite');
+        if (this.selected.toString() === 'gene') {
+          params.append('boost_fx', 'pow(edges,0.334)');
+        }
         if (this.selected.length > 0) {
           this.selected.forEach(elem => {
             params.append('category', elem);
@@ -139,6 +143,7 @@ export default {
         params.append('prefix', '-OMIA');
         axios.get(blUrl, { params })
           .then((resp) => {
+            console.log(resp);
             resp.data.docs.forEach(elem => {
               const resultPacket = {
                 match: elem.match,
@@ -206,7 +211,7 @@ export default {
     },
     categoryMap(catList) {
       let cat1 = new Set(catList);
-      let cat2 = new Set(['phenotype', 'gene', 'variant', 'model', 'disease']);
+      let cat2 = new Set(['phenotype', 'gene', 'variant', 'genotype', 'disease']);
       let intersection = new Set(
         [...cat1].filter(x => cat2.has(x)));
       const intArray = Array.from(intersection);
@@ -270,5 +275,8 @@ export default {
   .autorootdiv {
     position: relative;
     min-width: 600px;
+  }
+  .hilite {
+    font-weight: bold;
   }
 </style>
