@@ -123,7 +123,7 @@ export default {
 nav#monarchng-navbar.navbar .navbar-brand {
   height: $navbar-height;
   padding: 0;
-  margin: -1px 20px 0 0;
+  margin: 0 20px 0 0;
 }
 
 nav#monarchng-navbar.navbar .navbar-brand .branding-logo {
@@ -149,6 +149,10 @@ nav#monarchng-navbar.navbar .navbar-collapse > .navbar-nav > .nav-item > .nav-li
 nav#monarchng-navbar.navbar .navbar-toggle {
   margin: 2px 35px 0 10px;
   padding: 1px;
+}
+
+nav#monarchng-navbar.navbar .navbar-toggler {
+  padding: 2px 10px;
 }
 
 nav#monarchng-navbar.navbar .navbar-toggle .icon-bar {
