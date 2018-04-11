@@ -24,11 +24,7 @@
                 <b-form-checkbox-group plain
                                        stacked
                                        v-model="selected"
-                                       :options="options"
-                                       offset="50"
-
-                >
-
+                                       :options="options">
                 </b-form-checkbox-group>
             </div>
           </div>
@@ -50,8 +46,7 @@
             @click="suggestionClick(index)"
             v-bind:class="{'active': isActive(index)}"
             v-on:mouseover="mouseOver(index)"
-            class="dropList border-bottom px-1"
-            :title="suggestion.definition">
+            class="dropList border-bottom px-1">
           <div class="row p-0">
             <div class="col-5" v-if="suggestion.has_hl">
               <span v-html="suggestion.highlight"></span>
@@ -67,14 +62,14 @@
         </div>
       <div class="row">
         <div v-if="suggestions.length > 0"
-             class="btn btn-sm btn-outline-success col m-2"
+             class="btn btn-outline-success col m-2"
              v-on:click="showMore">
           Show all results for '{{value}}'
         </div>
         <div v-if="suggestions.length === 0" class="btn col m-2">
           No results for '{{value}}'
         </div>
-        <div  class="btn btn-sm btn-outline-warning col m-2"
+        <div  class="btn btn-outline-warning col m-2"
               @click="clearSearch">Clear Search</div>
       </div>
     </div>
@@ -276,8 +271,4 @@ export default {
     position: relative;
     min-width: 600px;
   }
-  .checkbox-z {
-    z-index: 1001;
-  }
-
 </style>
