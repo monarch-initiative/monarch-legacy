@@ -141,7 +141,7 @@ export default {
           .then((resp) => {
             resp.data.docs.forEach(elem => {
               const resultPacket = {
-                label: elem.label,
+                label: elem.match,
                 category: that.categoryMap(elem.category),
                 taxon: that.checkTaxon(elem.taxon_label),
                 curie: elem.id,
