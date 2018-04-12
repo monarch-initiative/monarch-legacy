@@ -214,18 +214,27 @@ export default {
       this.value = '';
     },
     categoryMap(catList) {
-      let cat1 = new Set(catList);
-      let cat2 = new Set(['phenotype', 'gene', 'variant locus', 'genotype', 'disease']);
-      let intersection = new Set(
-        [...cat1].filter(x => cat2.has(x)));
-      const intArray = Array.from(intersection);
-      return intArray.toString();
+      let categoryReturn = '';
+      let categoryList = catList;
+      if (categoryList.indexOf('gene') !== -1) {
+        categoryReturn = 'gene';
+      }
+      else if (categoryList.indexOf('variant locus') !== -1 ) {
+        categoryReturn = 'variant';
+      }
+      else {
+        let cat2 = new Set(['phenotype', 'genotype', 'disease']);
+        let intersection = new Set(
+          catList.filter(x => cat2.has(x)));
+        const intArray = Array.from(intersection);
+        categoryReturn = intArray.toString();
+      }
+      return categoryReturn
     },
     checkTaxon(taxon){
       if (typeof taxon === 'string') {
         return taxon;
       }
-
     },
   },
   watch: {
