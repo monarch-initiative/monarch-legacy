@@ -99,6 +99,7 @@ export default {
       options: [
         { text: 'Gene', value: 'gene' },
         { text: 'Genotype', value: 'genotype' },
+        { text: 'Variant', value: 'variant locus' },
         { text: 'Phenotype', value: 'phenotype' },
         { text: 'Disease', value: 'disease' },
       ],
@@ -214,7 +215,7 @@ export default {
     },
     categoryMap(catList) {
       let cat1 = new Set(catList);
-      let cat2 = new Set(['phenotype', 'gene', 'variant', 'genotype', 'disease']);
+      let cat2 = new Set(['phenotype', 'gene', 'variant locus', 'genotype', 'disease']);
       let intersection = new Set(
         [...cat1].filter(x => cat2.has(x)));
       const intArray = Array.from(intersection);
