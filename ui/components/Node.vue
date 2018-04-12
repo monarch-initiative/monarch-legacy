@@ -59,7 +59,7 @@
 </div>
 
 
-<div class="xcontainer container-cards">
+<div class="container-cards">
 <div class="wrapper">
   <div
     class="overlay"
@@ -100,7 +100,20 @@
     class="container-fluid title-bar">
     <div
       v-if="!node">
-      <h4 class="text-center">Loading Data for {{labels[nodeType]}}: {{nodeID}}</h4>
+      <div
+        v-if="nodeError">
+        <sm>
+          <h6>
+            Error loading {{labels[nodeType]}}: {{nodeId}}
+          </h6>
+          <pre
+            class="pre-scrollable">{{nodeError}}</pre>
+        </sm>
+      </div>
+      <div
+        v-else>
+        <h5 class="text-center">Loading Data for {{labels[nodeType]}}: {{nodeId}}</h5>
+      </div>
     </div>
 
     <div
@@ -197,7 +210,7 @@
           :card-type="cardType"
           :card-count="counts[cardType]"
           :parent-node="node"
-          :parent-node-id="nodeID"
+          :parent-node-id="nodeId"
           v-on:expandCard="expandCard(cardType)">
         </node-card>
       </div>
@@ -207,12 +220,12 @@
       v-if="expandedCard"
       class="expanded-card-view">
       <h3 class="text-center">{{labels[expandedCard]}} Associations</h3>
-      <assoc-table
+      <table-view
               :facets="facetObject"
               :nodeType="nodeCategory"
               :cardType="expandedCard"
-              :identifier="nodeID">
-      </assoc-table>
+              :identifier="nodeId">
+      </table-view>
     </div>
 
 <!--
@@ -226,17 +239,10 @@
         <json-tree :data="node" :level="1"></json-tree>
       </div>
     </div>
--->
+ -->
 
   </div>
 </div>
-<!--
-<button
-  v-on:click="getHierarchy()"
-  class="btn btn-default btn-sm">
-    Get Hierarchy
-</button>
- -->
 
 
 </div>
@@ -247,29 +253,8 @@
 
 import _ from 'underscore';
 import TableView from "./TableView.vue";
+import * as MA from '../../js/MonarchAccess';
 
-function pathLoadedAsync(sourceText, responseURL, path, done) {
-  if (done) {
-    done(sourceText, responseURL);
-  }
-  else {
-    console.log('pathLoadedAsync', responseURL, path, sourceText.slice(0, 100));
-  }
-}
-
-
-function loadPathContentAsync(path, done) {
-  // console.log('loadPathContentAsync', path);
-  /* global XMLHttpRequest */
-  const oReq = new XMLHttpRequest();
-  oReq.addEventListener('load', function load() {
-    // console.log('loadPathContentAsync', path, this);
-    pathLoadedAsync(this.responseText, this.responseURL, path, done);
-  });
-
-  oReq.open('GET', path);
-  oReq.send();
-}
 
 const availableCardTypes = [
   'anatomy',
@@ -329,15 +314,15 @@ const labels = {
 export default {
     name: 'home',
   created() {
-    // console.log('created', this.nodeID);
+    // console.log('created', this.nodeId);
   },
 
   updated() {
-    // console.log('updated', this.nodeID);
+    // console.log('updated', this.nodeId);
   },
 
   destroyed() {
-    // console.log('destroyed', this.nodeID);
+    // console.log('destroyed', this.nodeId);
   },
 
   mounted() {
@@ -416,6 +401,7 @@ export default {
         diseases: false,
       },
       node: null,
+      nodeError: null,
       equivalentClasses: null,
       superclasses: null,
       subclasses: null,
@@ -424,11 +410,10 @@ export default {
       contentScript: '',
       contentBody: '',
       progressTimer: null,
-      progressPath: null,
       path: null,
       icons: icons,
       labels: labels,
-      nodeID: null,
+      nodeId: null,
       nodeDefinition: null,
       nodeLabel: null,
       nodeIcon: null,
@@ -478,10 +463,16 @@ export default {
       this.isActive = !this.isActive;
     },
 
-    parseNodeContent(content) {
+    // TIP/QUESTION: This applyResponse is called asynchronously via the function
+    // fetchData when it's promise is fulfilled. We (as VueJS newbies) aren't
+    // yet certain how this fits into the Vue lifecycle and we may eventually
+    // need to apply $nextTick() to deal with this. Keep an eye out for UI fields
+    // not updating or having undefined values.
+    //
+    applyResponse(content) {
       var that = this;
-      this.node = JSON.parse(content);
-      // console.log('parseNodeContent', this.node);
+      this.node = content;
+      // console.log('applyResponse', this.node);
 
       var equivalentClasses = [];
       var superclasses = [];
@@ -489,14 +480,14 @@ export default {
       if (this.node.relationships) {
         this.node.relationships.forEach(relationship => {
           if (relationship.property.id === 'subClassOf') {
-            if (relationship.subject.id === this.nodeID) {
+            if (relationship.subject.id === this.nodeId) {
               superclasses.push(relationship.object);
             }
-            else if (relationship.object.id === this.nodeID) {
+            else if (relationship.object.id === this.nodeId) {
               subclasses.push(relationship.subject);
             }
             else {
-              console.log('parseNodeContent ERROR', relationship);
+              console.log('applyResponse ERROR', relationship);
             }
           }
           else if (relationship.property.id === 'equivalentClass') {
@@ -544,90 +535,65 @@ export default {
       // this.literature = this.node.literatureNum;
     },
 
-    fetchData() {
+
+    startProgress() {
+      const that = this;
+      if (that.progressTimer) {
+        console.log('startProgress.... leftover progressTimer');
+      }
+      else {
+        that.progressTimer = setTimeout(function timeout() {
+          that.progressTimer = null;
+        }, 500);
+      }
+    },
+
+
+    clearProgress() {
+      const that = this;
+      that.$nextTick(function() {
+        if (that.progressTimer) {
+          clearTimeout(that.progressTimer);
+          that.progressTimer = null;
+        }
+      });
+    },
+
+
+    async fetchData() {
       const that = this;
       const path = that.$route.fullPath;
+
       this.path = that.$route.path;
-      this.nodeID = this.$route.params.id;
+      this.nodeId = this.$route.params.id;
       this.nodeType = this.path.split('/')[1];
+
+      // TIP: setup the pre-fetch state, waiting for the async result
+      this.node = null;
+      this.nodeError = null;
       this.expandedCard = null;
       this.nonEmptyCards = [];
       this.isActive = false;
+      this.startProgress();
 
-      // console.log('fetchData', path, this.$route.params, this.$route.params.id, this.nodeType);
-
-      if (that.progressTimer) {
-        console.log('leftover progressTimer');
+      try {
+        let nodeResponse = await MA.getNodeSummary(this.nodeId, this.nodeType);
+        // console.log('nodeResponse', nodeResponse);
+        // TIP: We got a result, apply it to the Vue model
+        that.applyResponse(nodeResponse);
+        that.clearProgress();
       }
-      else {
-        that.progressPath = null;
-        that.progressTimer = setTimeout(function timeout() {
-          that.progressTimer = null;
-          that.progressPath = path;
-          that.node = null;
-        }, 500);
+      catch (e) {
+        console.log('nodeResponse ERROR', e, that);
+        that.nodeError = e;
+        that.clearProgress();
       }
-      that.node = null;
-      var url = `/node${that.path}.json`;
-      loadPathContentAsync(url, function(content, responseURL) {
-        that.parseNodeContent(content);
-        that.$nextTick(function() {
-          if (that.progressTimer) {
-            clearTimeout(that.progressTimer);
-            that.progressTimer = null;
-          }
-          that.progressPath = null;
-        });
-      });
+
+      // TIP: Don't put anything useful here, because this will execute BEFORE
+      // the async operation has even been queued and before it has returned
+      // a useful result or error.
     },
-
-    xloadPathContentAsync(path, done) {
-      console.log('xloadPathContentAsync', path);
-      /* global XMLHttpRequest */
-      const oReq = new XMLHttpRequest();
-      oReq.addEventListener('load', function load() {
-        // console.log('xloadPathContentAsync', path, this);
-        var responseJSON = this.responseText;
-        var response = JSON.parse(responseJSON);
-        done(response, this.responseURL, path);
-      });
-
-      let refinedPath = path;
-
-      // const hashIndex = refinedPath.indexOf('#');
-      // if (hashIndex >= 0) {
-      //   refinedPath = refinedPath.slice(0, hashIndex) + '?stripme' + refinedPath.slice(hashIndex);
-      // }
-      // else {
-      //   refinedPath += '?stripme';
-      // }
-      oReq.open('GET', refinedPath);
-      oReq.send();
-    },
-
-    getHierarchy() {
-      //Determine if ID is clique leader
-      console.log('qurl', this.node);
-      var qurl = this.node.global_scigraph_data_url + "dynamic/cliqueLeader/" + this.nodeID + ".json";
-      this.xloadPathContentAsync(qurl,
-        function(response, responseURL, path) {
-          console.log('xpathLoadedAsync', response, responseURL, path);
-
-          var graph = new bbop.model.graph();
-          graph.load_json(response);
-          var nodeList = graph.all_nodes();
-          console.log('nodeList', nodeList);
-          if (nodeList.length !== 1) {
-            console.log('nodeList ERROR too many entries', nodeList);
-          }
-          else {
-            var leaderId = nodeList[0].id();
-            console.log('leaderId', leaderId);
-          }
-        });
-    }
   }
-
 }
 
 </script>

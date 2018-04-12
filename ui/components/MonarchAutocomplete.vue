@@ -1,5 +1,7 @@
 <template>
-  <div class="autocomplete autorootdiv" v-bind:class="{'open':open}">
+  <div
+    class="autocomplete autorootdiv"
+    v-bind:class="{'home-search':homeSearch, 'open':open}">
     <div v-if="homeSearch" class="form-group">
       <div class="form-group" label="Button style checkboxes">
         <b-form-checkbox-group buttons
@@ -273,6 +275,8 @@ export default {
     border-radius: 2px;
   }
   .dropCatList {
+    position: absolute;
+    z-index: 1001;
     border-radius: 2px;
     padding-left: 2px;
     padding-right: 2px;
@@ -287,9 +291,18 @@ export default {
   }
   .autorootdiv {
     position: relative;
-    min-width: 600px;
   }
+
   .hilite {
     font-weight: bold;
   }
+
+  .autorootdiv .input-group.input-group-sm {
+    width: 400px;
+  }
+
+  .autorootdiv.home-search .input-group.input-group-sm {
+    width: unset;
+  }
+  
 </style>
