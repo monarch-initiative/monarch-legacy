@@ -7,7 +7,9 @@
                                v-model="selected"
                                name="butons1"
                                size="sm"
-                               :options="options">
+                               :options="options"
+                               v-b-tooltip.left
+                               title="Select a single or set of categories to search on">
         </b-form-checkbox-group>
       </div>
     </div>
@@ -35,10 +37,11 @@
              type="text"
              v-model="value"
              v-on:input="debounceInput"
-             @keydown.enter='enter'
-             @keydown.down='down'
-             @keydown.up='up'
-             placeholder="search...">
+             @keydown.enter="enter"
+             @keydown.down="down"
+             @keydown.up="up"
+             @keydown.esc="clearSearch"
+             placeholder="Search... e.g. Marfan syndrome or sox3">
     </div>
     <div v-if="open"
          class="dropdown-menu list-group dropList px-4">
@@ -69,7 +72,7 @@
         <div v-if="suggestions.length === 0" class="btn col m-2">
           No results for '{{value}}'
         </div>
-        <div  class="btn btn-outline-warning col m-2"
+        <div  class="btn btn-outline-secondary col m-2"
               @click="clearSearch">Clear Search</div>
       </div>
     </div>
@@ -98,7 +101,6 @@ export default {
         { text: 'Genotype', value: 'genotype' },
         { text: 'Phenotype', value: 'phenotype' },
         { text: 'Disease', value: 'disease' },
-        // { text: 'Variant', value: 'variant' },
       ],
       catDropDown: false,
       value: '',
@@ -123,11 +125,13 @@ export default {
       if (this.value) {
         const that = this;
         this.loading = true;
-        const blUrl = `https://owlsim.monarchinitiative.org/api/search/entity/autocomplete/${this.value}`;
+        const baseUrl = 'https://owlsim.monarchinitiative.org/api/';
+        const urlExtension = `search/entity/autocomplete/${this.value}`;
         const params = new URLSearchParams();
         params.append('rows', 10);
         params.append('start', 0);
         params.append('highlight_class', 'hilite');
+        params.append('boost_q', 'category:genotype^-10');
         if (this.selected.toString() === 'gene') {
           params.append('boost_fx', 'pow(edges,0.334)');
         }
@@ -141,9 +145,8 @@ export default {
           });
         }
         params.append('prefix', '-OMIA');
-        axios.get(blUrl, { params })
+        axios.get(`${baseUrl}${urlExtension}`, { params })
           .then((resp) => {
-            console.log(resp);
             resp.data.docs.forEach(elem => {
               const resultPacket = {
                 match: elem.match,
@@ -215,7 +218,7 @@ export default {
       let intersection = new Set(
         [...cat1].filter(x => cat2.has(x)));
       const intArray = Array.from(intersection);
-      return intArray[0]
+      return intArray.toString();
     },
     checkTaxon(taxon){
       if (typeof taxon === 'string') {
