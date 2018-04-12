@@ -57,9 +57,19 @@
     xpadding: 4px 0px 0px;
 }
 #monarch-navbar .navbar-brand {
-    padding: 8px 20px 0px 20px;
+    padding: 0px 5px;
     height: $navbar-height;
 }
+
+#monarch-navbar .navbar-brand > img {
+  margin: 1px 5px 0 0;
+}
+
+#monarch-navbar .navbar-brand > div.pull-right {
+  margin: 2px 0 0 5px;
+}
+
+
 #monarch-navbar .navbar-link {
     font-size: 14px;
 }

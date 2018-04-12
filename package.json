@@ -122,6 +122,7 @@
     "bbop-rest-manager": "0.0.17",
     "bbop-widget-set": "^2.5.8",
     "bootstrap": "^4.0.0",
+    "bootstrap-vue": "^2.0.0-rc.6",
     "font-awesome": "^4.7.0",
     "golr-conf": "0.0.3",
     "hapi": "^16.6.2",
