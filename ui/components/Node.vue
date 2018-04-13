@@ -984,8 +984,10 @@ table.fake-table-view td
 
 li.node-filter-section {
   margin: 0;
-  padding: 0 0 0 10px;
-  background: white;
+  padding: 5px 5px 5px 10px;
+  color: white;
+  border: solid black 1px;
+  border-bottom: solid black 2px;
 }
 
 @media (max-width: $grid-float-breakpoint) {
