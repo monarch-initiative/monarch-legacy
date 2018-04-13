@@ -7,7 +7,6 @@ import Router from 'vue-router';
 import VueGoodTable from 'vue-good-table';
 import BootstrapVue from 'bootstrap-vue/dist/bootstrap-vue.esm';
 import 'bootstrap-vue/dist/bootstrap-vue.css';
-import JsonTree from 'vue-json-tree';
 import App from './App.vue';
 import Home from '@/components/Home.vue';
 import Navbar from '@/components/Navbar.vue';
@@ -18,10 +17,6 @@ import TableView from '@/components/TableView.vue';
 import AssocFacets from '@/components/AssocFacets.vue';
 import MonarchAutocomplete from '@/components/MonarchAutocomplete.vue';
 import ExacGeneSummary from '@/components/ExacGeneSummary.vue';
-
-
-
-Vue.component('json-tree', JsonTree);
 
 
 /**

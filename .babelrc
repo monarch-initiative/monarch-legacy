@@ -1,4 +1,4 @@
 {
-  "presets": ["es2015"],
-  "plugins": ["syntax-dynamic-import"]
+  "presets": ["env"],
+  "plugins": ["transform-runtime", "syntax-dynamic-import"]
 }
