@@ -12,57 +12,68 @@ import axios from 'axios';
 
 /* eslint indent: 0 */
 function createExaxGeneSummaryTable(varID) {
-    const vueapp = new Vue({
-        delimiters: ['{[{', '}]}'],
-        el: '#exacGene',
-        data() {
-            return {
-                exacGene: '',
-                showGeneExac: false,
+  const vueapp = new Vue({
+    delimiters: ['{[{', '}]}'],
+    el: '#exacGene',
+    data() {
+      return {
+        exacGene: '',
+        showGeneExac: false,
+      };
+    },
+    methods: {
+      round(value, decimals) {
+        let returnValue = '';
+        if (value < 1) {
+          returnValue = value.toPrecision(2);
+        }
+        else {
+          returnValue = Number(Math.round(`${value}e${decimals}`) + `e-${decimals}`);
+        }
+        return returnValue;
+      },
+      hitMyGene(identifier) {
+        const baseURL = 'https://mygene.info/v3/query/';
+        const curieMap = {
+          'HGNC': 'hgnc',
+          'OMIM': 'mim',
+          'ENSEMBL': 'ensembl.gene',
+          'NCBIGene': 'entrezgene',
+        };
+        const splitCurie = identifier.split(':');
+        const mgCurie = `${curieMap[splitCurie[0]]}:${splitCurie[1]}`;
+        axios.get(baseURL, {
+          params: {
+            q: mgCurie,
+            fields: 'exac',
+          },
+        })
+          .then((resp) => {
+            // eslint-disable-next-line
+            const hits = resp.data.hits[0];
+            if (hits.exac) {
+              this.showGeneExac = true;
+            }
+            this.exacGene = {
+              exp_syn: hits.exac.all.exp_syn,
+              n_syn: hits.exac.all.n_syn,
+              syn_z: hits.exac.all.n_syn,
+              exp_mis: hits.exac.all.exp_mis,
+              n_mis: hits.exac.all.n_mis,
+              mis_z: hits.exac.all.mis_z,
+              exp_lof: hits.exac.all.exp_lof,
+              n_lof: hits.exac.all.n_lof,
+              p_li: hits.exac.all.p_li,
+              link: resp.request.responseURL,
             };
-        },
-        methods: {
-            round(value, decimals) {
-                // eslint-disable-next-line
-                return Number(Math.round(`${value}e${decimals}`) + `e-${decimals}`);
-            },
-            hitMyGene(identifier) {
-                const baseURL = 'https://mygene.info/v3/query/';
-                const numericalIdentifier = identifier.split(':').pop();
-                axios.get(baseURL, {
-                    params: {
-                        q: numericalIdentifier,
-                        fields: 'exac',
-                    },
-                })
-                    .then((resp) => {
-                        // eslint-disable-next-line
-                        console.log(resp.request.responseURL);
-                        const hits = resp.data.hits[0];
-                        if (hits.exac) {
-                            this.showGeneExac = true;
-                        }
-                        this.exacGene = {
-                            exp_syn: hits.exac.all.exp_syn,
-                            n_syn: hits.exac.all.n_syn,
-                            syn_z: hits.exac.all.n_syn,
-                            exp_mis: hits.exac.all.exp_mis,
-                            n_mis: hits.exac.all.n_mis,
-                            mis_z: hits.exac.all.mis_z,
-                            exp_lof: hits.exac.all.exp_lof,
-                            n_lof: hits.exac.all.n_lof,
-                            p_li: hits.exac.all.p_li,
-                            link: resp.request.responseURL,
-                        };
-                        console.log(this.exacGene);
-                    })
-                    .catch((err) => {
-                        // eslint-disable-next-line
-                        console.log(err);
-                    });
-            },
-        },
-    });
-    vueapp.hitMyGene(varID);
+          })
+          .catch((err) => {
+            // eslint-disable-next-line
+            console.log(err);
+          });
+      },
+    },
+  });
+  vueapp.hitMyGene(varID);
 }
 exports.createExaxGeneSummaryTable = createExaxGeneSummaryTable;
