@@ -9,7 +9,7 @@
                                size="sm"
                                :options="options"
                                v-b-tooltip.left
-                               title="Select a single or set of categories to search on">
+                               title="Select a single category or set of categories to search on">
         </b-form-checkbox-group>
       </div>
     </div>
@@ -45,24 +45,25 @@
     </div>
     <div v-if="open"
          class="dropdown-menu list-group dropList px-4">
-        <div v-for="(suggestion, index) in suggestions" :key="index"
-            @click="suggestionClick(index)"
-            v-bind:class="{'active': isActive(index)}"
-            v-on:mouseover="mouseOver(index)"
-            class="dropList border-bottom px-1">
-          <div class="row p-0">
-            <div class="col-5" v-if="suggestion.has_hl">
-              <span v-html="suggestion.highlight"></span>
-            </div>
-            <div class="col-5" v-else>
-              <strong>{{suggestion.match}}</strong>
-            </div>
-            <div class="col-4"><i>{{ suggestion.taxon }}</i></div>
-            <div class="col-3 text-align-right">
-              <small>{{suggestion.category }}</small>
-            </div>
+      <div v-for="(suggestion, index) in suggestions"
+           :key="index"
+           @click="suggestionClick(index)"
+           v-bind:class="{'active': isActive(index)}"
+           v-on:mouseover="mouseOver(index)"
+           class="border-bottom px-1">
+        <div class="row p-0">
+          <div class="col-5" v-if="suggestion.has_hl">
+            <span v-html="suggestion.highlight"></span>
+          </div>
+          <div class="col-5" v-else>
+            <strong>{{suggestion.match}}</strong>
+          </div>
+          <div class="col-4"><i>{{suggestion.taxon}}</i></div>
+          <div class="col-3 text-align-right">
+            <small>{{suggestion.category}}</small>
           </div>
         </div>
+      </div>
       <div class="row">
         <div v-if="suggestions.length > 0"
              class="btn btn-outline-success col m-2"
@@ -148,6 +149,7 @@ export default {
         params.append('prefix', '-OMIA');
         axios.get(`${baseUrl}${urlExtension}`, { params })
           .then((resp) => {
+            console.log(resp);
             resp.data.docs.forEach(elem => {
               const resultPacket = {
                 match: elem.match,
@@ -214,22 +216,23 @@ export default {
       this.value = '';
     },
     categoryMap(catList) {
-      let categoryReturn = '';
-      let categoryList = catList;
-      if (categoryList.indexOf('gene') !== -1) {
-        categoryReturn = 'gene';
-      }
-      else if (categoryList.indexOf('variant locus') !== -1 ) {
-        categoryReturn = 'variant';
-      }
-      else {
-        let cat2 = new Set(['phenotype', 'genotype', 'disease']);
-        let intersection = new Set(
-          catList.filter(x => cat2.has(x)));
-        const intArray = Array.from(intersection);
-        categoryReturn = intArray.toString();
-      }
-      return categoryReturn
+      const validCats = {
+        'gene': 'gene',
+        'variant locus': 'variant',
+        'phenotype': 'phenotype',
+        'genotype': 'genotype',
+        'disease': 'disease'
+      };
+      const categoryObj = catList.reduce( (map, cat) => {
+        cat = validCats[cat];
+        if (cat) {
+          map[cat] = cat;
+        }
+        return map;
+      }, {});
+      return categoryObj.gene ||
+        categoryObj.variant ||
+        Object.keys(categoryObj).join(',');
     },
     checkTaxon(taxon){
       if (typeof taxon === 'string') {
@@ -271,6 +274,7 @@ export default {
   .dropList {
     width:100%;
     border-radius: 2px;
+    border: solid black 1px;
   }
   .dropCatList {
     border-radius: 2px;
