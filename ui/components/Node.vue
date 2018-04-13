@@ -202,7 +202,7 @@
         </node-card>
       </div>
     </div>
-    <div>
+    <div v-if="!expandedCard">
       <exac-gene :nodeID="nodeID"></exac-gene>
     </div>
     <div
