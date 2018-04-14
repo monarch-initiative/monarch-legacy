@@ -19,7 +19,23 @@ function createExaxGeneSummaryTable(varID) {
       return {
         exacGene: '',
         showGeneExac: false,
+        curieMap: {
+          'HGNC': 'hgnc',
+          'OMIM': 'mim',
+          'ENSEMBL': 'ensembl.gene',
+          'NCBIGene': 'entrezgene',
+        },
       };
+    },
+    mounted() {
+      if (Object.keys(this.curieMap).indexOf(this.nodePrefix) !== -1 ) {
+        this.hitMyGene(varID);
+      }
+    },
+    computed: {
+      nodePrefix() {
+        return varID.split(':')[0];
+      },
     },
     methods: {
       round(value, decimals) {
@@ -34,14 +50,8 @@ function createExaxGeneSummaryTable(varID) {
       },
       hitMyGene(identifier) {
         const baseURL = 'https://mygene.info/v3/query/';
-        const curieMap = {
-          'HGNC': 'hgnc',
-          'OMIM': 'mim',
-          'ENSEMBL': 'ensembl.gene',
-          'NCBIGene': 'entrezgene',
-        };
         const splitCurie = identifier.split(':');
-        const mgCurie = `${curieMap[splitCurie[0]]}:${splitCurie[1]}`;
+        const mgCurie = `${this.curieMap[splitCurie[0]]}:${splitCurie[1]}`;
         axios.get(baseURL, {
           params: {
             q: mgCurie,
