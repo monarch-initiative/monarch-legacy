@@ -216,7 +216,7 @@
       </div>
     </div>
     <div v-if="!expandedCard">
-      <exac-gene :nodeID="nodeID"></exac-gene>
+      <exac-gene :nodeID="nodeId"></exac-gene>
     </div>
     <div
       v-if="expandedCard"
