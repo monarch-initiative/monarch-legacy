@@ -13,9 +13,6 @@
     <link
       href="<%= webpackConfig.output.publicPath + (Object.prototype.toString.call(webpack.assetsByChunkName['app']) === '[object Array]' ? webpack.assetsByChunkName['app'][1] : webpack.assetsByChunkName['app']) %>"
       rel="stylesheet">
-    <link
-      href="<%= webpackConfig.output.publicPath + (Object.prototype.toString.call(webpack.assetsByChunkName['spa']) === '[object Array]' ? webpack.assetsByChunkName['spa'][1] : webpack.assetsByChunkName['spa']) %>"
-      rel="stylesheet">
     <% } %>
 
     <style>
@@ -70,8 +67,6 @@ function loaderBody() {
   <% if (!htmlWebpackPlugin.options.MODE_DEV_SERVER) { %>
     <script
       src="<%= webpackConfig.output.publicPath + (Object.prototype.toString.call(webpack.assetsByChunkName['app']) === '[object Array]' ? webpack.assetsByChunkName['app'][0] : webpack.assetsByChunkName['app']) %>"></script>
-    <script
-      src="<%= webpackConfig.output.publicPath + (Object.prototype.toString.call(webpack.assetsByChunkName['spa']) === '[object Array]' ? webpack.assetsByChunkName['spa'][0] : webpack.assetsByChunkName['spa']) %>"></script>
   <% } %>
 
       <!-- Google Analytics
