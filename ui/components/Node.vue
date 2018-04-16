@@ -229,20 +229,6 @@
               :identifier="nodeId">
       </table-view>
     </div>
-
-<!--
-    <br>
-    <br>
-    <br>
-    <br>
-
-    <div class="row pre-scrollable">
-      <div class="col-xs-12">
-        <json-tree :data="node" :level="1"></json-tree>
-      </div>
-    </div>
- -->
-
   </div>
 </div>
 

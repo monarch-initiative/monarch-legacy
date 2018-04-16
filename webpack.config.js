@@ -230,8 +230,7 @@ const config = {
         test: /\.vue$/,
         loader: 'vue-loader',
         include: [
-          path.resolve('ui'),
-          path.resolve('node_modules/vue-json-tree/src/')
+          path.resolve('ui')
         ],
         options: {
           esModule: true,
@@ -262,7 +261,11 @@ const config = {
           path.resolve('js'),
           path.resolve('node_modules/q'),
           path.resolve('node_modules/webpack-dev-server/client')],
-        loader: 'babel-loader'
+        loader: 'babel-loader',
+        // options: {
+        //   presets: [path.resolve('node_modules/babel-preset-env')],
+        //   plugins: ["fast-async", "syntax-dynamic-import"]
+        // }
       },
       {
         test: /\.css$/,
