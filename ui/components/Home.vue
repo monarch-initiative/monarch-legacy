@@ -433,7 +433,7 @@ html {
   -webkit-transition: all .3s ease-in-out;
   -moz-transition: all .3s ease-in-out;
   transition: all .3s ease-in-out;
-  border-radius: 0;
+  /*border-radius: 0;*/
 }
 
 #monarch-home-container .btn-default {

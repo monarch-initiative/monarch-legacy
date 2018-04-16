@@ -9,7 +9,9 @@
                                v-model="selected"
                                name="butons1"
                                size="sm"
-                               :options="options">
+                               :options="options"
+                               v-b-tooltip.left
+                               title="Select a single category or set of categories to search on">
         </b-form-checkbox-group>
       </div>
     </div>
@@ -27,7 +29,6 @@
                                        stacked
                                        v-model="selected"
                                        :options="options">
-
                 </b-form-checkbox-group>
             </div>
           </div>
@@ -38,28 +39,33 @@
              type="text"
              v-model="value"
              v-on:input="debounceInput"
-             @keydown.enter='enter'
-             @keydown.down='down'
-             @keydown.up='up'
-             placeholder="search...">
+             @keydown.enter="enter"
+             @keydown.down="down"
+             @keydown.up="up"
+             @keydown.esc="clearSearch"
+             placeholder="Search... e.g. Marfan syndrome or sox3">
     </div>
     <div v-if="open"
          class="dropdown-menu list-group dropList px-4">
-        <div v-for="(suggestion, index) in suggestions" :key="index"
-            @click="suggestionClick(index)"
-            v-bind:class="{'active': isActive(index)}"
-            v-on:mouseover="mouseOver(index)"
-            class="dropList border-bottom px-1"
-            :title="suggestion.definition"
-            style="margin-right: 25px">
-          <div class="row p-0">
-            <div class="col-5"><strong>{{ ...suggestion.label }}</strong></div>
-            <div class="col-4"><i>{{ suggestion.taxon }}</i></div>
-            <div class="col-3 text-align-right">
-              <small>{{suggestion.category }}</small>
-            </div>
+      <div v-for="(suggestion, index) in suggestions"
+           :key="index"
+           @click="suggestionClick(index)"
+           v-bind:class="{'active': isActive(index)}"
+           v-on:mouseover="mouseOver(index)"
+           class="border-bottom px-1">
+        <div class="row p-0">
+          <div class="col-5" v-if="suggestion.has_hl">
+            <span v-html="suggestion.highlight"></span>
+          </div>
+          <div class="col-5" v-else>
+            <strong>{{suggestion.match}}</strong>
+          </div>
+          <div class="col-4"><i>{{suggestion.taxon}}</i></div>
+          <div class="col-3 text-align-right">
+            <small>{{suggestion.category}}</small>
           </div>
         </div>
+      </div>
       <div class="row">
         <div v-if="suggestions.length > 0"
              class="btn btn-outline-success col m-2"
@@ -69,7 +75,8 @@
         <div v-if="suggestions.length === 0" class="btn col m-2">
           No results for '{{value}}'
         </div>
-        <div  class="btn btn-outline-warning col m-2" @click="clearSearch">Clear Search</div>
+        <div  class="btn btn-outline-secondary col m-2"
+              @click="clearSearch">Clear Search</div>
       </div>
     </div>
   </div>
@@ -95,9 +102,9 @@ export default {
       options: [
         { text: 'Gene', value: 'gene' },
         { text: 'Genotype', value: 'genotype' },
-        { text: 'Phenotype', value: 'Phenotype' },
+        { text: 'Variant', value: 'variant locus' },
+        { text: 'Phenotype', value: 'phenotype' },
         { text: 'Disease', value: 'disease' },
-        // { text: 'Variant', value: 'variant' },
       ],
       catDropDown: false,
       value: '',
@@ -122,10 +129,16 @@ export default {
       if (this.value) {
         const that = this;
         this.loading = true;
-        const blUrl = `https://owlsim.monarchinitiative.org/api/search/entity/autocomplete/${this.value}`;
+        const baseUrl = 'https://owlsim.monarchinitiative.org/api/';
+        const urlExtension = `search/entity/autocomplete/${this.value}`;
         const params = new URLSearchParams();
         params.append('rows', 10);
         params.append('start', 0);
+        params.append('highlight_class', 'hilite');
+        params.append('boost_q', 'category:genotype^-10');
+        if (this.selected.toString() === 'gene') {
+          params.append('boost_fx', 'pow(edges,0.334)');
+        }
         if (this.selected.length > 0) {
           this.selected.forEach(elem => {
             params.append('category', elem);
@@ -136,14 +149,17 @@ export default {
           });
         }
         params.append('prefix', '-OMIA');
-        axios.get(blUrl, { params })
+        axios.get(`${baseUrl}${urlExtension}`, { params })
           .then((resp) => {
+            console.log(resp);
             resp.data.docs.forEach(elem => {
               const resultPacket = {
-                label: elem.label,
+                match: elem.match,
                 category: that.categoryMap(elem.category),
                 taxon: that.checkTaxon(elem.taxon_label),
                 curie: elem.id,
+                highlight: elem.highlight,
+                has_hl: elem.has_highlight,
               };
               this.suggestions.push(resultPacket);
             });
@@ -202,18 +218,28 @@ export default {
       this.value = '';
     },
     categoryMap(catList) {
-      let cat1 = new Set(catList);
-      let cat2 = new Set(['Phenotype', 'gene', 'variant', 'model', 'disease']);
-      let intersection = new Set(
-        [...cat1].filter(x => cat2.has(x)));
-      const intArray = Array.from(intersection);
-      return intArray[0]
+      const validCats = {
+        'gene': 'gene',
+        'variant locus': 'variant',
+        'phenotype': 'phenotype',
+        'genotype': 'genotype',
+        'disease': 'disease'
+      };
+      const categoryObj = catList.reduce( (map, cat) => {
+        cat = validCats[cat];
+        if (cat) {
+          map[cat] = cat;
+        }
+        return map;
+      }, {});
+      return categoryObj.gene ||
+        categoryObj.variant ||
+        Object.keys(categoryObj).join(',');
     },
     checkTaxon(taxon){
       if (typeof taxon === 'string') {
         return taxon;
       }
-
     },
   },
   watch: {
@@ -250,6 +276,7 @@ export default {
   .dropList {
     width:100%;
     border-radius: 2px;
+    border: solid black 1px;
   }
   .dropCatList {
     position: absolute;
@@ -270,6 +297,10 @@ export default {
     position: relative;
   }
 
+  .hilite {
+    font-weight: bold;
+  }
+
   .autorootdiv .input-group.input-group-sm {
     width: 400px;
   }
@@ -277,6 +308,5 @@ export default {
   .autorootdiv.home-search .input-group.input-group-sm {
     width: unset;
   }
-
-
+  
 </style>
