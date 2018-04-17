@@ -147,7 +147,7 @@ export default {
     enter() {
       const currentData = this.suggestions[this.current];
       // this.$emit('value', { value: this.suggestions[this.current] });
-      this.$router.push({ path: `/${currentData.category}/${currentData.curie }`});
+      this.$router.push({ path: `/${currentData.category}/${currentData.curie }` });
       this.value = '';
       this.open = false;
       this.suggestions = [];
@@ -174,7 +174,7 @@ export default {
     // When one of the suggestion is clicked
     suggestionClick(index) {
       const currentData = this.suggestions[index];
-      this.$router.push({ path: `/${currentData.category}/${currentData.curie }`});
+      this.$router.push({ path: `/${currentData.category}/${currentData.curie }` });
       // this.$emit('value', { value: this.suggestions[index] });
       this.value = '';
       this.open = false;
