@@ -40,6 +40,54 @@ export function getNodeSummary(nodeId, nodeType) {
 }
 
 
+export function getSearchTermSuggestions(term, selected) {
+    const baseUrl = 'https://owlsim.monarchinitiative.org/api/';
+    const urlExtension = `search/entity/autocomplete/${term}`;
+    const params = new URLSearchParams();
+    params.append('rows', 10);
+    params.append('start', 0);
+    params.append('highlight_class', 'hilite');
+    params.append('boost_q', 'category:genotype^-10');
+    if (selected.toString() === 'gene') {
+        params.append('boost_fx', 'pow(edges,0.334)');
+    }
+    if (selected.length > 0) {
+        selected.forEach(elem => {
+            params.append('category', elem);
+        });
+    }
+    else {
+        ['gene', 'variant locus', 'phenotype', 'genotype', 'disease']
+            .forEach((elem, index) => {
+                params.append('category', elem);
+            });
+    }
+    params.append('prefix', '-OMIA');
+    console.log(params);
+    const returnedPromise = new Promise((resolve, reject) => {
+        axios.get(`${baseUrl}${urlExtension}`, { params })
+            .then(resp => {
+                console.log(resp);
+                const responseData = resp.data
+                const {responseURL} = resp.request;
+                // console.log('...getNodeSummary', resp, responseData, responseURL);
+                if (typeof responseData !== 'object') {
+                    reject(responseData);
+                }
+                else {
+                    resolve(responseData);
+                }
+            })
+            .catch(err => {
+                reject(err);
+            });
+    });
+
+    return returnedPromise;
+}
+
+
+
 
 /*
   might be useful, probably should be deleted and reinvented.
