@@ -97,11 +97,11 @@ export default {
     return {
       selected: [],
       options: [
-        {text: 'Gene', value: 'gene'},
-        {text: 'Genotype', value: 'genotype'},
-        {text: 'Variant', value: 'variant locus'},
-        {text: 'Phenotype', value: 'phenotype'},
-        {text: 'Disease', value: 'disease'},
+        { text: 'Gene', value: 'gene' },
+        { text: 'Genotype', value: 'genotype' },
+        { text: 'Variant', value: 'variant locus' },
+        { text: 'Phenotype', value: 'phenotype' },
+        { text: 'Disease', value: 'disease' },
       ],
       catDropDown: false,
       value: '',
@@ -147,7 +147,7 @@ export default {
     enter() {
       const currentData = this.suggestions[this.current];
       // this.$emit('value', { value: this.suggestions[this.current] });
-      this.$router.push({path: `/${currentData.category}/${currentData.curie}`});
+      this.$router.push({ path: `/${currentData.category}/${currentData.curie }`});
       this.value = '';
       this.open = false;
       this.suggestions = [];
@@ -174,7 +174,7 @@ export default {
     // When one of the suggestion is clicked
     suggestionClick(index) {
       const currentData = this.suggestions[index];
-      this.$router.push({path: `/${currentData.category}/${currentData.curie}`});
+      this.$router.push({ path: `/${currentData.category}/${currentData.curie }`});
       // this.$emit('value', { value: this.suggestions[index] });
       this.value = '';
       this.open = false;
@@ -277,5 +277,4 @@ export default {
   .autorootdiv.home-search .input-group.input-group-sm {
     width: unset;
   }
-
 </style>
