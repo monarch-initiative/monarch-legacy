@@ -62,6 +62,7 @@ export function getSearchTermSuggestions(term, selected) {
       });
   }
   params.append('prefix', '-OMIA');
+  console.log(params.toString());
   const returnedPromise = new Promise((resolve, reject) => {
     axios.get(`${baseUrl}${urlExtension}`, {params})
       .then(resp => {

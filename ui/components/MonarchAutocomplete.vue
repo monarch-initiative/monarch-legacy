@@ -82,7 +82,8 @@
   </div>
 </template>
 
-<script type="text/babel">import * as MA from '../../js/MonarchAccess';
+<script type="text/babel">
+import * as MA from '../../js/MonarchAccess';
 const debounce = require('lodash/debounce');
 export default {
   name: 'AutoComplete',
@@ -118,19 +119,17 @@ export default {
   },
   methods: {
     debounceInput: debounce(
-      // eslint-disable-next-line
       function () {
         this.fetchData();
       }, 500, {leading: false, trailing: true}),
     async fetchData() {
-      const that = this;
       try {
         let searchResponse = await MA.getSearchTermSuggestions(this.value, this.selected);
         searchResponse.docs.forEach(elem => {
           const resultPacket = {
             match: elem.match,
-            category: that.categoryMap(elem.category),
-            taxon: that.checkTaxon(elem.taxon_label),
+            category: this.categoryMap(elem.category),
+            taxon: this.checkTaxon(elem.taxon_label),
             curie: elem.id,
             highlight: elem.highlight,
             has_hl: elem.has_highlight,
@@ -141,40 +140,36 @@ export default {
         this.loading = false;
       }
       catch (e) {
-        console.log('nodeResponse ERROR', e, that);
+        console.log('nodeResponse ERROR', e, this);
       }
     },
     enter() {
       const currentData = this.suggestions[this.current];
       // this.$emit('value', { value: this.suggestions[this.current] });
-      this.$router.push({ path: `/${currentData.category}/${currentData.curie }` });
+      this.$router.push({ path: `/${currentData.category}/${currentData.curie}` });
       this.value = '';
       this.open = false;
       this.suggestions = [];
     },
-    // When up pressed while suggestions are open
     up() {
       if (this.current > 0) {
         this.current -= 1;
       }
     },
-    // When down pressed while suggestions are open
     down() {
       if (this.current < this.suggestions.length - 1) {
         this.current += 1;
       }
     },
-    // For highlighting element
     isActive(index) {
       return index === this.current;
     },
     mouseOver(index) {
       this.current = index;
     },
-    // When one of the suggestion is clicked
     suggestionClick(index) {
       const currentData = this.suggestions[index];
-      this.$router.push({ path: `/${currentData.category}/${currentData.curie }` });
+      this.$router.push({ path: `/${currentData.category}/${currentData.curie}` });
       // this.$emit('value', { value: this.suggestions[index] });
       this.value = '';
       this.open = false;
