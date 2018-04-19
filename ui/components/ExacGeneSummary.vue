@@ -94,23 +94,22 @@
           },
         })
           .then((resp) => {
-            // eslint-disable-next-line
             const hits = resp.data.hits[0];
             if (hits.exac) {
               this.showGeneExac = true;
+              this.exacGene = {
+                exp_syn: hits.exac.all.exp_syn,
+                n_syn: hits.exac.all.n_syn,
+                syn_z: hits.exac.all.n_syn,
+                exp_mis: hits.exac.all.exp_mis,
+                n_mis: hits.exac.all.n_mis,
+                mis_z: hits.exac.all.mis_z,
+                exp_lof: hits.exac.all.exp_lof,
+                n_lof: hits.exac.all.n_lof,
+                p_li: hits.exac.all.p_li,
+                link: resp.request.responseURL,
+              };
             }
-            this.exacGene = {
-              exp_syn: hits.exac.all.exp_syn,
-              n_syn: hits.exac.all.n_syn,
-              syn_z: hits.exac.all.n_syn,
-              exp_mis: hits.exac.all.exp_mis,
-              n_mis: hits.exac.all.n_mis,
-              mis_z: hits.exac.all.mis_z,
-              exp_lof: hits.exac.all.exp_lof,
-              n_lof: hits.exac.all.n_lof,
-              p_li: hits.exac.all.p_li,
-              link: resp.request.responseURL,
-            };
           })
           .catch((err) => {
             // eslint-disable-next-line

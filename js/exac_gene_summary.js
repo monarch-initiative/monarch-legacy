@@ -28,13 +28,13 @@ function createExaxGeneSummaryTable(varID) {
       };
     },
     mounted() {
-      if (Object.keys(this.curieMap).indexOf(this.nodePrefix) !== -1 ) {
-        this.hitMyGene(varID);
+      if (Object.keys(this.curieMap).indexOf(this.nodePrefix[0]) !== -1) {
+        this.hitMyGene();
       }
     },
     computed: {
       nodePrefix() {
-        return varID.split(':')[0];
+        return varID.split(':');
       },
     },
     methods: {
@@ -48,10 +48,9 @@ function createExaxGeneSummaryTable(varID) {
         }
         return returnValue;
       },
-      hitMyGene(identifier) {
+      hitMyGene() {
         const baseURL = 'https://mygene.info/v3/query/';
-        const splitCurie = identifier.split(':');
-        const mgCurie = `${this.curieMap[splitCurie[0]]}:${splitCurie[1]}`;
+        const mgCurie = `${this.curieMap[this.nodePrefix[0]]}:${this.nodePrefix[1]}`;
         axios.get(baseURL, {
           params: {
             q: mgCurie,
@@ -84,6 +83,5 @@ function createExaxGeneSummaryTable(varID) {
       },
     },
   });
-  vueapp.hitMyGene(varID);
 }
 exports.createExaxGeneSummaryTable = createExaxGeneSummaryTable;
