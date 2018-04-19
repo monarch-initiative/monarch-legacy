@@ -1,6 +1,7 @@
-<div id="vue-exac" v-show="show_table" class="col-md-8" >
+<div id="vue-exac" v-show="showTable" class="col-md-8" >
+   <h2 class="p-2">Exac Population Frequencies</h2>
     <table class="table table-hover">
-        <caption><h2>Exac Population Frequencies</h2></caption>
+
         <thead>
         <tr>
             <th>Population</th>
@@ -13,75 +14,75 @@
         <tbody>
         <tr>
             <th scope="row">South Asian</th>
-            <td>{[{ allele_counts.ac_sas }]}</td>
-            <td>{[{ allele_numbers.an_sas }]}</td>
+            <td>{[{ alleleCounts.ac_sas }]}</td>
+            <td>{[{ alleleNumbers.an_sas }]}</td>
             <td>{[{ homozygotes.hom_sas }]}</td>
-            <td>{[{ round((allele_counts.ac_sas / allele_numbers.an_sas), 7) }]}</td>
+            <td>{[{ round((alleleCounts.ac_sas / alleleNumbers.an_sas), 7) }]}</td>
         </tr>
         <tr>
             <th scope="row">Other</th>
-            <td>{[{ allele_counts.ac_oth }]}</td>
-            <td>{[{ allele_numbers.an_oth }]}</td>
+            <td>{[{ alleleCounts.ac_oth }]}</td>
+            <td>{[{ alleleNumbers.an_oth }]}</td>
             <td>{[{ homozygotes.hom_oth }]}</td>
-            <td>{[{ round((allele_counts.ac_oth / allele_numbers.an_oth), 7) }]}</td>
+            <td>{[{ round((alleleCounts.ac_oth / alleleNumbers.an_oth), 7) }]}</td>
         </tr>
         <tr>
             <th scope="row">Latino</th>
-            <td>{[{ allele_counts.ac_amr }]}</td>
-            <td>{[{ allele_numbers.an_amr }]}</td>
+            <td>{[{ alleleCounts.ac_amr }]}</td>
+            <td>{[{ alleleNumbers.an_amr }]}</td>
             <td>{[{ homozygotes.hom_amr }]}</td>
-            <td>{[{ round((allele_counts.ac_amr / allele_numbers.an_amr), 7) }]}</td>
+            <td>{[{ round((alleleCounts.ac_amr / alleleNumbers.an_amr), 7) }]}</td>
         </tr>
         <tr>
             <th scope="row">European (Non-Finnish)</th>
-            <td>{[{ allele_counts.ac_nfe }]}</td>
-            <td>{[{ allele_numbers.an_nfe }]}</td>
+            <td>{[{ alleleCounts.ac_nfe }]}</td>
+            <td>{[{ alleleNumbers.an_nfe }]}</td>
             <td>{[{ homozygotes.hom_nfe }]}</td>
-            <td>{[{ round((allele_counts.ac_nfe / allele_numbers.an_nfe), 7) }]}</td>
+            <td>{[{ round((alleleCounts.ac_nfe / alleleNumbers.an_nfe), 7) }]}</td>
         </tr>
         <tr>
             <th scope="row">African</th>
-            <td>{[{ allele_counts.ac_afr }]}</td>
-            <td>{[{ allele_numbers.an_afr }]}</td>
+            <td>{[{ alleleCounts.ac_afr }]}</td>
+            <td>{[{ alleleNumbers.an_afr }]}</td>
             <td>{[{ homozygotes.hom_afr }]}</td>
-            <td>{[{ round((allele_counts.ac_afr / allele_numbers.an_afr), 7) }]}</td>
+            <td>{[{ round((alleleCounts.ac_afr / alleleNumbers.an_afr), 7) }]}</td>
         </tr>
         <tr>
             <th scope="row">East Asian</th>
-            <td>{[{ allele_counts.ac_eas }]}</td>
-            <td>{[{ allele_numbers.an_eas }]}</td>
+            <td>{[{ alleleCounts.ac_eas }]}</td>
+            <td>{[{ alleleNumbers.an_eas }]}</td>
             <td>{[{ homozygotes.hom_eas }]}</td>
-            <td>{[{ round((allele_counts.ac_eas / allele_numbers.an_eas), 7) }]}</td>
+            <td>{[{ round((alleleCounts.ac_eas / alleleNumbers.an_eas), 7) }]}</td>
         </tr>
         <tr>
             <th scope="row">European (Finnish)</th>
-            <td>{[{ allele_counts.ac_fin }]}</td>
-            <td>{[{ allele_numbers.an_fin }]}</td>
+            <td>{[{ alleleCounts.ac_fin }]}</td>
+            <td>{[{ alleleNumbers.an_fin }]}</td>
             <td>{[{ homozygotes.hom_fin }]}</td>
-            <td>{[{ round((allele_counts.ac_fin / allele_numbers.an_fin), 7) }]}</td>
+            <td>{[{ round((alleleCounts.ac_fin / alleleNumbers.an_fin), 7) }]}</td>
         </tr>
         <tr style="border-top: solid black 2px;">
             <th scope="row">Total</th>
             <td>
                 {[{
-                allele_counts.ac_sas +
-                allele_counts.ac_amr +
-                allele_counts.ac_oth +
-                allele_counts.ac_nfe +
-                allele_counts.ac_afr +
-                allele_counts.ac_eas +
-                allele_counts.ac_fin
+                alleleCounts.ac_sas +
+                alleleCounts.ac_amr +
+                alleleCounts.ac_oth +
+                alleleCounts.ac_nfe +
+                alleleCounts.ac_afr +
+                alleleCounts.ac_eas +
+                alleleCounts.ac_fin
                 }]}
             </td>
             <td>
                 {[{
-                allele_numbers.an_sas +
-                allele_numbers.an_amr +
-                allele_numbers.an_oth +
-                allele_numbers.an_nfe +
-                allele_numbers.an_afr +
-                allele_numbers.an_eas +
-                allele_numbers.an_fin
+                alleleNumbers.an_sas +
+                alleleNumbers.an_amr +
+                alleleNumbers.an_oth +
+                alleleNumbers.an_nfe +
+                alleleNumbers.an_afr +
+                alleleNumbers.an_eas +
+                alleleNumbers.an_fin
                 }]}
             </td>
             <td>
@@ -97,21 +98,7 @@
             </td>
             <td>
                 {[{
-                round(((allele_counts.ac_sas +
-                allele_counts.ac_amr +
-                allele_counts.ac_oth +
-                allele_counts.ac_nfe +
-                allele_counts.ac_afr +
-                allele_counts.ac_eas +
-                allele_counts.ac_fin)
-                /
-                (allele_numbers.an_sas +
-                allele_numbers.an_amr +
-                allele_numbers.an_oth +
-                allele_numbers.an_nfe +
-                allele_numbers.an_afr +
-                allele_numbers.an_eas +
-                allele_numbers.an_fin)), 7)
+                totalFrequencies
                 }]}
             </td>
         </tr>
@@ -129,8 +116,3 @@
         margin-bottom: 10px;
     }
 </style>
-
-
-<!-- <script src="https://unpkg.com/vue@2.4.2/dist/vue.min.js"></script>
-<script src="https://unpkg.com/axios@0.16.1/dist/axios.min.js"></script>
- -->
