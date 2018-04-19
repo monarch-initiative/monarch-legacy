@@ -17,38 +17,68 @@ function createExacTable(varID) {
     el: '#vue-exac',
     data() {
       return {
-        allele_counts: '',
-        allele_numbers: '',
+        nodeID: varID,
+        alleleCounts: '',
+        alleleNumbers: '',
+        totalFrequencies: '',
         homozygotes: '',
         exacID: '',
-        show_table: false,
+        showTable: false,
         curieMap: {
-          ClinVarVariant: 'clinvar',
-          dbSNP: 'dbsnp',
+          ClinVarVariant: 'clinvar.variant_id',
+          dbSNP: 'dbsnp.rsid',
         },
       };
     },
     mounted() {
-      if (Object.keys(this.curieMap).indexOf(this.nodePrefix[0]) !== -1) {
-        console.log('variant mounts');
+      if (Object.keys(this.curieMap).indexOf(this.nodePrefix.prefix) !== -1) {
         this.hitMyVariant();
       }
     },
     computed: {
       nodePrefix() {
-        return varID.split(':');
+        const splitID = this.nodeID.split(':');
+        return {
+          prefix: splitID[0],
+          identifier: splitID[1],
+        }
       },
     },
     methods: {
+      alleleFrequency(counts, numbers){
+        const alleleCounts = counts.ac_sas +
+          counts.ac_amr +
+          counts.ac_oth +
+          counts.ac_nfe +
+          counts.ac_afr +
+          counts.ac_eas +
+          counts.ac_fin;
+        const alleleNumbers = numbers.an_sas +
+          numbers.an_amr +
+          numbers.an_oth +
+          numbers.an_nfe +
+          numbers.an_afr +
+          numbers.an_eas +
+          numbers.an_fin;
+        return this.round(alleleCounts/alleleNumbers, 7)
+
+      },
       round(value, decimals) {
-        return Number(Math.round(`${value}e${decimals}`) + `e-${decimals}`);
+        let returnValue = '';
+        if (value < 1) {
+          returnValue = value.toPrecision(2);
+        }
+        else {
+          returnValue = Number(Math.round(`${value}e${decimals}`) + `e-${decimals}`);
+        }
+        return returnValue;
       },
       hitMyVariant() {
         // Example API Call: http://myvariant.info/v1/query?q=clinvar.allele_id:251469&fields=exac
         const baseURL = 'https://myvariant.info/v1/query';
         axios.get(baseURL, {
           params: {
-            q: `${this.curieMap[this.nodePrefix[0]]}:${this.nodePrefix[1]}`,
+            q: `${this.curieMap[this.nodePrefix.prefix]}:${this.nodePrefix.identifier}`,
             fields: 'exac',
           }
         })
@@ -56,9 +86,9 @@ function createExacTable(varID) {
             if (resp.data.total === 1) {
               const exacData = resp.data.hits[0].exac;
               if (exacData) {
-                // console.log('exacData', resp.data, resp.data.hits, exacData);
-                this.allele_counts = exacData.ac;
-                this.allele_numbers = exacData.an;
+                this.alleleCounts = exacData.ac;
+                this.alleleNumbers = exacData.an;
+                this.totalFrequencies = this.alleleFrequency(this.alleleCounts, this.alleleNumbers);
                 this.homozygotes = exacData.hom;
                 const exacURL = 'https://exac.broadinstitute.org/variant/';
                 const exacIDParams = [
@@ -68,8 +98,7 @@ function createExacTable(varID) {
                   exacData.alt,
                 ].join('-');
                 this.exacID = `${exacURL}${exacIDParams}`;
-                this.show_table = true;
-                // console.log('showtable', this, that);
+                this.showTable = true;
                 if (window.vueRouter) {
                   this.$nextTick(function () {
                     window.vueRouter.updatePageLinks();
