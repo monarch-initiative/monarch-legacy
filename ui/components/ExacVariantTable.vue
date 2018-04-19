@@ -98,7 +98,7 @@
                     }}
                 </td>
                 <td>
-                    {{this.totalFrequencies}}
+                    {{totalFrequencies}}
                 </td>
             </tr>
             </tbody>
@@ -198,11 +198,6 @@
                 ].join('-');
                 this.exacID = `${exacURL}${exacIDParams}`;
                 this.showTable = true;
-                if (window.vueRouter) {
-                  this.$nextTick(function () {
-                    window.vueRouter.updatePageLinks();
-                  });
-                }
               }
             }
           })
