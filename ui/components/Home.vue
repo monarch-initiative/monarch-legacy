@@ -116,82 +116,13 @@
       src="../assets/images/partners.png"/>
   </section>
 
-
-
-
-  <section id="contact" class="container content-section text-center">
-    <div class="row">
-      <div class="col-xs-10 offset-xs-1">
-        <h2>Contact Us</h2>
-
-        <ul class="list-inline banner-social-buttons">
-          <li>
-            <a target="_blank" href="https://twitter.com/MonarchInit" class="btn btn-default btn-lg"><i class="fa fa-twitter fa-fw"></i> <span class="network-name">Twitter</span></a>
-          </li>
-          <li>
-            <a target="_blank" href="https://github.com/monarch-initiative/monarch-app/" class="btn btn-default btn-lg"><i class="fa fa-github fa-fw"></i> <span class="network-name">Github</span></a>
-          </li>
-          <li>
-            <a target="_blank" href="mailto:info@monarchinitiative.org" class="btn btn-default btn-lg"><i class="fa fa-envelope fa-fw"></i> <span class="network-name">Mail</span></a>
-          </li>
-          <li>
-            <a target="_blank" href="mailto:info@monarchinitiative.org" class="btn btn-default btn-lg"><i class="fa fa-envelope-square fa-fw"></i> <span class="network-name">List</span></a>
-          </li>
-        </ul>
-      </div>
-    </div>
-  </section>
-
-
+  <home-footer>
+  </home-footer>
   <section id="footer-fake" class="footer-section text-center">
     <img
       class="center-block text-center img-fluid"
       src="../assets/images/footer.png"/>
   </section>
-
-
-  <footer
-    id="footer">
-    <div class="container text-center">
-      <div> The Monarch Initiative is a collaboration between: </div>
-      <ul>
-        <li>
-          Oregon Health & Science University
-        </li>
-        <li>
-          The Jackson Laboratory
-        </li>
-        <li>
-          Lawrence Berkeley National Laboratory
-        </li>
-        <li>
-          Charité - Universitätsmedizin Berlin
-        </li>
-        <li>
-          Garvan Institute of Medical Research
-        </li>
-        <li>
-          William Harvey Research Institute
-        </li>
-        <li>
-          Barts & The London School of Medicine & Dentistry, Queen Mary University of London
-        </li>
-        <li>
-          Renaissance Computing Institute, University of North Carolina at Chapel Hill
-        </li>
-      </ul>
-
-      <div>
-        Monarch is supported generously by a NIH Office of the Director Grant #5R24OD011883,
-        as well as by NIH-UDP: HHSN268201300036C, HHSN268201400093P, NCI/Leidos #15X143.
-        We are grateful to the many <a target="_blank" href="/about/sources">original sources of our data</a> for allowing Monarch to integrate them in this way.
-        Except where forbidden by the original sources, this work is licensed under a
-        Creative Commons Attribution 3.0 License.
-      </div>
-    </div>
-  </footer>
-
-
 </div>
 
 </div>

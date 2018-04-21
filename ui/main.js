@@ -9,6 +9,7 @@ import BootstrapVue from 'bootstrap-vue/dist/bootstrap-vue.esm';
 import 'bootstrap-vue/dist/bootstrap-vue.css';
 import App from './App.vue';
 import Home from '@/components/Home.vue';
+import HomeFooter from '@/components/HomeFooter.vue';
 import Navbar from '@/components/Navbar.vue';
 import Node from '@/components/Node.vue';
 import NodeCard from '@/components/NodeCard.vue';
@@ -106,6 +107,7 @@ const main = () => {
   Vue.component('table-view', TableView);
   Vue.component('assoc-facets', AssocFacets);
   Vue.component('monarch-autocomplete', MonarchAutocomplete);
+  Vue.component('home-footer', HomeFooter);
   Vue.component('exac-gene', ExacGeneSummary);
   Vue.component('exac-variant', ExacVariantTable);
 
