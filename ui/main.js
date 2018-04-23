@@ -17,6 +17,7 @@ import TableView from '@/components/TableView.vue';
 import AssocFacets from '@/components/AssocFacets.vue';
 import MonarchAutocomplete from '@/components/MonarchAutocomplete.vue';
 import ExacGeneSummary from '@/components/ExacGeneSummary.vue';
+import AnalyzePhenotypes from '@/components/AnalyzePhenotypes.vue';
 
 
 /**
@@ -106,6 +107,7 @@ const main = () => {
   Vue.component('assoc-facets', AssocFacets);
   Vue.component('monarch-autocomplete', MonarchAutocomplete);
   Vue.component('exac-gene', ExacGeneSummary);
+  Vue.component('analyze-phenotypes', AnalyzePhenotypes);
 
   const availableCardTypes = [
     'anatomy',
