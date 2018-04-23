@@ -28,7 +28,7 @@ function createExaxGeneSummaryTable(varID) {
       };
     },
     mounted() {
-      if (Object.keys(this.curieMap).indexOf(this.nodePrefix[0]) !== -1) {
+      if (this.nodePrefix[0] in this.curieMap) {
         this.hitMyGene();
       }
     },
@@ -64,15 +64,15 @@ function createExaxGeneSummaryTable(varID) {
               this.showGeneExac = true;
             }
             this.exacGene = {
-              exp_syn: hits.exac.all.exp_syn,
-              n_syn: hits.exac.all.n_syn,
-              syn_z: hits.exac.all.n_syn,
-              exp_mis: hits.exac.all.exp_mis,
-              n_mis: hits.exac.all.n_mis,
-              mis_z: hits.exac.all.mis_z,
-              exp_lof: hits.exac.all.exp_lof,
-              n_lof: hits.exac.all.n_lof,
-              p_li: hits.exac.all.p_li,
+              exp_syn: this.round(hits.exac.all.exp_syn, 1),
+              n_syn: this.round(hits.exac.all.n_syn, 1),
+              syn_z: this.round(hits.exac.all.n_syn, 1),
+              exp_mis: this.round(hits.exac.all.exp_mis, 1),
+              n_mis: this.round(hits.exac.all.n_mis, 1),
+              mis_z: this.round(hits.exac.all.mis_z, 2),
+              exp_lof: this.round(hits.exac.all.exp_lof, 1),
+              n_lof: this.round(hits.exac.all.n_lof, 1),
+              p_li: this.round(hits.exac.all.p_li, 1),
               link: resp.request.responseURL,
             };
           })
