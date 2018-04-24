@@ -65,13 +65,17 @@
       };
     },
     mounted() {
-      if (this.nodePrefix[0] in this.curieMap) {
+      if (this.nodePrefix.prefix in this.curieMap) {
         this.hitMyGene();
       }
     },
     computed: {
       nodePrefix() {
-        return this.nodeID.split(':');
+        const splitID = this.nodeID.split(':');
+        return {
+          prefix: splitID[0],
+          identifier: splitID[1],
+        };
       },
     },
     methods: {
@@ -87,7 +91,7 @@
       },
       hitMyGene() {
         const baseURL = 'https://mygene.info/v3/query/';
-        const mgCurie = `${this.curieMap[this.nodePrefix[0]]}:${this.nodePrefix[1]}`;
+        const mgCurie = `${this.curieMap[this.nodePrefix.prefix]}:${this.nodePrefix.identifier}`;
         axios.get(baseURL, {
           params: {
             q: mgCurie,

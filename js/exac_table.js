@@ -28,8 +28,8 @@ function createExacTable(nodeID) {
       };
     },
     mounted() {
-      if (Object.keys(this.curieMap).indexOf(this.nodePrefix.prefix) !== -1) {
-        this.hitMyVariant();
+      if (this.nodePrefix.prefix in this.curieMap) {
+         this.hitMyVariant();
       }
     },
     computed: {
@@ -38,7 +38,7 @@ function createExacTable(nodeID) {
         return {
           prefix: splitID[0],
           identifier: splitID[1],
-        }
+        };
       },
     },
     methods: {

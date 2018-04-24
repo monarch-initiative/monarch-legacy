@@ -103,7 +103,7 @@
       };
     },
     mounted() {
-      if (Object.keys(this.curieMap).indexOf(this.nodePrefix.prefix) !== -1) {
+      if (this.nodePrefix.prefix in this.curieMap) {
         this.hitMyVariant();
       }
     },
