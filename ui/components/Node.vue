@@ -229,7 +229,7 @@
               :identifier="nodeId">
       </table-view>
     </div>
-    <div v-if="!expandedCard &&  nodeCategory === 'variant'">
+    <div v-if="!expandedCard && nodeCategory === 'variant'">
       <exac-variant :nodeID="nodeId"></exac-variant>
     </div>
   </div>
