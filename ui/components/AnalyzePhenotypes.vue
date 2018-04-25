@@ -10,11 +10,7 @@
           <tab-content title="Step 1: Create A Profile of Phenotypes"
                        icon="ti-user">
             <div class="card card-body">
-              <!--<monarch-autocomplete-->
-                <!--semanticType="Phenotype"-->
-                <!--v-on:value="handlePhenotype"-->
-                <!--:homeSearch='false'-->
-              <!--&gt;</monarch-autocomplete>-->
+              <monarch-autocomplete></monarch-autocomplete>
             </div>
           </tab-content>
           <tab-content title="Additional Info"
