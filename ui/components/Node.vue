@@ -222,17 +222,15 @@
       v-if="expandedCard"
       class="expanded-card-view">
       <h3 class="text-center">{{labels[expandedCard]}} Associations</h3>
-      <table-view
+      <assoc-table
               :facets="facetObject"
               :nodeType="nodeCategory"
               :cardType="expandedCard"
               :identifier="nodeId">
-      </table-view>
+      </assoc-table>
     </div>
   </div>
 </div>
-
-
 </div>
 </div>
 </template>
@@ -240,7 +238,6 @@
 <script>
 
 import _ from 'underscore';
-import TableView from "./TableView.vue";
 import * as MA from '../../js/MonarchAccess';
 
 
