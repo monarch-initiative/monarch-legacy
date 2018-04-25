@@ -15,51 +15,51 @@
             <tbody>
             <tr>
                 <th scope="row">South Asian</th>
-                <td>{{ rowData.sa.aC }}</td>
-                <td>{{ rowData.sa.aN }}</td>
-                <td>{{ rowData.sa.hmzgts }}</td>
-                <td>{{ rowData.sa.aF }}</td>
+                <td>{{ rowData.sas.aC }}</td>
+                <td>{{ rowData.sas.aN }}</td>
+                <td>{{ rowData.sas.hom }}</td>
+                <td>{{ rowData.sas.aF }}</td>
             </tr>
             <tr>
                 <th scope="row">Other</th>
                 <td>{{ rowData.oth.aC }}</td>
                 <td>{{ rowData.oth.aN }}</td>
-                <td>{{ rowData.oth.hmzgts }}</td>
+                <td>{{ rowData.oth.hom }}</td>
                 <td>{{ rowData.oth.aF }}</td>
             </tr>
             <tr>
                 <th scope="row">Latino</th>
                 <td>{{ rowData.amr.aC }}</td>
                 <td>{{ rowData.amr.aN }}</td>
-                <td>{{ rowData.amr.hmzgts }}</td>
+                <td>{{ rowData.amr.hom }}</td>
                 <td>{{ rowData.amr.aF }}</td>
             </tr>
             <tr>
                 <th scope="row">European (Non-Finnish)</th>
                 <td>{{ rowData.nfe.aC }}</td>
                 <td>{{ rowData.nfe.aN }}</td>
-                <td>{{ rowData.nfe.hmzgts }}</td>
+                <td>{{ rowData.nfe.hom }}</td>
                 <td>{{ rowData.nfe.aF }}</td>
             </tr>
             <tr>
                 <th scope="row">African</th>
                 <td>{{ rowData.afr.aC }}</td>
                 <td>{{ rowData.afr.aN }}</td>
-                <td>{{ rowData.afr.hmzgts }}</td>
+                <td>{{ rowData.afr.hom }}</td>
                 <td>{{ rowData.afr.aF }}</td>
             </tr>
             <tr>
                 <th scope="row">East Asian</th>
                 <td>{{ rowData.eas.aC }}</td>
                 <td>{{ rowData.eas.aN }}</td>
-                <td>{{ rowData.eas.hmzgts }}</td>
+                <td>{{ rowData.eas.hom }}</td>
                 <td>{{ rowData.eas.aF }}</td>
             </tr>
             <tr>
                 <th scope="row">European (Finnish)</th>
                 <td>{{ rowData.fin.aC }}</td>
                 <td>{{ rowData.fin.aN }}</td>
-                <td>{{ rowData.fin.hmzgts }}</td>
+                <td>{{ rowData.fin.hom }}</td>
                 <td>{{ rowData.fin.aF }}</td>
             </tr>
             <tr style="border-top: solid black 2px;">
@@ -71,7 +71,7 @@
                     {{ rowData.tot.aN }}
                 </td>
                 <td>
-                    {{ rowData.tot.hmzgts }}
+                    {{ rowData.tot.hom }}
                 </td>
                 <td>
                     {{ rowData.tot.aF }}
@@ -117,25 +117,41 @@
       },
     },
     methods: {
+      buildRowData(prefixes, alleleCounts, alleleNumbers, homozygotes) {
+        const rowData = {};
+        let aCTotal = 0;
+        let aNTotal = 0;
+        let homTotal = 0;
+        let aFTotal = 0;
+
+        prefixes.forEach(prefix => {
+          const aC = alleleCounts[`ac_${prefix}`];
+          const aN = alleleNumbers[`an_${prefix}`];
+          const hom = homozygotes[`hom_${prefix}`];
+          const aF = this.singleAlleleFrequency(aC, aN);
+          aCTotal += aC;
+          aNTotal += aN;
+          homTotal += hom;
+          aFTotal += aF;
+
+          const element = {
+            aC: aC,
+            aN: aN,
+            hom: hom,
+            aF: this.singleAlleleFrequency(aC, aN),
+          };
+          rowData[prefix] = element;
+        });
+        rowData.tot = {
+          aC: aCTotal,
+          aN: aNTotal,
+          hom: homTotal,
+          aF: this.round(aCTotal / aNTotal, 4),
+        };
+        return rowData;
+      },
       singleAlleleFrequency(count, number){
         return this.round(count / number, 7);
-      },
-      totalAlleleFrequency(counts, numbers){
-        const alleleCounts = counts.ac_sas +
-          counts.ac_amr +
-          counts.ac_oth +
-          counts.ac_nfe +
-          counts.ac_afr +
-          counts.ac_eas +
-          counts.ac_fin;
-        const alleleNumbers = numbers.an_sas +
-          numbers.an_amr +
-          numbers.an_oth +
-          numbers.an_nfe +
-          numbers.an_afr +
-          numbers.an_eas +
-          numbers.an_fin;
-        return this.round(alleleCounts / alleleNumbers, 7)
       },
       round(value, decimals) {
         let returnValue = '';
@@ -148,7 +164,6 @@
         return returnValue;
       },
       hitMyVariant() {
-        // Example API Call: http://myvariant.info/v1/query?q=clinvar.allele_id:251469&fields=exac
         const baseURL = 'https://myvariant.info/v1/query';
         axios.get(baseURL, {
           params: {
@@ -162,7 +177,6 @@
               if (exacData) {
                 const alleleCounts = exacData.ac;
                 const alleleNumbers = exacData.an;
-                const totalFrequencies = this.totalAlleleFrequency(alleleCounts, alleleNumbers);
                 const homozygotes = exacData.hom;
                 const exacURL = 'https://exac.broadinstitute.org/variant/';
                 const exacIDParams = [
@@ -172,75 +186,16 @@
                   exacData.alt,
                 ].join('-');
                 this.exacID = `${exacURL}${exacIDParams}`;
-                this.rowData = {
-                  sa: {
-                    aC: alleleCounts.ac_sas,
-                    aN: alleleNumbers.an_sas,
-                    hmzgts: homozygotes.hom_sas,
-                    aF: this.singleAlleleFrequency(alleleCounts.ac_sas, alleleNumbers.an_sas),
-                  },
-                  oth: {
-                    aC: alleleCounts.ac_oth,
-                    aN: alleleNumbers.an_oth,
-                    hmzgts: homozygotes.hom_oth,
-                    aF: this.singleAlleleFrequency(alleleCounts.ac_oth, alleleNumbers.an_oth),
-                  },
-                  amr: {
-                    aC: alleleCounts.ac_amr,
-                    aN: alleleNumbers.an_amr,
-                    hmzgts: homozygotes.hom_amr,
-                    aF: this.singleAlleleFrequency(alleleCounts.ac_amr, alleleNumbers.an_amr),
-                  },
-                  nfe: {
-                    aC: alleleCounts.ac_nfe,
-                    aN: alleleNumbers.an_nfe,
-                    hmzgts: homozygotes.hom_nfe,
-                    aF: this.singleAlleleFrequency(alleleCounts.ac_nfe, alleleNumbers.an_nfe),
-                  },
-                  afr: {
-                    aC: alleleCounts.ac_afr,
-                    aN: alleleNumbers.an_afr,
-                    hmzgts: homozygotes.hom_afr,
-                    aF: this.singleAlleleFrequency(alleleCounts.ac_afr, alleleNumbers.an_afr),
-                  },
-                  eas: {
-                    aC: alleleCounts.ac_eas,
-                    aN: alleleNumbers.an_eas,
-                    hmzgts: homozygotes.hom_eas,
-                    aF: this.singleAlleleFrequency(alleleCounts.ac_eas, alleleNumbers.an_eas),
-                  },
-                  fin: {
-                    aC: alleleCounts.ac_fin,
-                    aN: alleleNumbers.an_fin,
-                    hmzgts: homozygotes.hom_fin,
-                    aF: this.singleAlleleFrequency(alleleCounts.ac_fin, alleleNumbers.an_fin),
-                  },
-                  tot: {
-                    aC: alleleCounts.ac_sas +
-                    alleleCounts.ac_amr +
-                    alleleCounts.ac_oth +
-                    alleleCounts.ac_nfe +
-                    alleleCounts.ac_afr +
-                    alleleCounts.ac_eas +
-                    alleleCounts.ac_fin
-                    ,
-                    aN: alleleNumbers.an_sas +
-                    alleleNumbers.an_amr +
-                    alleleNumbers.an_oth +
-                    alleleNumbers.an_nfe +
-                    alleleNumbers.an_afr +
-                    alleleNumbers.an_eas +
-                    alleleNumbers.an_fin,
-                    hmzgts: homozygotes.hom_sas +
-                    homozygotes.hom_amr +
-                    homozygotes.hom_oth +
-                    homozygotes.hom_nfe +
-                    homozygotes.hom_afr +
-                    homozygotes.hom_eas +
-                    homozygotes.hom_fin,
-                    aF: totalFrequencies,
-                  },
-                };
+                const prefixes = [
+                  'sas',
+                  'oth',
+                  'amr',
+                  'nfe',
+                  'afr',
+                  'eas',
+                  'fin'
+                ];
+                this.rowData = this.buildRowData(prefixes, alleleCounts, alleleNumbers, homozygotes);
                 this.showTable = true;
               }
             }
