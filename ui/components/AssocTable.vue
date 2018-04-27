@@ -114,7 +114,12 @@
             fetch_objects: true,
               rows: 1000,
           };
-          let searchResponse = await MA.getNodeAssociations(this.nodeType, this.identifier, biolinkAnnotationSuffix, params);
+          let searchResponse = await MA.getNodeAssociations(
+            this.nodeType,
+            this.identifier,
+            biolinkAnnotationSuffix,
+            params
+          );
           that.dataPacket = searchResponse;
           that.totalRows = searchResponse.data.objects.length;
           that.dataFetched = true;
