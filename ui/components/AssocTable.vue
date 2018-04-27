@@ -8,7 +8,7 @@
       >
         <template slot="assoc_object" slot-scope="data">
           <strong>
-            <router-link target="_blank" :to="`/${cardType}/${data.item.objectCurie}`">
+            <router-link :to="`/${cardType}/${data.item.objectCurie}`">
               <strong><h5>{{data.item.assoc_object}}</h5></strong>
             </router-link>
           </strong>
@@ -26,9 +26,9 @@
           ({{data.item.sourcesLength}})
         </template>
         <template slot="show_details" slot-scope="row">
-          <b-button size="sm" @click="row.toggleDetails" class="mr-2">
+          <div  size="sm" @click="row.toggleDetails" class="mr-2">
             {{ row.detailsShowing ? 'Hide' : 'Show'}} Details
-          </b-button>
+          </div>
         </template>
         <template slot="row-details" slot-scope="row">
           <div class="card">
@@ -48,7 +48,7 @@
               </template>
               <template slot="sources" slot-scope="data">
                 <ul class="list-bullets" v-for="source in data.item.sources">
-                  <li><a target="_blank" v-bind:href="source">{{source | sourceHref}}</a></li>
+                  <li><a v-bind:href="source">{{source | sourceHref}}</a></li>
                 </ul>
               </template>
             </b-table>
@@ -189,7 +189,7 @@
             },
           ];
         const taxonFields = ['gene', 'genotype', 'model', 'variant'];
-        if (taxonFields.indexOf(this.cardType) !== -1) {
+        if (taxonFields.includes(this.cardType) {
           this.isGene = true;
           fields.splice(1, 0, {
             key: 'taxon',
