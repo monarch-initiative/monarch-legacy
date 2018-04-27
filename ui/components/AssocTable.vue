@@ -71,7 +71,7 @@
 </template>
 
 <script>
-  import axios from 'axios';
+  import * as MA from '../../js/MonarchAccess';
 
   export default {
     data() {
@@ -106,26 +106,22 @@
       },
     },
     methods: {
-      fetchData() {
-        const biolinkAnnotationSuffix = this.getBiolinkAnnotation(this.cardType);
-        const baseURL = 'https://api-dev.monarchinitiative.org/api/bioentity/';
-        const urlExtension = `${this.nodeType}/${this.identifier}/${biolinkAnnotationSuffix}`;
+      async fetchData() {
         const that = this;
-        axios.get(`${baseURL}${urlExtension}`, {
-          params: {
+        try {
+          const biolinkAnnotationSuffix = this.getBiolinkAnnotation(this.cardType);
+          const params= {
             fetch_objects: true,
-            rows: 1000,
-          },
-        })
-          .then((resp) => {
-            that.dataPacket = resp;
-            that.totalRows = resp.data.objects.length;
-            that.dataFetched = true;
-          })
-          .catch((err) => {
-            that.dataError = err;
-            console.log('BioLink Error', baseURL, err);
-          });
+              rows: 1000,
+          };
+          let searchResponse = await MA.getNodeAssociations(this.nodeType, this.identifier, biolinkAnnotationSuffix, params);
+          that.dataPacket = searchResponse;
+          that.totalRows = searchResponse.data.objects.length;
+          that.dataFetched = true;
+        }
+        catch (e) {
+          console.log('nodeResponse ERROR', e, this);
+        }
       },
       populateRows(page) {
         const that = this;
