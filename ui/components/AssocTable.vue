@@ -38,17 +38,17 @@
             >
               <template slot="evidence" slot-scope="data">
                 <ul class="list-bullets" v-for="evi in data.item.evidence">
-                  <li><a v-bind:href="evi.id | eviHref">{{evi.lbl}}</a></li>
+                  <li><a target="_blank" v-bind:href="evi.id | eviHref">{{evi.lbl}}</a></li>
                 </ul>
               </template>
               <template slot="references" slot-scope="data">
                 <ul class="list-bullets" v-for="ref in data.item.references">
-                  <li><a v-bind:href="ref | pubHref">{{ref}}</a></li>
+                  <li><a target="_blank"  v-bind:href="ref | pubHref">{{ref}}</a></li>
                 </ul>
               </template>
               <template slot="sources" slot-scope="data">
                 <ul class="list-bullets" v-for="source in data.item.sources">
-                  <li><a v-bind:href="source">{{source | sourceHref}}</a></li>
+                  <li><a target="_blank" v-bind:href="source">{{source | sourceHref}}</a></li>
                 </ul>
               </template>
             </b-table>
