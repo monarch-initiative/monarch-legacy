@@ -229,6 +229,9 @@
               :identifier="nodeId">
       </assoc-table>
     </div>
+    <div v-if="!expandedCard && nodeCategory === 'variant'">
+      <exac-variant :nodeID="nodeId"></exac-variant>
+    </div>
   </div>
 </div>
 </div>

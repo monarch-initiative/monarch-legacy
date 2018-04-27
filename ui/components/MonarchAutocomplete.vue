@@ -83,10 +83,8 @@
 </template>
 
 <script type="text/babel">
-import axios from 'axios';
-
+import * as MA from '../../js/MonarchAccess';
 const debounce = require('lodash/debounce');
-
 export default {
   name: 'AutoComplete',
   props: {
@@ -121,57 +119,28 @@ export default {
   },
   methods: {
     debounceInput: debounce(
-      // eslint-disable-next-line
       function () {
         this.fetchData();
-      }, 500, { leading: false, trailing: true }),
-    fetchData() {
-      if (this.value) {
-        const that = this;
-        this.loading = true;
-        const baseUrl = 'https://owlsim.monarchinitiative.org/api/';
-        const urlExtension = `search/entity/autocomplete/${this.value}`;
-        const params = new URLSearchParams();
-        params.append('rows', 10);
-        params.append('start', 0);
-        params.append('highlight_class', 'hilite');
-        params.append('boost_q', 'category:genotype^-10');
-        if (this.selected.toString() === 'gene') {
-          params.append('boost_fx', 'pow(edges,0.334)');
-        }
-        if (this.selected.length > 0) {
-          this.selected.forEach(elem => {
-            params.append('category', elem);
-          });
-        } else {
-          this.options.forEach((elem, index) => {
-            params.append('category', elem.value);
-          });
-        }
-        params.append('prefix', '-OMIA');
-        axios.get(`${baseUrl}${urlExtension}`, { params })
-          .then((resp) => {
-            console.log(resp);
-            resp.data.docs.forEach(elem => {
-              const resultPacket = {
-                match: elem.match,
-                category: that.categoryMap(elem.category),
-                taxon: that.checkTaxon(elem.taxon_label),
-                curie: elem.id,
-                highlight: elem.highlight,
-                has_hl: elem.has_highlight,
-              };
-              this.suggestions.push(resultPacket);
-            });
-            this.open = true;
-            this.loading = false;
-          })
-          .catch((err) => {
-            // eslint-disable-next-line
-            console.log(err);
-          });
-      } else {
-        this.suggestions = [];
+      }, 500, {leading: false, trailing: true}),
+    async fetchData() {
+      try {
+        let searchResponse = await MA.getSearchTermSuggestions(this.value, this.selected);
+        searchResponse.docs.forEach(elem => {
+          const resultPacket = {
+            match: elem.match,
+            category: this.categoryMap(elem.category),
+            taxon: this.checkTaxon(elem.taxon_label),
+            curie: elem.id,
+            highlight: elem.highlight,
+            has_hl: elem.has_highlight,
+          };
+          this.suggestions.push(resultPacket);
+        });
+        this.open = true;
+        this.loading = false;
+      }
+      catch (e) {
+        console.log('nodeResponse ERROR', e, this);
       }
     },
     enter() {
@@ -182,26 +151,22 @@ export default {
       this.open = false;
       this.suggestions = [];
     },
-    // When up pressed while suggestions are open
     up() {
       if (this.current > 0) {
         this.current -= 1;
       }
     },
-    // When down pressed while suggestions are open
     down() {
       if (this.current < this.suggestions.length - 1) {
         this.current += 1;
       }
     },
-    // For highlighting element
     isActive(index) {
       return index === this.current;
     },
     mouseOver(index) {
       this.current = index;
     },
-    // When one of the suggestion is clicked
     suggestionClick(index) {
       const currentData = this.suggestions[index];
       this.$router.push({ path: `/${currentData.category}/${currentData.curie}` });
@@ -225,7 +190,7 @@ export default {
         'genotype': 'genotype',
         'disease': 'disease'
       };
-      const categoryObj = catList.reduce( (map, cat) => {
+      const categoryObj = catList.reduce((map, cat) => {
         cat = validCats[cat];
         if (cat) {
           map[cat] = cat;
@@ -236,14 +201,13 @@ export default {
         categoryObj.variant ||
         Object.keys(categoryObj).join(',');
     },
-    checkTaxon(taxon){
+    checkTaxon(taxon) {
       if (typeof taxon === 'string') {
         return taxon;
       }
     },
   },
   watch: {
-    // eslint-disable-next-line
     value: function () {
       this.suggestions = [];
       if (!this.value) {
@@ -308,5 +272,4 @@ export default {
   .autorootdiv.home-search .input-group.input-group-sm {
     width: unset;
   }
-  
 </style>

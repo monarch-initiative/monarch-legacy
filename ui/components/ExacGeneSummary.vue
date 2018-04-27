@@ -13,21 +13,21 @@
             <tbody>
             <tr>
                 <th scope="row">Synonymous</th>
-                <td>{{ round(exacGene.exp_syn, 1) }}</td>
-                <td>{{ round(exacGene.n_syn, 1) }}</td>
-                <td>z = {{ round(exacGene.syn_z, 2) }}</td>
+                <td>{{ exacGene.exp_syn}}</td>
+                <td>{{ exacGene.n_syn }}</td>
+                <td>z = {{ exacGene.syn_z }}</td>
             </tr>
             <tr>
                 <th scope="row">Missense</th>
-                <td>{{ round(exacGene.exp_mis, 1) }}</td>
-                <td>{{ round(exacGene.n_mis, 1) }}</td>
-                <td>z = {{ round(exacGene.mis_z, 2) }}</td>
+                <td>{{ exacGene.exp_mis}}</td>
+                <td>{{ exacGene.n_mis}}</td>
+                <td>z = {{ exacGene.mis_z}}</td>
             </tr>
             <tr>
                 <th scope="row">LoF</th>
-                <td>{{ round(exacGene.exp_lof, 1) }}</td>
-                <td>{{ round(exacGene.n_lof, 1)}}</td>
-                <td>pLI = {{ round(exacGene.p_li, 2) }}</td>
+                <td>{{ exacGene.exp_lof }}</td>
+                <td>{{ exacGene.n_lof }}</td>
+                <td>pLI = {{ exacGene.p_li }}</td>
             </tr>
             </tbody>
         </table>
@@ -35,8 +35,10 @@
             <div class="col-md-6" id="mgi-link">
                 [Retrieved from <a target="_blank" v-bind:href="exacGene.link">MyGene.info</a>]
             </div>
-            <div class="col-md-6" id="exac-link"><a target="_blank" href="http://exac.broadinstitute.org/"
-                                                    class="glyphicon glyphicon-link"></a>
+            <div class="col-md-6" id="exac-link">
+                <a target="_blank"
+                   href="http://exac.broadinstitute.org/"
+                   class="glyphicon glyphicon-link"></a>
             </div>
         </div>
     </div>
@@ -63,13 +65,17 @@
       };
     },
     mounted() {
-      if (Object.keys(this.curieMap).indexOf(this.nodePrefix) !== -1 ) {
-        this.hitMyGene(this.nodeID);
+      if (this.nodePrefix.prefix in this.curieMap) {
+        this.hitMyGene();
       }
     },
     computed: {
       nodePrefix() {
-        return this.nodeID.split(':')[0];
+        const splitID = this.nodeID.split(':');
+        return {
+          prefix: splitID[0],
+          identifier: splitID[1],
+        };
       },
     },
     methods: {
@@ -83,10 +89,9 @@
         }
         return returnValue;
       },
-      hitMyGene(identifier) {
+      hitMyGene() {
         const baseURL = 'https://mygene.info/v3/query/';
-        const splitCurie = identifier.split(':');
-        const mgCurie = `${this.curieMap[splitCurie[0]]}:${splitCurie[1]}`;
+        const mgCurie = `${this.curieMap[this.nodePrefix.prefix]}:${this.nodePrefix.identifier}`;
         axios.get(baseURL, {
           params: {
             q: mgCurie,
@@ -94,23 +99,22 @@
           },
         })
           .then((resp) => {
-            // eslint-disable-next-line
             const hits = resp.data.hits[0];
             if (hits.exac) {
               this.showGeneExac = true;
+              this.exacGene = {
+                exp_syn: this.round(hits.exac.all.exp_syn, 1),
+                n_syn: this.round(hits.exac.all.n_syn, 1),
+                syn_z: this.round(hits.exac.all.n_syn, 1),
+                exp_mis: this.round(hits.exac.all.exp_mis, 1),
+                n_mis: this.round(hits.exac.all.n_mis, 1),
+                mis_z: this.round(hits.exac.all.mis_z, 2),
+                exp_lof: this.round(hits.exac.all.exp_lof, 1),
+                n_lof: this.round(hits.exac.all.n_lof, 1),
+                p_li: this.round(hits.exac.all.p_li, 1),
+                link: resp.request.responseURL,
+              };
             }
-            this.exacGene = {
-              exp_syn: hits.exac.all.exp_syn,
-              n_syn: hits.exac.all.n_syn,
-              syn_z: hits.exac.all.n_syn,
-              exp_mis: hits.exac.all.exp_mis,
-              n_mis: hits.exac.all.n_mis,
-              mis_z: hits.exac.all.mis_z,
-              exp_lof: hits.exac.all.exp_lof,
-              n_lof: hits.exac.all.n_lof,
-              p_li: hits.exac.all.p_li,
-              link: resp.request.responseURL,
-            };
           })
           .catch((err) => {
             // eslint-disable-next-line

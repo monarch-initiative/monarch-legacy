@@ -1,6 +1,7 @@
-<div id="vue-exac" v-show="show_table" class="col-md-8" >
+<div id="vue-exac" v-if="showTable" class="col-md-8" >
+    <h2 class="p-2">Exac Population Frequencies</h2>
     <table class="table table-hover">
-        <caption><h2>Exac Population Frequencies</h2></caption>
+
         <thead>
         <tr>
             <th>Population</th>
@@ -13,106 +14,66 @@
         <tbody>
         <tr>
             <th scope="row">South Asian</th>
-            <td>{[{ allele_counts.ac_sas }]}</td>
-            <td>{[{ allele_numbers.an_sas }]}</td>
-            <td>{[{ homozygotes.hom_sas }]}</td>
-            <td>{[{ round((allele_counts.ac_sas / allele_numbers.an_sas), 7) }]}</td>
+            <td>{[{ rowData.sas.aC }]}</td>
+            <td>{[{ rowData.sas.aN }]}</td>
+            <td>{[{ rowData.sas.hom }]}</td>
+            <td>{[{ rowData.sas.aF }]}</td>
         </tr>
         <tr>
             <th scope="row">Other</th>
-            <td>{[{ allele_counts.ac_oth }]}</td>
-            <td>{[{ allele_numbers.an_oth }]}</td>
-            <td>{[{ homozygotes.hom_oth }]}</td>
-            <td>{[{ round((allele_counts.ac_oth / allele_numbers.an_oth), 7) }]}</td>
+            <td>{[{ rowData.oth.aC }]}</td>
+            <td>{[{ rowData.oth.aN }]}</td>
+            <td>{[{ rowData.oth.hom }]}</td>
+            <td>{[{ rowData.oth.aF }]}</td>
         </tr>
         <tr>
             <th scope="row">Latino</th>
-            <td>{[{ allele_counts.ac_amr }]}</td>
-            <td>{[{ allele_numbers.an_amr }]}</td>
-            <td>{[{ homozygotes.hom_amr }]}</td>
-            <td>{[{ round((allele_counts.ac_amr / allele_numbers.an_amr), 7) }]}</td>
+            <td>{[{ rowData.amr.aC }]}</td>
+            <td>{[{ rowData.amr.aN }]}</td>
+            <td>{[{ rowData.amr.hom }]}</td>
+            <td>{[{ rowData.amr.aF }]}</td>
         </tr>
         <tr>
             <th scope="row">European (Non-Finnish)</th>
-            <td>{[{ allele_counts.ac_nfe }]}</td>
-            <td>{[{ allele_numbers.an_nfe }]}</td>
-            <td>{[{ homozygotes.hom_nfe }]}</td>
-            <td>{[{ round((allele_counts.ac_nfe / allele_numbers.an_nfe), 7) }]}</td>
+            <td>{[{ rowData.nfe.aC }]}</td>
+            <td>{[{ rowData.nfe.aN }]}</td>
+            <td>{[{ rowData.nfe.hom }]}</td>
+            <td>{[{ rowData.nfe.aF }]}</td>
         </tr>
         <tr>
             <th scope="row">African</th>
-            <td>{[{ allele_counts.ac_afr }]}</td>
-            <td>{[{ allele_numbers.an_afr }]}</td>
-            <td>{[{ homozygotes.hom_afr }]}</td>
-            <td>{[{ round((allele_counts.ac_afr / allele_numbers.an_afr), 7) }]}</td>
+            <td>{[{ rowData.afr.aC }]}</td>
+            <td>{[{ rowData.afr.aN }]}</td>
+            <td>{[{ rowData.afr.hom }]}</td>
+            <td>{[{ rowData.afr.aF }]}</td>
         </tr>
         <tr>
             <th scope="row">East Asian</th>
-            <td>{[{ allele_counts.ac_eas }]}</td>
-            <td>{[{ allele_numbers.an_eas }]}</td>
-            <td>{[{ homozygotes.hom_eas }]}</td>
-            <td>{[{ round((allele_counts.ac_eas / allele_numbers.an_eas), 7) }]}</td>
+            <td>{[{ rowData.eas.aC }]}</td>
+            <td>{[{ rowData.eas.aN }]}</td>
+            <td>{[{ rowData.eas.hom }]}</td>
+            <td>{[{ rowData.eas.aF }]}</td>
         </tr>
         <tr>
             <th scope="row">European (Finnish)</th>
-            <td>{[{ allele_counts.ac_fin }]}</td>
-            <td>{[{ allele_numbers.an_fin }]}</td>
-            <td>{[{ homozygotes.hom_fin }]}</td>
-            <td>{[{ round((allele_counts.ac_fin / allele_numbers.an_fin), 7) }]}</td>
+            <td>{[{ rowData.fin.aC }]}</td>
+            <td>{[{ rowData.fin.aN }]}</td>
+            <td>{[{ rowData.fin.hom }]}</td>
+            <td>{[{ rowData.fin.aF }]}</td>
         </tr>
         <tr style="border-top: solid black 2px;">
             <th scope="row">Total</th>
             <td>
-                {[{
-                allele_counts.ac_sas +
-                allele_counts.ac_amr +
-                allele_counts.ac_oth +
-                allele_counts.ac_nfe +
-                allele_counts.ac_afr +
-                allele_counts.ac_eas +
-                allele_counts.ac_fin
-                }]}
+                {[{ rowData.tot.aC }]}
             </td>
             <td>
-                {[{
-                allele_numbers.an_sas +
-                allele_numbers.an_amr +
-                allele_numbers.an_oth +
-                allele_numbers.an_nfe +
-                allele_numbers.an_afr +
-                allele_numbers.an_eas +
-                allele_numbers.an_fin
-                }]}
+                {[{ rowData.tot.aN }]}
             </td>
             <td>
-                {[{
-                homozygotes.hom_sas +
-                homozygotes.hom_amr +
-                homozygotes.hom_oth +
-                homozygotes.hom_nfe +
-                homozygotes.hom_afr +
-                homozygotes.hom_eas +
-                homozygotes.hom_fin
-                }]}
+                {[{ rowData.tot.hom }]}
             </td>
             <td>
-                {[{
-                round(((allele_counts.ac_sas +
-                allele_counts.ac_amr +
-                allele_counts.ac_oth +
-                allele_counts.ac_nfe +
-                allele_counts.ac_afr +
-                allele_counts.ac_eas +
-                allele_counts.ac_fin)
-                /
-                (allele_numbers.an_sas +
-                allele_numbers.an_amr +
-                allele_numbers.an_oth +
-                allele_numbers.an_nfe +
-                allele_numbers.an_afr +
-                allele_numbers.an_eas +
-                allele_numbers.an_fin)), 7)
-                }]}
+                {[{ rowData.tot.aF }]}
             </td>
         </tr>
         </tbody>
@@ -129,8 +90,3 @@
         margin-bottom: 10px;
     }
 </style>
-
-
-<!-- <script src="https://unpkg.com/vue@2.4.2/dist/vue.min.js"></script>
-<script src="https://unpkg.com/axios@0.16.1/dist/axios.min.js"></script>
- -->

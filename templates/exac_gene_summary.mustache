@@ -12,21 +12,21 @@
         <tbody>
         <tr>
             <th scope="row">Synonymous</th>
-            <td>{[{ round(exacGene.exp_syn, 1) }]}</td>
-            <td>{[{ round(exacGene.n_syn, 1) }]}</td>
-            <td>z = {[{ round(exacGene.syn_z, 2) }]}</td>
+            <td>{[{ exacGene.exp_syn }]}</td>
+            <td>{[{ exacGene.n_syn }]}</td>
+            <td>z = {[{ exacGene.syn_z }]}</td>
         </tr>
         <tr>
             <th scope="row">Missense</th>
-            <td>{[{ round(exacGene.exp_mis, 1) }]}</td>
-            <td>{[{ round(exacGene.n_mis, 1) }]}</td>
-            <td>z = {[{ round(exacGene.mis_z, 2) }]}</td>
+            <td>{[{ exacGene.exp_mis }]}</td>
+            <td>{[{ exacGene.n_mis }]}</td>
+            <td>z = {[{ exacGene.mis_z }]}</td>
         </tr>
         <tr>
             <th scope="row">LoF</th>
-            <td>{[{ round(exacGene.exp_lof, 1) }]}</td>
-            <td>{[{ round(exacGene.n_lof, 1)}]}</td>
-            <td>pLI = {[{ round(exacGene.p_li, 2) }]}</td>
+            <td>{[{ exacGene.exp_lof }]}</td>
+            <td>{[{ exacGene.n_lof}]}</td>
+            <td>pLI = {[{ exacGene.p_li }]}</td>
         </tr>
         </tbody>
     </table>
