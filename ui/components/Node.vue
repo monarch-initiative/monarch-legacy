@@ -71,7 +71,7 @@
     v-bind:class="{ active: isActive }">
     <div class="sidebar-content">
       <div class="row superclass" v-for="c in superclasses">
-        <div class="col-xs-12">
+        <div class="col-12">
           <router-link
             :to="'/' + nodeCategory + '/' + c.id">
             {{c.label}}
@@ -80,13 +80,13 @@
       </div>
 
       <div class="row currentclass">
-        <div class="col-xs-12">
+        <div class="col-12">
           {{nodeLabel}}
         </div>
       </div>
 
       <div class="row subclass" v-for="c in subclasses">
-        <div class="col-xs-12">
+        <div class="col-12">
           <router-link
             :to="'/' + nodeCategory + '/' + c.id">
             {{c.label}}
@@ -133,13 +133,13 @@
     <div
       v-if="!expandedCard && nodeDefinition"
       class="node-content-section">
-      <div class="col-xs-12">
+      <div class="col-12">
         <div class="node-description">
           {{nodeDefinition}}
         </div>
       </div>
 
-      <div class="col-xs-12">
+      <div class="col-12">
         <b>References:</b>&nbsp;
         <span
           v-for="r in xrefs">
@@ -173,7 +173,7 @@
         </span>
       </div>
 
-      <div class="col-xs-12">
+      <div class="col-12">
         <b>Equivalent IDs:</b>&nbsp;
 
         <span
@@ -220,7 +220,7 @@
     </div>
     <div
       v-if="expandedCard"
-      class="expanded-card-view">
+      class="expanded-card-view col-12">
       <h3 class="text-center">{{labels[expandedCard]}} Associations</h3>
       <assoc-table
               :facets="facetObject"
