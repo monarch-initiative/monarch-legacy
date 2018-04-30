@@ -37,7 +37,7 @@
   </header>
 
 <!--
-  <section
+  <section>
     id="search"
     class="container search-section text-center">
     <div class="container">
@@ -87,16 +87,17 @@
 
   <section id="features" class="content-section text-center">
     <div class="features-section">
-      <div class="container">
-        <div class="col-lg-8 offset-lg-2">
+      <div class="container-fluid">
+        <div class="col-sm">
+          <h2>What We Do</h2>
           <ul style="list-style-type:none;">
-            <li>Integrate, align, and re-distribute cross-species gene, genotype, variant, disease, and phenotype data</li>
-            <li>Provide a portal for exploration of phenotype-based similarity</li>
-            <li>Facilitate identification of animal models of human disease through phenotypic similarity</li>
-            <li>Enable quantitative comparison of cross-species phenotypes</li>
-            <li>Develop embeddable widgets for data exploration</li>
-            <li>Influence genotype and phenotype reporting standards</li>
-            <li>Improve ontologies to better curate genotype-phenotype data</li>
+            <li>Integrate, align, and re-distribute cross-species gene, genotype, variant, disease, and phenotype data.</li>
+            <li>Provide a portal for exploration of phenotype-based similarity.</li>
+            <li>Facilitate identification of animal models of human disease through phenotypic similarity.</li>
+            <li>Enable quantitative comparison of cross-species phenotypes.</li>
+            <li>Develop embeddable widgets for data exploration.</li>
+            <li>Influence genotype and phenotype reporting standards.</li>
+            <li>Improve ontologies to better curate genotype-phenotype data.</li>
           </ul>
 
           <router-link to="/page/about" class="btn btn-default btn-lg">
@@ -108,23 +109,107 @@
     </div>
   </section>
 
+  <section class="content-section text-center">
+    <h2 class="text-center" style="margin: 10px; padding: 0px 0px 25px 0px;"> The Monarch Initiative is a collaboration between: </h2>
+    <div class="container">
+      <div class="row">
+        <div class="col-6 col-md-3">
+          <div class="media">
+            <a target="_blank" href="https://www.charite.de/en/"><span class="network-name"></span>
+            <img class="mr-3"
+            style="max-height:35px;"
+            src="../assets/images/team-charite.png"
+            alt="Charite">
+            </a>
+          </div>
+        </div>
+        <div class="col-6 col-md-3">  
+          <div class="media">
+            <a target="_blank" href="https://www.garvan.org.au/"><span class="network-name"></span>
+            <img class="mr-3"
+            style="max-height:35px;"
+            src="../assets/images/team-garvan.png"
+            alt="Garvan">
+            </a>
+          </div>
+        </div>
+        <div class="col-6 col-md-3">
+          <div class="media">
+            <a target="_blank" href="https://www.jax.org/"><span class="network-name"></span>
+            <img class="mr-3"
+            style="max-height:35px;"
+            src="../assets/images/team-jackson.png"
+            alt="Jax">
+            </a>
+          </div>
+        </div>
+        <div class="col-6 col-md-3">
+          <div class="media">
+            <a target="_blank" href="http://www.lbl.gov/"><span class="network-name"></span>
+            <img class="mr-3"
+            style="max-height:25px;"
+            src="../assets/images/team-lbnl.jpeg"
+            alt="LBNL">
+            </a>
+          </div>
+        </div>
+        <div class="col-6 col-md-3">
+          <div class="media">
+            <a target="_blank" href="https://www.ohsu.edu/"><span class="network-name"></span>
+            <img class="mr-3"
+            style="max-height:35px;"
+            src="../assets/images/team-ohsu.gif"
+            alt="OHSU">
+            </a>
+          </div>
+        </div>
+        <div class="col-6 col-md-3">
+          <div class="media">
+            <a target="_blank" href="http://www.smd.qmul.ac.uk/"><span class="network-name"></span>
+            <img class="mr-3"
+            style="max-height:35px;"
+            src="../assets/images/team-qmul.png"
+            alt="QMUL">
+            </a>
+          </div>
+        </div>
+        <div class="col-6 col-md-3">
+          <div class="media">
+            <a target="_blank" href="http://renci.org/"><span class="network-name"></span>
+            <img class="mr-3"
+            style="max-height:35px;"
+            src="../assets/images/team-renci.png"
+            alt="RENCI">
+            </a>
+          </div>
+        </div>
+        <div class="col-6 col-md-3">
+          <div class="media">
+            <a target="_blank" href="http://www.sanger.ac.uk/"><span class="network-name"></span>
+            <img class="mr-3"
+            style="max-height:35px;"
+            src="../assets/images/team-sanger.png"
+            alt="Sanger">
+            </a>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
 
-  <section id="partners" class="partners-section text-center">
-    <h1>Partners</h1>
-    <img
-      class="center-block text-center img-fluid"
-      src="../assets/images/partners.png"/>
+  <section class="content-section text-center">
+    <div style="padding: 0px 15px 50px 15px;">
+        Monarch is supported generously by a NIH Office of the Director Grant #5R24OD011883,
+        as well as by NIH-UDP: HHSN268201350036C, HHSN268201400093P, NCI/Leidos #15X143.
+        We are grateful to the many <a target="_blank" href="/about/sources">original sources of our data</a> for allowing Monarch to integrate them in this way.
+        Except where forbidden by the original sources, this work is licensed under a
+        Creative Commons Attribution 3.0 License.
+    </div>
   </section>
 
   <home-footer>
   </home-footer>
-  <section id="footer-fake" class="footer-section text-center">
-    <img
-      class="center-block text-center img-fluid"
-      src="../assets/images/footer.png"/>
-  </section>
 </div>
-
 </div>
 </template>
 
@@ -165,7 +250,7 @@ html {
 #monarch-home-container h1,
 #monarch-home-container h2,
 #monarch-home-container h3,
-#monarch-home-container h4,
+*/ COMMENT OUT #monarch-home-container h4, */
 #monarch-home-container h5,
 #monarch-home-container h6 {
   margin: 0 0 35px;
@@ -216,12 +301,12 @@ html {
   padding: 50px 0;
   text-align: center;
   color: white;
-  background: url(../assets/images/intro-bg.jpg) no-repeat bottom center scroll;
-  background-color: black;
-  -webkit-background-size: cover;
-  -moz-background-size: cover;
-  background-size: cover;
-  -o-background-size: cover;
+  background: url(../assets/images/home-splash.png) no-repeat bottom center scroll;
+  background-color: #434343;
+  */ -webkit-background-size: cover;*/
+  */ -moz-background-size: cover;*/
+  */ background-size: cover;*/
+  */ -o-background-size: cover;*/
   .intro-body {
     display: table-cell;
     vertical-align: middle;
@@ -320,7 +405,8 @@ html {
 }
 
 #monarch-home-container .content-section {
-  padding-top: 100px;
+  padding-top: 50px;
+  font-size: 18px;
 }
 
 
@@ -332,10 +418,9 @@ html {
 #monarch-home-container .features-section {
   height: auto;
   width: 100%;
-  padding: 100px 0;
-  color: white;
-  background: url(../assets/images/features-bg.jpg) no-repeat center center scroll;*/
-  background-color: black;
+  padding: 50px 0;
+  color: black;
+  background-color: lightgrey;
   -webkit-background-size: cover;
   -moz-background-size: cover;
   background-size: cover;
@@ -344,13 +429,8 @@ html {
 
 
 #monarch-home-container .partners-section {
-  padding: 100px 10px;
+  padding: 50px 10px;
   background: #EBEBEB;
-}
-
-
-#monarch-home-container .partners-section img {
-
 }
 
 
