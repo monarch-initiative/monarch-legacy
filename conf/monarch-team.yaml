@@ -245,7 +245,7 @@ institutions:
         title: Monarch PI
         alumni: false
         bio: Dr. Osumi-Sutherland has a PhD in Developmental Biology from the University of Warwick. Being a major contributor to the Gene Ontology, Flybase and Cell Ontology, he has over ten years of experience on semantic integration. Dr. Osumi-Sutherland is a PI and founder of the Virtual Fly Brain project. He is developing tools that facilitate the reconciliation of the ontologies used by the Monarch Initiative, to improve their general maintainability, quality and integration.
-    - name: Nicolas Matentzoglu
+      - name: Nicolas Matentzoglu
         picture: /image/team/NicolasMatentzoglu.jpg
         title: Semantic Web Developer
         alumni: false
