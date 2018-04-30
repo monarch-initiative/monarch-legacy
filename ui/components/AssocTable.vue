@@ -3,66 +3,104 @@
     <div v-if="dataFetched">
       <b-table :items="rows"
                :fields="fields"
-               hover
-               outlined
+               responsive="true"
+               class="table-border-soft"
       >
-        <template slot="assoc_object" slot-scope="data">
+        <template slot="assocObject"
+                  slot-scope="data">
           <strong>
-            <router-link :to="`/${cardType}/${data.item.objectCurie}`">
-              <strong><h5>{{data.item.assoc_object}}</h5></strong>
+            <router-link :to="data.item.objectLink">
+              <strong>{{data.item.assocObject}}</strong>
             </router-link>
           </strong>
         </template>
-        <template v-if="isGene" slot="taxon" slot-scope="data">
+        <template v-if="isGene"
+                  slot="taxon"
+                  slot-scope="data">
           {{data.item.taxonLabel}}
         </template>
-        <template slot="evidence" slot-scope="data">
+        <template slot="evidence"
+                  slot-scope="data">
           ({{data.item.evidenceLength}})
         </template>
-        <template slot="references" slot-scope="data">
+        <template slot="references"
+                  slot-scope="data">
           ({{data.item.referencesLength}})
         </template>
-        <template slot="sources" slot-scope="data">
+        <template slot="sources"
+                  slot-scope="data">
           ({{data.item.sourcesLength}})
         </template>
-        <template slot="show_details" slot-scope="row">
-          <div  size="sm" @click="row.toggleDetails" class="mr-2">
-            {{ row.detailsShowing ? 'Hide' : 'Show'}} Details
+        <template slot="show_details"
+                  slot-scope="row"
+
+        >
+          <div @click="row.toggleDetails">
+            <div class="fa mx-auto"
+                 v-bind:class="{
+                'fa-angle-down': row.detailsShowing,
+                'fa-angle-right': !row.detailsShowing
+                }"
+            >
+            </div>
           </div>
         </template>
-        <template slot="row-details" slot-scope="row">
+        <template slot="row-details"
+                  slot-scope="row">
           <div class="card">
             <b-table :fields="fields.slice(-4,-1)"
                      :items="[row.item]"
                       fixed
             >
-              <template slot="evidence" slot-scope="data">
-                <ul class="list-bullets" v-for="evi in data.item.evidence">
-                  <li><a target="_blank" v-bind:href="evi.id | eviHref">{{evi.lbl}}</a></li>
+              <template slot="evidence"
+                        slot-scope="data">
+                <ul class="list-bullets"
+                    v-for="evi in data.item.evidence"
+                >
+                  <li><a target="_blank"
+                         v-bind:href="evi.id | eviHref">
+                    {{evi.lbl}}
+                  </a>
+                  </li>
                 </ul>
               </template>
-              <template slot="references" slot-scope="data">
-                <ul class="list-bullets" v-for="ref in data.item.references">
-                  <li><a target="_blank"  v-bind:href="ref | pubHref">{{ref}}</a></li>
+              <template slot="references"
+                        slot-scope="data">
+                <ul class="list-bullets"
+                    v-for="ref in data.item.references">
+                  <li><a target="_blank"
+                         v-bind:href="ref | pubHref">
+                    {{ref}}
+                  </a>
+                  </li>
                 </ul>
               </template>
-              <template slot="sources" slot-scope="data">
-                <ul class="list-bullets" v-for="source in data.item.sources">
-                  <li><a v-bind:href="source">{{source | sourceHref}}</a></li>
+              <template slot="sources"
+                        slot-scope="data">
+                <ul class="list-bullets"
+                    v-for="source in data.item.sources">
+                  <li>
+                    <a v-bind:href="source">
+                      {{source | sourceHref}}
+                    </a>
+                  </li>
                 </ul>
               </template>
             </b-table>
           </div>
         </template>
       </b-table>
-      <b-pagination
-              class="mx-auto pag-width"
-              size="md"
-              v-model="currentPage"
-              :per-page="10"
-              :total-rows="totalRows"
-      >
-      </b-pagination>
+      <div class="form-group" label="Button style radios">
+      </div>
+          <b-pagination
+                  class="pag-width"
+                  align="center"
+                  size="md"
+                  v-model="currentPage"
+                  :per-page="10"
+                  :total-rows="totalRows"
+          >
+          </b-pagination>
     </div>
     <div v-else>
       <h1>Loading ...</h1>
@@ -155,7 +193,8 @@
             objectCurie: elem.object.id,
             sources: elem.provided_by,
             sourcesLength: elem.provided_by.length,
-            assoc_object: elem.object.label,
+            assocObject: elem.object.label,
+            objectLink:`/${this.cardType}/${elem.object.id}`,
             taxonLabel: taxon.label,
             taxonId: taxon.id,
             relationId: elem.relation.id,
@@ -168,8 +207,9 @@
         this.isGene = false;
         const fields = [
             {
-              key: 'assoc_object',
+              key: 'assocObject',
               label: this.firstCap(this.cardType),
+              'class': 'assoc-column-width ',
             },
             {
               key: 'evidence',
@@ -185,11 +225,11 @@
             },
             {
               key: 'show_details',
-              label: 'More',
+              label: '',
             },
           ];
         const taxonFields = ['gene', 'genotype', 'model', 'variant'];
-        if (taxonFields.includes(this.cardType) {
+        if (taxonFields.includes(this.cardType)) {
           this.isGene = true;
           fields.splice(1, 0, {
             key: 'taxon',
@@ -244,9 +284,10 @@
         return `http://purl.obolibrary.org/obo/ECO_${identifier}`;
       },
       sourceHref(url) {
-        const file = url.split(/[/]+/).pop();
-        const name = file.split(/[.]+/)[0];
-        return name.toUpperCase();
+        return url.split(/[/]+/)
+          .pop()
+          .split(/[.]+/)[0]
+          .toUpperCase();
       },
     },
     watch: {
@@ -294,7 +335,9 @@
     border-radius: 10px;
 
   }
-
+  .assoc-column-width {
+    width: 400px;
+  }
   .list-bullets {
     list-style: square;
   }
@@ -304,9 +347,6 @@
   }
   .full-width {
     width: 100%;
-  }
-  .pag-width {
-    width: 200px;
   }
 </style>
 
