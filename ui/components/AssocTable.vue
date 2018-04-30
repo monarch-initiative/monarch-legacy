@@ -11,7 +11,8 @@
           {{data.index + 1}}
         </template>
         <template slot="assocObject"
-                  slot-scope="data">
+                  slot-scope="data"
+        >
           <strong>
             <router-link :to="data.item.objectLink">
               <strong>{{data.item.assocObject}}</strong>
@@ -20,23 +21,28 @@
         </template>
         <template v-if="isGene"
                   slot="taxon"
-                  slot-scope="data">
+                  slot-scope="data"
+        >
           {{data.item.taxonLabel}}
         </template>
         <template slot="evidence"
-                  slot-scope="data">
+                  slot-scope="data"
+        >
           ({{data.item.evidenceLength}})
         </template>
         <template slot="references"
-                  slot-scope="data">
+                  slot-scope="data"
+        >
           ({{data.item.referencesLength}})
         </template>
         <template slot="sources"
-                  slot-scope="data">
+                  slot-scope="data"
+        >
           ({{data.item.sourcesLength}})
         </template>
         <template slot="show_details"
-                  slot-scope="row">
+                  slot-scope="row"
+        >
           <div @click="row.toggleDetails">
             <div class="fa"
                  v-bind:class="{
@@ -48,7 +54,8 @@
           </div>
         </template>
         <template slot="row-details"
-                  slot-scope="row">
+                  slot-scope="row"
+        >
           <div class="card">
             <b-table :fields="fields.slice(-4,-1)"
                      :items="[row.item]"
@@ -60,27 +67,33 @@
                     v-for="evi in data.item.evidence"
                 >
                   <li><a target="_blank"
-                         v-bind:href="evi.id | eviHref">
+                         v-bind:href="evi.id | eviHref"
+                  >
                     {{evi.lbl}}
                   </a>
                   </li>
                 </ul>
               </template>
               <template slot="references"
-                        slot-scope="data">
+                        slot-scope="data"
+              >
                 <ul class="list-bullets"
                     v-for="ref in data.item.references">
-                  <li><a target="_blank"
-                         v-bind:href="ref | pubHref">
-                    {{ref}}
-                  </a>
+                  <li>
+                    <a target="_blank"
+                       v-bind:href="ref | pubHref"
+                    >
+                      {{ref}}
+                    </a>
                   </li>
                 </ul>
               </template>
               <template slot="sources"
-                        slot-scope="data">
+                        slot-scope="data"
+              >
                 <ul class="list-bullets"
-                    v-for="source in data.item.sources">
+                    v-for="source in data.item.sources"
+                >
                   <li>
                     <a v-bind:href="source">
                       {{source | sourceHref}}
