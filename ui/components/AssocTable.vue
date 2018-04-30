@@ -5,7 +5,11 @@
                :fields="fields"
                responsive="true"
                class="table-border-soft"
+               @row-clicked="rowClickHandler"
       >
+        <template slot="index" slot-scope="data">
+          {{data.index + 1}}
+        </template>
         <template slot="assocObject"
                   slot-scope="data">
           <strong>
@@ -32,11 +36,9 @@
           ({{data.item.sourcesLength}})
         </template>
         <template slot="show_details"
-                  slot-scope="row"
-
-        >
+                  slot-scope="row">
           <div @click="row.toggleDetails">
-            <div class="fa mx-auto"
+            <div class="fa"
                  v-bind:class="{
                 'fa-angle-down': row.detailsShowing,
                 'fa-angle-right': !row.detailsShowing
@@ -90,10 +92,8 @@
           </div>
         </template>
       </b-table>
-      <div class="form-group" label="Button style radios">
-      </div>
           <b-pagination
-                  class="pag-width"
+                  class="pag-width my-1"
                   align="center"
                   size="md"
                   v-model="currentPage"
@@ -114,6 +114,7 @@
   export default {
     data() {
       return {
+        rowClicked: false,
         totalRows: 0,
         isGene: false,
         currentPage: 0,
@@ -144,6 +145,9 @@
       },
     },
     methods: {
+      rowClickHandler(record, index, event){
+        this.rowClicked = !this.rowClicked;
+      },
       async fetchData() {
         const that = this;
         try {
@@ -206,28 +210,29 @@
       generateFields() {
         this.isGene = false;
         const fields = [
-            {
-              key: 'assocObject',
-              label: this.firstCap(this.cardType),
-              'class': 'assoc-column-width ',
-            },
-            {
-              key: 'evidence',
-              label: 'Evidence',
-            },
-            {
-              key: 'references',
-              label: 'References',
-            },
-            {
-              key: 'sources',
-              label: 'Sources',
-            },
-            {
-              key: 'show_details',
-              label: '',
-            },
-          ];
+          'index',
+          {
+            key: 'assocObject',
+            label: this.firstCap(this.cardType),
+            'class': 'assoc-column-width ',
+          },
+          {
+            key: 'evidence',
+            label: 'Evidence',
+          },
+          {
+            key: 'references',
+            label: 'References',
+          },
+          {
+            key: 'sources',
+            label: 'Sources',
+          },
+          {
+            key: 'show_details',
+            label: '',
+          },
+        ];
         const taxonFields = ['gene', 'genotype', 'model', 'variant'];
         if (taxonFields.includes(this.cardType)) {
           this.isGene = true;
