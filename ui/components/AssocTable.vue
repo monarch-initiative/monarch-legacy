@@ -1,14 +1,25 @@
 <template>
   <div>
     <div v-if="dataFetched">
+      <span>
+        <i>
+          <small>
+            <strong>{{rows.length}}</strong>
+            <strong>{{nodeType}}</strong> to
+            <strong>{{cardType}}</strong> associations found
+          </small>
+        </i>
+      </span>
       <b-table :items="rows"
                :fields="fields"
                responsive="true"
                class="table-border-soft"
                @row-clicked="rowClickHandler"
+               :current-page="currentPage"
+               :per-page="10"
       >
         <template slot="index" slot-scope="data">
-          {{data.index + 1}}
+          {{data.item.recordIndex}}
         </template>
         <template slot="assocObject"
                   slot-scope="data"
@@ -105,7 +116,7 @@
           </div>
         </template>
       </b-table>
-          <b-pagination
+          <div v-if="rows.length > 10"><b-pagination
                   class="pag-width my-1"
                   align="center"
                   size="md"
@@ -113,7 +124,18 @@
                   :per-page="10"
                   :total-rows="totalRows"
           >
-          </b-pagination>
+          </b-pagination></div>
+    </div>
+    <div v-else-if="dataError">
+      <h3>BioLink Error</h3>
+      <div class="row">
+        <div class="col-xs-12 pre-scrollable">
+          <json-tree :data="dataError.response"
+                     :level="1"
+          >
+          </json-tree>
+        </div>
+      </div>
     </div>
     <div v-else>
       <h1>Loading ...</h1>
@@ -123,19 +145,26 @@
 
 <script>
   import * as MA from '../../js/MonarchAccess';
-
   export default {
     data() {
       return {
+        inverted: false,
         rowClicked: false,
         totalRows: 0,
         isGene: false,
-        currentPage: 0,
+        currentPage: 1,
         dataPacket: '',
         dataFetched: false,
         dataError: false,
         fields: '',
         rows: [],
+        taxonFields: [
+          'gene',
+          'genotype',
+          'model',
+          'variant',
+          'homolog',
+        ],
       };
     },
     props: {
@@ -157,9 +186,151 @@
         required: false,
       },
     },
+    computed: {
+      trueFacets(){
+        const truth = [];
+          Object.entries(this.facets.species)
+            .forEach((elem) => {
+              if (elem[1]) {
+                truth.push(this.keyMap(elem[0]));
+              }
+            });
+        return truth;
+      }
+    },
+    mounted() {
+      this.generateFields();
+      this.handleSubjectObjectInversion();
+      this.fetchData();
+    },
     methods: {
+      keyMap(key) {
+        const keyMappings = {
+          'Skeletal system': 'HP:0000924',
+          'Limbs': 'HP:0040064',
+          'Nervous system': 'HP:0000707',
+          'Head or neck': 'HP:0000152',
+          'Metabolism/homeostasis': 'HP:0001939',
+          'Cardiovascular system': 'HP:0001626',
+          'Integument': 'HP:0001574',
+          'Genitourinary system': 'HP:0000119',
+          'Eye': 'HP:0000478',
+          'Musculature': 'HP:0003011',
+          'Neoplasm': 'HP:0002664',
+          'Digestive system': 'HP:0025031',
+          'Immune System': 'HP:0002715',
+          'Blood and blood-forming tissues': 'HP:0001871',
+          'Endocrine': 'HP:0000818',
+          'Respiratory system': 'HP:0002086',
+          'Ear': 'HP:0000598',
+          'Connective tissue': 'HP:0003549',
+          'Prenatal development or birth': 'HP:0001197',
+          'Growth': 'HP:0001507',
+          'Constitutional': 'HP:0025142',
+          'Thoracic cavity': 'HP:0045027',
+          'Breast': 'HP:0000769',
+          'Voice': 'HP:0001608',
+          'Cellular': 'HP:0025354',
+          'Anolis carolinensis': 'NCBITaxon:28377',
+          'Arabidopsis thaliana': 'NCBITaxon:3702',
+          'Bos taurus': 'NCBITaxon:9913',
+          'Caenorhabditis elegans': 'NCBITaxon:6239',
+          'Danio rerio': 'NCBITaxon:7955',
+          'Drosophila melanogaster': 'NCBITaxon:7227',
+          'Equus caballus': 'NCBITaxon:9796',
+          'Gallus gallus': 'NCBITaxon:9031',
+          'Homo sapiens': 'NCBITaxon:9606',
+          'Macaca mulatta': 'NCBITaxon:9544',
+          'Monodelphis domestica': 'NCBITaxon:13616',
+          'Mus musculus': 'NCBITaxon:10090',
+          'Ornithorhynchus anatinus': 'NCBITaxon:9258',
+          'Pan troglodytes': 'NCBITaxon:9598',
+          'Rattus norvegicus': 'NCBITaxon:10116',
+          'Saccharomyces cerevisiae S288C': 'NCBITaxon:559292',
+          'Sus scrofa': 'NCBITaxon:9823',
+          'Xenopus (Silurana) tropicalis': 'NCBITaxon:8364',
+        };
+        return keyMappings[key];
+      },
       rowClickHandler(record, index, event){
         this.rowClicked = !this.rowClicked;
+      },
+      facetRows(){
+        this.rows = this.rows.filter(elem => this.trueFacets.includes(elem.taxonId));
+      },
+      handleSubjectObjectInversion() {
+        const invertedCalls = [
+          {
+            'object': 'genotype',
+            'subject': 'gene',
+          },
+          {
+            'object': 'literature',
+            'subject': 'gene',
+          },
+          {
+            'object': 'model',
+            'subject': 'gene',
+          },
+          {
+            'object': 'variant',
+            'subject': 'gene',
+          },
+          {
+            'object': 'gene',
+            'subject': 'disease',
+          },
+          {
+            'object': 'model',
+            'subject': 'disease',
+          },
+          {
+            'object': 'genotype',
+            'subject': 'disease',
+          },
+          {
+            'object': 'literature',
+            'subject': 'disease',
+          },
+          {
+            'object': 'variant',
+            'subject': 'disease',
+          },
+          {
+            'object': 'disease',
+            'subject': 'phenotype',
+          },
+          {
+            'object': 'gene',
+            'subject': 'phenotype',
+          },
+          {
+            'object': 'genotype',
+            'subject': 'phenotype',
+          },
+          {
+            'object': 'literature',
+            'subject': 'phenotype',
+          },
+          {
+            'object': 'variant',
+            'subject': 'phenotype',
+          },
+          {
+            'object': 'gene',
+            'subject': 'goterm',
+          },
+          {
+            'object': 'literature',
+            'subject': 'model',
+          },
+        ];
+        this.inverted = false;
+        invertedCalls.forEach((elem) => {
+          if (this.nodeType === elem.subject && this.cardType === elem.object) {
+            this.inverted = true;
+          }
+        })
       },
       async fetchData() {
         const that = this;
@@ -180,45 +351,62 @@
           that.dataFetched = true;
         }
         catch (e) {
-          console.log('nodeResponse ERROR', e, this);
+          that.dataError = e;
+          console.log('BioLink Error', e);
         }
+
       },
-      populateRows(page) {
-        const that = this;
-        that.rows = [];
+      populateRows() {
+        this.rows = [];
+        let count = 0;
         this.dataPacket.data.associations.forEach((elem) => {
-          let pubs = ['No References'];
+          count += 1;
+          let pubs = [
+            'No References',
+          ];
           let pubsLength = 0;
           if (elem.publications) {
             pubs = this.parsePublications(elem.publications);
             pubsLength += pubs.length;
           }
-          let evidence = [{lbl: 'No Evidence', id: '',}];
+          let evidence = [
+            {
+              lbl: 'No Evidence',
+              id: '',
+            }
+          ];
           let evidenceLength = 0;
           const eviResults = this.parseEvidence(elem.evidence_graph.nodes);
           if (eviResults.length) {
             evidence = eviResults;
             evidenceLength += eviResults.length;
           }
-          const taxon = this.parseTaxon(elem.subject);
-          that.rows.push({
+          let objectElem = elem.object;
+          if (this.inverted) {
+            objectElem = elem.subject;
+          }
+          const taxon = this.parseTaxon(objectElem);
+          this.rows.push({
+            recordIndex: count,
             references: pubs,
             referencesLength: pubsLength,
-            annotationType: that.cardType,
+            annotationType: this.cardType,
             evidence: evidence,
             evidenceLength: evidenceLength,
-            objectCurie: elem.object.id,
+            objectCurie: objectElem.id,
             sources: elem.provided_by,
             sourcesLength: elem.provided_by.length,
-            assocObject: elem.object.label,
-            objectLink:`/${this.cardType}/${elem.object.id}`,
+            assocObject: objectElem.label,
+            objectLink:`/${this.cardType}/${objectElem.id}`,
             taxonLabel: taxon.label,
             taxonId: taxon.id,
             relationId: elem.relation.id,
             relationLabel: elem.relation.label,
           });
         });
-        that.rows = that.rows.slice(page, page + 10);
+        if (this.taxonFields.includes(this.cardType)) {
+          this.facetRows();
+        }
       },
       generateFields() {
         this.isGene = false;
@@ -228,6 +416,7 @@
             key: 'assocObject',
             label: this.firstCap(this.cardType),
             'class': 'assoc-column-width ',
+            sortable: true,
           },
           {
             key: 'evidence',
@@ -246,10 +435,9 @@
             label: '',
           },
         ];
-        const taxonFields = ['gene', 'genotype', 'model', 'variant'];
-        if (taxonFields.includes(this.cardType)) {
+        if (this.taxonFields.includes(this.cardType)) {
           this.isGene = true;
-          fields.splice(1, 0, {
+          fields.splice(2, 0, {
             key: 'taxon',
             label: 'Taxon',
             sortable: true,
@@ -261,6 +449,8 @@
         let result = `${val}s/`;
         if (val === 'anatomy') {
           result = 'expression/anatomy';
+        } else if (val === 'literature') {
+          result = 'literature';
         }
         return result;
       },
@@ -288,10 +478,6 @@
           .toUpperCase() + val.slice(1);
       },
     },
-    mounted() {
-      this.generateFields();
-      this.fetchData();
-    },
     filters: {
       pubHref(curie) {
         const identifier = curie.split(/[:]+/).pop();
@@ -309,22 +495,20 @@
       },
     },
     watch: {
-      currentPage() {
-        this.populateRows(this.currentPage);
-      },
       cardType() {
         this.dataFetched = false;
         this.dataError = false;
         this.generateFields();
+        this.handleSubjectObjectInversion();
         this.fetchData();
       },
       dataPacket() {
-        this.populateRows(this.currentPage);
+        this.populateRows();
       },
       facets: {
         handler() {
-          this.currentPage = 0;
-          this.populateRows(this.currentPage);
+          this.currentPage = 1;
+          this.fetchData();
         },
         deep: true,
       },
