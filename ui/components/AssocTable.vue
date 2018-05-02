@@ -122,7 +122,7 @@
                   size="md"
                   v-model="currentPage"
                   :per-page="10"
-                  :total-rows="totalRows"
+                  :total-rows="rows.length"
           >
           </b-pagination></div>
     </div>
@@ -150,7 +150,6 @@
       return {
         inverted: false,
         rowClicked: false,
-        totalRows: 0,
         isGene: false,
         currentPage: 1,
         dataPacket: '',
@@ -347,7 +346,6 @@
             params
           );
           that.dataPacket = searchResponse;
-          that.totalRows = searchResponse.data.objects.length;
           that.dataFetched = true;
         }
         catch (e) {
@@ -454,12 +452,18 @@
         if (val === 'anatomy') {
           result = 'expression/anatomy';
         } else if (val === 'literature') {
-          result = 'literature';
+          result = val;
+        } else if (val === 'function') {
+          result = val;
         }
         return result;
       },
       parseEvidence(evidenceList) {
-        return evidenceList.filter(elem => elem.id.includes('ECO'));
+        let result = [];
+        if (evidenceList) {
+          result = evidenceList.filter(elem => elem.id.includes('ECO'));
+        }
+        return result;
       },
       parsePublications(pubsList) {
         const pubs = [];
