@@ -16,7 +16,7 @@
                class="table-border-soft"
                @row-clicked="rowClickHandler"
                :current-page="currentPage"
-               :per-page="10"
+               :per-page="rowsPerPage"
       >
         <template slot="index" slot-scope="data">
           {{data.item.recordIndex}}
@@ -121,7 +121,7 @@
                   align="center"
                   size="md"
                   v-model="currentPage"
-                  :per-page="10"
+                  :per-page="rowsPerPage"
                   :total-rows="rows.length"
           >
           </b-pagination></div>
@@ -148,6 +148,7 @@
   export default {
     data() {
       return {
+        rowsPerPage: 10,
         inverted: false,
         rowClicked: false,
         isGene: false,
@@ -186,14 +187,14 @@
       },
     },
     computed: {
-      trueFacets(){
+      trueFacets() {
         const truth = [];
-          Object.entries(this.facets.species)
-            .forEach((elem) => {
-              if (elem[1]) {
-                truth.push(this.keyMap(elem[0]));
-              }
-            });
+        Object.entries(this.facets.species)
+          .forEach((elem) => {
+            if (elem[1]) {
+              truth.push(this.keyMap(elem[0]));
+            }
+          });
         return truth;
       }
     },
