@@ -358,6 +358,7 @@
         this.rows = [];
         let count = 0;
         this.dataPacket.data.associations.forEach((elem) => {
+          console.log(elem);
           count += 1;
           let pubs = [
             'No References',
@@ -402,9 +403,11 @@
             relationLabel: elem.relation.label,
           });
         });
+        console.log(this.rows);
         if (this.taxonFields.includes(this.cardType)) {
           this.facetRows();
         }
+        console.log(this.rows);
       },
       generateFields() {
         this.isGene = false;
@@ -557,6 +560,9 @@
   }
   .full-width {
     width: 100%;
+  }
+  .table thead th{
+    border-top: none;
   }
 </style>
 
