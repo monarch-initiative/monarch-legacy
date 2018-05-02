@@ -25,13 +25,13 @@ Scenario: "food" in the navbar search with a click goes to a details page
     then the title should be "Monarch Disease: food allergy (MONDO:0002497)"
 
 @ui
-Scenario: "ZRS" in the navbar search with a click goes to a gene page
+Scenario: "BRCA1" in the navbar search with a click goes to a gene page
    Given I go to page "/"
-    and I type "ZRS" into the navbar search
-    and I wait until "ZRSR2" appears in the autocomplete
-    and I click the autocomplete dropdown item "ZRSR2" with category "Homo sapiens"
+    and I type "BRCA1" into the navbar search
+    and I wait until "BRCA1" appears in the autocomplete
+    and I click the autocomplete dropdown item "BRCA1" with category "Homo sapiens"
     when I wait for id "monarch-node"
-    then the title should start with "Monarch Gene: ZRSR2 ("
+    then the title should start with "Monarch Gene: BRCA1 ("
 
 @ui
 Scenario: "hyper-be" in the navbar search with a click goes to a disease page

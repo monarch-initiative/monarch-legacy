@@ -62,86 +62,8 @@ function navbar_search_init(in_search_id, in_form_id){
             collision: "flip"
         },
         source: function(request, response) {
-
-        // // Argument response from source gets map as argument.
-        // var _parse_data_item = function(item){
-        //
-        //     // If has a category, append that; if not try to use
-        //     // namespace; otherwise, nothing.
-        //     var appendee = '';
-        //     if( item ){
-        //     if( item['concept']['categories'][0] ){
-        //         appendee = item['concept']['categories'][0];
-        //     }else if( item['id'] ){
-        //         // Get first split on '_'.
-        //         var fspl = first_split(/_|:/, item['id']);
-        //         if( fspl[0] ){
-        //         appendee = fspl[0];
-        //         }
-        //     }
-        //     }
-        //
-        //     return {
-        //     label: item.completion,
-        //     id : item.id,
-        //     category : item.concept.categories[0],
-        //     tag: appendee,
-        //     name: item.id
-        //     };
-        // };
-        var _on_success = function(data) {
-          return response(data);
-            // console.log('success:', data);
-            // // Pare out duplicates. Assume existence of 'id'
-            // // field. Would really be nice to have bbop.core in
-            // // here...
-            // var pared_data = [];
-            // var seen_ids = {};
-            // for( var di = 0; di < data.length; di++ ){
-            //     var datum = data[di];
-            //     var datum_id = datum['id'];
-            //     if (!seen_ids[datum_id]){
-            //         // Only add new ids to pared data list.
-            //         pared_data.push(datum);
-            //
-            //         // Block them in the future.
-            //         seen_ids[datum_id] = true;
-            //     }
-            // }
-            //
-            // var map = jQuery.map(pared_data, _parse_data_item);
-            //
-            // if (map.length > 0) {
-            //     var id_list = map.map( function(i) { return i.id; });
-            //
-            //     var filtered_list = map.filter(function(i) { return i.category === 'gene'; });
-            //     var gene_ids = filtered_list.map(function(i) { return i.id; });
-            //     //var gene_ids = id_list;
-            //     var ids = gene_ids.join('&id=');
-            //     if (gene_ids.length > 0) {
-            //     //TODO pass server in using puptent var
-            //     var qurl = global_scigraph_url+"graph/neighbors?id="
-            //         + ids + "&depth=1&blankNodes=false&relationshipType=http%3A%2F%2Fpurl.obolibrary.org%2Fobo%2FRO_0002162"
-            //         + "&direction=BOTH&project=%2A";
-            //     jQuery.ajax({
-            //         url: qurl,
-            //         dataType:"json",
-            //         error: function (){
-            //             console.log('could not get taxon for genes');
-            //             remove_equivalent_ids(map, id_list, response);
-            //         },
-            //         success: function ( successData ){
-            //             map = add_species_to_autocomplete(successData, map, gene_ids);
-            //             remove_equivalent_ids(map, id_list, response);
-            //         }
-            //
-            //     });
-            // } else {
-            //     remove_equivalent_ids(map, id_list, response);
-            // }
-            // } else {
-            //     response(map);
-            // }
+          var _on_success = function(data) {
+            return response(data);
         };
 
         var query = "/autocomplete/"+request.term+".json";
@@ -160,7 +82,25 @@ function navbar_search_init(in_search_id, in_form_id){
             },
         select: function(event,ui) {
         if (ui.item !== null) {
-            var newurl = "/"+ui.item.category+"/"
+            // Violating DRY and copying from the new Vue autocomplete
+            const validCats = {
+               'gene': 'gene',
+               'variant locus': 'variant',
+               'phenotype': 'phenotype',
+               'genotype': 'genotype',
+               'disease': 'disease'
+            };
+            const categoryObj = ui.item.category.reduce((map, cat) => {
+                cat = validCats[cat];
+                if (cat) {
+                  map[cat] = cat;
+                }
+                return map;
+            }, {});
+            const category = categoryObj.gene ||
+              categoryObj.variant ||
+              Object.keys(categoryObj).join(',');
+            const newurl = "/"+category+"/"
                 +encodeURIComponent(ui.item.id);
             if (window.vueRouter) {
               window.vueRouter.push(newurl);

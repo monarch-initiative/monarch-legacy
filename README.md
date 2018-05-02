@@ -204,7 +204,7 @@ Note that your default web browser will open up automatically and you will be po
 
     > cd tests/behave
     > source bin/activate
-    > TARGET=http://localhost:8081/ behave
+    > TARGET=http://localhost:8081 behave
 
 ### Documentation on the Tooling
 
