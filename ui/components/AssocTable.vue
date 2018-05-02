@@ -411,7 +411,11 @@
       generateFields() {
         this.isGene = false;
         const fields = [
-          'index',
+          {
+            key: 'recordIndex',
+            label: 'Index',
+            sortable: true,
+          },
           {
             key: 'assocObject',
             label: this.firstCap(this.cardType),
