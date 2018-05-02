@@ -71,7 +71,7 @@
     v-bind:class="{ active: isActive }">
     <div class="sidebar-content">
       <div class="row superclass" v-for="c in superclasses">
-        <div class="col-xs-12">
+        <div class="col-12">
           <router-link
             :to="'/' + nodeCategory + '/' + c.id">
             {{c.label}}
@@ -80,13 +80,13 @@
       </div>
 
       <div class="row currentclass">
-        <div class="col-xs-12">
+        <div class="col-12">
           {{nodeLabel}}
         </div>
       </div>
 
       <div class="row subclass" v-for="c in subclasses">
-        <div class="col-xs-12">
+        <div class="col-12">
           <router-link
             :to="'/' + nodeCategory + '/' + c.id">
             {{c.label}}
@@ -133,13 +133,13 @@
     <div
       v-if="!expandedCard && nodeDefinition"
       class="node-content-section">
-      <div class="col-xs-12">
+      <div class="col-12">
         <div class="node-description">
           {{nodeDefinition}}
         </div>
       </div>
 
-      <div class="col-xs-12">
+      <div class="col-12">
         <b>References:</b>&nbsp;
         <span
           v-for="r in xrefs">
@@ -173,7 +173,7 @@
         </span>
       </div>
 
-      <div class="col-xs-12">
+      <div class="col-12">
         <b>Equivalent IDs:</b>&nbsp;
 
         <span
@@ -220,22 +220,20 @@
     </div>
     <div
       v-if="expandedCard"
-      class="expanded-card-view">
+      class="expanded-card-view col-12">
       <h3 class="text-center">{{labels[expandedCard]}} Associations</h3>
-      <table-view
+      <assoc-table
               :facets="facetObject"
               :nodeType="nodeCategory"
               :cardType="expandedCard"
               :identifier="nodeId">
-      </table-view>
+      </assoc-table>
     </div>
     <div v-if="!expandedCard && nodeCategory === 'variant'">
       <exac-variant :nodeID="nodeId"></exac-variant>
     </div>
   </div>
 </div>
-
-
 </div>
 </div>
 </template>
@@ -243,7 +241,6 @@
 <script>
 
 import _ from 'underscore';
-import TableView from "./TableView.vue";
 import * as MA from '../../js/MonarchAccess';
 
 
@@ -333,25 +330,24 @@ export default {
   data () {
     return {
       facetObject: {
-          species: {
-              human: true,
-              zebrafish: true,
-              chimpanzee: true,
-              mouse: true,
-              opposum: true,
-              horse: true,
-              rat: true,
-              macaque: true,
-              chicken: true,
-              cow: true,
-              anole: true,
-              frog: true,
-              boar: true,
-              fly: true,
-              arabidopsis: true,
-              platypus: true,
-              worm: true,
-              yeast: true,
+          species: {'Anolis carolinensis': true,
+            'Arabidopsis thaliana': true,
+            'Bos taurus': true,
+            'Caenorhabditis elegans': true,
+            'Danio rerio': true,
+            'Drosophila melanogaster': true,
+            'Equus caballus': true,
+            'Gallus gallus': true,
+            'Homo sapiens': true,
+            'Macaca mulatta': true,
+            'Monodelphis domestica': true,
+            'Mus musculus': true,
+            'Ornithorhynchus anatinus': true,
+            'Pan troglodytes': true,
+            'Rattus norvegicus': true,
+            'Saccharomyces cerevisiae S288C': true,
+            'Sus scrofa': true,
+            'Xenopus (Silurana) tropicalis': true,
           },
           evidence: {
               IEA: true,

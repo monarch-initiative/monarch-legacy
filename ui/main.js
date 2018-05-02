@@ -14,7 +14,7 @@ import Navbar from '@/components/Navbar.vue';
 import Node from '@/components/Node.vue';
 import NodeCard from '@/components/NodeCard.vue';
 import MonarchLegacy from '@/components/MonarchLegacy.vue';
-import TableView from '@/components/TableView.vue';
+import AssocTable from '@/components/AssocTable.vue';
 import AssocFacets from '@/components/AssocFacets.vue';
 import MonarchAutocomplete from '@/components/MonarchAutocomplete.vue';
 import ExacGeneSummary from '@/components/ExacGeneSummary.vue';
@@ -104,7 +104,7 @@ const main = () => {
 
   Vue.component('monarch-navbar', Navbar);
   Vue.component('node-card', NodeCard);
-  Vue.component('table-view', TableView);
+  Vue.component('assoc-table', AssocTable);
   Vue.component('assoc-facets', AssocFacets);
   Vue.component('monarch-autocomplete', MonarchAutocomplete);
   Vue.component('home-footer', HomeFooter);

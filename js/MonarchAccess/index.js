@@ -62,11 +62,10 @@ export function getSearchTermSuggestions(term, selected) {
       });
   }
   params.append('prefix', '-OMIA');
-  console.log(params.toString());
   const returnedPromise = new Promise((resolve, reject) => {
-    axios.get(`${baseUrl}${urlExtension}`, {params})
+    axios.get(`${baseUrl}${urlExtension}`, { params })
       .then(resp => {
-        const responseData = resp.data
+        const responseData = resp.data;
         if (typeof responseData !== 'object') {
           reject(responseData);
         }
@@ -82,7 +81,26 @@ export function getSearchTermSuggestions(term, selected) {
   return returnedPromise;
 }
 
-
+export function getNodeAssociations(nodeType, identifier, biolinkAnnotationSuffix, params) {
+  const baseUrl = 'https://api-dev.monarchinitiative.org/api/bioentity/';
+  const urlExtension = `${nodeType}/${identifier}/${biolinkAnnotationSuffix}`;
+  const returnedPromise = new Promise((resolve, reject) => {
+    axios.get(`${baseUrl}${urlExtension}`, { params })
+      .then(resp => {
+        const responseData = resp;
+        if (typeof responseData !== 'object') {
+          reject(responseData);
+        }
+        else {
+          resolve(responseData);
+        }
+      })
+      .catch(err => {
+        reject(err);
+      });
+  });
+  return returnedPromise;
+}
 
 
 /*
