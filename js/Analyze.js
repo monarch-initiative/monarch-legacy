@@ -570,7 +570,7 @@ function AnalyzeInit(phenogrid_conf, view){
 
     var auto_args = {
 		source: function(request, response) {
-		    var query = "/autocomplete/Phenotype/" + request.term + ".json";
+		    var query = "/autocomplete/phenotype/" + request.term + ".json";
 		    jQuery.ajax({
 				    url: query,
 				    dataType: 'json',
