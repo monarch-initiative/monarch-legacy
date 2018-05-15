@@ -291,7 +291,7 @@ function AnalyzeInit(phenogrid_conf, view){
             jQuery("#srch").prop("disabled", false);
             scroll_to_bottom('ortholog-list');
         })
-        .error(function() {
+        .fail(function() {
             jQuery("#ajax-spinner").hide();
             enable_compare_form();
             jQuery("#reset").prop('disabled', false);
@@ -331,7 +331,7 @@ function AnalyzeInit(phenogrid_conf, view){
             jQuery("#srch").prop("disabled", false);
             scroll_to_bottom('paralog-list');
         })
-        .error(function() {
+        .fail(function() {
             jQuery("#ajax-spinner").hide();
             enable_compare_form();
             jQuery("#srch").prop("disabled", false);
