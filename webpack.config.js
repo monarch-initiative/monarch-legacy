@@ -13,6 +13,8 @@ log.level = 'silly';
 const webpack = require('webpack');
 const ExtractTextPlugin = require('extract-text-webpack-plugin');
 const HtmlWebpackPlugin = require('html-webpack-plugin');
+const VueLoaderPlugin = require('vue-loader/lib/plugin')
+
 const myLocalIp = require('my-local-ip');
 const common = require('./common');
 const AssetsPlugin = require('assets-webpack-plugin');
@@ -47,7 +49,7 @@ const ASSETS_LIMIT = typeof process.env.ASSETS_LIMIT !== 'undefined' ? parseInt(
 const hash = ''; // (NODE_ENV === 'production' && DEVTOOLS ? '-devtools' : '') + (NODE_ENV === 'production' ? '-[hash]' : '');
 const TEST = false;
 
-
+const mode = NODE_ENV;
 
 /** integrity checks */
 
@@ -83,6 +85,10 @@ plugins.push(new webpack.ProvidePlugin({
       jQuery: "jquery",
       "window.jQuery": "jquery"
   }));
+
+if (USE_SPA) {
+  plugins.push(new VueLoaderPlugin());
+}
 
 if (USE_SPA) {
   plugins.push(new HtmlWebpackPlugin({
@@ -151,12 +157,12 @@ if (MODE_DEV_SERVER) {
   }
 
   // https://github.com/1337programming/webpack-browser-plugin
-  const WebpackBrowserPlugin = require('webpack-browser-plugin');
-  plugins.push(
-    new WebpackBrowserPlugin({
-      // browser: 'Safari'   // 'Firefox'
-    })
-  );
+  // const WebpackBrowserPlugin = require('webpack-browser-plugin');
+  // plugins.push(
+  //   new WebpackBrowserPlugin({
+  //     // browser: 'Safari'   // 'Firefox'
+  //   })
+  // );
 }
 else {
   // build mode
@@ -198,6 +204,7 @@ else {
 /** webpack config */
 
 const config = {
+  mode: mode,
   amd: {
     jQuery: true
   },

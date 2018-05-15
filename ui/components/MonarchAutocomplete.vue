@@ -82,7 +82,7 @@
   </div>
 </template>
 
-<script type="text/babel">
+<script>
 import * as MA from '../../js/MonarchAccess';
 const debounce = require('lodash/debounce');
 export default {
