@@ -88,7 +88,6 @@
 .home-footer {
   margin: 0px 15px;
   padding: 10px 0px;
-  background-color: lightgrey;
 }
 
 .about-section > ul > li > a {
