@@ -116,18 +116,18 @@
           <h4>Recent Blog Posts</h4>
           <ul class="list-inline">
             <li>
+              <a href="https://medium.com/@MonarchInit/curating-rare-disease-genes-an-interview-with-eleanor-williams-of-genomics-england-ad2a677de8a0">
+              Feb 28, 2018: <b>Curating Rare Disease Genes...</b>
+              </a>
+            </li>
+            <li>
               <a href="https://medium.com/@MonarchInit/exomiser-10-faster-leaner-better-c988650488be"> 
-              March 22, 2018: <b> Exomiser 10: Faster, Leaner, Better</b>
+              March 22, 2018: <b>Exomiser 10: Faster, Leaner, Better</b>
               </a>
             </li>
             <li>
               <a href="https://medium.com/@MonarchInit/tailoring-the-nci-thesaurus-for-semantic-interoperability-21305ccfe3a6">
               March 2, 2018: <b>Tailoring the NCI Thesaurus...</b>
-              </a>
-            </li>
-            <li>
-              <a href="https://medium.com/@MonarchInit/rare-disease-day-2018-a5b7e72df57b">
-              Feb 28, 2018: <b>Rare Disease Day 2018</b>
               </a>
             </li>
           </ul>
