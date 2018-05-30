@@ -26,9 +26,9 @@
               <!--Examples: <i>Marfan Syndrome</i> <i>sox3</i>-->
             <!--</p>-->
 
-            <a href="#footer-fake" class="btn btn-circle page-scroll">
+            <!--a href="#footer-fake" class="btn btn-circle page-scroll">
               <i class="fa fa-angle-double-down animated"></i>
-            </a>
+            </a-->
 
           </div>
         </div>
