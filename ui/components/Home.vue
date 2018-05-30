@@ -26,9 +26,9 @@
               <!--Examples: <i>Marfan Syndrome</i> <i>sox3</i>-->
             <!--</p>-->
 
-            <a href="#footer-fake" class="btn btn-circle page-scroll">
+            <!--a href="#footer-fake" class="btn btn-circle page-scroll">
               <i class="fa fa-angle-double-down animated"></i>
-            </a>
+            </a-->
 
           </div>
         </div>
@@ -109,88 +109,54 @@
     </div>
   </section>
 
-  <section class="content-section text-center">
-    <h2 class="text-center" style="margin: 10px; padding: 0px 0px 25px 0px;"> The Monarch Initiative is a collaboration between: </h2>
-    <div class="container">
+  <section class="news-section text-center">
+    <div class="container-fluid">
       <div class="row">
-        <div class="col-6 col-md-3">
-          <div class="media">
-            <a target="_blank" href="https://www.charite.de/en/"><span class="network-name"></span>
-            <img class="mr-3"
-            style="max-height:35px;"
-            src="../assets/images/team-charite.png"
-            alt="Charite">
-            </a>
+        <div class="col-sm">
+          <h4>Recent Blog Posts</h4>
+          <ul class="list-inline">
+            <li>
+              <a href="https://medium.com/@MonarchInit/curating-rare-disease-genes-an-interview-with-eleanor-williams-of-genomics-england-ad2a677de8a0">
+              Feb 28, 2018: <b>Curating Rare Disease Genes...</b>
+              </a>
+            </li>
+            <li>
+              <a href="https://medium.com/@MonarchInit/exomiser-10-faster-leaner-better-c988650488be"> 
+              March 22, 2018: <b>Exomiser 10: Faster, Leaner, Better</b>
+              </a>
+            </li>
+            <li>
+              <a href="https://medium.com/@MonarchInit/tailoring-the-nci-thesaurus-for-semantic-interoperability-21305ccfe3a6">
+              March 2, 2018: <b>Tailoring the NCI Thesaurus...</b>
+              </a>
+            </li>
+          </ul>
+          <h4>Upcoming Events</h4>
+          <ul class="list-inline">
+            <li>
+              <a href="http://icbo2018.cgrb.oregonstate.edu/"> 
+              ICBO Conference, Aug 7, 2018
+              </a>
+            </li>
+          </ul>
+          <div style="padding: 0 0 15px 0;">
+            <a class="btn btn-dark" target="_blank" href="https://medium.com/@MonarchInit" role="button">Read More</a>
           </div>
         </div>
-        <div class="col-6 col-md-3">  
-          <div class="media">
-            <a target="_blank" href="https://www.garvan.org.au/"><span class="network-name"></span>
-            <img class="mr-3"
-            style="max-height:35px;"
-            src="../assets/images/team-garvan.png"
-            alt="Garvan">
-            </a>
-          </div>
-        </div>
-        <div class="col-6 col-md-3">
-          <div class="media">
-            <a target="_blank" href="https://www.jax.org/"><span class="network-name"></span>
-            <img class="mr-3"
-            style="max-height:35px;"
-            src="../assets/images/team-jackson.png"
-            alt="Jax">
-            </a>
-          </div>
-        </div>
-        <div class="col-6 col-md-3">
-          <div class="media">
-            <a target="_blank" href="http://www.lbl.gov/"><span class="network-name"></span>
-            <img class="mr-3"
-            style="max-height:25px;"
-            src="../assets/images/team-lbnl.jpeg"
-            alt="LBNL">
-            </a>
-          </div>
-        </div>
-        <div class="col-6 col-md-3">
-          <div class="media">
-            <a target="_blank" href="https://www.ohsu.edu/"><span class="network-name"></span>
-            <img class="mr-3"
-            style="max-height:35px;"
-            src="../assets/images/team-ohsu.gif"
-            alt="OHSU">
-            </a>
-          </div>
-        </div>
-        <div class="col-6 col-md-3">
-          <div class="media">
-            <a target="_blank" href="http://www.smd.qmul.ac.uk/"><span class="network-name"></span>
-            <img class="mr-3"
-            style="max-height:35px;"
-            src="../assets/images/team-qmul.png"
-            alt="QMUL">
-            </a>
-          </div>
-        </div>
-        <div class="col-6 col-md-3">
-          <div class="media">
-            <a target="_blank" href="http://renci.org/"><span class="network-name"></span>
-            <img class="mr-3"
-            style="max-height:35px;"
-            src="../assets/images/team-renci.png"
-            alt="RENCI">
-            </a>
-          </div>
-        </div>
-        <div class="col-6 col-md-3">
-          <div class="media">
-            <a target="_blank" href="http://www.sanger.ac.uk/"><span class="network-name"></span>
-            <img class="mr-3"
-            style="max-height:35px;"
-            src="../assets/images/team-sanger.png"
-            alt="Sanger">
-            </a>
+        <div class="col-sm">
+          <div>
+            <div class="card-body news-list">
+              <a class="twitter-timeline"
+                href="https://twitter.com/search?q=%40MonarchInit+OR+%40hp_ontology+OR+%40GA4GH+OR+%40UDNconnect"
+                data-widget-id="527567015918051328"
+                xdata-theme="dark"
+                xdata-tweet-limit="1"
+                data-preview=""
+                height="220"
+                width="320">
+                Loading Tweets about "@MonarchInit OR @hp_ontology OR @GA4GH OR @UDNconnect"
+              </a>
+            </div>
           </div>
         </div>
       </div>
@@ -198,12 +164,99 @@
   </section>
 
   <section class="content-section text-center">
-    <div style="padding: 0px 15px 50px 15px;">
+    <div class="features-section">
+      <h4 class="text-center" style="margin: 10px; padding: 0px 0px 25px 0px;"> The Monarch Initiative is a collaboration between: </h4>
+      <div class="container">
+        <div class="row">
+          <div class="col-6 col-md-3">
+            <div class="media">
+              <a target="_blank" href="https://www.charite.de/en/"><span class="network-name"></span>
+              <img class="mr-3"
+              style="max-height:35px;"
+              src="../assets/images/team-charite.png"
+              alt="Charite">
+              </a>
+            </div>
+          </div>
+          <div class="col-6 col-md-3">  
+            <div class="media">
+              <a target="_blank" href="https://www.garvan.org.au/"><span class="network-name"></span>
+              <img class="mr-3"
+              style="max-height:35px;"
+              src="../assets/images/team-garvan.png"
+              alt="Garvan">
+              </a>
+            </div>
+          </div>
+          <div class="col-6 col-md-3">
+            <div class="media">
+              <a target="_blank" href="https://www.jax.org/"><span class="network-name"></span>
+              <img class="mr-3"
+              style="max-height:35px;"
+              src="../assets/images/team-jackson.png"
+              alt="Jax">
+              </a>
+            </div>
+          </div>
+          <div class="col-6 col-md-3">
+            <div class="media">
+              <a target="_blank" href="http://www.lbl.gov/"><span class="network-name"></span>
+              <img class="mr-3"
+              style="max-height:25px;"
+              src="../assets/images/team-lbnl.jpeg"
+              alt="LBNL">
+              </a>
+            </div>
+          </div>
+          <div class="col-6 col-md-3">
+            <div class="media">
+              <a target="_blank" href="https://www.ohsu.edu/"><span class="network-name"></span>
+              <img class="mr-3"
+              style="max-height:35px;"
+              src="../assets/images/team-ohsu.gif"
+              alt="OHSU">
+              </a>
+            </div>
+          </div>
+          <div class="col-6 col-md-3">
+            <div class="media">
+              <a target="_blank" href="http://www.smd.qmul.ac.uk/"><span class="network-name"></span>
+              <img class="mr-3"
+              style="max-height:35px;"
+              src="../assets/images/team-qmul.png"
+              alt="QMUL">
+              </a>
+            </div>
+          </div>
+          <div class="col-6 col-md-3">
+            <div class="media">
+              <a target="_blank" href="http://renci.org/"><span class="network-name"></span>
+              <img class="mr-3"
+              style="max-height:35px;"
+              src="../assets/images/team-renci.png"
+              alt="RENCI">
+              </a>
+            </div>
+          </div>
+          <div class="col-6 col-md-3">
+            <div class="media">
+              <a target="_blank" href="http://www.sanger.ac.uk/"><span class="network-name"></span>
+              <img class="mr-3"
+              style="max-height:35px;"
+              src="../assets/images/team-sanger.png"
+              alt="Sanger">
+              </a>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div style="padding: 25px 15px 0px 15px;">
         Monarch is supported generously by a NIH Office of the Director Grant #5R24OD011883,
         as well as by NIH-UDP: HHSN268201350036C, HHSN268201400093P, NCI/Leidos #15X143.
         We are grateful to the many <a target="_blank" href="/about/sources">original sources of our data</a> for allowing Monarch to integrate them in this way.
         Except where forbidden by the original sources, this work is licensed under a
         Creative Commons Attribution 3.0 License.
+      </div>
     </div>
   </section>
 
@@ -226,6 +279,43 @@ export default {
     }
   },
 }
+
+// From https://dev.twitter.com/web/javascript/loading - 7/26/2015
+!(function(d, s, id) {
+
+  var js,
+      fjs=d.getElementsByTagName(s)[0],
+      p=/^http:/.test(d.location)?'http':'https';
+  if(!d.getElementById(id)){
+    js=d.createElement(s);
+    js.id=id;
+    js.src=p+"://platform.twitter.com/widgets.js";
+    fjs.parentNode.insertBefore(js,fjs);
+  }
+
+  // https://twittercommunity.com/t/auto-expand-photos-always-on-for-embedded-timeline/62510/48
+
+  var hideRecursive = false;
+  var hideTweetMedia = function() {
+    var container = jQuery("#twitter").find(".twitter-timeline").contents().find(".timeline-Tweet-media");
+      container.css("display", "none");
+      jQuery("#twitter").css("height", "100%");
+      container.css("border", "3px solid red");
+      if (!hideRecursive) {
+        jQuery("#twitter").find(".twitter-timeline").contents().find(".timeline-TweetList").bind('DOMSubtreeModified propertychange',
+          function() {
+            hideTweetMedia(this);
+            hideRecursive = true;
+          }
+        );
+      }
+  };
+  hideTweetMedia();
+  jQuery('#twitter').on('DOMSubtreeModified propertychange',"#twitter-widget-0", function() {
+      hideTweetMedia();
+  });
+}(document, "script", "twitter-wjs"));
+
 </script>
 
 
@@ -409,6 +499,10 @@ html {
   font-size: 18px;
 }
 
+#monarch-home-container .news-section {
+  padding-top: 50px;
+  font-size: 18px;
+}
 
 #monarch-home-container .search-section {
   padding: 50px 10px;
@@ -420,7 +514,7 @@ html {
   width: 100%;
   padding: 50px 0;
   color: black;
-  background-color: lightgrey;
+  background-color: #E8E8E8;
   -webkit-background-size: cover;
   -moz-background-size: cover;
   background-size: cover;
