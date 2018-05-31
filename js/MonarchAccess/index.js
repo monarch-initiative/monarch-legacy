@@ -102,6 +102,56 @@ export function getNodeAssociations(nodeType, identifier, biolinkAnnotationSuffi
   return returnedPromise;
 }
 
+export function getNodeLabelByCurie(curie) {
+  const baseUrl = `https://api-dev.monarchinitiative.org/api/bioentity/${curie}`;
+  const params = {
+    fetch_objects: true,
+    rows: 100,
+  };
+  const returnedPromise = new Promise((resolve, reject) => {
+    axios.get(baseUrl, { params })
+      .then(resp => {
+        const responseData = resp;
+        if (typeof responseData !== 'object') {
+          reject(responseData);
+        }
+        else {
+          resolve(responseData);
+        }
+      })
+      .catch(err => {
+        reject(err);
+      });
+  });
+  return returnedPromise;
+}
+
+export function comparePhenotypes(phenotypesList) {
+  const baseUrl = 'https://beta.monarchinitiative.org/analyze/phenotypes.json?';
+  const extenstion = 'input_items=';
+  const phenoCuries = [];
+  phenotypesList.forEach((elem) => {
+    phenoCuries.push(elem.curie);
+  });
+  const fullUrl = `${baseUrl}${extenstion}${phenoCuries.join('+')}`;
+  const returnedPromise = new Promise((resolve, reject) => {
+    axios.get(fullUrl)
+      .then(resp => {
+        const responseData = resp;
+        if (typeof responseData !== 'object') {
+          reject(responseData);
+        }
+        else {
+          resolve(responseData);
+        }
+      })
+      .catch(err => {
+        reject(err);
+      });
+  });
+  return returnedPromise;
+}
+
 
 /*
   might be useful, probably should be deleted and reinvented.
