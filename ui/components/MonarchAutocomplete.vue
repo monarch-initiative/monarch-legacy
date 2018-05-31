@@ -1,8 +1,14 @@
 <template>
   <div
     class="autocomplete autorootdiv"
-    v-bind:class="{'home-search':homeSearch, 'open':open}">
-    <div v-if="homeSearch" class="form-group">
+    v-bind:class="{
+    'home-search':homeSearch,
+    'open':open
+    }"
+  >
+    <div v-if="homeSearch && !singleCategory"
+         class="form-group"
+    >
       <div class="form-group" label="Button style checkboxes">
         <b-form-checkbox-group buttons
                                button-variant="dark"
@@ -16,7 +22,7 @@
       </div>
     </div>
     <div class="input-group input-group-sm">
-      <div v-if="!homeSearch" class="input-group-prepend">
+      <div v-if="!homeSearch && !singleCategory" class="input-group-prepend">
         <button class="btn btn-secondary dropdown-toggle"
                 type="button"
                 v-on:click="catDropDown = !catDropDown">
@@ -43,7 +49,7 @@
              @keydown.down="down"
              @keydown.up="up"
              @keydown.esc="clearSearch"
-             placeholder="Search... e.g. Marfan syndrome or sox3">
+             placeholder="Search...">
     </div>
     <div v-if="open"
          class="dropdown-menu list-group dropList px-4">
@@ -67,7 +73,7 @@
         </div>
       </div>
       <div class="row">
-        <div v-if="suggestions.length > 0"
+        <div v-if="suggestions.length && !singleCategory"
              class="btn btn-outline-success col m-2"
              v-on:click="showMore">
           Show all results for '{{value}}'
@@ -85,12 +91,18 @@
 <script>
 import * as MA from '../../js/MonarchAccess';
 const debounce = require('lodash/debounce');
+
 export default {
   name: 'AutoComplete',
   props: {
     homeSearch: {
       type: String,
       required: true,
+      default: false,
+    },
+    singleCategory: {
+      type: String,
+      required: false,
       default: false,
     },
   },
@@ -116,6 +128,11 @@ export default {
     allLower(word) {
       return word.toLowerCase();
     },
+  },
+  mounted() {
+    if (this.singleCategory) {
+      this.selected.push(this.singleCategory);
+    }
   },
   methods: {
     debounceInput: debounce(
@@ -145,8 +162,11 @@ export default {
     },
     enter() {
       const currentData = this.suggestions[this.current];
-      // this.$emit('value', { value: this.suggestions[this.current] });
-      this.$router.push({ path: `/${currentData.category}/${currentData.curie}` });
+      if (!this.singleCategory) {
+        this.$router.push({ path: `/${currentData.category}/${currentData.curie}` });
+      } else {
+        this.$emit('interface', this.suggestions[this.current]);
+      }
       this.value = '';
       this.open = false;
       this.suggestions = [];
@@ -169,8 +189,11 @@ export default {
     },
     suggestionClick(index) {
       const currentData = this.suggestions[index];
-      this.$router.push({ path: `/${currentData.category}/${currentData.curie}` });
-      // this.$emit('value', { value: this.suggestions[index] });
+      if (!this.singleCategory) {
+        this.$router.push({ path: `/${currentData.category}/${currentData.curie}` });
+      } else {
+        this.$emit('interface', this.suggestions[index]);
+      }
       this.value = '';
       this.open = false;
       this.suggestions = [];
@@ -215,8 +238,10 @@ export default {
       }
     },
     selected: function () {
-      this.suggestions = [];
-      this.fetchData();
+      if (!this.singleCategory){
+        this.suggestions = [];
+        this.fetchData();
+      }
     },
   },
 };
