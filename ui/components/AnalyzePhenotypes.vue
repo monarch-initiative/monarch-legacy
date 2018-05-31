@@ -209,7 +209,7 @@
     </div>
     <div class="row my-3" v-if="launchPhenotypesTable">
       <div class="col-1"></div>
-      <div class="col-10 card">
+      <div class="col-10">
         <phenotypes-table :phenotypes="phenotypes"
         >
         </phenotypes-table>
