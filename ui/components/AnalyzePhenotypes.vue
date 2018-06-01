@@ -1,5 +1,13 @@
 <template>
   <div class="container-fluid">
+    <b-alert variant="danger"
+             class="my-5"
+             show
+             dismissible
+    >
+      This page is a work in progress.  The individual and gene selection on step 2 are not yet functional.
+      Please select a group for now.
+    </b-alert>
     <div class="row wizard-style">
       <div class="col-1"></div>
       <div class="col-10 card card-body">
@@ -8,7 +16,7 @@
                      subtitle="A tool for ontological comparison of phenotype sets"
                      color="darkgrey"
                      finish-button-text="Submit and Analyze"
-                     @on-complete="launchPhenogrid()"
+                     @on-complete="generatePhenogridData()"
         >
           <tab-content title="Create A Profile of Phenotypes">
             <monarch-autocomplete homeSearch="true"
@@ -18,7 +26,7 @@
             </monarch-autocomplete>
             <b-form-textarea id="textarea1"
                              v-model="phenoCurieList"
-                             placeholder="Enter a comma seperated list of phenotype ids"
+                             placeholder="Enter a comma separated list of prefixed phenotype ids e.g. HP:0000322"
                              :rows="3"
                              :max-rows="6"
                              class="my-2"
@@ -94,6 +102,7 @@
           </tab-content>
           <tab-content title="Run Analyses"
           >
+
           </tab-content>
         </form-wizard>
       </div>
@@ -197,17 +206,20 @@
       </div>
       <div class="col-1"></div>
     </div>
-    <div class="row my-3" v-show="showPhenogrid">
+    <div class="row my-3">
       <div class="col-1"></div>
-      <div class="col-10 card">
-        <div id="phenogrid_container"
-             class="clearfix"
-             ref="phenogrid_container"
-        ></div>
+      <div class="col-10 card"
+           v-show="showPhenogrid"
+      >
+        <pheno-grid :xAxis="xAxis"
+                    :yAxis="yAxis"
+                    :index="pgIndex"
+        >
+        </pheno-grid>
       </div>
       <div class="col-1"></div>
     </div>
-    <div class="row my-3" v-if="launchPhenotypesTable">
+    <div class="row my-3" v-if="showPhenogrid">
       <div class="col-1"></div>
       <div class="col-10">
         <phenotypes-table :phenotypes="phenotypes"
@@ -225,12 +237,12 @@ export default {
   name: 'AnalyzePhenotypes',
   data() {
     return {
-      launchPhenotypesTable: false,
+      showPhenogrid: false,
+      pgIndex: 0,
       rejectedPhenotypeCuries: [],
       showGeneAlert: false,
       showPhenotypeAlert: false,
-      showPhenogrid: false,
-      phenoCurieList: 'HP:0000303,HP:0000272, HP:0000316,HP:0000322,NCBIGene:231221',
+      phenoCurieList: '',
       geneCurieList:'',
       messages: [],
       phenotypes: [],
@@ -341,6 +353,9 @@ export default {
       this.genes.push(payload);
     },
     generatePhenogridData() {
+      this.showPhenogrid = true;
+      this.yAxis = [];
+      this.xAxis = [];
       this.phenotypes.forEach((elem) => {
         this.yAxis.push({
           id: elem.curie,
@@ -348,6 +363,7 @@ export default {
         });
       });
       this.xAxis = this.selectedGroups;
+      this.pgIndex++;
     },
     geneListLookup(){
       this.genes = [];
@@ -388,25 +404,6 @@ export default {
         match: phenoData.label,
       });
     },
-    launchPhenogrid() {
-      this.launchPhenotypesTable = true;
-      this.showPhenogrid = true;
-      this.yAxis = [];
-      this.xAxis = [];
-      this.generatePhenogridData();
-      const pgData = {
-        "title": "Phenogrid Results",
-        "xAxis": this.xAxis,
-        "yAxis": this.yAxis,
-      };
-      Phenogrid.createPhenogridForElement(this.$refs.phenogrid_container,{
-        serverURL : "https://beta.monarchinitiative.org",
-        gridSkeletonData: pgData,
-        selectedCalculation: 0,
-        selectedSort: "Frequency",
-      });
-    },
-
   },
 };
 </script>
@@ -432,4 +429,3 @@ export default {
     height: 100%;
   }
 </style>
-<!--https://beta.monarchinitiative.org/compare/MP:0000585+MP:0020309+HP:0011892/WormBase:WBGene00000406,WormBase:WBGene00019362,NCBIGene:618631-->

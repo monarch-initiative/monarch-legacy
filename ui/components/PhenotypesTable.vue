@@ -110,6 +110,9 @@
       this.comparePhenotypes();
     },
     watch: {
+      phenotypes(){
+        this.comparePhenotypes();
+      },
       preItems(){
         this.processItems();
       },
@@ -128,6 +131,7 @@
         }
       },
       processItems(){
+        this.items = [];
         this.preItems.data.results.forEach((elem) => {
           const rowData = {
             hitLabel: elem.j.label,
