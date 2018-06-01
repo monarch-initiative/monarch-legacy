@@ -25,7 +25,7 @@ import ExacVariantTable from '@/components/ExacVariantTable.vue';
 import AnalyzePhenotypes from '@/components/AnalyzePhenotypes.vue';
 import PhenotypesTable from '@/components/PhenotypesTable.vue';
 import LocalNav from '@/components/LocalNav.vue';
-
+import PhenoGrid from '@/components/PhenoGrid.vue';
 
 
 /**
@@ -121,6 +121,7 @@ const main = () => {
   Vue.component('analyze-phenotypes', AnalyzePhenotypes);
   Vue.component('phenotypes-table', PhenotypesTable);
   Vue.component('local-nav', LocalNav);
+  Vue.component('pheno-grid', PhenoGrid);
 
   const availableCardTypes = [
     'anatomy',
