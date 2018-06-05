@@ -1,63 +1,71 @@
 <template>
-    <div>
-       <div v-if="dataFetched">
-           <b-table :items="items"
-                 :fields="fields"
-                 responsive="true"
-                 class="table-border-soft"
-                 :current-page="currentPage"
-                 :per-page="rowsPerPage"
+  <div>
+    <div v-if="dataFetched">
+      <b-table
+        :items="items"
+        :fields="fields"
+        responsive="true"
+        class="table-border-soft"
+        :current-page="currentPage"
+        :per-page="rowsPerPage"
+      >
+        <template
+          slot="hit"
+          slot-scope="data"
         >
-            <template slot="hit"
-                      slot-scope="data"
-            >
-                <strong>{{data.item.hitLabel}}</strong>
-            </template>
-            <template slot="combined_score"
-                      slot-scope="data"
-            >
-                {{data.item.combinedScore}}
-            </template>
-            <template slot="most_informative_shared_phenotype"
-                      slot-scope="data"
-            >
-                <router-link :to="data.item.mostInformativeLink">
-                    {{data.item.mostInformativeLabel}}
-                </router-link>
+          <strong>{{data.item.hitLabel}}</strong>
+        </template>
+        <template
+          slot="combined_score"
+          slot-scope="data"
+        >
+          {{data.item.combinedScore}}
+        </template>
+        <template
+          slot="most_informative_shared_phenotype"
+          slot-scope="data"
+        >
+          <router-link
+            :to="data.item.mostInformativeLink">
+            {{data.item.mostInformativeLabel}}
+          </router-link>
 
-            </template>
-            <template slot="misp_ic"
-                      slot-scope="data"
-            >
-                {{data.item.mostInformativeIc}}
-            </template>
-            <template slot="other_matching_phenotypes"
-                      slot-scope="data"
-            >
-                <router-link :to="data.item.otherMatchLink">
-                    {{data.item.otherMatchLabel}}
-                </router-link>
-            </template>
-            <template slot="omp_ic"
-                      slot-scope="data"
-            >
-                {{data.item.otherMatchIc}}
-            </template>
-        </b-table>
-        <div v-if="items.length > 10">
-            <b-pagination
-                    class="my-1"
-                    align="center"
-                    size="md"
-                    v-model="currentPage"
-                    :per-page="rowsPerPage"
-                    :total-rows="items.length"
-            >
-            </b-pagination>
-        </div>
-       </div>
-        <div v-else>Loading Phenotype Comparison Table ...</div>
+        </template>
+        <template
+          slot="misp_ic"
+          slot-scope="data"
+        >
+          {{data.item.mostInformativeIc}}
+        </template>
+        <template
+          slot="other_matching_phenotypes"
+          slot-scope="data"
+        >
+          <router-link :to="data.item.otherMatchLink">
+            {{data.item.otherMatchLabel}}
+          </router-link>
+        </template>
+        <template
+          slot="omp_ic"
+          slot-scope="data"
+        >
+          {{data.item.otherMatchIc}}
+        </template>
+      </b-table>
+      <div v-if="items.length > 10">
+        <b-pagination
+          class="my-1"
+          align="center"
+          size="md"
+          v-model="currentPage"
+          :per-page="rowsPerPage"
+          :total-rows="items.length"
+        >
+        </b-pagination>
+      </div>
     </div>
+    <div v-else>Loading Phenotype Comparison Table ...</div>
+  </div>
 </template>
 <script>
   import * as MA from '../../js/MonarchAccess';

@@ -129,9 +129,8 @@ export function getNodeLabelByCurie(curie) {
 export function comparePhenotypes(phenotypesList) {
   const baseUrl = 'https://beta.monarchinitiative.org/analyze/phenotypes.json?';
   const extenstion = 'input_items=';
-  const phenoCuries = [];
-  phenotypesList.forEach((elem) => {
-    phenoCuries.push(elem.curie);
+  const phenoCuries = phenotypesList.map(elem => {
+    return elem.curie;
   });
   const fullUrl = `${baseUrl}${extenstion}${phenoCuries.join('+')}`;
   const returnedPromise = new Promise((resolve, reject) => {

@@ -1,7 +1,8 @@
 <template>
-    <div ref="phenogridbox"
-         v-if="pgVersion === index"
-         v-bind:id="'phenogridbox-'+index"
+    <div
+      ref="phenogridbox"
+      v-if="pgVersion === index"
+      v-bind:id="'phenogridbox-'+index"
     >
     </div>
 
@@ -53,4 +54,6 @@
     },
   };
 </script>
-<style></style>
+<style>
+
+</style>

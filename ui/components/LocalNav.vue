@@ -8,31 +8,38 @@
         <div class="col-4"><h3>Child Terms</h3></div>
       </div>
       <div class="row py-2">
-        <div class="col-4"
-             v-for="parent in parents" :key="parent.object.id"
+        <div
+          class="col-4"
+          v-for="parent in parents"
+          :key="parent.object.id"
         >
-          <div @click="emitSelection(parent.object.label, parent.object.id)"
-               class="p-1 m-1 btn btn-info"
+          <div
+            @click="emitSelection(parent.object.label, parent.object.id)"
+            class="p-1 m-1 btn btn-info"
           >
-            {{parent.object.label}} <br/> ({{parent.object.id}})
+            {{parent.object.label}} <br> ({{parent.object.id}})
           </div>
         </div>
-        <div class="col-4"
-             v-for="sibling in equivalentTerms" :key="sibling.id"
+        <div
+          class="col-4"
+          v-for="sibling in equivalentTerms" :key="sibling.id"
         >
-          <div @click="emitSelection(sibling.lbl, sibling.id)"
-               class="p-1 m-1 btn btn-info"
+          <div
+            @click="emitSelection(sibling.lbl, sibling.id)"
+            class="p-1 m-1 btn btn-info"
           >
-            {{sibling.lbl}} <br/> ({{sibling.id}})
+            {{sibling.lbl}} <br> ({{sibling.id}})
           </div>
         </div>
-        <div class="col-4"
-             v-for="child in children" :key="child.object.id"
+        <div
+          class="col-4"
+          v-for="child in children" :key="child.object.id"
         >
-          <div @click="emitSelection(child.subject.label, child.subject.id)"
-               class="p-1 m-1 btn btn-info"
+          <div
+            @click="emitSelection(child.subject.label, child.subject.id)"
+            class="p-1 m-1 btn btn-info"
           >
-            {{child.subject.label}} <br/> ({{child.subject.id}})
+            {{child.subject.label}} <br> ({{child.subject.id}})
           </div>
         </div>
       </div>
@@ -41,7 +48,7 @@
 </template>
 <script>
 import * as MA from '../../js/MonarchAccess';
-import * as _ from 'underscore';
+const uniqBy = require('lodash/uniqBy');
 
 export default {
   data() {
@@ -77,7 +84,7 @@ export default {
         console.log('BioLink Error', e);
       }
     },
-    emitSelection(termLabel, termId){
+    emitSelection(termLabel, termId) {
       this.$emit('interface',
         {
           curie: termId,
@@ -86,13 +93,13 @@ export default {
         }
       );
     },
-    sortRelationships(){
+    sortRelationships() {
       this.rootTerm = {
         id: this.familyData.id,
         label: this.familyData.label,
         synonyms: this.familyData.synonyms,
       };
-      this.equivalentTerms = _.uniq(this.familyData.equivalentNodes, 'id');
+      this.equivalentTerms = uniqBy(this.familyData.equivalentNodes, 'id');
       const preChildren = [];
       const preParents = [];
       this.familyData.relationships.forEach((elem) => {
@@ -106,8 +113,8 @@ export default {
         }
 
       });
-      this.children = _.uniq(preChildren, 'id');
-      this.parents = _.uniq(preParents, 'id');
+      this.children = uniqBy(preChildren, 'id');
+      this.parents = uniqBy(preParents, 'id');
     },
   },
 };

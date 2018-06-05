@@ -3,7 +3,10 @@
     class="assoc-facets-wrapper">
     <div v-for="(value, key) in facetObject">
       <label>
-        <input type="checkbox" v-model="facetObject[key]">
+        <input
+          type="checkbox"
+          v-model="facetObject[key]"
+        >
         <i>{{ key }}</i>
       </label>
     </div>

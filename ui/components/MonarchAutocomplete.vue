@@ -6,64 +6,87 @@
     'open':open
     }"
   >
-    <div v-if="homeSearch && !singleCategory"
-         class="form-group"
+    <div
+      v-if="homeSearch && !singleCategory"
+      class="form-group"
     >
-      <div class="form-group" label="Button style checkboxes">
-        <b-form-checkbox-group buttons
-                               button-variant="dark"
-                               v-model="selected"
-                               name="butons1"
-                               size="sm"
-                               :options="options"
-                               v-b-tooltip.left
-                               title="Select a single category or set of categories to search on">
+      <div
+        class="form-group"
+        label="Button style checkboxes">
+        <b-form-checkbox-group
+          buttons
+          button-variant="dark"
+          v-model="selected"
+          name="butons1"
+          size="sm"
+          :options="options"
+          v-b-tooltip.left
+          title="Select a single category or set of categories to search on"
+        >
         </b-form-checkbox-group>
       </div>
     </div>
     <div class="input-group input-group-sm">
       <div v-if="!homeSearch && !singleCategory" class="input-group-prepend">
-        <button class="btn btn-secondary dropdown-toggle"
-                type="button"
-                v-on:click="catDropDown = !catDropDown">
-                Categories
+        <button
+          class="btn btn-secondary dropdown-toggle"
+          type="button"
+          v-on:click="catDropDown = !catDropDown"
+        >
+          Categories
         </button>
-        <div v-if="catDropDown" class="dropdown-menu list-group dropCatList px-4">
+        <div
+          v-if="catDropDown"
+          class="dropdown-menu list-group dropCatList px-4"
+        >
           <div>
             <div class="form-group">
-                <b-form-checkbox-group plain
-                                       stacked
-                                       v-model="selected"
-                                       :options="options">
-                </b-form-checkbox-group>
+              <b-form-checkbox-group
+                plain
+                stacked
+                v-model="selected"
+                :options="options">
+              </b-form-checkbox-group>
             </div>
           </div>
         </div>
       </div>
-      <input v-bind:class="{'loading': loading}"
-             class="form-control form-control-sm"
-             type="text"
-             v-model="value"
-             v-on:input="debounceInput"
-             @keydown.enter="enter"
-             @keydown.down="down"
-             @keydown.up="up"
-             @keydown.esc="clearSearch"
-             placeholder="Search...">
+      <input
+        v-bind:class="{'loading': loading}"
+        class="form-control form-control-sm"
+        type="text"
+        v-model="value"
+        v-on:input="debounceInput"
+        @keydown.enter="enter"
+        @keydown.down="down"
+        @keydown.up="up"
+        @keydown.esc="clearSearch"
+        placeholder="Search..."
+      >
     </div>
-    <div v-if="open"
-         class="dropdown-menu list-group dropList px-4">
-      <div v-for="(suggestion, index) in suggestions"
-           :key="index"
-           @click="suggestionClick(index)"
-           v-bind:class="{'active': isActive(index)}"
-           v-on:mouseover="mouseOver(index)"
-           class="border-bottom px-1">
+    <div
+      v-if="open"
+      class="dropdown-menu list-group dropList px-4"
+    >
+      <div
+        v-for="(suggestion, index) in suggestions"
+        :key="index"
+        @click="suggestionClick(index)"
+        v-bind:class="{'active': isActive(index)}"
+        v-on:mouseover="mouseOver(index)"
+        class="border-bottom px-1"
+      >
         <div class="row p-0">
-          <div class="col-5" v-if="suggestion.has_hl">
+          <div
+            class="col-5"
+            v-if="suggestion.has_hl"
+          >
             <span v-html="suggestion.highlight"></span>
           </div>
-          <div class="col-5" v-else>
+          <div
+            class="col-5"
+            v-else
+          >
             <strong>{{suggestion.match}}</strong>
           </div>
           <div class="col-4"><i>{{suggestion.taxon}}</i></div>
@@ -73,16 +96,25 @@
         </div>
       </div>
       <div class="row">
-        <div v-if="suggestions.length && !singleCategory"
-             class="btn btn-outline-success col m-2"
-             v-on:click="showMore">
+        <div
+          v-if="suggestions.length && !singleCategory"
+          class="btn btn-outline-success col m-2"
+          v-on:click="showMore"
+        >
           Show all results for '{{value}}'
         </div>
-        <div v-if="suggestions.length === 0" class="btn col m-2">
+        <div
+          v-if="suggestions.length === 0"
+          class="btn col m-2"
+        >
           No results for '{{value}}'
         </div>
-        <div  class="btn btn-outline-secondary col m-2"
-              @click="clearSearch">Clear Search</div>
+        <div
+          class="btn btn-outline-secondary col m-2"
+          @click="clearSearch"
+        >
+          Clear Search
+        </div>
       </div>
     </div>
   </div>
