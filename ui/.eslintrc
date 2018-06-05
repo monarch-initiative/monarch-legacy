@@ -1,5 +1,14 @@
 {
-  "parser": "babel-eslint",
+  "root": true,
+  "parserOptions": {
+    "parser": "babel-eslint"
+  },
+  "env": {
+    "browser": true,
+  },
+  "plugins": [
+    "vue"
+  ],
   "rules": {
     "comma-dangle": 0,
     "brace-style": [2, "stroustrup"],
@@ -11,5 +20,9 @@
     "import/prefer-default-export": "off",
     "arrow-parens": ["error", "as-needed"]
   },
-  "extends": "airbnb-base"
+  "extends": [
+    "plugin:vue/strongly-recommended",
+    "airbnb-base"
+  ],
 }
+
