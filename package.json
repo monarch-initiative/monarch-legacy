@@ -34,8 +34,7 @@
     "wbs-generate-dist-readme": "node wpbin/generate-dist-readme.js",
     "wbs-contributing-install": "./wpcontributing/bin/contributing-install.sh",
     "wbs-contributing-test": "./wpcontributing/bin/contributing-test.sh",
-    "lint": "eslint --ext .js,.vue ui js/MonarchAccess/",
-    "fix-lint-errors": "eslint --fix --ext .js,.vue ui js/MonarchAccess/"
+    "lint": "eslint --ext .js,.vue ui js/MonarchAccess/"
   },
   "keywords": [
     "Monarch Initiative"
