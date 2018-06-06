@@ -33,7 +33,8 @@
     "wbs-webpack-build-prod": "LINTER=0 ./node_modules/.bin/webpack --progress -p",
     "wbs-generate-dist-readme": "node wpbin/generate-dist-readme.js",
     "wbs-contributing-install": "./wpcontributing/bin/contributing-install.sh",
-    "wbs-contributing-test": "./wpcontributing/bin/contributing-test.sh"
+    "wbs-contributing-test": "./wpcontributing/bin/contributing-test.sh",
+    "lint": "eslint --ext .js,.vue ui js/MonarchAccess/"
   },
   "keywords": [
     "Monarch Initiative"
@@ -72,6 +73,7 @@
     "eslint-loader": "^2.0.0",
     "eslint-plugin-import": "^2.11.0",
     "eslint-plugin-react": "7",
+    "eslint-plugin-vue": "^4.5.0",
     "exports-loader": "^0.7.0",
     "extract-text-webpack-plugin": "^4.0.0-beta.0",
     "file-loader": "^1.1.11",
