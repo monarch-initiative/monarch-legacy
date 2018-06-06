@@ -10,19 +10,24 @@
           </small>
         </i>
       </span>
-      <b-table :items="rows"
-               :fields="fields"
-               responsive="true"
-               class="table-border-soft"
-               @row-clicked="rowClickHandler"
-               :current-page="currentPage"
-               :per-page="rowsPerPage"
+      <b-table
+        :items="rows"
+        :fields="fields"
+        responsive="true"
+        class="table-border-soft"
+        @row-clicked="rowClickHandler"
+        :current-page="currentPage"
+        :per-page="rowsPerPage"
       >
-        <template slot="index" slot-scope="data">
+        <template
+          slot="index"
+          slot-scope="data"
+        >
           {{data.item.recordIndex}}
         </template>
-        <template slot="assocObject"
-                  slot-scope="data"
+        <template
+          slot="assocObject"
+          slot-scope="data"
         >
           <strong>
             <router-link :to="data.item.objectLink">
@@ -30,33 +35,39 @@
             </router-link>
           </strong>
         </template>
-        <template v-if="isGene"
-                  slot="taxon"
-                  slot-scope="data"
+        <template
+          v-if="isGene"
+          slot="taxon"
+          slot-scope="data"
         >
           {{data.item.taxonLabel}}
         </template>
-        <template slot="evidence"
-                  slot-scope="data"
+        <template
+          slot="evidence"
+          slot-scope="data"
         >
           ({{data.item.evidenceLength}})
         </template>
-        <template slot="references"
-                  slot-scope="data"
+        <template
+          slot="references"
+          slot-scope="data"
         >
           ({{data.item.referencesLength}})
         </template>
-        <template slot="sources"
-                  slot-scope="data"
+        <template
+          slot="sources"
+          slot-scope="data"
         >
           ({{data.item.sourcesLength}})
         </template>
-        <template slot="show_details"
-                  slot-scope="row"
+        <template
+          slot="show_details"
+          slot-scope="row"
         >
           <div @click="row.toggleDetails">
-            <div class="fa"
-                 v-bind:class="{
+            <div
+              class="fa"
+              v-bind:class="{
                 'fa-angle-down': row.detailsShowing,
                 'fa-angle-right': !row.detailsShowing
                 }"
@@ -64,46 +75,59 @@
             </div>
           </div>
         </template>
-        <template slot="row-details"
-                  slot-scope="row"
+        <template
+          slot="row-details"
+          slot-scope="row"
         >
           <div class="card">
-            <b-table :fields="fields.slice(-4,-1)"
-                     :items="[row.item]"
-                      fixed
+            <b-table
+              :fields="fields.slice(-4,-1)"
+              :items="[row.item]"
+              fixed
             >
-              <template slot="evidence"
-                        slot-scope="data">
-                <ul class="list-bullets"
-                    v-for="evi in data.item.evidence"
+              <template
+                slot="evidence"
+                slot-scope="data"
+              >
+                <ul
+                  class="list-bullets"
+                  v-for="evi in data.item.evidence"
                 >
-                  <li><a target="_blank"
-                         v-bind:href="evi.id | eviHref"
-                  >
-                    {{evi.lbl}}
-                  </a>
+                  <li>
+                    <a
+                      target="_blank"
+                      v-bind:href="evi.id | eviHref"
+                    >
+                      {{evi.lbl}}
+                    </a>
                   </li>
                 </ul>
               </template>
-              <template slot="references"
-                        slot-scope="data"
+              <template
+                slot="references"
+                slot-scope="data"
               >
-                <ul class="list-bullets"
-                    v-for="ref in data.item.references">
+                <ul
+                  class="list-bullets"
+                  v-for="ref in data.item.references"
+                >
                   <li>
-                    <a target="_blank"
-                       v-bind:href="ref | pubHref"
+                    <a
+                      target="_blank"
+                      v-bind:href="ref | pubHref"
                     >
                       {{ref}}
                     </a>
                   </li>
                 </ul>
               </template>
-              <template slot="sources"
-                        slot-scope="data"
+              <template
+                slot="sources"
+                slot-scope="data"
               >
-                <ul class="list-bullets"
-                    v-for="source in data.item.sources"
+                <ul
+                  class="list-bullets"
+                  v-for="source in data.item.sources"
                 >
                   <li>
                     <a v-bind:href="source">
@@ -116,22 +140,25 @@
           </div>
         </template>
       </b-table>
-          <div v-if="rows.length > 10"><b-pagination
-                  class="pag-width my-1"
-                  align="center"
-                  size="md"
-                  v-model="currentPage"
-                  :per-page="rowsPerPage"
-                  :total-rows="rows.length"
-          >
-          </b-pagination></div>
+      <div v-if="rows.length > 10">
+        <b-pagination
+          class="pag-width my-1"
+          align="center"
+          size="md"
+          v-model="currentPage"
+          :per-page="rowsPerPage"
+          :total-rows="rows.length"
+        >
+        </b-pagination>
+      </div>
     </div>
     <div v-else-if="dataError">
       <h3>BioLink Error</h3>
       <div class="row">
         <div class="col-xs-12 pre-scrollable">
-          <json-tree :data="dataError.response"
-                     :level="1"
+          <json-tree
+            :data="dataError.response"
+            :level="1"
           >
           </json-tree>
         </div>
@@ -359,7 +386,6 @@
         this.rows = [];
         let count = 0;
         this.dataPacket.data.associations.forEach((elem) => {
-          console.log(elem);
           count += 1;
           let pubs = [
             'No References',
@@ -404,11 +430,9 @@
             relationLabel: elem.relation.label,
           });
         });
-        console.log(this.rows);
         if (this.taxonFields.includes(this.cardType)) {
           this.facetRows();
         }
-        console.log(this.rows);
       },
       generateFields() {
         this.isGene = false;

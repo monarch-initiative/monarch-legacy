@@ -1,63 +1,92 @@
 <template>
   <div
     class="autocomplete autorootdiv"
-    v-bind:class="{'home-search':homeSearch, 'open':open}">
-    <div v-if="homeSearch" class="form-group">
-      <div class="form-group" label="Button style checkboxes">
-        <b-form-checkbox-group buttons
-                               button-variant="dark"
-                               v-model="selected"
-                               name="butons1"
-                               size="sm"
-                               :options="options"
-                               v-b-tooltip.left
-                               title="Select a single category or set of categories to search on">
+    v-bind:class="{
+    'home-search':homeSearch,
+    'open':open
+    }"
+  >
+    <div
+      v-if="homeSearch && !singleCategory"
+      class="form-group"
+    >
+      <div
+        class="form-group"
+        label="Button style checkboxes">
+        <b-form-checkbox-group
+          buttons
+          button-variant="dark"
+          v-model="selected"
+          name="butons1"
+          size="sm"
+          :options="options"
+          v-b-tooltip.left
+          title="Select a single category or set of categories to search on"
+        >
         </b-form-checkbox-group>
       </div>
     </div>
     <div class="input-group input-group-sm">
-      <div v-if="!homeSearch" class="input-group-prepend">
-        <button class="btn btn-secondary dropdown-toggle"
-                type="button"
-                v-on:click="catDropDown = !catDropDown">
-                Categories
+      <div v-if="!homeSearch && !singleCategory" class="input-group-prepend">
+        <button
+          class="btn btn-secondary dropdown-toggle"
+          type="button"
+          v-on:click="catDropDown = !catDropDown"
+        >
+          Categories
         </button>
-        <div v-if="catDropDown" class="dropdown-menu list-group dropCatList px-4">
+        <div
+          v-if="catDropDown"
+          class="dropdown-menu list-group dropCatList px-4"
+        >
           <div>
             <div class="form-group">
-                <b-form-checkbox-group plain
-                                       stacked
-                                       v-model="selected"
-                                       :options="options">
-                </b-form-checkbox-group>
+              <b-form-checkbox-group
+                plain
+                stacked
+                v-model="selected"
+                :options="options">
+              </b-form-checkbox-group>
             </div>
           </div>
         </div>
       </div>
-      <input v-bind:class="{'loading': loading}"
-             class="form-control form-control-sm"
-             type="text"
-             v-model="value"
-             v-on:input="debounceInput"
-             @keydown.enter="enter"
-             @keydown.down="down"
-             @keydown.up="up"
-             @keydown.esc="clearSearch"
-             placeholder="Search... e.g. Marfan syndrome or sox3">
+      <input
+        v-bind:class="{'loading': loading}"
+        class="form-control form-control-sm"
+        type="text"
+        v-model="value"
+        v-on:input="debounceInput"
+        @keydown.enter="enter"
+        @keydown.down="down"
+        @keydown.up="up"
+        @keydown.esc="clearSearch"
+        placeholder="Search..."
+      >
     </div>
-    <div v-if="open"
-         class="dropdown-menu list-group dropList px-4">
-      <div v-for="(suggestion, index) in suggestions"
-           :key="index"
-           @click="suggestionClick(index)"
-           v-bind:class="{'active': isActive(index)}"
-           v-on:mouseover="mouseOver(index)"
-           class="border-bottom px-1">
+    <div
+      v-if="open"
+      class="dropdown-menu list-group dropList px-4"
+    >
+      <div
+        v-for="(suggestion, index) in suggestions"
+        :key="index"
+        @click="suggestionClick(index)"
+        v-bind:class="{'active': isActive(index)}"
+        v-on:mouseover="mouseOver(index)"
+        class="border-bottom px-1"
+      >
         <div class="row p-0">
-          <div class="col-5" v-if="suggestion.has_hl">
+          <div
+            class="col-5"
+            v-if="suggestion.has_hl"
+          >
             <span v-html="suggestion.highlight"></span>
           </div>
-          <div class="col-5" v-else>
+          <div
+            class="col-5"
+            v-else
+          >
             <strong>{{suggestion.match}}</strong>
           </div>
           <div class="col-4"><i>{{suggestion.taxon}}</i></div>
@@ -67,16 +96,25 @@
         </div>
       </div>
       <div class="row">
-        <div v-if="suggestions.length > 0"
-             class="btn btn-outline-success col m-2"
-             v-on:click="showMore">
+        <div
+          v-if="suggestions.length && !singleCategory"
+          class="btn btn-outline-success col m-2"
+          v-on:click="showMore"
+        >
           Show all results for '{{value}}'
         </div>
-        <div v-if="suggestions.length === 0" class="btn col m-2">
+        <div
+          v-if="suggestions.length === 0"
+          class="btn col m-2"
+        >
           No results for '{{value}}'
         </div>
-        <div  class="btn btn-outline-secondary col m-2"
-              @click="clearSearch">Clear Search</div>
+        <div
+          class="btn btn-outline-secondary col m-2"
+          @click="clearSearch"
+        >
+          Clear Search
+        </div>
       </div>
     </div>
   </div>
@@ -85,12 +123,18 @@
 <script>
 import * as MA from '../../js/MonarchAccess';
 const debounce = require('lodash/debounce');
+
 export default {
   name: 'AutoComplete',
   props: {
     homeSearch: {
       type: String,
       required: true,
+      default: false,
+    },
+    singleCategory: {
+      type: String,
+      required: false,
       default: false,
     },
   },
@@ -116,6 +160,11 @@ export default {
     allLower(word) {
       return word.toLowerCase();
     },
+  },
+  mounted() {
+    if (this.singleCategory) {
+      this.selected.push(this.singleCategory);
+    }
   },
   methods: {
     debounceInput: debounce(
@@ -145,8 +194,11 @@ export default {
     },
     enter() {
       const currentData = this.suggestions[this.current];
-      // this.$emit('value', { value: this.suggestions[this.current] });
-      this.$router.push({ path: `/${currentData.category}/${currentData.curie}` });
+      if (!this.singleCategory) {
+        this.$router.push({ path: `/${currentData.category}/${currentData.curie}` });
+      } else {
+        this.$emit('interface', this.suggestions[this.current]);
+      }
       this.value = '';
       this.open = false;
       this.suggestions = [];
@@ -169,8 +221,11 @@ export default {
     },
     suggestionClick(index) {
       const currentData = this.suggestions[index];
-      this.$router.push({ path: `/${currentData.category}/${currentData.curie}` });
-      // this.$emit('value', { value: this.suggestions[index] });
+      if (!this.singleCategory) {
+        this.$router.push({ path: `/${currentData.category}/${currentData.curie}` });
+      } else {
+        this.$emit('interface', this.suggestions[index]);
+      }
       this.value = '';
       this.open = false;
       this.suggestions = [];
@@ -215,8 +270,10 @@ export default {
       }
     },
     selected: function () {
-      this.suggestions = [];
-      this.fetchData();
+      if (!this.singleCategory){
+        this.suggestions = [];
+        this.fetchData();
+      }
     },
   },
 };

@@ -7,6 +7,9 @@ import Router from 'vue-router';
 import VueGoodTable from 'vue-good-table';
 import BootstrapVue from 'bootstrap-vue/dist/bootstrap-vue.esm';
 import 'bootstrap-vue/dist/bootstrap-vue.css';
+import VueFormWizard from 'vue-form-wizard';
+import 'vue-form-wizard/dist/vue-form-wizard.min.css';
+
 import App from './App.vue';
 import Home from '@/components/Home.vue';
 import HomeFooter from '@/components/HomeFooter.vue';
@@ -19,6 +22,10 @@ import AssocFacets from '@/components/AssocFacets.vue';
 import MonarchAutocomplete from '@/components/MonarchAutocomplete.vue';
 import ExacGeneSummary from '@/components/ExacGeneSummary.vue';
 import ExacVariantTable from '@/components/ExacVariantTable.vue';
+import AnalyzePhenotypes from '@/components/AnalyzePhenotypes.vue';
+import PhenotypesTable from '@/components/PhenotypesTable.vue';
+import LocalNav from '@/components/LocalNav.vue';
+import PhenoGrid from '@/components/PhenoGrid.vue';
 
 
 /**
@@ -101,6 +108,7 @@ const main = () => {
   Vue.use(Router);
   Vue.use(VueGoodTable);
   Vue.use(BootstrapVue);
+  Vue.use(VueFormWizard);
 
   Vue.component('monarch-navbar', Navbar);
   Vue.component('node-card', NodeCard);
@@ -110,6 +118,10 @@ const main = () => {
   Vue.component('home-footer', HomeFooter);
   Vue.component('exac-gene', ExacGeneSummary);
   Vue.component('exac-variant', ExacVariantTable);
+  Vue.component('analyze-phenotypes', AnalyzePhenotypes);
+  Vue.component('phenotypes-table', PhenotypesTable);
+  Vue.component('local-nav', LocalNav);
+  Vue.component('pheno-grid', PhenoGrid);
 
   const availableCardTypes = [
     'anatomy',
@@ -146,6 +158,11 @@ const main = () => {
         path: '/',
         name: 'Home',
         component: Home
+      },
+      {
+        path: '/analyze/phenotypes',
+        name: 'AnalyzePhenotypes',
+        component: AnalyzePhenotypes
       },
       {
         path: '/*',

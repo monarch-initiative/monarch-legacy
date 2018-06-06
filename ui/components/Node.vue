@@ -48,8 +48,7 @@
       <li
         class="node-filter-section">
         <h5>Species</h5>
-        <assoc-facets
-          v-model="facetObject.species">
+        <assoc-facets v-model="facetObject.species">
         </assoc-facets>
       </li>
     </ul>
@@ -226,7 +225,8 @@
               :facets="facetObject"
               :nodeType="nodeCategory"
               :cardType="expandedCard"
-              :identifier="nodeId">
+              :identifier="nodeId"
+      >
       </assoc-table>
     </div>
     <div v-if="!expandedCard && nodeCategory === 'variant'">
