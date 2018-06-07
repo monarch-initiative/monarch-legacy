@@ -5,7 +5,7 @@
     <div class="col-12 col-lg-3">
       <div class="media">
         <img class="img-fluid"
-        style="max-height:125px; margin:auto; padding:5px 5px 15px 5px;"
+        style="max-height:125px; margin:auto; padding:5px 5px 5px 5px;"
         src="../assets/images/monarch-logo-black-stacked.png" 
         alt="Monarch logo">
       </div>

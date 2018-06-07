@@ -113,7 +113,7 @@
     <div class="container-fluid">
       <div class="row">
         <div class="col-sm">
-          <h4>Recent Blog Posts</h4>
+          <h3>Recent Blog Posts</h3>
           <ul class="list-inline">
             <li>
               <a href="https://medium.com/@MonarchInit/curating-rare-disease-genes-an-interview-with-eleanor-williams-of-genomics-england-ad2a677de8a0">
@@ -131,7 +131,8 @@
               </a>
             </li>
           </ul>
-          <h4>Upcoming Events</h4>
+          <br>
+          <h3>Upcoming Events</h3>
           <ul class="list-inline">
             <li>
               <a href="http://icbo2018.cgrb.oregonstate.edu/"> 
@@ -145,18 +146,15 @@
         </div>
         <div class="col-sm">
           <div>
-            <div class="card-body news-list">
-              <a class="twitter-timeline"
-                href="https://twitter.com/search?q=%40MonarchInit+OR+%40hp_ontology+OR+%40GA4GH+OR+%40UDNconnect"
-                data-widget-id="527567015918051328"
-                xdata-theme="dark"
-                xdata-tweet-limit="1"
-                data-preview=""
-                height="220"
-                width="320">
-                Loading Tweets about "@MonarchInit OR @hp_ontology OR @GA4GH OR @UDNconnect"
-              </a>
-            </div>
+          <h3>Tweets about Monarch</h3>
+            <a class="twitter-timeline"
+              href="https://twitter.com/search?q=%40MonarchInit"
+              data-widget-id="527567015918051328"
+              data-preview=""
+              data-chrome="noheader"
+              data-height="250">
+              Loading Tweets about "@MonarchInit"
+            </a>
           </div>
         </div>
       </div>
