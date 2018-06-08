@@ -78,33 +78,31 @@
     <div class="row">
       <div class="col-lg-8 offset-lg-2">
         <h2>The Monarch Initiative</h2>
-        <p>Our philosophy is based on the premise that we want to make all the data count. Monarch isn’t just another database that slurps data from the typical places and renders it in a different format. We are driven to truly integrate biological information using semantics, and present it in a novel way, leveraging phenotypes to bridge the knowledge gap.</p>
+        <p>Our philosophy is based on the premise that we want to make all the data count.We are driven to truly integrate biological information using semantics, and present it in a novel way, leveraging phenotypes to bridge the knowledge gap.</p>
       </div>
     </div>
   </section>
 
 
 
-  <section id="features" class="content-section text-center">
-    <div class="features-section">
-      <div class="container-fluid">
-        <div class="col-sm">
-          <h2>What We Do</h2>
-          <ul style="list-style-type:none;">
-            <li>Integrate, align, and re-distribute cross-species gene, genotype, variant, disease, and phenotype data.</li>
-            <li>Provide a portal for exploration of phenotype-based similarity.</li>
-            <li>Facilitate identification of animal models of human disease through phenotypic similarity.</li>
-            <li>Enable quantitative comparison of cross-species phenotypes.</li>
-            <li>Develop embeddable widgets for data exploration.</li>
-            <li>Influence genotype and phenotype reporting standards.</li>
-            <li>Improve ontologies to better curate genotype-phenotype data.</li>
-          </ul>
+  <section id="features" class="features-section text-center">
+    <div class="container-fluid">
+      <div class="col-sm">
+        <h2>What We Do</h2>
+        <ul style="list-style-type:none;">
+          <li>Integrate, align, and re-distribute cross-species gene, genotype, variant, disease, and phenotype data.</li>
+          <li>Provide a portal for exploration of phenotype-based similarity.</li>
+          <li>Facilitate identification of animal models of human disease through phenotypic similarity.</li>
+          <li>Enable quantitative comparison of cross-species phenotypes.</li>
+          <li>Develop embeddable widgets for data exploration.</li>
+          <li>Influence genotype and phenotype reporting standards.</li>
+          <li>Improve ontologies to better curate genotype-phenotype data.</li>
+        </ul>
 
-          <router-link to="/page/about" class="btn btn-default btn-lg">
-            <span>Learn More</span>
-          </router-link>
+        <router-link to="/page/about" class="btn btn-dark">
+          <span>Learn More</span>
+        </router-link>
 
-        </div>
       </div>
     </div>
   </section>
@@ -161,8 +159,26 @@
     </div>
   </section>
 
+  <section class="data-dashboard text-center">
+    <div class="container">
+    <div class="row">
+      <div class="col-sm">
+        <i class="fa fa-child fa-fw" style="color: #15556A; font-size: 2em;"></i> 
+        <span class="network-name"><br><b>218,313</b><br>Disease-Phenotype Associations</span>
+      </div>
+      <div class="col-sm">
+        <i class="fa fa-tint fa-fw" style="color: #15556A; font-size: 2em;"></i> 
+        <span class="network-name"><br><b>793,526</b><br>Gene-Phenotype Associations</span>
+      </div>
+      <div class="col-sm">
+        <i class="fa fa-paw fa-fw" style="color: #15556A; font-size: 2em;"></i> 
+        <span class="network-name"><br><b>20,870</b><br>Model Associations</span>
+      </div>
+    </div>
+    </div>
+  </section>
+
   <section class="content-section text-center">
-    <div class="features-section">
       <h4 class="text-center" style="margin: 10px; padding: 0px 0px 25px 0px;"> The Monarch Initiative is a collaboration between: </h4>
       <div class="container">
         <div class="row">
@@ -246,7 +262,6 @@
               </a>
             </div>
           </div>
-        </div>
       </div>
       <div style="padding: 25px 15px 0px 15px;">
         Monarch is supported generously by a NIH Office of the Director Grant #5R24OD011883,
@@ -389,8 +404,8 @@ html {
   padding: 50px 0;
   text-align: center;
   color: white;
-  background: url(../assets/images/home-splash.png) no-repeat bottom center scroll;
-  background-color: #434343;
+  xbackground: url(../assets/images/home-splash.png) no-repeat bottom center scroll;
+  background-color: #15556A;
   */ -webkit-background-size: cover;*/
   */ -moz-background-size: cover;*/
   */ background-size: cover;*/
@@ -494,11 +509,20 @@ html {
 
 #monarch-home-container .content-section {
   padding-top: 50px;
+  padding-bottom: 50px;
   font-size: 18px;
+}
+
+#monarch-home-container .data-dashboard {
+  padding-top: 50px;
+  padding-bottom: 50px;
+  font-size: 18px;
+  background: #EBEBEB;
 }
 
 #monarch-home-container .news-section {
   padding-top: 50px;
+  padding-bottom: 50px;
   font-size: 18px;
 }
 
@@ -512,6 +536,7 @@ html {
   width: 100%;
   padding: 50px 0;
   color: black;
+  font-size: 18px;
   background-color: #E8E8E8;
   -webkit-background-size: cover;
   -moz-background-size: cover;
@@ -522,7 +547,6 @@ html {
 
 #monarch-home-container .partners-section {
   padding: 50px 10px;
-  background: #EBEBEB;
 }
 
 

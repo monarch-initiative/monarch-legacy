@@ -6,7 +6,7 @@
       <div class="media">
         <img class="img-fluid"
         style="max-height:125px; margin:auto; padding:5px 5px 5px 5px;"
-        src="../assets/images/monarch-logo-black-stacked.png" 
+        src="../assets/images/monarch-logo-white-stacked.png" 
         alt="Monarch logo">
       </div>
     </div>
@@ -85,7 +85,9 @@
 @import "../../css/_prelude-ng.scss";
 .home-footer {
   margin: 0px 15px;
-  padding: 10px 0px;
+  padding: 25px 0px;
+  background: #15556A;
+  color: white;
 }
 
 .about-section{
@@ -101,5 +103,6 @@
 .about-section > ul > li > a {
   padding: 0;
   margin: 0;
+  color: white;
 }
 </style>
