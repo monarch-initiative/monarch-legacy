@@ -78,7 +78,7 @@
     <div class="row">
       <div class="col-lg-8 offset-lg-2">
         <h2>The Monarch Initiative</h2>
-        <p>Our philosophy is based on the premise that we want to make all the data count.We are driven to truly integrate biological information using semantics, and present it in a novel way, leveraging phenotypes to bridge the knowledge gap.</p>
+        <p>Our philosophy is based on the premise that we want to make all the data count. We are driven to truly integrate biological information using semantics, and present it in a novel way, leveraging phenotypes to bridge the knowledge gap.</p>
       </div>
     </div>
   </section>
