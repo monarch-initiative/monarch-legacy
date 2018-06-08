@@ -1,8 +1,12 @@
-import * as JSONAccess from './JSONAccess';
 import axios from 'axios';
+import * as JSONAccess from './JSONAccess';
 
 // Re-export stuff from JSONAccess into the MonarchAccess namespace
 export const { loadJSONXHR, loadJSONAxios } = JSONAccess;
+
+const biolink = global.serviceUrls.BIOLINK;
+// const scigraphData = global.serviceUrls.SCIGRAPH_DATA;
+// const scigraphOntology = global.serviceUrls.SCIGRAPH_ONTOLOGY;
 
 // TIP: Example of a domain-specific (as opposed to a generic loadJSON)
 // service function. This set of domain-specific services will pretty much
@@ -22,7 +26,7 @@ export function getNodeSummary(nodeId, nodeType) {
     axios.get(url)
       .then(resp => {
         const responseData = resp.data
-        const { responseURL } = resp.request;
+        // const { responseURL } = resp.request;
         // console.log('...getNodeSummary', resp, responseData, responseURL);
         if (typeof responseData !== 'object') {
           reject(responseData);
@@ -40,8 +44,8 @@ export function getNodeSummary(nodeId, nodeType) {
 }
 
 export function getSearchTermSuggestions(term, selected) {
-  const baseUrl = 'https://owlsim.monarchinitiative.org/api/';
-  const urlExtension = `search/entity/autocomplete/${term}`;
+  const baseUrl = `${biolink}search/entity/autocomplete/`;
+  const urlExtension = `${baseUrl}${term}`;
   const params = new URLSearchParams();
   params.append('rows', 10);
   params.append('start', 0);
@@ -57,13 +61,11 @@ export function getSearchTermSuggestions(term, selected) {
   }
   else {
     ['gene', 'variant locus', 'phenotype', 'genotype', 'disease']
-      .forEach((elem, index) => {
-        params.append('category', elem);
-      });
+      .forEach(elem => (params.append('category', elem)));
   }
   params.append('prefix', '-OMIA');
   const returnedPromise = new Promise((resolve, reject) => {
-    axios.get(`${baseUrl}${urlExtension}`, { params })
+    axios.get(urlExtension, { params })
       .then(resp => {
         const responseData = resp.data;
         if (typeof responseData !== 'object') {
@@ -82,7 +84,7 @@ export function getSearchTermSuggestions(term, selected) {
 }
 
 export function getNodeAssociations(nodeType, identifier, biolinkAnnotationSuffix, params) {
-  const baseUrl = 'https://api-dev.monarchinitiative.org/api/bioentity/';
+  const baseUrl = `${biolink}bioentity/`;
   const urlExtension = `${nodeType}/${identifier}/${biolinkAnnotationSuffix}`;
   const returnedPromise = new Promise((resolve, reject) => {
     axios.get(`${baseUrl}${urlExtension}`, { params })
@@ -103,7 +105,7 @@ export function getNodeAssociations(nodeType, identifier, biolinkAnnotationSuffi
 }
 
 export function getNodeLabelByCurie(curie) {
-  const baseUrl = `https://api-dev.monarchinitiative.org/api/bioentity/${curie}`;
+  const baseUrl = `${biolink}bioentity/${curie}`;
   const params = {
     fetch_objects: true,
     rows: 100,
