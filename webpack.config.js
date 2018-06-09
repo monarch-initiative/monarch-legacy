@@ -59,6 +59,23 @@ if (/^\w+/.test(DIST_DIR) === false || /\/$/.test(DIST_DIR) === true) { // @todo
 }
 
 log.info('webpack', `${NODE_ENV.toUpperCase()} mode`);
+if (NODE_ENV === 'development') {
+  plugins.push(
+    new webpack.DefinePlugin({
+      'global.serviceUrls': require('./config/dev.env')
+    })
+  );
+  log.info('webpack', 'config/dev.env.js loaded');
+}
+
+if (NODE_ENV === 'production') {
+  plugins.push(
+    new webpack.DefinePlugin({
+      'global.serviceUrls': require('./config/prod.env')
+    })
+  );
+  log.info('webpack', 'config/prod.env.js loaded');
+}
 if (USE_SPA) {
   log.info('webpack', 'USE_SPA active');
 }
