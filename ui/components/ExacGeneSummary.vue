@@ -47,7 +47,7 @@
   import axios from 'axios';
   export default {
     props: {
-      nodeID: {
+      nodeId: {
         type: String,
         required: true,
       },
@@ -71,7 +71,7 @@
     },
     computed: {
       nodePrefix() {
-        const splitID = this.nodeID.split(':');
+        const splitID = this.nodeId.split(':');
         return {
           prefix: splitID[0],
           identifier: splitID[1],

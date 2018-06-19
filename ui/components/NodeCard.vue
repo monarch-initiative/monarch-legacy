@@ -1,33 +1,35 @@
 <template>
+  <!-- eslint-disable vue/html-indent -->
 
 <div class="node-card">
-
   <div
     class="card"
-    v-bind:class="{ active: isSelected }"
-    v-on:click="toggleSelected()">
+    :class="{ active: isSelected }"
+    @click="toggleSelected()">
     <h6 class="card-title card-header text-center py-0">
-      {{cardLabel}}
-      <img class="card-img-top" :src="cardIcon"/>
+      {{ cardLabel }}
+      <img
+        class="card-img-top"
+        :src="cardIcon"/>
     </h6>
     <div class="card-header text-center py-0">
     </div>
     <div class="card-body">
       <div class="card-text text-center">
-        {{cardCount}}
+        {{ cardCount }}
       </div>
     </div>
   </div>
 </div>
 </template>
 
-
-
 <script>
 
 export default {
   name: 'NodeCard',
 
+  /* eslint vue/require-default-prop: 0 */
+  /* eslint vue/require-prop-types: 0 */
   props: [
     'cardType',
     'cardCount',
@@ -49,12 +51,12 @@ export default {
     this.cardLabel = this.$parent.labels[this.cardType];
   },
 
-  data () {
+  data() {
     return {
       isSelected: false,
       cardIcon: null,
       cardLabel: null
-    }
+    };
   },
 
 
@@ -62,12 +64,12 @@ export default {
     toggleSelected() {
       this.isSelected = !this.isSelected;
       if (this.isSelected) {
-        this.$emit('expandCard', this);
+        this.$emit('expand-card', this);
       }
     },
   }
 
-}
+};
 
 </script>
 

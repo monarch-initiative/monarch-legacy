@@ -18,7 +18,11 @@
     "spaced-comment": 1,
     "quotes": ["error", "single", { "allowTemplateLiterals": true }],
     "import/prefer-default-export": "off",
-    "arrow-parens": ["error", "as-needed"]
+    "arrow-parens": ["error", "as-needed"],
+    "vue/html-self-closing": 0,
+    "vue/html-indent": 1,
+    "global-require": 0,
+    "no-unused-vars": [0, { "argsIgnorePattern": "^_" }],
   },
   "extends": [
     "plugin:vue/strongly-recommended",

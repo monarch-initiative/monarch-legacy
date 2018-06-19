@@ -1,8 +1,8 @@
 <template>
 <div id="selenium_id_content">
-  <div
-    id="monarch-home-container"
-    class="container-fluid monarch-container">
+<div
+  id="monarch-home-container"
+  class="container-fluid monarch-container">
 
   <header class="intro">
     <div class="intro-body">
@@ -22,57 +22,12 @@
             </p>
             <monarch-autocomplete homeSearch="true">
             </monarch-autocomplete>
-            <!--<p class="search-examples-text">-->
-              <!--Examples: <i>Marfan Syndrome</i> <i>sox3</i>-->
-            <!--</p>-->
-
-            <!--a href="#footer-fake" class="btn btn-circle page-scroll">
-              <i class="fa fa-angle-double-down animated"></i>
-            </a-->
 
           </div>
         </div>
       </div>
     </div>
   </header>
-
-<!--
-  <section>
-    id="search"
-    class="container search-section text-center">
-    <div class="container">
-
-      <div class="row">
-        <div class="col-xs-12">
-
-          <form
-            id="home_search_form"
-            class="searchspace"
-            action="/search"
-            role="search">
-            <div class="input-group">
-              <span class="input-group-addon" id="sizing-addon1">
-              <i class="fa fa-search fa-fw"></i>
-              </span>
-              <input
-                autofocus
-                id="home_search" type="text" class="form-control" placeholder="Search for...">
-
-              <span class="input-group-btn">
-              <button class="btn btn-default" type="button">Search</button>
-              </span>
-
-
-            </div>
-          </form>
-
-        </div>
-      </div>
-
-    </div>
-  </section>
- -->
-
 
   <section id="about" class="container content-section text-center">
     <div class="row">
@@ -119,7 +74,7 @@
               </a>
             </li>
             <li>
-              <a href="https://medium.com/@MonarchInit/exomiser-10-faster-leaner-better-c988650488be"> 
+              <a href="https://medium.com/@MonarchInit/exomiser-10-faster-leaner-better-c988650488be">
               March 22, 2018: <b>Exomiser 10: Faster, Leaner, Better</b>
               </a>
             </li>
@@ -133,7 +88,7 @@
           <h3>Upcoming Events</h3>
           <ul class="list-inline">
             <li>
-              <a href="http://icbo2018.cgrb.oregonstate.edu/"> 
+              <a href="http://icbo2018.cgrb.oregonstate.edu/">
               ICBO Conference, Aug 7, 2018
               </a>
             </li>
@@ -163,15 +118,15 @@
     <div class="container">
     <div class="row">
       <div class="col-sm">
-        <i class="fa fa-child fa-fw" style="color: #15556A; font-size: 2em;"></i> 
+        <i class="fa fa-child fa-fw" style="color: #15556A; font-size: 2em;"></i>
         <span class="network-name"><br><b>218,313</b><br>Disease-Phenotype Associations</span>
       </div>
       <div class="col-sm">
-        <i class="fa fa-tint fa-fw" style="color: #15556A; font-size: 2em;"></i> 
+        <i class="fa fa-tint fa-fw" style="color: #15556A; font-size: 2em;"></i>
         <span class="network-name"><br><b>793,526</b><br>Gene-Phenotype Associations</span>
       </div>
       <div class="col-sm">
-        <i class="fa fa-paw fa-fw" style="color: #15556A; font-size: 2em;"></i> 
+        <i class="fa fa-paw fa-fw" style="color: #15556A; font-size: 2em;"></i>
         <span class="network-name"><br><b>20,870</b><br>Model Associations</span>
       </div>
     </div>
@@ -179,102 +134,109 @@
   </section>
 
   <section class="content-section text-center">
-      <h4 class="text-center" style="margin: 10px; padding: 0px 0px 25px 0px;"> The Monarch Initiative is a collaboration between: </h4>
-      <div class="container">
-        <div class="row">
-          <div class="col-6 col-md-3">
-            <div class="media">
-              <a target="_blank" href="https://www.charite.de/en/"><span class="network-name"></span>
-              <img class="mr-3"
-              style="max-height:35px;"
-              src="../assets/images/team-charite.png"
-              alt="Charite">
-              </a>
-            </div>
+    <h4
+      class="text-center"
+      style="margin: 10px; padding: 0px 0px 25px 0px;">
+      The Monarch Initiative is a collaboration between:
+    </h4>
+    <div class="container">
+      <div class="row">
+        <div class="col-6 col-md-3">
+          <div class="media">
+            <a target="_blank" href="https://www.charite.de/en/"><span class="network-name"></span>
+            <img class="mr-3"
+            style="max-height:35px;"
+            src="../assets/images/team-charite.png"
+            alt="Charite">
+            </a>
           </div>
-          <div class="col-6 col-md-3">  
-            <div class="media">
-              <a target="_blank" href="https://www.garvan.org.au/"><span class="network-name"></span>
-              <img class="mr-3"
-              style="max-height:35px;"
-              src="../assets/images/team-garvan.png"
-              alt="Garvan">
-              </a>
-            </div>
+        </div>
+        <div class="col-6 col-md-3">
+          <div class="media">
+            <a target="_blank" href="https://www.garvan.org.au/"><span class="network-name"></span>
+            <img class="mr-3"
+            style="max-height:35px;"
+            src="../assets/images/team-garvan.png"
+            alt="Garvan">
+            </a>
           </div>
-          <div class="col-6 col-md-3">
-            <div class="media">
-              <a target="_blank" href="https://www.jax.org/"><span class="network-name"></span>
-              <img class="mr-3"
-              style="max-height:35px;"
-              src="../assets/images/team-jackson.png"
-              alt="Jax">
-              </a>
-            </div>
+        </div>
+        <div class="col-6 col-md-3">
+          <div class="media">
+            <a target="_blank" href="https://www.jax.org/"><span class="network-name"></span>
+            <img class="mr-3"
+            style="max-height:35px;"
+            src="../assets/images/team-jackson.png"
+            alt="Jax">
+            </a>
           </div>
-          <div class="col-6 col-md-3">
-            <div class="media">
-              <a target="_blank" href="http://www.lbl.gov/"><span class="network-name"></span>
-              <img class="mr-3"
-              style="max-height:25px;"
-              src="../assets/images/team-lbnl.jpeg"
-              alt="LBNL">
-              </a>
-            </div>
+        </div>
+        <div class="col-6 col-md-3">
+          <div class="media">
+            <a target="_blank" href="http://www.lbl.gov/"><span class="network-name"></span>
+            <img class="mr-3"
+            style="max-height:25px;"
+            src="../assets/images/team-lbnl.jpeg"
+            alt="LBNL">
+            </a>
           </div>
-          <div class="col-6 col-md-3">
-            <div class="media">
-              <a target="_blank" href="https://www.ohsu.edu/"><span class="network-name"></span>
-              <img class="mr-3"
-              style="max-height:35px;"
-              src="../assets/images/team-ohsu.gif"
-              alt="OHSU">
-              </a>
-            </div>
+        </div>
+        <div class="col-6 col-md-3">
+          <div class="media">
+            <a target="_blank" href="https://www.ohsu.edu/"><span class="network-name"></span>
+            <img class="mr-3"
+            style="max-height:35px;"
+            src="../assets/images/team-ohsu.gif"
+            alt="OHSU">
+            </a>
           </div>
-          <div class="col-6 col-md-3">
-            <div class="media">
-              <a target="_blank" href="http://www.smd.qmul.ac.uk/"><span class="network-name"></span>
-              <img class="mr-3"
-              style="max-height:35px;"
-              src="../assets/images/team-qmul.png"
-              alt="QMUL">
-              </a>
-            </div>
+        </div>
+        <div class="col-6 col-md-3">
+          <div class="media">
+            <a target="_blank" href="http://www.smd.qmul.ac.uk/"><span class="network-name"></span>
+            <img class="mr-3"
+            style="max-height:35px;"
+            src="../assets/images/team-qmul.png"
+            alt="QMUL">
+            </a>
           </div>
-          <div class="col-6 col-md-3">
-            <div class="media">
-              <a target="_blank" href="http://renci.org/"><span class="network-name"></span>
-              <img class="mr-3"
-              style="max-height:35px;"
-              src="../assets/images/team-renci.png"
-              alt="RENCI">
-              </a>
-            </div>
+        </div>
+        <div class="col-6 col-md-3">
+          <div class="media">
+            <a target="_blank" href="http://renci.org/"><span class="network-name"></span>
+            <img class="mr-3"
+            style="max-height:35px;"
+            src="../assets/images/team-renci.png"
+            alt="RENCI">
+            </a>
           </div>
-          <div class="col-6 col-md-3">
-            <div class="media">
-              <a target="_blank" href="http://www.sanger.ac.uk/"><span class="network-name"></span>
-              <img class="mr-3"
-              style="max-height:35px;"
-              src="../assets/images/team-sanger.png"
-              alt="Sanger">
-              </a>
-            </div>
+        </div>
+        <div class="col-6 col-md-3">
+          <div class="media">
+            <a target="_blank" href="http://www.sanger.ac.uk/"><span class="network-name"></span>
+            <img class="mr-3"
+            style="max-height:35px;"
+            src="../assets/images/team-sanger.png"
+            alt="Sanger">
+            </a>
           </div>
+        </div>
       </div>
-      <div style="padding: 25px 15px 0px 15px;">
-        Monarch is supported generously by a NIH Office of the Director Grant #5R24OD011883,
-        as well as by NIH-UDP: HHSN268201350036C, HHSN268201400093P, NCI/Leidos #15X143.
-        We are grateful to the many <a target="_blank" href="/about/sources">original sources of our data</a> for allowing Monarch to integrate them in this way.
-        Except where forbidden by the original sources, this work is licensed under a
-        Creative Commons Attribution 3.0 License.
-      </div>
+    </div>
+    <div style="padding: 25px 15px 0px 15px;">
+      Monarch is supported generously by a NIH Office of the Director Grant #5R24OD011883,
+      as well as by NIH-UDP: HHSN268201350036C, HHSN268201400093P, NCI/Leidos #15X143.
+      We are grateful to the many <a target="_blank" href="/about/sources">original sources of our data</a> for allowing Monarch to integrate them in this way.
+      Except where forbidden by the original sources, this work is licensed under a
+      Creative Commons Attribution 3.0 License.
     </div>
   </section>
 
-  <home-footer>
-  </home-footer>
+  <footer class="footer">
+    <home-footer>
+    </home-footer>
+  </footer>
+
 </div>
 </div>
 </template>
@@ -332,273 +294,149 @@ export default {
 </script>
 
 
+<style lang="scss">
+  @import "../../css/_prelude-ng.scss";
+  $home-primary: pink;  // #42DCA3;
 
-<style>
-$home-primary: #42DCA3;
 
-
-body {
-  width: 100%;
-  height: 100%;
-  font-family: "Lora","Helvetica Neue",Helvetica,Arial,sans-serif;
-  color: white;
-  background-color: black;
-}
-
-html {
-  width: 100%;
-  height: 100%;
-}
-
-#monarch-home-container h1,
-#monarch-home-container h2,
-#monarch-home-container h3,
-*/ COMMENT OUT #monarch-home-container h4, */
-#monarch-home-container h5,
-#monarch-home-container h6 {
-  margin: 0 0 35px;
-  text-transform: uppercase;
-  font-family: "Montserrat","Helvetica Neue",Helvetica,Arial,sans-serif;
-  font-weight: 700;
-  letter-spacing: 1px;
-}
-
-#monarch-home-container p {
-  margin: 0 0 25px;
-  font-size: 18px;
-  line-height: 1.5;
-  @media(min-width:768px) {
-    margin: 0 0 35px;
-    font-size: 20px;
-    line-height: 1.6;
+  #monarch-home-container h1,
+  #monarch-home-container h2,
+  #monarch-home-container h3,
+  #monarch-home-container h4,
+  #monarch-home-container h5,
+  #monarch-home-container h6 {
+    xmargin: 0 0 35px 0;
+    xtext-transform: uppercase;
+    xfont-family: "Montserrat","Helvetica Neue",Helvetica,Arial,sans-serif;
+    xfont-weight: 700;
+    xletter-spacing: 1px;
   }
-}
 
-#monarch-home-container a {
-  color: $home-primary;
-  -webkit-transition: all .2s ease-in-out;
-  -moz-transition: all .2s ease-in-out;
-  transition: all .2s ease-in-out;
-  &:hover,
-  &:focus {
-    text-decoration: none;
-    color: darken($home-primary,20%);
-  }
-}
-
-#monarch-home-container .light {
-  font-weight: 400;
-}
-
-#monarch-home-container .intro .search-examples-text {
-  background: lightgray;
-  color: black;
-  border:1px solid lightgray;
-  font-size: 0.9em;
-}
-
-#monarch-home-container .intro {
-  display: table;
-  width: 100%;
-  height: auto;
-  padding: 50px 0;
-  text-align: center;
-  color: white;
-  xbackground: url(../assets/images/home-splash.png) no-repeat bottom center scroll;
-  background-color: #15556A;
-  */ -webkit-background-size: cover;*/
-  */ -moz-background-size: cover;*/
-  */ background-size: cover;*/
-  */ -o-background-size: cover;*/
-  .intro-body {
-    display: table-cell;
-    vertical-align: middle;
-    .brand-heading {
-      font-size: 40px;
-    }
-    .intro-text {
-      font-size: 18px;
+  #monarch-home-container p {
+    margin: 0 0 25px;
+    font-size: 18px;
+    line-height: 1.5;
+    @media(min-width:$grid-float-breakpoint) {
+      margin: 0 0 35px;
+      font-size: 20px;
+      line-height: 1.6;
     }
   }
-  @media(min-width:768px) {
-    height: 100%;
-    padding: 0;
+
+
+  // #monarch-home-container a {
+  //   color: $link-color;
+  //   -webkit-transition: all .2s ease-in-out;
+  //   -moz-transition: all .2s ease-in-out;
+  //   transition: all .2s ease-in-out;
+  //   &:hover,
+  //   &:focus {
+  //     xtext-decoration: none;
+  //     color: darken($link-color,20%);
+  //   }
+  // }
+
+  #monarch-home-container .light {
+    font-weight: 400;
+  }
+
+  #monarch-home-container header.intro {
+    display: table;
+    width: 100%;
+    height: auto;
+    padding: 50px 0;
+    text-align: center;
+    color: white;
+    background-color: $monarch-bg-color;
+
     .intro-body {
+      display: table-cell;
+      vertical-align: middle;
+
       .brand-heading {
-        font-size: 100px;
+        padding: 20px 0 20px 0;
       }
       .intro-text {
-        font-size: 26px;
+        font-size: 18px;
       }
     }
-  }
-}
 
-#monarch-home-container .btn-circle {
-  width: 70px;
-  height: 70px;
-  margin-top: 15px;
-  padding: 7px 16px;
-  border: 2px solid white;
-  border-radius: 100% !important;
-  font-size: 40px;
-  color: white;
-  background: transparent;
-  -webkit-transition: background .3s ease-in-out;
-  -moz-transition: background .3s ease-in-out;
-  transition: background .3s ease-in-out;
-  &:hover,
-  &:focus {
-    outline: none;
-    color: white;
-    background: rgba(white, 0.1);
-  }
-  i.animated {
-    -webkit-transition-property: -webkit-transform;
-    -webkit-transition-duration: 1s;
-    -moz-transition-property: -moz-transform;
-    -moz-transition-duration: 1s;
-  }
-  &:hover {
-    i.animated {
-      -webkit-animation-name: pulse;
-      -moz-animation-name: pulse;
-      -webkit-animation-duration: 1.5s;
-      -moz-animation-duration: 1.5s;
-      -webkit-animation-iteration-count: infinite;
-      -moz-animation-iteration-count: infinite;
-      -webkit-animation-timing-function: linear;
-      -moz-animation-timing-function: linear;
+    @media(min-width:$grid-float-breakpoint) {
+      .intro-body {
+        .intro-text {
+          font-size: 26px;
+        }
+      }
+
     }
   }
-}
 
-@-webkit-keyframes pulse {
-  from {
-    -webkit-transform: scale(1);
-    transform: scale(1);
+  #monarch-home-container .content-section {
+    padding-top: 50px;
+    padding-bottom: 50px;
+    font-size: 18px;
   }
 
-  50% {
-    -webkit-transform: scale(1.2);
-    transform: scale(1.2);
+  #monarch-home-container .data-dashboard {
+    padding-top: 50px;
+    padding-bottom: 50px;
+    font-size: 18px;
+    background: #EBEBEB;
   }
 
-  100% {
-    -webkit-transform: scale(1);
-    transform: scale(1);
-  }
-}
-
-@-moz-keyframes pulse {
-  from {
-    -moz-transform: scale(1);
-    transform: scale(1);
+  #monarch-home-container .news-section {
+    padding-top: 50px;
+    padding-bottom: 50px;
+    font-size: 18px;
   }
 
-  50% {
-    -moz-transform: scale(1.2);
-    transform: scale(1.2);
+  #monarch-home-container .search-section {
+    padding: 50px 10px;
   }
 
-  100% {
-    -moz-transform: scale(1);
-    transform: scale(1);
-  }
-}
 
-#monarch-home-container .content-section {
-  padding-top: 50px;
-  padding-bottom: 50px;
-  font-size: 18px;
-}
-
-#monarch-home-container .data-dashboard {
-  padding-top: 50px;
-  padding-bottom: 50px;
-  font-size: 18px;
-  background: #EBEBEB;
-}
-
-#monarch-home-container .news-section {
-  padding-top: 50px;
-  padding-bottom: 50px;
-  font-size: 18px;
-}
-
-#monarch-home-container .search-section {
-  padding: 50px 10px;
-}
-
-
-#monarch-home-container .features-section {
-  height: auto;
-  width: 100%;
-  padding: 50px 0;
-  color: black;
-  font-size: 18px;
-  background-color: #E8E8E8;
-  -webkit-background-size: cover;
-  -moz-background-size: cover;
-  background-size: cover;
-  -o-background-size: cover;
-}
-
-
-#monarch-home-container .partners-section {
-  padding: 50px 10px;
-}
-
-
-@media(min-width:767px) {
-}
-
-#monarch-home-container .btn {
-  text-transform: uppercase;
-  font-family: "Montserrat","Helvetica Neue",Helvetica,Arial,sans-serif;
-  font-weight: 400;
-  -webkit-transition: all .3s ease-in-out;
-  -moz-transition: all .3s ease-in-out;
-  transition: all .3s ease-in-out;
-  /*border-radius: 0;*/
-}
-
-#monarch-home-container .btn-default {
-  border: 1px solid $home-primary;
-  color: $home-primary;
-  background-color: transparent;
-  &:hover,
-  &:focus {
-    border: 1px solid $home-primary;
-    outline: none;
+  #monarch-home-container .features-section {
+    height: auto;
+    width: 100%;
+    padding: 50px 0;
     color: black;
-    background-color: $home-primary;
+    font-size: 18px;
+    background-color: #E8E8E8;
+    -webkit-background-size: cover;
+    -moz-background-size: cover;
+    background-size: cover;
+    -o-background-size: cover;
   }
-}
 
 
-#monarch-home-container ul.banner-social-buttons {
-  margin-top: 0;
-  @media(max-width:1199px) {
-    margin-top: 15px;
+  #monarch-home-container .partners-section {
+    padding: 50px 10px;
   }
-  @media(max-width:767px) {
-    li {
-      display: block;
-      margin-bottom: 20px;
-      padding: 0;
-      &:last-child {
-        margin-bottom: 0;
-      }
+
+  #monarch-home-container .btn.btn-dark {
+    text-transform: uppercase;
+    color: white;
+    font-family: "Montserrat","Helvetica Neue",Helvetica,Arial,sans-serif;
+    font-weight: 400;
+    -webkit-transition: all .3s ease-in-out;
+    -moz-transition: all .3s ease-in-out;
+    transition: all .3s ease-in-out;
+  }
+
+
+  #monarch-home-container footer.footer {
+    display: table;
+    width: 100%;
+    height: auto;
+    padding: 50px 0;
+    text-align: center;
+    color: white;
+    background-color: $monarch-bg-color;
+
+    a {
+      color: white;
     }
   }
-}
-
-#monarch-home-container footer {
-  padding: 50px 0;
-  p {
-    margin: 0;
-  }
-}
-
 </style>
+
+

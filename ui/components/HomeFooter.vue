@@ -4,10 +4,10 @@
   <div class="row">
     <div class="col-12 col-lg-3">
       <div class="media">
-        <img class="img-fluid"
-        style="max-height:125px; margin:auto; padding:5px 5px 5px 5px;"
-        src="../assets/images/monarch-logo-white-stacked.png" 
-        alt="Monarch logo">
+        <img
+          class="img-fluid monarch-logo"
+          src="../assets/images/monarch-logo-white-stacked.png" 
+          alt="Monarch logo">
       </div>
     </div>
     <div class="col-12 col-md-4 col-lg-3 about-section">
@@ -85,16 +85,16 @@
 @import "../../css/_prelude-ng.scss";
 .home-footer {
   margin: 0px 15px;
-  padding: 25px 0px;
-  background: #15556A;
-  color: white;
+  padding: 15px 0px;
+  xbackground: $monarch-bg-color;
+  xcolor: white;
 }
 
 .about-section{
   padding-left: 25px;
 }
 
-@media (max-width: 770px) {
+@media (max-width:$grid-float-breakpoint) {
   .about-section {
     text-align: center;
   }
@@ -105,4 +105,12 @@
   margin: 0;
   color: white;
 }
+
+.monarch-logo {
+  max-height:125px;
+  margin:0 auto 20px auto;
+  padding:5px 5px 5px 5px;
+}
+
+
 </style>

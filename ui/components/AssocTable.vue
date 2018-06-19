@@ -373,12 +373,19 @@
             biolinkAnnotationSuffix,
             params
           );
+          // console.log('searchResponse');
+          // console.log(JSON.stringify(searchResponse, null, 2));
+          if (!searchResponse.data ||
+              !searchResponse.data.associations) {
+            that.dataPacket = null;
+            throw new Error('MA.getNodeAssociations() returned no data');
+          }
           that.dataPacket = searchResponse;
           that.dataFetched = true;
         }
         catch (e) {
           that.dataError = e;
-          console.log('BioLink Error', e);
+          // console.log('BioLink Error', e);
         }
 
       },
@@ -539,7 +546,9 @@
         this.fetchData();
       },
       dataPacket() {
-        this.populateRows();
+        if (this.dataPacket) {
+          this.populateRows();
+        }
       },
       facets: {
         handler() {
@@ -551,7 +560,7 @@
     },
   };
 </script>
-<style>
+<style scoped>
   a {
     color: #404040;
   }

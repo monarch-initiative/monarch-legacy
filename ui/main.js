@@ -15,6 +15,7 @@ import Home from '@/components/Home.vue';
 import HomeFooter from '@/components/HomeFooter.vue';
 import Navbar from '@/components/Navbar.vue';
 import Node from '@/components/Node.vue';
+import NodeSidebar from '@/components/NodeSidebar.vue';
 import NodeCard from '@/components/NodeCard.vue';
 import MonarchLegacy from '@/components/MonarchLegacy.vue';
 import AssocTable from '@/components/AssocTable.vue';
@@ -111,6 +112,7 @@ const main = () => {
   Vue.use(VueFormWizard);
 
   Vue.component('monarch-navbar', Navbar);
+  Vue.component('node-sidebar', NodeSidebar);
   Vue.component('node-card', NodeCard);
   Vue.component('assoc-table', AssocTable);
   Vue.component('assoc-facets', AssocFacets);
