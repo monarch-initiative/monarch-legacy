@@ -1,99 +1,35 @@
 <template>
+<!-- eslint-disable vue/html-indent -->
+
 <div id="selenium_id_content">
 
-<div>
-  <div class="nav-sidebar-vertical">
-    <ul class="list-group">
-      <li class="list-group-item list-group-item-node">
-        <a
-          target="_blank"
-          v-bind:href="'http://beta.monarchinitiative.org' + path">
-          <img
-            class="entity-type-icon"
-            :src="icons[nodeType]"/>
-          <span class="list-group-item-value">{{labels[nodeType]}}</span>
-        </a>
-      </li>
-
-      <li class="list-group-item list-group-item-squat">
-        <a
-          v-on:click="toggleSidebar()"
-          href="#">
-          <i class="fa fa-2x fa-crosshairs"></i>
-          <span class="list-group-item-value">Neighbors</span>
-        </a>
-      </li>
-
-      <li class="list-group-item list-group-item-squat"
-        v-bind:class="{ active: !expandedCard }">
-        <a
-          v-on:click="expandCard(null)"
-          href="#">
-          <i class="fa fa-2x fa-th-large"></i>
-          <span class="list-group-item-value">Overview</span>
-        </a>
-      </li>
-
-      <li class="list-group-item"
-        v-bind:class="{ active: expandedCard === cardType }"
-        v-for="cardType in nonEmptyCards"
-        :key="cardType">
-        <a
-          :href="'#' + cardType"
-          v-on:click="expandCard(cardType)">
-          <img class="entity-type-icon" :src="icons[cardType]"/>
-          <span class="list-group-item-value">{{labels[cardType]}} ({{counts[cardType]}})</span>
-        </a>
-      </li>
-      <li
-        class="node-filter-section">
-        <h5>Species</h5>
-        <assoc-facets v-model="facetObject.species">
-        </assoc-facets>
-      </li>
-    </ul>
-
-  </div>
-
-</div>
-
+<node-sidebar
+  v-if="node"
+  ref="sidebar"
+  :node-type="nodeType"
+  :node-label="nodeLabel"
+  :expanded-card="expandedCard"
+  :available-cards="availableCards"
+  :cards-to-display="nonEmptyCards"
+  :card-counts="counts"
+  :parent-node="node"
+  :parent-node-id="nodeId"
+  :facet-object="facetObject"
+  :is-neighborhood="isNeighborhood"
+  :subclasses="subclasses"
+  :superclasses="superclasses"
+  @expand-card="expandCard"
+  @toggle-neighborhood="toggleNeighborhood"
+  />
 
 <div class="container-cards">
 <div class="wrapper">
+
   <div
     class="overlay"
-    v-bind:class="{ active: isActive }"
-    v-on:click="toggleSidebar()">
+    :class="{ active: isNeighborhood }"
+    @click="toggleNeighborhood()">
   </div>
-  <nav
-    id="sidebar"
-    v-bind:class="{ active: isActive }">
-    <div class="sidebar-content">
-      <div class="row superclass" v-for="c in superclasses">
-        <div class="col-12">
-          <router-link
-            :to="'/' + nodeCategory + '/' + c.id">
-            {{c.label}}
-          </router-link>
-        </div>
-      </div>
-
-      <div class="row currentclass">
-        <div class="col-12">
-          {{nodeLabel}}
-        </div>
-      </div>
-
-      <div class="row subclass" v-for="c in subclasses">
-        <div class="col-12">
-          <router-link
-            :to="'/' + nodeCategory + '/' + c.id">
-            {{c.label}}
-          </router-link>
-        </div>
-      </div>
-    </div>
-  </nav>
 
   <div
     class="container-fluid title-bar">
@@ -103,25 +39,31 @@
         v-if="nodeError">
         <sm>
           <h6>
-            Error loading {{labels[nodeType]}}: {{nodeId}}
+            Error loading {{ labels[nodeType] }}: {{ nodeId }}
           </h6>
           <pre
-            class="pre-scrollable">{{nodeError}}</pre>
+            class="pre-scrollable">{{ nodeError }}</pre>
         </sm>
       </div>
       <div
         v-else>
-        <h5 class="text-center">Loading Data for {{labels[nodeType]}}: {{nodeId}}</h5>
+        <h5 class="text-center">Loading Data for {{ labels[nodeType] }}: {{ nodeId }}</h5>
       </div>
     </div>
 
     <div
       v-else>
 
-      <span><b>{{nodeLabel}}</b> ({{node.id}})</span>
+      <span><b>{{ nodeLabel }}</b> ({{ node.id }})</span>
       <br>
       <span><b>AKA:</b>&nbsp;</span>
-      <span class="synonym" v-for="s in synonyms">{{s}}</span>
+      <span
+        class="synonym"
+        v-for="s in synonyms"
+        :key="s"
+      >
+        {{ s }}
+      </span>
     </div>
   </div>
 
@@ -134,41 +76,42 @@
       class="node-content-section">
       <div class="col-12">
         <div class="node-description">
-          {{nodeDefinition}}
+          {{ nodeDefinition }}
         </div>
       </div>
 
       <div class="col-12">
         <b>References:</b>&nbsp;
         <span
-          v-for="r in xrefs">
+          v-for="r in xrefs"
+          :key="r">
           <router-link
             v-if="r.url.indexOf('/') === 0"
             :to="r.url">
-            {{r.label}}
+            {{ r.label }}
           </router-link>
 
           <a
             v-else-if="r.url && r.blank"
             :href="r.url"
             target="_blank">
-            {{r.label}}
+            {{ r.label }}
           </a>
           <a
             v-else-if="r.url"
             :href="r.url">
-            {{r.label}}
+            {{ r.label }}
           </a>
 
           <span
             v-else>
-            {{r.label}}
+            {{ r.label }}
           </span>
         </span>
         <br>
         <span
           v-if="inheritance">
-          <b>Heritability:</b>&nbsp;{{inheritance}}
+          <b>Heritability:</b>&nbsp;{{ inheritance }}
         </span>
       </div>
 
@@ -176,22 +119,23 @@
         <b>Equivalent IDs:</b>&nbsp;
 
         <span
-          v-for="r in equivalentClasses">
+          v-for="r in equivalentClasses"
+          :key="r">
           <router-link
             v-if="r.id"
             :to="'/resolve/' + r.id">
-            {{r.label || r.id}}
+            {{ r.label || r.id }}
           </router-link>
 
           <span
             v-else>
-            {{r.label}}
+            {{ r.label }}
           </span>
         </span>
         <br>
         <span
           v-if="inheritance">
-          <b>Heritability:</b>&nbsp;{{inheritance}}
+          <b>Heritability:</b>&nbsp;{{ inheritance }}
         </span>
       </div>
 
@@ -210,27 +154,29 @@
           :card-count="counts[cardType]"
           :parent-node="node"
           :parent-node-id="nodeId"
-          v-on:expandCard="expandCard(cardType)">
+          @expand-card="expandCard(cardType)">
         </node-card>
       </div>
     </div>
     <div v-if="!expandedCard">
-      <exac-gene :nodeID="nodeId"></exac-gene>
+      <exac-gene
+        :node-id="nodeId"/>
     </div>
     <div
       v-if="expandedCard"
       class="expanded-card-view col-12">
-      <h3 class="text-center">{{labels[expandedCard]}} Associations</h3>
+      <h3 class="text-center">{{ labels[expandedCard] }} Associations</h3>
       <assoc-table
               :facets="facetObject"
-              :nodeType="nodeCategory"
-              :cardType="expandedCard"
+              :node-type="nodeCategory"
+              :card-type="expandedCard"
               :identifier="nodeId"
       >
       </assoc-table>
     </div>
     <div v-if="!expandedCard && nodeCategory === 'variant'">
-      <exac-variant :nodeID="nodeId"></exac-variant>
+      <exac-variant
+        :node-id="nodeId"/>
     </div>
   </div>
 </div>
@@ -300,7 +246,7 @@ const labels = {
 
 
 export default {
-    name: 'home',
+  name: 'home',
   created() {
     // console.log('created', this.nodeId);
   },
@@ -317,7 +263,7 @@ export default {
     this.fetchData();
   },
   watch: {
-    '$route' (to, from) {
+    $route(to, _from) {
       // Only fetchData if the path is different.
       // hash changes are currently handled by monarch-tabs.js
       // within the loaded MonarchLegacy component.
@@ -327,60 +273,63 @@ export default {
       }
     }
   },
-  data () {
+
+  /* eslint quote-props: 0 */
+  data() {
     return {
+      isNeighborhood: false,
       facetObject: {
-          species: {'Anolis carolinensis': true,
-            'Arabidopsis thaliana': true,
-            'Bos taurus': true,
-            'Caenorhabditis elegans': true,
-            'Danio rerio': true,
-            'Drosophila melanogaster': true,
-            'Equus caballus': true,
-            'Gallus gallus': true,
-            'Homo sapiens': true,
-            'Macaca mulatta': true,
-            'Monodelphis domestica': true,
-            'Mus musculus': true,
-            'Ornithorhynchus anatinus': true,
-            'Pan troglodytes': true,
-            'Rattus norvegicus': true,
-            'Saccharomyces cerevisiae S288C': true,
-            'Sus scrofa': true,
-            'Xenopus (Silurana) tropicalis': true,
-          },
-          evidence: {
-              IEA: true,
-          },
-          systems: {
-              'Skeletal system': true,
-              'Limbs': true,
-              'Nervous system': true,
-              'Head or neck': true,
-              'Metabolism/homeostasis': true,
-              'Cardiovascular system': true,
-              'Integument': true,
-              'Genitourinary system': true,
-              'Eye': true,
-              'Musculature': true,
-              'Neoplasm': true,
-              'Digestive system': true,
-              'Immune System': true,
-              'Blood and blood-forming tissues': true,
-              'Endocrine': true,
-              'Respiratory system': true,
-              'Ear': true,
-              'Connective tissue': true,
-              'Prenatal development or birth': true,
-              'Growth': true,
-              'Constitutional': true,
-              'Thoracic cavity': true,
-              'Breast': true,
-              'Voice': true,
-              'Cellular': true,
-          },
+        species: {
+          'Anolis carolinensis': true,
+          'Arabidopsis thaliana': true,
+          'Bos taurus': true,
+          'Caenorhabditis elegans': true,
+          'Danio rerio': true,
+          'Drosophila melanogaster': true,
+          'Equus caballus': true,
+          'Gallus gallus': true,
+          'Homo sapiens': true,
+          'Macaca mulatta': true,
+          'Monodelphis domestica': true,
+          'Mus musculus': true,
+          'Ornithorhynchus anatinus': true,
+          'Pan troglodytes': true,
+          'Rattus norvegicus': true,
+          'Saccharomyces cerevisiae S288C': true,
+          'Sus scrofa': true,
+          'Xenopus (Silurana) tropicalis': true,
+        },
+        evidence: {
+          IEA: true,
+        },
+        systems: {
+          'Skeletal system': true,
+          'Limbs': true,
+          'Nervous system': true,
+          'Head or neck': true,
+          'Metabolism/homeostasis': true,
+          'Cardiovascular system': true,
+          'Integument': true,
+          'Genitourinary system': true,
+          'Eye': true,
+          'Musculature': true,
+          'Neoplasm': true,
+          'Digestive system': true,
+          'Immune System': true,
+          'Blood and blood-forming tissues': true,
+          'Endocrine': true,
+          'Respiratory system': true,
+          'Ear': true,
+          'Connective tissue': true,
+          'Prenatal development or birth': true,
+          'Growth': true,
+          'Constitutional': true,
+          'Thoracic cavity': true,
+          'Breast': true,
+          'Voice': true,
+          'Cellular': true,
+        },
       },
-      isActive: false,
       isSelected: {
         phenotypes: false,
         genes: false,
@@ -437,7 +386,7 @@ export default {
           field: 'source'
         }
       ],
-    }
+    };
   },
 
 
@@ -446,8 +395,8 @@ export default {
       this.expandedCard = cardType;
     },
 
-    toggleSidebar() {
-      this.isActive = !this.isActive;
+    toggleNeighborhood() {
+      this.isNeighborhood = !this.isNeighborhood;
     },
 
     // TIP/QUESTION: This applyResponse is called asynchronously via the function
@@ -560,7 +509,7 @@ export default {
       this.nodeError = null;
       this.expandedCard = null;
       this.nonEmptyCards = [];
-      this.isActive = false;
+      this.isNeighborhood = false;
       this.startProgress();
 
       try {
@@ -775,7 +724,7 @@ $title-bar-height: 70px;
   margin: 0;
   padding: 0;
   background-color: transparent;
-  border-color: #030303;
+  xborder-color: #030303;
 }
 
 .nav-sidebar-vertical li.list-group-item > a {
@@ -830,7 +779,7 @@ $title-bar-height: 70px;
 
 
 .nav-sidebar-vertical li.list-group-item.list-group-item-node {
-  background: black;
+  xbackground: black;
 }
 
 .nav-sidebar-vertical li.list-group-item.list-group-item-node > a {
@@ -903,7 +852,7 @@ div.panel.panel-default {
 }
 
 .nav-sidebar-vertical {
-  background: #292e34;
+  background: $monarch-bg-color;
   border-right: 1px solid #292e34;
   bottom: 0;
   left: 0;
@@ -911,7 +860,7 @@ div.panel.panel-default {
   overflow-y: auto;
   position: fixed;
   width: $sidebar-width;
-  top: ($navbar-height + 6);
+  top: ($navbar-height);
   z-index: 1000;
 }
 
@@ -965,14 +914,6 @@ table.fake-table-view td
 
 .btn-sidebar {
   border:1px solid red;
-}
-
-li.node-filter-section {
-  margin: 0;
-  padding: 5px 5px 5px 10px;
-  color: white;
-  border: solid black 1px;
-  border-bottom: solid black 2px;
 }
 
 @media (max-width: $grid-float-breakpoint) {

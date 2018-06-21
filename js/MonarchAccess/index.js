@@ -25,7 +25,7 @@ export function getNodeSummary(nodeId, nodeType) {
   const returnedPromise = new Promise((resolve, reject) => {
     axios.get(url)
       .then(resp => {
-        const responseData = resp.data
+        const responseData = resp.data;
         // const { responseURL } = resp.request;
         // console.log('...getNodeSummary', resp, responseData, responseURL);
         if (typeof responseData !== 'object') {

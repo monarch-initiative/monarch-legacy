@@ -18,7 +18,8 @@
     "spaced-comment": 1,
     "quotes": ["error", "single", { "allowTemplateLiterals": true }],
     "import/prefer-default-export": "off",
-    "arrow-parens": ["error", "as-needed"]
+    "arrow-parens": ["error", "as-needed"],
+    "vue/html-self-closing": 0
   },
   "extends": [
     "plugin:vue/strongly-recommended",

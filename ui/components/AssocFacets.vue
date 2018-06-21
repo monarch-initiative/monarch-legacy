@@ -1,7 +1,9 @@
 <template>
   <div
     class="assoc-facets-wrapper">
-    <div v-for="(value, key) in facetObject">
+    <div
+      v-for="(value, key) in facetObject"
+      :key="key">
       <label>
         <input
           type="checkbox"
@@ -13,24 +15,31 @@
   </div>
 </template>
 <script>
-  export default {
-    model: {
-      prop: 'facetObject'
-    },
-    props: {
-      facetObject: {
-        type: Object,
-      }
-    },
-  };
+export default {
+  model: {
+    prop: 'facetObject'
+  },
+
+  /* eslint vue/require-default-prop: 0 */
+  props: {
+    facetObject: {
+      type: Object,
+    }
+  },
+};
 </script>
-<style scoped>
+<style lang="scss">
 .assoc-facets-wrapper {
-  height: 200px;
-  overflow-y: scroll;
+  margin: 0;
+  padding: 0;
   padding: 0;
   margin: 0;
+  background: #444;
+
+  label {
+    margin: 0;
+    padding-left: 4px;
+  }
 }
 </style>
-
 

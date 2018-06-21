@@ -7,3 +7,12 @@ $grid-float-breakpoint: 700px;
 
 $link-color: #0088ce;
 
+$monarch-bg-color: #15556A;
+
+$grid-breakpoints: (
+  xs: 0,
+  sm: 576px,
+  md: 768px,
+  lg: 950px, // Original BS4 value: 992px
+  xl: 1200px
+) !default;
