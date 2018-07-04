@@ -28,6 +28,7 @@ import Analytics from '@/components/Analytics.vue';
 import PhenotypesTable from '@/components/PhenotypesTable.vue';
 import LocalNav from '@/components/LocalNav.vue';
 import PhenoGrid from '@/components/PhenoGrid.vue';
+import FooterAll from '@/components/FooterAll.vue';
 
 
 /**
@@ -125,6 +126,7 @@ const main = () => {
   Vue.component('phenotypes-table', PhenotypesTable);
   Vue.component('local-nav', LocalNav);
   Vue.component('pheno-grid', PhenoGrid);
+  Vue.component('footer-all', FooterAll);
 
   const availableCardTypes = [
     'anatomy',
