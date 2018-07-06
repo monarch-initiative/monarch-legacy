@@ -4,9 +4,13 @@ import * as JSONAccess from './JSONAccess';
 // Re-export stuff from JSONAccess into the MonarchAccess namespace
 export const { loadJSONXHR, loadJSONAxios } = JSONAccess;
 
-const biolink = global.serviceUrls.BIOLINK;
-// const scigraphData = global.serviceUrls.SCIGRAPH_DATA;
-// const scigraphOntology = global.serviceUrls.SCIGRAPH_ONTOLOGY;
+const serviceEnvironment = window.serverConfigurationName;
+const biolink = window.serverConfiguration.biolink_url;
+// const scigraphData = globalServiceURLs[serviceEnvironment].SCIGRAPH_DATA;
+// const scigraphOntology = globalServiceURLs[serviceEnvironment].SCIGRAPH_ONTOLOGY;
+
+console.log('###biolink', serviceEnvironment, biolink);
+
 
 // TIP: Example of a domain-specific (as opposed to a generic loadJSON)
 // service function. This set of domain-specific services will pretty much
@@ -86,6 +90,7 @@ export function getSearchTermSuggestions(term, selected) {
 export function getNodeAssociations(nodeType, identifier, biolinkAnnotationSuffix, params) {
   const baseUrl = `${biolink}bioentity/`;
   const urlExtension = `${nodeType}/${identifier}/${biolinkAnnotationSuffix}`;
+
   const returnedPromise = new Promise((resolve, reject) => {
     axios.get(`${baseUrl}${urlExtension}`, { params })
       .then(resp => {

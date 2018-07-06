@@ -1,15 +1,11 @@
 <template>
   <div>
-    <div v-if="dataFetched">
-      <span>
-        <i>
-          <small>
-            <strong>{{rows.length}}</strong>
-            <strong>{{nodeType}}</strong> to
-            <strong>{{cardType}}</strong> associations found
-          </small>
-        </i>
-      </span>
+    <div v-show="dataFetched">
+      <h5>
+        <strong>{{ rows.length }}</strong>
+        <strong>{{ nodeType }}</strong> to
+        <strong>{{ cardType }}</strong> associations
+      </h5>
       <b-table
         :items="rows"
         :fields="fields"
@@ -152,7 +148,7 @@
         </b-pagination>
       </div>
     </div>
-    <div v-else-if="dataError">
+    <div v-show="dataError">
       <h3>BioLink Error</h3>
       <div class="row">
         <div class="col-xs-12 pre-scrollable">
@@ -164,7 +160,7 @@
         </div>
       </div>
     </div>
-    <div v-else>
+    <div v-show="!dataFetched && !dataError">
       <h1>Loading ...</h1>
     </div>
   </div>
@@ -283,7 +279,7 @@
         this.rowClicked = !this.rowClicked;
       },
       facetRows(){
-        this.rows = this.rows.filter(elem => this.trueFacets.includes(elem.taxonId));
+        // this.rows = this.rows.filter(elem => this.trueFacets.includes(elem.taxonId));
       },
       handleSubjectObjectInversion() {
         const invertedCalls = [
@@ -382,6 +378,10 @@
           }
           that.dataPacket = searchResponse;
           that.dataFetched = true;
+          that.currentPage = 1;
+          that.$nextTick(function() {
+            that.populateRows();
+          });
         }
         catch (e) {
           that.dataError = e;
@@ -390,7 +390,7 @@
 
       },
       populateRows() {
-        this.rows = [];
+        this.rows.length = 0;
         let count = 0;
         this.dataPacket.data.associations.forEach((elem) => {
           count += 1;
@@ -545,11 +545,11 @@
         this.handleSubjectObjectInversion();
         this.fetchData();
       },
-      dataPacket() {
-        if (this.dataPacket) {
-          this.populateRows();
-        }
-      },
+      // dataPacket() {
+      //   if (this.dataPacket) {
+      //     this.populateRows();
+      //   }
+      // },
       facets: {
         handler() {
           this.currentPage = 1;

@@ -1,5 +1,5 @@
 <template>
-    <div id="exacGene" class="col-md-6" v-show="showGeneExac">
+    <div id="exacGene" class="container-fluid" v-show="showGeneExac">
         <h4>Exac Population Frequencies</h4>
         <table class="table table-hover">
             <thead>
@@ -32,13 +32,20 @@
             </tbody>
         </table>
         <div class="row">
-            <div class="col-md-6" id="mgi-link">
-                [Retrieved from <a target="_blank" v-bind:href="exacGene.link">MyGene.info</a>]
+            <div class="col-9" id="mgi-link">
+              [Retrieved from
+              <a
+                target="_blank"
+                v-bind:href="exacGene.link">
+                MyGene.info
+              </a>
+              ]
             </div>
-            <div class="col-md-6" id="exac-link">
-                <a target="_blank"
-                   href="http://exac.broadinstitute.org/"
-                   class="glyphicon glyphicon-link"></a>
+            <div class="col-3" id="exac-link">
+                <a
+                  target="_blank"
+                  href="http://exac.broadinstitute.org/"
+                  class="fa fa-link"></a>
             </div>
         </div>
     </div>

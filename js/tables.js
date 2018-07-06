@@ -11,7 +11,6 @@
  * appropriate dictionary for sortable type. */
 
 function InitTables() {
-
     /* This provides functions for comparing elements by datatype. */
     var table = jQuery('.simpletable').stupidtable({
         "string": function(a, b) {

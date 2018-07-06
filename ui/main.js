@@ -30,7 +30,6 @@ import LocalNav from '@/components/LocalNav.vue';
 import PhenoGrid from '@/components/PhenoGrid.vue';
 import FooterAll from '@/components/FooterAll.vue';
 
-
 /**
  * The linter can be disabled via LINTER=false env var
  *  - show a message in console to inform if it's on or off
@@ -122,7 +121,7 @@ const main = () => {
   Vue.component('home-footer', HomeFooter);
   Vue.component('exac-gene', ExacGeneSummary);
   Vue.component('exac-variant', ExacVariantTable);
-  Vue.component('analyze-phenotypes', AnalyzePhenotypes);
+  // Vue.component('analyze-phenotypes', AnalyzePhenotypes);
   Vue.component('phenotypes-table', PhenotypesTable);
   Vue.component('local-nav', LocalNav);
   Vue.component('pheno-grid', PhenoGrid);
@@ -263,6 +262,21 @@ const main = () => {
   }
 };
 
-console.log('about to main()');
+// window.serverEnvironment = 'unknown';
+// function getServerEnvironment() {
+//   const request = new XMLHttpRequest();
+//   request.addEventListener('load', function load() {
+//     console.log('...this.responseText', this.responseText);
+//     const response = JSON.parse(this.responseText);
+//     console.log('...response', response);
+//     main();
+//   });
+//   request.open('GET', '/getConfig');
+//   request.send();
+// }
+
+// getServerEnvironment();
+
+console.log('main.js window.serverConfigurationName', window.serverConfigurationName);
 main();
 

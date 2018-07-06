@@ -13,6 +13,7 @@
 
     "owlsim_services_url" : "https://monarchinitiative.org/owlsim",
 
-    "analytics_id" : "UA-41803362-1"
+    "analytics_id" : "UA-41803362-1",
 
+    "biolink_url" : "https://api.monarchinitiative.org/api/"
 }
