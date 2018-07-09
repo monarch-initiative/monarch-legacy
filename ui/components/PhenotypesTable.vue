@@ -68,108 +68,113 @@
   </div>
 </template>
 <script>
-  import * as MA from '../../js/MonarchAccess';
+import * as MA from '../../js/MonarchAccess';
 
-  export default {
-    data() {
-      return {
-        dataFetched: false,
-        rowsPerPage: 10,
-        currentPage: 1,
-        fields: [
-          {
-            key: 'hit',
-            sortable: true,
-          },
-          {
-            key: 'combined_score',
-            sortable: true,
-          },
-          {
-            key: 'most_informative_shared_phenotype',
-            sortable: true,
-          },
-          {
-            key: 'misp_ic',
-            sortable: true,
-            label: 'MISP IC',
-          },
-          {
-            key: 'other_matching_phenotypes',
-            sortable: true,
-          },
-          {
-            key: 'omp_ic',
-            sortable: true,
-            label: 'OMP IC',
-          },
-        ],
-        items: [],
-        preItems: [],
-      };
+export default {
+  data() {
+    return {
+      dataFetched: false,
+      rowsPerPage: 10,
+      currentPage: 1,
+      fields: [
+        {
+          key: 'hit',
+          sortable: true,
+        },
+        {
+          key: 'combined_score',
+          sortable: true,
+        },
+        {
+          key: 'most_informative_shared_phenotype',
+          sortable: true,
+        },
+        {
+          key: 'misp_ic',
+          sortable: true,
+          label: 'MISP IC',
+        },
+        {
+          key: 'other_matching_phenotypes',
+          sortable: true,
+        },
+        {
+          key: 'omp_ic',
+          sortable: true,
+          label: 'OMP IC',
+        },
+      ],
+      items: [],
+      preItems: [],
+    };
+  },
+  props: {
+    phenotypes: {
+      type: Array,
+      required: true,
     },
-    props: {
-      phenotypes: {
-        type: Array,
-        required: true,
-      },
+    genes: {
+      type: Array,
+      required: true,
     },
-    mounted(){
+  },
+  mounted(){
+    this.comparePhenotypes();
+  },
+  watch: {
+    phenotypes() {
       this.comparePhenotypes();
     },
-    watch: {
-      phenotypes(){
-        this.comparePhenotypes();
-      },
-      preItems(){
-        this.processItems();
-      },
+    preItems() {
+      this.processItems();
     },
-    methods: {
-      async comparePhenotypes() {
-        const that = this;
-        try {
-          let searchResponse = await MA.comparePhenotypes(this.phenotypes);
-          this.preItems = searchResponse;
-          this.dataFetched = true;
-        }
-        catch (e) {
-          that.dataError = e;
-          console.log('BioLink Error', e);
-        }
-      },
-      processItems(){
-        this.items = [];
-        this.preItems.data.results.forEach((elem) => {
-          const rowData = {
-            hitLabel: elem.j.label,
-            hitId: elem.j.id,
-            mostInformativeId: elem.maxIC_class.id,
-            mostInformativeIc: this.round(elem.maxIC_class.IC, 2),
-            mostInformativeLabel: elem.maxIC_class.label,
-            mostInformativeLink: `/phenotype/${elem.maxIC_class.id}`,
-            combinedScore: elem.combinedScore,
-            otherMatchId: '',
-            otherMatchLabel: '',
-            otherMatchIc: '',
-            otherMatchLink: '',
-          };
-          elem.matches.forEach((match) => {
-            if (match.lcs.id !== rowData.hitId) {
-              rowData.otherMatchIc = this.round(match.lcs.IC, 2);
-              rowData.otherMatchId = match.lcs.id;
-              rowData.otherMatchLabel = match.lcs.label;
-              rowData.otherMatchLink = `/phenotype/${match.lcs.id}`;
-            }
-              });
-          this.items.push(rowData);
+  },
+  methods: {
+    async comparePhenotypes() {
+      const that = this;
+      try {
+        let searchResponse = await MA.comparePhenotypes(this.phenotypes, this.genes);
+
+        this.preItems = searchResponse;
+        this.dataFetched = true;
+      }
+      catch (e) {
+        that.dataError = e;
+        console.log('BioLink Error', e);
+      }
+    },
+    processItems(){
+      this.items = [];
+      this.preItems.data.results.forEach((elem) => {
+        const rowData = {
+          hitLabel: elem.j.label,
+          hitId: elem.j.id,
+          mostInformativeId: elem.maxIC_class.id,
+          mostInformativeIc: this.round(elem.maxIC_class.IC, 2),
+          mostInformativeLabel: elem.maxIC_class.label,
+          mostInformativeLink: `/phenotype/${elem.maxIC_class.id}`,
+          combinedScore: elem.combinedScore,
+          otherMatchId: '',
+          otherMatchLabel: '',
+          otherMatchIc: '',
+          otherMatchLink: '',
+        };
+        elem.matches.forEach(match => {
+          if (match.lcs.id !== rowData.hitId) {
+            rowData.otherMatchIc = this.round(match.lcs.IC, 2);
+            rowData.otherMatchId = match.lcs.id;
+            rowData.otherMatchLabel = match.lcs.label;
+            rowData.otherMatchLink = `/phenotype/${match.lcs.id}`;
+          }
         });
-      },
-      round(value, decimals) {
-        return value.toFixed(decimals);
-      },
+        this.items.push(rowData);
+      });
     },
-  }
+    round(value, decimals) {
+      return value.toFixed(decimals);
+    },
+  },
+}
 </script>
 <style>
 

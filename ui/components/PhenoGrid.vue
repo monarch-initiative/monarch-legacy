@@ -23,6 +23,9 @@
       },
       index: {
         type: Number,
+      },
+      mode: {
+        type: String,
       }
 
     },
@@ -49,11 +52,10 @@
           gridSkeletonData: pgData,
           selectedCalculation: 0,
           selectedSort: 'Frequency',
+          geneList: this.xAxis,
+          owlSimFunction: this.mode,
         });
       },
     },
   };
 </script>
-<style>
-
-</style>

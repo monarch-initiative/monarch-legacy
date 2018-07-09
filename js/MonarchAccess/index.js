@@ -128,15 +128,18 @@ export function getNodeLabelByCurie(curie) {
   return returnedPromise;
 }
 
-export function comparePhenotypes(phenotypesList) {
+export function comparePhenotypes(phenotypesList, geneList, species = 'all', mode = 'search') {
   const baseUrl = 'https://beta.monarchinitiative.org/analyze/phenotypes.json?';
-  const extenstion = 'input_items=';
+  const params = new URLSearchParams();
   const phenoCuries = phenotypesList.map(elem => {
     return elem.curie;
   });
-  const fullUrl = `${baseUrl}${extenstion}${phenoCuries.join('+')}`;
+  params.append('input_items', phenoCuries);
+  params.append('gene_items', geneList);
+  params.append('target_species', species);
+  params.append('mode', mode);
   const returnedPromise = new Promise((resolve, reject) => {
-    axios.get(fullUrl)
+    axios.get(baseUrl, { params })
       .then(resp => {
         const responseData = resp;
         if (typeof responseData !== 'object') {
@@ -152,6 +155,7 @@ export function comparePhenotypes(phenotypesList) {
   });
   return returnedPromise;
 }
+
 
 
 /*
@@ -205,4 +209,24 @@ export function comparePhenotypes(phenotypesList) {
     }
 */
 
+
+// url1 = 'https://beta.monarchinitiative.org/analyze/phenotypes.json' +
+//   '?input_items=' +
+//   'HP%3A0000316+HP%3A0000322+HP%3A0000272' +
+//   '&' +
+//   'mode=compare' +
+//   '&' +
+//   'target_species=all' +
+//   '&' +
+//   'limit=100' +
+//   '&' +
+//   'gene_list=' +
+//   'NCBIGene%3A7157%2CNCBIGene%3A5290%2CNCBIGene%3A5728%2CNCBIGene%3A324%2CNCBIGene%3A7428'
+
+
+// target_species=<taxids>
+// input_items=<phenotypes>
+// gene_items=<genes>
+// mode=search, ?
+// limit=<integer>
 
