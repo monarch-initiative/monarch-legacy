@@ -118,15 +118,18 @@
     <div class="container">
     <div class="row">
       <div class="col-sm">
-        <i class="fa fa-child fa-fw" style="color: #15556A; font-size: 2em;"></i>
+        <router-link to="/analytics" class="btn btn-link" role="button">
+        <i class="fa fa-child fa-fw" style="color: #15556A; font-size: 2em;"></i></router-link>
         <span class="network-name"><br><b>218,313</b><br>Disease-Phenotype Associations</span>
       </div>
       <div class="col-sm">
-        <i class="fa fa-tint fa-fw" style="color: #15556A; font-size: 2em;"></i>
+        <router-link to="/analytics" class="btn btn-link" role="button">
+        <i class="fa fa-tint fa-fw" style="color: #15556A; font-size: 2em;"></i></router-link>
         <span class="network-name"><br><b>793,526</b><br>Gene-Phenotype Associations</span>
       </div>
       <div class="col-sm">
-        <i class="fa fa-paw fa-fw" style="color: #15556A; font-size: 2em;"></i>
+        <router-link to="/analytics" class="btn btn-link" role="button">
+        <i class="fa fa-paw fa-fw" style="color: #15556A; font-size: 2em;"></i></router-link>
         <span class="network-name"><br><b>20,870</b><br>Model Associations</span>
       </div>
     </div>

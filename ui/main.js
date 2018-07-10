@@ -24,9 +24,11 @@ import MonarchAutocomplete from '@/components/MonarchAutocomplete.vue';
 import ExacGeneSummary from '@/components/ExacGeneSummary.vue';
 import ExacVariantTable from '@/components/ExacVariantTable.vue';
 import AnalyzePhenotypes from '@/components/AnalyzePhenotypes.vue';
+import Analytics from '@/components/Analytics.vue';
 import PhenotypesTable from '@/components/PhenotypesTable.vue';
 import LocalNav from '@/components/LocalNav.vue';
 import PhenoGrid from '@/components/PhenoGrid.vue';
+import FooterAll from '@/components/FooterAll.vue';
 
 
 /**
@@ -124,6 +126,7 @@ const main = () => {
   Vue.component('phenotypes-table', PhenotypesTable);
   Vue.component('local-nav', LocalNav);
   Vue.component('pheno-grid', PhenoGrid);
+  Vue.component('footer-all', FooterAll);
 
   const availableCardTypes = [
     'anatomy',
@@ -165,6 +168,11 @@ const main = () => {
         path: '/analyze/phenotypes',
         name: 'AnalyzePhenotypes',
         component: AnalyzePhenotypes
+      },
+      {
+        path: '/analytics',
+        name: 'Analytics',
+        component: Analytics
       },
       {
         path: '/*',
