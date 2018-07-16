@@ -1,6 +1,6 @@
 module.exports = {
-  BIOLINK: '"https://api-dev.monarchinitiative.org/api/"',
-  SCIGRAPH_ONTOLOGY: '"https://scigraph-ontology-dev.monarchinitiative.org/"',
-  SCIGRAPH_DATA: '"https://scigraph-data-dev.monarchinitiative.org/"',
-  OWLSIM: '"https://beta.monarchinitiative.org/owlsim"'
+  BIOLINK: '"https://api.monarchinitiative.org/api/"',
+  SCIGRAPH_ONTOLOGY: '"https://scigraph-ontology.monarchinitiative.org/"',
+  SCIGRAPH_DATA: '"https://scigraph-data.monarchinitiative.org/"',
+  OWLSIM: '"https://monarchinitiative.org/owlsim"'
 };
