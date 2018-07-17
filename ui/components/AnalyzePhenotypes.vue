@@ -1,16 +1,7 @@
 <template>
   <div class="container-fluid">
-    <b-alert
-      variant="danger"
-      class="my-5"
-      show
-      dismissible
-    >
-      This page is a work in progress. The individual and gene selection on step 2 are not yet functional.
-      Please select a group for now.
-    </b-alert>
     <div class="row wizard-style">
-      <div class="col-1"></div>
+      <div class="col-1"/>
       <div class="col-10 card card-body">
         <form-wizard
           title="Analyze Phenotypes"
@@ -22,11 +13,10 @@
         >
           <tab-content title="Create A Profile of Phenotypes">
             <monarch-autocomplete
-              homeSearch="true"
-              singleCategory="phenotype"
+              home-search="true"
+              single-category="phenotype"
               @interface="handlePhenotypes"
-            >
-            </monarch-autocomplete>
+            />
             <b-form-textarea
               id="textarea1"
               v-model="phenoCurieList"
@@ -34,8 +24,7 @@
               :rows="3"
               :max-rows="6"
               class="my-2"
-            >
-            </b-form-textarea>
+            />
             <div
               @click="generatePGDataFromPhenotypeList"
               class="btn btn-success btn-sm"
@@ -64,17 +53,15 @@
                     v-model="selectedGroups"
                     :options="groupOptions"
                     name="radiosBtnDefault"
-                  >
-                  </b-form-checkbox-group>
+                  />
                 </b-form-group>
               </div>
               <div class="col-9">
                 <monarch-autocomplete
-                  homeSearch="true"
-                  singleCategory="gene"
+                  home-search="true"
+                  single-category="gene"
                   @interface="handleGenes"
-                >
-                </monarch-autocomplete>
+                />
                 <b-form-textarea
                   id="textarea1"
                   v-model="geneCurieList"
@@ -82,8 +69,7 @@
                   :rows="3"
                   :max-rows="6"
                   class="my-3"
-                >
-                </b-form-textarea>
+                />
                 <div class="form-group">
                   <div
                     @click="geneListLookup"
@@ -97,8 +83,7 @@
                     size="sm"
                     v-model="geneCurieType"
                     :options="geneCurieTypeOptions"
-                  >
-                  </b-form-radio-group>
+                  />
                 </div>
                 <b-alert
                   variant="danger"
@@ -112,142 +97,191 @@
               </div>
             </div>
           </tab-content>
-          <tab-content title="Run Analyses"
-          >
-          </tab-content>
+          <tab-content
+            title="Run Analyses"
+          />
         </form-wizard>
       </div>
-      <div class="col-1"></div>
+      <div class="col-1"/>
     </div>
-    <div class="row my-2">
-      <div class="col-1"></div>
-      <div class="col-10">
-        <div class="row p-0">
-          <div class="col-6 pad-right">
-            <div v-if="phenotypes.length"
-                 class="card full-height"
+
+    <!--results below here-->
+    <div v-if="phenotypes.length">
+      <div
+        class="row my-2"
+      >
+        <div class="col-1"/>
+        <div class="col-1">
+
+          <svg
+            height="100"
+            width="100"
+          >
+            <circle
+              cx="50"
+              cy="50"
+              r="40"
+              stroke-width="3"
+              fill="darkgrey"
+            />
+            <text
+              x="50%"
+              y="50%"
+              text-anchor="middle"
+              stroke="white"
+              stroke-width="3px"
+              dy=".3em"
+              font-style="italic"
             >
-              <div class="p-3">
-                <h4>Phenotype Profile</h4>
-                <div class="flex-container">
-                  <div
-                    class="m-1"
-                    v-for="(phenotype, index) in phenotypes"
-                    :key="phenotype.curie"
+              1
+            </text>
+          </svg>
+        </div>
+        <div class="col-9 card">
+          <div class="p-3">
+            <h4>Phenotype Profile</h4>
+            <div class="flex-container">
+              <div
+                class="m-1"
+                v-for="(phenotype, index) in phenotypes"
+                :key="phenotype.curie"
+              >
+                <div
+                  class="btn-group"
+                  role="group"
+                >
+                  <button
+                    v-b-modal="phenotype.curie"
+                    class="btn btn-sm btn-info"
                   >
-                    <div
-                      class="btn-group"
-                      role="group"
-                    >
-                      <button
-                        v-b-modal="phenotype.curie"
-                        class="btn btn-sm btn-info"
-                      >
-                        {{phenotype.match}} ({{phenotype.curie}})
-                      </button>
-                      <button
-                        type="button"
-                        class="btn btn-sm btn-info"
-                        @click="popPhenotype(index)"
-                      >
-                        <strong>x</strong>
-                      </button>
-                    </div>
-                    <b-modal
-                      size="lg"
-                      :id="phenotype.curie"
-                      title="phenotype.label"
-                    >
-                      <div
-                        slot="modal-title"
-                        class="w-100"
-                      >
-                        {{phenotype.match}} | {{phenotype.curie}}
-                      </div>
-                      <div>
-                        <local-nav
-                          @interface="handleReplacePhenotype"
-                          :anchorId="phenotype.curie"
-                        >
-                        </local-nav>
-                      </div>
-                    </b-modal>
-                  </div>
+                    {{ phenotype.match }} ({{ phenotype.curie }})
+                  </button>
+                  <button
+                    type="button"
+                    class="btn btn-sm btn-info"
+                    @click="popPhenotype(index)"
+                  >
+                    <strong>x</strong>
+                  </button>
                 </div>
+                <b-modal
+                  size="lg"
+                  :id="phenotype.curie"
+                  title="phenotype.label"
+                >
+                  <div
+                    slot="modal-title"
+                    class="w-100"
+                  >
+                    {{ phenotype.match }} | {{ phenotype.curie }}
+                  </div>
+                  <div>
+                    <local-nav
+                      @interface="handleReplacePhenotype"
+                      :anchor-id="phenotype.curie"
+                    />
+                  </div>
+                </b-modal>
               </div>
             </div>
           </div>
-          <div class="pad-left col-6">
-            <div
-              v-if="genes.length || selectedGroups.length"
-              class="card full-height"
+        </div>
+        <div class="col-1"/>
+      </div>
+    </div>
+    <div v-if="showComparableList">
+      <div class="row my-2">
+        <div class="col-1"/>
+        <div class="col-1">
+          <svg
+            height="100"
+            width="100"
+          >
+            <circle
+              cx="50"
+              cy="50"
+              r="40"
+              stroke-width="3"
+              fill="darkgrey"
+            />
+            <text
+              x="50%"
+              y="50%"
+              text-anchor="middle"
+              stroke="white"
+              stroke-width="3px"
+              dy=".3em"
+              font-style="italic"
             >
-              <div class="p-3">
-                <h4>Comparables</h4>
-                <div class="flex-container">
-                  <div
-                    class="m-1"
-                    v-for="(group, index) in selectedGroups"
-                    :key="group.id"
+              2
+            </text>
+          </svg>
+        </div>
+        <div class="col-9 card">
+          <div class="p-3">
+            <h4>Comparables</h4>
+            <div class="flex-container">
+              <div
+                class="m-1"
+                v-for="(group, index) in selectedGroups"
+                :key="group.id"
+              >
+                <div
+                  class="btn-group"
+                  role="group"
+                >
+                  <button class="btn btn-sm btn-success">
+                    {{ group.groupName }}
+                  </button>
+                  <button
+                    type="button"
+                    class="btn btn-sm btn-success"
+                    @click="popGroup(index)"
                   >
-                    <div
-                      class="btn-group"
-                      role="group"
-                    >
-                      <button class="btn btn-sm btn-success">
-                        {{ group.groupName }}
-                      </button>
-                      <button
-                        type="button"
-                        class="btn btn-sm btn-success"
-                        @click="popGroup(index)"
-                      >
-                        <strong>x</strong>
-                      </button>
-                    </div>
-                  </div>
+                    <strong>x</strong>
+                  </button>
                 </div>
-                <div class="flex-container">
-                  <div
-                    class="m-1"
-                    v-for="(gene, index) in genes"
-                    :key="gene.curie"
+              </div>
+            </div>
+            <div class="flex-container">
+              <div
+                class="m-1"
+                v-for="(gene, index) in genes"
+                :key="gene.curie"
+              >
+                <div
+                  class="btn-group"
+                  role="group">
+                  <button class="btn btn-sm btn-warning">
+                    {{ gene.match }}
+                  </button>
+                  <button
+                    type="button"
+                    class="btn btn-sm btn-warning"
+                    @click="popGene(index)"
                   >
-                    <div
-                      class="btn-group"
-                      role="group">
-                      <button class="btn btn-sm btn-warning">
-                        {{ gene.match }}
-                      </button>
-                      <button
-                        type="button"
-                        class="btn btn-sm btn-warning"
-                        @click="popGene(index)"
-                      >
-                        <strong>x</strong>
-                      </button>
-                    </div>
-                  </div>
+                    <strong>x</strong>
+                  </button>
                 </div>
               </div>
             </div>
           </div>
         </div>
+        <div class="col-1"/>
       </div>
-      <div class="col-1"></div>
     </div>
     <div class="row my-3">
-      <div class="col-1"></div>
+      <div class="col-1"/>
       <div
         class="col-10 card"
         v-show="showPhenogrid"
       >
         <pheno-grid
-          :xAxis="xAxis"
-          :yAxis="yAxis"
+          :x-axis="xAxis"
+          :y-axis="yAxis"
           :index="pgIndex"
-        >
-        </pheno-grid>
+          :mode="mode"
+        />
       </div>
       <div class="col-1"></div>
     </div>
@@ -256,8 +290,10 @@
       v-if="showPhenogrid">
       <div class="col-1"></div>
       <div class="col-10">
-        <phenotypes-table :phenotypes="phenotypes">
-        </phenotypes-table>
+        <phenotypes-table
+          :genes="genes"
+          :phenotypes="phenotypes"
+        />
       </div>
       <div class="col-1"></div>
     </div>
@@ -265,18 +301,21 @@
 </template>
 <script>
 import * as MA from '../../js/MonarchAccess';
+
 const findIndex = require('lodash/findIndex');
+
 export default {
   name: 'AnalyzePhenotypes',
   data() {
     return {
+      mode: 'search',
       showPhenogrid: false,
       pgIndex: 0,
       rejectedPhenotypeCuries: [],
       showGeneAlert: false,
       showPhenotypeAlert: false,
-      phenoCurieList: '',
-      geneCurieList:'',
+      phenoCurieList: 'HP:0000322,HP:0000303,HP:0000316,HP:0000272',
+      geneCurieList: '5290, 5728, 324, 7428, 3845',
       messages: [],
       phenotypes: [],
       genes: [],
@@ -302,17 +341,17 @@ export default {
         {
           text: 'Mus musculus (genes)',
           value: {
-            "groupId": "10090",
-            "groupName": "Mus musculus"
+            groupId: '10090',
+            groupName: 'Mus musculus'
           }
         },
-        {
-          text: 'Homo sapiens (diseases)',
-          value: {
-            "groupId": "9606",
-            "groupName": "Homo sapiens"
-          }
-        },
+        // {
+        //   text: 'Homo sapiens (diseases)',
+        //   value: {
+        //     groupId: '9606',
+        //     groupName: 'Homo sapiens'
+        //   }
+        // },
         {
           text: 'Drosophila melanogaster (genes)',
           value: {
@@ -330,16 +369,23 @@ export default {
         {
           text: 'Danio rerio (genes)',
           value: {
-            groupId: "7955",
-            groupName: "Danio rerio"
+            groupId: '7955',
+            groupName: 'Danio rerio'
           }
         },
       ]
     };
   },
-  mounted(){
-  },
-  watch: {
+  computed: {
+    showComparableList() {
+      let show = false;
+      if (this.phenotypes.length) {
+        if (this.genes.length || this.selectedGroups.length) {
+          show = true
+        }
+      }
+      return show;
+    },
   },
   methods: {
     async fetchLabel(curie, curieType) {
@@ -378,7 +424,7 @@ export default {
       this.phenotypes.push(payload);
     },
     handleReplacePhenotype(payload){
-      const replaceIndex = findIndex(this.phenotypes, {curie: payload.root});
+      const replaceIndex = findIndex(this.phenotypes, { curie: payload.root });
       this.phenotypes.splice(replaceIndex, 1);
       this.phenotypes.push(payload);
     },
@@ -387,22 +433,31 @@ export default {
     },
     generatePhenogridData() {
       this.showPhenogrid = true;
-      this.xAxis = this.selectedGroups;
+      if (this.selectedGroups.length) {
+        this.xAxis = this.selectedGroups;
+      }
+      else {
+        this.xAxis = this.genes.map(elem => {
+          this.mode = 'compare';
+          return elem.curie;
+        });
+      }
       this.yAxis = this.phenotypes.map(elem => {
         return {
           id: elem.curie,
           term: elem.match,
         };
       });
-      this.pgIndex++;
+      this.pgIndex += 1;
     },
-    geneListLookup(){
+    geneListLookup() {
       this.genes = [];
       this.geneCurieList.split(',').forEach((elem) => {
         this.fetchLabel(`${this.geneCurieType}:${elem.trim()}`, 'gene');
       });
+
     },
-    generatePGDataFromPhenotypeList(){
+    generatePGDataFromPhenotypeList() {
       this.rejectedPhenotypeCuries = [];
       const acceptedPrefixes = [
         'HP',
@@ -410,12 +465,13 @@ export default {
         'ZP',
       ];
       this.phenotypes = [];
-      this.phenoCurieList.split(',').forEach((elem) => {
-        let elemTrimmed = elem.trim();
+      this.phenoCurieList.split(',').forEach(elem => {
+        const elemTrimmed = elem.trim();
         const prefix = elemTrimmed.split(':')[0];
         if (acceptedPrefixes.includes(prefix)) {
           this.fetchLabel(elemTrimmed, 'phenotype');
-        } else {
+        }
+        else {
           this.rejectedPhenotypeCuries.push(elemTrimmed);
           this.showPhenotypeAlert = true;
         }
