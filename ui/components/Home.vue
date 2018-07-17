@@ -440,7 +440,7 @@ export default {
     display: table;
     width: 100%;
     height: auto;
-    padding: 50px 0;
+    padding: 50px 0 0 0;
     text-align: center;
     color: white;
     background-color: $monarch-bg-color;

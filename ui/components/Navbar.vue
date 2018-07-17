@@ -31,12 +31,12 @@
 
       <li class="nav-item dropdown">
         <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown2" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-          Analyze
+          Tools
         </a>
         <div class="dropdown-menu" aria-labelledby="navbarDropdown2">
-          <router-link class="dropdown-item" to="/analyze/phenotypes">Phenotypes</router-link>
+          <router-link class="dropdown-item" to="/analyze/phenotypes">Analyze Phenotypes</router-link>
           <router-link class="dropdown-item" to="/annotate/text">Annotate Text</router-link>
-          <router-link class="dropdown-item" to="/page/exomes">Exomes</router-link>
+          <router-link to="/page/phenogrid"><i class="fa fa-braille fa-fw"></i> <span class="network-name">Phenogrid Widget</span></router-link>
         </div>
       </li>
       <li class="nav-item dropdown">
@@ -45,12 +45,11 @@
         </a>
         <div class="dropdown-menu" aria-labelledby="navbarDropdown3">
           <router-link class="dropdown-item" to="/page/about">About Monarch</router-link>
-          <router-link class="dropdown-item" to="/about/sources">Data Sources</router-link>
-          <router-link class="dropdown-item" to="/page/releases">Releases</router-link>
-          <router-link class="dropdown-item" to="/page/team">Monarch Team</router-link>
-          <router-link class="dropdown-item" to="/page/disclaimer">Monarch Disclaimer</router-link>
-          <router-link class="dropdown-item" to="/page/services">Monarch Web Services and APIs</router-link>
-          <a target="_blank" class="dropdown-item" href="https://archive.monarchinitiative.org/latest ">Data Downloads</a>
+          <router-link class="dropdown-item" to="/page/team">Team</router-link>
+          <router-link class="dropdown-item" to="/page/disclaimer">Disclaimer</router-link>
+          <router-link class="dropdown-item" to="/page/pubs">Publications</router-link>
+          <router-link class="dropdown-item" to="/page/links">Link To Us</router-link>
+          <a target="_blank" class="dropdown-item" href="https://github.com/monarch-initiative">GitHub Organization</a>
 
           <router-link class="dropdown-item" to="/disease/MONDO:0007947">
             Marfan syndrome MONDO:0007947
@@ -71,15 +70,13 @@
 
       <li class="nav-item dropdown">
         <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown4" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-          Documentation
+          Data
         </a>
         <div class="dropdown-menu" aria-labelledby="navbarDropdown4">
-          <router-link class="dropdown-item" to="/page/phenogrid">Monarch Phenotype Grid Widget</router-link>
-          <a target="_blank" class="dropdown-item" href="http://monarch-initiative.blogspot.com/2015/01/how-to-annotate-patients-phenotypic.html">Phenotype Curation Guidelines</a>
-          <a target="_blank" class="dropdown-item" href="https://github.com/monarch-initiative">GitHub Organization</a>
-          <a target="_blank" class="dropdown-item" href="https://github.com/obophenotype/upheno">Phenotype Ontologies Project</a>
-          <router-link class="dropdown-item" to="/page/pubs">Publications</router-link>
-          <router-link class="dropdown-item" to="/page/links">Link To Us</router-link>
+          <a target="_blank" class="dropdown-item" href="https://archive.monarchinitiative.org/latest ">Data Downloads</a>
+          <router-link class="dropdown-item" to="/page/releases">Releases</router-link>
+          <router-link class="dropdown-item" to="/page/services">Monarch Web Services and APIs</router-link>
+          <router-link class="dropdown-item" to="/about/sources">Data Sources</router-link>
         </div>
       </li>
     </ul>
