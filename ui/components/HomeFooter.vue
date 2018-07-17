@@ -34,6 +34,9 @@
           <router-link to="/page/about"><i class="fa fa-info fa-fw"></i>  <span class="network-name">About Monarch</span></router-link>
         </li>
         <li>
+          <router-link to="/page/team"><i class="fa fa-users fa-fw"></i> <span class="network-name">Team</span></router-link>
+        </li>
+        <li>
           <router-link to="/page/disclaimer"><i class="fa fa-file fa-fw"></i> <span class="network-name">Disclaimer</span></router-link>
         </li>
       </ul>
