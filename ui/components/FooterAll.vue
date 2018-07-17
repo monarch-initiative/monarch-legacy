@@ -1,14 +1,10 @@
 <template>
 <div class="footer-all">
   <div class="container"
-    <div class="row justify-content-center">
+    <div class="row">
       <div class="col-3">
-        <div class="media">
-          <img
-            class="img-fluid monarch-logo-all"
-            src="../assets/images/monarch-logo-black.png" 
-            alt="Monarch logo">
-        </div>
+        <i class="fa fa-creative-commons fa-fw"></i>
+        CC-BY 3.0, except where noted.
       </div>
       <div class="col-3">
         <a href="mailto:info@monarchinitiative.org">
@@ -38,11 +34,9 @@
 
 .footer-all{
   padding: 15px;
-  background: lightgrey;
   height: 60px;
   width: 100%;
   position: absolute;
-  bottom:0;
 }
 
 @media (max-width:$grid-float-breakpoint) {

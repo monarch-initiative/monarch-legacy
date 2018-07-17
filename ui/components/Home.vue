@@ -119,17 +119,26 @@
     <div class="row">
       <div class="col-sm">
         <router-link to="/analytics" class="btn btn-link" role="button">
-        <i class="fa fa-child fa-fw" style="color: #15556A; font-size: 2em;"></i></router-link>
+        <img style="max-height:35px;"
+          src="image/carousel-diseases.png" 
+          alt="disease">
+        </router-link>
         <span class="network-name"><br><b>218,313</b><br>Disease-Phenotype Associations</span>
       </div>
       <div class="col-sm">
         <router-link to="/analytics" class="btn btn-link" role="button">
-        <i class="fa fa-tint fa-fw" style="color: #15556A; font-size: 2em;"></i></router-link>
+        <img style="max-height:35px;"
+          src="image/carousel-genes.png" 
+          alt="disease">
+          </router-link>
         <span class="network-name"><br><b>793,526</b><br>Gene-Phenotype Associations</span>
       </div>
       <div class="col-sm">
         <router-link to="/analytics" class="btn btn-link" role="button">
-        <i class="fa fa-paw fa-fw" style="color: #15556A; font-size: 2em;"></i></router-link>
+        <img style="max-height:35px;"
+          src="image/carousel-models.png" 
+          alt="disease">
+          </router-link>
         <span class="network-name"><br><b>20,870</b><br>Model Associations</span>
       </div>
     </div>
@@ -431,7 +440,7 @@ export default {
     display: table;
     width: 100%;
     height: auto;
-    padding: 50px 0;
+    padding: 50px 0 0 0;
     text-align: center;
     color: white;
     background-color: $monarch-bg-color;
