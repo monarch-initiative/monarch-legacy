@@ -9,7 +9,7 @@ const biolink = window.serverConfiguration.biolink_url;
 // const scigraphData = globalServiceURLs[serviceEnvironment].SCIGRAPH_DATA;
 // const scigraphOntology = globalServiceURLs[serviceEnvironment].SCIGRAPH_ONTOLOGY;
 
-console.log('###biolink', serviceEnvironment, biolink);
+// console.log('###biolink', serviceEnvironment, biolink);
 
 
 // TIP: Example of a domain-specific (as opposed to a generic loadJSON)
@@ -46,6 +46,7 @@ export function getNodeSummary(nodeId, nodeType) {
 
   return returnedPromise;
 }
+
 
 export function getSearchTermSuggestions(term, selected) {
   const baseUrl = `${biolink}search/entity/autocomplete/`;

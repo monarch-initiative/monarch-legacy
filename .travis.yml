@@ -52,7 +52,7 @@ before_install:
 install:
   - "rm -rf node_modules/"
   - "./install.sh"
-  - "SERVICE_ENV=none BUILD_ENV=production npm run wbs-webpack-build-prod"
+  - "NODE_ENV=production npm run wbs-webpack-build-prod"
   - "ls -lhS dist/"
   - "sudo pip install selenium"
   - "sudo pip install --upgrade selenium"

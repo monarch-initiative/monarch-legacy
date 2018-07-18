@@ -278,9 +278,6 @@
       rowClickHandler(record, index, event){
         this.rowClicked = !this.rowClicked;
       },
-      facetRows(){
-        // this.rows = this.rows.filter(elem => this.trueFacets.includes(elem.taxonId));
-      },
       handleSubjectObjectInversion() {
         const invertedCalls = [
           {
@@ -379,9 +376,7 @@
           that.dataPacket = searchResponse;
           that.dataFetched = true;
           that.currentPage = 1;
-          that.$nextTick(function() {
-            that.populateRows();
-          });
+          that.populateRows();
         }
         catch (e) {
           that.dataError = e;
@@ -390,7 +385,7 @@
 
       },
       populateRows() {
-        this.rows.length = 0;
+        this.rows = [];
         let count = 0;
         this.dataPacket.data.associations.forEach((elem) => {
           count += 1;
@@ -419,27 +414,27 @@
             objectElem = elem.subject;
           }
           const taxon = this.parseTaxon(objectElem);
-          this.rows.push({
-            recordIndex: count,
-            references: pubs,
-            referencesLength: pubsLength,
-            annotationType: this.cardType,
-            evidence: evidence,
-            evidenceLength: evidenceLength,
-            objectCurie: objectElem.id,
-            sources: elem.provided_by,
-            sourcesLength: elem.provided_by.length,
-            assocObject: objectElem.label,
-            objectLink:`/${this.cardType}/${objectElem.id}`,
-            taxonLabel: taxon.label,
-            taxonId: taxon.id,
-            relationId: elem.relation.id,
-            relationLabel: elem.relation.label,
-          });
+
+          if (!taxon.id || this.trueFacets.includes(taxon.id)) {
+            this.rows.push({
+              recordIndex: count,
+              references: pubs,
+              referencesLength: pubsLength,
+              annotationType: this.cardType,
+              evidence: evidence,
+              evidenceLength: evidenceLength,
+              objectCurie: objectElem.id,
+              sources: elem.provided_by,
+              sourcesLength: elem.provided_by.length,
+              assocObject: objectElem.label,
+              objectLink:`/${this.cardType}/${objectElem.id}`,
+              taxonLabel: taxon.label,
+              taxonId: taxon.id,
+              relationId: elem.relation.id,
+              relationLabel: elem.relation.label,
+            });
+          }
         });
-        if (this.taxonFields.includes(this.cardType)) {
-          this.facetRows();
-        }
       },
       generateFields() {
         this.isGene = false;
