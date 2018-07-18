@@ -4,7 +4,6 @@
 const _ = require('underscore');
 
 function MonarchCarousel(carousel_elt, tabber_elt, next_id, prev_id) {
-
     var self = this;
 
     var celt = carousel_elt;

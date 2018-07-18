@@ -48,6 +48,8 @@ const LOCALHOST = process.env.LOCALHOST ? JSON.parse(process.env.LOCALHOST) : tr
 const ASSETS_LIMIT = typeof process.env.ASSETS_LIMIT !== 'undefined' ? parseInt(process.env.ASSETS_LIMIT, 10) : 5000;// limit bellow the assets will be inlines
 const hash = ''; // (NODE_ENV === 'production' && DEVTOOLS ? '-devtools' : '') + (NODE_ENV === 'production' ? '-[hash]' : '');
 const TEST = false;
+const NOPFN = path.join(__dirname, "js/nop.js");
+const NOPOBJECT = path.join(__dirname, "js/nop_object.js");
 
 const mode = NODE_ENV;
 
@@ -59,23 +61,6 @@ if (/^\w+/.test(DIST_DIR) === false || /\/$/.test(DIST_DIR) === true) { // @todo
 }
 
 log.info('webpack', `${NODE_ENV.toUpperCase()} mode`);
-if (NODE_ENV === 'development') {
-  plugins.push(
-    new webpack.DefinePlugin({
-      'global.serviceUrls': require('./config/dev.env')
-    })
-  );
-  log.info('webpack', 'config/dev.env.js loaded');
-}
-
-if (NODE_ENV === 'production') {
-  plugins.push(
-    new webpack.DefinePlugin({
-      'global.serviceUrls': require('./config/prod.env')
-    })
-  );
-  log.info('webpack', 'config/prod.env.js loaded');
-}
 if (USE_SPA) {
   log.info('webpack', 'USE_SPA active');
 }
@@ -359,26 +344,26 @@ const config = {
   resolve: {
     modules: ['node_modules'],
     alias: {
+      // 'bbop': (USE_SPA ? NOPOBJECT : path.join(__dirname, 'gen/bbop.min.js')),
       'bbop': path.join(__dirname, 'gen/bbop.min.js'),
+      'monarchSearchResults' : (USE_SPA ? NOPFN : path.join(__dirname, 'js/search_results.js')),
       'jquery': path.join(__dirname, 'node_modules/jquery/dist/jquery.min.js'),
       'jquery-ui': path.join(__dirname, 'node_modules/jquery-ui/'),
       'd3': path.join(__dirname, 'node_modules/d3/d3.min.js'),
-      'monarchNGMain': (USE_SPA ? '../ui/main.js' : path.join(__dirname, "js/nop.js")),
+      'monarchNGMain': (USE_SPA ? '../ui/main.js' : NOPFN),
       'monarchSCSS': (USE_SPA ? '../css/monarch-ng.scss' : '../css/monarch.scss'),
       'monarchHomeCSS': (USE_SPA ? '../css/empty.css' : '../css/monarch-home.css'),
       'bootstrap$': path.join(__dirname, 'node_modules/bootstrap/'),
       'bootstrapSCSS$': path.join(__dirname, 'node_modules/bootstrap/scss/bootstrap.scss'),
       'vue$': 'vue/dist/vue.min.js',  // 'vue/dist/vue.esm.js',
       'vue-good-table$': 'vue-good-table/dist/vue-good-table.min.js',
-      'ringo/httpclient': path.join(__dirname, "js/nop.js"),
+      'ringo/httpclient': NOPFN,
       'phenogrid': path.join(__dirname, 'gen/phenogrid.min.js'),
       // 'phenogrid': path.join(__dirname, 'node_modules/phenogrid/js/phenogrid.js')
       // 'phenogrid': path.join(__dirname, 'node_modules/phenogrid/dist/phenogrid-bundle.js')
     }
   }
 };
-
-
 
 if (USE_SPA) {
   // config.entry.spa = './ui/main.js';
@@ -392,15 +377,17 @@ if (MODE_DEV_SERVER) {
   config.devServer = {
     clientLogLevel: 'info', // 'warning',
     historyApiFallback: true,
+    noInfo: false,
     hot: true,
     inline: true,
     contentBase: false, // since we use CopyWebpackPlugin.
     compress: true,
     host: LOCALHOST ? 'localhost' : myLocalIp(),
-    open: false,
-    overlay: true,  // { warnings: false, errors: true },
+    open: true,
+    overlay: { warnings: !OPTIMIZE, errors: true },
     publicPath: '/',
-    quiet: true, // necessary for FriendlyErrorsPlugin
+    port: 8081,
+    quiet: false,
     watchOptions: {
       poll: false,
     },
@@ -408,8 +395,6 @@ if (MODE_DEV_SERVER) {
       "Access-Control-Allow-Origin": "http://localhost:8080",
       "Access-Control-Allow-Credentials": "true"
     }
-
-
 
     // clientLogLevel: 'warning',
     // host: LOCALHOST ? 'localhost' : myLocalIp(),
@@ -454,7 +439,10 @@ if (MODE_DEV_SERVER) {
     },
     '/node_modules/phenogrid/': {
       target: 'http://localhost:8080'
-    }
+    },
+    '/configuration/server.js': {
+      target: 'http://localhost:8080'
+    },
   };
 
   if (!USE_SPA) {

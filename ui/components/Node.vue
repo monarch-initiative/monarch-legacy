@@ -53,17 +53,30 @@
 
     <div
       v-else>
+      <div
+        class="node-label">
+        <span
+          class="node-label-label">
+          {{ nodeLabel }}
+        </span>
+        <a
+          :href="node.iri"
+          target="_blank"
+          class="node-label-id">
+          {{ node.id }}
+        </a>
+      </div>
 
-      <span><b>{{ nodeLabel }}</b> ({{ node.id }})</span>
-      <br>
-      <span><b>AKA:</b>&nbsp;</span>
-      <span
-        class="synonym"
-        v-for="s in synonyms"
-        :key="s"
-      >
-        {{ s }}
-      </span>
+      <div
+        class="node-synonyms">
+        <span
+          class="synonym"
+          v-for="s in synonyms"
+          :key="s"
+        >
+          {{ s }}
+        </span>
+      </div>
     </div>
   </div>
 
@@ -73,14 +86,15 @@
 
     <div
       v-if="!expandedCard && nodeDefinition"
-      class="node-content-section">
+      class="row node-content-section">
       <div class="col-12">
         <div class="node-description">
           {{ nodeDefinition }}
         </div>
       </div>
 
-      <div class="col-12">
+      <div
+        class="col-12 pt-2">
         <b>References:</b>&nbsp;
         <span
           v-for="r in xrefs"
@@ -108,7 +122,9 @@
             {{ r.label }}
           </span>
         </span>
-        <br>
+      </div>
+
+      <div class="col-12">
         <span
           v-if="inheritance">
           <b>Heritability:</b>&nbsp;{{ inheritance }}
@@ -132,40 +148,32 @@
             {{ r.label }}
           </span>
         </span>
-        <br>
-        <span
-          v-if="inheritance">
-          <b>Heritability:</b>&nbsp;{{ inheritance }}
-        </span>
       </div>
 
     </div>
 
     <div
       v-if="!expandedCard"
-      class="node-content-section">
-      <div
-        class="row">
-        <node-card
-          v-for="cardType in nonEmptyCards"
-          :key="cardType"
-          class="col-4"
-          :card-type="cardType"
-          :card-count="counts[cardType]"
-          :parent-node="node"
-          :parent-node-id="nodeId"
-          @expand-card="expandCard(cardType)">
-        </node-card>
-      </div>
+      class="row node-cards-section">
+      <node-card
+        v-for="cardType in nonEmptyCards"
+        :key="cardType"
+        :card-type="cardType"
+        :card-count="counts[cardType]"
+        :parent-node="node"
+        :parent-node-id="nodeId"
+        @expand-card="expandCard(cardType)">
+      </node-card>
     </div>
-    <div v-if="!expandedCard">
+    <div
+      v-if="!expandedCard && hasExacGene"
+      class="row">
       <exac-gene
         :node-id="nodeId"/>
     </div>
     <div
       v-if="expandedCard"
       class="expanded-card-view col-12">
-      <h3 class="text-center">{{ labels[expandedCard] }} Associations</h3>
       <assoc-table
               :facets="facetObject"
               :node-type="nodeCategory"
@@ -246,7 +254,6 @@ const labels = {
 
 
 export default {
-  name: 'home',
   created() {
     // console.log('created', this.nodeId);
   },
@@ -262,6 +269,7 @@ export default {
   mounted() {
     this.fetchData();
   },
+
   watch: {
     $route(to, _from) {
       // Only fetchData if the path is different.
@@ -357,6 +365,7 @@ export default {
       availableCards: availableCardTypes,
       nonEmptyCards: [],
       expandedCard: null,
+      hasExacGene: false,
       counts: {
         disease: 0,
         phenotype: 0,
@@ -392,11 +401,22 @@ export default {
 
   methods: {
     expandCard(cardType) {
+      this.$router.replace({ hash: cardType });
       this.expandedCard = cardType;
     },
 
     toggleNeighborhood() {
       this.isNeighborhood = !this.isNeighborhood;
+    },
+
+    generateDefinitionText(nodeType, node) {
+      let result = node.definitions ? node.definitions[0] : '???definitions???';
+
+      if (nodeType === 'gene') {
+        result = 'MYGENEFIXME';
+      }
+
+      return result;
     },
 
     // TIP/QUESTION: This applyResponse is called asynchronously via the function
@@ -408,7 +428,6 @@ export default {
     applyResponse(content) {
       var that = this;
       this.node = content;
-      // console.log('applyResponse', this.node);
 
       var equivalentClasses = [];
       var superclasses = [];
@@ -445,13 +464,14 @@ export default {
       this.synonyms = this.node.synonyms;
       this.xrefs = this.node.xrefs;
       this.inheritance = this.node.inheritance ? this.node.inheritance[0] : null;
-      this.nodeDefinition = this.node.definitions ? this.node.definitions[0] : '???definitions???';
+      this.nodeDefinition = this.generateDefinitionText(this.nodeType, this.node);
       this.nodeLabel = this.node.label;
       this.nodeCategory = this.node.categories ? this.node.categories[0].toLowerCase() : this.nodeType;
       this.nodeIcon = this.icons[this.nodeCategory];
       this.phenotypeIcon = this.icons.phenotype;
       this.geneIcon = this.icons.gene;
       this.modelIcon = this.icons.model;
+      this.hasExacGene = (this.nodeType === 'gene' || this.nodeType === 'variant');
 
       var nonEmptyCards = [];
       this.availableCards.forEach(cardType => {
@@ -469,6 +489,14 @@ export default {
       // this.counts.variant = this.node.variantNum;
       // this.counts.pathway = this.node.pathwayNum;
       // this.literature = this.node.literatureNum;
+
+      const hash = this.$router.currentRoute.hash;
+      if (hash.length > 1) {
+        const cardType = hash.slice(1);
+        this.$nextTick(_ => {
+          this.expandCard(cardType);
+        });
+      }
     },
 
 
@@ -541,7 +569,8 @@ $sidebar-content-width: 500px;
 $sidebar-width: 200px;
 $collapsed-sidebar-width: 55px;
 $sidebar-button-width: 32px;
-$title-bar-height: 70px;
+$title-bar-height: 80px;
+$line-height-compact: 1.3em;
 
 #sidebar a,
 #sidebar a:hover,
@@ -753,7 +782,6 @@ $title-bar-height: 70px;
 }
 
 
-
 .nav-sidebar-vertical li.list-group-item.active > a {
   background-color: #393f44;
   color: #fff;
@@ -775,7 +803,6 @@ $title-bar-height: 70px;
   padding: 0;
   height: 30px;
 }
-
 
 
 .nav-sidebar-vertical li.list-group-item.list-group-item-node {
@@ -825,16 +852,10 @@ $title-bar-height: 70px;
 }
 
 
-.node-container .node-title {
-  background: #4B4B4B;
-  color: white;
-}
-
 .node-container .node-description {
-  margin: 5px 0;
-  padding: 5px;
-  border:1px solid lightgray;
-  line-height: 1.15em;
+  margin: 0;
+  padding: 0;
+  line-height: $line-height-compact;
 }
 
 .wrapper {
@@ -865,7 +886,6 @@ div.panel.panel-default {
 }
 
 
-
 div.container-cards {
   width: unset;
   padding: 0;
@@ -873,8 +893,13 @@ div.container-cards {
 }
 
 div.container-cards .node-content-section {
-  margin: 0;
+  line-height: $line-height-compact;
 }
+
+div.container-cards .node-cards-section {
+  margin-top: 10px;
+}
+
 
 .title-bar {
   border-bottom:1px solid lightgray;
@@ -884,19 +909,43 @@ div.container-cards .node-content-section {
   max-height: $title-bar-height;
   overflow-y: auto;
   xfont-size: 1.0em;
-  line-height: 1.1em;
-  top: ($navbar-height + 6);
-  left: $sidebar-width;
-  right: 0;
-  padding: 5px 10px;
+  line-height: $line-height-compact;
+  top: ($navbar-height);
+  left: 0;
+  right: 222px;
+  padding: 5px;
+  padding-left: ($sidebar-width + 5);
+  margin: 0;
   z-index: 1;
 }
 
-.title-bar .synonym {
-  border:1px solid lightgray;
-  padding: 0 5px;
-  font-size: 0.9em;
+.title-bar .node-synonyms {
+  line-height: $line-height-compact;
 }
+
+.title-bar .synonym {
+  padding: 2px 10px 1px 2px;
+  font-size: 0.9em;
+  background: white;
+}
+
+.title-bar .node-label {
+  margin: 2px 5px 5px 2px;
+}
+
+.title-bar .node-label-label {
+  font-size: 1.8em;
+  font-weight: 500;
+}
+
+.title-bar .node-label-id {
+}
+
+.title-bar .node-label-iri {
+  border:1px solid gray;
+  padding:5px;
+}
+
 
 table.fake-table-view {
   border:1px solid black;
@@ -917,10 +966,6 @@ table.fake-table-view td
 }
 
 @media (max-width: $grid-float-breakpoint) {
-  .node-container {
-    margin-left: 0;
-  }
-
   .nav-sidebar-vertical {
     width: $collapsed-sidebar-width;
   }
@@ -934,8 +979,9 @@ table.fake-table-view td
   }
 
   .title-bar {
-    left: $collapsed-sidebar-width;
+    padding-left: ($collapsed-sidebar-width + 5);
   }
+
 }
 
 </style>

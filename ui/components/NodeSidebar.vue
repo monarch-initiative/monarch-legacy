@@ -52,7 +52,7 @@
           <span class="list-group-item-value">{{ $parent.labels[nodeType] }}</span>
         </a>
         <a
-          style="padding:0;height:0;width:100%;border:2px solid black;"
+          class="debug-link-to-alpha"
           target="_blank"
           :href="'http://alpha.monarchinitiative.org' + $route.path">
         </a>
@@ -327,10 +327,14 @@ $title-bar-height: 70px;
 
 .nav-sidebar-vertical .node-filter-section {
   padding: 0;
-  margin-top: 10px;
+  margin-top: 6px;
   height: 250px;
   overflow-y: scroll;
   color: white;
+}
+
+.nav-sidebar-vertical .node-filter-section h5 {
+  margin-left:10px;
 }
 
 .nav-sidebar-vertical li.list-group-item {
@@ -391,15 +395,22 @@ $title-bar-height: 70px;
 .nav-sidebar-vertical li.list-group-item.list-group-item-node {
 }
 
+.nav-sidebar-vertical li.list-group-item.list-group-item-node .debug-link-to-alpha {
+  padding:0;
+  height:0;
+  width:100%;
+  border:2px solid $monarch-bg-color;
+}
+
 .nav-sidebar-vertical li.list-group-item.list-group-item-node > a {
   text-transform: uppercase;
   vertical-align: bottom;
-  height: 30px;
+  height: 28px;
 }
 
 .nav-sidebar-vertical li.list-group-item.list-group-item-node img.entity-type-icon {
   margin: 0;
-  height: 28px;
+  height: 26px;
 }
 
 
@@ -440,6 +451,10 @@ $title-bar-height: 70px;
   }
 
   .nav-sidebar-vertical li.list-group-item > a .list-group-item-value {
+    display: none;
+  }
+
+  .nav-sidebar-vertical li.node-filter-section {
     display: none;
   }
 }

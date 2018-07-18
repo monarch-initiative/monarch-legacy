@@ -1,15 +1,11 @@
 <template>
   <div>
-    <div v-if="dataFetched">
-      <span>
-        <i>
-          <small>
-            <strong>{{rows.length}}</strong>
-            <strong>{{nodeType}}</strong> to
-            <strong>{{cardType}}</strong> associations found
-          </small>
-        </i>
-      </span>
+    <div v-show="dataFetched">
+      <h5>
+        <strong>{{ rows.length }}</strong>
+        <strong>{{ nodeType }}</strong> to
+        <strong>{{ cardType }}</strong> associations
+      </h5>
       <b-table
         :items="rows"
         :fields="fields"
@@ -152,7 +148,7 @@
         </b-pagination>
       </div>
     </div>
-    <div v-else-if="dataError">
+    <div v-show="dataError">
       <h3>BioLink Error</h3>
       <div class="row">
         <div class="col-xs-12 pre-scrollable">
@@ -164,7 +160,7 @@
         </div>
       </div>
     </div>
-    <div v-else>
+    <div v-show="!dataFetched && !dataError">
       <h1>Loading ...</h1>
     </div>
   </div>
@@ -282,9 +278,6 @@
       rowClickHandler(record, index, event){
         this.rowClicked = !this.rowClicked;
       },
-      facetRows(){
-        this.rows = this.rows.filter(elem => this.trueFacets.includes(elem.taxonId));
-      },
       handleSubjectObjectInversion() {
         const invertedCalls = [
           {
@@ -382,6 +375,8 @@
           }
           that.dataPacket = searchResponse;
           that.dataFetched = true;
+          that.currentPage = 1;
+          that.populateRows();
         }
         catch (e) {
           that.dataError = e;
@@ -419,27 +414,27 @@
             objectElem = elem.subject;
           }
           const taxon = this.parseTaxon(objectElem);
-          this.rows.push({
-            recordIndex: count,
-            references: pubs,
-            referencesLength: pubsLength,
-            annotationType: this.cardType,
-            evidence: evidence,
-            evidenceLength: evidenceLength,
-            objectCurie: objectElem.id,
-            sources: elem.provided_by,
-            sourcesLength: elem.provided_by.length,
-            assocObject: objectElem.label,
-            objectLink:`/${this.cardType}/${objectElem.id}`,
-            taxonLabel: taxon.label,
-            taxonId: taxon.id,
-            relationId: elem.relation.id,
-            relationLabel: elem.relation.label,
-          });
+
+          if (!taxon.id || this.trueFacets.includes(taxon.id)) {
+            this.rows.push({
+              recordIndex: count,
+              references: pubs,
+              referencesLength: pubsLength,
+              annotationType: this.cardType,
+              evidence: evidence,
+              evidenceLength: evidenceLength,
+              objectCurie: objectElem.id,
+              sources: elem.provided_by,
+              sourcesLength: elem.provided_by.length,
+              assocObject: objectElem.label,
+              objectLink:`/${this.cardType}/${objectElem.id}`,
+              taxonLabel: taxon.label,
+              taxonId: taxon.id,
+              relationId: elem.relation.id,
+              relationLabel: elem.relation.label,
+            });
+          }
         });
-        if (this.taxonFields.includes(this.cardType)) {
-          this.facetRows();
-        }
       },
       generateFields() {
         this.isGene = false;
@@ -545,11 +540,11 @@
         this.handleSubjectObjectInversion();
         this.fetchData();
       },
-      dataPacket() {
-        if (this.dataPacket) {
-          this.populateRows();
-        }
-      },
+      // dataPacket() {
+      //   if (this.dataPacket) {
+      //     this.populateRows();
+      //   }
+      // },
       facets: {
         handler() {
           this.currentPage = 1;

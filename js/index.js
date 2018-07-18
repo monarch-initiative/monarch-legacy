@@ -1,6 +1,5 @@
 /* global window */
 
-
 var jq = require('jquery');
 window.jQuery = jq;
 window.$ = jq;
@@ -42,10 +41,15 @@ else {
   bbop.monarch = {
     widget: {}
   };
+  if (!bbop.widget) {
+    bbop.widget = {};
+  }
+  if (!bbop.golr) {
+    bbop.golr = {};
+  }
 }
 
-
-import {InitSearchResults} from './search_results.js';
+import {InitSearchResults} from 'monarchSearchResults';
 window.InitSearchResults = InitSearchResults;
 
 import {InitMonarchBBOPHandler} from './lib/monarch/handler';
