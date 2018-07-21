@@ -1,15 +1,13 @@
 import axios from 'axios';
 import * as JSONAccess from './JSONAccess';
+import * as TaxonTable from './TaxonTable';
 
 // Re-export stuff from JSONAccess into the MonarchAccess namespace
 export const { loadJSONXHR, loadJSONAxios } = JSONAccess;
 
 const serviceEnvironment = window.serverConfigurationName;
 const biolink = window.serverConfiguration.biolink_url;
-// const scigraphData = globalServiceURLs[serviceEnvironment].SCIGRAPH_DATA;
-// const scigraphOntology = globalServiceURLs[serviceEnvironment].SCIGRAPH_ONTOLOGY;
-
-// console.log('###biolink', serviceEnvironment, biolink);
+const taxonTable = TaxonTable.TaxonTable;
 
 
 // TIP: Example of a domain-specific (as opposed to a generic loadJSON)
@@ -23,28 +21,40 @@ const biolink = window.serverConfiguration.biolink_url;
 // to be.
 //
 
+
 export function getNodeSummary(nodeId, nodeType) {
-  const url = `/node/${nodeType}/${nodeId}.json`;
+  console.log('node summary', taxonTable);
+  if (nodeType === 'taxon') {
+    const taxonInfo = taxonTable[nodeId];
+    if (taxonInfo) {
+      console.log('taxon-info', taxonInfo);
+      // this should return a promise
+      return taxonInfo;
+    }
+  }
+  else {
+    const url = `/node/${nodeType}/${nodeId}.json`;
 
-  const returnedPromise = new Promise((resolve, reject) => {
-    axios.get(url)
-      .then(resp => {
-        const responseData = resp.data;
-        // const { responseURL } = resp.request;
-        // console.log('...getNodeSummary', resp, responseData, responseURL);
-        if (typeof responseData !== 'object') {
-          reject(responseData);
-        }
-        else {
-          resolve(responseData);
-        }
-      })
-      .catch(err => {
-        reject(err);
-      });
-  });
+    const returnedPromise = new Promise((resolve, reject) => {
+      axios.get(url)
+        .then(resp => {
+          const responseData = resp.data;
+          // const { responseURL } = resp.request;
+          // console.log('...getNodeSummary', resp, responseData, responseURL);
+          if (typeof responseData !== 'object') {
+            reject(responseData);
+          }
+          else {
+            resolve(responseData);
+          }
+        })
+        .catch(err => {
+          reject(err);
+        });
+    });
 
-  return returnedPromise;
+    return returnedPromise;
+  };
 }
 
 

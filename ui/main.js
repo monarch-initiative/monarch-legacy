@@ -142,6 +142,7 @@ const main = () => {
     'ortholog-disease',
     'pathway',
     'phenotype',
+    'taxon',
     'variant',
   ];
 
