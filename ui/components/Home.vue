@@ -8,23 +8,26 @@
     <div class="intro-body">
       <div class="container">
         <div class="row">
-          <div class="col-md-8 offset-md-2">
-
-            <h1 class="brand-heading">
+          <div class="col-md-12">
+            <div class="brand-heading m-0 p-0">
               <img
                 class="center-block text-center img-fluid"
-                style="max-height:150px;"
+                style="max-height:80px;"
                 src="../assets/images/monarch-logo-white-stacked.png"/>
-            </h1>
-
+            </div>
+          </div>
+          <div
+            class="col-md-12 py-2">
             <p class="intro-text">
               Advancing translational science by semantically integrating biological information across species.
             </p>
+          </div>
+          <div class="col-12">
             <monarch-autocomplete homeSearch="true">
             </monarch-autocomplete>
-
           </div>
         </div>
+
       </div>
     </div>
   </header>
@@ -356,7 +359,8 @@ export default {
     display: table;
     width: 100%;
     height: auto;
-    padding: 50px 0;
+    margin: $navbar-height - 1 0 0 0;
+    padding: 20px 0;
     text-align: center;
     color: white;
     background-color: $monarch-bg-color;
@@ -369,6 +373,7 @@ export default {
         padding: 20px 0 20px 0;
       }
       .intro-text {
+        margin: 5px;
         font-size: 18px;
       }
     }
@@ -376,7 +381,8 @@ export default {
     @media(min-width:$grid-float-breakpoint) {
       .intro-body {
         .intro-text {
-          font-size: 26px;
+          font-size: 22px;
+          line-height: 1.2em;
         }
       }
 
