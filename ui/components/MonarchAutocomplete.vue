@@ -1,59 +1,60 @@
 <template>
   <div
     class="autocomplete autorootdiv"
-    v-bind:class="{
-    'home-search':homeSearch,
-    'open':open
+    :class="{
+      'home-search':homeSearch,
+      'open':open
     }"
   >
+
     <div
-      v-if="homeSearch && !singleCategory"
-      class="form-group"
+      v-if="homeSearch"
+      class="p-0 m-0">
+      <hr>
+      <button
+        v-for="(example, index) in exampleSearches"
+        class="btn btn-outline-light m-1 py-0"
+        role="button"
+        @click="useExample(example.searchString, example.category)">
+        {{ example.searchString }}
+        <em v-if="example.category">
+          {{ example.category }}
+        </em>
+      </button>
+    </div>
+
+
+    <div
+      class="input-group"
+      :class="{'input-group-sm': !homeSearch}"
     >
       <div
-        class="form-group"
-        label="Button style checkboxes">
-        <b-form-checkbox-group
-          buttons
-          button-variant="dark"
-          v-model="selected"
-          name="butons1"
-          size="sm"
-          :options="options"
-          v-b-tooltip.left
-          title="Select a single category or set of categories to search on"
-        >
-        </b-form-checkbox-group>
-      </div>
-    </div>
-    <div class="input-group input-group-sm">
-      <div v-if="!homeSearch && !singleCategory" class="input-group-prepend">
+        v-if="!homeSearch && !singleCategory"
+        class="input-group-prepend">
         <button
           class="btn btn-secondary dropdown-toggle"
           type="button"
           v-on:click="catDropDown = !catDropDown"
         >
-          Categories
+          Filters
         </button>
         <div
           v-if="catDropDown"
           class="dropdown-menu list-group dropCatList px-4"
         >
-          <div>
-            <div class="form-group">
-              <b-form-checkbox-group
-                plain
-                stacked
-                v-model="selected"
-                :options="options">
-              </b-form-checkbox-group>
-            </div>
+          <div class="form-group">
+            <b-form-checkbox-group
+              plain
+              stacked
+              v-model="selected"
+              :options="options">
+            </b-form-checkbox-group>
           </div>
         </div>
       </div>
       <input
-        v-bind:class="{'loading': loading}"
-        class="form-control form-control-sm"
+        :class="{'loading': loading}"
+        class="form-control xform-control-sm"
         type="text"
         v-model="value"
         v-on:input="debounceInput"
@@ -61,9 +62,32 @@
         @keydown.down="down"
         @keydown.up="up"
         @keydown.esc="clearSearch"
-        placeholder="Search..."
+        placeholder="Search for phenotypes, diseases, genes..."
       >
     </div>
+
+    <div
+      v-if="homeSearch"
+      class="form-group form-group-sm p-1 m-0"
+      label="Button style checkboxes">
+      <label
+        for="categoryChoices">
+        Categories&nbsp;&nbsp;
+      </label>
+
+      <b-form-checkbox-group
+        buttons
+        button-variant="dark"
+        v-model="selected"
+        name="categoryChoices"
+        size="sm"
+        :options="options"
+        v-b-tooltip.topright
+        title="Select a single category or set of categories to search on"
+      >
+      </b-form-checkbox-group>
+    </div>
+
     <div
       v-if="open"
       class="dropdown-menu list-group dropList px-4"
@@ -72,7 +96,7 @@
         v-for="(suggestion, index) in suggestions"
         :key="index"
         @click="suggestionClick(index)"
-        v-bind:class="{'active': isActive(index)}"
+        :class="{'active': isActive(index)}"
         v-on:mouseover="mouseOver(index)"
         class="border-bottom px-1"
       >
@@ -117,6 +141,7 @@
         </div>
       </div>
     </div>
+
   </div>
 </template>
 
@@ -124,6 +149,27 @@
 import * as MA from '../../js/MonarchAccess';
 const debounce = require('lodash/debounce');
 
+const exampleSearches = [
+  {
+    searchString: 'Marfan Syndrome',
+  },
+  {
+    searchString: 'Marfan Syndrome',
+    category: 'disease'
+  },
+  {
+    searchString: 'Spinocerebellar Ataxia 2',
+    category: 'disease'
+  },
+  {
+    searchString: 'Multicystic kidney dysplasia',
+    category: 'phenotype'
+  },
+  {
+    searchString: 'Shh',
+    category: 'gene'
+  },
+];
 export default {
   name: 'AutoComplete',
   props: {
@@ -141,6 +187,7 @@ export default {
   data() {
     return {
       selected: [],
+      exampleSearches: exampleSearches,
       options: [
         { text: 'Gene', value: 'gene' },
         { text: 'Genotype', value: 'genotype' },
@@ -173,7 +220,8 @@ export default {
       }, 500, {leading: false, trailing: true}),
     async fetchData() {
       try {
-        let searchResponse = await MA.getSearchTermSuggestions(this.value, this.selected);
+        const selected = this.selected;
+        let searchResponse = await MA.getSearchTermSuggestions(this.value, selected);
         searchResponse.docs.forEach(elem => {
           const resultPacket = {
             match: elem.match,
@@ -261,6 +309,14 @@ export default {
         return taxon;
       }
     },
+    useExample(searchString, category) {
+      this.selected = [];
+      if (category) {
+        this.selected.push(category);
+      }
+
+      this.value = searchString;
+    }
   },
   watch: {
     value: function () {
@@ -269,17 +325,20 @@ export default {
         this.open = false;
       }
     },
-    selected: function () {
-      if (!this.singleCategory){
+    selected: function(newValue) {
+      if (!this.singleCategory) {
         this.suggestions = [];
-        this.fetchData();
+        if (this.value.length > 0) {
+          this.fetchData();
+        }
       }
     },
   },
 };
 </script>
 
-<style scoped>
+<style lang="scss">
+@import "../../css/_prelude-ng.scss";
   .text-align-right {
     text-align: right;
   }
@@ -328,5 +387,11 @@ export default {
 
   .autorootdiv.home-search .input-group.input-group-sm {
     width: unset;
+  }
+
+  #monarch-home-container .btn-group-toggle.btn-group.btn-group-sm {
+    label.active {
+      text-decoration: underline;
+    }
   }
 </style>

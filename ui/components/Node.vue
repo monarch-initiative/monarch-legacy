@@ -476,8 +476,8 @@ export default {
       var nonEmptyCards = [];
       this.availableCards.forEach(cardType => {
         const count = that.node[cardType + 'Num'];
-        that.counts[cardType] = count;
-        if (count > 0) {
+        that.counts[cardType] = count ? count.totalCount : 0;
+        if (that.counts[cardType] > 0) {
           nonEmptyCards.push(cardType);
         }
       });
@@ -542,8 +542,7 @@ export default {
 
       try {
         let nodeResponse = await MA.getNodeSummary(this.nodeId, this.nodeType);
-        // console.log('nodeResponse', nodeResponse);
-        // TIP: We got a result, apply it to the Vue model
+
         that.applyResponse(nodeResponse);
         that.clearProgress();
       }

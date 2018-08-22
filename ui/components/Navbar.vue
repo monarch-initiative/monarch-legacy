@@ -1,7 +1,7 @@
 <template>
 <nav
   id="monarchng-navbar"
-  class="navbar fixed-top navbar-expand-lg navbar-dark bg-dark">
+  class="navbar fixed-top navbar-expand-monarch navbar-dark bg-dark">
 
   <router-link to="/" class="navbar-brand">
     <img class="branding-logo"

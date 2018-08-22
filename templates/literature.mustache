@@ -4,15 +4,14 @@
   <div class="container-fluid monarch-container">
 
     <div class="content">
-           <div class="jumbotron">
+           <div class="card bg-light pt-3 px-3 m-0">
                 <div id="description">
                     {{#alerts}}
                     <div class="alert alert-warning alert-block top-alert">
                         {{{.}}}
                     </div>
                     {{/alerts}}
-                    <img id="monarch-logo" class="downloadline" src="/image/logo.png"/>
-                    <h1 class="downloadline">{{publicationTitle}}</h1>
+                    <h4 class="downloadline">{{publicationTitle}}</h4>
                     <p>
                         <b>Authors</b>: {{{authorSpan}}}</br>
                         <b>Journal</b>: {{journal}} ({{year}})
