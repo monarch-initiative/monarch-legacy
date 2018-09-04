@@ -327,3 +327,14 @@ Please feel free to pose any questions or concerns to info@monarchinitiative.org
 
 
 ![in action](https://github.com/monarch-initiative/dipper/blob/master/docs/curies-and-uris-in-action.png)
+
+
+## Using the VueJS API
+
+Run: 
+
+    ./install.sh
+    USE_SPA=1 npm run dev
+
+
+
