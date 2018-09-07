@@ -53,6 +53,10 @@ const NOPOBJECT = path.join(__dirname, "js/nop_object.js");
 
 const mode = NODE_ENV;
 
+const monarchAccess = path.join(__dirname, 'ui/monarchAccess/index.js');
+const monarchNGPrelude = path.join(__dirname, 'ui/style/_prelude-ng.scss');
+const monarchRelations = path.join(__dirname, 'ui/data/relations.json');
+
 /** integrity checks */
 
 if (/^\w+/.test(DIST_DIR) === false || /\/$/.test(DIST_DIR) === true) { // @todo make a better regexp that accept valid unicode leading chars
@@ -346,12 +350,15 @@ const config = {
     alias: {
       // 'bbop': (USE_SPA ? NOPOBJECT : path.join(__dirname, 'gen/bbop.min.js')),
       'bbop': path.join(__dirname, 'gen/bbop.min.js'),
-      'monarchSearchResults' : (USE_SPA ? NOPFN : path.join(__dirname, 'js/search_results.js')),
+      'monarchSearchResults' : path.join(__dirname, 'js/search_results.js'),  // (USE_SPA ? NOPFN : path.join(__dirname, 'js/search_results.js')),
       'jquery': path.join(__dirname, 'node_modules/jquery/dist/jquery.min.js'),
       'jquery-ui': path.join(__dirname, 'node_modules/jquery-ui/'),
       'd3': path.join(__dirname, 'node_modules/d3/d3.min.js'),
       'monarchNGMain': (USE_SPA ? '../ui/main.js' : NOPFN),
-      'monarchSCSS': (USE_SPA ? '../css/monarch-ng.scss' : '../css/monarch.scss'),
+      'monarchSCSS': (USE_SPA ? '../ui/style/monarch-ng.scss' : '../css/monarch.scss'),
+      'monarchAccess': monarchAccess,
+      'monarchNGPrelude': monarchNGPrelude,
+      'monarchRelations': monarchRelations,
       'monarchHomeCSS': (USE_SPA ? '../css/empty.css' : '../css/monarch-home.css'),
       'bootstrap$': path.join(__dirname, 'node_modules/bootstrap/'),
       'bootstrapSCSS$': path.join(__dirname, 'node_modules/bootstrap/scss/bootstrap.scss'),

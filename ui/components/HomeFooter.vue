@@ -64,7 +64,7 @@
 </script>
 
 <style lang="scss">
-@import "../../css/_prelude-ng.scss";
+@import "monarchNGPrelude";
 .home-footer {
   margin: 0px 15px;
   padding: 15px 0px;

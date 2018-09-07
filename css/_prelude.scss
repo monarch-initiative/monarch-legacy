@@ -1,12 +1,17 @@
 $navbar-height: 32px !default;
-$grid-float-breakpoint: 700px;
+$grid-float-breakpoint: 870px;
 
 $enable-gradients: 					true !default;
 $navbar-padding-y: 					0 !default;
 $nav-link-padding-y: 				0 !default;
 $nav-link-padding-x: 				0 !default;
 $font-size-base:              		0.875rem !default;
-$enable-grid-classes: true !default;
 
-// $font-path: "~bootstrap-sass/assets/fonts/" !default;
-// $icon-font-path: "~bootstrap-sass/assets/fonts/bootstrap/" !default;
+$grid-breakpoints: (
+  xs: 0,
+  sm: 576px,
+  md: 768px,
+  monarch: $grid-float-breakpoint,
+  lg: 992px,
+  xl: 1200px
+) !default;

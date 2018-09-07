@@ -32,7 +32,7 @@
     "wbs-generate-dist-readme": "node wpbin/generate-dist-readme.js",
     "wbs-contributing-install": "./wpcontributing/bin/contributing-install.sh",
     "wbs-contributing-test": "./wpcontributing/bin/contributing-test.sh",
-    "lint": "eslint --ext .js,.vue ui js/MonarchAccess/"
+    "lint": "eslint --ext .js,.vue ui"
   },
   "keywords": [
     "Monarch Initiative"
@@ -84,6 +84,7 @@
     "html-webpack-plugin": "^3.2.0",
     "imports-loader": "^0.8.0",
     "is-my-json-valid": "^2.17.2",
+    "json-loader": "^0.5.7",
     "less-loader": "^4.1.0",
     "lodash.template": "^4.4.0",
     "mocha": "^5.1.1",

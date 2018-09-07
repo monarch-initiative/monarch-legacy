@@ -310,7 +310,7 @@ export default {
 
 
 <style lang="scss">
-  @import "../../css/_prelude-ng.scss";
+  @import "monarchNGPrelude";
   $home-primary: pink;  // #42DCA3;
 
 

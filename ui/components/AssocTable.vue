@@ -167,7 +167,7 @@
 </template>
 
 <script>
-import * as MA from '../../js/MonarchAccess';
+import * as MA from 'monarchAccess';
 export default {
   data() {
     return {
@@ -224,7 +224,6 @@ export default {
   },
   mounted() {
     this.generateFields();
-    this.handleSubjectObjectInversion();
     // this.fetchData();
   },
   methods: {
@@ -286,89 +285,15 @@ export default {
       };
       return keyMappings[key];
     },
+
     rowClickHandler(record, index, event) {
       this.rowClicked = !this.rowClicked;
-    },
-    handleSubjectObjectInversion() {
-      const invertedCalls = [
-        {
-          'object': 'genotype',
-          'subject': 'gene',
-        },
-        {
-          'object': 'literature',
-          'subject': 'gene',
-        },
-        {
-          'object': 'model',
-          'subject': 'gene',
-        },
-        {
-          'object': 'variant',
-          'subject': 'gene',
-        },
-        {
-          'object': 'gene',
-          'subject': 'disease',
-        },
-        {
-          'object': 'model',
-          'subject': 'disease',
-        },
-        {
-          'object': 'genotype',
-          'subject': 'disease',
-        },
-        {
-          'object': 'literature',
-          'subject': 'disease',
-        },
-        {
-          'object': 'variant',
-          'subject': 'disease',
-        },
-        {
-          'object': 'disease',
-          'subject': 'phenotype',
-        },
-        {
-          'object': 'gene',
-          'subject': 'phenotype',
-        },
-        {
-          'object': 'genotype',
-          'subject': 'phenotype',
-        },
-        {
-          'object': 'literature',
-          'subject': 'phenotype',
-        },
-        {
-          'object': 'variant',
-          'subject': 'phenotype',
-        },
-        {
-          'object': 'gene',
-          'subject': 'goterm',
-        },
-        {
-          'object': 'literature',
-          'subject': 'model',
-        },
-      ];
-      this.inverted = false;
-      invertedCalls.forEach((elem) => {
-        if (this.nodeType === elem.subject && this.cardType === elem.object) {
-          this.inverted = true;
-        }
-      })
     },
 
     async fetchData() {
       const that = this;
       // console.log('####fetchData');
       try {
-        const biolinkAnnotationSuffix = this.getBiolinkAnnotation(this.cardType);
         const params= {
           fetch_objects: true,
           start: ((this.currentPage - 1) * this.rowsPerPage),
@@ -377,7 +302,7 @@ export default {
         let searchResponse = await MA.getNodeAssociations(
           this.nodeType,
           this.identifier,
-          biolinkAnnotationSuffix,
+          this.cardType,
           params
         );
         if (!searchResponse.data ||
@@ -547,7 +472,6 @@ export default {
       this.dataFetched = false;
       this.dataError = false;
       this.generateFields();
-      this.handleSubjectObjectInversion();
 
       this.$refs.tableRef.refresh();
       // this.fetchData();
