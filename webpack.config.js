@@ -55,7 +55,6 @@ const mode = NODE_ENV;
 
 const monarchAccess = path.join(__dirname, 'ui/monarchAccess/index.js');
 const monarchNGPrelude = path.join(__dirname, 'ui/style/_prelude-ng.scss');
-const monarchRelations = path.join(__dirname, 'ui/data/relations.json');
 
 /** integrity checks */
 
@@ -358,7 +357,6 @@ const config = {
       'monarchSCSS': (USE_SPA ? '../ui/style/monarch-ng.scss' : '../css/monarch.scss'),
       'monarchAccess': monarchAccess,
       'monarchNGPrelude': monarchNGPrelude,
-      'monarchRelations': monarchRelations,
       'monarchHomeCSS': (USE_SPA ? '../css/empty.css' : '../css/monarch-home.css'),
       'bootstrap$': path.join(__dirname, 'node_modules/bootstrap/'),
       'bootstrapSCSS$': path.join(__dirname, 'node_modules/bootstrap/scss/bootstrap.scss'),

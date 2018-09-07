@@ -1,13 +1,6 @@
 import _ from 'underscore';
 import axios from 'axios';
 import * as JSONAccess from './JSONAccess';
-import monarchRelations from 'monarchRelations';
-
-const monarchRelationsNameToId = monarchRelations;
-const monarchRelationsIdToName = _.invert(monarchRelationsNameToId);
-
-// console.log('monarchRelationsNameToId', monarchRelationsNameToId);
-// console.log('monarchRelationsIdToName', monarchRelationsIdToName);
 
 // Re-export stuff from JSONAccess into the MonarchAccess namespace
 export const { loadJSONXHR, loadJSONAxios } = JSONAccess;
