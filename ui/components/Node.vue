@@ -74,7 +74,7 @@
           v-for="s in synonyms"
           :key="s"
         >
-          {{ s }}
+          {{ s.val }}
         </span>
       </div>
     </div>
@@ -83,6 +83,14 @@
   <div
     v-if="node"
     class="container-fluid node-container">
+
+    <div
+      v-if="nodeDebug"
+      class="row node-content-section">
+      <div class="col-12">
+        <pre>{{ nodeDebug }}</pre>
+      </div>
+    </div>
 
     <div
       v-if="!expandedCard && nodeDefinition"
@@ -195,7 +203,7 @@
 <script>
 
 import _ from 'underscore';
-import * as MA from '../../js/MonarchAccess';
+import * as MA from 'monarchAccess';
 
 
 const availableCardTypes = [
@@ -358,6 +366,7 @@ export default {
       icons: icons,
       labels: labels,
       nodeId: null,
+      nodeDebug: null,
       nodeDefinition: null,
       nodeLabel: null,
       nodeIcon: null,
@@ -410,7 +419,7 @@ export default {
     },
 
     generateDefinitionText(nodeType, node) {
-      let result = node.definitions ? node.definitions[0] : '???definitions???';
+      let result = node.description;
 
       if (nodeType === 'gene') {
         result = 'MYGENEFIXME';
@@ -426,69 +435,88 @@ export default {
     // not updating or having undefined values.
     //
     applyResponse(content) {
-      var that = this;
+      // console.log('applyResponse', content);
+      const that = this;
       this.node = content;
+      // this.nodeDebug = JSON.stringify(content, null, 2);
+      const equivalentClasses = [];
+      const superclasses = [];
+      const subclasses = [];
 
-      var equivalentClasses = [];
-      var superclasses = [];
-      var subclasses = [];
-      if (this.node.relationships) {
-        this.node.relationships.forEach(relationship => {
-          if (relationship.property.id === 'subClassOf') {
-            if (relationship.subject.id === this.nodeId) {
-              superclasses.push(relationship.object);
+      const nodeLabelMap = {};
+      if (this.node.nodes) {
+        this.node.nodes.forEach(node => {
+          nodeLabelMap[node.id] = node.lbl;
+        });
+      }
+      if (this.node.edges) {
+        this.node.edges.forEach(edge => {
+          if (edge.pred === 'subClassOf') {
+            if (edge.sub === this.nodeId) {
+              // console.log('Superclass Edge', edge.sub, edge.pred, edge.obj);
+              superclasses.push(edge.obj);
             }
-            else if (relationship.object.id === this.nodeId) {
-              subclasses.push(relationship.subject);
+            else if (edge.obj === this.nodeId) {
+              // console.log('Subclass Edge', edge.sub, edge.pred, edge.obj);
+              subclasses.push(edge.sub);
             }
             else {
-              console.log('applyResponse ERROR', relationship);
+              // console.log('BAD', edge.sub, edge.pred, edge.obj);
             }
           }
-          else if (relationship.property.id === 'equivalentClass') {
-            equivalentClasses.push(relationship.subject);
+          else if (edge.pred === 'equivalentClass') {
+            // console.log('Equiv Edge', edge.sub, edge.pred, edge.obj);
+            equivalentClasses.push(edge.sub);
           }
         });
       }
 
-      this.superclasses = _.uniq(superclasses, function(item, key, list) {
-        return JSON.stringify(item);
+      this.superclasses = _.map(_.uniq(superclasses), c => {
+        return {
+          id: c,
+          label: nodeLabelMap[c]
+        };
       });
-      this.subclasses = _.uniq(subclasses, function(item, key, list) {
-        return JSON.stringify(item);
+      this.subclasses = _.map(_.uniq(subclasses), c => {
+        return {
+          id: c,
+          label: nodeLabelMap[c]
+        };
       });
-      this.equivalentClasses = _.uniq(equivalentClasses, function(item, key, list) {
-        return JSON.stringify(item);
+      this.equivalentClasses = _.map(_.uniq(equivalentClasses), c => {
+        return {
+          id: c,
+          label: nodeLabelMap[c]
+        };
       });
+      // console.log('superclasses', this.superclasses);
+      // console.log('subclasses', this.subclasses);
+      // console.log('equivalentClasses', this.equivalentClasses);
+
 
       this.synonyms = this.node.synonyms;
       this.xrefs = this.node.xrefs;
       this.inheritance = this.node.inheritance ? this.node.inheritance[0] : null;
       this.nodeDefinition = this.generateDefinitionText(this.nodeType, this.node);
       this.nodeLabel = this.node.label;
-      this.nodeCategory = this.node.categories ? this.node.categories[0].toLowerCase() : this.nodeType;
+      this.nodeCategory = this.node.categories ?
+        this.node.categories[0].toLowerCase() :
+        this.nodeType;
       this.nodeIcon = this.icons[this.nodeCategory];
       this.phenotypeIcon = this.icons.phenotype;
       this.geneIcon = this.icons.gene;
       this.modelIcon = this.icons.model;
       this.hasExacGene = (this.nodeType === 'gene' || this.nodeType === 'variant');
 
-      var nonEmptyCards = [];
+      const nonEmptyCards = [];
       this.availableCards.forEach(cardType => {
-        const count = that.node[cardType + 'Num'];
+        const count = that.node.counts[cardType];
         that.counts[cardType] = count ? count.totalCount : 0;
         if (that.counts[cardType] > 0) {
           nonEmptyCards.push(cardType);
         }
       });
       this.nonEmptyCards = nonEmptyCards;
-      // this.counts.phenotype = this.node.phenotypeNum;
-      // this.counts.gene = this.node.geneNum;
-      // this.counts.genotype = this.node.genotypeNum;
-      // this.counts.model = this.node.modelNum;
-      // this.counts.variant = this.node.variantNum;
-      // this.counts.pathway = this.node.pathwayNum;
-      // this.literature = this.node.literatureNum;
 
       const hash = this.$router.currentRoute.hash;
       if (hash.length > 1) {
@@ -562,7 +590,7 @@ export default {
 </script>
 
 <style lang="scss">
-@import "../../css/_prelude-ng.scss";
+@import "monarchNGPrelude";
 
 $sidebar-content-width: 500px;
 $sidebar-width: 200px;

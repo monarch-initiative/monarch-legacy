@@ -161,7 +161,7 @@ export default {
 </script>
 
 <style lang="scss">
-@import "../../css/_prelude-ng.scss";
+@import "monarchNGPrelude";
 
 $sidebar-content-width: 500px;
 $sidebar-width: 200px;
@@ -406,7 +406,12 @@ $title-bar-height: 70px;
   height:0;
   width:100%;
   border:2px solid $monarch-bg-color;
+
+  &:hover {
+    border-color: darkslateblue !important;
+  }
 }
+
 
 .nav-sidebar-vertical li.list-group-item.list-group-item-node > a {
   text-transform: uppercase;

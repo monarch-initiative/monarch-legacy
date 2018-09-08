@@ -1,26 +1,33 @@
 <template>
   <div
-    class="autocomplete autorootdiv"
+    class="monarch-autocomplete autocomplete autorootdiv"
     :class="{
       'home-search':homeSearch,
       'open':open
     }"
   >
 
+
     <div
       v-if="homeSearch"
-      class="p-0 m-0">
-      <hr>
-      <button
-        v-for="(example, index) in exampleSearches"
-        class="btn btn-outline-light m-1 py-0"
-        role="button"
-        @click="useExample(example.searchString, example.category)">
-        {{ example.searchString }}
-        <em v-if="example.category">
-          {{ example.category }}
-        </em>
-      </button>
+      class="form-group form-group-sm p-0 m-0"
+      label="Button style checkboxes">
+      <label
+        for="categoryChoices">
+        Categories&nbsp;&nbsp;
+      </label>
+
+      <b-form-checkbox-group
+        buttons
+        button-variant="dark"
+        v-model="selected"
+        name="categoryChoices"
+        size="sm"
+        :options="options"
+        v-b-tooltip.topright
+        title="Select a single category or set of categories to search on"
+      >
+      </b-form-checkbox-group>
     </div>
 
 
@@ -64,89 +71,112 @@
         @keydown.esc="clearSearch"
         placeholder="Search for phenotypes, diseases, genes..."
       >
+
+      <div
+        v-if="homeSearch"
+        class="input-group-append">
+        <button
+          class="btn xbtn-sm btn-light py-0"
+          type="button"
+          v-on:click="showMore"
+          v-b-tooltip.topright
+          title="Show all matching results"
+        >
+          <i class="p-0 m-0 fa xfa-2x fa-search-plus fa-solid"></i>
+        </button>
+        <button
+          class="btn xbtn-sm btn-light py-0"
+          type="button"
+          v-on:click="clearSearch"
+          v-b-tooltip.topright
+          title="Clear search input"
+        >
+          <i class="p-0 m-0 fa xfa-2x fa-ban"></i>
+        </button>
+      </div>
+
+      <div
+        v-if="open"
+        class="dropdown-menu list-group dropList px-4"
+        style="overflow-y:auto;"
+      >
+        <div
+          v-for="(suggestion, index) in suggestions"
+          :key="index"
+          @click="suggestionClick(index)"
+          :class="{'active': isActive(index)}"
+          v-on:mouseover="mouseOver(index)"
+          class="border-bottom px-1"
+        >
+          <div class="row p-0">
+            <div
+              class="col-5"
+              v-if="suggestion.has_hl"
+            >
+              <span v-html="suggestion.highlight"></span>
+            </div>
+            <div
+              class="col-5"
+              v-else
+            >
+              <strong>{{suggestion.match}}</strong>
+            </div>
+            <div class="col-4"><i>{{suggestion.taxon}}</i></div>
+            <div class="col-3 text-align-right">
+              <small>{{suggestion.category}}</small>
+            </div>
+          </div>
+        </div>
+        <div class="row">
+<!--
+          <div
+            v-if="suggestions.length && !singleCategory"
+            class="btn btn-outline-success col m-2"
+            v-on:click="showMore"
+          >
+            Show all results for '{{value}}'
+          </div>
+ -->
+          <div
+            v-if="suggestions.length === 0"
+            class="btn col m-2"
+          >
+            No results for '{{value}}'
+          </div>
+<!--
+          <div
+            class="btn btn-outline-secondary col m-2"
+            @click="clearSearch"
+          >
+            Clear Search
+          </div>
+ -->
+
+        </div>
+      </div>
+
     </div>
 
     <div
       v-if="homeSearch"
-      class="form-group form-group-sm p-1 m-0"
-      label="Button style checkboxes">
-      <label
-        for="categoryChoices">
-        Categories&nbsp;&nbsp;
-      </label>
-
-      <b-form-checkbox-group
-        buttons
-        button-variant="dark"
-        v-model="selected"
-        name="categoryChoices"
-        size="sm"
-        :options="options"
-        v-b-tooltip.topright
-        title="Select a single category or set of categories to search on"
-      >
-      </b-form-checkbox-group>
-    </div>
-
-    <div
-      v-if="open"
-      class="dropdown-menu list-group dropList px-4"
-    >
-      <div
-        v-for="(suggestion, index) in suggestions"
-        :key="index"
-        @click="suggestionClick(index)"
-        :class="{'active': isActive(index)}"
-        v-on:mouseover="mouseOver(index)"
-        class="border-bottom px-1"
-      >
-        <div class="row p-0">
-          <div
-            class="col-5"
-            v-if="suggestion.has_hl"
-          >
-            <span v-html="suggestion.highlight"></span>
-          </div>
-          <div
-            class="col-5"
-            v-else
-          >
-            <strong>{{suggestion.match}}</strong>
-          </div>
-          <div class="col-4"><i>{{suggestion.taxon}}</i></div>
-          <div class="col-3 text-align-right">
-            <small>{{suggestion.category}}</small>
-          </div>
-        </div>
-      </div>
-      <div class="row">
-        <div
-          v-if="suggestions.length && !singleCategory"
-          class="btn btn-outline-success col m-2"
-          v-on:click="showMore"
-        >
-          Show all results for '{{value}}'
-        </div>
-        <div
-          v-if="suggestions.length === 0"
-          class="btn col m-2"
-        >
-          No results for '{{value}}'
-        </div>
-        <div
-          class="btn btn-outline-secondary col m-2"
-          @click="clearSearch"
-        >
-          Clear Search
-        </div>
-      </div>
+      class="p-0 m-0">
+      <button
+        v-for="(example, index) in exampleSearches"
+        class="btn btn-outline-light m-1 py-0"
+        role="button"
+        @click="useExample(example.searchString, example.category)">
+        {{ example.searchString }}
+        <em v-if="example.category">
+          {{ example.category }}
+        </em>
+      </button>
     </div>
 
   </div>
 </template>
 
 <script>
-import * as MA from '../../js/MonarchAccess';
+import * as MA from 'monarchAccess';
 const debounce = require('lodash/debounce');
 
 const exampleSearches = [
@@ -279,7 +309,9 @@ export default {
       this.suggestions = [];
     },
     showMore() {
-      window.location = `/search/${this.value}`;
+      // window.location = `/search/${this.value}`;
+      this.$router.push({ path: `/search/${this.value}` });
+
     },
     clearSearch() {
       this.suggestions = [];
@@ -338,7 +370,10 @@ export default {
 </script>
 
 <style lang="scss">
-@import "../../css/_prelude-ng.scss";
+
+@import "monarchNGPrelude";
+
+.monarch-autocomplete {
   .text-align-right {
     text-align: right;
   }
@@ -373,6 +408,11 @@ export default {
     background-color: cornflowerblue;
     color: white;
   }
+
+  div.form-group .btn.btn-dark.btn-sm.active {
+    border-color: ghostwhite;
+  }
+
   .autorootdiv {
     position: relative;
   }
@@ -388,10 +428,5 @@ export default {
   .autorootdiv.home-search .input-group.input-group-sm {
     width: unset;
   }
-
-  #monarch-home-container .btn-group-toggle.btn-group.btn-group-sm {
-    label.active {
-      text-decoration: underline;
-    }
-  }
+}
 </style>

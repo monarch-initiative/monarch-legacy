@@ -300,7 +300,7 @@
   </div>
 </template>
 <script>
-import * as MA from '../../js/MonarchAccess';
+import * as MA from 'monarchAccess';
 
 const findIndex = require('lodash/findIndex');
 

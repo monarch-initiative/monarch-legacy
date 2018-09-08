@@ -68,7 +68,7 @@
   </div>
 </template>
 <script>
-import * as MA from '../../js/MonarchAccess';
+import * as MA from 'monarchAccess';
 
 export default {
   data() {

@@ -47,7 +47,7 @@
   </div>
 </template>
 <script>
-import * as MA from '../../js/MonarchAccess';
+import * as MA from 'monarchAccess';
 const uniqBy = require('lodash/uniqBy');
 
 export default {

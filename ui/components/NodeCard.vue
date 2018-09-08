@@ -79,7 +79,7 @@ export default {
 </script>
 
 <style lang="scss">
-@import "../../css/_prelude-ng.scss";
+@import "monarchNGPrelude";
 
 $card-height: 110px;
 $card-width: 300px;

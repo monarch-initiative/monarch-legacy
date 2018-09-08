@@ -9,6 +9,12 @@ $link-color: #0088ce;
 
 $monarch-bg-color: #15556A;
 
+
+$navbar-padding-y:          0 !default;
+$nav-link-padding-y:        0 !default;
+$nav-link-padding-x:        0 !default;
+
+
 $grid-breakpoints: (
   xs: 0,
   sm: 576px,
@@ -18,15 +24,3 @@ $grid-breakpoints: (
   xl: 1200px
 ) !default;
 
-/*
-original
-
-$grid-breakpoints: (
-  xs: 0,
-  sm: 576px,
-  md: 768px,
-  lg: 992px,
-  xl: 1200px
-) !default;
-
-*/

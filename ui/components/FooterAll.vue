@@ -30,7 +30,7 @@
 </script>
 
 <style lang="scss">
-@import "../../css/_prelude-ng.scss";
+@import "monarchNGPrelude";
 
 .footer-all{
   padding: 15px;

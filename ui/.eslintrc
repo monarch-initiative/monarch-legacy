@@ -23,7 +23,10 @@
     "vue/html-indent": 1,
     "global-require": 0,
     "no-unused-vars": [0, { "argsIgnorePattern": "^_" }],
-    "quote-props": [0]
+    "quote-props": [0],
+    "prefer-destructuring": 0,
+    "prefer-arrow-callback": 0,
+    "prefer-template": 0,
   },
   "extends": [
     "plugin:vue/strongly-recommended",

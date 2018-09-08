@@ -115,7 +115,7 @@ export default {
 </script>
 
 <style lang="scss">
-@import "../../css/_prelude-ng.scss";
+@import "monarchNGPrelude";
 
 nav#monarchng-navbar.navbar .navbar-brand {
   height: $navbar-height;
