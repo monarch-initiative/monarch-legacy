@@ -5,7 +5,7 @@
 
   <router-link to="/" class="navbar-brand">
     <img class="branding-logo"
-         src="../assets/images/monarch-logo-white.png"
+         src="../assets/img/monarch-logo-white.png"
          alt="Monarch Initiative logo"
          title="Monarch Initiative front page"/>
   </router-link>

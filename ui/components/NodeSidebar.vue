@@ -102,6 +102,7 @@
 </template>
 
 <script>
+import * as MA from 'monarchAccess';
 
 
 export default {
@@ -136,12 +137,7 @@ export default {
 
   data() {
     return {
-      debugServerName:
-        (
-          (window.serverConfiguration.app_base.length > 0) ?
-            window.serverConfiguration.app_base :
-            'https://beta.monarchinitiative.org'
-        )
+      debugServerName: MA.debugServerName()
     };
   },
 

@@ -21,11 +21,6 @@
     }
     </style>
 
-    <script
-      type="text/javascript"
-      src="/configuration/server.js">
-    </script>
-
     <!-- Legacy JS launcher. -->
     <script type="text/javascript">
 
@@ -42,6 +37,13 @@ function loaderBody() {
   // InitFacetFilters();
 }
     </script>
+
+  <% if (htmlWebpackPlugin.options.MODE_LOCAL_SERVER) { %>
+    <script>
+      window.mngLocalServerMode = true;
+    </script>
+  <% } %>
+
 </head>
 
 <body
@@ -57,11 +59,11 @@ function loaderBody() {
     <p class="require-ensure">
       <span class="test-require-ensure">
         <img
-          src="<%= require('./assets/images/monarch-logo.png') %>"
+          src="<%= require('./assets/img/monarch-logo.png') %>"
           class="fidget-spinner left"
           alt="monarch-logo"/>
         <img
-          src="<%= require('./assets/images/monarch-logo.png') %>"
+          src="<%= require('./assets/img/monarch-logo.png') %>"
           class="fidget-spinner right"
           alt="monarch-logo"/>
       </span>

@@ -383,7 +383,7 @@ export default {
   }
   .loading {
     background-color: #ffffff;
-    background-image: url("../assets/images/infinity.gif");
+    background-image: url("../assets/img/infinity.gif");
     background-size: 25px 25px;
     background-position: 99%;
     background-repeat: no-repeat;

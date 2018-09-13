@@ -13,7 +13,7 @@
               <img
                 class="center-block text-center img-fluid"
                 style="max-height:80px;"
-                src="../assets/images/monarch-logo-white-stacked.png"/>
+                src="../assets/img/monarch-logo-white-stacked.png"/>
             </div>
           </div>
           <div
@@ -117,13 +117,14 @@
     </div>
   </section>
 
+
   <section class="data-dashboard text-center">
     <div class="container">
     <div class="row">
       <div class="col-sm">
         <router-link to="/analytics" class="btn btn-link" role="button">
         <img style="max-height:35px;"
-          src="image/carousel-diseases.png" 
+          src="../assets/img/icon-diseases.png" 
           alt="disease">
         </router-link>
         <span class="network-name"><br><b>218,313</b><br>Disease-Phenotype Associations</span>
@@ -131,7 +132,7 @@
       <div class="col-sm">
         <router-link to="/analytics" class="btn btn-link" role="button">
         <img style="max-height:35px;"
-          src="image/carousel-genes.png" 
+          src="../assets/img/icon-genes.png" 
           alt="disease">
           </router-link>
         <span class="network-name"><br><b>793,526</b><br>Gene-Phenotype Associations</span>
@@ -139,7 +140,7 @@
       <div class="col-sm">
         <router-link to="/analytics" class="btn btn-link" role="button">
         <img style="max-height:35px;"
-          src="image/carousel-models.png" 
+          src="../assets/img/icon-models.png" 
           alt="disease">
           </router-link>
         <span class="network-name"><br><b>20,870</b><br>Model Associations</span>
@@ -161,7 +162,7 @@
             <a target="_blank" href="https://www.charite.de/en/"><span class="network-name"></span>
             <img class="mr-3"
             style="max-height:35px;"
-            src="../assets/images/team-charite.png"
+            src="../assets/img/team-charite.png"
             alt="Charite">
             </a>
           </div>
@@ -171,7 +172,7 @@
             <a target="_blank" href="https://www.garvan.org.au/"><span class="network-name"></span>
             <img class="mr-3"
             style="max-height:35px;"
-            src="../assets/images/team-garvan.png"
+            src="../assets/img/team-garvan.png"
             alt="Garvan">
             </a>
           </div>
@@ -181,7 +182,7 @@
             <a target="_blank" href="https://www.jax.org/"><span class="network-name"></span>
             <img class="mr-3"
             style="max-height:35px;"
-            src="../assets/images/team-jackson.png"
+            src="../assets/img/team-jackson.png"
             alt="Jax">
             </a>
           </div>
@@ -191,7 +192,7 @@
             <a target="_blank" href="http://www.lbl.gov/"><span class="network-name"></span>
             <img class="mr-3"
             style="max-height:25px;"
-            src="../assets/images/team-lbnl.jpeg"
+            src="../assets/img/team-lbnl.jpeg"
             alt="LBNL">
             </a>
           </div>
@@ -201,7 +202,7 @@
             <a target="_blank" href="https://www.ohsu.edu/"><span class="network-name"></span>
             <img class="mr-3"
             style="max-height:35px;"
-            src="../assets/images/team-ohsu.gif"
+            src="../assets/img/team-ohsu.gif"
             alt="OHSU">
             </a>
           </div>
@@ -211,7 +212,7 @@
             <a target="_blank" href="http://www.smd.qmul.ac.uk/"><span class="network-name"></span>
             <img class="mr-3"
             style="max-height:35px;"
-            src="../assets/images/team-qmul.png"
+            src="../assets/img/team-qmul.png"
             alt="QMUL">
             </a>
           </div>
@@ -221,7 +222,7 @@
             <a target="_blank" href="http://renci.org/"><span class="network-name"></span>
             <img class="mr-3"
             style="max-height:35px;"
-            src="../assets/images/team-renci.png"
+            src="../assets/img/team-renci.png"
             alt="RENCI">
             </a>
           </div>
@@ -231,7 +232,7 @@
             <a target="_blank" href="http://www.sanger.ac.uk/"><span class="network-name"></span>
             <img class="mr-3"
             style="max-height:35px;"
-            src="../assets/images/team-sanger.png"
+            src="../assets/img/team-sanger.png"
             alt="Sanger">
             </a>
           </div>
