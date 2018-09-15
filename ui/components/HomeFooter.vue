@@ -6,7 +6,7 @@
       <div class="media">
         <img
           class="img-fluid monarch-logo"
-          src="../assets/images/monarch-logo-white-stacked.png" 
+          src="../assets/img/monarch-logo-white-stacked.png" 
           alt="Monarch logo">
       </div>
     </div>

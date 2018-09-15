@@ -225,21 +225,21 @@ const availableCardTypes = [
 ];
 
 const icons = {
-  anatomy: require('../../image/carousel-anatomy.png'),
-  cellline: require('../../image/carousel-anatomy.png'),
-  disease: require('../../image/carousel-diseases.png'),
-  function: require('../../image/carousel-anatomy.png'),
-  gene: require('../../image/carousel-genes.png'),
-  genotype: require('../../image/carousel-anatomy.png'),
-  homolog: require('../../image/carousel-anatomy.png'),
-  interaction: require('../../image/carousel-anatomy.png'),
-  literature: require('../../image/carousel-anatomy.png'),
-  model: require('../../image/carousel-models.png'),
-  'ortholog-disease': require('../../image/carousel-anatomy.png'),
-  'ortholog-phenotype': require('../../image/carousel-anatomy.png'),
-  pathway: require('../../image/carousel-anatomy.png'),
-  phenotype: require('../../image/carousel-phenotypes.png'),
-  variant: require('../../image/carousel-genes.png'),
+  anatomy: require('../assets/img/icon-anatomy.png'),
+  cellline: require('../assets/img/icon-anatomy.png'),
+  disease: require('../assets/img/icon-diseases.png'),
+  function: require('../assets/img/icon-anatomy.png'),
+  gene: require('../assets/img/icon-genes.png'),
+  genotype: require('../assets/img/icon-anatomy.png'),
+  homolog: require('../assets/img/icon-anatomy.png'),
+  interaction: require('../assets/img/icon-anatomy.png'),
+  literature: require('../assets/img/icon-anatomy.png'),
+  model: require('../assets/img/icon-models.png'),
+  'ortholog-disease': require('../assets/img/icon-anatomy.png'),
+  'ortholog-phenotype': require('../assets/img/icon-anatomy.png'),
+  pathway: require('../assets/img/icon-anatomy.png'),
+  phenotype: require('../assets/img/icon-phenotypes.png'),
+  variant: require('../assets/img/icon-genes.png'),
 };
 
 const labels = {
@@ -434,42 +434,17 @@ export default {
     // need to apply $nextTick() to deal with this. Keep an eye out for UI fields
     // not updating or having undefined values.
     //
-    applyResponse(content) {
-      // console.log('applyResponse', content);
+    applyResponse(response) {
+      // console.log('applyResponse', response);
       const that = this;
-      this.node = content;
-      // this.nodeDebug = JSON.stringify(content, null, 2);
-      const equivalentClasses = [];
-      const superclasses = [];
-      const subclasses = [];
+      this.node = response;
+      // this.nodeDebug = JSON.stringify(response, null, 2);
 
-      const nodeLabelMap = {};
-      if (this.node.nodes) {
-        this.node.nodes.forEach(node => {
-          nodeLabelMap[node.id] = node.lbl;
-        });
-      }
-      if (this.node.edges) {
-        this.node.edges.forEach(edge => {
-          if (edge.pred === 'subClassOf') {
-            if (edge.sub === this.nodeId) {
-              // console.log('Superclass Edge', edge.sub, edge.pred, edge.obj);
-              superclasses.push(edge.obj);
-            }
-            else if (edge.obj === this.nodeId) {
-              // console.log('Subclass Edge', edge.sub, edge.pred, edge.obj);
-              subclasses.push(edge.sub);
-            }
-            else {
-              // console.log('BAD', edge.sub, edge.pred, edge.obj);
-            }
-          }
-          else if (edge.pred === 'equivalentClass') {
-            // console.log('Equiv Edge', edge.sub, edge.pred, edge.obj);
-            equivalentClasses.push(edge.sub);
-          }
-        });
-      }
+      const neighborhood = MA.getNeighborhoodFromResponse(response);
+      const nodeLabelMap = neighborhood.nodeLabelMap;
+      const equivalentClasses = neighborhood.equivalentClasses;
+      const superclasses = neighborhood.superclasses;
+      const subclasses = neighborhood.subclasses;
 
       this.superclasses = _.map(_.uniq(superclasses), c => {
         return {

@@ -28,6 +28,7 @@ const BANNER_HTML = common.getBannerHtml();
 const root = __dirname;
 
 const MODE_DEV_SERVER = process.argv[1].indexOf('webpack-dev-server') > -1 ? true : false;
+const MODE_LOCAL_SERVER = !!process.env.MODE_LOCAL_SERVER;
 
 log.info('webpack', 'Launched in ' + (MODE_DEV_SERVER ? 'dev-server' : 'build') + ' mode');
 
@@ -50,6 +51,8 @@ const hash = ''; // (NODE_ENV === 'production' && DEVTOOLS ? '-devtools' : '') +
 const TEST = false;
 const NOPFN = path.join(__dirname, "js/nop.js");
 const NOPOBJECT = path.join(__dirname, "js/nop_object.js");
+const bbopJS = path.resolve(__dirname, 'gen/bbop.min.js');
+// const bbopJS = path.resolve(__dirname, 'node_modules/bbop/bbop.js');
 
 const mode = NODE_ENV;
 
@@ -102,6 +105,18 @@ if (USE_SPA) {
     filename: 'index.html',
     inject: MODE_DEV_SERVER, // inject scripts in dev-server mode - in build mode, use the template tags
     MODE_DEV_SERVER: MODE_DEV_SERVER,
+    MODE_LOCAL_SERVER: MODE_LOCAL_SERVER,
+    DEVTOOLS: DEVTOOLS,
+    BANNER_HTML: BANNER_HTML,
+    USE_SPA: USE_SPA
+  }));
+  plugins.push(new HtmlWebpackPlugin({
+    title: 'Monarch',
+    template: 'ui/index.ejs',
+    filename: '404.html',
+    inject: MODE_DEV_SERVER, // inject scripts in dev-server mode - in build mode, use the template tags
+    MODE_DEV_SERVER: MODE_DEV_SERVER,
+    MODE_LOCAL_SERVER: MODE_LOCAL_SERVER,
     DEVTOOLS: DEVTOOLS,
     BANNER_HTML: BANNER_HTML,
     USE_SPA: USE_SPA
@@ -219,7 +234,7 @@ const config = {
   devtool: OPTIMIZE ? false : 'sourcemap',
   module: {
     noParse: [
-      path.resolve(__dirname, 'gen/bbop.min.js'),
+      bbopJS,
       path.resolve(__dirname, 'node_modules/bootstrap/dist/js/bootstrap.min.js'),
       path.resolve(__dirname, 'node_modules/underscore/underscore-min.js'),
       path.resolve(__dirname, 'node_modules/d3/d3.min.js'),
@@ -347,8 +362,7 @@ const config = {
   resolve: {
     modules: ['node_modules'],
     alias: {
-      // 'bbop': (USE_SPA ? NOPOBJECT : path.join(__dirname, 'gen/bbop.min.js')),
-      'bbop': path.join(__dirname, 'gen/bbop.min.js'),
+      'bbop': (USE_SPA ? NOPOBJECT : bbopJS),
       'monarchSearchResults' : path.join(__dirname, 'js/search_results.js'),  // (USE_SPA ? NOPFN : path.join(__dirname, 'js/search_results.js')),
       'jquery': path.join(__dirname, 'node_modules/jquery/dist/jquery.min.js'),
       'jquery-ui': path.join(__dirname, 'node_modules/jquery-ui/'),
@@ -385,7 +399,7 @@ if (MODE_DEV_SERVER) {
     noInfo: false,
     hot: true,
     inline: true,
-    contentBase: false, // since we use CopyWebpackPlugin.
+    contentBase: false,
     compress: true,
     host: LOCALHOST ? 'localhost' : myLocalIp(),
     open: true,
@@ -445,9 +459,6 @@ if (MODE_DEV_SERVER) {
     '/node_modules/phenogrid/': {
       target: 'http://localhost:8080'
     },
-    '/configuration/server.js': {
-      target: 'http://localhost:8080'
-    },
   };
 
   if (!USE_SPA) {
@@ -460,19 +471,24 @@ if (MODE_DEV_SERVER) {
       target: 'http://localhost:8080'
     };
 
-    config.devServer.proxy['/**/*.json'] = {
-      target: 'http://localhost:8080'
-    };
+    if (MODE_LOCAL_SERVER) {
+      console.log('MODE_LOCAL_SERVER means devServer proxy disabled');
+    }
+    else {
+      config.devServer.proxy['/**/*.json'] = {
+        target: 'http://localhost:8080'
+      };
 
-    config.devServer.proxy['/legacy'] = {
-      target: 'http://localhost:8080',
-    };
-    config.devServer.proxy['/'] = {
-      target: 'http://localhost:8080',
-      bypass: function(req, res, proxyOptions) {
-        return '/index.html';
-      }
-    };
+      config.devServer.proxy['/legacy'] = {
+        target: 'http://localhost:8080',
+      };
+      config.devServer.proxy['/'] = {
+        target: 'http://localhost:8080',
+        bypass: function(req, res, proxyOptions) {
+          return '/index.html';
+        }
+      };
+    }
   }
 }
 

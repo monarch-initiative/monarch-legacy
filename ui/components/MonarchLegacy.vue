@@ -84,7 +84,6 @@ export default {
       // hash changes are currently handled by monarch-tabs.js
       // within the loaded MonarchLegacy component.
 
-      // console.log('$route', to, from, to.path, this.path);
       if (to.path !== this.path) {
         this.fetchData();
       }
@@ -121,53 +120,92 @@ export default {
           that.contentBody = null;
         }, 500);
       }
-      // console.log('fetchData', path);
       const scriptHeaderPrefix = '+++++++++++++++monarch-script';
       const scriptHeaderSuffix = '---------------monarch-script';
-      // console.log('MonarchLegacy window.loadPathContentAsync', path);
-      window.loadPathContentAsync(path, function(content, responseURL) {
-        const scriptHeaderBegin = content.indexOf(scriptHeaderPrefix);
-        const scriptHeaderEnd = content.indexOf(scriptHeaderSuffix);
-        if (scriptHeaderBegin !== 0 ||
-            scriptHeaderEnd <= 0) {
-          console.log('Invalid script header', scriptHeaderBegin, scriptHeaderEnd, content.slice(0, 100));
-        }
-        else {
-          // console.log('#content', content);
-          that.contentScript = content.slice(
-            scriptHeaderBegin + scriptHeaderPrefix.length,
-            scriptHeaderEnd);
-          that.contentBody = content.slice(
-            scriptHeaderEnd + scriptHeaderSuffix.length);
-          // that.contentBody = unescape(that.contentBody);
+      window.loadPathContentAsync(this.path, function(status, content, responseURL, originalURL) {
+
+        if (status !== 200) { // (status === 504) || (status === 404)) {
+          that.contentBody =
+            `
+            <br>
+            <br>
+            <br>
+            <h3 class="text-center">
+              Error accessing legacy server at
+              <a
+                href="${responseURL}"
+                target="_blank">
+                ${originalURL}
+              </a>
+            </h3>
+
+            <h4 class="text-center">Response Code: ${status}</h4>
+            <hr>
+
+            <h4 class="text-center">
+              <a
+                href="/">
+                Return to Home
+              </a>
+            </h4>
+            `;
+
           that.$nextTick(function() {
             if (that.progressTimer) {
               clearTimeout(that.progressTimer);
               that.progressTimer = null;
             }
             that.progressPath = null;
-
-            responseURL = responseURL.replace(window.location.origin, '');
-            responseURL = responseURL.replace(/\/legacy/g, '');
-            // console.log('#responseURL', responseURL, window.location.origin, path);
-            if (responseURL !== path) {
-              // console.log('path/responseURL', window.location.origin, path, responseURL);
-              var hashIndex = path.indexOf('#');
-              if (hashIndex >= 0) {
-                responseURL += path.slice(hashIndex);
-              }
-              window.vueRouter.replace(responseURL, function() {
-                console.log('replaced', path, that.$route.path);
-                that.path = that.$route.path;
-              });
-            }
-
-            // console.log('that.contentScript', that.contentScript.slice(0, 50));
-            if (that.contentScript) {
-              eval(that.contentScript);
-              window.vueRouter.updatePageLinks();
-            }
           });
+        }
+        else {
+          const scriptHeaderBegin = content.indexOf(scriptHeaderPrefix);
+          const scriptHeaderEnd = content.indexOf(scriptHeaderSuffix);
+          if (scriptHeaderBegin !== 0 ||
+              scriptHeaderEnd <= 0) {
+            console.log('Invalid script header', scriptHeaderBegin, scriptHeaderEnd, content.slice(0, 100));
+          }
+          else {
+            // console.log('#content', content);
+            that.contentScript = content.slice(
+              scriptHeaderBegin + scriptHeaderPrefix.length,
+              scriptHeaderEnd);
+            that.contentBody = content.slice(
+              scriptHeaderEnd + scriptHeaderSuffix.length);
+            // that.contentBody = unescape(that.contentBody);
+
+            that.$nextTick(function() {
+              if (that.progressTimer) {
+                clearTimeout(that.progressTimer);
+                that.progressTimer = null;
+              }
+              that.progressPath = null;
+
+              // The following .replace() is really supposed to strip
+              // the http://domain.com prefix and leave the path behind.
+              // It doesn't work in window.mngLocalServerMode and is probably
+              // no longer relevant.
+              responseURL = responseURL.replace(window.location.origin, '');
+              responseURL = responseURL.replace(/\/legacy/g, '');
+              if (!window.mngLocalServerMode && responseURL !== path) {
+                console.log('path/responseURL', window.location.origin, path, responseURL);
+                var hashIndex = path.indexOf('#');
+                if (hashIndex >= 0) {
+                  responseURL += path.slice(hashIndex);
+                }
+
+                window.vueRouter.replace(originalURL, function() {
+                  that.path = that.$route.path;
+                });
+              }
+
+              // console.log('that.contentScript', that.contentScript.slice(0, 50));
+              if (that.contentScript) {
+                eval(that.contentScript);
+                window.vueRouter.updatePageLinks();
+              }
+            });
+          }
         }
       });
     }

@@ -61,27 +61,18 @@ if (process.env.DEVTOOLS && process.env.NODE_ENV !== 'production') {
 
 let router = null;
 
-function pathLoadedAsync(sourceText, responseURL, path, done) {
-  if (done) {
-    done(sourceText, responseURL);
-  }
-  else {
-    console.log('pathLoadedAsync', responseURL, path, sourceText.slice(0, 100));
-  }
-}
-
 
 function loadPathContentAsync(path, done) {
   /* global XMLHttpRequest */
   const oReq = new XMLHttpRequest();
-  oReq.addEventListener('load', function load() {
-    // console.log('loadPathContentAsync', path, this);
-    pathLoadedAsync(this.responseText, this.responseURL, path, done);
-  });
 
   let refinedPath = path;
   if (refinedPath.indexOf('/') === 0) {
     refinedPath = '/legacy' + refinedPath;
+
+    if (window.mngLocalServerMode) {
+      refinedPath = `http://localhost:8080${refinedPath}`;
+    }
   }
 
   // const hashIndex = refinedPath.indexOf('#');
@@ -91,8 +82,18 @@ function loadPathContentAsync(path, done) {
   // else {
   //   refinedPath += '?stripme';
   // }
-  oReq.open('GET', refinedPath);
-  oReq.send();
+
+  oReq.addEventListener('loadend', function load() {
+    done(this.status, this.responseText, this.responseURL, refinedPath);
+  });
+
+  try {
+    oReq.open('GET', refinedPath);
+    oReq.send();
+  }
+  catch (e) {
+    console.log('loadPathContentAsync exception', path, refinedPath, this, e);
+  }
 }
 
 
@@ -277,6 +278,5 @@ const main = () => {
 
 // getServerEnvironment();
 
-console.log('main.js window.serverConfigurationName', window.serverConfigurationName);
 main();
 

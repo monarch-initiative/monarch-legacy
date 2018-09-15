@@ -3,60 +3,64 @@
     <div v-if="!dataFetched">Loading Related Terms ...</div>
     <div v-else>
       <div class="row border-bottom py-2">
-        <div class="col-4"><h3>Parent Terms</h3></div>
-        <div class="col-4"><h3>Equivalent Terms</h3></div>
-        <div class="col-4"><h3>Child Terms</h3></div>
+        <div class="col-4"><h5>Parent Terms</h5></div>
+        <div class="col-4"><h5>Equivalent Terms</h5></div>
+        <div class="col-4"><h5>Child Terms</h5></div>
       </div>
+
       <div class="row py-2">
         <div
           class="col-4"
-          v-for="parent in parents"
-          :key="parent.object.id"
+          v-for="superclass in superclasses"
+          :key="superclass.id"
         >
-          <div
-            @click="emitSelection(parent.object.label, parent.object.id)"
-            class="p-1 m-1 btn btn-info"
+          <button
+            @click="emitSelection(superclass.label, superclass.id)"
+            class="p-1 m-1 btn btn-sm btn-info"
           >
-            {{parent.object.label}} <br> ({{parent.object.id}})
-          </div>
+            {{superclass.label}} <br> ({{superclass.id}})
+          </button>
         </div>
+
         <div
           class="col-4"
-          v-for="sibling in equivalentTerms" :key="sibling.id"
+          v-for="sibling in equivalentClasses" :key="sibling.id"
         >
-          <div
-            @click="emitSelection(sibling.lbl, sibling.id)"
-            class="p-1 m-1 btn btn-info"
+          <button
+            @click="emitSelection(sibling.label, sibling.id)"
+            class="p-1 m-1 btn btn-sm btn-info"
           >
-            {{sibling.lbl}} <br> ({{sibling.id}})
-          </div>
+            {{sibling.label}} <br> ({{sibling.id}})
+          </button>
         </div>
+
         <div
           class="col-4"
-          v-for="child in children" :key="child.object.id"
+          v-for="subclass in subclasses" :key="subclass.id"
         >
-          <div
-            @click="emitSelection(child.subject.label, child.subject.id)"
-            class="p-1 m-1 btn btn-info"
+          <button
+            @click="emitSelection(subclass.label, subclass.id)"
+            class="p-1 m-1 btn btn-sm btn-info"
           >
-            {{child.subject.label}} <br> ({{child.subject.id}})
-          </div>
+            {{subclass.label}} <br> ({{subclass.id}})
+          </button>
         </div>
       </div>
     </div>
   </div>
 </template>
 <script>
+import _ from 'underscore';
 import * as MA from 'monarchAccess';
 const uniqBy = require('lodash/uniqBy');
 
 export default {
   data() {
     return {
-      equivalentTerms: '',
+      equivalentClasses: '',
       rootTerm: '',
       familyData: [],
-      children: [],
+      subclasses: [],
       siblings: [],
       dataFetched: false,
     };
@@ -99,6 +103,35 @@ export default {
         label: this.familyData.label,
         synonyms: this.familyData.synonyms,
       };
+
+      const neighborhood = MA.getNeighborhoodFromResponse(this.familyData);
+      const nodeLabelMap = neighborhood.nodeLabelMap;
+      const equivalentClasses = neighborhood.equivalentClasses;
+      const superclasses = neighborhood.superclasses;
+      const subclasses = neighborhood.subclasses;
+
+      this.superclasses = _.map(_.uniq(superclasses), c => {
+        return {
+          id: c,
+          label: nodeLabelMap[c]
+        };
+      });
+      this.subclasses = _.map(_.uniq(subclasses), c => {
+        return {
+          id: c,
+          label: nodeLabelMap[c]
+        };
+      });
+      this.equivalentClasses = _.map(_.uniq(equivalentClasses), c => {
+        return {
+          id: c,
+          label: nodeLabelMap[c]
+        };
+      });
+
+/*
+      // This code no longer works, as MonarchAccess returns super/sub/equiv in a different form.
+
       this.equivalentTerms = uniqBy(this.familyData.equivalentNodes, 'id');
       const preChildren = [];
       const preParents = [];
@@ -115,6 +148,8 @@ export default {
       });
       this.children = uniqBy(preChildren, 'id');
       this.parents = uniqBy(preParents, 'id');
+*/
+
     },
   },
 };

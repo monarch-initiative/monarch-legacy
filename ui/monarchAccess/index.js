@@ -1,16 +1,13 @@
 import _ from 'underscore';
 import axios from 'axios';
 import * as JSONAccess from './JSONAccess';
+import * as Servers from './servers';
 
 // Re-export stuff from JSONAccess into the MonarchAccess namespace
 export const { loadJSONXHR, loadJSONAxios } = JSONAccess;
 
-const serviceEnvironment = window.serverConfigurationName;
-const biolink = window.serverConfiguration.biolink_url;
-// const scigraphData = globalServiceURLs[serviceEnvironment].SCIGRAPH_DATA;
-// const scigraphOntology = globalServiceURLs[serviceEnvironment].SCIGRAPH_ONTOLOGY;
-
-// console.log('###biolink', serviceEnvironment, biolink);
+const serverConfiguration = Servers.serverConfigurations.development;
+const biolink = serverConfiguration.biolink_url;
 
 
 function getBiolinkAnnotation(cardType) {
@@ -256,6 +253,58 @@ export async function getNodeSummary(nodeId, nodeType) {
 }
 
 
+export function getNeighborhoodFromResponse(response) {
+  const nodeId = response.id;
+
+  const nodeLabelMap = {};
+
+  const equivalentClasses = [];
+  const superclasses = [];
+  const subclasses = [];
+
+  if (response.nodes) {
+    response.nodes.forEach(node => {
+      nodeLabelMap[node.id] = node.lbl;
+    });
+  }
+  if (response.edges) {
+    response.edges.forEach(edge => {
+      if (edge.pred === 'subClassOf') {
+        if (edge.sub === nodeId) {
+          // console.log('Superclass Edge', edge.sub, edge.pred, edge.obj);
+          superclasses.push(edge.obj);
+        }
+        else if (edge.obj === nodeId) {
+          // console.log('Subclass Edge', edge.sub, edge.pred, edge.obj);
+          subclasses.push(edge.sub);
+        }
+        else {
+          // console.log('BAD', edge.sub, edge.pred, edge.obj);
+        }
+      }
+      else if (edge.pred === 'equivalentClass') {
+        // console.log('Equiv Edge', edge.sub, edge.pred, edge.obj);
+
+        if (edge.sub === nodeId) {
+          // console.log('Skip duplicate equiv class', nodeId, edge.sub, edge.obj);
+        }
+        else {
+          equivalentClasses.push(edge.sub);
+        }
+      }
+    });
+  }
+
+  return {
+    nodeLabelMap: nodeLabelMap,
+    equivalentClasses: equivalentClasses,
+    superclasses: superclasses,
+    subclasses: subclasses,
+  };
+}
+
+
+
 export function getSearchTermSuggestions(term, selected) {
   const baseUrl = `${biolink}search/entity/autocomplete/`;
   const urlExtension = `${baseUrl}${term}`;
@@ -373,3 +422,11 @@ export function comparePhenotypes(phenotypesList, geneList, species = 'all', mod
   });
   return returnedPromise;
 }
+
+
+export function debugServerName() {
+  return (serverConfiguration.app_base.length > 0) ?
+            serverConfiguration.app_base :
+            'https://beta.monarchinitiative.org';
+}
+
