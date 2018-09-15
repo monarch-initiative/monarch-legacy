@@ -91,6 +91,7 @@ $card-width: 300px;
   xmax-height: $card-height;
   min-width: 90%;
   max-width: 90%;
+  cursor: pointer;
 }
 
 .node-card .card-img-top {
