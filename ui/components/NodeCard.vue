@@ -87,8 +87,8 @@ $card-width: 300px;
 .node-card {
   margin: 50px auto;
   padding: 0;
-  xmin-height: $card-height;
-  xmax-height: $card-height;
+  min-height: $card-height;
+  max-height: $card-height;
   min-width: 90%;
   max-width: 90%;
   cursor: pointer;
