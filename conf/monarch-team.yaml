@@ -22,7 +22,7 @@ institutions:
         picture: /image/team/MelissaHaendel.jpg
         title: Monarch PI
         alumni: false
-        bio: Dr. Haendel is currently a PI of the Monarch Initiative. She has a BA from Reed College in Chemistry and a Ph.D. in Neuroscience from the University of Wisconsin, Madison. She is currently a PI of the Monarch Initiative, with the aim of providing integrated access to model systems phenotype-genotype data for the purposes of disease hypothesis exploration. She also participates in development of the eagle-i and CTSAconnect ontologies, designed to collect and disseminate information about biomedical resources and enable research profiling. Her research interests are in using ontologies to promote synthetic science though connections within biomedical data, to utilize information science during the course of research and its publication, and to enable scientific reproducibility.
+        bio: Dr. Haendel is currently a PI of the Monarch Initiative. She has a BA from Reed College in Chemistry and a Ph.D. in Neuroscience from the University of Wisconsin, Madison. Her aim with the Monarch Initiative is to provide integrated access to model systems phenotype-genotype data for the purposes of disease hypothesis exploration. She also participates in development of the eagle-i and CTSAconnect ontologies, designed to collect and disseminate information about biomedical resources and enable research profiling. Her research interests are in using ontologies to promote synthetic science though connections within biomedical data, to utilize information science during the course of research and its publication, and to enable scientific reproducibility.
       - name: Nicole Vasilevsky
         picture: /image/team/NicoleVasilevsky.jpg
         title: Lead Biocurator
@@ -62,6 +62,11 @@ institutions:
         title: Biodiversity Informaticist
         alumni: false
         bio: Dr. Thessen holds a BS in Marine Science from Nicholls State University and a Ph.D. in Oceanography from the University of Maryland. She has been running her own data science consulting company where her clients included NASA and the Smithsonian Institution. She will be working on environments and traits in monarch.
+      - name: Moni Munoz-Torres
+        title: Program Manager
+        alumni: false
+        bio: Dr. Munoz-Torres is a curator of genomes, and her work facilitates the development of software tools to accomplish these tasks. Dr. Munoz-Torres has a BSc in Biology and Genetics from Universidad del Valle (Colombia) and a PhD in Genetics from Clemson University. 
+        picture: /image/team/MoniMunozTorres.jpg
       - name: Shahim Essaid
         picture: /image/team/ShahimEssaid.jpg
         title: Ontologist
@@ -71,6 +76,16 @@ institutions:
         title: Data Wrangler
         alumni: true
         bio: Bryan has a BA from Reed College in Biology, post-bac training in MIS from Oregon Institute of Technology, and is currently a Master’s student in Bioinformatics &amp; Computational Biology at Oregon Health &amp; Science University. He is currently a Data Wrangler for the Monarch Initiative, assisting with data ingestion.
+      # - name: Rocket J. Squirrel
+      #   title: Lead Moose Foil
+      #   alumni: false
+      #   bio: Alumni of Wossamotta U, after a career in television and international espionage (1959-1964), and a brief stint in the movie industry consulting (working with Yutte Hermsgervordenbroti, Olaf Prot, and Jurgan Wigg), he has settled into handling PR and moose-related needs for scientific groups.
+      #   picture: /image/person-unknown.png
+      #   contact:
+      #     email: spam@spamspam.spam
+      #     twitter: http://twitter.com
+      #     facebook: http://facebook.com
+      #     website: https://en.wikipedia.org/wiki/Rocky_the_Flying_Squirrel        
   - id: lbnl
     name: Lawrence Berkeley National Laboratory
     logo: /image/team-lbnl.jpeg
@@ -108,16 +123,6 @@ institutions:
         title: Software Engineer
         alumni: true
         bio: Jeremy has a MS in Computer Science from the École polytechnique fédérale de Lausanne (EPFL). After spending three years at CERN in the Beams department and a year in a finance company, he joined LBNL in 2015.
-      # - name: Rocket J. Squirrel
-      #   title: Lead Moose Foil
-      #   alumni: false
-      #   bio: Alumni of Wossamotta U, after a career in television and international espionage (1959-1964), and a brief stint in the movie industry consulting (working with Yutte Hermsgervordenbroti, Olaf Prot, and Jurgan Wigg), he has settled into handling PR and moose-related needs for scientific groups.
-      #   picture: /image/person-unknown.png
-      #   contact:
-      #     email: spam@spamspam.spam
-      #     twitter: http://twitter.com
-      #     facebook: http://facebook.com
-      #     website: https://en.wikipedia.org/wiki/Rocky_the_Flying_Squirrel
       - name: Nicole Washington
         picture: /image/team/NicoleWashington.jpeg
         title: Lead Bioinformatician
