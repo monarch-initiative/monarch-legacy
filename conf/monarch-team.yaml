@@ -55,7 +55,7 @@ institutions:
       - name: Lilly Winfree
         picture: /image/team/LillyWinfree.jpg
         title: Science and Data Analyst
-        alumni: false
+        alumni: true
         bio: Dr. Winfree has a BS in Neuroscience from the University of Rochester and a Ph.D. in Neuroscience from Oregon Health & Science University. Lilly is responsible for scientific communication and outreach and contributes to data analytics. Lilly will be working with the Monarch Initiative bioinformatics team to derive biological stories from the data.
       - name: Anne E Thessen
         picture: /image/team/AnneThessen.jpg
