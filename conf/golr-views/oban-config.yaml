@@ -41,6 +41,12 @@ fields:
     display_name: Association id
     type: string
     property: []
+    
+  - id: association_type
+    description: "Label describing the assocation. Optional."
+    display_name: Association type
+    type: string
+    property: []
 
 
 ## SUBJECT
