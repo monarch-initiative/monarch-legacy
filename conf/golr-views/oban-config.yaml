@@ -69,7 +69,6 @@ fields:
     display_name: Subject (Inferred)
     type: string
     cardinality: multi
-    docValues: true
     property: []
 
   - id: subject_closure_label
@@ -268,7 +267,6 @@ fields:
     display_name: Object (Inferred)
     type: string
     cardinality: multi
-    docValues: true
     property: []
 
   - id: object_closure_label
