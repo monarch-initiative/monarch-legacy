@@ -5,18 +5,24 @@
 import Vue from 'vue';
 import Router from 'vue-router';
 import VueGoodTable from 'vue-good-table';
+import BootstrapVue from 'bootstrap-vue/dist/bootstrap-vue.esm';
+import 'bootstrap-vue/dist/bootstrap-vue.css';
 import JsonTree from 'vue-json-tree';
-Vue.component('json-tree', JsonTree);
-
 import App from './App.vue';
 import Home from '@/components/Home.vue';
 import Navbar from '@/components/Navbar.vue';
-import About from '@/components/About.vue';
 import Node from '@/components/Node.vue';
 import NodeCard from '@/components/NodeCard.vue';
 import MonarchLegacy from '@/components/MonarchLegacy.vue';
 import TableView from '@/components/TableView.vue';
 import AssocFacets from '@/components/AssocFacets.vue';
+import MonarchAutocomplete from '@/components/MonarchAutocomplete.vue';
+import ExacGeneSummary from '@/components/ExacGeneSummary.vue';
+
+
+
+Vue.component('json-tree', JsonTree);
+
 
 /**
  * The linter can be disabled via LINTER=false env var
@@ -97,11 +103,14 @@ const main = () => {
   Vue.config.productionTip = false;
   Vue.use(Router);
   Vue.use(VueGoodTable);
+  Vue.use(BootstrapVue);
 
   Vue.component('monarch-navbar', Navbar);
   Vue.component('node-card', NodeCard);
   Vue.component('table-view', TableView);
   Vue.component('assoc-facets', AssocFacets);
+  Vue.component('monarch-autocomplete', MonarchAutocomplete);
+  Vue.component('exac-gene', ExacGeneSummary);
 
   const availableCardTypes = [
     'anatomy',
@@ -138,11 +147,6 @@ const main = () => {
         path: '/',
         name: 'Home',
         component: Home
-      },
-      {
-        path: '/page/aboutSPA',
-        name: 'AboutSPA',
-        component: About
       },
       {
         path: '/*',
@@ -233,5 +237,6 @@ const main = () => {
   }
 };
 
+console.log('about to main()');
 main();
 

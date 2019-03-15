@@ -2,7 +2,7 @@
 <div id="selenium_id_content">
 
 <div>
-  <div class="nav-pf-vertical nav-pf-vertical-with-sub-menus">
+  <div class="nav-sidebar-vertical">
     <ul class="list-group">
       <li class="list-group-item list-group-item-node">
         <a
@@ -45,12 +45,12 @@
           <span class="list-group-item-value">{{labels[cardType]}} ({{counts[cardType]}})</span>
         </a>
       </li>
-      <li class="list-group-item list-group-item-squat">
-        <a href="#"><span class="list-group-item-value">Association Filters</span></a>
-        <div style="padding:15px; background: #363636; color:white" class="panel">
-          <h3>Species</h3>
-          <assoc-facets v-model="facetObject.species"></assoc-facets>
-        </div>
+      <li
+        class="node-filter-section">
+        <h5>Species</h5>
+        <assoc-facets
+          v-model="facetObject.species">
+        </assoc-facets>
       </li>
     </ul>
 
@@ -59,7 +59,7 @@
 </div>
 
 
-<div class="container-fluid container-cards-pf container-pf-nav-pf-vertical">
+<div class="container-cards">
 <div class="wrapper">
   <div
     class="overlay"
@@ -97,10 +97,23 @@
   </nav>
 
   <div
-    class="title-bar">
+    class="container-fluid title-bar">
     <div
       v-if="!node">
-      <h4 class="text-center">Loading Data for {{labels[nodeType]}}: {{nodeID}}</h4>
+      <div
+        v-if="nodeError">
+        <sm>
+          <h6>
+            Error loading {{labels[nodeType]}}: {{nodeId}}
+          </h6>
+          <pre
+            class="pre-scrollable">{{nodeError}}</pre>
+        </sm>
+      </div>
+      <div
+        v-else>
+        <h5 class="text-center">Loading Data for {{labels[nodeType]}}: {{nodeId}}</h5>
+      </div>
     </div>
 
     <div
@@ -119,7 +132,7 @@
 
     <div
       v-if="!expandedCard && nodeDefinition"
-      class="row">
+      class="node-content-section">
       <div class="col-xs-12">
         <div class="node-description">
           {{nodeDefinition}}
@@ -187,22 +200,24 @@
 
     <div
       v-if="!expandedCard"
-      class="cards-pf">
+      class="node-content-section">
       <div
-        class="row row-cards-pf">
+        class="row">
         <node-card
           v-for="cardType in nonEmptyCards"
           :key="cardType"
-          class="col-lg-3 col-xs-6"
+          class="col-4"
           :card-type="cardType"
           :card-count="counts[cardType]"
           :parent-node="node"
-          :parent-node-id="nodeID"
+          :parent-node-id="nodeId"
           v-on:expandCard="expandCard(cardType)">
         </node-card>
       </div>
     </div>
-
+    <div v-if="!expandedCard">
+      <exac-gene :nodeID="nodeID"></exac-gene>
+    </div>
     <div
       v-if="expandedCard"
       class="expanded-card-view">
@@ -211,7 +226,7 @@
               :facets="facetObject"
               :nodeType="nodeCategory"
               :cardType="expandedCard"
-              :identifier="nodeID">
+              :identifier="nodeId">
       </table-view>
     </div>
 
@@ -226,17 +241,10 @@
         <json-tree :data="node" :level="1"></json-tree>
       </div>
     </div>
--->
+ -->
 
   </div>
 </div>
-<!--
-<button
-  v-on:click="getHierarchy()"
-  class="btn btn-default btn-sm">
-    Get Hierarchy
-</button>
- -->
 
 
 </div>
@@ -247,29 +255,8 @@
 
 import _ from 'underscore';
 import TableView from "./TableView.vue";
+import * as MA from '../../js/MonarchAccess';
 
-function pathLoadedAsync(sourceText, responseURL, path, done) {
-  if (done) {
-    done(sourceText, responseURL);
-  }
-  else {
-    console.log('pathLoadedAsync', responseURL, path, sourceText.slice(0, 100));
-  }
-}
-
-
-function loadPathContentAsync(path, done) {
-  // console.log('loadPathContentAsync', path);
-  /* global XMLHttpRequest */
-  const oReq = new XMLHttpRequest();
-  oReq.addEventListener('load', function load() {
-    // console.log('loadPathContentAsync', path, this);
-    pathLoadedAsync(this.responseText, this.responseURL, path, done);
-  });
-
-  oReq.open('GET', path);
-  oReq.send();
-}
 
 const availableCardTypes = [
   'anatomy',
@@ -329,15 +316,15 @@ const labels = {
 export default {
     name: 'home',
   created() {
-    // console.log('created', this.nodeID);
+    // console.log('created', this.nodeId);
   },
 
   updated() {
-    // console.log('updated', this.nodeID);
+    // console.log('updated', this.nodeId);
   },
 
   destroyed() {
-    // console.log('destroyed', this.nodeID);
+    // console.log('destroyed', this.nodeId);
   },
 
   mounted() {
@@ -416,6 +403,7 @@ export default {
         diseases: false,
       },
       node: null,
+      nodeError: null,
       equivalentClasses: null,
       superclasses: null,
       subclasses: null,
@@ -424,11 +412,10 @@ export default {
       contentScript: '',
       contentBody: '',
       progressTimer: null,
-      progressPath: null,
       path: null,
       icons: icons,
       labels: labels,
-      nodeID: null,
+      nodeId: null,
       nodeDefinition: null,
       nodeLabel: null,
       nodeIcon: null,
@@ -478,10 +465,16 @@ export default {
       this.isActive = !this.isActive;
     },
 
-    parseNodeContent(content) {
+    // TIP/QUESTION: This applyResponse is called asynchronously via the function
+    // fetchData when it's promise is fulfilled. We (as VueJS newbies) aren't
+    // yet certain how this fits into the Vue lifecycle and we may eventually
+    // need to apply $nextTick() to deal with this. Keep an eye out for UI fields
+    // not updating or having undefined values.
+    //
+    applyResponse(content) {
       var that = this;
-      this.node = JSON.parse(content);
-      // console.log('parseNodeContent', this.node);
+      this.node = content;
+      // console.log('applyResponse', this.node);
 
       var equivalentClasses = [];
       var superclasses = [];
@@ -489,14 +482,14 @@ export default {
       if (this.node.relationships) {
         this.node.relationships.forEach(relationship => {
           if (relationship.property.id === 'subClassOf') {
-            if (relationship.subject.id === this.nodeID) {
+            if (relationship.subject.id === this.nodeId) {
               superclasses.push(relationship.object);
             }
-            else if (relationship.object.id === this.nodeID) {
+            else if (relationship.object.id === this.nodeId) {
               subclasses.push(relationship.subject);
             }
             else {
-              console.log('parseNodeContent ERROR', relationship);
+              console.log('applyResponse ERROR', relationship);
             }
           }
           else if (relationship.property.id === 'equivalentClass') {
@@ -544,96 +537,71 @@ export default {
       // this.literature = this.node.literatureNum;
     },
 
-    fetchData() {
+
+    startProgress() {
+      const that = this;
+      if (that.progressTimer) {
+        console.log('startProgress.... leftover progressTimer');
+      }
+      else {
+        that.progressTimer = setTimeout(function timeout() {
+          that.progressTimer = null;
+        }, 500);
+      }
+    },
+
+
+    clearProgress() {
+      const that = this;
+      that.$nextTick(function() {
+        if (that.progressTimer) {
+          clearTimeout(that.progressTimer);
+          that.progressTimer = null;
+        }
+      });
+    },
+
+
+    async fetchData() {
       const that = this;
       const path = that.$route.fullPath;
+
       this.path = that.$route.path;
-      this.nodeID = this.$route.params.id;
+      this.nodeId = this.$route.params.id;
       this.nodeType = this.path.split('/')[1];
+
+      // TIP: setup the pre-fetch state, waiting for the async result
+      this.node = null;
+      this.nodeError = null;
       this.expandedCard = null;
       this.nonEmptyCards = [];
       this.isActive = false;
+      this.startProgress();
 
-      // console.log('fetchData', path, this.$route.params, this.$route.params.id, this.nodeType);
-
-      if (that.progressTimer) {
-        console.log('leftover progressTimer');
+      try {
+        let nodeResponse = await MA.getNodeSummary(this.nodeId, this.nodeType);
+        // console.log('nodeResponse', nodeResponse);
+        // TIP: We got a result, apply it to the Vue model
+        that.applyResponse(nodeResponse);
+        that.clearProgress();
       }
-      else {
-        that.progressPath = null;
-        that.progressTimer = setTimeout(function timeout() {
-          that.progressTimer = null;
-          that.progressPath = path;
-          that.node = null;
-        }, 500);
+      catch (e) {
+        console.log('nodeResponse ERROR', e, that);
+        that.nodeError = e;
+        that.clearProgress();
       }
-      that.node = null;
-      var url = `/node${that.path}.json`;
-      loadPathContentAsync(url, function(content, responseURL) {
-        that.parseNodeContent(content);
-        that.$nextTick(function() {
-          if (that.progressTimer) {
-            clearTimeout(that.progressTimer);
-            that.progressTimer = null;
-          }
-          that.progressPath = null;
-        });
-      });
+
+      // TIP: Don't put anything useful here, because this will execute BEFORE
+      // the async operation has even been queued and before it has returned
+      // a useful result or error.
     },
-
-    xloadPathContentAsync(path, done) {
-      console.log('xloadPathContentAsync', path);
-      /* global XMLHttpRequest */
-      const oReq = new XMLHttpRequest();
-      oReq.addEventListener('load', function load() {
-        // console.log('xloadPathContentAsync', path, this);
-        var responseJSON = this.responseText;
-        var response = JSON.parse(responseJSON);
-        done(response, this.responseURL, path);
-      });
-
-      let refinedPath = path;
-
-      // const hashIndex = refinedPath.indexOf('#');
-      // if (hashIndex >= 0) {
-      //   refinedPath = refinedPath.slice(0, hashIndex) + '?stripme' + refinedPath.slice(hashIndex);
-      // }
-      // else {
-      //   refinedPath += '?stripme';
-      // }
-      oReq.open('GET', refinedPath);
-      oReq.send();
-    },
-
-    getHierarchy() {
-      //Determine if ID is clique leader
-      console.log('qurl', this.node);
-      var qurl = this.node.global_scigraph_data_url + "dynamic/cliqueLeader/" + this.nodeID + ".json";
-      this.xloadPathContentAsync(qurl,
-        function(response, responseURL, path) {
-          console.log('xpathLoadedAsync', response, responseURL, path);
-
-          var graph = new bbop.model.graph();
-          graph.load_json(response);
-          var nodeList = graph.all_nodes();
-          console.log('nodeList', nodeList);
-          if (nodeList.length !== 1) {
-            console.log('nodeList ERROR too many entries', nodeList);
-          }
-          else {
-            var leaderId = nodeList[0].id();
-            console.log('leaderId', leaderId);
-          }
-        });
-    }
   }
-
 }
 
 </script>
 
 <style lang="scss">
-@import "../../css/_prelude-patternfly.scss";
+@import "../../css/_prelude-ng.scss";
 
 $sidebar-content-width: 500px;
 $sidebar-width: 200px;
@@ -671,7 +639,7 @@ $title-bar-height: 70px;
 }
 
 #sidebar.active {
-  left: 0;
+  left: 10px;
   box-shadow: 3px 3px 3px rgba(0, 0, 0, 0.2);
 }
 
@@ -804,7 +772,7 @@ $title-bar-height: 70px;
 }
 
 .node-container {
-  margin: $title-bar-height 25px 0 0;
+  margin: $title-bar-height 5px 5px 5px;
   padding: 3px 5px;
   transition: all 0.3s;
   width: 100%;
@@ -818,59 +786,107 @@ $title-bar-height: 70px;
   height:100%;
 }
 
-img.entity-type-icon {
-  margin: 0 5px 0 0;
-  padding: 0;
-  height: 40px;
-}
-
-.nav-pf-vertical li.list-group-item {
+.nav-sidebar-vertical li.list-group-item {
   margin: 0;
   padding: 0;
+  background-color: transparent;
+  border-color: #030303;
 }
-.nav-pf-vertical li.list-group-item > a {
+
+.nav-sidebar-vertical li.list-group-item > a {
+  background-color: transparent;
+  color: #d1d1d1;
+  cursor: pointer;
+  display: block;
+  font-size: 16px;
+  font-weight: 400;
+  height: 63px;
+  line-height: 26px;
+  padding: 17px 20px 17px 25px;
+  position: relative;
+  white-space: nowrap;
+  width: $sidebar-width;
+  text-decoration: none;
   margin: 0;
-  padding: 3px 0 0 8px;
-  height: 45px;
+  padding: 2px 0 0 6px;
+  height: 35px;
 }
 
 
-.nav-pf-vertical li.list-group-item.list-group-item-node {
+.nav-sidebar-vertical li.list-group-item > a:hover {
+  color: #fff;
+  font-weight: 600
+}
+
+
+
+.nav-sidebar-vertical li.list-group-item.active > a {
+  background-color: #393f44;
+  color: #fff;
+  font-weight: 600
+}
+
+.nav-sidebar-vertical li.list-group-item.active > a:before {
+  background: #39a5dc;
+  content: " ";
+  height: 100%;
+  left: 0;
+  position: absolute;
+  top: 0;
+  width: 3px;
+}
+
+.nav-sidebar-vertical li.list-group-item > a img.entity-type-icon {
+  margin: 0 5px;
+  padding: 0;
+  height: 30px;
+}
+
+
+
+.nav-sidebar-vertical li.list-group-item.list-group-item-node {
   background: black;
 }
 
-.nav-pf-vertical li.list-group-item.list-group-item-node > a {
+.nav-sidebar-vertical li.list-group-item.list-group-item-node > a {
   text-transform: uppercase;
   vertical-align: bottom;
-  height: 35px;
+  height: 30px;
 }
 
-.nav-pf-vertical li.list-group-item.list-group-item-node img.entity-type-icon {
+.nav-sidebar-vertical li.list-group-item.list-group-item-node img.entity-type-icon {
   margin: 0;
-  height: 32px;
+  height: 28px;
 }
 
-.nav-pf-vertical li.list-group-item.list-group-item-squat {
+
+.nav-sidebar-vertical li.list-group-item.list-group-item-squat {
 }
 
-.nav-pf-vertical li.list-group-item.list-group-item-squat > a {
+.nav-sidebar-vertical li.list-group-item.list-group-item-squat > a {
   padding: 0;
 }
 
-.nav-pf-vertical li.list-group-item.list-group-item-squat > a .list-group-item-value {
-  padding: 2px 2px;
+.nav-sidebar-vertical li.list-group-item.list-group-item-squat > a i.fa {
+  margin: 2px 8px 0 12px;
+  padding: 0;
+}
+
+.nav-sidebar-vertical li.list-group-item.list-group-item-squat > a .list-group-item-value {
+  padding: 0;
+  vertical-align:text-bottom;
 }
 
 
-.nav-pf-vertical li.list-group-item.list-group-item-squat > a {
+.nav-sidebar-vertical li.list-group-item.list-group-item-squat > a {
   height: 35px;
 }
 
-.nav-pf-vertical li.list-group-item.list-group-item-squat > a > i {
+.nav-sidebar-vertical li.list-group-item.list-group-item-squat > a > i {
   margin: 5px 0 0 5px;
 }
 
-.nav-pf-vertical li.list-group-item > a .list-group-item-value {
+.nav-sidebar-vertical li.list-group-item > a .list-group-item-value {
   margin: 2px 0 0 5px;
 }
 
@@ -893,30 +909,37 @@ img.entity-type-icon {
   min-height: 100%;
   width: 100%;
   margin: 0;
-  padding: 0;
+  padding: 5px;
 }
 
-
-div.container-cards-pf.container-pf-nav-pf-vertical {
-  padding: 0;
-  margin: $navbar-height 0 0 0;
-}
 
 div.panel.panel-default {
   margin-bottom: 0;
 }
 
-.nav-pf-vertical {
+.nav-sidebar-vertical {
+  background: #292e34;
+  border-right: 1px solid #292e34;
+  bottom: 0;
+  left: 0;
+  overflow-x: hidden;
+  overflow-y: auto;
+  position: fixed;
+  width: $sidebar-width;
   top: ($navbar-height + 6);
   z-index: 1000;
 }
 
 
-div.container-fluid.container-cards-pf.container-pf-nav-pf-vertical {
+
+div.container-cards {
+  width: unset;
+  padding: 0;
+  margin: $navbar-height 0 0 $sidebar-width;
 }
 
-div.container-fluid.container-cards-pf.container-pf-nav-pf-vertical .cards-pf {
-  margin: 0 5px 0 0;
+div.container-cards .node-content-section {
+  margin: 0;
 }
 
 .title-bar {
@@ -959,20 +982,26 @@ table.fake-table-view td
   border:1px solid red;
 }
 
+li.node-filter-section {
+  margin: 0;
+  padding: 0 0 0 10px;
+  background: white;
+}
+
 @media (max-width: $grid-float-breakpoint) {
   .node-container {
     margin-left: 0;
   }
 
-  .nav-pf-vertical {
+  .nav-sidebar-vertical {
     width: $collapsed-sidebar-width;
   }
 
-  .nav-pf-vertical li.list-group-item > a .list-group-item-value {
+  .nav-sidebar-vertical li.list-group-item > a .list-group-item-value {
     display: none;
   }
 
-  div.container-fluid.container-cards-pf.container-pf-nav-pf-vertical {
+  div.container-cards {
     margin-left: $collapsed-sidebar-width;
   }
 

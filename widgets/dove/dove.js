@@ -2059,7 +2059,8 @@ monarch.builder.tree_builder.prototype.setGolrManager = function(golr_manager, i
     golr_manager.add_query_filter(config.id_field, id, ['*']);
     golr_manager.set_results_count(0);
     golr_manager.lite(true);
-    
+    golr_manager.set_facet_limit(-1);
+
     if (config.filter instanceof Array && config.filter.length > 0){
         config.filter.forEach(function(val){
             if (val != null && val.field && val.value){
@@ -2199,12 +2200,12 @@ monarch.builder.tree_builder.prototype._getCountsForClass = function(id, parents
                     var index = counts.map(function(d){return d.name}).indexOf('Other');
                     if (index != -1){
                         counts[index]['value'] += i[1];
-                    } else {
+                    }/* else {
                         counts.push({
                             'name': 'Other',
                             'value' : i[1]
                         });
-                    }
+                    }*/
                 }
             });
         } else if (typeof self.config.single_group != 'undefined') {

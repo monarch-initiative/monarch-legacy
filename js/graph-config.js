@@ -56,8 +56,8 @@ exports.phenotypeLandingConfig = {
         //Colors set in the order they appear in the JSON object
         color : {
             bars : {
-                human  : '#a6cee3',
-                mouse : '#1f78b4',
+                human : '#1f78b4',
+                mouse  : '#a6cee3',
                 zebrafish : '#b2df8a',
                 fly : '#33a02c',
                 rat : '#ff7f00',
@@ -101,7 +101,7 @@ exports.phenotypeGeneGolrSettings = {
         id_field : 'object_closure',
         personality : 'dovechart',
         filter : [{ field: 'subject_category', value: 'gene' }],
-        facet : 'subject_taxon'
+        facet : 'subject_taxon_closure'
 };
 
 exports.diseaseGeneGolrSettings = {
@@ -111,21 +111,21 @@ exports.diseaseGeneGolrSettings = {
                   { field: 'subject_category', value: 'gene' },
                   { field: 'object_category', value: 'disease' }
         ],
-        facet : 'subject_taxon'
+        facet : 'subject_taxon_closure'
 };
 
 exports.phenotypeGenotypeGolrSettings = {
         id_field : 'object_closure',
         personality : 'dovechart',
         filter : [{ field: 'subject_category', value: 'genotype' }],
-        facet : 'subject_taxon'
+        facet : 'subject_taxon_closure'
 };
 
 exports.modelDiseaseGolrSettings = {
         id_field : 'object_closure',
         personality : 'dovechart',
         filter : [{ field: 'subject_category', value: 'model' }],
-        facet : 'subject_taxon'
+        facet : 'subject_taxon_closure'
 };
 
 //Graph for phenotypeLandingPage
