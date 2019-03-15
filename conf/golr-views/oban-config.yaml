@@ -455,6 +455,14 @@ fields:
     type: string
     cardinality: multi
     property: []
+    
+  - id: source_count
+    description: "Number of sources for association"
+    display_name: source_count
+    type: integer
+    cardinality: single
+    property: []
+    searchable: false
 
   - id: source_label
     description: "Label for source"
