@@ -4,7 +4,7 @@ document_category: generic_association
 weight: 20
 
 ## Results table, horizontal
-result_weights: subject^7.0  object^6.0 relation^5.0 frequency^5.5 onset^5.4 evidence^4.0 source^3.5 is_defined_by^3.0
+result_weights: subject^7.0  object^6.0 relation^5.0 frequency^5.5 onset^5.4 evidence^4.0 is_defined_by^3.0
 
 ## Ordering of facets, vertical
 filter_weights:

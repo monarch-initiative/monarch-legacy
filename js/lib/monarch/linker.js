@@ -187,6 +187,9 @@ bbop.monarch.linker.prototype.img = function (id, xid, modifier, category){
                 if (/_slim$/.test(lc_src)) {
                     lc_src = lc_src.replace(/_slim$/, '');
                 }
+                if (/slim$/.test(lc_src)) {
+                    lc_src = lc_src.replace(/slim$/, '');
+                }
                 var xref = global_xrefs_conf[lc_src];
                 if (xref && xref['image_path']){
                     retval = '<img class="source" src="' + this.app_base
@@ -298,6 +301,9 @@ bbop.monarch.linker.prototype.set_anchor = function(id, args, xid, modifier){
             var lc_src = src.toLowerCase();
             if (/_slim$/.test(lc_src)) {
                 lc_src = lc_src.replace(/_slim$/, '');
+            }
+            if (/slim$/.test(lc_src)) {
+                lc_src = lc_src.replace(/slim$/, '');
             }
             var xref = global_xrefs_conf[lc_src];
            
