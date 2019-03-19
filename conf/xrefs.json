@@ -2535,20 +2535,21 @@
       "datatype" : null,
       "image_path" : "/image/source-ncbi.png"
    },
-   "sgdid" : {
+   "sgd" : {
       "object" : "Identifier for SGD Loci",
       "name" : null,
       "uri_prefix" : null,
-      "url_example" : "http://db.yeastgenome.org/cgi-bin/locus.pl?dbid=S000006169",
+      "url_example" : "http://db.yeastgenome.org/locus/S000006169",
       "database" : "Saccharomyces Genome Database",
       "local_id_syntax" : "^S[0-9]{9}$",
       "example_id" : "SGD:S000006169",
       "generic_url" : "http://www.yeastgenome.org/",
       "fullname" : null,
       "entity_type" : "SO:0000704 ! gene",
-      "abbreviation" : "SGDID",
+      "abbreviation" : "SGD",
       "id" : null,
-      "url_syntax" : "http://db.yeastgenome.org/cgi-bin/locus.pl?dbid=[example_id]",
+      "url_syntax" : "http://db.yeastgenome.org/locus/[example_id]",
+      "image_path" : "/image/source-sgd.png",
       "datatype" : null
    },
    "vida" : {
@@ -3579,22 +3580,6 @@
       "id" : null,
       "abbreviation" : "EnsemblPlants/Gramene",
       "url_syntax" : "http://www.ensemblgenomes.org/id/[example_ID]",
-      "datatype" : null
-   },
-   "sgd" : {
-      "object" : "Identifier for SGD Loci",
-      "uri_prefix" : null,
-      "name" : null,
-      "url_example" : "http://db.yeastgenome.org/cgi-bin/locus.pl?dbid=S000006169",
-      "database" : "Saccharomyces Genome Database",
-      "local_id_syntax" : "^S[0-9]{9}$",
-      "example_id" : "SGD:S000006169",
-      "generic_url" : "http://www.yeastgenome.org/",
-      "entity_type" : "SO:0000704 ! gene",
-      "fullname" : null,
-      "id" : null,
-      "abbreviation" : "SGD",
-      "url_syntax" : "http://db.yeastgenome.org/cgi-bin/locus.pl?dbid=[example_id]",
       "datatype" : null
    },
    "sgn" : {
