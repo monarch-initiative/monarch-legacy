@@ -451,7 +451,7 @@ bbop.monarch.widget.browse = function(server, manager, reference_id, root, inter
         anchor._current_acc = term_acc;
         // Data call setup
         // var rsrc = this.server + "dynamic/browser.json" + "?start_id=" + term_acc + "&root_id=" + anchor._root+ "&relationship=subClassOf|partOf|isA";
-        var rsrc = this.server + "graph/neighbors/" + term_acc + ".json?&depth=25&blankNodes=false&relationshipType=subClassOf&direction=OUTGOING&project=%2A";
+        var rsrc = this.server + "graph/neighbors/" + term_acc + ".json?&depth=1&blankNodes=false&relationshipType=subClassOf&direction=OUTGOING&project=%2A";
        
         anchor.manager.resource(rsrc);
         anchor.manager.method('get');
