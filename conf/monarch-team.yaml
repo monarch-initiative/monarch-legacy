@@ -67,16 +67,16 @@ institutions:
         title: Ontologist
         alumni: false
         bio: Dr. Brush has a BS from Notre Dame and a Ph.D.in Cell Biology from Duke University, and is a former Biomedical Informatics Fellow at Oregon Health and Science University. He is the lead developer of the Genotype Ontology (GENO) for Monarch, and coordinates its use in ingest of genotype and phenotype data. In addition, he has contributed to development of several other ontologies that will be employed in the Monarch system, including the Reagent Ontology (ReO), the Ontology of Biomedical Investigations (OBI), the Cell Line Ontology (CLO), and the eagle-i Ontology (ERO).
-      - name: Lilly Winfree
-        picture: /image/team/LillyWinfree.jpg
-        title: Science and Data Analyst
-        alumni: true
-        bio: Dr. Winfree has a BS in Neuroscience from the University of Rochester and a Ph.D. in Neuroscience from Oregon Health & Science University. Lilly is responsible for scientific communication and outreach and contributes to data analytics. Lilly will be working with the Monarch Initiative bioinformatics team to derive biological stories from the data.
       - name: Shahim Essaid
         picture: /image/team/ShahimEssaid.jpg
         title: Ontologist
         alumni: false
         bio: Dr. Essaid is an Ontologist and Software Engineer; he has an MD University of Baghdad, Iraq and holds a graduate certificate Department of Medical Informatics and Clinical Epidemiology from OHSU.
+      - name: Lilly Winfree
+        picture: /image/team/LillyWinfree.jpg
+        title: Science and Data Analyst
+        alumni: true
+        bio: Dr. Winfree has a BS in Neuroscience from the University of Rochester and a Ph.D. in Neuroscience from Oregon Health & Science University. Lilly is responsible for scientific communication and outreach and contributes to data analytics. Lilly will be working with the Monarch Initiative bioinformatics team to derive biological stories from the data.
       - name: Bryan Laraway
         title: Data Wrangler
         alumni: true
@@ -91,11 +91,6 @@ institutions:
         title: Monarch PI
         alumni: false
         bio: "Dr. Mungall is currently a PI of the Monarch Initiative. He has a BSc in Computer Science from the University of Edinburgh and a Ph.D. from University of Edinburgh in Biological Sciences. He is currently the PI of the Monarch Initiative and his current research focuses on the use of informatics techniques and tools to integrate and interpret life science data across a variety of domains. In particular, he is interested in connecting biological models at multiple scales: the biochemical, molecular, cellular, organismal and ecological."
-      - name: Suzanna Lewis
-        picture: /image/team/SuzannaLewis.jpg
-        title: Genomics
-        alumni: false
-        bio: Suzi has an MS in Biology and MS in Computer Science. She is a scientist and Principal Investigator at the Berkeley Bioinformatics Open-source Project (BBOP) based at Lawrence Berkeley National Laboratory. She is one of the pioneers of developing open standards and software for genome annotation and ontologies.
       - name: Seth Carbon
         title: Software Engineer
         alumni: false
@@ -127,6 +122,11 @@ institutions:
       #     twitter: http://twitter.com
       #     facebook: http://facebook.com
       #     website: https://en.wikipedia.org/wiki/Rocky_the_Flying_Squirrel
+      - name: Suzanna Lewis
+        picture: /image/team/SuzannaLewis.jpg
+        title: Genomics
+        alumni: true
+        bio: Suzi has an MS in Biology and MS in Computer Science. She is a scientist and Principal Investigator at the Berkeley Bioinformatics Open-source Project (BBOP) based at Lawrence Berkeley National Laboratory. She is one of the pioneers of developing open standards and software for genome annotation and ontologies.
       - name: Nicole Washington
         picture: /image/team/NicoleWashington.jpeg
         title: Lead Bioinformatician
@@ -183,7 +183,6 @@ institutions:
         title: Bioinformatician
         bio: Dr. Jacobsen has a BSc in Biochemistry from the Imperial College, London and a Ph.D. from the University of Cambridge, in Structural Biology. He has developed several tools for investigating the use of model organism phenotype data to better understand the role of gene mutation in human disease.
       - name: Tomasz Konopka
-        picture: /image/person-unknown.png
         alumni: false
         title: Bioinformatician
         bio: Dr. Konopka has a PhD in physics from the University of Waterloo. Since turning to bioinformatics, he has developed computational methods for sequence-data analysis and contributed to characterizations of molecular signatures due to genetic mutations. He is interested in the mechanisms, uncertainties, and ambiguities associated with linking genotypes to phenotypes.
@@ -222,6 +221,21 @@ institutions:
         title: Senior Research Scientist
         alumni: false
         bio: "Dr. Balhoff has a PhD in Biology from Duke University. He is interested in the application of ontologies and automated reasoning to facilitate the use and integration of biological data."
+  - id: embl-ebi
+    name: European Bioinformatics Institute (EMBL-EBI)
+    logo: /image/team-ebi.png
+    website: https://www.ebi.ac.uk
+    people:
+      - name: David Osumi-Sutherland
+        picture: /image/team/DavidOS.jpg
+        title: Monarch PI
+        alumni: false
+        bio: Dr. Osumi-Sutherland has a PhD in Developmental Biology from the University of Warwick. Being a major contributor to the Gene Ontology, Flybase and Cell Ontology, he has over ten years of experience on semantic integration. Dr. Osumi-Sutherland is a PI and founder of the Virtual Fly Brain project. He is developing tools that facilitate the reconciliation of the ontologies used by the Monarch Initiative, to improve their general maintainability, quality and integration.
+      - name: Nicolas Matentzoglu
+        picture: /image/team/NicoMatentzoglu.jpg
+        title: Semantic Web Developer
+        alumni: false
+        bio: Dr. Matentzoglu has a PhD in ontology reasoning and modularity from the University of Manchester. Together with Dr. Osumi-Sutherland, he is working on improving the integration of and extending the various ontologies used by the Monarch Initiative.
   - id: pitt
     name: University of Pittsburgh
     logo: /image/team-pitt.png
@@ -249,18 +263,3 @@ institutions:
         alumni: true
         title: Senior Research Scientist, Department of Biomedical Informatics
         bio: Jeremy is trained in General Medicine, Medical Informatics and Intelligent Systems.  His claim to fame is programming the first real-time disease surveillance system in 1999—the Real-time Outbreak and Disease Surveillance System (RODS).  RODS and its open source derivatives have subsequently been deployed in over 16 states and a couple of countries.  He has also managed the IT infrastructure of the National Retail Monitor which provides over-the-counter medication sales data from over 33,000 retail stores to health departments across the U.S..  In his free time he enjoys hacking micro controllers, piano and 3d printing.
-  - id: embl-ebi
-    name: European Bioinformatics Institute (EMBL-EBI)
-    logo: /image/team-ebi.png
-    website: https://www.ebi.ac.uk
-    people:
-      - name: David Osumi-Sutherland
-        picture: /image/team/DavidOS.jpg
-        title: Monarch PI
-        alumni: false
-        bio: Dr. Osumi-Sutherland has a PhD in Developmental Biology from the University of Warwick. Being a major contributor to the Gene Ontology, Flybase and Cell Ontology, he has over ten years of experience on semantic integration. Dr. Osumi-Sutherland is a PI and founder of the Virtual Fly Brain project. He is developing tools that facilitate the reconciliation of the ontologies used by the Monarch Initiative, to improve their general maintainability, quality and integration.
-      - name: Nicolas Matentzoglu
-        picture: /image/team/NicoMatentzoglu.jpg
-        title: Semantic Web Developer
-        alumni: false
-        bio: Dr. Matentzoglu has a PhD in ontology reasoning and modularity from the University of Manchester. Together with Dr. Osumi-Sutherland, he is working on improving the integration of and extending the various ontologies used by the Monarch Initiative.
