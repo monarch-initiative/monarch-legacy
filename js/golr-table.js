@@ -3,7 +3,6 @@ var golr_response = require('bbop-response-golr');
 var golr_manager = require('bbop-manager-golr');
 var jquery_engine = require('bbop-rest-manager').jquery;
 var bbop_widgets = require('bbop-widget-set');
-var Q = require('q');
 
 //
 // If the anchor is a site-relative link, then annotate with
