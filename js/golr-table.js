@@ -115,6 +115,9 @@ function getTableFromSolr(query_field, div, filter, personality, tab_anchor, is_
             molr_manager.add_query_filter_as_string(orFilterString);
         }
 
+        // Global params
+        molr_manager.set("sort", "source_count desc");
+
         // Add filters.
         var f_opts = {
                 'meta_label': 'Total:&nbsp;',
