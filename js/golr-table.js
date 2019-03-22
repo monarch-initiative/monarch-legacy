@@ -41,13 +41,13 @@ function convertLinkToVueRouterLink(old) {
  *                          value: 'phenotype"
  *                      }
  */
-function getTableFromSolr(query_field, div, filter, personality, tab_anchor, is_leaf, orFilter, isSymmetric, query_id) {
+function getTableFromSolr(query_field, div, filter, personality, tab_anchor, is_leaf, orFilter, query_id) {
     if (tab_anchor != null){
         var isTabLoading = false;
         jQuery('#categories a[href="'+tab_anchor+'"]').click(function(event) {
             if (!(jQuery('#'+div+' .table').length) && !isTabLoading){
                 isTabLoading = true;
-                getTable(query_field, div, filter, personality, is_leaf, orFilter, isSymmetric, query_id);
+                getTable(query_field, div, filter, personality, is_leaf, orFilter, query_id);
             }
         });
         // Trigger a click event if we're loading the page on an href
@@ -56,10 +56,10 @@ function getTableFromSolr(query_field, div, filter, personality, tab_anchor, is_
             jQuery('#categories a[href="'+window.location.hash+'"]').click();
         }
     } else {
-        getTable(query_field, div, filter, personality, is_leaf, orFilter, isSymmetric, query_id);
+        getTable(query_field, div, filter, personality, is_leaf, orFilter, query_id);
     }
 
-    function getTable(query_field, div, filter, personality, is_leaf, orFilter, isSymmetric, query_id) {
+    function getTable(query_field, div, filter, personality, is_leaf, orFilter, query_id) {
         if (query_field == null) {
             query_field = 'object_closure';
         }
@@ -252,27 +252,6 @@ function getTableFromSolr(query_field, div, filter, personality, tab_anchor, is_
         filters.spin_down();
         open_species_filter();
     });
-
-    if (isSymmetric) {
-        molr_manager.register('search', function(solrResponse) {
-            solrResponse.documents().forEach(function(doc) {
-                if (doc.object_closure.includes(query_id)) {
-                    const obj = doc.object;
-                    const obj_label = doc.object_label;
-                    const obj_taxon = doc.object_taxon;
-                    const obj_taxon_label = doc.object_taxon_label;
-                    doc.object = doc.subject;
-                    doc.object_label = doc.subject_label;
-                    doc.object_taxon = doc.subject_taxon;
-                    doc.object_taxon_label = doc.subject_taxon_label;
-                    doc.subject = obj;
-                    doc.subject_label = obj_label;
-                    doc.subject_taxon = obj_taxon;
-                    doc.subject_taxon_label = obj_taxon_label;
-                }
-            });
-        }, '100');
-    }
 
     // Initial run.
     molr_manager.search();

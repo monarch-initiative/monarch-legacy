@@ -5,13 +5,21 @@
 
     "scigraph_url" : "https://scigraph-ontology-dev.monarchinitiative.org/scigraph/",
 
+    "scigraph_url_backend" : "http://monarch-scigraph-ontology-dev.cgrb.oregonstate.local/scigraph/",
+
     "scigraph_data_url" : "https://scigraph-data-dev.monarchinitiative.org/scigraph/",
+
+    "scigraph_data_url_backend" : "http://monarch-scigraph-data-dev.cgrb.oregonstate.local/scigraph/",
 
     "golr_url" : "https://solr-dev.monarchinitiative.org/solr/golr/",
 
+    "golr_url_backend" : "http://monarch-solr6-dev.cgrb.oregonstate.local/solr/golr/",
+
     "search_url" : "https://solr-dev.monarchinitiative.org/solr/search/",
 
-    "owlsim_services_url" : "https://beta.monarchinitiative.org/owlsim",
+    "search_url_backend" : "http://monarch-solr6-dev.cgrb.oregonstate.local/solr/search/",
+
+    "owlsim_services_url" : "http://monarch-app-beta.cgrb.oregonstate.local/owlsim",
 
     "analytics_id" : ""
 }
