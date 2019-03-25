@@ -94,7 +94,7 @@ function getTableFromSolr(query_field, div, filter, personality, tab_anchor, is_
 
         // Other widget tests; start with manager.
         var molr_manager = new golr_manager(srv, gconf, engine, 'async');
-        molr_manager.use_jsonp = true
+        molr_manager.use_jsonp = true;
         molr_manager.set_personality(personality);
         //molr_manager.query_variants['facet.method'] = 'enum';
         molr_manager.set_results_count(25);
@@ -117,6 +117,28 @@ function getTableFromSolr(query_field, div, filter, personality, tab_anchor, is_
 
         // Global params
         molr_manager.set("sort", "source_count desc");
+
+        // Get fields from personality
+        var fields_without_labels = [ 'source', 'is_defined_by', 'qualifier' ];
+        var constant_fields = [ 'subject_category', 'object_category', 'score', 'id', 'evidence_closure_map'];
+
+        var personality = molr_manager.get_personality();
+
+        // We have a bbop.golr.conf api that may be able to replace this
+        // Global scigraph url passed in from webapp.js addGolrStaticFiles
+        var result_weights = global_golr_conf[personality]['result_weights'].split(/\s+/);
+
+        result_weights = result_weights.map(function(i) {
+            return i.replace(/\^.+$/, '');
+        });
+
+        result_weights.forEach(function(val, index) {
+            if (fields_without_labels.indexOf(val) === -1) {
+                result_weights.push(val + '_label');
+            }
+        });
+        result_weights = result_weights.concat(constant_fields);
+        molr_manager.set("fl", result_weights.join(","));
 
         // Add filters.
         var f_opts = {
