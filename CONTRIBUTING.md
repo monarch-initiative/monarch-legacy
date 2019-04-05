@@ -12,10 +12,10 @@ These guidelines are for developers of Monarch software, whether internal or in 
 * Changes will never be committed directly to the master branch on the shared repo. Rather, they will be composed as branches within the developer's forked repo, where the developer can iterate and refine their code prior to submitting it for review.
 
 ##### Principle 3: Propose changes via pull request of personal branches
-*  Each set of changes will be developed as a task-specific *branch* in the developer's forked repo, and then a [pull request](github.com/government/best-practices/compare) will be created to develop and propose changes to the shared repo. This mechanism provides a way for developers to discuss, revise and ultimately merge changes from the forked repo into the shared Monarch repo.
+*  Each set of changes will be developed as a task-specific *branch* in the developer's forked repo, and then a [pull request](github.com/government/best-practices/compare) will be created to propose changes to the shared repo. This mechanism provides a way for developers to discuss, revise and ultimately merge changes from the forked repo into the shared Monarch repo.
 
 ##### Principle 4: Delete or ignore stale branches, but don't recycle merged ones
-*  Once a pull request has been merged, the task-specific branch is no longer needed and may be deleted or ignored. It is bad practice to reuse an existing branch once it has been merged. Instead, a subsequent branch and pull-request cycle should begin when a developer switches to a different coding task. 
+*  Once a pull request has been merged, the task-specific branch is no longer needed and may be deleted or ignored. It is bad practice to reuse an existing branch once it has been merged. Instead, a new branch and pull-request cycle should begin when a developer switches to a different coding task. 
 *  You may create a pull request in order to get feedback, but if you wish to continue working on the branch, so state with "DO NOT MERGE YET".
 
 ## Table of contents
@@ -62,12 +62,12 @@ Typically, a developer will fork a shared repo once, which creates a personal co
 
 The easiest way to fork the `monarch-app` repository is via the GitHub web interface:
 
-- Ensure you are logged into GitHub as your GitHub user.
+- Ensure you are logged into GitHub.
 - Navigate to the monarch-app shared repo at [https://github.com/monarch-initiative/monarch-app](https://github.com/monarch-initiative/monarch-app).
 - Notice the 'Fork' button in the upper right corner. It has a number to the right of the button.
 ![](docs/images/githubForkButton.png)
-- Click the Fork button. The resulting behavior will depend upon whether your GitHub user is a member of a GitHub organization. If not a member of an organization, then the fork operation will be performed and the forked repo will be created in the user's account.
-- If your user is a member of an organization (e.g., monarch-initiative or acme-incorporated), then GitHub will present a dialog for the user to choose where to place the forked repo. The user should click on the icon corresponding to their username.
+- Click the Fork button. The resulting behavior will depend upon whether your GitHub account is a member of a GitHub organization. If not a member of an organization, then the fork operation will be performed and the forked repo will be created in your account.
+- If you are a member of an organization (e.g., monarch-initiative or acme-incorporated), then GitHub will present a dialog to allow you to choose where to place the forked repo. Click on the icon corresponding to your username.
 ![](docs/images/githubForkTarget.png)
 - *If you accidentally click the number, you will be on the Network Graphs page and should go back.*
 
@@ -147,7 +147,7 @@ Once you have completed the One-time Setup above, then it will be possible to cr
 
 - Refresh and clean up local environment
 - Create a new task-specific branch
-- Perform ordinary development work, periodically committing to the branch
+- Perform development work, periodically committing to the branch
 - Prepare and submit a Pull Request (PR) that refers to the branch
 - Participate in PR Review, possibly making changes and pushing new commits to the branch
 - Celebrate when your PR is finally Merged into the shared repo.
@@ -156,7 +156,7 @@ Once you have completed the One-time Setup above, then it will be possible to cr
 
 ### Refresh and clean up local environment
 
-Git will not automatically sync your Forked repo with the original shared repo, and will not automatically update your local copy of the Forked repo. These tasks are part of the developer's normal *cycle*, and should be the first thing done prior to beginning a new development effort and creating a new branch. In addition, this
+Git will not automatically sync your Forked repo with the original shared repo, and will not automatically update your local copy of the Forked repo. These tasks are part of the developer's normal *cycle*, and should be the first thing done prior to beginning a new development effort and creating a new branch.
 
 #### Step 1 - Fetch remotes
 
@@ -203,9 +203,9 @@ Note that we are pushing to 'origin', which is our forked repo. We are definitel
 
 ### Reconcile branch with upstream changes
 
-If you have followed the instructions above at [Refresh and clean up local environment](#refresh-and-clean-up-local-environment), then your working directory and task-specific branch will be based on a starting point from the latest-and-greatest version of the shared repo's master branch. Depending upon how long it takes you to develop your changes, and upon how much other developer activity there is, it is possible that changes to the upstream master will conflict with changes in your branch.
+If you have followed the instructions above at [Refresh and clean up local environment](#refresh-and-clean-up-local-environment), then your working directory and task-specific branch will be based on a starting point from the latest-and-greatest version of the shared repo's master branch. Depending on how long it takes you to develop your changes, and how much other developer activity there is, it is possible that changes to the upstream master will conflict with changes in your branch.
 
-So it is a good practice to periodically pull down these upstream changes and reconcile your task branch with the upstream master branch. At the least, this should be performed prior to submitting a PR.
+It is therefore good practice to periodically pull down these upstream changes and reconcile your task branch with the upstream master branch. At the least, this should be performed prior to submitting a PR.
 
 #### Fetching the upstream branch
 
@@ -215,7 +215,7 @@ The first step is to fetch the update upstream master branch down to your local 
 
 #### Rebasing to avoid Conflicts and Merge Commits
 
-Now that you've fetched the upstream changes to your local Git environment, you will use the `git rebase` command to adjust your branch
+Now that you've fetched the upstream changes to your local Git environment, you will use the `git rebase` command to adjust your branch:
 
 
     > # Make that your changes are committed to your branch
@@ -244,23 +244,23 @@ See [squashing commits with rebase](http://gitready.com/advanced/2009/02/10/squa
 
 ### Submitting a PR (pull request)
 
-Once you have developed code and are confident it is ready for review and final integration into the upstream version, you will want to do a final `git push origin ...` (see Changes, Commits and Pushes above). Then you will use the GitHub website to perform the operation of creating a Pull Request based upon the newly pushed branch.
+Once you have developed code and are confident it is ready for review and final integration into the upstream version, you will want to do a final `git push origin ...` (see Changes, Commits and Pushes above). Then you will use the GitHub website to create a Pull Request based upon the newly pushed branch.
 
 See [submitting a pull request](https://help.github.com/articles/creating-a-pull-request).
 
 
 ### Reviewing a pull request
 
-The set of open PRs for the monarch-app can be viewed by first visiting the shared monarch-app GitHub page at [https://github.com/monarch-initiative/monarch-app](https://github.com/monarch-initiative/monarch-app).
+The set of open PRs for the monarch-app repo can be viewed by first visiting the shared monarch-app GitHub page at [https://github.com/monarch-initiative/monarch-app](https://github.com/monarch-initiative/monarch-app).
 
 Click on the 'Pull Requests' link on the right-side of the page:
 ![](docs/images/githubPullRequest.png)
 
-Note that the Pull Request you created from your forked repo shows up in the shared repo's Pull Request list. One way to avoid confusion is to think of the shared repo's PR list as a queue of changes to be applied, pending their review and approval.
+Note that the Pr you created from your forked repo shows up in the shared repo's PR list. You can think of the shared repo's PR list as a queue of changes to be applied, pending their review and approval.
 
 ### Respond to TravisCI tests
 
-The GitHub Pull Request mechanism is designed to allow review and refinement of code prior to its final merge to the shared repo. After creating your Pull Request, the TravisCI tests for monarch-app will be executed automatically, ensuring that the code that 'worked fine' on your development machine also works in the production-like environment provided by TravisCI. The current status of the tests can be found near the bottom of the individual PR page, to the right of the Merge Request symbol:
+The GitHub Pull Request mechanism is designed to allow testing, review and refinement of code prior to its final merge to the shared repo. After creating your PR, the TravisCI tests for monarch-app will be executed automatically, ensuring that the code that 'worked fine' on your development machine also works in the production-like environment provided by TravisCI. The current status of the tests can be found near the bottom of the individual PR page, to the right of the Merge Request symbol:
 ![](docs/images/githubTestProgress.png)
 ![](docs/images/githubTestStatus.png)
 
@@ -269,20 +269,16 @@ TBD - Something should be written about developers running tests PRIOR to Travis
 
 ### Respond to peer review
 
-The GitHub Pull Request mechanism is designed to allow review and refinement of code prior to its final merge to the shared repo. After creating your Pull Request, the TravisCI tests for monarch-app will be executed automatically, ensuring that the code that 'worked fine' on your development machine also works in the production-like environment provided by TravisCI. The current status of the tests can be found
-
-### Repushing to a PR branch
-
-It's likely that after created a Pull Request, you will receive useful peer review or your TravisCI tests will have failed. In either case, you will make the required changes on your development machine, retest your changes, and you can then push your new changes back to your task branch and the PR will be automatically updated. This allows a PR to evolve in response to feedback from peers. Once everyone is satisfied, the PR may be merged. (see below).
+It's likely that after you create a Pull Request, you will receive useful peer review or perhaps your TravisCI tests will have failed. In either case, you will make the required changes on your development machine, retest your changes, and you can then push your new changes back to your task branch and the PR will be automatically updated. This allows a PR to evolve in response to feedback from peers. Once everyone is satisfied, the PR may be merged. (see below).
 
 
 ### Merge a pull request
 
-One of the goals behind the workflow described here is to enable a large group of developers to meaningfully contribute to the Monarch codebase. The Pull Request mechanism encourages review and refinement of the proposed code changes. As a matter of informal policy, Monarch expects that a PR will not be merged by its author and that a PR will not be merged without at least one reviewer approving it (via a comment such as +1 in the PR's Comment section).
+One of the goals behind the workflow described here is to enable a large group of developers to meaningfully contribute to the Monarch codebase. The Pull Request mechanism encourages review and refinement of the proposed code changes. As a matter of informal policy, Monarch expects that a PR will not be merged by its author and that a PR will not be merged without at least one reviewer approving it (via a comment such as "+1" (meaning "looks good") in the PR's Comment section).
 
 ### Celebrate and get back to work
 
-You have successfully gotten your code improvements into the shared repository. Congratulations! The branch you created for this PR is no longer useful, and may be deleted from your forked repo or may be kept. But in no case should the branch be further developed or reused once it has been successfully merge. Subsequent development should be on a new branch. Prepare for your next work by returning to [Refresh and clean up local environment](#refresh-and-clean-up-local-environment).
+You have successfully gotten your code improvements into the shared repository. Congratulations! The branch you created for this PR is no longer useful, and may be deleted from your forked repo or may be kept. But in no case should the branch be further developed or reused once it has been successfully merged. Subsequent development should be on a new branch. Prepare for your next work phase by returning to [Refresh and clean up local environment](#refresh-and-clean-up-local-environment).
 
 ---
 
@@ -293,7 +289,7 @@ You have successfully gotten your code improvements into the shared repository. 
 
 ## References and Documentation
 
-- The instructions presented here are derived from several sources. However, a very readable and complete article is [Using the Fork-and-Branch Git Workflow](http://blog.scottlowe.org/2015/01/27/using-fork-branch-git-workflow/). Note that the article doesn't make clear that certain steps like Forking are one-time setup steps, after which Branch-PullRequest-Merge steps are used; the instructions below will attempt to clarify this.
+- The instructions presented here are derived from several sources. However, a very readable and complete article is [Using the Fork-and-Branch Git Workflow](http://blog.scottlowe.org/2015/01/27/using-fork-branch-git-workflow/). Note that the article doesn't make clear that certain steps like Forking are one-time setup steps, after which Branch / Pull Request / Merge steps are used.
 
 - New to GitHub? The [GitHub Guides](http://guides.github.com) are a great place to start.
 
@@ -302,4 +298,4 @@ You have successfully gotten your code improvements into the shared repository. 
 
 ## Notes
 
-The process described below is initially intended to be used in the `monarch-app` repository, although it may later be adopted by the other Monarch-related source code repositories, such as `phenogrid`.
+The process described above is initially intended to be used in the `monarch-app` repository, although it may later be adopted by other Monarch-related source code repositories, such as `phenogrid`.
