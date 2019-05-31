@@ -25,13 +25,6 @@ fields:
     property: []
     searchable: true
 
-  - id: iri
-    description: "The IRI."
-    display_name: iri
-    type: string
-    property: []
-    searchable: true
-
   - id: label
     description: "The labels."
     display_name: label
@@ -83,14 +76,6 @@ fields:
   - id: category
     description: "The categories."
     display_name: category
-    type: string
-    cardinality: multi
-    property: []
-    searchable: true
-
-  - id: equivalent_iri
-    description: "The equivalent IRIs."
-    display_name: equivalentIri
     type: string
     cardinality: multi
     property: []
