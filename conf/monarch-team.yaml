@@ -46,7 +46,7 @@ institutions:
       - name: Dan Keith
         picture: /image/team/DanKeith.jpg
         title: Research Software Engineer
-        alumni: false
+        alumni: true
         bio: Dan is a Software Engineer for the Monarch Initiative, within the OHSU Ontology Development Group. He works on the Monarch Initiative Portal and WebPhenote web applications, as well as helping with tooling and infrastructure. Dan has a BS in Computer Science from Northwestern University and a MS and PhD in Computer Science from University of Oregon, specializing in programming language metatheory, scientific workflow, and program analysis.
       - name: Tom Conlin
         title: Bioinformaticist
@@ -76,6 +76,11 @@ institutions:
         title: Data Wrangler
         alumni: true
         bio: Bryan has a BA from Reed College in Biology, post-bac training in MIS from Oregon Institute of Technology, and is currently a Master’s student in Bioinformatics &amp; Computational Biology at Oregon Health &amp; Science University. He is currently a Data Wrangler for the Monarch Initiative, assisting with data ingestion.
+      - name: Lauren Chan
+        title: Graduate Student
+        alumni: false
+        bio: Lauren has a BS in Nutrition and Dietetics, a Master's degree in Family and Consumer Sciences, and is a Registered Dietitian. She is currently pursuing her PhD in the TisLab, focusing on nutrition bioinformatics and formalizing nutrition concepts in biomedical ontologies, including the Medical Action Ontology (MAxO). 
+        picture: /image/team/LaurenChan.jpg
       # - name: Rocket J. Squirrel
       #   title: Lead Moose Foil
       #   alumni: false
