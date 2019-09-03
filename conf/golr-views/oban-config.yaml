@@ -62,7 +62,6 @@ fields:
     display_name: Subject
     type: string
     property: []
-    searchable: true
 
   - id: subject_closure
     description: "Reflexive closure of association_has_subject. A list of CURIEs. If an individual, first traverse rdf:tpye. The default closure is subclass, but other may optionally be added depending on what type of association this is and what the class is. E.g. for expression associations, the object is an anatomy class, and the closure will include part_of"
@@ -197,7 +196,6 @@ fields:
     display_name: Object
     type: string
     property: []
-    searchable: true
 
   - id: object_closure
     description: "Reflexive closure of association_has_object. A list of CURIEs. If an individual, first traverse rdf:tpye. The default closure is subclass, but other may optionally be added depending on what type of association this is and what the class is. E.g. for expression associations, the object is an anatomy class, and the closure will include part_of"
