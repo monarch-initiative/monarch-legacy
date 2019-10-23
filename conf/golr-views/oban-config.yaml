@@ -449,3 +449,9 @@ fields:
     type: string
     cardinality: multi
     property: []
+    
+  - id: confidence_score
+    description: "Confidence score for association"
+    display_name: Confidence Score
+    type: integer
+    property: []
