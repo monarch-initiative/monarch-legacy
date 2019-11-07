@@ -62,6 +62,12 @@ fields:
     display_name: Subject
     type: string
     property: []
+  
+  - id: subject_eq
+    description: "Reflexive equivalent/same as closure"
+    display_name: Subject Equivalents
+    type: string
+    property: []
 
   - id: subject_closure
     description: "Reflexive closure of association_has_subject. A list of CURIEs. If an individual, first traverse rdf:tpye. The default closure is subclass, but other may optionally be added depending on what type of association this is and what the class is. E.g. for expression associations, the object is an anatomy class, and the closure will include part_of"
@@ -194,6 +200,12 @@ fields:
   - id: object_label
     description: "Label for association_object."
     display_name: Object
+    type: string
+    property: []
+    
+  - id: object_eq
+    description: "Reflexive equivalent/same as closure"
+    display_name: Object Equivalents
     type: string
     property: []
 
