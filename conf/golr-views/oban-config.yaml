@@ -67,6 +67,7 @@ fields:
     description: "Reflexive equivalent/same as closure"
     display_name: Subject Equivalents
     type: string
+    cardinality: multi
     property: []
 
   - id: subject_closure
@@ -207,6 +208,7 @@ fields:
     description: "Reflexive equivalent/same as closure"
     display_name: Object Equivalents
     type: string
+    cardinality: multi
     property: []
 
   - id: object_closure
