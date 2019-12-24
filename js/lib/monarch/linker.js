@@ -99,7 +99,7 @@ bbop.monarch.linker.prototype.url = function (id, xid, modifier, category){
         if(id && id != ''){
             if(this.generic_item[xid]){
                 if (category == null
-                     && (xid === 'subject_gene' 
+                     && (xid === 'subject_gene'
                          || xid === 'object_gene')) {
                     category = 'gene';
                 }
@@ -170,7 +170,7 @@ bbop.monarch.linker.prototype.img = function (id, xid, modifier, category){
             }
             var src;
             if (/^http/.test(id)){
-                src = id.replace(/.*\/(\w+)\.ttl/, "$1").replace(/.*\/(\w+)\.nt/, "$1");
+                src = id.replace(/.*\/(\w+)\.ttl/, "$1").replace(/.*\/(\w+)\.nt/, "$1").replace(/.*\/#(\w+)/, "$1");
             } else {
 
                 // First, extract the probable source and break it into parts.
@@ -297,7 +297,7 @@ bbop.monarch.linker.prototype.set_anchor = function(id, args, xid, modifier){
         // Check if id is an is_defined_by url
         var title = "";
         if (/^http/.test(id)){
-            var src = id.replace(/.*\/(\w+)\.ttl/, "$1").replace(/.*\/(\w+)\.nt/, "$1");
+            var src = id.replace(/.*\/(\w+)\.ttl/, "$1").replace(/.*\/(\w+)\.nt/, "$1").replace(/.*\/#(\w+)/, "$1");
             var lc_src = src.toLowerCase();
             if (/_slim$/.test(lc_src)) {
                 lc_src = lc_src.replace(/_slim$/, '');
@@ -306,7 +306,7 @@ bbop.monarch.linker.prototype.set_anchor = function(id, args, xid, modifier){
                 lc_src = lc_src.replace(/slim$/, '');
             }
             var xref = global_xrefs_conf[lc_src];
-           
+
             if (xref && xref['database']){
                 title = xref['database'];
             }
