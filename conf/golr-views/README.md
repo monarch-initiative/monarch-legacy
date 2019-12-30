@@ -1,3 +1,5 @@
+#### Note: As of 12/30/2019 these files will no longer drive the solr schemas in the three solr cores for monarch (golr, search, feature-location).  They have been moved to the respective docker repos in this org
+
 This directory contains the Yaml Golr-view definitions. Each golr-view
 corresponds to a tab in the new Monarch architecture.
 
