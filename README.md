@@ -1,5 +1,4 @@
-[![Build Status](https://travis-ci.org/monarch-initiative/monarch-app.svg?branch=master)](https://travis-ci.org/monarch-initiative/monarch-app)
-[![Join the chat at https://gitter.im/monarch-initiative/helpdesk](https://badges.gitter.im/monarch-initiative/helpdesk.svg)](https://gitter.im/monarch-initiative/helpdesk?utm_source=badge&utm_medium=badge&utm_campaign=pr-badge&utm_content=badge)
+__Deprecated: The monarch web application has been moved and largely rewritten here: https://github.com/monarch-initiative/monarch-ui__
 
 ## About Monarch
 
